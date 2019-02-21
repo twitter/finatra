@@ -239,15 +239,13 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
     controller: Controller,
     conf: Controller.ControllerConfig
   ): ThriftService = {
-    if (!conf.isValid) {
-      val expectStr = conf.methods.map(_.method.name).mkString("{,", ", ", "}")
-      val message =
-        s"${controller.getClass.getSimpleName} for service " +
-          s"${conf.gen.getClass.getSimpleName} is misconfigured. " +
-          s"Expected exactly one implementation for each of $expectStr but found:\n" +
-          conf.methods.map(m => s" - ${m.method.name}").mkString("\n")
-      error(message)
-    }
+    assert(conf.isValid, {
+      val expectStr = conf.gen.methods.map(_.name).mkString("{", ", ", "}")
+      val actualStr = conf.methods.map(_.method.name).mkString("{", ", ", "}")
+      s"${controller.getClass.getSimpleName} for service " +
+        s"${conf.gen.getClass.getSimpleName} is misconfigured. " +
+        s"Expected exactly one implementation for each of $expectStr but found $actualStr"
+    })
 
     routes = conf.methods.map { cm =>
       val method: ThriftMethod = cm.method

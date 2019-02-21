@@ -3,7 +3,7 @@ package com.twitter.finatra.kafkastreams.internal.utils
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.processor.internals.InternalTopologyBuilder
 
-object TopologyReflectionUtils {
+private[kafkastreams] object TopologyReflectionUtils {
 
   private val internalTopologyBuilderField =
     ReflectionUtils.getFinalField(classOf[Topology], "internalTopologyBuilder")

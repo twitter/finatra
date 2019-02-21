@@ -1,9 +1,9 @@
-package com.twitter.finatra.kafkastreams.utils
+package com.twitter.finatra.kafkastreams.internal.utils
 
 import com.twitter.app.{App, Flag, Flaggable}
 import org.apache.kafka.streams.StreamsConfig
 
-trait KafkaFlagUtils extends App {
+private[kafkastreams] trait KafkaFlagUtils extends App {
 
   def requiredKafkaFlag[T: Flaggable: Manifest](key: String, helpPrefix: String = ""): Flag[T] = {
     flag[T](name = "kafka." + key, help = helpPrefix + kafkaDocumentation(key))

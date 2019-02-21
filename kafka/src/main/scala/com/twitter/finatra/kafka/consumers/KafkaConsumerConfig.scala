@@ -21,7 +21,25 @@ object KafkaConsumerConfig {
 }
 
 trait KafkaConsumerConfigMethods[Self] extends KafkaConfigMethods[Self] with Logging {
-  def dest(dest: String): This = bootstrapServers(BootstrapServerUtils.lookupBootstrapServers(dest))
+  /**
+   * Configure the Kafka server the consumer will connect to.
+   *
+   * @param dest the Kafka server address
+   * @return the [[KafkaConsumerConfigMethods]] instance.
+   */
+  def dest(dest: String): This =
+    bootstrapServers(BootstrapServerUtils.lookupBootstrapServers(dest))
+
+
+  /**
+   * Configure the Kafka server the consumer will connect to.
+   *
+   * @param dest the Kafka server address
+   * @param timeout the timeout duration when trying to resolve the [[dest]] server.
+   * @return the [[KafkaConsumerConfigMethods]] instance.
+   */
+  def dest(dest: String, timeout: Duration): This =
+    bootstrapServers(BootstrapServerUtils.lookupBootstrapServers(dest, timeout))
 
   def autoCommitInterval(duration: Duration): This =
     withConfig(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, duration)

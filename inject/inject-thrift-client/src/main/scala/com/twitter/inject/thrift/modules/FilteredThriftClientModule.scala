@@ -6,13 +6,8 @@ import com.google.inject.Provides
 import com.twitter.finagle._
 import com.twitter.finagle.service.Retries.Budget
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finagle.thrift.{
-  ClientId,
-  MethodIfaceBuilder,
-  ServiceIfaceBuilder,
-  ThriftService,
-  ThriftServiceIface
-}
+import com.twitter.finagle.thrift.service.Filterable
+import com.twitter.finagle.thrift.{ClientId, MethodIfaceBuilder, ServiceIfaceBuilder, ThriftService}
 import com.twitter.inject.annotations.Flag
 import com.twitter.inject.conversions.duration._
 import com.twitter.inject.exceptions.PossiblyRetryable
@@ -66,7 +61,7 @@ object FilteredThriftClientModule {
 @deprecated("Use the com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule", "2018-01-08")
 abstract class FilteredThriftClientModule[
   FutureIface <: ThriftService: ClassTag,
-  ServiceIface <: ThriftServiceIface.Filterable[ServiceIface]: ClassTag
+  ServiceIface <: Filterable[ServiceIface]: ClassTag
 ](
   implicit serviceBuilder: ServiceIfaceBuilder[ServiceIface],
   methodBuilder: MethodIfaceBuilder[ServiceIface, FutureIface]

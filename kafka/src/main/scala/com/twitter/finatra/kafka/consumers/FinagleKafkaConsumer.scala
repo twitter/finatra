@@ -137,6 +137,19 @@ class FinagleKafkaConsumer[K, V](config: FinagleKafkaConsumerConfig[K, V])
   }
 
   /**
+   * Get the end offsets for the given partitions. In the default {@code read_uncommitted} isolation level, the end
+   * offset is the high watermark (that is, the offset of the last successfully replicated message plus one). For
+   * {@code read_committed} consumers, the end offset is the last stable offset (LSO), which is the minimum of
+   * the high watermark and the smallest offset of any open transaction. Finally, if the partition has never been
+   * written to, the end offset is 0.
+   */
+  def endOffsets(
+    partitions: Seq[TopicPartition]
+  ): Future[util.Map[TopicPartition, java.lang.Long]] = {
+    singleThreadFuturePool(consumer.endOffsets(partitions.asJavaCollection))
+  }
+
+  /**
    * @param timeout The time, in milliseconds, spent waiting in poll if data is not available in the buffer.
    *                If 0, returns immediately with any records that are available currently in the buffer, else returns empty.
    *                Must not be negative.

@@ -26,6 +26,9 @@ private[twitter] trait ExternalHttpClient { self: EmbeddedTwitterServer =>
   /** Provide an override to the underlying server's mapper */
   def mapperOverride: Option[FinatraObjectMapper]
 
+  /** Provide an override to the external HTTPS client */
+  private[twitter] def httpsClientOverride: Option[JsonAwareEmbeddedHttpClient] = None
+
   /* Overrides */
 
   /** Logs the external http and/or https host and port of the underlying EmbeddedHttpServer */
@@ -108,18 +111,11 @@ private[twitter] trait ExternalHttpClient { self: EmbeddedTwitterServer =>
       mapper,
       disableLogging = self.disableLogging
     )
-    closeOnExit {
-      if (isStarted) {
-        Closable.make { deadline =>
-          info(s"Closing embedded http client: ${client.label}", disableLogging)
-          client.close(deadline)
-        }
-      } else Closable.nop
-    }
+    closeOnExit(client)
     client
   }
 
-  final lazy val httpsClient: JsonAwareEmbeddedHttpClient = {
+  final lazy val httpsClient: JsonAwareEmbeddedHttpClient = httpsClientOverride.getOrElse {
     val client = new JsonAwareEmbeddedHttpClient(
       "httpsClient",
       httpsExternalPort(),
@@ -130,14 +126,16 @@ private[twitter] trait ExternalHttpClient { self: EmbeddedTwitterServer =>
       mapper,
       disableLogging = self.disableLogging
     )
-    closeOnExit {
-      if (isStarted) {
-        Closable.make { deadline =>
-          info(s"Closing embedded http client: ${client.label}", disableLogging)
-          client.close(deadline)
-        }
-      } else Closable.nop
-    }
+    closeOnExit(client)
     client
+  }
+
+  final def closeOnExit(client: JsonAwareEmbeddedHttpClient): Unit = closeOnExit {
+    if (isStarted) {
+      Closable.make { deadline =>
+        info(s"Closing embedded http client: ${client.label}", disableLogging)
+        client.close(deadline)
+      }
+    } else Closable.nop
   }
 }

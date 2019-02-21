@@ -55,8 +55,8 @@ basics.html#verbosity-levels>`__ of the metrics via a Finagle `Tunable <https://
 finagle/guide/Configuration.html>`__.
 
 Users need to create a JSON file and place it in the `src/main/resources` folder in
-`com/twitter/tunables/finagle/instances.json` to whitelist the Logback metrics.
-To whitelist all Logback metrics the JSON file could contain the following:
+`com/twitter/tunables/finagle/instances.json` to acceptlist the Logback metrics.
+To acceptlist all Logback metrics the JSON file could contain the following:
 
 .. code-block:: json
 

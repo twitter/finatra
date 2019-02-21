@@ -7,14 +7,134 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
-19.1.0
+19.2.0
 -------
+
+Added
+~~~~~
+* finatra-kafka: Expose timeout duration in FinagleKafkaConsumerBuilder dest(). ``PHAB_ID=D269701``
+
+* finatra-kafka-streams: Expose all existing RocksDb configurations. See
+  `c.t.f.k.config.FinatraRocksDBConfig` for details on flag names,
+  descriptions and default values. ``PHAB_ID=D272068``
+
+* finatra-kafka-streams: Added two RocksDB flags related to block cache tuning,
+  `cache_index_and_filter_blocks` and `pin_l0_filter_and_index_blocks_in_cache`.
+  ``PHAB_ID=D269516``
+
+* finatra-kafka: Adding an implicit implementation of
+  `c.t.app.Flaggable[c.t.finatra.kafka.domain.SeekStrategy]`
+  and `c.t.app.Flaggable[org.apache.kafka.clients.consumer.OffsetResetStrategy]`.
+  ``PHAB_ID=D271098``
+
+* finatra-http: Added support to serve `c.t.io.Reader` as a streaming response in
+  `c.t.finatra.http.internal.marshalling.CallbackConverter`. ``PHAB_ID=D266863``
+
+* finatra-kafka: Expose endOffsets() in FinagleKafkaConsumer. ``PHAB_ID=D263573``
+
+* finatra-kafka-streams: Adding missing ScalaDocs. Adding metric for elapsed state
+  restore time. RocksDB configuration now contains a flag for adjusting the number
+  of cache shard bits, `rocksdb.block.cache.shard.bits`. ``PHAB_ID=D255771``
+
+* finatra-jackson: Added @Pattern annotation to support finatra/jackson for regex pattern
+  validation on string values. ``PHAB_ID=D259719``
+
+Changed
+~~~~~~~
+
+* finatra-kafka-streams: Refactor package names. All classes moved from
+  com.twitter.finatra.streams to com.twitter.finatra.kafkastreams. ``PHAB_ID=D268027``
+
+* finatra-kafka-streams: Delete deprecated and unused classes. ``PHAB_ID=D267921``
+
+* finatra-kafka-streams: `c.t.finatra.streams.transformer.domain.Time` is now the canonical
+   representation of time for watermarks and timers. `RichLong` implicit from
+   `com.twitter.finatra.streams.converters.time` has been renamed to `RichFinatraKafkaStreamsLong`.
+   ``PHAB_ID=D255736``
+
+* finatra-jackson: Fix `CaseClassField` annotation reflection for Scala 2.12. ``PHAB_ID=D264423``
+
+* finatra-kafka-streams: Combine FinatraTransformer with FinatraTransformerV2. ``PHAB_ID=D254411``
+
+* finatra-thrift: The return type of `ReqRepDarkTrafficFilterModule#newFilter` has been changed from
+  `DarkTrafficFilter[MethodIface]` to `Filter.TypeAgnostic`. ``PHAB_ID=D261868``
+
+* finatra-kafka: Add lookupBootstrapServers function that takes timeout as a parameter.
+  ``PHAB_ID=D256997``
+
+* finatra-thrift: If a Controller is not configured with exactly one endpoint
+  per method, it will throw an AssertionError instead of logging an error message.
+  An attempt to use non-legacy functionality with a legacy Controller will throw
+  an AssertionError. ``PHAB_ID=D260230``
+
+* finatra-kafka: Add flags for controlling rocksdb internal LOG file growth.
+  - `rocksdb.log.info.level` Allows the setting of rocks log levels
+    `DEBUG_LEVEL`, `INFO_LEVEL`, `WARN_LEVEL`, `ERROR_LEVEL`, `FATAL_LEVEL`,
+    `HEADER_LEVEL`.
+  - `rocksdb.log.max.file.size` The maximal size of the info log file.
+  - `rocksdb.log.keep.file.num` Maximal info log files to be kept.
+  ``PHAB_ID=D259579``
+
+* finatra-kafka: Add admin routes for properties and topology information
+  - `/admin/kafka/streams/properties` Dumps the
+    `KafkaStreamsTwitterServer#properties` as plain text in the TwitterServer
+    admin page.
+  - `/admin/kafka/streams/topology` Dumps the
+    `KafkaStreamsTwitterServer#topology` as plain text in the TwitterServer
+    admin page.
+  ``PHAB_ID=D259597``
+
+* inject-server: EmbeddedTwitterServer that fails to start will now continue to
+  throw the startup failure on calls to methods that require a successfully started server.
+  ``PHAB_ID=D265543``
+
+Fixed
+~~~~~
+
+* finatra-kafka-streams: `FinatraTopologyTester` did not set
+  `TopologyTestDriver#initialWallClockTimeMs` on initialization causing diverging wall clock time
+  when `TopologyTestDriver#advanceWallClockTime` advanced time. The divergence was between
+  system time set by `org.joda.time.DateTimeUtils.setCurrentMillisFixed` and internal mock timer
+  `TopologyTestDriver#mockWallClockTime`. `FinatraTopologyTester.inMemoryStatsReceiver` is reset on
+  `TopologyFeatureTest#beforeEach` for all test that extend `TopologyFeatureTest`.
+  ``PHAB_ID=D269013``
+
+* finatra-kafka-streams: Improve watermark assignment/propagation upon reading the first
+  message and when caching key value stores are used. ``PHAB_ID=D262054``
+
+* finatra-jackson: Support inherited annotations in case class deserialization. Case class
+  deserialization support does not properly find inherited Jackson annotations. This means
+  that code like this:
+
+  ```
+  trait MyTrait {
+    @JsonProperty("differentName")
+    def name: String
+  }
+  case class MyCaseClass(name: String) extends MyTrait
+  ```
+
+  would not properly expect an incoming field with name `differentName` to parse into the
+  case class `name` field. This commit provides support for capturing inherited annotations
+  on case class fields. Annotations processed in order, thus if the same annotation appears
+  in the class hierarchy multiple times, the value configured on the class will win otherwise
+  will be in the order of trait linearization with the "last" declaration prevailing.
+  ``PHAB_ID=D260376``
+
+* finatra: Remove extraneous dependency on old `javax.servlet` ServletAPI dependency.
+  The fixes #478. ``PHAB_ID=D259671``
+
+Closed
+~~~~~~
+
+19.1.0
+------
 
 Added
 ~~~~~
 
 * finatra-kafka-streams: SumAggregator and CompositeSumAggregator only support enhanced window
-  aggregations for the sum operation. Deprecate SumAggregator and CompositeSumAggregator and create 
+  aggregations for the sum operation. Deprecate SumAggregator and CompositeSumAggregator and create
   an AggregatorTransformer class that can perform arbitrary aggregations. ``PHAB_ID=D257138``
 
 * finatra-streams: Open-source Finatra Streams. Finatra Streams is an integration
@@ -100,11 +220,11 @@ Changed
   now-removed `c.t.f.b.Server` have been modified or removed.
   ``PHAB_ID=D254339``
 
-* finatra-kafka-streams: Finatra Queryable State methods currently require the window size 
-  to be passed into query methods for windowed key value stores. This is unnecessary, as 
-  the queryable state class can be passed the window size at construction time. We also now 
-  save off all FinatraKeyValueStores in a global manager class to allow query services 
-  (e.g. thrift) to access the same KeyValueStore implementation that the FinatraTransformer 
+* finatra-kafka-streams: Finatra Queryable State methods currently require the window size
+  to be passed into query methods for windowed key value stores. This is unnecessary, as
+  the queryable state class can be passed the window size at construction time. We also now
+  save off all FinatraKeyValueStores in a global manager class to allow query services
+  (e.g. thrift) to access the same KeyValueStore implementation that the FinatraTransformer
   is using. ``PHAB_ID=D256920``
 
 Fixed

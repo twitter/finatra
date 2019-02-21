@@ -237,7 +237,8 @@ the server documentation `here <https://twitter.github.io/finagle/guide/Servers.
 Server-side Response Classification
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To configure server-side `Response Classification <https://twitter.github.io/finagle/guide/Servers.html#response-classification>`__
+The default Response Classifier for Thrift servers is `ThriftResponseClassifier.ThriftExceptionsAsFailures <https://github.com/twitter/finatra/blob/8b448065f5f74c1eedd744bd15618cbf932ea1bc/thrift/src/main/scala/com/twitter/finatra/thrift/response/ThriftResponseClassifier.scala#L14>`__,
+which classifies any deserialized Thrift Exception as a failure. To configure server-side `Response Classification <https://twitter.github.io/finagle/guide/Servers.html#response-classification>`__
 you could choose to set the classifier directly on the underlying Finagle server by overriding the
 `configureThriftServer` in your server, e.g.,
 

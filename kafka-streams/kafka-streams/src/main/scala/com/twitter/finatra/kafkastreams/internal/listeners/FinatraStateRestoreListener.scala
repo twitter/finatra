@@ -4,11 +4,23 @@ import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.util.logging.Logging
 import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.streams.processor.StateRestoreListener
+import org.joda.time.DateTimeUtils
 
-class FinatraStateRestoreListener(
-  statsReceiver: StatsReceiver) //TODO: Add stats for restoration (e.g. total time)
+/**
+ * A [[StateRestoreListener]] that emits logs and metrics relating to state restoration.
+ *
+ * @param statsReceiver A StatsReceiver used for metric tracking.
+ */
+private[kafkastreams] class FinatraStateRestoreListener(statsReceiver: StatsReceiver)
     extends StateRestoreListener
     with Logging {
+
+  private val scopedStatReceiver = statsReceiver.scope("finatra_state_restore_listener")
+  private val totalRestoreTime =
+    scopedStatReceiver.addGauge("restore_time_elapsed_ms")(restoreTimeElapsedMs)
+
+  private var restoreTimestampStartMs: Option[Long] = None
+  private var restoreTimestampEndMs: Option[Long] = None
 
   override def onRestoreStart(
     topicPartition: TopicPartition,
@@ -16,6 +28,7 @@ class FinatraStateRestoreListener(
     startingOffset: Long,
     endingOffset: Long
   ): Unit = {
+    restoreTimestampStartMs = Some(DateTimeUtils.currentTimeMillis)
     val upToRecords = endingOffset - startingOffset
     info(
       s"${storeAndPartition(storeName, topicPartition)} start restoring up to $upToRecords records from $startingOffset to $endingOffset"
@@ -36,12 +49,20 @@ class FinatraStateRestoreListener(
     storeName: String,
     totalRestored: Long
   ): Unit = {
+    restoreTimestampEndMs = Some(DateTimeUtils.currentTimeMillis)
     info(
-      s"${storeAndPartition(storeName, topicPartition)} finished restoring $totalRestored records"
+      s"${storeAndPartition(storeName, topicPartition)} finished restoring $totalRestored records in $restoreTimeElapsedMs ms"
     )
   }
 
-  private def storeAndPartition(storeName: String, topicPartition: TopicPartition) = {
+  private def storeAndPartition(storeName: String, topicPartition: TopicPartition): String = {
     s"$storeName topic ${topicPartition.topic}_${topicPartition.partition}"
+  }
+
+  private def restoreTimeElapsedMs: Long = {
+    val currentTimestampMs = DateTimeUtils.currentTimeMillis
+    restoreTimestampEndMs.getOrElse(currentTimestampMs) - restoreTimestampStartMs.getOrElse(
+      currentTimestampMs
+    )
   }
 }

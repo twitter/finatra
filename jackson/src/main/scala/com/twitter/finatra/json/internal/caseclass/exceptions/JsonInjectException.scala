@@ -1,7 +1,6 @@
 package com.twitter.finatra.json.internal.caseclass.exceptions
 
 import com.google.inject.Key
-import scala.language.existentials
 import scala.util.control.NoStackTrace
 
 case class JsonInjectException(

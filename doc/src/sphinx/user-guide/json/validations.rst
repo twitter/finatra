@@ -10,6 +10,7 @@ The validations framework integrates Finatra's custom `case class` deserializer 
 -  ``@CountryCode``
 -  ``@FutureTime``
 -  ``@PastTime``
+-  ``@Pattern``
 -  ``@Max``
 -  ``@Min``
 -  ``@NotEmpty``

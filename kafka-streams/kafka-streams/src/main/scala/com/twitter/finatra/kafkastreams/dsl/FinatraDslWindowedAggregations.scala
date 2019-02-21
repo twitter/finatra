@@ -1,25 +1,19 @@
 package com.twitter.finatra.kafkastreams.dsl
 
 import com.twitter.app.Flag
-import com.twitter.conversions.storage._
-import com.twitter.conversions.time._
+import com.twitter.conversions.StorageUnitOps._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.kafka.serde.ScalaSerdes
-import com.twitter.finatra.kafkastreams.internal.ScalaStreamsImplicits
-import com.twitter.finatra.kafkastreams.processors.FlushingAwareServer
-import com.twitter.finatra.streams.flags.FinatraTransformerFlags
-import com.twitter.finatra.streams.transformer.domain._
-import com.twitter.finatra.streams.transformer.{AggregatorTransformer, FinatraTransformer}
+import com.twitter.finatra.kafkastreams.config.FinatraTransformerFlags
+import com.twitter.finatra.kafkastreams.flushing.FlushingAwareServer
+import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer
+import com.twitter.finatra.kafkastreams.transformer.aggregation.{AggregatorTransformer, FixedTimeWindowedSerde, TimeWindowed, WindowedValue}
+import com.twitter.finatra.kafkastreams.transformer.domain.Time
+import com.twitter.finatra.kafkastreams.utils.ScalaStreamsImplicits
 import com.twitter.inject.Logging
 import com.twitter.util.Duration
-import org.apache.kafka.common.config.TopicConfig.{
-  CLEANUP_POLICY_COMPACT,
-  CLEANUP_POLICY_CONFIG,
-  CLEANUP_POLICY_DELETE,
-  DELETE_RETENTION_MS_CONFIG,
-  RETENTION_MS_CONFIG,
-  SEGMENT_BYTES_CONFIG
-}
+import org.apache.kafka.common.config.TopicConfig.{CLEANUP_POLICY_COMPACT, CLEANUP_POLICY_CONFIG, CLEANUP_POLICY_DELETE, DELETE_RETENTION_MS_CONFIG, RETENTION_MS_CONFIG, SEGMENT_BYTES_CONFIG}
 import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.streams.scala.kstream.{KStream => KStreamS}
 import org.apache.kafka.streams.state.Stores
@@ -73,10 +67,10 @@ trait FinatraDslWindowedAggregations
      * A Window is closed after event time passes the end of a TimeWindow + allowedLateness.
      *
      * After a window is closed, if emitOnClose=true it is forwarded out of this transformer with a
-     * [[WindowedValue.resultState]] of [[com.twitter.finatra.streams.transformer.domain.WindowClosed]]
+     * [[WindowedValue.windowResultType]] of [[WindowClosed]]
      *
      * If a record arrives after a window is closed it is immediately forwarded out of this
-     * transformer with a [[WindowedValue.resultState]] of [[com.twitter.finatra.streams.transformer.domain.Restatement]]
+     * transformer with a [[WindowedValue.windowResultType]] of [[Restatement]]
      *
      * @param stateStore the name of the StateStore used to maintain the counts.
      * @param windowSize splits the stream of data into buckets of data of windowSize,
@@ -111,7 +105,7 @@ trait FinatraDslWindowedAggregations
       aggregateSerde: Serde[Aggregate],
       initializer: () => Aggregate,
       aggregator: ((K, V), Aggregate) => Aggregate,
-      windowStart: (Time, K, V) => Long = null,
+      windowStart: (Time, K, V) => Time = null,
       emitOnClose: Boolean = true,
       emitUpdatedEntriesOnCommit: Boolean = false,
       windowSizeRetentionMultiplier: Int = 2
@@ -174,10 +168,10 @@ trait FinatraDslWindowedAggregations
      * A Window is closed after event time passes the end of a TimeWindow + allowedLateness.
      *
      * After a window is closed, if emitOnClose=true it is forwarded out of this transformer with a
-     * [[WindowedValue.resultState]] of [[com.twitter.finatra.streams.transformer.domain.WindowClosed]]
+     * [[WindowedValue.windowResultType]] of [[WindowClosed]]
      *
      * If a record arrives after a window is closed it is immediately forwarded out of this
-     * transformer with a [[WindowedValue.resultState]] of [[com.twitter.finatra.streams.transformer.domain.Restatement]]
+     * transformer with a [[WindowedValue.windowResultType]] of [[Restatement]]
      *
      * @param stateStore the name of the StateStore used to maintain the counts.
      * @param windowSize splits the stream of data into buckets of data of windowSize,
@@ -192,6 +186,7 @@ trait FinatraDslWindowedAggregations
      *                                   Streams commit interval. Emitted entries will have a
      *                                   WindowResultType set to WindowOpen.
      * @param windowSizeRetentionMultiplier A multiplier on top of the windowSize to ensure data is not deleted from the changelog prematurely. Allows for clock drift. Default is 2
+     *
      * @return a stream of Keys for a particular timewindow, and the sum of the values for that key
      *         within a particular timewindow.
      */
@@ -242,10 +237,10 @@ trait FinatraDslWindowedAggregations
      * A Window is closed after event time passes the end of a TimeWindow + allowedLateness.
      *
      * After a window is closed, if emitOnClose=true it is forwarded out of this transformer with a
-     * [[WindowedValue.resultState]] of [[com.twitter.finatra.streams.transformer.domain.WindowClosed]]
+     * [[WindowedValue.windowResultType]] of [[WindowClosed]]
      *
      * If a record arrives after a window is closed it is immediately forwarded out of this
-     * transformer with a [[WindowedValue.resultState]] of [[com.twitter.finatra.streams.transformer.domain.Restatement]]
+     * transformer with a [[WindowedValue.windowResultType]] of [[Restatement]]
      *
      * @param stateStore the name of the StateStore used to maintain the counts.
      * @param windowSize splits the stream of data into buckets of data of windowSize,
@@ -260,6 +255,7 @@ trait FinatraDslWindowedAggregations
      *                                   Streams commit interval. Emitted entries will have a
      *                                   WindowResultType set to WindowOpen.
      * @param windowSizeRetentionMultiplier A multiplier on top of the windowSize to ensure data is not deleted from the changelog prematurely. Allows for clock drift. Default is 2
+     *
      * @return a stream of Keys for a particular timewindow, and the sum of the values for that key
      *         within a particular timewindow.
      */
@@ -290,7 +286,7 @@ trait FinatraDslWindowedAggregations
         windowStart = {
           case (time, key, timeWindowedCount) =>
             assert(timeWindowedCount.sizeMillis == windowSizeMillis)
-            timeWindowedCount.startMs
+            timeWindowedCount.start
         },
         emitOnClose = emitOnClose,
         emitUpdatedEntriesOnCommit = emitUpdatedEntriesOnCommit,

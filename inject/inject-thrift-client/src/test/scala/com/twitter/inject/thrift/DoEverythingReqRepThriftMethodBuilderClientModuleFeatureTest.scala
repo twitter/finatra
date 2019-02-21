@@ -64,7 +64,7 @@ class DoEverythingReqRepThriftMethodBuilderClientModuleFeatureTest
     }
 
     // per-method -- all the requests in this test were to the same method
-    /* assert counters added by ThriftServiceIface#statsFilter */
+    /* assert counters added by ThriftServicePerEndpoint#statsFilter */
     server.assertCounter("clnt/greeter-thrift-client/Greeter/hi/requests", 3)
     server.assertCounter("clnt/greeter-thrift-client/Greeter/hi/success", 1)
     server.assertCounter("clnt/greeter-thrift-client/Greeter/hi/failures", 2)
@@ -83,7 +83,7 @@ class DoEverythingReqRepThriftMethodBuilderClientModuleFeatureTest
     assert(!response.headers.empty)
 
     // per-method -- all the requests in this test were to the same method
-    /* assert counters added by ThriftServiceIface#statsFilter */
+    /* assert counters added by ThriftServicePerEndpoint#statsFilter */
     server.assertCounter("clnt/greeter-thrift-client/Greeter/hello/requests", 3)
     server.assertCounter("clnt/greeter-thrift-client/Greeter/hello/success", 1)
     server.assertCounter("clnt/greeter-thrift-client/Greeter/hello/failures", 2)
@@ -103,7 +103,7 @@ class DoEverythingReqRepThriftMethodBuilderClientModuleFeatureTest
     )
 
     // per-method -- all the requests in this test were to the same method
-    /* assert counters added by ThriftServiceIface#statsFilter */
+    /* assert counters added by ThriftServicePerEndpoint#statsFilter */
     server.assertCounter("clnt/greeter-thrift-client/Greeter/bye/requests", 3)
     server.assertCounter("clnt/greeter-thrift-client/Greeter/bye/success", 1)
     server.assertCounter("clnt/greeter-thrift-client/Greeter/bye/failures", 2)

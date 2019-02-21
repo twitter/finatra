@@ -2,7 +2,7 @@ package com.twitter.finatra.kafkastreams.internal.utils
 
 import java.lang.reflect.{Field, Modifier}
 
-object ReflectionUtils {
+private[kafkastreams] object ReflectionUtils {
 
   def getField(clazz: Class[_], fieldName: String): Field = {
     val field = clazz.getDeclaredField(fieldName)

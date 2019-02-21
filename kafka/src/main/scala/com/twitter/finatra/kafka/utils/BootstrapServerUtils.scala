@@ -4,20 +4,36 @@ import com.twitter.finagle.Addr.{Bound, Failed, Neg, Pending}
 import com.twitter.finagle.Address.Inet
 import com.twitter.finagle.{Addr, Address, Namer}
 import com.twitter.inject.Logging
-import com.twitter.util.{Await, Promise, Witness}
+import com.twitter.util.{Await, Duration, Promise, Witness}
 import java.net.InetSocketAddress
+
 
 object BootstrapServerUtils extends Logging {
 
-  def lookupBootstrapServers(dest: String): String = {
+  /**
+   * Translates the dest path into a list of servers that can be used to initialize a Kafka
+   * producer or consumer. It uses [[com.twitter.util.Duration.Top]] as the timeout, effectively
+   * waiting infinitely for the name resolution.
+   * @param dest The path to translate.
+   * @return A comma separated list of server addresses.
+   */
+  def lookupBootstrapServers(dest: String): String = lookupBootstrapServers(dest, Duration.Top)
+
+  /**
+   * Translates the dest path into a list of servers that can be used to initialize a Kafka
+   * producer or consumer using the specified timeout.
+   * @param dest The path to translate.
+   * @param timeout The maximum timeout for the name resolution.
+   * @return A comma separated list of server addresses.
+   */
+  def lookupBootstrapServers(dest: String, timeout: Duration): String = {
     if (!dest.startsWith("/")) {
       info(s"Resolved Kafka Dest = $dest")
       dest
     } else {
       info(s"Resolving Kafka Bootstrap Servers: $dest")
       val promise = new Promise[Seq[InetSocketAddress]]()
-      val resolveResult = Namer
-        .resolve(dest).changes
+      val resolveResult = Namer.resolve(dest).changes
         .register(new Witness[Addr] {
           override def notify(note: Addr): Unit = note match {
             case Pending =>
@@ -32,7 +48,7 @@ object BootstrapServerUtils extends Logging {
           }
         })
 
-      val socketAddress = Await.result(promise)
+      val socketAddress = Await.result(promise, timeout)
       resolveResult.close()
       val servers =
         socketAddress.take(5).map(a => s"${a.getAddress.getHostAddress}:${a.getPort}").mkString(",")

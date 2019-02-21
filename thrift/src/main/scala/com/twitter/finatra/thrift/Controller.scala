@@ -52,9 +52,9 @@ abstract class Controller private (val config: Controller.Config) extends Loggin
    */
   class MethodDSL[M <: ThriftMethod] (val m: M, chain: Filter.TypeAgnostic) {
 
-    private[this] def nonLegacy[T](f: ControllerConfig => T): T = config match {
-      case cc: ControllerConfig => f(cc)
-      case _: LegacyConfig => throw new IllegalStateException("Legacy controllers cannot use method DSLs")
+    private[this] def nonLegacy[T](f: ControllerConfig => T): T = {
+      assert(config.isInstanceOf[ControllerConfig], "Legacy controllers cannot use method DSLs")
+      f(config.asInstanceOf[ControllerConfig])
     }
 
     /**
@@ -67,6 +67,8 @@ abstract class Controller private (val config: Controller.Config) extends Loggin
     /**
      * Provide an implementation for this method in the form of a [[com.twitter.finagle.Service]]
      *
+     * @note The service will be called for each request.
+     *
      * @param svc the service to use as an implementation
      */
     def withService(svc: Service[Request[M#Args], Response[M#SuccessType]]): Unit = nonLegacy { cc =>
@@ -75,7 +77,9 @@ abstract class Controller private (val config: Controller.Config) extends Loggin
 
     /**
      * Provide an implementation for this method in the form of a function of
-     * Request => Future[Response]
+     * Request => Future[Response].
+     *
+     * @note The given function will be invoked for each request.
      *
      * @param fn the function to use
      */
@@ -87,6 +91,8 @@ abstract class Controller private (val config: Controller.Config) extends Loggin
      * Provide an implementation for this method in the form a function of Args => Future[SuccessType]
      * This exists for legacy compatibility reasons. Users should instead use Request/Response
      * based functionality.
+     *
+     * @note The implementation given will be invoked for each request.
      *
      * @param f the implementation
      * @return a ThriftMethodService, which is used in legacy controller configurations
@@ -119,7 +125,10 @@ abstract class Controller private (val config: Controller.Config) extends Loggin
    * implementation. All thrift methods that a ThriftSerivce handles must be registered using
    * this method to properly construct a Controller.
    *
+   * @note The provided implementation will be invoked for each request.
+   *
    * @param m The thrift method to handle.
+   *
    */
   protected def handle[M <: ThriftMethod](m: M) = new MethodDSL[M](m, Filter.TypeAgnostic.Identity)
 }

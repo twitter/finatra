@@ -172,7 +172,7 @@ trait TwitterServer
   /* Overrides */
 
   override final def main(): Unit = {
-    super.main() // Call inject.App.main() to create Injector
+    super[App].main() // Call inject.App.main() to create Injector
 
     info("Startup complete, server awaiting.")
     Awaiter.any(awaitables.asScala, period = 1.second)
@@ -190,7 +190,7 @@ trait TwitterServer
    */
   @Lifecycle
   override protected def postInjectorStartup(): Unit = {
-    super.postInjectorStartup()
+    super[App].postInjectorStartup()
 
     if (resolveFinagleClientsOnStartup) {
       info("Resolving Finagle clients before warmup")
@@ -278,7 +278,7 @@ trait TwitterServer
    */
   @Lifecycle
   override protected def beforePostWarmup(): Unit = {
-    super.beforePostWarmup()
+    super[App].beforePostWarmup()
 
     // trigger gc before accepting traffic
     prebindWarmup()
@@ -298,7 +298,7 @@ trait TwitterServer
    */
   @Lifecycle
   override protected def postWarmup(): Unit = {
-    super.postWarmup()
+    super[App].postWarmup()
 
     if (disableAdminHttpServer) {
       info("Disabling the Admin HTTP Server since disableAdminHttpServer=true")
@@ -324,7 +324,7 @@ trait TwitterServer
    */
   @Lifecycle
   override protected def afterPostWarmup(): Unit = {
-    super.afterPostWarmup()
+    super[App].afterPostWarmup()
 
     if (!disableAdminHttpServer) {
       info("admin http server started on port " + PortUtils.getPort(adminHttpServer))

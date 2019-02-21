@@ -205,7 +205,16 @@ class EmbeddedTwitterServer(
       started = true //mutation
       starting = false //mutation
     }
+
+    //because start() can be called lazily multiple times,
+    //subsequent calls will not enter the initialization loop.
+    //we need to throw here if there was an error for the initial start() call.
+    throwIfStartupFailed()
   }
+
+  /** If the [[startupFailedThrowable]] is defined, [[throwStartupFailedException]] */
+  private def throwIfStartupFailed(): Unit =
+    if (startupFailedThrowable.isDefined) throwStartupFailedException()
 
   /** Assert the underlying TwitterServer has started */
   def assertStarted(started: Boolean = true): Unit = {
@@ -448,9 +457,7 @@ class EmbeddedTwitterServer(
     for (_ <- 1 to maxStartupTimeSeconds) {
       info("Waiting for warmup phases to complete...", disableLogging)
 
-      if (startupFailedThrowable.isDefined) {
-        throwStartupFailedException()
-      }
+      throwIfStartupFailed()
 
       if ((isInjectable && injectableServer.started)
         || (!isInjectable && nonInjectableServerStarted)) {

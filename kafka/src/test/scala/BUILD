@@ -31,20 +31,6 @@ scala_library(
         "finatra/kafka/src/test/thrift:thrift-scala",
         "util/util-slf4j-api/src/main/scala",
     ],
-    excludes = [
-        exclude(
-            org = "com.twitter",
-            name = "twitter-server-internal-naming_2.11",
-        ),
-        exclude(
-            org = "com.twitter",
-            name = "loglens-log4j-logging_2.11",
-        ),
-        exclude(
-            org = "log4j",
-            name = "log4j",
-        ),
-    ],
     exports = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/junit",

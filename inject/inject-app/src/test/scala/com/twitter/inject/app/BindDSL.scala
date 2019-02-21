@@ -58,7 +58,7 @@ private[twitter] trait BindDSL { self =>
   def bindClass[T](clazz: Class[T]): ClassDSL[T] = new ClassDSL[T](clazz)
 
   /** For Java Compatibility */
-  def bindClass[T](clazz: Class[T], instance: T): self.type = {
+  def bindClass[T](clazz: Class[T], instance: T): BindDSL.this.type = {
     addInjectionServiceModule(new TwitterModule {
       override def configure(): Unit = {
         bind(clazz).toInstance(instance)
@@ -68,7 +68,7 @@ private[twitter] trait BindDSL { self =>
   }
 
   /** For Java Compatibility */
-  def bindClass[T](clazz: Class[T], annotation: Annotation, instance: T): self.type = {
+  def bindClass[T](clazz: Class[T], annotation: Annotation, instance: T): BindDSL.this.type = {
     addInjectionServiceModule(new TwitterModule {
       override def configure(): Unit = {
         bind(clazz).annotatedWith(annotation).toInstance(instance)
@@ -78,7 +78,7 @@ private[twitter] trait BindDSL { self =>
   }
 
   /** For Java Compatibility */
-  def bindClass[T, Ann <: Annotation](clazz: Class[T], annotationClazz: Class[Ann], instance: T): self.type = {
+  def bindClass[T, Ann <: Annotation](clazz: Class[T], annotationClazz: Class[Ann], instance: T): BindDSL.this.type = {
     addInjectionServiceModule(new TwitterModule {
       override def configure(): Unit = {
         bind(clazz).annotatedWith(annotationClazz).toInstance(instance)
@@ -88,7 +88,7 @@ private[twitter] trait BindDSL { self =>
   }
 
   /** For Java Compatibility */
-  def bindClass[T, U <: T](clazz: Class[T], instanceClazz: Class[U]): self.type = {
+  def bindClass[T, U <: T](clazz: Class[T], instanceClazz: Class[U]): BindDSL.this.type = {
     addInjectionServiceModule(new TwitterModule {
       override def configure(): Unit = {
         bind(clazz).to(instanceClazz)
@@ -98,7 +98,7 @@ private[twitter] trait BindDSL { self =>
   }
 
   /** For Java Compatibility */
-  def bindClass[T, U <: T](clazz: Class[T], annotation: Annotation, instanceClazz: Class[U]): self.type = {
+  def bindClass[T, U <: T](clazz: Class[T], annotation: Annotation, instanceClazz: Class[U]): BindDSL.this.type = {
     addInjectionServiceModule(new TwitterModule {
       override def configure(): Unit = {
         bind(clazz).annotatedWith(annotation).to(instanceClazz)
@@ -108,7 +108,7 @@ private[twitter] trait BindDSL { self =>
   }
 
   /** For Java Compatibility */
-  def bindClass[T, Ann <: Annotation, U <: T](clazz: Class[T], annotationClazz: Class[Ann], instanceClazz: Class[U]): self.type = {
+  def bindClass[T, Ann <: Annotation, U <: T](clazz: Class[T], annotationClazz: Class[Ann], instanceClazz: Class[U]): BindDSL.this.type = {
     addInjectionServiceModule(new TwitterModule {
       override def configure(): Unit = {
         bind(clazz).annotatedWith(annotationClazz).to(instanceClazz)
@@ -120,7 +120,7 @@ private[twitter] trait BindDSL { self =>
   /* Private */
 
   private[app] class TypeDSL[T: TypeTag] {
-    def toInstance(instance: T): self.type = {
+    def toInstance(instance: T): BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(asManifest[T]).toInstance(instance)
@@ -129,7 +129,7 @@ private[twitter] trait BindDSL { self =>
       self
     }
 
-    def to[U <: T: TypeTag]: self.type = {
+    def to[U <: T: TypeTag]: BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(asManifest[T]).to(asManifest[U])
@@ -138,7 +138,7 @@ private[twitter] trait BindDSL { self =>
       self
     }
 
-    def to[U <: T: TypeTag](instanceClazz: Class[U]): self.type = {
+    def to[U <: T: TypeTag](instanceClazz: Class[U]): BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(asManifest[T]).to(instanceClazz)
@@ -155,7 +155,7 @@ private[twitter] trait BindDSL { self =>
   }
 
   private[app] class TypeAnnotationDSL[T: TypeTag, Ann <: Annotation: TypeTag] extends TypeDSL[T] {
-    override def toInstance(instance: T): self.type = {
+    override def toInstance(instance: T): BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(asManifest[T], asManifest[Ann]).toInstance(instance)
@@ -164,7 +164,7 @@ private[twitter] trait BindDSL { self =>
       self
     }
 
-    override def to[U <: T: TypeTag]: self.type = {
+    override def to[U <: T: TypeTag]: BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(asManifest[T]).annotatedWith(asManifest[Ann]).to(asManifest[U])
@@ -173,7 +173,7 @@ private[twitter] trait BindDSL { self =>
       self
     }
 
-    override def to[U <: T: TypeTag](instanceClazz: Class[U]): self.type = {
+    override def to[U <: T: TypeTag](instanceClazz: Class[U]): BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(asManifest[T]).annotatedWith(asManifest[Ann]).to(instanceClazz)
@@ -184,7 +184,7 @@ private[twitter] trait BindDSL { self =>
   }
 
   private[app] class TypeAnnotationClassDSL[T: TypeTag, Ann <: Annotation](annotationClazz: Class[Ann]) extends TypeDSL[T] {
-    override def toInstance(instance: T): self.type = {
+    override def toInstance(instance: T): BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(asManifest[T]).annotatedWith(annotationClazz).toInstance(instance)
@@ -193,7 +193,7 @@ private[twitter] trait BindDSL { self =>
       self
     }
 
-    override def to[U <: T: TypeTag]: self.type = {
+    override def to[U <: T: TypeTag]: BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(asManifest[T]).annotatedWith(annotationClazz).to(asManifest[U])
@@ -202,7 +202,7 @@ private[twitter] trait BindDSL { self =>
       self
     }
 
-    override def to[U <: T: TypeTag](instanceClazz: Class[U]): self.type = {
+    override def to[U <: T: TypeTag](instanceClazz: Class[U]): BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(asManifest[T]).annotatedWith(annotationClazz).to(instanceClazz)
@@ -213,7 +213,7 @@ private[twitter] trait BindDSL { self =>
   }
 
   private[app] class TypeWithNamedAnnotationDSL[T: TypeTag](annotation: Annotation) extends TypeDSL[T] {
-    override def toInstance(instance: T): self.type = {
+    override def toInstance(instance: T): BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(asManifest[T]).annotatedWith(annotation).toInstance(instance)
@@ -222,7 +222,7 @@ private[twitter] trait BindDSL { self =>
       self
     }
 
-    override def to[U <: T: TypeTag]: self.type = {
+    override def to[U <: T: TypeTag]: BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(asManifest[T]).annotatedWith(annotation).to(asManifest[U])
@@ -231,7 +231,7 @@ private[twitter] trait BindDSL { self =>
       self
     }
 
-    override def to[U <: T: TypeTag](instanceClazz: Class[U]): self.type = {
+    override def to[U <: T: TypeTag](instanceClazz: Class[U]): BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(asManifest[T]).annotatedWith(annotation).to(instanceClazz)
@@ -242,7 +242,7 @@ private[twitter] trait BindDSL { self =>
   }
 
   private[app] class ClassDSL[T](clazz: Class[T]) {
-    def toInstance(instance: T): self.type = {
+    def toInstance(instance: T): BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(clazz).toInstance(instance)
@@ -251,7 +251,7 @@ private[twitter] trait BindDSL { self =>
       self
     }
 
-    def to[U <: T : TypeTag : ClassTag]: self.type = {
+    def to[U <: T : TypeTag : ClassTag]: BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(clazz).to(typeLiteral[U](asManifest[U]))
@@ -260,7 +260,7 @@ private[twitter] trait BindDSL { self =>
       self
     }
 
-    def to[U <: T](instanceClazz: Class[U]): self.type = {
+    def to[U <: T](instanceClazz: Class[U]): BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(clazz).to(instanceClazz)
@@ -275,7 +275,7 @@ private[twitter] trait BindDSL { self =>
   }
 
   private[app] class ClassAnnotationDSL[T, Ann <: Annotation](clazz: Class[T], annotationClazz: Class[Ann]) extends ClassDSL(clazz) {
-    override def toInstance(instance: T): self.type = {
+    override def toInstance(instance: T): BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(clazz).annotatedWith(annotationClazz).toInstance(instance)
@@ -284,7 +284,7 @@ private[twitter] trait BindDSL { self =>
       self
     }
 
-    override def to[U <: T : TypeTag : ClassTag]: self.type = {
+    override def to[U <: T : TypeTag : ClassTag]: BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(clazz).annotatedWith(annotationClazz).to(typeLiteral[U](asManifest[U]))
@@ -293,7 +293,7 @@ private[twitter] trait BindDSL { self =>
       self
     }
 
-    override def to[U <: T](instanceClazz: Class[U]): self.type = {
+    override def to[U <: T](instanceClazz: Class[U]): BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(clazz).annotatedWith(annotationClazz).to(instanceClazz)
@@ -304,7 +304,7 @@ private[twitter] trait BindDSL { self =>
   }
 
   private[app] class ClassWithNamedAnnotationDSL[T](clazz: Class[T], annotation: Annotation) extends ClassDSL(clazz) {
-    override def toInstance(instance: T): self.type = {
+    override def toInstance(instance: T): BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(clazz).annotatedWith(annotation).toInstance(instance)
@@ -313,7 +313,7 @@ private[twitter] trait BindDSL { self =>
       self
     }
 
-    override def to[U <: T : TypeTag : ClassTag]: self.type = {
+    override def to[U <: T : TypeTag : ClassTag]: BindDSL.this.type = {
       addInjectionServiceModule(new  TwitterModule {
         override def configure(): Unit = {
           bind(clazz).annotatedWith(annotation).to(typeLiteral[U](asManifest[U]))
@@ -323,7 +323,7 @@ private[twitter] trait BindDSL { self =>
     }
 
 
-    override def to[U <: T](instanceClazz: Class[U]): self.type = {
+    override def to[U <: T](instanceClazz: Class[U]): BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
           bind(clazz).annotatedWith(annotation).to(instanceClazz)

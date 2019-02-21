@@ -1,7 +1,9 @@
 owners:
+  - csl-team:ldap 
   - messaging-group:ldap
   - scosenza
   - dbress
   - adams
 watchers:
+  - csl-team@twitter.com
   - ds-messaging@twitter.com

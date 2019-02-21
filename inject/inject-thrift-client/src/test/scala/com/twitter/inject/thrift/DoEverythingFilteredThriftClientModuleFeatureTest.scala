@@ -44,7 +44,7 @@ class DoEverythingFilteredThriftClientModuleFeatureTest
 
     // per-method -- all the requests in this test were to the same method
     server.assertCounter("clnt/greeter-thrift-client/Greeter/hi/invocations", 1)
-    /* assert counters added by ThriftServiceIface#statsFilter */
+    /* assert counters added by ThriftServicePerEndpoint#statsFilter */
     server.assertCounter("clnt/greeter-thrift-client/Greeter/hi/requests", 4)
     server.assertCounter("clnt/greeter-thrift-client/Greeter/hi/success", 2)
     server.assertCounter("clnt/greeter-thrift-client/Greeter/hi/failures", 2)

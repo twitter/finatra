@@ -44,6 +44,12 @@ trait KafkaConfigMethods[Self] extends KafkaConfig {
   def withConfig(key: String, value: String): This =
     fromConfigMap(configMap + (key -> value))
 
+  def withConfig(key: String, value: Int): This =
+    fromConfigMap(configMap + (key -> value.toString))
+
+  def withConfig(key: String, value: Boolean): This =
+    fromConfigMap(configMap + (key -> value.toString))
+
   def withConfig(key: String, value: Duration): This = {
     fromConfigMap(configMap + (key -> value.inMilliseconds.toString))
   }

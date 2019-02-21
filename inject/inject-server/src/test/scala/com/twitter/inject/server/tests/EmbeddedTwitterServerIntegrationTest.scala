@@ -88,6 +88,29 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
     }
   }
 
+  test("server#failed startup throws startup error on future method calls") {
+    val server = new EmbeddedTwitterServer(
+      twitterServer = new TwitterServer {},
+      flags = Map("foo.bar" -> "true"),
+      disableTestLogging = true
+    )
+
+    try {
+      val e = intercept[Exception] {
+        server.assertHealthy()
+      }
+
+      val e2 = intercept[Exception] { //accessing the injector requires a started server
+        server.injector
+      }
+
+      e.getMessage.contains("Error parsing flag \"foo.bar\": flag undefined") should be(true)
+      e.getMessage equals(e2.getMessage)
+    } finally {
+      server.close()
+    }
+  }
+
   test("server#injector error") {
     val server = new EmbeddedTwitterServer(
       stage = Stage.PRODUCTION,

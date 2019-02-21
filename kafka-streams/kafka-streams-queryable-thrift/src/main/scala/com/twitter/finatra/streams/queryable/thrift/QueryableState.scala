@@ -1,12 +1,8 @@
 package com.twitter.finatra.streams.queryable.thrift
 
 import com.twitter.app.Flag
-import com.twitter.finatra.streams.partitioning.StaticPartitioning
-import com.twitter.finatra.streams.query.{
-  QueryableFinatraCompositeWindowStore,
-  QueryableFinatraKeyValueStore,
-  QueryableFinatraWindowStore
-}
+import com.twitter.finatra.kafkastreams.partitioning.StaticPartitioning
+import com.twitter.finatra.kafkastreams.query.{QueryableFinatraCompositeWindowStore, QueryableFinatraKeyValueStore, QueryableFinatraWindowStore}
 import com.twitter.util.Duration
 import org.apache.kafka.common.serialization.Serde
 
@@ -38,14 +34,6 @@ trait QueryableState extends StaticPartitioning {
       numShards = numApplicationInstances(),
       numQueryablePartitions = numQueryablePartitions(),
       currentShardId = currentShard())
-  }
-
-  @deprecated("Use queryableFinatraWindowStore without a windowSize", "1/7/2019")
-  protected def queryableFinatraWindowStore[K, V](
-    storeName: String,
-    primaryKeySerde: Serde[K]
-  ): QueryableFinatraWindowStore[K, V] = {
-    queryableFinatraWindowStore(storeName, null, primaryKeySerde)
   }
 
   protected def queryableFinatraCompositeWindowStore[PK, SK, V](

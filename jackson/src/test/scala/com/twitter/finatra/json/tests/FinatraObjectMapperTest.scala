@@ -25,6 +25,7 @@ import com.twitter.finatra.json.tests.internal.Obj.{
 }
 import com.twitter.finatra.json.tests.internal.TypeAndCompanion.NestedCaseClassInCompanion
 import com.twitter.finatra.json.tests.internal._
+import com.twitter.finatra.json.tests.internal.caseclass.jackson.Aum
 import com.twitter.finatra.json.tests.internal.internal.{
   SimplePersonInPackageObject,
   SimplePersonInPackageObjectWithoutConstructorParams
@@ -49,6 +50,19 @@ class FinatraObjectMapperTest extends Test with Logging {
   /* Test Injector */
   private[this] val injector =
     TestInjector(FinatraJacksonModule).create
+
+  test("JsonProperty#annotation inheritance") {
+    val aumJson = """{"i":1,"j":"J"}"""
+    val aum = parse[Aum](aumJson)
+    aum should equal(Aum(1, "J"))
+    mapper.writeValueAsString(Aum(1, "J")) should equal(aumJson)
+
+    val testCaseClassJson = """{"fedoras":["felt","straw"],"oldness":27}"""
+    val testCaseClass = parse[CaseClassTraitImpl](testCaseClassJson)
+    testCaseClass should equal(CaseClassTraitImpl(Seq("felt", "straw"), 27))
+    mapper.writeValueAsString(CaseClassTraitImpl(Seq("felt", "straw"), 27)) should equal(
+      testCaseClassJson)
+  }
 
   test("simple tests#parse super simple") {
     val foo = parse[SimplePerson]("""{"name": "Steve"}""")
@@ -356,9 +370,11 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("Jodatime#invalid DateTime") {
-    assertJsonParse[CaseClassWithDateTime]("""{
+    assertJsonParse[CaseClassWithDateTime](
+      """{
          "date_time" : ""
-       }""", withErrors = Seq("""date_time: field cannot be empty"""))
+       }""",
+      withErrors = Seq("""date_time: field cannot be empty"""))
   }
 
   test("Jodatime#invalid DateTime's") {
@@ -1089,15 +1105,19 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("case class with boolean as string") {
-    assertJsonParse[CaseClassWithBoolean](""" {
+    assertJsonParse[CaseClassWithBoolean](
+      """ {
             "foo": "bar"
-          }""", withErrors = Seq("foo: 'bar' is not a valid Boolean"))
+          }""",
+      withErrors = Seq("foo: 'bar' is not a valid Boolean"))
   }
 
   test("case class with boolean number as string") {
-    assertJsonParse[CaseClassWithBoolean](""" {
+    assertJsonParse[CaseClassWithBoolean](
+      """ {
             "foo": "1"
-          }""", withErrors = Seq("foo: '1' is not a valid Boolean"))
+          }""",
+      withErrors = Seq("foo: '1' is not a valid Boolean"))
   }
 
   val msgHiJsonStr = """{"msg":"hi"}"""

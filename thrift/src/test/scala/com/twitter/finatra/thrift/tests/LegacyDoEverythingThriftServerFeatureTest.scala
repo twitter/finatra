@@ -1,6 +1,6 @@
 package com.twitter.finatra.thrift.tests
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.doeverything.thriftscala.{Answer, DoEverything, Question}
 import com.twitter.finagle.http.Status
 import com.twitter.finagle.tracing.Trace
@@ -118,11 +118,11 @@ class LegacyDoEverythingThriftServerFeatureTest extends FeatureTest {
     await(client123.magicNum()) should equal("57")
   }
 
-  test("blacklist") {
-    val notWhitelistClient =
-      server.thriftClient[DoEverything[Future]](clientId = "not_on_whitelist")
+  test("denylist") {
+    val notAcceptlistClient =
+      server.thriftClient[DoEverything[Future]](clientId = "not_on_acceptlist")
     assertFailedFuture[UnknownClientIdError] {
-      notWhitelistClient.echo("Hi")
+      notAcceptlistClient.echo("Hi")
     }
   }
 
