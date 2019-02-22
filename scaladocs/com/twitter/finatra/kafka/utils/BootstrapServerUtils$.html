@@ -887,7 +887,25 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
-    </li><li name="com.twitter.finatra.kafka.utils.BootstrapServerUtils#lookupBootstrapServers" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.kafka.utils.BootstrapServerUtils#lookupBootstrapServers" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="lookupBootstrapServers(dest:String,timeout:com.twitter.util.Duration):String"></a><a id="lookupBootstrapServers(String,Duration):String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/utils/BootstrapServerUtils$.html#lookupBootstrapServers(dest:String,timeout:com.twitter.util.Duration):String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lookupBootstrapServers</span><span class="params">(<span name="dest">dest: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="timeout">timeout: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Translates the dest path into a list of servers that can be used to initialize a Kafka
+producer or consumer using the specified timeout.</p><div class="fullcomment"><div class="comment cmt"><p>Translates the dest path into a list of servers that can be used to initialize a Kafka
+producer or consumer using the specified timeout.</p></div><dl class="paramcmts block"><dt class="param">dest</dt><dd class="cmt"><p>The path to translate.</p></dd><dt class="param">timeout</dt><dd class="cmt"><p>The maximum timeout for the name resolution.</p></dd><dt>returns</dt><dd class="cmt"><p>A comma separated list of server addresses.</p></dd></dl></div>
+    </li><li name="com.twitter.finatra.kafka.utils.BootstrapServerUtils#lookupBootstrapServers" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="lookupBootstrapServers(dest:String):String"></a><a id="lookupBootstrapServers(String):String"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/kafka/utils/BootstrapServerUtils$.html#lookupBootstrapServers(dest:String):String" title="Permalink">
@@ -902,7 +920,10 @@
         <span class="name">lookupBootstrapServers</span><span class="params">(<span name="dest">dest: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Translates the dest path into a list of servers that can be used to initialize a Kafka
+producer or consumer.</p><div class="fullcomment"><div class="comment cmt"><p>Translates the dest path into a list of servers that can be used to initialize a Kafka
+producer or consumer. It uses <span class="extype" name="com.twitter.util.Duration.Top">com.twitter.util.Duration.Top</span> as the timeout, effectively
+waiting infinitely for the name resolution.</p></div><dl class="paramcmts block"><dt class="param">dest</dt><dd class="cmt"><p>The path to translate.</p></dd><dt>returns</dt><dd class="cmt"><p>A comma separated list of server addresses.</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">

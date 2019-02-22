@@ -178,6 +178,10 @@
                         <a class="class" href="FinagleKafkaConsumerConfig.html" title=""></a>
                         <a href="FinagleKafkaConsumerConfig.html" title="">FinagleKafkaConsumerConfig</a>
                       </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="object" href="Flaggables$.html" title="Contains implicit Flaggable implementations for various kafka configuration types."></a>
+                        <a href="Flaggables$.html" title="Contains implicit Flaggable implementations for various kafka configuration types.">Flaggables</a>
+                      </li><li class="current-entities indented5">
                         <a class="object" href="KafkaConsumerConfig$.html" title=""></a>
                         <a class="class" href="KafkaConsumerConfig.html" title=""></a>
                         <a href="KafkaConsumerConfig.html" title="">KafkaConsumerConfig</a>
@@ -622,6 +626,23 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
     </li><li name="com.twitter.finatra.kafka.consumers.KafkaConsumerConfigMethods#dest" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="dest(dest:String,timeout:com.twitter.util.Duration):KafkaConsumerConfigMethods.this.This"></a><a id="dest(String,Duration):This"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/FinagleKafkaConsumerBuilder.html#dest(dest:String,timeout:com.twitter.util.Duration):KafkaConsumerConfigMethods.this.This" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dest</span><span class="params">(<span name="dest">dest: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="timeout">timeout: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>)</span><span class="result">: <a href="#This=Self" class="extmbr" name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilder.This">This</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Configure the Kafka server the consumer will connect to.</p><div class="fullcomment"><div class="comment cmt"><p>Configure the Kafka server the consumer will connect to.
+</p></div><dl class="paramcmts block"><dt class="param">dest</dt><dd class="cmt"><p>the Kafka server address</p></dd><dt class="param">timeout</dt><dd class="cmt"><p>the timeout duration when trying to resolve the <a href="KafkaConsumerConfigMethods.html#dest(dest:String,timeout:com.twitter.util.Duration):KafkaConsumerConfigMethods.this.This" class="extmbr" name="com.twitter.finatra.kafka.consumers.KafkaConsumerConfigMethods#dest">dest</a> server.</p></dd><dt>returns</dt><dd class="cmt"><p>the <a href="KafkaConsumerConfigMethods.html" class="extype" name="com.twitter.finatra.kafka.consumers.KafkaConsumerConfigMethods">KafkaConsumerConfigMethods</a> instance.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="KafkaConsumerConfigMethods.html" class="extype" name="com.twitter.finatra.kafka.consumers.KafkaConsumerConfigMethods">KafkaConsumerConfigMethods</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.kafka.consumers.KafkaConsumerConfigMethods#dest" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="dest(dest:String):KafkaConsumerConfigMethods.this.This"></a><a id="dest(String):This"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/kafka/consumers/FinagleKafkaConsumerBuilder.html#dest(dest:String):KafkaConsumerConfigMethods.this.This" title="Permalink">
@@ -636,7 +657,8 @@
         <span class="name">dest</span><span class="params">(<span name="dest">dest: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#This=Self" class="extmbr" name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilder.This">This</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="KafkaConsumerConfigMethods.html" class="extype" name="com.twitter.finatra.kafka.consumers.KafkaConsumerConfigMethods">KafkaConsumerConfigMethods</a></dd></dl></div>
+      <p class="shortcomment cmt">Configure the Kafka server the consumer will connect to.</p><div class="fullcomment"><div class="comment cmt"><p>Configure the Kafka server the consumer will connect to.
+</p></div><dl class="paramcmts block"><dt class="param">dest</dt><dd class="cmt"><p>the Kafka server address</p></dd><dt>returns</dt><dd class="cmt"><p>the <a href="KafkaConsumerConfigMethods.html" class="extype" name="com.twitter.finatra.kafka.consumers.KafkaConsumerConfigMethods">KafkaConsumerConfigMethods</a> instance.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="KafkaConsumerConfigMethods.html" class="extype" name="com.twitter.finatra.kafka.consumers.KafkaConsumerConfigMethods">KafkaConsumerConfigMethods</a></dd></dl></div>
     </li><li name="com.twitter.finatra.kafka.consumers.KafkaConsumerConfigMethods#enableAutoCommit" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="enableAutoCommit(boolean:Boolean):KafkaConsumerConfigMethods.this.This"></a><a id="enableAutoCommit(Boolean):This"></a>
       <span class="permalink">
@@ -2011,6 +2033,38 @@
       </span>
       <span class="symbol">
         <span class="name">withConfig</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>)</span><span class="result">: <a href="#This=Self" class="extmbr" name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilder.This">This</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../config/KafkaConfigMethods.html" class="extype" name="com.twitter.finatra.kafka.config.KafkaConfigMethods">KafkaConfigMethods</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.kafka.config.KafkaConfigMethods#withConfig" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withConfig(key:String,value:Boolean):KafkaConfigMethods.this.This"></a><a id="withConfig(String,Boolean):This"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/FinagleKafkaConsumerBuilder.html#withConfig(key:String,value:Boolean):KafkaConfigMethods.this.This" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withConfig</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <a href="#This=Self" class="extmbr" name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilder.This">This</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../config/KafkaConfigMethods.html" class="extype" name="com.twitter.finatra.kafka.config.KafkaConfigMethods">KafkaConfigMethods</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.kafka.config.KafkaConfigMethods#withConfig" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withConfig(key:String,value:Int):KafkaConfigMethods.this.This"></a><a id="withConfig(String,Int):This"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/FinagleKafkaConsumerBuilder.html#withConfig(key:String,value:Int):KafkaConfigMethods.this.This" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withConfig</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="#This=Self" class="extmbr" name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilder.This">This</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../config/KafkaConfigMethods.html" class="extype" name="com.twitter.finatra.kafka.config.KafkaConfigMethods">KafkaConfigMethods</a></dd></dl></div>

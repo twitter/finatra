@@ -182,9 +182,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.kafkastreams.internal.utils">utils</a></dd></dl></div>
     </li><li class="current-entities indented7">
-                        <a class="object" href="IndexedSampleKeySerde$.html" title=""></a>
-                        <a class="class" href="IndexedSampleKeySerde.html" title=""></a>
-                        <a href="IndexedSampleKeySerde.html" title="">IndexedSampleKeySerde</a>
+                        <a class="object" href="IndexedSampleKey$.html" title=""></a>
+                        <a class="class" href="IndexedSampleKey.html" title="The key in a sample KeyValue store."></a>
+                        <a href="IndexedSampleKey.html" title="The key in a sample KeyValue store.">IndexedSampleKey</a>
                       </li><li class="current-entities indented7">
                         <span class="separator"></span>
                         <a class="class" href="ReservoirSamplingTransformer.html" title="A Reservoir sampling transformer"></a>
@@ -252,26 +252,28 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.twitter.finatra.kafkastreams.internal.utils.sampling.IndexedSampleKeySerde" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="IndexedSampleKeySerde[SampleKey]extendsAbstractSerde[com.twitter.finatra.streams.transformer.domain.IndexedSampleKey[SampleKey]]"></a><a id="IndexedSampleKeySerde[SampleKey]:IndexedSampleKeySerde[SampleKey]"></a>
+              <ol><li name="com.twitter.finatra.kafkastreams.internal.utils.sampling.IndexedSampleKey" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="IndexedSampleKey[SampleKey]extendsProductwithSerializable"></a><a id="IndexedSampleKey[SampleKey]:IndexedSampleKey[SampleKey]"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/index.html#IndexedSampleKeySerde[SampleKey]extendsAbstractSerde[com.twitter.finatra.streams.transformer.domain.IndexedSampleKey[SampleKey]]" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/index.html#IndexedSampleKey[SampleKey]extendsProductwithSerializable" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="IndexedSampleKeySerde.html"><span class="name">IndexedSampleKeySerde</span></a><span class="tparams">[<span name="SampleKey">SampleKey</span>]</span><span class="result"> extends <a href="../../../../kafka/serde/AbstractSerde.html" class="extype" name="com.twitter.finatra.kafka.serde.AbstractSerde">AbstractSerde</a>[<a href="../../../../streams/transformer/domain/IndexedSampleKey.html" class="extype" name="com.twitter.finatra.streams.transformer.domain.IndexedSampleKey">IndexedSampleKey</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.IndexedSampleKeySerde.SampleKey">SampleKey</span>]]</span>
+        <a title="The key in a sample KeyValue store." href="IndexedSampleKey.html"><span class="name">IndexedSampleKey</span></a><span class="tparams">[<span name="SampleKey">SampleKey</span>]</span><span class="params">(<span name="sampleKey">sampleKey: <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.IndexedSampleKey.SampleKey">SampleKey</span></span>, <span name="index">index: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">The key in a sample KeyValue store.</p><div class="fullcomment"><div class="comment cmt"><p>The key in a sample KeyValue store.  Each sample is stored as a row in the table,
+and the index is what makes each row unique.  The index is a number of 0..sampleSize
+</p></div><dl class="paramcmts block"><dt class="tparam">SampleKey</dt><dd class="cmt"><p>the user specified sample key type.</p></dd><dt class="param">sampleKey</dt><dd class="cmt"><p>the user specified key of the sample(e.g. engagement type, or audience)</p></dd><dt class="param">index</dt><dd class="cmt"><p>a number of 0..sampleSize</p></dd></dl></div>
     </li><li name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ReservoirSamplingTransformer[Key,Value,SampleKey,SampleValue]extendsFinatraTransformerV2[Key,Value,SampleKey,SampleValue]withPersistentTimers"></a><a id="ReservoirSamplingTransformer[Key,Value,SampleKey,SampleValue]:ReservoirSamplingTransformer[Key,Value,SampleKey,SampleValue]"></a>
+      <a id="ReservoirSamplingTransformer[Key,Value,SampleKey,SampleValue]extendsFinatraTransformer[Key,Value,SampleKey,SampleValue]withPersistentTimers"></a><a id="ReservoirSamplingTransformer[Key,Value,SampleKey,SampleValue]:ReservoirSamplingTransformer[Key,Value,SampleKey,SampleValue]"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/index.html#ReservoirSamplingTransformer[Key,Value,SampleKey,SampleValue]extendsFinatraTransformerV2[Key,Value,SampleKey,SampleValue]withPersistentTimers" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/index.html#ReservoirSamplingTransformer[Key,Value,SampleKey,SampleValue]extendsFinatraTransformer[Key,Value,SampleKey,SampleValue]withPersistentTimers" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -280,7 +282,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="A Reservoir sampling transformer" href="ReservoirSamplingTransformer.html"><span class="name">ReservoirSamplingTransformer</span></a><span class="tparams">[<span name="Key">Key</span>, <span name="Value">Value</span>, <span name="SampleKey">SampleKey</span>, <span name="SampleValue">SampleValue</span>]</span><span class="result"> extends <a href="../../../../streams/transformer/FinatraTransformerV2.html" class="extype" name="com.twitter.finatra.streams.transformer.FinatraTransformerV2">FinatraTransformerV2</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Key">Key</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Value">Value</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleKey">SampleKey</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleValue">SampleValue</span>] with <a href="../../../../streams/transformer/PersistentTimers.html" class="extype" name="com.twitter.finatra.streams.transformer.PersistentTimers">PersistentTimers</a></span>
+        <a title="A Reservoir sampling transformer" href="ReservoirSamplingTransformer.html"><span class="name">ReservoirSamplingTransformer</span></a><span class="tparams">[<span name="Key">Key</span>, <span name="Value">Value</span>, <span name="SampleKey">SampleKey</span>, <span name="SampleValue">SampleValue</span>]</span><span class="result"> extends <a href="../../../transformer/FinatraTransformer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer">FinatraTransformer</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Key">Key</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Value">Value</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleKey">SampleKey</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleValue">SampleValue</span>] with <a href="../../../transformer/stores/PersistentTimers.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimers">PersistentTimers</a></span>
       </span>
       
       <p class="shortcomment cmt">A Reservoir sampling transformer</p><div class="fullcomment"><div class="comment cmt"><p>A Reservoir sampling transformer</p><p>See &quot;Random Sampling with a Reservoir&quot;, Vitter, 1985
@@ -293,10 +295,10 @@
         <div class="values members">
               <h3>Value Members</h3>
               <ol>
-                <li name="com.twitter.finatra.kafkastreams.internal.utils.sampling.IndexedSampleKeySerde" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="IndexedSampleKeySerde"></a><a id="IndexedSampleKeySerde:IndexedSampleKeySerde"></a>
+                <li name="com.twitter.finatra.kafkastreams.internal.utils.sampling.IndexedSampleKey" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IndexedSampleKey"></a><a id="IndexedSampleKey:IndexedSampleKey"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/index.html#IndexedSampleKeySerde" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/index.html#IndexedSampleKey" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -305,7 +307,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="IndexedSampleKeySerde$.html"><span class="name">IndexedSampleKeySerde</span></a>
+        <a title="" href="IndexedSampleKey$.html"><span class="name">IndexedSampleKey</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       

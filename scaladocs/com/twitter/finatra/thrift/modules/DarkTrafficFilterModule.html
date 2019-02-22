@@ -159,16 +159,16 @@
                         <a href="ClientIdWhitelistModule$.html" title="">ClientIdWhitelistModule</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="" title="A TwitterModule which configures and binds a DarkTrafficFilter to the object graph."></a>
-                        <a href="" title="A TwitterModule which configures and binds a DarkTrafficFilter to the object graph.">DarkTrafficFilterModule</a>
+                        <a class="class" href="" title="A TwitterModule which configures and binds a DarkTrafficFilter to the object graph, for use with Controllers constructed using the legacy method."></a>
+                        <a href="" title="A TwitterModule which configures and binds a DarkTrafficFilter to the object graph, for use with Controllers constructed using the legacy method.">DarkTrafficFilterModule</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="class" href="JavaDarkTrafficFilterModule.html" title="A TwitterModule which configures and binds a JavaDarkTrafficFilter to the object graph."></a>
                         <a href="JavaDarkTrafficFilterModule.html" title="A TwitterModule which configures and binds a JavaDarkTrafficFilter to the object graph.">JavaDarkTrafficFilterModule</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="ReqRepDarkTrafficFilterModule.html" title=""></a>
-                        <a href="ReqRepDarkTrafficFilterModule.html" title="">ReqRepDarkTrafficFilterModule</a>
+                        <a class="class" href="ReqRepDarkTrafficFilterModule.html" title="A TwitterModule which configures and binds a DarkTrafficFilter to the object graph."></a>
+                        <a href="ReqRepDarkTrafficFilterModule.html" title="A TwitterModule which configures and binds a DarkTrafficFilter to the object graph.">ReqRepDarkTrafficFilterModule</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="object" href="ThriftResponseClassifierModule$.html" title=""></a>
@@ -201,8 +201,12 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A <span class="extype" name="TwitterModule">TwitterModule</span> which configures and binds a <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> to the object graph.
-</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>This is only applicable in Scala as it uses generated Scala classes and expects to configure
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A <span class="extype" name="TwitterModule">TwitterModule</span> which configures and binds a <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> to the object graph, for
+use with <span class="extype" name="Controllers">Controllers</span> constructed using the legacy method.
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>This <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> module is to be used with <span class="extype" name="Controllers">Controllers</span> which are constructed using
+      the deprecated method of extending the <code>BaseServiceIface</code> of the generated Thrift service.
+      For services that construct their Controllers by extending
+      <code>Controller(GeneratedThriftService)</code>, use the <span class="extype" name="ReqRepDarkTrafficFilter">ReqRepDarkTrafficFilter</span> instead</p></span>, <span class="cmt"><p>This is only applicable in Scala as it uses generated Scala classes and expects to configure
       the <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> over a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html" class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</a> that is generated from
       Finagle via generated Scala code. Users of generated Java code should use the
       <a href="JavaDarkTrafficFilterModule.html" class="extype" name="com.twitter.finatra.thrift.modules.JavaDarkTrafficFilterModule">JavaDarkTrafficFilterModule</a>.</p></span></dd></dl><div class="toggleContainer block">

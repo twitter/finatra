@@ -658,10 +658,9 @@ and implementation.
       </span>
       
       <p class="shortcomment cmt">Provide an implementation for this method in the form of a function of
-Request =&gt; Future[Response]
-</p><div class="fullcomment"><div class="comment cmt"><p>Provide an implementation for this method in the form of a function of
-Request =&gt; Future[Response]
-</p></div><dl class="paramcmts block"><dt class="param">fn</dt><dd class="cmt"><p>the function to use</p></dd></dl></div>
+Request =&gt; Future[Response].</p><div class="fullcomment"><div class="comment cmt"><p>Provide an implementation for this method in the form of a function of
+Request =&gt; Future[Response].
+</p></div><dl class="paramcmts block"><dt class="param">fn</dt><dd class="cmt"><p>the function to use</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>The given function will be invoked for each request.</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.Controller.MethodDSL#withService" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="withService(svc:com.twitter.finagle.Service[com.twitter.scrooge.Request[M#Args],com.twitter.scrooge.Response[M#SuccessType]]):Unit"></a><a id="withService(Service[Request[M.Args],Response[M.SuccessType]]):Unit"></a>
       <span class="permalink">
@@ -679,7 +678,7 @@ Request =&gt; Future[Response]
       
       <p class="shortcomment cmt">Provide an implementation for this method in the form of a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html" class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</a>
 </p><div class="fullcomment"><div class="comment cmt"><p>Provide an implementation for this method in the form of a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html" class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</a>
-</p></div><dl class="paramcmts block"><dt class="param">svc</dt><dd class="cmt"><p>the service to use as an implementation</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">svc</dt><dd class="cmt"><p>the service to use as an implementation</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>The service will be called for each request.</p></span></dd></dl></div>
     </li>
               </ol>
             </div>
@@ -710,7 +709,7 @@ based functionality.
 </p></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>the implementation</p></dd><dt>returns</dt><dd class="cmt"><p>a ThriftMethodService, which is used in legacy controller configurations</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@deprecated</span>
               
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2018-12-20)</i> Use Request/Response based functionality</p></dd></dl></div>
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2018-12-20)</i> Use Request/Response based functionality</p></dd><dt>Note</dt><dd><span class="cmt"><p>The implementation given will be invoked for each request.</p></span></dd></dl></div>
     </li></ol>
             </div>
         </div>

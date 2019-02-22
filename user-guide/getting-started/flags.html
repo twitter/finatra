@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Flags &#8212; Finatra 19.1.0 documentation</title>
+    <title>Flags &#8212; Finatra 19.2.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.1.0',
+        VERSION:     '19.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.1.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.2.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Future Gotchas" href="futures.html" />
     <link rel="prev" title="Binding Annotations" href="binding_annotations.html" />
@@ -88,6 +88,15 @@ of &#8220;<em>environment</em>&#8221; string within code, e.g.</p>
 <p>It is generally good practice to make Flags <em>granular</em> controls that are  fully orthogonal to one
 another. They can then be independently managed for each deploy and this scales consistently as the
 number of supported  &#8220;environments&#8221; scales.</p>
+<div class="section" id="global-flags">
+<h2>Global Flags<a class="headerlink" href="#global-flags" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/twitter/util">TwitterUtil</a> <a class="reference external" href="https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala">Flags</a>
+also has the concept of a &#8220;global&#8221; flag. That is, a flag that is &#8220;global&#8221; to the JVM process (as it is
+generally defined as a Scala object). In the discussion of Flags with Finatra we <strong>do not</strong> mean
+&#8220;global&#8221; flags unless it is explicitly stated.</p>
+<p>See the <a class="reference external" href="http://twitter.github.io/util/docs/com/twitter/app/GlobalFlag.html">scaladoc</a> for
+<cite>c.t.app.GlobalFlag</cite> for more information.</p>
+</div>
 <div class="section" id="but-i-have-a-lot-of-flags">
 <h2>But I have a lot of Flags<a class="headerlink" href="#but-i-have-a-lot-of-flags" title="Permalink to this headline">¶</a></h2>
 <p>If you find that you end up with a lot of Flags to configure for your service and your deployment
@@ -406,6 +415,7 @@ instance of the <cite>ClientId</cite> type in any manner they choose.</p>
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Flags</a><ul>
+<li><a class="reference internal" href="#global-flags">Global Flags</a></li>
 <li><a class="reference internal" href="#but-i-have-a-lot-of-flags">But I have a lot of Flags</a></li>
 <li><a class="reference internal" href="#how-to-define-flags">How To Define Flags</a></li>
 <li><a class="reference internal" href="#flag-annotation"><code class="docutils literal"><span class="pre">&#64;Flag</span></code> annotation</a><ul>

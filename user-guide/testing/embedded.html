@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Embedded Servers and Apps &#8212; Finatra 19.1.0 documentation</title>
+    <title>Embedded Servers and Apps &#8212; Finatra 19.2.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.1.0',
+        VERSION:     '19.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.1.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.2.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Feature Tests" href="feature_tests.html" />
     <link rel="prev" title="Testing Features" href="index.html" />
@@ -94,6 +94,41 @@ your service locally and attach a remote debugger.</p>
 <p>You&#8217;ll notice that this hierarchy generally follows the server trait hierarchy as <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala"><cite>c.t.finatra.http.HttpServer</cite></a>
 and <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.finatra.thrift.ThriftServer</cite></a> extend from <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a> which extends from
 <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a>.</p>
+<div class="section" id="testing-with-global-flags">
+<h2>Testing With <cite>Global Flags</cite><a class="headerlink" href="#testing-with-global-flags" title="Permalink to this headline">¶</a></h2>
+<p>The embedded servers and the embedded app allow for passing <a class="reference external" href="https://github.com/twitter/util">TwitterUtil</a> <a class="reference external" href="https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala">Flags</a>
+to the server under test via the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L90">flags</a>
+constructor argument (a map of flag name to flag value) which is meant to mimic setting flag values
+via the command line.</p>
+<p>However it is <strong>not recommended</strong> that users set any <a class="reference external" href="https://github.com/twitter/util/blob/f2a05474ec41f34146d710bdc2a789efd6da9d21/util-app/src/main/scala/com/twitter/app/GlobalFlag.scala"><cite>GlobalFlag</cite></a> value in this manner. In normal
+usage, the value of a <a class="reference external" href="https://github.com/twitter/util/blob/f2a05474ec41f34146d710bdc2a789efd6da9d21/util-app/src/main/scala/com/twitter/app/GlobalFlag.scala"><cite>GlobalFlag</cite></a> is <strong>only read once during the initialization of the JVM process</strong>.</p>
+<p>If you wish to test with toggled values of a <a class="reference external" href="https://github.com/twitter/util/blob/f2a05474ec41f34146d710bdc2a789efd6da9d21/util-app/src/main/scala/com/twitter/app/GlobalFlag.scala"><cite>GlobalFlag</cite></a> you should prefer using
+<a class="reference external" href="http://twitter.github.io/util/docs/com/twitter/app/Flag.html#let[R](t:T)(f:=%3ER):R"><cite>Flag.let</cite></a> or <a class="reference external" href="http://twitter.github.io/util/docs/com/twitter/app/Flag.html#letClear[R](f:=%3ER):R"><cite>Flag.letClear</cite></a> in tests instead of passing the <a class="reference external" href="https://github.com/twitter/util/blob/f2a05474ec41f34146d710bdc2a789efd6da9d21/util-app/src/main/scala/com/twitter/app/GlobalFlag.scala"><cite>GlobalFlag</cite></a> value via the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L90">flags</a>
+arg of an embedded server or embedded app. For example,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.EmbeddedHttpServer
+import com.twitter.finagle.http.Status
+import com.twitter.inject.server.FeatureTest
+
+class ExampleServerFeatureTest extends FeatureTest {
+  override val server = new EmbeddedHttpServer(new ExampleServer)
+
+  test(&quot;ExampleServer#perform feature&quot;) {
+
+    someGlobalFlag.let(&quot;a value&quot;) {
+      // any read of the `someGlobalFlag` value in this closure will be &quot;a value&quot;
+      server.httpGet(
+        path = &quot;/&quot;,
+        andExpect = Status.Ok)
+
+      ???
+    }
+  }
+}
+</pre></div>
+</div>
+<p>See the <a class="reference external" href="http://twitter.github.io/util/docs/com/twitter/app/Flag.html">scaladoc</a> for <cite>c.t.app.Flag</cite>
+for more information on using <a class="reference external" href="http://twitter.github.io/util/docs/com/twitter/app/Flag.html#let[R](t:T)(f:=%3ER):R"><cite>Flag.let</cite></a> or <a class="reference external" href="http://twitter.github.io/util/docs/com/twitter/app/Flag.html#letClear[R](f:=%3ER):R"><cite>Flag.letClear</cite></a>.</p>
+</div>
 <div class="section" id="inmemorystatsreceiver">
 <h2>InMemoryStatsReceiver<a class="headerlink" href="#inmemorystatsreceiver" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala"><cite>EmbeddedTwitterServer</cite></a> (and thus its subclasses: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><cite>EmbeddedHttpServer</cite></a> and <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala"><cite>EmbeddedThriftServer</cite></a>)
@@ -148,6 +183,7 @@ for an example usage.</p>
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Embedded Servers and Apps</a><ul>
+<li><a class="reference internal" href="#testing-with-global-flags">Testing With <cite>Global Flags</cite></a></li>
 <li><a class="reference internal" href="#inmemorystatsreceiver">InMemoryStatsReceiver</a></li>
 <li><a class="reference internal" href="#more-information">More Information</a></li>
 </ul>

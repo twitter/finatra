@@ -182,13 +182,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.streams.transformer.internal">internal</a></dd></dl></div>
     </li><li class="current-entities indented7">
-                        <span class="separator"></span>
-                        <a class="class" href="Timer.html" title=""></a>
-                        <a href="Timer.html" title="">Timer</a>
-                      </li><li class="current-entities indented7">
                         <a class="object" href="TimerSerde$.html" title=""></a>
-                        <a class="class" href="TimerSerde.html" title=""></a>
-                        <a href="TimerSerde.html" title="">TimerSerde</a>
+                        <a class="class" href="TimerSerde.html" title="Serde for the Timer class."></a>
+                        <a href="TimerSerde.html" title="Serde for the Timer class.">TimerSerde</a>
                       </li>
               </ul>
             </div>
@@ -252,26 +248,10 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.twitter.finatra.streams.transformer.internal.domain.Timer" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Timer[K]extendsProductwithSerializable"></a><a id="Timer[K]:Timer[K]"></a>
+              <ol><li name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TimerSerde[K]extendsAbstractSerde[com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer[K]]"></a><a id="TimerSerde[K]:TimerSerde[K]"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/streams/transformer/internal/domain/index.html#Timer[K]extendsProductwithSerializable" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="Timer.html"><span class="name">Timer</span></a><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="time">time: <a href="http://www.scala-lang.org/api/2.12.7/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="metadata">metadata: <a href="../../domain/TimerMetadata.html" class="extype" name="com.twitter.finatra.streams.transformer.domain.TimerMetadata">TimerMetadata</a></span>, <span name="key">key: <span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.Timer.K">K</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
-      </span>
-      
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">time</dt><dd class="cmt"><p>Time to fire the timer</p></dd></dl></div>
-    </li><li name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="TimerSerde[K]extendsAbstractSerde[com.twitter.finatra.streams.transformer.internal.domain.Timer[K]]"></a><a id="TimerSerde[K]:TimerSerde[K]"></a>
-      <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/streams/transformer/internal/domain/index.html#TimerSerde[K]extendsAbstractSerde[com.twitter.finatra.streams.transformer.internal.domain.Timer[K]]" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/streams/transformer/internal/domain/index.html#TimerSerde[K]extendsAbstractSerde[com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer[K]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -280,10 +260,10 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="TimerSerde.html"><span class="name">TimerSerde</span></a><span class="tparams">[<span name="K">K</span>]</span><span class="result"> extends <a href="../../../../kafka/serde/AbstractSerde.html" class="extype" name="com.twitter.finatra.kafka.serde.AbstractSerde">AbstractSerde</a>[<a href="Timer.html" class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]]</span>
+        <a title="Serde for the Timer class." href="TimerSerde.html"><span class="name">TimerSerde</span></a><span class="tparams">[<span name="K">K</span>]</span><span class="result"> extends <a href="../../../../kafka/serde/AbstractSerde.html" class="extype" name="com.twitter.finatra.kafka.serde.AbstractSerde">AbstractSerde</a>[<a href="../../../../kafkastreams/transformer/stores/internal/Timer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">Serde for the <span class="extype" name="Timer">Timer</span> class.</p>
     </li></ol>
             </div>
 

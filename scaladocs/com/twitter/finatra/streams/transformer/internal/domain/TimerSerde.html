@@ -182,13 +182,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.streams.transformer.internal">internal</a></dd></dl></div>
     </li><li class="current-entities indented7">
-                        <span class="separator"></span>
-                        <a class="class" href="Timer.html" title=""></a>
-                        <a href="Timer.html" title="">Timer</a>
-                      </li><li class="current-entities indented7">
                         <a class="object" href="TimerSerde$.html" title=""></a>
-                        <a class="class" href="" title=""></a>
-                        <a href="" title="">TimerSerde</a>
+                        <a class="class" href="" title="Serde for the Timer class."></a>
+                        <a href="" title="Serde for the Timer class.">TimerSerde</a>
                       </li>
               </ul>
             </div>
@@ -214,16 +210,17 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">TimerSerde</span><span class="tparams">[<span name="K">K</span>]</span><span class="result"> extends <a href="../../../../kafka/serde/AbstractSerde.html" class="extype" name="com.twitter.finatra.kafka.serde.AbstractSerde">AbstractSerde</a>[<a href="Timer.html" class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]]</span>
+        <span class="name">TimerSerde</span><span class="tparams">[<span name="K">K</span>]</span><span class="result"> extends <a href="../../../../kafka/serde/AbstractSerde.html" class="extype" name="com.twitter.finatra.kafka.serde.AbstractSerde">AbstractSerde</a>[<a href="../../../../kafkastreams/transformer/stores/internal/Timer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]]</span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Serde for the <span class="extype" name="Timer">Timer</span> class.
+</p></div><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="../../../../kafka/serde/AbstractSerde.html" class="extype" name="com.twitter.finatra.kafka.serde.AbstractSerde">AbstractSerde</a>[<a href="Timer.html" class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]], <span class="extype" name="org.apache.kafka.common.serialization.Serde">Serde</span>[<a href="Timer.html" class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]], <span class="extype" name="java.io.Closeable">Closeable</span>, <span class="extype" name="java.lang.AutoCloseable">AutoCloseable</span>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../../../../kafka/serde/AbstractSerde.html" class="extype" name="com.twitter.finatra.kafka.serde.AbstractSerde">AbstractSerde</a>[<a href="../../../../kafkastreams/transformer/stores/internal/Timer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]], <span class="extype" name="org.apache.kafka.common.serialization.Serde">Serde</span>[<a href="../../../../kafkastreams/transformer/stores/internal/Timer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]], <span class="extype" name="java.io.Closeable">Closeable</span>, <span class="extype" name="java.lang.AutoCloseable">AutoCloseable</span>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -269,7 +266,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(inner:org.apache.kafka.common.serialization.Serde[K]):com.twitter.finatra.streams.transformer.internal.domain.TimerSerde[K]"></a><a id="&lt;init&gt;:TimerSerde[K]"></a>
       <span class="permalink">
       <a href="../../../../../../../com/twitter/finatra/streams/transformer/internal/domain/TimerSerde.html#&lt;init&gt;(inner:org.apache.kafka.common.serialization.Serde[K]):com.twitter.finatra.streams.transformer.internal.domain.TimerSerde[K]" title="Permalink">
@@ -284,7 +281,7 @@
         <span class="name">TimerSerde</span><span class="params">(<span name="inner">inner: <span class="extype" name="org.apache.kafka.common.serialization.Serde">Serde</span>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]</span>)</span>
       </span>
       
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">inner</dt><dd class="cmt"><p>Serde for <span class="extype" name="Timer.key">Timer.key</span>.</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -416,9 +413,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../kafka/serde/AbstractSerde.html" class="extype" name="com.twitter.finatra.kafka.serde.AbstractSerde">AbstractSerde</a> → Serde</dd></dl></div>
     </li><li name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde#deserialize" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="deserialize(bytes:Array[Byte]):com.twitter.finatra.streams.transformer.internal.domain.Timer[K]"></a><a id="deserialize(Array[Byte]):Timer[K]"></a>
+      <a id="deserialize(bytes:Array[Byte]):com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer[K]"></a><a id="deserialize(Array[Byte]):Timer[K]"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/streams/transformer/internal/domain/TimerSerde.html#deserialize(bytes:Array[Byte]):com.twitter.finatra.streams.transformer.internal.domain.Timer[K]" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/streams/transformer/internal/domain/TimerSerde.html#deserialize(bytes:Array[Byte]):com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer[K]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -427,7 +424,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deserialize</span><span class="params">(<span name="bytes">bytes: <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>)</span><span class="result">: <a href="Timer.html" class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]</span>
+        <span class="name">deserialize</span><span class="params">(<span name="bytes">bytes: <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>)</span><span class="result">: <a href="../../../../kafkastreams/transformer/stores/internal/Timer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde">TimerSerde</a> → <a href="../../../../kafka/serde/AbstractSerde.html" class="extype" name="com.twitter.finatra.kafka.serde.AbstractSerde">AbstractSerde</a></dd></dl></div>
@@ -443,7 +440,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deserializer</span><span class="params">()</span><span class="result">: <span class="extype" name="org.apache.kafka.common.serialization.Deserializer">Deserializer</span>[<a href="Timer.html" class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]]</span>
+        <span class="name">deserializer</span><span class="params">()</span><span class="result">: <span class="extype" name="org.apache.kafka.common.serialization.Deserializer">Deserializer</span>[<a href="../../../../kafkastreams/transformer/stores/internal/Timer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../kafka/serde/AbstractSerde.html" class="extype" name="com.twitter.finatra.kafka.serde.AbstractSerde">AbstractSerde</a> → Serde</dd></dl></div>
@@ -610,9 +607,9 @@
               
         </dd></dl></div>
     </li><li name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde#serialize" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="serialize(timer:com.twitter.finatra.streams.transformer.internal.domain.Timer[K]):Array[Byte]"></a><a id="serialize(Timer[K]):Array[Byte]"></a>
+      <a id="serialize(timer:com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer[K]):Array[Byte]"></a><a id="serialize(Timer[K]):Array[Byte]"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/streams/transformer/internal/domain/TimerSerde.html#serialize(timer:com.twitter.finatra.streams.transformer.internal.domain.Timer[K]):Array[Byte]" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/streams/transformer/internal/domain/TimerSerde.html#serialize(timer:com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer[K]):Array[Byte]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -621,7 +618,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">serialize</span><span class="params">(<span name="timer">timer: <a href="Timer.html" class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>
+        <span class="name">serialize</span><span class="params">(<span name="timer">timer: <a href="../../../../kafkastreams/transformer/stores/internal/Timer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde">TimerSerde</a> → <a href="../../../../kafka/serde/AbstractSerde.html" class="extype" name="com.twitter.finatra.kafka.serde.AbstractSerde">AbstractSerde</a></dd></dl></div>
@@ -637,7 +634,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">serializer</span><span class="params">()</span><span class="result">: <span class="extype" name="org.apache.kafka.common.serialization.Serializer">Serializer</span>[<a href="Timer.html" class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]]</span>
+        <span class="name">serializer</span><span class="params">()</span><span class="result">: <span class="extype" name="org.apache.kafka.common.serialization.Serializer">Serializer</span>[<a href="../../../../kafkastreams/transformer/stores/internal/Timer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../kafka/serde/AbstractSerde.html" class="extype" name="com.twitter.finatra.kafka.serde.AbstractSerde">AbstractSerde</a> → Serde</dd></dl></div>
@@ -772,9 +769,9 @@ Note: topic is only available when called from the &quot;deserialize&quot; or &q
 
         <div id="inheritedMembers">
         <div class="parent" name="com.twitter.finatra.kafka.serde.AbstractSerde">
-              <h3>Inherited from <a href="../../../../kafka/serde/AbstractSerde.html" class="extype" name="com.twitter.finatra.kafka.serde.AbstractSerde">AbstractSerde</a>[<a href="Timer.html" class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]]</h3>
+              <h3>Inherited from <a href="../../../../kafka/serde/AbstractSerde.html" class="extype" name="com.twitter.finatra.kafka.serde.AbstractSerde">AbstractSerde</a>[<a href="../../../../kafkastreams/transformer/stores/internal/Timer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]]</h3>
             </div><div class="parent" name="org.apache.kafka.common.serialization.Serde">
-              <h3>Inherited from <span class="extype" name="org.apache.kafka.common.serialization.Serde">Serde</span>[<a href="Timer.html" class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]]</h3>
+              <h3>Inherited from <span class="extype" name="org.apache.kafka.common.serialization.Serde">Serde</span>[<a href="../../../../kafkastreams/transformer/stores/internal/Timer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer">Timer</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.internal.domain.TimerSerde.K">K</span>]]</h3>
             </div><div class="parent" name="java.io.Closeable">
               <h3>Inherited from <span class="extype" name="java.io.Closeable">Closeable</span></h3>
             </div><div class="parent" name="java.lang.AutoCloseable">

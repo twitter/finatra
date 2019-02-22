@@ -182,9 +182,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.kafkastreams.internal.utils">utils</a></dd></dl></div>
     </li><li class="current-entities indented7">
-                        <a class="object" href="IndexedSampleKeySerde$.html" title=""></a>
-                        <a class="class" href="IndexedSampleKeySerde.html" title=""></a>
-                        <a href="IndexedSampleKeySerde.html" title="">IndexedSampleKeySerde</a>
+                        <a class="object" href="IndexedSampleKey$.html" title=""></a>
+                        <a class="class" href="IndexedSampleKey.html" title="The key in a sample KeyValue store."></a>
+                        <a href="IndexedSampleKey.html" title="The key in a sample KeyValue store.">IndexedSampleKey</a>
                       </li><li class="current-entities indented7">
                         <span class="separator"></span>
                         <a class="class" href="" title="A Reservoir sampling transformer"></a>
@@ -212,7 +212,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">ReservoirSamplingTransformer</span><span class="tparams">[<span name="Key">Key</span>, <span name="Value">Value</span>, <span name="SampleKey">SampleKey</span>, <span name="SampleValue">SampleValue</span>]</span><span class="result"> extends <a href="../../../../streams/transformer/FinatraTransformerV2.html" class="extype" name="com.twitter.finatra.streams.transformer.FinatraTransformerV2">FinatraTransformerV2</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Key">Key</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Value">Value</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleKey">SampleKey</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleValue">SampleValue</span>] with <a href="../../../../streams/transformer/PersistentTimers.html" class="extype" name="com.twitter.finatra.streams.transformer.PersistentTimers">PersistentTimers</a></span>
+        <span class="name">ReservoirSamplingTransformer</span><span class="tparams">[<span name="Key">Key</span>, <span name="Value">Value</span>, <span name="SampleKey">SampleKey</span>, <span name="SampleValue">SampleValue</span>]</span><span class="result"> extends <a href="../../../transformer/FinatraTransformer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer">FinatraTransformer</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Key">Key</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Value">Value</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleKey">SampleKey</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleValue">SampleValue</span>] with <a href="../../../transformer/stores/PersistentTimers.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimers">PersistentTimers</a></span>
       </span>
       </h4>
 
@@ -222,7 +222,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="../../../../streams/transformer/PersistentTimers.html" class="extype" name="com.twitter.finatra.streams.transformer.PersistentTimers">PersistentTimers</a>, <a href="../../../../streams/transformer/FinatraTransformerV2.html" class="extype" name="com.twitter.finatra.streams.transformer.FinatraTransformerV2">FinatraTransformerV2</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Key">Key</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Value">Value</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleKey">SampleKey</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleValue">SampleValue</span>], <a href="../ProcessorContextLogging.html" class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging">ProcessorContextLogging</a>, <a href="../../../../streams/transformer/internal/OnClose.html" class="extype" name="com.twitter.finatra.streams.transformer.internal.OnClose">OnClose</a>, <a href="../../../../streams/transformer/OnWatermark.html" class="extype" name="com.twitter.finatra.streams.transformer.OnWatermark">OnWatermark</a>, <a href="../../../../streams/transformer/internal/OnInit.html" class="extype" name="com.twitter.finatra.streams.transformer.internal.OnInit">OnInit</a>, <span class="extype" name="org.apache.kafka.streams.kstream.Transformer">Transformer</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Key">Key</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Value">Value</span>, (<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleKey">SampleKey</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleValue">SampleValue</span>)], <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../../../transformer/stores/PersistentTimers.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimers">PersistentTimers</a>, <a href="../../../transformer/FinatraTransformer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer">FinatraTransformer</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Key">Key</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Value">Value</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleKey">SampleKey</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleValue">SampleValue</span>], <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging">ProcessorContextLogging</span>, <a href="../../../transformer/lifecycle/OnFlush.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnFlush">OnFlush</a>, <a href="../../../transformer/lifecycle/OnClose.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnClose">OnClose</a>, <a href="../../../transformer/lifecycle/OnWatermark.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnWatermark">OnWatermark</a>, <a href="../../../transformer/lifecycle/OnInit.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnInit">OnInit</a>, <span class="extype" name="org.apache.kafka.streams.kstream.Transformer">Transformer</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Key">Key</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Value">Value</span>, (<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleKey">SampleKey</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleValue">SampleValue</span>)], <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -248,7 +248,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer"><span>ReservoirSamplingTransformer</span></li><li class="in" name="com.twitter.finatra.streams.transformer.PersistentTimers"><span>PersistentTimers</span></li><li class="in" name="com.twitter.finatra.streams.transformer.FinatraTransformerV2"><span>FinatraTransformerV2</span></li><li class="in" name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging"><span>ProcessorContextLogging</span></li><li class="in" name="com.twitter.finatra.streams.transformer.internal.OnClose"><span>OnClose</span></li><li class="in" name="com.twitter.finatra.streams.transformer.OnWatermark"><span>OnWatermark</span></li><li class="in" name="com.twitter.finatra.streams.transformer.internal.OnInit"><span>OnInit</span></li><li class="in" name="org.apache.kafka.streams.kstream.Transformer"><span>Transformer</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer"><span>ReservoirSamplingTransformer</span></li><li class="in" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimers"><span>PersistentTimers</span></li><li class="in" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer"><span>FinatraTransformer</span></li><li class="in" name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging"><span>ProcessorContextLogging</span></li><li class="in" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnFlush"><span>OnFlush</span></li><li class="in" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnClose"><span>OnClose</span></li><li class="in" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnWatermark"><span>OnWatermark</span></li><li class="in" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnInit"><span>OnInit</span></li><li class="in" name="org.apache.kafka.streams.kstream.Transformer"><span>Transformer</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -292,7 +292,7 @@
               <ol><li name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging.RichLong" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="RichLongextendsAnyRef"></a><a id="RichLong:RichLong"></a>
       <span class="permalink">
-      <a href="../../../../../../com/twitter/finatra/kafkastreams/internal/utils/ProcessorContextLogging.html#RichLongextendsAnyRef" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#RichLongextendsAnyRef" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -301,10 +301,10 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="../ProcessorContextLogging$RichLong.html"><span class="name">RichLong</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">RichLong</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ProcessorContextLogging.html" class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging">ProcessorContextLogging</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProcessorContextLogging</dd></dl></div>
     </li></ol>
             </div>
 
@@ -401,7 +401,7 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.streams.transformer.FinatraTransformerV2#close" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer#close" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="close():Unit"></a>
       <span class="permalink">
       <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#close():Unit" title="Permalink">
@@ -416,7 +416,7 @@
         <span class="name">close</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../streams/transformer/FinatraTransformerV2.html" class="extype" name="com.twitter.finatra.streams.transformer.FinatraTransformerV2">FinatraTransformerV2</a> → Transformer</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../transformer/FinatraTransformer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer">FinatraTransformer</a> → Transformer</dd></dl></div>
     </li><li name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging#debug" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debug(message:=&gt;Any):Unit"></a><a id="debug(⇒Any):Unit"></a>
       <span class="permalink">
@@ -432,7 +432,7 @@
         <span class="name">debug</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd><a href="../ProcessorContextLogging.html" class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging">ProcessorContextLogging</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>ProcessorContextLogging</dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -480,7 +480,7 @@
         <span class="name">error</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd><a href="../ProcessorContextLogging.html" class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging">ProcessorContextLogging</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>ProcessorContextLogging</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
@@ -503,10 +503,10 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.streams.transformer.FinatraTransformerV2#finatraKeyValueStoresMap" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finatraKeyValueStoresMap:scala.collection.mutable.Map[String,com.twitter.finatra.streams.stores.FinatraKeyValueStore[_,_]]"></a><a id="finatraKeyValueStoresMap:Map[String,FinatraKeyValueStore[_,_]]"></a>
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer#finatraKeyValueStoresMap" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finatraKeyValueStoresMap:scala.collection.mutable.Map[String,com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore[_,_]]"></a><a id="finatraKeyValueStoresMap:Map[String,FinatraKeyValueStore[_,_]]"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#finatraKeyValueStoresMap:scala.collection.mutable.Map[String,com.twitter.finatra.streams.stores.FinatraKeyValueStore[_,_]]" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#finatraKeyValueStoresMap:scala.collection.mutable.Map[String,com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore[_,_]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -515,11 +515,11 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">finatraKeyValueStoresMap</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/collection/mutable/Map.html#scala.collection.mutable.Map" class="extype" name="scala.collection.mutable.Map">Map</a>[<span class="extype" name="scala.Predef.String">String</span>, <a href="../../../../streams/stores/FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.streams.stores.FinatraKeyValueStore">FinatraKeyValueStore</a>[_, _]]</span>
+        <span class="name">finatraKeyValueStoresMap</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/collection/mutable/Map.html#scala.collection.mutable.Map" class="extype" name="scala.collection.mutable.Map">Map</a>[<span class="extype" name="scala.Predef.String">String</span>, <a href="../../../transformer/stores/FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a>[_, _]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../streams/index.html" class="extype" name="com.twitter.finatra.streams">com.twitter.finatra.streams</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../../streams/transformer/FinatraTransformerV2.html" class="extype" name="com.twitter.finatra.streams.transformer.FinatraTransformerV2">FinatraTransformerV2</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.streams.transformer.FinatraTransformerV2#forward" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../index.html" class="extype" name="com.twitter.finatra.kafkastreams">com.twitter.finatra.kafkastreams</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../transformer/FinatraTransformer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer">FinatraTransformer</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer#forward" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="forward(key:OutputKey,value:OutputValue,timestamp:Long):Unit"></a><a id="forward(SampleKey,SampleValue,Long):Unit"></a>
       <span class="permalink">
       <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#forward(key:OutputKey,value:OutputValue,timestamp:Long):Unit" title="Permalink">
@@ -534,8 +534,8 @@
         <span class="name">forward</span><span class="params">(<span name="key">key: <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleKey">SampleKey</span></span>, <span name="value">value: <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleValue">SampleValue</span></span>, <span name="timestamp">timestamp: <a href="http://www.scala-lang.org/api/2.12.7/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../../streams/transformer/FinatraTransformerV2.html" class="extype" name="com.twitter.finatra.streams.transformer.FinatraTransformerV2">FinatraTransformerV2</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.streams.transformer.FinatraTransformerV2#forward" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../transformer/FinatraTransformer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer">FinatraTransformer</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer#forward" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="forward(key:OutputKey,value:OutputValue):Unit"></a><a id="forward(SampleKey,SampleValue):Unit"></a>
       <span class="permalink">
       <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#forward(key:OutputKey,value:OutputValue):Unit" title="Permalink">
@@ -550,7 +550,7 @@
         <span class="name">forward</span><span class="params">(<span name="key">key: <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleKey">SampleKey</span></span>, <span name="value">value: <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleValue">SampleValue</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../../streams/transformer/FinatraTransformerV2.html" class="extype" name="com.twitter.finatra.streams.transformer.FinatraTransformerV2">FinatraTransformerV2</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../transformer/FinatraTransformer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer">FinatraTransformer</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -570,10 +570,10 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.streams.transformer.FinatraTransformerV2#getKeyValueStore" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getKeyValueStore[KK,VV](name:String)(implicitevidence$1:scala.reflect.ClassTag[KK]):com.twitter.finatra.streams.stores.FinatraKeyValueStore[KK,VV]"></a><a id="getKeyValueStore[KK,VV](String)(ClassTag[KK]):FinatraKeyValueStore[KK,VV]"></a>
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer#getKeyValueStore" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getKeyValueStore[KK,VV](name:String)(implicitevidence$1:scala.reflect.ClassTag[KK]):com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore[KK,VV]"></a><a id="getKeyValueStore[KK,VV](String)(ClassTag[KK]):FinatraKeyValueStore[KK,VV]"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#getKeyValueStore[KK,VV](name:String)(implicitevidence$1:scala.reflect.ClassTag[KK]):com.twitter.finatra.streams.stores.FinatraKeyValueStore[KK,VV]" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#getKeyValueStore[KK,VV](name:String)(implicitevidence$1:scala.reflect.ClassTag[KK]):com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore[KK,VV]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -582,14 +582,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getKeyValueStore</span><span class="tparams">[<span name="KK">KK</span>, <span name="VV">VV</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.7/scala/reflect/ClassTag.html#scala.reflect.ClassTag" class="extype" name="scala.reflect.ClassTag">ClassTag</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.FinatraTransformerV2.getKeyValueStore.KK">KK</span>]</span>)</span><span class="result">: <a href="../../../../streams/stores/FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.streams.stores.FinatraKeyValueStore">FinatraKeyValueStore</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.FinatraTransformerV2.getKeyValueStore.KK">KK</span>, <span class="extype" name="com.twitter.finatra.streams.transformer.FinatraTransformerV2.getKeyValueStore.VV">VV</span>]</span>
+        <span class="name">getKeyValueStore</span><span class="tparams">[<span name="KK">KK</span>, <span name="VV">VV</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.7/scala/reflect/ClassTag.html#scala.reflect.ClassTag" class="extype" name="scala.reflect.ClassTag">ClassTag</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer.getKeyValueStore.KK">KK</span>]</span>)</span><span class="result">: <a href="../../../transformer/stores/FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer.getKeyValueStore.KK">KK</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer.getKeyValueStore.VV">VV</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../../streams/transformer/FinatraTransformerV2.html" class="extype" name="com.twitter.finatra.streams.transformer.FinatraTransformerV2">FinatraTransformerV2</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.streams.transformer.PersistentTimers#getPersistentTimerStore" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getPersistentTimerStore[TimerKey](timerStoreName:String,onTimer:(com.twitter.finatra.streams.transformer.domain.Time,com.twitter.finatra.streams.transformer.domain.TimerMetadata,TimerKey)=&gt;Unit,punctuationType:org.apache.kafka.streams.processor.PunctuationType,maxTimerFiresPerWatermark:Int):com.twitter.finatra.streams.transformer.PersistentTimerStore[TimerKey]"></a><a id="getPersistentTimerStore[TimerKey](String,(Time,TimerMetadata,TimerKey)⇒Unit,PunctuationType,Int):PersistentTimerStore[TimerKey]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../transformer/FinatraTransformer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer">FinatraTransformer</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimers#getPersistentTimerStore" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getPersistentTimerStore[TimerKey](timerStoreName:String,onTimer:(com.twitter.finatra.kafkastreams.transformer.domain.Time,com.twitter.finatra.kafkastreams.transformer.domain.TimerMetadata,TimerKey)=&gt;Unit,punctuationType:org.apache.kafka.streams.processor.PunctuationType,maxTimerFiresPerWatermark:Int):com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerStore[TimerKey]"></a><a id="getPersistentTimerStore[TimerKey](String,(Time,TimerMetadata,TimerKey)⇒Unit,PunctuationType,Int):PersistentTimerStore[TimerKey]"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#getPersistentTimerStore[TimerKey](timerStoreName:String,onTimer:(com.twitter.finatra.streams.transformer.domain.Time,com.twitter.finatra.streams.transformer.domain.TimerMetadata,TimerKey)=&gt;Unit,punctuationType:org.apache.kafka.streams.processor.PunctuationType,maxTimerFiresPerWatermark:Int):com.twitter.finatra.streams.transformer.PersistentTimerStore[TimerKey]" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#getPersistentTimerStore[TimerKey](timerStoreName:String,onTimer:(com.twitter.finatra.kafkastreams.transformer.domain.Time,com.twitter.finatra.kafkastreams.transformer.domain.TimerMetadata,TimerKey)=&gt;Unit,punctuationType:org.apache.kafka.streams.processor.PunctuationType,maxTimerFiresPerWatermark:Int):com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerStore[TimerKey]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -598,10 +598,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getPersistentTimerStore</span><span class="tparams">[<span name="TimerKey">TimerKey</span>]</span><span class="params">(<span name="timerStoreName">timerStoreName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="onTimer">onTimer: (<a href="../../../../streams/transformer/domain/Time.html" class="extype" name="com.twitter.finatra.streams.transformer.domain.Time">Time</a>, <a href="../../../../streams/transformer/domain/TimerMetadata.html" class="extype" name="com.twitter.finatra.streams.transformer.domain.TimerMetadata">TimerMetadata</a>, <span class="extype" name="com.twitter.finatra.streams.transformer.PersistentTimers.getPersistentTimerStore.TimerKey">TimerKey</span>) ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>, <span name="punctuationType">punctuationType: <span class="extype" name="org.apache.kafka.streams.processor.PunctuationType">PunctuationType</span></span>, <span name="maxTimerFiresPerWatermark">maxTimerFiresPerWatermark: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a> = <span class="symbol">10000</span></span>)</span><span class="result">: <a href="../../../../streams/transformer/PersistentTimerStore.html" class="extype" name="com.twitter.finatra.streams.transformer.PersistentTimerStore">PersistentTimerStore</a>[<span class="extype" name="com.twitter.finatra.streams.transformer.PersistentTimers.getPersistentTimerStore.TimerKey">TimerKey</span>]</span>
+        <span class="name">getPersistentTimerStore</span><span class="tparams">[<span name="TimerKey">TimerKey</span>]</span><span class="params">(<span name="timerStoreName">timerStoreName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="onTimer">onTimer: (<a href="../../../transformer/domain/Time.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.domain.Time">Time</a>, <a href="../../../transformer/domain/TimerMetadata.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.domain.TimerMetadata">TimerMetadata</a>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimers.getPersistentTimerStore.TimerKey">TimerKey</span>) ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>, <span name="punctuationType">punctuationType: <span class="extype" name="org.apache.kafka.streams.processor.PunctuationType">PunctuationType</span></span>, <span name="maxTimerFiresPerWatermark">maxTimerFiresPerWatermark: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a> = <span class="symbol">10000</span></span>)</span><span class="result">: <a href="../../../transformer/stores/PersistentTimerStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerStore">PersistentTimerStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimers.getPersistentTimerStore.TimerKey">TimerKey</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../../streams/transformer/PersistentTimers.html" class="extype" name="com.twitter.finatra.streams.transformer.PersistentTimers">PersistentTimers</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../transformer/stores/PersistentTimers.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimers">PersistentTimers</a></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
@@ -636,8 +636,8 @@
         <span class="name">info</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd><a href="../ProcessorContextLogging.html" class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging">ProcessorContextLogging</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.streams.transformer.FinatraTransformerV2#init" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>ProcessorContextLogging</dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer#init" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="init(processorContext:org.apache.kafka.streams.processor.ProcessorContext):Unit"></a><a id="init(ProcessorContext):Unit"></a>
       <span class="permalink">
       <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#init(processorContext:org.apache.kafka.streams.processor.ProcessorContext):Unit" title="Permalink">
@@ -652,7 +652,7 @@
         <span class="name">init</span><span class="params">(<span name="processorContext">processorContext: <span class="extype" name="org.apache.kafka.streams.processor.ProcessorContext">ProcessorContext</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../streams/transformer/FinatraTransformerV2.html" class="extype" name="com.twitter.finatra.streams.transformer.FinatraTransformerV2">FinatraTransformerV2</a> → Transformer</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../transformer/FinatraTransformer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer">FinatraTransformer</a> → Transformer</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
@@ -723,7 +723,7 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.streams.transformer.internal.OnClose#onClose" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnClose#onClose" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="onClose():Unit"></a>
       <span class="permalink">
       <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#onClose():Unit" title="Permalink">
@@ -738,8 +738,26 @@
         <span class="name">onClose</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../../streams/transformer/internal/OnClose.html" class="extype" name="com.twitter.finatra.streams.transformer.internal.OnClose">OnClose</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.streams.transformer.PersistentTimers#onInit" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../transformer/lifecycle/OnClose.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnClose">OnClose</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer#onFlush" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="onFlush():Unit"></a>
+      <span class="permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#onFlush():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">onFlush</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Callback method for when you should flush any cached data.</p><div class="fullcomment"><div class="comment cmt"><p>Callback method for when you should flush any cached data.
+This method is typically called prior to a Kafka commit
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../transformer/FinatraTransformer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer">FinatraTransformer</a> → <a href="../../../transformer/lifecycle/OnFlush.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnFlush">OnFlush</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimers#onInit" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="onInit():Unit"></a>
       <span class="permalink">
       <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#onInit():Unit" title="Permalink">
@@ -754,11 +772,11 @@
         <span class="name">onInit</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../streams/transformer/PersistentTimers.html" class="extype" name="com.twitter.finatra.streams.transformer.PersistentTimers">PersistentTimers</a> → <a href="../../../../streams/transformer/internal/OnInit.html" class="extype" name="com.twitter.finatra.streams.transformer.internal.OnInit">OnInit</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../transformer/stores/PersistentTimers.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimers">PersistentTimers</a> → <a href="../../../transformer/lifecycle/OnInit.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnInit">OnInit</a></dd></dl></div>
     </li><li name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer#onMessage" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="onMessage(messageTime:com.twitter.finatra.streams.transformer.domain.Time,key:Key,value:Value):Unit"></a><a id="onMessage(Time,Key,Value):Unit"></a>
+      <a id="onMessage(messageTime:com.twitter.finatra.kafkastreams.transformer.domain.Time,key:Key,value:Value):Unit"></a><a id="onMessage(Time,Key,Value):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#onMessage(messageTime:com.twitter.finatra.streams.transformer.domain.Time,key:Key,value:Value):Unit" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#onMessage(messageTime:com.twitter.finatra.kafkastreams.transformer.domain.Time,key:Key,value:Value):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -767,16 +785,16 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">onMessage</span><span class="params">(<span name="messageTime">messageTime: <a href="../../../../streams/transformer/domain/Time.html" class="extype" name="com.twitter.finatra.streams.transformer.domain.Time">Time</a></span>, <span name="key">key: <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Key">Key</span></span>, <span name="value">value: <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Value">Value</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">onMessage</span><span class="params">(<span name="messageTime">messageTime: <a href="../../../transformer/domain/Time.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.domain.Time">Time</a></span>, <span name="key">key: <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Key">Key</span></span>, <span name="value">value: <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Value">Value</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <p class="shortcomment cmt">Callback method which is called for every message in the stream this Transformer is attached to.</p><div class="fullcomment"><div class="comment cmt"><p>Callback method which is called for every message in the stream this Transformer is attached to.
 Implementers of this method may emit 0 or more records by using the processorContext.
-</p></div><dl class="paramcmts block"><dt class="param">messageTime</dt><dd class="cmt"><p>the time of the message</p></dd><dt class="param">key</dt><dd class="cmt"><p>the key of the message</p></dd><dt class="param">value</dt><dd class="cmt"><p>the value of the message</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../index.html" class="extype" name="com.twitter.finatra">com.twitter.finatra</a>] </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer">ReservoirSamplingTransformer</a> → <a href="../../../../streams/transformer/FinatraTransformerV2.html" class="extype" name="com.twitter.finatra.streams.transformer.FinatraTransformerV2">FinatraTransformerV2</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.streams.transformer.PersistentTimers#onWatermark" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="onWatermark(watermark:com.twitter.finatra.streams.transformer.domain.Watermark):Unit"></a><a id="onWatermark(Watermark):Unit"></a>
+</p></div><dl class="paramcmts block"><dt class="param">messageTime</dt><dd class="cmt"><p>the time of the message</p></dd><dt class="param">key</dt><dd class="cmt"><p>the key of the message</p></dd><dt class="param">value</dt><dd class="cmt"><p>the value of the message</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../index.html" class="extype" name="com.twitter.finatra">com.twitter.finatra</a>] </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer">ReservoirSamplingTransformer</a> → <a href="../../../transformer/FinatraTransformer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer">FinatraTransformer</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimers#onWatermark" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="onWatermark(watermark:com.twitter.finatra.kafkastreams.transformer.watermarks.Watermark):Unit"></a><a id="onWatermark(Watermark):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#onWatermark(watermark:com.twitter.finatra.streams.transformer.domain.Watermark):Unit" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#onWatermark(watermark:com.twitter.finatra.kafkastreams.transformer.watermarks.Watermark):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -785,11 +803,11 @@ Implementers of this method may emit 0 or more records by using the processorCon
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">onWatermark</span><span class="params">(<span name="watermark">watermark: <a href="../../../../streams/transformer/domain/Watermark.html" class="extype" name="com.twitter.finatra.streams.transformer.domain.Watermark">Watermark</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">onWatermark</span><span class="params">(<span name="watermark">watermark: <a href="../../../transformer/watermarks/Watermark.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.watermarks.Watermark">Watermark</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../streams/transformer/PersistentTimers.html" class="extype" name="com.twitter.finatra.streams.transformer.PersistentTimers">PersistentTimers</a> → <a href="../../../../streams/transformer/OnWatermark.html" class="extype" name="com.twitter.finatra.streams.transformer.OnWatermark">OnWatermark</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.streams.transformer.FinatraTransformerV2#processorContext" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../transformer/stores/PersistentTimers.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimers">PersistentTimers</a> → <a href="../../../transformer/lifecycle/OnWatermark.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnWatermark">OnWatermark</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer#processorContext" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="processorContext:org.apache.kafka.streams.processor.ProcessorContext"></a><a id="processorContext:ProcessorContext"></a>
       <span class="permalink">
       <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#processorContext:org.apache.kafka.streams.processor.ProcessorContext" title="Permalink">
@@ -804,7 +822,7 @@ Implementers of this method may emit 0 or more records by using the processorCon
         <span class="name">processorContext</span><span class="result">: <span class="extype" name="org.apache.kafka.streams.processor.ProcessorContext">ProcessorContext</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../../streams/transformer/FinatraTransformerV2.html" class="extype" name="com.twitter.finatra.streams.transformer.FinatraTransformerV2">FinatraTransformerV2</a> → <a href="../ProcessorContextLogging.html" class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging">ProcessorContextLogging</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../transformer/FinatraTransformer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer">FinatraTransformer</a> → ProcessorContextLogging</dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
@@ -836,7 +854,7 @@ Implementers of this method may emit 0 or more records by using the processorCon
         <span class="name">taskIdStr</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../ProcessorContextLogging.html" class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging">ProcessorContextLogging</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>ProcessorContextLogging</dd></dl></div>
     </li><li name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging#timeStr" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="timeStr:String"></a>
       <span class="permalink">
@@ -852,7 +870,7 @@ Implementers of this method may emit 0 or more records by using the processorCon
         <span class="name">timeStr</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../ProcessorContextLogging.html" class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging">ProcessorContextLogging</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>ProcessorContextLogging</dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
@@ -884,8 +902,8 @@ Implementers of this method may emit 0 or more records by using the processorCon
         <span class="name">trace</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd><a href="../ProcessorContextLogging.html" class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging">ProcessorContextLogging</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.streams.transformer.FinatraTransformerV2#transform" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>ProcessorContextLogging</dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer#transform" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="transform(k:InputKey,v:InputValue):(OutputKey,OutputValue)"></a><a id="transform(Key,Value):(SampleKey,SampleValue)"></a>
       <span class="permalink">
       <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#transform(k:InputKey,v:InputValue):(OutputKey,OutputValue)" title="Permalink">
@@ -900,7 +918,7 @@ Implementers of this method may emit 0 or more records by using the processorCon
         <span class="name">transform</span><span class="params">(<span name="k">k: <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Key">Key</span></span>, <span name="v">v: <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Value">Value</span></span>)</span><span class="result">: (<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleKey">SampleKey</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleValue">SampleValue</span>)</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../streams/transformer/FinatraTransformerV2.html" class="extype" name="com.twitter.finatra.streams.transformer.FinatraTransformerV2">FinatraTransformerV2</a> → Transformer</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../transformer/FinatraTransformer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer">FinatraTransformer</a> → Transformer</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
@@ -984,11 +1002,11 @@ Implementers of this method may emit 0 or more records by using the processorCon
         <span class="name">warn</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd><a href="../ProcessorContextLogging.html" class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging">ProcessorContextLogging</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.streams.transformer.FinatraTransformerV2#watermark" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="watermark:com.twitter.finatra.streams.transformer.domain.Watermark"></a><a id="watermark:Watermark"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>ProcessorContextLogging</dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer#watermark" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="watermark:com.twitter.finatra.kafkastreams.transformer.watermarks.Watermark"></a><a id="watermark:Watermark"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#watermark:com.twitter.finatra.streams.transformer.domain.Watermark" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#watermark:com.twitter.finatra.kafkastreams.transformer.watermarks.Watermark" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -997,54 +1015,34 @@ Implementers of this method may emit 0 or more records by using the processorCon
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">watermark</span><span class="result">: <a href="../../../../streams/transformer/domain/Watermark.html" class="extype" name="com.twitter.finatra.streams.transformer.domain.Watermark">Watermark</a></span>
+        <span class="name">watermark</span><span class="result">: <a href="../../../transformer/watermarks/Watermark.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.watermarks.Watermark">Watermark</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../../streams/transformer/FinatraTransformerV2.html" class="extype" name="com.twitter.finatra.streams.transformer.FinatraTransformerV2">FinatraTransformerV2</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../index.html" class="extype" name="com.twitter.finatra">com.twitter.finatra</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../transformer/FinatraTransformer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer">FinatraTransformer</a></dd></dl></div>
     </li>
               </ol>
             </div>
 
         
 
-        <div class="values members">
-              <h3>Deprecated Value Members</h3>
-              <ol><li name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging#logger" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="logger:com.twitter.util.logging.Logger"></a><a id="logger:Logger"></a>
-      <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/internal/utils/sampling/ReservoirSamplingTransformer.html#logger:com.twitter.util.logging.Logger" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: Use error, warn, info, debug, or trace methods directly">logger</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logger.html#com.twitter.util.logging.Logger" class="extype" name="com.twitter.util.logging.Logger">Logger</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../ProcessorContextLogging.html" class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging">ProcessorContextLogging</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p>Use error, warn, info, debug, or trace methods directly</p></dd></dl></div>
-    </li></ol>
-            </div>
+        
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.twitter.finatra.streams.transformer.PersistentTimers">
-              <h3>Inherited from <a href="../../../../streams/transformer/PersistentTimers.html" class="extype" name="com.twitter.finatra.streams.transformer.PersistentTimers">PersistentTimers</a></h3>
-            </div><div class="parent" name="com.twitter.finatra.streams.transformer.FinatraTransformerV2">
-              <h3>Inherited from <a href="../../../../streams/transformer/FinatraTransformerV2.html" class="extype" name="com.twitter.finatra.streams.transformer.FinatraTransformerV2">FinatraTransformerV2</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Key">Key</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Value">Value</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleKey">SampleKey</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleValue">SampleValue</span>]</h3>
+        <div class="parent" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimers">
+              <h3>Inherited from <a href="../../../transformer/stores/PersistentTimers.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimers">PersistentTimers</a></h3>
+            </div><div class="parent" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer">
+              <h3>Inherited from <a href="../../../transformer/FinatraTransformer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer">FinatraTransformer</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Key">Key</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Value">Value</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleKey">SampleKey</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleValue">SampleValue</span>]</h3>
             </div><div class="parent" name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging">
-              <h3>Inherited from <a href="../ProcessorContextLogging.html" class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging">ProcessorContextLogging</a></h3>
-            </div><div class="parent" name="com.twitter.finatra.streams.transformer.internal.OnClose">
-              <h3>Inherited from <a href="../../../../streams/transformer/internal/OnClose.html" class="extype" name="com.twitter.finatra.streams.transformer.internal.OnClose">OnClose</a></h3>
-            </div><div class="parent" name="com.twitter.finatra.streams.transformer.OnWatermark">
-              <h3>Inherited from <a href="../../../../streams/transformer/OnWatermark.html" class="extype" name="com.twitter.finatra.streams.transformer.OnWatermark">OnWatermark</a></h3>
-            </div><div class="parent" name="com.twitter.finatra.streams.transformer.internal.OnInit">
-              <h3>Inherited from <a href="../../../../streams/transformer/internal/OnInit.html" class="extype" name="com.twitter.finatra.streams.transformer.internal.OnInit">OnInit</a></h3>
+              <h3>Inherited from <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging">ProcessorContextLogging</span></h3>
+            </div><div class="parent" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnFlush">
+              <h3>Inherited from <a href="../../../transformer/lifecycle/OnFlush.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnFlush">OnFlush</a></h3>
+            </div><div class="parent" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnClose">
+              <h3>Inherited from <a href="../../../transformer/lifecycle/OnClose.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnClose">OnClose</a></h3>
+            </div><div class="parent" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnWatermark">
+              <h3>Inherited from <a href="../../../transformer/lifecycle/OnWatermark.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnWatermark">OnWatermark</a></h3>
+            </div><div class="parent" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnInit">
+              <h3>Inherited from <a href="../../../transformer/lifecycle/OnInit.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnInit">OnInit</a></h3>
             </div><div class="parent" name="org.apache.kafka.streams.kstream.Transformer">
               <h3>Inherited from <span class="extype" name="org.apache.kafka.streams.kstream.Transformer">Transformer</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Key">Key</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.Value">Value</span>, (<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleKey">SampleKey</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer.SampleValue">SampleValue</span>)]</h3>
             </div><div class="parent" name="scala.AnyRef">

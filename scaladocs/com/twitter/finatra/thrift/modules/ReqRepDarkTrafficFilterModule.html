@@ -159,16 +159,16 @@
                         <a href="ClientIdWhitelistModule$.html" title="">ClientIdWhitelistModule</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="DarkTrafficFilterModule.html" title="A TwitterModule which configures and binds a DarkTrafficFilter to the object graph."></a>
-                        <a href="DarkTrafficFilterModule.html" title="A TwitterModule which configures and binds a DarkTrafficFilter to the object graph.">DarkTrafficFilterModule</a>
+                        <a class="class" href="DarkTrafficFilterModule.html" title="A TwitterModule which configures and binds a DarkTrafficFilter to the object graph, for use with Controllers constructed using the legacy method."></a>
+                        <a href="DarkTrafficFilterModule.html" title="A TwitterModule which configures and binds a DarkTrafficFilter to the object graph, for use with Controllers constructed using the legacy method.">DarkTrafficFilterModule</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="class" href="JavaDarkTrafficFilterModule.html" title="A TwitterModule which configures and binds a JavaDarkTrafficFilter to the object graph."></a>
                         <a href="JavaDarkTrafficFilterModule.html" title="A TwitterModule which configures and binds a JavaDarkTrafficFilter to the object graph.">JavaDarkTrafficFilterModule</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="" title=""></a>
-                        <a href="" title="">ReqRepDarkTrafficFilterModule</a>
+                        <a class="class" href="" title="A TwitterModule which configures and binds a DarkTrafficFilter to the object graph."></a>
+                        <a href="" title="A TwitterModule which configures and binds a DarkTrafficFilter to the object graph.">ReqRepDarkTrafficFilterModule</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="object" href="ThriftResponseClassifierModule$.html" title=""></a>
@@ -201,7 +201,14 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A <span class="extype" name="TwitterModule">TwitterModule</span> which configures and binds a <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> to the object graph.
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>This <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> module is to be used with <span class="extype" name="Controllers">Controllers</span> which are constructed by
+      extending <code>Controller(GeneratedThriftService)</code>. For Controllers that are constructed using
+      the deprecated method of extending <code>Controller with GeneratedThriftService.BaseServiceIface</code>,
+      Use the <a href="DarkTrafficFilterModule.html" class="extype" name="com.twitter.finatra.thrift.modules.DarkTrafficFilterModule">DarkTrafficFilterModule</a> above.</p></span>, <span class="cmt"><p>This is only applicable in Scala as it uses generated Scala classes and expects to configure
+      the <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> over a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html" class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</a> that is generated from
+      Finagle via generated Scala code. Users of generated Java code should use the
+      <a href="JavaDarkTrafficFilterModule.html" class="extype" name="com.twitter.finatra.thrift.modules.JavaDarkTrafficFilterModule">JavaDarkTrafficFilterModule</a>.</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -1779,9 +1786,9 @@ due to install being deferred until after flag parsing occurs.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.modules.ReqRepDarkTrafficFilterModule#newFilter" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="newFilter(dest:String,client:com.twitter.finagle.ThriftMux.Client,injector:com.twitter.inject.Injector,stats:com.twitter.finagle.stats.StatsReceiver):com.twitter.finatra.thrift.filters.DarkTrafficFilter[MethodIface]"></a><a id="newFilter(String,Client,Injector,StatsReceiver):DarkTrafficFilter[MethodIface]"></a>
+      <a id="newFilter(dest:String,client:com.twitter.finagle.ThriftMux.Client,injector:com.twitter.inject.Injector,stats:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.Filter.TypeAgnostic"></a><a id="newFilter(String,Client,Injector,StatsReceiver):TypeAgnostic"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/modules/ReqRepDarkTrafficFilterModule.html#newFilter(dest:String,client:com.twitter.finagle.ThriftMux.Client,injector:com.twitter.inject.Injector,stats:com.twitter.finagle.stats.StatsReceiver):com.twitter.finatra.thrift.filters.DarkTrafficFilter[MethodIface]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/ReqRepDarkTrafficFilterModule.html#newFilter(dest:String,client:com.twitter.finagle.ThriftMux.Client,injector:com.twitter.inject.Injector,stats:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.Filter.TypeAgnostic" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1790,7 +1797,7 @@ due to install being deferred until after flag parsing occurs.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">newFilter</span><span class="params">(<span name="dest">dest: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="client">client: <span class="extype" name="com.twitter.finagle.ThriftMux.Client">Client</span></span>, <span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="stats">stats: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="result">: <a href="../filters/DarkTrafficFilter.html" class="extype" name="com.twitter.finatra.thrift.filters.DarkTrafficFilter">DarkTrafficFilter</a>[<span class="extype" name="com.twitter.finatra.thrift.modules.ReqRepDarkTrafficFilterModule.MethodIface">MethodIface</span>]</span>
+        <span class="name">newFilter</span><span class="params">(<span name="dest">dest: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="client">client: <span class="extype" name="com.twitter.finagle.ThriftMux.Client">Client</span></span>, <span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="stats">stats: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.modules.ReqRepDarkTrafficFilterModule">ReqRepDarkTrafficFilterModule</a> → AbstractDarkTrafficFilterModule</dd></dl></div>
