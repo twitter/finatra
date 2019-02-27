@@ -45,6 +45,11 @@ private[http] class CallbackConverter @Inject()(
       request: Request =>
         val asyncStream = jsonStreamParser.parseArray(request.reader)(asyncStreamTypeParam)
         callback(asyncStream.asInstanceOf[RequestType])
+    } else if (runtimeClassEq[RequestType, Reader[_]]) {
+      val readerTypeParam = manifest[RequestType].typeArguments.head
+      request: Request =>
+        val reader = jsonStreamParser.parseJson(request.reader)(readerTypeParam)
+        callback(reader.asInstanceOf[RequestType])
     } else if (runtimeClassEq[RequestType, Int] || runtimeClassEq[RequestType, String]) {
       // NOTE: callback functions with no input param which return a String are inferred as a RequestType of
       // `Int` by Scala because `StringOps.apply` is a function of Int => Char, other return types

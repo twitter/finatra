@@ -7,11 +7,18 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
+* finatra-http: Added support to serve `c.t.io.Reader` as a streaming request.
+  ``PHAB_ID=D278988``
+
 19.2.0
 -------
 
 Added
 ~~~~~
+
 * finatra-kafka: Expose timeout duration in FinagleKafkaConsumerBuilder dest(). ``PHAB_ID=D269701``
 
 * finatra-kafka-streams: Expose all existing RocksDb configurations. See

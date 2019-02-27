@@ -1,8 +1,7 @@
 package com.twitter.finatra.http.tests.integration.tweetexample.main.services
 
-import com.twitter.concurrent.AsyncStream
-import com.twitter.concurrent.AsyncStream.fromOption
 import com.twitter.finatra.http.tests.integration.tweetexample.main.domain.Tweet
+import com.twitter.io.Reader
 import com.twitter.util.Future
 
 class MyTweetsRepository extends TweetsRepository {
@@ -17,7 +16,10 @@ class MyTweetsRepository extends TweetsRepository {
     Future.value(tweets.get(id))
   }
 
-  def getByIds(ids: AsyncStream[Long]): AsyncStream[Tweet] = {
-    ids map tweets.get flatMap fromOption
+  def getByIds(ids: Reader[Long]): Reader[Tweet] = {
+    ids.map(tweets.get).flatMap {
+      case Some(a) => Reader.value(a)
+      case None => Reader.empty
+    }
   }
 }

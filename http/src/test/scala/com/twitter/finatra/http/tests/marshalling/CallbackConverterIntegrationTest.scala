@@ -11,7 +11,7 @@ import com.twitter.inject.conversions.buf._
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.{Mockito, IntegrationTest}
 import com.twitter.io.{Buf, Reader}
-import com.twitter.util.{Await, Future}
+import com.twitter.util.Future
 import scala.concurrent.{Future => ScalaFuture}
 
 class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
@@ -200,7 +200,7 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
     val jsonStr = "[1,2]"
     val request = Request(HttpMethod.Post, "/")
     request.setChunked(true)
-    request.writer.write(Buf.Utf8(jsonStr)) ensure {
+    request.writer.write(Buf.Utf8(jsonStr)).ensure {
       request.writer.close()
     }
 
@@ -233,12 +233,41 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
     await(Reader.readAll(response.reader)).utf8str should equal("""["1","2"]""")
   }
 
+  test("Reader request") {
+    val jsonStr = "[1,2]"
+    val request = Request(HttpMethod.Post, "/")
+    request.setChunked(true)
+    request.writer.write(Buf.Utf8(jsonStr)).ensure {
+      request.writer.close()
+    }
+
+    val converted = callbackConverter.convertToFutureResponse(readerRequest)
+
+    val response = await(converted(request))
+    assertOk(response, "[1,2]")
+  }
+
   test("Reader response") {
     val converted = callbackConverter.convertToFutureResponse(readerResponse)
 
     val response = await(converted(Request()))
     response.status should equal(Status.Ok)
     await(Reader.readAll(response.reader)).utf8str should equal("[1.1,2.2,3.3]")
+  }
+
+  test("Reader request and response") {
+    val jsonStr = "[1,2]"
+    val request = Request(HttpMethod.Post, "/")
+    request.setChunked(true)
+    request.writer.write(Buf.Utf8(jsonStr)) ensure {
+      request.writer.close()
+    }
+
+    val converted = callbackConverter.convertToFutureResponse(readerRequestAndResponse)
+
+    val response = await(converted(request))
+    response.status should equal(Status.Ok)
+    await(Reader.readAll(response.reader)).utf8str should equal("""["1","2"]""")
   }
 
   test("Null") {
@@ -377,8 +406,22 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
     AsyncStream(1, 2, 3)
   }
 
+  def readerRequest(reader: Reader[Int]): Future[List[Int]] = {
+    def consume(list: List[Int]): Future[List[Int]] = {
+      reader.read().flatMap {
+        case Some(a) => consume(list :+ a)
+        case None => Future.value(list)
+      }
+    }
+    consume(List.empty[Int])
+  }
+
   def readerResponse(request: Request): Reader[Double] = {
     Reader.fromSeq(Seq(1.1, 2.2, 3.3))
+  }
+
+  def readerRequestAndResponse(reader: Reader[Int]): Reader[String] = {
+    reader.map(_.toString)
   }
 
   private def assertOk(response: Response, expectedBody: String): Unit = {

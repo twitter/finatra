@@ -91,20 +91,42 @@ class TweetsControllerIntegrationTest extends FeatureTest {
     )
   }
 
-  test("post streaming json") {
+  test("post streaming json with Reader") {
     val request = RequestBuilder
       .post("/tweets/streaming")
       .header("X-UserId", "123")
       .chunked
 
-    val ids = (1 to 5).toSeq
+    val ids = (1 to 5)
 
     // Write to request in separate thread
     pool {
       streamingJsonHelper.writeJsonArray(request, ids, delayMs = 10)
     }
 
-    server.httpRequest(request)
+    server.httpRequest(
+      request = request,
+      andExpect = Status.Ok,
+      withJsonBody = """
+        [
+          {
+            "id" : 1,
+            "user" : "Bob",
+            "msg" : "whats up"
+          },
+          {
+            "id" : 2,
+            "user" : "Sally",
+            "msg" : "yo"
+          },
+          {
+            "id" : 3,
+            "user" : "Fred",
+            "msg" : "hey"
+          }
+        ]
+        """
+    )
   }
 
   test("post streaming json without chunks") {
