@@ -1,14 +1,11 @@
 package com.twitter.finatra.http.tests.response
 
 import com.twitter.concurrent.AsyncStream
-import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.http.{Response, Status}
 import com.twitter.finatra.http.response.StreamingResponse
 import com.twitter.inject.Test
-import com.twitter.io.ReaderDiscardedException
-import com.twitter.io.{Buf, Reader}
+import com.twitter.io.{Buf, Reader, ReaderDiscardedException}
 import com.twitter.util._
-
 import scala.collection.mutable
 
 class StreamingResponseTest extends Test {

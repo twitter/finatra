@@ -23,9 +23,9 @@ private object ThriftServerTrait {
 }
 
 /**
- * A Basic ThriftServer. To implement, override
+ * A basic ThriftServer. To implement, override
  * {{{
- *   protected def service: Service[Array[Byte], Array[Byte]]
+ *   protected def thriftService: Service[Array[Byte], Array[Byte]]
  * }}}
  *
  * with your `Service[Array[Byte], Array[Byte]]` implementation.
@@ -70,8 +70,8 @@ trait ThriftServerTrait extends TwitterServer {
 
   /* Abstract */
 
-  /** Override with an implementation to serve a Thrift Service */
-  protected def service: Service[Array[Byte], Array[Byte]]
+  /** Override with an implementation to serve a `Service[Array[Byte], Array[Byte]]` */
+  protected def thriftService: Service[Array[Byte], Array[Byte]]
 
   /* Lifecycle */
 
@@ -140,18 +140,19 @@ trait ThriftServerTrait extends TwitterServer {
    * @param server the configured [[ThriftMux.Server]] stack.
    * @return a constructed [[ListeningServer]].
    */
-  protected def build(addr: String, server: ThriftMux.Server): ListeningServer = {
-    server.serve(addr, this.service)
+  protected[thrift] def build(addr: String, server: ThriftMux.Server): ListeningServer = {
+    server.serve(addr, this.thriftService)
   }
 }
 
-/** ThriftServer for usage from Scala */
+/** ThriftServer for use from Scala */
 trait ThriftServer extends ThriftServerTrait {
 
   /** This Server does not return a `Service[Array[Byte], Array[Byte]]` */
-  protected final def service: Service[Array[Byte], Array[Byte]] = NilService
+  protected final def thriftService: Service[Array[Byte], Array[Byte]] = NilService
 
-  override protected final def build(addr: String, server: ThriftMux.Server): ListeningServer = {
+  /** Instead the [[ThriftRouter]] provides the `Service[Array[Byte], Array[Byte]]` to serve. */
+  override protected[thrift] final def build(addr: String, server: ThriftMux.Server): ListeningServer = {
     val router = injector.instance[ThriftRouter]
     server.serveIface(addr, router.thriftService)
   }
@@ -172,7 +173,7 @@ trait ThriftServer extends ThriftServerTrait {
 
 /** AbstractThriftServer for usage from Java or with generated Java code */
 abstract class AbstractThriftServer extends ThriftServerTrait {
-  protected final def service: Service[Array[Byte], Array[Byte]] = {
+  protected final def thriftService: Service[Array[Byte], Array[Byte]] = {
     val router = injector.instance[JavaThriftRouter]
     registerService(
       configureService(router.service))

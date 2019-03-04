@@ -10,11 +10,28 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-http: Added `HttpServerTrait` which allows for a simple way to serve a
+  Finagle `Service[Request, Response]` on an external interface without the need to
+  configure the Finatra `HttpRouter`. ``PHAB_ID=D280896``
+
 * finatra-http: Added support to serve `c.t.io.Reader` as a streaming request.
   ``PHAB_ID=D278988``
 
+Changed
+~~~~~~~
+
+* finatra-thrift: Changed `c.t.finatra.thrift.ThriftServerTrait#service` to `#thriftService` to
+  not collide with the serving of a Finagle service from the `HttpServer` when a server extends
+  both `HttpServer` and `ThriftServer`. ``PHAB_ID=D280896``
+
+Fixed
+~~~~~
+
+Closed
+~~~~~~
+
 19.2.0
--------
+------
 
 Added
 ~~~~~

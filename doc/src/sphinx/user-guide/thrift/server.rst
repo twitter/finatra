@@ -195,7 +195,7 @@ your server.
     }
 
 
-For a list of what flags can be set programmatically, please see the `ThriftServer <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala>`__ class.
+For a list of what flags can be set programmatically, please see the `ThriftServerTrait <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/servers.scala>`__ class.
 
 For more information on using and setting command-line flags see `Flags <../getting-started/flags.html#passing-flag-values-as-command-line-arguments>`__.
 
@@ -268,8 +268,7 @@ For example, in your `ThriftServer` you would do:
       override thriftResponseClassifierModule: Module = ???
     }
 
-The bound value is also then `set on the underlying Finagle server <https://github.com/twitter/finatra/blob/9d7b430ce469d1542b603938e3ec24cf6ff79d64/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala#L71>`__
-before serving.
+The bound value is also then set on the underlying Finagle server before serving.
 
 Testing
 -------

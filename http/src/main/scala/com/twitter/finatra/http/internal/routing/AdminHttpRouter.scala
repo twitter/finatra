@@ -24,7 +24,7 @@ private[http] object AdminHttpRouter extends Logging {
    * only on paths behind /admin/finatra.
    */
   def addAdminRoutes(
-    server: HttpServer,
+    server: HttpServerTrait,
     router: HttpRouter,
     twitterServerAdminRoutes: Seq[AdminHttpServer.Route]
   ): Unit = {
