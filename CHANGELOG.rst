@@ -20,6 +20,11 @@ Added
 Changed
 ~~~~~~~
 
+* inject-utils: Mark `c.t.inject.utils.StringUtils#snakify,camelify,pascalify` as
+  deprecated as their implementations have moved to util/util-core `c.t.conversions.StringOps`.
+  Encourage users to switch usages to `c.t.conversions.StringOps#toSnakeCase,toCamelCase,toPascalCase`.
+  ``PHAB_ID=D280886``
+
 * finatra-thrift: Changed `c.t.finatra.thrift.ThriftServerTrait#service` to `#thriftService` to
   not collide with the serving of a Finagle service from the `HttpServer` when a server extends
   both `HttpServer` and `ThriftServer`. ``PHAB_ID=D280896``

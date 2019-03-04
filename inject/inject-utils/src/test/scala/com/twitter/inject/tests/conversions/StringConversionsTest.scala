@@ -16,16 +16,4 @@ class StringConversionsTest extends Test {
   test("ellipse") {
     "foobar".ellipse(2) should be("fo...")
   }
-
-  test("camelify") {
-    "foo_bar".camelify should be("fooBar")
-  }
-
-  test("pascalify") {
-    "foo_bar".pascalify should be("FooBar")
-  }
-
-  test("snakify") {
-    "FooBar".snakify should be("foo_bar")
-  }
 }

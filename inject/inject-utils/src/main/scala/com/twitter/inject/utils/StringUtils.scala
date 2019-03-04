@@ -1,9 +1,8 @@
 package com.twitter.inject.utils
 
-object StringUtils {
+import com.twitter.conversions.StringOps
 
-  private[this] val SnakifyRegexFirstPass = """([A-Z]+)([A-Z][a-z])""".r
-  private[this] val SnakifyRegexSecondPass = """([a-z\d])([A-Z])""".r
+object StringUtils {
 
   /**
    * Turn a string of format "FooBar" into snake case "foo_bar"
@@ -14,21 +13,10 @@ object StringUtils {
    *    s == camelify(snakify(s))
    * }}}
    *
-   * Copied from the Lift Framework:
-   * https://github.com/lift/framework/blob/master/core/util/src/main/scala/net/liftweb/util/StringHelpers.scala
-   *
-   * Apache 2.0 License: https://github.com/lift/framework/blob/master/LICENSE.txt
-   *
    * @return the underscored string
    */
-  def snakify(name: String): String =
-    SnakifyRegexSecondPass
-      .replaceAllIn(
-        SnakifyRegexFirstPass
-          .replaceAllIn(name, "$1_$2"),
-        "$1_$2"
-      )
-      .toLowerCase
+  @deprecated("Users are encouraged to use com.twitter.conversions.StringOps#toSnakeCase", "2019-03-02")
+  def snakify(name: String): String = StringOps.toSnakeCase(name)
 
   /**
    * Turns a string of format "foo_bar" into PascalCase "FooBar"
@@ -40,31 +28,12 @@ object StringUtils {
    *       "CamelCase" is a valid camel-cased word. Hence, PascalCase can be considered to be a
    *       subset of camelCase.
    *
-   * Copied from the "lift" framework:
-   * https://github.com/lift/framework/blob/master/core/util/src/main/scala/net/liftweb/util/StringHelpers.scala
-   *
-   * Apache 2.0 License: https://github.com/lift/framework/blob/master/LICENSE.txt
-   *
-   * Functional code courtesy of Jamie Webb (j@jmawebb.cjb.net) 2006/11/28
-   *
    * @param name the String to PascalCase
    * @return the PascalCased string
    */
-  def pascalify(name: String): String = {
-    def loop(x: List[Char]): List[Char] = (x: @unchecked) match {
-      case '_' :: '_' :: rest => loop('_' :: rest)
-      case '_' :: c :: rest => Character.toUpperCase(c) :: loop(rest)
-      case '_' :: Nil => Nil
-      case c :: rest => c :: loop(rest)
-      case Nil => Nil
-    }
+  @deprecated("Users are encouraged to use com.twitter.conversions.StringOps#toPascalCase", "2019-03-02")
+  def pascalify(name: String): String = StringOps.toPascalCase(name)
 
-    if (name == null) {
-      ""
-    } else {
-      loop('_' :: name.toList).mkString
-    }
-  }
 
   /**
    * Turn a string of format "foo_bar" into camelCase with the first letter in lower case: "fooBar"
@@ -78,20 +47,9 @@ object StringUtils {
    *       "CamelCase" is a valid camel-cased word. Hence, PascalCase can be considered to be a
    *       subset of camelCase.
    *
-   * Copied from the Lift Framework:
-   * https://github.com/lift/framework/blob/master/core/util/src/main/scala/net/liftweb/util/StringHelpers.scala
-   *
-   * Apache 2.0 License: https://github.com/lift/framework/blob/master/LICENSE.txt
-   *
    * @param name the String to camelCase
    * @return the camelCased string
    */
-  def camelify(name: String): String = {
-    val tmp: String = pascalify(name)
-    if (tmp.length == 0) {
-      ""
-    } else {
-      tmp.substring(0, 1).toLowerCase + tmp.substring(1)
-    }
-  }
+  @deprecated("Users are encouraged to use com.twitter.conversions.StringOps#toCamelCase", "2019-03-02")
+  def camelify(name: String): String = StringOps.toCamelCase(name)
 }
