@@ -40,42 +40,200 @@ trait HttpServerTrait extends TwitterServer {
   addFrameworkModule(
     httpResponseClassifierModule)
 
-  /** Http Port */
+  /**
+   * Default external HTTP port used as the [[Flag]] default value for [[httpPortFlag]]. This can be
+   * overridden to provide a different default programmatically when a flag value cannot be passed.
+   * The format of this value is expected to be a String in the form of ":port".
+   *
+   * In general, users should prefer setting the [[httpPortFlag]] [[Flag]] value.
+   *
+   * @see [[com.twitter.finatra.http.HttpServerTrait.httpPortFlag]]
+   */
   protected def defaultHttpPort: String = ":8888"
-  private val httpPortFlag = flag("http.port", defaultHttpPort, "External HTTP server port")
 
-  /** Https Port */
+  /**
+   * External HTTP port [[Flag]]. The default value is specified by [[defaultHttpPort]] which
+   * can be overridden to provide a different default.
+   *
+   * @note the default value is ":8888" as defined by [[defaultHttpPort]].
+   * @note the format of this flag is expected to be a String in the form of ":port".
+   * @see [[com.twitter.finatra.http.HttpServerTrait.defaultHttpPort]]
+   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   */
+  private val httpPortFlag =
+    flag("http.port", defaultHttpPort, "External HTTP server port")
+
+  /**
+   * Default external HTTPS port used as the [[Flag]] default value for [[httpsPortFlag]]. This can
+   * be overridden to provide a different default programmatically when a flag value cannot be
+   * passed. The format of this value is expected to be a String in the form of ":port".
+   *
+   * In general, users should prefer setting the [[httpsPortFlag]] [[Flag]] value.
+   *
+   * @see [[com.twitter.finatra.http.HttpServerTrait.httpsPortFlag]]
+   */
   protected def defaultHttpsPort: String = ""
-  private val httpsPortFlag = flag("https.port", defaultHttpsPort, "External HTTPS server port")
 
-  /** HTTP Max Request Message Size */
+  /**
+   * External HTTPS port [[Flag]]. The default value is specified by [[defaultHttpsPort]] which
+   * can be overridden to provide a different default.
+   *
+   * @note the default value is "" as defined by [[defaultHttpsPort]].
+   * @note the format of this flag is expected to be a String in the form of ":port".
+   * @see [[com.twitter.finatra.http.HttpServerTrait.defaultHttpsPort]]
+   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   */
+  private val httpsPortFlag =
+    flag("https.port", defaultHttpsPort, "External HTTPS server port")
+
+  /**
+   * Default maximum request message size this server can receive used as the [[Flag]] default value
+   * for [[maxRequestSizeFlag]]. This can be overridden to provide a different default
+   * programmatically when a flag value cannot be passed. The format of this flag is expected to be
+   * a String which is parsable into a [[com.twitter.util.StorageUnit]].
+   *
+   * In general, users should prefer setting the [[maxRequestSizeFlag]] [[Flag]] value.
+   *
+   * @see [[com.twitter.util.StorageUnit]]
+   * @see [[com.twitter.finagle.Http.Server.withMaxRequestSize]]
+   * @see [[com.twitter.finatra.http.HttpServerTrait.maxRequestSizeFlag]]
+   */
   protected def defaultMaxRequestSize: StorageUnit = 5.megabytes
+
+  /**
+   * Maximum request message [[Flag]]. The default value is specified by [[defaultMaxRequestSize]]
+   * which can be overridden to provide a different default.
+   *
+   * @note the default value is "5.megabytes" as defined by [[defaultMaxRequestSize]].
+   * @note the format of this flag is expected to be a String which is parsable into a [[com.twitter.util.StorageUnit]].
+   * @see [[com.twitter.util.StorageUnit]]
+   * @see [[com.twitter.finatra.http.HttpServerTrait.defaultMaxRequestSize]]
+   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   */
   private val maxRequestSizeFlag =
     flag("maxRequestSize", defaultMaxRequestSize, "HTTP(s) Max Request Size")
 
-  /** Shutdown Timeout */
+  /**
+   * Default shutdown timeout used as the [[Flag]] default value for [[shutdownTimeoutFlag]]. This
+   * represents the deadline for the closing of this server which can be overridden to provide a
+   * different default programmatically when a flag value cannot be passed.
+   *
+   * In general, users should prefer setting the [[shutdownTimeoutFlag]] [[Flag]] value.
+   *
+   * @note the value is used to denote a delta "from now", that is this value is applied as:
+   *       `server.close(shutdownTimeoutDuration.fromNow())`
+   * @see [[com.twitter.util.Closable.close(deadline: Time)]]
+   * @see [[https://github.com/twitter/util/blob/b0a5d06269b9526b4408239ce1441b2a213dd0df/util-core/src/main/scala/com/twitter/util/Duration.scala#L436]]
+   * @see [[com.twitter.finatra.http.HttpServerTrait.shutdownTimeoutFlag]]
+   */
   protected def defaultShutdownTimeout: Duration = 1.minute
+
+  /**
+   * Shutdown timeout [[Flag]]. The default value is specified by [[defaultShutdownTimeout]] which
+   * can be overridden to provide a different default.
+   *
+   * @note the default value is "1.minute" as defined by [[defaultShutdownTimeout]].
+   * @note the format of this flag is expected to be a String which is parsable into a [[com.twitter.util.Duration]].
+   * @see [[com.twitter.finatra.http.HttpServerTrait.defaultShutdownTimeout]]
+   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   */
   private val shutdownTimeoutFlag = flag(
     "shutdown.time", // todo: rename to http.shutdown.time
     defaultShutdownTimeout,
     "Maximum amount of time to wait for pending requests to complete on shutdown"
   )
 
-  /** HTTP Server Name */
+  /**
+   * Default server name for the external HTTP interface used as the [[Flag]] default value for
+   * [[httpServerNameFlag]]. This can be overridden to provide a different default programmatically
+   * when a flag value cannot be passed.
+   *
+   * In general, users should prefer setting the [[httpServerNameFlag]] [[Flag]] value.
+   *
+   * @see [[com.twitter.finatra.http.HttpServerTrait.httpServerNameFlag]]
+   */
   protected def defaultHttpServerName: String = "http"
-  private val httpServerNameFlag = flag("http.name", defaultHttpServerName, "Http server name")
 
-  /** HTTPS Server Name */
+  /**
+   * Server name for the external HTTP interface [[Flag]]. The default value is specified by [[defaultHttpServerName]]
+   * which can be overridden to provide a different default.
+   *
+   * @note the default value is "http" as defined by [[defaultHttpServerName]].
+   * @see [[com.twitter.finatra.http.HttpServerTrait.defaultHttpServerName]]
+   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   */
+  private val httpServerNameFlag =
+    flag("http.name", defaultHttpServerName, "Http server name")
+
+  /**
+   * Default server name for serving the external HTTPS interface used as the [[Flag]] default value
+   * for [[httpsServerNameFlag]]. This can be overridden to provide a different default
+   * programmatically when a flag value cannot be passed.
+   *
+   * In general, users should prefer setting the [[httpsServerNameFlag]] [[Flag]] value.
+   *
+   * @see [[com.twitter.finatra.http.HttpServerTrait.httpsServerNameFlag]]
+   */
   protected def defaultHttpsServerName: String = "https"
-  private val httpsServerNameFlag = flag("https.name", defaultHttpsServerName, "Https server name")
 
-  /** HTTP Server Announcement */
+  /**
+   * Server name for the external HTTPS interface [[Flag]]. The default value is specified by [[defaultHttpsServerName]]
+   * which can be overridden to provide a different default.
+   *
+   * @note the default value is "https" as defined by [[defaultHttpsServerName]].
+   * @see [[com.twitter.finatra.http.HttpServerTrait.defaultHttpsServerName]]
+   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   */
+  private val httpsServerNameFlag =
+    flag("https.name", defaultHttpsServerName, "Https server name")
+
+  /**
+   * Default server announcement String for the HTTP server used as the [[Flag]] default value for
+   * [[httpAnnounceFlag]]. This can be overridden to provide a different default programmatically
+   * when a flag value cannot be passed. An empty String value is an indication to not perform any
+   * announcement of the server.
+   *
+   * In general, users should prefer setting the [[httpAnnounceFlag]] [[Flag]] value.
+   *
+   * @see [[com.twitter.finagle.ListeningServer.announce(addr: String)]]
+   */
   protected def defaultHttpAnnouncement: String = HttpServerTrait.NoHttpAnnouncement
+
+  /**
+   * HTTP server announcement String [[Flag]]. The default value is specified by [[defaultHttpAnnouncement]]
+   * which can be overridden to provide a different default. Setting an empty String is an indication
+   * to not perform any announcement of the server.
+   *
+   * @note the default value is "No Announcement" (empty String) as defined by [[defaultHttpAnnouncement]].
+   * @see [[com.twitter.finagle.ListeningServer.announce(addr: String)]]
+   * @see [[com.twitter.finatra.http.HttpServerTrait.defaultHttpAnnouncement]]
+   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   */
   private val httpAnnounceFlag = flag[String]("http.announce", defaultHttpAnnouncement,
     "Address for announcing HTTP server. Empty string indicates no announcement.")
 
-  /** HTTPS Server Announcement */
+  /**
+   * Default server announcement String for the HTTPS server used as the [[Flag]] default value for
+   * [[httpsAnnounceFlag]]. This can be overridden to provide a different default programmatically
+   * when a flag value cannot be passed. An empty String value is an indication to not perform any
+   * announcement of the server.
+   *
+   * In general, users should prefer setting the [[httpsAnnounceFlag]] [[Flag]] value.
+   *
+   * @see [[com.twitter.finagle.ListeningServer.announce(addr: String)]]
+   */
   protected def defaultHttpsAnnouncement: String = HttpServerTrait.NoHttpAnnouncement
+
+  /**
+   * HTTPS server announcement String [[Flag]]. The default value is specified by [[defaultHttpsAnnouncement]]
+   * which can be overridden to provide a different default. Setting an empty String is an indication
+   * to not perform any announcement of the server.
+   *
+   * @note the default value is "No Announcement" (empty String) as defined by [[defaultHttpsAnnouncement]].
+   * @see [[com.twitter.finagle.ListeningServer.announce(addr: String)]]
+   * @see [[com.twitter.finatra.http.HttpServerTrait.defaultHttpsAnnouncement]]
+   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   */
   private val httpsAnnounceFlag = flag[String]("https.announce", defaultHttpsAnnouncement,
     "Address for announcing HTTPS server. Empty string indicates no announcement.")
 
@@ -86,10 +244,22 @@ trait HttpServerTrait extends TwitterServer {
 
   /* Abstract */
 
-  /** Override with an implementation to serve a Service[Request, Response] */
+  /**
+   * The Finagle `Service[Request, Response]` to serve on either configured [[ListeningServer]].
+   *
+   * Users must override with an implementation to serve a `Service[Request, Response]` */
   protected def httpService: Service[Request, Response]
 
   /* Lifecycle */
+
+  private[this] def defaultHttpServer(name: String): Http.Server = {
+    Http.server
+      .withMaxRequestSize(maxRequestSizeFlag())
+      .withStreaming(streamRequest)
+      .withLabel(name)
+      .withStatsReceiver(injector.instance[StatsReceiver])
+      .withResponseClassifier(injector.instance[HttpResponseClassifier])
+  }
 
   @Lifecycle
   override protected def postWarmup(): Unit = {
@@ -97,16 +267,10 @@ trait HttpServerTrait extends TwitterServer {
 
     // START HTTP
     for (address <- parsePort(httpPortFlag)) {
-      httpServer = build(
-        address,
-        configureHttpServer(
-          Http.server
-            .withMaxRequestSize(maxRequestSizeFlag())
-            .withStreaming(streamRequest)
-            .withLabel(httpServerNameFlag())
-            .withStatsReceiver(injector.instance[StatsReceiver])
-            .withResponseClassifier(injector.instance[HttpResponseClassifier])
-        )
+      httpServer =
+        build(
+          address,
+          configureHttpServer(defaultHttpServer(httpServerNameFlag()))
       )
 
       onExit {
@@ -124,15 +288,10 @@ trait HttpServerTrait extends TwitterServer {
 
     // START HTTPS
     for (address <- parsePort(httpsPortFlag)) {
-      httpsServer = build(
-        address,
-        configureHttpsServer(
-          Http.server
-            .withMaxRequestSize(maxRequestSizeFlag())
-            .withStreaming(streamRequest)
-            .withLabel(httpsServerNameFlag())
-            .withStatsReceiver(injector.instance[StatsReceiver])
-            .withResponseClassifier(injector.instance[HttpResponseClassifier])
+      httpsServer =
+        build(
+          address,
+          configureHttpsServer(defaultHttpServer(httpsServerNameFlag())
         )
       )
 
@@ -154,12 +313,12 @@ trait HttpServerTrait extends TwitterServer {
 
   override def httpExternalPort: Option[Int] = httpServer match {
     case NullServer => None
-    case _ => Option(httpServer).map(PortUtils.getPort)
+    case _ => Some(PortUtils.getPort(httpServer))
   }
 
   override def httpsExternalPort: Option[Int] = httpsServer match {
     case NullServer => None
-    case _ => Option(httpsServer).map(PortUtils.getPort)
+    case _ => Some(PortUtils.getPort(httpsServer))
   }
 
   /* Protected */
@@ -233,7 +392,13 @@ trait HttpServerTrait extends TwitterServer {
   }
 }
 
-/** HttpServer for use from Scala */
+/**
+ * A Finagle server which exposes external HTTP or HTTPS interfaces implemented by a
+ * `Service[Request, Response]` configured via an [[HttpRouter]]. This trait is
+ * intended for use from Scala or with generated Scala code.
+ *
+ * @note Java users are encouraged to use [[AbstractHttpServer]] instead.
+ */
 trait HttpServer extends HttpServerTrait {
 
   /** Add Framework Modules */
@@ -246,10 +411,14 @@ trait HttpServer extends HttpServerTrait {
     mustacheModule
   )
 
-  /** This Server does not return a `Service[Request, Response]` */
+  /**
+   * Configuration of the `Service[Request, Response]` to serve on the [[ListeningServer]]
+   * is defined by configuring the [[HttpRouter]] and not by implementation of this method,
+   * thus this method overridden to be final and set to a `NilService`.
+   */
   protected final def httpService: Service[Request, Response] = NilService
 
-  /** Instead the [[HttpRouter]] provides the `Service[Request, Response]` to serve. */
+  /** Serve the `Service[Request, Response]` from the configured [[HttpRouter]]. */
   override protected[http] final def build(addr: InetSocketAddress, server: Http.Server): ListeningServer = {
     val router = injector.instance[HttpRouter]
     AdminHttpRouter.addAdminRoutes(this, router, this.routes)
@@ -258,6 +427,13 @@ trait HttpServer extends HttpServerTrait {
 
   /* Abstract */
 
+  /**
+   * Users MUST provide an implementation to configure the provided [[HttpRouter]]. The [[HttpRouter]]
+   * exposes a DSL which results in a configured Finagle `Service[-Request, +Response]` to serve on
+   * the [[ListeningServer]].
+   *
+   * @param router the [[HttpRouter]] to configure.
+   */
   protected def configureHttp(router: HttpRouter): Unit
 
   /* Lifecycle */
@@ -304,5 +480,11 @@ trait HttpServer extends HttpServerTrait {
   protected def jacksonModule: Module = FinatraJacksonModule
 }
 
-/** AbstractHttpServer for usage from Java */
+/**
+ * A Finagle server which exposes an external HTTP or HTTPS interfaces implemented by a
+ * `Service[Request, Response]` configured via an [[HttpRouter]]. This abstract class is
+ * intended for use from Java or with generated Java code.
+ *
+ * @note Scala users are encouraged to use [[HttpServer]] instead.
+ */
 abstract class AbstractHttpServer extends HttpServer
