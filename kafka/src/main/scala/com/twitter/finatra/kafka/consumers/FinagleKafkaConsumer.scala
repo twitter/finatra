@@ -150,6 +150,13 @@ class FinagleKafkaConsumer[K, V](config: FinagleKafkaConsumerConfig[K, V])
   }
 
   /**
+   * Get the end offset for a given partition.
+   */
+  def endOffset(partition: TopicPartition): Future[Long] = {
+    singleThreadFuturePool(consumer.endOffsets(List(partition).asJava).get(partition))
+  }
+
+  /**
    * @param timeout The time, in milliseconds, spent waiting in poll if data is not available in the buffer.
    *                If 0, returns immediately with any records that are available currently in the buffer, else returns empty.
    *                Must not be negative.

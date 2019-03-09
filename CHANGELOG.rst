@@ -10,6 +10,8 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-kafka: Added support to fetch end offset for a given partition. ``PHAB_ID=D283813``
+
 * finatra-http: Added `HttpServerTrait` which allows for a simple way to serve a
   Finagle `Service[Request, Response]` on an external interface without the need to
   configure the Finatra `HttpRouter`. ``PHAB_ID=D280896``

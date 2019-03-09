@@ -31,42 +31,41 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
 
   test("endOffset returns 0 for empty topic with no events") {
     val emptyTopicPartition = new TopicPartition(emptyTestTopic.topic, 0)
-    val endOffsets = await(consumer.endOffsets(Seq(emptyTopicPartition)))
-    assert(endOffsets.get(emptyTopicPartition) == 0)
+    assert(await(consumer.endOffset(emptyTopicPartition)) == 0)
   }
 
   test("endOffset increases by 1 after publish") {
     val topicPartition = new TopicPartition(testTopic.topic, 0)
-    val initEndOffsets = await(consumer.endOffsets(Seq(topicPartition)))
-    val initEndOffset = initEndOffsets.get(topicPartition)
+    val initEndOffset = await(consumer.endOffset(topicPartition))
 
     await(producer.send(testTopic.topic, "Foo", "Bar", System.currentTimeMillis))
-
-    val writtenEndOffsets = await(consumer.endOffsets(Seq(topicPartition)))
-    assert(writtenEndOffsets.get(topicPartition) == initEndOffset + 1)
+    assert(await(consumer.endOffset(topicPartition)) == initEndOffset + 1)
   }
 
   test("endOffset increases by 3 after 3 publishes") {
     val topicPartition = new TopicPartition(testTopic.topic, 0)
-    val initEndOffsets = await(consumer.endOffsets(Seq(topicPartition)))
-    val initEndOffset = initEndOffsets.get(topicPartition)
+    val initEndOffset = await(consumer.endOffset(topicPartition))
 
     await(producer.send(testTopic.topic, "Fee", "Bee", System.currentTimeMillis))
     await(producer.send(testTopic.topic, "Fi", "Bye", System.currentTimeMillis))
     await(producer.send(testTopic.topic, "Foo", "Boo", System.currentTimeMillis))
-
-    val writtenEndOffsets = await(consumer.endOffsets(Seq(topicPartition)))
-    assert(writtenEndOffsets.get(topicPartition) == initEndOffset + 3)
+    assert(await(consumer.endOffset(topicPartition)) == initEndOffset + 3)
   }
 
-  test("endOffset returns empty map for empty sequence of partitions") {
+  test("endOffsets returns empty map for empty sequence of partitions") {
     val emptyEndOffsets = await(consumer.endOffsets(Seq.empty[TopicPartition]))
     assert(emptyEndOffsets.size == 0)
+  }
+
+  test("endOffsets times out for non-existent topic") {
+    val notExistTopicPartition = new TopicPartition("topic-does-not-exist", 0)
+    assertThrows[org.apache.kafka.common.errors.TimeoutException](
+      await(consumer.endOffsets(Seq(notExistTopicPartition))))
   }
 
   test("endOffset times out for non-existent topic") {
     val notExistTopicPartition = new TopicPartition("topic-does-not-exist", 0)
     assertThrows[org.apache.kafka.common.errors.TimeoutException](
-      await(consumer.endOffsets(Seq(notExistTopicPartition))))
+      await(consumer.endOffset(notExistTopicPartition)))
   }
 }
