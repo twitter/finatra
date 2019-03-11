@@ -40,8 +40,8 @@ abstract class AbstractKafkaStreamsFeatureTest extends Test with EmbeddedKafka {
 
   protected def kafkaStreamsFlags: Map[String, String] = {
     kafkaBootstrapFlag ++ Map(
-      "kafka.auto.offset.reset" -> "earliest",
-      "kafka.max.poll.records" -> "1", //Read one record at a time to help makes tests more deterministic
+      "kafka.consumer.auto.offset.reset" -> "earliest",
+      "kafka.consumer.max.poll.records" -> "1", //Read one record at a time to help makes tests more deterministic
       "kafka.commit.interval" -> kafkaCommitInterval.toString(),
       "kafka.replication.factor" -> "1",
       "kafka.state.dir" -> newTempDirectory().toString

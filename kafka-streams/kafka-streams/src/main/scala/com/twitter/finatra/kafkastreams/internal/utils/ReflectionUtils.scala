@@ -27,6 +27,11 @@ private[kafkastreams] object ReflectionUtils {
     field.get(anyRef).asInstanceOf[T]
   }
 
+  def getStaticFinalField[CLAZZ: Manifest, T](fieldName: String): T = {
+    val field = getFinalField(manifest[CLAZZ].runtimeClass, fieldName)
+    field.get(null).asInstanceOf[T]
+  }
+
   def removeFinal(field: Field): Unit = {
     val fieldModifiers = classOf[Field].getDeclaredField("modifiers")
     fieldModifiers.setAccessible(true)

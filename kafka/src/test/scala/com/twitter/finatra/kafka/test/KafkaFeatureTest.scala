@@ -17,7 +17,6 @@ trait KafkaFeatureTest extends Test with EmbeddedKafka {
   override def afterAll(): Unit = {
     try {
       server.close()
-      //TODO: Await.result(server.mainResult)
     } finally {
       super.afterAll()
     }

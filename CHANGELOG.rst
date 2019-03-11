@@ -10,6 +10,10 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-kafka-streams: (BREAKING API CHANGE) Create flags for common consumer and producer
+  configs. KafkaFlagUtils#kafkaDocumentation and getKafkaDefault are no longer public methods.
+  ``PHAB_ID=D277044``
+
 * finatra-kafka: Added support to fetch end offset for a given partition. ``PHAB_ID=D283813``
 
 * finatra-http: Added `HttpServerTrait` which allows for a simple way to serve a

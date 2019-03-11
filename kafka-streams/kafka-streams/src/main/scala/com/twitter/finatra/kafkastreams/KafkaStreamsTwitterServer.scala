@@ -21,6 +21,7 @@ import java.util.Properties
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicLong
 import org.apache.kafka.clients.consumer.{ConsumerConfig, OffsetResetStrategy}
+import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.metrics.Sensor.RecordingLevel
 import org.apache.kafka.streams.KafkaStreams.{State, StateListener}
 import org.apache.kafka.streams.processor.internals.DefaultKafkaClientSupplier
@@ -69,11 +70,15 @@ abstract class KafkaStreamsTwitterServer
   private val cacheMaxBytesBuffering =
     flagWithKafkaDefault[Long](StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG)
   private val metadataMaxAge = flagWithKafkaDefault[Long](StreamsConfig.METADATA_MAX_AGE_CONFIG)
-  private val maxPollRecords = kafkaFlag[Int](
-    ConsumerConfig.MAX_POLL_RECORDS_CONFIG,
-    500,
-    "The maximum number of records returned in a single call to poll()."
-  ) //TODO: Use ConsumerConfig aware flagWithKafkaDefault
+
+  private val consumerMaxPollRecords = consumerFlagWithKafkaDefault[Int](ConsumerConfig.MAX_POLL_RECORDS_CONFIG)
+  private val consumerAutoOffsetReset = consumerFlagWithKafkaDefault[String](ConsumerConfig.AUTO_OFFSET_RESET_CONFIG)
+  private val consumerSessionTimeout = consumerFlagWithKafkaDefault[Int](ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG)
+  private val consumerHeartbeatInterval = consumerFlagWithKafkaDefault[Int](ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG)
+  private val consumerFetchMin = consumerFlagWithKafkaDefault[Int](ConsumerConfig.FETCH_MIN_BYTES_CONFIG)
+  private val consumerFetchMaxWait = consumerFlagWithKafkaDefault[Int](ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG)
+
+  private val producerLinger = producerFlagWithKafkaDefault[Long](ProducerConfig.LINGER_MS_CONFIG)
 
   // Configs with customized default
   private val replicationFactor = kafkaFlag(StreamsConfig.REPLICATION_FACTOR_CONFIG, 3) // We set it to 3 for durability and reliability.
@@ -82,11 +87,7 @@ abstract class KafkaStreamsTwitterServer
   private val stateDir = kafkaFlag(StreamsConfig.STATE_DIR_CONFIG, "kafka-stream-state")
   private val metricsRecordingLevel =
     kafkaFlag(StreamsConfig.METRICS_RECORDING_LEVEL_CONFIG, "INFO")
-  private val autoOffsetReset = kafkaFlag(
-    ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,
-    "latest",
-    ConsumerConfig.AUTO_OFFSET_RESET_DOC
-  )
+
   protected val commitInterval: Flag[Duration] = flag(
     "kafka.commit.interval",
     30.seconds,
@@ -230,11 +231,16 @@ abstract class KafkaStreamsTwitterServer
         .producer.metricsSampleWindow(60.seconds)
         .producer.interceptor[PublishTimeProducerInterceptor]
         .producer.interceptor[InstanceMetadataProducerInterceptor]
+        .producer.linger(producerLinger().milliseconds)
+        .consumer.fetchMin(consumerFetchMin().bytes)
+        .consumer.fetchMaxWait(consumerFetchMaxWait().milliseconds)
+        .consumer.sessionTimeout(consumerSessionTimeout().milliseconds)
+        .consumer.heartbeatInterval(consumerHeartbeatInterval().milliseconds)
         .consumer.metricReporter[KafkaStreamsFinagleMetricsReporter]
         .consumer.metricsRecordingLevel(RecordingLevel.forName(metricsRecordingLevel()))
         .consumer.metricsSampleWindow(60.seconds)
-        .consumer.autoOffsetReset(OffsetResetStrategy.valueOf(autoOffsetReset().toUpperCase))
-        .consumer.maxPollRecords(maxPollRecords())
+        .consumer.autoOffsetReset(OffsetResetStrategy.valueOf(consumerAutoOffsetReset().toUpperCase))
+        .consumer.maxPollRecords(consumerMaxPollRecords())
         .consumer.interceptor[KafkaStreamsMonitoringConsumerInterceptor]
 
     if (applicationId().nonEmpty) {

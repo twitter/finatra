@@ -66,13 +66,13 @@ class WordCountServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
       2
     )
     wordsWithCountsTopic.consumeAsManyMessagesUntilMap(Map("world" -> 3L))
-    serverBeforeRestart.assertGauge(
+    serverBeforeRestartStats.waitForGaugeUntil(
       "kafka/thread1/producer/wordcount_prod_CountsStore_changelog/record_send_total",
-      3
+      _ >= 3
     )
-    serverBeforeRestart.assertGauge(
+    serverBeforeRestartStats.waitForGaugeUntil(
       "kafka/thread1/producer/WordsWithCountsTopic/record_send_total",
-      3
+      _ >= 3
     )
 
     serverBeforeRestart.assertGauge("kafka/stream/state", 2)
@@ -92,7 +92,6 @@ class WordCountServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
 
     serverBeforeRestart.printStats()
     serverBeforeRestart.close()
-    Await.result(serverBeforeRestart.mainResult)
 
     val serverAfterRestart = createServer()
     serverAfterRestart.start()
