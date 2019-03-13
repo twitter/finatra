@@ -66,7 +66,9 @@ abstract class FinatraTransformer[InputKey, InputValue, OutputKey, OutputValue](
     with OnFlush
     with ProcessorContextLogging {
 
-  protected[kafkastreams] val finatraKeyValueStoresMap: mutable.Map[String, FinatraKeyValueStore[_, _]] =
+  private type StoreName = String
+
+  protected[kafkastreams] val finatraKeyValueStoresMap: mutable.Map[StoreName,FinatraKeyValueStore[_, _]] =
     scala.collection.mutable.Map[String, FinatraKeyValueStore[_, _]]()
 
   /* Private Mutable */
@@ -92,6 +94,7 @@ abstract class FinatraTransformer[InputKey, InputValue, OutputKey, OutputValue](
   override protected def processorContext: ProcessorContext = _context
 
   final override def init(processorContext: ProcessorContext): Unit = {
+    trace(s"init ${processorContext.taskId()}")
     _context = processorContext
 
     watermarkManager = new WatermarkManager[InputKey, InputValue](
@@ -103,6 +106,11 @@ abstract class FinatraTransformer[InputKey, InputValue, OutputKey, OutputValue](
 
     for ((name, store) <- finatraKeyValueStoresMap) {
       store.init(processorContext, null)
+
+      FinatraStoresGlobalManager.addStore(
+        processorContextStateDir = processorContext.stateDir(),
+        taskId = processorContext.taskId(),
+        store = store)
     }
 
     val autoWatermarkInterval = parseAutoWatermarkInterval(_context).inMillis
@@ -150,8 +158,12 @@ abstract class FinatraTransformer[InputKey, InputValue, OutputKey, OutputValue](
     watermarkManager.close()
 
     for ((name, store) <- finatraKeyValueStoresMap) {
+      FinatraStoresGlobalManager.removeStore(
+        processorContextStateDir = processorContext.stateDir(),
+        taskId = processorContext.taskId(),
+        store = store)
+
       store.close()
-      FinatraStoresGlobalManager.removeStore(store)
     }
 
     onClose()
@@ -164,7 +176,6 @@ abstract class FinatraTransformer[InputKey, InputValue, OutputKey, OutputValue](
 
     val previousStore = finatraKeyValueStoresMap.put(name, store)
     assert(previousStore.isEmpty, s"getKeyValueStore was called for store $name more than once")
-    FinatraStoresGlobalManager.addStore(store)
 
     // Initialize stores that are still using the "lazy val store" pattern
     if (processorContext != null) {

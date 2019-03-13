@@ -2,8 +2,13 @@ package com.twitter.finatra.streams.queryable.thrift
 
 import com.twitter.app.Flag
 import com.twitter.finatra.kafkastreams.partitioning.StaticPartitioning
-import com.twitter.finatra.kafkastreams.query.{QueryableFinatraCompositeWindowStore, QueryableFinatraKeyValueStore, QueryableFinatraWindowStore}
+import com.twitter.finatra.kafkastreams.query.{
+  QueryableFinatraCompositeWindowStore,
+  QueryableFinatraKeyValueStore,
+  QueryableFinatraWindowStore
+}
 import com.twitter.util.Duration
+import java.io.File
 import org.apache.kafka.common.serialization.Serde
 
 /**
@@ -28,11 +33,12 @@ trait QueryableState extends StaticPartitioning {
     primaryKeySerde: Serde[PK]
   ): QueryableFinatraKeyValueStore[PK, K, V] = {
     new QueryableFinatraKeyValueStore[PK, K, V](
-      storeName,
-      primaryKeySerde,
-      numApplicationInstances(),
-      numQueryablePartitions(),
-      currentShard())
+      stateDir = stateDirWithLeadingSlash,
+      storeName = storeName,
+      primaryKeySerde = primaryKeySerde,
+      numShards = numApplicationInstances(),
+      numQueryablePartitions = numQueryablePartitions(),
+      currentShardId = currentShard())
   }
 
   /**
@@ -55,7 +61,8 @@ trait QueryableState extends StaticPartitioning {
     primaryKeySerde: Serde[K]
   ): QueryableFinatraWindowStore[K, V] = {
     new QueryableFinatraWindowStore[K, V](
-      storeName,
+      stateDir = stateDirWithLeadingSlash,
+      storeName = storeName,
       windowSize = windowSize,
       allowedLateness = allowedLateness,
       queryableAfterClose = queryableAfterClose,
@@ -75,10 +82,10 @@ trait QueryableState extends StaticPartitioning {
    * @param queryableAfterClose Time the window being queried will exist after closing
    * @param primaryKeySerde Serde of the primary key being queried which is used to determine
    *                        which queryable store is responsible for they key being queried
-   * @tparam PK Type of the primary key
-   * @tparam K  Type of the key being queried
-   * @tparam V  Type of the value associated with the key being queried
-   * @return A QueryableFinatraCompositeWindowStore
+   * @tparam PK  Type of the primary key being queried
+   * @tparam SK  Type of the secondary key being queried
+   * @tparam V   Type of the value associated with the key being queried
+   * @return A   QueryableFinatraCompositeWindowStore
    */
   protected def queryableFinatraCompositeWindowStore[PK, SK, V](
     storeName: String,
@@ -88,7 +95,8 @@ trait QueryableState extends StaticPartitioning {
     primaryKeySerde: Serde[PK]
   ): QueryableFinatraCompositeWindowStore[PK, SK, V] = {
     new QueryableFinatraCompositeWindowStore[PK, SK, V](
-      storeName,
+      stateDir = stateDirWithLeadingSlash,
+      storeName = storeName,
       windowSize = windowSize,
       allowedLateness = allowedLateness,
       queryableAfterClose = queryableAfterClose,
@@ -96,5 +104,22 @@ trait QueryableState extends StaticPartitioning {
       numShards = numApplicationInstances(),
       numQueryablePartitions = numQueryablePartitions(),
       currentShardId = currentShard())
+  }
+
+  /*
+   * Note: We need to ensure the state dir has a leading slash because processorContext.getStateDir
+   * always returns the state dir with a leading slash and getStateDir is used when state stores
+   * are added to the FinatraStoresGlobalManager
+   */
+  private def stateDirWithLeadingSlash[V, K, PK]: File = {
+    val stateDirValue = stateDir()
+
+    val dirWithLeadingSlash = if (!stateDirValue.startsWith("/")) {
+      "/" + stateDirValue
+    } else {
+      stateDirValue
+    }
+
+    new File(dirWithLeadingSlash)
   }
 }

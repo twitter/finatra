@@ -32,6 +32,8 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-kafka-streams: finatra-kafka-streams: Refactor queryable state management  ``PHAB_ID=D277594``
+
 * finatra-kafka-streams: Improve querying of windowed stores. ``PHAB_ID=D277553``
 
 * inject-utils: Mark `c.t.inject.utils.StringUtils#snakify,camelify,pascalify` as

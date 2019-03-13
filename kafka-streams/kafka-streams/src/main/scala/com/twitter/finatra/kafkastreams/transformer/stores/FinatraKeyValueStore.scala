@@ -4,7 +4,9 @@ import org.apache.kafka.streams.errors.InvalidStateStoreException
 import org.apache.kafka.streams.processor.TaskId
 import org.apache.kafka.streams.state.{KeyValueIterator, KeyValueStore}
 
-trait FinatraKeyValueStore[K, V] extends KeyValueStore[K, V] {
+trait FinatraKeyValueStore[K, V]
+  extends KeyValueStore[K, V]
+    with FinatraReadOnlyKeyValueStore[K, V] {
 
   /**
    * The task id associated with this store

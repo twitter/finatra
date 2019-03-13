@@ -4,13 +4,14 @@ import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer.{DateTimeMillis, WindowStartTime}
 import com.twitter.finatra.kafkastreams.transformer.aggregation.TimeWindowed
 import com.twitter.finatra.kafkastreams.transformer.domain.Time
-import com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore
 import com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraStoresGlobalManager
+import com.twitter.finatra.kafkastreams.utils.time._
 import com.twitter.finatra.streams.queryable.thrift.domain.ServiceShardId
 import com.twitter.finatra.streams.queryable.thrift.partitioning.{KafkaPartitioner, StaticServiceShardPartitioner}
 import com.twitter.inject.Logging
 import com.twitter.util.Duration
-import org.apache.kafka.common.serialization.{Serde, Serializer}
+import java.io.File
+import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.streams.errors.InvalidStateStoreException
 import org.joda.time.DateTimeUtils
 import scala.collection.JavaConverters._
@@ -73,6 +74,7 @@ object QueryableFinatraWindowStore {
  * A queryable Finatra window store for use by endpoints exposing queryable state
  */
 class QueryableFinatraWindowStore[K, V](
+  stateDir: File,
   storeName: String,
   windowSize: Duration,
   allowedLateness: Duration,
@@ -86,6 +88,8 @@ class QueryableFinatraWindowStore[K, V](
   private val keySerializer = keySerde.serializer()
 
   private val currentServiceShardId = ServiceShardId(currentShardId)
+
+  private val windowSizeMillis = windowSize.inMillis
 
   private val partitioner = new KafkaPartitioner(
     StaticServiceShardPartitioner(numShards = numShards),
@@ -117,39 +121,36 @@ class QueryableFinatraWindowStore[K, V](
     startTime: Option[Long] = None,
     endTime: Option[Long] = None
   ): Map[WindowStartTime, V] = {
-    throwIfNonLocalKey(key, keySerializer)
+    val primaryKeyBytes = FinatraStoresGlobalManager.primaryKeyBytesIfLocalKey(
+      partitioner,
+      currentServiceShardId,
+      key,
+      keySerializer)
 
     val (startWindowRange, endWindowRange) = QueryableFinatraWindowStore.queryStartAndEndTime(windowSize, defaultQueryRange, startTime, endTime)
-
     val windowedMap = new java.util.TreeMap[DateTimeMillis, V]
+    var currentWindowStart = startWindowRange
 
-    var currentWindowStart = Time(startWindowRange)
-    while (currentWindowStart.millis <= endWindowRange) {
-      val windowedKey = TimeWindowed.forSize(currentWindowStart, windowSize, key)
+    while (currentWindowStart <= endWindowRange) {
+      val windowedKey = TimeWindowed.forSize(Time(currentWindowStart), windowSize, key)
 
-      //TODO: Use store.taskId to find exact store where the key is assigned
-      for (store <- stores) {
-        val result = store.get(windowedKey)
-        if (result != null) {
-          windowedMap.put(currentWindowStart.millis, result)
-        }
+      debug(s"Query for $storeName $windowedKey")
+      val result = FinatraStoresGlobalManager
+        .getWindowedStore[K, V](stateDir, storeName, numQueryablePartitions, primaryKeyBytes)
+        .get(windowedKey)
+
+      if (result != null) {
+        debug(s"Found $storeName  $windowedKey = $result")
+        windowedMap.put(currentWindowStart, result)
+      } else {
+        debug(s"NotFound $storeName $windowedKey = $result")
       }
 
-      currentWindowStart = currentWindowStart + windowSize
+      currentWindowStart = currentWindowStart + windowSizeMillis
     }
 
+    info(
+      s"Query $key ${startWindowRange.iso8601Millis} to ${endWindowRange.iso8601Millis} = $windowedMap")
     windowedMap.asScala.toMap
-  }
-
-  private def throwIfNonLocalKey(key: K, keySerializer: Serializer[K]): Unit = {
-    val keyBytes = keySerializer.serialize("", key)
-    val partitionsToQuery = partitioner.shardIds(keyBytes)
-    if (partitionsToQuery.head != currentServiceShardId) {
-      throw new Exception(s"Non local key. Query $partitionsToQuery")
-    }
-  }
-
-  private def stores: Iterable[FinatraKeyValueStore[TimeWindowed[K], V]] = {
-    FinatraStoresGlobalManager.getWindowedStores(storeName)
   }
 }

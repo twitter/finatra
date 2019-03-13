@@ -48,7 +48,7 @@ import org.apache.kafka.streams.{KafkaClientSupplier, KafkaStreams, StreamsBuild
  * }}}
  */
 abstract class KafkaStreamsTwitterServer
-    extends TwitterServer
+  extends TwitterServer
     with KafkaFlagUtils
     with ScalaStreamsImplicits {
 
@@ -84,7 +84,7 @@ abstract class KafkaStreamsTwitterServer
   private val replicationFactor = kafkaFlag(StreamsConfig.REPLICATION_FACTOR_CONFIG, 3) // We set it to 3 for durability and reliability.
   protected[kafkastreams] val applicationServerConfig =
     kafkaFlag(StreamsConfig.APPLICATION_SERVER_CONFIG, s"localhost:$defaultAdminPort")
-  private val stateDir = kafkaFlag(StreamsConfig.STATE_DIR_CONFIG, "kafka-stream-state")
+  private[finatra] val stateDir = kafkaFlag(StreamsConfig.STATE_DIR_CONFIG, "kafka-stream-state")
   private val metricsRecordingLevel =
     kafkaFlag(StreamsConfig.METRICS_RECORDING_LEVEL_CONFIG, "INFO")
 

@@ -2,7 +2,7 @@ package com.twitter.finatra.kafkastreams.transformer.stores
 
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.kafkastreams.flushing.FlushingTransformer
-import com.twitter.finatra.kafkastreams.transformer.stores.internal.{CachingFinatraKeyValueStoreImpl, FinatraKeyValueStoreImpl, FinatraStoresGlobalManager}
+import com.twitter.finatra.kafkastreams.transformer.stores.internal.{CachingFinatraKeyValueStoreImpl, FinatraKeyValueStoreImpl}
 import scala.collection.mutable
 import scala.reflect.ClassTag
 
@@ -35,7 +35,6 @@ trait CachingKeyValueStores[K, V, K1, V1] extends FlushingTransformer[K, V, K1, 
     assert(
       previousStore.isEmpty,
       s"getCachingKeyValueStore was called for store $name more than once")
-    FinatraStoresGlobalManager.addStore(store)
 
     store
   }

@@ -19,7 +19,7 @@ import scala.reflect.ClassTag
  * This trait adds reservoir sampling DSL methods to the Kafka Streams DSL
  */
 trait FinatraDslSampling
-    extends KafkaStreamsTwitterServer
+  extends KafkaStreamsTwitterServer
     with FinatraTransformerFlags
     with Logging {
 

@@ -1,11 +1,10 @@
 package com.twitter.finatra.kafkastreams.query
 
-import com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore
 import com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraStoresGlobalManager
 import com.twitter.finatra.streams.queryable.thrift.domain.ServiceShardId
 import com.twitter.finatra.streams.queryable.thrift.partitioning.{KafkaPartitioner, StaticServiceShardPartitioner}
 import com.twitter.inject.Logging
-import java.util.NoSuchElementException
+import java.io.File
 import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.streams.errors.InvalidStateStoreException
 import org.apache.kafka.streams.state.KeyValueIterator
@@ -14,6 +13,7 @@ import org.apache.kafka.streams.state.KeyValueIterator
  * A queryable Finatra key value store for use by endpoints exposing queryable state
  */
 class QueryableFinatraKeyValueStore[PK, K, V](
+  stateDir: File,
   storeName: String,
   primaryKeySerde: Serde[PK],
   numShards: Int,
@@ -41,19 +41,14 @@ class QueryableFinatraKeyValueStore[PK, K, V](
    */
   @throws[InvalidStateStoreException]
   def get(primaryKey: PK, key: K): Option[V] = {
-    throwIfNonLocalKey(primaryKey)
-
-    trace(s"Get $key")
-
-    //TODO: Use store.taskId to find exact store where the key is assigned
-    for (store <- stores) {
-      val result = store.get(key)
-      if (result != null) {
-        return Some(result)
-      }
-    }
-
-    None
+    Option(
+      FinatraStoresGlobalManager
+        .getStore[K, V](
+          stateDir,
+          storeName,
+          numQueryablePartitions,
+          getPrimaryKeyBytes(primaryKey))
+        .get(key))
   }
 
   /**
@@ -70,40 +65,22 @@ class QueryableFinatraKeyValueStore[PK, K, V](
    * @throws InvalidStateStoreException if the store is not initialized
    */
   def range(primaryKey: PK, from: K, to: K): KeyValueIterator[K, V] = {
-    throwIfNonLocalKey(primaryKey)
-
-    //TODO: Use store.taskId to find exact store where the key is assigned
-    for (store <- stores) {
-      val result = store.range(from, to)
-      if (result.hasNext) {
-        return result
-      }
-    }
-
-    EmptyKeyValueIterator
+    FinatraStoresGlobalManager
+      .getStore[K, V](
+        stateDir,
+        storeName,
+        numQueryablePartitions,
+        getPrimaryKeyBytes(primaryKey))
+      .range(from, to)
   }
 
-  private def throwIfNonLocalKey(primaryKey: PK): Unit = {
-    val keyBytes = primaryKeySerializer.serialize("", primaryKey)
-    val partitionsToQuery = partitioner.shardIds(keyBytes)
-    if (partitionsToQuery.head != currentServiceShardId) {
-      throw new Exception(s"Non local key. Query $partitionsToQuery")
-    }
-  }
+  /* Private */
 
-  private def stores: Iterable[FinatraKeyValueStore[K, V]] = {
-    FinatraStoresGlobalManager.getStores[K, V](storeName)
-  }
-
-  private object EmptyKeyValueIterator extends KeyValueIterator[K, V] {
-    override def hasNext = false
-
-    override def close(): Unit = {}
-
-    override def peekNextKey = throw new NoSuchElementException
-
-    override def next = throw new NoSuchElementException
-
-    override def remove(): Unit = {}
+  private def getPrimaryKeyBytes(primaryKey: PK): Array[Byte] = {
+    FinatraStoresGlobalManager.primaryKeyBytesIfLocalKey(
+      partitioner,
+      currentServiceShardId,
+      primaryKey,
+      primaryKeySerializer)
   }
 }

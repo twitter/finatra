@@ -3,7 +3,7 @@ package com.twitter.finatra.kafkastreams.transformer.stores.internal
 import com.twitter.finagle.stats.{Gauge, Stat, StatsReceiver}
 import com.twitter.finatra.kafkastreams.internal.utils.ReflectionUtils
 import FinatraKeyValueStoreImpl._
-import com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore
+import com.twitter.finatra.kafkastreams.transformer.stores.{FinatraKeyValueStore, FinatraReadOnlyKeyValueStore}
 import com.twitter.finatra.kafkastreams.transformer.utils.IteratorImplicits
 import com.twitter.finatra.kafkastreams.utils.RocksKeyValueIterator
 import com.twitter.inject.Logging
@@ -45,7 +45,8 @@ case class FinatraKeyValueStoreImpl[K: ClassTag, V](
     extends KeyValueStore[K, V]
     with Logging
     with IteratorImplicits
-    with FinatraKeyValueStore[K, V] {
+    with FinatraKeyValueStore[K, V]
+    with FinatraReadOnlyKeyValueStore[K, V] {
 
   private val latencyStatName: String = "latency_us"
   private val storeStatsScope: StatsReceiver = statsReceiver.scope("stores").scope(name)
