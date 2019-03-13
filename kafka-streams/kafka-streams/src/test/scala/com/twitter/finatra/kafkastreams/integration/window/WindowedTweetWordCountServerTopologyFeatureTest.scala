@@ -27,8 +27,12 @@ class WindowedTweetWordCountServerTopologyFeatureTest extends TopologyFeatureTes
 
   test("windowed word count test 1") {
     val countStore =
-      topologyTester
-        .queryableFinatraWindowStore[String, Int]("CountsStore", 1.hour, Serdes.String())
+      topologyTester.queryableFinatraWindowStore[String, Int](
+        storeName = "CountsStore",
+        windowSize = 1.hour,
+        allowedLateness = 1.minute,
+        queryableAfterClose = 10.minutes,
+        keySerde = Serdes.String())
 
     wordAndCountTopic.pipeInput("bob", 1)
     assertCurrentHourContains(countStore, "bob", 1)

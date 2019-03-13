@@ -1,6 +1,5 @@
 package com.twitter.finatra.kafkastreams.query
 
-import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer.{DateTimeMillis, WindowStartTime}
 import com.twitter.finatra.kafkastreams.transformer.aggregation.TimeWindowed
 import com.twitter.finatra.kafkastreams.transformer.domain.{CompositeKey, Time}
@@ -11,21 +10,23 @@ import com.twitter.finatra.streams.queryable.thrift.partitioning.{KafkaPartition
 import com.twitter.inject.Logging
 import com.twitter.util.Duration
 import org.apache.kafka.common.serialization.{Serde, Serializer}
-import org.joda.time.DateTimeUtils
 import scala.collection.JavaConverters._
 
-//TODO: DRY with other queryable finatra stores
+/**
+ * A queryable Finatra composite window store for use by endpoints exposing queryable
+ * state (composite stores utilize composite keys which are comprised of a primary
+ * and secondary key.
+ */
 class QueryableFinatraCompositeWindowStore[PK, SK, V](
   storeName: String,
   windowSize: Duration,
+  allowedLateness: Duration,
+  queryableAfterClose: Duration,
   primaryKeySerde: Serde[PK],
   numShards: Int,
   numQueryablePartitions: Int,
   currentShardId: Int)
     extends Logging {
-
-  // The number of windows to query before and/or after specified start and end times
-  private val defaultWindowMultiplier = 3
 
   private val primaryKeySerializer = primaryKeySerde.serializer()
 
@@ -37,6 +38,12 @@ class QueryableFinatraCompositeWindowStore[PK, SK, V](
     StaticServiceShardPartitioner(numShards = numShards),
     numPartitions = numQueryablePartitions
   )
+
+  private val defaultQueryRange = QueryableFinatraWindowStore
+    .defaultQueryRange(
+      windowSize,
+      allowedLateness,
+      queryableAfterClose)
 
   /* Public */
 
@@ -64,10 +71,8 @@ class QueryableFinatraCompositeWindowStore[PK, SK, V](
   ): Map[WindowStartTime, scala.collection.Map[SK, V]] = {
     throwIfNonLocalKey(primaryKey, primaryKeySerializer)
 
-    val (startWindowRange, endWindowRange) = startAndEndRange(
-      startTime = startTime,
-      endTime = endTime,
-      windowSizeMillis = windowSizeMillis)
+    val (startWindowRange, endWindowRange) = QueryableFinatraWindowStore.queryStartAndEndTime(windowSize, defaultQueryRange, startTime, endTime)
+
 
     val resultMap = new java.util.TreeMap[Long, scala.collection.mutable.Map[SK, V]]().asScala
 
@@ -107,24 +112,6 @@ class QueryableFinatraCompositeWindowStore[PK, SK, V](
         innerMap += (entry.key.value.secondary -> entry.value)
       }
     }
-  }
-
-  private def startAndEndRange(
-    startTime: Option[DateTimeMillis],
-    endTime: Option[DateTimeMillis],
-    windowSizeMillis: DateTimeMillis
-  ): (DateTimeMillis, DateTimeMillis) = {
-    val endWindowRange = endTime.getOrElse {
-      TimeWindowed
-        .windowStart(messageTime = Time(DateTimeUtils.currentTimeMillis), size = windowSize)
-        .+(windowSizeMillis.millis * defaultWindowMultiplier)
-        .millis
-    }
-
-    val startWindowRange =
-      startTime.getOrElse(endWindowRange - (defaultWindowMultiplier * windowSizeMillis))
-
-    (startWindowRange, endWindowRange)
   }
 
   private def throwIfNonLocalKey(key: PK, keySerializer: Serializer[PK]): Unit = {

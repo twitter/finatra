@@ -7,21 +7,51 @@ import org.joda.time.{DateTime, DateTimeConstants}
 
 object TimeWindowed {
 
+  /**
+   * Create a time windowed value
+   *
+   * @param start Start of the window
+   * @param size Size of the window
+   * @param value Windowed value
+   * @tparam V Type of the windowed value
+   * @return A time windowed value
+   */
   def forSize[V](start: Time, size: Duration, value: V): TimeWindowed[V] = {
     TimeWindowed(start, start + size, value)
   }
 
-  def forSizeFromMessageTime[V](messageTime: Time, size: Duration, value: V): TimeWindowed[V] = {
-    val startWindow = windowStart(messageTime, size)
-    TimeWindowed(startWindow, startWindow + size, value)
-  }
-
+  /**
+   * Create an hourly time windowed value
+   *
+   * @param start Start of the hourly window
+   * @param value Windowed value
+   * @tparam V Type of the windowed value
+   * @return An hourly time windowed value
+   */
   def hourly[V](start: Time, value: V): TimeWindowed[V] = {
     TimeWindowed(start, Time(start.millis + DateTimeConstants.MILLIS_PER_HOUR), value)
   }
 
+  /**
+   * Calculate the start time of the window that the specified message belongs to
+   *
+   * @param messageTime Message time
+   * @param size Fixed window size
+   * @return Start time of a window
+   */
   def windowStart(messageTime: Time, size: Duration): Time = {
     Time((messageTime.millis / size.inMillis) * size.inMillis)
+  }
+
+  /**
+   * Calculate the end time of the window that the specified message belongs to
+   *
+   * @param messageTime Message time
+   * @param size Fixed window size
+   * @return End time of a window
+   */
+  def windowEnd(messageTime: Time, size: Duration): Time = {
+    windowStart(messageTime, size) + size
   }
 }
 

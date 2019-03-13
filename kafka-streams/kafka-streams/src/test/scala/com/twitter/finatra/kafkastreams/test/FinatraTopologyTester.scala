@@ -8,7 +8,7 @@ import com.twitter.finatra.kafka.modules.KafkaBootstrapModule
 import com.twitter.finatra.kafka.test.utils.InMemoryStatsUtil
 import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
 import com.twitter.finatra.kafkastreams.config.FinatraTransformerFlags
-import com.twitter.finatra.kafkastreams.query.{QueryableFinatraKeyValueStore, QueryableFinatraWindowStore}
+import com.twitter.finatra.kafkastreams.query.{QueryableFinatraCompositeWindowStore, QueryableFinatraKeyValueStore, QueryableFinatraWindowStore}
 import com.twitter.finatra.kafkastreams.transformer.aggregation.TimeWindowed
 import com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer
 import com.twitter.finatra.kafkastreams.utils.time._
@@ -263,6 +263,13 @@ case class FinatraTopologyTester private (
     advanceWallClockTime(duration.toDuration.getMillis)
   }
 
+  /**
+   * Get a queryable store
+   * @param storeName Name of the window store
+   * @tparam K Type of the secondary key
+   * @tparam V Type of the value in the store
+   * @return A queryable store
+   */
   def queryableFinatraKeyValueStore[PK, K, V](
     storeName: String,
     primaryKeySerde: Serde[PK]
@@ -276,15 +283,59 @@ case class FinatraTopologyTester private (
     )
   }
 
+  /**
+   * Get a queryable window store
+   * @param storeName Name of the window store
+   * @param windowSize Size of the window
+   * @param allowedLateness Allowed lateness of the window
+   * @param queryableAfterClose Queryable after close of the window
+   * @tparam K Type of the secondary key
+   * @tparam V Type of the value in the store
+   * @return A queryable window store
+   */
   def queryableFinatraWindowStore[K, V](
     storeName: String,
     windowSize: Duration,
+    allowedLateness: Duration,
+    queryableAfterClose: Duration,
     keySerde: Serde[K]
   ): QueryableFinatraWindowStore[K, V] = {
     new QueryableFinatraWindowStore[K, V](
       storeName,
       windowSize = windowSize,
+      allowedLateness = allowedLateness,
+      queryableAfterClose = queryableAfterClose,
       keySerde = keySerde,
+      numShards = 1,
+      numQueryablePartitions = 1,
+      currentShardId = 0)
+  }
+
+  /**
+   * Get a queryable composite window store
+   * @param storeName Name of the window store
+   * @param windowSize Size of the window
+   * @param allowedLateness Allowed lateness of the window
+   * @param queryableAfterClose Queryable after close of the window
+   * @param primaryKeySerde Serde of the primary key type being queried
+   * @tparam PK Type of the primary key
+   * @tparam SK Type of the secondary key
+   * @tparam V Type of the value in the store
+   * @return A queryable composite window store
+   */
+  def queryableFinatraCompositeWindowStore[PK, SK, V](
+    storeName: String,
+    windowSize: Duration,
+    allowedLateness: Duration,
+    queryableAfterClose: Duration,
+    primaryKeySerde: Serde[PK]
+  ): QueryableFinatraCompositeWindowStore[PK, SK, V] = {
+    new QueryableFinatraCompositeWindowStore[PK, SK, V](
+      storeName,
+      primaryKeySerde = primaryKeySerde,
+      windowSize = windowSize,
+      allowedLateness = allowedLateness,
+      queryableAfterClose = queryableAfterClose,
       numShards = 1,
       numQueryablePartitions = 1,
       currentShardId = 0)

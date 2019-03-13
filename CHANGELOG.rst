@@ -29,6 +29,8 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-kafka-streams: Improve querying of windowed stores. ``PHAB_ID=D277553``
+
 * inject-utils: Mark `c.t.inject.utils.StringUtils#snakify,camelify,pascalify` as
   deprecated as their implementations have moved to util/util-core `c.t.conversions.StringOps`.
   Encourage users to switch usages to `c.t.conversions.StringOps#toSnakeCase,toCamelCase,toPascalCase`.
