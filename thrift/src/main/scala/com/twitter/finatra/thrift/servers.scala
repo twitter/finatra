@@ -23,9 +23,9 @@ private object ThriftServerTrait {
 }
 
 /**
- * A Basic ThriftServer. To implement, override
+ * A basic ThriftServer. To implement, override
  * {{{
- *   protected def service: Service[Array[Byte], Array[Byte]]
+ *   protected def thriftService: Service[Array[Byte], Array[Byte]]
  * }}}
  *
  * with your `Service[Array[Byte], Array[Byte]]` implementation.
@@ -37,26 +37,102 @@ trait ThriftServerTrait extends TwitterServer {
     ExceptionManagerModule,
     thriftResponseClassifierModule)
 
-  /** Thrift Port */
+  /**
+   * Default external Thrift port used as the [[Flag]] default value for [[thriftPortFlag]]. This
+   * can be overridden to provide a different default programmatically when a flag value cannot be
+   * passed. The format of this value is expected to be a String in the form of ":port".
+   *
+   * In general, users should prefer setting the [[thriftPortFlag]] [[Flag]] value.
+   *
+   * @see [[com.twitter.finatra.thrift.ThriftServerTrait.thriftPortFlag]]
+   */
   protected def defaultThriftPort: String = ":9999"
+
+  /**
+   * External Thrift port [[Flag]]. The default value is specified by [[defaultThriftPort]] which
+   * can be overridden to provide a different default.
+   *
+   * @note the default value is ":9999" as defined by [[defaultThriftPort]].
+   * @note the format of this flag is expected to be a String in the form of ":port".
+   * @see [[com.twitter.finatra.thrift.ThriftServerTrait.defaultThriftPort]]
+   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   */
   private val thriftPortFlag: Flag[String] =
     flag("thrift.port", defaultThriftPort, "External Thrift server port")
 
-  /** Shutdown Timeout */
+  /**
+   * Default shutdown timeout used as the [[Flag]] default value for [[thriftShutdownTimeoutFlag]].
+   * This represents the deadline for the closing of this server which can be overridden to provide
+   * a different default programmatically when a flag value cannot be passed.
+   *
+   * In general, users should prefer setting the [[thriftShutdownTimeoutFlag]] [[Flag]] value.
+   *
+   * @note the value is used to denote a delta "from now", that is this value is applied as:
+   *       `server.close(shutdownTimeoutDuration.fromNow())`
+   * @see [[com.twitter.finatra.thrift.ThriftServerTrait.thriftShutdownTimeoutFlag]]
+   * @see [[com.twitter.util.Closable.close(deadline: Time)]]
+   * @see [[https://github.com/twitter/util/blob/b0a5d06269b9526b4408239ce1441b2a213dd0df/util-core/src/main/scala/com/twitter/util/Duration.scala#L436]]
+   */
   protected def defaultThriftShutdownTimeout: Duration = 1.minute
+
+  /**
+   * Shutdown timeout [[Flag]]. The default value is specified by [[defaultThriftShutdownTimeout]]
+   * which can be overridden to provide a different default.
+   *
+   * @note the default value is "1.minute" as defined by [[defaultThriftShutdownTimeout]].
+   * @note the format of this flag is expected to be a String which is parsable into a [[com.twitter.util.Duration]].
+   * @see [[com.twitter.finatra.thrift.ThriftServerTrait.defaultThriftShutdownTimeout]]
+   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   */
   private val thriftShutdownTimeoutFlag: Flag[Duration] = flag(
     "thrift.shutdown.time",
     defaultThriftShutdownTimeout,
     "Maximum amount of time to wait for pending requests to complete on shutdown"
   )
 
-  /** Server Name */
+  /**
+   * Default server name for the external Thrift interface used as the [[Flag]] default value for
+   * [[thriftServerNameFlag]]. This can be overridden to provide a different default programmatically
+   * when a flag value cannot be passed.
+   *
+   * In general, users should prefer setting the [[thriftServerNameFlag]] [[Flag]] value.
+   *
+   * @see [[com.twitter.finatra.thrift.ThriftServerTrait.thriftServerNameFlag]]
+   */
   protected def defaultThriftServerName: String = "thrift"
+
+  /**
+   * Server name for the external Thrift interface [[Flag]]. The default value is specified by
+   * [[defaultThriftServerName]] which can be overridden to provide a different default.
+   *
+   * @note the default value is "thrift" as defined by [[defaultThriftServerName]].
+   * @see [[com.twitter.finatra.thrift.ThriftServerTrait.defaultThriftServerName]]
+   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   */
   private val thriftServerNameFlag: Flag[String] =
     flag("thrift.name", defaultThriftServerName, "Thrift server name")
 
-  /** Server Announcement */
+  /**
+   * Default server announcement String used as the [[Flag]] default value for [[thriftAnnounceFlag]].
+   * This can be overridden to provide a different default programmatically when a flag value cannot
+   * be passed. An empty String value is an indication to not perform any announcement of the server.
+   *
+   * In general, users should prefer setting the [[thriftAnnounceFlag]] [[Flag]] value.
+   *
+   * @see [[com.twitter.finagle.ListeningServer.announce(addr: String)]]
+   */
   protected def defaultThriftAnnouncement: String = ThriftServerTrait.NoThriftAnnouncement
+
+  /**
+   * Server announcement String [[Flag]]. The default value is specified by [[defaultThriftAnnouncement]]
+   * which can be overridden to provide a different default. Setting an empty String is an indication
+   * to not perform any announcement of the server.
+   *
+   * @note the default value is "No Announcement" (empty String) as defined by [[defaultThriftAnnouncement]].
+   * @see [[com.twitter.finagle.ListeningServer.announce(addr: String)]]
+   * @see [[com.twitter.finatra.thrift.ThriftServerTrait.defaultThriftAnnouncement]]
+   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   */
   private val thriftAnnounceFlag: Flag[String] =
     flag[String](
       "thrift.announce",
@@ -70,8 +146,12 @@ trait ThriftServerTrait extends TwitterServer {
 
   /* Abstract */
 
-  /** Override with an implementation to serve a Thrift Service */
-  protected def service: Service[Array[Byte], Array[Byte]]
+  /**
+   * The Finagle `Service[Array[Byte], Array[Byte]]` to serve on the configured [[ListeningServer]].
+   *
+   * Users must override with an implementation to serve a `Service[Array[Byte], Array[Byte]]`.
+   */
+  protected def thriftService: Service[Array[Byte], Array[Byte]]
 
   /* Lifecycle */
 
@@ -105,7 +185,7 @@ trait ThriftServerTrait extends TwitterServer {
 
   /* Overrides */
 
-  override def thriftPort: Option[Int] = Option(thriftServer).map(PortUtils.getPort)
+  override def thriftPort: Option[Int] = Some(PortUtils.getPort(thriftServer))
 
   /* Protected */
 
@@ -140,24 +220,42 @@ trait ThriftServerTrait extends TwitterServer {
    * @param server the configured [[ThriftMux.Server]] stack.
    * @return a constructed [[ListeningServer]].
    */
-  protected def build(addr: String, server: ThriftMux.Server): ListeningServer = {
-    server.serve(addr, this.service)
+  protected[thrift] def build(addr: String, server: ThriftMux.Server): ListeningServer = {
+    server.serve(addr, this.thriftService)
   }
 }
 
-/** ThriftServer for usage from Scala */
+/**
+ * A Finagle server which exposes an external Thrift interface implemented by a
+ * `Service[Array[Byte], Array[Byte]]` configured via a [[ThriftRouter]]. This trait is
+ * intended for use from Scala or with generated Scala code.
+ *
+ * @note Java users are encouraged to use [[AbstractThriftServer]] instead.
+ */
 trait ThriftServer extends ThriftServerTrait {
 
-  /** This Server does not return a `Service[Array[Byte], Array[Byte]]` */
-  protected final def service: Service[Array[Byte], Array[Byte]] = NilService
+  /**
+   * Configuration of the `Service[Array[Byte], Array[Byte]]` to serve on the [[ListeningServer]]
+   * is defined by configuring the [[ThriftRouter]] and not by implementation of this method,
+   * thus this method overridden to be final and set to a `NilService`.
+   */
+  protected final def thriftService: Service[Array[Byte], Array[Byte]] = NilService
 
-  override protected final def build(addr: String, server: ThriftMux.Server): ListeningServer = {
+  /** Serve the `Service[Array[Byte], Array[Byte]]` from the configured [[ThriftRouter]]. */
+  override protected[thrift] final def build(addr: String, server: ThriftMux.Server): ListeningServer = {
     val router = injector.instance[ThriftRouter]
     server.serveIface(addr, router.thriftService)
   }
 
   /* Abstract */
 
+  /**
+   * Users MUST provide an implementation to configure the provided [[ThriftRouter]]. The [[ThriftRouter]]
+   * exposes a DSL which results in a configured Finagle `Service[-Req, +Rep]` to serve on
+   * the [[ListeningServer]].
+   *
+   * @param router the [[ThriftRouter]] to configure.
+   */
   protected def configureThrift(router: ThriftRouter): Unit
 
   /* Lifecycle */
@@ -170,9 +268,17 @@ trait ThriftServer extends ThriftServerTrait {
   }
 }
 
-/** AbstractThriftServer for usage from Java or with generated Java code */
+/**
+ * A Finagle server which exposes an external Thrift interface implemented by a
+ * `Service[Array[Byte], Array[Byte]]` configured via a [[JavaThriftRouter]]. This abstract class is
+ * intended for use from Java or with generated Java code.
+ *
+ * @note Scala users are encouraged to use [[ThriftServer]] instead.
+ */
 abstract class AbstractThriftServer extends ThriftServerTrait {
-  protected final def service: Service[Array[Byte], Array[Byte]] = {
+
+  /** This Server returns a [[JavaThriftRouter]] configured `Service[Array[Byte], Array[Byte]]` */
+  protected final def thriftService: Service[Array[Byte], Array[Byte]] = {
     val router = injector.instance[JavaThriftRouter]
     registerService(
       configureService(router.service))
@@ -180,6 +286,12 @@ abstract class AbstractThriftServer extends ThriftServerTrait {
 
   /* Abstract */
 
+  /**
+   * Users MUST provide an implementation to configure the provided [[JavaThriftRouter]]. The [[JavaThriftRouter]]
+   * exposes a DSL which results in a configured Finagle `Service[-Req, +Rep]` to serve on the [[ListeningServer]].
+   *
+   * @param router the [[JavaThriftRouter]] to configure.
+   */
   protected def configureThrift(router: JavaThriftRouter): Unit
 
   /* Protected */

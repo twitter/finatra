@@ -54,6 +54,7 @@ scala_library(
 junit_tests(
     sources = rglobs(
         "com/twitter/finatra/kafkastreams/integration/*.scala",
+        "com/twitter/finatra/kafkastreams/query/*.scala",
         "com/twitter/finatra/kafkastreams/transformer/*.scala",
     ),
     compiler_option_sets = {"fatal_warnings"},

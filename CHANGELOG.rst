@@ -7,11 +7,54 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
-19.2.0
--------
+19.3.0
+------
 
 Added
 ~~~~~
+
+* finatra-kafka: FinagleKafka clients pass correct deadline for close to
+  underlying Kafka clients. ``PHAB_ID=D261115``
+
+* finatra-kafka-streams: (BREAKING API CHANGE) Create flags for common consumer and producer
+  configs. KafkaFlagUtils#kafkaDocumentation and getKafkaDefault are no longer public methods.
+  ``PHAB_ID=D277044``
+
+* finatra-kafka: Added support to fetch end offset for a given partition. ``PHAB_ID=D283813``
+
+* finatra-http: Added `HttpServerTrait` which allows for a simple way to serve a
+  Finagle `Service[Request, Response]` on an external interface without the need to
+  configure the Finatra `HttpRouter`. ``PHAB_ID=D280896``
+
+* finatra-http: Added support to serve `c.t.io.Reader` as a streaming request.
+  ``PHAB_ID=D278988``
+
+Changed
+~~~~~~~
+
+* finatra-kafka-streams: Improve querying of windowed stores. ``PHAB_ID=D277553``
+
+* inject-utils: Mark `c.t.inject.utils.StringUtils#snakify,camelify,pascalify` as
+  deprecated as their implementations have moved to util/util-core `c.t.conversions.StringOps`.
+  Encourage users to switch usages to `c.t.conversions.StringOps#toSnakeCase,toCamelCase,toPascalCase`.
+  ``PHAB_ID=D280886``
+
+* finatra-thrift: Changed `c.t.finatra.thrift.ThriftServerTrait#service` to `#thriftService` to
+  not collide with the serving of a Finagle service from the `HttpServer` when a server extends
+  both `HttpServer` and `ThriftServer`. ``PHAB_ID=D280896``
+
+Fixed
+~~~~~
+
+Closed
+~~~~~~
+
+19.2.0
+------
+
+Added
+~~~~~
+
 * finatra-kafka: Expose timeout duration in FinagleKafkaConsumerBuilder dest(). ``PHAB_ID=D269701``
 
 * finatra-kafka-streams: Expose all existing RocksDb configurations. See

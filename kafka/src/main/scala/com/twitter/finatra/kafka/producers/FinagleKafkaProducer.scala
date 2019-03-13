@@ -5,7 +5,7 @@ import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter.sanitizeMetri
 import com.twitter.inject.Logging
 import com.twitter.util._
 import java.util
-import java.util.concurrent.TimeUnit.SECONDS
+import java.util.concurrent.TimeUnit._
 import org.apache.kafka.clients.consumer.OffsetAndMetadata
 import org.apache.kafka.clients.producer._
 import org.apache.kafka.common.{PartitionInfo, TopicPartition}
@@ -102,7 +102,15 @@ class FinagleKafkaProducer[K, V](config: FinagleKafkaProducerConfig[K, V])
   }
 
   override def close(deadline: Time): Future[Unit] = {
-    Future(producer.close(deadline.inSeconds, SECONDS))
+    // com.twitter.Util.Closable.close() calls com.twitter.Util.Closable.close(Duration) with
+    // a duration of Time.Bottom to wait for the resource to be completely relinquished.
+    // However, the underlying KafkaProducer will throw an IllegalArgumentException when
+    // KafkaProducer.close(Duration) is called with a negative timeout.
+    if (deadline == Time.Bottom) {
+      Future(producer.close(Long.MaxValue, MILLISECONDS))
+    } else {
+      Future(producer.close(deadline.inSeconds, SECONDS))
+    }
   }
 
   /* Private */

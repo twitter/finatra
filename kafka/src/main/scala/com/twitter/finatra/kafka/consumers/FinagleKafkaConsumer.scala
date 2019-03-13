@@ -5,7 +5,6 @@ import com.twitter.finatra.utils.FuturePools
 import com.twitter.inject.Logging
 import com.twitter.util._
 import java.util
-import java.util.concurrent.TimeUnit.SECONDS
 import java.util.concurrent.atomic.AtomicBoolean
 import org.apache.kafka.clients.consumer._
 import org.apache.kafka.common.TopicPartition
@@ -150,6 +149,13 @@ class FinagleKafkaConsumer[K, V](config: FinagleKafkaConsumerConfig[K, V])
   }
 
   /**
+   * Get the end offset for a given partition.
+   */
+  def endOffset(partition: TopicPartition): Future[Long] = {
+    singleThreadFuturePool(consumer.endOffsets(List(partition).asJava).get(partition))
+  }
+
+  /**
    * @param timeout The time, in milliseconds, spent waiting in poll if data is not available in the buffer.
    *                If 0, returns immediately with any records that are available currently in the buffer, else returns empty.
    *                Must not be negative.
@@ -204,7 +210,15 @@ class FinagleKafkaConsumer[K, V](config: FinagleKafkaConsumerConfig[K, V])
     try {
       singleThreadFuturePool({
         info(s"Closing consumer for topics: ${consumer.subscription()}")
-        consumer.close(deadline.inSeconds, SECONDS)
+        // com.twitter.Util.Closable.close() calls com.twitter.Util.Closable.close(Duration) with
+        // a duration of Time.Bottom to wait for the resource to be completely relinquished.
+        // However, the underlying KafkaConsumer will throw an IllegalArgumentException when
+        // KafkaConsumer.close(Duration) is called with a negative timeout.
+        if (deadline == Time.Bottom) {
+          consumer.close(java.time.Duration.ofMillis(Long.MaxValue))
+        } else {
+          consumer.close(java.time.Duration.ofMillis(deadline.inMillis))
+        }
       }).ensure {
         singleThreadFuturePool.executor.shutdown()
       }

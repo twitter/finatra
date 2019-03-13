@@ -7,16 +7,19 @@ import com.twitter.finatra.streams.queryable.thrift.partitioning.{KafkaPartition
 import com.twitter.inject.Logging
 import java.util.NoSuchElementException
 import org.apache.kafka.common.serialization.Serde
+import org.apache.kafka.streams.errors.InvalidStateStoreException
 import org.apache.kafka.streams.state.KeyValueIterator
 
-//TODO: DRY with window store
+/**
+ * A queryable Finatra key value store for use by endpoints exposing queryable state
+ */
 class QueryableFinatraKeyValueStore[PK, K, V](
   storeName: String,
   primaryKeySerde: Serde[PK],
   numShards: Int,
   numQueryablePartitions: Int,
   currentShardId: Int)
-    extends Logging {
+  extends Logging {
   private val primaryKeySerializer = primaryKeySerde.serializer()
 
   private val currentServiceShardId = ServiceShardId(currentShardId)
@@ -36,6 +39,7 @@ class QueryableFinatraKeyValueStore[PK, K, V](
    * @throws NullPointerException       If null is used for key.
    * @throws InvalidStateStoreException if the store is not initialized
    */
+  @throws[InvalidStateStoreException]
   def get(primaryKey: PK, key: K): Option[V] = {
     throwIfNonLocalKey(primaryKey)
 

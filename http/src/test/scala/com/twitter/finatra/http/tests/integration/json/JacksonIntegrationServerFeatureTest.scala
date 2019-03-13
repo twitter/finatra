@@ -1,10 +1,10 @@
 package com.twitter.finatra.http.tests.integration.json
 
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.http.Response
 import com.twitter.finagle.http.Status.BadRequest
-import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
+import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
 import com.twitter.inject.server.FeatureTest
 
 class JacksonIntegrationServerFeatureTest extends FeatureTest {
@@ -18,11 +18,12 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
           .filter[CommonFilters]
           .exceptionMapper[CaseClassMappingExceptionMapper]
           .add(new Controller {
-              post("/personWithThings") { _: PersonWithThingsRequest =>
-                "Accepted"
-              }
+            post("/personWithThings") { _: PersonWithThingsRequest =>
+              "Accepted"
+            }
 
-              get("/users/lookup") { request: UserLookupRequest =>
+            get("/users/lookup") {
+              request: UserLookupRequest =>
                 Map(
                   "ids" -> request.ids,
                   "names" -> request.names,
@@ -33,16 +34,14 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
                   "validationPassesForIds" -> request.validationPassesForIds,
                   "validationPassesForNames" -> request.validationPassesForNames
                 )
-              }
             }
-          )
+          })
       }
     },
     disableTestLogging = true
   )
 
   /** Verify users can choose to not "leak" information via the ExceptionMapper */
-
   test("/POST /personWithThings") {
     server.httpPost(
       "/personWithThings",
@@ -59,7 +58,8 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
           }
       """,
       andExpect = BadRequest,
-      withJsonBody = """{"errors":["things: Unable to parse"]}""")
+      withJsonBody = """{"errors":["things: Unable to parse"]}"""
+    )
   }
 
   test("/GET UserLookup") {

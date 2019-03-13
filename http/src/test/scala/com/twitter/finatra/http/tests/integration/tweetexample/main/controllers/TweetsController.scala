@@ -6,10 +6,9 @@ import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.tests.integration.tweetexample.main.domain.Tweet
 import com.twitter.finatra.http.tests.integration.tweetexample.main.services.TweetsRepository
 import com.twitter.finatra.http.response.{StreamingResponse, StreamingResponseUtils}
-import com.twitter.io.Buf
+import com.twitter.io.{Buf, Reader}
 import com.twitter.util.{Duration, Future, Try}
 import javax.inject.Inject
-
 import scala.collection.mutable
 
 class TweetsController @Inject()(
@@ -26,12 +25,12 @@ class TweetsController @Inject()(
     "tweet with id " + tweet.id + " is valid"
   }
 
-  post("/tweets/streaming") { ids: AsyncStream[Long] =>
+  post("/tweets/streaming") { ids: Reader[Long] =>
     tweetsRepository.getByIds(ids)
   }
 
   get("/tweets/streaming_json") { request: Request =>
-    tweetsRepository.getByIds(AsyncStream(0, 1, 2, 3, 4, 5))
+    tweetsRepository.getByIds(Reader.fromSeq(Seq(0, 1, 2, 3, 4, 5)))
   }
 
   get("/tweets/streaming_custom_tobuf") { request: Request =>
