@@ -10,6 +10,9 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-kafka: FinagleKafka clients pass correct deadline for close to
+  underlying Kafka clients. ``PHAB_ID=D261115``
+
 * finatra-kafka-streams: (BREAKING API CHANGE) Create flags for common consumer and producer
   configs. KafkaFlagUtils#kafkaDocumentation and getKafkaDefault are no longer public methods.
   ``PHAB_ID=D277044``
