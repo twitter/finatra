@@ -251,8 +251,8 @@
                         <a href="AbstractThriftFilter.html" title="AbstractThriftFilter for Java usage.">AbstractThriftFilter</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="class" href="AbstractThriftServer.html" title="AbstractThriftServer for usage from Java or with generated Java code"></a>
-                        <a href="AbstractThriftServer.html" title="AbstractThriftServer for usage from Java or with generated Java code">AbstractThriftServer</a>
+                        <a class="class" href="AbstractThriftServer.html" title="A Finagle server which exposes an external Thrift interface implemented by a Service[Array[Byte], Array[Byte]] configured via a JavaThriftRouter."></a>
+                        <a href="AbstractThriftServer.html" title="A Finagle server which exposes an external Thrift interface implemented by a Service[Array[Byte], Array[Byte]] configured via a JavaThriftRouter.">AbstractThriftServer</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
                         <a class="class" href="Controller.html" title=""></a>
@@ -271,12 +271,12 @@
                         <a href="ThriftRequest.html" title="ThriftRequest was created to provide some metadata about a request.">ThriftRequest</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="trait" href="" title="ThriftServer for usage from Scala"></a>
-                        <a href="" title="ThriftServer for usage from Scala">ThriftServer</a>
+                        <a class="trait" href="" title="A Finagle server which exposes an external Thrift interface implemented by a Service[Array[Byte], Array[Byte]] configured via a ThriftRouter."></a>
+                        <a href="" title="A Finagle server which exposes an external Thrift interface implemented by a Service[Array[Byte], Array[Byte]] configured via a ThriftRouter.">ThriftServer</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="trait" href="ThriftServerTrait.html" title="A Basic ThriftServer."></a>
-                        <a href="ThriftServerTrait.html" title="A Basic ThriftServer.">ThriftServerTrait</a>
+                        <a class="trait" href="ThriftServerTrait.html" title="A basic ThriftServer."></a>
+                        <a href="ThriftServerTrait.html" title="A basic ThriftServer.">ThriftServerTrait</a>
                       </li>
               </ul>
             </div>
@@ -305,7 +305,10 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>ThriftServer for usage from Scala</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A Finagle server which exposes an external Thrift interface implemented by a
+<code>Service[Array[Byte], Array[Byte]]</code> configured via a <span class="extype" name="ThriftRouter">ThriftRouter</span>. This trait is
+intended for use from Scala or with generated Scala code.
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>Java users are encouraged to use <a href="AbstractThriftServer.html" class="extype" name="com.twitter.finatra.thrift.AbstractThriftServer">AbstractThriftServer</a> instead.</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -374,7 +377,10 @@
         <span class="name">configureThrift</span><span class="params">(<span name="router">router: <a href="routing/ThriftRouter.html" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <p class="shortcomment cmt">Users MUST provide an implementation to configure the provided <span class="extype" name="ThriftRouter">ThriftRouter</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Users MUST provide an implementation to configure the provided <span class="extype" name="ThriftRouter">ThriftRouter</span>. The <span class="extype" name="ThriftRouter">ThriftRouter</span>
+exposes a DSL which results in a configured Finagle <code>Service[-Req, +Rep]</code> to serve on
+the <span class="extype" name="ListeningServer">ListeningServer</span>.
+</p></div><dl class="paramcmts block"><dt class="param">router</dt><dd class="cmt"><p>the <span class="extype" name="ThriftRouter">ThriftRouter</span> to configure.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li></ol>
             </div>
 
@@ -770,10 +776,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
         <span class="name">build</span><span class="params">(<span name="addr">addr: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="server">server: <span class="extype" name="com.twitter.finagle.ThriftMux.Server">Server</span></span>)</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ListeningServer.html#com.twitter.finagle.ListeningServer" class="extype" name="com.twitter.finagle.ListeningServer">ListeningServer</a></span>
       </span>
       
-      <p class="shortcomment cmt">Construct a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ListeningServer.html" class="extype" name="com.twitter.finagle.ListeningServer">com.twitter.finagle.ListeningServer</a> from the given String addr
-and configured <span class="extype" name="ThriftMux.Server">ThriftMux.Server</span> stack.</p><div class="fullcomment"><div class="comment cmt"><p>Construct a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ListeningServer.html" class="extype" name="com.twitter.finagle.ListeningServer">com.twitter.finagle.ListeningServer</a> from the given String addr
-and configured <span class="extype" name="ThriftMux.Server">ThriftMux.Server</span> stack.
-</p></div><dl class="paramcmts block"><dt class="param">addr</dt><dd class="cmt"><p>the <span class="extype" name="String">String</span> address to bind the resultant <span class="extype" name="ListeningServer">ListeningServer</span>.</p></dd><dt class="param">server</dt><dd class="cmt"><p>the configured <span class="extype" name="ThriftMux.Server">ThriftMux.Server</span> stack.</p></dd><dt>returns</dt><dd class="cmt"><p>a constructed <span class="extype" name="ListeningServer">ListeningServer</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a> → <a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd></dl></div>
+      <p class="shortcomment cmt">Serve the <code>Service[Array[Byte], Array[Byte]]</code> from the configured <span class="extype" name="ThriftRouter">ThriftRouter</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Serve the <code>Service[Array[Byte], Array[Byte]]</code> from the configured <span class="extype" name="ThriftRouter">ThriftRouter</span>.</p></div><dl class="paramcmts block"><dt class="param">addr</dt><dd class="cmt"><p>the <span class="extype" name="String">String</span> address to bind the resultant <span class="extype" name="ListeningServer">ListeningServer</span>.</p></dd><dt class="param">server</dt><dd class="cmt"><p>the configured <span class="extype" name="ThriftMux.Server">ThriftMux.Server</span> stack.</p></dd><dt>returns</dt><dd class="cmt"><p>a constructed <span class="extype" name="ListeningServer">ListeningServer</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="index.html" class="extype" name="com.twitter.finatra.thrift">com.twitter.finatra.thrift</a>] </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a> → <a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
@@ -1195,7 +1198,10 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultThriftAnnouncement</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <p class="shortcomment cmt">Server Announcement</p><div class="fullcomment"><div class="comment cmt"><p>Server Announcement</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd></dl></div>
+      <p class="shortcomment cmt">Default server announcement String used as the <span class="extype" name="Flag">Flag</span> default value for <span class="extype" name="thriftAnnounceFlag">thriftAnnounceFlag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default server announcement String used as the <span class="extype" name="Flag">Flag</span> default value for <span class="extype" name="thriftAnnounceFlag">thriftAnnounceFlag</span>.
+This can be overridden to provide a different default programmatically when a flag value cannot
+be passed. An empty String value is an indication to not perform any announcement of the server.</p><p>In general, users should prefer setting the <span class="extype" name="thriftAnnounceFlag">thriftAnnounceFlag</span> <span class="extype" name="Flag">Flag</span> value.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finagle.ListeningServer.announce(addr:">String)</span></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.ThriftServerTrait#defaultThriftPort" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultThriftPort:String"></a>
       <span class="permalink">
@@ -1211,7 +1217,10 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultThriftPort</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <p class="shortcomment cmt">Thrift Port</p><div class="fullcomment"><div class="comment cmt"><p>Thrift Port</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd></dl></div>
+      <p class="shortcomment cmt">Default external Thrift port used as the <span class="extype" name="Flag">Flag</span> default value for <span class="extype" name="thriftPortFlag">thriftPortFlag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default external Thrift port used as the <span class="extype" name="Flag">Flag</span> default value for <span class="extype" name="thriftPortFlag">thriftPortFlag</span>. This
+can be overridden to provide a different default programmatically when a flag value cannot be
+passed. The format of this value is expected to be a String in the form of &quot;:port&quot;.</p><p>In general, users should prefer setting the <span class="extype" name="thriftPortFlag">thriftPortFlag</span> <span class="extype" name="Flag">Flag</span> value.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait.thriftPortFlag">com.twitter.finatra.thrift.ThriftServerTrait.thriftPortFlag</span></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.ThriftServerTrait#defaultThriftServerName" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultThriftServerName:String"></a>
       <span class="permalink">
@@ -1227,7 +1236,11 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultThriftServerName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <p class="shortcomment cmt">Server Name</p><div class="fullcomment"><div class="comment cmt"><p>Server Name</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd></dl></div>
+      <p class="shortcomment cmt">Default server name for the external Thrift interface used as the <span class="extype" name="Flag">Flag</span> default value for
+<span class="extype" name="thriftServerNameFlag">thriftServerNameFlag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default server name for the external Thrift interface used as the <span class="extype" name="Flag">Flag</span> default value for
+<span class="extype" name="thriftServerNameFlag">thriftServerNameFlag</span>. This can be overridden to provide a different default programmatically
+when a flag value cannot be passed.</p><p>In general, users should prefer setting the <span class="extype" name="thriftServerNameFlag">thriftServerNameFlag</span> <span class="extype" name="Flag">Flag</span> value.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait.thriftServerNameFlag">com.twitter.finatra.thrift.ThriftServerTrait.thriftServerNameFlag</span></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.ThriftServerTrait#defaultThriftShutdownTimeout" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultThriftShutdownTimeout:com.twitter.util.Duration"></a><a id="defaultThriftShutdownTimeout:Duration"></a>
       <span class="permalink">
@@ -1243,7 +1256,11 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultThriftShutdownTimeout</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>
       </span>
       
-      <p class="shortcomment cmt">Shutdown Timeout</p><div class="fullcomment"><div class="comment cmt"><p>Shutdown Timeout</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd></dl></div>
+      <p class="shortcomment cmt">Default shutdown timeout used as the <span class="extype" name="Flag">Flag</span> default value for <span class="extype" name="thriftShutdownTimeoutFlag">thriftShutdownTimeoutFlag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default shutdown timeout used as the <span class="extype" name="Flag">Flag</span> default value for <span class="extype" name="thriftShutdownTimeoutFlag">thriftShutdownTimeoutFlag</span>.
+This represents the deadline for the closing of this server which can be overridden to provide
+a different default programmatically when a flag value cannot be passed.</p><p>In general, users should prefer setting the <span class="extype" name="thriftShutdownTimeoutFlag">thriftShutdownTimeoutFlag</span> <span class="extype" name="Flag">Flag</span> value.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd><dt>Note</dt><dd><span class="cmt"><p>the value is used to denote a delta &quot;from now&quot;, that is this value is applied as:
+      <code>server.close(shutdownTimeoutDuration.fromNow())</code></p></span></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait.thriftShutdownTimeoutFlag">com.twitter.finatra.thrift.ThriftServerTrait.thriftShutdownTimeoutFlag</span></p></span><span class="cmt"><p><span class="extype" name="com.twitter.util.Closable.close(deadline:">Time)</span></p></span><span class="cmt"><p><a href="https://github.com/twitter/util/blob/b0a5d06269b9526b4408239ce1441b2a213dd0df/util-core/src/main/scala/com/twitter/util/Duration.scala#L436" target="_blank">https://github.com/twitter/util/blob/b0a5d06269b9526b4408239ce1441b2a213dd0df/util-core/src/main/scala/com/twitter/util/Duration.scala#L436</a></p></span></dd></dl></div>
     </li><li name="com.twitter.inject.server.TwitterServer#disableAdminHttpServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="disableAdminHttpServer:Boolean"></a>
       <span class="permalink">
@@ -1597,7 +1614,9 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
         <span class="name">httpExternalPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns the bound port representing the external HTTP interface of this server.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the bound port representing the external HTTP interface of this server.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a defined <code>Some(Int)</code> representing the port of the external HTTP interface
+        if defined and bound, None otherwise.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
     </li><li name="com.twitter.inject.server.Ports#httpsExternalPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="httpsExternalPort:Option[Int]"></a>
       <span class="permalink">
@@ -1613,7 +1632,9 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
         <span class="name">httpsExternalPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns the bound port representing the external HTTPS interface of this server.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the bound port representing the external HTTPS interface of this server.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a defined <code>Some(Int)</code> representing the port of the external HTTPS interface
+        if defined and bound, None otherwise.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#inferClassNamesFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="inferClassNamesFlag:com.twitter.app.Flag[Boolean]"></a><a id="inferClassNamesFlag:Flag[Boolean]"></a>
       <span class="permalink">
@@ -2508,22 +2529,6 @@ of the server lifecycle.</p></span></dd></dl></div>
       </span>
       
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="../../inject/server/TwitterServer.html#start():Unit" class="extmbr" name="com.twitter.inject.server.TwitterServer#start">com.twitter.inject.server.TwitterServer#start</a></p></span></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.ThriftServer#service" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="service:com.twitter.finagle.Service[Array[Byte],Array[Byte]]"></a><a id="service:Service[Array[Byte],Array[Byte]]"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#service:com.twitter.finagle.Service[Array[Byte],Array[Byte]]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">service</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html#com.twitter.finagle.Service" class="extype" name="com.twitter.finagle.Service">Service</a>[<span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>], <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]]</span>
-      </span>
-      
-      <p class="shortcomment cmt">This Server does not return a <code>Service[Array[Byte], Array[Byte]]</code></p><div class="fullcomment"><div class="comment cmt"><p>This Server does not return a <code>Service[Array[Byte], Array[Byte]]</code></p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a> → <a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd></dl></div>
     </li><li name="com.twitter.inject.server.TwitterServer#setup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setup():Unit"></a>
       <span class="permalink">
@@ -2671,7 +2676,9 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
         <span class="name">thriftPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a> → <a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns the bound port representing the external Thrift interface of this server.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the bound port representing the external Thrift interface of this server.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a defined <code>Some(Int)</code> representing the port of the external Thrift interface
+        if defined and bound, None otherwise.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a> → <a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.ThriftServerTrait#thriftResponseClassifierModule" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="thriftResponseClassifierModule:com.google.inject.Module"></a><a id="thriftResponseClassifierModule:Module"></a>
       <span class="permalink">
@@ -2689,6 +2696,27 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
       
       <p class="shortcomment cmt">Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing a <span class="extype" name="ThriftResponseClassifier">ThriftResponseClassifier</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing a <span class="extype" name="ThriftResponseClassifier">ThriftResponseClassifier</span>.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which provides a <span class="extype" name="ThriftResponseClassifier">ThriftResponseClassifier</span> implementation.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.ThriftServer#thriftService" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="thriftService:com.twitter.finagle.Service[Array[Byte],Array[Byte]]"></a><a id="thriftService:Service[Array[Byte],Array[Byte]]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#thriftService:com.twitter.finagle.Service[Array[Byte],Array[Byte]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">thriftService</span><span class="result">: <span class="extype" name="com.twitter.finagle.Service">Service</span>[<span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>], <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Configuration of the <code>Service[Array[Byte], Array[Byte]]</code> to serve on the <span class="extype" name="ListeningServer">ListeningServer</span>
+is defined by configuring the <span class="extype" name="ThriftRouter">ThriftRouter</span> and not by implementation of this method,
+thus this method overridden to be final and set to a <code>NilService</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Configuration of the <code>Service[Array[Byte], Array[Byte]]</code> to serve on the <span class="extype" name="ListeningServer">ListeningServer</span>
+is defined by configuring the <span class="extype" name="ThriftRouter">ThriftRouter</span> and not by implementation of this method,
+thus this method overridden to be final and set to a <code>NilService</code>.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a> → <a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd></dl></div>
     </li><li name="com.twitter.inject.Logging#time" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="time[T](formatStr:String)(func:=&gt;T):T"></a><a id="time[T](String)(⇒T):T"></a>
       <span class="permalink">

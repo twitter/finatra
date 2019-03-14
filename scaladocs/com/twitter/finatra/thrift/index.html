@@ -427,8 +427,8 @@
                         <a href="AbstractThriftFilter.html" title="AbstractThriftFilter for Java usage.">AbstractThriftFilter</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="class" href="AbstractThriftServer.html" title="AbstractThriftServer for usage from Java or with generated Java code"></a>
-                        <a href="AbstractThriftServer.html" title="AbstractThriftServer for usage from Java or with generated Java code">AbstractThriftServer</a>
+                        <a class="class" href="AbstractThriftServer.html" title="A Finagle server which exposes an external Thrift interface implemented by a Service[Array[Byte], Array[Byte]] configured via a JavaThriftRouter."></a>
+                        <a href="AbstractThriftServer.html" title="A Finagle server which exposes an external Thrift interface implemented by a Service[Array[Byte], Array[Byte]] configured via a JavaThriftRouter.">AbstractThriftServer</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
                         <a class="class" href="Controller.html" title=""></a>
@@ -447,12 +447,12 @@
                         <a href="ThriftRequest.html" title="ThriftRequest was created to provide some metadata about a request.">ThriftRequest</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="trait" href="ThriftServer.html" title="ThriftServer for usage from Scala"></a>
-                        <a href="ThriftServer.html" title="ThriftServer for usage from Scala">ThriftServer</a>
+                        <a class="trait" href="ThriftServer.html" title="A Finagle server which exposes an external Thrift interface implemented by a Service[Array[Byte], Array[Byte]] configured via a ThriftRouter."></a>
+                        <a href="ThriftServer.html" title="A Finagle server which exposes an external Thrift interface implemented by a Service[Array[Byte], Array[Byte]] configured via a ThriftRouter.">ThriftServer</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="trait" href="ThriftServerTrait.html" title="A Basic ThriftServer."></a>
-                        <a href="ThriftServerTrait.html" title="A Basic ThriftServer.">ThriftServerTrait</a>
+                        <a class="trait" href="ThriftServerTrait.html" title="A basic ThriftServer."></a>
+                        <a href="ThriftServerTrait.html" title="A basic ThriftServer.">ThriftServerTrait</a>
                       </li><li name="com.twitter.finatra.utils" visbl="pub" class="indented4 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="utils"></a><a id="utils:utils"></a>
       <span class="permalink">
@@ -565,7 +565,7 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.twitter.finatra.thrift.AbstractThriftServer" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="com.twitter.finatra.thrift.AbstractThriftServer" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="AbstractThriftServerextendsThriftServerTrait"></a><a id="AbstractThriftServer:AbstractThriftServer"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/thrift/index.html#AbstractThriftServerextendsThriftServerTrait" title="Permalink">
@@ -577,10 +577,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="AbstractThriftServer for usage from Java or with generated Java code" href="AbstractThriftServer.html"><span class="name">AbstractThriftServer</span></a><span class="result"> extends <a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></span>
+        <a title="A Finagle server which exposes an external Thrift interface implemented by a Service[Array[Byte], Array[Byte]] configured via a JavaThriftRouter." href="AbstractThriftServer.html"><span class="name">AbstractThriftServer</span></a><span class="result"> extends <a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></span>
       </span>
       
-      <p class="shortcomment cmt">AbstractThriftServer for usage from Java or with generated Java code</p>
+      <p class="shortcomment cmt">A Finagle server which exposes an external Thrift interface implemented by a
+<code>Service[Array[Byte], Array[Byte]]</code> configured via a <span class="extype" name="JavaThriftRouter">JavaThriftRouter</span>.</p><div class="fullcomment"><div class="comment cmt"><p>A Finagle server which exposes an external Thrift interface implemented by a
+<code>Service[Array[Byte], Array[Byte]]</code> configured via a <span class="extype" name="JavaThriftRouter">JavaThriftRouter</span>. This abstract class is
+intended for use from Java or with generated Java code.
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>Scala users are encouraged to use <a href="ThriftServer.html" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a> instead.</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.Controller" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ControllerextendsLogging"></a><a id="Controller:Controller"></a>
       <span class="permalink">
@@ -616,7 +620,7 @@
                 <span class="name">@Singleton</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.ThriftServer" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.thrift.ThriftServer" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="ThriftServerextendsThriftServerTrait"></a><a id="ThriftServer:ThriftServer"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/thrift/index.html#ThriftServerextendsThriftServerTrait" title="Permalink">
@@ -628,10 +632,14 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="ThriftServer for usage from Scala" href="ThriftServer.html"><span class="name">ThriftServer</span></a><span class="result"> extends <a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></span>
+        <a title="A Finagle server which exposes an external Thrift interface implemented by a Service[Array[Byte], Array[Byte]] configured via a ThriftRouter." href="ThriftServer.html"><span class="name">ThriftServer</span></a><span class="result"> extends <a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></span>
       </span>
       
-      <p class="shortcomment cmt">ThriftServer for usage from Scala</p>
+      <p class="shortcomment cmt">A Finagle server which exposes an external Thrift interface implemented by a
+<code>Service[Array[Byte], Array[Byte]]</code> configured via a <span class="extype" name="ThriftRouter">ThriftRouter</span>.</p><div class="fullcomment"><div class="comment cmt"><p>A Finagle server which exposes an external Thrift interface implemented by a
+<code>Service[Array[Byte], Array[Byte]]</code> configured via a <span class="extype" name="ThriftRouter">ThriftRouter</span>. This trait is
+intended for use from Scala or with generated Scala code.
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>Java users are encouraged to use <a href="AbstractThriftServer.html" class="extype" name="com.twitter.finatra.thrift.AbstractThriftServer">AbstractThriftServer</a> instead.</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.ThriftServerTrait" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="ThriftServerTraitextendsTwitterServer"></a><a id="ThriftServerTrait:ThriftServerTrait"></a>
       <span class="permalink">
@@ -644,10 +652,10 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="A Basic ThriftServer." href="ThriftServerTrait.html"><span class="name">ThriftServerTrait</span></a><span class="result"> extends <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a></span>
+        <a title="A basic ThriftServer." href="ThriftServerTrait.html"><span class="name">ThriftServerTrait</span></a><span class="result"> extends <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a></span>
       </span>
       
-      <p class="shortcomment cmt">A Basic ThriftServer.</p><div class="fullcomment"><div class="comment cmt"><p>A Basic ThriftServer. To implement, override</p><pre><span class="kw">protected</span> <span class="kw">def</span> service: Service[<span class="std">Array</span>[<span class="std">Byte</span>], <span class="std">Array</span>[<span class="std">Byte</span>]]</pre><p>with your <code>Service[Array[Byte], Array[Byte]]</code> implementation.
+      <p class="shortcomment cmt">A basic ThriftServer.</p><div class="fullcomment"><div class="comment cmt"><p>A basic ThriftServer. To implement, override</p><pre><span class="kw">protected</span> <span class="kw">def</span> thriftService: Service[<span class="std">Array</span>[<span class="std">Byte</span>], <span class="std">Array</span>[<span class="std">Byte</span>]]</pre><p>with your <code>Service[Array[Byte], Array[Byte]]</code> implementation.
 </p></div></div>
     </li><li name="com.twitter.finatra.thrift.AbstractThriftFilter" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="AbstractThriftFilterextendsFilter.TypeAgnosticwithThriftFilter"></a><a id="AbstractThriftFilter:AbstractThriftFilter"></a>

@@ -331,8 +331,8 @@
                         <a href="AbstractController.html" title="">AbstractController</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="class" href="AbstractHttpServer.html" title="AbstractHttpServer for usage from Java"></a>
-                        <a href="AbstractHttpServer.html" title="AbstractHttpServer for usage from Java">AbstractHttpServer</a>
+                        <a class="class" href="AbstractHttpServer.html" title="A Finagle server which exposes an external HTTP or HTTPS interfaces implemented by a Service[Request, Response] configured via an HttpRouter."></a>
+                        <a href="AbstractHttpServer.html" title="A Finagle server which exposes an external HTTP or HTTPS interfaces implemented by a Service[Request, Response] configured via an HttpRouter.">AbstractHttpServer</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
                         <a class="class" href="Controller.html" title=""></a>
@@ -343,8 +343,12 @@
                         <a href="HttpHeaders$.html" title="">HttpHeaders</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="trait" href="" title=""></a>
-                        <a href="" title="">HttpServer</a>
+                        <a class="trait" href="" title="A Finagle server which exposes external HTTP or HTTPS interfaces implemented by a Service[Request, Response] configured via an HttpRouter."></a>
+                        <a href="" title="A Finagle server which exposes external HTTP or HTTPS interfaces implemented by a Service[Request, Response] configured via an HttpRouter.">HttpServer</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="trait" href="HttpServerTrait.html" title="A basic HttpServer."></a>
+                        <a href="HttpServerTrait.html" title="A basic HttpServer.">HttpServerTrait</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
                         <a class="trait" href="JavaCallback.html" title=""></a>
@@ -376,16 +380,19 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">HttpServer</span><span class="result"> extends <span class="extype" name="com.twitter.finatra.http.internal.server.BaseHttpServer">BaseHttpServer</span></span>
+        <span class="name">HttpServer</span><span class="result"> extends <a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A Finagle server which exposes external HTTP or HTTPS interfaces implemented by a
+<code>Service[Request, Response]</code> configured via an <span class="extype" name="HttpRouter">HttpRouter</span>. This trait is
+intended for use from Scala or with generated Scala code.
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>Java users are encouraged to use <a href="AbstractHttpServer.html" class="extype" name="com.twitter.finatra.http.AbstractHttpServer">AbstractHttpServer</a> instead.</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><span class="extype" name="com.twitter.finatra.http.internal.server.BaseHttpServer">BaseHttpServer</span>, <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a>, <span class="extype" name="com.twitter.server.Lifecycle.Warmup">Warmup</span>, <a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a>, <span class="extype" name="com.twitter.inject.server.DeprecatedLogging">DeprecatedLogging</span>, <a href="https://twitter.github.io/util/docs/com/twitter/logging/Logging.html#com.twitter.logging.Logging" class="extype" name="com.twitter.logging.Logging">Logging</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/TwitterServer.html#com.twitter.server.TwitterServer" class="extype" name="com.twitter.server.TwitterServer">TwitterServer</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Stats.html#com.twitter.server.Stats" class="extype" name="com.twitter.server.Stats">Stats</a>, <span class="extype" name="com.twitter.server.Lifecycle">Lifecycle</span>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Admin.html#com.twitter.server.Admin" class="extype" name="com.twitter.server.Admin">Admin</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/AdminHttpServer.html#com.twitter.server.AdminHttpServer" class="extype" name="com.twitter.server.AdminHttpServer">AdminHttpServer</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Hooks.html#com.twitter.server.Hooks" class="extype" name="com.twitter.server.Hooks">Hooks</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Linters.html#com.twitter.server.Linters" class="extype" name="com.twitter.server.Linters">Linters</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Slf4jBridge.html#com.twitter.server.Slf4jBridge" class="extype" name="com.twitter.server.Slf4jBridge">Slf4jBridge</a>, <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a>, <a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/app/App.html#com.twitter.app.App" class="extype" name="com.twitter.app.App">App</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/CloseAwaitably.html#com.twitter.util.CloseAwaitably" class="extype" name="com.twitter.util.CloseAwaitably">CloseAwaitably</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/CloseAwaitably0.html#com.twitter.util.CloseAwaitably0" class="extype" name="com.twitter.util.CloseAwaitably0">CloseAwaitably0</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>], <a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable.html#com.twitter.util.Awaitable" class="extype" name="com.twitter.util.Awaitable">Awaitable</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>], <a href="https://twitter.github.io/util/docs/com/twitter/util/Closable.html#com.twitter.util.Closable" class="extype" name="com.twitter.util.Closable">Closable</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a>, <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a>, <span class="extype" name="com.twitter.server.Lifecycle.Warmup">Warmup</span>, <a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a>, <span class="extype" name="com.twitter.inject.server.DeprecatedLogging">DeprecatedLogging</span>, <a href="https://twitter.github.io/util/docs/com/twitter/logging/Logging.html#com.twitter.logging.Logging" class="extype" name="com.twitter.logging.Logging">Logging</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/TwitterServer.html#com.twitter.server.TwitterServer" class="extype" name="com.twitter.server.TwitterServer">TwitterServer</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Stats.html#com.twitter.server.Stats" class="extype" name="com.twitter.server.Stats">Stats</a>, <span class="extype" name="com.twitter.server.Lifecycle">Lifecycle</span>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Admin.html#com.twitter.server.Admin" class="extype" name="com.twitter.server.Admin">Admin</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/AdminHttpServer.html#com.twitter.server.AdminHttpServer" class="extype" name="com.twitter.server.AdminHttpServer">AdminHttpServer</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Hooks.html#com.twitter.server.Hooks" class="extype" name="com.twitter.server.Hooks">Hooks</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Linters.html#com.twitter.server.Linters" class="extype" name="com.twitter.server.Linters">Linters</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Slf4jBridge.html#com.twitter.server.Slf4jBridge" class="extype" name="com.twitter.server.Slf4jBridge">Slf4jBridge</a>, <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a>, <a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/app/App.html#com.twitter.app.App" class="extype" name="com.twitter.app.App">App</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/CloseAwaitably.html#com.twitter.util.CloseAwaitably" class="extype" name="com.twitter.util.CloseAwaitably">CloseAwaitably</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/CloseAwaitably0.html#com.twitter.util.CloseAwaitably0" class="extype" name="com.twitter.util.CloseAwaitably0">CloseAwaitably0</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>], <a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable.html#com.twitter.util.Awaitable" class="extype" name="com.twitter.util.Awaitable">Awaitable</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>], <a href="https://twitter.github.io/util/docs/com/twitter/util/Closable.html#com.twitter.util.Closable" class="extype" name="com.twitter.util.Closable">Closable</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">
               Known Subclasses
@@ -416,7 +423,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.http.HttpServer"><span>HttpServer</span></li><li class="in" name="com.twitter.finatra.http.internal.server.BaseHttpServer"><span>BaseHttpServer</span></li><li class="in" name="com.twitter.inject.server.TwitterServer"><span>TwitterServer</span></li><li class="in" name="com.twitter.server.Lifecycle.Warmup"><span>Warmup</span></li><li class="in" name="com.twitter.inject.server.Ports"><span>Ports</span></li><li class="in" name="com.twitter.inject.server.DeprecatedLogging"><span>DeprecatedLogging</span></li><li class="in" name="com.twitter.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.server.TwitterServer"><span>TwitterServer</span></li><li class="in" name="com.twitter.server.Stats"><span>Stats</span></li><li class="in" name="com.twitter.server.Lifecycle"><span>Lifecycle</span></li><li class="in" name="com.twitter.server.Admin"><span>Admin</span></li><li class="in" name="com.twitter.server.AdminHttpServer"><span>AdminHttpServer</span></li><li class="in" name="com.twitter.server.Hooks"><span>Hooks</span></li><li class="in" name="com.twitter.server.Linters"><span>Linters</span></li><li class="in" name="com.twitter.server.Slf4jBridge"><span>Slf4jBridge</span></li><li class="in" name="com.twitter.inject.app.App"><span>App</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.app.App"><span>App</span></li><li class="in" name="com.twitter.util.CloseAwaitably"><span>CloseAwaitably</span></li><li class="in" name="com.twitter.util.CloseAwaitably0"><span>CloseAwaitably0</span></li><li class="in" name="com.twitter.util.Awaitable"><span>Awaitable</span></li><li class="in" name="com.twitter.util.Closable"><span>Closable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.http.HttpServer"><span>HttpServer</span></li><li class="in" name="com.twitter.finatra.http.HttpServerTrait"><span>HttpServerTrait</span></li><li class="in" name="com.twitter.inject.server.TwitterServer"><span>TwitterServer</span></li><li class="in" name="com.twitter.server.Lifecycle.Warmup"><span>Warmup</span></li><li class="in" name="com.twitter.inject.server.Ports"><span>Ports</span></li><li class="in" name="com.twitter.inject.server.DeprecatedLogging"><span>DeprecatedLogging</span></li><li class="in" name="com.twitter.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.server.TwitterServer"><span>TwitterServer</span></li><li class="in" name="com.twitter.server.Stats"><span>Stats</span></li><li class="in" name="com.twitter.server.Lifecycle"><span>Lifecycle</span></li><li class="in" name="com.twitter.server.Admin"><span>Admin</span></li><li class="in" name="com.twitter.server.AdminHttpServer"><span>AdminHttpServer</span></li><li class="in" name="com.twitter.server.Hooks"><span>Hooks</span></li><li class="in" name="com.twitter.server.Linters"><span>Linters</span></li><li class="in" name="com.twitter.server.Slf4jBridge"><span>Slf4jBridge</span></li><li class="in" name="com.twitter.inject.app.App"><span>App</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.app.App"><span>App</span></li><li class="in" name="com.twitter.util.CloseAwaitably"><span>CloseAwaitably</span></li><li class="in" name="com.twitter.util.CloseAwaitably0"><span>CloseAwaitably0</span></li><li class="in" name="com.twitter.util.Awaitable"><span>Awaitable</span></li><li class="in" name="com.twitter.util.Closable"><span>Closable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -455,7 +462,10 @@
         <span class="name">configureHttp</span><span class="params">(<span name="router">router: <a href="routing/HttpRouter.html" class="extype" name="com.twitter.finatra.http.routing.HttpRouter">HttpRouter</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <p class="shortcomment cmt">Users MUST provide an implementation to configure the provided <span class="extype" name="HttpRouter">HttpRouter</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Users MUST provide an implementation to configure the provided <span class="extype" name="HttpRouter">HttpRouter</span>. The <span class="extype" name="HttpRouter">HttpRouter</span>
+exposes a DSL which results in a configured Finagle <code>Service[-Request, +Response]</code> to serve on
+the <span class="extype" name="ListeningServer">ListeningServer</span>.
+</p></div><dl class="paramcmts block"><dt class="param">router</dt><dd class="cmt"><p>the <span class="extype" name="HttpRouter">HttpRouter</span> to configure.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li></ol>
             </div>
 
@@ -853,6 +863,22 @@ registered <span class="extype" name="Awaitable">Awaitable</span> exits it will 
         </dd><dt>Note</dt><dd><span class="cmt"><p>You MUST call <code>super.beforePostWarmup()</code> in any overridden definition of this
 method. Failure to do so may cause your server to not completely startup.</p></span>, <span class="cmt"><p>It is NOT expected that you block in this method as you will prevent completion
 of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Lifecycle$$Warmup.html#prebindWarmup():Unit" class="extype" name="com.twitter.server.Lifecycle.Warmup">com.twitter.server.Lifecycle.Warmup#prebindWarmup</a></p></span><span class="cmt"><p><a href="../../inject/app/App.html#beforePostWarmup():Unit" class="extmbr" name="com.twitter.inject.app.App#beforePostWarmup">com.twitter.inject.app.App#beforePostWarmup</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.HttpServer#build" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="build(addr:java.net.InetSocketAddress,server:com.twitter.finagle.Http.Server):com.twitter.finagle.ListeningServer"></a><a id="build(InetSocketAddress,Server):ListeningServer"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServer.html#build(addr:java.net.InetSocketAddress,server:com.twitter.finagle.Http.Server):com.twitter.finagle.ListeningServer" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">build</span><span class="params">(<span name="addr">addr: <span class="extype" name="java.net.InetSocketAddress">InetSocketAddress</span></span>, <span name="server">server: <span class="extype" name="com.twitter.finagle.Http.Server">Server</span></span>)</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ListeningServer.html#com.twitter.finagle.ListeningServer" class="extype" name="com.twitter.finagle.ListeningServer">ListeningServer</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Serve the <code>Service[Request, Response]</code> from the configured <span class="extype" name="HttpRouter">HttpRouter</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Serve the <code>Service[Request, Response]</code> from the configured <span class="extype" name="HttpRouter">HttpRouter</span>.</p></div><dl class="paramcmts block"><dt class="param">addr</dt><dd class="cmt"><p>the <span class="extype" name="InetSocketAddress">InetSocketAddress</span> address to bind the resultant <span class="extype" name="ListeningServer">ListeningServer</span>.</p></dd><dt class="param">server</dt><dd class="cmt"><p>the configured <span class="extype" name="Http.Server">Http.Server</span> stack.</p></dd><dt>returns</dt><dd class="cmt"><p>a constructed <span class="extype" name="ListeningServer">ListeningServer</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="index.html" class="extype" name="com.twitter.finatra.http">com.twitter.finatra.http</a>] </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a> → <a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
@@ -989,7 +1015,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>AdminHttpServer</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#configureHttpServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.HttpServerTrait#configureHttpServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configureHttpServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server"></a><a id="configureHttpServer(Server):Server"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/HttpServer.html#configureHttpServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server" title="Permalink">
@@ -1010,8 +1036,8 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
  server
    .withMaxInitialLineSize(2048)
 }
-</p></div><dl class="paramcmts block"><dt class="param">server</dt><dd class="cmt"><p>- the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Http$$Server.html" class="extype" name="com.twitter.finagle.Http.Server">com.twitter.finagle.Http.Server</a> to configure.</p></dd><dt>returns</dt><dd class="cmt"><p>a configured Http.Server.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#configureHttpsServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+</p></div><dl class="paramcmts block"><dt class="param">server</dt><dd class="cmt"><p>- the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Http$$Server.html" class="extype" name="com.twitter.finagle.Http.Server">com.twitter.finagle.Http.Server</a> to configure.</p></dd><dt>returns</dt><dd class="cmt"><p>a configured Http.Server.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.HttpServerTrait#configureHttpsServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configureHttpsServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server"></a><a id="configureHttpsServer(Server):Server"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/HttpServer.html#configureHttpsServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server" title="Permalink">
@@ -1033,7 +1059,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
    .withMaxInitialLineSize(2048)
    .withTransport.tls(....)
 }
-</p></div><dl class="paramcmts block"><dt class="param">server</dt><dd class="cmt"><p>- the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Http$$Server.html" class="extype" name="com.twitter.finagle.Http.Server">com.twitter.finagle.Http.Server</a> to configure.</p></dd><dt>returns</dt><dd class="cmt"><p>a configured Http.Server.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">server</dt><dd class="cmt"><p>- the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Http$$Server.html" class="extype" name="com.twitter.finagle.Http.Server">com.twitter.finagle.Http.Server</a> to configure.</p></dd><dt>returns</dt><dd class="cmt"><p>a configured Http.Server.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd></dl></div>
     </li><li name="com.twitter.inject.server.DeprecatedLogging#configureLoggerFactories" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configureLoggerFactories():Unit"></a>
       <span class="permalink">
@@ -1218,7 +1244,7 @@ SLF4J BridgeHandler from being removed.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Logging</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#defaultHttpAnnouncement" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.HttpServerTrait#defaultHttpAnnouncement" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultHttpAnnouncement:String"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/HttpServer.html#defaultHttpAnnouncement:String" title="Permalink">
@@ -1233,8 +1259,13 @@ SLF4J BridgeHandler from being removed.
         <span class="name">defaultHttpAnnouncement</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#defaultHttpPort" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt">Default server announcement String for the HTTP server used as the <span class="extype" name="Flag">Flag</span> default value for
+<span class="extype" name="httpAnnounceFlag">httpAnnounceFlag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default server announcement String for the HTTP server used as the <span class="extype" name="Flag">Flag</span> default value for
+<span class="extype" name="httpAnnounceFlag">httpAnnounceFlag</span>. This can be overridden to provide a different default programmatically
+when a flag value cannot be passed. An empty String value is an indication to not perform any
+announcement of the server.</p><p>In general, users should prefer setting the <span class="extype" name="httpAnnounceFlag">httpAnnounceFlag</span> <span class="extype" name="Flag">Flag</span> value.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finagle.ListeningServer.announce(addr:">String)</span></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.HttpServerTrait#defaultHttpPort" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultHttpPort:String"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/HttpServer.html#defaultHttpPort:String" title="Permalink">
@@ -1249,8 +1280,11 @@ SLF4J BridgeHandler from being removed.
         <span class="name">defaultHttpPort</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#defaultHttpServerName" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt">Default external HTTP port used as the <span class="extype" name="Flag">Flag</span> default value for <span class="extype" name="httpPortFlag">httpPortFlag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default external HTTP port used as the <span class="extype" name="Flag">Flag</span> default value for <span class="extype" name="httpPortFlag">httpPortFlag</span>. This can be
+overridden to provide a different default programmatically when a flag value cannot be passed.
+The format of this value is expected to be a String in the form of &quot;:port&quot;.</p><p>In general, users should prefer setting the <span class="extype" name="httpPortFlag">httpPortFlag</span> <span class="extype" name="Flag">Flag</span> value.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpServerTrait.httpPortFlag">com.twitter.finatra.http.HttpServerTrait.httpPortFlag</span></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.HttpServerTrait#defaultHttpServerName" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultHttpServerName:String"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/HttpServer.html#defaultHttpServerName:String" title="Permalink">
@@ -1265,8 +1299,12 @@ SLF4J BridgeHandler from being removed.
         <span class="name">defaultHttpServerName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#defaultHttpsAnnouncement" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt">Default server name for the external HTTP interface used as the <span class="extype" name="Flag">Flag</span> default value for
+<span class="extype" name="httpServerNameFlag">httpServerNameFlag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default server name for the external HTTP interface used as the <span class="extype" name="Flag">Flag</span> default value for
+<span class="extype" name="httpServerNameFlag">httpServerNameFlag</span>. This can be overridden to provide a different default programmatically
+when a flag value cannot be passed.</p><p>In general, users should prefer setting the <span class="extype" name="httpServerNameFlag">httpServerNameFlag</span> <span class="extype" name="Flag">Flag</span> value.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpServerTrait.httpServerNameFlag">com.twitter.finatra.http.HttpServerTrait.httpServerNameFlag</span></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.HttpServerTrait#defaultHttpsAnnouncement" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultHttpsAnnouncement:String"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/HttpServer.html#defaultHttpsAnnouncement:String" title="Permalink">
@@ -1281,8 +1319,13 @@ SLF4J BridgeHandler from being removed.
         <span class="name">defaultHttpsAnnouncement</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#defaultHttpsPort" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt">Default server announcement String for the HTTPS server used as the <span class="extype" name="Flag">Flag</span> default value for
+<span class="extype" name="httpsAnnounceFlag">httpsAnnounceFlag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default server announcement String for the HTTPS server used as the <span class="extype" name="Flag">Flag</span> default value for
+<span class="extype" name="httpsAnnounceFlag">httpsAnnounceFlag</span>. This can be overridden to provide a different default programmatically
+when a flag value cannot be passed. An empty String value is an indication to not perform any
+announcement of the server.</p><p>In general, users should prefer setting the <span class="extype" name="httpsAnnounceFlag">httpsAnnounceFlag</span> <span class="extype" name="Flag">Flag</span> value.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finagle.ListeningServer.announce(addr:">String)</span></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.HttpServerTrait#defaultHttpsPort" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultHttpsPort:String"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/HttpServer.html#defaultHttpsPort:String" title="Permalink">
@@ -1297,8 +1340,11 @@ SLF4J BridgeHandler from being removed.
         <span class="name">defaultHttpsPort</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#defaultHttpsServerName" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt">Default external HTTPS port used as the <span class="extype" name="Flag">Flag</span> default value for <span class="extype" name="httpsPortFlag">httpsPortFlag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default external HTTPS port used as the <span class="extype" name="Flag">Flag</span> default value for <span class="extype" name="httpsPortFlag">httpsPortFlag</span>. This can
+be overridden to provide a different default programmatically when a flag value cannot be
+passed. The format of this value is expected to be a String in the form of &quot;:port&quot;.</p><p>In general, users should prefer setting the <span class="extype" name="httpsPortFlag">httpsPortFlag</span> <span class="extype" name="Flag">Flag</span> value.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpServerTrait.httpsPortFlag">com.twitter.finatra.http.HttpServerTrait.httpsPortFlag</span></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.HttpServerTrait#defaultHttpsServerName" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultHttpsServerName:String"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/HttpServer.html#defaultHttpsServerName:String" title="Permalink">
@@ -1313,7 +1359,11 @@ SLF4J BridgeHandler from being removed.
         <span class="name">defaultHttpsServerName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
+      <p class="shortcomment cmt">Default server name for serving the external HTTPS interface used as the <span class="extype" name="Flag">Flag</span> default value
+for <span class="extype" name="httpsServerNameFlag">httpsServerNameFlag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default server name for serving the external HTTPS interface used as the <span class="extype" name="Flag">Flag</span> default value
+for <span class="extype" name="httpsServerNameFlag">httpsServerNameFlag</span>. This can be overridden to provide a different default
+programmatically when a flag value cannot be passed.</p><p>In general, users should prefer setting the <span class="extype" name="httpsServerNameFlag">httpsServerNameFlag</span> <span class="extype" name="Flag">Flag</span> value.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpServerTrait.httpsServerNameFlag">com.twitter.finatra.http.HttpServerTrait.httpsServerNameFlag</span></p></span></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#defaultLogLevel" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultLogLevel:com.twitter.logging.Level"></a><a id="defaultLogLevel:Level"></a>
       <span class="permalink">
@@ -1330,7 +1380,7 @@ SLF4J BridgeHandler from being removed.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Logging</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#defaultMaxRequestSize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.HttpServerTrait#defaultMaxRequestSize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultMaxRequestSize:com.twitter.util.StorageUnit"></a><a id="defaultMaxRequestSize:StorageUnit"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/HttpServer.html#defaultMaxRequestSize:com.twitter.util.StorageUnit" title="Permalink">
@@ -1345,7 +1395,12 @@ SLF4J BridgeHandler from being removed.
         <span class="name">defaultMaxRequestSize</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/StorageUnit.html#com.twitter.util.StorageUnit" class="extype" name="com.twitter.util.StorageUnit">StorageUnit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
+      <p class="shortcomment cmt">Default maximum request message size this server can receive used as the <span class="extype" name="Flag">Flag</span> default value
+for <span class="extype" name="maxRequestSizeFlag">maxRequestSizeFlag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default maximum request message size this server can receive used as the <span class="extype" name="Flag">Flag</span> default value
+for <span class="extype" name="maxRequestSizeFlag">maxRequestSizeFlag</span>. This can be overridden to provide a different default
+programmatically when a flag value cannot be passed. The format of this flag is expected to be
+a String which is parsable into a <a href="https://twitter.github.io/util/docs/com/twitter/util/StorageUnit.html" class="extype" name="com.twitter.util.StorageUnit">com.twitter.util.StorageUnit</a>.</p><p>In general, users should prefer setting the <span class="extype" name="maxRequestSizeFlag">maxRequestSizeFlag</span> <span class="extype" name="Flag">Flag</span> value.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/util/docs/com/twitter/util/StorageUnit.html" class="extype" name="com.twitter.util.StorageUnit">com.twitter.util.StorageUnit</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Http$$Server.html#withMaxRequestSize(size:com.twitter.util.StorageUnit):com.twitter.finagle.Http.Server" class="extype" name="com.twitter.finagle.Http.Server">com.twitter.finagle.Http.Server.withMaxRequestSize</a></p></span><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpServerTrait.maxRequestSizeFlag">com.twitter.finatra.http.HttpServerTrait.maxRequestSizeFlag</span></p></span></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#defaultOutput" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultOutput:String"></a>
       <span class="permalink">
@@ -1394,7 +1449,7 @@ SLF4J BridgeHandler from being removed.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Logging</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#defaultShutdownTimeout" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.HttpServerTrait#defaultShutdownTimeout" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultShutdownTimeout:com.twitter.util.Duration"></a><a id="defaultShutdownTimeout:Duration"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/HttpServer.html#defaultShutdownTimeout:com.twitter.util.Duration" title="Permalink">
@@ -1409,7 +1464,11 @@ SLF4J BridgeHandler from being removed.
         <span class="name">defaultShutdownTimeout</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
+      <p class="shortcomment cmt">Default shutdown timeout used as the <span class="extype" name="Flag">Flag</span> default value for <span class="extype" name="shutdownTimeoutFlag">shutdownTimeoutFlag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default shutdown timeout used as the <span class="extype" name="Flag">Flag</span> default value for <span class="extype" name="shutdownTimeoutFlag">shutdownTimeoutFlag</span>. This
+represents the deadline for the closing of this server which can be overridden to provide a
+different default programmatically when a flag value cannot be passed.</p><p>In general, users should prefer setting the <span class="extype" name="shutdownTimeoutFlag">shutdownTimeoutFlag</span> <span class="extype" name="Flag">Flag</span> value.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd><dt>Note</dt><dd><span class="cmt"><p>the value is used to denote a delta &quot;from now&quot;, that is this value is applied as:
+      <code>server.close(shutdownTimeoutDuration.fromNow())</code></p></span></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.util.Closable.close(deadline:">Time)</span></p></span><span class="cmt"><p><a href="https://github.com/twitter/util/blob/b0a5d06269b9526b4408239ce1441b2a213dd0df/util-core/src/main/scala/com/twitter/util/Duration.scala#L436" target="_blank">https://github.com/twitter/util/blob/b0a5d06269b9526b4408239ce1441b2a213dd0df/util-core/src/main/scala/com/twitter/util/Duration.scala#L436</a></p></span><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpServerTrait.shutdownTimeoutFlag">com.twitter.finatra.http.HttpServerTrait.shutdownTimeoutFlag</span></p></span></dd></dl></div>
     </li><li name="com.twitter.inject.server.TwitterServer#disableAdminHttpServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="disableAdminHttpServer:Boolean"></a>
       <span class="permalink">
@@ -1748,7 +1807,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#httpExternalPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.HttpServerTrait#httpExternalPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="httpExternalPort:Option[Int]"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/HttpServer.html#httpExternalPort:Option[Int]" title="Permalink">
@@ -1763,8 +1822,10 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
         <span class="name">httpExternalPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>BaseHttpServer → <a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#httpResponseClassifierModule" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt">Returns the bound port representing the external HTTP interface of this server.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the bound port representing the external HTTP interface of this server.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a defined <code>Some(Int)</code> representing the port of the external HTTP interface
+        if defined and bound, None otherwise.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a> → <a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.HttpServerTrait#httpResponseClassifierModule" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="httpResponseClassifierModule:com.google.inject.Module"></a><a id="httpResponseClassifierModule:Module"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/HttpServer.html#httpResponseClassifierModule:com.google.inject.Module" title="Permalink">
@@ -1780,8 +1841,8 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
       </span>
       
       <p class="shortcomment cmt">Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing an <span class="extype" name="HttpResponseClassifier">HttpResponseClassifier</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing an <span class="extype" name="HttpResponseClassifier">HttpResponseClassifier</span>.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which provides an <span class="extype" name="HttpResponseClassifier">HttpResponseClassifier</span> implementation.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.HttpServer#httpService" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which provides an <span class="extype" name="HttpResponseClassifier">HttpResponseClassifier</span> implementation.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.HttpServer#httpService" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="httpService:com.twitter.finagle.Service[com.twitter.finagle.http.Request,com.twitter.finagle.http.Response]"></a><a id="httpService:Service[Request,Response]"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/HttpServer.html#httpService:com.twitter.finagle.Service[com.twitter.finagle.http.Request,com.twitter.finagle.http.Response]" title="Permalink">
@@ -1793,11 +1854,16 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">httpService</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html#com.twitter.finagle.Service" class="extype" name="com.twitter.finagle.Service">Service</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a>]</span>
+        <span class="name">httpService</span><span class="result">: <span class="extype" name="com.twitter.finagle.Service">Service</span>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a> → BaseHttpServer</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#httpsExternalPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt">Configuration of the <code>Service[Request, Response]</code> to serve on the <span class="extype" name="ListeningServer">ListeningServer</span>
+is defined by configuring the <span class="extype" name="HttpRouter">HttpRouter</span> and not by implementation of this method,
+thus this method overridden to be final and set to a <code>NilService</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Configuration of the <code>Service[Request, Response]</code> to serve on the <span class="extype" name="ListeningServer">ListeningServer</span>
+is defined by configuring the <span class="extype" name="HttpRouter">HttpRouter</span> and not by implementation of this method,
+thus this method overridden to be final and set to a <code>NilService</code>.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a> → <a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.HttpServerTrait#httpsExternalPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="httpsExternalPort:Option[Int]"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/HttpServer.html#httpsExternalPort:Option[Int]" title="Permalink">
@@ -1812,7 +1878,9 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
         <span class="name">httpsExternalPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>BaseHttpServer → <a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns the bound port representing the external HTTPS interface of this server.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the bound port representing the external HTTPS interface of this server.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a defined <code>Some(Int)</code> representing the port of the external HTTPS interface
+        if defined and bound, None otherwise.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a> → <a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#inferClassNamesFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="inferClassNamesFlag:com.twitter.app.Flag[Boolean]"></a><a id="inferClassNamesFlag:Flag[Boolean]"></a>
       <span class="permalink">
@@ -2576,7 +2644,7 @@ If you think you need this in your main server you are most likely doing somethi
         </dd><dt>Note</dt><dd><span class="cmt"><p>You MUST call <code>super.postInjectorStartup()</code> in any overridden definition of this
 method. Failure to do so may cause your server to not completely startup.</p></span>, <span class="cmt"><p>It is NOT expected that you block in this method as you will prevent completion
 of the server lifecycle.</p></span></dd></dl></div>
-    </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#postWarmup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.HttpServerTrait#postWarmup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="postWarmup():Unit"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/HttpServer.html#postWarmup():Unit" title="Permalink">
@@ -2598,7 +2666,7 @@ instantiate any awaitable it is expected that you add the Awaitable (or
 instantiate any awaitable it is expected that you add the Awaitable (or
 <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ListeningServer.html" class="extype" name="com.twitter.finagle.ListeningServer">com.twitter.finagle.ListeningServer</a>) to the list of Awaitables using the
 <span class="extype" name="await[T">&lt;: Awaitable[_</span>(awaitable: T): Unit]] function.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer → <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a> → <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@<a href="../../inject/annotations/Lifecycle.html" class="extype" name="com.twitter.inject.annotations.Lifecycle">Lifecycle</a></span><span class="args">()</span>
               
         </dd><dt>Note</dt><dd><span class="cmt"><p>You MUST call <code>super.postWarmup()</code> in any overridden definition of this
@@ -2864,7 +2932,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
       
       <p class="shortcomment cmt">Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing a <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html" class="extype" name="com.twitter.finagle.stats.StatsReceiver">com.twitter.finagle.stats.StatsReceiver</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing a <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html" class="extype" name="com.twitter.finagle.stats.StatsReceiver">com.twitter.finagle.stats.StatsReceiver</a>.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which provides a <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html" class="extype" name="com.twitter.finagle.stats.StatsReceiver">com.twitter.finagle.stats.StatsReceiver</a> implementation.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#streamRequest" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.HttpServerTrait#streamRequest" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="streamRequest:Boolean"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/HttpServer.html#streamRequest:Boolean" title="Permalink">
@@ -2883,7 +2951,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
 Set to true if you wish to stream parse requests using request.reader.read
 </p><div class="fullcomment"><div class="comment cmt"><p>If false, the underlying Netty pipeline collects HttpChunks into the body of each Request
 Set to true if you wish to stream parse requests using request.reader.read
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd></dl></div>
     </li><li name="com.twitter.server.TwitterServer#suppressGracefulShutdownErrors" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="suppressGracefulShutdownErrors:Boolean"></a>
       <span class="permalink">
@@ -2931,7 +2999,9 @@ Set to true if you wish to stream parse requests using request.reader.read
         <span class="name">thriftPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns the bound port representing the external Thrift interface of this server.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the bound port representing the external Thrift interface of this server.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a defined <code>Some(Int)</code> representing the port of the external Thrift interface
+        if defined and bound, None otherwise.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
     </li><li name="com.twitter.inject.Logging#time" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="time[T](formatStr:String)(func:=&gt;T):T"></a><a id="time[T](String)(⇒T):T"></a>
       <span class="permalink">
@@ -3258,8 +3328,8 @@ Override, but do not call <code>super.warmup()</code> as you will trigger a lint
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.twitter.finatra.http.internal.server.BaseHttpServer">
-              <h3>Inherited from <span class="extype" name="com.twitter.finatra.http.internal.server.BaseHttpServer">BaseHttpServer</span></h3>
+        <div class="parent" name="com.twitter.finatra.http.HttpServerTrait">
+              <h3>Inherited from <a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></h3>
             </div><div class="parent" name="com.twitter.inject.server.TwitterServer">
               <h3>Inherited from <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a></h3>
             </div><div class="parent" name="com.twitter.server.Lifecycle.Warmup">

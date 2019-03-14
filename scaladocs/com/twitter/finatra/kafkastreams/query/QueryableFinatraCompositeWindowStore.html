@@ -151,16 +151,16 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.kafkastreams">kafkastreams</a></dd></dl></div>
     </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="" title=""></a>
-                        <a href="" title="">QueryableFinatraCompositeWindowStore</a>
+                        <a class="class" href="" title="A queryable Finatra composite window store for use by endpoints exposing queryable state (composite stores utilize composite keys which are comprised of a primary and secondary key."></a>
+                        <a href="" title="A queryable Finatra composite window store for use by endpoints exposing queryable state (composite stores utilize composite keys which are comprised of a primary and secondary key.">QueryableFinatraCompositeWindowStore</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="QueryableFinatraKeyValueStore.html" title=""></a>
-                        <a href="QueryableFinatraKeyValueStore.html" title="">QueryableFinatraKeyValueStore</a>
+                        <a class="class" href="QueryableFinatraKeyValueStore.html" title="A queryable Finatra key value store for use by endpoints exposing queryable state"></a>
+                        <a href="QueryableFinatraKeyValueStore.html" title="A queryable Finatra key value store for use by endpoints exposing queryable state">QueryableFinatraKeyValueStore</a>
                       </li><li class="current-entities indented5">
-                        <span class="separator"></span>
-                        <a class="class" href="QueryableFinatraWindowStore.html" title=""></a>
-                        <a href="QueryableFinatraWindowStore.html" title="">QueryableFinatraWindowStore</a>
+                        <a class="object" href="QueryableFinatraWindowStore$.html" title=""></a>
+                        <a class="class" href="QueryableFinatraWindowStore.html" title="A queryable Finatra window store for use by endpoints exposing queryable state"></a>
+                        <a href="QueryableFinatraWindowStore.html" title="A queryable Finatra window store for use by endpoints exposing queryable state">QueryableFinatraWindowStore</a>
                       </li>
               </ul>
             </div>
@@ -189,7 +189,10 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A queryable Finatra composite window store for use by endpoints exposing queryable
+state (composite stores utilize composite keys which are comprised of a primary
+and secondary key.
+</p></div><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -240,9 +243,9 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.twitter.finatra.kafkastreams.query.QueryableFinatraCompositeWindowStore#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(storeName:String,windowSize:com.twitter.util.Duration,primaryKeySerde:org.apache.kafka.common.serialization.Serde[PK],numShards:Int,numQueryablePartitions:Int,currentShardId:Int):com.twitter.finatra.kafkastreams.query.QueryableFinatraCompositeWindowStore[PK,SK,V]"></a><a id="&lt;init&gt;:QueryableFinatraCompositeWindowStore[PK,SK,V]"></a>
+      <a id="&lt;init&gt;(storeName:String,windowSize:com.twitter.util.Duration,allowedLateness:com.twitter.util.Duration,queryableAfterClose:com.twitter.util.Duration,primaryKeySerde:org.apache.kafka.common.serialization.Serde[PK],numShards:Int,numQueryablePartitions:Int,currentShardId:Int):com.twitter.finatra.kafkastreams.query.QueryableFinatraCompositeWindowStore[PK,SK,V]"></a><a id="&lt;init&gt;:QueryableFinatraCompositeWindowStore[PK,SK,V]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/query/QueryableFinatraCompositeWindowStore.html#&lt;init&gt;(storeName:String,windowSize:com.twitter.util.Duration,primaryKeySerde:org.apache.kafka.common.serialization.Serde[PK],numShards:Int,numQueryablePartitions:Int,currentShardId:Int):com.twitter.finatra.kafkastreams.query.QueryableFinatraCompositeWindowStore[PK,SK,V]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/query/QueryableFinatraCompositeWindowStore.html#&lt;init&gt;(storeName:String,windowSize:com.twitter.util.Duration,allowedLateness:com.twitter.util.Duration,queryableAfterClose:com.twitter.util.Duration,primaryKeySerde:org.apache.kafka.common.serialization.Serde[PK],numShards:Int,numQueryablePartitions:Int,currentShardId:Int):com.twitter.finatra.kafkastreams.query.QueryableFinatraCompositeWindowStore[PK,SK,V]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -251,7 +254,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">QueryableFinatraCompositeWindowStore</span><span class="params">(<span name="storeName">storeName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="windowSize">windowSize: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>, <span name="primaryKeySerde">primaryKeySerde: <span class="extype" name="org.apache.kafka.common.serialization.Serde">Serde</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.query.QueryableFinatraCompositeWindowStore.PK">PK</span>]</span>, <span name="numShards">numShards: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>, <span name="numQueryablePartitions">numQueryablePartitions: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>, <span name="currentShardId">currentShardId: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span>
+        <span class="name">QueryableFinatraCompositeWindowStore</span><span class="params">(<span name="storeName">storeName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="windowSize">windowSize: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>, <span name="allowedLateness">allowedLateness: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>, <span name="queryableAfterClose">queryableAfterClose: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>, <span name="primaryKeySerde">primaryKeySerde: <span class="extype" name="org.apache.kafka.common.serialization.Serde">Serde</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.query.QueryableFinatraCompositeWindowStore.PK">PK</span>]</span>, <span name="numShards">numShards: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>, <span name="numQueryablePartitions">numQueryablePartitions: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>, <span name="currentShardId">currentShardId: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span>
       </span>
       
       

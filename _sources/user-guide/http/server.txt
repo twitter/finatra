@@ -194,12 +194,12 @@ For example, instead of setting the `-http.port` flag, you can override the foll
     }
 
 
-For a list of what flags can be set programmatically, please see the `BaseHttpServer <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/server/BaseHttpServer.scala>`__ class.
+For a list of what flags can be set programmatically, please see the `HttpServerTrait <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/servers.scala>`__ class.
 
 Framework Modules
 ~~~~~~~~~~~~~~~~~
 
-You can override some of the modules provided by default in `HttpServer <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala>`__.
+You can override some of the modules provided by default in `HttpServer <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/servers.scala>`__.
 
 An example use-case would be to provide a custom Jackson module implementation in place of the default `FinatraJacksonModule <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala>`__.
 
@@ -292,8 +292,7 @@ For example, in your `HttpServer` you would do:
       override httpResponseClassifierModule: Module = ???
     }
 
-The bound value is also then `set on the underlying Finagle server <https://github.com/twitter/finatra/blob/9d7b430ce469d1542b603938e3ec24cf6ff79d64/http/src/main/scala/com/twitter/finatra/http/internal/server/BaseHttpServer.scala#L150>`__
-before serving.
+The bound value is also then set on the underlying Finagle server before serving.
 
 Testing
 -------

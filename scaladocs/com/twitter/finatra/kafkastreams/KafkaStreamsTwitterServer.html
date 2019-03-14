@@ -1088,6 +1088,26 @@ SLF4J BridgeHandler from being removed.
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>DeprecatedLogging → Logging</dd><dt>Note</dt><dd><span class="cmt"><p>Subclasses MUST override this method with an implementation that configures the
       <code>com.twitter.logging.Logger</code> if they want to use their configured logger factories via
       the util-logging style of configuration.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://www.slf4j.org/legacy.html#jul-to-slf4j" target="_blank">jul-to-slf4j bridge</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils#consumerFlagWithKafkaDefault" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="consumerFlagWithKafkaDefault[T](key:String)(implicitevidence$5:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="consumerFlagWithKafkaDefault[T](String)(Flaggable[T]):Flag[T]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/kafkastreams/KafkaStreamsTwitterServer.html#consumerFlagWithKafkaDefault[T](key:String)(implicitevidence$5:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">consumerFlagWithKafkaDefault</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flaggable.html#com.twitter.app.Flaggable" class="extype" name="com.twitter.app.Flaggable">Flaggable</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils.consumerFlagWithKafkaDefault.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils.consumerFlagWithKafkaDefault.T">T</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Create a flag prefixed by &quot;kafka.consumer.&quot; with a default value and help string that is
+populated from the Kafka ConsumerConfig class
+</p><div class="fullcomment"><div class="comment cmt"><p>Create a flag prefixed by &quot;kafka.consumer.&quot; with a default value and help string that is
+populated from the Kafka ConsumerConfig class
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>Type of the flag value</p></dd><dt class="param">key</dt><dd class="cmt"><p>Name of the KafkaStreams flag as specified in the ConsumerConfig class</p></dd><dt>returns</dt><dd class="cmt"><p>Flag for the specified key</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>KafkaFlagUtils</dd></dl></div>
     </li><li name="com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer#createAndStartKafkaStreams" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createAndStartKafkaStreams():Unit"></a>
       <span class="permalink">
@@ -1594,9 +1614,9 @@ Note: Disabling the admin server allows services to be deployed into environment
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>App</dd></dl></div>
     </li><li name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils#flagWithKafkaDefault" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="flagWithKafkaDefault[T](key:String)(implicitevidence$3:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="flagWithKafkaDefault[T](String)(Flaggable[T]):Flag[T]"></a>
+      <a id="flagWithKafkaDefault[T](key:String)(implicitevidence$4:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="flagWithKafkaDefault[T](String)(Flaggable[T]):Flag[T]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/kafkastreams/KafkaStreamsTwitterServer.html#flagWithKafkaDefault[T](key:String)(implicitevidence$3:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/kafkastreams/KafkaStreamsTwitterServer.html#flagWithKafkaDefault[T](key:String)(implicitevidence$4:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1608,7 +1628,11 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="name">flagWithKafkaDefault</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flaggable.html#com.twitter.app.Flaggable" class="extype" name="com.twitter.app.Flaggable">Flaggable</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils.flagWithKafkaDefault.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils.flagWithKafkaDefault.T">T</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KafkaFlagUtils</dd></dl></div>
+      <p class="shortcomment cmt">Create a flag prefixed by &quot;kafka.&quot; with a default value and help string that is
+populated from the Kafka Streams StreamsConfig class
+</p><div class="fullcomment"><div class="comment cmt"><p>Create a flag prefixed by &quot;kafka.&quot; with a default value and help string that is
+populated from the Kafka Streams StreamsConfig class
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>Type of the flag value</p></dd><dt class="param">key</dt><dd class="cmt"><p>Name of the KafkaStreams flag as specified in the StreamsConfig class</p></dd><dt>returns</dt><dd class="cmt"><p>Flag for the specified key</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>KafkaFlagUtils</dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -1628,22 +1652,6 @@ Note: Disabling the admin server allows services to be deployed into environment
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils#getKafkaDefault" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getKafkaDefault[T](key:String):T"></a><a id="getKafkaDefault[T](String):T"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/kafkastreams/KafkaStreamsTwitterServer.html#getKafkaDefault[T](key:String):T" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">getKafkaDefault</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils.getKafkaDefault.T">T</span></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KafkaFlagUtils</dd></dl></div>
     </li><li name="com.twitter.server.Lifecycle#group" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="group:String"></a>
       <span class="permalink">
@@ -1746,7 +1754,9 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
         <span class="name">httpExternalPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns the bound port representing the external HTTP interface of this server.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the bound port representing the external HTTP interface of this server.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a defined <code>Some(Int)</code> representing the port of the external HTTP interface
+        if defined and bound, None otherwise.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
     </li><li name="com.twitter.inject.server.Ports#httpsExternalPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="httpsExternalPort:Option[Int]"></a>
       <span class="permalink">
@@ -1762,7 +1772,9 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
         <span class="name">httpsExternalPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns the bound port representing the external HTTPS interface of this server.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the bound port representing the external HTTPS interface of this server.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a defined <code>Some(Int)</code> representing the port of the external HTTPS interface
+        if defined and bound, None otherwise.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#inferClassNamesFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="inferClassNamesFlag:com.twitter.app.Flag[Boolean]"></a><a id="inferClassNamesFlag:Flag[Boolean]"></a>
       <span class="permalink">
@@ -2117,42 +2129,10 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
       <p class="shortcomment cmt">ONLY INTENDED FOR USE IN TESTING.</p><div class="fullcomment"><div class="comment cmt"><p>ONLY INTENDED FOR USE IN TESTING.</p><p>Override modules from Java which redefine production bindings (only use overrideModules during testing)
 If you think you need this in your main server you are most likely doing something incorrectly.
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils#kafkaDocumentation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="kafkaDocumentation(key:String):String"></a><a id="kafkaDocumentation(String):String"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/kafkastreams/KafkaStreamsTwitterServer.html#kafkaDocumentation(key:String):String" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">kafkaDocumentation</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KafkaFlagUtils</dd></dl></div>
     </li><li name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils#kafkaFlag" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="kafkaFlag[T](key:String,default:=&gt;T,helpDoc:String)(implicitevidence$5:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="kafkaFlag[T](String,⇒T,String)(Flaggable[T]):Flag[T]"></a>
+      <a id="kafkaFlag[T](key:String,default:=&gt;T)(implicitevidence$3:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="kafkaFlag[T](String,⇒T)(Flaggable[T]):Flag[T]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/kafkastreams/KafkaStreamsTwitterServer.html#kafkaFlag[T](key:String,default:=&gt;T,helpDoc:String)(implicitevidence$5:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">kafkaFlag</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="default">default: ⇒ <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils.kafkaFlag.T">T</span></span>, <span name="helpDoc">helpDoc: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flaggable.html#com.twitter.app.Flaggable" class="extype" name="com.twitter.app.Flaggable">Flaggable</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils.kafkaFlag.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils.kafkaFlag.T">T</span>]</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KafkaFlagUtils</dd></dl></div>
-    </li><li name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils#kafkaFlag" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="kafkaFlag[T](key:String,default:=&gt;T)(implicitevidence$4:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="kafkaFlag[T](String,⇒T)(Flaggable[T]):Flag[T]"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/kafkastreams/KafkaStreamsTwitterServer.html#kafkaFlag[T](key:String,default:=&gt;T)(implicitevidence$4:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/kafkastreams/KafkaStreamsTwitterServer.html#kafkaFlag[T](key:String,default:=&gt;T)(implicitevidence$3:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2164,7 +2144,11 @@ If you think you need this in your main server you are most likely doing somethi
         <span class="name">kafkaFlag</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="default">default: ⇒ <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils.kafkaFlag.T">T</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flaggable.html#com.twitter.app.Flaggable" class="extype" name="com.twitter.app.Flaggable">Flaggable</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils.kafkaFlag.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils.kafkaFlag.T">T</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KafkaFlagUtils</dd></dl></div>
+      <p class="shortcomment cmt">Create a flag prefixed by &quot;kafka.&quot; with the specified default value and a help string that is
+populated from the Kafka Streams StreamsConfig class
+</p><div class="fullcomment"><div class="comment cmt"><p>Create a flag prefixed by &quot;kafka.&quot; with the specified default value and a help string that is
+populated from the Kafka Streams StreamsConfig class
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>Type of the flag value</p></dd><dt class="param">key</dt><dd class="cmt"><p>Name of the KafkaStreams flag as specified in the StreamsConfig class</p></dd><dt class="param">default</dt><dd class="cmt"><p>Default value for this flag</p></dd><dt>returns</dt><dd class="cmt"><p>Flag for the specified key</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>KafkaFlagUtils</dd></dl></div>
     </li><li name="com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer#kafkaStreams" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kafkaStreams:org.apache.kafka.streams.KafkaStreams"></a><a id="kafkaStreams:KafkaStreams"></a>
       <span class="permalink">
@@ -2651,6 +2635,26 @@ of the server lifecycle.</p></span></dd></dl></div>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>App</dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils#producerFlagWithKafkaDefault" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="producerFlagWithKafkaDefault[T](key:String)(implicitevidence$6:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="producerFlagWithKafkaDefault[T](String)(Flaggable[T]):Flag[T]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/kafkastreams/KafkaStreamsTwitterServer.html#producerFlagWithKafkaDefault[T](key:String)(implicitevidence$6:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">producerFlagWithKafkaDefault</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flaggable.html#com.twitter.app.Flaggable" class="extype" name="com.twitter.app.Flaggable">Flaggable</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils.producerFlagWithKafkaDefault.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils.producerFlagWithKafkaDefault.T">T</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Create a flag prefixed by &quot;kafka.producer.&quot; with a default value and help string that is
+populated from the Kafka ProducerConfig class
+</p><div class="fullcomment"><div class="comment cmt"><p>Create a flag prefixed by &quot;kafka.producer.&quot; with a default value and help string that is
+populated from the Kafka ProducerConfig class
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>Type of the flag value</p></dd><dt class="param">key</dt><dd class="cmt"><p>Name of the KafkaStreams flag as specified in the ProducerConfig class</p></dd><dt>returns</dt><dd class="cmt"><p>Flag for the specified key</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>KafkaFlagUtils</dd></dl></div>
     </li><li name="com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer#properties" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="properties:java.util.Properties"></a><a id="properties:Properties"></a>
       <span class="permalink">
@@ -2698,7 +2702,11 @@ of the server lifecycle.</p></span></dd></dl></div>
         <span class="name">requiredKafkaFlag</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="helpPrefix">helpPrefix: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flaggable.html#com.twitter.app.Flaggable" class="extype" name="com.twitter.app.Flaggable">Flaggable</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils.requiredKafkaFlag.T">T</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils.requiredKafkaFlag.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils.requiredKafkaFlag.T">T</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KafkaFlagUtils</dd></dl></div>
+      <p class="shortcomment cmt">Create a required flag prefixed by &quot;kafka.&quot; with a help string this is populated from the
+Kafka Streams StreamsConfig class
+</p><div class="fullcomment"><div class="comment cmt"><p>Create a required flag prefixed by &quot;kafka.&quot; with a help string this is populated from the
+Kafka Streams StreamsConfig class
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>Type of the flag value</p></dd><dt class="param">key</dt><dd class="cmt"><p>Name of the KafkaStreams flag as specified in the StreamsConfig class</p></dd><dt class="param">helpPrefix</dt><dd class="cmt"><p>A string to be added to the front of the Kafka documentation for this key</p></dd><dt>returns</dt><dd class="cmt"><p>Flag for the specified key</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>KafkaFlagUtils</dd></dl></div>
     </li><li name="com.twitter.inject.server.TwitterServer#resolveFinagleClientsOnStartup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="resolveFinagleClientsOnStartup:Boolean"></a>
       <span class="permalink">
@@ -3004,7 +3012,9 @@ configured.</p><p>Use the provided KafkaStreamsConfig and augment to configure y
         <span class="name">thriftPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns the bound port representing the external Thrift interface of this server.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the bound port representing the external Thrift interface of this server.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a defined <code>Some(Int)</code> representing the port of the external Thrift interface
+        if defined and bound, None otherwise.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
     </li><li name="com.twitter.inject.Logging#time" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="time[T](formatStr:String)(func:=&gt;T):T"></a><a id="time[T](String)(⇒T):T"></a>
       <span class="permalink">

@@ -321,23 +321,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.twitter.inject.conversions.string.RichString#camelify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="camelify:String"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/inject/conversions/string$$RichString.html#camelify:String" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">camelify</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      
-      <p class="shortcomment cmt">Converts foo_bar to fooBar (first letter lowercased)</p><div class="fullcomment"><div class="comment cmt"><p>Converts foo_bar to fooBar (first letter lowercased)</p><p>For example:</p><pre><span class="lit">"hello_world"</span>.camelify</pre><p>will return the String <code>&quot;helloWorld&quot;</code>.
-</p></div></div>
     </li><li name="com.twitter.inject.conversions.string.RichString#ellipse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ellipse(len:Int):String"></a><a id="ellipse(Int):String"></a>
       <span class="permalink">
@@ -350,7 +333,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ellipse</span><span class="params">(<span name="len">len: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">ellipse</span><span class="params">(<span name="len">len: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
       
@@ -402,23 +385,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.twitter.inject.conversions.string.RichString#pascalify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="pascalify:String"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/inject/conversions/string$$RichString.html#pascalify:String" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">pascalify</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      
-      <p class="shortcomment cmt">Converts foo_bar to FooBar (first letter uppercased)</p><div class="fullcomment"><div class="comment cmt"><p>Converts foo_bar to FooBar (first letter uppercased)</p><p>For example:</p><pre><span class="lit">"hello_world"</span>.pascalify</pre><p>will return the String <code>&quot;HelloWorld&quot;</code>.
-</p></div></div>
     </li><li name="com.twitter.inject.conversions.string.RichString#self" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="self:String"></a>
       <span class="permalink">
@@ -435,23 +401,6 @@
       </span>
       
       
-    </li><li name="com.twitter.inject.conversions.string.RichString#snakify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="snakify:String"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/inject/conversions/string$$RichString.html#snakify:String" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">snakify</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      
-      <p class="shortcomment cmt">Converts FooBar to foo_bar (all lowercase)</p><div class="fullcomment"><div class="comment cmt"><p>Converts FooBar to foo_bar (all lowercase)</p><p> For example:</p><pre><span class="lit">"HelloWorld"</span>.snakify</pre><p>will return the String <code>&quot;hello_world&quot;</code>.
-</p></div></div>
     </li><li name="com.twitter.inject.conversions.string.RichString#toOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="toOption:Option[String]"></a>
       <span class="permalink">
@@ -490,7 +439,70 @@
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="com.twitter.inject.conversions.string.RichString#camelify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="camelify:String"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/conversions/string$$RichString.html#camelify:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2019-03-02) Users are encouraged to use com.twitter.conversions.StringOps#toCamelCase">camelify</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Converts foo_bar to fooBar (first letter lowercased)</p><div class="fullcomment"><div class="comment cmt"><p>Converts foo_bar to fooBar (first letter lowercased)</p><p>For example:</p><pre><span class="lit">"hello_world"</span>.camelify</pre><p>will return the String <code>&quot;helloWorld&quot;</code>.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2019-03-02)</i> Users are encouraged to use com.twitter.conversions.StringOps#toCamelCase</p></dd></dl></div>
+    </li><li name="com.twitter.inject.conversions.string.RichString#pascalify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="pascalify:String"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/conversions/string$$RichString.html#pascalify:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2019-03-02) Users are encouraged to use com.twitter.conversions.StringOps#toPascalCase">pascalify</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Converts foo_bar to FooBar (first letter uppercased)</p><div class="fullcomment"><div class="comment cmt"><p>Converts foo_bar to FooBar (first letter uppercased)</p><p>For example:</p><pre><span class="lit">"hello_world"</span>.pascalify</pre><p>will return the String <code>&quot;HelloWorld&quot;</code>.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2019-03-02)</i> Users are encouraged to use com.twitter.conversions.StringOps#toPascalCase</p></dd></dl></div>
+    </li><li name="com.twitter.inject.conversions.string.RichString#snakify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="snakify:String"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/conversions/string$$RichString.html#snakify:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2019-03-02) Users are encouraged to use com.twitter.conversions.StringOps#toSnakeCase">snakify</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Converts FooBar to foo_bar (all lowercase)</p><div class="fullcomment"><div class="comment cmt"><p>Converts FooBar to foo_bar (all lowercase)</p><p> For example:</p><pre><span class="lit">"HelloWorld"</span>.snakify</pre><p>will return the String <code>&quot;hello_world&quot;</code>.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2019-03-02)</i> Users are encouraged to use com.twitter.conversions.StringOps#toSnakeCase</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

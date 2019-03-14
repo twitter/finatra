@@ -39,8 +39,6 @@ In these cases, you can programmatically disable the TwitterServer `HTTP Admin I
   you should set the `-admin.port` flag and your external interface port e.g., `-http.port` flag to
   the **same value** when disabling the TwitterServer `AdminHttpServer <https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/AdminHttpServer.scala>`__.
 
-  For a working example of disabling the TwitterServer `HTTP Admin Interface <https://twitter.github.io/twitter-server/Features.html#http-admin-interface>`__, see the `Heroku hello-world example <https://github.com/twitter/finatra/tree/master/examples/hello-world-heroku>`__.
-
 Lifecycle Management
 --------------------
 

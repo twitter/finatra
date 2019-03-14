@@ -331,8 +331,8 @@
                         <a href="AbstractController.html" title="">AbstractController</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="class" href="" title="A Finagle server which exposes an external HTTP or HTTPS interfaces implemented by a Service[Request, Response] configured via an HttpRouter."></a>
-                        <a href="" title="A Finagle server which exposes an external HTTP or HTTPS interfaces implemented by a Service[Request, Response] configured via an HttpRouter.">AbstractHttpServer</a>
+                        <a class="class" href="AbstractHttpServer.html" title="A Finagle server which exposes an external HTTP or HTTPS interfaces implemented by a Service[Request, Response] configured via an HttpRouter."></a>
+                        <a href="AbstractHttpServer.html" title="A Finagle server which exposes an external HTTP or HTTPS interfaces implemented by a Service[Request, Response] configured via an HttpRouter.">AbstractHttpServer</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
                         <a class="class" href="Controller.html" title=""></a>
@@ -347,8 +347,8 @@
                         <a href="HttpServer.html" title="A Finagle server which exposes external HTTP or HTTPS interfaces implemented by a Service[Request, Response] configured via an HttpRouter.">HttpServer</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="trait" href="HttpServerTrait.html" title="A basic HttpServer."></a>
-                        <a href="HttpServerTrait.html" title="A basic HttpServer.">HttpServerTrait</a>
+                        <a class="trait" href="" title="A basic HttpServer."></a>
+                        <a href="" title="A basic HttpServer.">HttpServerTrait</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
                         <a class="trait" href="JavaCallback.html" title=""></a>
@@ -362,12 +362,12 @@
             </div>
           </div>
           <div id="content">
-            <body class="class type">
+            <body class="trait type">
       <div id="definition">
-        <div class="big-circle class">c</div>
+        <div class="big-circle trait">t</div>
         <p id="owner"><a href="../../../index.html" class="extype" name="com">com</a>.<a href="../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../index.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="index.html" class="extype" name="com.twitter.finatra.http">http</a></p>
-        <h1>AbstractHttpServer<span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html" title="Permalink">
+        <h1>HttpServerTrait<span class="permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
@@ -376,24 +376,27 @@
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">class</span>
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">AbstractHttpServer</span><span class="result"> extends <a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a></span>
+        <span class="name">HttpServerTrait</span><span class="result"> extends <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A Finagle server which exposes an external HTTP or HTTPS interfaces implemented by a
-<code>Service[Request, Response]</code> configured via an <span class="extype" name="HttpRouter">HttpRouter</span>. This abstract class is
-intended for use from Java or with generated Java code.
-</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>Scala users are encouraged to use <a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a> instead.</p></span></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A basic HttpServer. To implement, override</p><pre><span class="kw">protected</span> <span class="kw">def</span> httpService: Service[Request, Response]</pre><p>with your <code>Service[Request, Response]</code> implementation.
+</p></div><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a>, <a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a>, <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a>, <span class="extype" name="com.twitter.server.Lifecycle.Warmup">Warmup</span>, <a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a>, <span class="extype" name="com.twitter.inject.server.DeprecatedLogging">DeprecatedLogging</span>, <a href="https://twitter.github.io/util/docs/com/twitter/logging/Logging.html#com.twitter.logging.Logging" class="extype" name="com.twitter.logging.Logging">Logging</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/TwitterServer.html#com.twitter.server.TwitterServer" class="extype" name="com.twitter.server.TwitterServer">TwitterServer</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Stats.html#com.twitter.server.Stats" class="extype" name="com.twitter.server.Stats">Stats</a>, <span class="extype" name="com.twitter.server.Lifecycle">Lifecycle</span>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Admin.html#com.twitter.server.Admin" class="extype" name="com.twitter.server.Admin">Admin</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/AdminHttpServer.html#com.twitter.server.AdminHttpServer" class="extype" name="com.twitter.server.AdminHttpServer">AdminHttpServer</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Hooks.html#com.twitter.server.Hooks" class="extype" name="com.twitter.server.Hooks">Hooks</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Linters.html#com.twitter.server.Linters" class="extype" name="com.twitter.server.Linters">Linters</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Slf4jBridge.html#com.twitter.server.Slf4jBridge" class="extype" name="com.twitter.server.Slf4jBridge">Slf4jBridge</a>, <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a>, <a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/app/App.html#com.twitter.app.App" class="extype" name="com.twitter.app.App">App</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/CloseAwaitably.html#com.twitter.util.CloseAwaitably" class="extype" name="com.twitter.util.CloseAwaitably">CloseAwaitably</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/CloseAwaitably0.html#com.twitter.util.CloseAwaitably0" class="extype" name="com.twitter.util.CloseAwaitably0">CloseAwaitably0</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>], <a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable.html#com.twitter.util.Awaitable" class="extype" name="com.twitter.util.Awaitable">Awaitable</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>], <a href="https://twitter.github.io/util/docs/com/twitter/util/Closable.html#com.twitter.util.Closable" class="extype" name="com.twitter.util.Closable">Closable</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
-        </div></div>
+          <div class="superTypes hiddenContent"><a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a>, <span class="extype" name="com.twitter.server.Lifecycle.Warmup">Warmup</span>, <a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a>, <span class="extype" name="com.twitter.inject.server.DeprecatedLogging">DeprecatedLogging</span>, <a href="https://twitter.github.io/util/docs/com/twitter/logging/Logging.html#com.twitter.logging.Logging" class="extype" name="com.twitter.logging.Logging">Logging</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/TwitterServer.html#com.twitter.server.TwitterServer" class="extype" name="com.twitter.server.TwitterServer">TwitterServer</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Stats.html#com.twitter.server.Stats" class="extype" name="com.twitter.server.Stats">Stats</a>, <span class="extype" name="com.twitter.server.Lifecycle">Lifecycle</span>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Admin.html#com.twitter.server.Admin" class="extype" name="com.twitter.server.Admin">Admin</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/AdminHttpServer.html#com.twitter.server.AdminHttpServer" class="extype" name="com.twitter.server.AdminHttpServer">AdminHttpServer</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Hooks.html#com.twitter.server.Hooks" class="extype" name="com.twitter.server.Hooks">Hooks</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Linters.html#com.twitter.server.Linters" class="extype" name="com.twitter.server.Linters">Linters</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Slf4jBridge.html#com.twitter.server.Slf4jBridge" class="extype" name="com.twitter.server.Slf4jBridge">Slf4jBridge</a>, <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a>, <a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/app/App.html#com.twitter.app.App" class="extype" name="com.twitter.app.App">App</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/CloseAwaitably.html#com.twitter.util.CloseAwaitably" class="extype" name="com.twitter.util.CloseAwaitably">CloseAwaitably</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/CloseAwaitably0.html#com.twitter.util.CloseAwaitably0" class="extype" name="com.twitter.util.CloseAwaitably0">CloseAwaitably0</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>], <a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable.html#com.twitter.util.Awaitable" class="extype" name="com.twitter.util.Awaitable">Awaitable</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>], <a href="https://twitter.github.io/util/docs/com/twitter/util/Closable.html#com.twitter.util.Closable" class="extype" name="com.twitter.util.Closable">Closable</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">
+              Known Subclasses
+            </span>
+            <div class="subClasses hiddenContent"><a href="AbstractHttpServer.html" class="extype" name="com.twitter.finatra.http.AbstractHttpServer">AbstractHttpServer</a>, <a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a></div>
+          </div></div>
         
 
       <div id="mbrsel">
@@ -418,7 +421,7 @@ intended for use from Java or with generated Java code.
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.http.AbstractHttpServer"><span>AbstractHttpServer</span></li><li class="in" name="com.twitter.finatra.http.HttpServer"><span>HttpServer</span></li><li class="in" name="com.twitter.finatra.http.HttpServerTrait"><span>HttpServerTrait</span></li><li class="in" name="com.twitter.inject.server.TwitterServer"><span>TwitterServer</span></li><li class="in" name="com.twitter.server.Lifecycle.Warmup"><span>Warmup</span></li><li class="in" name="com.twitter.inject.server.Ports"><span>Ports</span></li><li class="in" name="com.twitter.inject.server.DeprecatedLogging"><span>DeprecatedLogging</span></li><li class="in" name="com.twitter.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.server.TwitterServer"><span>TwitterServer</span></li><li class="in" name="com.twitter.server.Stats"><span>Stats</span></li><li class="in" name="com.twitter.server.Lifecycle"><span>Lifecycle</span></li><li class="in" name="com.twitter.server.Admin"><span>Admin</span></li><li class="in" name="com.twitter.server.AdminHttpServer"><span>AdminHttpServer</span></li><li class="in" name="com.twitter.server.Hooks"><span>Hooks</span></li><li class="in" name="com.twitter.server.Linters"><span>Linters</span></li><li class="in" name="com.twitter.server.Slf4jBridge"><span>Slf4jBridge</span></li><li class="in" name="com.twitter.inject.app.App"><span>App</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.app.App"><span>App</span></li><li class="in" name="com.twitter.util.CloseAwaitably"><span>CloseAwaitably</span></li><li class="in" name="com.twitter.util.CloseAwaitably0"><span>CloseAwaitably0</span></li><li class="in" name="com.twitter.util.Awaitable"><span>Awaitable</span></li><li class="in" name="com.twitter.util.Closable"><span>Closable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.http.HttpServerTrait"><span>HttpServerTrait</span></li><li class="in" name="com.twitter.inject.server.TwitterServer"><span>TwitterServer</span></li><li class="in" name="com.twitter.server.Lifecycle.Warmup"><span>Warmup</span></li><li class="in" name="com.twitter.inject.server.Ports"><span>Ports</span></li><li class="in" name="com.twitter.inject.server.DeprecatedLogging"><span>DeprecatedLogging</span></li><li class="in" name="com.twitter.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.server.TwitterServer"><span>TwitterServer</span></li><li class="in" name="com.twitter.server.Stats"><span>Stats</span></li><li class="in" name="com.twitter.server.Lifecycle"><span>Lifecycle</span></li><li class="in" name="com.twitter.server.Admin"><span>Admin</span></li><li class="in" name="com.twitter.server.AdminHttpServer"><span>AdminHttpServer</span></li><li class="in" name="com.twitter.server.Hooks"><span>Hooks</span></li><li class="in" name="com.twitter.server.Linters"><span>Linters</span></li><li class="in" name="com.twitter.server.Slf4jBridge"><span>Slf4jBridge</span></li><li class="in" name="com.twitter.inject.app.App"><span>App</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.app.App"><span>App</span></li><li class="in" name="com.twitter.util.CloseAwaitably"><span>CloseAwaitably</span></li><li class="in" name="com.twitter.util.CloseAwaitably0"><span>CloseAwaitably0</span></li><li class="in" name="com.twitter.util.Awaitable"><span>Awaitable</span></li><li class="in" name="com.twitter.util.Closable"><span>Closable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -436,35 +439,16 @@ intended for use from Java or with generated Java code.
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="com.twitter.finatra.http.AbstractHttpServer#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;():com.twitter.finatra.http.AbstractHttpServer"></a><a id="&lt;init&gt;:AbstractHttpServer"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#&lt;init&gt;():com.twitter.finatra.http.AbstractHttpServer" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">AbstractHttpServer</span><span class="params">()</span>
-      </span>
-      
-      
-    </li></ol>
-            </div>
+        
 
         
 
         <div class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="com.twitter.finatra.http.HttpServer#configureHttp" visbl="prt" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="configureHttp(router:com.twitter.finatra.http.routing.HttpRouter):Unit"></a><a id="configureHttp(HttpRouter):Unit"></a>
+              <ol><li name="com.twitter.finatra.http.HttpServerTrait#httpService" visbl="prt" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="httpService:com.twitter.finagle.Service[com.twitter.finagle.http.Request,com.twitter.finagle.http.Response]"></a><a id="httpService:Service[Request,Response]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#configureHttp(router:com.twitter.finatra.http.routing.HttpRouter):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#httpService:com.twitter.finagle.Service[com.twitter.finagle.http.Request,com.twitter.finagle.http.Response]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -473,13 +457,10 @@ intended for use from Java or with generated Java code.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">configureHttp</span><span class="params">(<span name="router">router: <a href="routing/HttpRouter.html" class="extype" name="com.twitter.finatra.http.routing.HttpRouter">HttpRouter</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">httpService</span><span class="result">: <span class="extype" name="com.twitter.finagle.Service">Service</span>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a>]</span>
       </span>
       
-      <p class="shortcomment cmt">Users MUST provide an implementation to configure the provided <span class="extype" name="HttpRouter">HttpRouter</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Users MUST provide an implementation to configure the provided <span class="extype" name="HttpRouter">HttpRouter</span>. The <span class="extype" name="HttpRouter">HttpRouter</span>
-exposes a DSL which results in a configured Finagle <code>Service[-Request, +Response]</code> to serve on
-the <span class="extype" name="ListeningServer">ListeningServer</span>.
-</p></div><dl class="paramcmts block"><dt class="param">router</dt><dd class="cmt"><p>the <span class="extype" name="HttpRouter">HttpRouter</span> to configure.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a></dd></dl></div>
+      <p class="shortcomment cmt">The Finagle <code>Service[Request, Response]</code> to serve on either configured <span class="extype" name="ListeningServer">ListeningServer</span>.</p><div class="fullcomment"><div class="comment cmt"><p>The Finagle <code>Service[Request, Response]</code> to serve on either configured <span class="extype" name="ListeningServer">ListeningServer</span>.</p><p>Users must override with an implementation to serve a <code>Service[Request, Response]</code></p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li></ol>
             </div>
 
@@ -489,7 +470,7 @@ the <span class="extype" name="ListeningServer">ListeningServer</span>.
                 <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#!=(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#!=(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -505,7 +486,7 @@ the <span class="extype" name="ListeningServer">ListeningServer</span>.
     </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html###():Int" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html###():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -521,7 +502,7 @@ the <span class="extype" name="ListeningServer">ListeningServer</span>.
     </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#==(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#==(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -537,7 +518,7 @@ the <span class="extype" name="ListeningServer">ListeningServer</span>.
     </li><li name="com.twitter.app.App#MinGrace" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="MinGrace:com.twitter.util.Duration"></a><a id="MinGrace:Duration"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#MinGrace:com.twitter.util.Duration" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#MinGrace:com.twitter.util.Duration" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -550,27 +531,10 @@ the <span class="extype" name="ListeningServer">ListeningServer</span>.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>App</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.HttpServer#accessLogModule" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="accessLogModule:com.google.inject.Module"></a><a id="accessLogModule:Module"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#accessLogModule:com.google.inject.Module" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">accessLogModule</span><span class="result">: <span class="extype" name="com.google.inject.Module">Module</span></span>
-      </span>
-      
-      <p class="shortcomment cmt">Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/filter/LogFormatter.html" class="extype" name="com.twitter.finagle.filter.LogFormatter">com.twitter.finagle.filter.LogFormatter</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/filter/LogFormatter.html" class="extype" name="com.twitter.finagle.filter.LogFormatter">com.twitter.finagle.filter.LogFormatter</a>.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which provides a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/filter/LogFormatter.html" class="extype" name="com.twitter.finagle.filter.LogFormatter">com.twitter.finagle.filter.LogFormatter</a> implementation.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a></dd></dl></div>
     </li><li name="com.twitter.server.AdminHttpServer#addAdminRoute" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="addAdminRoute(route:com.twitter.server.AdminHttpServer.Route):Unit"></a><a id="addAdminRoute(Route):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#addAdminRoute(route:com.twitter.server.AdminHttpServer.Route):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#addAdminRoute(route:com.twitter.server.AdminHttpServer.Route):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -586,7 +550,7 @@ the <span class="extype" name="ListeningServer">ListeningServer</span>.
     </li><li name="com.twitter.server.AdminHttpServer#addAdminRoutes" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="addAdminRoutes(newRoutes:Seq[com.twitter.server.AdminHttpServer.Route]):Unit"></a><a id="addAdminRoutes(Seq[Route]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#addAdminRoutes(newRoutes:Seq[com.twitter.server.AdminHttpServer.Route]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#addAdminRoutes(newRoutes:Seq[com.twitter.server.AdminHttpServer.Route]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -602,7 +566,7 @@ the <span class="extype" name="ListeningServer">ListeningServer</span>.
     </li><li name="com.twitter.inject.app.App#addFrameworkModule" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="addFrameworkModule(module:com.google.inject.Module):Unit"></a><a id="addFrameworkModule(Module):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#addFrameworkModule(module:com.google.inject.Module):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#addFrameworkModule(module:com.google.inject.Module):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -620,7 +584,7 @@ is overriding the default methods using a val instead of a def
     </li><li name="com.twitter.inject.app.App#addFrameworkModules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="addFrameworkModules(modules:com.google.inject.Module*):Unit"></a><a id="addFrameworkModules(Module*):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#addFrameworkModules(modules:com.google.inject.Module*):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#addFrameworkModules(modules:com.google.inject.Module*):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -636,7 +600,7 @@ is overriding the default methods using a val instead of a def
     </li><li name="com.twitter.inject.app.App#addFrameworkOverrideModules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="addFrameworkOverrideModules(modules:com.google.inject.Module*):Unit"></a><a id="addFrameworkOverrideModules(Module*):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#addFrameworkOverrideModules(modules:com.google.inject.Module*):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#addFrameworkOverrideModules(modules:com.google.inject.Module*):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -652,7 +616,7 @@ is overriding the default methods using a val instead of a def
     </li><li name="com.twitter.server.AdminHttpServer#adminBoundAddress" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="adminBoundAddress:java.net.InetSocketAddress"></a><a id="adminBoundAddress:InetSocketAddress"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#adminBoundAddress:java.net.InetSocketAddress" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#adminBoundAddress:java.net.InetSocketAddress" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -668,7 +632,7 @@ is overriding the default methods using a val instead of a def
     </li><li name="com.twitter.server.AdminHttpServer#adminHttpServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="adminHttpServer:com.twitter.finagle.ListeningServer"></a><a id="adminHttpServer:ListeningServer"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#adminHttpServer:com.twitter.finagle.ListeningServer" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#adminHttpServer:com.twitter.finagle.ListeningServer" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -687,7 +651,7 @@ is overriding the default methods using a val instead of a def
     </li><li name="com.twitter.server.AdminHttpServer#adminPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="adminPort:com.twitter.app.Flag[java.net.InetSocketAddress]"></a><a id="adminPort:Flag[InetSocketAddress]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#adminPort:com.twitter.app.Flag[java.net.InetSocketAddress]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#adminPort:com.twitter.app.Flag[java.net.InetSocketAddress]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -703,7 +667,7 @@ is overriding the default methods using a val instead of a def
     </li><li name="com.twitter.inject.server.TwitterServer#afterPostWarmup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="afterPostWarmup():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#afterPostWarmup():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#afterPostWarmup():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -727,7 +691,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.app.App#allowUndefinedFlags" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="allowUndefinedFlags:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#allowUndefinedFlags:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#allowUndefinedFlags:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -743,7 +707,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.logging.Logging#appendFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="appendFlag:com.twitter.app.Flag[Boolean]"></a><a id="appendFlag:Flag[Boolean]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#appendFlag:com.twitter.app.Flag[Boolean]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#appendFlag:com.twitter.app.Flag[Boolean]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -759,7 +723,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.app.App#args" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="args:Array[String]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#args:Array[String]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#args:Array[String]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -775,7 +739,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#asInstanceOf[T0]:T0" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#asInstanceOf[T0]:T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -791,7 +755,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.logging.Logging#asyncFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asyncFlag:com.twitter.app.Flag[Boolean]"></a><a id="asyncFlag:Flag[Boolean]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#asyncFlag:com.twitter.app.Flag[Boolean]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#asyncFlag:com.twitter.app.Flag[Boolean]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -807,7 +771,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.logging.Logging#asyncMaxSizeFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asyncMaxSizeFlag:com.twitter.app.Flag[Int]"></a><a id="asyncMaxSizeFlag:Flag[Int]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#asyncMaxSizeFlag:com.twitter.app.Flag[Int]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#asyncMaxSizeFlag:com.twitter.app.Flag[Int]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -823,7 +787,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.inject.server.TwitterServer#await" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="await(awaitables:com.twitter.util.Awaitable[_]*):Unit"></a><a id="await(Awaitable[_]*):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#await(awaitables:com.twitter.util.Awaitable[_]*):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#await(awaitables:com.twitter.util.Awaitable[_]*):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -839,7 +803,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.inject.server.TwitterServer#await" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="await[T&lt;:com.twitter.util.Awaitable[_]](awaitable:T):Unit"></a><a id="await[T&lt;:Awaitable[_]](T):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#await[T&lt;:com.twitter.util.Awaitable[_]](awaitable:T):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#await[T&lt;:com.twitter.util.Awaitable[_]](awaitable:T):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -856,7 +820,7 @@ registered <span class="extype" name="Awaitable">Awaitable</span> exits it will 
     </li><li name="com.twitter.inject.server.TwitterServer#beforePostWarmup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="beforePostWarmup():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#beforePostWarmup():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#beforePostWarmup():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -877,26 +841,29 @@ registered <span class="extype" name="Awaitable">Awaitable</span> exits it will 
         </dd><dt>Note</dt><dd><span class="cmt"><p>You MUST call <code>super.beforePostWarmup()</code> in any overridden definition of this
 method. Failure to do so may cause your server to not completely startup.</p></span>, <span class="cmt"><p>It is NOT expected that you block in this method as you will prevent completion
 of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Lifecycle$$Warmup.html#prebindWarmup():Unit" class="extype" name="com.twitter.server.Lifecycle.Warmup">com.twitter.server.Lifecycle.Warmup#prebindWarmup</a></p></span><span class="cmt"><p><a href="../../inject/app/App.html#beforePostWarmup():Unit" class="extmbr" name="com.twitter.inject.app.App#beforePostWarmup">com.twitter.inject.app.App#beforePostWarmup</a></p></span></dd></dl></div>
-    </li><li name="com.twitter.finatra.http.HttpServer#build" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.HttpServerTrait#build" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="build(addr:java.net.InetSocketAddress,server:com.twitter.finagle.Http.Server):com.twitter.finagle.ListeningServer"></a><a id="build(InetSocketAddress,Server):ListeningServer"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#build(addr:java.net.InetSocketAddress,server:com.twitter.finagle.Http.Server):com.twitter.finagle.ListeningServer" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#build(addr:java.net.InetSocketAddress,server:com.twitter.finagle.Http.Server):com.twitter.finagle.ListeningServer" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
         <span class="name">build</span><span class="params">(<span name="addr">addr: <span class="extype" name="java.net.InetSocketAddress">InetSocketAddress</span></span>, <span name="server">server: <span class="extype" name="com.twitter.finagle.Http.Server">Server</span></span>)</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ListeningServer.html#com.twitter.finagle.ListeningServer" class="extype" name="com.twitter.finagle.ListeningServer">ListeningServer</a></span>
       </span>
       
-      <p class="shortcomment cmt">Serve the <code>Service[Request, Response]</code> from the configured <span class="extype" name="HttpRouter">HttpRouter</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Serve the <code>Service[Request, Response]</code> from the configured <span class="extype" name="HttpRouter">HttpRouter</span>.</p></div><dl class="paramcmts block"><dt class="param">addr</dt><dd class="cmt"><p>the <span class="extype" name="InetSocketAddress">InetSocketAddress</span> address to bind the resultant <span class="extype" name="ListeningServer">ListeningServer</span>.</p></dd><dt class="param">server</dt><dd class="cmt"><p>the configured <span class="extype" name="Http.Server">Http.Server</span> stack.</p></dd><dt>returns</dt><dd class="cmt"><p>a constructed <span class="extype" name="ListeningServer">ListeningServer</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="index.html" class="extype" name="com.twitter.finatra.http">com.twitter.finatra.http</a>] </dd><dt>Definition Classes</dt><dd><a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a> → <a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd></dl></div>
+      <p class="shortcomment cmt">Construct a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ListeningServer.html" class="extype" name="com.twitter.finagle.ListeningServer">com.twitter.finagle.ListeningServer</a> from the given <span class="extype" name="InetSocketAddress">InetSocketAddress</span> addr
+and configured <span class="extype" name="Http.Server">Http.Server</span> stack.</p><div class="fullcomment"><div class="comment cmt"><p>Construct a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ListeningServer.html" class="extype" name="com.twitter.finagle.ListeningServer">com.twitter.finagle.ListeningServer</a> from the given <span class="extype" name="InetSocketAddress">InetSocketAddress</span> addr
+and configured <span class="extype" name="Http.Server">Http.Server</span> stack.
+</p></div><dl class="paramcmts block"><dt class="param">addr</dt><dd class="cmt"><p>the <span class="extype" name="InetSocketAddress">InetSocketAddress</span> address to bind the resultant <span class="extype" name="ListeningServer">ListeningServer</span>.</p></dd><dt class="param">server</dt><dd class="cmt"><p>the configured <span class="extype" name="Http.Server">Http.Server</span> stack.</p></dd><dt>returns</dt><dd class="cmt"><p>a constructed <span class="extype" name="ListeningServer">ListeningServer</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="index.html" class="extype" name="com.twitter.finatra.http">com.twitter.finatra.http</a>] </dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#clone():Object" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#clone():Object" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -920,7 +887,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.app.App#close" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="close(deadline:com.twitter.util.Time):com.twitter.util.Future[Unit]"></a><a id="close(Time):Future[Unit]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#close(deadline:com.twitter.util.Time):com.twitter.util.Future[Unit]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#close(deadline:com.twitter.util.Time):com.twitter.util.Future[Unit]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -936,7 +903,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.util.Closable#close" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="close(after:com.twitter.util.Duration):com.twitter.util.Future[Unit]"></a><a id="close(Duration):Future[Unit]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#close(after:com.twitter.util.Duration):com.twitter.util.Future[Unit]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#close(after:com.twitter.util.Duration):com.twitter.util.Future[Unit]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -952,7 +919,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.util.Closable#close" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="close():com.twitter.util.Future[Unit]"></a><a id="close():Future[Unit]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#close():com.twitter.util.Future[Unit]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#close():com.twitter.util.Future[Unit]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -968,7 +935,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.util.CloseAwaitably0#closeAwaitably" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="closeAwaitably(f:=&gt;com.twitter.util.Future[U]):com.twitter.util.Future[U]"></a><a id="closeAwaitably(⇒Future[Unit]):Future[Unit]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#closeAwaitably(f:=&gt;com.twitter.util.Future[U]):com.twitter.util.Future[U]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#closeAwaitably(f:=&gt;com.twitter.util.Future[U]):com.twitter.util.Future[U]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -984,7 +951,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.app.App#closeOnExit" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="closeOnExit(closable:com.twitter.util.Closable):Unit"></a><a id="closeOnExit(Closable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#closeOnExit(closable:com.twitter.util.Closable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#closeOnExit(closable:com.twitter.util.Closable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1000,7 +967,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.app.App#closeOnExitLast" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="closeOnExitLast(closable:com.twitter.util.Closable):Unit"></a><a id="closeOnExitLast(Closable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#closeOnExitLast(closable:com.twitter.util.Closable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#closeOnExitLast(closable:com.twitter.util.Closable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1016,7 +983,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.server.AdminHttpServer#configureAdminHttpServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configureAdminHttpServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server"></a><a id="configureAdminHttpServer(Server):Server"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#configureAdminHttpServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#configureAdminHttpServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1032,7 +999,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.finatra.http.HttpServerTrait#configureHttpServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configureHttpServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server"></a><a id="configureHttpServer(Server):Server"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#configureHttpServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#configureHttpServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1050,11 +1017,11 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
  server
    .withMaxInitialLineSize(2048)
 }
-</p></div><dl class="paramcmts block"><dt class="param">server</dt><dd class="cmt"><p>- the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Http$$Server.html" class="extype" name="com.twitter.finagle.Http.Server">com.twitter.finagle.Http.Server</a> to configure.</p></dd><dt>returns</dt><dd class="cmt"><p>a configured Http.Server.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">server</dt><dd class="cmt"><p>- the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Http$$Server.html" class="extype" name="com.twitter.finagle.Http.Server">com.twitter.finagle.Http.Server</a> to configure.</p></dd><dt>returns</dt><dd class="cmt"><p>a configured Http.Server.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="com.twitter.finatra.http.HttpServerTrait#configureHttpsServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configureHttpsServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server"></a><a id="configureHttpsServer(Server):Server"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#configureHttpsServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#configureHttpsServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1073,11 +1040,11 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
    .withMaxInitialLineSize(2048)
    .withTransport.tls(....)
 }
-</p></div><dl class="paramcmts block"><dt class="param">server</dt><dd class="cmt"><p>- the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Http$$Server.html" class="extype" name="com.twitter.finagle.Http.Server">com.twitter.finagle.Http.Server</a> to configure.</p></dd><dt>returns</dt><dd class="cmt"><p>a configured Http.Server.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">server</dt><dd class="cmt"><p>- the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Http$$Server.html" class="extype" name="com.twitter.finagle.Http.Server">com.twitter.finagle.Http.Server</a> to configure.</p></dd><dt>returns</dt><dd class="cmt"><p>a configured Http.Server.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="com.twitter.inject.server.DeprecatedLogging#configureLoggerFactories" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configureLoggerFactories():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#configureLoggerFactories():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#configureLoggerFactories():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1100,7 +1067,7 @@ SLF4J BridgeHandler from being removed.
     </li><li name="com.twitter.util.logging.Logging#debug" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debug(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="debug(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#debug(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#debug(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1116,7 +1083,7 @@ SLF4J BridgeHandler from being removed.
     </li><li name="com.twitter.util.logging.Logging#debug" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debug(message:=&gt;Any,cause:Throwable):Unit"></a><a id="debug(⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#debug(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#debug(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1132,7 +1099,7 @@ SLF4J BridgeHandler from being removed.
     </li><li name="com.twitter.util.logging.Logging#debug" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debug(marker:org.slf4j.Marker,message:=&gt;Any):Unit"></a><a id="debug(Marker,⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#debug(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#debug(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1148,7 +1115,7 @@ SLF4J BridgeHandler from being removed.
     </li><li name="com.twitter.util.logging.Logging#debug" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debug(message:=&gt;Any):Unit"></a><a id="debug(⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#debug(message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#debug(message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1164,7 +1131,7 @@ SLF4J BridgeHandler from being removed.
     </li><li name="com.twitter.inject.Logging#debugFutureResult" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debugFutureResult[T](msg:String)(func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]"></a><a id="debugFutureResult[T](String)(⇒Future[T]):Future[T]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#debugFutureResult[T](msg:String)(func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#debugFutureResult[T](msg:String)(func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1181,7 +1148,7 @@ SLF4J BridgeHandler from being removed.
     </li><li name="com.twitter.util.logging.Logging#debugResult" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debugResult[T](message:=&gt;String)(fn:=&gt;T):T"></a><a id="debugResult[T](⇒String)(⇒T):T"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#debugResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#debugResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1197,7 +1164,7 @@ SLF4J BridgeHandler from being removed.
     </li><li name="com.twitter.server.AdminHttpServer#defaultAdminPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultAdminPort:Int"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultAdminPort:Int" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#defaultAdminPort:Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1213,7 +1180,7 @@ SLF4J BridgeHandler from being removed.
     </li><li name="com.twitter.logging.Logging#defaultAppend" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultAppend:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultAppend:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#defaultAppend:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1229,7 +1196,7 @@ SLF4J BridgeHandler from being removed.
     </li><li name="com.twitter.app.App#defaultCloseGracePeriod" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultCloseGracePeriod:com.twitter.util.Duration"></a><a id="defaultCloseGracePeriod:Duration"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultCloseGracePeriod:com.twitter.util.Duration" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#defaultCloseGracePeriod:com.twitter.util.Duration" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1245,7 +1212,7 @@ SLF4J BridgeHandler from being removed.
     </li><li name="com.twitter.logging.Logging#defaultFormatter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultFormatter:com.twitter.logging.Formatter"></a><a id="defaultFormatter:Formatter"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultFormatter:com.twitter.logging.Formatter" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#defaultFormatter:com.twitter.logging.Formatter" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1261,7 +1228,7 @@ SLF4J BridgeHandler from being removed.
     </li><li name="com.twitter.finatra.http.HttpServerTrait#defaultHttpAnnouncement" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultHttpAnnouncement:String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultHttpAnnouncement:String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#defaultHttpAnnouncement:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1278,11 +1245,11 @@ SLF4J BridgeHandler from being removed.
 <span class="extype" name="httpAnnounceFlag">httpAnnounceFlag</span>. This can be overridden to provide a different default programmatically
 when a flag value cannot be passed. An empty String value is an indication to not perform any
 announcement of the server.</p><p>In general, users should prefer setting the <span class="extype" name="httpAnnounceFlag">httpAnnounceFlag</span> <span class="extype" name="Flag">Flag</span> value.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finagle.ListeningServer.announce(addr:">String)</span></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finagle.ListeningServer.announce(addr:">String)</span></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.HttpServerTrait#defaultHttpPort" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultHttpPort:String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultHttpPort:String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#defaultHttpPort:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1297,11 +1264,11 @@ announcement of the server.</p><p>In general, users should prefer setting the <s
       <p class="shortcomment cmt">Default external HTTP port used as the <span class="extype" name="Flag">Flag</span> default value for <span class="extype" name="httpPortFlag">httpPortFlag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default external HTTP port used as the <span class="extype" name="Flag">Flag</span> default value for <span class="extype" name="httpPortFlag">httpPortFlag</span>. This can be
 overridden to provide a different default programmatically when a flag value cannot be passed.
 The format of this value is expected to be a String in the form of &quot;:port&quot;.</p><p>In general, users should prefer setting the <span class="extype" name="httpPortFlag">httpPortFlag</span> <span class="extype" name="Flag">Flag</span> value.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpServerTrait.httpPortFlag">com.twitter.finatra.http.HttpServerTrait.httpPortFlag</span></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpServerTrait.httpPortFlag">com.twitter.finatra.http.HttpServerTrait.httpPortFlag</span></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.HttpServerTrait#defaultHttpServerName" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultHttpServerName:String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultHttpServerName:String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#defaultHttpServerName:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1317,11 +1284,11 @@ The format of this value is expected to be a String in the form of &quot;:port&q
 <span class="extype" name="httpServerNameFlag">httpServerNameFlag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default server name for the external HTTP interface used as the <span class="extype" name="Flag">Flag</span> default value for
 <span class="extype" name="httpServerNameFlag">httpServerNameFlag</span>. This can be overridden to provide a different default programmatically
 when a flag value cannot be passed.</p><p>In general, users should prefer setting the <span class="extype" name="httpServerNameFlag">httpServerNameFlag</span> <span class="extype" name="Flag">Flag</span> value.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpServerTrait.httpServerNameFlag">com.twitter.finatra.http.HttpServerTrait.httpServerNameFlag</span></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpServerTrait.httpServerNameFlag">com.twitter.finatra.http.HttpServerTrait.httpServerNameFlag</span></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.HttpServerTrait#defaultHttpsAnnouncement" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultHttpsAnnouncement:String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultHttpsAnnouncement:String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#defaultHttpsAnnouncement:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1338,11 +1305,11 @@ when a flag value cannot be passed.</p><p>In general, users should prefer settin
 <span class="extype" name="httpsAnnounceFlag">httpsAnnounceFlag</span>. This can be overridden to provide a different default programmatically
 when a flag value cannot be passed. An empty String value is an indication to not perform any
 announcement of the server.</p><p>In general, users should prefer setting the <span class="extype" name="httpsAnnounceFlag">httpsAnnounceFlag</span> <span class="extype" name="Flag">Flag</span> value.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finagle.ListeningServer.announce(addr:">String)</span></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finagle.ListeningServer.announce(addr:">String)</span></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.HttpServerTrait#defaultHttpsPort" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultHttpsPort:String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultHttpsPort:String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#defaultHttpsPort:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1357,11 +1324,11 @@ announcement of the server.</p><p>In general, users should prefer setting the <s
       <p class="shortcomment cmt">Default external HTTPS port used as the <span class="extype" name="Flag">Flag</span> default value for <span class="extype" name="httpsPortFlag">httpsPortFlag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default external HTTPS port used as the <span class="extype" name="Flag">Flag</span> default value for <span class="extype" name="httpsPortFlag">httpsPortFlag</span>. This can
 be overridden to provide a different default programmatically when a flag value cannot be
 passed. The format of this value is expected to be a String in the form of &quot;:port&quot;.</p><p>In general, users should prefer setting the <span class="extype" name="httpsPortFlag">httpsPortFlag</span> <span class="extype" name="Flag">Flag</span> value.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpServerTrait.httpsPortFlag">com.twitter.finatra.http.HttpServerTrait.httpsPortFlag</span></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpServerTrait.httpsPortFlag">com.twitter.finatra.http.HttpServerTrait.httpsPortFlag</span></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.HttpServerTrait#defaultHttpsServerName" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultHttpsServerName:String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultHttpsServerName:String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#defaultHttpsServerName:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1377,11 +1344,11 @@ passed. The format of this value is expected to be a String in the form of &quot
 for <span class="extype" name="httpsServerNameFlag">httpsServerNameFlag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default server name for serving the external HTTPS interface used as the <span class="extype" name="Flag">Flag</span> default value
 for <span class="extype" name="httpsServerNameFlag">httpsServerNameFlag</span>. This can be overridden to provide a different default
 programmatically when a flag value cannot be passed.</p><p>In general, users should prefer setting the <span class="extype" name="httpsServerNameFlag">httpsServerNameFlag</span> <span class="extype" name="Flag">Flag</span> value.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpServerTrait.httpsServerNameFlag">com.twitter.finatra.http.HttpServerTrait.httpsServerNameFlag</span></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpServerTrait.httpsServerNameFlag">com.twitter.finatra.http.HttpServerTrait.httpsServerNameFlag</span></p></span></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#defaultLogLevel" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultLogLevel:com.twitter.logging.Level"></a><a id="defaultLogLevel:Level"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultLogLevel:com.twitter.logging.Level" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#defaultLogLevel:com.twitter.logging.Level" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1397,7 +1364,7 @@ programmatically when a flag value cannot be passed.</p><p>In general, users sho
     </li><li name="com.twitter.finatra.http.HttpServerTrait#defaultMaxRequestSize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultMaxRequestSize:com.twitter.util.StorageUnit"></a><a id="defaultMaxRequestSize:StorageUnit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultMaxRequestSize:com.twitter.util.StorageUnit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#defaultMaxRequestSize:com.twitter.util.StorageUnit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1414,11 +1381,11 @@ for <span class="extype" name="maxRequestSizeFlag">maxRequestSizeFlag</span>.</p
 for <span class="extype" name="maxRequestSizeFlag">maxRequestSizeFlag</span>. This can be overridden to provide a different default
 programmatically when a flag value cannot be passed. The format of this flag is expected to be
 a String which is parsable into a <a href="https://twitter.github.io/util/docs/com/twitter/util/StorageUnit.html" class="extype" name="com.twitter.util.StorageUnit">com.twitter.util.StorageUnit</a>.</p><p>In general, users should prefer setting the <span class="extype" name="maxRequestSizeFlag">maxRequestSizeFlag</span> <span class="extype" name="Flag">Flag</span> value.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/util/docs/com/twitter/util/StorageUnit.html" class="extype" name="com.twitter.util.StorageUnit">com.twitter.util.StorageUnit</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Http$$Server.html#withMaxRequestSize(size:com.twitter.util.StorageUnit):com.twitter.finagle.Http.Server" class="extype" name="com.twitter.finagle.Http.Server">com.twitter.finagle.Http.Server.withMaxRequestSize</a></p></span><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpServerTrait.maxRequestSizeFlag">com.twitter.finatra.http.HttpServerTrait.maxRequestSizeFlag</span></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/util/docs/com/twitter/util/StorageUnit.html" class="extype" name="com.twitter.util.StorageUnit">com.twitter.util.StorageUnit</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Http$$Server.html#withMaxRequestSize(size:com.twitter.util.StorageUnit):com.twitter.finagle.Http.Server" class="extype" name="com.twitter.finagle.Http.Server">com.twitter.finagle.Http.Server.withMaxRequestSize</a></p></span><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpServerTrait.maxRequestSizeFlag">com.twitter.finatra.http.HttpServerTrait.maxRequestSizeFlag</span></p></span></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#defaultOutput" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultOutput:String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultOutput:String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#defaultOutput:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1434,7 +1401,7 @@ a String which is parsable into a <a href="https://twitter.github.io/util/docs/c
     </li><li name="com.twitter.logging.Logging#defaultRollPolicy" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultRollPolicy:com.twitter.logging.Policy"></a><a id="defaultRollPolicy:Policy"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultRollPolicy:com.twitter.logging.Policy" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#defaultRollPolicy:com.twitter.logging.Policy" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1450,7 +1417,7 @@ a String which is parsable into a <a href="https://twitter.github.io/util/docs/c
     </li><li name="com.twitter.logging.Logging#defaultRotateCount" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultRotateCount:Int"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultRotateCount:Int" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#defaultRotateCount:Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1466,7 +1433,7 @@ a String which is parsable into a <a href="https://twitter.github.io/util/docs/c
     </li><li name="com.twitter.finatra.http.HttpServerTrait#defaultShutdownTimeout" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultShutdownTimeout:com.twitter.util.Duration"></a><a id="defaultShutdownTimeout:Duration"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultShutdownTimeout:com.twitter.util.Duration" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#defaultShutdownTimeout:com.twitter.util.Duration" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1481,12 +1448,12 @@ a String which is parsable into a <a href="https://twitter.github.io/util/docs/c
       <p class="shortcomment cmt">Default shutdown timeout used as the <span class="extype" name="Flag">Flag</span> default value for <span class="extype" name="shutdownTimeoutFlag">shutdownTimeoutFlag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default shutdown timeout used as the <span class="extype" name="Flag">Flag</span> default value for <span class="extype" name="shutdownTimeoutFlag">shutdownTimeoutFlag</span>. This
 represents the deadline for the closing of this server which can be overridden to provide a
 different default programmatically when a flag value cannot be passed.</p><p>In general, users should prefer setting the <span class="extype" name="shutdownTimeoutFlag">shutdownTimeoutFlag</span> <span class="extype" name="Flag">Flag</span> value.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd><dt>Note</dt><dd><span class="cmt"><p>the value is used to denote a delta &quot;from now&quot;, that is this value is applied as:
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Note</dt><dd><span class="cmt"><p>the value is used to denote a delta &quot;from now&quot;, that is this value is applied as:
       <code>server.close(shutdownTimeoutDuration.fromNow())</code></p></span></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.util.Closable.close(deadline:">Time)</span></p></span><span class="cmt"><p><a href="https://github.com/twitter/util/blob/b0a5d06269b9526b4408239ce1441b2a213dd0df/util-core/src/main/scala/com/twitter/util/Duration.scala#L436" target="_blank">https://github.com/twitter/util/blob/b0a5d06269b9526b4408239ce1441b2a213dd0df/util-core/src/main/scala/com/twitter/util/Duration.scala#L436</a></p></span><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpServerTrait.shutdownTimeoutFlag">com.twitter.finatra.http.HttpServerTrait.shutdownTimeoutFlag</span></p></span></dd></dl></div>
     </li><li name="com.twitter.inject.server.TwitterServer#disableAdminHttpServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="disableAdminHttpServer:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#disableAdminHttpServer:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#disableAdminHttpServer:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1504,7 +1471,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#eq(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1520,7 +1487,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#equals(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#equals(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1536,7 +1503,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.util.logging.Logging#error" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="error(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="error(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#error(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#error(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1552,7 +1519,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.util.logging.Logging#error" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="error(message:=&gt;Any,cause:Throwable):Unit"></a><a id="error(⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#error(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#error(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1568,7 +1535,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.util.logging.Logging#error" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="error(marker:org.slf4j.Marker,message:=&gt;Any):Unit"></a><a id="error(Marker,⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#error(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#error(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1584,7 +1551,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.util.logging.Logging#error" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="error(message:=&gt;Any):Unit"></a><a id="error(⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#error(message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#error(message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1600,7 +1567,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.util.logging.Logging#errorResult" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="errorResult[T](message:=&gt;String)(fn:=&gt;T):T"></a><a id="errorResult[T](⇒String)(⇒T):T"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#errorResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#errorResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1616,7 +1583,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.app.App#exitOnError" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="exitOnError(reason:String,details:=&gt;String):Unit"></a><a id="exitOnError(String,⇒String):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#exitOnError(reason:String,details:=&gt;String):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#exitOnError(reason:String,details:=&gt;String):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1632,7 +1599,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.app.App#exitOnError" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="exitOnError(reason:String):Unit"></a><a id="exitOnError(String):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#exitOnError(reason:String):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#exitOnError(reason:String):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1648,7 +1615,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.app.App#exitOnError" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="exitOnError(throwable:Throwable):Unit"></a><a id="exitOnError(Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#exitOnError(throwable:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#exitOnError(throwable:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1664,7 +1631,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.inject.server.TwitterServer#failfastOnFlagsNotParsed" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="failfastOnFlagsNotParsed:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#failfastOnFlagsNotParsed:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#failfastOnFlagsNotParsed:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1680,7 +1647,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#finalize():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#finalize():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1702,7 +1669,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.app.App#flag" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="flag:com.twitter.app.Flags"></a><a id="flag:Flags"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#flag:com.twitter.app.Flags" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#flag:com.twitter.app.Flags" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1718,7 +1685,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#getClass():Class[_]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#getClass():Class[_]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1737,7 +1704,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.server.Lifecycle#group" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="group:String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#group:String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#group:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1753,7 +1720,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.inject.server.TwitterServer#handle" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="handle(clazz:Class[_&lt;:com.twitter.inject.utils.Handler]):Unit"></a><a id="handle(Class[_&lt;:Handler]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#handle(clazz:Class[_&lt;:com.twitter.inject.utils.Handler]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#handle(clazz:Class[_&lt;:com.twitter.inject.utils.Handler]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1771,7 +1738,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.inject.server.TwitterServer#handle" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="handle[T&lt;:com.twitter.inject.utils.Handler]()(implicitevidence$1:Manifest[T]):Unit"></a><a id="handle[T&lt;:Handler]()(Manifest[T]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#handle[T&lt;:com.twitter.inject.utils.Handler]()(implicitevidence$1:Manifest[T]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#handle[T&lt;:com.twitter.inject.utils.Handler]()(implicitevidence$1:Manifest[T]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1789,7 +1756,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.logging.Logging#handlers" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="handlers:List[()=&gt;com.twitter.logging.Handler]"></a><a id="handlers:List[()⇒Handler]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#handlers:List[()=&gt;com.twitter.logging.Handler]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#handlers:List[()=&gt;com.twitter.logging.Handler]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1805,7 +1772,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#hashCode():Int" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#hashCode():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1824,7 +1791,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.finatra.http.HttpServerTrait#httpExternalPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="httpExternalPort:Option[Int]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#httpExternalPort:Option[Int]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#httpExternalPort:Option[Int]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1838,11 +1805,11 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
       
       <p class="shortcomment cmt">Returns the bound port representing the external HTTP interface of this server.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the bound port representing the external HTTP interface of this server.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a defined <code>Some(Int)</code> representing the port of the external HTTP interface
-        if defined and bound, None otherwise.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a> → <a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
+        if defined and bound, None otherwise.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a> → <a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
     </li><li name="com.twitter.finatra.http.HttpServerTrait#httpResponseClassifierModule" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="httpResponseClassifierModule:com.google.inject.Module"></a><a id="httpResponseClassifierModule:Module"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#httpResponseClassifierModule:com.google.inject.Module" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#httpResponseClassifierModule:com.google.inject.Module" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1855,32 +1822,11 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
       </span>
       
       <p class="shortcomment cmt">Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing an <span class="extype" name="HttpResponseClassifier">HttpResponseClassifier</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing an <span class="extype" name="HttpResponseClassifier">HttpResponseClassifier</span>.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which provides an <span class="extype" name="HttpResponseClassifier">HttpResponseClassifier</span> implementation.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.http.HttpServer#httpService" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="httpService:com.twitter.finagle.Service[com.twitter.finagle.http.Request,com.twitter.finagle.http.Response]"></a><a id="httpService:Service[Request,Response]"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#httpService:com.twitter.finagle.Service[com.twitter.finagle.http.Request,com.twitter.finagle.http.Response]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">httpService</span><span class="result">: <span class="extype" name="com.twitter.finagle.Service">Service</span>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a>]</span>
-      </span>
-      
-      <p class="shortcomment cmt">Configuration of the <code>Service[Request, Response]</code> to serve on the <span class="extype" name="ListeningServer">ListeningServer</span>
-is defined by configuring the <span class="extype" name="HttpRouter">HttpRouter</span> and not by implementation of this method,
-thus this method overridden to be final and set to a <code>NilService</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Configuration of the <code>Service[Request, Response]</code> to serve on the <span class="extype" name="ListeningServer">ListeningServer</span>
-is defined by configuring the <span class="extype" name="HttpRouter">HttpRouter</span> and not by implementation of this method,
-thus this method overridden to be final and set to a <code>NilService</code>.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a> → <a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which provides an <span class="extype" name="HttpResponseClassifier">HttpResponseClassifier</span> implementation.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="com.twitter.finatra.http.HttpServerTrait#httpsExternalPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="httpsExternalPort:Option[Int]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#httpsExternalPort:Option[Int]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#httpsExternalPort:Option[Int]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1894,11 +1840,11 @@ thus this method overridden to be final and set to a <code>NilService</code>.
       
       <p class="shortcomment cmt">Returns the bound port representing the external HTTPS interface of this server.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the bound port representing the external HTTPS interface of this server.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a defined <code>Some(Int)</code> representing the port of the external HTTPS interface
-        if defined and bound, None otherwise.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a> → <a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
+        if defined and bound, None otherwise.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a> → <a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#inferClassNamesFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="inferClassNamesFlag:com.twitter.app.Flag[Boolean]"></a><a id="inferClassNamesFlag:Flag[Boolean]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#inferClassNamesFlag:com.twitter.app.Flag[Boolean]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#inferClassNamesFlag:com.twitter.app.Flag[Boolean]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1914,7 +1860,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="com.twitter.util.logging.Logging#info" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="info(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="info(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#info(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#info(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1930,7 +1876,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="com.twitter.util.logging.Logging#info" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="info(message:=&gt;Any,cause:Throwable):Unit"></a><a id="info(⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#info(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#info(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1946,7 +1892,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="com.twitter.util.logging.Logging#info" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="info(marker:org.slf4j.Marker,message:=&gt;Any):Unit"></a><a id="info(Marker,⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#info(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#info(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1962,7 +1908,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="com.twitter.util.logging.Logging#info" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="info(message:=&gt;Any):Unit"></a><a id="info(⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#info(message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#info(message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1978,7 +1924,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="com.twitter.util.logging.Logging#infoResult" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="infoResult[T](message:=&gt;String)(fn:=&gt;T):T"></a><a id="infoResult[T](⇒String)(⇒T):T"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#infoResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#infoResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1994,7 +1940,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="com.twitter.app.App#init" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="init(f:=&gt;Unit):Unit"></a><a id="init(⇒Unit):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#init(f:=&gt;Unit):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#init(f:=&gt;Unit):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2010,7 +1956,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="com.twitter.inject.app.App#injector" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="injector:com.twitter.inject.Injector"></a><a id="injector:Injector"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#injector:com.twitter.inject.Injector" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#injector:com.twitter.inject.Injector" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2026,7 +1972,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="com.twitter.util.logging.Logging#isDebugEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isDebugEnabled(marker:org.slf4j.Marker):Boolean"></a><a id="isDebugEnabled(Marker):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#isDebugEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#isDebugEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2042,7 +1988,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="com.twitter.util.logging.Logging#isDebugEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isDebugEnabled:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#isDebugEnabled:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#isDebugEnabled:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2058,7 +2004,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="com.twitter.util.logging.Logging#isErrorEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isErrorEnabled(marker:org.slf4j.Marker):Boolean"></a><a id="isErrorEnabled(Marker):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#isErrorEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#isErrorEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2074,7 +2020,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="com.twitter.util.logging.Logging#isErrorEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isErrorEnabled:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#isErrorEnabled:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#isErrorEnabled:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2090,7 +2036,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="com.twitter.util.logging.Logging#isInfoEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInfoEnabled(marker:org.slf4j.Marker):Boolean"></a><a id="isInfoEnabled(Marker):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#isInfoEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#isInfoEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2106,7 +2052,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="com.twitter.util.logging.Logging#isInfoEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInfoEnabled:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#isInfoEnabled:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#isInfoEnabled:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2122,7 +2068,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#isInstanceOf[T0]:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#isInstanceOf[T0]:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2138,7 +2084,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="com.twitter.util.CloseAwaitably0#isReady" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isReady(implicitpermit:com.twitter.util.Awaitable.CanAwait):Boolean"></a><a id="isReady(CanAwait):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#isReady(implicitpermit:com.twitter.util.Awaitable.CanAwait):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#isReady(implicitpermit:com.twitter.util.Awaitable.CanAwait):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2154,7 +2100,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="com.twitter.util.logging.Logging#isTraceEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isTraceEnabled(marker:org.slf4j.Marker):Boolean"></a><a id="isTraceEnabled(Marker):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#isTraceEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#isTraceEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2170,7 +2116,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="com.twitter.util.logging.Logging#isTraceEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isTraceEnabled:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#isTraceEnabled:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#isTraceEnabled:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2186,7 +2132,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="com.twitter.util.logging.Logging#isWarnEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isWarnEnabled(marker:org.slf4j.Marker):Boolean"></a><a id="isWarnEnabled(Marker):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#isWarnEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#isWarnEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2202,7 +2148,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="com.twitter.util.logging.Logging#isWarnEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isWarnEnabled:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#isWarnEnabled:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#isWarnEnabled:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2215,27 +2161,10 @@ thus this method overridden to be final and set to a <code>NilService</code>.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.HttpServer#jacksonModule" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="jacksonModule:com.google.inject.Module"></a><a id="jacksonModule:Module"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#jacksonModule:com.google.inject.Module" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">jacksonModule</span><span class="result">: <span class="extype" name="com.google.inject.Module">Module</span></span>
-      </span>
-      
-      <p class="shortcomment cmt">Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing a <a href="../json/FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">com.twitter.finatra.json.FinatraObjectMapper</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing a <a href="../json/FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">com.twitter.finatra.json.FinatraObjectMapper</a>.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which provides a <a href="../json/FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">com.twitter.finatra.json.FinatraObjectMapper</a> implementation.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a></dd></dl></div>
     </li><li name="com.twitter.inject.app.App#javaModules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="javaModules:java.util.Collection[com.google.inject.Module]"></a><a id="javaModules:Collection[Module]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#javaModules:java.util.Collection[com.google.inject.Module]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#javaModules:java.util.Collection[com.google.inject.Module]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2251,7 +2180,7 @@ thus this method overridden to be final and set to a <code>NilService</code>.
     </li><li name="com.twitter.inject.app.App#javaOverrideModules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="javaOverrideModules:java.util.Collection[com.google.inject.Module]"></a><a id="javaOverrideModules:Collection[Module]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#javaOverrideModules:java.util.Collection[com.google.inject.Module]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#javaOverrideModules:java.util.Collection[com.google.inject.Module]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2269,7 +2198,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.logging.Logging#levelFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="levelFlag:com.twitter.app.Flag[com.twitter.logging.Level]"></a><a id="levelFlag:Flag[Level]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#levelFlag:com.twitter.app.Flag[com.twitter.logging.Level]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#levelFlag:com.twitter.app.Flag[com.twitter.logging.Level]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2285,7 +2214,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.inject.server.TwitterServer#libraryName" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="libraryName:String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#libraryName:String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#libraryName:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2303,7 +2232,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.server.Linters#linterRules" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="linterRules:Seq[com.twitter.util.lint.Rule]"></a><a id="linterRules:Seq[Rule]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#linterRules:Seq[com.twitter.util.lint.Rule]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#linterRules:Seq[com.twitter.util.lint.Rule]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2319,7 +2248,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.inject.app.App#loadModules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loadModules():com.twitter.inject.app.internal.InstalledModules"></a><a id="loadModules():InstalledModules"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#loadModules():com.twitter.inject.app.internal.InstalledModules" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#loadModules():com.twitter.inject.app.internal.InstalledModules" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2335,7 +2264,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.app.App#loadServiceBindings" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loadServiceBindings:Seq[com.twitter.app.LoadService.Binding[_]]"></a><a id="loadServiceBindings:Seq[Binding[_]]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#loadServiceBindings:Seq[com.twitter.app.LoadService.Binding[_]]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#loadServiceBindings:Seq[com.twitter.app.LoadService.Binding[_]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2351,7 +2280,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.util.logging.Logging#logger" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="logger:com.twitter.util.logging.Logger"></a><a id="logger:Logger"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#logger:com.twitter.util.logging.Logger" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#logger:com.twitter.util.logging.Logger" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2367,7 +2296,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.logging.Logging#loggerFactories" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loggerFactories:List[com.twitter.logging.LoggerFactory]"></a><a id="loggerFactories:List[LoggerFactory]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#loggerFactories:List[com.twitter.logging.LoggerFactory]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#loggerFactories:List[com.twitter.logging.LoggerFactory]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2383,7 +2312,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.util.logging.Logging#loggerName" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loggerName:String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#loggerName:String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#loggerName:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2399,7 +2328,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.inject.server.TwitterServer#main" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="main():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#main():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#main():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2415,7 +2344,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.app.App#main" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="main(args:Array[String]):Unit"></a><a id="main(Array[String]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#main(args:Array[String]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#main(args:Array[String]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2428,33 +2357,10 @@ If you think you need this in your main server you are most likely doing somethi
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>App</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.HttpServer#messageBodyModule" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="messageBodyModule:com.google.inject.Module"></a><a id="messageBodyModule:Module"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#messageBodyModule:com.google.inject.Module" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">messageBodyModule</span><span class="result">: <span class="extype" name="com.google.inject.Module">Module</span></span>
-      </span>
-      
-      <p class="shortcomment cmt">Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing implementations for a
-<a href="marshalling/DefaultMessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyReader">com.twitter.finatra.http.marshalling.DefaultMessageBodyReader</a> and a
-<a href="marshalling/DefaultMessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter">com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing implementations for a
-<a href="marshalling/DefaultMessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyReader">com.twitter.finatra.http.marshalling.DefaultMessageBodyReader</a> and a
-<a href="marshalling/DefaultMessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter">com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter</a>.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which provides implementations for
-        <a href="marshalling/DefaultMessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyReader">com.twitter.finatra.http.marshalling.DefaultMessageBodyReader</a> and
-        <a href="marshalling/DefaultMessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter">com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter</a>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a></dd></dl></div>
     </li><li name="com.twitter.inject.app.App#modules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="modules:Seq[com.google.inject.Module]"></a><a id="modules:Seq[Module]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#modules:Seq[com.google.inject.Module]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#modules:Seq[com.google.inject.Module]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2467,27 +2373,10 @@ If you think you need this in your main server you are most likely doing somethi
       </span>
       
       <p class="shortcomment cmt">Production modules</p><div class="fullcomment"><div class="comment cmt"><p>Production modules</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.http.HttpServer#mustacheModule" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="mustacheModule:com.google.inject.Module"></a><a id="mustacheModule:Module"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#mustacheModule:com.google.inject.Module" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">mustacheModule</span><span class="result">: <span class="extype" name="com.google.inject.Module">Module</span></span>
-      </span>
-      
-      <p class="shortcomment cmt">Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing a <span class="extype" name="com.github.mustachejava.MustacheFactory">com.github.mustachejava.MustacheFactory</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing a <span class="extype" name="com.github.mustachejava.MustacheFactory">com.github.mustachejava.MustacheFactory</span>.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which provides a <span class="extype" name="com.github.mustachejava.MustacheFactory">com.github.mustachejava.MustacheFactory</span> implementation.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a></dd></dl></div>
     </li><li name="com.twitter.app.App#name" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="name:String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#name:String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#name:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2503,7 +2392,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#ne(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2519,7 +2408,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.app.App#nonExitingMain" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nonExitingMain(args:Array[String]):Unit"></a><a id="nonExitingMain(Array[String]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#nonExitingMain(args:Array[String]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#nonExitingMain(args:Array[String]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2535,7 +2424,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#notify():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#notify():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2554,7 +2443,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#notifyAll():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#notifyAll():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2573,7 +2462,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.app.App#onExit" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="onExit(f:=&gt;Unit):Unit"></a><a id="onExit(⇒Unit):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#onExit(f:=&gt;Unit):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#onExit(f:=&gt;Unit):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2589,7 +2478,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.logging.Logging#outputFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="outputFlag:com.twitter.app.Flag[String]"></a><a id="outputFlag:Flag[String]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#outputFlag:com.twitter.app.Flag[String]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#outputFlag:com.twitter.app.Flag[String]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2605,7 +2494,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.inject.app.App#overrideModules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="overrideModules:Seq[com.google.inject.Module]"></a><a id="overrideModules:Seq[Module]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#overrideModules:Seq[com.google.inject.Module]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#overrideModules:Seq[com.google.inject.Module]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2623,7 +2512,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.app.App#parseArgs" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="parseArgs(args:Array[String]):Unit"></a><a id="parseArgs(Array[String]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#parseArgs(args:Array[String]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#parseArgs(args:Array[String]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2636,10 +2525,10 @@ If you think you need this in your main server you are most likely doing somethi
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>App</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.HttpServer#postInjectorStartup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.inject.server.TwitterServer#postInjectorStartup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="postInjectorStartup():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#postInjectorStartup():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#postInjectorStartup():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2652,7 +2541,7 @@ If you think you need this in your main server you are most likely doing somethi
       </span>
       
       <p class="shortcomment cmt">After creation of the Injector.</p><div class="fullcomment"><div class="comment cmt"><p>After creation of the Injector. Before any other lifecycle methods.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a> → <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@<a href="../../inject/annotations/Lifecycle.html" class="extype" name="com.twitter.inject.annotations.Lifecycle">Lifecycle</a></span><span class="args">()</span>
               
         </dd><dt>Note</dt><dd><span class="cmt"><p>You MUST call <code>super.postInjectorStartup()</code> in any overridden definition of this
@@ -2661,7 +2550,7 @@ of the server lifecycle.</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.HttpServerTrait#postWarmup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="postWarmup():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#postWarmup():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#postWarmup():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2680,7 +2569,7 @@ instantiate any awaitable it is expected that you add the Awaitable (or
 instantiate any awaitable it is expected that you add the Awaitable (or
 <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ListeningServer.html" class="extype" name="com.twitter.finagle.ListeningServer">com.twitter.finagle.ListeningServer</a>) to the list of Awaitables using the
 <span class="extype" name="await[T">&lt;: Awaitable[_</span>(awaitable: T): Unit]] function.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a> → <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a> → <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@<a href="../../inject/annotations/Lifecycle.html" class="extype" name="com.twitter.inject.annotations.Lifecycle">Lifecycle</a></span><span class="args">()</span>
               
         </dd><dt>Note</dt><dd><span class="cmt"><p>You MUST call <code>super.postWarmup()</code> in any overridden definition of this
@@ -2689,7 +2578,7 @@ of the server lifecycle.</p></span></dd></dl></div>
     </li><li name="com.twitter.app.App#postmain" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="postmain(f:=&gt;Unit):Unit"></a><a id="postmain(⇒Unit):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#postmain(f:=&gt;Unit):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#postmain(f:=&gt;Unit):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2705,7 +2594,7 @@ of the server lifecycle.</p></span></dd></dl></div>
     </li><li name="com.twitter.server.Lifecycle.Warmup#prebindWarmup" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="prebindWarmup():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#prebindWarmup():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#prebindWarmup():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2721,7 +2610,7 @@ of the server lifecycle.</p></span></dd></dl></div>
     </li><li name="com.twitter.app.App#premain" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="premain(f:=&gt;Unit):Unit"></a><a id="premain(⇒Unit):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#premain(f:=&gt;Unit):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#premain(f:=&gt;Unit):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2735,9 +2624,9 @@ of the server lifecycle.</p></span></dd></dl></div>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>App</dd></dl></div>
     </li><li name="com.twitter.util.CloseAwaitably0#ready" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ready(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):CloseAwaitably0.this.type"></a><a id="ready(Duration)(CanAwait):AbstractHttpServer.this.type"></a>
+      <a id="ready(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):CloseAwaitably0.this.type"></a><a id="ready(Duration)(CanAwait):HttpServerTrait.this.type"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#ready(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):CloseAwaitably0.this.type" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#ready(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):CloseAwaitably0.this.type" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2746,14 +2635,14 @@ of the server lifecycle.</p></span></dd></dl></div>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ready</span><span class="params">(<span name="timeout">timeout: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="permit">permit: <span class="extype" name="com.twitter.util.Awaitable.CanAwait">CanAwait</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.AbstractHttpServer">AbstractHttpServer</a>.this.type</span>
+        <span class="name">ready</span><span class="params">(<span name="timeout">timeout: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="permit">permit: <span class="extype" name="com.twitter.util.Awaitable.CanAwait">CanAwait</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a>.this.type</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>CloseAwaitably0 → Awaitable</dd></dl></div>
     </li><li name="com.twitter.inject.server.TwitterServer#resolveFinagleClientsOnStartup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="resolveFinagleClientsOnStartup:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#resolveFinagleClientsOnStartup:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#resolveFinagleClientsOnStartup:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2769,7 +2658,7 @@ of the server lifecycle.</p></span></dd></dl></div>
     </li><li name="com.twitter.util.CloseAwaitably0#result" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="result(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):U"></a><a id="result(Duration)(CanAwait):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#result(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):U" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#result(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):U" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2785,7 +2674,7 @@ of the server lifecycle.</p></span></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#rollPolicyFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rollPolicyFlag:com.twitter.app.Flag[com.twitter.logging.Policy]"></a><a id="rollPolicyFlag:Flag[Policy]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#rollPolicyFlag:com.twitter.app.Flag[com.twitter.logging.Policy]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#rollPolicyFlag:com.twitter.app.Flag[com.twitter.logging.Policy]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2801,7 +2690,7 @@ of the server lifecycle.</p></span></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#rotateCountFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rotateCountFlag:com.twitter.app.Flag[Int]"></a><a id="rotateCountFlag:Flag[Int]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#rotateCountFlag:com.twitter.app.Flag[Int]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#rotateCountFlag:com.twitter.app.Flag[Int]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2817,7 +2706,7 @@ of the server lifecycle.</p></span></dd></dl></div>
     </li><li name="com.twitter.server.Admin#routes" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="routes:Seq[com.twitter.server.AdminHttpServer.Route]"></a><a id="routes:Seq[Route]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#routes:Seq[com.twitter.server.AdminHttpServer.Route]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#routes:Seq[com.twitter.server.AdminHttpServer.Route]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2833,7 +2722,7 @@ of the server lifecycle.</p></span></dd></dl></div>
     </li><li name="com.twitter.inject.server.TwitterServer#run" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="run():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#run():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#run():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2849,7 +2738,7 @@ of the server lifecycle.</p></span></dd></dl></div>
     </li><li name="com.twitter.inject.server.TwitterServer#setup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setup():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#setup():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#setup():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2875,7 +2764,7 @@ when the <a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable
     </li><li name="com.twitter.server.TwitterServer#shutdownTimer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="shutdownTimer:com.twitter.util.Timer"></a><a id="shutdownTimer:Timer"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#shutdownTimer:com.twitter.util.Timer" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#shutdownTimer:com.twitter.util.Timer" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2891,7 +2780,7 @@ when the <a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable
     </li><li name="com.twitter.inject.server.TwitterServer#start" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="start():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#start():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#start():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2916,7 +2805,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
     </li><li name="com.twitter.server.Stats#statsReceiver" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="statsReceiver:com.twitter.finagle.stats.StatsReceiver"></a><a id="statsReceiver:StatsReceiver"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#statsReceiver:com.twitter.finagle.stats.StatsReceiver" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#statsReceiver:com.twitter.finagle.stats.StatsReceiver" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2932,7 +2821,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
     </li><li name="com.twitter.inject.server.TwitterServer#statsReceiverModule" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="statsReceiverModule:com.google.inject.Module"></a><a id="statsReceiverModule:Module"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#statsReceiverModule:com.google.inject.Module" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#statsReceiverModule:com.google.inject.Module" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2949,7 +2838,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
     </li><li name="com.twitter.finatra.http.HttpServerTrait#streamRequest" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="streamRequest:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#streamRequest:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#streamRequest:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2965,11 +2854,11 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
 Set to true if you wish to stream parse requests using request.reader.read
 </p><div class="fullcomment"><div class="comment cmt"><p>If false, the underlying Netty pipeline collects HttpChunks into the body of each Request
 Set to true if you wish to stream parse requests using request.reader.read
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="com.twitter.server.TwitterServer#suppressGracefulShutdownErrors" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="suppressGracefulShutdownErrors:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#suppressGracefulShutdownErrors:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#suppressGracefulShutdownErrors:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2985,7 +2874,7 @@ Set to true if you wish to stream parse requests using request.reader.read
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3001,7 +2890,7 @@ Set to true if you wish to stream parse requests using request.reader.read
     </li><li name="com.twitter.inject.server.Ports#thriftPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="thriftPort:Option[Int]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#thriftPort:Option[Int]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#thriftPort:Option[Int]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3019,7 +2908,7 @@ Set to true if you wish to stream parse requests using request.reader.read
     </li><li name="com.twitter.inject.Logging#time" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="time[T](formatStr:String)(func:=&gt;T):T"></a><a id="time[T](String)(⇒T):T"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#time[T](formatStr:String)(func:=&gt;T):T" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#time[T](formatStr:String)(func:=&gt;T):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3035,7 +2924,7 @@ Set to true if you wish to stream parse requests using request.reader.read
     </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#toString():String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#toString():String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3051,7 +2940,7 @@ Set to true if you wish to stream parse requests using request.reader.read
     </li><li name="com.twitter.util.logging.Logging#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trace(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="trace(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#trace(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#trace(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3067,7 +2956,7 @@ Set to true if you wish to stream parse requests using request.reader.read
     </li><li name="com.twitter.util.logging.Logging#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trace(message:=&gt;Any,cause:Throwable):Unit"></a><a id="trace(⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#trace(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#trace(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3083,7 +2972,7 @@ Set to true if you wish to stream parse requests using request.reader.read
     </li><li name="com.twitter.util.logging.Logging#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trace(marker:org.slf4j.Marker,message:=&gt;Any):Unit"></a><a id="trace(Marker,⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#trace(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#trace(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3099,7 +2988,7 @@ Set to true if you wish to stream parse requests using request.reader.read
     </li><li name="com.twitter.util.logging.Logging#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trace(message:=&gt;Any):Unit"></a><a id="trace(⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#trace(message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#trace(message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3115,7 +3004,7 @@ Set to true if you wish to stream parse requests using request.reader.read
     </li><li name="com.twitter.util.logging.Logging#traceResult" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="traceResult[T](message:=&gt;String)(fn:=&gt;T):T"></a><a id="traceResult[T](⇒String)(⇒T):T"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#traceResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#traceResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3131,7 +3020,7 @@ Set to true if you wish to stream parse requests using request.reader.read
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#wait():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#wait():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3153,7 +3042,7 @@ Set to true if you wish to stream parse requests using request.reader.read
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3175,7 +3064,7 @@ Set to true if you wish to stream parse requests using request.reader.read
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#wait(x$1:Long):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#wait(x$1:Long):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3199,7 +3088,7 @@ Set to true if you wish to stream parse requests using request.reader.read
     </li><li name="com.twitter.inject.server.TwitterServer#warmup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warmup():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#warmup():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#warmup():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3217,7 +3106,7 @@ Override, but do not call <code>super.warmup()</code> as you will trigger a lint
     </li><li name="com.twitter.server.Lifecycle.Warmup#warmupComplete" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warmupComplete():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#warmupComplete():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#warmupComplete():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3233,7 +3122,7 @@ Override, but do not call <code>super.warmup()</code> as you will trigger a lint
     </li><li name="com.twitter.util.logging.Logging#warn" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warn(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="warn(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#warn(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#warn(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3249,7 +3138,7 @@ Override, but do not call <code>super.warmup()</code> as you will trigger a lint
     </li><li name="com.twitter.util.logging.Logging#warn" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warn(message:=&gt;Any,cause:Throwable):Unit"></a><a id="warn(⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#warn(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#warn(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3265,7 +3154,7 @@ Override, but do not call <code>super.warmup()</code> as you will trigger a lint
     </li><li name="com.twitter.util.logging.Logging#warn" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warn(marker:org.slf4j.Marker,message:=&gt;Any):Unit"></a><a id="warn(Marker,⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#warn(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#warn(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3281,7 +3170,7 @@ Override, but do not call <code>super.warmup()</code> as you will trigger a lint
     </li><li name="com.twitter.util.logging.Logging#warn" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warn(message:=&gt;Any):Unit"></a><a id="warn(⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#warn(message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#warn(message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3297,7 +3186,7 @@ Override, but do not call <code>super.warmup()</code> as you will trigger a lint
     </li><li name="com.twitter.util.logging.Logging#warnResult" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warnResult[T](message:=&gt;String)(fn:=&gt;T):T"></a><a id="warnResult[T](⇒String)(⇒T):T"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#warnResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#warnResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3321,7 +3210,7 @@ Override, but do not call <code>super.warmup()</code> as you will trigger a lint
               <ol><li name="com.twitter.inject.server.DeprecatedLogging#log" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="log:com.twitter.logging.Logger"></a><a id="log:Logger"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#log:com.twitter.logging.Logger" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#log:com.twitter.logging.Logger" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3342,11 +3231,7 @@ Override, but do not call <code>super.warmup()</code> as you will trigger a lint
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.twitter.finatra.http.HttpServer">
-              <h3>Inherited from <a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a></h3>
-            </div><div class="parent" name="com.twitter.finatra.http.HttpServerTrait">
-              <h3>Inherited from <a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></h3>
-            </div><div class="parent" name="com.twitter.inject.server.TwitterServer">
+        <div class="parent" name="com.twitter.inject.server.TwitterServer">
               <h3>Inherited from <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a></h3>
             </div><div class="parent" name="com.twitter.server.Lifecycle.Warmup">
               <h3>Inherited from <span class="extype" name="com.twitter.server.Lifecycle.Warmup">Warmup</span></h3>
