@@ -7,6 +7,12 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+
+* finatra-thrift: Constructing a `ThriftRouter` now requires a `c.t.f.StackTransformer`
+  ``PHAB_ID=D277493``
+
 19.3.0
 ------
 

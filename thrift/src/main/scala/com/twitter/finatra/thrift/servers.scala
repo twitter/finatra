@@ -11,6 +11,7 @@ import com.twitter.finatra.thrift.response.ThriftResponseClassifier
 import com.twitter.finatra.thrift.routing.{JavaThriftRouter, ThriftRouter}
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.internal.LibraryRegistry
+import com.twitter.inject.modules.StackTransformerModule
 import com.twitter.inject.server.{PortUtils, TwitterServer}
 import com.twitter.util.{Await, Duration}
 
@@ -35,6 +36,7 @@ trait ThriftServerTrait extends TwitterServer {
   /** Add Framework Modules */
   addFrameworkModules(
     ExceptionManagerModule,
+    StackTransformerModule,
     thriftResponseClassifierModule)
 
   /**

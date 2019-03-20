@@ -1,8 +1,9 @@
 package com.twitter.finatra.thrift.routing
 
+import com.twitter.finagle
 import com.twitter.finagle.service.NilService
 import com.twitter.finagle.thrift.{RichServerParam, ThriftService, ToThriftService}
-import com.twitter.finagle.{Filter, Service, Thrift, ThriftMux}
+import com.twitter.finagle.{Filter, Thrift, ThriftMux, Service, ServiceFactory, Stack, StackTransformer}
 import com.twitter.finatra.thrift._
 import com.twitter.finatra.thrift.exceptions.{ExceptionManager, ExceptionMapper}
 import com.twitter.finatra.thrift.internal.routing.{NullThriftService, Registrar}
@@ -101,9 +102,9 @@ private[routing] abstract class BaseThriftRouter[Router <: BaseThriftRouter[Rout
     result
   }
 
-  protected[this] def registerGlobalFilter(thriftFilter: Filter.TypeAgnostic): Unit = {
+  protected[this] def registerGlobalFilter(thriftFilter: Object, registry: LibraryRegistry): Unit = {
     if (thriftFilter ne Filter.TypeAgnostic.Identity) {
-      libraryRegistry
+      registry
         .withSection("thrift")
         .put("filters", thriftFilter.toString)
     }
@@ -122,7 +123,7 @@ private object ThriftRouter {
  *       are encouraged to use the [[JavaThriftRouter]].
  */
 @Singleton
-class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionManager)
+class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionManager, stackTransformer: StackTransformer)
     extends BaseThriftRouter[ThriftRouter](injector, exceptionManager) {
 
   private[this] var underlying: ThriftService = NullThriftService
@@ -130,7 +131,15 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
   // This map of routes is generated based on the controller and set once.
   private[this] var routes: Map[ThriftMethod, ScroogeServiceImpl] = _
 
-  protected[this] var filters: Filter.TypeAgnostic = Filter.TypeAgnostic.Identity
+  private[this] def filterStack[Req, Rep]: Stack[ServiceFactory[Req, Rep]] = {
+    val nilStack = finagle.stack.nilStack[Req, Rep]
+    val stackSvcFac = filters.foldLeft(nilStack) { (stack, filter) =>
+      stack.prepend(Stack.Role(filter.toString), filter)
+    }
+    stackTransformer.apply(stackSvcFac)
+  }
+
+  private[this] var filters: Seq[Filter.TypeAgnostic] = Nil
 
   private[finatra] def routeWarmup[M <: ThriftMethod](
     m: M
@@ -198,7 +207,7 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
    */
   def filter(filter: Filter.TypeAgnostic): ThriftRouter =
     preConfig("'filter' must be called before 'add'.") {
-      filters = filters.andThen(filter)
+      filters = filter +: filters
       this
     }
 
@@ -226,7 +235,7 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
         .instance[LibraryRegistry]
         .withSection("thrift", "methods")
 
-      registerGlobalFilter(reg, filters)
+      registerGlobalFilter(filterStack, reg)
 
       underlying = controller.config match {
         case c: Controller.ControllerConfig => addController(controller, c)
@@ -251,8 +260,14 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
       val method: ThriftMethod = cm.method
       val service = cm.impl.asInstanceOf[Service[Request[method.Args], Response[method.SuccessType]]]
       thriftMethodRegistrar.register(controller.getClass, method, cm.filters)
+      method -> {
+        val endpoint = ServiceFactory.const(cm.filters.andThen(service))
+        val stack = filterStack ++ Stack.leaf(finagle.stack.Endpoint, endpoint)
 
-      method -> filters.andThen(cm.filters).andThen(service).asInstanceOf[ScroogeServiceImpl]
+        // Materialize a stack with default params.
+        val svcFac = stack.make(Stack.Params.empty)
+        Service.pending(svcFac()).asInstanceOf[ScroogeServiceImpl]
+      }
     }.toMap
 
     info(
@@ -277,8 +292,7 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
       routes = conf.methods.map { methodService =>
         val method = methodService.method
         thriftMethodRegistrar.register(controller.getClass, method, Filter.TypeAgnostic.Identity)
-        methodService.setFilter(filters)
-
+        methodService.setStack(filterStack)
         // Convert to a ScroogeServiceImpl for issuing warmup requests
         val castedService = methodService.asInstanceOf[Service[method.Args, method.SuccessType]]
         val reqRepService = Service.mk[Request[method.Args], Response[method.SuccessType]] { req =>
@@ -294,17 +308,6 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
       )
     }
     controller.asInstanceOf[ToThriftService].toThriftService
-  }
-
-  private[this] def registerGlobalFilter(
-    registry: LibraryRegistry,
-    thriftFilter: Filter.TypeAgnostic
-  ): Unit = {
-    if (thriftFilter ne Filter.TypeAgnostic.Identity) {
-      libraryRegistry
-        .withSection("thrift")
-        .put("filters", thriftFilter.toString)
-    }
   }
 }
 
@@ -445,7 +448,7 @@ class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: Exception
           declaredMethods.map(method => s"$serviceName.${method.getName}").mkString("\n")
       )
 
-      registerGlobalFilter(filters)
+      registerGlobalFilter(filters, libraryRegistry)
       registerMethods(serviceName, controller, declaredMethods.toSeq)
       underlying = serviceInstance
     }
