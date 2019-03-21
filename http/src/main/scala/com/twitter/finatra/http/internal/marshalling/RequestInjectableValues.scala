@@ -5,6 +5,7 @@ import com.google.inject.{Injector, Key}
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.internal.marshalling.RequestInjectableValues.SeqWithSingleEmptyString
 import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.json.internal.caseclass.exceptions.RepeatedCommaSeparatedQueryParameterException
 import com.twitter.finatra.request.{FormParam, Header, QueryParam, RouteParam}
 import java.lang.annotation.Annotation
 
@@ -51,7 +52,8 @@ private[http] class RequestInjectableValues(
         request.params.getAll(fieldName) match {
           case propertyValue: Seq[String]
               if propertyValue.nonEmpty || request.params.contains(fieldName) =>
-            val value = handleEmptySeq(forProperty, propertyValue)
+            val separatedValues = handleCommaSeparatedLists(forProperty, propertyValue)
+            val value = handleEmptySeq(forProperty, separatedValues)
             val modifiedParamsValue = handleExtendedBooleans(forProperty, value)
             convert(forProperty, modifiedParamsValue)
           case _ => null
@@ -105,6 +107,20 @@ private[http] class RequestInjectableValues(
     else
       objectMapper.convert(propertyValue, forType)
   }
+
+  private def handleCommaSeparatedLists(forProperty: BeanProperty, propertyValue: Seq[String]): Seq[String] = {
+    findAnnotation(forProperty, Seq(classOf[QueryParam])) match {
+      case Some(queryParam: QueryParam) if queryParam.commaSeparatedList() =>
+        if (propertyValue.size > 1) {
+          throw new RepeatedCommaSeparatedQueryParameterException
+        } else {
+          propertyValue.flatMap(_.split(','))
+        }
+      case _ =>
+        propertyValue
+    }
+  }
+
 
   private def handleEmptySeq(forProperty: BeanProperty, propertyValue: Any): Any = {
     if (propertyValue == SeqWithSingleEmptyString &&

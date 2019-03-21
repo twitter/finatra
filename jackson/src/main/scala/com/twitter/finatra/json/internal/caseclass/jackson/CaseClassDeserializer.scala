@@ -193,6 +193,16 @@ private[finatra] class CaseClassDeserializer(
               Invalid(JacksonUtils.errorMessage(e), ErrorCode.JsonProcessingError(e))
             )
           )
+        case e: RepeatedCommaSeparatedQueryParameterException =>
+          addException(
+            field,
+            CaseClassValidationException(
+              PropertyPath.leaf(field.name),
+              Invalid(
+                s"Repeating ${field.name} is not allowed. Pass multiple values as a single comma-separated string.",
+                ErrorCode.RepeatedCommaSeparatedCollection)
+            )
+          )
         case e @ (_: JsonInjectionNotSupportedException | _: JsonInjectException) =>
           // we rethrow, to prevent leaking internal injection details in the "errors" array
           throw e

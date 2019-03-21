@@ -27,4 +27,5 @@ object ErrorCode {
   case class ValueTooSmall(minValue: Long, value: Number) extends ErrorCode
   case class PatternNotMatched(value: String, regex: String) extends ErrorCode
   case class PatternSyntaxError(message: String, regex: String) extends ErrorCode
+  case object RepeatedCommaSeparatedCollection extends ErrorCode
 }

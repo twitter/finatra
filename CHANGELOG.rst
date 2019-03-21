@@ -7,6 +7,12 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
+* finatra-http: Add `commaSeparatedList` boolean parameter to QueryParams, for
+   parsing comma-separated query parameters into collection types. ``PHAB_ID=D268989``
+
 Changed
 ~~~~~~~
 
@@ -92,7 +98,6 @@ Added
 
 Changed
 ~~~~~~~
-
 * finatra-kafka-streams: Refactor package names. All classes moved from
   com.twitter.finatra.streams to com.twitter.finatra.kafkastreams. ``PHAB_ID=D268027``
 

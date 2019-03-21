@@ -691,6 +691,14 @@ class DoEverythingController @Inject()(
     ResponseOfQueryParamSeqLong(r.foo.map(_ + 1).seq)
   }
 
+  get("/RequestWithCommaSeparatedQueryParamSeqLong") { r: RequestWithCommaSeparatedQueryParamSeqLong =>
+    ResponseOfQueryParamSeqLong(r.foo.map(_ + 1).seq)
+  }
+
+  get("/RequestWithUselessCommaSeparatedQueryParamLong") { r: RequestWithUselessCommaSeparatedQueryParamLong =>
+    ResponseOfQueryParamSeqLong(Seq(r.foo + 1))
+  }
+
   get("/FooException/:id") { r: Request =>
     throw new FooException(r.params("id"))
   }
