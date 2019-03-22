@@ -1,11 +1,11 @@
 package com.twitter.inject.modules
 
-import com.twitter.finagle.{ServiceFactory, Stack, StackTransformer}
 import com.twitter.finagle.util.LoadService
-import com.twitter.inject.TwitterModule
+import com.twitter.finagle.{ServiceFactory, Stack}
+import com.twitter.inject.{StackTransformer, TwitterModule}
 
 /**
- * Provides a [[com.twitter.finagle.StackTransformer]] to the dependency
+ * Provides a [[com.twitter.inject.StackTransformer]] to the dependency
  * injection context.
  */
 object StackTransformerModule extends TwitterModule {
