@@ -10,9 +10,12 @@ import com.twitter.inject.conversions.map._
 import java.lang.annotation.Annotation
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
+
 import javax.inject.{Inject, Singleton}
 import net.codingwell.scalaguice._
+
 import scala.collection.mutable
+import scala.reflect.runtime.universe.TypeTag
 
 /**
  * Manages registration of message body components. I.e., components that specify how to parse
@@ -56,14 +59,14 @@ class MessageBodyManager @Inject()(
 
   /* Public (Config methods called during server startup) */
 
-  def add[MBC <: MessageBodyComponent: Manifest](): Unit = {
+  def add[MBC <: MessageBodyComponent: Manifest : TypeTag](): Unit = {
     val componentSupertypeClass =
       if (classOf[MessageBodyReader[_]].isAssignableFrom(manifest[MBC].runtimeClass))
         classOf[MessageBodyReader[_]]
       else
         classOf[MessageBodyWriter[_]]
 
-    val componentSupertypeType = typeLiteral.getSupertype(componentSupertypeClass).getType
+    val componentSupertypeType = typeLiteral[MBC].getSupertype(componentSupertypeClass).getType
 
     add[MBC](singleTypeParam(componentSupertypeType))
   }
@@ -92,7 +95,7 @@ class MessageBodyManager @Inject()(
 
   /* Public (Per-request read and write methods) */
 
-  def read[T: Manifest](request: Request): T = {
+  def read[T: Manifest : TypeTag](request: Request): T = {
     val requestManifest = manifest[T]
     readerCache.atomicGetOrElseUpdate(requestManifest, {
       val objType = typeLiteral[T].getType
