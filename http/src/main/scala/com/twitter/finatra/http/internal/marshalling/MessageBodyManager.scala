@@ -95,7 +95,7 @@ class MessageBodyManager @Inject()(
   def read[T: Manifest](request: Request): T = {
     val requestManifest = manifest[T]
     readerCache.atomicGetOrElseUpdate(requestManifest, {
-      val objType = typeLiteral(requestManifest).getType
+      val objType = typeLiteral[T].getType
       classTypeToReader.get(objType).orElse(findReaderBySuperType(objType))
     }) match {
       case Some(reader) =>
