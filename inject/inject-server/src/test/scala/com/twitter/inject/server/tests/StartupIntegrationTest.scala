@@ -200,7 +200,7 @@ class StartupIntegrationTest extends Test {
 
 class FailFastServer extends TwitterServer {
   override val modules = Seq(new AbstractModule {
-    def configure(): Unit = {
+    override def configure(): Unit = {
       throw new StartupTestException("guice module exception")
     }
   })
