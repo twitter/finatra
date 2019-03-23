@@ -254,7 +254,7 @@ private[twitter] trait BindDSL { self =>
     def to[U <: T : TypeTag : ClassTag]: BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
-          bind(clazz).to(typeLiteral[U](asManifest[U]))
+          bind(clazz).to(typeLiteral[U])
         }
       })
       self
@@ -287,7 +287,7 @@ private[twitter] trait BindDSL { self =>
     override def to[U <: T : TypeTag : ClassTag]: BindDSL.this.type = {
       addInjectionServiceModule(new TwitterModule {
         override def configure(): Unit = {
-          bind(clazz).annotatedWith(annotationClazz).to(typeLiteral[U](asManifest[U]))
+          bind(clazz).annotatedWith(annotationClazz).to(typeLiteral[U])
         }
       })
       self
@@ -316,7 +316,7 @@ private[twitter] trait BindDSL { self =>
     override def to[U <: T : TypeTag : ClassTag]: BindDSL.this.type = {
       addInjectionServiceModule(new  TwitterModule {
         override def configure(): Unit = {
-          bind(clazz).annotatedWith(annotation).to(typeLiteral[U](asManifest[U]))
+          bind(clazz).annotatedWith(annotation).to(typeLiteral[U])
         }
       })
       self
