@@ -4,7 +4,9 @@ import com.google.inject._
 import com.google.inject.internal.CircularDependencyProxy
 import com.twitter.util.Local
 import java.util.{HashMap => JHashMap, Map => JMap}
+
 import net.codingwell.scalaguice.typeLiteral
+import scala.reflect.runtime.universe.TypeTag
 
 /**
  * A Guice 'Request Scope' implemented with com.twitter.util.Local
@@ -54,7 +56,7 @@ class FinagleRequestScope extends Scope {
    * @param value Value to seed/add into the request scope
    * @param overwrite Whether to overwrite an existing value already in the request scope (defaults to false)
    */
-  def seed[T <: AnyRef: Manifest](value: T, overwrite: Boolean = false): Unit = {
+  def seed[T <: AnyRef: TypeTag](value: T, overwrite: Boolean = false): Unit = {
     seed(Key.get(typeLiteral[T]), value, overwrite = overwrite)
   }
 

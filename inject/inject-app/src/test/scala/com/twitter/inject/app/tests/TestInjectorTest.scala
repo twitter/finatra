@@ -197,7 +197,7 @@ class TestInjectorTest extends Test with Mockito {
     await(svc(42)) should equal("The answer is: 42")
     // need to explicitly provide a Manifest here for the higher kinded type
     // note: this is not always necessary
-    await(injector.instance[DoEverything[Future]](TypeUtils.asManifest[DoEverything[Future]]).magicNum()) should equal("42")
+    await(injector.instance[DoEverything[Future]].magicNum()) should equal("42")
   }
 
   test("bind") {
@@ -281,7 +281,7 @@ class TestInjectorTest extends Test with Mockito {
 
     // need to explicitly provide a Manifest here for the higher kinded type
     // note: this is not always necessary
-    await(injector.instance[DoEverything[Future]](TypeUtils.asManifest[DoEverything[Future]]).magicNum()) should equal("137")
+    await(injector.instance[DoEverything[Future]].magicNum()) should equal("137")
   }
 
   test("bindClass") {

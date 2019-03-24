@@ -8,6 +8,7 @@ import com.google.inject.{Module, _}
 import java.lang.annotation.Annotation
 import net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder
 import net.codingwell.scalaguice.{ScalaMultibinder, typeLiteral}
+import scala.reflect.runtime.universe.TypeTag
 
 abstract class TwitterModule extends AbstractModule with TwitterBaseModule with Logging {
 
@@ -39,7 +40,7 @@ abstract class TwitterModule extends AbstractModule with TwitterBaseModule with 
     super.install(new FactoryModuleBuilder().build(manifest[T].runtimeClass))
   }
 
-  protected def addTypeConverter[T: Manifest](converter: TypeConverter): Unit = {
+  protected def addTypeConverter[T: TypeTag](converter: TypeConverter): Unit = {
     convertToTypes(Matchers.only(typeLiteral[T]), converter)
   }
 
@@ -102,7 +103,7 @@ abstract class TwitterModule extends AbstractModule with TwitterBaseModule with 
   /* Private */
 
   /* Copying stacktrace hacks found in scalaguice's ScalaModule.scala */
-  private def createBuilder[T: Manifest](
+  private def createBuilder[T: TypeTag](
     annotationOpt: Option[Annotation] = None,
     singleton: Boolean = true
   ): AnnotatedBindingBuilder[T] = {
@@ -123,7 +124,7 @@ abstract class TwitterModule extends AbstractModule with TwitterBaseModule with 
   }
 
   /* Copying stacktrace hacks found in scalaguice's ScalaModule.scala */
-  private def createBuilderWithAnnotation[T: Manifest, A <: Annotation: Manifest](
+  private def createBuilderWithAnnotation[T: TypeTag, A <: Annotation: Manifest](
     singleton: Boolean = true
   ): AnnotatedBindingBuilder[T] = {
     val mybinder = binderAccess.withSource((new Throwable).getStackTrace()(3))

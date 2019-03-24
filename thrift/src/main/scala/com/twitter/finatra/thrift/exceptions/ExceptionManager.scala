@@ -6,10 +6,13 @@ import com.twitter.inject.TypeUtils.singleTypeParam
 import com.twitter.util.Future
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
+
 import javax.inject.Singleton
 import net.codingwell.scalaguice.typeLiteral
+
 import scala.annotation.tailrec
 import scala.collection.JavaConverters._
+import scala.reflect.runtime.universe.TypeTag
 
 /**
  * A class to register [[com.twitter.finatra.thrift.exceptions.ExceptionMapper]]s and
@@ -35,7 +38,7 @@ class ExceptionManager(injector: Injector, statsReceiver: StatsReceiver) {
    * @tparam T - ExceptionMapper type T, which should be a subclass of
    * [[com.twitter.finatra.thrift.exceptions.ExceptionMapper]]
    */
-  def add[T <: ExceptionMapper[_, _]: Manifest]: Unit = {
+  def add[T <: ExceptionMapper[_, _] : TypeTag]: Unit = {
     val mapperType = typeLiteral[T].getSupertype(classOf[ExceptionMapper[_, _]]).getType
     val throwableType = singleTypeParam(mapperType)
     register(throwableType, injector.instance[T])

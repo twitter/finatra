@@ -5,6 +5,7 @@ import com.google.inject.{Injector => UnderlyingInjector, Key}
 import java.lang.annotation.Annotation
 import net.codingwell.scalaguice.KeyExtensions._
 import net.codingwell.scalaguice._
+import scala.reflect.runtime.universe.TypeTag
 
 case class Injector(underlying: UnderlyingInjector) {
 
@@ -20,7 +21,7 @@ case class Injector(underlying: UnderlyingInjector) {
    *
    * @return bound instance of type [[T]].
    */
-  def instance[T: Manifest]: T = underlying.getInstance(typeLiteral[T].toKey)
+  def instance[T: TypeTag]: T = underlying.getInstance(typeLiteral[T].toKey)
 
   /**
    * Returns the appropriate instance for the given key constructed from the
@@ -35,7 +36,7 @@ case class Injector(underlying: UnderlyingInjector) {
    *
    * @return bound instance of type [[T]] annotated with annotation type [[Ann]].
    */
-  def instance[T: Manifest, Ann <: Annotation: Manifest]: T = {
+  def instance[T: TypeTag, Ann <: Annotation: Manifest]: T = {
     val annotationType = manifest[Ann].runtimeClass.asInstanceOf[Class[Ann]]
     val key = Key.get(typeLiteral[T], annotationType)
     underlying.getInstance(key)
@@ -55,7 +56,7 @@ case class Injector(underlying: UnderlyingInjector) {
    *
    * @return bound instance of type [[T]] annotated with annotation.
    */
-  def instance[T: Manifest](annotation: Annotation): T = {
+  def instance[T: TypeTag](annotation: Annotation): T = {
     val key = Key.get(typeLiteral[T], annotation)
     underlying.getInstance(key)
   }
@@ -73,7 +74,7 @@ case class Injector(underlying: UnderlyingInjector) {
    * @tparam T type of the bound instance to return from the object graph.
    * @return bound instance of type [[T]] annotated with annotation class.
    */
-  def instance[T: Manifest](annotationClazz: Class[_ <: Annotation]): T = {
+  def instance[T: TypeTag](annotationClazz: Class[_ <: Annotation]): T = {
     val key = Key.get(typeLiteral[T], annotationClazz)
     underlying.getInstance(key)
   }
@@ -95,7 +96,7 @@ case class Injector(underlying: UnderlyingInjector) {
    * @see [[https://google.github.io/guice/api-docs/latest/javadoc/com/google/inject/name/Named.html com.google.inject.name.Named]]
    */
   @deprecated("Users should prefer injector.instance[T](java.lang.annotation.Annotation", "2017-09-25")
-  def instance[T: Manifest](name: String): T = {
+  def instance[T: TypeTag](name: String): T = {
     val namedAnnotation = Names.named(name)
     val key = Key.get(typeLiteral[T], namedAnnotation)
     underlying.getInstance(key)

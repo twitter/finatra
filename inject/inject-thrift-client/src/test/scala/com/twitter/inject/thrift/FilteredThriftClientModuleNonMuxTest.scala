@@ -21,7 +21,7 @@ class FilteredThriftClientModuleNonMuxTest extends IntegrationTest {
   ).create
 
   lazy val greeter =
-    injector.instance[Greeter[Future]](TypeUtils.asManifest[Greeter[Future]])
+    injector.instance[Greeter[Future]]
 
   test("bind expected type properly") {
     assert(greeter != null)

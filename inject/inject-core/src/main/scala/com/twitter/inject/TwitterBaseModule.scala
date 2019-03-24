@@ -2,6 +2,7 @@ package com.twitter.inject
 
 import com.google.inject.{Key, Module}
 import net.codingwell.scalaguice._
+import scala.reflect.runtime.universe.TypeTag
 
 /**
  * Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules
@@ -24,7 +25,7 @@ trait TwitterBaseModule extends TwitterModuleFlags with TwitterModuleLifecycle {
    */
   protected[inject] def frameworkModules: Seq[Module] = Seq()
 
-  protected def createKey[T: Manifest]: Key[T] = {
+  protected def createKey[T: TypeTag]: Key[T] = {
     Key.get(typeLiteral[T])
   }
 }

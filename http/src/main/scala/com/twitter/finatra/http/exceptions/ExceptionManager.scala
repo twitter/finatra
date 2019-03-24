@@ -13,7 +13,9 @@ import javax.inject.Singleton
 import net.codingwell.scalaguice.typeLiteral
 import scala.annotation.tailrec
 import scala.collection.JavaConverters._
+import scala.reflect.runtime.universe.TypeTag
 import scala.util.control.NonFatal
+
 
 /**
  * A class to register [[com.twitter.finatra.http.exceptions.ExceptionMapper]]s
@@ -73,7 +75,7 @@ class ExceptionManager(injector: Injector, statsReceiver: StatsReceiver) {
    *
    * @tparam T - ExceptionMapper type T which should subclass [[com.twitter.finatra.http.exceptions.ExceptionMapper]]
    */
-  def add[T <: ExceptionMapper[_]: Manifest]: Unit = {
+  def add[T <: ExceptionMapper[_]: TypeTag]: Unit = {
     val mapperType = typeLiteral[T].getSupertype(classOf[ExceptionMapper[_]]).getType
     val throwableType = singleTypeParam(mapperType)
     register(throwableType, injector.instance[T])

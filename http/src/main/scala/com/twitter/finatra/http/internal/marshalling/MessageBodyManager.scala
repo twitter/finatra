@@ -89,7 +89,7 @@ class MessageBodyManager @Inject()(
     writerCache.putIfAbsent(componentType, messageBodyWriter.asInstanceOf[MessageBodyWriter[Any]])
   }
 
-  def addExplicit[MBC <: MessageBodyComponent: Manifest, TypeToReadOrWrite: Manifest](): Unit = {
+  def addExplicit[MBC <: MessageBodyComponent: Manifest, TypeToReadOrWrite: Manifest : TypeTag](): Unit = {
     add[MBC](typeLiteral[TypeToReadOrWrite].getType)
   }
 
