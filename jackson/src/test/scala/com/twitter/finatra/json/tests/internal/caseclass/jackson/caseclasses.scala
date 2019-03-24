@@ -14,7 +14,8 @@ trait Aumly { @JsonProperty("i") def _i: Int; @JsonProperty("j") def _j: String 
 case class Aum(_i: Int, _j: String) extends Aumly
 
 trait Bar {
-  @JsonProperty("helloWorld") @Header("accept")
+  @JsonProperty("helloWorld")
+  @Header("accept")
   def hello: String
 }
 case class FooBar(hello: String) extends Bar
