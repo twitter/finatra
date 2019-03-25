@@ -10,6 +10,10 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-kafka-streams: Add flag `rocksdb.manifest.preallocation.size` with default value
+    `4.megabytes` to `c.t.f.k.c.RocksDbFlags` and set value in
+    `c.t.f.k.c.FinatraRocksDBConfig`. ``PHAB_ID=D290130``
+
 * finatra-http: Add `commaSeparatedList` boolean parameter to QueryParams, for
    parsing comma-separated query parameters into collection types. ``PHAB_ID=D268989``
 

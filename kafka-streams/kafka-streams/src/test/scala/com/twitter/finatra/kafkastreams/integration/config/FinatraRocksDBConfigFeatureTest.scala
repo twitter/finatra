@@ -61,6 +61,7 @@ class FinatraRocksDBConfigFeatureTest extends TopologyFeatureTest {
         .withConfig(RocksDbTableConfigBoomFilterMode, rocksDbTableConfigBoomFilterMode())
         .withConfig(RocksDbDatabaseWriteBufferSize, rocksDbDatabaseWriteBufferSize())
         .withConfig(RocksDbWriteBufferSize, rocksDbWriteBufferSize())
+        .withConfig(RocksDbManifestPreallocationSize, rocksDbManifestPreallocationSize())
         .withConfig(RocksDbMinWriteBufferNumberToMerge, rocksDbMinWriteBufferNumberToMerge())
         .withConfig(RocksDbMaxWriteBufferNumber, rocksDbMaxWriteBufferNumber())
         .withConfig(RocksDbBytesPerSync, rocksDbBytesPerSync())
@@ -98,6 +99,7 @@ class FinatraRocksDBConfigFeatureTest extends TopologyFeatureTest {
       "rocksdb.tableconfig.bloomfilter.mode" -> "false",
       "rocksdb.db.write.buffer.size" -> "6.bytes",
       "rocksdb.write.buffer.size" -> "7.bytes",
+      "rocksdb.manifest.preallocation.size" -> "5.megabytes",
       "rocksdb.min.write.buffer.num.merge" -> "8",
       "rocksdb.max.write.buffer.num" -> "9",
       "rocksdb.bytes.per.sync" -> "10.bytes",
@@ -153,6 +155,7 @@ class FinatraRocksDBConfigFeatureTest extends TopologyFeatureTest {
     properties.getProperty("rocksdb.tableconfig.bloomfilter.mode") should be("false")
     properties.getProperty("rocksdb.db.write.buffer.size") should be("6")
     properties.getProperty("rocksdb.write.buffer.size") should be("7")
+    properties.getProperty("rocksdb.manifest.preallocation.size") should be("5242880")
     properties.getProperty("rocksdb.min.write.buffer.num.merge") should be("8")
     properties.getProperty("rocksdb.max.write.buffer.num") should be("9")
     properties.getProperty("rocksdb.bytes.per.sync") should be("10")

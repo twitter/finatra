@@ -111,6 +111,13 @@ trait RocksDbFlags extends TwitterServer {
       help = FinatraRocksDBConfig.RocksDbWriteBufferSizeDoc
     )
 
+  protected val rocksDbManifestPreallocationSize: Flag[StorageUnit] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbManifestPreallocationSize,
+      default = FinatraRocksDBConfig.RocksDbManifestPreallocationSizeDefault,
+      help = FinatraRocksDBConfig.RocksDbManifestPreallocationSizeDoc
+    )
+
   protected val rocksDbMinWriteBufferNumberToMerge: Flag[Int] =
     flag(
       name = FinatraRocksDBConfig.RocksDbMinWriteBufferNumberToMerge,
