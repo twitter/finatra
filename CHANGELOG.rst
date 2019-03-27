@@ -29,6 +29,17 @@ Changed
 Added
 ~~~~~
 
+* finatra-kafka-streams: Exposing additional consumer configuration flags.
+  - `kafka.consumer.max.poll.interval.ms` Maximum delay between invocations of poll() when using
+  consumer group management.
+  - `kafka.consumer.max.partition.fetch.bytes` Consumer's maximum amount of data per-partition the
+  server will return.
+  - `kafka.consumer.request.timeout.ms` Consumer's maximum amount of time to wait for the response
+  of a request.
+  - `kafka.consumer.connections.max.idle.ms` Consumer's maximum idle time for connections before
+  closing the connection.
+  ``PHAB_ID=D287371``
+
 * finatra-kafka: FinagleKafka clients pass correct deadline for close to
   underlying Kafka clients. ``PHAB_ID=D261115``
 
