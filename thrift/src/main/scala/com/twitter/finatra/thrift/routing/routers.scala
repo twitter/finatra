@@ -1,6 +1,7 @@
 package com.twitter.finatra.thrift.routing
 
 import com.twitter.finagle
+import com.twitter.finagle.param
 import com.twitter.finagle.service.NilService
 import com.twitter.finagle.thrift.{RichServerParam, ThriftService, ToThriftService}
 import com.twitter.finagle.{Filter, Thrift, ThriftMux, Service, ServiceFactory, Stack}
@@ -263,9 +264,8 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
       method -> {
         val endpoint = ServiceFactory.const(cm.filters.andThen(service))
         val stack = filterStack ++ Stack.leaf(finagle.stack.Endpoint, endpoint)
-
-        // Materialize a stack with default params.
-        val svcFac = stack.make(Stack.Params.empty)
+        val params = Stack.Params.empty + param.Tags(method.name, method.serviceName)
+        val svcFac = stack.make(params)
         Service.pending(svcFac()).asInstanceOf[ScroogeServiceImpl]
       }
     }.toMap
