@@ -23,6 +23,14 @@ Changed
 * finatra-thrift: Constructing a `ThriftRouter` now requires a `c.t.f.StackTransformer`
   ``PHAB_ID=D277493``
 
+Fixed
+~~~~~
+
+ * finatra-kafka-streams: `FinatraTransformer.timerStore` config object references immutable
+   map which causes exception thrown if user code calls `AbstractStoreBuilder.withLoggingDisabled`.
+   Fixed `FinatraTransformer.timerStore` to convert from immutable map to mutable map before
+   forwarding config object to kafka library. ``PHAB_ID=D293979``
+
 19.3.0
 ------
 

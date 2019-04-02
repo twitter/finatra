@@ -17,6 +17,7 @@ import org.apache.kafka.common.serialization.{Serde, Serdes}
 import org.apache.kafka.streams.kstream.Transformer
 import org.apache.kafka.streams.processor.{Cancellable, ProcessorContext, PunctuationType, Punctuator, To}
 import org.apache.kafka.streams.state.{KeyValueStore, StoreBuilder, Stores}
+import scala.collection.JavaConverters._
 import scala.collection.mutable
 import scala.reflect.ClassTag
 
@@ -29,13 +30,16 @@ object FinatraTransformer {
     name: String,
     timerKeySerde: Serde[TimerKey]
   ): StoreBuilder[KeyValueStore[Timer[TimerKey], Array[Byte]]] = {
+    // Logging config is mutable so AbstractStoreBuilder can clear config state when disabled with
+    // AbstractStoreBuilder.withLoggingDisabled().
+    val config = collection.mutable.Map(DefaultTopicConfig.FinatraChangelogConfig.asScala.toSeq: _*)
     Stores
       .keyValueStoreBuilder(
         Stores.persistentKeyValueStore(name),
         TimerSerde(timerKeySerde),
         Serdes.ByteArray
       )
-      .withLoggingEnabled(DefaultTopicConfig.FinatraChangelogConfig)
+      .withLoggingEnabled(config.asJava)
   }
 }
 
