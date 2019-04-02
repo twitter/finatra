@@ -89,13 +89,11 @@ will run the callbacks in the order added during the `init` lifecycle phase.
             // closing logic
         }
 
-        onExitLast {
-            // final closing logic
-        }
+        closeOnExitLast(MyClosable) // final closing logic
     }
 
 
-Additional hooks are `premain`, `postmain`, `onExit` and `onExitLast`, as shown above.
+Additional hooks are `premain`, `postmain`, `onExit` and `closeOnExitLast()`, as shown above.
 
 The lifecycle could thus be represented:
 
@@ -111,7 +109,7 @@ The lifecycle could thus be represented:
         run all postmain {} blocks
         App#close() -->
             run all onExit {} blocks
-            run all onExitLast {} blocks.
+            run all Closables registered via closeOnExitLast()
 
 The Finatra |c.t.inject.app.App|_ extends the |c.t.app.App|_ lifecycle by adding more structure to the
 defined `main()` method.
@@ -140,7 +138,7 @@ The lifecycle for a Finatra "injectable" App |c.t.inject.app.App|_ can be descri
         run all postmain {} blocks
         App#close() -->
             run all onExit {} blocks
-            run all onExitLast {} blocks.
+            run all Closables registered via closeOnExitLast()
 
 For more information on creating an "injectable" App with Finatra, see the documentation
 `here <../app/index.html>`__.
@@ -224,7 +222,7 @@ In text, at a high-level, the start-up lifecycle of a Finatra server looks like:
         run all postmain {} blocks
         App#close() -->
             run all onExit {} blocks
-            run all onExitLast {} blocks.
+            run all Closables registered via closeOnExitLast()
 
 Visually:
 
