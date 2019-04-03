@@ -2,6 +2,7 @@ package com.twitter.inject.conversions
 
 import com.twitter.inject.conversions.tuple._
 import java.util.concurrent.ConcurrentHashMap
+import scala.collection.mutable.ArrayBuffer
 import scala.collection.{SortedMap, immutable, mutable}
 
 object map {
@@ -47,8 +48,19 @@ object map {
       self.filterKeys(!func(_))
     }
 
-    def toSortedMap(implicit ordering: Ordering[K]) = {
+    def toSortedMap(implicit ordering: Ordering[K]): SortedMap[K,V] = {
       SortedMap[K, V]() ++ self
+    }
+
+  }
+
+  implicit class RichJavaMap[K, V](val self: java.util.Map[K, V]) extends AnyVal {
+    import scala.collection.JavaConverters._
+
+    def toOrderedMap: Map[K,V] = {
+      val entries = new ArrayBuffer[(K,V)]
+      self.asScala.foreach(entries.append(_))
+      immutable.ListMap(entries: _*)
     }
   }
 
@@ -65,7 +77,7 @@ object map {
 
     /**
      * Swap the keys between the inner and outer maps
-     * Input: Map[A,Map[B,C]] Output: Map[B, Map[A,C]]
+     * Input: `Map[A,Map[B,C]]` Output: `Map[B, Map[A,C]]`
      */
     //TODO: Optimize
     def swapKeys: Map[B, Map[A, C]] = {
@@ -83,7 +95,7 @@ object map {
 
     /**
      * Swap the keys between the inner and outer maps
-     * Input: Map[A,Map[B,C]] Output: Map[B, Map[A,C]]
+     * Input: `Map[A,Map[B,C]]` Output: `Map[B, Map[A,C]]`
      */
     def swapKeys(
       implicit orderingA: Ordering[A],

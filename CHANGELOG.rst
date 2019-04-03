@@ -10,6 +10,8 @@ Unreleased
 Added
 ~~~~~
 
+* inject-utils: add `toOrderedMap` implicit conversion for `java.util.Map` ``PHAB_ID=D295005``
+
 * finatra-kafka-streams: Add flag `rocksdb.manifest.preallocation.size` with default value
     `4.megabytes` to `c.t.f.k.c.RocksDbFlags` and set value in
     `c.t.f.k.c.FinatraRocksDBConfig`. ``PHAB_ID=D290130``
