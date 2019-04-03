@@ -103,7 +103,7 @@ The lifecycle could thus be represented:
     App#nonExitingMain() -->
         bind LoadService bindings
         run all init {} blocks
-        App#parseArgs() // read command args into Flags
+        App#parseArgs() // read command line args into Flags
         run all premain {} blocks
         run all defined main() methods
         run all postmain {} blocks
@@ -122,7 +122,7 @@ The lifecycle for a Finatra "injectable" App |c.t.inject.app.App|_ can be descri
     App#nonExitingMain() -->
         bind LoadService bindings
         run all init {} blocks
-        App#parseArgs() // read command args into Flags
+        App#parseArgs() // read command line args into Flags
         run all premain {} blocks
         c.t.inject.app.App#main() -->
             load/install modules
@@ -194,7 +194,7 @@ In text, at a high-level, the start-up lifecycle of a Finatra server looks like:
     App#nonExitingMain() -->
         bind LoadService bindings
         run all init {} blocks
-        App#parseArgs() // read command args into Flags
+        App#parseArgs() // read command line args into Flags
         run all premain {} blocks -->
             add routes to TwitterServer AdminHttpServer
             bind interface and start TwitterServer AdminHttpServer
