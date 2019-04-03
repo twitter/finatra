@@ -1,6 +1,7 @@
 package com.twitter.finatra.kafkastreams.integration.config
 
 import com.twitter.conversions.DurationOps._
+import com.twitter.finagle.stats.NullStatsReceiver
 import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
 import com.twitter.finatra.kafkastreams.config.{DefaultTopicConfig, FinatraRocksDBConfig, FinatraTransformerFlags, KafkaStreamsConfig, RocksDbFlags}
 import com.twitter.finatra.kafkastreams.test.{FinatraTopologyTester, IteratorWithAutoCloseToSeq, TopologyFeatureTest, TopologyTesterTopic}
@@ -14,7 +15,8 @@ import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.{Consumed, Produced}
 import org.apache.kafka.streams.processor.PunctuationType
-import org.apache.kafka.streams.state.{KeyValueStore, Stores}
+import org.apache.kafka.streams.state.KeyValueStore
+import org.apache.kafka.streams.state.internals.FinatraStores
 import org.joda.time.DateTime
 
 abstract class FinatraTransformerChangeLogConfigFeatureTest
@@ -123,9 +125,10 @@ abstract class FinatraTransformerChangeLogConfigFeatureTest
 class WithLoggingEnabled extends FinatraTransformerChangeLogConfigFeatureTest {
   override def configureStateStores(builder: StreamsBuilder): Unit = {
     builder.addStateStore(
-      Stores
+      FinatraStores
         .keyValueStoreBuilder(
-          Stores.persistentKeyValueStore(stateStoreName),
+          NullStatsReceiver,
+          FinatraStores.persistentKeyValueStore(stateStoreName),
           Serdes.String,
           Serdes.String
         )
@@ -134,7 +137,7 @@ class WithLoggingEnabled extends FinatraTransformerChangeLogConfigFeatureTest {
 
     builder.addStateStore(
       FinatraTransformer
-        .timerStore(name = timerStoreName, timerKeySerde = Serdes.String)
+        .timerStore(name = timerStoreName, timerKeySerde = Serdes.String, statsReceiver = NullStatsReceiver)
     )
   }
 
@@ -164,9 +167,10 @@ class WithLoggingEnabled extends FinatraTransformerChangeLogConfigFeatureTest {
 class WithLoggingDisabled extends FinatraTransformerChangeLogConfigFeatureTest {
   override def configureStateStores(builder: StreamsBuilder): Unit = {
     builder.addStateStore(
-      Stores
+      FinatraStores
         .keyValueStoreBuilder(
-          Stores.persistentKeyValueStore(stateStoreName),
+          NullStatsReceiver,
+          FinatraStores.persistentKeyValueStore(stateStoreName),
           Serdes.String,
           Serdes.String
         ).withLoggingDisabled()
@@ -174,7 +178,7 @@ class WithLoggingDisabled extends FinatraTransformerChangeLogConfigFeatureTest {
 
     builder.addStateStore(
       FinatraTransformer
-        .timerStore(name = timerStoreName, timerKeySerde = Serdes.String)
+        .timerStore(name = timerStoreName, timerKeySerde = Serdes.String, statsReceiver = NullStatsReceiver)
         .withLoggingDisabled()
     )
   }

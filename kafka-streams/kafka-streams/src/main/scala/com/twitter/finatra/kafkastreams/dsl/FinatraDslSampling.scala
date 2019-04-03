@@ -4,7 +4,10 @@ import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.kafka.serde.ScalaSerdes
 import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
 import com.twitter.finatra.kafkastreams.config.{DefaultTopicConfig, FinatraTransformerFlags}
-import com.twitter.finatra.kafkastreams.internal.utils.sampling.{IndexedSampleKeySerde, ReservoirSamplingTransformer}
+import com.twitter.finatra.kafkastreams.internal.utils.sampling.{
+  IndexedSampleKeySerde,
+  ReservoirSamplingTransformer
+}
 import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer
 import com.twitter.finatra.kafkastreams.transformer.utils.SamplingUtils
 import com.twitter.inject.Logging
@@ -12,7 +15,7 @@ import com.twitter.util.Duration
 import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.scala.kstream.{KStream => KStreamS}
-import org.apache.kafka.streams.state.Stores
+import org.apache.kafka.streams.state.internals.FinatraStores
 import scala.reflect.ClassTag
 
 /**
@@ -105,9 +108,10 @@ trait FinatraDslSampling
 
       val countStoreName = SamplingUtils.getNumCountsStoreName(sampleName)
       kafkaStreamsBuilder.addStateStore(
-        Stores
+        FinatraStores
           .keyValueStoreBuilder(
-            Stores.persistentKeyValueStore(countStoreName),
+            streamsStatsReceiver,
+            FinatraStores.persistentKeyValueStore(countStoreName),
             sampleKeySerde,
             ScalaSerdes.Long
           )
@@ -116,9 +120,10 @@ trait FinatraDslSampling
 
       val sampleStoreName = SamplingUtils.getSampleStoreName(sampleName)
       kafkaStreamsBuilder.addStateStore(
-        Stores
+        FinatraStores
           .keyValueStoreBuilder(
-            Stores.persistentKeyValueStore(sampleStoreName),
+            streamsStatsReceiver,
+            FinatraStores.persistentKeyValueStore(sampleStoreName),
             new IndexedSampleKeySerde(sampleKeySerde),
             sampleValueSerde
           )
@@ -127,8 +132,7 @@ trait FinatraDslSampling
 
       val timerStoreName = SamplingUtils.getTimerStoreName(sampleName)
       kafkaStreamsBuilder.addStateStore(
-        FinatraTransformer.timerStore(timerStoreName, sampleKeySerde)
-      )
+        FinatraTransformer.timerStore(timerStoreName, sampleKeySerde, streamsStatsReceiver))
 
       val transformer = () =>
         new ReservoirSamplingTransformer[K, V, SampleKey, SampleValue](

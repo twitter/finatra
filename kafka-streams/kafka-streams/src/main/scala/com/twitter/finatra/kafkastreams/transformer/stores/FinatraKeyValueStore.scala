@@ -1,35 +1,11 @@
 package com.twitter.finatra.kafkastreams.transformer.stores
 
 import org.apache.kafka.streams.errors.InvalidStateStoreException
-import org.apache.kafka.streams.processor.TaskId
 import org.apache.kafka.streams.state.{KeyValueIterator, KeyValueStore}
 
 trait FinatraKeyValueStore[K, V]
-  extends KeyValueStore[K, V]
+    extends KeyValueStore[K, V]
     with FinatraReadOnlyKeyValueStore[K, V] {
-
-  /**
-   * The task id associated with this store
-   */
-  def taskId: TaskId
-
-  /**
-   * Get an iterator over a given range of keys. This iterator must be closed after use.
-   * The returned iterator must be safe from {@link java.util.ConcurrentModificationException}s
-   * and must not return null values. No ordering guarantees are provided.
-   *
-   * @param from            The first key that could be in the range
-   * @param to              The last key that could be in the range
-   * @param allowStaleReads Allow stale reads when querying a caching key value store. If set to false,
-   *                        each query will trigger a flush of the cache.
-   *
-   * @return The iterator for this range.
-   *
-   * @throws NullPointerException       If null is used for from or to.
-   * @throws InvalidStateStoreException if the store is not initialized
-   */
-  @throws[InvalidStateStoreException]
-  def range(from: K, to: K, allowStaleReads: Boolean): KeyValueIterator[K, V]
 
   /**
    * Removes the database entries in the range ["from", "to"), i.e.,
@@ -120,20 +96,4 @@ trait FinatraKeyValueStore[K, V]
     beginKeyInclusive: Array[Byte],
     endKeyExclusive: Array[Byte]
   ): Unit
-
-  /*
-     Note: We define equals and hashcode so we can store Finatra Key Value stores in maps for
-     retrieval when implementing queryable state
-   */
-
-  override def equals(other: Any): Boolean = other match {
-    case that: FinatraKeyValueStore[_, _] =>
-      taskId == that.taskId &&
-        name == that.name()
-    case _ => false
-  }
-
-  override def hashCode(): Int = {
-    31 * taskId.hashCode() + name.hashCode
-  }
 }

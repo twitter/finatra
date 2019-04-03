@@ -5,19 +5,19 @@ import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.kafka.utils.ConfigUtils
 import com.twitter.finatra.kafkastreams.config.{DefaultTopicConfig, FinatraTransformerFlags}
 import com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging
-import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer.TimerTime
+import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer.{StateStoreName, TimerTime}
 import com.twitter.finatra.kafkastreams.transformer.domain.Time
 import com.twitter.finatra.kafkastreams.transformer.lifecycle.{OnClose, OnFlush, OnInit, OnWatermark}
 import com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore
-import com.twitter.finatra.kafkastreams.transformer.stores.internal.{FinatraKeyValueStoreImpl, FinatraStoresGlobalManager, Timer}
+import com.twitter.finatra.kafkastreams.transformer.stores.internal.{FinatraStoresGlobalManager, FinatraTransformerLifecycleKeyValueStore, Timer}
 import com.twitter.finatra.kafkastreams.transformer.watermarks.{DefaultWatermarkAssignor, Watermark, WatermarkAssignor, WatermarkManager}
 import com.twitter.finatra.streams.transformer.internal.domain.TimerSerde
 import com.twitter.util.Duration
 import org.apache.kafka.common.serialization.{Serde, Serdes}
 import org.apache.kafka.streams.kstream.Transformer
 import org.apache.kafka.streams.processor.{Cancellable, ProcessorContext, PunctuationType, Punctuator, To}
-import org.apache.kafka.streams.state.{KeyValueStore, StoreBuilder, Stores}
-import scala.collection.JavaConverters._
+import org.apache.kafka.streams.state.StoreBuilder
+import org.apache.kafka.streams.state.internals.FinatraStores
 import scala.collection.mutable
 import scala.reflect.ClassTag
 
@@ -25,21 +25,20 @@ object FinatraTransformer {
   type TimerTime = Long
   type WindowStartTime = Long
   type DateTimeMillis = Long
+  type StateStoreName = String
 
   def timerStore[TimerKey](
     name: String,
-    timerKeySerde: Serde[TimerKey]
-  ): StoreBuilder[KeyValueStore[Timer[TimerKey], Array[Byte]]] = {
-    // Logging config is mutable so AbstractStoreBuilder can clear config state when disabled with
-    // AbstractStoreBuilder.withLoggingDisabled().
-    val config = collection.mutable.Map(DefaultTopicConfig.FinatraChangelogConfig.asScala.toSeq: _*)
-    Stores
+    timerKeySerde: Serde[TimerKey],
+    statsReceiver: StatsReceiver
+  ): StoreBuilder[FinatraKeyValueStore[Timer[TimerKey], Array[Byte]]] = {
+    FinatraStores
       .keyValueStoreBuilder(
-        Stores.persistentKeyValueStore(name),
+        statsReceiver,
+        FinatraStores.persistentKeyValueStore(name),
         TimerSerde(timerKeySerde),
-        Serdes.ByteArray
-      )
-      .withLoggingEnabled(config.asJava)
+        Serdes.ByteArray)
+      .withLoggingEnabled(DefaultTopicConfig.FinatraChangelogConfig)
   }
 }
 
@@ -62,8 +61,8 @@ object FinatraTransformer {
 abstract class FinatraTransformer[InputKey, InputValue, OutputKey, OutputValue](
   statsReceiver: StatsReceiver,
   watermarkAssignor: WatermarkAssignor[InputKey, InputValue] =
-  new DefaultWatermarkAssignor[InputKey, InputValue])
-  extends Transformer[InputKey, InputValue, (OutputKey, OutputValue)]
+    new DefaultWatermarkAssignor[InputKey, InputValue])
+    extends Transformer[InputKey, InputValue, (OutputKey, OutputValue)]
     with OnInit
     with OnWatermark
     with OnClose
@@ -173,20 +172,19 @@ abstract class FinatraTransformer[InputKey, InputValue, OutputKey, OutputValue](
     onClose()
   }
 
+  /**
+   * Get the state store given the store name.
+   *
+   * @param name The store name
+   * @tparam KK Key type of the state store
+   * @tparam VV Value type of the state store
+   *
+   * @return The state store instance
+   */
   final protected def getKeyValueStore[KK: ClassTag, VV](
     name: String
   ): FinatraKeyValueStore[KK, VV] = {
-    val store = new FinatraKeyValueStoreImpl[KK, VV](name, statsReceiver)
-
-    val previousStore = finatraKeyValueStoresMap.put(name, store)
-    assert(previousStore.isEmpty, s"getKeyValueStore was called for store $name more than once")
-
-    // Initialize stores that are still using the "lazy val store" pattern
-    if (processorContext != null) {
-      store.init(processorContext, null)
-    }
-
-    store
+    getKeyValueStore(name, flushListener = None)
   }
 
   final protected def forward(key: OutputKey, value: OutputValue): Unit = {
@@ -206,6 +204,18 @@ abstract class FinatraTransformer[InputKey, InputValue, OutputKey, OutputValue](
 
   final protected[finatra] def watermark: Watermark = {
     watermarkManager.watermark
+  }
+
+  /* Private */
+
+  private[kafkastreams] def getKeyValueStore[KK: ClassTag, VV](
+    name: String,
+    flushListener: Option[(StateStoreName, KK, VV) => Unit]
+  ): FinatraKeyValueStore[KK, VV] = {
+    val store = new FinatraTransformerLifecycleKeyValueStore[KK, VV](name, flushListener)
+    val previousStore = finatraKeyValueStoresMap.put(name, store)
+    assert(previousStore.isEmpty, s"getKeyValueStore was called for store $name more than once")
+    store
   }
 
   private def parseAutoWatermarkInterval(processorContext: ProcessorContext): Duration = {

@@ -20,6 +20,8 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-kafka-streams: Implement FinatraKeyValueStore as custom store. ``PHAB_ID=D277612``
+
 * finatra-thrift: Constructing a `ThriftRouter` now requires a `c.t.f.StackTransformer`
   ``PHAB_ID=D277493``
 

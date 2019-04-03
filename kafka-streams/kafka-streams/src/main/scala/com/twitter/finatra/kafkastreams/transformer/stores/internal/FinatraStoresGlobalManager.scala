@@ -203,7 +203,10 @@ object FinatraStoresGlobalManager extends Logging {
     val topicGroupId = taskStoreNameToGroupId
       .getOrElse(
         storeName,
-        throw new InvalidStateStoreException(s"State store group id not found for $storeName"))
+        throw new InvalidStateStoreException(
+          s"State store group id not found for $storeName in map " +
+            s"taskStoreNameToGroupId = $taskStoreNameToGroupId and " +
+            s"taskIdToFinatraStore = $taskIdToFinatraStore"))
 
     val taskId = new TaskId(topicGroupId, partitionId.id)
     debug(s"LookupTaskId with NumPartitions: $numPartitions store $storeName and key $keyBytes = $taskId \t $taskStoreNameToGroupId $taskIdToFinatraStore")

@@ -18,7 +18,7 @@ class WordLengthServer extends KafkaStreamsTwitterServer {
   override protected def configureKafkaStreams(streamsBuilder: StreamsBuilder): Unit = {
 
     kafkaStreamsBuilder.addStateStore(
-      FinatraTransformer.timerStore(timerStoreName, Serdes.String()))
+      FinatraTransformer.timerStore(timerStoreName, Serdes.String(), streamsStatsReceiver))
 
     val transformerSupplier = () =>
       new WordLengthFinatraTransformer(statsReceiver, timerStoreName)

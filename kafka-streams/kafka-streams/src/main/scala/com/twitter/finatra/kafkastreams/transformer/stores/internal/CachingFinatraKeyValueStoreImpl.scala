@@ -1,15 +1,15 @@
 package com.twitter.finatra.kafkastreams.transformer.stores.internal
 
 import com.twitter.finagle.stats.{Gauge, StatsReceiver}
-import com.twitter.finatra.kafkastreams.transformer.stores.{CachingFinatraKeyValueStore, FinatraKeyValueStore}
+import com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore
 import com.twitter.inject.Logging
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import java.util
 import java.util.function.BiConsumer
 import org.apache.kafka.streams.KeyValue
+import org.apache.kafka.streams.processor.internals.InternalProcessorContext
 import org.apache.kafka.streams.processor.{ProcessorContext, StateStore, TaskId}
 import org.apache.kafka.streams.state.KeyValueIterator
-import scala.reflect.ClassTag
 
 /**
  * A write-behind caching layer around the FinatraKeyValueStore.
@@ -17,28 +17,32 @@ import scala.reflect.ClassTag
  * We cache Java objects here and then periodically flush entries into RocksDB which involves
  * serializing the objects into byte arrays. As such this cache:
  * 1) Reduces the number of reads/writes to RocksDB
- * 2) Reduces the number of serialization/deserialization operations which can be expensive for some classes
+ * 2) Reduces the number of serialization/deserialization operations which can be expensive for some
+ * classes
  * 3) Reduces the number of publishes to the Kafka changelog topic backing this key value store
  *
  * This caching does introduce a few odd corner cases :-(
- * 1. Items in the cache have pass-by-reference semantics but items in rocksdb have pass-by-value semantics. Modifying items after a put is a bad idea! Ideally, only
+ * 1. Items in the cache have pass-by-reference semantics but items in rocksdb have pass-by-value
+ * semantics. Modifying items after a put is a bad idea! Ideally, only
  * immutable objects would be stored in a CachingFinatraKeyValueStore
  * 2. Range queries currently only work against the uncached RocksDB data.
  * This is because sorted Java maps are much less performant than their unsorted counterparts.
  * We typically only use range queries for queryable state where it is ok to read stale data
- * If fresher data is required for range queries, decrease your commit interval.
+ * If fresher data is required for range queries, decrease your commit interval, or disable caching
+ * on your key value store
  *
- * This class is inspired by: https://github.com/apache/samza/blob/1.0.0/samza-kv/src/main/scala/org/apache/samza/storage/kv/CachedStore.scala
+ * This class is inspired by:
+ * https://github.com/apache/samza/blob/1.0.0/samza-kv/src/main/scala/org/apache/samza/storage/kv/CachedStore.scala
  */
-class CachingFinatraKeyValueStoreImpl[K: ClassTag, V](
-  statsReceiver: StatsReceiver,
-  keyValueStore: FinatraKeyValueStore[K, V])
-    extends CachingFinatraKeyValueStore[K, V]
+class CachingFinatraKeyValueStoreImpl[K, V](
+  keyValueStore: FinatraKeyValueStore[K, V],
+  statsReceiver: StatsReceiver)
+    extends FinatraKeyValueStore[K, V]
     with Logging {
 
-  private var numCacheEntriesGauge: Gauge = _
-
-  private var _taskId: TaskId = _
+  @volatile private var numCacheEntriesGauge: Gauge = _
+  @volatile private var processorContext: ProcessorContext = _
+  @volatile private var flushListener: (K, V) => Unit = _
 
   /* Regarding concurrency, Kafka Stream's Transformer interface assures us that only 1 thread will ever modify this map.
    * However, when using QueryableState, there may be concurrent readers of this map. FastUtil documentation says the following:
@@ -51,8 +55,6 @@ class CachingFinatraKeyValueStoreImpl[K: ClassTag, V](
    */
   private val objectCache = new Object2ObjectOpenHashMap[K, V]
 
-  private var flushListener: (K, V) => Unit = _
-
   /*
       TODO: Consider making this a "batch consumer" so we could use keyValueStore.putAll which uses RocksDB WriteBatch
       which may lead to better performance...
@@ -61,7 +63,7 @@ class CachingFinatraKeyValueStoreImpl[K: ClassTag, V](
    */
   private val flushListenerBiConsumer = new BiConsumer[K, V] {
     override def accept(key: K, value: V): Unit = {
-      debug(s"flush_put($key -> $value")
+      trace(s"flush_put($key -> $value")
       keyValueStore.put(key, value)
       if (flushListener != null) {
         flushListener(key, value)
@@ -74,19 +76,18 @@ class CachingFinatraKeyValueStoreImpl[K: ClassTag, V](
   /**
    * Register a flush listener callback that will be called every time a cached key value store
    * entry is flushed into the underlying RocksDB store
-   * @param listener Flush callback for cached entries
+   * @param flushListener Flush callback for cached entries
    */
-  def registerFlushListener(listener: (K, V) => Unit): Unit = {
-    assert(flushListener == null, "Can only currently call registerFlushListener once")
-    flushListener = listener
+  def registerFlushListener(flushListener: (K, V) => Unit): Unit = {
+    this.flushListener = flushListener
   }
 
-  override def taskId: TaskId = _taskId
+  override def taskId: TaskId = keyValueStore.taskId
 
   override def name(): String = keyValueStore.name
 
   override def init(processorContext: ProcessorContext, stateStore: StateStore): Unit = {
-    _taskId = processorContext.taskId()
+    this.processorContext = processorContext
 
     numCacheEntriesGauge = statsReceiver
       .scope("stores")
@@ -97,8 +98,14 @@ class CachingFinatraKeyValueStoreImpl[K: ClassTag, V](
   }
 
   override def flush(): Unit = {
-    trace("flush")
-    flushObjectCache()
+    trace(s"flush $processorContext")
+    val internalProcessorContext = processorContext.asInstanceOf[InternalProcessorContext]
+
+    //This check is needed to support TopologyTests which call 'commit' directly without first triggering a flush :-/
+    if (internalProcessorContext.currentNode != null) {
+      flushObjectCache()
+    }
+
     keyValueStore.flush()
   }
 
@@ -112,7 +119,7 @@ class CachingFinatraKeyValueStoreImpl[K: ClassTag, V](
   }
 
   override def put(key: K, value: V): Unit = {
-    trace(s"put($key -> $value")
+    trace(s"$name $taskId put($key -> $value")
     objectCache.put(key, value)
   }
 
@@ -158,43 +165,6 @@ class CachingFinatraKeyValueStoreImpl[K: ClassTag, V](
     keyValueStore.put(key, null.asInstanceOf[V])
   }
 
-  override def all(): KeyValueIterator[K, V] = {
-    flushObjectCache()
-    keyValueStore.all()
-  }
-
-  override def range(fromInclusive: K, toInclusive: K): KeyValueIterator[K, V] = {
-    flushObjectCache()
-    keyValueStore.range(fromInclusive, toInclusive)
-  }
-
-  override def range(fromBytesInclusive: Array[Byte]): KeyValueIterator[K, V] = {
-    flushObjectCache()
-    keyValueStore.range(fromBytesInclusive)
-  }
-
-  override def range(
-    fromBytesInclusive: Array[Byte],
-    toBytesExclusive: Array[Byte]
-  ): KeyValueIterator[K, V] = {
-    flushObjectCache()
-    keyValueStore.range(fromBytesInclusive, toBytesExclusive)
-  }
-
-  override def range(
-    fromInclusive: K,
-    toInclusive: K,
-    allowStaleReads: Boolean
-  ): KeyValueIterator[K, V] = {
-    trace(s"range($fromInclusive to $toInclusive)")
-    if (allowStaleReads) {
-      staleRange(fromInclusive, toInclusive)
-    } else {
-      flushObjectCache()
-      keyValueStore.range(fromInclusive, toInclusive)
-    }
-  }
-
   override def deleteRangeExperimentalWithNoChangelogUpdates(
     beginKeyInclusive: Array[Byte],
     endKeyExclusive: Array[Byte]
@@ -208,8 +178,43 @@ class CachingFinatraKeyValueStoreImpl[K: ClassTag, V](
     keyValueStore.deleteRange(from, to)
   }
 
+  override def range(
+    fromInclusive: K,
+    toInclusive: K,
+    allowStaleReads: Boolean
+  ): KeyValueIterator[K, V] = {
+    if (allowStaleReads) {
+      staleRange(fromInclusive, toInclusive)
+    } else {
+      range(fromInclusive, toInclusive)
+    }
+  }
+
+  override def all(): KeyValueIterator[K, V] = {
+    throw new UnsupportedOperationException(
+      "Caching key value store does not support ordered ranges across all entries")
+  }
+
+  override def range(fromInclusive: K, toInclusive: K): KeyValueIterator[K, V] = {
+    throw new UnsupportedOperationException(
+      "Only range(to,from, allowStaleReads) currently supported on caching key value store")
+  }
+
+  override def range(
+    fromBytesInclusive: Array[Byte],
+    toBytesExclusive: Array[Byte]
+  ): KeyValueIterator[K, V] = {
+    flushObjectCache()
+    keyValueStore.range(fromBytesInclusive, toBytesExclusive)
+  }
+
+  override def range(fromBytesInclusive: Array[Byte]): KeyValueIterator[K, V] = {
+    throw new UnsupportedOperationException(
+      "Only range(to,from, allowStaleReads) currently supported on caching key value store")
+  }
+
   override def approximateNumEntries(): Long = {
-    keyValueStore.approximateNumEntries()
+    objectCache.size() + keyValueStore.approximateNumEntries()
   }
 
   override def persistent(): Boolean = keyValueStore.persistent()

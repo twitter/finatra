@@ -1,29 +1,34 @@
 package com.twitter.finatra.kafkastreams.transformer.stores.internal
 
 import com.twitter.finagle.stats.InMemoryStatsReceiver
+import com.twitter.finatra.kafka.serde.ScalaSerdes
 import com.twitter.finatra.kafka.test.utils.InMemoryStatsUtil
 import com.twitter.inject.Test
 import org.apache.kafka.common.metrics.Metrics
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.utils.LogContext
 import org.apache.kafka.streams.KeyValue
-import org.apache.kafka.streams.processor.StateStore
 import org.apache.kafka.streams.processor.internals.MockStreamsMetrics
-import org.apache.kafka.streams.state.Stores
-import org.apache.kafka.streams.state.internals.ThreadCache
+import org.apache.kafka.streams.state.internals.{RocksDBStoreFactory, ThreadCache}
 import org.apache.kafka.test.{InternalMockProcessorContext, NoOpRecordCollector, TestUtils}
 import scala.collection.JavaConversions._
 
 class FinatraKeyValueStoreLatencyTest extends Test {
 
-  private var context: InternalMockProcessorContext = _
+  private val context = new InternalMockProcessorContext(
+    TestUtils.tempDirectory,
+    Serdes.String,
+    Serdes.String,
+    new NoOpRecordCollector,
+    new ThreadCache(new LogContext("testCache"), 0, new MockStreamsMetrics(new Metrics()))
+  )
 
   private val statsReceiver = new InMemoryStatsReceiver()
   private val statsUtil = new InMemoryStatsUtil(statsReceiver)
-  private val keyValueStore = new FinatraKeyValueStoreImpl[Int, String](
-    name = "FinatraKeyValueStoreTest",
-    statsReceiver = statsReceiver
-  )
+  private val rocksDbStore = RocksDBStoreFactory.create("FinatraKeyValueStoreTest")
+  private val keyValueStore = new MetricsFinatraKeyValueStore[Int, String](
+    new FinatraKeyValueStoreImpl(rocksDbStore, rocksDbStore, ScalaSerdes.Int, Serdes.String),
+    statsReceiver = statsReceiver)
 
   private val Keys1to10 = 1 to 10
   private val Values1to10 = 'a' to 'j'
@@ -32,24 +37,24 @@ class FinatraKeyValueStoreLatencyTest extends Test {
   private val Key1 = KeyValues1to10.head.key
   private val Value1 = KeyValues1to10.head.value
 
-  // TODO: add `FinatraKeyValueStoreImpl.DeleteRangeExperimentalLatencyStatName` for testing
   private val AllLatencyStats = Seq(
-    FinatraKeyValueStoreImpl.InitLatencyStatName,
-    FinatraKeyValueStoreImpl.CloseLatencyStatName,
-    FinatraKeyValueStoreImpl.PutLatencyStatName,
-    FinatraKeyValueStoreImpl.PutIfAbsentLatencyStatName,
-    FinatraKeyValueStoreImpl.PutAllLatencyStatName,
-    FinatraKeyValueStoreImpl.DeleteLatencyStatName,
-    FinatraKeyValueStoreImpl.FlushLatencyStatName,
-    FinatraKeyValueStoreImpl.PersistentLatencyStatName,
-    FinatraKeyValueStoreImpl.IsOpenLatencyStatName,
-    FinatraKeyValueStoreImpl.GetLatencyStatName,
-    FinatraKeyValueStoreImpl.RangeLatencyStatName,
-    FinatraKeyValueStoreImpl.AllLatencyStatName,
-    FinatraKeyValueStoreImpl.ApproximateNumEntriesLatencyStatName,
-    FinatraKeyValueStoreImpl.DeleteRangeLatencyStatName,
-    FinatraKeyValueStoreImpl.DeleteWithoutGettingPriorValueLatencyStatName,
-    FinatraKeyValueStoreImpl.FinatraRangeLatencyStatName
+    MetricsFinatraKeyValueStore.InitLatencyStatName,
+    MetricsFinatraKeyValueStore.CloseLatencyStatName,
+    MetricsFinatraKeyValueStore.PutLatencyStatName,
+    MetricsFinatraKeyValueStore.PutIfAbsentLatencyStatName,
+    MetricsFinatraKeyValueStore.PutAllLatencyStatName,
+    MetricsFinatraKeyValueStore.DeleteLatencyStatName,
+    MetricsFinatraKeyValueStore.FlushLatencyStatName,
+    MetricsFinatraKeyValueStore.PersistentLatencyStatName,
+    MetricsFinatraKeyValueStore.IsOpenLatencyStatName,
+    MetricsFinatraKeyValueStore.GetLatencyStatName,
+    MetricsFinatraKeyValueStore.RangeLatencyStatName,
+    MetricsFinatraKeyValueStore.AllLatencyStatName,
+    MetricsFinatraKeyValueStore.ApproximateNumEntriesLatencyStatName,
+    MetricsFinatraKeyValueStore.DeleteRangeLatencyStatName,
+    MetricsFinatraKeyValueStore.DeleteRangeExperimentalLatencyStatName,
+    MetricsFinatraKeyValueStore.DeleteWithoutGettingPriorValueLatencyStatName,
+    MetricsFinatraKeyValueStore.FinatraRangeLatencyStatName
   )
 
   private def getLatencyStat(name: String): Seq[Float] = {
@@ -70,81 +75,61 @@ class FinatraKeyValueStoreLatencyTest extends Test {
     }
   }
 
-  override def beforeEach(): Unit = {
-    context = new InternalMockProcessorContext(
-      TestUtils.tempDirectory,
-      Serdes.Integer,
-      Serdes.String,
-      new NoOpRecordCollector,
-      new ThreadCache(new LogContext(), 0, new MockStreamsMetrics(new Metrics()))
-    ) {
-      override def getStateStore(name: String): StateStore = {
-        val storeBuilder = Stores
-          .keyValueStoreBuilder(
-            Stores.persistentKeyValueStore(name),
-            Serdes.Integer(),
-            Serdes.String()
-          )
-
-        val store = storeBuilder.build
-        store.init(this, store)
-        store
-      }
-    }
-  }
-
   override def afterEach(): Unit = {
     statsReceiver.clear()
   }
 
-  test("Series of store operations") { // TODO: test deleteRangeExperimental()
-    keyValueStore.init(context, null)
-    assertNonzeroLatency(FinatraKeyValueStoreImpl.InitLatencyStatName)
+  test("Series of store operations") {
+    keyValueStore.init(context, rocksDbStore)
+    assertNonzeroLatency(MetricsFinatraKeyValueStore.InitLatencyStatName)
 
     assert(keyValueStore.isOpen())
-    assertNonzeroLatency(FinatraKeyValueStoreImpl.IsOpenLatencyStatName)
+    assertNonzeroLatency(MetricsFinatraKeyValueStore.IsOpenLatencyStatName)
 
     assert(keyValueStore.persistent())
-    assertNonzeroLatency(FinatraKeyValueStoreImpl.PersistentLatencyStatName)
+    assertNonzeroLatency(MetricsFinatraKeyValueStore.PersistentLatencyStatName)
 
     keyValueStore.put(Key1, Value1)
-    assertNonzeroLatency(FinatraKeyValueStoreImpl.PutLatencyStatName)
+    assertNonzeroLatency(MetricsFinatraKeyValueStore.PutLatencyStatName)
 
     assert(keyValueStore.get(Key1) == Value1)
-    assertNonzeroLatency(FinatraKeyValueStoreImpl.GetLatencyStatName)
+    assertNonzeroLatency(MetricsFinatraKeyValueStore.GetLatencyStatName)
 
     keyValueStore.putIfAbsent(Key1, Value1)
-    assertNonzeroLatency(FinatraKeyValueStoreImpl.PutIfAbsentLatencyStatName)
+    assertNonzeroLatency(MetricsFinatraKeyValueStore.PutIfAbsentLatencyStatName)
 
     keyValueStore.delete(Key1)
-    assertNonzeroLatency(FinatraKeyValueStoreImpl.DeleteLatencyStatName)
+    assertNonzeroLatency(MetricsFinatraKeyValueStore.DeleteLatencyStatName)
 
     keyValueStore.putAll(KeyValues1to10)
-    assertNonzeroLatency(FinatraKeyValueStoreImpl.PutAllLatencyStatName)
+    assertNonzeroLatency(MetricsFinatraKeyValueStore.PutAllLatencyStatName)
 
     keyValueStore.range(1, 5).close()
-    assertNonzeroLatency(FinatraKeyValueStoreImpl.RangeLatencyStatName)
+    assertNonzeroLatency(MetricsFinatraKeyValueStore.RangeLatencyStatName)
 
     keyValueStore.all().close()
-    assertNonzeroLatency(FinatraKeyValueStoreImpl.AllLatencyStatName)
+    assertNonzeroLatency(MetricsFinatraKeyValueStore.AllLatencyStatName)
 
     keyValueStore.approximateNumEntries()
-    assertNonzeroLatency(FinatraKeyValueStoreImpl.ApproximateNumEntriesLatencyStatName)
+    assertNonzeroLatency(MetricsFinatraKeyValueStore.ApproximateNumEntriesLatencyStatName)
 
     keyValueStore.deleteRange(1, 2)
-    assertNonzeroLatency(FinatraKeyValueStoreImpl.DeleteRangeLatencyStatName)
+    assertNonzeroLatency(MetricsFinatraKeyValueStore.DeleteRangeLatencyStatName)
+
+    keyValueStore.deleteRangeExperimentalWithNoChangelogUpdates(Array.emptyByteArray, Array.emptyByteArray)
+    assertNonzeroLatency(MetricsFinatraKeyValueStore.DeleteRangeExperimentalLatencyStatName)
 
     keyValueStore.deleteWithoutGettingPriorValue(10)
-    assertNonzeroLatency(FinatraKeyValueStoreImpl.DeleteWithoutGettingPriorValueLatencyStatName)
+    assertNonzeroLatency(MetricsFinatraKeyValueStore.DeleteWithoutGettingPriorValueLatencyStatName)
 
     keyValueStore.range(Array())
-    assertNonzeroLatency(FinatraKeyValueStoreImpl.FinatraRangeLatencyStatName)
+    assertNonzeroLatency(MetricsFinatraKeyValueStore.FinatraRangeLatencyStatName)
 
     keyValueStore.flush()
-    assertNonzeroLatency(FinatraKeyValueStoreImpl.FlushLatencyStatName)
+    assertNonzeroLatency(MetricsFinatraKeyValueStore.FlushLatencyStatName)
 
     keyValueStore.close()
-    assertNonzeroLatency(FinatraKeyValueStoreImpl.CloseLatencyStatName)
+    assertNonzeroLatency(MetricsFinatraKeyValueStore.CloseLatencyStatName)
 
     assertAllNonzeroLatency()
   }

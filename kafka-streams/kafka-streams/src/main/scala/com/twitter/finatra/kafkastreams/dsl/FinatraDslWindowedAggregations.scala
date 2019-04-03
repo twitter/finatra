@@ -8,15 +8,27 @@ import com.twitter.finatra.kafka.serde.ScalaSerdes
 import com.twitter.finatra.kafkastreams.config.FinatraTransformerFlags
 import com.twitter.finatra.kafkastreams.flushing.FlushingAwareServer
 import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer
-import com.twitter.finatra.kafkastreams.transformer.aggregation.{AggregatorTransformer, FixedTimeWindowedSerde, TimeWindowed, WindowedValue}
+import com.twitter.finatra.kafkastreams.transformer.aggregation.{
+  AggregatorTransformer,
+  FixedTimeWindowedSerde,
+  TimeWindowed,
+  WindowedValue
+}
 import com.twitter.finatra.kafkastreams.transformer.domain.Time
 import com.twitter.finatra.kafkastreams.utils.ScalaStreamsImplicits
 import com.twitter.inject.Logging
 import com.twitter.util.Duration
-import org.apache.kafka.common.config.TopicConfig.{CLEANUP_POLICY_COMPACT, CLEANUP_POLICY_CONFIG, CLEANUP_POLICY_DELETE, DELETE_RETENTION_MS_CONFIG, RETENTION_MS_CONFIG, SEGMENT_BYTES_CONFIG}
+import org.apache.kafka.common.config.TopicConfig.{
+  CLEANUP_POLICY_COMPACT,
+  CLEANUP_POLICY_CONFIG,
+  CLEANUP_POLICY_DELETE,
+  DELETE_RETENTION_MS_CONFIG,
+  RETENTION_MS_CONFIG,
+  SEGMENT_BYTES_CONFIG
+}
 import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.streams.scala.kstream.{KStream => KStreamS}
-import org.apache.kafka.streams.state.Stores
+import org.apache.kafka.streams.state.internals.FinatraStores
 import org.apache.kafka.streams.{KafkaStreams, StreamsBuilder}
 import scala.collection.JavaConverters._
 import scala.reflect.ClassTag
@@ -67,10 +79,10 @@ trait FinatraDslWindowedAggregations
      * A Window is closed after event time passes the end of a TimeWindow + allowedLateness.
      *
      * After a window is closed, if emitOnClose=true it is forwarded out of this transformer with a
-     * [[WindowedValue.windowResultType]] of [[WindowClosed]]
+     * [[WindowedValue.windowResultType]] of [[com.twitter.finatra.kafkastreams.transformer.aggregation.WindowClosed]]
      *
      * If a record arrives after a window is closed it is immediately forwarded out of this
-     * transformer with a [[WindowedValue.windowResultType]] of [[Restatement]]
+     * transformer with a [[WindowedValue.windowResultType]] of [[com.twitter.finatra.kafkastreams.transformer.aggregation.Restatement]]
      *
      * @param stateStore the name of the StateStore used to maintain the counts.
      * @param windowSize splits the stream of data into buckets of data of windowSize,
@@ -112,11 +124,13 @@ trait FinatraDslWindowedAggregations
     ): KStreamS[TimeWindowed[K], WindowedValue[Aggregate]] = {
       val windowedKeySerde = FixedTimeWindowedSerde(inner = keySerde, duration = windowSize)
 
-      val aggregateStore = Stores
+      val aggregateStore = FinatraStores
         .keyValueStoreBuilder(
-          Stores.persistentKeyValueStore(stateStore),
-          windowedKeySerde,
-          aggregateSerde)
+          statsReceiver = streamsStatsReceiver,
+          supplier = FinatraStores.persistentKeyValueStore(stateStore),
+          keySerde = windowedKeySerde,
+          valueSerde = aggregateSerde)
+        .withCachingEnabled()
         .withLoggingEnabled(Map(
           CLEANUP_POLICY_CONFIG -> (CLEANUP_POLICY_COMPACT + ", " + CLEANUP_POLICY_DELETE),
           SEGMENT_BYTES_CONFIG -> 100.megabytes.inBytes.toString,
@@ -127,7 +141,8 @@ trait FinatraDslWindowedAggregations
 
       val timerStore = FinatraTransformer.timerStore(
         name = s"$stateStore-TimerStore",
-        timerKeySerde = ScalaSerdes.Long)
+        timerKeySerde = ScalaSerdes.Long,
+        statsReceiver = streamsStatsReceiver)
 
       debug(s"Add $aggregateStore")
       kafkaStreamsBuilder.addStateStore(aggregateStore)
@@ -168,10 +183,10 @@ trait FinatraDslWindowedAggregations
      * A Window is closed after event time passes the end of a TimeWindow + allowedLateness.
      *
      * After a window is closed, if emitOnClose=true it is forwarded out of this transformer with a
-     * [[WindowedValue.windowResultType]] of [[WindowClosed]]
+     * [[WindowedValue.windowResultType]] of [[com.twitter.finatra.kafkastreams.transformer.aggregation.WindowClosed]]
      *
      * If a record arrives after a window is closed it is immediately forwarded out of this
-     * transformer with a [[WindowedValue.windowResultType]] of [[Restatement]]
+     * transformer with a [[WindowedValue.windowResultType]] of [[com.twitter.finatra.kafkastreams.transformer.aggregation.Restatement]]
      *
      * @param stateStore the name of the StateStore used to maintain the counts.
      * @param windowSize splits the stream of data into buckets of data of windowSize,
@@ -237,10 +252,10 @@ trait FinatraDslWindowedAggregations
      * A Window is closed after event time passes the end of a TimeWindow + allowedLateness.
      *
      * After a window is closed, if emitOnClose=true it is forwarded out of this transformer with a
-     * [[WindowedValue.windowResultType]] of [[WindowClosed]]
+     * [[WindowedValue.windowResultType]] of [[com.twitter.finatra.kafkastreams.transformer.aggregation.WindowClosed]]
      *
      * If a record arrives after a window is closed it is immediately forwarded out of this
-     * transformer with a [[WindowedValue.windowResultType]] of [[Restatement]]
+     * transformer with a [[WindowedValue.windowResultType]] of [[com.twitter.finatra.kafkastreams.transformer.aggregation.Restatement]]
      *
      * @param stateStore the name of the StateStore used to maintain the counts.
      * @param windowSize splits the stream of data into buckets of data of windowSize,

@@ -89,7 +89,7 @@ class QueryableFinatraCompositeWindowStore[PK, SK, V](
       numPartitions = numQueryablePartitions,
       keyBytes = primaryKeyBytes)
 
-    trace(s"Start Query $storeName $primaryKey $startCompositeKey $endCompositeKey ${startWindowRange.iso8601Millis} to ${endWindowRange.iso8601Millis} = $resultMap")
+    trace(s"Start Query $storeName ${store.taskId} $primaryKey $startCompositeKey $endCompositeKey ${startWindowRange.iso8601Millis} to ${endWindowRange.iso8601Millis} = $resultMap")
 
     var windowStartTime = startWindowRange
     while (windowStartTime <= endWindowRange) {
@@ -104,7 +104,7 @@ class QueryableFinatraCompositeWindowStore[PK, SK, V](
       windowStartTime = windowStartTime + windowSizeMillis
     }
 
-    info(s"Query $storeName $primaryKey $startCompositeKey $endCompositeKey ${startWindowRange.iso8601Millis} to ${endWindowRange.iso8601Millis} = $resultMap")
+    info(s"Query $storeName ${store.taskId} $primaryKey $startCompositeKey $endCompositeKey ${startWindowRange.iso8601Millis} to ${endWindowRange.iso8601Millis} = $resultMap")
     resultMap.toMap
   }
 

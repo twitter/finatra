@@ -1,6 +1,7 @@
 package com.twitter.finatra.kafkastreams.transformer.stores
 
 import org.apache.kafka.streams.errors.InvalidStateStoreException
+import org.apache.kafka.streams.processor.TaskId
 import org.apache.kafka.streams.state.{KeyValueIterator, ReadOnlyKeyValueStore}
 
 /**
@@ -9,6 +10,13 @@ import org.apache.kafka.streams.state.{KeyValueIterator, ReadOnlyKeyValueStore}
  * are expected.
  */
 trait FinatraReadOnlyKeyValueStore[K, V] extends ReadOnlyKeyValueStore[K, V] {
+
+  /**
+   * Returns the task id of this tore
+   *
+   * @return the task id of this store
+   */
+  def taskId: TaskId
 
   /**
    * Get an iterator over a given range of keys. This iterator must be closed after use.

@@ -1,16 +1,21 @@
 package com.twitter.finatra.kafkastreams.transformer.stores
 
-import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.kafkastreams.flushing.FlushingTransformer
-import com.twitter.finatra.kafkastreams.transformer.stores.internal.{CachingFinatraKeyValueStoreImpl, FinatraKeyValueStoreImpl}
-import scala.collection.mutable
+import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer
 import scala.reflect.ClassTag
 
-trait CachingKeyValueStores[K, V, K1, V1] extends FlushingTransformer[K, V, K1, V1] {
-
-  protected def statsReceiver: StatsReceiver
-
-  protected def finatraKeyValueStoresMap: mutable.Map[String, FinatraKeyValueStore[_, _]]
+/**
+ * Trait to mix into a FinatraTransformer which is used
+ * to access a caching enabled Finatra Store
+ *
+ * @tparam K Transformer key input type
+ * @tparam V Transformer value input type
+ * @tparam K1 Transformer key return type
+ * @tparam V1 Transformer value return type
+ */
+trait CachingKeyValueStores[K, V, K1, V1]
+    extends FinatraTransformer[K, V, K1, V1]
+    with FlushingTransformer[K, V, K1, V1] {
 
   override def onFlush(): Unit = {
     super.onFlush()
@@ -20,23 +25,16 @@ trait CachingKeyValueStores[K, V, K1, V1] extends FlushingTransformer[K, V, K1, 
   /**
    * Lookup a caching key value store by name
    * @param name The name of the store
+   * @param flushListener Callback that will be called every time a cached store entry is flushed
+   *                      into the underlying RocksDB store
    * @tparam KK Type of keys in the store
    * @tparam VV Type of values in the store
    * @return A caching key value store
    */
   protected def getCachingKeyValueStore[KK: ClassTag, VV](
-    name: String
-  ): CachingFinatraKeyValueStore[KK, VV] = {
-    val store = new CachingFinatraKeyValueStoreImpl[KK, VV](
-      statsReceiver,
-      new FinatraKeyValueStoreImpl[KK, VV](name, statsReceiver))
-
-    val previousStore = finatraKeyValueStoresMap.put(name, store)
-    assert(
-      previousStore.isEmpty,
-      s"getCachingKeyValueStore was called for store $name more than once")
-
-    store
+    name: String,
+    flushListener: (String, KK, VV) => Unit
+  ): FinatraKeyValueStore[KK, VV] = {
+    getKeyValueStore(name, Some(flushListener))
   }
-
 }
