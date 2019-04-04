@@ -31,7 +31,7 @@ This commands differs from the [CONTRIBUTING.md](../CONTRIBUTING.md) documentati
 that it will also *include* building and publishing Finatra locally from the Finatra
 `develop` branch.
 
-In the `master` branch, you should be able run the examples without building any dependencies 
+In the `master` branch, you should be able to run the examples without building any dependencies
 as `master` uses the released versions of the Twitter OSS dependencies.
 
 ### To Run

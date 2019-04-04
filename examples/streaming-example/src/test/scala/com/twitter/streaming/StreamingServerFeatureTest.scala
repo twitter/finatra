@@ -5,9 +5,25 @@ import com.twitter.finatra.http.{EmbeddedHttpServer, StreamingJsonTestHelper}
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.{Buf, Reader}
-import com.twitter.util.Await
+
+object StreamingServerFeatureTest {
+  /* Response Implicit Utils */
+  implicit class RichResponse(val self: Response) extends AnyVal {
+    def readerStrings: Reader[String] = {
+      self.reader.map {
+        case Buf.Utf8(str) =>
+          str
+      }
+    }
+
+    def printReaderStrings() = {
+      readerStrings map { str => println("Read:\t" + str) }
+    }
+  }
+}
 
 class StreamingServerFeatureTest extends FeatureTest {
+  import StreamingServerFeatureTest._
 
   override val server = new EmbeddedHttpServer(new StreamingServer, streamResponse = true)
 
@@ -27,21 +43,8 @@ class StreamingServerFeatureTest extends FeatureTest {
     }
 
     val response = server.httpRequest(request)
-    response.printAsyncStrings()
-  }
-
-  /* Response Implicit Utils */
-
-  implicit class RichResponse(val self: Response) {
-    def asyncStrings = {
-      Reader.toAsyncStream(self.reader).map {
-        case Buf.Utf8(str) =>
-          str
-      }
-    }
-
-    def printAsyncStrings() = {
-      Await.result(self.asyncStrings map { "Read:\t" + _ } foreach println)
-    }
+    response.printReaderStrings()
   }
 }
+
+

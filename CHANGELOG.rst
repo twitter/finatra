@@ -22,6 +22,9 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-examples: Updated `StreamingController` to use `Reader` instead of `AsyncStream`
+  ``PHAB_ID=D295227``
+
 * finatra-kafka-streams: Implement FinatraKeyValueStore as custom store. ``PHAB_ID=D277612``
 
 * finatra-thrift: Constructing a `ThriftRouter` now requires a `c.t.f.StackTransformer`
