@@ -4,7 +4,6 @@ import com.twitter.adder.thriftscala.Adder
 import com.twitter.adder.thriftscala.Adder._
 import com.twitter.finagle.CancelledRequestException
 import com.twitter.finatra.thrift.Controller
-import com.twitter.finatra.thrift.thriftscala.{ServerError, ServerErrorCause}
 import com.twitter.util.Future
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Singleton
@@ -21,7 +20,7 @@ class AdderThriftController extends Controller with Adder.BaseServiceIface {
     if (numCalled == 1)
       Future.exception(new IllegalArgumentException)
     else if (numCalled == 2)
-      Future.exception(new ServerError(ServerErrorCause.InternalServerError, "oops"))
+      Future.exception(new RuntimeException("oops"))
     else
       Future.value(args.num + 1)
   }
@@ -36,7 +35,7 @@ class AdderThriftController extends Controller with Adder.BaseServiceIface {
     else if (numCalled == 3)
       Future.exception(new NullPointerException)
     else if (numCalled < 6)
-      Future.exception(new ServerError(ServerErrorCause.InternalServerError, "oops " + numCalled))
+      Future.exception(new RuntimeException("oops " + numCalled))
     else
       Future((args.num.toInt + 1).toString)
   }

@@ -17,16 +17,12 @@ import org.junit.Test;
 import com.twitter.doeverything.thriftjava.Answer;
 import com.twitter.doeverything.thriftjava.DoEverything;
 import com.twitter.doeverything.thriftjava.Question;
+import com.twitter.finagle.RequestException;
 import com.twitter.finagle.http.Response;
 import com.twitter.finagle.http.Status;
 import com.twitter.finatra.thrift.EmbeddedThriftServer;
 import com.twitter.finatra.thrift.tests.doeverything.DoEverythingJavaThriftServer;
-import com.twitter.finatra.thrift.thriftjava.ClientError;
-import com.twitter.finatra.thrift.thriftjava.ClientErrorCause;
-import com.twitter.finatra.thrift.thriftjava.NoClientIdError;
-import com.twitter.finatra.thrift.thriftjava.ServerError;
-import com.twitter.finatra.thrift.thriftjava.ServerErrorCause;
-import com.twitter.finatra.thrift.thriftjava.UnknownClientIdError;
+import com.twitter.finatra.thrift.tests.doeverything.exceptions.TestChannelException;
 import com.twitter.util.Await;
 import com.twitter.util.Duration;
 import com.twitter.util.Future;
@@ -43,14 +39,6 @@ public class DoEverythingJavaThriftServerFeatureTest extends Assert {
             SERVER.thriftClient(
                 "client123",
                 ClassTag$.MODULE$.apply(DoEverything.ServiceIface.class));
-    private static final DoEverything.ServiceIface UNSUPPORTED_THRIFT_CLIENT =
-            SERVER.thriftClient(
-                "unsupported",
-                ClassTag$.MODULE$.apply(DoEverything.ServiceIface.class));
-    private static final DoEverything.ServiceIface NO_ID_THRIFT_CLIENT =
-        SERVER.thriftClient(
-            null,
-            ClassTag$.MODULE$.apply(DoEverything.ServiceIface.class));
 
     @AfterClass
     public static void tearDown() throws Exception {
@@ -79,8 +67,7 @@ public class DoEverythingJavaThriftServerFeatureTest extends Assert {
                 + ".andThen(com.twitter.finatra.thrift.filters.ThriftMDCFilter)"
                 + ".andThen(com.twitter.finatra.thrift.filters.AccessLoggingFilter)"
                 + ".andThen(com.twitter.finatra.thrift.filters.StatsFilter)"
-                + ".andThen(com.twitter.finatra.thrift.filters.ExceptionMappingFilter)"
-                + ".andThen(com.twitter.finatra.thrift.filters.JavaClientIdAcceptlistFilter)",
+                + ".andThen(com.twitter.finatra.thrift.filters.ExceptionMappingFilter)",
             filters.asText());
         JsonNode methods = thriftNode.get("methods");
 
@@ -110,34 +97,7 @@ public class DoEverythingJavaThriftServerFeatureTest extends Assert {
             fail("Expected exception " + Exception.class + " never thrown");
         } catch (Exception e) {
             // expected
-            assertEquals(ServerError.class.getName(), e.getClass().getName());
-            assertEquals(ServerErrorCause.INTERNAL_SERVER_ERROR, ((ServerError) e).getErrorCause());
-        }
-    }
-
-    /** test echo endpoint fails */
-    @Test
-    public void testUnsupportedThriftClient() throws Exception {
-        try {
-            await(UNSUPPORTED_THRIFT_CLIENT.echo("Hi"));
-            fail("Expected exception " + Exception.class + " never thrown");
-        } catch (Exception e) {
-            // expected
-            assertEquals(UnknownClientIdError.class.getName(), e.getClass().getName());
-            assertEquals("unknown client id", e.getMessage());
-        }
-    }
-
-    /** test echo endpoint fails */
-    @Test
-    public void testNoIdThriftClient() throws Exception {
-        try {
-            await(NO_ID_THRIFT_CLIENT.echo("Hi"));
-            fail("Expected exception " + Exception.class + " never thrown");
-        } catch (Exception e) {
-            // expected
-            assertEquals(NoClientIdError.class.getName(), e.getClass().getName());
-            assertEquals("The request did not contain a Thrift client id", e.getMessage());
+            assertEquals(TApplicationException.class.getName(), e.getClass().getName());
         }
     }
 
@@ -158,8 +118,7 @@ public class DoEverythingJavaThriftServerFeatureTest extends Assert {
       } catch (Exception e) {
           // expected
           assertEquals(TApplicationException.class.getName(), e.getClass().getName());
-          assertTrue(
-              e.getMessage().contains("ClientError(errorCause:BAD_REQUEST, message:client error)"));
+          assertTrue(e.getMessage().contains("client error"));
       }
     }
 
@@ -173,8 +132,8 @@ public class DoEverythingJavaThriftServerFeatureTest extends Assert {
         fail("Expected exception " + Exception.class + " never thrown");
       } catch (Exception e) {
         // expected
-        assertEquals(ClientError.class.getName(), e.getClass().getName());
-        assertEquals(ClientErrorCause.BAD_REQUEST, ((ClientError) e).getErrorCause());
+        assertEquals(TApplicationException.class.getName(), e.getClass().getName());
+        assertTrue(e.getMessage().contains("client error"));
       }
     }
 
@@ -186,8 +145,8 @@ public class DoEverythingJavaThriftServerFeatureTest extends Assert {
             fail("Expected exception " + Exception.class + " never thrown");
         } catch (Exception e) {
             // expected
-            assertEquals(ServerError.class.getName(), e.getClass().getName());
-            assertEquals(ServerErrorCause.INTERNAL_SERVER_ERROR, ((ServerError) e).getErrorCause());
+            assertEquals(TApplicationException.class.getName(), e.getClass().getName());
+            assertTrue(e.getMessage().contains(RequestException.class.getName()));
         }
     }
 
@@ -199,8 +158,8 @@ public class DoEverythingJavaThriftServerFeatureTest extends Assert {
             fail("Expected exception " + Exception.class + " never thrown");
         } catch (Exception e) {
             // expected
-            assertEquals(ClientError.class.getName(), e.getClass().getName());
-            assertEquals(ClientErrorCause.REQUEST_TIMEOUT, ((ClientError) e).getErrorCause());
+            assertEquals(TApplicationException.class.getName(), e.getClass().getName());
+            assertTrue(e.getMessage().contains("timeout exception"));
         }
     }
 
@@ -226,8 +185,8 @@ public class DoEverythingJavaThriftServerFeatureTest extends Assert {
             fail("Expected exception " + Exception.class + " never thrown");
         } catch (Exception e) {
             // expected
-            assertEquals(ServerError.class.getName(), e.getClass().getName());
-            assertEquals(ServerErrorCause.INTERNAL_SERVER_ERROR, ((ServerError) e).getErrorCause());
+            assertEquals(TApplicationException.class.getName(), e.getClass().getName());
+            assertTrue(e.getMessage().contains(TestChannelException.class.getName()));
         }
     }
 
@@ -239,8 +198,8 @@ public class DoEverythingJavaThriftServerFeatureTest extends Assert {
             fail("Expected exception " + Exception.class + " never thrown");
         } catch (Exception e) {
             // expected
-            assertEquals(ServerError.class.getName(), e.getClass().getName());
-            assertEquals(ServerErrorCause.INTERNAL_SERVER_ERROR, ((ServerError) e).getErrorCause());
+            assertEquals(TApplicationException.class.getName(), e.getClass().getName());
+            assertTrue(e.getMessage().contains("unhandled exception"));
         }
     }
 

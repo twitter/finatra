@@ -1,12 +1,14 @@
 scala_library(
     name = "doeverything-exceptions",
     sources = globs(
+        "com/twitter/finatra/thrift/exceptions/*.scala",
         "com/twitter/finatra/thrift/tests/doeverything/exceptions/*.scala",
     ),
     compiler_option_sets = {"fatal_warnings"},
     dependencies = [
         "finagle/finagle-core/src/main/scala",
         "finatra/thrift/src/main/scala",
+        "finatra/thrift/src/test/thrift:doeverything-thrift-java",
         "finatra/thrift/src/test/thrift:doeverything-thrift-scala",
     ],
 )
@@ -44,6 +46,7 @@ junit_tests(
         "com/twitter/finatra/thrift/tests/*.scala",
         "com/twitter/finatra/thrift/tests/doeverything/*.scala",
         "com/twitter/finatra/thrift/tests/doeverything/controllers/*.scala",
+        "com/twitter/finatra/thrift/tests/doeverything/filters/*.scala",
         "com/twitter/finatra/thrift/tests/doeverything/modules/*.scala",
         "com/twitter/finatra/thrift/tests/exceptions/*.scala",
         "com/twitter/finatra/thrift/tests/inheritance/*.scala",
@@ -78,7 +81,6 @@ junit_tests(
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/thrift/src/main/scala",
-        "finatra/thrift/src/main/thrift:thrift-scala",
         "finatra/thrift/src/test/resources",
         "finatra/thrift/src/test/thrift:doeverything-thrift-scala",
         "finatra/utils/src/main/java",

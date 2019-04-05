@@ -7,8 +7,6 @@ import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.{ChannelException, Filter, RequestException, RequestTimeoutException, Service, SimpleFilter}
 import com.twitter.finatra.thrift.Controller
 import com.twitter.finatra.thrift.tests.doeverything.exceptions.{BarException, FooException}
-import com.twitter.finatra.thrift.thriftscala.{ClientError, UnknownClientIdError}
-import com.twitter.finatra.thrift.thriftscala.ClientErrorCause.BadRequest
 import com.twitter.inject.annotations.Flag
 import com.twitter.inject.logging.FinagleMDCAdapter
 import com.twitter.util.Future
@@ -46,7 +44,7 @@ class DoEverythingThriftController @Inject()(@Flag("magicNum") magicNumValue: St
 
   handle(Echo).filtered(countEchoFilter) { args: Echo.Args =>
     if (args.msg == "clientError") {
-      Future.exception(ClientError(BadRequest, "client error"))
+      Future.exception(new Exception("client error") with NoStackTrace)
     } else {
       Future.value(args.msg)
     }
@@ -54,9 +52,8 @@ class DoEverythingThriftController @Inject()(@Flag("magicNum") magicNumValue: St
 
   handle(Echo2).filtered(countEchoFilter) { args: Echo2.Args =>
     args.msg match {
-      // should be handled by FinatraExceptionMapper
-      case "clientError" => throw new ClientError(BadRequest, "client error")
-      case "unknownClientIdError" => throw new UnknownClientIdError("unknown client id error")
+      case "clientError" => throw new Exception("client error")
+      case "unknownClientIdError" => throw new Exception("unknown client id error")
       case "requestException" => throw new RequestException
       case "timeoutException" => throw new RequestTimeoutException(1.second, "timeout exception")
       case "unhandledException" => throw new Exception("unhandled exception") with NoStackTrace

@@ -27,7 +27,6 @@ junit_tests(
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/thrift/src/main/scala",
-        "finatra/thrift/src/main/thrift:thrift-java",
         "finatra/thrift/src/test/resources",
         "finatra/thrift/src/test/scala:doeverything-exceptions",
         "finatra/thrift/src/test/scala:test-deps",

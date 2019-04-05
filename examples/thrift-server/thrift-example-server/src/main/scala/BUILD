@@ -19,7 +19,6 @@ scala_library(
         "finatra/inject/inject-server/src/main/scala",
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/thrift/src/main/scala",
-        "finatra/thrift/src/main/thrift:thrift-scala",
         "scrooge/scrooge-core/src/main/scala",
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",

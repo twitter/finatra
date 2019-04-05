@@ -87,6 +87,13 @@ Changed
   not collide with the serving of a Finagle service from the `HttpServer` when a server extends
   both `HttpServer` and `ThriftServer`. ``PHAB_ID=D280896``
 
+* finatra-thrift: Removed `c.t.finatra.thrift.exceptions.FinatraThriftExceptionMapper`, 
+  `c.t.finatra.thrift.filters.ClientIdAcceptlistFilter`,
+  `c.t.finatra.thrift.modules.ClientIdAcceptlistModule`,
+  `c.t.finatra.thrift.filters.ClientIdWhitelistFilter`,
+  `c.t.finatra.thrift.modules.ClientIdWhitelistModule`,
+  and the `finatra/finatra_thrift_exceptions.thrift` IDL. ``PHAB_ID=D278231``
+
 Fixed
 ~~~~~
 

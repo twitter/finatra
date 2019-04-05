@@ -724,9 +724,7 @@ lazy val thrift = project
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "org.yaml" % "snakeyaml" % versions.snakeyaml
     ),
-    scroogePublishThrift in Compile := true,
-    scroogeThriftIncludeFolders in Test := Seq(file("thrift/src/main/thrift")),
-    scroogeLanguages in Compile := Seq("java", "scala"),
+    scroogePublishThrift in Test := true,
     scroogeLanguages in Test := Seq("java", "scala"),
     excludeFilter in unmanagedResources := "BUILD",
     publishArtifact in Test := true,
@@ -753,7 +751,6 @@ lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-h
   .settings(
     name := "inject-thrift-client-http-mapper",
     moduleName := "inject-thrift-client-http-mapper",
-    scroogeThriftIncludeFolders in Test := Seq(file("thrift/src/main/thrift")),
     excludeFilter in Test in unmanagedResources := "BUILD"
   ).dependsOn(
     http % "test->test;compile->compile",
@@ -1035,7 +1032,6 @@ lazy val thriftExampleIdl = (project in file("examples/thrift-server/thrift-exam
     moduleName := "thrift-example-idl",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*",
     scroogeThriftIncludeFolders in Compile := Seq(
-      file("thrift/src/main/thrift"),
       file("examples/thrift-server/thrift-example-idl/src/main/thrift"))
   ).dependsOn(thrift)
 
@@ -1064,7 +1060,6 @@ lazy val thriftJavaExampleIdl = (project in file("examples/java-thrift-server/th
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftjava.*",
     scroogeLanguages in Compile := Seq("java"),
     scroogeThriftIncludeFolders in Compile := Seq(
-      file("thrift/src/main/thrift"),
       file("examples/java-thrift-server/thrift-example-idl/src/main/thrift"))
   ).dependsOn(thrift)
 
