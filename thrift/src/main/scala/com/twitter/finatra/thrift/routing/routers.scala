@@ -9,6 +9,7 @@ import com.twitter.finatra.thrift._
 import com.twitter.finatra.thrift.exceptions.{ExceptionManager, ExceptionMapper}
 import com.twitter.finatra.thrift.internal.routing.{NullThriftService, Registrar}
 import com.twitter.inject.TypeUtils._
+import com.twitter.inject.annotations.Flag
 import com.twitter.inject.internal.LibraryRegistry
 import com.twitter.inject.{Injector, Logging, StackTransformer}
 import com.twitter.scrooge.{Request, Response, ThriftMethod}
@@ -124,8 +125,12 @@ private object ThriftRouter {
  *       are encouraged to use the [[JavaThriftRouter]].
  */
 @Singleton
-class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionManager, stackTransformer: StackTransformer)
-    extends BaseThriftRouter[ThriftRouter](injector, exceptionManager) {
+class ThriftRouter @Inject()(
+  injector: Injector,
+  exceptionManager: ExceptionManager,
+  stackTransformer: StackTransformer,
+  @Flag("thrift.name") serverName: String
+) extends BaseThriftRouter[ThriftRouter](injector, exceptionManager) {
 
   private[this] var underlying: ThriftService = NullThriftService
 
@@ -264,7 +269,9 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
       method -> {
         val endpoint = ServiceFactory.const(cm.filters.andThen(service))
         val stack = filterStack ++ Stack.leaf(finagle.stack.Endpoint, endpoint)
-        val params = Stack.Params.empty + param.Tags(method.name, method.serviceName)
+        val params = Stack.Params.empty +
+          param.Label(serverName) +
+          param.Tags(method.name, method.serviceName)
         val svcFac = stack.make(params)
         Service.pending(svcFac()).asInstanceOf[ScroogeServiceImpl]
       }

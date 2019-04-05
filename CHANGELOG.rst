@@ -22,12 +22,14 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-thrift: Constructing a `ThriftRouter` now requires `serverName`. ``PHAB_ID=D294345``
+
 * finatra-examples: Updated `StreamingController` to use `Reader` instead of `AsyncStream`
   ``PHAB_ID=D295227``
 
 * finatra-kafka-streams: Implement FinatraKeyValueStore as custom store. ``PHAB_ID=D277612``
 
-* finatra-thrift: Constructing a `ThriftRouter` now requires a `c.t.f.StackTransformer`
+* finatra-thrift: Constructing a `ThriftRouter` now requires `c.t.f.StackTransformer`.
   ``PHAB_ID=D277493``
 
 Fixed
