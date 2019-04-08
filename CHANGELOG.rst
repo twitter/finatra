@@ -42,6 +42,9 @@ Changed
 Fixed
 ~~~~~
 
+ * finatra-kafka: Ensure that `EmbeddedKafka` implementation of `beforeAll()` makes
+   call to `super.beforeAll()` so hooks registered in super class get executed. ``PHAB_ID=D296643``
+
  * finatra-kafka-streams: `FinatraTransformer.timerStore` config object references immutable
    map which causes exception thrown if user code calls `AbstractStoreBuilder.withLoggingDisabled`.
    Fixed `FinatraTransformer.timerStore` to convert from immutable map to mutable map before
