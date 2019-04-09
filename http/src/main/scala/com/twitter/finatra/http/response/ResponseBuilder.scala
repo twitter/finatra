@@ -22,7 +22,6 @@ import java.util.function.{Function => JFunction}
 import javax.inject.Inject
 import org.apache.commons.io.FilenameUtils._
 import org.apache.commons.io.IOUtils
-import org.jboss.netty.handler.codec.http.{Cookie => NettyCookie}
 import scala.runtime.BoxedUnit
 
 object ResponseBuilder {
@@ -206,12 +205,6 @@ class ResponseBuilder @Inject()(
      */
     def cookie(c: Cookie): EnrichedResponse = {
       response.addCookie(c)
-      this
-    }
-
-    @deprecated("use cookie(Cookie)", "2016-11-07")
-    def cookie(c: NettyCookie): EnrichedResponse = {
-      response.addCookie(new Cookie(c))
       this
     }
 
