@@ -36,6 +36,11 @@ class FinatraKeyValueStoreBuilder[K, V](
     this
   }
 
+  override def withCachingDisabled(): StoreBuilder[FinatraKeyValueStore[K, V]] = {
+    enableCaching = false
+    this
+  }
+
   override def withLoggingDisabled(): StoreBuilder[FinatraKeyValueStore[K, V]] = {
     //Note: We're calling clear for consistency with AbstractStoreBuilder
     _logConfig.clear()

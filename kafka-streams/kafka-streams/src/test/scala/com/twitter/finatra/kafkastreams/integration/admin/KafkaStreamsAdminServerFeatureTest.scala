@@ -11,17 +11,22 @@ import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.{Consumed, Produced}
 
 class KafkaStreamsAdminServerFeatureTest extends KafkaStreamsFeatureTest {
+  private val ApplicationId = "no-op"
+  private val Source = "source"
+  private val Sink = "sink"
+  kafkaTopic(keySerde = UnKeyedSerde, valSerde = Serdes.String, name = Source)
+  kafkaTopic(keySerde = UnKeyedSerde, valSerde = Serdes.String, name = Sink)
 
   override val server = new EmbeddedTwitterServer(
     new KafkaStreamsTwitterServer {
-      override val name = "no-op"
+      override val name = ApplicationId
       override protected def configureKafkaStreams(builder: StreamsBuilder): Unit = {
         builder.asScala
-          .stream("TextLinesTopic")(Consumed.`with`(UnKeyedSerde, Serdes.String))
-          .to("sink")(Produced.`with`(UnKeyedSerde, Serdes.String))
+          .stream(Source)(Consumed.`with`(UnKeyedSerde, Serdes.String))
+          .to(Sink)(Produced.`with`(UnKeyedSerde, Serdes.String))
       }
     },
-    flags = kafkaStreamsFlags ++ Map("kafka.application.id" -> "no-op")
+    flags = kafkaStreamsFlags ++ Map("kafka.application.id" -> ApplicationId)
   )
 
   override def beforeEach(): Unit = {
@@ -41,7 +46,7 @@ class KafkaStreamsAdminServerFeatureTest extends KafkaStreamsFeatureTest {
       """<pre>
         |Topologies:
         |   Sub-topology: 0
-        |    Source: KSTREAM-SOURCE-0000000000 (topics: [TextLinesTopic])
+        |    Source: KSTREAM-SOURCE-0000000000 (topics: [source])
         |      --> KSTREAM-SINK-0000000001
         |    Sink: KSTREAM-SINK-0000000001 (topic: sink)
         |      <-- KSTREAM-SOURCE-0000000000

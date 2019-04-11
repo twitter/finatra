@@ -94,7 +94,7 @@ abstract class KafkaStreamsTwitterServer
     consumerFlagWithKafkaDefault[Long](ConsumerConfig.CONNECTIONS_MAX_IDLE_MS_CONFIG)
 
   // ProducerConfig default flag
-  private val producerLinger = producerFlagWithKafkaDefault[Long](ProducerConfig.LINGER_MS_CONFIG)
+  private val producerLinger = producerFlagWithKafkaDefault[Int](ProducerConfig.LINGER_MS_CONFIG)
 
   // Configs with customized default
   private val replicationFactor = kafkaFlag(StreamsConfig.REPLICATION_FACTOR_CONFIG, 3) // We set it to 3 for durability and reliability.

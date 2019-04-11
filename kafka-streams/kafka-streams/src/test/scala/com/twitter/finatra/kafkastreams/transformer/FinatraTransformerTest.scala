@@ -13,7 +13,7 @@ import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.processor._
 import org.apache.kafka.streams.processor.internals.{ProcessorNode, RecordCollector, ToInternal}
-import org.apache.kafka.streams.state.internals.FinatraStores
+import org.apache.kafka.streams.state.internals.{FinatraStores, WrappedStateStore}
 import org.apache.kafka.test.{InternalMockProcessorContext, MockProcessorNode, NoOpRecordCollector, TestUtils}
 import org.hamcrest.{BaseMatcher, Description}
 import org.mockito.{Matchers, Mockito}
@@ -152,7 +152,8 @@ class FinatraTransformerTest extends Test with com.twitter.inject.Mockito {
 
       val store = storeBuilder.build
       store.init(this, store)
-      store
+
+      new WrappedStateStore(store) {}
     }
 
     override def recordCollector(): RecordCollector = {

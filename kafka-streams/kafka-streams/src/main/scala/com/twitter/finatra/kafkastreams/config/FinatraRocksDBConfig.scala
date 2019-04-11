@@ -501,7 +501,8 @@ class FinatraRocksDBConfig extends RocksDBConfigSetter with Logging {
         getIntOrDefault(
           configs,
           FinatraRocksDBConfig.RocksDbStatCollectionPeriodMs,
-          FinatraRocksDBConfig.RocksDbStatCollectionPeriodMsDefault))
+          FinatraRocksDBConfig.RocksDbStatCollectionPeriodMsDefault)
+      )
 
       statsCollector.start()
 

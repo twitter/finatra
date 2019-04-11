@@ -11,8 +11,7 @@ private[kafkastreams] object TopologyReflectionUtils {
   def isStateless(topology: Topology): Boolean = {
     val internalTopologyBuilder = getInternalTopologyBuilder(topology)
 
-    internalTopologyBuilder.allStateStoreName().isEmpty &&
-    internalTopologyBuilder.globalStateStores().isEmpty
+    internalTopologyBuilder.getStateStores.isEmpty
   }
 
   private def getInternalTopologyBuilder(topology: Topology): InternalTopologyBuilder = {

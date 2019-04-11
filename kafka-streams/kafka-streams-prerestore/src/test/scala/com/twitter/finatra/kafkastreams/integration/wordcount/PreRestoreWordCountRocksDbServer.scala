@@ -5,7 +5,8 @@ import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
 import com.twitter.finatra.kafkastreams.prerestore.PreRestoreState
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.StreamsBuilder
-import org.apache.kafka.streams.kstream.{Consumed, Materialized, Produced, Serialized}
+import org.apache.kafka.streams.kstream.{Consumed, Materialized, Produced}
+import org.apache.kafka.streams.scala.kstream.Grouped
 
 class PreRestoreWordCountRocksDbServer extends KafkaStreamsTwitterServer with PreRestoreState {
 
@@ -17,7 +18,7 @@ class PreRestoreWordCountRocksDbServer extends KafkaStreamsTwitterServer with Pr
     builder.asScala
       .stream("TextLinesTopic")(Consumed.`with`(Serdes.Bytes, Serdes.String))
       .flatMapValues(_.split(' '))
-      .groupBy((_, word) => word)(Serialized.`with`(Serdes.String, Serdes.String))
+      .groupBy((_, word) => word)(Grouped.`with`(Serdes.String, Serdes.String))
       .count()(Materialized.as(countStoreName))
       .toStream
       .to("WordsWithCountsTopic")(Produced.`with`(Serdes.String, ScalaSerdes.Long))

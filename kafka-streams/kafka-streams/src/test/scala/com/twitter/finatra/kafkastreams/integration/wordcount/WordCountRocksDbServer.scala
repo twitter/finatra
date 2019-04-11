@@ -5,7 +5,7 @@ import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.utils.Bytes
 import org.apache.kafka.streams.StreamsBuilder
-import org.apache.kafka.streams.kstream.{Consumed, Materialized, Produced, Serialized}
+import org.apache.kafka.streams.kstream.{Consumed, Grouped, Materialized, Produced}
 
 class WordCountRocksDbServer extends KafkaStreamsTwitterServer {
 
@@ -16,7 +16,7 @@ class WordCountRocksDbServer extends KafkaStreamsTwitterServer {
     builder.asScala
       .stream[Bytes, String]("TextLinesTopic")(Consumed.`with`(Serdes.Bytes, Serdes.String))
       .flatMapValues(_.split(' '))
-      .groupBy((_, word) => word)(Serialized.`with`(Serdes.String, Serdes.String))
+      .groupBy((_, word) => word)(Grouped.`with`(Serdes.String, Serdes.String))
       .count()(Materialized.as(countStoreName))
       .toStream
       .to("WordsWithCountsTopic")(Produced.`with`(Serdes.String, ScalaSerdes.Long))

@@ -7,6 +7,7 @@ import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.errors.InvalidStateStoreException
 import org.apache.kafka.streams.processor.{ProcessorContext, StateStore, TaskId}
 import org.apache.kafka.streams.state.KeyValueIterator
+import org.apache.kafka.streams.state.internals.WrappedStateStore
 
 /**
  * A FinatraKeyValueStore which allows FinatraTransformer#getKeyValueStore to retrieve a key value
@@ -32,7 +33,11 @@ case class FinatraTransformerLifecycleKeyValueStore[K, V](
     debug(s"init ${processorContext.taskId}")
     this._processorContext = processorContext
 
-    this.keyValueStore = processorContext.getStateStore(name) match {
+    val unwrappedStateStore = processorContext
+      .getStateStore(name).asInstanceOf[WrappedStateStore[_]]
+      .wrapped()
+
+    this.keyValueStore = unwrappedStateStore match {
       case cachingStore: CachingFinatraKeyValueStoreImpl[K, V] =>
         flushListener.foreach { listener =>
           cachingStore.registerFlushListener { case (k, v) =>
@@ -49,8 +54,8 @@ case class FinatraTransformerLifecycleKeyValueStore[K, V](
 
         finatraKeyValueStore
 
-      case _ =>
-        throw new Exception(s"FinatraTransformer cannot be used with store $name since it isn't " +
+      case store =>
+        throw new Exception(s"FinatraTransformer cannot be used with $name $store since it isn't " +
           "a FinatraKeyValueStore. To fix this error, configure your state store with the " +
           "FinatraStores class instead of the Stores class. " +
           "Note: FinatraTransformer#getKeyValueStore does not currently work with global stores" +
