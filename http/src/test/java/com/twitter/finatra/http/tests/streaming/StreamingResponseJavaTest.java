@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-import scala.Option;
 import scala.collection.JavaConverters;
 
 import org.junit.Assert;
@@ -34,16 +33,13 @@ import com.twitter.util.Future;
 public class StreamingResponseJavaTest extends Assert {
 
   private Future burnLoop(Reader<Buf> reader) {
-    return reader.read().flatMap(new Function<Option<Buf>, Future<scala.runtime.BoxedUnit>>() {
-      @Override
-      public Future<scala.runtime.BoxedUnit> apply(Option<Buf> v1) {
-        if (v1.nonEmpty()) {
-          return burnLoop(reader);
-        } else {
-          return Future.Unit();
-        }
+    return reader.read().flatMap(Function.func(v1 -> {
+      if (v1.nonEmpty()) {
+        return burnLoop(reader);
+      } else {
+        return Future.Unit();
       }
-    });
+    }));
   }
 
   private ResponseBuilder responseBuilder = new ResponseBuilder(
