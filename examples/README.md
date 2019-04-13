@@ -6,8 +6,8 @@ A collection of example [Finatra][finatra] applications.
 
 ## Details
 For detailed information see the README.md within each
-example project. Every project builds with [sbt](http://www.scala-sbt.org/) and
-at least one example which also uses [Maven](http://maven.apache.org).
+example project. Every project builds with [sbt](https://www.scala-sbt.org/) and
+at least one example which also uses [Maven](https://maven.apache.org).
 
 
 ## Building and Running

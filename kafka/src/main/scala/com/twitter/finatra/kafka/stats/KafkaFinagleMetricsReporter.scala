@@ -158,7 +158,7 @@ class KafkaFinagleMetricsReporter extends MetricsReporter with Logging {
   protected def shouldIncludeMetric(metric: KafkaMetric): Boolean = {
     val metricName = metric.metricName()
 
-    // remove any metrics that are already "rated" as these not consistent with other metrics: http://go/jira/DINS-2187
+    // remove any metrics that are already "rated" as these not consistent with other metrics: go/jira/DINS-2187
     if (KafkaFinagleMetricsReporter.rateMetricsToIgnore(metricName.name())) {
       false
     } else if (metricName

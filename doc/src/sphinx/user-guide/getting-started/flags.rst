@@ -31,7 +31,7 @@ also has the concept of a "global" flag. That is, a flag that is "global" to the
 generally defined as a Scala object). In the discussion of Flags with Finatra we **do not** mean
 "global" flags unless it is explicitly stated.
 
-See the `scaladoc <http://twitter.github.io/util/docs/com/twitter/app/GlobalFlag.html>`__ for
+See the `scaladoc <https://twitter.github.io/util/docs/com/twitter/app/GlobalFlag.html>`__ for
 `c.t.app.GlobalFlag` for more information.
 
 But I have a lot of Flags

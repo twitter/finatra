@@ -254,5 +254,5 @@ Setting the Response Location Header:
 which can be used:
 
 -  if the URI has a valid scheme then the URI is placed in the Location header unchanged.
--  `response.location("/users/123")` will get turned into the correct full URI by the `HttpResponseFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/HttpResponseFilter.scala>`__ (e.g. `http://host.com/users/123`) according to rules defined in the `URI specification <https://en.wikipedia.org/wiki/Uniform_Resource_Identifier#Generic_syntax>`__
+-  `response.location("/users/123")` will get turned into the correct full URI by the `HttpResponseFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/HttpResponseFilter.scala>`__ (e.g. `https://host.com/users/123`) according to rules defined in the `URI specification <https://en.wikipedia.org/wiki/Uniform_Resource_Identifier#Generic_syntax>`__
 - The scheme is assumed to be `http` when rewritten unless otherwise specified in the `"x-forwarded-proto"` header in the request.

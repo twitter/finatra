@@ -66,7 +66,7 @@ arg of an embedded server or embedded app. For example,
       }
     }
 
-See the `scaladoc <http://twitter.github.io/util/docs/com/twitter/app/Flag.html>`_ for `c.t.app.Flag`
+See the `scaladoc <https://twitter.github.io/util/docs/com/twitter/app/Flag.html>`_ for `c.t.app.Flag`
 for more information on using |FlagLet|_ or |FlagLetClear|_.
 
 InMemoryStatsReceiver
@@ -127,7 +127,7 @@ More Information
 .. _GlobalFlag: https://github.com/twitter/util/blob/f2a05474ec41f34146d710bdc2a789efd6da9d21/util-app/src/main/scala/com/twitter/app/GlobalFlag.scala
 
 .. |FlagLet| replace:: `Flag.let`
-.. _FlagLet: http://twitter.github.io/util/docs/com/twitter/app/Flag.html#let[R](t:T)(f:=%3ER):R
+.. _FlagLet: https://twitter.github.io/util/docs/com/twitter/app/Flag.html#let[R](t:T)(f:=%3ER):R
 
 .. |FlagLetClear| replace:: `Flag.letClear`
-.. _FlagLetClear: http://twitter.github.io/util/docs/com/twitter/app/Flag.html#letClear[R](f:=%3ER):R
+.. _FlagLetClear: https://twitter.github.io/util/docs/com/twitter/app/Flag.html#letClear[R](f:=%3ER):R

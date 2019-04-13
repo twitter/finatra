@@ -47,7 +47,7 @@ For example:
 
 The `Service[Request, Response]` executed by the Filter can then get and set MDC values which can be
 used by the chosen logging implementation's MDC configuration.  For example, see the
-`Logback MDC documentation <http://logback.qos.ch/manual/mdc.html>`__ for more information the
+`Logback MDC documentation <https://logback.qos.ch/manual/mdc.html>`__ for more information the
 MDC functionality and configuration in Logback.
 
 

@@ -58,7 +58,7 @@ trait HttpServerTrait extends TwitterServer {
    * @note the default value is ":8888" as defined by [[defaultHttpPort]].
    * @note the format of this flag is expected to be a String in the form of ":port".
    * @see [[com.twitter.finatra.http.HttpServerTrait.defaultHttpPort]]
-   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   * @see [[https://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
    */
   private val httpPortFlag =
     flag("http.port", defaultHttpPort, "External HTTP server port")
@@ -81,7 +81,7 @@ trait HttpServerTrait extends TwitterServer {
    * @note the default value is "" as defined by [[defaultHttpsPort]].
    * @note the format of this flag is expected to be a String in the form of ":port".
    * @see [[com.twitter.finatra.http.HttpServerTrait.defaultHttpsPort]]
-   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   * @see [[https://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
    */
   private val httpsPortFlag =
     flag("https.port", defaultHttpsPort, "External HTTPS server port")
@@ -108,7 +108,7 @@ trait HttpServerTrait extends TwitterServer {
    * @note the format of this flag is expected to be a String which is parsable into a [[com.twitter.util.StorageUnit]].
    * @see [[com.twitter.util.StorageUnit]]
    * @see [[com.twitter.finatra.http.HttpServerTrait.defaultMaxRequestSize]]
-   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   * @see [[https://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
    */
   private val maxRequestSizeFlag =
     flag("maxRequestSize", defaultMaxRequestSize, "HTTP(s) Max Request Size")
@@ -135,7 +135,7 @@ trait HttpServerTrait extends TwitterServer {
    * @note the default value is "1.minute" as defined by [[defaultShutdownTimeout]].
    * @note the format of this flag is expected to be a String which is parsable into a [[com.twitter.util.Duration]].
    * @see [[com.twitter.finatra.http.HttpServerTrait.defaultShutdownTimeout]]
-   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   * @see [[https://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
    */
   private val shutdownTimeoutFlag = flag(
     "shutdown.time", // todo: rename to http.shutdown.time
@@ -160,7 +160,7 @@ trait HttpServerTrait extends TwitterServer {
    *
    * @note the default value is "http" as defined by [[defaultHttpServerName]].
    * @see [[com.twitter.finatra.http.HttpServerTrait.defaultHttpServerName]]
-   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   * @see [[https://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
    */
   private val httpServerNameFlag =
     flag("http.name", defaultHttpServerName, "Http server name")
@@ -182,7 +182,7 @@ trait HttpServerTrait extends TwitterServer {
    *
    * @note the default value is "https" as defined by [[defaultHttpsServerName]].
    * @see [[com.twitter.finatra.http.HttpServerTrait.defaultHttpsServerName]]
-   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   * @see [[https://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
    */
   private val httpsServerNameFlag =
     flag("https.name", defaultHttpsServerName, "Https server name")
@@ -207,7 +207,7 @@ trait HttpServerTrait extends TwitterServer {
    * @note the default value is "No Announcement" (empty String) as defined by [[defaultHttpAnnouncement]].
    * @see [[com.twitter.finagle.ListeningServer.announce(addr: String)]]
    * @see [[com.twitter.finatra.http.HttpServerTrait.defaultHttpAnnouncement]]
-   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   * @see [[https://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
    */
   private val httpAnnounceFlag = flag[String]("http.announce", defaultHttpAnnouncement,
     "Address for announcing HTTP server. Empty string indicates no announcement.")
@@ -232,7 +232,7 @@ trait HttpServerTrait extends TwitterServer {
    * @note the default value is "No Announcement" (empty String) as defined by [[defaultHttpsAnnouncement]].
    * @see [[com.twitter.finagle.ListeningServer.announce(addr: String)]]
    * @see [[com.twitter.finatra.http.HttpServerTrait.defaultHttpsAnnouncement]]
-   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   * @see [[https://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
    */
   private val httpsAnnounceFlag = flag[String]("https.announce", defaultHttpsAnnouncement,
     "Address for announcing HTTPS server. Empty string indicates no announcement.")

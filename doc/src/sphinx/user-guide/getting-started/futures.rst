@@ -8,8 +8,8 @@ Future Gotchas
 
 Finatra -- like other frameworks based on Twitter's `Finagle <https://twitter.github.io/finagle>`__ library -- uses the `TwitterUtil <https://github.com/twitter/util>`__ `c.t.util.Future <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala>`__ class. 
 
-Twitter's `com.twitter.util.Future` is similar to, but predates `Scala's <http://docs.scala-lang.org/overviews/core/futures.html>`__
-`scala.concurrent.Future <http://www.scala-lang.org/api/current/index.html#scala.concurrent.Future>`__ (introduced in Scala 2.10 and later backported to Scala 2.9.3) and is
+Twitter's `com.twitter.util.Future` is similar to, but predates `Scala's <https://docs.scala-lang.org/overviews/core/futures.html>`__
+`scala.concurrent.Future <https://www.scala-lang.org/api/current/index.html#scala.concurrent.Future>`__ (introduced in Scala 2.10 and later backported to Scala 2.9.3) and is
 **not compatible** without using a `Bijection <https://twitter.github.io/util/guide/util-cookbook/futures.html#conversions-between-twitter-s-future-and-scala-s-future>`__ to transform one into the other.
 
 It is important to remember that the **Finatra framework uses and expects** `c.t.util.Future <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala>`__.

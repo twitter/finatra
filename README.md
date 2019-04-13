@@ -107,7 +107,7 @@ The [master branch](https://github.com/twitter/finatra/tree/master) in Github tr
 available on Maven Central. See the [First Steps](https://twitter.github.io/finatra/user-guide/getting-started/basics.html#first-steps) section in the [User Guide][user-guide] for how to add dependencies.
 
 Releases are done on an approximately monthly schedule. While
-[semver](http://semver.org/) is not followed, the
+[semver](https://semver.org/) is not followed, the
 [changelogs](CHANGELOG.rst) are detailed and include sections on public API
 breaks and changes in runtime behavior.
 
@@ -148,4 +148,4 @@ Licensed under the Apache License, Version 2.0: https://www.apache.org/licenses/
 [maven]: https://maven.apache.org/
 [maven-central]: https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20%28a%3A%22finatra-http_2.12%22%20OR%20a%3A%22finatra-thrift_2.12%22%29
 [user-guide]: https://twitter.github.io/finatra/user-guide/index.html
-[sbt]: http://www.scala-sbt.org/
+[sbt]: https://www.scala-sbt.org/

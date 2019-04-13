@@ -197,7 +197,7 @@ Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/sca
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Read a header value specified by the case class field name or by the ``@Header`` annotation value.
-You can use a Scala `"back-quote" literal <http://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html>`__
+You can use a Scala `"back-quote" literal <https://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html>`__
 for the field name when special characters are involved.
 
 .. code:: scala

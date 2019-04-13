@@ -46,7 +46,7 @@ object HttpHeaders {
 
   /**
    * RFC 7231 Date Format
-   * @see [[http://tools.ietf.org/html/rfc7231#section-7.1.1.1 RFC 7231 Section 7.1.1.1]]
+   * @see [[https://tools.ietf.org/html/rfc7231#section-7.1.1.1 RFC 7231 Section 7.1.1.1]]
    */
   val RFC7231DateFormat = "EEE, dd MMM yyyy HH:mm:ss 'GMT'"
 

@@ -8,7 +8,7 @@ object DeadlineValues extends Logging {
 
   /**
    * Note: Deadline already contains an remaining and expired method, but they use Twitter time
-   * to calculate "now", however we'd like to continue using Joda-Time (http://www.joda.org/joda-time/)
+   * to calculate "now", however we'd like to continue using Joda-Time (https://www.joda.org/joda-time/)
    * for consistency in how we mock time in testing.
    */
   def current(): Option[DeadlineValues] = {

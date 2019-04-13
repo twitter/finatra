@@ -200,15 +200,15 @@ Scaladocs. Please file an [issue](https://github.com/twitter/finatra/issues).
 [finagle-repo]: https://github.com/twitter/finagle 
 [util-repo]: https://github.com/twitter/util
 [effectivescala]: https://twitter.github.io/effectivescala/ 
-[funsuite]: http://doc.scalatest.org/2.2.1/#org.scalatest.FunSuite
-[scalatest]: http://www.scalatest.org/ 
+[funsuite]: https://doc.scalatest.org/2.2.1/#org.scalatest.FunSuite
+[scalatest]: https://www.scalatest.org/ 
 [scala-style-guide]: https://docs.scala-lang.org/style/index.html
 [sbt]: https://www.scala-sbt.org/
 [travis-ci]: https://travis-ci.org/twitter/finatra 
 [test-trait]: https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/Test.scala
 [scaladoc]: https://docs.scala-lang.org/style/scaladoc.html
 [scalacheck]: https://www.scalacheck.org/
-[gendrivenprop]: http://www.scalatest.org/user_guide/generator_driven_property_checks
+[gendrivenprop]: https://www.scalatest.org/user_guide/generator_driven_property_checks
 
 ### License 
 By contributing your code, you agree to license your contribution under the 

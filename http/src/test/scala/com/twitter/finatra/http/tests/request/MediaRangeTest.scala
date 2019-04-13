@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009-2015 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2009-2015 Typesafe Inc. <https://www.typesafe.com>
  */
 
 // Adapted from github:playframework/framework/src/play/src/test/scala/play/api/http/MediaRangeSpec.scala

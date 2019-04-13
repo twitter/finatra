@@ -7,7 +7,7 @@ Feature Tests
     test, it is generally considered good practice to ensure that your |c.t.util.Await|_ call
     includes a timeout duration, e.g., |c.t.util.Await#ready|_.
 
-If you are familiar with `Gherkin <http://docs.behat.org/en/v2.5/guides/1.gherkin.html>`__ or
+If you are familiar with `Gherkin <https://docs.behat.org/en/v2.5/guides/1.gherkin.html>`__ or
 `Cucumber <https://github.com/cucumber/cucumber/wiki/Feature-Introduction>`__ or other similar
 testing languages and frameworks, then `feature testing <https://wiki.documentfoundation.org/QA/Testing/Feature_Tests>`__
 will feel somewhat familiar. In Finatra, a feature test always consists of an application or a server

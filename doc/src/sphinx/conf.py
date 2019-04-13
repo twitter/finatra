@@ -54,7 +54,7 @@ extlinks = {
 }
 
 rst_epilog = '''
-.. _Sphinx: http://sphinx.pocoo.org/
+.. _Sphinx: https://www.sphinx-doc.org/en/master/
 '''
 
 pygments_style = 'sphinx'
