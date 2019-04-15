@@ -1,6 +1,8 @@
 package com.twitter.finatra.thrift
 
 import com.google.inject.Stage
+import com.twitter.app.GlobalFlag
+import com.twitter.inject.conversions.map._
 import com.twitter.inject.server.PortUtils._
 import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
 import com.twitter.util.Duration
@@ -27,6 +29,11 @@ import scala.collection.JavaConverters._
  * @param failOnLintViolation If server startup should fail due (and thus the test) to a detected lint rule issue after startup.
  * @param closeGracePeriod An Optional grace period to use instead of the underlying server's
  *                         `defaultGracePeriod` when closing the underlying server.
+ * @param globalFlags An ordered map of [[GlobalFlag]] and the desired value to be set during the
+ *                    scope of the underlying [[twitterServer]]'s lifecycle. The flags will be
+ *                    applied in insertion order, with the first entry being applied closest to
+ *                    the startup of the [[twitterServer]]. In order to ensure insertion ordering,
+ *                    you should use a [[scala.collection.immutable.ListMap]].
  */
 class EmbeddedThriftServer(
   override val twitterServer: Ports,
@@ -40,7 +47,8 @@ class EmbeddedThriftServer(
   disableTestLogging: Boolean = false,
   maxStartupTimeSeconds: Int = 60,
   failOnLintViolation: Boolean = false,
-  closeGracePeriod: Option[Duration] = None
+  closeGracePeriod: Option[Duration] = None,
+  globalFlags: => Map[GlobalFlag[_], String] = Map()
 ) extends EmbeddedTwitterServer(
       twitterServer,
       flags + (thriftPortFlag -> ephemeralLoopback),
@@ -52,7 +60,8 @@ class EmbeddedThriftServer(
       disableTestLogging = disableTestLogging,
       maxStartupTimeSeconds = maxStartupTimeSeconds,
       failOnLintViolation = failOnLintViolation,
-      closeGracePeriod = closeGracePeriod
+      closeGracePeriod = closeGracePeriod,
+      globalFlags = globalFlags
     )
     with ThriftClient {
 
@@ -63,6 +72,12 @@ class EmbeddedThriftServer(
 
   def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage, disableTestLogging: Boolean) =
     this(twitterServer, flags = flags.asScala.toMap, stage = stage, disableTestLogging = disableTestLogging)
+
+  def this(twitterServer: Ports, flags: java.util.Map[String, String], globalFlags: java.util.Map[GlobalFlag[_], String], stage: Stage) =
+    this(twitterServer, flags = flags.asScala.toMap, globalFlags = globalFlags.toOrderedMap, stage = stage)
+
+  def this(twitterServer: Ports, flags: java.util.Map[String, String], globalFlags: java.util.Map[GlobalFlag[_], String], stage: Stage, disableTestLogging: Boolean) =
+    this(twitterServer, flags = flags.asScala.toMap, globalFlags = globalFlags.toOrderedMap, stage = stage, disableTestLogging = disableTestLogging)
 
   /* Public */
 

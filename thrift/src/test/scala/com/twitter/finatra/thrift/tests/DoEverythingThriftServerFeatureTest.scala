@@ -315,4 +315,5 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
   override protected def beforeEach(): Unit = {
     server.inMemoryStatsReceiver.clear()
   }
+
 }

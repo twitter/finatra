@@ -10,6 +10,12 @@ Unreleased
 Added
 ~~~~~
 
+* inject-server: Add `globalFlags` argument to EmbeddedTwitterServer, which will
+   allow for scoping a `c.t.a.GlobalFlag` property change to the lifecycle of the
+   underlying TwitterServer, as a `c.t.a.GlobalFlag` is normally scoped to the JVM/process.
+   This change is also reflected in `EmbeddedHttpServer` and `EmbeddedThriftServer` constructors.
+   ``PHAB_ID=D288032``
+
 * inject-utils: add `toOrderedMap` implicit conversion for `java.util.Map` ``PHAB_ID=D295005``
 
 * finatra-kafka-streams: Add flag `rocksdb.manifest.preallocation.size` with default value

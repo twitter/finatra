@@ -1,6 +1,7 @@
 package com.twitter.inject.server
 
 import com.google.inject.Stage
+import com.twitter.app.GlobalFlag
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
 import com.twitter.inject.{Injector, PoolUtils}
 import com.twitter.inject.app.{BindDSL, StartupTimeoutException}
@@ -56,6 +57,40 @@ object EmbeddedTwitterServer {
       firstPass
     }
   }
+
+
+  /**
+   * A type alias that represents a function that generates a `T` as input (`=> T`)
+   * and outputs a `T` result. This signature allows for reducing
+   * multiple functions of `(=> T) => T` into a single `(=> T) => T`.
+   *
+   * @note The `(=> T)` allows for passing a lazy executed function as an
+   *       input function. If the signature were `T => T`, then the
+   *       input would be eagerly executed if it were actually a `=> T`.
+   *
+   * @note This is `private[server]` scoped for testing purposes
+   * @tparam T The input and output type of the function
+   */
+  private[server] type ReducibleFn[T] = (=> T) => T
+
+  /**
+   * Takes an ordered sequence of functions that require scoping over an
+   * underlying input. The first function (i.e. the head) will be scoped
+   * closest to the input to the resulting function.
+   *
+   * @param fns The ordered functions to be reduced to a single function
+   * @tparam T The input/output type of the functions
+   *
+   * @return A single function comprised of the `fns` functions
+   *
+   * @note This is `private[server]` scoped for testing purposes
+   */
+  private[server] def mkGlobalFlagsFn[T](
+    fns: Iterable[ReducibleFn[T]]
+  ): ReducibleFn[T] =
+    fns.reduce[ReducibleFn[T]] {
+      case (fn, collector) => input => collector(fn(input))
+    }
 }
 
 /**
@@ -84,6 +119,11 @@ object EmbeddedTwitterServer {
  * @param failOnLintViolation If server startup should fail due (and thus the test) to a detected lint rule issue after startup.
  * @param closeGracePeriod An Optional grace period to use instead of the underlying server's
  *                         `defaultGracePeriod` when closing the underlying server.
+ * @param globalFlags An ordered map of [[GlobalFlag]] and the desired value to be set during the
+ *                    scope of the underlying [[twitterServer]]'s lifecycle. The flags will be
+ *                    applied in insertion order, with the first entry being applied closest to
+ *                    the startup of the [[twitterServer]]. In order to ensure insertion ordering,
+ *                    you should use a [[scala.collection.immutable.ListMap]].
  */
 class EmbeddedTwitterServer(
   twitterServer: com.twitter.server.TwitterServer,
@@ -98,7 +138,8 @@ class EmbeddedTwitterServer(
   disableTestLogging: Boolean = false,
   maxStartupTimeSeconds: Int = 60,
   failOnLintViolation: Boolean = false,
-  closeGracePeriod: Option[Duration] = None
+  closeGracePeriod: Option[Duration] = None,
+  globalFlags: => Map[GlobalFlag[_], String] = Map()
 ) extends AdminHttpClient(twitterServer, verbose)
   with BindDSL
   with Matchers {
@@ -109,6 +150,9 @@ class EmbeddedTwitterServer(
 
   def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage) =
     this(twitterServer, flags = flags.asScala.toMap, stage = stage)
+
+  def this(twitterServer: Ports, flags: java.util.Map[String, String], globalFlags: java.util.Map[GlobalFlag[_], String], stage: Stage) =
+    this(twitterServer, flags = flags.asScala.toMap, stage = stage, globalFlags = globalFlags.toOrderedMap)
 
   /* Main Constructor */
 
@@ -421,27 +465,68 @@ class EmbeddedTwitterServer(
     flags.map { case (k, v) => "-" + k + "=" + v }
   }
 
+  /**
+   * A method that allows for applying [[com.twitter.util.Local]] context
+   * (e.g. [[com.twitter.app.GlobalFlag]]) scoped to the execution of the
+   * underlying [[twitterServer]]'s lifecycle.
+   *
+   * @example
+   *          {{{
+   *            override protected[twitter] def withLocals(fn: => Unit): Unit = super.withLocals {
+   *              SomeLocal.let("xyz")(fn)
+   *            }
+   *          }}}
+   *
+   * @note Ordering of [[com.twitter.util.Local]] context scoping is important. The scope
+   *       closest to the `fn` param is going to win, if there are conflicts.
+   *
+   * @param fn The main function that will take into account local scope modifications
+   */
+  protected[twitter] def withLocals(fn: => Unit): Unit =
+    if (globalFlags.isEmpty) {
+      fn
+    } else {
+      info(s"Applying GlobalFlag scoping to $name embedded server: $globalFlags")
+
+      // take the globalFlags and map them to their local scoped functions
+      val globalFlagLocalFns: Iterable[ReducibleFn[Unit]] = globalFlags.map { case (k, v) =>
+        val f: ReducibleFn[Unit] = func => k.letParse[Unit](v){
+          info(s"Applying GlobalFlag${k.name}=$v")
+          func
+        }
+        f
+      }
+
+      // reduce all of the functions down to a single input function that can accept `fn`
+      val globalsFn = mkGlobalFlagsFn(globalFlagLocalFns)
+
+      // apply `fn` wrapped by GlobalFlag's local context modifications
+      globalsFn(fn)
+    }
+
+  private def main(allArgs: Array[String]): Unit = try {
+    twitterServer.nonExitingMain(allArgs)
+  } catch {
+    case e: OutOfMemoryError if e.getMessage == "PermGen space" =>
+      println(
+        "OutOfMemoryError(PermGen) in server startup. " +
+          "This is most likely due to the incorrect setting of a client " +
+          "flag (not defined or invalid). Increase your PermGen to see the exact error message (e.g. -XX:MaxPermSize=256m)"
+      )
+      e.printStackTrace()
+      System.exit(-1)
+    case e if !NonFatal(e) =>
+      println("Fatal exception in server startup.")
+      throw new Exception(e) // Need to rethrow as a NonFatal for FuturePool to "see" the exception :/
+  }
+
   private def runNonExitingMain(): Unit = {
     // we call distinct here b/c port flag args can potentially be added multiple times
     val allArgs = combineArgs().distinct
     info("\nStarting " + name + " with args: " + allArgs.mkString(" "), disableLogging)
 
     _mainResult = futurePool {
-      try {
-        twitterServer.nonExitingMain(allArgs)
-      } catch {
-        case e: OutOfMemoryError if e.getMessage == "PermGen space" =>
-          println(
-            "OutOfMemoryError(PermGen) in server startup. " +
-              "This is most likely due to the incorrect setting of a client " +
-              "flag (not defined or invalid). Increase your PermGen to see the exact error message (e.g. -XX:MaxPermSize=256m)"
-          )
-          e.printStackTrace()
-          System.exit(-1)
-        case e if !NonFatal(e) =>
-          println("Fatal exception in server startup.")
-          throw new Exception(e) // Need to rethrow as a NonFatal for FuturePool to "see" the exception :/
-      }
+      withLocals(main(allArgs))
     }.onFailure { e =>
       //If we rethrow, the exception will be suppressed by the Future Pool's monitor. Instead we save off the exception and rethrow outside the pool
       startupFailedThrowable = Some(e)
