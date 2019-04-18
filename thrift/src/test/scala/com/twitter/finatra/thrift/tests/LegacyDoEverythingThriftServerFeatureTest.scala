@@ -8,7 +8,6 @@ import com.twitter.finagle.{Filter, Service}
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.finatra.thrift.tests.doeverything.LegacyDoEverythingThriftServer
 import com.twitter.finatra.thrift.tests.doeverything.controllers.LegacyDoEverythingThriftController
-import com.twitter.finatra.thrift.thriftscala.{ClientError, NoClientIdError, ServerError, UnknownClientIdError}
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.Buf
 import com.twitter.scrooge
@@ -118,21 +117,6 @@ class LegacyDoEverythingThriftServerFeatureTest extends FeatureTest {
     await(client123.magicNum()) should equal("57")
   }
 
-  test("denylist") {
-    val notAcceptlistClient =
-      server.thriftClient[DoEverything[Future]](clientId = "not_on_acceptlist")
-    assertFailedFuture[UnknownClientIdError] {
-      notAcceptlistClient.echo("Hi")
-    }
-  }
-
-  test("no client id") {
-    val noClientIdClient = server.thriftClient[DoEverything[Future]]()
-    assertFailedFuture[NoClientIdError] {
-      noClientIdClient.echo("Hi")
-    }
-  }
-
   // echo method doesn't define throws ClientError Exception
   // we should receive TApplicationException
   test("ClientError throw back") {
@@ -143,27 +127,27 @@ class LegacyDoEverythingThriftServerFeatureTest extends FeatureTest {
 
   // should be caught by FinatraThriftExceptionMapper
   test("ThriftException#ClientError mapping") {
-    val e = assertFailedFuture[ClientError] {
+    val e = assertFailedFuture[TApplicationException] {
       client123.echo2("clientError")
     }
     e.getMessage should include("client error")
   }
 
   test("ThriftException#UnknownClientIdError mapping") {
-    val e = assertFailedFuture[UnknownClientIdError] {
+    val e = assertFailedFuture[TApplicationException] {
       client123.echo2("unknownClientIdError")
     }
     e.getMessage should include("unknown client id error")
   }
 
   test("ThriftException#RequestException mapping") {
-    assertFailedFuture[ServerError] {
+    assertFailedFuture[TApplicationException] {
       client123.echo2("requestException")
     }
   }
 
   test("ThriftException#TimeoutException mapping") {
-    assertFailedFuture[ClientError] {
+    assertFailedFuture[TApplicationException] {
       client123.echo2("timeoutException")
     }
   }
@@ -178,13 +162,13 @@ class LegacyDoEverythingThriftServerFeatureTest extends FeatureTest {
   }
 
   test("ThriftException#UnhandledSourcedException mapping") {
-    assertFailedFuture[ServerError] {
+    assertFailedFuture[TApplicationException] {
       client123.echo2("unhandledSourcedException")
     }
   }
 
   test("ThriftException#UnhandledException mapping") {
-    assertFailedFuture[ServerError] {
+    assertFailedFuture[TApplicationException] {
       client123.echo2("unhandledException")
     }
   }

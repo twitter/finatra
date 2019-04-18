@@ -1,7 +1,8 @@
 package com.twitter.finatra.kafkastreams.transformer
 
 import com.twitter.conversions.DurationOps._
-import com.twitter.finagle.stats.{NullStatsReceiver, StatsReceiver}
+import com.twitter.finagle.stats.{InMemoryStatsReceiver, NullStatsReceiver, StatsReceiver}
+import com.twitter.finatra.kafka.test.utils.InMemoryStatsUtil
 import com.twitter.finatra.kafkastreams.config.KafkaStreamsConfig
 import com.twitter.finatra.kafkastreams.transformer.domain.Time
 import com.twitter.finatra.kafkastreams.transformer.stores.CachingKeyValueStores
@@ -11,9 +12,9 @@ import com.twitter.util.Duration
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.processor._
-import org.apache.kafka.streams.processor.internals.{RecordCollector, ToInternal}
-import org.apache.kafka.streams.state.Stores
-import org.apache.kafka.test.{InternalMockProcessorContext, NoOpRecordCollector, TestUtils}
+import org.apache.kafka.streams.processor.internals.{ProcessorNode, RecordCollector, ToInternal}
+import org.apache.kafka.streams.state.internals.{FinatraStores, WrappedStateStore}
+import org.apache.kafka.test.{InternalMockProcessorContext, MockProcessorNode, NoOpRecordCollector, TestUtils}
 import org.hamcrest.{BaseMatcher, Description}
 import org.mockito.{Matchers, Mockito}
 
@@ -55,27 +56,25 @@ class FinatraTransformerTest extends Test with com.twitter.inject.Mockito {
   test("watermark processing when forwarding from caching flush listener") {
     val transformer =
       new FinatraTransformer[String, String, String, String](NullStatsReceiver)
-        with CachingKeyValueStores[String, String, String, String] {
-        private val cache = getCachingKeyValueStore[String, String]("mystore")
+      with CachingKeyValueStores[String, String, String, String] {
+        private val cache =
+          getCachingKeyValueStore[String, String]("mystore", onFlushedEntry(_, _, _))
 
-        override def statsReceiver: StatsReceiver = NullStatsReceiver
         override def commitInterval: Duration = 1.second
-
-        override def onInit(): Unit = {
-          super.onInit()
-          cache.registerFlushListener(onFlushed)
-        }
 
         override def onMessage(messageTime: Time, key: String, value: String): Unit = {
           cache.put(key, value)
         }
 
-        private def onFlushed(key: String, value: String): Unit = {
+        private def onFlushedEntry(store: String, key: String, value: String): Unit = {
           forward(key = key, value = value, timestamp = watermark.timeMillis)
         }
       }
 
-    val context = Mockito.spy(new FinatraMockProcessorContext)
+    val inMemoryStatsReceiver = new InMemoryStatsReceiver
+    val statUtils = new InMemoryStatsUtil(inMemoryStatsReceiver)
+
+    val context = Mockito.spy(new CachingFinatraMockProcessorContext(inMemoryStatsReceiver))
     transformer.init(context)
 
     context.setTime(firstMessageTimestamp)
@@ -83,10 +82,12 @@ class FinatraTransformerTest extends Test with com.twitter.inject.Mockito {
 
     context.setTime(secondMessageTimestamp)
     transformer.transform(secondKey, secondValue)
+    statUtils.assertGauge("stores/mystore/numCacheEntries", 2)
 
     transformer.onFlush()
     assertForwardedMessage(context, firstKey, firstValue, secondMessageTimestamp)
     assertForwardedMessage(context, secondKey, secondValue, secondMessageTimestamp)
+    statUtils.assertGauge("stores/mystore/numCacheEntries", 0)
   }
 
   private def assertForwardedMessage(
@@ -119,10 +120,14 @@ class FinatraTransformerTest extends Test with com.twitter.inject.Mockito {
     .applicationId("test-app")
     .bootstrapServers("127.0.0.1:1000")
 
-  class FinatraMockProcessorContext
-    extends InternalMockProcessorContext(
-      TestUtils.tempDirectory,
-      new StreamsConfig(config.properties)) {
+  class CachingFinatraMockProcessorContext(statsReceiver: StatsReceiver)
+      extends InternalMockProcessorContext(
+        TestUtils.tempDirectory,
+        new StreamsConfig(config.properties)) {
+
+    override def currentNode(): ProcessorNode[_, _] = {
+      new MockProcessorNode()
+    }
 
     override def schedule(
       interval: Long,
@@ -136,16 +141,19 @@ class FinatraTransformerTest extends Test with com.twitter.inject.Mockito {
       }
     }
     override def getStateStore(name: String): StateStore = {
-      val storeBuilder = Stores
+      val storeBuilder = FinatraStores
         .keyValueStoreBuilder(
-          Stores.persistentKeyValueStore(name),
+          statsReceiver,
+          FinatraStores.persistentKeyValueStore(name),
           Serdes.String(),
           Serdes.String()
         )
+        .withCachingEnabled()
 
       val store = storeBuilder.build
       store.init(this, store)
-      store
+
+      new WrappedStateStore(store) {}
     }
 
     override def recordCollector(): RecordCollector = {

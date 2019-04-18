@@ -1,6 +1,6 @@
 # Finatra Benchmark Server
 
-A simple server for running microbenchmarks using [JMH](http://openjdk.java.net/projects/code-tools/jmh/).
+A simple server for running microbenchmarks using [JMH](https://openjdk.java.net/projects/code-tools/jmh/).
 
 Note: All Finatra examples should be run from the base Finatra directory as they are defined as part 
 of the root project.

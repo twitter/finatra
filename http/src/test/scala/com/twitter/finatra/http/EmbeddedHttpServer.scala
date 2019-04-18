@@ -3,10 +3,12 @@ package com.twitter.finatra.http
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.net.MediaType
 import com.google.inject.Stage
+import com.twitter.app.GlobalFlag
 import com.twitter.finagle.http.{Method, Status, _}
 import com.twitter.finatra.http.JsonAwareEmbeddedHttpClient.jsonParseWithNormalizer
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.inject.conversions.map._
 import com.twitter.inject.server.{EmbeddedHttpClient, EmbeddedTwitterServer, Ports}
 import com.twitter.util.{Duration, Memoize}
 import scala.collection.JavaConverters._
@@ -39,6 +41,11 @@ import scala.collection.JavaConverters._
  * @param failOnLintViolation If server startup should fail due (and thus the test) to a detected lint rule issue after startup.
  * @param closeGracePeriod An Optional grace period to use instead of the underlying server's
  *                         `defaultGracePeriod` when closing the underlying server.
+ * @param globalFlags An ordered map of [[GlobalFlag]] and the desired value to be set during the
+ *                    scope of the underlying [[twitterServer]]'s lifecycle. The flags will be
+ *                    applied in insertion order, with the first entry being applied closest to
+ *                    the startup of the [[twitterServer]]. In order to ensure insertion ordering,
+ *                    you should use a [[scala.collection.immutable.ListMap]].
  */
 class EmbeddedHttpServer(
   override val twitterServer: Ports,
@@ -56,7 +63,8 @@ class EmbeddedHttpServer(
   disableTestLogging: Boolean = false,
   maxStartupTimeSeconds: Int = 60,
   failOnLintViolation: Boolean = false,
-  closeGracePeriod: Option[Duration] = None
+  closeGracePeriod: Option[Duration] = None,
+  globalFlags: => Map[GlobalFlag[_], String] = Map()
 ) extends EmbeddedTwitterServer(
       twitterServer = twitterServer,
       flags = flags,
@@ -70,7 +78,8 @@ class EmbeddedHttpServer(
       disableTestLogging = disableTestLogging,
       maxStartupTimeSeconds = maxStartupTimeSeconds,
       failOnLintViolation = failOnLintViolation,
-      closeGracePeriod = closeGracePeriod
+      closeGracePeriod = closeGracePeriod,
+      globalFlags = globalFlags
     )
   with ExternalHttpClient {
 
@@ -78,6 +87,9 @@ class EmbeddedHttpServer(
 
   def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage) =
     this(twitterServer, flags = flags.asScala.toMap, stage = stage)
+
+  def this(twitterServer: Ports, flags: java.util.Map[String, String], globalFlags: java.util.LinkedHashMap[GlobalFlag[_], String], stage: Stage) =
+    this(twitterServer, flags = flags.asScala.toMap, stage = stage, globalFlags = globalFlags.toOrderedMap)
 
   /* Public */
 
@@ -1053,7 +1065,7 @@ class EmbeddedHttpServer(
     routeToAdminServer: Boolean = false,
     secure: Boolean
   ): Response = {
-
+    start() // ensure we have started the server
     if (routeToAdminServer || matchesAdminRoute(request.method, request.path)) {
       httpAdminClient(
         request,
@@ -1091,7 +1103,6 @@ class EmbeddedHttpServer(
   }
 
   private def matchesAdminRoute(method: Method, path: String): Boolean = {
-    start() // ensure we have started the server and thus added admin routes.
     path.startsWith(HttpRouter.FinatraAdminPrefix) ||
       adminHttpRouteMatchesPath(method -> path)
   }

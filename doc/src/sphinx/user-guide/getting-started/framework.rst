@@ -28,8 +28,8 @@ Modules in `inject` include:
 - `inject-modules` - core library which defines framework modules.
 - `inject-app` - core integration with `c.t.app.App <https://twitter.github.io/util/docs/com/twitter/app/App.html>`__
 - `inject-server` - core integration with `c.t.server.TwitterServer`.
-- `inject-slf4j` - core library integration with the `SLF4J <http://www.slf4j.org/manual.html>`__ API.
-  Also provides support for bridging Logback's `Mapped Diagnostic Context <http://logback.qos.ch/manual/mdc.html>`__
+- `inject-slf4j` - core library integration with the `SLF4J <https://www.slf4j.org/manual.html>`__ API.
+  Also provides support for bridging Logback's `Mapped Diagnostic Context <https://logback.qos.ch/manual/mdc.html>`__
   with Finagle. See `Mapped Diagnostic Context Filter <../logging/logback.html#mapped-diagnostic-context-filter>`__
   Logback documentation for more information.
 - `inject-request-scope` - core library for integrating `Guice <https://github.com/google/guice>`__'s

@@ -4,12 +4,12 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "19.3.0"
+val releaseVersion = "19.4.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
-  scalaVersion := "2.12.7",
-  crossScalaVersions := Seq("2.11.12", "2.12.7"),
+  scalaVersion := "2.12.8",
+  crossScalaVersions := Seq("2.11.12", "2.12.8"),
   scalaModuleInfo := scalaModuleInfo.value.map(_.withOverrideScalaVersion(true)),
   fork in Test := true,
   javaOptions in Test ++= travisTestJavaOptions
@@ -64,7 +64,7 @@ lazy val versions = new {
   val jodaConvert = "1.2"
   val jodaTime = "2.5"
   val junit = "4.12"
-  val kafka = "2.0.1"
+  val kafka = "2.2.0"
   val libThrift = "0.10.0"
   val logback = "1.1.7"
   val mockito = "1.9.5"
@@ -130,7 +130,7 @@ lazy val publishSettings = Seq(
     else
       Some("releases" at nexus + "service/local/staging/deploy/maven2")
   },
-  licenses := Seq("Apache 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
+  licenses := Seq("Apache 2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
   homepage := Some(url("https://github.com/twitter/finatra")),
   autoAPIMappings := true,
   apiURL := Some(url("https://twitter.github.io/finatra/scaladocs/")),
@@ -724,9 +724,7 @@ lazy val thrift = project
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "org.yaml" % "snakeyaml" % versions.snakeyaml
     ),
-    scroogePublishThrift in Compile := true,
-    scroogeThriftIncludeFolders in Test := Seq(file("thrift/src/main/thrift")),
-    scroogeLanguages in Compile := Seq("java", "scala"),
+    scroogePublishThrift in Test := true,
     scroogeLanguages in Test := Seq("java", "scala"),
     excludeFilter in unmanagedResources := "BUILD",
     publishArtifact in Test := true,
@@ -753,7 +751,6 @@ lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-h
   .settings(
     name := "inject-thrift-client-http-mapper",
     moduleName := "inject-thrift-client-http-mapper",
-    scroogeThriftIncludeFolders in Test := Seq(file("thrift/src/main/thrift")),
     excludeFilter in Test in unmanagedResources := "BUILD"
   ).dependsOn(
     http % "test->test;compile->compile",
@@ -1035,7 +1032,6 @@ lazy val thriftExampleIdl = (project in file("examples/thrift-server/thrift-exam
     moduleName := "thrift-example-idl",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*",
     scroogeThriftIncludeFolders in Compile := Seq(
-      file("thrift/src/main/thrift"),
       file("examples/thrift-server/thrift-example-idl/src/main/thrift"))
   ).dependsOn(thrift)
 
@@ -1064,7 +1060,6 @@ lazy val thriftJavaExampleIdl = (project in file("examples/java-thrift-server/th
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftjava.*",
     scroogeLanguages in Compile := Seq("java"),
     scroogeThriftIncludeFolders in Compile := Seq(
-      file("thrift/src/main/thrift"),
       file("examples/java-thrift-server/thrift-example-idl/src/main/thrift"))
   ).dependsOn(thrift)
 

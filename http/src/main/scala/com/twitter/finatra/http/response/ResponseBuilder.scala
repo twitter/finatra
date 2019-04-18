@@ -4,10 +4,12 @@ import com.google.common.net.{MediaType => GuavaMediaType}
 import com.twitter.finagle
 import com.twitter.finagle.http._
 import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.finatra.http
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.exceptions.HttpResponseException
 import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
 import com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent
+import com.twitter.finatra.http.streaming.ToReader
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.utils.AutoClosable.tryWith
 import com.twitter.finatra.utils.FileResolver
@@ -22,7 +24,6 @@ import java.util.function.{Function => JFunction}
 import javax.inject.Inject
 import org.apache.commons.io.FilenameUtils._
 import org.apache.commons.io.IOUtils
-import org.jboss.netty.handler.codec.http.{Cookie => NettyCookie}
 import scala.runtime.BoxedUnit
 
 object ResponseBuilder {
@@ -105,7 +106,8 @@ class ResponseBuilder @Inject()(
 
   def movedPermanently: EnrichedResponse = EnrichedResponse(Status.MovedPermanently)
 
-  def movedPermanently(body: Any): EnrichedResponse = EnrichedResponse(Status.MovedPermanently).body(body)
+  def movedPermanently(body: Any): EnrichedResponse =
+    EnrichedResponse(Status.MovedPermanently).body(body)
 
   def found: EnrichedResponse = EnrichedResponse(Status.Found)
 
@@ -141,11 +143,13 @@ class ResponseBuilder @Inject()(
 
   def preconditionFailed: EnrichedResponse = EnrichedResponse(Status.PreconditionFailed)
 
-  def preconditionFailed(body: Any): EnrichedResponse = EnrichedResponse(Status.PreconditionFailed).body(body)
+  def preconditionFailed(body: Any): EnrichedResponse =
+    EnrichedResponse(Status.PreconditionFailed).body(body)
 
   def requestEntityTooLarge: EnrichedResponse = EnrichedResponse(Status.RequestEntityTooLarge)
 
-  def requestEntityTooLarge(body: Any): EnrichedResponse = EnrichedResponse(Status.RequestEntityTooLarge).body(body)
+  def requestEntityTooLarge(body: Any): EnrichedResponse =
+    EnrichedResponse(Status.RequestEntityTooLarge).body(body)
 
   def gone: EnrichedResponse = EnrichedResponse(Status.Gone)
 
@@ -153,7 +157,8 @@ class ResponseBuilder @Inject()(
 
   def internalServerError: EnrichedResponse = EnrichedResponse(Status.InternalServerError)
 
-  def internalServerError(body: Any): EnrichedResponse = EnrichedResponse(Status.InternalServerError).body(body)
+  def internalServerError(body: Any): EnrichedResponse =
+    EnrichedResponse(Status.InternalServerError).body(body)
 
   def notImplemented: EnrichedResponse = EnrichedResponse(Status.NotImplemented)
 
@@ -162,6 +167,17 @@ class ResponseBuilder @Inject()(
   def clientClosed: EnrichedResponse = EnrichedResponse(Status.ClientClosedRequest)
 
   def create(response: Response): EnrichedResponse = new EnrichedResponse(response)
+
+  /**
+   * Experimental, create a StreamingResponse which can be converted to a
+   * [[com.twitter.finagle.http.Response]] later.
+   *
+   * @param stream The output stream.
+   * @tparam F The Primitive Stream type.
+   * @tparam A The type of streaming values.
+   */
+  private[http] def streaming[F[_]: ToReader, A](stream: F[A]): http.streaming.StreamingResponse[F, A] =
+    http.streaming.StreamingResponse(objectMapper, stream)
 
   private def fullMimeTypeValue(mimeType: String): String = {
     mimeTypeCache.computeIfAbsent(mimeType, whenMimeTypeAbsent)
@@ -206,12 +222,6 @@ class ResponseBuilder @Inject()(
      */
     def cookie(c: Cookie): EnrichedResponse = {
       response.addCookie(c)
-      this
-    }
-
-    @deprecated("use cookie(Cookie)", "2016-11-07")
-    def cookie(c: NettyCookie): EnrichedResponse = {
-      response.addCookie(new Cookie(c))
       this
     }
 
@@ -436,7 +446,9 @@ class ResponseBuilder @Inject()(
       this
     }
 
-    @deprecated("Use header(key: String, v: Any) using a String representation  of the MediaType", "2017-12-12")
+    @deprecated(
+      "Use header(key: String, v: Any) using a String representation  of the MediaType",
+      "2017-12-12")
     def header(k: String, v: GuavaMediaType): EnrichedResponse = {
       response.headerMap.set(k, mediaToString(v))
       this
@@ -480,7 +492,9 @@ class ResponseBuilder @Inject()(
       this
     }
 
-    @deprecated("Use contentType(mediaType: String) using a String representation of the MediaType", "2017-12-12")
+    @deprecated(
+      "Use contentType(mediaType: String) using a String representation of the MediaType",
+      "2017-12-12")
     def contentType(mediaType: GuavaMediaType): EnrichedResponse = {
       response.headerMap.set(Fields.ContentType, mediaToString(mediaType))
       this
@@ -515,10 +529,11 @@ class ResponseBuilder @Inject()(
      */
     def file(file: String): EnrichedResponse = {
       val fileWithSlash = if (file.startsWith("/")) file else "/" + file
-      fileResolver.getInputStream(fileWithSlash).map { is =>
-        contentType(fileResolver.getContentType(file))
-        body(is)
-      }.getOrElse(notFound.plain(fileWithSlash + " not found"))
+      fileResolver
+        .getInputStream(fileWithSlash).map { is =>
+          contentType(fileResolver.getContentType(file))
+          body(is)
+        }.getOrElse(notFound.plain(fileWithSlash + " not found"))
     }
 
     /**
@@ -675,8 +690,8 @@ class ResponseBuilder @Inject()(
               .counter(detailStrings: _*)
               .incr()
           case _ =>
-            // No stored RouteInfo. Note: the com.twitter.finatra.http.exceptions.ExceptionManager
-            // will always stat failure details for a request.
+          // No stored RouteInfo. Note: the com.twitter.finatra.http.exceptions.ExceptionManager
+          // will always stat failure details for a request.
         }
       }
 

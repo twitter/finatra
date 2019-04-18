@@ -2,8 +2,10 @@ package com.twitter.inject.tests.conversions
 
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.Test
+import java.util
 import java.util.concurrent.ConcurrentHashMap
 import scala.collection.SortedMap
+import scala.collection.immutable.ListMap
 
 class MapsConversionsTest extends Test {
 
@@ -59,6 +61,26 @@ class MapsConversionsTest extends Test {
   test("RichMap#filterNotKeys") {
     Map(1 -> "a", 2 -> "a", 3 -> "b") filterNotKeys { _ == 3 } should
       equal(Map(1 -> "a", 2 -> "a"))
+  }
+
+  test("RichJavaMap#toOrderedMap") {
+    val treeMap = new java.util.TreeMap[String, Int]()
+    treeMap.put("c", 3)
+    treeMap.put("a", 2)
+    treeMap.put("b", 1)
+
+    treeMap.toOrderedMap should equal(ListMap("a" -> 2, "b" -> 1, "c" -> 3))
+    treeMap.toOrderedMap.toSeq should equal(Seq(("a", 2), ("b", 1), ("c", 3)))
+
+    val orderedMap = new util.LinkedHashMap[String, Int]()
+    orderedMap.put("a", 3)
+    orderedMap.put("b", 2)
+    orderedMap.put("c", 1)
+    orderedMap.put("e", 4)
+    orderedMap.put("d", 5)
+
+    orderedMap.toOrderedMap should equal(ListMap("a" -> 3, "b" -> 2, "c" -> 1, "e" -> 4, "d" -> 5))
+    orderedMap.toOrderedMap.toSeq should equal(Seq(("a", 3), ("b", 2), ("c", 1), ("e", 4), ("d", 5)))
   }
 
   test("RichConcurrentMap#atomicGetOrElseUpdate") {

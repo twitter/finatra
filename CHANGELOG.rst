@@ -7,11 +7,81 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+19.4.0
+------
+
+Added
+~~~~~
+
+* inject-server: Add `globalFlags` argument to EmbeddedTwitterServer, which will
+   allow for scoping a `c.t.a.GlobalFlag` property change to the lifecycle of the
+   underlying TwitterServer, as a `c.t.a.GlobalFlag` is normally scoped to the JVM/process.
+   This change is also reflected in `EmbeddedHttpServer` and `EmbeddedThriftServer` constructors.
+   ``PHAB_ID=D288032``
+
+* inject-utils: add `toOrderedMap` implicit conversion for `java.util.Map` ``PHAB_ID=D295005``
+
+* finatra-kafka-streams: Add flag `rocksdb.manifest.preallocation.size` with default value
+    `4.megabytes` to `c.t.f.k.c.RocksDbFlags` and set value in
+    `c.t.f.k.c.FinatraRocksDBConfig`. ``PHAB_ID=D290130``
+
+* finatra-http: Add `commaSeparatedList` boolean parameter to QueryParams, for
+   parsing comma-separated query parameters into collection types. ``PHAB_ID=D268989``
+
+Changed
+~~~~~~~
+
+* finatra-kafka: Upgraded kafka libraries from 2.0.0 to 2.2.0.
+  - `Kafka 2.0.1 Release Notes <https://archive.apache.org/dist/kafka/2.0.1/RELEASE_NOTES.html>`__
+  - `Kafka 2.1.0 Release Notes <https://archive.apache.org/dist/kafka/2.1.0/RELEASE_NOTES.html>`__
+  - `Kafka 2.1.1 Release Notes <https://archive.apache.org/dist/kafka/2.1.1/RELEASE_NOTES.html>`__
+  - `Kafka 2.2.0 Release Notes <https://archive.apache.org/dist/kafka/2.2.0/RELEASE_NOTES.html>`__
+  ``PHAB_ID=D248171``
+
+* finatra-thrift: Removed `c.t.finatra.thrift.exceptions.FinatraThriftExceptionMapper`,
+  `c.t.finatra.thrift.filters.ClientIdAcceptlistFilter`,
+  `c.t.finatra.thrift.modules.ClientIdAcceptlistModule`,
+  `c.t.finatra.thrift.filters.ClientIdWhitelistFilter`,
+  `c.t.finatra.thrift.modules.ClientIdWhitelistModule`,
+  and the `finatra/finatra_thrift_exceptions.thrift` IDL. ``PHAB_ID=D278231``
+
+* finatra-thrift: Constructing a `ThriftRouter` now requires `serverName`. ``PHAB_ID=D294345``
+
+* finatra-examples: Updated `StreamingController` to use `Reader` instead of `AsyncStream`
+  ``PHAB_ID=D295227``
+
+* finatra-kafka-streams: Implement FinatraKeyValueStore as custom store. ``PHAB_ID=D277612``
+
+* finatra-thrift: Constructing a `ThriftRouter` now requires `c.t.f.StackTransformer`.
+  ``PHAB_ID=D277493``
+
+Fixed
+~~~~~
+
+ * finatra-kafka: Ensure that `EmbeddedKafka` implementation of `beforeAll()` makes
+   call to `super.beforeAll()` so hooks registered in super class get executed. ``PHAB_ID=D296643``
+
+ * finatra-kafka-streams: `FinatraTransformer.timerStore` config object references immutable
+   map which causes exception thrown if user code calls `AbstractStoreBuilder.withLoggingDisabled`.
+   Fixed `FinatraTransformer.timerStore` to convert from immutable map to mutable map before
+   forwarding config object to kafka library. ``PHAB_ID=D293979``
+
 19.3.0
 ------
 
 Added
 ~~~~~
+
+* finatra-kafka-streams: Exposing additional consumer configuration flags.
+  - `kafka.consumer.max.poll.interval.ms` Maximum delay between invocations of poll() when using
+  consumer group management.
+  - `kafka.consumer.max.partition.fetch.bytes` Consumer's maximum amount of data per-partition the
+  server will return.
+  - `kafka.consumer.request.timeout.ms` Consumer's maximum amount of time to wait for the response
+  of a request.
+  - `kafka.consumer.connections.max.idle.ms` Consumer's maximum idle time for connections before
+  closing the connection.
+  ``PHAB_ID=D287371``
 
 * finatra-kafka: FinagleKafka clients pass correct deadline for close to
   underlying Kafka clients. ``PHAB_ID=D261115``
@@ -31,6 +101,8 @@ Added
 
 Changed
 ~~~~~~~
+
+* finatra-kafka-streams: finatra-kafka-streams: Refactor queryable state management  ``PHAB_ID=D277594``
 
 * finatra-kafka-streams: Improve querying of windowed stores. ``PHAB_ID=D277553``
 
@@ -84,7 +156,6 @@ Added
 
 Changed
 ~~~~~~~
-
 * finatra-kafka-streams: Refactor package names. All classes moved from
   com.twitter.finatra.streams to com.twitter.finatra.kafkastreams. ``PHAB_ID=D268027``
 

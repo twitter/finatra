@@ -11,9 +11,9 @@ October 2015
 August 2015
 -----------
 
-- `#FinagleCon 2015 <http://finagle.github.io/finaglecon/>`__ - `Streaming HTTP with Finatra and AsyncStream <http://schd.ws/hosted_files/finaglecon2015/d1/Streaming%20HTTP%20with%20Finatra%20and%20AsyncStream.pdf>`__ 	· `Youtube Video <https://youtu.be/7dsX0S0WsEk>`__
+- `#FinagleCon 2015 <https://finagle.github.io/finaglecon/>`__ - `Streaming HTTP with Finatra and AsyncStream <https://schd.ws/hosted_files/finaglecon2015/d1/Streaming%20HTTP%20with%20Finatra%20and%20AsyncStream.pdf>`__ 	· `Youtube Video <https://youtu.be/7dsX0S0WsEk>`__
 
 April 2015
 ----------
 
-- `SF Scala <http://www.meetup.com/SF-Scala/>`__ at Twitter - `Introducing to Finatra 2.0 </finatra/Presentations/FinatraSFScala.pdf>`__ 	· `Youtube Video <https://youtu.be/hkVp9W4c9bs>`__
+- `SF Scala <https://www.meetup.com/SF-Scala/>`__ at Twitter - `Introducing to Finatra 2.0 </finatra/Presentations/FinatraSFScala.pdf>`__ 	· `Youtube Video <https://youtu.be/hkVp9W4c9bs>`__

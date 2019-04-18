@@ -11,7 +11,6 @@ import com.twitter.inject.{Test, Mockito}
 import com.twitter.util.Await
 import java.io.{File, FileWriter}
 import org.apache.commons.io.IOUtils
-import org.jboss.netty.handler.codec.http.DefaultCookie
 
 class ResponseBuilderTest extends Test with Mockito {
 
@@ -63,8 +62,6 @@ class ResponseBuilderTest extends Test with Mockito {
     assertFooBarCookie(responseBuilder.ok.cookie("foo", "bar"))
 
     assertFooBarCookie(responseBuilder.ok.cookie(new FinagleCookie("foo", "bar")))
-
-    assertFooBarCookie(responseBuilder.ok.cookie(new DefaultCookie("foo", "bar")))
   }
 
   test("properly return responses") {

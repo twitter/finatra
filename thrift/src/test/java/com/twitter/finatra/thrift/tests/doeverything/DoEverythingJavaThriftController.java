@@ -11,9 +11,6 @@ import com.twitter.finagle.RequestTimeoutException;
 import com.twitter.finatra.thrift.tests.doeverything.exceptions.BarException;
 import com.twitter.finatra.thrift.tests.doeverything.exceptions.FooException;
 import com.twitter.finatra.thrift.tests.doeverything.exceptions.TestChannelException;
-import com.twitter.finatra.thrift.thriftjava.ClientError;
-import com.twitter.finatra.thrift.thriftjava.ClientErrorCause;
-import com.twitter.finatra.thrift.thriftjava.UnknownClientIdError;
 import com.twitter.inject.annotations.Flag;
 import com.twitter.util.Duration;
 import com.twitter.util.Future;
@@ -38,7 +35,7 @@ class DoEverythingJavaThriftController implements DoEverything.ServiceIface {
     @Override
     public Future<String> echo(String msg) {
         if ("clientError".equals(msg)) {
-            return Future.exception(new ClientError(ClientErrorCause.BAD_REQUEST, "client error"));
+            return Future.exception(new Exception("client error"));
         } else {
             return Future.value(msg);
         }
@@ -47,9 +44,7 @@ class DoEverythingJavaThriftController implements DoEverything.ServiceIface {
     @Override
     public Future<String> echo2(String msg) {
         if ("clientError".equals(msg)) {
-            return Future.exception(new ClientError(ClientErrorCause.BAD_REQUEST, "client error"));
-        } else if ("unknownClientIdError".equals(msg)) {
-            return Future.exception(new UnknownClientIdError("unknown client id error"));
+            return Future.exception(new Exception("client error"));
         } else if ("requestException".equals(msg)) {
             return Future.exception(new RequestException());
         } else if ("timeoutException".equals(msg)) {

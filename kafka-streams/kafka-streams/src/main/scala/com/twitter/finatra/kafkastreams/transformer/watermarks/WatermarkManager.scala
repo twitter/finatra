@@ -51,8 +51,9 @@ class WatermarkManager[K, V](
     val latestAssignedWatermark = watermarkAssignor.getWatermark
     trace(s"callOnWatermarkIfChanged $transformerName $taskId $latestAssignedWatermark")
     if (latestAssignedWatermark.timeMillis > lastEmittedWatermark.timeMillis) {
-      onWatermark.onWatermark(latestAssignedWatermark)
+      // It's important to call setLastEmittedWatermark before calling onWatermark since onWatermark may in turn call a callback that wants to read the current watermark...
       setLastEmittedWatermark(latestAssignedWatermark)
+      onWatermark.onWatermark(latestAssignedWatermark)
     }
   }
 

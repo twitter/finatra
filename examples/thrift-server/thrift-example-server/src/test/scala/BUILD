@@ -17,7 +17,6 @@ junit_tests(
         "finatra/inject/inject-server/src/main/scala",
         "finatra/inject/inject-server/src/test/scala:test-deps",
         "finatra/thrift/src/main/scala",
-        "finatra/thrift/src/main/thrift:thrift-scala",
         "finatra/thrift/src/test/scala:test-deps",
         "util/util-core/src/main/scala",
         "util/util-slf4j-api/src/main/scala",

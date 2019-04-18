@@ -3,14 +3,17 @@ package com.twitter.finatra.kafkastreams.query
 import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer.{DateTimeMillis, WindowStartTime}
 import com.twitter.finatra.kafkastreams.transformer.aggregation.TimeWindowed
 import com.twitter.finatra.kafkastreams.transformer.domain.{CompositeKey, Time}
+import com.twitter.finatra.kafkastreams.transformer.stores.FinatraReadOnlyKeyValueStore
 import com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraStoresGlobalManager
 import com.twitter.finatra.kafkastreams.utils.time._
 import com.twitter.finatra.streams.queryable.thrift.domain.ServiceShardId
 import com.twitter.finatra.streams.queryable.thrift.partitioning.{KafkaPartitioner, StaticServiceShardPartitioner}
 import com.twitter.inject.Logging
 import com.twitter.util.Duration
-import org.apache.kafka.common.serialization.{Serde, Serializer}
+import java.io.File
+import org.apache.kafka.common.serialization.Serde
 import scala.collection.JavaConverters._
+import scala.collection.mutable
 
 /**
  * A queryable Finatra composite window store for use by endpoints exposing queryable
@@ -18,6 +21,7 @@ import scala.collection.JavaConverters._
  * and secondary key.
  */
 class QueryableFinatraCompositeWindowStore[PK, SK, V](
+  stateDir: File,
   storeName: String,
   windowSize: Duration,
   allowedLateness: Duration,
@@ -69,56 +73,65 @@ class QueryableFinatraCompositeWindowStore[PK, SK, V](
     startTime: Option[DateTimeMillis] = None,
     endTime: Option[DateTimeMillis] = None
   ): Map[WindowStartTime, scala.collection.Map[SK, V]] = {
-    throwIfNonLocalKey(primaryKey, primaryKeySerializer)
+    val primaryKeyBytes = FinatraStoresGlobalManager.primaryKeyBytesIfLocalKey(
+      partitioner,
+      currentServiceShardId,
+      primaryKey,
+      primaryKeySerializer)
 
     val (startWindowRange, endWindowRange) = QueryableFinatraWindowStore.queryStartAndEndTime(windowSize, defaultQueryRange, startTime, endTime)
 
+    val resultMap = new java.util.TreeMap[DateTimeMillis, mutable.Map[SK, V]]().asScala
 
-    val resultMap = new java.util.TreeMap[Long, scala.collection.mutable.Map[SK, V]]().asScala
+    val store = FinatraStoresGlobalManager.getWindowedCompositeStore[PK, SK, V](
+      stateDirFlag = stateDir,
+      storeName = storeName,
+      numPartitions = numQueryablePartitions,
+      keyBytes = primaryKeyBytes)
+
+    trace(s"Start Query $storeName ${store.taskId} $primaryKey $startCompositeKey $endCompositeKey ${startWindowRange.iso8601Millis} to ${endWindowRange.iso8601Millis} = $resultMap")
 
     var windowStartTime = startWindowRange
     while (windowStartTime <= endWindowRange) {
-      queryWindow(startCompositeKey, endCompositeKey, windowStartTime, allowStaleReads, resultMap)
+      queryWindow(
+        store = store,
+        startCompositeKey = startCompositeKey,
+        endCompositeKey = endCompositeKey,
+        windowStartTime = windowStartTime,
+        allowStaleReads = allowStaleReads,
+        windowedResultsMap = resultMap)
+
       windowStartTime = windowStartTime + windowSizeMillis
     }
 
+    info(s"Query $storeName ${store.taskId} $primaryKey $startCompositeKey $endCompositeKey ${startWindowRange.iso8601Millis} to ${endWindowRange.iso8601Millis} = $resultMap")
     resultMap.toMap
   }
 
   /* Private */
 
   private def queryWindow(
+    store: FinatraReadOnlyKeyValueStore[TimeWindowed[CompositeKey[PK, SK]], V],
     startCompositeKey: CompositeKey[PK, SK],
     endCompositeKey: CompositeKey[PK, SK],
     windowStartTime: DateTimeMillis,
     allowStaleReads: Boolean,
-    resultMap: scala.collection.mutable.Map[Long, scala.collection.mutable.Map[SK, V]]
+    windowedResultsMap: scala.collection.mutable.Map[WindowStartTime, scala.collection.mutable.Map[SK, V]]
   ): Unit = {
-    trace(s"QueryWindow $startCompositeKey to $endCompositeKey ${windowStartTime.asInstanceOf[Long].iso8601}")
+    val iterator = store.range(
+      TimeWindowed.forSize(start = Time(windowStartTime), windowSize, startCompositeKey),
+      TimeWindowed.forSize(start = Time(windowStartTime), windowSize, endCompositeKey),
+      allowStaleReads = allowStaleReads
+    )
 
-    //TODO: Use store.taskId to find exact store where the key is assigned
-    for (store <- FinatraStoresGlobalManager.getWindowedCompositeStores[PK, SK, V](storeName)) {
-      val iterator = store.range(
-        TimeWindowed.forSize(start = Time(windowStartTime), windowSize, startCompositeKey),
-        TimeWindowed.forSize(start = Time(windowStartTime), windowSize, endCompositeKey),
-        allowStaleReads = allowStaleReads
-      )
+    while (iterator.hasNext) {
+      val entry = iterator.next()
+      trace(s"$store\t$entry")
+      val windowedResult = windowedResultsMap.getOrElseUpdate(
+        entry.key.start.millis,
+        scala.collection.mutable.Map[SK, V]())
 
-      while (iterator.hasNext) {
-        val entry = iterator.next()
-        trace(s"$store\t$entry")
-        val innerMap =
-          resultMap.getOrElseUpdate(entry.key.start.millis, scala.collection.mutable.Map[SK, V]())
-        innerMap += (entry.key.value.secondary -> entry.value)
-      }
-    }
-  }
-
-  private def throwIfNonLocalKey(key: PK, keySerializer: Serializer[PK]): Unit = {
-    val keyBytes = keySerializer.serialize("", key)
-    val partitionsToQuery = partitioner.shardIds(keyBytes)
-    if (partitionsToQuery.head != currentServiceShardId) {
-      throw new Exception(s"Non local key. Query $partitionsToQuery")
+      windowedResult += (entry.key.value.secondary -> entry.value)
     }
   }
 }

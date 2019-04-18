@@ -101,7 +101,7 @@ Finatra provides a custom `case class deserializer <https://github.com/twitter/f
 -  Throws a `JsonException` when required fields are missing from the parsed JSON.
 -  Use default values when fields are missing in the incoming JSON.
 -  Properly deserialize a `Seq[Long]` (see https://github.com/FasterXML/jackson-module-scala/issues/62).
--  Support `"wrapped values" <http://docs.scala-lang.org/overviews/core/value-classes.html>`__ using `WrappedValue` (needed since `jackson-module-scala <https://github.com/FasterXML/jackson-module-scala>`__ does not support the ``@JsonCreator`` annotation).
+-  Support `"wrapped values" <https://docs.scala-lang.org/overviews/core/value-classes.html>`__ using `WrappedValue` (needed since `jackson-module-scala <https://github.com/FasterXML/jackson-module-scala>`__ does not support the ``@JsonCreator`` annotation).
 -  Support for accumulating JSON parsing errors (instead of failing fast).
 -  Support for field and method level validations which also accumulate errors.
 

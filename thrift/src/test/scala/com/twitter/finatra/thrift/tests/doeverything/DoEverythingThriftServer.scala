@@ -3,9 +3,7 @@ package com.twitter.finatra.thrift.tests.doeverything
 import com.twitter.finagle.{Filter, ThriftMux}
 import com.twitter.finagle.tracing.NullTracer
 import com.twitter.finatra.annotations.DarkTrafficFilterType
-import com.twitter.finatra.thrift.exceptions.FinatraThriftExceptionMapper
 import com.twitter.finatra.thrift.filters._
-import com.twitter.finatra.thrift.modules.ClientIdAcceptlistModule
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.tests.doeverything.controllers.DoEverythingThriftController
 import com.twitter.finatra.thrift.tests.doeverything.exceptions.{ReqRepBarExceptionMapper, ReqRepDoEverythingExceptionMapper, ReqRepFooExceptionMapper}
@@ -21,9 +19,7 @@ class DoEverythingThriftServer extends ThriftServer {
   flag("magicNum", "26", "Magic number")
 
   override val modules =
-    Seq(
-      new ClientIdAcceptlistModule("/clients.yml"),
-      new DoEverythingThriftServerDarkTrafficFilterModule)
+    Seq(new DoEverythingThriftServerDarkTrafficFilterModule)
 
   override protected def configureThriftServer(server: ThriftMux.Server): ThriftMux.Server = {
     server
@@ -40,10 +36,8 @@ class DoEverythingThriftServer extends ThriftServer {
       .filter(classOf[AccessLoggingFilter])
       .filter[StatsFilter]
       .filter[ExceptionMappingFilter]
-      .filter[ClientIdAcceptlistFilter]
       .filter(Filter.TypeAgnostic.Identity)
       .filter[Filter.TypeAgnostic, DarkTrafficFilterType]
-      .exceptionMapper[FinatraThriftExceptionMapper]
       .exceptionMapper[ReqRepBarExceptionMapper]
       .exceptionMapper[ReqRepFooExceptionMapper]
       .exceptionMapper[ReqRepDoEverythingExceptionMapper]

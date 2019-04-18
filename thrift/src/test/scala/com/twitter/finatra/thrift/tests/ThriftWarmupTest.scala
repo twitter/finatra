@@ -7,7 +7,7 @@ import com.twitter.inject.Test
 class ThriftWarmupTest extends Test {
   test("ThriftWarmup refuses to send a request if a router is not configured") {
     intercept[IllegalStateException] {
-      val tw = new ThriftWarmup(new ThriftRouter(null, null))
+      val tw = new ThriftWarmup(new ThriftRouter(null, null, null, "hi-server"))
       tw.send(Uppercase, Uppercase.Args("hithere"), 1)()
     }
   }

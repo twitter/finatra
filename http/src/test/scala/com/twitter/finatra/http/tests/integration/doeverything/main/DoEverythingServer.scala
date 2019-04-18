@@ -1,6 +1,7 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main
 
 import com.google.inject.Module
+import com.twitter.app.GlobalFlag
 import com.twitter.finagle.Filter
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.filters.CommonFilters
@@ -13,6 +14,7 @@ import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{App
 import com.twitter.finatra.http.tests.integration.doeverything.main.modules.{DoEverythingModule, DoEverythingStatsReceiverModule}
 import com.twitter.finatra.http.{Controller, HttpServer}
 import com.twitter.finatra.httpclient.modules.HttpClientModule
+
 
 object DoEverythingServerMain extends DoEverythingServer
 
@@ -121,4 +123,5 @@ class DoEverythingServer extends HttpServer {
   override protected def warmup(): Unit = {
     handle[DoEverythingWarmupHandler]()
   }
+
 }

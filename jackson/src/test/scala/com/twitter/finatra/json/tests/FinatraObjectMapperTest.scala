@@ -1079,21 +1079,21 @@ class FinatraObjectMapperTest extends Test with Logging {
     parse[NoConstructorArgs]("""{}""")
   }
 
-  //Jackson parses numbers into boolean type without error. see http://jira.codehaus.org/browse/JACKSON-78
+  //Jackson parses numbers into boolean type without error. see https://jira.codehaus.org/browse/JACKSON-78
   test("case class with boolean as number") {
     parse[CaseClassWithBoolean](""" {
             "foo": 100
           }""") should equal(CaseClassWithBoolean(true))
   }
 
-  //Jackson parses numbers into boolean type without error. see http://jira.codehaus.org/browse/JACKSON-78
+  //Jackson parses numbers into boolean type without error. see https://jira.codehaus.org/browse/JACKSON-78
   test("case class with Seq[Boolean]") {
     parse[CaseClassWithSeqBooleans](""" {
             "foos": [100, 5, 0, 9]
           }""") should equal(CaseClassWithSeqBooleans(Seq(true, true, false, true)))
   }
 
-  //Jackson parses numbers into boolean type without error. see http://jira.codehaus.org/browse/JACKSON-78
+  //Jackson parses numbers into boolean type without error. see https://jira.codehaus.org/browse/JACKSON-78
   test("Seq[Boolean]") {
     parse[Seq[Boolean]]("""[100, 5, 0, 9]""") should equal(Seq(true, true, false, true))
   }

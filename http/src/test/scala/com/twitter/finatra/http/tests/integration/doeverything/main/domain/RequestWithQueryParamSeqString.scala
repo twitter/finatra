@@ -14,6 +14,10 @@ case class RequestWithDefaultQueryParam(@QueryParam param: String = "default")
 
 case class RequestWithQueryParamSeqLong(@QueryParam foo: Seq[Long])
 
+case class RequestWithCommaSeparatedQueryParamSeqLong(@QueryParam(commaSeparatedList = true) foo: Seq[Long])
+
+case class RequestWithUselessCommaSeparatedQueryParamLong(@QueryParam(commaSeparatedList = true) foo: Long)
+
 case class ResponseOfQueryParamSeqLong(foo: Seq[Long])
 
 case class RequestWithIntQueryParams(@QueryParam param: Seq[Int])

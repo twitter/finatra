@@ -124,6 +124,13 @@ object FinatraRocksDBConfig {
       |max_write_buffer_number write buffers available. This value can be used to adjust the control
       |of memory usage. Larger write buffers will cause longer recovery on file open.""".stripMargin
 
+  val RocksDbManifestPreallocationSize = "rocksdb.manifest.preallocation.size"
+  val RocksDbManifestPreallocationSizeDefault: StorageUnit = 4.megabytes
+  val RocksDbManifestPreallocationSizeDoc =
+    """Number of bytes to preallocate (via fallocate) the manifest files.
+      |Default is 4mb, which is reasonable to reduce random IO as well as prevent overallocation
+      |for mounts that preallocate large amounts of data (such as xfs's allocsize option).""".stripMargin
+
   val RocksDbMinWriteBufferNumberToMerge = "rocksdb.min.write.buffer.num.merge"
   val RocksDbMinWriteBufferNumberToMergeDefault: Int = 1
   val RocksDbMinWriteBufferNumberToMergeDoc =
@@ -274,11 +281,17 @@ class FinatraRocksDBConfig extends RocksDBConfigSetter with Logging {
       FinatraRocksDBConfig.RocksDbMaxWriteBufferNumber,
       FinatraRocksDBConfig.RocksDbMaxWriteBufferNumberDefault)
 
+    val manifestPreallocationSize = getBytesOrDefault(
+      configs,
+      FinatraRocksDBConfig.RocksDbManifestPreallocationSize,
+      FinatraRocksDBConfig.RocksDbManifestPreallocationSizeDefault)
+
     options
       .setDbWriteBufferSize(dbWriteBufferSize)
       .setWriteBufferSize(writeBufferSize)
       .setMinWriteBufferNumberToMerge(minWriteBufferNumberToMerge)
       .setMaxWriteBufferNumber(maxWriteBufferNumber)
+      .setManifestPreallocationSize(manifestPreallocationSize)
   }
 
   private def setTableConfiguration(options: Options, configs: util.Map[String, AnyRef]): Unit = {
@@ -390,10 +403,11 @@ class FinatraRocksDBConfig extends RocksDBConfigSetter with Logging {
     options: Options,
     configs: util.Map[String, AnyRef]
   ): Unit = {
-    val compactionStyle = CompactionStyle.valueOf(getStringOrDefault(
-      configs,
-      FinatraRocksDBConfig.RocksDbCompactionStyle,
-      FinatraRocksDBConfig.RocksDbCompactionStyleDefault).toUpperCase)
+    val compactionStyle = CompactionStyle.valueOf(
+      getStringOrDefault(
+        configs,
+        FinatraRocksDBConfig.RocksDbCompactionStyle,
+        FinatraRocksDBConfig.RocksDbCompactionStyleDefault).toUpperCase)
 
     val compactionStyleOptimize = getBooleanOrDefault(
       configs,
@@ -447,10 +461,11 @@ class FinatraRocksDBConfig extends RocksDBConfigSetter with Logging {
     options: Options,
     configs: util.Map[String, AnyRef]
   ): Unit = {
-    val infoLogLevel = InfoLogLevel.valueOf(getStringOrDefault(
-      configs,
-      FinatraRocksDBConfig.RocksDbInfoLogLevel,
-      FinatraRocksDBConfig.RocksDbInfoLogLevelDefault).toUpperCase)
+    val infoLogLevel = InfoLogLevel.valueOf(
+      getStringOrDefault(
+        configs,
+        FinatraRocksDBConfig.RocksDbInfoLogLevel,
+        FinatraRocksDBConfig.RocksDbInfoLogLevelDefault).toUpperCase)
 
     options
       .setInfoLogLevel(infoLogLevel)
@@ -486,7 +501,8 @@ class FinatraRocksDBConfig extends RocksDBConfigSetter with Logging {
         getIntOrDefault(
           configs,
           FinatraRocksDBConfig.RocksDbStatCollectionPeriodMs,
-          FinatraRocksDBConfig.RocksDbStatCollectionPeriodMsDefault))
+          FinatraRocksDBConfig.RocksDbStatCollectionPeriodMsDefault)
+      )
 
       statsCollector.start()
 
@@ -521,7 +537,8 @@ class FinatraRocksDBConfig extends RocksDBConfigSetter with Logging {
 
   private def getStringOrDefault(
     configs: util.Map[String, AnyRef],
-    key: String, default: String
+    key: String,
+    default: String
   ): String = {
     val valueString = configs.get(key)
     if (valueString != null) {

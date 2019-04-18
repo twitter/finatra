@@ -162,6 +162,25 @@ as a Boolean into the `QueryParamRequest#isSkipped` field.
 
 Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala>`__.
 
+You can parse comma-separated lists in your query parameters by setting `commaSeparatedList` to `true` in the QueryParam annotation, e.g.
+
+.. code:: scala
+
+  case class ManyUsersRequest(
+    @QueryParam(commaSeparatedList=true) ids: Seq[Long])
+
+Using this class in a route callback for a request:
+
+``GET /?ids=1,2,3``
+
+would split the string "1,2,3" into "1", "2", and "3", and then parse each into a `Long`.
+
+Note that turning this on will disallow repeating the 'ids' parameter, ie.
+
+``GET /?ids=1&ids=2,3``
+
+will return a Bad Request with an appropriate error message when `commaSeparatedList` is `true`.
+
 ------------
 
 `@FormParam <https://github.com/twitter/finatra/blob/develop/jackson/src/main/java/com/twitter/finatra/request/FormParam.java>`__
@@ -178,7 +197,7 @@ Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/sca
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Read a header value specified by the case class field name or by the ``@Header`` annotation value.
-You can use a Scala `"back-quote" literal <http://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html>`__
+You can use a Scala `"back-quote" literal <https://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html>`__
 for the field name when special characters are involved.
 
 .. code:: scala

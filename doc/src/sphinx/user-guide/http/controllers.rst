@@ -59,7 +59,7 @@ Here we are adding *by type* allowing the framework to handle class instantiatio
 Controllers and Routing
 -----------------------
 
-Routes are defined in a `Sinatra <http://www.sinatrarb.com/>`__-style syntax which consists of an
+Routes are defined in a `Sinatra <https://www.sinatrarb.com/>`__-style syntax which consists of an
 HTTP method, a URL matching pattern and an associated callback function. The callback function can
 accept a `c.t.finagle.http.Request <https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala>`__,
 a `custom request case class <requests.html#custom-request-case-class>`__ (which declaratively

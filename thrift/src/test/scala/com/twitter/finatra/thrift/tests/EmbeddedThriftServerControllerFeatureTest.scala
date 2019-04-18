@@ -5,17 +5,9 @@ import com.twitter.converter.thriftscala.Converter
 import com.twitter.converter.thriftscala.Converter.Uppercase
 import com.twitter.finagle.{Filter, Service}
 import com.twitter.finatra.thrift._
-import com.twitter.finatra.thrift.exceptions.FinatraThriftExceptionMapper
-import com.twitter.finatra.thrift.filters.{
-  AccessLoggingFilter,
-  ClientIdAcceptlistFilter,
-  ExceptionMappingFilter,
-  StatsFilter
-}
-import com.twitter.finatra.thrift.modules.ClientIdAcceptlistModule
+import com.twitter.finatra.thrift.filters.{AccessLoggingFilter, ExceptionMappingFilter, StatsFilter}
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.tests.EmbeddedThriftServerControllerFeatureTest._
-import com.twitter.finatra.thrift.thriftscala.{NoClientIdError, UnknownClientIdError}
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.Buf
 import com.twitter.scrooge
@@ -24,15 +16,12 @@ import com.twitter.util.{Await, Future}
 object EmbeddedThriftServerControllerFeatureTest {
 
   class ConverterControllerServer extends ThriftServer {
-    override val modules = Seq(new ClientIdAcceptlistModule("/clients.yml"))
 
     override def configureThrift(router: ThriftRouter): Unit = {
       router
         .filter(classOf[AccessLoggingFilter])
         .filter[StatsFilter]
         .filter[ExceptionMappingFilter]
-        .filter[ClientIdAcceptlistFilter]
-        .exceptionMapper[FinatraThriftExceptionMapper]
         .add[ConverterController]
     }
   }
@@ -131,20 +120,6 @@ class EmbeddedThriftServerControllerFeatureTest extends FeatureTest {
       client123.uppercase("fail")
     }
     e.getMessage should include("oops")
-  }
-
-  test("denylist") {
-    val notAcceptlistClient = server.thriftClient[Converter[Future]](clientId = "not_on_acceptlist")
-    assertFailedFuture[UnknownClientIdError] {
-      notAcceptlistClient.uppercase("Hi")
-    }
-  }
-
-  test("no client id") {
-    val noClientIdClient = server.thriftClient[Converter[Future]]()
-    assertFailedFuture[NoClientIdError] {
-      noClientIdClient.uppercase("Hi")
-    }
   }
 
   test("more than 22 args") {

@@ -48,7 +48,7 @@ import org.apache.kafka.streams.{KafkaClientSupplier, KafkaStreams, StreamsBuild
  * }}}
  */
 abstract class KafkaStreamsTwitterServer
-    extends TwitterServer
+  extends TwitterServer
     with KafkaFlagUtils
     with ScalaStreamsImplicits {
 
@@ -60,7 +60,7 @@ abstract class KafkaStreamsTwitterServer
     helpPrefix = "A finagle destination or"
   )
 
-  // Configs using kafka default
+  // StreamsConfig default flags
   private val numStreamThreads =
     flagWithKafkaDefault[Integer](StreamsConfig.NUM_STREAM_THREADS_CONFIG)
   private val numStandbyReplicas =
@@ -71,20 +71,36 @@ abstract class KafkaStreamsTwitterServer
     flagWithKafkaDefault[Long](StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG)
   private val metadataMaxAge = flagWithKafkaDefault[Long](StreamsConfig.METADATA_MAX_AGE_CONFIG)
 
-  private val consumerMaxPollRecords = consumerFlagWithKafkaDefault[Int](ConsumerConfig.MAX_POLL_RECORDS_CONFIG)
-  private val consumerAutoOffsetReset = consumerFlagWithKafkaDefault[String](ConsumerConfig.AUTO_OFFSET_RESET_CONFIG)
-  private val consumerSessionTimeout = consumerFlagWithKafkaDefault[Int](ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG)
-  private val consumerHeartbeatInterval = consumerFlagWithKafkaDefault[Int](ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG)
-  private val consumerFetchMin = consumerFlagWithKafkaDefault[Int](ConsumerConfig.FETCH_MIN_BYTES_CONFIG)
-  private val consumerFetchMaxWait = consumerFlagWithKafkaDefault[Int](ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG)
+  // ConsumerConfig default flags
+  private val consumerMaxPollRecords =
+    consumerFlagWithKafkaDefault[Int](ConsumerConfig.MAX_POLL_RECORDS_CONFIG)
+  private val consumerMaxPollInterval =
+    consumerFlagWithKafkaDefault[Int](ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG)
+  private val consumerAutoOffsetReset =
+    consumerFlagWithKafkaDefault[String](ConsumerConfig.AUTO_OFFSET_RESET_CONFIG)
+  private val consumerSessionTimeout =
+    consumerFlagWithKafkaDefault[Int](ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG)
+  private val consumerHeartbeatInterval =
+    consumerFlagWithKafkaDefault[Int](ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG)
+  private val consumerFetchMin =
+    consumerFlagWithKafkaDefault[Int](ConsumerConfig.FETCH_MIN_BYTES_CONFIG)
+  private val consumerFetchMaxWait =
+    consumerFlagWithKafkaDefault[Int](ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG)
+  private val consumerMaxPartitionFetch =
+    consumerFlagWithKafkaDefault[Int](ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG)
+  private val consumerRequestTimeout =
+    consumerFlagWithKafkaDefault[Int](ConsumerConfig.REQUEST_TIMEOUT_MS_CONFIG)
+  private val consumerConnectionsMaxIdle =
+    consumerFlagWithKafkaDefault[Long](ConsumerConfig.CONNECTIONS_MAX_IDLE_MS_CONFIG)
 
-  private val producerLinger = producerFlagWithKafkaDefault[Long](ProducerConfig.LINGER_MS_CONFIG)
+  // ProducerConfig default flag
+  private val producerLinger = producerFlagWithKafkaDefault[Int](ProducerConfig.LINGER_MS_CONFIG)
 
   // Configs with customized default
   private val replicationFactor = kafkaFlag(StreamsConfig.REPLICATION_FACTOR_CONFIG, 3) // We set it to 3 for durability and reliability.
   protected[kafkastreams] val applicationServerConfig =
     kafkaFlag(StreamsConfig.APPLICATION_SERVER_CONFIG, s"localhost:$defaultAdminPort")
-  private val stateDir = kafkaFlag(StreamsConfig.STATE_DIR_CONFIG, "kafka-stream-state")
+  private[finatra] val stateDir = kafkaFlag(StreamsConfig.STATE_DIR_CONFIG, "kafka-stream-state")
   private val metricsRecordingLevel =
     kafkaFlag(StreamsConfig.METRICS_RECORDING_LEVEL_CONFIG, "INFO")
 
@@ -241,6 +257,10 @@ abstract class KafkaStreamsTwitterServer
         .consumer.metricsSampleWindow(60.seconds)
         .consumer.autoOffsetReset(OffsetResetStrategy.valueOf(consumerAutoOffsetReset().toUpperCase))
         .consumer.maxPollRecords(consumerMaxPollRecords())
+        .consumer.maxPollInterval(consumerMaxPollInterval().milliseconds)
+        .consumer.maxPartitionFetch(consumerMaxPartitionFetch().bytes)
+        .consumer.requestTimeout(consumerRequestTimeout().milliseconds)
+        .consumer.connectionsMaxIdle(consumerConnectionsMaxIdle().milliseconds)
         .consumer.interceptor[KafkaStreamsMonitoringConsumerInterceptor]
 
     if (applicationId().nonEmpty) {

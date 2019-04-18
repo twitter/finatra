@@ -4,8 +4,8 @@ Creating an injectable |TwitterServer|_
 =======================================
 
 To create an injectable |c.t.server.TwitterServer|_, first depend on the `inject-server` library. We
-also recommend using `Logback <http://logback.qos.ch/>`__ as your
-`SLF4J <http://www.slf4j.org/manual.html>`__ implementation. E.g.,
+also recommend using `Logback <https://logback.qos.ch/>`__ as your
+`SLF4J <https://www.slf4j.org/manual.html>`__ implementation. E.g.,
 
 with sbt:
 

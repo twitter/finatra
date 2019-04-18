@@ -3,7 +3,7 @@
 Logback
 =======
 
-We highly recommend using `Logback <http://logback.qos.ch/>`__ as an SLF4J binding (logging
+We highly recommend using `Logback <https://logback.qos.ch/>`__ as an SLF4J binding (logging
 implementation).
 
 .. admonition:: From the Logback documentation
@@ -18,7 +18,7 @@ See Logback's documentation on `reasons to switch from Log4j <https://logback.qo
 
 If you choose to use Logback, just include a jar dependency on `ch.qos.logback:logback-classic`. 
 
-E.g., with `sbt <http://www.scala-sbt.org/>`__:
+E.g., with `sbt <https://www.scala-sbt.org/>`__:
 
 ::
 
@@ -27,7 +27,7 @@ E.g., with `sbt <http://www.scala-sbt.org/>`__:
 
 Where, `VERSION` represents the version of Logback you want to use. 
 
-Similarly, with `Maven <http://maven.apache.org/>`__:
+Similarly, with `Maven <https://maven.apache.org/>`__:
 
 .. code:: xml
 
@@ -45,7 +45,7 @@ APIs <https://www.slf4j.org/legacy.html>`__.
 .. note:: To configure dynamic changing log levels with `TwitterServer <https://twitter.github.io/twitter-server/>`__,
     be sure to *also* include a dependency on the TwitterServer Logback library.
 
-    With `sbt <http://www.scala-sbt.org/>`__:
+    With `sbt <https://www.scala-sbt.org/>`__:
 
     ::
 
@@ -58,7 +58,7 @@ APIs <https://www.slf4j.org/legacy.html>`__.
 Logback Configuration
 ---------------------
 
-See the Logback documentation on `configuration <http://logback.qos.ch/manual/configuration.html>`__
+See the Logback documentation on `configuration <https://logback.qos.ch/manual/configuration.html>`__
 for detailed information on configuring Logback logging.
 
 Examples
@@ -72,7 +72,7 @@ example project for example Logback configurations.
 
 The example
 `logback.xml <https://github.com/twitter/finatra/blob/develop/examples/hello-world/src/main/resources/logback.xml>`__
-configuration file makes use of `Logback's variable substitution <http://logback.qos.ch/manual/configuration.html#variableSubstitution>`__
+configuration file makes use of `Logback's variable substitution <https://logback.qos.ch/manual/configuration.html#variableSubstitution>`__
 
 .. code:: xml
 
@@ -89,7 +89,7 @@ runtime as a Java system property, e.g.,
 If a value is not provided the inlined default will be used, i.e., what is on the other side of the
 `:-`, e.g., `access.log` or `service.log`.
 
-More information about Logback's variable substitution may be found `here <http://logback.qos.ch/manual/configuration.html#variableSubstitution>`__.
+More information about Logback's variable substitution may be found `here <https://logback.qos.ch/manual/configuration.html#variableSubstitution>`__.
 
 Rerouting `java.util.logging`
 -------------------------------
@@ -99,7 +99,7 @@ the `jul-to-slf4j` bridge cannot replace classes in the `java.util.logging` pack
 redirection statically as it does for the other bridge implementations. Instead, it has to register
 a handler on the root logger and listen for logging statements like any other handler. It will then
 redirect those logging statements appropriately. This redirection is accomplished via SLF4J's
-`SLF4JBridgeHandler` [`documentation <http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html>`__\ ].
+`SLF4JBridgeHandler` [`documentation <https://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html>`__\ ].
 `finatra/inject-modules <https://github.com/twitter/finatra/tree/develop/inject/inject-modules>`__
 provides a module for initializing this bridge handler via the
 `LoggerModule <https://github.com/twitter/finatra/blob/develop/inject/inject-modules/src/main/scala/com/twitter/inject/modules/LoggerModule.scala>`__.

@@ -131,7 +131,7 @@ private[kafkastreams] class KafkaStreamsFinagleMetricsReporter extends KafkaFina
 
     if (isDebugMetric(metricName) && (recordingLevel != RecordingLevel.DEBUG)) {
       false
-    } else if (KafkaStreamsFinagleMetricsReporter.rateMetricsToIgnore(metricName.name())) { // remove any metrics that are already "rated" as these not consistent with other stats: http://go/jira/DINS-2187
+    } else if (KafkaStreamsFinagleMetricsReporter.rateMetricsToIgnore(metricName.name())) { // remove any metrics that are already "rated" as these not consistent with other stats: go/jira/DINS-2187
       false
     } else if (isGlobalTableMetric(metricName)) {
       includeGlobalTableMetrics

@@ -4,10 +4,12 @@ import com.google.inject.name.Names
 import com.google.inject.{Provides, Stage}
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finagle.{Http, Service}
+import com.twitter.inject.server.EmbeddedTwitterServer.ReducibleFn
 import com.twitter.inject.server.{EmbeddedTwitterServer, TwitterServer}
 import com.twitter.inject.{Logging, Test, TwitterModule}
 import com.twitter.util.{Await, Future}
 import javax.inject.Singleton
+import scala.collection.immutable.ListMap
 
 class EmbeddedTwitterServerIntegrationTest extends Test {
 
@@ -135,6 +137,83 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
       server.close()
     }
   }
+
+  test("server#support specifying GlobalFlags") {
+    var shouldLogMetrics = false
+
+    com.twitter.finagle.stats.logOnShutdown.let(false) { //set the scope of this test thread
+      val server = new EmbeddedTwitterServer(
+        twitterServer = new TwitterServer {
+          override protected def postInjectorStartup(): Unit = {
+            //mutate to match the inner scope of withLocals
+            shouldLogMetrics = com.twitter.finagle.stats.logOnShutdown()
+            super.postInjectorStartup()
+          }
+        },
+        globalFlags = ListMap(
+          com.twitter.finagle.stats.logOnShutdown -> "true"
+        )
+      )
+      try {
+        server.start() //start the server, otherwise the scope will never be entered
+        shouldLogMetrics should equal(true) //verify mutation of inner scope
+        com.twitter.finagle.stats
+          .logOnShutdown() should equal(false) //verify outer scope is not changed
+      } finally {
+        server.close()
+      }
+    }
+  }
+
+  test("server#support local scope of underlying server") {
+    var shouldLogMetrics = false
+
+    com.twitter.finagle.stats.logOnShutdown() should equal(false) // verify initial default value
+
+    com.twitter.finagle.stats.logOnShutdown.let(false) { // set the scope of this test thread
+      val server =
+        new EmbeddedTwitterServer(
+          twitterServer = new TwitterServer {
+            override protected def postInjectorStartup(): Unit = {
+              // mutate to match the inner scope of withLocals
+              shouldLogMetrics = com.twitter.finagle.stats.logOnShutdown()
+              super.postInjectorStartup()
+            }
+          },
+          disableTestLogging = true
+        ){
+          override protected[twitter] def withLocals(fn: => Unit): Unit =
+            com.twitter.finagle.stats.logOnShutdown.let(true)(super.withLocals(fn))
+        }.bind[String].toInstance("helloworld")
+
+      try {
+        server.start() // start the server, otherwise the scope will never be entered
+        shouldLogMetrics should equal(true) // verify mutation of inner scope
+        com.twitter.finagle.stats.logOnShutdown() should equal(false) // verify outer scope is not changed
+      } finally {
+        server.close()
+      }
+    }
+    com.twitter.finagle.stats.logOnShutdown() should equal(false) //verify default value unchanged
+  }
+
+  /* utility method tests */
+
+  test("method#reduceScopedFunction") {
+    val sb = new StringBuilder
+
+    val fns: Iterable[ReducibleFn[String]] = Seq(
+      s => { sb.append(s); s },
+      s => { sb.append('1'); s },
+      s => { sb.append("2"); s },
+      s => { sb.append("3"); s }
+    )
+
+    val fn = EmbeddedTwitterServer.mkGlobalFlagsFn(fns)
+    fn("abc") should equal("abc") //check expected output of fn ("abc" is pass-thru)
+    sb.toString should equal("321abc") //check that ordering of execution is correct (fn is inner-most)
+  }
+
 }
 
 class NonInjectableServer extends com.twitter.server.TwitterServer with Logging {

@@ -1165,6 +1165,84 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     )
   }
 
+  test("GET reject comma-separated query params when not enabled") {
+    server.httpGet(
+      "/RequestWithQueryParamSeqLong?foo=1,2,3",
+      andExpect = BadRequest,
+      withJsonBody = """{
+              "errors": [
+                "foo: '1,2,3' is not a valid Long"
+              ]
+            }"""
+    )
+  }
+
+  test("GET with comma separated query parameters as long sequence") {
+    server.httpGet(
+      "/RequestWithCommaSeparatedQueryParamSeqLong?foo=1,2,3",
+      andExpect = Ok,
+      withJsonBody = """
+            { "foo": [2, 3, 4] }
+        """
+    )
+  }
+
+  test("GET with mixed single and comma-separated query parameters as long sequence") {
+    server.httpGet(
+      "/RequestWithCommaSeparatedQueryParamSeqLong?foo=1&foo=2,3",
+      andExpect = BadRequest,
+      withJsonBody = """{
+              "errors":[
+                "foo: Repeating foo is not allowed. Pass multiple values as a single comma-separated string."
+              ]
+            }"""
+    )
+  }
+
+  test("GET with multiple comma-separated query parameters as long sequence") {
+    server.httpGet(
+      "/RequestWithCommaSeparatedQueryParamSeqLong?foo=1,2&foo=3,4",
+      andExpect = BadRequest,
+      withJsonBody = """{
+              "errors":[
+                "foo: Repeating foo is not allowed. Pass multiple values as a single comma-separated string."
+              ]
+            }"""
+    )
+  }
+
+  test("GET with comma-separated query parameters as empty long sequence") {
+    server.httpGet(
+      "/RequestWithCommaSeparatedQueryParamSeqLong?foo=",
+      andExpect = Ok,
+      withJsonBody = """
+            { "foo": [] }
+        """
+    )
+  }
+
+  test("GET with comma-separated query non-sequence parameter") {
+    server.httpGet(
+      "/RequestWithUselessCommaSeparatedQueryParamLong?foo=1",
+      andExpect = Ok,
+      withJsonBody = """
+            { "foo": [ 2 ] }
+        """
+    )
+  }
+
+  test("GET with comma-separated non-sequence parameter rejects sequence") {
+    server.httpGet(
+      "/RequestWithUselessCommaSeparatedQueryParamLong?foo=1,2,3",
+      andExpect = BadRequest,
+      withJsonBody = """{
+              "errors": [
+                "foo: '1,2,3' is not a valid Long"
+              ]
+            }"""
+    )
+  }
+
   test("apply route filter") {
     server.httpGet("/forbiddenByFilter", andExpect = Forbidden)
   }

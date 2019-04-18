@@ -1,19 +1,19 @@
 package com.twitter.finatra.kafkastreams.transformer.stores
 
-import com.twitter.finagle.stats.NullStatsReceiver
 import com.twitter.finatra.json.JsonDiff
 import com.twitter.finatra.kafkastreams.transformer.domain.{Expire, Time, TimerMetadata}
-import com.twitter.finatra.kafkastreams.transformer.stores.internal.{FinatraKeyValueStoreImpl, Timer}
+import com.twitter.finatra.kafkastreams.transformer.stores.internal.{
+  FinatraKeyValueStoreImpl,
+  Timer
+}
 import com.twitter.finatra.kafkastreams.transformer.watermarks.Watermark
 import com.twitter.finatra.streams.transformer.internal.domain.TimerSerde
 import com.twitter.inject.Test
 import org.apache.kafka.common.metrics.Metrics
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.utils.LogContext
-import org.apache.kafka.streams.processor.StateStore
 import org.apache.kafka.streams.processor.internals.MockStreamsMetrics
-import org.apache.kafka.streams.state.Stores
-import org.apache.kafka.streams.state.internals.ThreadCache
+import org.apache.kafka.streams.state.internals.{RocksDBStoreFactory, ThreadCache}
 import org.apache.kafka.test.{InternalMockProcessorContext, NoOpRecordCollector, TestUtils}
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ArrayBuffer
@@ -22,11 +22,21 @@ class PersistentTimerStoreTest extends Test {
 
   private type TimerKey = String
 
-  private var context: InternalMockProcessorContext = _
+  private val context = new InternalMockProcessorContext(
+    TestUtils.tempDirectory,
+    Serdes.String,
+    Serdes.String,
+    new NoOpRecordCollector,
+    new ThreadCache(new LogContext("testCache"), 0, new MockStreamsMetrics(new Metrics()))
+  )
+
+  private val rocksDBStore = RocksDBStoreFactory.create("mystore")
 
   private val keyValueStore = new FinatraKeyValueStoreImpl[Timer[TimerKey], Array[Byte]](
-    name = "TimerStore",
-    statsReceiver = NullStatsReceiver
+    _rocksDBStore = rocksDBStore,
+    inner = rocksDBStore,
+    keySerde = TimerSerde(Serdes.String),
+    valueSerde = Serdes.ByteArray()
   )
 
   val timerStore = new PersistentTimerStore[TimerKey](
@@ -38,29 +48,7 @@ class PersistentTimerStoreTest extends Test {
   private val onTimerCalls = new ArrayBuffer[OnTimerCall]
 
   override def beforeEach(): Unit = {
-    context = new InternalMockProcessorContext(
-      TestUtils.tempDirectory,
-      Serdes.String,
-      Serdes.String,
-      new NoOpRecordCollector,
-      new ThreadCache(new LogContext("testCache"), 0, new MockStreamsMetrics(new Metrics()))
-    ) {
-
-      override def getStateStore(name: TimerKey): StateStore = {
-        val storeBuilder = Stores
-          .keyValueStoreBuilder(
-            Stores.persistentKeyValueStore(name),
-            TimerSerde(Serdes.String()),
-            Serdes.ByteArray()
-          )
-
-        val store = storeBuilder.build
-        store.init(this, store)
-        store
-      }
-    }
-
-    keyValueStore.init(context, null)
+    keyValueStore.init(context, keyValueStore)
     timerStore.onInit()
 
     onTimerCalls.clear()

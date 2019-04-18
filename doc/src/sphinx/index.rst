@@ -16,9 +16,9 @@ For servers, Finatra builds on top of the `features <https://twitter.github.io/t
 Getting Started
 ---------------
 
-To get started, add a dependency on either `finatra-http <http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http_2.12%22>`__ or `finatra-thrift <http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-thrift_2.12%22>`__ depending if you are building an HTTP or Thrift server.
+To get started, add a dependency on either `finatra-http <https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http_2.12%22>`__ or `finatra-thrift <https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-thrift_2.12%22>`__ depending if you are building an HTTP or Thrift server.
 
-E.g., with `sbt <http://www.scala-sbt.org/>`__:
+E.g., with `sbt <https://www.scala-sbt.org/>`__:
 
 .. parsed-literal::
 
@@ -30,7 +30,7 @@ or
 
     "com.twitter" %% "finatra-thrift" % "\ |release|\ "
 
-Or similarily with `Maven <http://maven.apache.org/>`__:
+Or similarily with `Maven <https://maven.apache.org/>`__:
 
 .. parsed-literal::
 
@@ -59,7 +59,7 @@ Test Dependencies
 
 Finatra publishes `test-jars <https://maven.apache.org/guides/mini/guide-attached-tests.html>`__ for most modules. The test-jars include re-usable utilities for use in testing (e.g., the `EmbeddedTwitterServer <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala>`__).
 
-To add a test-jar dependency, depend on the appropriate module with the `tests` classifier. Additionally, these dependencies are typically **only needed** in the ``test`` scope for your project. E.g., with `sbt <http://www.scala-sbt.org/>`__:
+To add a test-jar dependency, depend on the appropriate module with the `tests` classifier. Additionally, these dependencies are typically **only needed** in the ``test`` scope for your project. E.g., with `sbt <https://www.scala-sbt.org/>`__:
 
 .. parsed-literal::
 
@@ -71,9 +71,9 @@ or
 
     "com.twitter" %% "finatra-thrift" % "\ |release|\ " % "test" classifier "tests"
 
-See the `sbt <http://www.scala-sbt.org/>`__ documentation for more information on using `ivy configurations and classifiers <http://www.scala-sbt.org/0.13/docs/Library-Management.html>`__.
+See the `sbt <https://www.scala-sbt.org/>`__ documentation for more information on using `ivy configurations and classifiers <https://www.scala-sbt.org/0.13/docs/Library-Management.html>`__.
 
-And with `Maven <http://maven.apache.org/>`__:
+And with `Maven <https://maven.apache.org/>`__:
 
 .. parsed-literal::
 
@@ -145,9 +145,9 @@ For support feel free to follow and/or tweet at the `@finatra <https://twitter.c
 
 
 .. |Build Status| image:: https://secure.travis-ci.org/twitter/finatra.png?branch=develop 
-   :target: http://travis-ci.org/twitter/finatra?branch=develop
-.. |Test Coverage| image:: http://codecov.io/github/twitter/finatra/coverage.svg?branch=develop 
-   :target: http://codecov.io/github/twitter/finatra?branch=develop
+   :target: https://travis-ci.org/twitter/finatra?branch=develop
+.. |Test Coverage| image:: https://codecov.io/github/twitter/finatra/coverage.svg?branch=develop 
+   :target: https://codecov.io/github/twitter/finatra?branch=develop
 .. |Project status| image:: https://img.shields.io/badge/status-active-brightgreen.svg 
    :target: https://github.com/twitter/finatra#status
 .. |Maven Central| image:: https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.12/badge.svg

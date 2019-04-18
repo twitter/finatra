@@ -27,6 +27,9 @@ class PersistentTimerStore[TimerKey](
   /* Public */
 
   def onInit(): Unit = {
+    trace(s"onInit ${timersStore.name()}")
+    assert(timersStore.isOpen)
+
     setNextTimerTime(Long.MaxValue)
     currentWatermark = Watermark(0L)
 

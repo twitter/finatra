@@ -11,6 +11,7 @@ import com.twitter.finatra.thrift.response.ThriftResponseClassifier
 import com.twitter.finatra.thrift.routing.{JavaThriftRouter, ThriftRouter}
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.internal.LibraryRegistry
+import com.twitter.inject.modules.StackTransformerModule
 import com.twitter.inject.server.{PortUtils, TwitterServer}
 import com.twitter.util.{Await, Duration}
 
@@ -35,6 +36,7 @@ trait ThriftServerTrait extends TwitterServer {
   /** Add Framework Modules */
   addFrameworkModules(
     ExceptionManagerModule,
+    StackTransformerModule,
     thriftResponseClassifierModule)
 
   /**
@@ -55,7 +57,7 @@ trait ThriftServerTrait extends TwitterServer {
    * @note the default value is ":9999" as defined by [[defaultThriftPort]].
    * @note the format of this flag is expected to be a String in the form of ":port".
    * @see [[com.twitter.finatra.thrift.ThriftServerTrait.defaultThriftPort]]
-   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   * @see [[https://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
    */
   private val thriftPortFlag: Flag[String] =
     flag("thrift.port", defaultThriftPort, "External Thrift server port")
@@ -82,7 +84,7 @@ trait ThriftServerTrait extends TwitterServer {
    * @note the default value is "1.minute" as defined by [[defaultThriftShutdownTimeout]].
    * @note the format of this flag is expected to be a String which is parsable into a [[com.twitter.util.Duration]].
    * @see [[com.twitter.finatra.thrift.ThriftServerTrait.defaultThriftShutdownTimeout]]
-   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   * @see [[https://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
    */
   private val thriftShutdownTimeoutFlag: Flag[Duration] = flag(
     "thrift.shutdown.time",
@@ -107,7 +109,7 @@ trait ThriftServerTrait extends TwitterServer {
    *
    * @note the default value is "thrift" as defined by [[defaultThriftServerName]].
    * @see [[com.twitter.finatra.thrift.ThriftServerTrait.defaultThriftServerName]]
-   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   * @see [[https://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
    */
   private val thriftServerNameFlag: Flag[String] =
     flag("thrift.name", defaultThriftServerName, "Thrift server name")
@@ -131,7 +133,7 @@ trait ThriftServerTrait extends TwitterServer {
    * @note the default value is "No Announcement" (empty String) as defined by [[defaultThriftAnnouncement]].
    * @see [[com.twitter.finagle.ListeningServer.announce(addr: String)]]
    * @see [[com.twitter.finatra.thrift.ThriftServerTrait.defaultThriftAnnouncement]]
-   * @see [[http://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
+   * @see [[https://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
    */
   private val thriftAnnounceFlag: Flag[String] =
     flag[String](

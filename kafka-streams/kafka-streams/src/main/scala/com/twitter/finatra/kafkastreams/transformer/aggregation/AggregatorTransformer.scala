@@ -5,7 +5,7 @@ import com.twitter.finatra.kafka.serde.ScalaSerdes
 import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer
 import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer.WindowStartTime
 import com.twitter.finatra.kafkastreams.transformer.domain._
-import com.twitter.finatra.kafkastreams.transformer.stores.{CachingFinatraKeyValueStore, CachingKeyValueStores, PersistentTimers}
+import com.twitter.finatra.kafkastreams.transformer.stores.{CachingKeyValueStores, PersistentTimers}
 import com.twitter.util.Duration
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet
 import org.apache.kafka.streams.processor.PunctuationType
@@ -45,7 +45,7 @@ import org.apache.kafka.streams.state.KeyValueIterator
  *         key within a particular timewindow.
  */
 class AggregatorTransformer[K, V, Aggregate](
-  override val statsReceiver: StatsReceiver,
+  statsReceiver: StatsReceiver,
   stateStoreName: String,
   timerStoreName: String,
   windowSize: Duration,
@@ -73,8 +73,9 @@ class AggregatorTransformer[K, V, Aggregate](
   private val longSerializer = ScalaSerdes.Long.serializer
   private val nonExpiredWindowStartTimes = new LongOpenHashSet()
 
-  private val stateStore: CachingFinatraKeyValueStore[TimeWindowed[K], Aggregate] =
-    getCachingKeyValueStore[TimeWindowed[K], Aggregate](stateStoreName)
+  private val stateStore = getCachingKeyValueStore[TimeWindowed[K], Aggregate](
+    name = stateStoreName,
+    flushListener = onFlushedEntry)
 
   private val timerStore = getPersistentTimerStore[WindowStartTime](
     timerStoreName = timerStoreName,
@@ -86,7 +87,6 @@ class AggregatorTransformer[K, V, Aggregate](
   override def onInit(): Unit = {
     super.onInit()
     nonExpiredWindowStartTimes.clear()
-    stateStore.registerFlushListener(onFlushed)
   }
 
   override def onMessage(time: Time, key: K, value: V): Unit = {
@@ -120,13 +120,17 @@ class AggregatorTransformer[K, V, Aggregate](
     }
   }
 
-  private def onFlushed(timeWindowedKey: TimeWindowed[K], value: Aggregate): Unit = {
+  private def onFlushedEntry(
+    storeName: String,
+    timeWindowedKey: TimeWindowed[K],
+    value: Aggregate
+  ): Unit = {
     if (emitUpdatedEntriesOnCommit) {
       emitEarlyCounter.incr()
-      val existing = stateStore.get(timeWindowedKey)
+      trace(s"OnFlushedEntry: $storeName $timeWindowedKey $value")
       forward(
         key = timeWindowedKey,
-        value = WindowedValue(windowResultType = WindowOpen, value = existing),
+        value = WindowedValue(windowResultType = WindowOpen, value = value),
         timestamp = forwardTime)
     }
   }
@@ -145,7 +149,7 @@ class AggregatorTransformer[K, V, Aggregate](
     timerMetadata: TimerMetadata,
     windowStartTime: WindowStartTime
   ): Unit = {
-    debug(s"onEventTimer $time $timerMetadata WindowStartTime(${windowStartTime.iso8601Millis})")
+    debug(s"onEventTimer $time $timerMetadata WindowStartTime(${windowStartTime.iso8601Millis}) $watermark")
     val windowedEntriesIterator = stateStore.range(
       fromBytesInclusive = windowStartTimeBytes(windowStartTime),
       toBytesExclusive = windowStartTimeBytes(windowStartTime + 1))

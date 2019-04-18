@@ -10,6 +10,7 @@ import org.apache.kafka.common.config.TopicConfig.{
   SEGMENT_BYTES_CONFIG
 }
 import scala.collection.JavaConverters._
+import scala.collection.mutable
 
 object DefaultTopicConfig {
 
@@ -19,9 +20,10 @@ object DefaultTopicConfig {
    * because we'd rather rely on FinatraTransformer PersistentTimers to handle expiration/deletes
    * (which gives us more control over when and how expiration's can occur).
    */
-  val FinatraChangelogConfig: util.Map[String, String] = Map(
-    CLEANUP_POLICY_CONFIG -> CLEANUP_POLICY_COMPACT,
-    SEGMENT_BYTES_CONFIG -> 100.megabytes.inBytes.toString,
-    DELETE_RETENTION_MS_CONFIG -> 5.minutes.inMillis.toString //configure delete retention such that standby replicas have 5 minutes to read deletes
-  ).asJava
+  def FinatraChangelogConfig: util.Map[String, String] = mutable
+    .Map(
+      CLEANUP_POLICY_CONFIG -> CLEANUP_POLICY_COMPACT,
+      SEGMENT_BYTES_CONFIG -> 100.megabytes.inBytes.toString,
+      DELETE_RETENTION_MS_CONFIG -> 5.minutes.inMillis.toString //configure delete retention such that standby replicas have 5 minutes to read deletes
+    ).asJava
 }

@@ -14,6 +14,7 @@ import com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer
 import com.twitter.finatra.kafkastreams.utils.time._
 import com.twitter.inject.{AppAccessor, Injector, Logging, TwitterModule}
 import com.twitter.util.Duration
+import java.io.File
 import java.util.Properties
 import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.streams.state.KeyValueStore
@@ -53,9 +54,12 @@ object FinatraTopologyTester {
   ): FinatraTopologyTester = {
     AppAccessor.callInits(server)
 
+    val stateDir = TestDirectoryUtils.newTempDirectory()
+
     AppAccessor.callParseArgs(
       server = server,
       args = kafkaStreamsArgs(
+        stateDir = stateDir,
         kafkaApplicationId = kafkaApplicationId,
         otherFlags = flags,
         thriftQueryable = thriftQueryable,
@@ -78,6 +82,7 @@ object FinatraTopologyTester {
     val injector = AppAccessor.loadAndSetInstalledModules(server)
 
     FinatraTopologyTester(
+      stateDir = stateDir,
       properties = server.createKafkaStreamsProperties(),
       topology = server.createKafkaStreamsTopology(),
       inMemoryStatsReceiver = inMemoryStatsReceiver,
@@ -87,6 +92,7 @@ object FinatraTopologyTester {
   }
 
   private def kafkaStreamsArgs(
+    stateDir: File,
     kafkaApplicationId: String,
     otherFlags: Map[String, String] = Map(),
     thriftQueryable: Boolean,
@@ -97,7 +103,7 @@ object FinatraTopologyTester {
     val kafkaStreamsAndOtherFlags = otherFlags ++ Map(
       "kafka.application.id" -> kafkaApplicationId,
       KafkaBootstrapModule.kafkaBootstrapServers.name -> "127.0.0.1:12345",
-      "kafka.state.dir" -> TestDirectoryUtils.newTempDirectory().toString
+      "kafka.state.dir" -> stateDir.toString
     )
 
     addFinatraTransformerFlags(
@@ -144,6 +150,7 @@ object FinatraTopologyTester {
 }
 
 case class FinatraTopologyTester private (
+  stateDir: File,
   properties: Properties,
   topology: Topology,
   inMemoryStatsReceiver: InMemoryStatsReceiver,
@@ -187,7 +194,6 @@ case class FinatraTopologyTester private (
    * Get a Finatra timer key value store by name
    * @param name Name of the store
    * @tparam K Key type of the store
-   * @tparam V Value type of the store
    * @return KeyValueStore used for timer entries
    */
   def getFinatraTimerStore[K](name: String): KeyValueStore[Timer[K], Array[Byte]] = {
@@ -275,6 +281,7 @@ case class FinatraTopologyTester private (
     primaryKeySerde: Serde[PK]
   ): QueryableFinatraKeyValueStore[PK, K, V] = {
     new QueryableFinatraKeyValueStore[PK, K, V](
+      stateDir,
       storeName,
       primaryKeySerde = primaryKeySerde,
       numShards = 1,
@@ -301,6 +308,7 @@ case class FinatraTopologyTester private (
     keySerde: Serde[K]
   ): QueryableFinatraWindowStore[K, V] = {
     new QueryableFinatraWindowStore[K, V](
+      stateDir,
       storeName,
       windowSize = windowSize,
       allowedLateness = allowedLateness,
@@ -331,6 +339,7 @@ case class FinatraTopologyTester private (
     primaryKeySerde: Serde[PK]
   ): QueryableFinatraCompositeWindowStore[PK, SK, V] = {
     new QueryableFinatraCompositeWindowStore[PK, SK, V](
+      stateDir = stateDir,
       storeName,
       primaryKeySerde = primaryKeySerde,
       windowSize = windowSize,

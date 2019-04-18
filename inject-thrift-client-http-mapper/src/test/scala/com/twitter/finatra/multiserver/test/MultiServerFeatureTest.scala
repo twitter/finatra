@@ -30,12 +30,8 @@ class MultiServerFeatureTest extends Test with HttpTest with ThriftTest {
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1/invocations", 2)
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1/failures", 2)
     add1HttpServer.assertCounter(
-      "clnt/adder-thrift/Adder/add1/failures/com.twitter.finatra.thrift.thriftscala.ServerError",
-      1
-    )
-    add1HttpServer.assertCounter(
       "clnt/adder-thrift/Adder/add1/failures/org.apache.thrift.TApplicationException",
-      1
+      2
     )
     add1HttpServer.assertCounter("route/add1/GET/status/200", 2)
   }
@@ -52,22 +48,14 @@ class MultiServerFeatureTest extends Test with HttpTest with ThriftTest {
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1String/invocations", 2)
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1String/failures", 5)
     add1HttpServer.assertCounter(
-      "clnt/adder-thrift/Adder/add1String/failures/com.twitter.finatra.thrift.thriftscala.ServerError",
-      2
-    )
-    add1HttpServer.assertCounter(
       "clnt/adder-thrift/Adder/add1String/failures/org.apache.thrift.TApplicationException",
-      3
+      5
     )
 
     // per-route stats
     // two total requests to the route
     add1HttpServer.assertCounter("route/add1String/GET/requests", 2)
     // the first resulted failed request
-    add1HttpServer.assertCounter(
-      "route/add1String/GET/failure/adder-thrift/Adder/add1String/com.twitter.finatra.thrift.thriftscala.ServerError",
-      1
-    )
     add1HttpServer.assertCounter("route/add1String/GET/status/503", 1)
     add1HttpServer.assertCounter("route/add1String/GET/status/503/mapped/ThriftClientException", 1)
     // the second an eventual 200 OK
@@ -76,10 +64,6 @@ class MultiServerFeatureTest extends Test with HttpTest with ThriftTest {
     // service failure stats
     add1HttpServer.assertCounter("service/failure", 1)
     add1HttpServer.assertCounter("service/failure/adder-thrift", 1)
-    add1HttpServer.assertCounter(
-      "service/failure/adder-thrift/Adder/add1String/com.twitter.finatra.thrift.thriftscala.ServerError",
-      1
-    )
   }
 
   test("add1 always error") {

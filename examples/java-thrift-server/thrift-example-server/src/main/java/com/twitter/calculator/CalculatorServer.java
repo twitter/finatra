@@ -8,21 +8,17 @@ import com.google.inject.Module;
 import com.twitter.calculator.modules.ModeModule;
 import com.twitter.finatra.thrift.AbstractThriftServer;
 import com.twitter.finatra.thrift.filters.AccessLoggingFilter;
-import com.twitter.finatra.thrift.filters.ClientIdAcceptlistFilter;
 import com.twitter.finatra.thrift.filters.LoggingMDCFilter;
 import com.twitter.finatra.thrift.filters.StatsFilter;
 import com.twitter.finatra.thrift.filters.ThriftMDCFilter;
 import com.twitter.finatra.thrift.filters.TraceIdMDCFilter;
-import com.twitter.finatra.thrift.modules.ClientIdAcceptlistModule;
 import com.twitter.finatra.thrift.routing.JavaThriftRouter;
 
 class CalculatorServer extends AbstractThriftServer {
 
     @Override
     public Collection<Module> javaModules() {
-        return ImmutableList.<Module>of(
-            new ClientIdAcceptlistModule("/clients.yml"),
-            new ModeModule());
+        return ImmutableList.<Module>of(new ModeModule());
     }
 
     @Override
@@ -33,7 +29,6 @@ class CalculatorServer extends AbstractThriftServer {
             .filter(ThriftMDCFilter.class)
             .filter(AccessLoggingFilter.class)
             .filter(StatsFilter.class)
-            .filter(ClientIdAcceptlistFilter.class)
             .add(CalculatorController.class);
     }
 }

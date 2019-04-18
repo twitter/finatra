@@ -51,14 +51,6 @@ class WordCountServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
       1
     )
     wordsWithCountsTopic.consumeAsManyMessagesUntilMap(Map("world" -> 1L, "hello" -> 2L))
-    serverBeforeRestart.assertGauge(
-      "kafka/thread1/producer/wordcount_prod_CountsStore_changelog/record_send_total",
-      2
-    )
-    serverBeforeRestart.assertGauge(
-      "kafka/thread1/producer/WordsWithCountsTopic/record_send_total",
-      2
-    )
 
     textLinesTopic.publish(1L -> "world world")
     serverBeforeRestartStats.waitForGauge(

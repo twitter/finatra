@@ -1,6 +1,6 @@
 # Finatra Benchmarks
 
-We use [JMH](http://openjdk.java.net/projects/code-tools/jmh/) as our benchmarking framework.
+We use [JMH](https://openjdk.java.net/projects/code-tools/jmh/) as our benchmarking framework.
 
 ## Tests
 
@@ -48,7 +48,7 @@ Or you can run the tests manually in an IDE.
 
 ## Running
 
-[JMH](http://openjdk.java.net/projects/code-tools/jmh/) is integrated via the 
+[JMH](https://openjdk.java.net/projects/code-tools/jmh/) is integrated via the 
 [`sbt-jmh`](https://github.com/ktoso/sbt-jmh) plugin.
 
 Benchmarks can be run using [SBT](https://www.scala-sbt.org/) via the plugin, e.g., from the

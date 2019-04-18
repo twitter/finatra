@@ -4,7 +4,7 @@ Working with Mocks
 ==================
 
 |c.t.inject.Mockito|_ provides `Specs2 <https://etorreborre.github.io/specs2/>`__ Mockito syntatic
-sugar for `ScalaTest <http://www.scalatest.org/>`__.
+sugar for `ScalaTest <https://www.scalatest.org/>`__.
 
 This is a drop-in replacement for |org.specs2.mock.Mockito|_ and we encourage you to **not** use
 |org.specs2.mock.Mockito|_ directly. Otherwise, Mockito match failures will **not propagate as ScalaTest
@@ -29,4 +29,4 @@ More Information
 .. _c.t.inject.Mockito: https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/Mockito.scala
 
 .. |org.specs2.mock.Mockito| replace:: `org.specs2.mock.Mockito`
-.. _org.specs2.mock.Mockito: http://etorreborre.github.io/specs2/guide/SPECS2-3.9.1/org.specs2.guide.UseMockito.html
+.. _org.specs2.mock.Mockito: https://etorreborre.github.io/specs2/guide/SPECS2-3.9.1/org.specs2.guide.UseMockito.html
