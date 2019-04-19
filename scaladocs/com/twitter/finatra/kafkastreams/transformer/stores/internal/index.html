@@ -186,13 +186,21 @@
                         <a class="class" href="CachingFinatraKeyValueStoreImpl.html" title="A write-behind caching layer around the FinatraKeyValueStore."></a>
                         <a href="CachingFinatraKeyValueStoreImpl.html" title="A write-behind caching layer around the FinatraKeyValueStore.">CachingFinatraKeyValueStoreImpl</a>
                       </li><li class="current-entities indented7">
-                        <a class="object" href="FinatraKeyValueStoreImpl$.html" title=""></a>
+                        <span class="separator"></span>
                         <a class="class" href="FinatraKeyValueStoreImpl.html" title=""></a>
                         <a href="FinatraKeyValueStoreImpl.html" title="">FinatraKeyValueStoreImpl</a>
                       </li><li class="current-entities indented7">
                         <span class="separator"></span>
                         <a class="object" href="FinatraStoresGlobalManager$.html" title="This class stores a global list of all Finatra Key Value Stores for use by Finatra's queryable state functionality."></a>
                         <a href="FinatraStoresGlobalManager$.html" title="This class stores a global list of all Finatra Key Value Stores for use by Finatra's queryable state functionality.">FinatraStoresGlobalManager</a>
+                      </li><li class="current-entities indented7">
+                        <span class="separator"></span>
+                        <a class="class" href="FinatraTransformerLifecycleKeyValueStore.html" title="A FinatraKeyValueStore which allows FinatraTransformer#getKeyValueStore to retrieve a key value store in it's static constructor and then have that returned store participate in the Kafka Streams init and close lifecycle"></a>
+                        <a href="FinatraTransformerLifecycleKeyValueStore.html" title="A FinatraKeyValueStore which allows FinatraTransformer#getKeyValueStore to retrieve a key value store in it's static constructor and then have that returned store participate in the Kafka Streams init and close lifecycle">FinatraTransformerLifecycleKeyValueStore</a>
+                      </li><li class="current-entities indented7">
+                        <a class="object" href="MetricsFinatraKeyValueStore$.html" title=""></a>
+                        <a class="class" href="MetricsFinatraKeyValueStore.html" title="Metrics wrapper around a FinatraKeyValueStore used for recording latency of methods"></a>
+                        <a href="MetricsFinatraKeyValueStore.html" title="Metrics wrapper around a FinatraKeyValueStore used for recording latency of methods">MetricsFinatraKeyValueStore</a>
                       </li><li class="current-entities indented7">
                         <span class="separator"></span>
                         <a class="class" href="Timer.html" title=""></a>
@@ -261,9 +269,9 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.CachingFinatraKeyValueStoreImpl" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="CachingFinatraKeyValueStoreImpl[K,V]extendsCachingFinatraKeyValueStore[K,V]withLogging"></a><a id="CachingFinatraKeyValueStoreImpl[K,V]:CachingFinatraKeyValueStoreImpl[K,V]"></a>
+      <a id="CachingFinatraKeyValueStoreImpl[K,V]extendsFinatraKeyValueStore[K,V]withLogging"></a><a id="CachingFinatraKeyValueStoreImpl[K,V]:CachingFinatraKeyValueStoreImpl[K,V]"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/index.html#CachingFinatraKeyValueStoreImpl[K,V]extendsCachingFinatraKeyValueStore[K,V]withLogging" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/index.html#CachingFinatraKeyValueStoreImpl[K,V]extendsFinatraKeyValueStore[K,V]withLogging" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -272,25 +280,45 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="A write-behind caching layer around the FinatraKeyValueStore." href="CachingFinatraKeyValueStoreImpl.html"><span class="name">CachingFinatraKeyValueStoreImpl</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <a href="../CachingFinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.CachingFinatraKeyValueStore">CachingFinatraKeyValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.CachingFinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.CachingFinatraKeyValueStoreImpl.V">V</span>] with <a href="../../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+        <a title="A write-behind caching layer around the FinatraKeyValueStore." href="CachingFinatraKeyValueStoreImpl.html"><span class="name">CachingFinatraKeyValueStoreImpl</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.CachingFinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.CachingFinatraKeyValueStoreImpl.V">V</span>] with <a href="../../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
       </span>
       
       <p class="shortcomment cmt">A write-behind caching layer around the FinatraKeyValueStore.</p><div class="fullcomment"><div class="comment cmt"><p>A write-behind caching layer around the FinatraKeyValueStore.</p><p>We cache Java objects here and then periodically flush entries into RocksDB which involves
 serializing the objects into byte arrays. As such this cache:
 1) Reduces the number of reads/writes to RocksDB
-2) Reduces the number of serialization/deserialization operations which can be expensive for some classes
+2) Reduces the number of serialization/deserialization operations which can be expensive for some
+classes
 3) Reduces the number of publishes to the Kafka changelog topic backing this key value store</p><p>This caching does introduce a few odd corner cases :-(
-1. Items in the cache have pass-by-reference semantics but items in rocksdb have pass-by-value semantics. Modifying items after a put is a bad idea! Ideally, only
+1. Items in the cache have pass-by-reference semantics but items in rocksdb have pass-by-value
+semantics. Modifying items after a put is a bad idea! Ideally, only
 immutable objects would be stored in a CachingFinatraKeyValueStore
 2. Range queries currently only work against the uncached RocksDB data.
 This is because sorted Java maps are much less performant than their unsorted counterparts.
 We typically only use range queries for queryable state where it is ok to read stale data
-If fresher data is required for range queries, decrease your commit interval.</p><p>This class is inspired by: https://github.com/apache/samza/blob/1.0.0/samza-kv/src/main/scala/org/apache/samza/storage/kv/CachedStore.scala
+If fresher data is required for range queries, decrease your commit interval, or disable caching
+on your key value store</p><p>This class is inspired by:
+https://github.com/apache/samza/blob/1.0.0/samza-kv/src/main/scala/org/apache/samza/storage/kv/CachedStore.scala
 </p></div></div>
     </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="FinatraKeyValueStoreImpl[K,V]extendsKeyValueStore[K,V]withLoggingwithIteratorImplicitswithFinatraKeyValueStore[K,V]withProductwithSerializable"></a><a id="FinatraKeyValueStoreImpl[K,V]:FinatraKeyValueStoreImpl[K,V]"></a>
+      <a id="FinatraKeyValueStoreImpl[K,V]extendsFinatraKeyValueStore[K,V]withLogging"></a><a id="FinatraKeyValueStoreImpl[K,V]:FinatraKeyValueStoreImpl[K,V]"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/index.html#FinatraKeyValueStoreImpl[K,V]extendsKeyValueStore[K,V]withLoggingwithIteratorImplicitswithFinatraKeyValueStore[K,V]withProductwithSerializable" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/index.html#FinatraKeyValueStoreImpl[K,V]extendsFinatraKeyValueStore[K,V]withLogging" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="FinatraKeyValueStoreImpl.html"><span class="name">FinatraKeyValueStoreImpl</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>] with <a href="../../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+      </span>
+      
+      
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraTransformerLifecycleKeyValueStore" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="FinatraTransformerLifecycleKeyValueStore[K,V]extendsFinatraKeyValueStore[K,V]withLoggingwithProductwithSerializable"></a><a id="FinatraTransformerLifecycleKeyValueStore[K,V]:FinatraTransformerLifecycleKeyValueStore[K,V]"></a>
+      <span class="permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/index.html#FinatraTransformerLifecycleKeyValueStore[K,V]extendsFinatraKeyValueStore[K,V]withLoggingwithProductwithSerializable" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -299,10 +327,34 @@ If fresher data is required for range queries, decrease your commit interval.</p
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="FinatraKeyValueStoreImpl.html"><span class="name">FinatraKeyValueStoreImpl</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="evidence$1">evidence$1: <a href="http://www.scala-lang.org/api/2.12.7/scala/reflect/ClassTag.html#scala.reflect.ClassTag" class="extype" name="scala.reflect.ClassTag">ClassTag</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>]</span>)</span><span class="result"> extends <span class="extype" name="org.apache.kafka.streams.state.KeyValueStore">KeyValueStore</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>] with <a href="../../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a> with <a href="../../utils/IteratorImplicits.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.utils.IteratorImplicits">IteratorImplicits</a> with <a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>] with <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="A FinatraKeyValueStore which allows FinatraTransformer#getKeyValueStore to retrieve a key value store in it's static constructor and then have that returned store participate in the Kafka Streams init and close lifecycle" href="FinatraTransformerLifecycleKeyValueStore.html"><span class="name">FinatraTransformerLifecycleKeyValueStore</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="flushListener">flushListener: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraTransformerLifecycleKeyValueStore.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraTransformerLifecycleKeyValueStore.V">V</span>) ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraTransformerLifecycleKeyValueStore.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraTransformerLifecycleKeyValueStore.V">V</span>] with <a href="../../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
+      <p class="shortcomment cmt">A FinatraKeyValueStore which allows FinatraTransformer#getKeyValueStore to retrieve a key value
+store in it's static constructor and then have that returned store participate in the
+Kafka Streams init and close lifecycle
+</p><div class="fullcomment"><div class="comment cmt"><p>A FinatraKeyValueStore which allows FinatraTransformer#getKeyValueStore to retrieve a key value
+store in it's static constructor and then have that returned store participate in the
+Kafka Streams init and close lifecycle
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>State store name</p></dd><dt class="param">flushListener</dt><dd class="cmt"><p>Callback that will be called every time a cached store entry is flushed
+                     into the underlying RocksDB store</p></dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.MetricsFinatraKeyValueStore" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MetricsFinatraKeyValueStore[K,V]extendsFinatraKeyValueStore[K,V]withProductwithSerializable"></a><a id="MetricsFinatraKeyValueStore[K,V]:MetricsFinatraKeyValueStore[K,V]"></a>
+      <span class="permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/index.html#MetricsFinatraKeyValueStore[K,V]extendsFinatraKeyValueStore[K,V]withProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="Metrics wrapper around a FinatraKeyValueStore used for recording latency of methods" href="MetricsFinatraKeyValueStore.html"><span class="name">MetricsFinatraKeyValueStore</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="inner">inner: <a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.MetricsFinatraKeyValueStore.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.MetricsFinatraKeyValueStore.V">V</span>]</span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="result"> extends <a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.MetricsFinatraKeyValueStore.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.MetricsFinatraKeyValueStore.V">V</span>] with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
       
+      <p class="shortcomment cmt">Metrics wrapper around a FinatraKeyValueStore used for recording latency of methods
+</p>
     </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Timer[K]extendsProductwithSerializable"></a><a id="Timer[K]:Timer[K]"></a>
       <span class="permalink">
@@ -315,7 +367,7 @@ If fresher data is required for range queries, decrease your commit interval.</p
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="Timer.html"><span class="name">Timer</span></a><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="time">time: <a href="../../domain/Time.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.domain.Time">Time</a></span>, <span name="metadata">metadata: <a href="../../domain/TimerMetadata.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.domain.TimerMetadata">TimerMetadata</a></span>, <span name="key">key: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer.K">K</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="Timer.html"><span class="name">Timer</span></a><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="time">time: <a href="../../domain/Time.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.domain.Time">Time</a></span>, <span name="metadata">metadata: <a href="../../domain/TimerMetadata.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.domain.TimerMetadata">TimerMetadata</a></span>, <span name="key">key: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer.K">K</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">time</dt><dd class="cmt"><p>Time to fire the timer</p></dd></dl></div>
@@ -327,23 +379,7 @@ If fresher data is required for range queries, decrease your commit interval.</p
         <div class="values members">
               <h3>Value Members</h3>
               <ol>
-                <li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="FinatraKeyValueStoreImpl"></a><a id="FinatraKeyValueStoreImpl:FinatraKeyValueStoreImpl"></a>
-      <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/index.html#FinatraKeyValueStoreImpl" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="FinatraKeyValueStoreImpl$.html"><span class="name">FinatraKeyValueStoreImpl</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
-      </span>
-      
-      
-    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraStoresGlobalManager" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+                <li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraStoresGlobalManager" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="FinatraStoresGlobalManager"></a><a id="FinatraStoresGlobalManager:FinatraStoresGlobalManager"></a>
       <span class="permalink">
       <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/index.html#FinatraStoresGlobalManager" title="Permalink">
@@ -355,15 +391,31 @@ If fresher data is required for range queries, decrease your commit interval.</p
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="This class stores a global list of all Finatra Key Value Stores for use by Finatra's queryable state functionality." href="FinatraStoresGlobalManager$.html"><span class="name">FinatraStoresGlobalManager</span></a>
+        <a title="This class stores a global list of all Finatra Key Value Stores for use by Finatra's queryable state functionality." href="FinatraStoresGlobalManager$.html"><span class="name">FinatraStoresGlobalManager</span></a><span class="result"> extends <a href="../../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
       </span>
       
       <p class="shortcomment cmt">This class stores a global list of all Finatra Key Value Stores for use by Finatra's
 queryable state functionality.</p><div class="fullcomment"><div class="comment cmt"><p>This class stores a global list of all Finatra Key Value Stores for use by Finatra's
-queryable state functionality.</p><p>Note: We maintain or own global list of state stores so we can retrieve Finatra
-FinatraKeyValueStore implementations directly for querying (the alternative would be to retrieve
-the underlying RocksDBStore which is wrapped by the FinatraKeyValueStore implementations).
+queryable state functionality.</p><p>Note: We maintain or own global list of state stores so we can directly retrieve the
+FinatraKeyValueStore responsible for the queried key instead of having to iterate through
+all key value stores hosted in this Kafka Streams instance.
 </p></div></div>
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.MetricsFinatraKeyValueStore" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MetricsFinatraKeyValueStore"></a><a id="MetricsFinatraKeyValueStore:MetricsFinatraKeyValueStore"></a>
+      <span class="permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/index.html#MetricsFinatraKeyValueStore" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="MetricsFinatraKeyValueStore$.html"><span class="name">MetricsFinatraKeyValueStore</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      
     </li>
               </ol>
             </div>

@@ -19,30 +19,31 @@ Scala Example
 .. code:: scala
 
   import com.google.inject.Module
-	import com.twitter.inject.app.App
-	import com.twitter.inject.Logging
+  import com.twitter.inject.app.App
+  import com.twitter.inject.Logging
 
-	object MyAppMain extends MyApp
+  object MyAppMain extends MyApp
 
-	class MyApp extends App with Logging  {
+  class MyApp extends App with Logging  {
 
-	  override val modules: Seq[Module] = Seq(
-	    MyModule1)
+    override val modules: Seq[Module] = Seq(
+      MyModule1)
 
-	  override protected def run(): Unit = {
-	    // Core app logic goes here.
-	  }
-	}
+    override protected def run(): Unit = {
+      // Core app logic goes here.
+    }
+  }
 
 Then to test:
 
 .. code:: scala
 
   import com.twitter.inject.Test
+  import com.twitter.inject.app.EmbeddedApp
 
   class MyAppTest extends Test {
 
-    private val app = EmbeddedApp(new MyApp)
+    private val app = new EmbeddedApp(new MyApp)
 
     test("MyApp#runs") {
       app.main("some.flag1" -> "value1", "some.flag2" -> "value2")

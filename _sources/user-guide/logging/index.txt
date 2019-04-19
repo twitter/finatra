@@ -3,8 +3,8 @@
 Introduction to Logging With Finatra
 ====================================
 
-Finatra uses the `SLF4J <http://www.slf4j.org/manual.html>`__ API for framework logging. By coupling
-the framework to only the `SLF4J <http://www.slf4j.org/manual.html>`__ API, application developers
+Finatra uses the `SLF4J <https://www.slf4j.org/manual.html>`__ API for framework logging. By coupling
+the framework to only the `SLF4J <https://www.slf4j.org/manual.html>`__ API, application developers
 are free to choose their actual logging implementation.
 
 .. admonition:: From the SLF4J documentation
@@ -18,11 +18,11 @@ are free to choose their actual logging implementation.
 and `finatra/inject/inject-server <https://github.com/twitter/finatra/tree/develop/inject/inject-server>`__
 transitively provide SLF4J bridges for the following logging providers:
 
--  `Log4j <http://en.wikipedia.org/wiki/Log4j>`__
--  `commons-logging <http://commons.apache.org/proper/commons-logging/>`__
--  `java.util.logging <http://docs.oracle.com/javase/7/docs/api/index.html?java/util/logging/package-summary.html>`__:
+-  `Log4j <https://en.wikipedia.org/wiki/Log4j>`__
+-  `commons-logging <https://commons.apache.org/proper/commons-logging/>`__
+-  `java.util.logging <https://docs.oracle.com/javase/7/docs/api/index.html?java/util/logging/package-summary.html>`__:
    there is a performance penalty for intercepting jul log messages, so `c.t.inject.server.TwitterServer`
-   will install the `SLF4JBridgeHandler <http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html>`__
+   will install the `SLF4JBridgeHandler <https://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html>`__
    which mitigates most of the performance penalty.
 
 .. tip::
@@ -30,12 +30,12 @@ transitively provide SLF4J bridges for the following logging providers:
    Note, if you are not using `c.t.inject.server.TwitterServer` or a subclass, e.g., you are
    building a command line application directly with `c.t.inject.app.App`, you can include the
    `LoggingModule <https://github.com/twitter/finatra/blob/develop/inject/inject-modules/src/main/scala/com/twitter/inject/modules/LoggerModule.scala>`__
-   to attempt installation the `SLF4JBridgeHandler <http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html>`__.
+   to attempt installation the `SLF4JBridgeHandler <https://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html>`__.
 
 For more information on the SLF4J bridges see the SLF4J
 `Bridging legacy APIs <https://www.slf4j.org/legacy.html>`__ documentation.
 
-Since `SLF4J <http://www.slf4j.org/manual.html>`__ is an interface, it requires an actual logging
+Since `SLF4J <https://www.slf4j.org/manual.html>`__ is an interface, it requires an actual logging
 implementation. However, you should ensure that you **do not** end-up with *multiple* logging
 implementations on your classpath, e.g., you should not have multiple SLF4J bindings (`slf4j-nop`,
 `slf4j-log4j12`, `slf4j-jdk14`, etc.) nor the `java.util.logging` implementation, etc. on your

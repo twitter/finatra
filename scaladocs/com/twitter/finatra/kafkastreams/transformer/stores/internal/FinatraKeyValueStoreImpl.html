@@ -186,13 +186,21 @@
                         <a class="class" href="CachingFinatraKeyValueStoreImpl.html" title="A write-behind caching layer around the FinatraKeyValueStore."></a>
                         <a href="CachingFinatraKeyValueStoreImpl.html" title="A write-behind caching layer around the FinatraKeyValueStore.">CachingFinatraKeyValueStoreImpl</a>
                       </li><li class="current-entities indented7">
-                        <a class="object" href="FinatraKeyValueStoreImpl$.html" title=""></a>
+                        <span class="separator"></span>
                         <a class="class" href="" title=""></a>
                         <a href="" title="">FinatraKeyValueStoreImpl</a>
                       </li><li class="current-entities indented7">
                         <span class="separator"></span>
                         <a class="object" href="FinatraStoresGlobalManager$.html" title="This class stores a global list of all Finatra Key Value Stores for use by Finatra's queryable state functionality."></a>
                         <a href="FinatraStoresGlobalManager$.html" title="This class stores a global list of all Finatra Key Value Stores for use by Finatra's queryable state functionality.">FinatraStoresGlobalManager</a>
+                      </li><li class="current-entities indented7">
+                        <span class="separator"></span>
+                        <a class="class" href="FinatraTransformerLifecycleKeyValueStore.html" title="A FinatraKeyValueStore which allows FinatraTransformer#getKeyValueStore to retrieve a key value store in it's static constructor and then have that returned store participate in the Kafka Streams init and close lifecycle"></a>
+                        <a href="FinatraTransformerLifecycleKeyValueStore.html" title="A FinatraKeyValueStore which allows FinatraTransformer#getKeyValueStore to retrieve a key value store in it's static constructor and then have that returned store participate in the Kafka Streams init and close lifecycle">FinatraTransformerLifecycleKeyValueStore</a>
+                      </li><li class="current-entities indented7">
+                        <a class="object" href="MetricsFinatraKeyValueStore$.html" title=""></a>
+                        <a class="class" href="MetricsFinatraKeyValueStore.html" title="Metrics wrapper around a FinatraKeyValueStore used for recording latency of methods"></a>
+                        <a href="MetricsFinatraKeyValueStore.html" title="Metrics wrapper around a FinatraKeyValueStore used for recording latency of methods">MetricsFinatraKeyValueStore</a>
                       </li><li class="current-entities indented7">
                         <span class="separator"></span>
                         <a class="class" href="Timer.html" title=""></a>
@@ -204,25 +212,23 @@
           <div id="content">
             <body class="class type">
       <div id="definition">
-        <a href="FinatraKeyValueStoreImpl$.html" title="See companion object"><div class="big-circle class-companion-object">c</div></a>
+        <div class="big-circle class">c</div>
         <p id="owner"><a href="../../../../../../index.html" class="extype" name="com">com</a>.<a href="../../../../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../../../../index.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../../../index.html" class="extype" name="com.twitter.finatra.kafkastreams">kafkastreams</a>.<a href="../../index.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer">transformer</a>.<a href="../index.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores">stores</a>.<a href="index.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal">internal</a></p>
-        <h1><a href="FinatraKeyValueStoreImpl$.html" title="See companion object">FinatraKeyValueStoreImpl</a><span class="permalink">
+        <h1>FinatraKeyValueStoreImpl<span class="permalink">
       <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
-        <h3><span class="morelinks"><div>
-            Companion <a href="FinatraKeyValueStoreImpl$.html" title="See companion object">object FinatraKeyValueStoreImpl</a>
-          </div></span></h3>
+        <h3><span class="morelinks"></span></h3>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">case class</span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">FinatraKeyValueStoreImpl</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="evidence$1">evidence$1: <a href="http://www.scala-lang.org/api/2.12.7/scala/reflect/ClassTag.html#scala.reflect.ClassTag" class="extype" name="scala.reflect.ClassTag">ClassTag</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>]</span>)</span><span class="result"> extends <span class="extype" name="org.apache.kafka.streams.state.KeyValueStore">KeyValueStore</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>] with <a href="../../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a> with <a href="../../utils/IteratorImplicits.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.utils.IteratorImplicits">IteratorImplicits</a> with <a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>] with <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">FinatraKeyValueStoreImpl</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>] with <a href="../../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
       </span>
       </h4>
 
@@ -231,7 +237,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a>, <a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>], <a href="../../utils/IteratorImplicits.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.utils.IteratorImplicits">IteratorImplicits</a>, <a href="../../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <span class="extype" name="org.apache.kafka.streams.state.KeyValueStore">KeyValueStore</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>], <span class="extype" name="org.apache.kafka.streams.state.ReadOnlyKeyValueStore">ReadOnlyKeyValueStore</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>], <span class="extype" name="org.apache.kafka.streams.processor.StateStore">StateStore</span>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>], <a href="../FinatraReadOnlyKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraReadOnlyKeyValueStore">FinatraReadOnlyKeyValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>], <span class="extype" name="org.apache.kafka.streams.state.KeyValueStore">KeyValueStore</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>], <span class="extype" name="org.apache.kafka.streams.state.ReadOnlyKeyValueStore">ReadOnlyKeyValueStore</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>], <span class="extype" name="org.apache.kafka.streams.processor.StateStore">StateStore</span>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -257,7 +263,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl"><span>FinatraKeyValueStoreImpl</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore"><span>FinatraKeyValueStore</span></li><li class="in" name="com.twitter.finatra.kafkastreams.transformer.utils.IteratorImplicits"><span>IteratorImplicits</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="org.apache.kafka.streams.state.KeyValueStore"><span>KeyValueStore</span></li><li class="in" name="org.apache.kafka.streams.state.ReadOnlyKeyValueStore"><span>ReadOnlyKeyValueStore</span></li><li class="in" name="org.apache.kafka.streams.processor.StateStore"><span>StateStore</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl"><span>FinatraKeyValueStoreImpl</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore"><span>FinatraKeyValueStore</span></li><li class="in" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraReadOnlyKeyValueStore"><span>FinatraReadOnlyKeyValueStore</span></li><li class="in" name="org.apache.kafka.streams.state.KeyValueStore"><span>KeyValueStore</span></li><li class="in" name="org.apache.kafka.streams.state.ReadOnlyKeyValueStore"><span>ReadOnlyKeyValueStore</span></li><li class="in" name="org.apache.kafka.streams.processor.StateStore"><span>StateStore</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -278,9 +284,9 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(name:String,statsReceiver:com.twitter.finagle.stats.StatsReceiver)(implicitevidence$1:scala.reflect.ClassTag[K]):com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl[K,V]"></a><a id="&lt;init&gt;:FinatraKeyValueStoreImpl[K,V]"></a>
+      <a id="&lt;init&gt;(_rocksDBStore:org.apache.kafka.streams.state.internals.RocksDBStore,inner:org.apache.kafka.streams.state.KeyValueStore[org.apache.kafka.common.utils.Bytes,Array[Byte]],keySerde:org.apache.kafka.common.serialization.Serde[K],valueSerde:org.apache.kafka.common.serialization.Serde[V]):com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl[K,V]"></a><a id="&lt;init&gt;:FinatraKeyValueStoreImpl[K,V]"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html#&lt;init&gt;(name:String,statsReceiver:com.twitter.finagle.stats.StatsReceiver)(implicitevidence$1:scala.reflect.ClassTag[K]):com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl[K,V]" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html#&lt;init&gt;(_rocksDBStore:org.apache.kafka.streams.state.internals.RocksDBStore,inner:org.apache.kafka.streams.state.KeyValueStore[org.apache.kafka.common.utils.Bytes,Array[Byte]],keySerde:org.apache.kafka.common.serialization.Serde[K],valueSerde:org.apache.kafka.common.serialization.Serde[V]):com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl[K,V]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -289,49 +295,14 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">FinatraKeyValueStoreImpl</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.7/scala/reflect/ClassTag.html#scala.reflect.ClassTag" class="extype" name="scala.reflect.ClassTag">ClassTag</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>]</span>)</span>
+        <span class="name">FinatraKeyValueStoreImpl</span><span class="params">(<span name="_rocksDBStore">_rocksDBStore: <span class="extype" name="org.apache.kafka.streams.state.internals.RocksDBStore">RocksDBStore</span></span>, <span name="inner">inner: <span class="extype" name="org.apache.kafka.streams.state.KeyValueStore">KeyValueStore</span>[<span class="extype" name="org.apache.kafka.common.utils.Bytes">Bytes</span>, <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]]</span>, <span name="keySerde">keySerde: <span class="extype" name="org.apache.kafka.common.serialization.Serde">Serde</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>]</span>, <span name="valueSerde">valueSerde: <span class="extype" name="org.apache.kafka.common.serialization.Serde">Serde</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>]</span>)</span>
       </span>
       
       
     </li></ol>
             </div>
 
-        <div id="types" class="types members">
-              <h3>Type Members</h3>
-              <ol><li name="com.twitter.finatra.kafkastreams.transformer.utils.IteratorImplicits.RichIterator" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="RichIterator[T]extendsAnyRef"></a><a id="RichIterator[T]:RichIterator[T]"></a>
-      <span class="permalink">
-      <a href="../../../../../../com/twitter/finatra/kafkastreams/transformer/utils/IteratorImplicits.html#RichIterator[T]extendsAnyRef" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="../../utils/IteratorImplicits$RichIterator.html"><span class="name">RichIterator</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../utils/IteratorImplicits.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.utils.IteratorImplicits">IteratorImplicits</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.kafkastreams.transformer.utils.IteratorImplicits.RichKeyValueIterator" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="RichKeyValueIterator[K,V]extendsAnyRef"></a><a id="RichKeyValueIterator[K,V]:RichKeyValueIterator[K,V]"></a>
-      <span class="permalink">
-      <a href="../../../../../../com/twitter/finatra/kafkastreams/transformer/utils/IteratorImplicits.html#RichKeyValueIterator[K,V]extendsAnyRef" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="../../utils/IteratorImplicits$RichKeyValueIterator.html"><span class="name">RichKeyValueIterator</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../utils/IteratorImplicits.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.utils.IteratorImplicits">IteratorImplicits</a></dd></dl></div>
-    </li></ol>
-            </div>
+        
 
         
 
@@ -350,7 +321,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -366,7 +337,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -382,7 +353,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -414,7 +385,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">approximateNumEntries</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>
+        <span class="name">approximateNumEntries</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → ReadOnlyKeyValueStore</dd></dl></div>
@@ -446,7 +417,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -470,7 +441,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">close</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">close</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → StateStore</dd></dl></div>
@@ -486,7 +457,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">debug</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">debug</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -502,7 +473,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">debug</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">debug</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -518,7 +489,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">debug</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">debug</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -534,7 +505,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">debug</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">debug</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -572,9 +543,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
     </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl#delete" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="delete(k:K):V"></a><a id="delete(K):V"></a>
+      <a id="delete(key:K):V"></a><a id="delete(K):V"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html#delete(k:K):V" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html#delete(key:K):V" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -583,7 +554,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">delete</span><span class="params">(<span name="k">k: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span></span>
+        <span class="name">delete</span><span class="params">(<span name="key">key: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → KeyValueStore</dd></dl></div>
@@ -599,7 +570,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deleteRange</span><span class="params">(<span name="from">from: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span></span>, <span name="to">to: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">deleteRange</span><span class="params">(<span name="from">from: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span></span>, <span name="to">to: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <p class="shortcomment cmt">Removes the database entries in the range [&quot;from&quot;, &quot;to&quot;), i.e.,
@@ -619,7 +590,7 @@ in the range [&quot;from&quot;, &quot;to&quot;).
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deleteRangeExperimentalWithNoChangelogUpdates</span><span class="params">(<span name="beginKeyInclusive">beginKeyInclusive: <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>, <span name="endKeyExclusive">endKeyExclusive: <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">deleteRangeExperimentalWithNoChangelogUpdates</span><span class="params">(<span name="beginKeyInclusive">beginKeyInclusive: <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>, <span name="endKeyExclusive">endKeyExclusive: <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <p class="shortcomment cmt">     Removes the database entries in the range [&quot;begin_key&quot;, &quot;end_key&quot;), i.e.,
@@ -648,7 +619,7 @@ in the range [&quot;from&quot;, &quot;to&quot;).
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deleteWithoutGettingPriorValue</span><span class="params">(<span name="key">key: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">deleteWithoutGettingPriorValue</span><span class="params">(<span name="key">key: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <p class="shortcomment cmt">Delete the value from the store (if there is one)
@@ -668,14 +639,14 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(other:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
+    </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html#equals(other:Any):Boolean" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html#equals(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -684,10 +655,10 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="other">other: <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a> → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.twitter.util.logging.Logging#error" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="error(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="error(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
@@ -700,7 +671,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">error</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">error</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -716,7 +687,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">error</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">error</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -732,7 +703,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">error</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">error</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -748,7 +719,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">error</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">error</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -780,7 +751,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -802,7 +773,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">flush</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">flush</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → StateStore</dd></dl></div>
@@ -859,7 +830,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
       <p class="shortcomment cmt">Get the value corresponding to this key or return the specified default value if no key is found
 </p><div class="fullcomment"><div class="comment cmt"><p>Get the value corresponding to this key or return the specified default value if no key is found
 </p></div><dl class="paramcmts block"><dt class="param">key</dt><dd class="cmt"><p>The key to fetch</p></dd><dt class="param">default</dt><dd class="cmt"><p>The default value to return if key is not found in the store</p></dd><dt>returns</dt><dd class="cmt"><p>The value associated with the key or the default value if the key is not found</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → <a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a></dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="InvalidStateStoreException"><code>InvalidStateStoreException</code></span> if the store is not initialized</p></span><span class="cmt"><p><span class="extype" name="NullPointerException"><code>NullPointerException</code></span> If null is used for key.</p></span></dd></dl></div>
-    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
       <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html#hashCode():Int" title="Permalink">
@@ -871,10 +842,13 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a> → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="com.twitter.util.logging.Logging#info" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="info(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="info(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
@@ -887,7 +861,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">info</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">info</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -903,7 +877,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">info</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">info</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -919,7 +893,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">info</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">info</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -935,7 +909,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">info</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">info</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -967,7 +941,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">init</span><span class="params">(<span name="processorContext">processorContext: <span class="extype" name="org.apache.kafka.streams.processor.ProcessorContext">ProcessorContext</span></span>, <span name="root">root: <span class="extype" name="org.apache.kafka.streams.processor.StateStore">StateStore</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">init</span><span class="params">(<span name="processorContext">processorContext: <span class="extype" name="org.apache.kafka.streams.processor.ProcessorContext">ProcessorContext</span></span>, <span name="root">root: <span class="extype" name="org.apache.kafka.streams.processor.StateStore">StateStore</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → StateStore</dd></dl></div>
@@ -983,7 +957,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isDebugEnabled</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isDebugEnabled</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -999,7 +973,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isDebugEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isDebugEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -1015,7 +989,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isErrorEnabled</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isErrorEnabled</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -1031,7 +1005,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isErrorEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isErrorEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -1047,7 +1021,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInfoEnabled</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isInfoEnabled</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -1063,7 +1037,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInfoEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isInfoEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -1079,7 +1053,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -1095,7 +1069,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isOpen</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isOpen</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → StateStore</dd></dl></div>
@@ -1111,7 +1085,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isTraceEnabled</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isTraceEnabled</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -1127,7 +1101,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isTraceEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isTraceEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -1143,7 +1117,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isWarnEnabled</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isWarnEnabled</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -1159,7 +1133,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isWarnEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isWarnEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -1196,18 +1170,18 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
     </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl#name" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="name:String"></a>
+      <a id="name():String"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html#name:String" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html#name():String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">name</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">name</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → StateStore</dd></dl></div>
@@ -1223,7 +1197,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -1239,7 +1213,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1258,7 +1232,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1277,7 +1251,7 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">persistent</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">persistent</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → StateStore</dd></dl></div>
@@ -1293,14 +1267,14 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">put</span><span class="params">(<span name="key">key: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span></span>, <span name="value">value: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">put</span><span class="params">(<span name="key">key: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span></span>, <span name="value">value: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → KeyValueStore</dd></dl></div>
     </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl#putAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="putAll(list:java.util.List[org.apache.kafka.streams.KeyValue[K,V]]):Unit"></a><a id="putAll(List[KeyValue[K,V]]):Unit"></a>
+      <a id="putAll(entries:java.util.List[org.apache.kafka.streams.KeyValue[K,V]]):Unit"></a><a id="putAll(List[KeyValue[K,V]]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html#putAll(list:java.util.List[org.apache.kafka.streams.KeyValue[K,V]]):Unit" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html#putAll(entries:java.util.List[org.apache.kafka.streams.KeyValue[K,V]]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1309,14 +1283,14 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">putAll</span><span class="params">(<span name="list">list: <span class="extype" name="java.util.List">List</span>[<span class="extype" name="org.apache.kafka.streams.KeyValue">KeyValue</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>]]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">putAll</span><span class="params">(<span name="entries">entries: <span class="extype" name="java.util.List">List</span>[<span class="extype" name="org.apache.kafka.streams.KeyValue">KeyValue</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>]]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → KeyValueStore</dd></dl></div>
     </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl#putIfAbsent" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="putIfAbsent(k:K,v:V):V"></a><a id="putIfAbsent(K,V):V"></a>
+      <a id="putIfAbsent(key:K,value:V):V"></a><a id="putIfAbsent(K,V):V"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html#putIfAbsent(k:K,v:V):V" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html#putIfAbsent(key:K,value:V):V" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1325,29 +1299,10 @@ Note: This version of delete avoids getting the prior value which keyValueStore.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">putIfAbsent</span><span class="params">(<span name="k">k: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span></span>, <span name="v">v: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span></span>
+        <span class="name">putIfAbsent</span><span class="params">(<span name="key">key: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span></span>, <span name="value">value: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → KeyValueStore</dd></dl></div>
-    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl#range" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="range(fromBytesInclusive:Array[Byte],toBytesExclusive:Array[Byte]):org.apache.kafka.streams.state.KeyValueIterator[K,V]"></a><a id="range(Array[Byte],Array[Byte]):KeyValueIterator[K,V]"></a>
-      <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html#range(fromBytesInclusive:Array[Byte],toBytesExclusive:Array[Byte]):org.apache.kafka.streams.state.KeyValueIterator[K,V]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">range</span><span class="params">(<span name="fromBytesInclusive">fromBytesInclusive: <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>, <span name="toBytesExclusive">toBytesExclusive: <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>)</span><span class="result">: <span class="extype" name="org.apache.kafka.streams.state.KeyValueIterator">KeyValueIterator</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>]</span>
-      </span>
-      
-      <p class="shortcomment cmt">Get an iterator over a given range of keys.</p><div class="fullcomment"><div class="comment cmt"><p>Get an iterator over a given range of keys. This iterator must be closed after use.
-The returned iterator must be safe from <code><span class="extype" name="java.util.ConcurrentModificationException">java.util.ConcurrentModificationException</span></code>s
-and must not return null values. No ordering guarantees are provided.
-</p></div><dl class="paramcmts block"><dt class="param">fromBytesInclusive</dt><dd class="cmt"><p>Inclusive bytes to start the range scan</p></dd><dt class="param">toBytesExclusive</dt><dd class="cmt"><p>Exclusive bytes to end the range scan</p></dd><dt>returns</dt><dd class="cmt"><p>The iterator for this range.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → <a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a></dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="InvalidStateStoreException"><code>InvalidStateStoreException</code></span> if the store is not initialized</p></span><span class="cmt"><p><span class="extype" name="NullPointerException"><code>NullPointerException</code></span> If null is used for from or to.</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl#range" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="range(fromBytes:Array[Byte]):org.apache.kafka.streams.state.KeyValueIterator[K,V]"></a><a id="range(Array[Byte]):KeyValueIterator[K,V]"></a>
       <span class="permalink">
@@ -1360,17 +1315,20 @@ and must not return null values. No ordering guarantees are provided.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">range</span><span class="params">(<span name="fromBytes">fromBytes: <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>)</span><span class="result">: <span class="extype" name="org.apache.kafka.streams.state.KeyValueIterator">KeyValueIterator</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>]</span>
+        <span class="name">range</span><span class="params">(<span name="fromBytes">fromBytes: <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>)</span><span class="result">: <span class="extype" name="org.apache.kafka.streams.state.KeyValueIterator">KeyValueIterator</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">A range scan starting from bytes.</p><div class="fullcomment"><div class="comment cmt"><p>A range scan starting from bytes. If RocksDB &quot;prefix seek mode&quot; is not enabled, than the iteration will NOT end when fromBytes is no longer the prefix</p><p>Note 1: This is an API for Advanced users only</p><p>Note 2: If this RocksDB instance is configured in &quot;prefix seek mode&quot;, than fromBytes will be used as a &quot;prefix&quot; and the iteration will end when the prefix is no longer part of the next element.
-Enabling &quot;prefix seek mode&quot; can be done by calling options.useFixedLengthPrefixExtractor. When enabled, prefix scans can take advantage of a prefix based bloom filter for better seek performance
-See: https://github.com/facebook/rocksdb/wiki/Prefix-Seek-API-Changes
+      <p class="shortcomment cmt">A range scan starting from bytes.</p><div class="fullcomment"><div class="comment cmt"><p>A range scan starting from bytes. If RocksDB &quot;prefix seek mode&quot; is not enabled, than the
+iteration will NOT end when fromBytes is no longer the prefix</p><p>Note 1: This is an API for Advanced users only</p><p>Note 2: If this RocksDB instance is configured in &quot;prefix seek mode&quot;, than fromBytes will be
+used as a &quot;prefix&quot; and the iteration will end when the prefix is no longer part of the next element.
+Enabling &quot;prefix seek mode&quot; can be done by calling options.useFixedLengthPrefixExtractor.
+When enabled, prefix scans can take advantage of a prefix based bloom filter for better seek performance
+See: https://github.com/facebook/rocksdb/wiki/Prefix-Seek-API-Changes</p><p>TODO: Save off iterators to make sure they are all closed
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → <a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a></dd></dl></div>
     </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl#range" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="range(from:K,to:K,allowStaleReads:Boolean):org.apache.kafka.streams.state.KeyValueIterator[K,V]"></a><a id="range(K,K,Boolean):KeyValueIterator[K,V]"></a>
+      <a id="range(fromBytesInclusive:Array[Byte],toBytesExclusive:Array[Byte]):org.apache.kafka.streams.state.KeyValueIterator[K,V]"></a><a id="range(Array[Byte],Array[Byte]):KeyValueIterator[K,V]"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html#range(from:K,to:K,allowStaleReads:Boolean):org.apache.kafka.streams.state.KeyValueIterator[K,V]" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html#range(fromBytesInclusive:Array[Byte],toBytesExclusive:Array[Byte]):org.apache.kafka.streams.state.KeyValueIterator[K,V]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1379,14 +1337,13 @@ See: https://github.com/facebook/rocksdb/wiki/Prefix-Seek-API-Changes
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">range</span><span class="params">(<span name="from">from: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span></span>, <span name="to">to: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span></span>, <span name="allowStaleReads">allowStaleReads: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <span class="extype" name="org.apache.kafka.streams.state.KeyValueIterator">KeyValueIterator</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>]</span>
+        <span class="name">range</span><span class="params">(<span name="fromBytesInclusive">fromBytesInclusive: <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>, <span name="toBytesExclusive">toBytesExclusive: <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>)</span><span class="result">: <span class="extype" name="org.apache.kafka.streams.state.KeyValueIterator">KeyValueIterator</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Get an iterator over a given range of keys.</p><div class="fullcomment"><div class="comment cmt"><p>Get an iterator over a given range of keys. This iterator must be closed after use.
 The returned iterator must be safe from <code><span class="extype" name="java.util.ConcurrentModificationException">java.util.ConcurrentModificationException</span></code>s
 and must not return null values. No ordering guarantees are provided.
-</p></div><dl class="paramcmts block"><dt class="param">from</dt><dd class="cmt"><p>The first key that could be in the range</p></dd><dt class="param">to</dt><dd class="cmt"><p>The last key that could be in the range</p></dd><dt class="param">allowStaleReads</dt><dd class="cmt"><p>Allow stale reads when querying a caching key value store. If set to false,
-                       each query will trigger a flush of the cache.</p></dd><dt>returns</dt><dd class="cmt"><p>The iterator for this range.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → <a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a></dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="InvalidStateStoreException"><code>InvalidStateStoreException</code></span> if the store is not initialized</p></span><span class="cmt"><p><span class="extype" name="NullPointerException"><code>NullPointerException</code></span> If null is used for from or to.</p></span></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">fromBytesInclusive</dt><dd class="cmt"><p>Inclusive bytes to start the range scan</p></dd><dt class="param">toBytesExclusive</dt><dd class="cmt"><p>Exclusive bytes to end the range scan</p></dd><dt>returns</dt><dd class="cmt"><p>The iterator for this range.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → <a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a></dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="InvalidStateStoreException"><code>InvalidStateStoreException</code></span> if the store is not initialized</p></span><span class="cmt"><p><span class="extype" name="NullPointerException"><code>NullPointerException</code></span> If null is used for from or to.</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl#range" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="range(from:K,to:K):org.apache.kafka.streams.state.KeyValueIterator[K,V]"></a><a id="range(K,K):KeyValueIterator[K,V]"></a>
       <span class="permalink">
@@ -1402,23 +1359,30 @@ and must not return null values. No ordering guarantees are provided.
         <span class="name">range</span><span class="params">(<span name="from">from: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span></span>, <span name="to">to: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span></span>)</span><span class="result">: <span class="extype" name="org.apache.kafka.streams.state.KeyValueIterator">KeyValueIterator</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → ReadOnlyKeyValueStore</dd></dl></div>
-    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl#statsReceiver" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="statsReceiver:com.twitter.finagle.stats.StatsReceiver"></a><a id="statsReceiver:StatsReceiver"></a>
+      <p class="shortcomment cmt">Get an iterator over a given range of keys.</p><div class="fullcomment"><div class="comment cmt"><p>Get an iterator over a given range of keys. This iterator must be closed after use.
+The returned iterator must be safe from <code><span class="extype" name="java.util.ConcurrentModificationException">java.util.ConcurrentModificationException</span></code>s
+and must not return null values. No ordering guarantees are provided.
+</p></div><dl class="paramcmts block"><dt class="param">from</dt><dd class="cmt"><p>The first key that could be in the range</p></dd><dt class="param">to</dt><dd class="cmt"><p>The last key that could be in the range (inclusive)</p></dd><dt>returns</dt><dd class="cmt"><p>The iterator for this range.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → ReadOnlyKeyValueStore</dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="InvalidStateStoreException"><code>InvalidStateStoreException</code></span> if the store is not initialized</p></span><span class="cmt"><p><span class="extype" name="NullPointerException"><code>NullPointerException</code></span> If null is used for from or to.</p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl#range" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="range(from:K,to:K,allowStaleReads:Boolean):org.apache.kafka.streams.state.KeyValueIterator[K,V]"></a><a id="range(K,K,Boolean):KeyValueIterator[K,V]"></a>
       <span class="permalink">
-      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html#statsReceiver:com.twitter.finagle.stats.StatsReceiver" title="Permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html#range(from:K,to:K,allowStaleReads:Boolean):org.apache.kafka.streams.state.KeyValueIterator[K,V]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">statsReceiver</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>
+        <span class="name">range</span><span class="params">(<span name="from">from: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span></span>, <span name="to">to: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span></span>, <span name="allowStaleReads">allowStaleReads: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <span class="extype" name="org.apache.kafka.streams.state.KeyValueIterator">KeyValueIterator</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">Get an iterator over a given range of keys.</p><div class="fullcomment"><div class="comment cmt"><p>Get an iterator over a given range of keys. This iterator must be closed after use.
+The returned iterator must be safe from <code><span class="extype" name="java.util.ConcurrentModificationException">java.util.ConcurrentModificationException</span></code>s
+and must not return null values. No ordering guarantees are provided.
+</p></div><dl class="paramcmts block"><dt class="param">from</dt><dd class="cmt"><p>The first key that could be in the range</p></dd><dt class="param">to</dt><dd class="cmt"><p>The last key that could be in the range</p></dd><dt class="param">allowStaleReads</dt><dd class="cmt"><p>Allow stale reads when querying (Stale reads can occur when querying
+                       key value stores with caching enabled).</p></dd><dt>returns</dt><dd class="cmt"><p>The iterator for this range.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → <a href="../FinatraReadOnlyKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraReadOnlyKeyValueStore">FinatraReadOnlyKeyValueStore</a></dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="InvalidStateStoreException"><code>InvalidStateStoreException</code></span> if the store is not initialized</p></span><span class="cmt"><p><span class="extype" name="NullPointerException"><code>NullPointerException</code></span> If null is used for from or to.</p></span></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
@@ -1450,9 +1414,9 @@ and must not return null values. No ordering guarantees are provided.
         <span class="name">taskId</span><span class="result">: <span class="extype" name="org.apache.kafka.streams.processor.TaskId">TaskId</span></span>
       </span>
       
-      <p class="shortcomment cmt">The task id associated with this store
-</p><div class="fullcomment"><div class="comment cmt"><p>The task id associated with this store
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → <a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns the task id of this tore
+</p><div class="fullcomment"><div class="comment cmt"><p>Returns the task id of this tore
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the task id of this store</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl">FinatraKeyValueStoreImpl</a> → <a href="../FinatraReadOnlyKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraReadOnlyKeyValueStore">FinatraReadOnlyKeyValueStore</a></dd></dl></div>
     </li><li name="com.twitter.inject.Logging#time" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="time[T](formatStr:String)(func:=&gt;T):T"></a><a id="time[T](String)(⇒T):T"></a>
       <span class="permalink">
@@ -1469,6 +1433,22 @@ and must not return null values. No ordering guarantees are provided.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <span class="permalink">
+      <a href="../../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/internal/FinatraKeyValueStoreImpl.html#toString():String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.twitter.util.logging.Logging#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trace(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="trace(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
@@ -1481,7 +1461,7 @@ and must not return null values. No ordering guarantees are provided.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">trace</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">trace</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -1497,7 +1477,7 @@ and must not return null values. No ordering guarantees are provided.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">trace</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">trace</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -1513,7 +1493,7 @@ and must not return null values. No ordering guarantees are provided.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">trace</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">trace</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -1529,7 +1509,7 @@ and must not return null values. No ordering guarantees are provided.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">trace</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">trace</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -1561,7 +1541,7 @@ and must not return null values. No ordering guarantees are provided.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1583,7 +1563,7 @@ and must not return null values. No ordering guarantees are provided.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.7/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1605,7 +1585,7 @@ and must not return null values. No ordering guarantees are provided.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.7/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1629,7 +1609,7 @@ and must not return null values. No ordering guarantees are provided.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">warn</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">warn</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -1645,7 +1625,7 @@ and must not return null values. No ordering guarantees are provided.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">warn</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">warn</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -1661,7 +1641,7 @@ and must not return null values. No ordering guarantees are provided.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">warn</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">warn</span><span class="params">(<span name="marker">marker: <span class="extype" name="org.slf4j.Marker">Marker</span></span>, <span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -1677,7 +1657,7 @@ and must not return null values. No ordering guarantees are provided.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">warn</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">warn</span><span class="params">(<span name="message">message: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -1707,22 +1687,14 @@ and must not return null values. No ordering guarantees are provided.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
-            </div><div class="parent" name="java.io.Serializable">
-              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="scala.Product">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a></h3>
-            </div><div class="parent" name="scala.Equals">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.7/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a></h3>
-            </div><div class="parent" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">
-              <h3>Inherited from <a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>]</h3>
-            </div><div class="parent" name="com.twitter.finatra.kafkastreams.transformer.utils.IteratorImplicits">
-              <h3>Inherited from <a href="../../utils/IteratorImplicits.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.utils.IteratorImplicits">IteratorImplicits</a></h3>
-            </div><div class="parent" name="com.twitter.inject.Logging">
+        <div class="parent" name="com.twitter.inject.Logging">
               <h3>Inherited from <a href="../../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></h3>
             </div><div class="parent" name="com.twitter.util.logging.Logging">
               <h3>Inherited from <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a></h3>
+            </div><div class="parent" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">
+              <h3>Inherited from <a href="../FinatraKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore">FinatraKeyValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>]</h3>
+            </div><div class="parent" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraReadOnlyKeyValueStore">
+              <h3>Inherited from <a href="../FinatraReadOnlyKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraReadOnlyKeyValueStore">FinatraReadOnlyKeyValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>]</h3>
             </div><div class="parent" name="org.apache.kafka.streams.state.KeyValueStore">
               <h3>Inherited from <span class="extype" name="org.apache.kafka.streams.state.KeyValueStore">KeyValueStore</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraKeyValueStoreImpl.V">V</span>]</h3>
             </div><div class="parent" name="org.apache.kafka.streams.state.ReadOnlyKeyValueStore">
@@ -1730,9 +1702,9 @@ and must not return null values. No ordering guarantees are provided.
             </div><div class="parent" name="org.apache.kafka.streams.processor.StateStore">
               <h3>Inherited from <span class="extype" name="org.apache.kafka.streams.processor.StateStore">StateStore</span></h3>
             </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
             </div>
         
         </div>

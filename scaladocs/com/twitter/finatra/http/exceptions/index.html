@@ -480,7 +480,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="BadRequestException.html"><span class="name">BadRequestException</span></a><span class="params">(<span name="mediaType">mediaType: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>, <span name="errors">errors: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="HttpException.html" class="extype" name="com.twitter.finatra.http.exceptions.HttpException">HttpException</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="BadRequestException.html"><span class="name">BadRequestException</span></a><span class="params">(<span name="mediaType">mediaType: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>, <span name="errors">errors: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="HttpException.html" class="extype" name="com.twitter.finatra.http.exceptions.HttpException">HttpException</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -496,7 +496,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="ConflictException.html"><span class="name">ConflictException</span></a><span class="params">(<span name="mediaType">mediaType: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>, <span name="errors">errors: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="HttpException.html" class="extype" name="com.twitter.finatra.http.exceptions.HttpException">HttpException</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="ConflictException.html"><span class="name">ConflictException</span></a><span class="params">(<span name="mediaType">mediaType: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>, <span name="errors">errors: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="HttpException.html" class="extype" name="com.twitter.finatra.http.exceptions.HttpException">HttpException</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -512,7 +512,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="A class to register com.twitter.finatra.http.exceptions.ExceptionMappers and handle exceptions." href="ExceptionManager.html"><span class="name">ExceptionManager</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <a title="A class to register com.twitter.finatra.http.exceptions.ExceptionMappers and handle exceptions." href="ExceptionManager.html"><span class="name">ExceptionManager</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       
       <p class="shortcomment cmt">A class to register <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a>s
@@ -534,8 +534,8 @@ to traverse the entire class linearization so it works for
 traits/mixins too [1]. Unfortunately, implementing this would require
 a lot more reflection and it might not be threadsafe [2]. Doing it in
 Scala 2.11 might be easier and safer.
-[1] http://stackoverflow.com/questions/15623498/handy-ways-to-show-linearization-of-a-class
-[2] http://docs.scala-lang.org/overviews/reflection/thread-safety.html</p></span></dd></dl></div>
+[1] https://stackoverflow.com/questions/15623498/handy-ways-to-show-linearization-of-a-class
+[2] https://docs.scala-lang.org/overviews/reflection/thread-safety.html</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.exceptions.ExceptionMapper" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="ExceptionMapper[T&lt;:Throwable]extendsAnyRef"></a><a id="ExceptionMapper[T&lt;:Throwable]:ExceptionMapper[T]"></a>
       <span class="permalink">
@@ -548,7 +548,7 @@ Scala 2.11 might be easier and safer.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="An ExceptionMapper converts a T-typed throwable to an HTTP response." href="ExceptionMapper.html"><span class="name">ExceptionMapper</span></a><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="scala.Throwable">Throwable</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <a title="An ExceptionMapper converts a T-typed throwable to an HTTP response." href="ExceptionMapper.html"><span class="name">ExceptionMapper</span></a><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="scala.Throwable">Throwable</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       
       <p class="shortcomment cmt">An ExceptionMapper converts a <code>T</code>-typed throwable to an HTTP response.</p><div class="fullcomment"><div class="comment cmt"><p>An ExceptionMapper converts a <code>T</code>-typed throwable to an HTTP response.</p><p>Java users should use the <a href="AbstractExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.AbstractExceptionMapper">AbstractExceptionMapper</a>.
@@ -582,7 +582,7 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="ForbiddenException.html"><span class="name">ForbiddenException</span></a><span class="params">(<span name="mediaType">mediaType: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>, <span name="errors">errors: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="HttpException.html" class="extype" name="com.twitter.finatra.http.exceptions.HttpException">HttpException</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="ForbiddenException.html"><span class="name">ForbiddenException</span></a><span class="params">(<span name="mediaType">mediaType: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>, <span name="errors">errors: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="HttpException.html" class="extype" name="com.twitter.finatra.http.exceptions.HttpException">HttpException</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -614,7 +614,7 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="HttpNackException.html"><span class="name">HttpNackException</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="http://www.scala-lang.org/api/2.12.7/scala/util/control/NoStackTrace.html#scala.util.control.NoStackTrace" class="extype" name="scala.util.control.NoStackTrace">NoStackTrace</a></span>
+        <a title="" href="HttpNackException.html"><span class="name">HttpNackException</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="http://www.scala-lang.org/api/2.12.8/scala/util/control/NoStackTrace.html#scala.util.control.NoStackTrace" class="extype" name="scala.util.control.NoStackTrace">NoStackTrace</a></span>
       </span>
       
       
@@ -630,7 +630,7 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="HttpResponseException.html"><span class="name">HttpResponseException</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="../../../inject/exceptions/NonRetryableException.html" class="extype" name="com.twitter.inject.exceptions.NonRetryableException">NonRetryableException</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/util/control/NoStackTrace.html#scala.util.control.NoStackTrace" class="extype" name="scala.util.control.NoStackTrace">NoStackTrace</a></span>
+        <a title="" href="HttpResponseException.html"><span class="name">HttpResponseException</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="../../../inject/exceptions/NonRetryableException.html" class="extype" name="com.twitter.inject.exceptions.NonRetryableException">NonRetryableException</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/util/control/NoStackTrace.html#scala.util.control.NoStackTrace" class="extype" name="scala.util.control.NoStackTrace">NoStackTrace</a></span>
       </span>
       
       
@@ -646,7 +646,7 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="InternalServerErrorException.html"><span class="name">InternalServerErrorException</span></a><span class="params">(<span name="mediaType">mediaType: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>, <span name="errors">errors: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="HttpException.html" class="extype" name="com.twitter.finatra.http.exceptions.HttpException">HttpException</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="InternalServerErrorException.html"><span class="name">InternalServerErrorException</span></a><span class="params">(<span name="mediaType">mediaType: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>, <span name="errors">errors: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="HttpException.html" class="extype" name="com.twitter.finatra.http.exceptions.HttpException">HttpException</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -678,7 +678,7 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="NotAcceptableException.html"><span class="name">NotAcceptableException</span></a><span class="params">(<span name="mediaType">mediaType: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>, <span name="errors">errors: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="HttpException.html" class="extype" name="com.twitter.finatra.http.exceptions.HttpException">HttpException</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="NotAcceptableException.html"><span class="name">NotAcceptableException</span></a><span class="params">(<span name="mediaType">mediaType: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>, <span name="errors">errors: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="HttpException.html" class="extype" name="com.twitter.finatra.http.exceptions.HttpException">HttpException</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -694,7 +694,7 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="NotFoundException.html"><span class="name">NotFoundException</span></a><span class="params">(<span name="mediaType">mediaType: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>, <span name="errors">errors: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="HttpException.html" class="extype" name="com.twitter.finatra.http.exceptions.HttpException">HttpException</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="NotFoundException.html"><span class="name">NotFoundException</span></a><span class="params">(<span name="mediaType">mediaType: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>, <span name="errors">errors: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="HttpException.html" class="extype" name="com.twitter.finatra.http.exceptions.HttpException">HttpException</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -710,7 +710,7 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="ServiceUnavailableException.html"><span class="name">ServiceUnavailableException</span></a><span class="params">(<span name="mediaType">mediaType: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>, <span name="errors">errors: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="HttpException.html" class="extype" name="com.twitter.finatra.http.exceptions.HttpException">HttpException</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="ServiceUnavailableException.html"><span class="name">ServiceUnavailableException</span></a><span class="params">(<span name="mediaType">mediaType: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>, <span name="errors">errors: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="HttpException.html" class="extype" name="com.twitter.finatra.http.exceptions.HttpException">HttpException</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -753,7 +753,7 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="BadRequestException$.html"><span class="name">BadRequestException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="BadRequestException$.html"><span class="name">BadRequestException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -769,7 +769,7 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="ConflictException$.html"><span class="name">ConflictException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="ConflictException$.html"><span class="name">ConflictException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -785,7 +785,7 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="ForbiddenException$.html"><span class="name">ForbiddenException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="ForbiddenException$.html"><span class="name">ForbiddenException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -801,7 +801,7 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="HttpException which will be rendered as an HTTP response." href="HttpException$.html"><span class="name">HttpException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="HttpException which will be rendered as an HTTP response." href="HttpException$.html"><span class="name">HttpException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">HttpException which will be rendered as an HTTP response.</p>
@@ -817,7 +817,7 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="InternalServerErrorException$.html"><span class="name">InternalServerErrorException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="InternalServerErrorException$.html"><span class="name">InternalServerErrorException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -833,7 +833,7 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="NotAcceptableException$.html"><span class="name">NotAcceptableException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="NotAcceptableException$.html"><span class="name">NotAcceptableException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -849,7 +849,7 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="NotFoundException$.html"><span class="name">NotFoundException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="NotFoundException$.html"><span class="name">NotFoundException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -865,7 +865,7 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="ServiceUnavailableException$.html"><span class="name">ServiceUnavailableException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="ServiceUnavailableException$.html"><span class="name">ServiceUnavailableException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       

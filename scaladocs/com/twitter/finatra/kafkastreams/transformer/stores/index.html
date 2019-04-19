@@ -251,12 +251,20 @@
                         <a href="CachingFinatraKeyValueStore.html" title="A FinatraKeyValueStore with a callback that fires when an entry is flushed into the underlying store">CachingFinatraKeyValueStore</a>
                       </li><li class="current-entities indented6">
                         <span class="separator"></span>
-                        <a class="trait" href="CachingKeyValueStores.html" title=""></a>
-                        <a href="CachingKeyValueStores.html" title="">CachingKeyValueStores</a>
+                        <a class="trait" href="CachingKeyValueStores.html" title="Trait to mix into a FinatraTransformer which is used to access a caching enabled Finatra Store"></a>
+                        <a href="CachingKeyValueStores.html" title="Trait to mix into a FinatraTransformer which is used to access a caching enabled Finatra Store">CachingKeyValueStores</a>
                       </li><li class="current-entities indented6">
                         <span class="separator"></span>
                         <a class="trait" href="FinatraKeyValueStore.html" title=""></a>
                         <a href="FinatraKeyValueStore.html" title="">FinatraKeyValueStore</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="trait" href="FinatraReadOnlyKeyValueStore.html" title="A Finatra key value store that only supports read operations."></a>
+                        <a href="FinatraReadOnlyKeyValueStore.html" title="A Finatra key value store that only supports read operations.">FinatraReadOnlyKeyValueStore</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="NonLocalQueryKeyException.html" title=""></a>
+                        <a href="NonLocalQueryKeyException.html" title="">NonLocalQueryKeyException</a>
                       </li><li class="current-entities indented6">
                         <span class="separator"></span>
                         <a class="class" href="PersistentTimerStore.html" title=""></a>
@@ -353,10 +361,10 @@
       
       <p class="shortcomment cmt">A FinatraKeyValueStore with a callback that fires when an entry is flushed into the underlying store
 </p>
-    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.CachingKeyValueStores" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="CachingKeyValueStores[K,V,K1,V1]extendsFlushingTransformer[K,V,K1,V1]"></a><a id="CachingKeyValueStores[K,V,K1,V1]:CachingKeyValueStores[K,V,K1,V1]"></a>
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.CachingKeyValueStores" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="CachingKeyValueStores[K,V,K1,V1]extendsFinatraTransformer[K,V,K1,V1]withFlushingTransformer[K,V,K1,V1]"></a><a id="CachingKeyValueStores[K,V,K1,V1]:CachingKeyValueStores[K,V,K1,V1]"></a>
       <span class="permalink">
-      <a href="../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/index.html#CachingKeyValueStores[K,V,K1,V1]extendsFlushingTransformer[K,V,K1,V1]" title="Permalink">
+      <a href="../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/index.html#CachingKeyValueStores[K,V,K1,V1]extendsFinatraTransformer[K,V,K1,V1]withFlushingTransformer[K,V,K1,V1]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -365,14 +373,18 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="CachingKeyValueStores.html"><span class="name">CachingKeyValueStores</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>, <span name="K1">K1</span>, <span name="V1">V1</span>]</span><span class="result"> extends <a href="../../flushing/FlushingTransformer.html" class="extype" name="com.twitter.finatra.kafkastreams.flushing.FlushingTransformer">FlushingTransformer</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.CachingKeyValueStores.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.CachingKeyValueStores.V">V</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.CachingKeyValueStores.K1">K1</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.CachingKeyValueStores.V1">V1</span>]</span>
+        <a title="Trait to mix into a FinatraTransformer which is used to access a caching enabled Finatra Store" href="CachingKeyValueStores.html"><span class="name">CachingKeyValueStores</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>, <span name="K1">K1</span>, <span name="V1">V1</span>]</span><span class="result"> extends <a href="../FinatraTransformer.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.FinatraTransformer">FinatraTransformer</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.CachingKeyValueStores.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.CachingKeyValueStores.V">V</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.CachingKeyValueStores.K1">K1</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.CachingKeyValueStores.V1">V1</span>] with <a href="../../flushing/FlushingTransformer.html" class="extype" name="com.twitter.finatra.kafkastreams.flushing.FlushingTransformer">FlushingTransformer</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.CachingKeyValueStores.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.CachingKeyValueStores.V">V</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.CachingKeyValueStores.K1">K1</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.CachingKeyValueStores.V1">V1</span>]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">Trait to mix into a FinatraTransformer which is used
+to access a caching enabled Finatra Store
+</p><div class="fullcomment"><div class="comment cmt"><p>Trait to mix into a FinatraTransformer which is used
+to access a caching enabled Finatra Store
+</p></div><dl class="paramcmts block"><dt class="tparam">K</dt><dd class="cmt"><p>Transformer key input type</p></dd><dt class="tparam">V</dt><dd class="cmt"><p>Transformer value input type</p></dd><dt class="tparam">K1</dt><dd class="cmt"><p>Transformer key return type</p></dd><dt class="tparam">V1</dt><dd class="cmt"><p>Transformer value return type</p></dd></dl></div>
     </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="FinatraKeyValueStore[K,V]extendsKeyValueStore[K,V]"></a><a id="FinatraKeyValueStore[K,V]:FinatraKeyValueStore[K,V]"></a>
+      <a id="FinatraKeyValueStore[K,V]extendsKeyValueStore[K,V]withFinatraReadOnlyKeyValueStore[K,V]"></a><a id="FinatraKeyValueStore[K,V]:FinatraKeyValueStore[K,V]"></a>
       <span class="permalink">
-      <a href="../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/index.html#FinatraKeyValueStore[K,V]extendsKeyValueStore[K,V]" title="Permalink">
+      <a href="../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/index.html#FinatraKeyValueStore[K,V]extendsKeyValueStore[K,V]withFinatraReadOnlyKeyValueStore[K,V]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -381,7 +393,42 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="FinatraKeyValueStore.html"><span class="name">FinatraKeyValueStore</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <span class="extype" name="org.apache.kafka.streams.state.KeyValueStore">KeyValueStore</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore.V">V</span>]</span>
+        <a title="" href="FinatraKeyValueStore.html"><span class="name">FinatraKeyValueStore</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <span class="extype" name="org.apache.kafka.streams.state.KeyValueStore">KeyValueStore</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore.V">V</span>] with <a href="FinatraReadOnlyKeyValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraReadOnlyKeyValueStore">FinatraReadOnlyKeyValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore.V">V</span>]</span>
+      </span>
+      
+      
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraReadOnlyKeyValueStore" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="FinatraReadOnlyKeyValueStore[K,V]extendsReadOnlyKeyValueStore[K,V]"></a><a id="FinatraReadOnlyKeyValueStore[K,V]:FinatraReadOnlyKeyValueStore[K,V]"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/index.html#FinatraReadOnlyKeyValueStore[K,V]extendsReadOnlyKeyValueStore[K,V]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="A Finatra key value store that only supports read operations." href="FinatraReadOnlyKeyValueStore.html"><span class="name">FinatraReadOnlyKeyValueStore</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <span class="extype" name="org.apache.kafka.streams.state.ReadOnlyKeyValueStore">ReadOnlyKeyValueStore</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraReadOnlyKeyValueStore.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.FinatraReadOnlyKeyValueStore.V">V</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">A Finatra key value store that only supports read operations.</p><div class="fullcomment"><div class="comment cmt"><p>A Finatra key value store that only supports read operations.
+Implementations should be thread-safe as concurrent reads and writes
+are expected.
+</p></div></div>
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.NonLocalQueryKeyException" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonLocalQueryKeyException[K]extendsExceptionwithProductwithSerializable"></a><a id="NonLocalQueryKeyException[K]:NonLocalQueryKeyException[K]"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/index.html#NonLocalQueryKeyException[K]extendsExceptionwithProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="NonLocalQueryKeyException.html"><span class="name">NonLocalQueryKeyException</span></a><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="primaryKey">primaryKey: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.NonLocalQueryKeyException.K">K</span></span>, <span name="serviceShardIds">serviceShardIds: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../../../streams/queryable/thrift/domain/ServiceShardId.html" class="extype" name="com.twitter.finatra.streams.queryable.thrift.domain.ServiceShardId">ServiceShardId</a>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       

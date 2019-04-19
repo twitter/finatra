@@ -33,16 +33,16 @@ Testing With `Global Flags`
 ---------------------------
 
 The embedded servers and the embedded app allow for passing `TwitterUtil <https://github.com/twitter/util>`__ `Flags <https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala>`__
-to the server under test via the `flags <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L90>`__
+to the server under test via the `flags <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L130>`__
 constructor argument (a map of flag name to flag value) which is meant to mimic setting flag values
 via the command line.
 
 However it is **not recommended** that users set any |GlobalFlag|_ value in this manner. In normal
 usage, the value of a |GlobalFlag|_ is **only read once during the initialization of the JVM process**.
 
-If you wish to test with toggled values of a |GlobalFlag|_ you should prefer using
-|FlagLet|_ or |FlagLetClear|_ in tests instead of passing the |GlobalFlag|_ value via the `flags <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L90>`__
-arg of an embedded server or embedded app. For example,
+A |GlobalFlag|_ can now be scoped for the execution of an embedded server by passing in a value via the
+`globalFlags <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L142>`__
+arg of an embedded server. For example,
 
 .. code:: scala
 
@@ -51,12 +51,49 @@ arg of an embedded server or embedded app. For example,
     import com.twitter.inject.server.FeatureTest
 
     class ExampleServerFeatureTest extends FeatureTest {
-      override val server = new EmbeddedHttpServer(new ExampleServer)
+      override val server = new EmbeddedHttpServer(
+        twitterServer = new ExampleServer,
+        globalFlags = ListMap(com.foo.bar.someGlobalFlag -> "a value")
+      )
+
+      test("ExampleServer#perform feature") {
+        // any read of the `com.foo.bar.someGlobalFlag` value within the server will be "a value"
+        server.httpGet(
+          path = "/",
+          andExpect = Status.Ok)
+
+        ???
+      }
+    }
+
+If you wish to test with toggled values of a |GlobalFlag|_ for an embedded app or server, you can
+still use |FlagLet|_ or |FlagLetClear|_ in tests. Note that if an embedded server takes
+`globalFlags <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L142>`__
+arguments, they will take precedents over an outer |FlagLet|_. It is recommended to test using
+|FlagLet|_ or |FlagLegClear|_ on a |GlobalFlag|_ in places where the global flag value is read once and not
+treated as a runtime variable, otherwise behavior can be unexpected across thread boundaries.
+For example,
+
+.. code:: scala
+
+    import com.twitter.finatra.http.EmbeddedHttpServer
+    import com.twitter.finagle.http.Status
+    import com.twitter.inject.server.FeatureTest
+
+    class ExampleServerFeatureTest extends FeatureTest {
+      override val server = new EmbeddedHttpServer(
+        twitterServer = new ExampleServer,
+        globalFlags = ListMap(com.foo.bar.someGlobalFlag -> "a value")
+      )
 
       test("ExampleServer#perform feature") {
 
-        someGlobalFlag.let("a value") {
-          // any read of the `someGlobalFlag` value in this closure will be "a value"
+        com.foo.bar.someGlobalFlag.let("b value") {
+          // any read of the `com.foo.bar.someGlobalFlag` value in this closure will be "b value"
+
+          com.foo.bar.someGlobalFlag() should equal("b value")
+
+          // except execution within the server will see "a value" due to `globalFlags` scope
           server.httpGet(
             path = "/",
             andExpect = Status.Ok)
@@ -66,7 +103,7 @@ arg of an embedded server or embedded app. For example,
       }
     }
 
-See the `scaladoc <http://twitter.github.io/util/docs/com/twitter/app/Flag.html>`_ for `c.t.app.Flag`
+See the `scaladoc <https://twitter.github.io/util/docs/com/twitter/app/Flag.html>`_ for `c.t.app.Flag`
 for more information on using |FlagLet|_ or |FlagLetClear|_.
 
 InMemoryStatsReceiver
@@ -127,7 +164,7 @@ More Information
 .. _GlobalFlag: https://github.com/twitter/util/blob/f2a05474ec41f34146d710bdc2a789efd6da9d21/util-app/src/main/scala/com/twitter/app/GlobalFlag.scala
 
 .. |FlagLet| replace:: `Flag.let`
-.. _FlagLet: http://twitter.github.io/util/docs/com/twitter/app/Flag.html#let[R](t:T)(f:=%3ER):R
+.. _FlagLet: https://twitter.github.io/util/docs/com/twitter/app/Flag.html#let[R](t:T)(f:=%3ER):R
 
 .. |FlagLetClear| replace:: `Flag.letClear`
-.. _FlagLetClear: http://twitter.github.io/util/docs/com/twitter/app/Flag.html#letClear[R](f:=%3ER):R
+.. _FlagLetClear: https://twitter.github.io/util/docs/com/twitter/app/Flag.html#letClear[R](f:=%3ER):R

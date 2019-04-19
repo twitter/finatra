@@ -39,16 +39,16 @@ in Finatra revolves around the following definitions:
   class and since constructor injection is used throughout the framework, Finatra stays out of your
   way.
 
-`ScalaTest <http://www.scalatest.org/>`__
+`ScalaTest <https://www.scalatest.org/>`__
 -----------------------------------------
 
-The Finatra testing framework uses the Twitter recommended ScalaTest `testing style <http://www.scalatest.org/user_guide/selecting_a_style>`__ `FunSuite <http://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite>`__ for framework testing and to 
+The Finatra testing framework uses the Twitter recommended ScalaTest `testing style <https://www.scalatest.org/user_guide/selecting_a_style>`__ `FunSuite <https://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite>`__ for framework testing and to 
 facilitate the types of testing outlined above we have several testing traits to aid in creating simple 
 and powerful tests.
 
-For more information on `ScalaTest <http://www.scalatest.org/>`__, see the `ScalaTest User Guide <http://www.scalatest.org/user_guide>`__.
+For more information on `ScalaTest <https://www.scalatest.org/>`__, see the `ScalaTest User Guide <https://www.scalatest.org/user_guide>`__.
 
-To make use of another ScalaTest testing style, such as `FunSpec <http://doc.scalatest.org/3.0.0/#org.scalatest.FunSpec>`__ 
+To make use of another ScalaTest testing style, such as `FunSpec <https://doc.scalatest.org/3.0.0/#org.scalatest.FunSpec>`__ 
 or others, see `Test Mixins <mixins.html>`__.
 
 More Information

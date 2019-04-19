@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Creating an injectable util-app App &#8212; Finatra 19.3.0 documentation</title>
+    <title>Creating an injectable util-app App &#8212; Finatra 19.4.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.3.0',
+        VERSION:     '19.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.3.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.4.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Creating an injectable TwitterServer" href="../twitter-server/index.html" />
     <link rel="prev" title="Custom Logback AsyncAppender" href="../logging/asyncappender.html" />
@@ -83,28 +83,29 @@ in a <a class="reference external" href="https://github.com/twitter/util/blob/de
 <div class="section" id="scala-example">
 <h2>Scala Example<a class="headerlink" href="#scala-example" title="Permalink to this headline">¶</a></h2>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
-      import com.twitter.inject.app.App
-      import com.twitter.inject.Logging
+import com.twitter.inject.app.App
+import com.twitter.inject.Logging
 
-      object MyAppMain extends MyApp
+object MyAppMain extends MyApp
 
-      class MyApp extends App with Logging  {
+class MyApp extends App with Logging  {
 
-        override val modules: Seq[Module] = Seq(
-          MyModule1)
+  override val modules: Seq[Module] = Seq(
+    MyModule1)
 
-        override protected def run(): Unit = {
-          // Core app logic goes here.
-        }
-      }
+  override protected def run(): Unit = {
+    // Core app logic goes here.
+  }
+}
 </pre></div>
 </div>
 <p>Then to test:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.Test
+import com.twitter.inject.app.EmbeddedApp
 
 class MyAppTest extends Test {
 
-  private val app = EmbeddedApp(new MyApp)
+  private val app = new EmbeddedApp(new MyApp)
 
   test(&quot;MyApp#runs&quot;) {
     app.main(&quot;some.flag1&quot; -&gt; &quot;value1&quot;, &quot;some.flag2&quot; -&gt; &quot;value2&quot;)

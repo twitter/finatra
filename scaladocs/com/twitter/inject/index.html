@@ -371,6 +371,10 @@
                         <a href="Logging.html" title="Mix this trait into a class/object to get helpful logging methods.">Logging</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="class" href="StackTransformer.html" title="StackTransformer allows plugins to modify Finatra filters before they are applied to controller routes."></a>
+                        <a href="StackTransformer.html" title="StackTransformer allows plugins to modify Finatra filters before they are applied to controller routes.">StackTransformer</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="trait" href="TwitterBaseModule.html" title="Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules"></a>
                         <a href="TwitterBaseModule.html" title="Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules">TwitterBaseModule</a>
                       </li><li class="current-entities indented3">
@@ -484,7 +488,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="Injector.html"><span class="name">Injector</span></a><span class="params">(<span name="underlying">underlying: <span class="extype" name="com.google.inject.Injector">google.inject.Injector</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="Injector.html"><span class="name">Injector</span></a><span class="params">(<span name="underlying">underlying: <span class="extype" name="com.google.inject.Injector">google.inject.Injector</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -518,6 +522,33 @@ Before:</p><pre><span class="kw">def</span> foo = {
     <span class="num">4</span> + <span class="num">5</span>
   }
 }</pre></span></dd></dl></div>
+    </li><li name="com.twitter.inject.StackTransformer" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="StackTransformerextendsStack.Transformer"></a><a id="StackTransformer:StackTransformer"></a>
+      <span class="permalink">
+      <a href="../../../com/twitter/inject/index.html#StackTransformerextendsStack.Transformer" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="StackTransformer allows plugins to modify Finatra filters before they are applied to controller routes." href="StackTransformer.html"><span class="name">StackTransformer</span></a><span class="result"> extends <span class="extype" name="com.twitter.finagle.Stack.Transformer">Transformer</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">StackTransformer allows plugins to modify Finatra filters before they are
+applied to controller routes.</p><div class="fullcomment"><div class="comment cmt"><p>StackTransformer allows plugins to modify Finatra filters before they are
+applied to controller routes.</p><p>Related to the Finagle <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/StackTransformer.html" class="extype" name="com.twitter.finagle.StackTransformer">com.twitter.finagle.StackTransformer</a>, which
+modifies Finagle server stacks, the Finatra <a href="StackTransformer.html" class="extype" name="com.twitter.inject.StackTransformer">StackTransformer</a> modifies
+Finatra controller routes.</p><p>If the goal is to share functionality between Finagle and Finatra, it's
+reasonable to want to use Finagle's StackTransformer directly on Finatra
+routes. However, the unit of functionality, and therefore meaningful reuse,
+is the stack module - the StackTransformer merely adapts stack modules to
+various stack contexts.</p><p>The stack module as the unit of reuse also makes it possible to install them
+in specific contexts; for example, modules that should be installed at the
+service-level but not at the route-level (e.g. admission controllers).
+</p></div></div>
     </li><li name="com.twitter.inject.TwitterBaseModule" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="TwitterBaseModuleextendsTwitterModuleFlagswithTwitterModuleLifecycle"></a><a id="TwitterBaseModule:TwitterBaseModule"></a>
       <span class="permalink">
@@ -563,7 +594,7 @@ Before:</p><pre><span class="kw">def</span> foo = {
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Guice/twitter.util.Flag integrations" href="TwitterModuleFlags.html"><span class="name">TwitterModuleFlags</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <a title="Guice/twitter.util.Flag integrations" href="TwitterModuleFlags.html"><span class="name">TwitterModuleFlags</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       
       <p class="shortcomment cmt">Guice/twitter.util.Flag integrations

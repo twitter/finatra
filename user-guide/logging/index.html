@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Introduction to Logging With Finatra &#8212; Finatra 19.3.0 documentation</title>
+    <title>Introduction to Logging With Finatra &#8212; Finatra 19.4.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.3.0',
+        VERSION:     '19.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.3.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.4.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Mapped Diagnostic Context (MDC) Support" href="mdc.html" />
     <link rel="prev" title="Example Projects" href="../getting-started/examples.html" />
@@ -73,8 +73,8 @@
             
   <div class="section" id="introduction-to-logging-with-finatra">
 <span id="logging"></span><h1>Introduction to Logging With Finatra<a class="headerlink" href="#introduction-to-logging-with-finatra" title="Permalink to this headline">¶</a></h1>
-<p>Finatra uses the <a class="reference external" href="http://www.slf4j.org/manual.html">SLF4J</a> API for framework logging. By coupling
-the framework to only the <a class="reference external" href="http://www.slf4j.org/manual.html">SLF4J</a> API, application developers
+<p>Finatra uses the <a class="reference external" href="https://www.slf4j.org/manual.html">SLF4J</a> API for framework logging. By coupling
+the framework to only the <a class="reference external" href="https://www.slf4j.org/manual.html">SLF4J</a> API, application developers
 are free to choose their actual logging implementation.</p>
 <div class="admonition-from-the-slf4j-documentation admonition">
 <p class="first admonition-title">From the SLF4J documentation</p>
@@ -87,11 +87,11 @@ plug in the desired logging framework at deployment time.&#8221;</p>
 and <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/inject/inject-server">finatra/inject/inject-server</a>
 transitively provide SLF4J bridges for the following logging providers:</p>
 <ul class="simple">
-<li><a class="reference external" href="http://en.wikipedia.org/wiki/Log4j">Log4j</a></li>
-<li><a class="reference external" href="http://commons.apache.org/proper/commons-logging/">commons-logging</a></li>
-<li><a class="reference external" href="http://docs.oracle.com/javase/7/docs/api/index.html?java/util/logging/package-summary.html">java.util.logging</a>:
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Log4j">Log4j</a></li>
+<li><a class="reference external" href="https://commons.apache.org/proper/commons-logging/">commons-logging</a></li>
+<li><a class="reference external" href="https://docs.oracle.com/javase/7/docs/api/index.html?java/util/logging/package-summary.html">java.util.logging</a>:
 there is a performance penalty for intercepting jul log messages, so <cite>c.t.inject.server.TwitterServer</cite>
-will install the <a class="reference external" href="http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html">SLF4JBridgeHandler</a>
+will install the <a class="reference external" href="https://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html">SLF4JBridgeHandler</a>
 which mitigates most of the performance penalty.</li>
 </ul>
 <div class="admonition tip">
@@ -99,11 +99,11 @@ which mitigates most of the performance penalty.</li>
 <p class="last">Note, if you are not using <cite>c.t.inject.server.TwitterServer</cite> or a subclass, e.g., you are
 building a command line application directly with <cite>c.t.inject.app.App</cite>, you can include the
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-modules/src/main/scala/com/twitter/inject/modules/LoggerModule.scala">LoggingModule</a>
-to attempt installation the <a class="reference external" href="http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html">SLF4JBridgeHandler</a>.</p>
+to attempt installation the <a class="reference external" href="https://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html">SLF4JBridgeHandler</a>.</p>
 </div>
 <p>For more information on the SLF4J bridges see the SLF4J
 <a class="reference external" href="https://www.slf4j.org/legacy.html">Bridging legacy APIs</a> documentation.</p>
-<p>Since <a class="reference external" href="http://www.slf4j.org/manual.html">SLF4J</a> is an interface, it requires an actual logging
+<p>Since <a class="reference external" href="https://www.slf4j.org/manual.html">SLF4J</a> is an interface, it requires an actual logging
 implementation. However, you should ensure that you <strong>do not</strong> end-up with <em>multiple</em> logging
 implementations on your classpath, e.g., you should not have multiple SLF4J bindings (<cite>slf4j-nop</cite>,
 <cite>slf4j-log4j12</cite>, <cite>slf4j-jdk14</cite>, etc.) nor the <cite>java.util.logging</cite> implementation, etc. on your

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Modules &#8212; Finatra 19.3.0 documentation</title>
+    <title>Modules &#8212; Finatra 19.4.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.3.0',
+        VERSION:     '19.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.3.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.4.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Binding Annotations" href="binding_annotations.html" />
     <link rel="prev" title="Application and Server Lifecycle" href="lifecycle.html" />
@@ -73,27 +73,60 @@
             
   <div class="section" id="modules">
 <span id="id1"></span><h1>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h1>
-<p>Modules are used in conjunction with dependency injection to specify <em>how</em> to instantiate an instance of a given type. They are especially useful when instantiation of an instance is dependent on some type of external configuration (see: <a class="reference external" href="flags.html">Flags</a>).</p>
-<p>We provide the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModule.scala">c.t.inject.TwitterModule</a> base class which extends the capabilities of the excellent Scala extensions for Google <a class="reference external" href="https://github.com/google/guice">Guice</a> provided by <a class="reference external" href="https://github.com/codingwell/scala-guice">codingwell/scala-guice</a>.</p>
+<p>Modules are used in conjunction with dependency injection to specify <em>how</em> to instantiate an instance
+of a given type. They are especially useful when instantiation of an instance is dependent on some
+type of external configuration (see: <a class="reference external" href="flags.html">Flags</a>).</p>
+<p>We provide the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModule.scala">c.t.inject.TwitterModule</a>
+base class which extends the capabilities of the excellent Scala extensions for Google
+<a class="reference external" href="https://github.com/google/guice">Guice</a> provided by <a class="reference external" href="https://github.com/codingwell/scala-guice">codingwell/scala-guice</a>.</p>
 <div class="section" id="defining-modules">
 <h2>Defining Modules<a class="headerlink" href="#defining-modules" title="Permalink to this headline">¶</a></h2>
-<p>Generally, modules are only required for helping the injector instantiate classes that you don&#8217;t control. Otherwise, you would simply add the <a class="reference external" href="https://github.com/google/guice/wiki/JSR330">JSR-330</a> annotations (e.g., <code class="docutils literal"><span class="pre">&#64;Inject</span></code>, <code class="docutils literal"><span class="pre">&#64;Singleton</span></code>) directly to the class definition.</p>
-<p>For example, if we wanted to declare an HTTP <a class="reference external" href="https://twitter.github.io/finagle/guide/Clients.html">Finagle Client</a> of type <cite>Service[Request, Response]</cite> as a constructor-arg to a <cite>MyService</cite> class:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyService @Inject() (
+<p>Generally, modules are only required for helping the injector instantiate classes that you don&#8217;t
+control. Otherwise, you would simply add the <a class="reference external" href="https://github.com/google/guice/wiki/JSR330">JSR-330</a>
+annotations (e.g., <code class="docutils literal"><span class="pre">&#64;Inject</span></code>, <code class="docutils literal"><span class="pre">&#64;Singleton</span></code>) directly to the class definition.</p>
+<p>For example, if we wanted to declare an HTTP <a class="reference external" href="https://twitter.github.io/finagle/guide/Clients.html">Finagle Client</a>
+of type <cite>Service[Request, Response]</cite> as a constructor-arg to a <cite>MyService</cite> class:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.Service
+import com.twitter.finagle.http.{Request, Response}
+import javax.inject.Inject
+
+class MyService @Inject() (
   httpClient: Service[Request, Response]) {
-  ...
+  ???
 }
 </pre></div>
 </div>
-<p>Adding the <code class="docutils literal"><span class="pre">&#64;Inject</span></code> documents that the <cite>MyService</cite> class participates in dependency injection. Note that the <code class="docutils literal"><span class="pre">&#64;Inject</span></code> annotation can be considered &#8220;metadata&#8221;. Nothing prevents you from instantiating <cite>MyService</cite> manually
-and passing it a <cite>Service[Request, Response]</cite> instance.</p>
-<p>However, when an instance of <cite>MyService</cite> is requested to be provided by the injector, the injector will attempt to provide all constructor arguments from the object graph &#8211; instantiating classes as necessary.</p>
-<p>The injector will look for public no-arg constructors failing if it cannot find one. In this case, <cite>c.t.finagle.Service</cite> <em>does not</em> have a public no-arg constructor so the injector needs help to satisfy the <cite>MyService</cite> constructor
-(for more information on constructor injection see the Guice <a class="reference external" href="https://github.com/google/guice/wiki/Injections#constructor-injection">documentation</a>).</p>
-<p>To provide this assistance, we can create a module which defines a provider of this type to the object graph for the injector to use.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object MyModule1 extends TwitterModule {
-  val dest = flag(name = &quot;client.dest&quot;, default = &quot;defaultDestIfNoneProvided&quot;, help = &quot;The client dest to use.&quot;)
-  val label = flag(name = &quot;client.label&quot;, default = &quot;defaultLabelIfNoneProvided&quot;, help = &quot;The client label to use.&quot;)
+<p>Adding the <code class="docutils literal"><span class="pre">&#64;Inject</span></code> documents that the <cite>MyService</cite> class participates in dependency injection.
+Note that the <code class="docutils literal"><span class="pre">&#64;Inject</span></code> annotation can be considered &#8220;metadata&#8221;. Nothing prevents you from
+instantiating <cite>MyService</cite> manually and passing it a <cite>Service[Request, Response]</cite> instance.</p>
+<p>However, when an instance of <cite>MyService</cite> is requested to be provided by the injector, the injector
+will attempt to provide all constructor arguments from the object graph &#8211; instantiating classes as
+necessary.</p>
+<p>The injector will look for public no-arg constructors failing if it cannot find one. In this case,
+<cite>c.t.finagle.Service</cite> <em>does not</em> have a public no-arg constructor so the injector needs help to
+satisfy the <cite>MyService</cite> constructor (for more information on constructor injection see the Guice
+<a class="reference external" href="https://github.com/google/guice/wiki/Injections#constructor-injection">documentation</a>).</p>
+<p>To provide this assistance, we can create a module which defines a provider of this type to the
+object graph for the injector to use.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Provides
+import com.twitter.finagle.Service
+import com.twitter.finagle.http.{Request, Response}
+import com.twitter.inject.TwitterModule
+import javax.inject.Singleton
+
+object MyModule1 extends TwitterModule {
+  val dest =
+    flag(
+      name = &quot;client.dest&quot;,
+      default = &quot;defaultDestIfNoneProvided&quot;,
+      help = &quot;The client dest to use.&quot;
+    )
+  val label =
+    flag(
+      name = &quot;client.label&quot;,
+      default = &quot;defaultLabelIfNoneProvided&quot;,
+      help = &quot;The client label to use.&quot;
+    )
 
   @Singleton
   @Provides
@@ -103,31 +136,64 @@ and passing it a <cite>Service[Request, Response]</cite> instance.</p>
 }
 </pre></div>
 </div>
-<p>Here we define a module to construct a singleton <a class="reference external" href="https://twitter.github.io/finagle/guide/Clients.html">Finagle Client</a> of type <cite>Service[Request, Response]</cite> which uses <a class="reference external" href="flags.html#passing-flag-values-as-command-line-arguments">flag values provided through command line arguments</a> to set the values of <cite>label</cite> and <cite>dest</cite>.</p>
+<p>Here we define a module to construct a singleton <a class="reference external" href="https://twitter.github.io/finagle/guide/Clients.html">Finagle Client</a>
+of type <cite>Service[Request, Response]</cite> which uses <a class="reference external" href="flags.html#passing-flag-values-as-command-line-arguments">flag values provided through command line arguments</a>
+to set the values of <cite>label</cite> and <cite>dest</cite>.</p>
 <div class="section" id="provides">
 <h3><code class="docutils literal"><span class="pre">&#64;Provides</span></code><a class="headerlink" href="#provides" title="Permalink to this headline">¶</a></h3>
-<p>The instance is provided by a module method annotated with <code class="docutils literal"><span class="pre">&#64;Provides</span></code> (<a class="reference external" href="https://github.com/google/guice/blob/master/core/src/com/google/inject/Provides.java">source</a>) which serves as a provider of the type to the object graph.</p>
-<p>Thus for the above example, we have now provided a way for the injector to construct an instance of type <cite>Service[Request, Response]</cite> allowing the injector to satisfy construction of <cite>MyService</cite> when the <cite>MyModule1</cite> is added to the server&#8217;s list of modules.</p>
+<p>The instance is provided by a module method annotated with <code class="docutils literal"><span class="pre">&#64;Provides</span></code>
+(<a class="reference external" href="https://github.com/google/guice/blob/master/core/src/com/google/inject/Provides.java">source</a>)
+which serves as a provider of the type to the object graph.</p>
+<p>Thus for the above example, we have now provided a way for the injector to construct an instance of
+type <cite>Service[Request, Response]</cite> allowing the injector to satisfy construction of <cite>MyService</cite> when
+the <cite>MyModule1</cite> is added to the server&#8217;s list of modules.</p>
+<p>Note: if your module method annotated with <code class="docutils literal"><span class="pre">&#64;Provides</span></code> has an argument list, all arguments to the
+method are provided by the injector (since it is the injector calling the method in the first place).</p>
+<p>Much like an <code class="docutils literal"><span class="pre">&#64;Inject</span></code> annotated constructor, the injector will attempt to provide all of the method
+arguments from the object graph &#8211; instantiating classes as necessary.</p>
+<p>For example:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span> import com.google.inject.Provides
+ import com.twitter.inject.TwitterModule
+ import javax.inject.Singleton
+
+ object MyModule1 extends TwitterModule {
+
+   @Singleton
+   @Provides
+   def providesBar(foo: Foo): Bar = {
+     new Bar(foo)
+   }
+}
+</pre></div>
+</div>
+<p>The argument <cite>foo: Foo</cite> will be &#8220;injected&#8221; in the sense that the injector will attempt to provide
+an instance of <cite>foo</cite> when invoking the method.</p>
 <p>See <a class="reference external" href="#module-configuration-in-servers">Module Configuration in Severs</a>.</p>
 </div>
 <div class="section" id="using-flags-in-modules">
 <h3>Using Flags in Modules<a class="headerlink" href="#using-flags-in-modules" title="Permalink to this headline">¶</a></h3>
-<p>As seen in the example above, <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flag.scala">TwitterUtil Flags</a> can be defined inside modules.
-This allows for re-usable scoping of external configuration that can be composed into a server via the module. See the section on <a class="reference external" href="flags.html">Flags</a> for more information.</p>
+<p>As seen in the example above, <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flag.scala">TwitterUtil Flags</a>
+can be defined inside modules. This allows for re-usable scoping of external configuration that can
+be composed into a server via the module. See the section on <a class="reference external" href="flags.html">Flags</a> for more information.</p>
 </div>
 <div class="section" id="best-practices">
 <h3>Best Practices<a class="headerlink" href="#best-practices" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>We recommend that you prefer using <code class="docutils literal"><span class="pre">&#64;Provides</span></code>-annotated methods over using the <cite>toInstance</cite> <a class="reference external" href="https://github.com/google/guice/wiki/InstanceBindings">bind DSL</a>.</li>
-<li>Modules should usually be defined as Scala <em>objects</em> as they typically contain no state and using an object makes usage of the module less verbose.</li>
-<li>Remember to add <code class="docutils literal"><span class="pre">&#64;Singleton</span></code> to your <code class="docutils literal"><span class="pre">&#64;Provides</span></code> method if you require only <strong>one</strong> instance per JVM process.</li>
+<li>We recommend that you prefer using <code class="docutils literal"><span class="pre">&#64;Provides</span></code>-annotated methods over using the <cite>toInstance</cite>
+<a class="reference external" href="https://github.com/google/guice/wiki/InstanceBindings">bind DSL</a>.</li>
+<li>Modules should usually be defined as Scala <em>objects</em> as they typically contain no state and using
+an object makes usage of the module less verbose.</li>
+<li>Remember to add <code class="docutils literal"><span class="pre">&#64;Singleton</span></code> to your <code class="docutils literal"><span class="pre">&#64;Provides</span></code> method if you require only <strong>one</strong> instance
+per JVM process.</li>
 </ul>
 </div>
 </div>
 <div class="section" id="module-configuration-in-servers">
 <h2>Module Configuration in Servers<a class="headerlink" href="#module-configuration-in-servers" title="Permalink to this headline">¶</a></h2>
 <p>A server can be configured with a list of modules:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class Server extends HttpServer {
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.HttpServer
+
+class Server extends HttpServer {
   override val modules = Seq(
     MyModule1,
     MyModule2,
@@ -135,20 +201,34 @@ This allows for re-usable scoping of external configuration that can be composed
     ClientAModule,
     ClientBModule)
 
-  ...
+  ???
 }
 </pre></div>
 </div>
-<p>How explicit to be in listing the modules for your server is up to you. If you include a module that is all ready <a class="reference external" href="modules.html#modules-depending-on-other-modules">included by another module</a>, Finatra will de-dupe the module list so there is no penalty, but you may want to prefer to define your list of modules as <a class="reference external" href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">DRY</a> as possible.</p>
-<p>For more information on server configuration see the <a class="reference external" href="../http/server.html">HTTP</a> or <a class="reference external" href="../thrift/server.html">Thrift</a> sections.</p>
+<p>How explicit to be in listing the modules for your server is up to you. If you include a module that
+is all ready <a class="reference external" href="modules.html#modules-depending-on-other-modules">included by another module</a>,
+Finatra will de-dupe the module list so there is no penalty, but you may want to prefer to define
+your list of modules as <a class="reference external" href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">DRY</a> as possible.</p>
+<p>For more information on server configuration see the <a class="reference external" href="../http/server.html">HTTP</a> or
+<a class="reference external" href="../thrift/server.html">Thrift</a> sections.</p>
 </div>
 <div class="section" id="module-lifecycle">
 <h2>Module Lifecycle<a class="headerlink" href="#module-lifecycle" title="Permalink to this headline">¶</a></h2>
-<p>Modules can hook into the Server lifecycle through the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala">c.t.inject.TwitterModuleLifecycle</a> which allows for a module to specify startup and shutdown functionality that is re-usable and scoped to the context of the Module.</p>
-<p>If your module provides a resource that requires one-time start-up or initialization you can do this by implementing the <cite>singletonStartup</cite> method in your TwitterModule. Conversely, if you want to clean up resources on graceful shutdown of the server you can implement the <cite>singletonShutdown</cite> method of your TwitterModule to close or shutdown any resources provided by the module.</p>
-<p>Additionally, there is also the <cite>TwitterModule#singletonPostWarmupComplete</cite> method which allows modules to hook into the server lifecycle after external ports have been bound, clients have been resolved, and the server is ready to accept traffic but before the <cite>App#run</cite> or <cite>Server#start</cite> callbacks are invoked.</p>
+<p>Modules can hook into the Server lifecycle through the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala">c.t.inject.TwitterModuleLifecycle</a>
+which allows for a module to specify startup and shutdown functionality that is re-usable and scoped
+to the context of the Module.</p>
+<p>If your module provides a resource that requires one-time start-up or initialization you can do this
+by implementing the <cite>singletonStartup</cite> method in your TwitterModule. Conversely, if you want to
+clean up resources on graceful shutdown of the server you can implement the <cite>singletonShutdown</cite>
+method of your TwitterModule to close or shutdown any resources provided by the module.</p>
+<p>Additionally, there is also the <cite>TwitterModule#singletonPostWarmupComplete</cite> method which allows
+modules to hook into the server lifecycle after external ports have been bound, clients have been
+resolved, and the server is ready to accept traffic but before the <cite>App#run</cite> or <cite>Server#start</cite>
+callbacks are invoked.</p>
 <p>E.g,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object MyModule extends TwitterModule {
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.{Injector, TwitterModule}
+
+object MyModule extends TwitterModule {
 
   override def singletonStartup(injector: Injector) {
     // initialize JVM-wide resources
@@ -165,51 +245,78 @@ This allows for re-usable scoping of external configuration that can be composed
 }
 </pre></div>
 </div>
-<p>See the <a class="reference external" href="lifecycle.html">Application and Server Lifecycle</a> section for more information on the application and server lifecycle.</p>
+<p>See the <a class="reference external" href="lifecycle.html">Application and Server Lifecycle</a> section for more information on the
+application and server lifecycle.</p>
 </div>
 <div class="section" id="modules-depending-on-other-modules">
 <h2>Modules Depending on Other Modules<a class="headerlink" href="#modules-depending-on-other-modules" title="Permalink to this headline">¶</a></h2>
-<p>There may be times where you would like to reuse types bound by one module inside another module. For instance, you may have a Module which provides a type <cite>Foo</cite> and need that instance when constructing a type <cite>Bar</cite> in another module. E.g.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object FooModule extends TwitterModule {
+<p>There may be times where you would like to reuse types bound by one module inside another module.
+For instance, you may have a Module which provides a type <cite>Foo</cite> and need that instance when
+constructing a type <cite>Bar</cite> in another module. E.g.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Provides
+import com.twitter.inject.TwitterModule
+import javax.inject.Singleton
+
+object FooModule extends TwitterModule {
 
   @Singleton
   @Provides
   def providesFoo: Foo = {
-    new Foo(....)
+    new Foo(???)
   }
 }
 </pre></div>
 </div>
 <p>How do you get access to the bound instance of Foo inside of another Module?</p>
 <p>Most often you are trying to inject the bound instance into a class as a class constructor-arg. E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>@Singleton
-class MyClassFoo @Inject() (
-  foo: Foo) {
-  ...
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import javax.inject.{Inject, Singleton}
+
+@Singleton
+class MyClassFoo @Inject()(foo: Foo) {
+  ???
 }
 </pre></div>
 </div>
-<p>You can do something similar in a module. However, instead of the injection point being the constructor annotated with <code class="docutils literal"><span class="pre">&#64;Inject</span></code>, it is the argument list of any <code class="docutils literal"><span class="pre">&#64;Provides</span></code>-annotated method.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object BarModule extends TwitterModule {
+<p>You can do something similar in a module. However, instead of the injection point being the
+constructor annotated with <code class="docutils literal"><span class="pre">&#64;Inject</span></code>, it is the argument list of any <code class="docutils literal"><span class="pre">&#64;Provides</span></code>-annotated
+method.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Provides
+import com.twitter.inject.TwitterModule
+import javax.inject.Singleton
+
+object BarModule extends TwitterModule {
   override val modules = Seq(FooModule)
 
-   @Singleton
-   @Provides
-   def providesBar(
-     foo: Foo): Bar = {
-     new Bar(foo)
-   }
+  @Singleton
+  @Provides
+  def providesBar(foo: Foo): Bar = {
+    new Bar(foo)
+  }
 }
 </pre></div>
 </div>
 <p>What&#8217;s happening here?</p>
-<p>Firstly, we&#8217;ve defined a <cite>BarModule</cite> that overrides the <cite>modules</cite> val with a <cite>Seq</cite> of modules that includes the <cite>FooModule</cite>. This guarantees that if the <cite>FooModule</cite> is not mixed into the list of modules for a server, the <cite>BarModule</cite> ensures it will be installed since it&#8217;s declared as a dependency and thus there will be a bound instance of <cite>Foo</cite> available for use in providing an instance of <cite>Bar</cite>.</p>
-<p>Finatra will de-dupe all modules before installing, so it is OK if a module appears twice in the server configuration, though you should strive to make this the exception.</p>
-<p>Secondly, we&#8217;ve defined a method which provides a <cite>Bar</cite> instance and add an argument of type <cite>Foo</cite> which will be provided by the Injector since injection is by type and the argument list to an <code class="docutils literal"><span class="pre">&#64;Provides</span></code> annotated method in a module is an injection point.</p>
+<p>Firstly, we&#8217;ve defined a <cite>BarModule</cite> that overrides the <cite>modules</cite> val with a <cite>Seq</cite> of modules that
+includes the <cite>FooModule</cite>. This guarantees that if the <cite>FooModule</cite> is not mixed into the list of
+modules for a server, the <cite>BarModule</cite> ensures it will be installed since it&#8217;s declared as a
+dependency and thus there will be a bound instance of <cite>Foo</cite> available for use in providing an
+instance of <cite>Bar</cite>.</p>
+<p>Finatra will de-dupe all modules before installing, so it is OK if a module appears twice in the
+server configuration, though you should strive to make this the exception.</p>
+<p>Secondly, we&#8217;ve defined a method which provides a <cite>Bar</cite> instance and add an argument of type <cite>Foo</cite>
+which will be provided by the Injector since injection is by type and the argument list to an
+<code class="docutils literal"><span class="pre">&#64;Provides</span></code> annotated method in a module is an injection point.</p>
 <p>Why?</p>
-<p>Because the Injector is what calls the <cite>providesBar</cite> method. When the Injector needs to provide an instance of <cite>Bar</cite> it looks for a &#8220;provider&#8221; of <cite>Bar</cite> in the list of modules. It will thus try to supply all arguments to the function from the object graph.</p>
-<p>We could continue this through another module. For example, if we wanted to provide a <cite>Baz</cite> which needs both a <cite>Foo</cite> and a <cite>Bar</cite> instance we could define a <cite>BazModule</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object BazModule extends TwitterModule {
+<p>Because the Injector is what calls the <cite>providesBar</cite> method. When the Injector needs to provide an
+instance of <cite>Bar</cite> it looks for a &#8220;provider&#8221; of <cite>Bar</cite> in the list of modules. It will thus try to
+supply all arguments to the function from the object graph.</p>
+<p>We could continue this through another module. For example, if we wanted to provide a <cite>Baz</cite> which
+needs both a <cite>Foo</cite> and a <cite>Bar</cite> instance we could define a <cite>BazModule</cite>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Provides
+import com.twitter.inject.TwitterModule
+import javax.inject.Singleton
+
+object BazModule extends TwitterModule {
   override val modules = Seq(
     FooModule,
     BarModule)
@@ -224,8 +331,12 @@ class MyClassFoo @Inject() (
 }
 </pre></div>
 </div>
-<p>Notice that we choose to list both the <cite>FooModule</cite> and <cite>BarModule</cite> in the modules for the <cite>BazModule</cite>. Yet, since we know that the <cite>BarModule</cite> includes the <cite>FooModule</cite> we could have choosen to leave it out. The <cite>providesBaz</cite> method in the module above takes in both <cite>Foo</cite> and a <cite>Bar</cite> instances as arguments.</p>
-<p>Since it declares the two modules, we&#8217;re assured that instances of these types will be available from the injector for our <cite>providesBaz</cite> method to use.</p>
+<p>Notice that we choose to list both the <cite>FooModule</cite> and <cite>BarModule</cite> in the modules for the <cite>BazModule</cite>.
+Yet, since we know that the <cite>BarModule</cite> includes the <cite>FooModule</cite> we could have choosen to leave it
+out. The <cite>providesBaz</cite> method in the module above takes in both <cite>Foo</cite> and a <cite>Bar</cite> instances as
+arguments.</p>
+<p>Since it declares the two modules, we&#8217;re assured that instances of these types will be available
+from the injector for our <cite>providesBaz</cite> method to use.</p>
 </div>
 </div>
 

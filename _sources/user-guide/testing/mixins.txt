@@ -3,7 +3,7 @@
 Test Mixins
 ===========
 
-Twitter's recommended ScalaTest test style is `FunSuite <http://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite>`__.
+Twitter's recommended ScalaTest test style is `FunSuite <https://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite>`__.
 
 You can use this ScalaTest test style by extending either:
 

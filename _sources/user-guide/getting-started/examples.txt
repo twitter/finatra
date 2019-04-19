@@ -8,8 +8,8 @@ Finatra includes a `collection of example applications and servers <https://gith
 Details
 -------
 
-For detailed information see the README.md within each example project. Every project builds with `sbt <http://www.scala-sbt.org/>`__ and at
-least one example also uses `Maven <http://maven.apache.org>`__.
+For detailed information see the README.md within each example project. Every project builds with `sbt <https://www.scala-sbt.org/>`__ and at
+least one example also uses `Maven <https://maven.apache.org>`__.
 
 Building and Running
 --------------------

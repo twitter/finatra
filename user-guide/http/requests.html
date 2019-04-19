@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>HTTP Requests &#8212; Finatra 19.3.0 documentation</title>
+    <title>HTTP Requests &#8212; Finatra 19.4.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.3.0',
+        VERSION:     '19.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.3.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.4.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="HTTP Responses" href="responses.html" />
     <link rel="prev" title="Defining HTTP Controllers" href="controllers.html" />
@@ -210,6 +210,17 @@ from the query string) and if present will be validated to be a date in the past
 <p>would parse the string &#8220;bar&#8221; into the value of <cite>QueryParamRequest#foo</cite> and parse the string &#8220;false&#8221;
 as a Boolean into the <cite>QueryParamRequest#isSkipped</cite> field.</p>
 <p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala">example</a>.</p>
+<p>You can parse comma-separated lists in your query parameters by setting <cite>commaSeparatedList</cite> to <cite>true</cite> in the QueryParam annotation, e.g.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class ManyUsersRequest(
+  @QueryParam(commaSeparatedList=true) ids: Seq[Long])
+</pre></div>
+</div>
+<p>Using this class in a route callback for a request:</p>
+<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/?ids=1,2,3</span></code></p>
+<p>would split the string &#8220;1,2,3&#8221; into &#8220;1&#8221;, &#8220;2&#8221;, and &#8220;3&#8221;, and then parse each into a <cite>Long</cite>.</p>
+<p>Note that turning this on will disallow repeating the &#8216;ids&#8217; parameter, ie.</p>
+<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/?ids=1&amp;ids=2,3</span></code></p>
+<p>will return a Bad Request with an appropriate error message when <cite>commaSeparatedList</cite> is <cite>true</cite>.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="formparam">
@@ -222,7 +233,7 @@ as a Boolean into the <cite>QueryParamRequest#isSkipped</cite> field.</p>
 <div class="section" id="header">
 <h4><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/java/com/twitter/finatra/request/Header.java">&#64;Header</a><a class="headerlink" href="#header" title="Permalink to this headline">¶</a></h4>
 <p>Read a header value specified by the case class field name or by the <code class="docutils literal"><span class="pre">&#64;Header</span></code> annotation value.
-You can use a Scala <a class="reference external" href="http://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html">&#8220;back-quote&#8221; literal</a>
+You can use a Scala <a class="reference external" href="https://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html">&#8220;back-quote&#8221; literal</a>
 for the field name when special characters are involved.</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>@Header `user-agent`: String
 </pre></div>

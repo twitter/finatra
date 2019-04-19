@@ -9,9 +9,9 @@ for an example `ThriftServer`.
 Thrift Server Definition
 ========================
 
-To start, add a dependency on the `finatra-thrift <http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-thrift_2.12%22>`__
-library. We also recommend using `Logback <http://logback.qos.ch/>`__ as your
-`SLF4J <http://www.slf4j.org/manual.html>`__ implementation. E.g., with sbt:
+To start, add a dependency on the `finatra-thrift <https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-thrift_2.12%22>`__
+library. We also recommend using `Logback <https://logback.qos.ch/>`__ as your
+`SLF4J <https://www.slf4j.org/manual.html>`__ implementation. E.g., with sbt:
 
 .. parsed-literal::
 

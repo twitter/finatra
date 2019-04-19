@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Future Gotchas &#8212; Finatra 19.3.0 documentation</title>
+    <title>Future Gotchas &#8212; Finatra 19.4.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.3.0',
+        VERSION:     '19.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.3.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.4.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Example Projects" href="examples.html" />
     <link rel="prev" title="Flags" href="flags.html" />
@@ -76,8 +76,8 @@
 <div class="section" id="c-t-util-future-vs-scala-concurrent-future">
 <h2><code class="docutils literal"><span class="pre">c.t.util.Future</span></code> vs. <code class="docutils literal"><span class="pre">scala.concurrent.Future</span></code><a class="headerlink" href="#c-t-util-future-vs-scala-concurrent-future" title="Permalink to this headline">¶</a></h2>
 <p>Finatra &#8211; like other frameworks based on Twitter&#8217;s <a class="reference external" href="https://twitter.github.io/finagle">Finagle</a> library &#8211; uses the <a class="reference external" href="https://github.com/twitter/util">TwitterUtil</a> <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala">c.t.util.Future</a> class.</p>
-<p>Twitter&#8217;s <cite>com.twitter.util.Future</cite> is similar to, but predates <a class="reference external" href="http://docs.scala-lang.org/overviews/core/futures.html">Scala&#8217;s</a>
-<a class="reference external" href="http://www.scala-lang.org/api/current/index.html#scala.concurrent.Future">scala.concurrent.Future</a> (introduced in Scala 2.10 and later backported to Scala 2.9.3) and is
+<p>Twitter&#8217;s <cite>com.twitter.util.Future</cite> is similar to, but predates <a class="reference external" href="https://docs.scala-lang.org/overviews/core/futures.html">Scala&#8217;s</a>
+<a class="reference external" href="https://www.scala-lang.org/api/current/index.html#scala.concurrent.Future">scala.concurrent.Future</a> (introduced in Scala 2.10 and later backported to Scala 2.9.3) and is
 <strong>not compatible</strong> without using a <a class="reference external" href="https://twitter.github.io/util/guide/util-cookbook/futures.html#conversions-between-twitter-s-future-and-scala-s-future">Bijection</a> to transform one into the other.</p>
 <p>It is important to remember that the <strong>Finatra framework uses and expects</strong> <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala">c.t.util.Future</a>.</p>
 <p>Finatra will <a class="reference external" href="https://github.com/twitter/finatra/commit/f7d617163d6981d779dca66fcc67ddd33c6aa083">attempt to perform a bijection</a> for you if your Controller route callback returns a <code class="docutils literal"><span class="pre">scala.concurrent.Future</span></code>. However, note that this bijection <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala#L193">may not be ideal in all cases</a> and you may wish to do the conversion yourself directly in your Controller.</p>

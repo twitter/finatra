@@ -38,7 +38,7 @@ protocol.
 Getting Started
 ---------------
 
-To start, add a dependency on the Finatra `inject-thrift-client <http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22inject-thrift-client_2.12%22>`__ library.
+To start, add a dependency on the Finatra `inject-thrift-client <https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22inject-thrift-client_2.12%22>`__ library.
 
 E.g., with sbt:
 

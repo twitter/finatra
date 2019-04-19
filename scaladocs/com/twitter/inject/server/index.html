@@ -470,58 +470,59 @@ occur causing your server to either function improperly or outright fail.</p><p>
         <tr><th class="doctbl-left"><p> Life Cycle Method             </p></th><th class="doctbl-left"><p> Ancillary Function(s)                   </p></th></tr>
       </thead>
       
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-left"><p> loadModules()                 </p></th><th class="doctbl-left"><p>                                         </p></th></tr>
       </thead>
       
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-left"><p> modules.postInjectorStartup() </p></th><th class="doctbl-left"><p> foreach.singletonStartup()              </p></th></tr>
       </thead>
       
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-right"><p> postInjectorStartup()         </p></th><th class="doctbl-right"><p> resolveFinagleClientsOnStartup(),       </p></th></tr>
       </thead>
       <tbody><tr><td class="doctbl-right"><p>                               </p></td><td class="doctbl-right"><p> setup()                                 </p></td></tr>
           </tbody>
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-left"><p> warmup()                      </p></th><th class="doctbl-left"><p>                                         </p></th></tr>
       </thead>
       
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-left"><p> beforePostWarmup()            </p></th><th class="doctbl-left"><p> LifeCycle.Warmup.prebindWarmup()        </p></th></tr>
       </thead>
       
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-left"><p> postWarmup() (binds ext ports)</p></th><th class="doctbl-left"><p> disable or announce admin server        </p></th></tr>
       </thead>
       
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-left"><p> afterpostwarmup()             </p></th><th class="doctbl-left"><p> LifeCycle.Warmup.warmupComplete()       </p></th></tr>
       </thead>
       
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-left"><p> setAppStarted()               </p></th><th class="doctbl-left"><p>                                         </p></th></tr>
       </thead>
       
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-left"><p> run()                         </p></th><th class="doctbl-left"><p> start()                                 </p></th></tr>
       </thead>
       
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-left"><p> Await on awaitables                                                     </p></th></tr>
       </thead>
       
-    </table><p>@Lifecycle
+    </table><p>+-------------------------------------------------------------------------+
+@Lifecycle
 }}}
 occur causing your server to either function improperly or outright fail.</p><p>If you are extending this trait, to implement your server, override the start() function, e.g.,</p><pre><span class="kw">import</span> com.twitter.inject.server.TwitterServer
 
@@ -539,58 +540,58 @@ occur causing your server to either function improperly or outright fail.</p><p>
         <tr><th class="doctbl-left"><p> Life Cycle Method             </p></th><th class="doctbl-left"><p> Ancillary Function(s)                   </p></th></tr>
       </thead>
       
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-left"><p> loadModules()                 </p></th><th class="doctbl-left"><p>                                         </p></th></tr>
       </thead>
       
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-left"><p> modules.postInjectorStartup() </p></th><th class="doctbl-left"><p> foreach.singletonStartup()              </p></th></tr>
       </thead>
       
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-right"><p> postInjectorStartup()         </p></th><th class="doctbl-right"><p> resolveFinagleClientsOnStartup(),       </p></th></tr>
       </thead>
       <tbody><tr><td class="doctbl-right"><p>                               </p></td><td class="doctbl-right"><p> setup()                                 </p></td></tr>
           </tbody>
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-left"><p> warmup()                      </p></th><th class="doctbl-left"><p>                                         </p></th></tr>
       </thead>
       
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-left"><p> beforePostWarmup()            </p></th><th class="doctbl-left"><p> LifeCycle.Warmup.prebindWarmup()        </p></th></tr>
       </thead>
       
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-left"><p> postWarmup() (binds ext ports)</p></th><th class="doctbl-left"><p> disable or announce admin server        </p></th></tr>
       </thead>
       
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-left"><p> afterpostwarmup()             </p></th><th class="doctbl-left"><p> LifeCycle.Warmup.warmupComplete()       </p></th></tr>
       </thead>
       
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-left"><p> setAppStarted()               </p></th><th class="doctbl-left"><p>                                         </p></th></tr>
       </thead>
       
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-left"><p> run()                         </p></th><th class="doctbl-left"><p> start()                                 </p></th></tr>
       </thead>
       
-    </table><table class="doctbl">
+    </table><p>+-------------------------------------------------------------------------+</p><table class="doctbl">
       <thead>
         <tr><th class="doctbl-left"><p> Await on awaitables                                                     </p></th></tr>
       </thead>
       
-    </table></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finatra/user-guide/twitter-server/index.html" target="_blank">Creating an Injectable TwitterServer</a></p></span></dd></dl></div>
+    </table><p>+-------------------------------------------------------------------------+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finatra/user-guide/twitter-server/index.html" target="_blank">Creating an Injectable TwitterServer</a></p></span></dd></dl></div>
     </li></ol>
             </div>
 

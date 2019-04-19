@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Application and Server Lifecycle &#8212; Finatra 19.3.0 documentation</title>
+    <title>Application and Server Lifecycle &#8212; Finatra 19.4.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.3.0',
+        VERSION:     '19.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.3.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.4.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Modules" href="modules.html" />
     <link rel="prev" title="TwitterServer Basics" href="twitter_server.html" />
@@ -92,7 +92,7 @@ fact it did not start properly as it could not bind to a port.</li>
 </ul>
 <p>Thus you do not have access to the <a class="reference external" href="https://github.com/twitter/util/blob/9fa550a269d2287b24e94921a352ba954f9f4bfb/util-app/src/main/scala/com/twitter/app/App.scala#L24">App</a>
 or <a class="reference external" href="https://github.com/twitter/twitter-server/blob/5fea9c2a6220ab9bbdb449c99c946e2aef322e7d/server/src/main/scala/com/twitter/server/TwitterServer.scala#L93">TwitterServer</a>
-<cite>main</cite> method. Instead, any logic should be contained in overriding an <code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code>-annotated
+<cite>main()</cite> method. Instead, any logic should be contained in overriding an <code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code>-annotated
 method or in the application or server callbacks.</p>
 <div class="admonition caution">
 <p class="first admonition-title">Caution</p>
@@ -102,13 +102,173 @@ accordingly.</p>
 </div>
 <p>See the <a class="reference external" href="../app/index.html">Creating an injectable App</a> and
 <a class="reference external" href="../twitter-server/index.html">Creating an injectable TwitterServer</a> sections for more information.</p>
-<div class="section" id="startup">
-<h2>Startup<a class="headerlink" href="#startup" title="Permalink to this headline">¶</a></h2>
-<p>At a high-level, the start-up lifecycle of a Finatra server looks like:</p>
+<div class="section" id="c-t-app-app-lifecycle">
+<h2><cite>c.t.app.App</cite> Lifecycle<a class="headerlink" href="#c-t-app-app-lifecycle" title="Permalink to this headline">¶</a></h2>
+<p>Finatra servers are, at their base, <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a> applications. Therefore it will help to first
+cover the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a> lifecycle.</p>
+<p>When writing a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a>, you extend the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a> trait and place your application logic
+inside of a public <cite>main()</cite> method.</p>
+<div class="code Scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.app.App
+
+class MyApp extends App {
+    val n = flag(&quot;n&quot;, 100, &quot;Number of items to process&quot;)
+
+    def main(): Unit = {
+      for (i &lt;- 0 until n()) process(i)
+    }
+}
+</pre></div>
+</div>
+<p><a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a> provides ways to tie into it&#8217;s lifecycle by allowing the user to register logic for
+different lifecycle phases. E.g., to run logic in the <cite>init</cite> lifecycle phase, the user can call
+the <cite>init</cite> function passing a callback to run. <cite>App</cite> collects every call to the <cite>init</cite> function and
+will run the callbacks in the order added during the <cite>init</cite> lifecycle phase.</p>
+<div class="code Scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.app.App
+
+class MyApp extends App {
+
+    init {
+        // initialization logic
+    }
+
+    premain {
+        // logic to run right before main()
+    }
+
+    def main(): Unit = {
+        // your application logic here
+    }
+
+    postmain {
+        // logic to run right after main()
+    }
+
+    onExit {
+        // closing logic
+    }
+
+    closeOnExitLast(MyClosable) // final closing logic
+}
+</pre></div>
+</div>
+<p>Additional hooks are <cite>premain</cite>, <cite>postmain</cite>, <cite>onExit</cite> and <cite>closeOnExitLast()</cite>, as shown above.</p>
+<p>The lifecycle could thus be represented:</p>
+<div class="code shell highlight-text"><div class="highlight"><pre><span></span>App#main() --&gt;
+App#nonExitingMain() --&gt;
+    bind LoadService bindings
+    run all init {} blocks
+    App#parseArgs() // read command line args into Flags
+    run all premain {} blocks
+    run all defined main() methods
+    run all postmain {} blocks
+    App#close() --&gt;
+        run all onExit {} blocks
+        run all Closables registered via closeOnExitLast()
+</pre></div>
+</div>
+<p>The Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><cite>c.t.inject.app.App</cite></a> extends the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a> lifecycle by adding more structure to the
+defined <cite>main()</cite> method.</p>
+<p>The lifecycle for a Finatra &#8220;injectable&#8221; App <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><cite>c.t.inject.app.App</cite></a> can be described:</p>
+<div class="code shell highlight-text"><div class="highlight"><pre><span></span>App#main() --&gt;
+App#nonExitingMain() --&gt;
+    bind LoadService bindings
+    run all init {} blocks
+    App#parseArgs() // read command line args into Flags
+    run all premain {} blocks
+    c.t.inject.app.App#main() --&gt;
+        load/install modules
+        modules#postInjectorStartup()
+        postInjectorStartup()
+        warmup()
+        beforePostWarmup()
+        postWarmup()
+        afterPostwarmup()
+        modules#postWarmupComplete()
+        register application started
+        c.t.inject.app.App#run()
+    run all postmain {} blocks
+    App#close() --&gt;
+        run all onExit {} blocks
+        run all Closables registered via closeOnExitLast()
+</pre></div>
+</div>
+<p>For more information on creating an &#8220;injectable&#8221; App with Finatra, see the documentation
+<a class="reference external" href="../app/index.html">here</a>.</p>
+</div>
+<div class="section" id="c-t-server-twitterserver-lifecycle">
+<h2><cite>c.t.server.TwitterServer</cite> Lifecycle<a class="headerlink" href="#c-t-server-twitterserver-lifecycle" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a> is an extension of <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a> and thus inherits the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a>
+lifecycle, but adds the ability to include &#8220;warmup&#8221; lifecycle phases which are just a refinement of
+the defined <cite>main()</cite> phase of the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a> lifecycle. That is, the
+<a class="reference external" href="https://github.com/twitter/twitter-server/blob/7d59c1bd46b2d96e4d0056f7860ca0344fe69247/server/src/main/scala/com/twitter/server/Lifecycle.scala#L85"><cite>c.t.server.Lifecycle.Warmup</cite></a> trait exposes two methods, <cite>prebindWarmup</cite> and <cite>warmupComplete</cite>.</p>
+<p>These methods are provided for the user to call when they make sense typically at points in the
+user defined <cite>main()</cite> method before awaiting on the external interface.</p>
+<p>The idea being that within your user defined <cite>main()</cite> method you may want to have logic to warmup
+the server before accepting traffic on any defined external interface. By default the <cite>prebindWarmup</cite>
+method attempts to run a <cite>System.gc</cite> in order to promote objects to old gen (in an attempt to incur a
+GC pause <em>before</em> your server accepts any traffic).</p>
+<p>Users then have a way to signal that warmup is done and the server is now ready to start
+accepting traffic. This is done by calling <cite>warmupComplete()</cite>.</p>
+<p>To add these phases, users would mix-in the <a class="reference external" href="https://github.com/twitter/twitter-server/blob/7d59c1bd46b2d96e4d0056f7860ca0344fe69247/server/src/main/scala/com/twitter/server/Lifecycle.scala#L85"><cite>c.t.server.Lifecycle.Warmup</cite></a> trait into their
+<a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a> extension.</p>
+<p>Finatra defines an &#8220;injectable&#8221; TwitterServer, <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala"><cite>c.t.inject.server.TwitterServer</cite></a> which itself is an
+extension of <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a> and the Finatra &#8220;injectable&#8221; App, <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><cite>c.t.inject.app.App</cite></a>.</p>
+<p>The Finatra &#8220;injectable&#8221; TwitterServer, <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala"><cite>c.t.inject.server.TwitterServer</cite></a> mixes in the
+<a class="reference external" href="https://github.com/twitter/twitter-server/blob/7d59c1bd46b2d96e4d0056f7860ca0344fe69247/server/src/main/scala/com/twitter/server/Lifecycle.scala#L85"><cite>c.t.server.Lifecycle.Warmup</cite></a> trait by default and further refines the &#8220;warmup&#8221; lifecycle as
+described in the next section.</p>
+<p>For more information on creating an &#8220;injectable&#8221; TwitterServer with Finatra, see the documentation
+<a class="reference external" href="../twitter-server/index.html">here</a>.</p>
+</div>
+<div class="section" id="server-startup-lifecycle">
+<h2>Server Startup Lifecycle<a class="headerlink" href="#server-startup-lifecycle" title="Permalink to this headline">¶</a></h2>
+<p>Finatra servers inherit the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a> lifecycle and, as mentioned, also mix-in the TwitterServer
+<a class="reference external" href="https://github.com/twitter/twitter-server/blob/7d59c1bd46b2d96e4d0056f7860ca0344fe69247/server/src/main/scala/com/twitter/server/Lifecycle.scala#L85"><cite>c.t.server.Lifecycle.Warmup</cite></a> trait. On top of that, Finatra further refines the lifecycle by adding
+more defined phases. These phases all run within a defined <cite>main()</cite> and thus in the &#8220;main&#8221; <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a>
+lifecycle phase and is intended to ensure that the underlying dependency injection framework is
+properly instantiated, all Twitter Util <a class="reference external" href="./flags.html">Flags</a> are properly parsed, external
+interfaces are properly bound and the application is correctly started with minimal intervention
+needed on the part of the implementor.</p>
+<p>In text, at a high-level, the start-up lifecycle of a Finatra server looks like:</p>
+<div class="code shell highlight-text"><div class="highlight"><pre><span></span>App#main() --&gt;
+App#nonExitingMain() --&gt;
+    bind LoadService bindings
+    run all init {} blocks
+    App#parseArgs() // read command line args into Flags
+    run all premain {} blocks --&gt;
+        add routes to TwitterServer AdminHttpServer
+        bind interface and start TwitterServer AdminHttpServer
+    c.t.inject.server.TwitterServer#main() --&gt;
+        c.t.inject.app.App#main() --&gt;
+            load/install modules
+            modules#postInjectorStartup()
+            postInjectorStartup() --&gt;
+                resolve finagle clients
+                setup()
+            warmup()
+            beforePostWarmup() --&gt;
+                Lifecycle#prebindWarmup()
+            postWarmup() --&gt;
+                announce TwitterServer AdminHttpServer interface
+                bind external interfaces
+                announce external interfaces
+            afterPostwarmup() --&gt;
+                Lifecycle#warmupComplete()
+            modules#postWarmupComplete()
+            register application started
+            c.t.inject.app.App#run() --&gt;
+                c.t.inject.server.TwitterServer#start()
+        block on awaitables
+    run all postmain {} blocks
+    App#close() --&gt;
+        run all onExit {} blocks
+        run all Closables registered via closeOnExitLast()
+</pre></div>
+</div>
+<p>Visually:</p>
 <img alt="../../_images/FinatraLifecycle.png" src="../../_images/FinatraLifecycle.png" />
 </div>
-<div class="section" id="shutdown">
-<h2>Shutdown<a class="headerlink" href="#shutdown" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="server-shutdown-lifecycle">
+<h2>Server Shutdown Lifecycle<a class="headerlink" href="#server-shutdown-lifecycle" title="Permalink to this headline">¶</a></h2>
 <p>Upon <em>graceful</em> shutdown of an application or a server, all registered <cite>onExit</cite>, <cite>closeOnExit</cite>, and
 <cite>closeOnExitLast</cite> blocks are executed. See
 <a class="reference external" href="https://github.com/twitter/util/blob/9fa550a269d2287b24e94921a352ba954f9f4bfb/util-app/src/main/scala/com/twitter/app/App.scala#L72">c.t.app.App#exits</a>
@@ -168,8 +328,8 @@ onExit {
 }
 </pre></div>
 </div>
-<p>However, this is obviously not ideal and there is an easier way. You can enforce the ordering of closing Closables
-by using <cite>closeOnExitLast</cite>.</p>
+<p>However, this is obviously not ideal and there is an easier way. You can enforce the ordering of
+closing Closables by using <cite>closeOnExitLast</cite>.</p>
 <p>A <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Closable.scala"><cite>c.t.util.Closable</cite></a> passed to <cite>closeOnExitLast</cite> will be closed <em>after</em> all <cite>onExit</cite> and
 <cite>closeOnExit</cite> functions are executed. E.g.,</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>closeOnExit(subscriber)
@@ -279,8 +439,10 @@ see the <a class="reference external" href="../app/index.html">Creating an injec
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Application and Server Lifecycle</a><ul>
-<li><a class="reference internal" href="#startup">Startup</a></li>
-<li><a class="reference internal" href="#shutdown">Shutdown</a><ul>
+<li><a class="reference internal" href="#c-t-app-app-lifecycle"><cite>c.t.app.App</cite> Lifecycle</a></li>
+<li><a class="reference internal" href="#c-t-server-twitterserver-lifecycle"><cite>c.t.server.TwitterServer</cite> Lifecycle</a></li>
+<li><a class="reference internal" href="#server-startup-lifecycle">Server Startup Lifecycle</a></li>
+<li><a class="reference internal" href="#server-shutdown-lifecycle">Server Shutdown Lifecycle</a><ul>
 <li><a class="reference internal" href="#ordering-onexit-and-closeonexit-functions">Ordering <cite>onExit</cite> and <cite>closeOnExit</cite> functions?</a></li>
 <li><a class="reference internal" href="#what-to-do-if-you-don-t-have-a-c-t-util-closable">What to do if you don&#8217;t have a <cite>c.t.util.Closable</cite>?</a></li>
 </ul>

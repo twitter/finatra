@@ -3,7 +3,7 @@
 JSON Validation Framework
 =========================
 
-Finatra provides a simple validation framework inspired by `JSR-303 <http://docs.oracle.com/javaee/6/tutorial/doc/gircz.html>`__.
+Finatra provides a simple validation framework inspired by `JSR-303 <https://docs.oracle.com/javaee/6/tutorial/doc/gircz.html>`__.
 
 The validations framework integrates Finatra's custom `case class` deserializer to efficiently apply per field validations as request parsing is performed. The following validation annotations are available (and additional validations can be easily created):
 
