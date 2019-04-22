@@ -240,11 +240,11 @@ lazy val finatraExamples =
   // START EXAMPLES
   Seq[sbt.ProjectReference](
     benchmarkServer,
+    exampleHttpServer,
     exampleHttpJavaServer,
     exampleInjectJavaServer,
     exampleTwitterServer,
     exampleWebDashboard,
-    helloWorld,
     streamingExample,
     thriftExampleServer,
     thriftJavaExampleServer,
@@ -270,7 +270,7 @@ lazy val root = (project in file("."))
       -- inProjects(benchmarks)
       // START EXAMPLES
       -- inProjects(benchmarkServer, exampleHttpJavaServer, exampleInjectJavaServer,
-         exampleTwitterServer, exampleWebDashboard, helloWorld,
+         exampleTwitterServer, exampleWebDashboard, exampleHttpServer,
          streamingExample, thriftExampleIdl, thriftExampleServer,
          thriftJavaExampleIdl, thriftJavaExampleServer, twitterClone)
       // END EXAMPLES
@@ -937,12 +937,12 @@ lazy val site = (project in file("doc"))
 
 // START EXAMPLES
 
-lazy val helloWorld = (project in file("examples/hello-world"))
+lazy val exampleHttpServer = (project in file("examples/http-server"))
   .settings(exampleServerSettings)
   .settings(noPublishSettings)
   .settings(
-    name := "hello-world",
-    moduleName := "hello-world"
+    name := "http-server",
+    moduleName := "http-server"
   ).dependsOn(
     http % "test->test;compile->compile",
     injectCore % "test->test",

@@ -9,7 +9,9 @@ class TwitterCloneStartupTest extends FeatureTest {
   override val server = new EmbeddedHttpServer(
     stage = Stage.PRODUCTION,
     twitterServer = new TwitterCloneServer,
-    flags = Map("com.twitter.server.resolverMap" -> "firebase=nil!")
+    flags = Map(
+      "dtab.add" -> "/s/firebaseio/finatra => /$/nil"
+    )
   )
 
   test("Server#startup") {

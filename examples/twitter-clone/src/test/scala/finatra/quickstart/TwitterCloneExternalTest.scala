@@ -2,6 +2,7 @@ package finatra.quickstart
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import com.google.inject.Stage
 import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.Test
@@ -30,19 +31,21 @@ class TwitterCloneExternalTest extends Test {
        should only ever be run manually and not within any continuous
        integration workflow.*/
 
+    val firebaseHost = "finatra.firebaseio.com"
     val server = new EmbeddedHttpServer(
       new TwitterCloneServer,
+      stage = Stage.PRODUCTION,
       flags = Map(
-        "firebase.host" -> "finatra.firebaseio.com",
-        "com.twitter.server.resolverMap" -> "firebase=finatra.firebaseio.com:443"
+        "firebase.host" -> firebaseHost,
+        "dtab.add" -> s"/s/firebaseio/finatra => /$$/inet/$firebaseHost/443"
       )
     )
     try {
       val result = server.httpPost(
         path = "/tweet",
-        postBody = """
+        postBody = s"""
         {
-          "message": "Hello #FinagleCon",
+          "message": "Lorem ipsum dolor sit amet.",
           "location": {
             "lat": "37.7821120598956",
             "long": "-122.400612831116"
@@ -51,10 +54,10 @@ class TwitterCloneExternalTest extends Test {
         }
           """,
         andExpect = Created,
-        withJsonBody = """
+        withJsonBody = s"""
         {
           "id": "0",
-          "message": "Hello #FinagleCon",
+          "message": "Lorem ipsum dolor sit amet.",
           "location": {
             "lat": "37.7821120598956",
             "long": "-122.400612831116"
@@ -71,7 +74,7 @@ class TwitterCloneExternalTest extends Test {
         withJsonBody = result.contentString
       )
 
-      println(s"Firebase Tweet: https://finatra.firebaseio.com/tweets/${tweet.id}")
+      println(s"Firebase Tweet: https://$firebaseHost/tweets/${tweet.id}")
     } finally {
       server.close()
     }

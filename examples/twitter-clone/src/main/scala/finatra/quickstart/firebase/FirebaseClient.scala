@@ -1,12 +1,19 @@
 package finatra.quickstart.firebase
 
+import com.twitter.finatra.http.response.ResponseUtils
 import com.twitter.finatra.httpclient.{HttpClient, RequestBuilder}
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.util.Future
+import com.twitter.inject.Logging
+import com.twitter.util.{Future, Return, Throw}
 import javax.inject.{Inject, Singleton}
 
+case class FirebaseError(error: String)
+
 @Singleton
-class FirebaseClient @Inject()(httpClient: HttpClient, mapper: FinatraObjectMapper) {
+class FirebaseClient @Inject()(
+  httpClient: HttpClient,
+  mapper: FinatraObjectMapper)
+  extends Logging {
 
   /** Writes data to path */
   def put[T](path: String, any: T): Future[Unit] = {
@@ -14,7 +21,17 @@ class FirebaseClient @Inject()(httpClient: HttpClient, mapper: FinatraObjectMapp
       .put(path)
       .body(mapper.writeValueAsString(any))
 
-    httpClient.execute(putRequest).unit
+    httpClient.execute(putRequest).transform {
+      case Return(response) if ResponseUtils.is4xxOr5xxResponse(response) =>
+        error(s"Firebase returned a non-OK response: ${response.statusCode}")
+        val errorResponse = mapper.parse[FirebaseError](response.getContentString())
+        Future.exception(new Exception(errorResponse.error))
+      case Return(_) =>
+        Future.Unit
+      case Throw(e) =>
+        error(e.getMessage, e)
+        Future.Unit
+    }
   }
 
   /** Reads JSON data at path */

@@ -11,7 +11,7 @@ junit_tests(
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "3rdparty/jvm/org/slf4j:slf4j-simple",
         "finagle/finagle-http/src/main/scala",
-        "finatra/examples/hello-world/src/main/scala",
+        "finatra/examples/http-server/src/main/scala",
         "finatra/http/src/test/scala:test-deps",
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-core/src/test/scala:test-deps",

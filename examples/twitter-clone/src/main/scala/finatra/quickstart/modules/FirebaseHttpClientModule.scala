@@ -10,7 +10,7 @@ object FirebaseHttpClientModule extends HttpClientModule {
   private val sslHostFlag = flag("firebase.host", "", "firebase hostname")
 
   override def sslHostname = Some(sslHostFlag())
-  override val dest = "flag!firebase"
+  override val dest = "/s/firebaseio/finatra"
 
   override def retryPolicy =
     Some(

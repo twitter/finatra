@@ -1,22 +1,22 @@
 target(
     dependencies = [
-        "finatra/examples/hello-world/src/main/scala",
+        "finatra/examples/http-server/src/main/scala",
     ],
 )
 
 target(
     name = "tests",
     dependencies = [
-        "finatra/examples/hello-world/src/test/scala",
+        "finatra/examples/http-server/src/test/scala",
     ],
 )
 
 jvm_binary(
     name = "bin",
-    basename = "finatra-hello-world",
+    basename = "finatra-http-server",
     main = "com.twitter.hello.HelloWorldServerMain",
     dependencies = [
-        ":hello-world",
+        ":http-server",
         "twitter-server/logback-classic/src/main/scala",
     ],
     excludes = [

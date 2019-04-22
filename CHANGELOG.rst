@@ -7,6 +7,13 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+* inject-app: Add `c.t.inject.app.DtabResolution` to help users apply supplemental Dtabs added by 
+  setting the dtab.add flag. This will append the supplemental Dtabs to the 
+  Dtab.base in a premain function. ``PHAB_ID=D303813``
+
+* finatra-examples: Update "twitter-clone" example to use `Dtabs` instead of the deprecated `resolverMap`.
+  Move the "hello-world" example to "http-server". ``PHAB_ID=D303813``
+
 19.4.0
 ------
 
@@ -14,19 +21,19 @@ Added
 ~~~~~
 
 * inject-server: Add `globalFlags` argument to EmbeddedTwitterServer, which will
-   allow for scoping a `c.t.a.GlobalFlag` property change to the lifecycle of the
-   underlying TwitterServer, as a `c.t.a.GlobalFlag` is normally scoped to the JVM/process.
-   This change is also reflected in `EmbeddedHttpServer` and `EmbeddedThriftServer` constructors.
-   ``PHAB_ID=D288032``
+  allow for scoping a `c.t.a.GlobalFlag` property change to the lifecycle of the
+  underlying TwitterServer, as a `c.t.a.GlobalFlag` is normally scoped to the JVM/process.
+  This change is also reflected in `EmbeddedHttpServer` and `EmbeddedThriftServer` constructors.
+  ``PHAB_ID=D288032``
 
 * inject-utils: add `toOrderedMap` implicit conversion for `java.util.Map` ``PHAB_ID=D295005``
 
 * finatra-kafka-streams: Add flag `rocksdb.manifest.preallocation.size` with default value
-    `4.megabytes` to `c.t.f.k.c.RocksDbFlags` and set value in
-    `c.t.f.k.c.FinatraRocksDBConfig`. ``PHAB_ID=D290130``
+  `4.megabytes` to `c.t.f.k.c.RocksDbFlags` and set value in
+  `c.t.f.k.c.FinatraRocksDBConfig`. ``PHAB_ID=D290130``
 
 * finatra-http: Add `commaSeparatedList` boolean parameter to QueryParams, for
-   parsing comma-separated query parameters into collection types. ``PHAB_ID=D268989``
+  parsing comma-separated query parameters into collection types. ``PHAB_ID=D268989``
 
 Changed
 ~~~~~~~

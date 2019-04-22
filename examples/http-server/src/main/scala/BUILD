@@ -5,7 +5,7 @@ scala_library(
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "finagle/finagle-http/src/main/scala",
-        "finatra/examples/hello-world/src/main/resources",
+        "finatra/examples/http-server/src/main/resources",
         "finatra/http/src/main/scala",
         "finatra/inject/inject-app/src/main/scala",
         "finatra/inject/inject-core/src/main/scala",
