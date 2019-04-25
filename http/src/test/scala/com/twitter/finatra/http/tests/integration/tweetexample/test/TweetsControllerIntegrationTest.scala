@@ -129,6 +129,38 @@ class TweetsControllerIntegrationTest extends FeatureTest {
     )
   }
 
+  test("post Reader[Buf] to Reader[String]") {
+    server.httpPost(
+      "/tweets/reader_buf_to_string",
+      postBody = "[1,2,3,4,5]",
+      andExpect = Status.Ok,
+      withBody = """"[1,2,3,4,5]"""")
+  }
+
+  test("post Reader[Buf] to Reader[Buf]") {
+    server.httpPost(
+      "/tweets/reader_buf",
+      postBody = "[1,2,3,4,5]",
+      andExpect = Status.Ok,
+      withBody = "[1,2,3,4,5]")
+  }
+
+  test("post AsyncStream[Buf] to AsyncStream[String]") {
+    server.httpPost(
+      "/tweets/asyncStream_buf_to_string",
+      postBody = "[1,2,3,4,5]",
+      andExpect = Status.Ok,
+      withBody = """"[1,2,3,4,5]"""")
+  }
+
+  test("post AsyncStream[Buf] to AsyncStream[Buf]") {
+    server.httpPost(
+      "/tweets/asyncStream_buf",
+      postBody = "[1,2,3,4,5]",
+      andExpect = Status.Ok,
+      withBody = "[1,2,3,4,5]")
+  }
+
   test("post streaming json without chunks") {
     server.httpPost("/tweets/streaming", """
       [1,2,3,4,5]

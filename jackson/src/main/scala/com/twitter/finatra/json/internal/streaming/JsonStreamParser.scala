@@ -19,10 +19,15 @@ private[finatra] class JsonStreamParser @Inject()(mapper: FinatraObjectMapper) {
 
   def parseJson[T: Manifest](reader: Reader[Buf]): Reader[T] = {
     val asyncJsonParser = new AsyncJsonParser
-    reader.flatMap { buf =>
-      val bufs: Seq[Buf] = asyncJsonParser.feedAndParse(buf)
-      val values: Seq[T] = bufs.map(mapper.parse[T])
-      Reader.fromSeq(values)
+    // If the deserialized Type is Buf, don't parse.
+    if (manifest[T] == manifest[Buf]) {
+      reader.asInstanceOf[Reader[T]]
+    } else {
+      reader.flatMap { buf =>
+        val bufs: Seq[Buf] = asyncJsonParser.feedAndParse(buf)
+        val values: Seq[T] = bufs.map(mapper.parse[T])
+        Reader.fromSeq(values)
+      }
     }
   }
 }

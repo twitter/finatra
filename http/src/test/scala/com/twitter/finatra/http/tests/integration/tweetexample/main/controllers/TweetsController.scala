@@ -8,6 +8,7 @@ import com.twitter.finatra.http.tests.integration.tweetexample.main.services.Twe
 import com.twitter.finatra.http.response.{StreamingResponse, StreamingResponseUtils}
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.{Duration, Future, Try}
+import java.nio.charset.StandardCharsets
 import javax.inject.Inject
 import scala.collection.mutable
 
@@ -28,6 +29,23 @@ class TweetsController @Inject()(
   post("/tweets/streaming") { ids: Reader[Long] =>
     tweetsRepository.getByIds(ids)
   }
+
+  post("/tweets/reader_buf_to_string") { bufs: Reader[Buf] =>
+    bufs.map(buf => Buf.decodeString(buf, StandardCharsets.UTF_8))
+  }
+
+  post("/tweets/reader_buf") { bufs: Reader[Buf] =>
+    bufs
+  }
+
+  post("/tweets/asyncStream_buf_to_string") { bufs: AsyncStream[Buf] =>
+    bufs.map(buf => Buf.decodeString(buf, StandardCharsets.UTF_8))
+  }
+
+  post("/tweets/asyncStream_buf") { bufs: AsyncStream[Buf] =>
+    bufs
+  }
+
 
   get("/tweets/streaming_json") { request: Request =>
     tweetsRepository.getByIds(Reader.fromSeq(Seq(0, 1, 2, 3, 4, 5)))
