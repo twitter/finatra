@@ -38,6 +38,8 @@ Added
 Changed
 ~~~~~~~
 
+* finatra: Update snakeyaml to version 1.24. ``PHAB_ID=D232547``
+
 * finatra-kafka: Upgraded kafka libraries from 2.0.0 to 2.2.0.
   - `Kafka 2.0.1 Release Notes <https://archive.apache.org/dist/kafka/2.0.1/RELEASE_NOTES.html>`__
   - `Kafka 2.1.0 Release Notes <https://archive.apache.org/dist/kafka/2.1.0/RELEASE_NOTES.html>`__

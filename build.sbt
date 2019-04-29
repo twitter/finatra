@@ -75,7 +75,7 @@ lazy val versions = new {
   val scalaGuice = "4.1.0"
   val scalaTest = "3.0.0"
   val slf4j = "1.7.21"
-  val snakeyaml = "1.12"
+  val snakeyaml = "1.24"
   val specs2 = "2.4.17"
 }
 
