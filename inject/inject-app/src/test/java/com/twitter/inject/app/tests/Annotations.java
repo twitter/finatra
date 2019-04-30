@@ -7,7 +7,7 @@ public final class Annotations {
   private Annotations() {
   }
 
-  public static final Down down() {
+  public static Down down() {
     return new Down() {
         public int hashCode() {
           // This is specified in java.lang.Annotation.
@@ -16,11 +16,7 @@ public final class Annotations {
 
         /** Down specific equals */
         public boolean equals(Object o) {
-          if (!(o instanceof Down)) {
-            return false;
-          }
-
-          return true;
+          return o instanceof Down;
         }
 
         public String toString() {
@@ -35,20 +31,16 @@ public final class Annotations {
       };
   }
 
-  public static final Up up() {
+  public static Up up() {
     return new Up() {
       public int hashCode() {
         // This is specified in java.lang.Annotation.
         return 127 * "value".hashCode();
       }
 
-      /** DUpown specific equals */
+      /** Up specific equals */
       public boolean equals(Object o) {
-        if (!(o instanceof Up)) {
-          return false;
-        }
-
-        return true;
+        return o instanceof Up;
       }
 
       public String toString() {

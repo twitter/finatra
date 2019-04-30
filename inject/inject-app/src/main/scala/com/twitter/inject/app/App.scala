@@ -85,6 +85,8 @@ trait App extends com.twitter.app.App with Logging {
 
   /* Protected */
 
+  override protected def failfastOnFlagsNotParsed: Boolean = true
+
   /** Production modules */
   protected def modules: Seq[Module] = Seq()
 

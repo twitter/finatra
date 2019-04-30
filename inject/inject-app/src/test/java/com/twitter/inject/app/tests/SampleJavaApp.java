@@ -12,7 +12,7 @@ public class SampleJavaApp extends AbstractApp {
 
   private String sampleServiceResponse = "";
 
-  public String getSampleServiceResponse() {
+  String getSampleServiceResponse() {
     return this.sampleServiceResponse;
   }
 
