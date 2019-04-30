@@ -4,6 +4,7 @@ import com.google.inject.{Module, Stage}
 import com.twitter.app.{Flag, FlagParseException, FlagUsageError, Flags}
 import com.twitter.inject.Injector
 import com.twitter.inject.app.internal.InstalledModules
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * A [[com.google.inject.Injector]] usable for testing. This injector can be used for
@@ -80,11 +81,12 @@ class TestInjector(
   private[this] val flag: Flags =
     new Flags(this.getClass.getSimpleName, includeGlobal = true, failFastUntilParsed = true)
 
+  private[this] val _started: AtomicBoolean = new AtomicBoolean(false)
+  private[inject] def started: Boolean = _started.get
+
   /* Mutable state */
 
   private[this] var overrides: Seq[Module] = overrideModules
-  private[this] var starting = false
-  private[this] var started = false
   private[this] var underlying: Injector = _
 
   /* Public */
@@ -120,9 +122,7 @@ class TestInjector(
   /* Private */
 
   private[this] def start(): Unit = {
-    if (!starting && !started) {
-      starting = true //mutation
-
+    if (_started.compareAndSet(false, true)) {
       val moduleFlags = InstalledModules.findModuleFlags(modules ++ overrides)
       moduleFlags.foreach(flag.add)
       parseFlags(flag, flags, moduleFlags)
@@ -135,9 +135,6 @@ class TestInjector(
           stage = stage
         )
         .injector
-
-      started = true //mutation
-      starting = false //mutation
     }
   }
 

@@ -11,9 +11,12 @@ import com.twitter.inject.server.PortUtils.getPort
 import com.twitter.util.lint.{GlobalRules, Rule}
 import com.twitter.util.{Await, Closable, Duration, ExecutorServiceFuturePool, Future}
 import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.atomic.AtomicBoolean
 import org.scalatest.Matchers
 import scala.collection.JavaConverters._
 import scala.collection.SortedMap
+import scala.reflect.runtime.currentMirror
+import scala.util.control.Breaks._
 import scala.util.control.NonFatal
 
 object EmbeddedTwitterServer {
@@ -34,7 +37,6 @@ object EmbeddedTwitterServer {
    * @see [[https://docs.scala-lang.org/tour/singleton-objects.html]]
    */
   private def isSingletonObject(server: com.twitter.server.TwitterServer) = {
-    import scala.reflect.runtime.currentMirror
     currentMirror.reflect(server).symbol.isModuleClass
   }
 
@@ -57,7 +59,6 @@ object EmbeddedTwitterServer {
       firstPass
     }
   }
-
 
   /**
    * A type alias that represents a function that generates a `T` as input (`=> T`)
@@ -85,11 +86,10 @@ object EmbeddedTwitterServer {
    *
    * @note This is `private[server]` scoped for testing purposes
    */
-  private[server] def mkGlobalFlagsFn[T](
-    fns: Iterable[ReducibleFn[T]]
-  ): ReducibleFn[T] =
+  private[server] def mkGlobalFlagsFn[T](fns: Iterable[ReducibleFn[T]]): ReducibleFn[T] =
     fns.reduce[ReducibleFn[T]] {
-      case (fn, collector) => input => collector(fn(input))
+      case (fn, collector) =>
+        input => collector(fn(input))
     }
 }
 
@@ -151,8 +151,17 @@ class EmbeddedTwitterServer(
   def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage) =
     this(twitterServer, flags = flags.asScala.toMap, stage = stage)
 
-  def this(twitterServer: Ports, flags: java.util.Map[String, String], globalFlags: java.util.Map[GlobalFlag[_], String], stage: Stage) =
-    this(twitterServer, flags = flags.asScala.toMap, stage = stage, globalFlags = globalFlags.toOrderedMap)
+  def this(
+    twitterServer: Ports,
+    flags: java.util.Map[String, String],
+    globalFlags: java.util.Map[GlobalFlag[_], String],
+    stage: Stage
+  ) =
+    this(
+      twitterServer,
+      flags = flags.asScala.toMap,
+      stage = stage,
+      globalFlags = globalFlags.toOrderedMap)
 
   /* Main Constructor */
 
@@ -175,15 +184,20 @@ class EmbeddedTwitterServer(
 
   val name: String = twitterServer.name
   val EmbeddedName: String = embeddedName(name)
+
   private[this] val FuturePoolName: String = s"finatra/embedded/$EmbeddedName"
   private[this] val futurePool: ExecutorServiceFuturePool = PoolUtils.newFixedPool(FuturePoolName)
+
   private[this] val closables: ConcurrentLinkedQueue[Closable] = new ConcurrentLinkedQueue()
+
+  // start() ends up calling itself, thus we want to bypass/skip if we are already starting
+  private[this] val starting: AtomicBoolean = new AtomicBoolean(false)
+  private[this] val started: AtomicBoolean = new AtomicBoolean(false)
+  private[this] val _closed: AtomicBoolean = new AtomicBoolean(false)
+  protected[inject] def closed: Boolean = _closed.get
 
   /* Mutable state */
 
-  private[this] var starting: Boolean = false
-  private[this] var started: Boolean = false
-  protected[inject] var closed: Boolean = false
   private[this] var _mainResult: Future[Unit] = _
   // This needs to be volatile because it is set in futurePool onFailure
   // which is a different thread than waitForServerStarted, where it's read.
@@ -230,29 +244,25 @@ class EmbeddedTwitterServer(
    * If the underlying embedded TwitterServer has started.
    * @return True if the server has started, False otherwise.
    */
-  def isStarted: Boolean = started
+  def isStarted: Boolean = started.get
 
   /**
    * Start the underlying TwitterServer.
    * @note Start is called in various places to "lazily start the server" as needed.
    */
   def start(): Unit = {
-    if (!starting && !started) {
-      starting = true //mutation
-
+    if (starting.compareAndSet(false, true)) {
       runNonExitingMain()
 
       if (waitForWarmup) {
         waitForServerStarted()
       }
-
-      started = true //mutation
-      starting = false //mutation
+      logStartup()
+      started.set(true)
     }
 
-    //because start() can be called lazily multiple times,
-    //subsequent calls will not enter the initialization loop.
-    //we need to throw here if there was an error for the initial start() call.
+    // if there is/was an exception on startup, we want it to be thrown *every* time
+    // this method is called.
     throwIfStartupFailed()
   }
 
@@ -311,7 +321,7 @@ class EmbeddedTwitterServer(
    * all resources have been fully relinquished.
    */
   def close(after: Duration): Unit = {
-    if (!closed) {
+    if (_closed.compareAndSet(false, true)) {
       infoBanner(s"Closing ${this.getClass.getSimpleName}: " + name, disableLogging)
       try {
         val underlyingClosable = Closable.make { deadline =>
@@ -322,7 +332,10 @@ class EmbeddedTwitterServer(
         Await.result(Future.collect(closables.asScala.toIndexedSeq.map(_.close(after))))
       } catch {
         case NonFatal(e) =>
-          info(s"Error while closing ${this.getClass.getSimpleName}: ${e.getMessage}\n", disableLogging)
+          info(
+            s"Error while closing ${this.getClass.getSimpleName}: ${e.getMessage}\n",
+            disableLogging
+          )
           e.printStackTrace()
           shutdownFailure = Some(e)
       } finally {
@@ -334,7 +347,6 @@ class EmbeddedTwitterServer(
             info(s"Unable to shutdown $FuturePoolName future pool executor. $t", disableLogging)
             t.printStackTrace()
         }
-        closed = true
       }
     }
   }
@@ -346,7 +358,7 @@ class EmbeddedTwitterServer(
    */
   def assertCleanShutdown(): Unit = {
     if (!closed) {
-      throw new IllegalStateException(s"$name is not closed")
+      throw new IllegalStateException(s"$name is not closed.")
     } else if (shutdownFailure.isDefined) {
       throw shutdownFailure.get
     }
@@ -489,12 +501,14 @@ class EmbeddedTwitterServer(
       info(s"Applying GlobalFlag scoping to $name embedded server: $globalFlags")
 
       // take the globalFlags and map them to their local scoped functions
-      val globalFlagLocalFns: Iterable[ReducibleFn[Unit]] = globalFlags.map { case (k, v) =>
-        val f: ReducibleFn[Unit] = func => k.letParse[Unit](v){
-          info(s"Applying GlobalFlag${k.name}=$v")
-          func
-        }
-        f
+      val globalFlagLocalFns: Iterable[ReducibleFn[Unit]] = globalFlags.map {
+        case (k, v) =>
+          val f: ReducibleFn[Unit] = func =>
+            k.letParse[Unit](v) {
+              info(s"Applying GlobalFlag${k.name}=$v")
+              func
+          }
+          f
       }
 
       // reduce all of the functions down to a single input function that can accept `fn`
@@ -504,31 +518,31 @@ class EmbeddedTwitterServer(
       globalsFn(fn)
     }
 
-  private def main(allArgs: Array[String]): Unit = try {
-    twitterServer.nonExitingMain(allArgs)
-  } catch {
-    case e: OutOfMemoryError if e.getMessage == "PermGen space" =>
-      println(
-        "OutOfMemoryError(PermGen) in server startup. " +
-          "This is most likely due to the incorrect setting of a client " +
-          "flag (not defined or invalid). Increase your PermGen to see the exact error message (e.g. -XX:MaxPermSize=256m)"
-      )
-      e.printStackTrace()
-      System.exit(-1)
-    case e if !NonFatal(e) =>
-      println("Fatal exception in server startup.")
-      throw new Exception(e) // Need to rethrow as a NonFatal for FuturePool to "see" the exception :/
-  }
-
-  private def runNonExitingMain(): Unit = {
-    // we call distinct here b/c port flag args can potentially be added multiple times
-    val allArgs = combineArgs().distinct
+  private[this] def runNonExitingMain(): Unit = {
+    val allArgs = combineArgs()
     info("\nStarting " + name + " with args: " + allArgs.mkString(" "), disableLogging)
 
     _mainResult = futurePool {
-      withLocals(main(allArgs))
+      withLocals {
+        try {
+          twitterServer.nonExitingMain(allArgs)
+        } catch {
+          case e: OutOfMemoryError if e.getMessage == "PermGen space" =>
+            println(
+              "OutOfMemoryError(PermGen) in server startup. " +
+                "This is most likely due to the incorrect setting of a client " +
+                "flag (not defined or invalid). Increase your PermGen to see the exact error message (e.g. -XX:MaxPermSize=256m)"
+            )
+            e.printStackTrace()
+            System.exit(-1)
+          case e if !NonFatal(e) =>
+            println("Fatal exception in server startup.")
+            throw new Exception(e) // Need to rethrow as a NonFatal for FuturePool to "see" the exception :/
+        }
+      }
     }.onFailure { e =>
-      //If we rethrow, the exception will be suppressed by the Future Pool's monitor. Instead we save off the exception and rethrow outside the pool
+      // If we rethrow, the exception will be suppressed by the Future Pool's monitor.
+      // Instead we save off the exception and rethrow outside the pool
       startupFailedThrowable = Some(e)
     }
   }
@@ -538,32 +552,40 @@ class EmbeddedTwitterServer(
     throw startupFailedThrowable.get
   }
 
+  private[this] def serverStarted: Boolean = {
+    if (isInjectable) {
+      injectableServer.started
+    } else {
+      nonInjectableServerStarted()
+    }
+  }
+
   private def waitForServerStarted(): Unit = {
-    for (_ <- 1 to maxStartupTimeSeconds) {
-      info("Waiting for warmup phases to complete...", disableLogging)
+    breakable {
+      for (_ <- 1 to maxStartupTimeSeconds) {
+        info("Waiting for warmup phases to complete...", disableLogging)
 
-      throwIfStartupFailed()
+        throwIfStartupFailed()
 
-      if ((isInjectable && injectableServer.started)
-        || (!isInjectable && nonInjectableServerStarted)) {
-        /* TODO: RUN AND WARN ALWAYS
-           For now only run if failOnValidation = true until
-           we allow for a better way to isolate the server startup
-           in feature tests */
-        if (failOnLintViolation) {
-          checkStartupLintIssues()
+        if (serverStarted) {
+          /* TODO: RUN AND WARN ALWAYS
+          For now only run if failOnValidation = true until
+          we allow for a better way to isolate the server startup
+          in feature tests */
+          if (failOnLintViolation) {
+            checkStartupLintIssues()
+          }
+
+          started.set(true)
+          break
         }
 
-        started = true
-        logStartup()
-        return
+        Thread.sleep(1000)
       }
-
-      Thread.sleep(1000)
+      throw new StartupTimeoutException(
+        s"Embedded server: $name failed to startup within $maxStartupTimeSeconds seconds."
+      )
     }
-    throw new StartupTimeoutException(
-      s"Embedded server: $name failed to startup within $maxStartupTimeSeconds seconds."
-    )
   }
 
   private def checkStartupLintIssues(): Unit = {

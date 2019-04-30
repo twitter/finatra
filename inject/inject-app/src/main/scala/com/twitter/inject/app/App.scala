@@ -5,6 +5,7 @@ import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.app.internal.InstalledModules
 import com.twitter.inject.app.internal.InstalledModules.findModuleFlags
 import com.twitter.inject.{Injector, InjectorModule, Logging}
+import java.util.concurrent.atomic.AtomicBoolean
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ArrayBuffer
 
@@ -30,7 +31,9 @@ trait App extends com.twitter.app.App with Logging {
   private val frameworkModules: ArrayBuffer[Module] = ArrayBuffer(InjectorModule)
   private val frameworkOverrideModules: ArrayBuffer[Module] = ArrayBuffer()
 
-  private[inject] var started: Boolean = false
+  private[this] val _started: AtomicBoolean = new AtomicBoolean(false)
+  private[inject] def started: Boolean = _started.get
+
   private[inject] var stage: Stage = Stage.PRODUCTION
   private var installedModules: InstalledModules = _
 
@@ -65,7 +68,7 @@ trait App extends com.twitter.app.App with Logging {
     registerInstalledModulesExits()
 
     /* Lifecycle is complete, mark the server as started. */
-    setAppStarted(true)
+    _started.set(true)
     info(s"$name started.")
     /* Execute callback for further configuration or to start long-running background processes */
     startApplication()
@@ -184,10 +187,6 @@ trait App extends com.twitter.app.App with Logging {
     funcs.foreach { fn =>
       onExit(fn.apply())
     }
-  }
-
-  private def setAppStarted(value: Boolean): Unit = {
-    started = value
   }
 
   private def startApplication(): Unit = {

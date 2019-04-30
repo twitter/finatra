@@ -7,6 +7,11 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+* inject-app|server: Fix capturing of flag ordering from Modules for adding to the App's `c.t.app.Flags`
+  instance to match the semantics of directly calling `c.t.app.Flags#add`. Prefer `AtomicBoolean`
+  instances over where we currently use mutable `Boolean` instances in `c.t.inject.app.App`, `c.t.inject.app.TestInjector`,
+  and `c.t.inject.server.EmbeddedTwitterServer`. ``PHAB_ID=D306897``
+
 * inject-app: Add `c.t.inject.app.DtabResolution` to help users apply supplemental Dtabs added by 
   setting the dtab.add flag. This will append the supplemental Dtabs to the 
   Dtab.base in a premain function. ``PHAB_ID=D303813``

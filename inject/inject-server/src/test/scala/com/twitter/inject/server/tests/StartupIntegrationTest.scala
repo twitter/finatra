@@ -1,6 +1,6 @@
 package com.twitter.inject.server.tests
 
-import com.google.inject.AbstractModule
+import com.google.inject.{AbstractModule, Module}
 import com.twitter.app.CloseException
 import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.http.Status
@@ -24,7 +24,7 @@ class StartupIntegrationTest extends Test {
   }
 
   test("ensure health check succeeds when guice config is good") {
-    val server = new EmbeddedTwitterServer(new SimpleHttpTwitterServer)
+    val server = new EmbeddedTwitterServer(new SimpleHttpTwitterServer, disableTestLogging = true)
     run(server) {
       server.assertHealthy()
       server.httpGetAdmin("/admin/server_info", andExpect = Status.Ok)
@@ -39,21 +39,21 @@ class StartupIntegrationTest extends Test {
   }
 
   test("embedded raw com.twitter.server.Twitter starts up") {
-    val server = new EmbeddedTwitterServer(twitterServer = new ExtendedBaseTwitterServer)
+    val server = new EmbeddedTwitterServer(twitterServer = new ExtendedBaseTwitterServer, disableTestLogging = true)
     run(server) {
       server.assertHealthy()
     }
   }
 
   test("TwitterServer starts up") {
-    val server = new EmbeddedTwitterServer(twitterServer = new TwitterServer {})
+    val server = new EmbeddedTwitterServer(twitterServer = new TwitterServer {}, disableTestLogging = true)
     run(server) {
       server.assertHealthy()
     }
   }
 
   test("ensure server health check fails when guice config fails fast") {
-    val server = new EmbeddedTwitterServer(new FailFastServer)
+    val server = new EmbeddedTwitterServer(new FailFastServer, disableTestLogging = true)
     run(server) {
       intercept[Exception] {
         server.start()
@@ -62,7 +62,7 @@ class StartupIntegrationTest extends Test {
   }
 
   test("ensure startup fails when base twitter server preMain throws exception") {
-    val server = new EmbeddedTwitterServer(new PremainErrorBaseTwitterServer)
+    val server = new EmbeddedTwitterServer(new PremainErrorBaseTwitterServer, disableTestLogging = true)
     run(server) {
       intercept[Exception] {
         server.start()
@@ -71,7 +71,7 @@ class StartupIntegrationTest extends Test {
   }
 
   test("ensure startup fails when preMain throws exception") {
-    val server = new EmbeddedTwitterServer(new ServerPremainException)
+    val server = new EmbeddedTwitterServer(new ServerPremainException, disableTestLogging = true)
     run(server) {
       intercept[Exception] {
         server.start()
@@ -80,31 +80,30 @@ class StartupIntegrationTest extends Test {
   }
 
   test("ensure http server starts after warmup") {
-    pending //only manually run since uses sleeps
     class WarmupServer extends TwitterServer {
 
       override def warmup(): Unit = {
-        println("Warmup begin")
-        Thread.sleep(1000)
-        println("Warmup end")
+        info("Warmup begin")
+        for (_ <- 1 to 10) { info("Warming up...") }
+        info("Warmup end")
       }
     }
 
-    val server = new EmbeddedTwitterServer(twitterServer = new WarmupServer)
+    val server = new EmbeddedTwitterServer(twitterServer = new WarmupServer, disableTestLogging = true)
     run(server) {
       server.assertHealthy()
     }
   }
 
   test("calling install without a TwitterModule works") {
-    val server = new EmbeddedTwitterServer(new ServerWithModuleInstall)
+    val server = new EmbeddedTwitterServer(new ServerWithModuleInstall, disableTestLogging = true)
     run(server) {
       server.start()
     }
   }
 
   test("calling install with a TwitterModule throws exception") {
-    val server = new EmbeddedTwitterServer(new ServerWithTwitterModuleInstall)
+    val server = new EmbeddedTwitterServer(new ServerWithTwitterModuleInstall, disableTestLogging = true)
     run(server) {
       intercept[Exception] {
         server.start()
@@ -113,8 +112,8 @@ class StartupIntegrationTest extends Test {
   }
 
   test("injector called before main") {
-    val app = new App {
-      override val modules = Seq(new TwitterModule {})
+    val app: App = new App {
+      override val modules: Seq[Module] = Seq(new TwitterModule {})
     }
     val e = intercept[Exception] {
       app.injector
@@ -144,7 +143,7 @@ class StartupIntegrationTest extends Test {
     val underlying = new ErrorOnExitTwitterServer
     // ErrorOnExitTwitterServer throws 5 non-fatal errors and 1 fatal error on shutdown,
     // the fatal is in the closeOnExitLast, so we see all the errors
-    val server = new EmbeddedTwitterServer(underlying)
+    val server = new EmbeddedTwitterServer(underlying, disableTestLogging = true)
 
     try {
       server.assertHealthy()
@@ -163,7 +162,7 @@ class StartupIntegrationTest extends Test {
 
   test("fatal server errors on shutdown") {
     // FatalErrorOnExitTwitterServer throws 3 fatal errors on shutdown
-    val server = new EmbeddedTwitterServer(new FatalErrorOnExitTwitterServer)
+    val server = new EmbeddedTwitterServer(new FatalErrorOnExitTwitterServer, disableTestLogging = true)
 
     server.assertHealthy()
 
@@ -175,7 +174,7 @@ class StartupIntegrationTest extends Test {
 
   test("fatal base server error on shutdown") {
     // FatalOnExitBaseTwitterServer throws 1 fatal on shutdown
-    val server = new EmbeddedTwitterServer(new FatalOnExitBaseTwitterServer)
+    val server = new EmbeddedTwitterServer(new FatalOnExitBaseTwitterServer, disableTestLogging = true)
 
     server.assertHealthy()
     server.close()
@@ -199,7 +198,7 @@ class StartupIntegrationTest extends Test {
 }
 
 class FailFastServer extends TwitterServer {
-  override val modules = Seq(new AbstractModule {
+  override val modules: Seq[Module] = Seq(new AbstractModule {
     def configure(): Unit = {
       throw new StartupTestException("guice module exception")
     }
@@ -209,7 +208,7 @@ class FailFastServer extends TwitterServer {
 class SimpleTwitterServer extends TwitterServer {
   /* ensure enough time to close resources */
   override val defaultCloseGracePeriod: Duration = 15.seconds
-  override val modules = Seq()
+  override val modules: Seq[Module] = Seq.empty[Module]
 }
 
 class SimpleHttpTwitterServer extends TwitterServer {}
@@ -217,7 +216,7 @@ class SimpleHttpTwitterServer extends TwitterServer {}
 class ServerWithTwitterModuleInstall extends TwitterServer {
   /* ensure enough time to close resources */
   override val defaultCloseGracePeriod: Duration = 15.seconds
-  override val modules = Seq(new TwitterModule {
+  override val modules: Seq[Module] = Seq(new TwitterModule {
     override def configure(): Unit = {
       install(new TwitterModule {})
     }
@@ -227,7 +226,7 @@ class ServerWithTwitterModuleInstall extends TwitterServer {
 class ServerWithModuleInstall extends TwitterServer {
   /* ensure enough time to close resources */
   override val defaultCloseGracePeriod: Duration = 15.seconds
-  override val modules = Seq(new TwitterModule {
+  override val modules: Seq[Module] = Seq(new TwitterModule {
     override def configure(): Unit = {
       install(new AbstractModule {
         override def configure(): Unit = {}
@@ -266,7 +265,7 @@ class ExtendedBaseTwitterServer extends BaseTwitterServer {
 class ErrorOnExitTwitterServer extends TwitterServer {
   var moduleAShutdown, moduleBShutdown = false
 
-  override val modules = Seq(new TwitterModule {
+  override val modules: Seq[Module] = Seq(new TwitterModule {
     override protected[inject] def singletonShutdown(injector: Injector): Unit = {
       moduleAShutdown = true
       throw new Exception("FORCED EXCEPTION in SingletonShutdown")
@@ -310,7 +309,7 @@ class ErrorOnExitTwitterServer extends TwitterServer {
 }
 
 class FatalErrorOnExitTwitterServer extends TwitterServer {
-  override val modules = Seq(new TwitterModule {
+  override val modules: Seq[Module] = Seq(new TwitterModule {
     override protected[inject] def singletonShutdown(injector: Injector): Unit =
       throw new InterruptedException("FORCED FATAL EXCEPTION in SingletonShutdown")
   }, new TwitterModule {

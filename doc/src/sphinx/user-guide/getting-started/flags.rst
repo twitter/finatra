@@ -185,9 +185,24 @@ This annotation allows parsed Flag values to be injected into classes (and provi
    `Seq[T]` or `Map[K, V]` as the |Flaggable[T]|_ trait does not currently carry enough type
    information to construct the correct binding key.
 
-When defining a Flag you can also simply dereference the Flag value directly within the Module or
-server (in lieu of using the |@Flag|_ annotation). Just keep a local reference to the created Flag
-then use the `Flag#apply <https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L171>`__,
+Holding a Reference
+^^^^^^^^^^^^^^^^^^^
+
+When defining a Flag you can also dereference the Flag value directly within the Module or server
+(in lieu of using the |@Flag|_ annotation).
+
+.. caution::
+
+    Note that holding onto a reference of a Flag can be potentially dangerous since Flag definitions
+    can currently be overridden with another definition. Flags are distinct `by name only <https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L251>`__. The Flag you are referencing can be replaced in the stateful `c.t.app.Flags <https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L89>`__
+    instance with another instance created with the same name. The last Flag added wins and thus
+    when the Flags are parsed your reference may not get a parsed value, resulting in the reference
+    retaining its default value or no value if it has no specified default.
+
+    You should only do this if you are guaranteed that the Flag defined for which you keep a
+    reference will not be redefined making your reference obselete.
+
+Keep a local reference to the created Flag then use the `Flag#apply <https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L171>`__,
 `Flag#get <https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L205>`__
 or other methods, depending e.g.:
 
@@ -208,13 +223,7 @@ or other methods, depending e.g.:
       }
     }
 
-.. caution::
-
-    Note that holding onto a reference of a Flag can be potentially dangerous since Flag definitions can currently be overridden
-    with another definition. Flags are distinct `by name only <https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L251>`__. The Flag you are referencing can be replaced in the stateful `c.t.app.Flags <https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L89>`__
-    instance with another instance created with the same name. The last Flag added wins and thus when the Flags are parsed
-    your reference may not get a parsed value, resulting in the reference retaining its default value or no value if it has no specified
-    default. 
+Again, note that caution should be used when defining flags in this manner.
 
 Flag Value Injection
 ^^^^^^^^^^^^^^^^^^^^

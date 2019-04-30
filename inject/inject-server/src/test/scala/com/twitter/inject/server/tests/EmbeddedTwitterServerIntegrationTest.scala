@@ -1,7 +1,7 @@
 package com.twitter.inject.server.tests
 
 import com.google.inject.name.Names
-import com.google.inject.{Provides, Stage}
+import com.google.inject.{Module, Provides, Stage}
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finagle.{Http, Service}
 import com.twitter.inject.server.EmbeddedTwitterServer.ReducibleFn
@@ -107,7 +107,7 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
       }
 
       e.getMessage.contains("Error parsing flag \"foo.bar\": flag undefined") should be(true)
-      e.getMessage equals(e2.getMessage)
+      e.getMessage equals e2.getMessage
     } finally {
       server.close()
     }
@@ -117,7 +117,7 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
     val server = new EmbeddedTwitterServer(
       stage = Stage.PRODUCTION,
       twitterServer = new TwitterServer {
-        override val modules = Seq(new TwitterModule() {
+        override val modules: Seq[Module] = Seq(new TwitterModule() {
           @Provides
           @Singleton
           def providesFoo: Integer = {
@@ -150,6 +150,7 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
             super.postInjectorStartup()
           }
         },
+        disableTestLogging = true,
         globalFlags = ListMap(
           com.twitter.finagle.stats.logOnShutdown -> "true"
         )
