@@ -9,7 +9,7 @@ import com.twitter.finatra.validation.{
   Validator
 }
 
-private[finatra] object SizeValidator {
+private[json] object SizeValidator {
 
   def errorMessage(
     resolver: ValidationMessageResolver,
@@ -35,7 +35,7 @@ private[finatra] object SizeValidator {
   }
 }
 
-private[finatra] class SizeValidator(
+private[json] class SizeValidator(
   validationMessageResolver: ValidationMessageResolver,
   annotation: Size
 ) extends Validator[Size, Any](validationMessageResolver, annotation) {

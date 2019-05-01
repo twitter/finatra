@@ -8,7 +8,7 @@ import com.twitter.finatra.validation.{
   Validator
 }
 
-private[finatra] object MaxValidator {
+private[json] object MaxValidator {
 
   def errorMessage(resolver: ValidationMessageResolver, value: Any, maxValue: Long): String = {
 
@@ -16,7 +16,7 @@ private[finatra] object MaxValidator {
   }
 }
 
-private[finatra] class MaxValidator(
+private[json] class MaxValidator(
   validationMessageResolver: ValidationMessageResolver,
   annotation: Max
 ) extends Validator[Max, Any](validationMessageResolver, annotation) {

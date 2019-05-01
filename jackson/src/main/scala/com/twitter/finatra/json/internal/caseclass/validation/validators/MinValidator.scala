@@ -8,7 +8,7 @@ import com.twitter.finatra.validation.{
   Validator
 }
 
-private[finatra] object MinValidator {
+private[json] object MinValidator {
 
   def errorMessage(resolver: ValidationMessageResolver, value: Any, minValue: Long): String = {
 
@@ -16,7 +16,7 @@ private[finatra] object MinValidator {
   }
 }
 
-private[finatra] class MinValidator(
+private[json] class MinValidator(
   validationMessageResolver: ValidationMessageResolver,
   annotation: Min
 ) extends Validator[Min, Any](validationMessageResolver, annotation) {

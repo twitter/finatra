@@ -6,7 +6,7 @@ import com.twitter.finatra.validation._
 import com.twitter.util.{Return, Throw, Try}
 import scala.util.matching.Regex
 
-private[finatra] object PatternValidator {
+private[json] object PatternValidator {
   def errorMessage(resolver: ValidationMessageResolver, value: Any, regex: String): String = {
     resolver.resolve(classOf[Pattern], value, regex)
   }
@@ -19,7 +19,7 @@ private[finatra] object PatternValidator {
  *            case class ExampleRequest(@Pattern(regexp= "exampleRegex") exampleValue : String)
  *         }}}
  */
-private[finatra] class PatternValidator(
+private[json] class PatternValidator(
   validationMessageResolver: ValidationMessageResolver,
   annotation: Pattern)
     extends Validator[Pattern, Any](validationMessageResolver, annotation) {

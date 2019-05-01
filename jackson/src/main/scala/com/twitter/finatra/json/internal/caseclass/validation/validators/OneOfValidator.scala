@@ -9,7 +9,7 @@ import com.twitter.finatra.validation.{
   Validator
 }
 
-private[finatra] object OneOfValidator {
+private[json] object OneOfValidator {
 
   def errorMessage(resolver: ValidationMessageResolver, oneOfValues: Set[String], value: Any) = {
 
@@ -36,7 +36,7 @@ private[finatra] object OneOfValidator {
  * Validates if one or more values exist in a given set of values.  The check for existence is case-sensitive
  * by default.
  */
-private[finatra] class OneOfValidator(
+private[json] class OneOfValidator(
   validationMessageResolver: ValidationMessageResolver,
   annotation: OneOf
 ) extends Validator[OneOf, Any](validationMessageResolver, annotation) {
