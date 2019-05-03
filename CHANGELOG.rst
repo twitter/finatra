@@ -24,6 +24,9 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-http: Add `http` scope to `shutdown.time` flag, making it `http.shutdown.time`.
+  ``PHAB_ID=D307552``
+
 * inject-app: Move override of `com.twitter.app.App#failfastOnFlagsNotParsed` up from
   `c.t.inject.server.TwitterServer` to `com.twitter.inject.app.App` such that all Finatra-based
   applications default to this behavior. ``PHAB_ID=D307858``

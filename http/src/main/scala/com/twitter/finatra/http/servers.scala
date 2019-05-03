@@ -138,7 +138,7 @@ trait HttpServerTrait extends TwitterServer {
    * @see [[https://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
    */
   private val shutdownTimeoutFlag = flag(
-    "shutdown.time", // todo: rename to http.shutdown.time
+    "http.shutdown.time",
     defaultShutdownTimeout,
     "Maximum amount of time to wait for pending requests to complete on shutdown"
   )
