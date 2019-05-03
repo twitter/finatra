@@ -88,7 +88,7 @@ class EmbeddedHttpServer(
   def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage) =
     this(twitterServer, flags = flags.asScala.toMap, stage = stage)
 
-  def this(twitterServer: Ports, flags: java.util.Map[String, String], globalFlags: java.util.LinkedHashMap[GlobalFlag[_], String], stage: Stage) =
+  def this(twitterServer: Ports, flags: java.util.Map[String, String], globalFlags: java.util.Map[GlobalFlag[_], String], stage: Stage) =
     this(twitterServer, flags = flags.asScala.toMap, stage = stage, globalFlags = globalFlags.toOrderedMap)
 
   /* Public */

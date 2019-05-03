@@ -73,11 +73,11 @@ class EmbeddedThriftServer(
   def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage, disableTestLogging: Boolean) =
     this(twitterServer, flags = flags.asScala.toMap, stage = stage, disableTestLogging = disableTestLogging)
 
-  def this(twitterServer: Ports, flags: java.util.Map[String, String], globalFlags: java.util.Map[GlobalFlag[_], String], stage: Stage) =
-    this(twitterServer, flags = flags.asScala.toMap, globalFlags = globalFlags.toOrderedMap, stage = stage)
+  def this(twitterServer: Ports, flags: java.util.Map[String, String], javaGlobalFlags: java.util.Map[GlobalFlag[_], String], stage: Stage) =
+    this(twitterServer, flags = flags.asScala.toMap, globalFlags = javaGlobalFlags.toOrderedMap, stage = stage)
 
-  def this(twitterServer: Ports, flags: java.util.Map[String, String], globalFlags: java.util.Map[GlobalFlag[_], String], stage: Stage, disableTestLogging: Boolean) =
-    this(twitterServer, flags = flags.asScala.toMap, globalFlags = globalFlags.toOrderedMap, stage = stage, disableTestLogging = disableTestLogging)
+  def this(twitterServer: Ports, flags: java.util.Map[String, String], javaGlobalFlags: java.util.Map[GlobalFlag[_], String], stage: Stage, disableTestLogging: Boolean) =
+    this(twitterServer, flags = flags.asScala.toMap, globalFlags = javaGlobalFlags.toOrderedMap, stage = stage, disableTestLogging = disableTestLogging)
 
   /* Public */
 
