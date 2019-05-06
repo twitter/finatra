@@ -15,7 +15,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 import org.scalatest.Matchers
 import scala.collection.JavaConverters._
 import scala.collection.SortedMap
-import scala.reflect.runtime.currentMirror
 import scala.util.control.Breaks._
 import scala.util.control.NonFatal
 
@@ -36,8 +35,27 @@ object EmbeddedTwitterServer {
    * Returns true if the given instance is a Scala singleton object, false otherwise.
    * @see [[https://docs.scala-lang.org/tour/singleton-objects.html]]
    */
-  private def isSingletonObject(server: com.twitter.server.TwitterServer) = {
-    currentMirror.reflect(server).symbol.isModuleClass
+  private def isSingletonObject(server: com.twitter.server.TwitterServer): Boolean = {
+    // while Scala's reflection utilities offer this in a succinct and convenient
+    // method, the startup costs are quite high for quick testing iteration cycles:
+    //
+    //    scala.reflect.runtime.currentMirror.reflect(server).symbol.isModuleClass
+    //
+    // the approach used here, while fragile to Scala internal changes, was deemed
+    // worth the tradeoff. this assumes that companion objects have class names that
+    // end with $ and have a field on them called MODULE$. For example `object MyServer`
+    // has the class name `MyServer$` and a `MODULE$` field. this works as of Scala 2.12.
+    val clazz = server.getClass
+    val className = clazz.getName
+    if (!className.endsWith("$"))
+      return false
+
+    try {
+      clazz.getField("MODULE$") // this throws if the field doesn't exist
+      true
+    } catch {
+      case _: NoSuchFieldException => false
+    }
   }
 
   /**
@@ -89,7 +107,8 @@ object EmbeddedTwitterServer {
   private[server] def mkGlobalFlagsFn[T](fns: Iterable[ReducibleFn[T]]): ReducibleFn[T] =
     fns.reduce[ReducibleFn[T]] {
       case (fn, collector) =>
-        input => collector(fn(input))
+        input =>
+          collector(fn(input))
     }
 }
 
@@ -139,10 +158,10 @@ class EmbeddedTwitterServer(
   maxStartupTimeSeconds: Int = 60,
   failOnLintViolation: Boolean = false,
   closeGracePeriod: Option[Duration] = None,
-  globalFlags: => Map[GlobalFlag[_], String] = Map()
-) extends AdminHttpClient(twitterServer, verbose)
-  with BindDSL
-  with Matchers {
+  globalFlags: => Map[GlobalFlag[_], String] = Map())
+    extends AdminHttpClient(twitterServer, verbose)
+    with BindDSL
+    with Matchers {
 
   import EmbeddedTwitterServer._
 
