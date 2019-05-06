@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.tests.integration.doeverything.test
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.google.common.net.MediaType
+import com.twitter.finagle.http.MediaType
 import com.google.inject.name.Names
 import com.google.inject.{Key, TypeLiteral}
 import com.twitter.finagle.http.Method._
@@ -139,17 +139,17 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test("GET /plaintext") {
     val response1 = server.httpGet("/plaintext", withBody = "Hello, World!")
 
-    response1.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
+    response1.contentType should equal(Some(MediaType.PlainTextUtf8))
 
     val response2 = server.httpGet("/plaintext/", withBody = "Hello, World!")
 
-    response2.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
+    response2.contentType should equal(Some(MediaType.PlainTextUtf8))
   }
 
   test("/plaintext (prefixed)") {
     val response = server.httpGet("/1.1/plaintext", withBody = "Hello, World!")
 
-    response.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
+    response.contentType should equal(Some(MediaType.PlainTextUtf8))
   }
 
   test("/forbiddenByFilter (prefixed)") {
@@ -198,13 +198,13 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test("GET /bytearray") {
     val response = server.httpGet("/bytearray")
 
-    response.contentType should equal(Some(MediaType.OCTET_STREAM.toString))
+    response.contentType should equal(Some(MediaType.OctetStream))
   }
 
   test("GET /inputstream") {
     val response = server.httpGet("/inputstream")
 
-    response.contentType should equal(Some(MediaType.OCTET_STREAM.toString))
+    response.contentType should equal(Some(MediaType.OctetStream))
   }
 
   test("GET /useragent") {
@@ -616,7 +616,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     server.httpPut(
       "/echo",
       putBody = body,
-      contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
+      contentType = MediaType.PlainTextUtf8,
       andExpect = Ok,
       withBody = body
     )
@@ -690,7 +690,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
       withJsonBody = "42"
     )
 
-    response.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
+    response.contentType should equal(Some(MediaType.PlainTextUtf8))
   }
 
   test("PUT /put_id_not_ignoring_body") {
@@ -838,7 +838,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     val response =
       server.httpGet("/users/mary", andExpect = Ok, withJsonBody = """{ "name" : "mary" }""")
 
-    response.headerMap("content-type") should equal(MediaType.JSON_UTF_8.toString)
+    response.headerMap("content-type") should equal(MediaType.JsonUtf8)
   }
 
   test("POST json user") {
@@ -862,7 +862,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     server.httpPost(
       "/echo",
       postBody = body,
-      contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
+      contentType = MediaType.PlainTextUtf8,
       andExpect = Ok,
       withBody = body
     )
@@ -1015,7 +1015,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     server.httpDelete(
       "/delete",
       deleteBody = "DELETE BODY",
-      contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
+      contentType = MediaType.PlainTextUtf8,
       andExpect = Ok,
       withBody = "delete"
     )
@@ -1041,7 +1041,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test("PATCH") {
     server.httpPatch(
       "/patch",
-      contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
+      contentType = MediaType.PlainTextUtf8,
       patchBody = "asdf",
       andExpect = Ok,
       withBody = "patch"
@@ -1062,7 +1062,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     val body = s"${musicalNote} ${musicalNote}"
     server.httpPatch(
       "/echo",
-      contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
+      contentType = MediaType.PlainTextUtf8,
       patchBody = body,
       andExpect = Ok,
       withBody = body
@@ -1827,7 +1827,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test("bytes returned") {
     val response = server.httpGet("/bytes", withBody = "Steve")
 
-    response.contentType should equal(Some(MediaType.OCTET_STREAM.toString))
+    response.contentType should equal(Some(MediaType.OctetStream))
   }
 
   test("Bad request for deserialization of wrapped value from a json object") {

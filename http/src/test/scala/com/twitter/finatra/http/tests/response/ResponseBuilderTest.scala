@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.tests.response
 
-import com.google.common.net.MediaType
+import com.twitter.finagle.http.MediaType
 import com.twitter.finagle.http.{Cookie => FinagleCookie, Request, Response, Status}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
@@ -111,10 +111,10 @@ class ResponseBuilderTest extends Test with Mockito {
       .get should equal("1")
 
     responseBuilder.ok
-      .header("Content-Type", MediaType.JSON_UTF_8)
+      .header("Content-Type", MediaType.JsonUtf8)
       .asInstanceOf[Response]
       .contentType
-      .get should equal(MediaType.JSON_UTF_8.toString)
+      .get should equal(MediaType.JsonUtf8)
 
     responseBuilder.ok
       .headers(Map("Content-Type" -> "Foo"))

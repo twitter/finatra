@@ -39,6 +39,10 @@ Changed
 * finatra-examples: Update "twitter-clone" example to use `Dtabs` instead of the deprecated `resolverMap`.
   Move the "hello-world" example to "http-server". ``PHAB_ID=D303813``
 
+* finatra-http: Replace all usages of guava's `com.google.common.net.MediaType` with `String`.
+  You can migrate by calling `MediaType#toString` everywhere you passed a `MediaType` before.  ``PHAB_ID=D308761``
+
+
 Fixed
 ~~~~~
 

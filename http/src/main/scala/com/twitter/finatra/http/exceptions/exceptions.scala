@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.exceptions
 
-import com.google.common.net.MediaType
+import com.twitter.finagle.http.MediaType
 import com.twitter.finagle.http.Status
 
 /* HTTP Exceptions */
@@ -11,17 +11,17 @@ import com.twitter.finagle.http.Status
  */
 object HttpException {
   def plainText(status: Status, body: String): HttpException = {
-    new HttpException(status, MediaType.PLAIN_TEXT_UTF_8, Seq(body))
+    new HttpException(status, MediaType.PlainTextUtf8, Seq(body))
   }
 
   def apply(status: Status, errors: String*): HttpException = {
-    new HttpException(status, MediaType.JSON_UTF_8, errors)
+    new HttpException(status, MediaType.JsonUtf8, errors)
   }
 }
 
 class HttpException(
   val statusCode: Status,
-  val mediaType: MediaType,
+  val mediaType: String,
   val errors: Seq[String] = Seq(),
   val headers: Seq[(String, String)] = Seq()
 ) extends Exception {
@@ -57,112 +57,112 @@ class HttpException(
 
 object NotFoundException {
   def plainText(body: String): NotFoundException = {
-    new NotFoundException(MediaType.PLAIN_TEXT_UTF_8, Seq(body))
+    new NotFoundException(MediaType.PlainTextUtf8, Seq(body))
   }
 
   def apply(errors: String*):NotFoundException = {
-    new NotFoundException(MediaType.JSON_UTF_8, errors)
+    new NotFoundException(MediaType.JsonUtf8, errors)
   }
 }
 
-case class NotFoundException(override val mediaType: MediaType, override val errors: Seq[String])
+case class NotFoundException(override val mediaType: String, override val errors: Seq[String])
     extends HttpException(Status.NotFound, mediaType, errors) {
 
   def this(error: String) = {
-    this(MediaType.JSON_UTF_8, Seq(error))
+    this(MediaType.JsonUtf8, Seq(error))
   }
 }
 
 object ConflictException {
   def plainText(body: String): ConflictException = {
-    new ConflictException(MediaType.PLAIN_TEXT_UTF_8, Seq(body))
+    new ConflictException(MediaType.PlainTextUtf8, Seq(body))
   }
 
   def apply(errors: String*): ConflictException = {
-    new ConflictException(MediaType.JSON_UTF_8, errors)
+    new ConflictException(MediaType.JsonUtf8, errors)
   }
 }
 
-case class ConflictException(override val mediaType: MediaType, override val errors: Seq[String])
+case class ConflictException(override val mediaType: String, override val errors: Seq[String])
     extends HttpException(Status.Conflict, mediaType, errors) {
 
   def this(error: String) = {
-    this(MediaType.JSON_UTF_8, Seq(error))
+    this(MediaType.JsonUtf8, Seq(error))
   }
 }
 
 object InternalServerErrorException {
   def plainText(body: String): InternalServerErrorException = {
-    new InternalServerErrorException(MediaType.PLAIN_TEXT_UTF_8, Seq(body))
+    new InternalServerErrorException(MediaType.PlainTextUtf8, Seq(body))
   }
 
   def apply(errors: String*): InternalServerErrorException = {
-    new InternalServerErrorException(MediaType.JSON_UTF_8, errors)
+    new InternalServerErrorException(MediaType.JsonUtf8, errors)
   }
 }
 
 case class InternalServerErrorException(
-  override val mediaType: MediaType,
+  override val mediaType: String,
   override val errors: Seq[String]
 ) extends HttpException(Status.InternalServerError, mediaType, errors)
 
 object ServiceUnavailableException {
   def plainText(body: String): ServiceUnavailableException = {
-    new ServiceUnavailableException(MediaType.PLAIN_TEXT_UTF_8, Seq(body))
+    new ServiceUnavailableException(MediaType.PlainTextUtf8, Seq(body))
   }
 
   def apply(errors: String*): ServiceUnavailableException = {
-    new ServiceUnavailableException(MediaType.JSON_UTF_8, errors)
+    new ServiceUnavailableException(MediaType.JsonUtf8, errors)
   }
 }
 
 case class ServiceUnavailableException(
-  override val mediaType: MediaType,
+  override val mediaType: String,
   override val errors: Seq[String]
 ) extends HttpException(Status.ServiceUnavailable, mediaType, errors)
 
 object BadRequestException {
   def plainText(body: String): BadRequestException = {
-    new BadRequestException(MediaType.PLAIN_TEXT_UTF_8, Seq(body))
+    new BadRequestException(MediaType.PlainTextUtf8, Seq(body))
   }
 
   def apply(errors: String*): BadRequestException = {
-    new BadRequestException(MediaType.JSON_UTF_8, errors)
+    new BadRequestException(MediaType.JsonUtf8, errors)
   }
 }
 
-case class BadRequestException(override val mediaType: MediaType, override val errors: Seq[String])
+case class BadRequestException(override val mediaType: String, override val errors: Seq[String])
     extends HttpException(Status.BadRequest, mediaType, errors) {
 
   def this(error: String) = {
-    this(MediaType.JSON_UTF_8, Seq(error))
+    this(MediaType.JsonUtf8, Seq(error))
   }
 }
 
 object ForbiddenException {
   def plainText(body: String): ForbiddenException = {
-    new ForbiddenException(MediaType.PLAIN_TEXT_UTF_8, Seq(body))
+    new ForbiddenException(MediaType.PlainTextUtf8, Seq(body))
   }
 
   def apply(errors: String*): ForbiddenException = {
-    new ForbiddenException(MediaType.JSON_UTF_8, errors)
+    new ForbiddenException(MediaType.JsonUtf8, errors)
   }
 }
 
-case class ForbiddenException(override val mediaType: MediaType, override val errors: Seq[String])
+case class ForbiddenException(override val mediaType: String, override val errors: Seq[String])
     extends HttpException(Status.Forbidden, mediaType, errors)
 
 object NotAcceptableException {
   def plainText(body: String): NotAcceptableException = {
-    new NotAcceptableException(MediaType.PLAIN_TEXT_UTF_8, Seq(body))
+    new NotAcceptableException(MediaType.PlainTextUtf8, Seq(body))
   }
 
   def apply(errors: String*): NotAcceptableException = {
-    new NotAcceptableException(MediaType.JSON_UTF_8, errors)
+    new NotAcceptableException(MediaType.JsonUtf8, errors)
   }
 }
 
 case class NotAcceptableException(
-  override val mediaType: MediaType,
+  override val mediaType: String,
   override val errors: Seq[String]
 ) extends HttpException(Status.NotAcceptable, mediaType, errors)

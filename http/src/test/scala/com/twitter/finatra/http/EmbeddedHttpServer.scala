@@ -1,7 +1,7 @@
 package com.twitter.finatra.http
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.google.common.net.MediaType
+import com.twitter.finagle.http.MediaType
 import com.google.inject.Stage
 import com.twitter.app.GlobalFlag
 import com.twitter.finagle.http.{Method, Status, _}
@@ -99,7 +99,7 @@ class EmbeddedHttpServer(
    * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
    *
    * @param path - URI of the request
-   * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
+   * @param accept - add request Accept header with the given [[com.twitter.finagle.http.MediaType]]
    * @param headers - additional headers that should be passed with the request
    * @param suppress - suppress http client logging
    * @param andExpect - expected [[com.twitter.finagle.http.Status]] value
@@ -115,7 +115,7 @@ class EmbeddedHttpServer(
    */
   def httpGet(
     path: String,
-    accept: MediaType = null,
+    accept: String = null,
     headers: Map[String, String] = Map(),
     suppress: Boolean = false,
     andExpect: Status = Status.Ok,
@@ -152,7 +152,7 @@ class EmbeddedHttpServer(
    *
    * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
    * @param path - URI of the request
-   * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
+   * @param accept - add request Accept header with the given [[com.twitter.finagle.http.MediaType]]
    * @param headers - additional headers that should be passed with the request
    * @param suppress - suppress http client logging
    * @param andExpect - expected [[com.twitter.finagle.http.Status]] value
@@ -170,7 +170,7 @@ class EmbeddedHttpServer(
    */
   def httpGetJson[ResponseType: Manifest](
     path: String,
-    accept: MediaType = null,
+    accept: String = null,
     headers: Map[String, String] = Map(),
     suppress: Boolean = false,
     andExpect: Status = Status.Ok,
@@ -191,7 +191,7 @@ class EmbeddedHttpServer(
     val response =
       httpGet(
         path,
-        accept = MediaType.JSON_UTF_8,
+        accept = MediaType.JsonUtf8,
         headers = headers,
         suppress = suppress,
         andExpect = andExpect,
@@ -215,7 +215,7 @@ class EmbeddedHttpServer(
    *
    * @param path - URI of the request
    * @param postBody - body of the POST request
-   * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
+   * @param accept - add request Accept header with the given [[com.twitter.finagle.http.MediaType]]
    * @param suppress - suppress http client logging
    * @param contentType - request Content-Type header value, application/json by default
    * @param headers - additional headers that should be passed with the request
@@ -233,7 +233,7 @@ class EmbeddedHttpServer(
   def httpPost(
     path: String,
     postBody: String,
-    accept: MediaType = null,
+    accept: String = null,
     suppress: Boolean = false,
     contentType: String = Message.ContentTypeJson,
     headers: Map[String, String] = Map(),
@@ -314,7 +314,7 @@ class EmbeddedHttpServer(
     val response = httpPost(
       path,
       postBody,
-      MediaType.JSON_UTF_8,
+      MediaType.JsonUtf8,
       suppress,
       Message.ContentTypeJson,
       headers,
@@ -343,7 +343,7 @@ class EmbeddedHttpServer(
    *
    * @param path - URI of the request
    * @param putBody - the body of the PUT request
-   * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
+   * @param accept - add request Accept header with the given [[com.twitter.finagle.http.MediaType]]
    * @param suppress - suppress http client logging
    * @param contentType - request Content-Type header value, application/json by default
    * @param headers - additional headers that should be passed with the request
@@ -361,7 +361,7 @@ class EmbeddedHttpServer(
   def httpPut(
     path: String,
     putBody: String,
-    accept: MediaType = null,
+    accept: String = null,
     suppress: Boolean = false,
     contentType: String = Message.ContentTypeJson,
     headers: Map[String, String] = Map(),
@@ -442,7 +442,7 @@ class EmbeddedHttpServer(
     val response = httpPut(
       path,
       putBody,
-      MediaType.JSON_UTF_8,
+      MediaType.JsonUtf8,
       suppress,
       Message.ContentTypeJson,
       headers,
@@ -471,7 +471,7 @@ class EmbeddedHttpServer(
    *
    * @param path - URI of the request
    * @param deleteBody - the body of the DELETE request
-   * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
+   * @param accept - add request Accept header with the given [[com.twitter.finagle.http.MediaType]]
    * @param suppress - suppress http client logging
    * @param contentType - request Content-Type header value, application/json by default
    * @param headers - additional headers that should be passed with the request
@@ -489,7 +489,7 @@ class EmbeddedHttpServer(
   def httpDelete(
     path: String,
     deleteBody: String = null,
-    accept: MediaType = null,
+    accept: String = null,
     suppress: Boolean = false,
     contentType: String = Message.ContentTypeJson,
     headers: Map[String, String] = Map(),
@@ -572,7 +572,7 @@ class EmbeddedHttpServer(
     val response = httpDelete(
       path,
       deleteBody,
-      MediaType.JSON_UTF_8,
+      MediaType.JsonUtf8,
       suppress,
       Message.ContentTypeJson,
       headers,
@@ -600,7 +600,7 @@ class EmbeddedHttpServer(
    * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
    *
    * @param path - URI of the request
-   * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
+   * @param accept - add request Accept header with the given [[com.twitter.finagle.http.MediaType]]
    * @param headers - additional headers that should be passed with the request
    * @param suppress - suppress http client logging
    * @param andExpect - expected [[com.twitter.finagle.http.Status]] value
@@ -616,7 +616,7 @@ class EmbeddedHttpServer(
    */
   def httpOptions(
     path: String,
-    accept: MediaType = null,
+    accept: String = null,
     headers: Map[String, String] = Map(),
     suppress: Boolean = false,
     andExpect: Status = Status.Ok,
@@ -652,7 +652,7 @@ class EmbeddedHttpServer(
    *
    * @param path - URI of the request
    * @param patchBody - the body of the PATCH request
-   * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
+   * @param accept - add request Accept header with the given [[com.twitter.finagle.http.MediaType]]
    * @param suppress - suppress http client logging
    * @param contentType - request Content-Type header value, application/json by default
    * @param headers - additional headers that should be passed with the request
@@ -670,7 +670,7 @@ class EmbeddedHttpServer(
   def httpPatch(
     path: String,
     patchBody: String,
-    accept: MediaType = null,
+    accept: String = null,
     suppress: Boolean = false,
     contentType: String = Message.ContentTypeJson,
     headers: Map[String, String] = Map(),
@@ -751,7 +751,7 @@ class EmbeddedHttpServer(
     val response = httpPatch(
       path,
       patchBody,
-      MediaType.JSON_UTF_8,
+      MediaType.JsonUtf8,
       suppress,
       Message.ContentTypeJson,
       headers,
@@ -779,7 +779,7 @@ class EmbeddedHttpServer(
    * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
    *
    * @param path - URI of the request
-   * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
+   * @param accept - add request Accept header with the given [[com.twitter.finagle.http.MediaType]]
    * @param headers - additional headers that should be passed with the request
    * @param suppress - suppress http client logging
    * @param andExpect - expected [[com.twitter.finagle.http.Status]] value
@@ -795,7 +795,7 @@ class EmbeddedHttpServer(
    */
   def httpHead(
     path: String,
-    accept: MediaType = null,
+    accept: String = null,
     headers: Map[String, String] = Map(),
     suppress: Boolean = false,
     andExpect: Status = Status.Ok,

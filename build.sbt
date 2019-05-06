@@ -58,7 +58,6 @@ lazy val versions = new {
   val commonsIo = "2.4"
   val commonsLang = "2.6"
   val fastutil = "8.1.1"
-  val guava = "19.0"
   val guice = "4.0"
   val jackson = "2.9.6"
   val jodaConvert = "1.2"
@@ -423,7 +422,6 @@ lazy val injectServer = (project in file("inject/inject-server"))
     moduleName := "inject-server",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*Ports.*;.*FinagleBuildRevision.*",
     libraryDependencies ++= Seq(
-      "com.google.guava" % "guava" % versions.guava % Test,
       "com.twitter" %% "finagle-stats" % versions.twLibVersion,
       "com.twitter" %% "twitter-server" % versions.twLibVersion,
       "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
@@ -641,7 +639,6 @@ lazy val http = project
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;.*NonValidatingHttpHeadersResponse.*;com\\.twitter\\.finatra\\..*package.*;.*ThriftExceptionMapper.*;.*HttpResponseExceptionMapper.*;.*HttpResponseException.*",
     libraryDependencies ++= Seq(
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache exclude("com.google.guava", "guava"),
-      "com.google.guava" % "guava" % versions.guava,
       "com.twitter" %% "finagle-exp" % versions.twLibVersion,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
@@ -1088,9 +1085,6 @@ lazy val exampleWebDashboard = (project in file("examples/web-dashboard"))
   .settings(
     name := "web-dashboard",
     moduleName := "web-dashboard",
-    libraryDependencies ++= Seq(
-      "com.google.guava" % "guava" % versions.guava
-    ),
     unmanagedResourceDirectories in Compile += baseDirectory.value / "src" / "main" / "webapp"
   ).dependsOn(
     http % "test->test;compile->compile",

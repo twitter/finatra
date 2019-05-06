@@ -14,7 +14,6 @@ scala_library(
         "3rdparty/jvm/com/fasterxml/jackson/datatype:jackson-datatype-joda",
         "3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala",
         "3rdparty/jvm/com/github/spullara/mustache/java",
-        "3rdparty/jvm/com/google/guava",
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
         "3rdparty/jvm/com/google/inject/extensions:guice-multibindings",

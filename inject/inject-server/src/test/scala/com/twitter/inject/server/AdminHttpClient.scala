@@ -1,6 +1,5 @@
 package com.twitter.inject.server
 
-import com.google.common.net.MediaType
 import com.twitter.finagle.http.{Fields, Method, Request, Response, Status}
 import com.twitter.server.AdminHttpServer
 import com.twitter.util.{Closable, Try}
@@ -32,7 +31,7 @@ private[twitter] abstract class AdminHttpClient private[twitter] (
 
   def httpGetAdmin(
     path: String,
-    accept: MediaType = null,
+    accept: String = null,
     headers: Map[String, String] = Map(),
     suppress: Boolean = false,
     andExpect: Status = Status.Ok,
@@ -67,7 +66,7 @@ private[twitter] abstract class AdminHttpClient private[twitter] (
   /* Protected */
 
   protected def addAcceptHeader(
-    accept: MediaType,
+    accept: String,
     headers: Map[String, String]
   ): Map[String, String] = {
     if (accept != null)

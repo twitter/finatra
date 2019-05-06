@@ -7,7 +7,6 @@ scala_library(
         repo = artifactory,
     ),
     dependencies = [
-        "3rdparty/jvm/com/google/guava",
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
         "3rdparty/jvm/com/google/inject/extensions:guice-multibindings",
