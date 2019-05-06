@@ -6,6 +6,7 @@ import com.twitter.finagle.http.{Method, RouteIndex}
 import com.twitter.inject.Injector
 import com.twitter.util.Var
 import scala.collection.mutable.ArrayBuffer
+import scala.reflect.runtime.universe._
 
 /**
  * RouteContext represents the current contextual attributes at a given point within a controller declaration using RouteDSL
@@ -45,7 +46,7 @@ private trait RouteState {
   // We define this constant separately rather than directly as a default value of context
   // so the "contextVar" val does not rely on "context" val
   private[this] val defaultContext =
-    RouteContext(prefix = "", buildFilter = Function.const(Filter.identity))
+    RouteContext(prefix = "", buildFilter = scala.Function.const(Filter.identity))
 
   private[http] val context: RouteContext = defaultContext
 
@@ -119,7 +120,7 @@ private[http] trait RouteDSL extends RouteState { self =>
     }
   }
 
-  def get[RequestType: Manifest, ResponseType: Manifest](
+  def get[RequestType: TypeTag, ResponseType: TypeTag](
     route: String,
     name: String = "",
     admin: Boolean = false,
@@ -127,7 +128,7 @@ private[http] trait RouteDSL extends RouteState { self =>
   )(callback: RequestType => ResponseType): Unit =
     add(Get, route, name, admin, index, callback)
 
-  def post[RequestType: Manifest, ResponseType: Manifest](
+  def post[RequestType: TypeTag, ResponseType: TypeTag](
     route: String,
     name: String = "",
     admin: Boolean = false,
@@ -135,7 +136,7 @@ private[http] trait RouteDSL extends RouteState { self =>
   )(callback: RequestType => ResponseType): Unit =
     add(Post, route, name, admin, index, callback)
 
-  def put[RequestType: Manifest, ResponseType: Manifest](
+  def put[RequestType: TypeTag, ResponseType: TypeTag](
     route: String,
     name: String = "",
     admin: Boolean = false,
@@ -143,7 +144,7 @@ private[http] trait RouteDSL extends RouteState { self =>
   )(callback: RequestType => ResponseType): Unit =
     add(Put, route, name, admin, index, callback)
 
-  def delete[RequestType: Manifest, ResponseType: Manifest](
+  def delete[RequestType: TypeTag, ResponseType: TypeTag](
     route: String,
     name: String = "",
     admin: Boolean = false,
@@ -151,7 +152,7 @@ private[http] trait RouteDSL extends RouteState { self =>
   )(callback: RequestType => ResponseType): Unit =
     add(Delete, route, name, admin, index, callback)
 
-  def options[RequestType: Manifest, ResponseType: Manifest](
+  def options[RequestType: TypeTag, ResponseType: TypeTag](
     route: String,
     name: String = "",
     admin: Boolean = false,
@@ -159,7 +160,7 @@ private[http] trait RouteDSL extends RouteState { self =>
   )(callback: RequestType => ResponseType): Unit =
     add(Options, route, name, admin, index, callback)
 
-  def patch[RequestType: Manifest, ResponseType: Manifest](
+  def patch[RequestType: TypeTag, ResponseType: TypeTag](
     route: String,
     name: String = "",
     admin: Boolean = false,
@@ -167,7 +168,7 @@ private[http] trait RouteDSL extends RouteState { self =>
   )(callback: RequestType => ResponseType): Unit =
     add(Patch, route, name, admin, index, callback)
 
-  def head[RequestType: Manifest, ResponseType: Manifest](
+  def head[RequestType: TypeTag, ResponseType: TypeTag](
     route: String,
     name: String = "",
     admin: Boolean = false,
@@ -175,7 +176,7 @@ private[http] trait RouteDSL extends RouteState { self =>
   )(callback: RequestType => ResponseType): Unit =
     add(Head, route, name, admin, index, callback)
 
-  def trace[RequestType: Manifest, ResponseType: Manifest](
+  def trace[RequestType: TypeTag, ResponseType: TypeTag](
     route: String,
     name: String = "",
     admin: Boolean = false,
@@ -183,7 +184,7 @@ private[http] trait RouteDSL extends RouteState { self =>
   )(callback: RequestType => ResponseType): Unit =
     add(Trace, route, name, admin, index, callback)
 
-  def any[RequestType: Manifest, ResponseType: Manifest](
+  def any[RequestType: TypeTag, ResponseType: TypeTag](
     route: String,
     name: String = "",
     admin: Boolean = false,
@@ -209,7 +210,7 @@ private[http] trait RouteDSL extends RouteState { self =>
 
   /* Private */
 
-  private def add[RequestType: Manifest, ResponseType: Manifest](
+  private def add[RequestType: TypeTag, ResponseType: TypeTag](
     method: Method,
     route: String,
     name: String,

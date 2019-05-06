@@ -6,11 +6,13 @@ import com.twitter.finatra.http.internal.marshalling.CallbackConverter.url
 import com.twitter.finatra.http.response.{ResponseBuilder, StreamingResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.streaming.JsonStreamParser
+import com.twitter.inject.TypeUtils
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.{Future, FuturePool, Promise}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext => ScalaExecutionContext, Future => ScalaFuture}
 import scala.util.{Failure, Success}
+import scala.reflect.runtime.universe._
 
 private object CallbackConverter {
   val url =
@@ -25,7 +27,7 @@ private[http] class CallbackConverter @Inject()(
 
   /* Public */
 
-  def convertToFutureResponse[RequestType: Manifest, ResponseType: Manifest](
+  def convertToFutureResponse[RequestType: TypeTag, ResponseType: TypeTag](
     callback: RequestType => ResponseType
   ): Request => Future[Response] = {
     val requestConvertedCallback: (Request => ResponseType) =
@@ -42,31 +44,33 @@ private[http] class CallbackConverter @Inject()(
    * @note If the RequestType is a stream of [[com.twitter.io.Buf]], it will not be
    *       parsed as a regular Json request.
    */
-  private def createRequestCallback[RequestType: Manifest, ResponseType: Manifest](
+  private def createRequestCallback[RequestType: TypeTag, ResponseType: TypeTag](
     callback: RequestType => ResponseType
   ): Request => ResponseType = {
-    if (manifest[RequestType] == manifest[Request]) {
+    val manifestRequestType = TypeUtils.asManifest[RequestType]
+
+    if (manifestRequestType == manifest[Request]) {
       callback.asInstanceOf[(Request => ResponseType)]
-    } else if (runtimeClassEq[RequestType, AsyncStream[_]]) {
-      val asyncStreamTypeParam = manifest[RequestType].typeArguments.head
+    } else if (runtimeClassEqs[AsyncStream[_]](manifestRequestType)) {
+      val asyncStreamTypeParam = manifestRequestType.typeArguments.head
       request: Request =>
         val asyncStream = jsonStreamParser.parseArray(request.reader)(asyncStreamTypeParam)
         callback(asyncStream.asInstanceOf[RequestType])
-    } else if (runtimeClassEq[RequestType, Reader[_]]) {
-      val readerTypeParam = manifest[RequestType].typeArguments.head
+    } else if (runtimeClassEqs[Reader[_]](manifestRequestType)) {
+      val readerTypeParam = manifestRequestType.typeArguments.head
       request: Request =>
         val reader = jsonStreamParser.parseJson(request.reader)(readerTypeParam)
         callback(reader.asInstanceOf[RequestType])
-    } else if (runtimeClassEq[RequestType, Int] || runtimeClassEq[RequestType, String]) {
+    } else if (runtimeClassEqs[Int](manifestRequestType) || runtimeClassEqs[String](manifestRequestType)) {
       // NOTE: callback functions with no input param which return a String are inferred as a RequestType of
       // `Int` by Scala because `StringOps.apply` is a function of Int => Char, other return types
       // infer a `RequestType` of `String`.
       throw new Exception(
-        s"Improper callback function RequestType: ${manifest[RequestType].runtimeClass}. Controller routes defined with a callback function that has no input parameter or with an incorrectly specified input parameter type are not allowed. " +
+        s"Improper callback function RequestType: ${manifestRequestType.runtimeClass}. Controller routes defined with a callback function that has no input parameter or with an incorrectly specified input parameter type are not allowed. " +
           s"Please specify an input parameter in your route callback function of the appropriate type. For more details see: $url"
       )
     } else { request: Request =>
-      val callbackInput = messageBodyManager.read[RequestType](request)
+      val callbackInput = messageBodyManager.read(request)(manifestRequestType)
       callback(callbackInput)
     }
   }
@@ -75,10 +79,12 @@ private[http] class CallbackConverter @Inject()(
    * Returns a Function1 of Request to Future[Response], convert the ResponseType
    * to Future[Response] based on the Manifest type.
    */
-  private def createResponseCallback[RequestType: Manifest, ResponseType: Manifest](
+  private def createResponseCallback[RequestType: TypeTag, ResponseType: TypeTag](
     requestCallback: Request => ResponseType
-  ): Request => Future[Response] =
-    manifest[ResponseType] match {
+  ): Request => Future[Response] = {
+    val manifestResponseType = TypeUtils.asManifest[ResponseType]
+
+    manifestResponseType match {
       case futureResponse if futureResponse == manifest[Future[Response]] =>
         requestCallback.asInstanceOf[(Request => Future[Response])]
       case futureOption if isFutureOption(futureOption) =>
@@ -93,7 +99,7 @@ private[http] class CallbackConverter @Inject()(
         request: Request =>
           requestCallback(request).asInstanceOf[Future[_]].map(createHttpResponse(request))
       case scalaFuture if runtimeClassEqs[ScalaFuture[_]](scalaFuture) =>
-        scalaFutureTypes(requestCallback)
+        scalaFutureTypes(requestCallback)(manifestResponseType)
       case option if runtimeClassEqs[Option[_]](option) =>
         request: Request =>
           Future(optionToHttpResponse(request)(requestCallback(request).asInstanceOf[Option[_]]))
@@ -135,9 +141,10 @@ private[http] class CallbackConverter @Inject()(
             case result => Future(createHttpResponse(request)(result))
           }
     }
+  }
 
   /**
-   * Returns if the manifest[ResponseType] is one of the streaming types.
+   * Returns if the ResponseType is one of the streaming types.
    */
   private def isStreamingType(manifested: Manifest[_]): Boolean = {
     runtimeClassEqs[AsyncStream[_]](manifested) ||
@@ -146,19 +153,19 @@ private[http] class CallbackConverter @Inject()(
   }
 
   /**
-   * Cases that the manifest[ResponseType] is one of the streaming types.
+   * Cases that the ResponseType is one of the streaming types.
    *
    * @note If the RequestType is a stream of [[com.twitter.io.Buf]], it will not be
    *       parsed as a regular Json request.
    * @note If the ResponseType is a stream of [[com.twitter.io.Buf]], it will not be transformed
    *       to Buf.
    */
-  private def streamingTypes[RequestType: Manifest, ResponseType: Manifest](
+  private def streamingTypes[RequestType: TypeTag, ResponseType: TypeTag](
     requestCallback: Request => ResponseType,
     manifested: Manifest[_]
   ): Request => Future[Response] = {
     val (jsonPrefix, jsonSeparator, jsonSuffix) = {
-      val typeArgs = manifest[RequestType].typeArguments
+      val typeArgs = TypeUtils.asManifest[RequestType].typeArguments
       if (typeArgs.size == 1 && typeArgs.head.runtimeClass == classOf[Buf]) {
         (None, None, None)
       } else {
@@ -204,7 +211,7 @@ private[http] class CallbackConverter @Inject()(
   }
 
   /**
-   * Cases that the manifest[ResponseType] is a ScalaFuture.
+   * Cases that the ResponseType is a ScalaFuture.
    */
   private def scalaFutureTypes[ResponseType: Manifest](
     requestCallback: Request => ResponseType

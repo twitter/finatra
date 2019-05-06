@@ -863,7 +863,7 @@ class DoEverythingController @Inject()(
 
   post("/invalidValidationRequestWithCause") { request: Request =>
     try {
-      objectMapper.parse[InvalidValidationRequest](request.contentString)
+      response.ok(objectMapper.parse[InvalidValidationRequest](request.contentString))
     } catch {
       case e: IllegalArgumentException =>
         // want to return the actual error to the client for testing against this case

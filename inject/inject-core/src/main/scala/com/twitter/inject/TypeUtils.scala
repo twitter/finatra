@@ -2,7 +2,7 @@ package com.twitter.inject
 
 import com.google.inject.TypeLiteral
 import com.google.inject.internal.MoreTypes.ParameterizedTypeImpl
-import scala.reflect.{ManifestFactory, ClassTag}
+import scala.reflect.{ClassTag, ManifestFactory}
 import scala.reflect.runtime.universe._
 
 object TypeUtils {
@@ -28,16 +28,27 @@ object TypeUtils {
     val t = typeTag[T]
     val mirror = t.mirror
     def manifestFromType(t: Type): Manifest[_] = {
-      val clazz = ClassTag[T](mirror.runtimeClass(t)).runtimeClass
-      if (t.typeArgs.length == 1) {
-        val arg = manifestFromType(t.typeArgs.head)
-        ManifestFactory.classType(clazz, arg)
-      } else if (t.typeArgs.length > 1) {
-        // recursively walk each type arg to create a Manifest
-        val args = t.typeArgs.map(x => manifestFromType(x))
-        ManifestFactory.classType(clazz, args.head, args.tail: _*)
-      } else {
-        ManifestFactory.classType(clazz)
+      t match {
+        case n if n =:= typeOf[Nothing] => ManifestFactory.Nothing
+        case n if n =:= typeOf[Null] => ManifestFactory.Null
+        case n if n =:= typeOf[Any] => ManifestFactory.Any
+        case n if n =:= typeOf[AnyVal] => ManifestFactory.AnyVal
+        case _ =>
+          try {
+            val clazz = ClassTag[T](mirror.runtimeClass(t)).runtimeClass
+            if (t.typeArgs.length == 1) {
+              val arg = manifestFromType(t.typeArgs.head)
+              ManifestFactory.classType(clazz, arg)
+            } else if (t.typeArgs.length > 1) {
+              // recursively walk each type arg to create a Manifest
+              val args = t.typeArgs.map(x => manifestFromType(x))
+              ManifestFactory.classType(clazz, args.head, args.tail: _*)
+            } else {
+              ManifestFactory.classType(clazz)
+            }
+          } catch {
+            case e: NoClassDefFoundError => ManifestFactory.Any
+          }
       }
     }
     manifestFromType(t.tpe).asInstanceOf[Manifest[T]]
