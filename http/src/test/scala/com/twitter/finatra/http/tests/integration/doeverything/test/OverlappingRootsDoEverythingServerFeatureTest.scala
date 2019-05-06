@@ -7,7 +7,6 @@ import com.twitter.finatra.http.tests.integration.doeverything.main.DoEverything
 import com.twitter.finatra.test.LocalFilesystemTestUtils._
 import com.twitter.inject.server.FeatureTest
 import java.io.File
-import org.apache.commons.io.FileUtils
 
 class OverlappingRootsDoEverythingServerFeatureTest
     extends FeatureTest
@@ -18,17 +17,17 @@ class OverlappingRootsDoEverythingServerFeatureTest
 
     // create src/main/webapp directory and add files
     val webapp = createFile(s"${BaseDirectory}src/main/webapp")
-    FileUtils.writeStringToFile(createFile(webapp, "testfile.txt"), testFileText)
-    FileUtils.writeStringToFile(createFile(webapp, "testindex.html"), testIndexHtml)
+    writeStringToFile(createFile(webapp, "testfile.txt"), testFileText)
+    writeStringToFile(createFile(webapp, "testindex.html"), testIndexHtml)
 
     // create /templates directory *under* webapp and add files
     val templates = createFile(webapp, "templates")
-    FileUtils.writeStringToFile(createFile(templates, "testuser.mustache"), testUserMustacheString)
-    FileUtils.writeStringToFile(
+    writeStringToFile(createFile(templates, "testuser.mustache"), testUserMustacheString)
+    writeStringToFile(
       createFile(templates, "testuser2.mustache"),
       testUser2MustacheString
     )
-    FileUtils.writeStringToFile(createFile(templates, "testHtml.mustache"), testHtmlMustacheString)
+    writeStringToFile(createFile(templates, "testHtml.mustache"), testHtmlMustacheString)
   }
 
   override protected def afterAll() = {

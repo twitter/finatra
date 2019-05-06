@@ -17,11 +17,10 @@ import com.twitter.finatra.httpclient.{HttpClient, RequestBuilder}
 import com.twitter.finatra.json.JsonDiff._
 import com.twitter.inject.Mockito
 import com.twitter.inject.server.FeatureTest
-import com.twitter.io.Buf
+import com.twitter.io.{Buf, StreamIO}
 import com.twitter.util.Future
 import com.twitter.{logging => ctl}
 import java.net.{ConnectException, InetSocketAddress, SocketAddress}
-import org.apache.commons.io.IOUtils
 import org.scalatest.exceptions.TestFailedException
 import scala.util.parsing.json.JSON
 
@@ -65,7 +64,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   val namedExampleString: String = server.injector.instance[String](Names.named("example"))
 
   private def deserializeRequest(name: String) = {
-    val requestBytes = IOUtils.toByteArray(getClass.getResourceAsStream(name))
+    val requestBytes = StreamIO.buffer(getClass.getResourceAsStream(name)).toByteArray
     HttpCodec.decodeBytesToRequest(requestBytes)
   }
 

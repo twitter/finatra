@@ -6,8 +6,8 @@ import com.twitter.finagle.http.codec.HttpCodec
 import com.twitter.finatra.http.fileupload.MultipartItem
 import com.twitter.finatra.http.request.RequestUtils
 import com.twitter.inject.{Mockito, Test}
+import com.twitter.io.StreamIO
 import org.apache.commons.fileupload.util.FileItemHeadersImpl
-import org.apache.commons.io.IOUtils
 import scala.collection.JavaConverters._
 
 class MultiParamsTest extends Test with Mockito {
@@ -201,7 +201,7 @@ class MultiParamsTest extends Test with Mockito {
   private def resourceAsBytes(resource: String) = {
     val is = getClass.getResourceAsStream(resource)
     try {
-      IOUtils.toByteArray(is)
+      StreamIO.buffer(is).toByteArray
     } finally {
       is.close()
     }

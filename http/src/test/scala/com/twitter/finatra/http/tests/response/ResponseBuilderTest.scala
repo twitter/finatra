@@ -10,7 +10,6 @@ import com.twitter.finatra.utils.FileResolver
 import com.twitter.inject.{Test, Mockito}
 import com.twitter.util.Await
 import java.io.{File, FileWriter}
-import org.apache.commons.io.IOUtils
 
 class ResponseBuilderTest extends Test with Mockito {
 
@@ -43,7 +42,7 @@ class ResponseBuilderTest extends Test with Mockito {
     val tempFile = File.createTempFile("temp", ".json")
     tempFile.deleteOnExit()
     val writer = new FileWriter(tempFile)
-    IOUtils.write(expectedContent, writer)
+    writer.write(expectedContent)
     writer.close()
 
     val response = responseBuilder.ok(tempFile)

@@ -7,7 +7,6 @@ import com.twitter.finatra.utils.Credentials
 import com.twitter.inject.IntegrationTest
 import com.twitter.inject.app.TestInjector
 import java.io.File
-import org.apache.commons.io.FileUtils
 
 object LocalFilesystemCredentialsIntegrationTest {
 
@@ -25,7 +24,7 @@ class LocalFilesystemCredentialsIntegrationTest extends IntegrationTest {
 
     // create keys/finatra directory and add credentials.yml
     val credentialsBasePath = createFile(s"${BaseDirectory}keys/finatra")
-    FileUtils.writeStringToFile(createFile(credentialsBasePath, "credentials.yml"), CredentialsText)
+    writeStringToFile(createFile(credentialsBasePath, "credentials.yml"), CredentialsText)
   }
 
   override protected def afterAll() = {

@@ -3,7 +3,6 @@ package com.twitter.finatra.kafkastreams.test
 import com.twitter.inject.Logging
 import java.io.File
 import java.nio.file.Files
-import org.apache.commons.io.FileUtils
 import scala.util.control.NonFatal
 
 object TestDirectoryUtils extends Logging {
@@ -12,7 +11,7 @@ object TestDirectoryUtils extends Logging {
     val dir = Files.createTempDirectory("kafkastreams").toFile
     Runtime.getRuntime.addShutdownHook(new Thread() {
       override def run(): Unit = {
-        try FileUtils.forceDelete(dir)
+        try forceDelete(dir)
         catch {
           case NonFatal(e) =>
             error(s"Error deleting $dir", e)
@@ -20,5 +19,12 @@ object TestDirectoryUtils extends Logging {
       }
     })
     dir
+  }
+
+  private def forceDelete(file: File): Unit = {
+    if (file.isDirectory)
+      file.listFiles.foreach(forceDelete)
+    if (file.exists && !file.delete)
+      throw new Exception(s"Unable to delete ${file.getAbsolutePath}")
   }
 }

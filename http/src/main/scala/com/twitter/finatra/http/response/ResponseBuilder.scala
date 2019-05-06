@@ -15,14 +15,13 @@ import com.twitter.finatra.utils.FileResolver
 import com.twitter.inject.Logging
 import com.twitter.inject.annotations.Flag
 import com.twitter.inject.exceptions.DetailedNonRetryableSourcedException
-import com.twitter.io.Buf
+import com.twitter.io.{Buf, StreamIO}
 import com.twitter.util.Future
 import java.io.{BufferedInputStream, File, FileInputStream, InputStream}
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.{Function => JFunction}
 import javax.inject.Inject
 import org.apache.commons.io.FilenameUtils._
-import org.apache.commons.io.IOUtils
 import scala.runtime.BoxedUnit
 
 object ResponseBuilder {
@@ -328,7 +327,7 @@ class ResponseBuilder @Inject()(
      */
     def body(inputStream: InputStream): EnrichedResponse = {
       tryWith(inputStream) { closable =>
-        body(IOUtils.toByteArray(closable))
+        body(StreamIO.buffer(closable).toByteArray)
       }
       this
     }
