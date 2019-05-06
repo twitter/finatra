@@ -17,12 +17,14 @@ Added
   `NullValidationFinatraJacksonModule`. ``PHAB_ID=D307795``
 
 * inject-app: Add `c.t.inject.app.DtabResolution` to help users apply supplemental Dtabs added by
-
   setting the dtab.add flag. This will append the supplemental Dtabs to the 
   Dtab.base in a premain function. ``PHAB_ID=D303813``
 
 Changed
 ~~~~~~~
+
+* finatra: Fix Commons FileUpload vulnerability. Update `org.apache.commons-fileupload` from verson 
+  1.3.1 to version 1.4. This closed #PR-497. ``PHAB_ID=D310470``
 
 * finatra-http: Add `http` scope to `shutdown.time` flag, making it `http.shutdown.time`.
   ``PHAB_ID=D307552``
