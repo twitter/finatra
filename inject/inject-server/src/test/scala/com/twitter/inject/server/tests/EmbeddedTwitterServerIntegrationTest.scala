@@ -30,7 +30,7 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
 
   test("server#fail if server is a singleton") {
     intercept[IllegalArgumentException] {
-      new EmbeddedTwitterServer(SingletonServer)
+      new EmbeddedTwitterServer(SingletonServer, disableTestLogging = true)
     }
   }
 

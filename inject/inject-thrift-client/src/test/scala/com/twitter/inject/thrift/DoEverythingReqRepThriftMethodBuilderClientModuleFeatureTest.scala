@@ -30,7 +30,8 @@ class DoEverythingReqRepThriftMethodBuilderClientModuleFeatureTest
     twitterServer = new TestThriftServer(
       new GreeterThriftService(
         httpServiceClientId,
-        requestHeaderKey).toThriftService)
+        requestHeaderKey).toThriftService),
+    disableTestLogging = true
   )
 
   override val server = new EmbeddedHttpServer(

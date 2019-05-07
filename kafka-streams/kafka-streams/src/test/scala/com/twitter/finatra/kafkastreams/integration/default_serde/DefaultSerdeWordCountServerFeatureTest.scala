@@ -11,7 +11,8 @@ class DefaultSerdeWordCountServerFeatureTest extends KafkaStreamsFeatureTest {
 
   override val server = new EmbeddedTwitterServer(
     new DefaultSerdeWordCountDbServer,
-    flags = kafkaStreamsFlags ++ Map("kafka.application.id" -> "wordcount-prod")
+    flags = kafkaStreamsFlags ++ Map("kafka.application.id" -> "wordcount-prod"),
+    disableTestLogging = true
   )
 
   private val textLinesTopic = kafkaTopic(ScalaSerdes.Long, Serdes.String, "TextLinesTopic")

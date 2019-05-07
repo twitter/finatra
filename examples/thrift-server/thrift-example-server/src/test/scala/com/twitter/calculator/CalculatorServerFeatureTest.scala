@@ -7,7 +7,7 @@ import com.twitter.util.Future
 
 class CalculatorServerFeatureTest extends FeatureTest {
 
-  override val server = new EmbeddedThriftServer(new CalculatorServer)
+  override val server = new EmbeddedThriftServer(new CalculatorServer, disableTestLogging = true)
 
   val client = server.thriftClient[Calculator[Future]](clientId = "client123")
 

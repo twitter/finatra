@@ -7,7 +7,8 @@ class ExampleTwitterServerFeatureTest extends FeatureTest with Mockito {
   private val queue = new TestQueue
 
   val server = new EmbeddedTwitterServer(
-    twitterServer = new ExampleTwitterServer
+    twitterServer = new ExampleTwitterServer,
+    disableTestLogging = true
   ).bind[Queue].toInstance(queue)
 
   test("Queue test") {

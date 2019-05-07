@@ -17,7 +17,8 @@ class InheritanceThriftMethodBuilderClientModuleFeatureTest
 
   private val thriftServer = new EmbeddedThriftServer(
     twitterServer = new TestThriftServer(
-      new ServiceBThriftService(httpClientId).toThriftService)
+      new ServiceBThriftService(httpClientId).toThriftService),
+    disableTestLogging = true
   )
 
   val server = new EmbeddedHttpServer(

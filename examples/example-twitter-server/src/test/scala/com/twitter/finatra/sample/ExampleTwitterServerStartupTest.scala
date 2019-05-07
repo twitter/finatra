@@ -7,6 +7,7 @@ class ExampleTwitterServerStartupTest extends FeatureTest {
 
   val server = new EmbeddedTwitterServer(
     twitterServer = new ExampleTwitterServer,
+    disableTestLogging = true,
     stage = Stage.PRODUCTION
   )
 

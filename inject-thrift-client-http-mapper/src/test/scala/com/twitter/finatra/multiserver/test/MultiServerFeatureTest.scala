@@ -11,13 +11,15 @@ import com.twitter.inject.Test
 
 class MultiServerFeatureTest extends Test with HttpTest with ThriftTest {
 
-  val add1ThriftServer = new EmbeddedThriftServer(new AdderThriftServer)
+  val add1ThriftServer = new EmbeddedThriftServer(new AdderThriftServer, disableTestLogging = true)
   val add1HttpServer = new EmbeddedHttpServer(
     new Add1Server,
+    disableTestLogging = true,
     flags = Map(resolverMap("adder-thrift-server", add1ThriftServer))
   )
   val add2Server = new EmbeddedHttpServer(
     new Add2Server,
+    disableTestLogging = true,
     flags = Map(resolverMap("add1-http-server", add1HttpServer))
   )
 

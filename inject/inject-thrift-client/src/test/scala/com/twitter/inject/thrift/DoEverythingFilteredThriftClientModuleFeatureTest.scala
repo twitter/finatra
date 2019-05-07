@@ -13,7 +13,8 @@ class DoEverythingFilteredThriftClientModuleFeatureTest
   override val printStats = false
 
   private val thriftServer = new EmbeddedThriftServer(
-    twitterServer = new TestThriftServer(new GreeterThriftService)
+    twitterServer = new TestThriftServer(new GreeterThriftService),
+    disableTestLogging = true
   )
 
   override val server = new EmbeddedHttpServer(

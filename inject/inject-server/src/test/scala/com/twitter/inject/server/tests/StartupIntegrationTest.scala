@@ -32,7 +32,7 @@ class StartupIntegrationTest extends Test {
   }
 
   test("non HTTP twitter-server passes health check") {
-    val server = new EmbeddedTwitterServer(new SimpleTwitterServer)
+    val server = new EmbeddedTwitterServer(new SimpleTwitterServer, disableTestLogging = true)
     run(server) {
       server.assertHealthy()
     }
