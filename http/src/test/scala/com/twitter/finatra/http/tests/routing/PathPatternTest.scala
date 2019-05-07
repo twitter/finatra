@@ -73,4 +73,10 @@ class PathPatternTest extends Test {
     val escapedUri = "/" + new URI(path).toASCIIString
     PathPattern("/" + path).extract(escapedUri).isDefined should equal(true)
   }
+
+  test("url-encode") {
+    PathPattern("/cars/ford/:model").extract("/cars/ford/fusion%20hybrid") should equal(
+      Some(Map("model" -> "fusion hybrid"))
+    )
+  }
 }

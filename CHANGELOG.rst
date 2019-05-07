@@ -13,6 +13,8 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-http: Route params are now URL-decoded automatically. ``PHAB_ID=D309144``
+
 * finatra-jackson: Add ability to bypass case class validation using the
   `NullValidationFinatraJacksonModule`. ``PHAB_ID=D307795``
 

@@ -1144,6 +1144,17 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     )
   }
 
+  test("GET defaulted request case class parameter as string with URL-encoded query param") {
+    server.httpGet(
+      "/RequestWithDefaultQueryParam?param=%3Dset%3D",
+      andExpect = Ok,
+      withJsonBody = """
+            { "param": "=set=" }
+        """
+    )
+  }
+
+
   test("GET with query parameters as long sequence") {
     server.httpGet(
       "/RequestWithQueryParamSeqLong?foo=1&foo=2&foo=3",

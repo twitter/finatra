@@ -52,6 +52,9 @@ class RouteBenchmark
   val postGroups123Path: String = postGroupsPath + "123"
   val postGroups123Request: Request = Request(Method.Post, postGroups123Path)
 
+  val postGroupsUrlEncodedPath: String = postGroupsPath + "%24%23%26" // $#&
+  val postGroupsUrlEncodedRequest: Request = Request(Method.Post, postGroupsUrlEncodedPath)
+
   @Benchmark
   def testRoute(): Option[Future[Response]] = {
     route.handle(postGroupsRequest, postGroupsPath, bypassFilters = false)
@@ -60,5 +63,11 @@ class RouteBenchmark
   @Benchmark
   def testRouteWithPathParams(): Option[Future[Response]] = {
     routeWithPathParams.handle(postGroups123Request, postGroups123Path, bypassFilters = false)
+  }
+
+  @Benchmark
+  def testRouteWithUrlEncodedPathParams(): Option[Future[Response]] = {
+    routeWithPathParams.handle(postGroupsUrlEncodedRequest,
+      postGroupsUrlEncodedPath, bypassFilters = false)
   }
 }
