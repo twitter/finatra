@@ -8,25 +8,20 @@ class FinagleRequestScopeTest extends Test {
   test("seed string") {
     val scope = new FinagleRequestScope()
     scope.toString should be("FinagleRequestScope")
-    scope.enter()
+    scope.let {
+      scope.seed[String]("abc")
 
-    scope.seed[String]("abc")
-
-    val unseededProvider = new UnseededFinagleScopeProvider[String]
-    val provider = scope.scope(Key.get(classOf[String]), unseededProvider)
-    provider.toString should include("UnseededFinagleScopeProvider")
-    provider.get should be("abc")
-    scope.exit()
+      val unseededProvider = new UnseededFinagleScopeProvider[String]
+      val provider = scope.scope(Key.get(classOf[String]), unseededProvider)
+      provider.toString should include("UnseededFinagleScopeProvider")
+      provider.get should be("abc")
+    }
   }
 
   test("Use provider after scope exited") {
     val scope = new FinagleRequestScope()
-    scope.enter()
-    scope.seed[String]("abc")
-
     val unseededProvider = new UnseededFinagleScopeProvider[String]
     val provider = scope.scope(Key.get(classOf[String]), unseededProvider)
-    scope.exit()
 
     intercept[OutOfScopeException] {
       println(provider.get)
@@ -35,13 +30,14 @@ class FinagleRequestScopeTest extends Test {
 
   test("get scope for unseeded value") {
     val scope = new FinagleRequestScope()
-    scope.enter()
+    scope.let {
 
-    val unseededProvider = new UnseededFinagleScopeProvider[String]
-    val provider = scope.scope(Key.get(classOf[String]), unseededProvider)
+      val unseededProvider = new UnseededFinagleScopeProvider[String]
+      val provider = scope.scope(Key.get(classOf[String]), unseededProvider)
 
-    intercept[IllegalStateException] {
-      provider.get
+      intercept[IllegalStateException] {
+        provider.get
+      }
     }
   }
 
@@ -54,12 +50,11 @@ class FinagleRequestScopeTest extends Test {
 
   test("seed same object twice") {
     val scope = new FinagleRequestScope()
-    scope.enter()
-
-    scope.seed[String]("abc")
-    intercept[AssertionError] {
+    scope.let {
       scope.seed[String]("abc")
+      intercept[AssertionError] {
+        scope.seed[String]("abc")
+      }
     }
-    scope.exit()
   }
 }

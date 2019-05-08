@@ -3,7 +3,7 @@
 
 Note: the most up-to-date examples are located in the `finatra/examples <https://github.com/twitter/finatra/tree/master/examples>`__ project.
 
-See `examples/hello-world <https://github.com/twitter/finatra/tree/develop/examples/hello-world>`__ for a simple example HTTP Server.
+See `examples/http-server <https://github.com/twitter/finatra/tree/develop/examples/http-server>`__ for a simple example HTTP Server.
 
 HTTP Server Definition
 ======================

@@ -7,11 +7,12 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
-* finatra-http: Remove deprecated `DefaultExceptionMapper`. Extend
-  `c.t.finatra.http.exceptions.ExceptionMapper[Throwable]` directly instead. ``PHAB_ID=D307520``
-
 Added
 ~~~~~
+
+* inject-request-scope: Add a `Filter.TypeAgnostic` implementation for the `FinagleRequestScopeFilter`
+  for better compatibility with Thrift servers. Update the `FinagleRequestScope` to make more idiomatic
+  use of `Context` locals. ``PHAB_ID=D310395``
 
 * finatra-http: Route params are now URL-decoded automatically. ``PHAB_ID=D309144``
 
@@ -25,11 +26,17 @@ Added
 Changed
 ~~~~~~~
 
-* finatra: Fix Commons FileUpload vulnerability. Update `org.apache.commons-fileupload` from verson 
-  1.3.1 to version 1.4. This closed #PR-497. ``PHAB_ID=D310470``
+* finatra: Fix Commons FileUpload vulnerability. Update `org.apache.commons-fileupload` from version
+  1.3.1 to version 1.4. This closes #PR-497. ``PHAB_ID=D310470``
+
+* finatra-http: Replace all usages of guava's `com.google.common.net.MediaType` with `String`.
+  You can migrate by calling `MediaType#toString` everywhere you passed a `MediaType` before.  ``PHAB_ID=D308761``
 
 * finatra-http: Add `http` scope to `shutdown.time` flag, making it `http.shutdown.time`.
   ``PHAB_ID=D307552``
+
+* finatra-http: Remove deprecated `DefaultExceptionMapper`. Extend
+  `c.t.finatra.http.exceptions.ExceptionMapper[Throwable]` directly instead. ``PHAB_ID=D307520``
 
 * inject-app: Move override of `com.twitter.app.App#failfastOnFlagsNotParsed` up from
   `c.t.inject.server.TwitterServer` to `com.twitter.inject.app.App` such that all Finatra-based
@@ -42,10 +49,6 @@ Changed
 
 * finatra-examples: Update "twitter-clone" example to use `Dtabs` instead of the deprecated `resolverMap`.
   Move the "hello-world" example to "http-server". ``PHAB_ID=D303813``
-
-* finatra-http: Replace all usages of guava's `com.google.common.net.MediaType` with `String`.
-  You can migrate by calling `MediaType#toString` everywhere you passed a `MediaType` before.  ``PHAB_ID=D308761``
-
 
 Fixed
 ~~~~~
