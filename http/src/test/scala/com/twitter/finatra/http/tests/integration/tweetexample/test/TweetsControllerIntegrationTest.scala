@@ -256,6 +256,11 @@ class TweetsControllerIntegrationTest extends FeatureTest {
     )
   }
 
+  test("get admin user from admin route without admin path") {
+    val response = server.httpGetJson[JsonNode]("/bestuser", routeToAdminServer = true)
+    assert(response.get("userName").textValue() == "123 from data://prod")
+  }
+
   test("get ping") {
     server.httpGet("/admin/ping", withBody = "pong")
   }

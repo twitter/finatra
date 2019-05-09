@@ -18,4 +18,11 @@ class AdminController @Inject()(@Prod prodUsers: UserService, @Staging stagingUs
     prodUsers.get(userId) + ", " +
       stagingUsers.get(userId)
   }
+
+  // explicitly test an admin route which doesn't use admin path
+  get("/bestuser", admin = true) { request: Request =>
+    val userId = "123"
+    val user = prodUsers.get(userId)
+    Map("userId" -> userId, "userName" -> user)
+  }
 }

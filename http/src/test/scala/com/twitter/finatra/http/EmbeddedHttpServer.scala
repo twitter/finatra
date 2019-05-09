@@ -197,7 +197,10 @@ class EmbeddedHttpServer(
         andExpect = andExpect,
         withLocation = withLocation,
         withJsonBody = withJsonBody,
-        withJsonBodyNormalizer = withJsonBodyNormalizer
+        withJsonBodyNormalizer = withJsonBodyNormalizer,
+        withErrors = withErrors,
+        routeToAdminServer = routeToAdminServer,
+        secure = secure
       )
 
     jsonParseWithNormalizer(
