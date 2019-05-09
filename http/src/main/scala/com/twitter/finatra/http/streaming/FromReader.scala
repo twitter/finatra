@@ -8,11 +8,11 @@ import com.twitter.io.Reader
  * There is currently support for [[com.twitter.io.Reader]] and
  * [[com.twitter.concurrent.AsyncStream]].
  */
-private[streaming] sealed abstract class FromReader[F[_]] {
+private[http] sealed abstract class FromReader[F[_]] {
   def apply[A](r: Reader[A]): F[A]
 }
 
-private[streaming] object FromReader {
+private[http] object FromReader {
   implicit val ReaderIdentity: FromReader[Reader] = new FromReader[Reader] {
     def apply[A](r: Reader[A]): Reader[A] = r
   }

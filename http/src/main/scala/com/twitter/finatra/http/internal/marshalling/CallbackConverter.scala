@@ -4,6 +4,7 @@ import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http._
 import com.twitter.finatra.http.internal.marshalling.CallbackConverter.url
 import com.twitter.finatra.http.response.{ResponseBuilder, StreamingResponse}
+import com.twitter.finatra.http.streaming.{FromReader, StreamingRequest}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.streaming.JsonStreamParser
 import com.twitter.inject.TypeUtils
@@ -30,7 +31,7 @@ private[http] class CallbackConverter @Inject()(
   def convertToFutureResponse[RequestType: TypeTag, ResponseType: TypeTag](
     callback: RequestType => ResponseType
   ): Request => Future[Response] = {
-    val requestConvertedCallback: (Request => ResponseType) =
+    val requestConvertedCallback: Request => ResponseType =
       createRequestCallback[RequestType, ResponseType](callback)
     createResponseCallback[RequestType, ResponseType](requestConvertedCallback)
   }
@@ -49,29 +50,49 @@ private[http] class CallbackConverter @Inject()(
   ): Request => ResponseType = {
     val manifestRequestType = TypeUtils.asManifest[RequestType]
 
-    if (manifestRequestType == manifest[Request]) {
-      callback.asInstanceOf[(Request => ResponseType)]
-    } else if (runtimeClassEqs[AsyncStream[_]](manifestRequestType)) {
-      val asyncStreamTypeParam = manifestRequestType.typeArguments.head
-      request: Request =>
-        val asyncStream = jsonStreamParser.parseArray(request.reader)(asyncStreamTypeParam)
-        callback(asyncStream.asInstanceOf[RequestType])
-    } else if (runtimeClassEqs[Reader[_]](manifestRequestType)) {
-      val readerTypeParam = manifestRequestType.typeArguments.head
-      request: Request =>
-        val reader = jsonStreamParser.parseJson(request.reader)(readerTypeParam)
-        callback(reader.asInstanceOf[RequestType])
-    } else if (runtimeClassEqs[Int](manifestRequestType) || runtimeClassEqs[String](manifestRequestType)) {
-      // NOTE: callback functions with no input param which return a String are inferred as a RequestType of
-      // `Int` by Scala because `StringOps.apply` is a function of Int => Char, other return types
-      // infer a `RequestType` of `String`.
-      throw new Exception(
-        s"Improper callback function RequestType: ${manifestRequestType.runtimeClass}. Controller routes defined with a callback function that has no input parameter or with an incorrectly specified input parameter type are not allowed. " +
-          s"Please specify an input parameter in your route callback function of the appropriate type. For more details see: $url"
-      )
-    } else { request: Request =>
-      val callbackInput = messageBodyManager.read(request)(manifestRequestType)
-      callback(callbackInput)
+    manifestRequestType match {
+      case request if request == manifest[Request] =>
+        callback.asInstanceOf[Request => ResponseType]
+      case streamingRequest if runtimeClassEqs[StreamingRequest[_, _]](streamingRequest) =>
+        val streamIdentity = streamingRequest.typeArguments.head
+        val streamType = streamingRequest.typeArguments.last
+        request: Request =>
+          val streamingRequest = streamIdentity match {
+            case reader if runtimeClassEqs[Reader[_]](reader) =>
+              StreamingRequest(jsonStreamParser, request.reader)(
+                FromReader.ReaderIdentity,
+                streamType)
+            case asyncStream if runtimeClassEqs[AsyncStream[_]](asyncStream) =>
+              StreamingRequest.fromRequestToAsyncStream(jsonStreamParser, request)(streamType)
+            case _ =>
+              throw new Exception(
+                s"Unsupported StreamingRequest type detected as $streamIdentity"
+              )
+          }
+          callback(streamingRequest.asInstanceOf[RequestType])
+      case asyncStream if runtimeClassEqs[AsyncStream[_]](asyncStream) =>
+        val asyncStreamTypeParam = asyncStream.typeArguments.head
+        request: Request =>
+          val asyncStream = jsonStreamParser.parseArray(request.reader)(asyncStreamTypeParam)
+          callback(asyncStream.asInstanceOf[RequestType])
+      case reader if runtimeClassEqs[Reader[_]](reader) =>
+        val readerTypeParam = reader.typeArguments.head
+        request: Request =>
+          val reader = jsonStreamParser.parseJson(request.reader)(readerTypeParam)
+          callback(reader.asInstanceOf[RequestType])
+      case intOrString
+          if runtimeClassEqs[Int](intOrString) || runtimeClassEqs[String](intOrString) =>
+        // NOTE: callback functions with no input param which return a String are inferred as a RequestType of
+        // `Int` by Scala because `StringOps.apply` is a function of Int => Char, other return types
+        // infer a `RequestType` of `String`.
+        throw new Exception(
+          s"Improper callback function RequestType: ${manifestRequestType.runtimeClass}. Controller routes defined with a callback function that has no input parameter or with an incorrectly specified input parameter type are not allowed. " +
+            s"Please specify an input parameter in your route callback function of the appropriate type. For more details see: $url"
+        )
+      case _ =>
+        request: Request =>
+          val callbackInput = messageBodyManager.read(request)(manifestRequestType)
+          callback(callbackInput)
     }
   }
 
@@ -86,7 +107,7 @@ private[http] class CallbackConverter @Inject()(
 
     manifestResponseType match {
       case futureResponse if futureResponse == manifest[Future[Response]] =>
-        requestCallback.asInstanceOf[(Request => Future[Response])]
+        requestCallback.asInstanceOf[Request => Future[Response]]
       case futureOption if isFutureOption(futureOption) =>
         // we special-case in order to convert None --> 404 NotFound
         request: Request =>

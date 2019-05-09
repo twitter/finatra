@@ -6,6 +6,7 @@ import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.tests.integration.tweetexample.main.domain.Tweet
 import com.twitter.finatra.http.tests.integration.tweetexample.main.services.TweetsRepository
 import com.twitter.finatra.http.response.{StreamingResponse, StreamingResponseUtils}
+import com.twitter.finatra.http.streaming.StreamingRequest
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.{Duration, Future, Try}
 import java.nio.charset.StandardCharsets
@@ -123,6 +124,11 @@ class TweetsController @Inject()(
     }
 
     Future(response)
+  }
+
+  post("/tweets/streaming_with_streamingRequest") { request: StreamingRequest[Reader, Long] =>
+    val reader = request.stream
+    tweetsRepository.getByIds(reader)
   }
 
   get("/tweets/") { request: Request =>
