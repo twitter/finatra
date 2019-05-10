@@ -56,16 +56,24 @@ The server can now be defined with the controller as follows:
 
 Here we are adding *by type* allowing the framework to handle class instantiation.
 
+.. _route:
+
 Controllers and Routing
 -----------------------
 
 Routes are defined in a `Sinatra <https://www.sinatrarb.com/>`__-style syntax which consists of an
-HTTP method, a URL matching pattern and an associated callback function. The callback function can
-accept a `c.t.finagle.http.Request <https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala>`__,
+HTTP method (or `any`), a URL matching pattern and an associated callback function. The callback
+function can accept a `c.t.finagle.http.Request
+<https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala>`__,
 a `custom request case class <requests.html#custom-request-case-class>`__ (which declaratively
-represents the parsed request body as JSON), or a type parsed by a registered
-`Message Body Reader <message_body.html#message-body-readers>`__. See `HTTP Requests <requests.html>`__
-for more information.
+represents the parsed request body as JSON), or a type parsed by a registered `Message Body Reader
+<message_body.html#message-body-readers>`__. See `HTTP Requests <requests.html>`__ for more
+information.
+
+If you use `any` instead of specifying an HTTP method, that means that it will match on all HTTP
+methods, provided the pattern matches to the URL. `any` has special `ordering`_ rules, so that
+it has lower precedence than routes where the HTTP method is specified. This ensures that you
+can't accidentally clobber a more specific route by registering them in the wrong order.
 
 The callback can return any type that can be converted into a `c.t.finagle.http.Response <https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Response.scala>`__.
 See `HTTP Responses <responses.html>`__ for more information.
@@ -80,16 +88,27 @@ See `HTTP Responses <responses.html>`__ for more information.
     Failure to specify a correct input type in the callback function will prevent your server from
     starting properly. See the `Http Requests <requests.html>`__ section for more information.
 
+.. _ordering:
+
 Route Ordering
 ^^^^^^^^^^^^^^
 
-When Finatra receives an HTTP request, it will scan all registered controllers **in the order they
-are added** and dispatch the request to the **first matching** route starting from the top of each
-controller then invoking the matching route's associated callback function.
+When Finatra receives an HTTP request, it will first check whether there is a constant route which
+matches the path exactly. If there is, it will dispatch the request to that route. If there isn't,
+it will scan all registered controllers **in the order they are added** and dispatch the request to
+the **first matching** route starting from the top of each controller then invoking the matching
+route's associated callback function.
 
 That is, routes are matched in the order they are added to the `c.t.finatra.http.routing.HttpRouter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__.
 Thus if you are creating routes with overlapping URIs it is recommended to list the routes in order
-starting with the "most specific" to the least specific.
+starting with the "most specific" to the least specific. Although you don't need to do this for
+constant routes, we encourage you to do it anyway to make it easier to reason about.
+
+.. important::
+    The one exception to this case is controllers that are registered with an `any` `route`_, which
+    will be applied only if there is no other matching route with that HTTP method. This is true
+    even if they are registered later. Constant routes for `any` work the same way, where they will
+    be applied only after all routes with that HTTP method are checked.
 
 In general, however, it is recommended to that you follow `REST <https://en.wikipedia.org/wiki/Representational_state_transfer>`__
 conventions if possible, i.e., when deciding which routes to group into a particular controller,
