@@ -1,6 +1,11 @@
 package com.twitter.finatra.http.internal.marshalling
 
-import com.fasterxml.jackson.databind.{BeanProperty, DeserializationContext, InjectableValues, JavaType}
+import com.fasterxml.jackson.databind.{
+  BeanProperty,
+  DeserializationContext,
+  InjectableValues,
+  JavaType
+}
 import com.google.inject.{Injector, Key}
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.internal.marshalling.RequestInjectableValues.SeqWithSingleEmptyString
@@ -10,14 +15,14 @@ import com.twitter.finatra.request.{FormParam, Header, QueryParam, RouteParam}
 import java.lang.annotation.Annotation
 
 object RequestInjectableValues {
-  val SeqWithSingleEmptyString = Seq("")
+  val SeqWithSingleEmptyString: Seq[String] = Seq("")
 }
 
 private[http] class RequestInjectableValues(
   objectMapper: FinatraObjectMapper,
   request: Request,
-  injector: Injector
-) extends InjectableValues {
+  injector: Injector)
+    extends InjectableValues {
 
   private val requestParamsAnnotations: Seq[Class[_ <: Annotation]] =
     Seq(classOf[RouteParam], classOf[QueryParam], classOf[FormParam])
@@ -108,7 +113,10 @@ private[http] class RequestInjectableValues(
       objectMapper.convert(propertyValue, forType)
   }
 
-  private def handleCommaSeparatedLists(forProperty: BeanProperty, propertyValue: Seq[String]): Seq[String] = {
+  private def handleCommaSeparatedLists(
+    forProperty: BeanProperty,
+    propertyValue: Seq[String]
+  ): Seq[String] = {
     findAnnotation(forProperty, Seq(classOf[QueryParam])) match {
       case Some(queryParam: QueryParam) if queryParam.commaSeparatedList() =>
         if (propertyValue.size > 1) {
@@ -120,7 +128,6 @@ private[http] class RequestInjectableValues(
         propertyValue
     }
   }
-
 
   private def handleEmptySeq(forProperty: BeanProperty, propertyValue: Any): Any = {
     if (propertyValue == SeqWithSingleEmptyString &&
@@ -154,11 +161,11 @@ private[http] class RequestInjectableValues(
     case _ => value
   }
 
-  private def hasAnnotation[T <: Annotation : Manifest](beanProperty: BeanProperty): Boolean = {
+  private def hasAnnotation[T <: Annotation: Manifest](beanProperty: BeanProperty): Boolean = {
     getAnnotation[T](beanProperty).isDefined
   }
 
-  private def getAnnotation[T <: Annotation : Manifest](beanProperty: BeanProperty): Option[T] = {
+  private def getAnnotation[T <: Annotation: Manifest](beanProperty: BeanProperty): Option[T] = {
     val clazz = manifest[T].runtimeClass.asInstanceOf[Class[_ <: Annotation]]
     Option(beanProperty.getContextAnnotation(clazz)).map(_.asInstanceOf[T])
   }
@@ -172,7 +179,7 @@ private[http] class RequestInjectableValues(
       .map(beanProperty.getContextAnnotation(_))
   }
 
-  private lazy val isSeqOfBools: (JavaType) => Boolean = { forType =>
+  private lazy val isSeqOfBools: JavaType => Boolean = { forType =>
     forType.getRawClass == classOf[Seq[_]] &&
     forType.containedType(0).getRawClass == classOf[java.lang.Boolean]
   }
@@ -182,7 +189,7 @@ private[http] class RequestInjectableValues(
       annotations.exists(beanProperty.getContextAnnotation(_) != null)
   }
 
-  private lazy val isRequest: (BeanProperty) => Boolean = { forProperty =>
+  private lazy val isRequest: BeanProperty => Boolean = { forProperty =>
     forProperty.getType.getRawClass == classOf[Request]
   }
 }

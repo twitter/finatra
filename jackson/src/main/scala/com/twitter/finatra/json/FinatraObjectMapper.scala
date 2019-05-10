@@ -24,7 +24,7 @@ object FinatraObjectMapper {
     new FinatraObjectMapper(jacksonModule.provideScalaObjectMapper(injector))
   }
 
-  def parseMessageBody[T: Manifest](message: Message, reader: ObjectReader): T = {
+  def parseMessageBody[T : Manifest](message: Message, reader: ObjectReader): T = {
     val inputStream = message.getInputStream()
     try {
       reader.readValue[T](inputStream)
@@ -33,16 +33,16 @@ object FinatraObjectMapper {
     }
   }
 
-  def parseRequestBody[T: Manifest](request: Request, reader: ObjectReader): T =
+  def parseRequestBody[T : Manifest](request: Request, reader: ObjectReader): T =
     parseMessageBody[T](request, reader)
 
-  def parseResponseBody[T: Manifest](response: Response, reader: ObjectReader): T =
+  def parseResponseBody[T : Manifest](response: Response, reader: ObjectReader): T =
     parseMessageBody[T](response, reader)
 }
 
 case class FinatraObjectMapper(objectMapper: ObjectMapper with ScalaObjectMapper) {
 
-  lazy val prettyObjectMapper = {
+  lazy val prettyObjectMapper: ObjectWriter = {
     objectMapper.writer(ArrayElementsOnNewLinesPrettyPrinter)
   }
 
@@ -50,11 +50,11 @@ case class FinatraObjectMapper(objectMapper: ObjectMapper with ScalaObjectMapper
     objectMapper.getPropertyNamingStrategy
   }
 
-  def reader[T: Manifest] = {
+  def reader[T : Manifest]: ObjectReader = {
     objectMapper.readerFor[T]
   }
 
-  def parse[T: Manifest](message: Message): T = {
+  def parse[T : Manifest](message: Message): T = {
     if (message.isRequest) {
       val length = message.contentLength.getOrElse(0L)
       if (length == 0) {
@@ -64,33 +64,33 @@ case class FinatraObjectMapper(objectMapper: ObjectMapper with ScalaObjectMapper
     FinatraObjectMapper.parseMessageBody(message, objectMapper.readerFor[T])
   }
 
-  def parse[T: Manifest](byteBuffer: ByteBuffer): T = {
+  def parse[T : Manifest](byteBuffer: ByteBuffer): T = {
     val is = new ByteBufferBackedInputStream(byteBuffer)
     objectMapper.readValue[T](is)
   }
 
-  def parse[T: Manifest](buf: Buf): T = {
+  def parse[T : Manifest](buf: Buf): T = {
     parse[T](Buf.ByteBuffer.Shared.extract(buf))
   }
 
-  def parse[T: Manifest](jsonNode: JsonNode): T = {
+  def parse[T : Manifest](jsonNode: JsonNode): T = {
     convert[T](jsonNode)
   }
 
   /** Parse InputStream (caller must close) */
-  def parse[T: Manifest](inputStream: InputStream): T = {
+  def parse[T : Manifest](inputStream: InputStream): T = {
     objectMapper.readValue[T](inputStream)
   }
 
-  def parse[T: Manifest](bytes: Array[Byte]): T = {
+  def parse[T : Manifest](bytes: Array[Byte]): T = {
     objectMapper.readValue[T](bytes)
   }
 
-  def parse[T: Manifest](string: String): T = {
+  def parse[T : Manifest](string: String): T = {
     objectMapper.readValue[T](string)
   }
 
-  def parse[T: Manifest](jsonParser: JsonParser): T = {
+  def parse[T : Manifest](jsonParser: JsonParser): T = {
     objectMapper.readValue[T](jsonParser)
   }
 
@@ -103,7 +103,7 @@ case class FinatraObjectMapper(objectMapper: ObjectMapper with ScalaObjectMapper
    The wrapping occurs because CaseClassMappingException is an IOException (because we extend JsonMappingException which extends JsonProcessingException which extends IOException).
    We must extend JsonMappingException otherwise CaseClassMappingException is not properly handled when deserializing into nested case-classes
    */
-  def convert[T: Manifest](any: Any): T = {
+  def convert[T : Manifest](any: Any): T = {
     try {
       objectMapper.convertValue[T](any)
     } catch {

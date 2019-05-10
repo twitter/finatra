@@ -53,6 +53,8 @@ Changed
 Fixed
 ~~~~~
 
+* finatra-jackson: Properly account for timezone in Joda `DateTime` deserialization. ``PHAB_ID=D312027``
+
  * finatra-http: `EmbeddedHttpServer`'s `httpGetJson` method now properly passes
    all parameters through to the underlying client call. ``PHAB_ID=D312151``
 
