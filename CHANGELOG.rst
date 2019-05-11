@@ -10,6 +10,9 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-http: Add ability for Java HTTP Controllers to use the RouteDSL for per-route filtering
+  and for route prefixing. ``PHAB_ID=D311625``
+
 * inject-request-scope: Add a `Filter.TypeAgnostic` implementation for the `FinagleRequestScopeFilter`
   for better compatibility with Thrift servers. Update the `FinagleRequestScope` to make more idiomatic
   use of `Context` locals. ``PHAB_ID=D310395``

@@ -2,7 +2,7 @@ package com.twitter.finatra.http
 
 import com.twitter.finagle.Filter
 import com.twitter.finagle.http.Method._
-import com.twitter.finagle.http.{Method, RouteIndex}
+import com.twitter.finagle.http.{Method, Request, RouteIndex}
 import com.twitter.inject.Injector
 import com.twitter.util.Var
 import scala.collection.mutable.ArrayBuffer
@@ -120,6 +120,8 @@ private[http] trait RouteDSL extends RouteState { self =>
     }
   }
 
+  /* GET/ */
+
   def get[RequestType: TypeTag, ResponseType: TypeTag](
     route: String,
     name: String = "",
@@ -127,6 +129,45 @@ private[http] trait RouteDSL extends RouteState { self =>
     index: Option[RouteIndex] = None
   )(callback: RequestType => ResponseType): Unit =
     add(Get, route, name, admin, index, callback)
+
+  /* For Java compatibility */
+
+  protected def get(
+    route: String,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    get(route, admin = false, callback)
+
+  protected def get(
+    route: String,
+    admin: Boolean,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    get(route, admin, null, callback)
+
+  protected def get(
+    route: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    get(route, "", admin, index, callback)
+
+  protected def get(
+    route: String,
+    name: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    get[Request, Object](
+      route,
+      name,
+      admin,
+      Option(index)
+    )(callback.apply)
+
+  /* POST/ */
 
   def post[RequestType: TypeTag, ResponseType: TypeTag](
     route: String,
@@ -136,6 +177,45 @@ private[http] trait RouteDSL extends RouteState { self =>
   )(callback: RequestType => ResponseType): Unit =
     add(Post, route, name, admin, index, callback)
 
+  /* For Java compatibility */
+
+  protected def post(
+    route: String,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    post(route, admin = false, callback)
+
+  protected def post(
+    route: String,
+    admin: Boolean,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    post(route, admin, null, callback)
+
+  protected def post(
+    route: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    post(route, "", admin, index, callback)
+
+  protected def post(
+    route: String,
+    name: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    post[Request, Object](
+      route,
+      name,
+      admin,
+      Option(index)
+    )(callback.apply)
+
+  /* PUT/ */
+
   def put[RequestType: TypeTag, ResponseType: TypeTag](
     route: String,
     name: String = "",
@@ -144,29 +224,44 @@ private[http] trait RouteDSL extends RouteState { self =>
   )(callback: RequestType => ResponseType): Unit =
     add(Put, route, name, admin, index, callback)
 
-  def delete[RequestType: TypeTag, ResponseType: TypeTag](
-    route: String,
-    name: String = "",
-    admin: Boolean = false,
-    index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
-    add(Delete, route, name, admin, index, callback)
+  /* For Java compatibility */
 
-  def options[RequestType: TypeTag, ResponseType: TypeTag](
+  protected def put(
     route: String,
-    name: String = "",
-    admin: Boolean = false,
-    index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
-    add(Options, route, name, admin, index, callback)
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    put(route, admin = false, callback)
 
-  def patch[RequestType: TypeTag, ResponseType: TypeTag](
+  protected def put(
     route: String,
-    name: String = "",
-    admin: Boolean = false,
-    index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
-    add(Patch, route, name, admin, index, callback)
+    admin: Boolean,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    put(route, admin, null, callback)
+
+  protected def put(
+    route: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    put(route, "", admin, index, callback)
+
+  protected def put(
+    route: String,
+    name: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    put[Request, Object](
+      route,
+      name,
+      admin,
+      Option(index)
+    )(callback.apply)
+
+  /* HEAD/ */
 
   def head[RequestType: TypeTag, ResponseType: TypeTag](
     route: String,
@@ -176,6 +271,139 @@ private[http] trait RouteDSL extends RouteState { self =>
   )(callback: RequestType => ResponseType): Unit =
     add(Head, route, name, admin, index, callback)
 
+  /* For Java compatibility */
+
+  protected def head(
+    route: String,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    head(route, admin = false, callback)
+
+  protected def head(
+    route: String,
+    admin: Boolean,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    head(route, admin, null, callback)
+
+  protected def head(
+    route: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    head(route, "", admin, index, callback)
+
+  protected def head(
+    route: String,
+    name: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    head[Request, Object](
+      route,
+      name,
+      admin,
+      Option(index)
+    )(callback.apply)
+
+  /* PATCH/ */
+
+  def patch[RequestType: TypeTag, ResponseType: TypeTag](
+    route: String,
+    name: String = "",
+    admin: Boolean = false,
+    index: Option[RouteIndex] = None
+  )(callback: RequestType => ResponseType): Unit =
+    add(Patch, route, name, admin, index, callback)
+
+  /* For Java compatibility */
+
+  protected def patch(
+    route: String,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    patch(route, admin = false, callback)
+
+  protected def patch(
+    route: String,
+    admin: Boolean,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    patch(route, admin, null, callback)
+
+  protected def patch(
+    route: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    patch(route, "", admin, index, callback)
+
+  protected def patch(
+    route: String,
+    name: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    patch[Request, Object](
+      route,
+      name,
+      admin,
+      Option(index)
+    )(callback.apply)
+
+  /* DELETE/ */
+
+  def delete[RequestType: TypeTag, ResponseType: TypeTag](
+    route: String,
+    name: String = "",
+    admin: Boolean = false,
+    index: Option[RouteIndex] = None
+  )(callback: RequestType => ResponseType): Unit =
+    add(Delete, route, name, admin, index, callback)
+
+  /* For Java compatibility */
+
+  protected def delete(
+    route: String,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    delete(route, admin = false, callback)
+
+  protected def delete(
+    route: String,
+    admin: Boolean,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    delete(route, admin, null, callback)
+
+  protected def delete(
+    route: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    delete(route, "", admin, index, callback)
+
+  protected def delete(
+    route: String,
+    name: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    delete[Request, Object](
+      route,
+      name,
+      admin,
+      Option(index)
+    )(callback.apply)
+
+  /* TRACE/ */
+
   def trace[RequestType: TypeTag, ResponseType: TypeTag](
     route: String,
     name: String = "",
@@ -183,6 +411,92 @@ private[http] trait RouteDSL extends RouteState { self =>
     index: Option[RouteIndex] = None
   )(callback: RequestType => ResponseType): Unit =
     add(Trace, route, name, admin, index, callback)
+
+  /* For Java compatibility */
+
+  protected def trace(
+    route: String,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    trace(route, admin = false, callback)
+
+  protected def trace(
+    route: String,
+    admin: Boolean,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    trace(route, admin, null, callback)
+
+  protected def trace(
+    route: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    trace(route, "", admin, index, callback)
+
+  protected def trace(
+    route: String,
+    name: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    trace[Request, Object](
+      route,
+      name,
+      admin,
+      Option(index)
+    )(callback.apply)
+
+  /* OPTIONS/ */
+
+  def options[RequestType: TypeTag, ResponseType: TypeTag](
+    route: String,
+    name: String = "",
+    admin: Boolean = false,
+    index: Option[RouteIndex] = None
+  )(callback: RequestType => ResponseType): Unit =
+    add(Options, route, name, admin, index, callback)
+
+  /* For Java compatibility */
+
+  protected def options(
+    route: String,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    options(route, admin = false, callback)
+
+  protected def options(
+    route: String,
+    admin: Boolean,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    options(route, admin, null, callback)
+
+  protected def options(
+    route: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    options(route, "", admin, index, callback)
+
+  protected def options(
+    route: String,
+    name: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    options[Request, Object](
+      route,
+      name,
+      admin,
+      Option(index)
+    )(callback.apply)
+
+  /* ANY/ */
 
   def any[RequestType: TypeTag, ResponseType: TypeTag](
     route: String,
@@ -192,7 +506,44 @@ private[http] trait RouteDSL extends RouteState { self =>
   )(callback: RequestType => ResponseType): Unit =
     add(AnyMethod, route, name, admin, index, callback)
 
-  /* Protected */
+  /* For Java compatibility */
+
+  protected def any(
+    route: String,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    any(route, admin = false, callback)
+
+  protected def any(
+    route: String,
+    admin: Boolean,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    any(route, admin, null, callback)
+
+  protected def any(
+    route: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    any(route, "", admin, index, callback)
+
+  protected def any(
+    route: String,
+    name: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback[Request, Object]
+  ): Unit =
+    any[Request, Object](
+      route,
+      name,
+      admin,
+      Option(index)
+    )(callback.apply)
+
+  /* Private */
 
   /* A function that wraps another and sets any contexts, if necessary */
   private[http] def contextWrapper[T](f: => T): T = f
@@ -208,9 +559,7 @@ private[http] trait RouteDSL extends RouteState { self =>
     }
   }
 
-  /* Private */
-
-  private def add[RequestType: TypeTag, ResponseType: TypeTag](
+  private def add[RequestType : TypeTag, ResponseType : TypeTag](
     method: Method,
     route: String,
     name: String,

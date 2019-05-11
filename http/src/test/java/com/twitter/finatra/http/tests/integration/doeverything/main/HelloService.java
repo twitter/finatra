@@ -3,14 +3,42 @@ package com.twitter.finatra.http.tests.integration.doeverything.main;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
+import com.twitter.finagle.http.Request;
+import com.twitter.finagle.http.Response;
+import com.twitter.finatra.http.response.ResponseBuilder;
 import com.twitter.util.Future;
 
 public class HelloService {
-    public String hi(String name) {
-        return "Hello " + name;
+    private final ResponseBuilder response;
+
+    @Inject
+    public HelloService(ResponseBuilder response) {
+        this.response = response;
     }
 
-    public Future<Map<String, Object>> computeQueryResult(String query) {
+    /** returns an http Response */
+    Response hi(Request request) {
+        return hi(request, true);
+    }
+
+    /** returns an http Response */
+    Response hi(Request request, Boolean verifyHeaders) {
+        if (verifyHeaders) {
+            assert request.headerMap().getAll("test").mkString("").equals("156");
+        }
+        return response.ok("Hello " + request.getParam("name"));
+    }
+
+    /** returns a Goodbye response */
+    GoodbyeResponse goodbye(Request request) {
+        return new GoodbyeResponse("guest", "cya", 123);
+    }
+
+    /** returns a Future Map[String, Object] */
+    Future<Map<String, Object>> computeQueryResult(Request request) {
+        String query = request.getParam("q");
         Map<String, String> results = new HashMap<String, String>();
         results.put("a", "1");
         results.put("b", "2");

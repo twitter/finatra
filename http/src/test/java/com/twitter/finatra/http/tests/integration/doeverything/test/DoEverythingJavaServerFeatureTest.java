@@ -147,6 +147,21 @@ public class DoEverythingJavaServerFeatureTest extends Assert {
     }
 
     @Test
+    public void testPrefixedQueryEndpoint() {
+        Request request = RequestBuilder.get("/1.0/query?q=FooBar");
+        Response response = SERVER.httpRequest(request);
+        assertEquals(Status.Ok(), response.status());
+        assertEquals(
+            "{\"query\":\"FooBar\","
+                + "\"numResults\":\"5\","
+                + "\"results\":"
+                +     "{\"a\":\"1\",\"b\":\"2\",\"c\":\"3\",\"d\":\"4\",\"e\":\"5\"},"
+                + "\"user\":\"Bob\","
+                + "\"timestamp\":\"Thu, 19 May 2016 00:00:00 +00:00\"}",
+            response.contentString());
+    }
+
+    @Test
     public void testExceptionEndpoint() {
         Request request = RequestBuilder.get("/exception");
         Response response = SERVER.httpRequest(request);
@@ -189,7 +204,7 @@ public class DoEverythingJavaServerFeatureTest extends Assert {
         String path,
         Method method,
         Boolean includeInIndex) {
-        Boolean result = false;
+        boolean result = false;
         for (AdminHttpServer.Route route : routes) {
             if (route.path().equalsIgnoreCase(path)
                     && route.method() == method

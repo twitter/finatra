@@ -3,7 +3,7 @@ package com.twitter.finatra.http.routing
 import com.twitter.finagle.Filter
 import com.twitter.finatra.http.exceptions.{AbstractExceptionMapper, ExceptionManager, ExceptionMapper, ExceptionMapperCollection}
 import com.twitter.finatra.http.internal.marshalling.{CallbackConverter, MessageBodyManager}
-import com.twitter.finatra.http.internal.routing.{Route, Registrar, RoutesByType, RoutingService, Services}
+import com.twitter.finatra.http.internal.routing.{Registrar, Route, RoutesByType, RoutingService, Services}
 import com.twitter.finatra.http.marshalling.MessageBodyComponent
 import com.twitter.finatra.http.routing.HttpRouter._
 import com.twitter.finatra.http.{AbstractController, Controller, HttpFilter}

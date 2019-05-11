@@ -1,4 +1,4 @@
-package com.twitter.finatra.http.tests.integration.doeverything.main;
+package com.twitter.hello.server.services;
 
 /**
  * Note that the class, all fields, and the constructor must be public (or have getter/setter
@@ -12,8 +12,8 @@ public class GoodbyeResponse {
   public final Integer code;
 
   public GoodbyeResponse(String name, String message, Integer code) {
-        this.name = name;
-        this.message = message;
-        this.code = code;
-    }
+      this.name = name;
+      this.message = message;
+      this.code = code;
+  }
 }

@@ -50,28 +50,28 @@ class DoEverythingController @Inject()(
     httpClient.execute(request)
   }
 
-  get("/example/routing/always") { request: Request =>
+  get("/example/routing/always") { _: Request =>
     response.ok.body("always response")
   }
 
-  get("/example/routing/always2") { request: Request =>
+  get("/example/routing/always2") { _: Request =>
     response.ok("always response")
   }
 
-  get("/plaintext/?") { request: Request =>
+  get("/plaintext/?") { _: Request =>
     "Hello, World!"
   }
 
   prefix("/1.1") {
-    get("/plaintext") { request: Request =>
+    get("/plaintext") { _: Request =>
       "Hello, World!"
     }
 
-    post("/foo") { request: Request =>
+    post("/foo") { _: Request =>
       "bar"
     }
 
-    filter[ForbiddenFilter].get("/forbiddenByFilter") { request: Request =>
+    filter[ForbiddenFilter].get("/forbiddenByFilter") { _: Request =>
       "ok!"
     }
 
@@ -91,7 +91,7 @@ class DoEverythingController @Inject()(
   prefix("/1.1") {
     prefix("/waterfall") {
       prefix("/users") {
-        get("/") { request: Request =>
+        get("/") { _: Request =>
           "ok!"
         }
       }
@@ -99,14 +99,14 @@ class DoEverythingController @Inject()(
   }
 
   filter[ForbiddenFilter].prefix("/1.1") {
-    get("/forbiddenByFilterPrefilter") { request: Request =>
+    get("/forbiddenByFilterPrefilter") { _: Request =>
       "ok!"
     }
   }
 
   filter[ForbiddenFilter] {
     prefix("/1.1") {
-      get("/forbiddenByFilterPrefilter-nested") { request: Request =>
+      get("/forbiddenByFilterPrefilter-nested") { _: Request =>
         "ok!"
       }
     }
@@ -120,13 +120,13 @@ class DoEverythingController @Inject()(
     forward(request, "/forwarded/post")
   }
 
-  get("/bytearray") { request: Request =>
+  get("/bytearray") { _: Request =>
     val b = new Array[Byte](20)
     ThreadLocalRandom.current().nextBytes(b)
     b
   }
 
-  get("/inputstream") { request: Request =>
+  get("/inputstream") { _: Request =>
     val b = new Array[Byte](20)
     ThreadLocalRandom.current().nextBytes(b)
     response.ok.body(new ByteArrayInputStream(b))
@@ -148,27 +148,27 @@ class DoEverythingController @Inject()(
     forward(request.request, "/forwarded/get")
   }
 
-  get("/json") { request: Request =>
+  get("/json") { _: Request =>
     response.ok.json("{}".getBytes)
   }
 
-  get("/json2") { request: Request =>
+  get("/json2") { _: Request =>
     response.ok.json("{}")
   }
 
-  get("/none") { request: Request =>
+  get("/none") { _: Request =>
     response.ok.body(None)
   }
 
-  get("/bodyunit") { request: Request =>
+  get("/bodyunit") { _: Request =>
     response.ok.body(())
   }
 
-  get("/bodynull") { request: Request =>
+  get("/bodynull") { _: Request =>
     response.ok.body(null.asInstanceOf[Any])
   }
 
-  get("/bodyEmptyString") { request: Request =>
+  get("/bodyEmptyString") { _: Request =>
     response.ok.body("")
   }
 
@@ -190,15 +190,15 @@ class DoEverythingController @Inject()(
     s"${request.params("key")}/${request.params("*")}"
   }
 
-  post("/foo") { request: Request =>
+  post("/foo") { _: Request =>
     "bar"
   }
 
-  post("/longer/post/path/:capture") { request: Request =>
+  post("/longer/post/path/:capture") { _: Request =>
     "bar"
   }
 
-  post("/longer/post/path/with/name/:capture", name = "my_cool_endpoint") { request: Request =>
+  post("/longer/post/path/with/name/:capture", name = "my_cool_endpoint") { _: Request =>
     "bar"
   }
 
@@ -251,11 +251,11 @@ class DoEverythingController @Inject()(
     response.created(r)
   }
 
-  post("/caseClassWithRequestField") { r: CaseClassWithRequestField =>
+  post("/caseClassWithRequestField") { _: CaseClassWithRequestField =>
     "hi"
   }
 
-  get("/example/routing/flaky") { request: Request =>
+  get("/example/routing/flaky") { _: Request =>
     val num = flakyCount.incrementAndGet()
     if (num == 1)
       response.internalServerError.body("flaky error")
@@ -267,75 +267,75 @@ class DoEverythingController @Inject()(
       response.ok.body("flaky response")
   }
 
-  get("/ok") { request: Request =>
+  get("/ok") { _: Request =>
     response.ok.body("ok")
   }
 
-  get("/created") { request: Request =>
+  get("/created") { _: Request =>
     response.created.body("created").location("/foo/123")
   }
 
-  get("/accepted") { request: Request =>
+  get("/accepted") { _: Request =>
     response.accepted.body("accepted").location("/foo/123")
   }
 
-  get("/accepted2") { request: Request =>
+  get("/accepted2") { _: Request =>
     response.accepted("accepted").location("/foo/123")
   }
 
-  get("/badrequest") { request: Request =>
+  get("/badrequest") { _: Request =>
     response.badRequest.body("bad")
   }
 
-  get("/forbidden") { request: Request =>
+  get("/forbidden") { _: Request =>
     response.forbidden.body("forbidden")
   }
 
-  get("/methodnotallowed") { request: Request =>
+  get("/methodnotallowed") { _: Request =>
     response.methodNotAllowed.body("not allowed")
   }
 
-  get("/unauthorized") { request: Request =>
+  get("/unauthorized") { _: Request =>
     response.unauthorized.body("unauthorized")
   }
 
-  get("/unavailable") { request: Request =>
+  get("/unavailable") { _: Request =>
     response.serviceUnavailable.body("unavail")
   }
 
-  get("/conflict") { request: Request =>
+  get("/conflict") { _: Request =>
     SimpleResponse(Status.Conflict, "conflict")
   }
 
-  get("/redirect") { request: Request =>
+  get("/redirect") { _: Request =>
     response.temporaryRedirect.location("/foo/123")
   }
 
-  get("/found") { request: Request =>
+  get("/found") { _: Request =>
     response.found.location("/foo/123")
   }
 
-  get("/notfound") { request: Request =>
+  get("/notfound") { _: Request =>
     response.notFound.body("notfound")
   }
 
-  get("/notfound2") { request: Request =>
+  get("/notfound2") { _: Request =>
     response.notFound("notfound")
   }
 
-  get("/future") { request: Request =>
+  get("/future") { _: Request =>
     Future(response.ok.body("future"))
   }
 
-  get("/true") { request: Request =>
+  get("/true") { _: Request =>
     true
   }
 
-  post("/post") { request: Request =>
+  post("/post") { _: Request =>
     "post"
   }
 
-  delete("/delete") { request: Request =>
+  delete("/delete") { _: Request =>
     "delete"
   }
 
@@ -363,11 +363,11 @@ class DoEverythingController @Inject()(
     response.ok(request.contentString)
   }
 
-  get("/testfile") { request: Request =>
+  get("/testfile") { _: Request =>
     response.ok.file("/testfile.txt")
   }
 
-  get("/testfileWhenNotfound") { request: Request =>
+  get("/testfileWhenNotfound") { _: Request =>
     response.ok.file("/doesntexist.txt")
   }
 
@@ -375,18 +375,18 @@ class DoEverythingController @Inject()(
     response.ok.fileOrIndex(request.params("*"), "testindex.html")
   }
 
-  get("/null") { request: Request =>
+  get("/null") { _: Request =>
     null
   }
 
-  get("/empty") { request: Request =>
+  get("/empty") { _: Request =>
     ""
   }
 
-  get("/unit") { request: Request =>
+  get("/unit") { _: Request =>
     }
 
-  get("/exception") { request: Request =>
+  get("/exception") { _: Request =>
     throw new Exception("bad")
   }
 
@@ -400,31 +400,31 @@ class DoEverythingController @Inject()(
     complexServiceFactory.create(name).execute
   }
 
-  get("/notfoundexception") { request: Request =>
+  get("/notfoundexception") { _: Request =>
     throw NotFoundException()
   }
 
-  get("/notfoundexception2") { request: Request =>
+  get("/notfoundexception2") { _: Request =>
     throw new NotFoundException("foo")
   }
 
-  get("/servererrorexception") { request: Request =>
+  get("/servererrorexception") { _: Request =>
     throw InternalServerErrorException()
   }
 
-  get("/serviceunavailableexception") { request: Request =>
+  get("/serviceunavailableexception") { _: Request =>
     throw ServiceUnavailableException()
   }
 
-  get("/serviceunavailableexception2") { request: Request =>
+  get("/serviceunavailableexception2") { _: Request =>
     throw ServiceUnavailableException.plainText("foo")
   }
 
-  get("/responsebuilder_status_code") { request: Request =>
+  get("/responsebuilder_status_code") { _: Request =>
     response.status(503)
   }
 
-  get("/responsebuilder_status") { request: Request =>
+  get("/responsebuilder_status") { _: Request =>
     response.status(Status.ServiceUnavailable)
   }
 
@@ -463,21 +463,21 @@ class DoEverythingController @Inject()(
       throw BadRequestException()
   }
 
-  get("/BadRequestException") { request: Request =>
+  get("/BadRequestException") { _: Request =>
     throw BadRequestException.plainText("foo")
   }
 
-  get("/slow") { request: Request =>
+  get("/slow") { _: Request =>
     println("SLOW ROUTE CALLED")
     Thread.sleep(9999)
     "slow"
   }
 
-  get("/nack") { request: Request =>
+  get("/nack") { _: Request =>
     Future.exception(Failure.rejected("overloaded!"))
   }
 
-  get("/builderCreatedWithHeader") { request: Request =>
+  get("/builderCreatedWithHeader") { _: Request =>
     response.created.header("a", "b").header("Location", "http://foo.com/1")
   }
 
@@ -485,7 +485,7 @@ class DoEverythingController @Inject()(
     request.fooClass
   }
 
-  get("/stringMap") { request: Request =>
+  get("/stringMap") { _: Request =>
     Map("message" -> helloWorldText)
   }
 
@@ -534,27 +534,27 @@ class DoEverythingController @Inject()(
     user
   }
 
-  get("/array") { r: Request =>
+  get("/array") { _: Request =>
     Array("a", "b")
   }
 
-  get("/set") { r: Request =>
+  get("/set") { _: Request =>
     response.ok.body(SortedSet("a", "b"))
   }
 
-  get("/seq") { r: Request =>
+  get("/seq") { _: Request =>
     Seq("a", "b")
   }
 
-  options("/options") { r: Request =>
+  options("/options") { _: Request =>
     "options"
   }
 
-  head("/head") { r: Request =>
+  head("/head") { _: Request =>
     response.conflict
   }
 
-  patch("/patch") { r: Request =>
+  patch("/patch") { _: Request =>
     "patch"
   }
 
@@ -613,19 +613,19 @@ class DoEverythingController @Inject()(
     response.ok(request.contentString)
   }
 
-  get("/HttpResponseException") { r: Request =>
+  get("/HttpResponseException") { _: Request =>
     val exception = new HttpResponseException(response.conflict("conflicted"))
     warn(exception.getMessage)
     throw exception
   }
 
-  get("/toFutureException") { r: Request =>
+  get("/toFutureException") { _: Request =>
     response.conflict("conflicted").toFutureException
   }
 
   /* Admin routes */
 
-  get("/admin/foo") { request: Request =>
+  get("/admin/foo") { _: Request =>
     response.ok("on the external interface")
   }
 
@@ -633,49 +633,49 @@ class DoEverythingController @Inject()(
     request.headerMap("test")
   }
 
-  get("/HttpExceptionPlain") { r: Request =>
+  get("/HttpExceptionPlain") { _: Request =>
     throw HttpException.plainText(Status.Created, "foo")
   }
 
-  get("/HttpExceptionErrors") { r: Request =>
+  get("/HttpExceptionErrors") { _: Request =>
     val e = HttpException(Status.Created, "foo1", "foo2")
     warn(e + " " + e.hashCode)
     throw e
   }
 
-  get("/NotFoundException") { r: Request =>
+  get("/NotFoundException") { _: Request =>
     throw NotFoundException("foo1")
   }
 
-  get("/ConflictException") { r: Request =>
+  get("/ConflictException") { _: Request =>
     throw ConflictException("foo1")
   }
 
-  get("/ConflictException2") { r: Request =>
+  get("/ConflictException2") { _: Request =>
     throw ConflictException.plainText("foo1")
   }
 
-  get("/ConflictException3") { r: Request =>
+  get("/ConflictException3") { _: Request =>
     throw new ConflictException("foo1")
   }
 
-  get("/ForbiddenException") { r: Request =>
+  get("/ForbiddenException") { _: Request =>
     throw ForbiddenException.plainText("foo1")
   }
 
-  get("/ForbiddenException2") { r: Request =>
+  get("/ForbiddenException2") { _: Request =>
     throw ForbiddenException("foo1")
   }
 
-  get("/NotAcceptableException") { r: Request =>
+  get("/NotAcceptableException") { _: Request =>
     throw NotAcceptableException("foo1")
   }
 
-  get("/NotAcceptableException2") { r: Request =>
+  get("/NotAcceptableException2") { _: Request =>
     throw NotAcceptableException.plainText("foo1")
   }
 
-  get("/InternalServerErrorExceptionPlain") { r: Request =>
+  get("/InternalServerErrorExceptionPlain") { _: Request =>
     throw InternalServerErrorException.plainText("foo1")
   }
 
@@ -703,21 +703,21 @@ class DoEverythingController @Inject()(
     throw new FooException(r.params("id"))
   }
 
-  get("/BarException") { r: Request =>
+  get("/BarException") { _: Request =>
     throw new BarException
   }
 
-  get("/BazException") { r: Request =>
+  get("/BazException") { _: Request =>
     throw new BazException
   }
 
-  get("/FooBarBazException") { r: Request =>
+  get("/FooBarBazException") { _: Request =>
     // pretend a JSON parse exception happened resulting in a thrown FooBarBazException
     // a mapper for this should be added by the DoEverythingInstalledExceptionMappersModule
     throw new FooBarBazException
   }
 
-  get("/NoSuchMethodException") { r: Request =>
+  get("/NoSuchMethodException") { _: Request =>
     throw new NoSuchMethodException
   }
 
@@ -781,7 +781,7 @@ class DoEverythingController @Inject()(
     SomethingStreamedResponse(r.somethingId, r.field1, r.field2)
   }
 
-  get("/camelCaseJson") { request: Request =>
+  get("/camelCaseJson") { _: Request =>
     camelCaseObjectMapper.writeValueAsString(Map("firstName" -> "Bob"))
   }
 
@@ -794,11 +794,11 @@ class DoEverythingController @Inject()(
   }
 
   //needed to avoid colliding with Logging#trace :-/
-  trace[Request, String]("/trace") { r: Request =>
+  trace[Request, String]("/trace") { _: Request =>
     "trace 123"
   }
 
-  filter[ForbiddenFilter].get("/forbiddenByFilter") { r: Request =>
+  filter[ForbiddenFilter].get("/forbiddenByFilter") { _: Request =>
     "ok!"
   }
 
@@ -817,11 +817,11 @@ class DoEverythingController @Inject()(
   filter[IdentityFilter]
     .filter[IdentityFilter]
     .filter[IdentityFilter]
-    .get("/multiIdentityFilterAppend") { request: Request =>
+    .get("/multiIdentityFilterAppend") { _: Request =>
       "ok!"
     }
 
-  get("/testClassWithHtml") { r: Request =>
+  get("/testClassWithHtml") { _: Request =>
     val testUser = TestUserView(28, "Bob Smith", Seq("user1", "user2"))
 
     TestCaseClassWithHtml(
@@ -831,18 +831,18 @@ class DoEverythingController @Inject()(
     )
   }
 
-  get("/non_case_class") { r: Request =>
+  get("/non_case_class") { _: Request =>
     new NonCaseClass
   }
 
-  get("/bytes") { r: Request =>
+  get("/bytes") { _: Request =>
     "Steve".getBytes(StandardCharsets.UTF_8)
   }
 
   any("/anyMethod") { request: Request =>
     // only support GET, HEAD or TRACE here
     request.method match {
-      case m @ (Method.Get | Method.Head | Method.Trace) =>
+      case _ @ (Method.Get | Method.Head | Method.Trace) =>
         response.ok
       case _ =>
         response.methodNotAllowed
@@ -853,11 +853,11 @@ class DoEverythingController @Inject()(
     r.dateTime.getMillis
   }
 
-  post("/localDateRequest") { r: TestCaseClassWithLocalDate =>
+  post("/localDateRequest") { _: TestCaseClassWithLocalDate =>
     response.ok
   }
 
-  post("/invalidValidationRequest") { request: InvalidValidationRequest =>
+  post("/invalidValidationRequest") { _: InvalidValidationRequest =>
     response.ok
   }
 

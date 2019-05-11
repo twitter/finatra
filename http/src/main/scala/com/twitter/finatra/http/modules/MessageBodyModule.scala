@@ -1,5 +1,6 @@
 package com.twitter.finatra.http.modules
 
+import com.google.inject.Module
 import com.twitter.finatra.http.internal.marshalling.mustache.MustacheMessageBodyWriter
 import com.twitter.finatra.http.internal.marshalling.{
   DefaultMessageBodyReaderImpl,
@@ -26,7 +27,7 @@ object MessageBodyModule extends TwitterModule {
 
   flag("http.response.charset.enabled", true, "Return HTTP Response Content-Type UTF-8 Charset")
 
-  override val modules = Seq(InjectorModule)
+  override val modules: Seq[Module] = Seq(InjectorModule)
 
   override def configure(): Unit = {
     bindSingleton[DefaultMessageBodyReader].to[DefaultMessageBodyReaderImpl]

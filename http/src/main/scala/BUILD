@@ -56,6 +56,7 @@ scala_library(
         "finagle/finagle-base-http/src/main/scala",
         "finagle/finagle-core/src/main/scala",
         "finagle/finagle-http/src/main/scala",
+        "finatra/http/src/main/java",
         "finatra/inject/inject-app/src/main/scala",
         "finatra/utils/src/main/java",
         "finatra/utils/src/main/scala",
