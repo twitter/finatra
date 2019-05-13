@@ -3,9 +3,7 @@ package com.twitter.inject.utils
 import com.twitter.finagle.service.Backoff._
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.service.RetryPolicy._
-import com.twitter.inject.conversions.time._
-import com.twitter.util.{Throw, Try}
-import org.joda.time.Duration
+import com.twitter.util.{Duration, Throw, Try}
 import scala.util.control.NonFatal
 
 object RetryPolicyUtils {
@@ -21,7 +19,7 @@ object RetryPolicyUtils {
     shouldRetry: PartialFunction[Try[T], Boolean]
   ): RetryPolicy[Try[T]] = {
 
-    backoff(exponential(start.toTwitterDuration, multiplier) take numRetries)(shouldRetry)
+    backoff(exponential(start, multiplier) take numRetries)(shouldRetry)
   }
 
   def constantRetry[T](
@@ -30,6 +28,6 @@ object RetryPolicyUtils {
     shouldRetry: PartialFunction[Try[T], Boolean]
   ): RetryPolicy[Try[T]] = {
 
-    backoff(constant(start.toTwitterDuration) take numRetries)(shouldRetry)
+    backoff(constant(start) take numRetries)(shouldRetry)
   }
 }

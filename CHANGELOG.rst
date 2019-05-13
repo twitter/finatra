@@ -29,6 +29,11 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-inject: Update `com.twitter.inject.utils.RetryPolicyUtils`,
+  `com.twitter.inject.thrift.modules.FilteredThriftClientModule`,  and
+  `com.twitter.inject.thrift.filters.ThriftClientFilterChain` methods to take
+  `com.twitter.util.Duration` instead of `org.joda.time.Duration`. ``PHAB_ID=D313153``
+
 * finatra: Fix Commons FileUpload vulnerability. Update `org.apache.commons-fileupload` from version
   1.3.1 to version 1.4. This closes #PR-497. ``PHAB_ID=D310470``
 

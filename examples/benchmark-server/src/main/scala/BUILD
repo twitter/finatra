@@ -3,7 +3,6 @@ scala_library(
     compiler_option_sets = {"fatal_warnings"},
     dependencies = [
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
-        "3rdparty/jvm/com/fasterxml/jackson/datatype:jackson-datatype-joda",
         "3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala",
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/commons-lang",

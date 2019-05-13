@@ -13,7 +13,6 @@ scala_library(
         "3rdparty/jvm/com/google/inject/extensions:guice-multibindings",
         "3rdparty/jvm/commons-lang",
         "3rdparty/jvm/javax/inject:javax.inject",
-        "3rdparty/jvm/joda-time",
         "3rdparty/jvm/net/codingwell:scala-guice",
         "3rdparty/jvm/org/apache/thrift:libthrift",
         "3rdparty/jvm/org/slf4j:jcl-over-slf4j",

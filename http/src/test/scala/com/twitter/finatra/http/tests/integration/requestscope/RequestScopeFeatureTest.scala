@@ -14,7 +14,7 @@ import com.twitter.inject.requestscope.{
   RequestScopeBinding
 }
 import com.twitter.inject.server.FeatureTest
-import com.twitter.inject.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.inject.utils.RetryPolicyUtils.constantRetry
 import com.twitter.inject.utils.RetryUtils.retryFuture
 import com.twitter.util.{Await, Future, Return}
@@ -26,7 +26,7 @@ class RequestScopeFeatureTest extends FeatureTest {
 
   override val server = new EmbeddedHttpServer(new PooledServer)
 
-  def await[T](f: Future[T]): T = Await.result(f, 5.seconds.toTwitterDuration)
+  def await[T](f: Future[T]): T = Await.result(f, 5.seconds)
 
   test("request scope propagates to multiple future pools") {
     for (i <- 1 to 50) {

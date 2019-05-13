@@ -1848,14 +1848,6 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     )
   }
 
-  test("Bad request for deserialization of an invalid joda LocalDate") {
-    server.httpPost(
-      "/localDateRequest",
-      postBody = """{"date" : "2016-11-32"}""",
-      andExpect = BadRequest
-    )
-  }
-
   test("JsonPatch") {
     val request = RequestBuilder
       .patch("/jsonPatch")
