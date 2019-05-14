@@ -29,6 +29,10 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-inject: Feature tests no longer default to printing metrics after tests.
+  This can be enabled on a per-test basis by overriding `FeatureTestMixin.printStats`
+  and setting it to `true`. ``PHAB_ID=D314329``
+
 * finatra-inject: Update `com.twitter.inject.utils.RetryPolicyUtils`,
   `com.twitter.inject.thrift.modules.FilteredThriftClientModule`,  and
   `com.twitter.inject.thrift.filters.ThriftClientFilterChain` methods to take
