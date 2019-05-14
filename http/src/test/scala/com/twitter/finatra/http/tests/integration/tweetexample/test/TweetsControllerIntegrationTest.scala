@@ -3,7 +3,7 @@ package com.twitter.finatra.http.tests.integration.tweetexample.test
 import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finagle.http.{Fields, Status}
 import com.twitter.finatra.http.tests.integration.tweetexample.main.TweetsEndpointServer
-import com.twitter.finatra.http.{EmbeddedHttpServer, StreamingJsonTestHelper}
+import com.twitter.finatra.http.{EmbeddedHttpServer, RouteHint, StreamingJsonTestHelper}
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.{Await, Future}
@@ -295,7 +295,7 @@ class TweetsControllerIntegrationTest extends FeatureTest {
   }
 
   test("get admin user from admin route without admin path") {
-    val response = server.httpGetJson[JsonNode]("/bestuser", routeToAdminServer = true)
+    val response = server.httpGetJson[JsonNode]("/bestuser", routeHint = RouteHint.AdminServer)
     assert(response.get("userName").textValue() == "123 from data://prod")
   }
 
@@ -304,7 +304,7 @@ class TweetsControllerIntegrationTest extends FeatureTest {
   }
 
   test("get health") {
-    server.httpGet("/health", routeToAdminServer = true, withBody = "OK\n")
+    server.httpGet("/health", routeHint = RouteHint.AdminServer, withBody = "OK\n")
   }
 
   test("verify max request size overridden") {

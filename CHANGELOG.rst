@@ -29,6 +29,10 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-http: `com.twitter.finatra.http.EmbeddedHttpServer` methods which previously used the
+  `routeToAdminServer` parameter have been changed to use a `RouteHint` instead for added
+  flexibility in controlling where a test request is sent. ``PHAB_ID=D313984``
+
 * finatra-inject: Feature tests no longer default to printing metrics after tests.
   This can be enabled on a per-test basis by overriding `FeatureTestMixin.printStats`
   and setting it to `true`. ``PHAB_ID=D314329``

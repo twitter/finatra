@@ -9,7 +9,7 @@ import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http._
 import com.twitter.finagle.http.codec.HttpCodec
 import com.twitter.finagle.{Failure, FailureFlags}
-import com.twitter.finatra.http.EmbeddedHttpServer
+import com.twitter.finatra.http.{EmbeddedHttpServer, RouteHint}
 import com.twitter.finatra.http.tests.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.SomethingStreamedResponse
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.DoEverythingService
@@ -90,11 +90,11 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   /* Note that tests against the Global Singleton HttpMuxer break when multiple servers are started in process */
   test("GET /admin/foo") {
     // NOT on the admin
-    server.httpGet("/admin/foo", routeToAdminServer = true, andExpect = Status.NotFound)
+    server.httpGet("/admin/foo", routeHint = RouteHint.AdminServer, andExpect = Status.NotFound)
     // on the external
     server.httpGet(
       "/admin/foo",
-      routeToAdminServer = false,
+      routeHint = RouteHint.ExternalServer,
       andExpect = Status.Ok,
       withBody = "on the external interface"
     )
@@ -117,13 +117,13 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     // NOT on the admin
     server.httpGet(
       "/admin/external/filtered",
-      routeToAdminServer = true,
+      routeHint = RouteHint.AdminServer,
       andExpect = Status.NotFound
     )
     // on the external and reads headers appended by external filters
     server.httpGet(
       "/admin/external/filtered",
-      routeToAdminServer = false,
+      routeHint = RouteHint.ExternalServer,
       andExpect = Ok,
       withBody = "01"
     )
