@@ -5,7 +5,6 @@ junit_tests(
     dependencies = [
         ":test-deps",
         "3rdparty/jvm/com/github/nscala_time",
-        "3rdparty/jvm/commons-io",
         "3rdparty/jvm/joda-time",
         "3rdparty/jvm/org/scalatest",
         "3rdparty/jvm/org/slf4j:slf4j-api",

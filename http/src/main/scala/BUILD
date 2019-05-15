@@ -17,7 +17,6 @@ scala_library(
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
         "3rdparty/jvm/com/google/inject/extensions:guice-multibindings",
         "3rdparty/jvm/commons-fileupload",
-        "3rdparty/jvm/commons-io",
         "3rdparty/jvm/commons-lang",
         "3rdparty/jvm/javax/inject:javax.inject",
         "3rdparty/jvm/net/codingwell:scala-guice",

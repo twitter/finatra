@@ -21,7 +21,6 @@ import java.io.{BufferedInputStream, File, FileInputStream, InputStream}
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.{Function => JFunction}
 import javax.inject.Inject
-import org.apache.commons.io.FilenameUtils._
 import scala.runtime.BoxedUnit
 
 object ResponseBuilder {
@@ -689,7 +688,7 @@ class ResponseBuilder @Inject()(
     }
 
     private def hasExtension(requestPath: String) = {
-      getExtension(requestPath).nonEmpty
+      fileResolver.getFileExtension(requestPath).nonEmpty
     }
 
     private def exists(path: String) = {

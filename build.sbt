@@ -55,7 +55,6 @@ lazy val versions = new {
   val bijectionCore = "0.9.5"
   val commonsCodec = "1.9"
   val commonsFileupload = "1.4"
-  val commonsIo = "2.4"
   val commonsLang = "2.6"
   val fastutil = "8.1.1"
   val guice = "4.0"
@@ -295,7 +294,6 @@ lazy val injectCore = (project in file("inject/inject-core"))
       "com.google.inject.extensions" % "guice-assistedinject" % versions.guice,
       "com.google.inject.extensions" % "guice-multibindings" % versions.guice,
       "com.twitter" %% "util-app" % versions.twLibVersion,
-      "commons-io" % "commons-io" % versions.commonsIo,
       "javax.inject" % "javax.inject" % "1",
       "joda-time" % "joda-time" % versions.jodaTime,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
@@ -559,7 +557,6 @@ lazy val utils = project
     libraryDependencies ++= Seq(
       "com.google.inject" % "guice" % versions.guice,
       "joda-time" % "joda-time" % versions.jodaTime,
-      "commons-io" % "commons-io" % versions.commonsIo,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "com.twitter" %% "util-core" % versions.twLibVersion

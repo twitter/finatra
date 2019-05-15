@@ -29,6 +29,8 @@ Added
 Changed
 ~~~~~~~
 
+* finatra: Removed Commons IO as a dependency. ``PHAB_ID=D314606``
+
 * finatra-http: `com.twitter.finatra.http.EmbeddedHttpServer` methods which previously used the
   `routeToAdminServer` parameter have been changed to use a `RouteHint` instead for added
   flexibility in controlling where a test request is sent. ``PHAB_ID=D313984``
