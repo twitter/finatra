@@ -4,8 +4,8 @@ import com.twitter.finatra.json.JsonDiff
 import com.twitter.finatra.kafka.interceptors.PublishTimeProducerInterceptor
 import com.twitter.finatra.kafka.test.utils.{PollUtils, ThreadUtils}
 import com.twitter.inject.Logging
-import com.twitter.inject.conversions.time._
-import com.twitter.util.TimeoutException
+import com.twitter.conversions.DurationOps._
+import com.twitter.util.{Time, Duration, TimeoutException}
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.{Collections, Properties}
 import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecord, KafkaConsumer}
@@ -13,7 +13,6 @@ import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig, Produce
 import org.apache.kafka.common.header.Header
 import org.apache.kafka.common.serialization.{ByteArrayDeserializer, ByteArraySerializer, Serde}
 import org.apache.kafka.streams.integration.utils.EmbeddedKafkaCluster
-import org.joda.time.{DateTime, Duration}
 import org.scalatest.Matchers
 import org.slf4j.event.Level
 import scala.collection.JavaConverters._
@@ -101,7 +100,7 @@ case class KafkaTopic[K, V](
     if (timestamp == Long.MaxValue) {
       "MaxWatermark"
     } else {
-      new DateTime(timestamp).toString
+      Time.fromMilliseconds(timestamp).toString
     }
   }
 
@@ -181,7 +180,7 @@ case class KafkaTopic[K, V](
 
     val resultBuilder = Seq.newBuilder[(K, V)]
     resultBuilder.sizeHint(numMessages)
-    val endTime = System.currentTimeMillis() + timeout.getMillis
+    val endTime = System.currentTimeMillis() + timeout.inMillis
 
     var messagesRemaining = numMessages
     while (messagesRemaining > 0) {
@@ -218,7 +217,7 @@ case class KafkaTopic[K, V](
 
     val resultBuilder = Seq.newBuilder[ConsumerRecord[Array[Byte], Array[Byte]]]
     resultBuilder.sizeHint(numMessages)
-    val endTime = System.currentTimeMillis() + timeout.getMillis
+    val endTime = System.currentTimeMillis() + timeout.inMillis
 
     var messagesRemaining = numMessages
     while (messagesRemaining > 0) {
@@ -253,7 +252,7 @@ case class KafkaTopic[K, V](
   ): (K, V) = {
     try {
       PollUtils.poll(
-        func = consumeMessage(Duration.standardHours(999)), //Note: Set set a high duration here so that we rely on PollUtils to enforce the duration
+        func = consumeMessage(Duration.fromMinutes(999 * 60)), //Note: Set set a high duration here so that we rely on PollUtils to enforce the duration
         exhaustedTriesMessage = (_: (K, V)) => exhaustedTriesMessage,
         exhaustedTimeoutMessage = exhaustedTimeoutMessage,
         timeout = timeout,

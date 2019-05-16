@@ -29,6 +29,10 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-kafka: Update `com.twitter.finatra.kafka.test.KafkaTopic`, and
+  `com.twitter.finatra.kafka.test.utils.PollUtils` methods to take
+  `com.twitter.util.Duration` instead of `org.joda.time.Duration`. ``PHAB_ID=D314958``
+
 * finatra: Removed Commons IO as a dependency. ``PHAB_ID=D314606``
 
 * finatra-http: `com.twitter.finatra.http.EmbeddedHttpServer` methods which previously used the

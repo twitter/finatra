@@ -2,9 +2,9 @@ package com.twitter.finatra.kafka.interceptors
 
 import com.google.common.primitives.Longs
 import com.twitter.finatra.kafka.interceptors.PublishTimeProducerInterceptor._
+import com.twitter.util.Time
 import java.util
 import org.apache.kafka.clients.producer.{ProducerInterceptor, ProducerRecord, RecordMetadata}
-import org.joda.time.DateTimeUtils
 
 object PublishTimeProducerInterceptor {
   val PublishTimeHeaderName = "publish_time"
@@ -18,7 +18,7 @@ class PublishTimeProducerInterceptor extends ProducerInterceptor[Any, Any] {
   override def onSend(record: ProducerRecord[Any, Any]): ProducerRecord[Any, Any] = {
     record
       .headers()
-      .add(PublishTimeHeaderName, Longs.toByteArray(DateTimeUtils.currentTimeMillis()))
+      .add(PublishTimeHeaderName, Longs.toByteArray(Time.now.inMillis))
     record
   }
 

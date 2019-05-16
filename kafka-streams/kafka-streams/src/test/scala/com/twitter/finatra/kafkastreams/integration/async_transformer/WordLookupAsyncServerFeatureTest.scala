@@ -1,8 +1,8 @@
 package com.twitter.finatra.kafkastreams.integration.async_transformer
 
+import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.kafka.serde.ScalaSerdes
 import com.twitter.finatra.kafkastreams.test.KafkaStreamsFeatureTest
-import com.twitter.inject.conversions.time._
 import com.twitter.inject.server.EmbeddedTwitterServer
 import com.twitter.util.Try
 import org.apache.kafka.common.serialization.Serdes
