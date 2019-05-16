@@ -9,8 +9,8 @@ import javax.inject.{Inject, Singleton}
 class TwitterCloneWarmupHandler @Inject()(httpWarmup: HttpWarmup) extends Handler {
 
   override def handle(): Unit = {
-    httpWarmup.send(post("/tweet/").body("{}"), times = 5)
+    httpWarmup.send(post("/tweet/").body("{}"), times = 5)()
 
-    httpWarmup.send(get("/tweet/123"), times = 5)
+    httpWarmup.send(get("/tweet/123"), times = 5)()
   }
 }

@@ -33,6 +33,14 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-http: Move when admin routes are added to the AdminHttpServer to the `postInjectorStartup`
+  phase, such that any admin routes are available to be hit during server warmup. Simplify `HttpWarmup`
+  utility to make it clear that it can and should only be used for sending requests to endpoints added
+  to the server's configured `HttpRouter`. The `forceRouteToAdminHttpMuxers` param has been renamed
+  to `admin` to signal that the request should be sent to the `HttpRouter#adminRoutingService` instead
+  of the `HttpRouter#externalRoutingService`. Routing to TwitterServer HTTP Admin Interface via this
+  utility never worked properly and the (broken) support has been dropped. ``PHAB_ID=D314152``
+
 * finatra-kafka: Update `com.twitter.finatra.kafka.test.KafkaTopic`, and
   `com.twitter.finatra.kafka.test.utils.PollUtils` methods to take
   `com.twitter.util.Duration` instead of `org.joda.time.Duration`. ``PHAB_ID=D314958``

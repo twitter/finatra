@@ -82,8 +82,7 @@ following handler:
 
       override def handle(): Unit = {
         try {
-          warmup.send(
-            get("/ping"))
+          warmup.send(get("/ping"))()
         } catch {
           case NonFatal(e) =>
             // Here we don't want a warmup failure to prevent server start-up --

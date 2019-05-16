@@ -1,7 +1,6 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main
 
 import com.google.inject.Module
-import com.twitter.app.GlobalFlag
 import com.twitter.finagle.Filter
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.filters.CommonFilters
@@ -9,12 +8,21 @@ import com.twitter.finatra.http.jsonpatch.{JsonPatchExceptionMapper, JsonPatchMe
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.tests.integration.doeverything.main.controllers._
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.DomainTestUserReader
-import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions.{BarExceptionMapper, FooBarBazExceptionMapper, FooExceptionMapper}
-import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{AppendToHeaderFilter, IdentityFilter}
-import com.twitter.finatra.http.tests.integration.doeverything.main.modules.{DoEverythingModule, DoEverythingStatsReceiverModule}
+import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions.{
+  BarExceptionMapper,
+  FooBarBazExceptionMapper,
+  FooExceptionMapper
+}
+import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{
+  AppendToHeaderFilter,
+  IdentityFilter
+}
+import com.twitter.finatra.http.tests.integration.doeverything.main.modules.{
+  DoEverythingModule,
+  DoEverythingStatsReceiverModule
+}
 import com.twitter.finatra.http.{Controller, HttpServer}
 import com.twitter.finatra.httpclient.modules.HttpClientModule
-
 
 object DoEverythingServerMain extends DoEverythingServer
 
@@ -26,7 +34,7 @@ class DoEverythingServer extends HttpServer {
 
   flag("magicNum", "26", "Magic number")
 
-  override val modules = Seq(
+  override val modules: Seq[Module] = Seq(
     DoEverythingModule,
     new HttpClientModule {
       override val dest = "localhost:1234"
@@ -123,5 +131,4 @@ class DoEverythingServer extends HttpServer {
   override protected def warmup(): Unit = {
     handle[DoEverythingWarmupHandler]()
   }
-
 }

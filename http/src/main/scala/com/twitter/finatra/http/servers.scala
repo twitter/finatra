@@ -421,7 +421,6 @@ trait HttpServer extends HttpServerTrait {
   /** Serve the `Service[Request, Response]` from the configured [[HttpRouter]]. */
   override protected[http] final def build(addr: InetSocketAddress, server: Http.Server): ListeningServer = {
     val router = injector.instance[HttpRouter]
-    AdminHttpRouter.addAdminRoutes(this, router, this.routes)
     server.serve(addr, router.services.externalService)
   }
 
@@ -441,8 +440,10 @@ trait HttpServer extends HttpServerTrait {
   @Lifecycle
   override protected def postInjectorStartup(): Unit = {
     super.postInjectorStartup()
-
-    configureHttp(injector.instance[HttpRouter])
+    val router = injector.instance[HttpRouter]
+    configureHttp(router)
+    /* add admin routes */
+    AdminHttpRouter.addAdminRoutes(this, router, this.routes)
   }
 
   /* Protected */

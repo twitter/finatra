@@ -12,12 +12,15 @@ private object ThriftWarmup {
 }
 
 /**
- * A utility for performing requests through a configured [[ThriftRouter]] for the purpose of
- * warming up the `ThriftServer`.
+ * A utility for performing requests to endpoints defined by a configured [[ThriftRouter]] for the
+ * purpose of warming up the `ThriftServer`.
  *
+ * @note This only provides routing to user-defined routes of the configured [[ThriftRouter]].
  * @note This is only for use with generated Scala code which uses the [[ThriftRouter]].
  *
  * @param router the configured [[com.twitter.finatra.thrift.routing.ThriftRouter]]
+ *
+ * @see [[com.twitter.finatra.thrift.routing.ThriftRouter]]
  */
 class ThriftWarmup @Inject()(
   router: ThriftRouter
@@ -29,14 +32,15 @@ class ThriftWarmup @Inject()(
   /**
    * Send a request to warmup services that are not yet externally receiving traffic.
    *
-   * @param method - [[com.twitter.scrooge.ThriftMethod]] to send request through
-   * @param args - [[com.twitter.scrooge.ThriftMethod]].Args to send
-   * @param times - number of times to send the request
-   * @param responseCallback - callback called for every response where assertions can be made.
-   * @tparam M - type of the [[com.twitter.scrooge.ThriftMethod]]
-   * @note be aware that in the response callback, failed assertions that throw Exceptions could
-   *       prevent a server from  restarting. This is generally when dependent services are
-   *       unresponsive causing the warm-up request(s) to fail. As such, you should wrap your
+   * @param method the[[com.twitter.scrooge.ThriftMethod]] to request
+   * @param args the [[com.twitter.scrooge.ThriftMethod]].Args to send
+   * @param times the number of times to send the request
+   * @param responseCallback a callback called for every response where assertions can be made.
+   * @tparam M the type of the [[com.twitter.scrooge.ThriftMethod]]
+   *
+   * @note be aware that in the response callback, failed assertions that throw exceptions could
+   *       prevent a server from starting. This is generally when dependent services are
+   *       unresponsive, causing the warm-up request(s) to fail. As such, you should wrap your
    *       warm-up calls in these situations in a try/catch {}.
    */
   @deprecated("Use Request/Response based functionality", "2018-12-20")
@@ -52,15 +56,18 @@ class ThriftWarmup @Inject()(
   /**
    * Send a request to warmup services that are not yet externally receiving traffic.
    *
-   * @param method - [[com.twitter.scrooge.ThriftMethod]] to send request through
-   * @param req - [[com.twitter.scrooge.Request]] to send
-   * @param times - number of times to send the request
-   * @param responseCallback - callback called for every response where assertions can be made.
-   * @tparam M - type of the [[com.twitter.scrooge.ThriftMethod]]
+   * @param method the [[com.twitter.scrooge.ThriftMethod]] to request
+   * @param req the [[com.twitter.scrooge.Request]] to send
+   * @param times the number of times to send the request
+   * @param responseCallback a callback called for every response where assertions can be made.
+   * @tparam M the type of the [[com.twitter.scrooge.ThriftMethod]]
+   *
    * @note be aware that in the response callback, failed assertions that throw Exceptions could
    *       prevent a server from  restarting. This is generally when dependent services are
    *       unresponsive causing the warm-up request(s) to fail. As such, you should wrap your
    *       warm-up calls in these situations in a try/catch {}.
+   *
+   * @see [[http://twitter.github.io/finatra/user-guide/thrift/controllers.html]]
    */
   def sendRequest[M <: ThriftMethod](method: M, req: Request[M#Args], times: Int = 1)(
     responseCallback: Try[Response[M#SuccessType]] => Unit = unitFunction

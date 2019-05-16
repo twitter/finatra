@@ -633,6 +633,14 @@ class DoEverythingController @Inject()(
     request.headerMap("test")
   }
 
+  get("/admin/testme", admin = true) { _: Request =>
+    response.ok("ping")
+  }
+
+  get("/admin/finatra/internal/route", admin = true) { _: Request =>
+    response.ok("ping")
+  }
+
   get("/HttpExceptionPlain") { _: Request =>
     throw HttpException.plainText(Status.Created, "foo")
   }
