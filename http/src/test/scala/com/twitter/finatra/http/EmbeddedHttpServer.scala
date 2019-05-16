@@ -5,6 +5,7 @@ import com.twitter.finagle.http.MediaType
 import com.google.inject.Stage
 import com.twitter.app.GlobalFlag
 import com.twitter.finagle.http.{Method, Status, _}
+import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.JsonAwareEmbeddedHttpClient.jsonParseWithNormalizer
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.json.FinatraObjectMapper
@@ -41,11 +42,18 @@ import scala.collection.JavaConverters._
  * @param failOnLintViolation If server startup should fail due (and thus the test) to a detected lint rule issue after startup.
  * @param closeGracePeriod An Optional grace period to use instead of the underlying server's
  *                         `defaultGracePeriod` when closing the underlying server.
- * @param globalFlags An ordered map of [[GlobalFlag]] and the desired value to be set during the
- *                    scope of the underlying [[twitterServer]]'s lifecycle. The flags will be
- *                    applied in insertion order, with the first entry being applied closest to
- *                    the startup of the [[twitterServer]]. In order to ensure insertion ordering,
- *                    you should use a [[scala.collection.immutable.ListMap]].
+ * @param globalFlags           An ordered map of [[GlobalFlag]] and the desired value to be set during the
+ *                              scope of the underlying [[twitterServer]]'s lifecycle. The flags will be
+ *                              applied in insertion order, with the first entry being applied closest to
+ *                              the startup of the [[twitterServer]]. In order to ensure insertion ordering,
+ *                              you should use a [[scala.collection.immutable.ListMap]].
+ * @param statsReceiverOverride An optional [[StatsReceiver]] implementation that should be bound to the
+ *                              underlying server when testing with an injectable server. By default
+ *                              an injectable server under test will have an [[com.twitter.finagle.stats.InMemoryStatsReceiver]]
+ *                              implementation bound for the purpose of testing. In some cases, users may want to test using
+ *                              a custom [[StatsReceiver]] implementation instead and can provide and instance
+ *                              to use here. For non-injectable servers this can be a shared reference
+ *                              used in the server under test.
  */
 class EmbeddedHttpServer(
   override val twitterServer: Ports,
@@ -64,7 +72,8 @@ class EmbeddedHttpServer(
   maxStartupTimeSeconds: Int = 60,
   failOnLintViolation: Boolean = false,
   closeGracePeriod: Option[Duration] = None,
-  globalFlags: => Map[GlobalFlag[_], String] = Map()
+  globalFlags: => Map[GlobalFlag[_], String] = Map(),
+  statsReceiverOverride: Option[StatsReceiver] = None
 ) extends EmbeddedTwitterServer(
       twitterServer = twitterServer,
       flags = flags,
@@ -79,9 +88,9 @@ class EmbeddedHttpServer(
       maxStartupTimeSeconds = maxStartupTimeSeconds,
       failOnLintViolation = failOnLintViolation,
       closeGracePeriod = closeGracePeriod,
-      globalFlags = globalFlags
-    )
-  with ExternalHttpClient {
+      globalFlags = globalFlags,
+      statsReceiverOverride = statsReceiverOverride
+    ) with ExternalHttpClient {
 
   /* Additional Constructors */
 

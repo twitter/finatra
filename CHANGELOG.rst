@@ -10,6 +10,10 @@ Unreleased
 Added
 ~~~~~
 
+* inject-server/http/thrift: Allow users to specify a `StatsReceiver` implementation to use in the
+  underlying `EmbeddedTwitterServer` instead of always providing an `InMemoryStatsReceiver`
+  implementation. ``PHAB_ID=D315440``
+
 * finatra-http: Add ability for Java HTTP Controllers to use the RouteDSL for per-route filtering
   and for route prefixing. ``PHAB_ID=D311625``
 

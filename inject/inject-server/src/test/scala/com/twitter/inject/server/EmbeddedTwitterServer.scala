@@ -3,7 +3,7 @@ package com.twitter.inject.server
 import com.google.inject.Stage
 import com.twitter.app.GlobalFlag
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
-import com.twitter.inject.{Injector, PoolUtils}
+import com.twitter.inject.{Injector, PoolUtils, TwitterModule}
 import com.twitter.inject.app.{BindDSL, StartupTimeoutException}
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
@@ -143,6 +143,13 @@ object EmbeddedTwitterServer {
  *                    applied in insertion order, with the first entry being applied closest to
  *                    the startup of the [[twitterServer]]. In order to ensure insertion ordering,
  *                    you should use a [[scala.collection.immutable.ListMap]].
+ * @param statsReceiverOverride An optional [[StatsReceiver]] implementation that should is bound to the
+ *                              underlying server when testing with an injectable server. By default
+ *                              an injectable server under test will have an [[InMemoryStatsReceiver]] implementation
+ *                              bound for the purpose of testing. In some cases, users may want to test using
+ *                              a custom [[StatsReceiver]] implementation instead and can provide and instance
+ *                              to use here. For non-injectable servers this can be a shared reference
+ *                              used in the server under test.
  */
 class EmbeddedTwitterServer(
   twitterServer: com.twitter.server.TwitterServer,
@@ -158,7 +165,8 @@ class EmbeddedTwitterServer(
   maxStartupTimeSeconds: Int = 60,
   failOnLintViolation: Boolean = false,
   closeGracePeriod: Option[Duration] = None,
-  globalFlags: => Map[GlobalFlag[_], String] = Map())
+  globalFlags: => Map[GlobalFlag[_], String] = Map(),
+  statsReceiverOverride: Option[StatsReceiver] = None)
     extends AdminHttpClient(twitterServer, verbose)
     with BindDSL
     with Matchers {
@@ -196,7 +204,16 @@ class EmbeddedTwitterServer(
     // embedded server is a com.twitter.inject.server.TwitterServer.
     injectableServer.stage = stage
     // Add framework override modules
-    injectableServer.addFrameworkOverrideModules(InMemoryStatsReceiverModule)
+    statsReceiverOverride match {
+      case Some(receiver) =>
+        injectableServer.addFrameworkOverrideModules(new TwitterModule {
+          override def configure(): Unit = {
+            bindSingleton[StatsReceiver].toInstance(receiver)
+          }
+        })
+      case _ =>
+        injectableServer.addFrameworkOverrideModules(InMemoryStatsReceiverModule)
+    }
   }
 
   /* Fields */
@@ -227,16 +244,35 @@ class EmbeddedTwitterServer(
 
   lazy val isInjectable: Boolean = twitterServer.isInstanceOf[TwitterServer]
   lazy val injectableServer: TwitterServer = twitterServer.asInstanceOf[TwitterServer]
+
   lazy val injector: Injector = {
     start()
     injectableServer.injector
   }
 
+  /** Returns the [[StatsReceiver]] for the underlying server when applicable */
   lazy val statsReceiver: StatsReceiver =
     if (isInjectable) injector.instance[StatsReceiver]
-    else new InMemoryStatsReceiver
-  lazy val inMemoryStatsReceiver: InMemoryStatsReceiver =
-    statsReceiver.asInstanceOf[InMemoryStatsReceiver]
+    else statsReceiverOverride.getOrElse(
+      throw new IllegalStateException(
+        "Accessing the underlying StatsReceiver is only supported with an injectable server or when an override is provided."))
+
+  lazy val usesInMemoryStatsReceiver: Boolean =
+    statsReceiver.isInstanceOf[InMemoryStatsReceiver]
+
+  /**
+   * Returns the bound [[InMemoryStatsReceiver]] when applicable. If access to this member is
+   * attempted when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]
+   * this will throw an [[IllegalStateException]] as it is not expected that users call this
+   * when providing a custom [[StatsReceiver]] implementation via the [[statsReceiverOverride]].
+   */
+  lazy val inMemoryStatsReceiver: InMemoryStatsReceiver = statsReceiver match {
+    case receiver: InMemoryStatsReceiver => receiver
+    case _ =>
+      throw new IllegalStateException(
+        "The configured StatsReceiver implementation is not of type InMemoryStatsReceiver.")
+  }
+
   lazy val adminHostAndPort: String = PortUtils.loopbackAddressForPort(httpAdminPort())
 
   /* Public */
@@ -383,21 +419,39 @@ class EmbeddedTwitterServer(
     }
   }
 
-  /* StatsReceiver Functions */
+  /* InMemoryStatsReceiver Functions */
 
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def clearStats(): Unit = {
     inMemoryStatsReceiver.counters.clear()
     inMemoryStatsReceiver.stats.clear()
     inMemoryStatsReceiver.gauges.clear()
   }
 
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def statsMap: SortedMap[String, Seq[Float]] =
     inMemoryStatsReceiver.stats.iterator.toMap.mapKeys(keyStr).toSortedMap
+
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def countersMap: SortedMap[String, Long] =
     inMemoryStatsReceiver.counters.iterator.toMap.mapKeys(keyStr).toSortedMap
+
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def gaugeMap: SortedMap[String, () => Float] =
     inMemoryStatsReceiver.gauges.iterator.toMap.mapKeys(keyStr).toSortedMap
 
+  /**
+   * Prints stats from the bound [[InMemoryStatsReceiver]] when applicable. If access to this method
+   * is attempted when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]
+   * this will throw an [[IllegalStateException]] as it is not expected that users call this
+   * when providing a custom [[StatsReceiver]] implementation via the [[statsReceiverOverride]].
+   *
+   * Instead users should prefer to print stats from their custom StatsReceiver implementation
+   * by other means.
+   *
+   * @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a
+   *        [[statsReceiverOverride]].
+   */
   def printStats(includeGauges: Boolean = true): Unit = {
     infoBanner(name + " Stats", disableLogging)
     for ((key, values) <- statsMap) {
@@ -421,30 +475,37 @@ class EmbeddedTwitterServer(
     }
   }
 
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def getCounter(name: String): Long = {
     countersMap.getOrElse(name, 0)
   }
 
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def assertCounter(name: String, expected: Long): Unit = {
     getCounter(name) should equal(expected)
   }
 
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def assertCounter(name: String)(callback: Long => Boolean): Unit = {
     callback(getCounter(name)) should be(true)
   }
 
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def getStat(name: String): Seq[Float] = {
     statsMap.getOrElse(name, Seq())
   }
 
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def assertStat(name: String, expected: Seq[Float]): Unit = {
     getStat(name) should equal(expected)
   }
 
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def getGauge(name: String): Float = {
     gaugeMap.get(name) map { _.apply() } getOrElse 0f
   }
 
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def assertGauge(name: String, expected: Float): Unit = {
     val value = getGauge(name)
     value should equal(expected)

@@ -27,6 +27,10 @@ class FeatureTestTest extends FeatureTest {
     server.assertHealthy()
   }
 
+  test("TwitterServer#stats receivers") {
+    server.statsReceiver should equal(server.inMemoryStatsReceiver)
+  }
+
   test("TwitterServer#feature test") {
     server.httpGetAdmin(
       "/admin/lint.json",
