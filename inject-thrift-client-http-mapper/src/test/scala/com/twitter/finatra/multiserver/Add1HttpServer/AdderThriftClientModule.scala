@@ -2,6 +2,7 @@ package com.twitter.finatra.multiserver.Add1HttpServer
 
 import com.twitter.adder.thriftscala.Adder
 import com.twitter.adder.thriftscala.Adder._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.Filter
 import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
 import com.twitter.inject.thrift.modules.FilteredThriftClientModule

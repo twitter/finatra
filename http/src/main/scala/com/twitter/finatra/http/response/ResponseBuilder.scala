@@ -1,6 +1,5 @@
 package com.twitter.finatra.http.response
 
-import com.google.common.net.{MediaType => GuavaMediaType}
 import com.twitter.finagle
 import com.twitter.finagle.http._
 import com.twitter.finagle.stats.StatsReceiver
@@ -16,14 +15,12 @@ import com.twitter.finatra.utils.FileResolver
 import com.twitter.inject.Logging
 import com.twitter.inject.annotations.Flag
 import com.twitter.inject.exceptions.DetailedNonRetryableSourcedException
-import com.twitter.io.Buf
+import com.twitter.io.{Buf, StreamIO}
 import com.twitter.util.Future
 import java.io.{BufferedInputStream, File, FileInputStream, InputStream}
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.{Function => JFunction}
 import javax.inject.Inject
-import org.apache.commons.io.FilenameUtils._
-import org.apache.commons.io.IOUtils
 import scala.runtime.BoxedUnit
 
 object ResponseBuilder {
@@ -47,17 +44,11 @@ class ResponseBuilder @Inject()(
   private[this] val mimeTypeCache = new ConcurrentHashMap[String, String]()
   private[this] val whenMimeTypeAbsent = new JFunction[String, String] {
     override def apply(mimeType: String): String = {
-      if (includeContentTypeCharset)
-        mimeType + "; " + ResponseBuilder.DefaultCharset
-      else
+      if (includeContentTypeCharset) {
+        if (mimeType.indexOf(';') == -1) mimeType + "; " + ResponseBuilder.DefaultCharset
+        else mimeType
+      } else
         mimeType
-    }
-  }
-  // optimized: MediaType.toString is a hotspot when profiling
-  private[this] val mediaTypeCache = new ConcurrentHashMap[GuavaMediaType, String]()
-  private[this] val whenMediaTypeAbsent = new JFunction[GuavaMediaType, String] {
-    override def apply(mediaType: GuavaMediaType): String = {
-      mediaType.toString
     }
   }
 
@@ -335,7 +326,7 @@ class ResponseBuilder @Inject()(
      */
     def body(inputStream: InputStream): EnrichedResponse = {
       tryWith(inputStream) { closable =>
-        body(IOUtils.toByteArray(closable))
+        body(StreamIO.buffer(closable).toByteArray)
       }
       this
     }
@@ -446,14 +437,6 @@ class ResponseBuilder @Inject()(
       this
     }
 
-    @deprecated(
-      "Use header(key: String, v: Any) using a String representation  of the MediaType",
-      "2017-12-12")
-    def header(k: String, v: GuavaMediaType): EnrichedResponse = {
-      response.headerMap.set(k, mediaToString(v))
-      this
-    }
-
     /**
      * Return a response with the given response headers set.
      *
@@ -489,14 +472,6 @@ class ResponseBuilder @Inject()(
      */
     def contentType(mediaType: String): EnrichedResponse = {
       response.headerMap.set(Fields.ContentType, fullMimeTypeValue(mediaType))
-      this
-    }
-
-    @deprecated(
-      "Use contentType(mediaType: String) using a String representation of the MediaType",
-      "2017-12-12")
-    def contentType(mediaType: GuavaMediaType): EnrichedResponse = {
-      response.headerMap.set(Fields.ContentType, mediaToString(mediaType))
       this
     }
 
@@ -713,17 +688,12 @@ class ResponseBuilder @Inject()(
     }
 
     private def hasExtension(requestPath: String) = {
-      getExtension(requestPath).nonEmpty
+      fileResolver.getFileExtension(requestPath).nonEmpty
     }
 
     private def exists(path: String) = {
       val fileWithSlash = if (path.startsWith("/")) path else "/" + path
       fileResolver.exists(fileWithSlash)
-    }
-
-    @deprecated("To be removed with guava usage.", "2017-12-12")
-    private def mediaToString(mediaType: GuavaMediaType): String = {
-      mediaTypeCache.computeIfAbsent(mediaType, whenMediaTypeAbsent)
     }
 
     private def body(request: Option[Request], any: Any): EnrichedResponse = {

@@ -1,13 +1,12 @@
 package com.twitter.inject.server.tests
 
 import com.google.inject.name.Names
-import com.google.inject.{Provides, Stage}
-import com.twitter.finagle.http.{Request, Response, Status}
-import com.twitter.finagle.{Http, Service}
+import com.google.inject.{Module, Provides, Stage}
+import com.twitter.finagle.http.Status
+import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.inject.server.EmbeddedTwitterServer.ReducibleFn
 import com.twitter.inject.server.{EmbeddedTwitterServer, TwitterServer}
-import com.twitter.inject.{Logging, Test, TwitterModule}
-import com.twitter.util.{Await, Future}
+import com.twitter.inject.{Test, TwitterModule}
 import javax.inject.Singleton
 import scala.collection.immutable.ListMap
 
@@ -28,16 +27,150 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
     }
   }
 
+  test("server#non-injectable start") {
+    val twitterServer = new NonInjectionTestServer()
+    val embeddedServer = new EmbeddedTwitterServer(
+      twitterServer = twitterServer,
+      args = Seq("http.port=:0"),
+      disableTestLogging = true
+    )
+
+    try {
+      embeddedServer.httpGetAdmin("/health", andExpect = Status.Ok, withBody = "OK\n")
+
+      intercept[IllegalStateException] {
+        // we have no way to give you something useful here as the server is not injectable
+        // and no override was provided.
+        embeddedServer.statsReceiver
+      }
+    } finally {
+      embeddedServer.close()
+    }
+  }
+
+  test("server#custom stats receiver") {
+    val testStatsReceiver = new TestStatsReceiver
+    val twitterServer = new TwitterServer {}
+    val embeddedServer = new EmbeddedTwitterServer(
+      twitterServer = twitterServer,
+      disableTestLogging = true,
+      statsReceiverOverride = Some(testStatsReceiver)
+    )
+
+    try {
+      embeddedServer.httpGetAdmin("/health", andExpect = Status.Ok, withBody = "OK\n")
+
+      intercept[IllegalStateException] {
+        embeddedServer.inMemoryStatsReceiver
+      }
+
+      intercept[IllegalStateException] {
+        embeddedServer.printStats()
+      }
+
+      intercept[IllegalStateException] {
+        embeddedServer.countersMap
+      }
+
+      intercept[IllegalStateException] {
+        embeddedServer.statsMap
+      }
+
+      intercept[IllegalStateException] {
+        embeddedServer.gaugeMap
+      }
+
+      intercept[IllegalStateException] {
+        embeddedServer.clearStats()
+      }
+
+      assert(embeddedServer.statsReceiver.isInstanceOf[TestStatsReceiver])
+    } finally {
+      embeddedServer.close()
+    }
+
+    assert(testStatsReceiver.gauges.nonEmpty) /* we add a build revision gauge in startup of the server */
+  }
+
+  test("server#custom stats receiver with non-injectable server") {
+    val testStatsReceiver = new TestStatsReceiver
+    val embeddedServer = new EmbeddedTwitterServer(
+      twitterServer = new NonInjectionTestServer(Some(testStatsReceiver)),
+      args = Seq("http.port=:0"),
+      disableTestLogging = true,
+      statsReceiverOverride = Some(testStatsReceiver)
+    )
+
+    try {
+      embeddedServer.httpGetAdmin("/health", andExpect = Status.Ok, withBody = "OK\n")
+
+      intercept[IllegalStateException] {
+        embeddedServer.inMemoryStatsReceiver
+      }
+
+      intercept[IllegalStateException] {
+        embeddedServer.printStats()
+      }
+
+      intercept[IllegalStateException] {
+        embeddedServer.countersMap
+      }
+
+      intercept[IllegalStateException] {
+        embeddedServer.statsMap
+      }
+
+      intercept[IllegalStateException] {
+        embeddedServer.gaugeMap
+      }
+
+      intercept[IllegalStateException] {
+        embeddedServer.clearStats()
+      }
+
+      assert(embeddedServer.statsReceiver.isInstanceOf[TestStatsReceiver])
+    } finally {
+      embeddedServer.close()
+    }
+
+    assert(testStatsReceiver.gauges.nonEmpty) /* we add a build revision gauge in startup of the server */
+  }
+
+  test("server#in memory stats receiver with non-injectable server") {
+    val inMemoryStatsReceiver = new InMemoryStatsReceiver
+    val embeddedServer = new EmbeddedTwitterServer(
+      twitterServer = new NonInjectionTestServer(Some(inMemoryStatsReceiver)),
+      args = Seq("http.port=:0"),
+      disableTestLogging = true,
+      statsReceiverOverride = Some(inMemoryStatsReceiver)
+    )
+
+    try {
+      embeddedServer.httpGetAdmin("/health", andExpect = Status.Ok, withBody = "OK\n")
+
+      // this should not blow up
+      embeddedServer.inMemoryStatsReceiver
+
+      assert(embeddedServer.statsReceiver.isInstanceOf[InMemoryStatsReceiver])
+    } finally {
+      embeddedServer.printStats()
+      embeddedServer.close()
+    }
+
+    assert(inMemoryStatsReceiver.gauges.nonEmpty) /* we add a build revision gauge in startup of the server */
+  }
+
   test("server#fail if server is a singleton") {
     intercept[IllegalArgumentException] {
-      new EmbeddedTwitterServer(SingletonServer)
+      new EmbeddedTwitterServer(SingletonServer, disableTestLogging = true)
     }
   }
 
   test("server#fail if bind on a non-injectable server") {
     intercept[IllegalStateException] {
       new EmbeddedTwitterServer(
-        twitterServer = new NonInjectableServer,
+        twitterServer = new NonInjectionTestServer(),
+        args = Seq("http.port=:0"),
         disableTestLogging = true
       ).bind[String].toInstance("hello!")
     }
@@ -107,7 +240,7 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
       }
 
       e.getMessage.contains("Error parsing flag \"foo.bar\": flag undefined") should be(true)
-      e.getMessage equals(e2.getMessage)
+      e.getMessage equals e2.getMessage
     } finally {
       server.close()
     }
@@ -117,7 +250,7 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
     val server = new EmbeddedTwitterServer(
       stage = Stage.PRODUCTION,
       twitterServer = new TwitterServer {
-        override val modules = Seq(new TwitterModule() {
+        override val modules: Seq[Module] = Seq(new TwitterModule() {
           @Provides
           @Singleton
           def providesFoo: Integer = {
@@ -150,6 +283,7 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
             super.postInjectorStartup()
           }
         },
+        disableTestLogging = true,
         globalFlags = ListMap(
           com.twitter.finagle.stats.logOnShutdown -> "true"
         )
@@ -181,7 +315,7 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
             }
           },
           disableTestLogging = true
-        ){
+        ) {
           override protected[twitter] def withLocals(fn: => Unit): Unit =
             com.twitter.finagle.stats.logOnShutdown.let(true)(super.withLocals(fn))
         }.bind[String].toInstance("helloworld")
@@ -189,7 +323,8 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
       try {
         server.start() // start the server, otherwise the scope will never be entered
         shouldLogMetrics should equal(true) // verify mutation of inner scope
-        com.twitter.finagle.stats.logOnShutdown() should equal(false) // verify outer scope is not changed
+        com.twitter.finagle.stats
+          .logOnShutdown() should equal(false) // verify outer scope is not changed
       } finally {
         server.close()
       }
@@ -212,25 +347,6 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
     val fn = EmbeddedTwitterServer.mkGlobalFlagsFn(fns)
     fn("abc") should equal("abc") //check expected output of fn ("abc" is pass-thru)
     sb.toString should equal("321abc") //check that ordering of execution is correct (fn is inner-most)
-  }
-
-}
-
-class NonInjectableServer extends com.twitter.server.TwitterServer with Logging {
-  private[this] val service = new Service[Request, Response] {
-    def apply(request: Request): Future[Response] = {
-      val response = Response(request.version, Status.Ok)
-      response.contentString = "hello"
-      Future.value(response)
-    }
-  }
-
-  def main(): Unit = {
-    val server = Http.serve(":8888", service)
-    onExit {
-      server.close()
-    }
-    Await.ready(server)
   }
 }
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import scala.collection.JavaConverters;
+import scala.runtime.BoxedUnit;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,7 +33,7 @@ import com.twitter.util.Future;
 
 public class StreamingResponseJavaTest extends Assert {
 
-  private Future burnLoop(Reader<Buf> reader) {
+  private Future<BoxedUnit> burnLoop(Reader<Buf> reader) {
     return reader.read().flatMap(Function.func(v1 -> {
       if (v1.nonEmpty()) {
         return burnLoop(reader);
@@ -50,9 +51,10 @@ public class StreamingResponseJavaTest extends Assert {
     true
   );
 
-  private Response fromReader(Reader reader) throws Exception {
-    StreamingResponse streamingResponse = responseBuilder.streaming(
-      reader, ToReader.ReaderIdentity());
+  @SuppressWarnings("rawtypes")
+  private <A> Response fromReader(Reader<A> reader) throws Exception {
+    StreamingResponse<Reader, A> streamingResponse =
+        responseBuilder.streaming(reader, ToReader.ReaderIdentity());
     Future<Response> fResponse = streamingResponse.toFutureResponse();
     return Await.result(fResponse);
   }
@@ -64,7 +66,7 @@ public class StreamingResponseJavaTest extends Assert {
 
   @Test
   public void emptyReader() throws Exception {
-    Reader reader = Readers.newEmptyReader();
+    Reader<?> reader = Readers.newEmptyReader();
     Response response = fromReader(reader);
     // observe the EOS
     response.reader().read();
@@ -104,8 +106,9 @@ public class StreamingResponseJavaTest extends Assert {
       Await.result(response.reader().onClose()), StreamTermination.Discarded$.MODULE$);
   }
 
-  private Response fromStream(AsyncStream stream) throws Exception {
-    StreamingResponse streamingResponse = responseBuilder.streaming(
+  @SuppressWarnings("rawtypes")
+  private <A> Response fromStream(AsyncStream<A> stream) throws Exception {
+    StreamingResponse<AsyncStream, A> streamingResponse = responseBuilder.streaming(
       stream, ToReader.AsyncStreamToReader());
     Future<Response> fResponse = streamingResponse.toFutureResponse();
     return Await.result(fResponse);

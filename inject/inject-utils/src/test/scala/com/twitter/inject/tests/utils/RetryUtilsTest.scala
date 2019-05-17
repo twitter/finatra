@@ -1,7 +1,7 @@
 package com.twitter.inject.tests.utils
 
+import com.twitter.conversions.DurationOps._
 import com.twitter.inject.Test
-import com.twitter.inject.conversions.time._
 import com.twitter.inject.utils.{RetryPolicyUtils, RetryUtils}
 import com.twitter.util.{Await, Future}
 

@@ -6,8 +6,10 @@ import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.tests.integration.tweetexample.main.domain.Tweet
 import com.twitter.finatra.http.tests.integration.tweetexample.main.services.TweetsRepository
 import com.twitter.finatra.http.response.{StreamingResponse, StreamingResponseUtils}
+import com.twitter.finatra.http.streaming.StreamingRequest
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.{Duration, Future, Try}
+import java.nio.charset.StandardCharsets
 import javax.inject.Inject
 import scala.collection.mutable
 
@@ -28,6 +30,23 @@ class TweetsController @Inject()(
   post("/tweets/streaming") { ids: Reader[Long] =>
     tweetsRepository.getByIds(ids)
   }
+
+  post("/tweets/reader_buf_to_string") { bufs: Reader[Buf] =>
+    bufs.map(buf => Buf.decodeString(buf, StandardCharsets.UTF_8))
+  }
+
+  post("/tweets/reader_buf") { bufs: Reader[Buf] =>
+    bufs
+  }
+
+  post("/tweets/asyncStream_buf_to_string") { bufs: AsyncStream[Buf] =>
+    bufs.map(buf => Buf.decodeString(buf, StandardCharsets.UTF_8))
+  }
+
+  post("/tweets/asyncStream_buf") { bufs: AsyncStream[Buf] =>
+    bufs
+  }
+
 
   get("/tweets/streaming_json") { request: Request =>
     tweetsRepository.getByIds(Reader.fromSeq(Seq(0, 1, 2, 3, 4, 5)))
@@ -105,6 +124,11 @@ class TweetsController @Inject()(
     }
 
     Future(response)
+  }
+
+  post("/tweets/streaming_with_streamingRequest") { request: StreamingRequest[Reader, Long] =>
+    val reader = request.stream
+    tweetsRepository.getByIds(reader)
   }
 
   get("/tweets/") { request: Request =>

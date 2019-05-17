@@ -7,7 +7,7 @@ import com.twitter.inject.{Injector, Logging}
 import com.twitter.scrooge.AsClosableMethodName
 import com.twitter.util.{Closable, Duration, Monitor}
 
-private[inject] trait ThriftClientModuleTrait extends Logging {
+private[twitter] trait ThriftClientModuleTrait extends Logging {
 
   /**
    * ThriftMux client label.

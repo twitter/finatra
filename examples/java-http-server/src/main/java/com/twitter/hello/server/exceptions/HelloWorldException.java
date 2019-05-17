@@ -1,4 +1,4 @@
-package com.twitter.hello.server;
+package com.twitter.hello.server.exceptions;
 
 public class HelloWorldException extends RuntimeException {
 

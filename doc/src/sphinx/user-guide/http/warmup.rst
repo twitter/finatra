@@ -73,6 +73,7 @@ following handler:
     import com.twitter.finatra.http.routing.HttpWarmup
     import com.twitter.finatra.httpclient.RequestBuilder._
     import com.twitter.inject.utils.Handler
+    import scala.util.control.NonFatal
     import javax.inject.Inject
 
     class ExampleWarmupHandler @Inject()(
@@ -81,10 +82,9 @@ following handler:
 
       override def handle(): Unit = {
         try {
-          warmup.send(
-            get("/ping"))
+          warmup.send(get("/ping"))()
         } catch {
-          case e: Throwable =>
+          case NonFatal(e) =>
             // Here we don't want a warmup failure to prevent server start-up --
             // this is important if your service will call downstream services
             // during warmup that could be temporarily down or unavailable.

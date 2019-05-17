@@ -6,9 +6,9 @@ Filtering HTTP Requests
 c.t.finatra.http.filters.CommonFilters
 --------------------------------------
 
-Finatra composes -- in defined order -- several generally useful HTTP filters into `c.t.finatra.http.filters.CommonFilters <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala>`__.
+Finatra composes -- in defined order -- several generally useful HTTP Filters into `c.t.finatra.http.filters.CommonFilters <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala>`__.
 
-`CommonFilters <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala>`__ can be added in the same manner as any other filter. Included filters:
+`CommonFilters <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala>`__ can be added in the same manner as any other Filter. Included Filters:
 
 `c.t.finatra.http.filters.StatsFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala>`__ |rarrow|
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -23,19 +23,25 @@ Finatra composes -- in defined order -- several generally useful HTTP filters in
 `c.t.finatra.http.filters.HttpResponseFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/HttpResponseFilter.scala>`__ |rarrow|
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- an HTTP response conformance filter which, among other things, ensures `Location` response headers are properly specified.
+- an HTTP response conformance Filter which, among other things, ensures `Location` response headers are properly specified.
 
 `c.t.finatra.http.filters.ExceptionMappingFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala>`__ |rarrow|
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- filter for use in mapping exceptions to HTTP responses. See `ExceptionMappingFilter <exceptions.html#exceptionmappingfilter>`__ for more information.
+- Filter for use in mapping exceptions to HTTP responses. See `ExceptionMappingFilter <exceptions.html#exceptionmappingfilter>`__
+for more information.
 
 Global Filters
 --------------
 
-Filters by default execute **after** route matching. Meaning, for a given request the URI path is matched in the routing table before executing any filter. If you need to be able to run a filter *before* route matching, you can add the filter via `HttpRouter#filter[T](beforeRouting = true)`, this is especially useful if the filter manually inspects to see if it should apply on a given request URI path that may not exist in the routing table (e.g., is not defined by any controller added to the server).
+Filters by default execute **after** route matching. Meaning, for a given request the URI path is
+matched in the routing table before executing any Filter. If you need to be able to run a Filter
+*before* route matching, you can add the Filter via `HttpRouter#filter[T](beforeRouting = true)`,
+this is especially useful if the Filter manually inspects to see if it should apply on a given
+request URI path that may not exist in the routing table (e.g., is not defined by any controller
+added to the server).
 
-If you want to apply a filter or filters to **all** added controllers you can do the following:
+If you want to apply a Filter or Filters to **all** added controllers you can do the following:
 
 .. code:: scala
 
@@ -59,16 +65,18 @@ If you want to apply a filter or filters to **all** added controllers you can do
       }
     }
 
-Note that filters -- much like controller routes -- are applied **in the order defined**.
+Note that Filters -- much like controller routes -- are applied **in the order defined**. Filters
+can be added to the `HttpRouter` by type (as in the example above) or by instance.
 
-For more information see the `Finagle User\'s Guide <https://twitter.github.io/finagle/guide/index.html>`__ section on `Filters <https://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters>`__.
+For more information see the `Finagle User\'s Guide <https://twitter.github.io/finagle/guide/index.html>`__
+section on `Filters <https://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters>`__.
 
 Per-controller Filters
 ----------------------
 
-It is also possible to add filters per controller, using `HttpRouter#add[F1 <: HttpFilter, C <: Controller]`.
+It is also possible to add Filters per controller, using `HttpRouter#add[F1 <: HttpFilter, C <: Controller]`.
 
-These filters will apply to all routes in the Controller.
+These Filters will apply to all routes in the Controller.
 
 .. code:: scala
 
@@ -93,14 +101,18 @@ These filters will apply to all routes in the Controller.
       }
     }
 
-Currently, `HttpRouter#add` supports in-lining up to ten (10) filters before a controller. If you need to include more than ten filters please consider combining them with `c.t.finatra.filters.MergedFilter <https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/filters/MergedFilter.scala>`__ in the same manner as `c.t.finatra.http.filters.CommonFilters <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala>`__ then using the combined filter in your call to `HttpRouter#add`.
+Currently, `HttpRouter#add` supports in-lining up to ten (10) filters before a Controller. If you
+need to include more than ten Filters please consider combining them with `c.t.finatra.filters.MergedFilter <https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/filters/MergedFilter.scala>`__
+in the same manner as `c.t.finatra.http.filters.CommonFilters <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala>`__
+then using the combined Filter in your call to `HttpRouter#add`.
 
-In all the above usages, we are applying the filter *by type* allowing the framework to instantiate instances of the filters. However all of these methods support passing constructed instances.
+In all the above usages, we are applying the Filter *by type* allowing the framework to instantiate
+instances of the Filters. However, all of these methods support passing constructed instances.
 
 Per-route Filters
 -----------------
 
-Additionally, you can define filters *inside* of a Controller per-route,
+Additionally, you can specify Filters *inside* of a Controller per-route,
 e.g.,
 
 .. code:: scala
@@ -125,53 +137,55 @@ e.g.,
       }
     }
 
-As you can see, you can choose to apply the filter either by type or provide an instance. Note that 
+As you can see, you can choose to apply the Filter either by type or provide an instance. Note that 
 you can chain `Controller#filter` calls arbitrarily deep.
 
 Request Scope
 -------------
 
 |Guice|_ supports `custom scopes <https://github.com/google/guice/wiki/CustomScopes>`__ in addition 
-to the defined ``@Singleton``, ``@SessionScoped``, and ``@RequestScoped`` `scopes <https://github.com/google/guice/wiki/Scopes>`__.
+to the defined ``@Singleton``, ``@SessionScoped``, and |@RequestScoped|_
+`scopes <https://github.com/google/guice/wiki/Scopes>`__. |@RequestScoped|_ is often used to allow
+injection of instances which can change depending on the incoming request (e.g. the currently
+authenticated User).
 
-``@RequestScoped`` is often used to allow injection of instances which can change depending on the incoming request 
-(e.g. the currently authenticated User). 
-
-Finatra provides a custom implementation of the default |Guice|_ ``@RequestScoped`` functionality which works
-across Finagle non-blocking threads. The default |Guice|_ `@RequestScoped <https://github.com/google/guice/wiki/Scopes#scopes>`__ 
+Finatra provides a custom implementation of the default |Guice|_ |@RequestScoped|_ functionality
+which works across Finagle non-blocking threads. The default |Guice|_ |@RequestScoped|_
 implementation uses `ThreadLocals <https://docs.oracle.com/javase/7/docs/api/java/lang/ThreadLocal.html>`__ 
 which will not work within the context of a Twitter `c.t.util.Future <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala>`__.
 
 .. note:: 
 
-     Fields added to the Finatra Request Scope will remain present in threads launched from a 
-     Finagle `FuturePool <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala>`__.
+    Fields added to the Custom Request Scope will remain present in threads launched from a
+    `FuturePool <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala>`__.
 
-Adding Classes into the Finatra Request Scope
----------------------------------------------
+Adding Classes into the Custom Request Scope
+--------------------------------------------
 
-First add a dependency on `com.twitter:inject-request-scope`
+First add a dependency on `com.twitter:inject-request-scope` (`finatra/inject/inject-request-scope`).
 
 Then define a module which mixes in the `c.t.inject.requestscope.RequestScopeBinding` trait.
 This trait defines `#bindRequestScope[T]` which will bind the given type to an "unseeded" 
-`Provider[T]` of the type *in* the "FinagleRequestScope". E.g.,
+`Provider[T]` of the type *in* the custom "FinagleRequestScope". E.g.,
 
 .. code:: scala
 
     import com.twitter.inject.TwitterModule
     import com.twitter.inject.requestscope.RequestScopeBinding
 
-    object UserModule
-      extends TwitterModule
-      with RequestScopeBinding {
+    object UserModule extends TwitterModule with RequestScopeBinding {
 
       override def configure(): Unit = {
         bindRequestScope[User]
       }
     }
 
-You must remember to "seed" this `Provider[T]` by obtaining an instance of the `FinagleRequestScope`
-and calling `#seed[T](instance)`. For request scoping, you would generally do this in another 
+.. important::
+
+    Remember to include this Module in your `server's list of Modules <../http/server.html#http-server-definition>`__.
+
+You must then "seed" this `Provider[T]` by obtaining an instance of the `FinagleRequestScope`
+and calling `#seed[T](instance)`. For request scoping, you would generally do this in a
 `Filter <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala>`__ 
 executed on the request path.
 
@@ -188,22 +202,27 @@ which seeds a `User` into the "FinagleRequestScope":
 
     @Singleton
     class UserFilter @Inject()(
-      requestScope: FinagleRequestScope)
-      extends SimpleFilter[Request, Response] {
+      finagleRequestScope: FinagleRequestScope
+    ) extends SimpleFilter[Request, Response] {
 
-      override def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
+      def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
         val userId = parseUserId(request) // User-defined method to parse a "user id" from the request
         val user = User(userId)
-        requestScope.seed[User](user)
+        finagleRequestScope.seed[User](user)
         service(request)
       }
     }
 
 
-Next, you must ensure to add the `FinagleRequestScopeFilter <https://github.com/twitter/finatra/tree/master/inject/inject-request-scope/src/main/scala/com/twitter/inject/requestscope/FinagleRequestScopeFilter.scala>`__ to your
-server before the defined `Filter <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala>`__ which seeds the provided instance.
+Next, add the `FinagleRequestScopeFilter <https://github.com/twitter/finatra/tree/master/inject/inject-request-scope/src/main/scala/com/twitter/inject/requestscope/filters.scala>`__ to your
+server _above_ the defined `Filter <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala>`__ which seeds the provided instance.
 
-E.g., for the `UserFilter` defined above (shown with common filters in a recommended filter order):
+.. note::
+  The `FinagleRequestScopeFilter <https://github.com/twitter/finatra/tree/master/inject/inject-request-scope/src/main/scala/com/twitter/inject/requestscope/FinagleRequestScopeFilter.scala>`__ expects
+  "request" and "response" type parameters. In this case, they would be
+  `com.twitter.finagle.http.Request` and `com.twitter.finagle.http.Response`.
+
+E.g., for the `UserFilter` defined above (shown with common Filters in a recommended Filter order):
 
 .. code:: scala
     
@@ -219,13 +238,14 @@ E.g., for the `UserFilter` defined above (shown with common filters in a recomme
           .filter[LoggingMDCFilter[Request, Response]]
           .filter[TraceIdMDCFilter[Request, Response]]
           .filter[CommonFilters]
-          .filter[FinagleRequestScopeFilter]
+          .filter[FinagleRequestScopeFilter[Request, Response]]
           .filter[UserFilter]
           .add[MyController]
         }
     }
 
-Lastly, wherever you need to access the Request scoped `User` inject a `User` or a `Provider[User]` type. 
+Lastly, wherever you need to access the Request scoped `User` inject a `User` or a `Provider[User]`
+type.
 
 .. code:: scala
 
@@ -252,14 +272,20 @@ Using `c.t.finagle.http.Request#ctx`
 
 Above we saw how to seed classes to the Finatra Request Scope using a `Provider[T]`.
 
-However, we recommend *not* seeding with a request scope `Provider[T]` but instead using Finagle's `c.t.finagle.http.Request#ctx <https://github.com/twitter/finagle/blob/f970bd5b0c1b3f968694dcde33b47b21869b9f0e/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala#L29>`__.
-Internally, for HTTP, we generally use the `Request#ctx` over `Provider[T]` even though we use `Guice <https://github.com/google/guice>`__ extensively.
+However, we recommend *not* seeding with a request scope `Provider[T]` but instead using Finagle's
+`c.t.finagle.http.Request#ctx <https://github.com/twitter/finagle/blob/f970bd5b0c1b3f968694dcde33b47b21869b9f0e/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala#L29>`__.
+Internally, for HTTP, we generally use the `Request#ctx` over `Provider[T]` even though we use
+|Guice|_ extensively.
 
-To use the `Request#ctx` technique, first create a `RecordSchema <https://github.com/twitter/util/blob/9fa550a269d2287b24e94921a352ba954f9f4bfb/util-collection/src/main/scala/com/twitter/collection/RecordSchema.scala#L6>`__ `request field <https://github.com/twitter/finagle/blob/f970bd5b0c1b3f968694dcde33b47b21869b9f0e/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala#L23>`__, a "context", and an HTTP `Filter <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala>`__ which can set the value of the "context".
+To use the `Request#ctx` technique, first create a `RecordSchema <https://github.com/twitter/util/blob/9fa550a269d2287b24e94921a352ba954f9f4bfb/util-collection/src/main/scala/com/twitter/collection/RecordSchema.scala#L6>`__
+`request field <https://github.com/twitter/finagle/blob/f970bd5b0c1b3f968694dcde33b47b21869b9f0e/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala#L23>`__,
+a "context", and an HTTP `Filter <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala>`__
+which can set the value of the "context".
 
-The "context" should define a method to retrieve the value from the `Request#ctx`. Typically, this method is defined in an `implicit class`
-which takes a `c.t.finagle.http.Request` as an argument. Importing the "context" members into scope thus allows for calling the method defined
-in the `implicit class` as though it were a method on the HTTP `Request` object.
+The "context" should define a method to retrieve the value from the `Request#ctx`. Typically, this
+method is defined in an `implicit class` which takes a `c.t.finagle.http.Request` as an argument.
+Importing the "context" members into scope thus allows for calling the method defined in the
+`implicit class` as though it were a method on the HTTP `Request` object.
 
 For example, a UserContext
 
@@ -290,7 +316,7 @@ which can set the `User`:
 
 .. code:: scala
 
-    // create a filter
+    // create a Filter
     class UserFilter extends SimpleFilter[Request, Response] {
       override def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
         UserContext.setUser(request)
@@ -299,8 +325,8 @@ which can set the `User`:
     }
 
 
-In the above example, the retrieval method defined in the implicit class `UserContextSyntax` will then be available on the the `request`
-when the `UserContext._` members are imported:
+In the above example, the retrieval method defined in the implicit class `UserContextSyntax` will
+then be available on the the `request` when the `UserContext._` members are imported:
 
 .. code:: scala
 
@@ -318,3 +344,6 @@ when the `UserContext._` members are imported:
 
 .. |Guice| replace:: Guice
 .. _Guice: https://github.com/google/guice
+
+.. |@RequestScoped| replace:: ``@RequestScoped``
+.. _@RequestScoped: https://github.com/google/guice/blob/master/extensions/servlet/src/com/google/inject/servlet/RequestScoped.java

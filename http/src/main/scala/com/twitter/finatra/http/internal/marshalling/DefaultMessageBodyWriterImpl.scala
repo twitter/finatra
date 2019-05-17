@@ -1,7 +1,6 @@
 package com.twitter.finatra.http.internal.marshalling
 
-import com.google.common.net.MediaType
-import com.google.common.net.MediaType._
+import com.twitter.finagle.http.MediaType
 import com.twitter.finatra.http.marshalling.{DefaultMessageBodyWriter, WriterResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.inject.annotations.Flag
@@ -14,13 +13,13 @@ private[finatra] class DefaultMessageBodyWriterImpl @Inject()(
 ) extends DefaultMessageBodyWriter {
 
   private val jsonCharset = {
-    if (includeContentTypeCharset) JSON_UTF_8
-    else MediaType.create("application", "json")
+    if (includeContentTypeCharset) MediaType.JsonUtf8
+    else MediaType.Json
   }
 
   private val plainText = {
-    if (includeContentTypeCharset) PLAIN_TEXT_UTF_8
-    else MediaType.create("plain", "text")
+    if (includeContentTypeCharset) MediaType.PlainTextUtf8
+    else MediaType.PlainText
   }
 
   /* Public */

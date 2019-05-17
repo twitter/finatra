@@ -1,13 +1,13 @@
 package com.twitter.inject.thrift.integration.filtered
 
+import com.twitter.conversions.DurationOps._
 import com.twitter.greeter.thriftscala.Greeter.{Bye, Hello, Hi}
 import com.twitter.greeter.thriftscala.{Greeter, InvalidOperation}
 import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
 import com.twitter.inject.thrift.integration.filters.MethodLoggingTypeAgnosticFilter
 import com.twitter.inject.thrift.modules.FilteredThriftClientModule
 import com.twitter.util.tunable.Tunable
-import com.twitter.util.{Future, Return, Throw}
-import org.joda.time.Duration
+import com.twitter.util.{Duration, Future, Return, Throw}
 import scala.util.control.NonFatal
 
 object GreeterFilteredThriftClientModule
@@ -15,7 +15,7 @@ object GreeterFilteredThriftClientModule
 
   override val label = "greeter-thrift-client"
   override val dest = "flag!greeter-thrift-service"
-  override val sessionAcquisitionTimeout = 1.minute.toDuration
+  override val sessionAcquisitionTimeout = 1.minute
 
   override def filterServiceIface(
     serviceIface: Greeter.ServiceIface,
@@ -23,7 +23,7 @@ object GreeterFilteredThriftClientModule
   ) = {
 
     val timeoutTunable = Tunable.emptyMutable[Duration]("id")
-    timeoutTunable.set(new Duration(60000)) // 1.minute
+    timeoutTunable.set(1.minute) // 1.minute
 
     serviceIface.copy(
       hi = filter

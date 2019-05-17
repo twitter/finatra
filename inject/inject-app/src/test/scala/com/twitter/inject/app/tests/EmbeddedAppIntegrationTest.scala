@@ -1,5 +1,6 @@
 package com.twitter.inject.app.tests
 
+import com.google.inject.Module
 import com.twitter.inject.{Logging, Mockito, Test, TwitterModule}
 import com.twitter.inject.app.{App, EmbeddedApp}
 import javax.inject.Inject
@@ -82,16 +83,39 @@ class EmbeddedAppIntegrationTest extends Test with Mockito {
 
     sampleApp.sampleServiceResponse should be("hi mock")
   }
+
+  test("failfastOnFlagsNotParsed") {
+    // Should NOT throw an IllegalStateException, even though we eagerly read the `f` flag as we set
+    // fail fast to false.
+    val app = new EmbeddedApp(new FailfastOnFlagsNotParsedApp(false))
+    app.main()
+  }
+
+  test("failfastOnFlagsNotParsed fails properly") {
+    // Throws an IllegalStateException, because we eagerly read the `f` flag and set fail fast to true.
+    intercept[IllegalStateException] {
+      val app = new EmbeddedApp(new FailfastOnFlagsNotParsedApp(true))
+      app.main()
+    }
+  }
 }
 
 object SampleAppMain extends SampleApp
+
+/* an app that eagerly applies (reads) a defined flag, with a toggle
+   to fail or not on read before parse */
+class FailfastOnFlagsNotParsedApp(fail: Boolean = true) extends App {
+  override protected def failfastOnFlagsNotParsed: Boolean = fail
+  private val f = flag("testing", "1", "help")
+  f()
+}
 
 class SampleApp extends App {
   var sampleServiceResponse: String = ""
 
   override val name = "sample-app"
 
-  override val modules = Seq()
+  override val modules: Seq[Module] = Seq.empty[Module]
 
   override protected def run(): Unit = {
     sampleServiceResponse = injector.instance[SampleManager].start()
@@ -115,7 +139,7 @@ class SampleService {
 
 object FooModule extends TwitterModule {
   override def configure(): Unit = {
-    bind[Foo].toInstance(new Foo("bar"))
+    bind[Foo].toInstance(Foo("bar"))
   }
 }
 

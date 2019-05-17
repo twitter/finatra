@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.internal.exceptions
 
-import com.google.common.net.MediaType
+import com.twitter.finagle.http.MediaType
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.exceptions.HttpException
 import com.twitter.finatra.http.response.{ErrorsResponse, ResponseBuilder}
@@ -19,7 +19,7 @@ class HttpExceptionMapper @Inject()(response: ResponseBuilder)
       .status(exception.statusCode)
       .headers(exception.headers: _*)
 
-    if (exception.mediaType.is(MediaType.JSON_UTF_8))
+    if (MediaType.typeEquals(exception.mediaType, MediaType.JsonUtf8))
       builder.json(ErrorsResponse(exception.errors))
     else
       builder.plain(exception.errors.mkString(", "))

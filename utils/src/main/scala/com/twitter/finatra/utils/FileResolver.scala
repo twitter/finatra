@@ -6,7 +6,6 @@ import com.twitter.inject.conversions.boolean._
 import java.io.{BufferedInputStream, File, FileInputStream, InputStream}
 import javax.activation.MimetypesFileTypeMap
 import javax.inject.{Inject, Singleton}
-import org.apache.commons.io.FilenameUtils
 
 /**
  * Non-optimized file resolver. The resolver takes in two possible parameters,
@@ -69,7 +68,23 @@ class FileResolver @Inject()(
     extMap.getContentType(dottedFileExtension(file))
   }
 
+  def getFileExtension(filename: String): String = {
+    val lastSeparator = getLastSeperatorIndex(filename)
+    val extensionPos = filename.lastIndexOf(EXTENSION_SEPARATOR)
+    if (lastSeparator >= extensionPos) "" else filename.substring(extensionPos)
+  }
+
   /* Private */
+
+  private final val UNIX_SEPARATOR = '/'
+  private final val WINDOWS_SEPARATOR = '\\'
+  private final val EXTENSION_SEPARATOR = '.'
+
+  private def getLastSeperatorIndex(filename: String): Int = {
+    val lastUnixPos = filename.lastIndexOf(UNIX_SEPARATOR)
+    val lastWindowPos = filename.lastIndexOf(WINDOWS_SEPARATOR)
+    if (lastUnixPos > lastWindowPos) lastUnixPos else lastWindowPos
+  }
 
   private def isDirectory(path: String): Boolean = {
     path.endsWith("/")
@@ -99,6 +114,6 @@ class FileResolver @Inject()(
   }
 
   private def dottedFileExtension(uri: String) = {
-    '.' + FilenameUtils.getExtension(uri)
+    '.' + getFileExtension(uri)
   }
 }

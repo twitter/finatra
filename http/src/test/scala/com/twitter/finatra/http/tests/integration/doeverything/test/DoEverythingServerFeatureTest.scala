@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.tests.integration.doeverything.test
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.google.common.net.MediaType
+import com.twitter.finagle.http.MediaType
 import com.google.inject.name.Names
 import com.google.inject.{Key, TypeLiteral}
 import com.twitter.finagle.http.Method._
@@ -9,7 +9,7 @@ import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http._
 import com.twitter.finagle.http.codec.HttpCodec
 import com.twitter.finagle.{Failure, FailureFlags}
-import com.twitter.finatra.http.EmbeddedHttpServer
+import com.twitter.finatra.http.{EmbeddedHttpServer, RouteHint}
 import com.twitter.finatra.http.tests.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.SomethingStreamedResponse
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.DoEverythingService
@@ -17,11 +17,10 @@ import com.twitter.finatra.httpclient.{HttpClient, RequestBuilder}
 import com.twitter.finatra.json.JsonDiff._
 import com.twitter.inject.Mockito
 import com.twitter.inject.server.FeatureTest
-import com.twitter.io.Buf
+import com.twitter.io.{Buf, StreamIO}
 import com.twitter.util.Future
 import com.twitter.{logging => ctl}
 import java.net.{ConnectException, InetSocketAddress, SocketAddress}
-import org.apache.commons.io.IOUtils
 import org.scalatest.exceptions.TestFailedException
 import scala.util.parsing.json.JSON
 
@@ -65,7 +64,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   val namedExampleString: String = server.injector.instance[String](Names.named("example"))
 
   private def deserializeRequest(name: String) = {
-    val requestBytes = IOUtils.toByteArray(getClass.getResourceAsStream(name))
+    val requestBytes = StreamIO.buffer(getClass.getResourceAsStream(name)).toByteArray
     HttpCodec.decodeBytesToRequest(requestBytes)
   }
 
@@ -91,11 +90,11 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   /* Note that tests against the Global Singleton HttpMuxer break when multiple servers are started in process */
   test("GET /admin/foo") {
     // NOT on the admin
-    server.httpGet("/admin/foo", routeToAdminServer = true, andExpect = Status.NotFound)
+    server.httpGet("/admin/foo", routeHint = RouteHint.AdminServer, andExpect = Status.NotFound)
     // on the external
     server.httpGet(
       "/admin/foo",
-      routeToAdminServer = false,
+      routeHint = RouteHint.ExternalServer,
       andExpect = Status.Ok,
       withBody = "on the external interface"
     )
@@ -118,13 +117,13 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     // NOT on the admin
     server.httpGet(
       "/admin/external/filtered",
-      routeToAdminServer = true,
+      routeHint = RouteHint.AdminServer,
       andExpect = Status.NotFound
     )
     // on the external and reads headers appended by external filters
     server.httpGet(
       "/admin/external/filtered",
-      routeToAdminServer = false,
+      routeHint = RouteHint.ExternalServer,
       andExpect = Ok,
       withBody = "01"
     )
@@ -139,17 +138,17 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test("GET /plaintext") {
     val response1 = server.httpGet("/plaintext", withBody = "Hello, World!")
 
-    response1.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
+    response1.contentType should equal(Some(MediaType.PlainTextUtf8))
 
     val response2 = server.httpGet("/plaintext/", withBody = "Hello, World!")
 
-    response2.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
+    response2.contentType should equal(Some(MediaType.PlainTextUtf8))
   }
 
   test("/plaintext (prefixed)") {
     val response = server.httpGet("/1.1/plaintext", withBody = "Hello, World!")
 
-    response.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
+    response.contentType should equal(Some(MediaType.PlainTextUtf8))
   }
 
   test("/forbiddenByFilter (prefixed)") {
@@ -198,13 +197,13 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test("GET /bytearray") {
     val response = server.httpGet("/bytearray")
 
-    response.contentType should equal(Some(MediaType.OCTET_STREAM.toString))
+    response.contentType should equal(Some(MediaType.OctetStream))
   }
 
   test("GET /inputstream") {
     val response = server.httpGet("/inputstream")
 
-    response.contentType should equal(Some(MediaType.OCTET_STREAM.toString))
+    response.contentType should equal(Some(MediaType.OctetStream))
   }
 
   test("GET /useragent") {
@@ -616,7 +615,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     server.httpPut(
       "/echo",
       putBody = body,
-      contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
+      contentType = MediaType.PlainTextUtf8,
       andExpect = Ok,
       withBody = body
     )
@@ -690,7 +689,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
       withJsonBody = "42"
     )
 
-    response.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
+    response.contentType should equal(Some(MediaType.PlainTextUtf8))
   }
 
   test("PUT /put_id_not_ignoring_body") {
@@ -838,7 +837,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     val response =
       server.httpGet("/users/mary", andExpect = Ok, withJsonBody = """{ "name" : "mary" }""")
 
-    response.headerMap("content-type") should equal(MediaType.JSON_UTF_8.toString)
+    response.headerMap("content-type") should equal(MediaType.JsonUtf8)
   }
 
   test("POST json user") {
@@ -862,7 +861,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     server.httpPost(
       "/echo",
       postBody = body,
-      contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
+      contentType = MediaType.PlainTextUtf8,
       andExpect = Ok,
       withBody = body
     )
@@ -1015,7 +1014,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     server.httpDelete(
       "/delete",
       deleteBody = "DELETE BODY",
-      contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
+      contentType = MediaType.PlainTextUtf8,
       andExpect = Ok,
       withBody = "delete"
     )
@@ -1041,7 +1040,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test("PATCH") {
     server.httpPatch(
       "/patch",
-      contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
+      contentType = MediaType.PlainTextUtf8,
       patchBody = "asdf",
       andExpect = Ok,
       withBody = "patch"
@@ -1062,7 +1061,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     val body = s"${musicalNote} ${musicalNote}"
     server.httpPatch(
       "/echo",
-      contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
+      contentType = MediaType.PlainTextUtf8,
       patchBody = body,
       andExpect = Ok,
       withBody = body
@@ -1144,6 +1143,17 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
         """
     )
   }
+
+  test("GET defaulted request case class parameter as string with URL-encoded query param") {
+    server.httpGet(
+      "/RequestWithDefaultQueryParam?param=%3Dset%3D",
+      andExpect = Ok,
+      withJsonBody = """
+            { "param": "=set=" }
+        """
+    )
+  }
+
 
   test("GET with query parameters as long sequence") {
     server.httpGet(
@@ -1827,21 +1837,13 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test("bytes returned") {
     val response = server.httpGet("/bytes", withBody = "Steve")
 
-    response.contentType should equal(Some(MediaType.OCTET_STREAM.toString))
+    response.contentType should equal(Some(MediaType.OctetStream))
   }
 
   test("Bad request for deserialization of wrapped value from a json object") {
     server.httpPost(
       "/RequestWithSeqWrappedString",
       postBody = """{"value" : [{"foo" : "foo"}]}""",
-      andExpect = BadRequest
-    )
-  }
-
-  test("Bad request for deserialization of an invalid joda LocalDate") {
-    server.httpPost(
-      "/localDateRequest",
-      postBody = """{"date" : "2016-11-32"}""",
       andExpect = BadRequest
     )
   }
@@ -2442,6 +2444,37 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     server.httpGet(
       "/httpclient",
       andExpect = Status.InternalServerError)
+  }
+
+  test("DoEverythingServer#support specifying GlobalFlags") {
+    var shouldLogMetrics = false
+
+    com.twitter.finagle.stats.logOnShutdown() should equal(false) // verify initial default value
+
+    com.twitter.finagle.stats.logOnShutdown.let(false) { //set the scope of this test thread
+      val srvr = new EmbeddedHttpServer(
+        twitterServer = new DoEverythingServer {
+          override protected def postInjectorStartup(): Unit = {
+            // mutate to match the inner scope of withLocals
+            shouldLogMetrics = com.twitter.finagle.stats.logOnShutdown()
+            super.postInjectorStartup()
+          }
+        },
+        globalFlags = Map(
+          com.twitter.finagle.stats.logOnShutdown -> "true"
+        )
+      )
+      try {
+        srvr.start() // start the server, otherwise the scope will never be entered
+        shouldLogMetrics should equal(true) // verify mutation of inner scope
+        com.twitter.finagle.stats
+          .logOnShutdown() should equal(false) // verify outer scope is not changed
+      } finally {
+        srvr.close()
+      }
+    }
+
+    com.twitter.finagle.stats.logOnShutdown() should equal(false) // verify default value unchanged
   }
 }
 

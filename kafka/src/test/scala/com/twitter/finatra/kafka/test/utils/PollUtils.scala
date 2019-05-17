@@ -1,8 +1,8 @@
 package com.twitter.finatra.kafka.test.utils
 
 import com.twitter.inject.Logging
-import com.twitter.inject.conversions.time._
-import org.joda.time.Duration
+import com.twitter.conversions.DurationOps._
+import com.twitter.util.Duration
 
 object PollUtils extends Logging {
   def poll[T](
@@ -21,10 +21,10 @@ object PollUtils extends Logging {
     val timeoutToUse = if (maxTries == -1) {
       timeout
     } else {
-      maxTries * sleepDuration
+      sleepDuration * maxTries
     }
 
-    val endTime = System.currentTimeMillis + timeoutToUse.millis
+    val endTime = System.currentTimeMillis + timeoutToUse.inMillis
 
     while (!until(funcResult)) {
       tries += 1
@@ -39,7 +39,7 @@ object PollUtils extends Logging {
         info(pollMessage)
       }
 
-      Thread.sleep(sleepDuration.millis)
+      Thread.sleep(sleepDuration.inMillis)
       funcResult = func
     }
 

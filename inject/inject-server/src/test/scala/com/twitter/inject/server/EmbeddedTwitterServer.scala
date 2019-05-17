@@ -3,7 +3,7 @@ package com.twitter.inject.server
 import com.google.inject.Stage
 import com.twitter.app.GlobalFlag
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
-import com.twitter.inject.{Injector, PoolUtils}
+import com.twitter.inject.{Injector, PoolUtils, TwitterModule}
 import com.twitter.inject.app.{BindDSL, StartupTimeoutException}
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
@@ -11,9 +11,11 @@ import com.twitter.inject.server.PortUtils.getPort
 import com.twitter.util.lint.{GlobalRules, Rule}
 import com.twitter.util.{Await, Closable, Duration, ExecutorServiceFuturePool, Future}
 import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.atomic.AtomicBoolean
 import org.scalatest.Matchers
 import scala.collection.JavaConverters._
 import scala.collection.SortedMap
+import scala.util.control.Breaks._
 import scala.util.control.NonFatal
 
 object EmbeddedTwitterServer {
@@ -33,9 +35,27 @@ object EmbeddedTwitterServer {
    * Returns true if the given instance is a Scala singleton object, false otherwise.
    * @see [[https://docs.scala-lang.org/tour/singleton-objects.html]]
    */
-  private def isSingletonObject(server: com.twitter.server.TwitterServer) = {
-    import scala.reflect.runtime.currentMirror
-    currentMirror.reflect(server).symbol.isModuleClass
+  private def isSingletonObject(server: com.twitter.server.TwitterServer): Boolean = {
+    // while Scala's reflection utilities offer this in a succinct and convenient
+    // method, the startup costs are quite high for quick testing iteration cycles:
+    //
+    //    scala.reflect.runtime.currentMirror.reflect(server).symbol.isModuleClass
+    //
+    // the approach used here, while fragile to Scala internal changes, was deemed
+    // worth the tradeoff. this assumes that companion objects have class names that
+    // end with $ and have a field on them called MODULE$. For example `object MyServer`
+    // has the class name `MyServer$` and a `MODULE$` field. this works as of Scala 2.12.
+    val clazz = server.getClass
+    val className = clazz.getName
+    if (!className.endsWith("$"))
+      return false
+
+    try {
+      clazz.getField("MODULE$") // this throws if the field doesn't exist
+      true
+    } catch {
+      case _: NoSuchFieldException => false
+    }
   }
 
   /**
@@ -57,7 +77,6 @@ object EmbeddedTwitterServer {
       firstPass
     }
   }
-
 
   /**
    * A type alias that represents a function that generates a `T` as input (`=> T`)
@@ -85,11 +104,11 @@ object EmbeddedTwitterServer {
    *
    * @note This is `private[server]` scoped for testing purposes
    */
-  private[server] def mkGlobalFlagsFn[T](
-    fns: Iterable[ReducibleFn[T]]
-  ): ReducibleFn[T] =
+  private[server] def mkGlobalFlagsFn[T](fns: Iterable[ReducibleFn[T]]): ReducibleFn[T] =
     fns.reduce[ReducibleFn[T]] {
-      case (fn, collector) => input => collector(fn(input))
+      case (fn, collector) =>
+        input =>
+          collector(fn(input))
     }
 }
 
@@ -124,6 +143,13 @@ object EmbeddedTwitterServer {
  *                    applied in insertion order, with the first entry being applied closest to
  *                    the startup of the [[twitterServer]]. In order to ensure insertion ordering,
  *                    you should use a [[scala.collection.immutable.ListMap]].
+ * @param statsReceiverOverride An optional [[StatsReceiver]] implementation that should is bound to the
+ *                              underlying server when testing with an injectable server. By default
+ *                              an injectable server under test will have an [[InMemoryStatsReceiver]] implementation
+ *                              bound for the purpose of testing. In some cases, users may want to test using
+ *                              a custom [[StatsReceiver]] implementation instead and can provide and instance
+ *                              to use here. For non-injectable servers this can be a shared reference
+ *                              used in the server under test.
  */
 class EmbeddedTwitterServer(
   twitterServer: com.twitter.server.TwitterServer,
@@ -139,10 +165,11 @@ class EmbeddedTwitterServer(
   maxStartupTimeSeconds: Int = 60,
   failOnLintViolation: Boolean = false,
   closeGracePeriod: Option[Duration] = None,
-  globalFlags: => Map[GlobalFlag[_], String] = Map()
-) extends AdminHttpClient(twitterServer, verbose)
-  with BindDSL
-  with Matchers {
+  globalFlags: => Map[GlobalFlag[_], String] = Map(),
+  statsReceiverOverride: Option[StatsReceiver] = None)
+    extends AdminHttpClient(twitterServer, verbose)
+    with BindDSL
+    with Matchers {
 
   import EmbeddedTwitterServer._
 
@@ -151,8 +178,17 @@ class EmbeddedTwitterServer(
   def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage) =
     this(twitterServer, flags = flags.asScala.toMap, stage = stage)
 
-  def this(twitterServer: Ports, flags: java.util.Map[String, String], globalFlags: java.util.Map[GlobalFlag[_], String], stage: Stage) =
-    this(twitterServer, flags = flags.asScala.toMap, stage = stage, globalFlags = globalFlags.toOrderedMap)
+  def this(
+    twitterServer: Ports,
+    flags: java.util.Map[String, String],
+    globalFlags: java.util.Map[GlobalFlag[_], String],
+    stage: Stage
+  ) =
+    this(
+      twitterServer,
+      flags = flags.asScala.toMap,
+      stage = stage,
+      globalFlags = globalFlags.toOrderedMap)
 
   /* Main Constructor */
 
@@ -168,22 +204,36 @@ class EmbeddedTwitterServer(
     // embedded server is a com.twitter.inject.server.TwitterServer.
     injectableServer.stage = stage
     // Add framework override modules
-    injectableServer.addFrameworkOverrideModules(InMemoryStatsReceiverModule)
+    statsReceiverOverride match {
+      case Some(receiver) =>
+        injectableServer.addFrameworkOverrideModules(new TwitterModule {
+          override def configure(): Unit = {
+            bindSingleton[StatsReceiver].toInstance(receiver)
+          }
+        })
+      case _ =>
+        injectableServer.addFrameworkOverrideModules(InMemoryStatsReceiverModule)
+    }
   }
 
   /* Fields */
 
   val name: String = twitterServer.name
   val EmbeddedName: String = embeddedName(name)
+
   private[this] val FuturePoolName: String = s"finatra/embedded/$EmbeddedName"
   private[this] val futurePool: ExecutorServiceFuturePool = PoolUtils.newFixedPool(FuturePoolName)
+
   private[this] val closables: ConcurrentLinkedQueue[Closable] = new ConcurrentLinkedQueue()
+
+  // start() ends up calling itself, thus we want to bypass/skip if we are already starting
+  private[this] val starting: AtomicBoolean = new AtomicBoolean(false)
+  private[this] val started: AtomicBoolean = new AtomicBoolean(false)
+  private[this] val _closed: AtomicBoolean = new AtomicBoolean(false)
+  protected[inject] def closed: Boolean = _closed.get
 
   /* Mutable state */
 
-  private[this] var starting: Boolean = false
-  private[this] var started: Boolean = false
-  protected[inject] var closed: Boolean = false
   private[this] var _mainResult: Future[Unit] = _
   // This needs to be volatile because it is set in futurePool onFailure
   // which is a different thread than waitForServerStarted, where it's read.
@@ -194,16 +244,35 @@ class EmbeddedTwitterServer(
 
   lazy val isInjectable: Boolean = twitterServer.isInstanceOf[TwitterServer]
   lazy val injectableServer: TwitterServer = twitterServer.asInstanceOf[TwitterServer]
+
   lazy val injector: Injector = {
     start()
     injectableServer.injector
   }
 
+  /** Returns the [[StatsReceiver]] for the underlying server when applicable */
   lazy val statsReceiver: StatsReceiver =
     if (isInjectable) injector.instance[StatsReceiver]
-    else new InMemoryStatsReceiver
-  lazy val inMemoryStatsReceiver: InMemoryStatsReceiver =
-    statsReceiver.asInstanceOf[InMemoryStatsReceiver]
+    else statsReceiverOverride.getOrElse(
+      throw new IllegalStateException(
+        "Accessing the underlying StatsReceiver is only supported with an injectable server or when an override is provided."))
+
+  lazy val usesInMemoryStatsReceiver: Boolean =
+    statsReceiver.isInstanceOf[InMemoryStatsReceiver]
+
+  /**
+   * Returns the bound [[InMemoryStatsReceiver]] when applicable. If access to this member is
+   * attempted when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]
+   * this will throw an [[IllegalStateException]] as it is not expected that users call this
+   * when providing a custom [[StatsReceiver]] implementation via the [[statsReceiverOverride]].
+   */
+  lazy val inMemoryStatsReceiver: InMemoryStatsReceiver = statsReceiver match {
+    case receiver: InMemoryStatsReceiver => receiver
+    case _ =>
+      throw new IllegalStateException(
+        "The configured StatsReceiver implementation is not of type InMemoryStatsReceiver.")
+  }
+
   lazy val adminHostAndPort: String = PortUtils.loopbackAddressForPort(httpAdminPort())
 
   /* Public */
@@ -230,29 +299,25 @@ class EmbeddedTwitterServer(
    * If the underlying embedded TwitterServer has started.
    * @return True if the server has started, False otherwise.
    */
-  def isStarted: Boolean = started
+  def isStarted: Boolean = started.get
 
   /**
    * Start the underlying TwitterServer.
    * @note Start is called in various places to "lazily start the server" as needed.
    */
   def start(): Unit = {
-    if (!starting && !started) {
-      starting = true //mutation
-
+    if (starting.compareAndSet(false, true)) {
       runNonExitingMain()
 
       if (waitForWarmup) {
         waitForServerStarted()
       }
-
-      started = true //mutation
-      starting = false //mutation
+      logStartup()
+      started.set(true)
     }
 
-    //because start() can be called lazily multiple times,
-    //subsequent calls will not enter the initialization loop.
-    //we need to throw here if there was an error for the initial start() call.
+    // if there is/was an exception on startup, we want it to be thrown *every* time
+    // this method is called.
     throwIfStartupFailed()
   }
 
@@ -311,7 +376,7 @@ class EmbeddedTwitterServer(
    * all resources have been fully relinquished.
    */
   def close(after: Duration): Unit = {
-    if (!closed) {
+    if (_closed.compareAndSet(false, true)) {
       infoBanner(s"Closing ${this.getClass.getSimpleName}: " + name, disableLogging)
       try {
         val underlyingClosable = Closable.make { deadline =>
@@ -322,7 +387,10 @@ class EmbeddedTwitterServer(
         Await.result(Future.collect(closables.asScala.toIndexedSeq.map(_.close(after))))
       } catch {
         case NonFatal(e) =>
-          info(s"Error while closing ${this.getClass.getSimpleName}: ${e.getMessage}\n", disableLogging)
+          info(
+            s"Error while closing ${this.getClass.getSimpleName}: ${e.getMessage}\n",
+            disableLogging
+          )
           e.printStackTrace()
           shutdownFailure = Some(e)
       } finally {
@@ -334,7 +402,6 @@ class EmbeddedTwitterServer(
             info(s"Unable to shutdown $FuturePoolName future pool executor. $t", disableLogging)
             t.printStackTrace()
         }
-        closed = true
       }
     }
   }
@@ -346,27 +413,45 @@ class EmbeddedTwitterServer(
    */
   def assertCleanShutdown(): Unit = {
     if (!closed) {
-      throw new IllegalStateException(s"$name is not closed")
+      throw new IllegalStateException(s"$name is not closed.")
     } else if (shutdownFailure.isDefined) {
       throw shutdownFailure.get
     }
   }
 
-  /* StatsReceiver Functions */
+  /* InMemoryStatsReceiver Functions */
 
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def clearStats(): Unit = {
     inMemoryStatsReceiver.counters.clear()
     inMemoryStatsReceiver.stats.clear()
     inMemoryStatsReceiver.gauges.clear()
   }
 
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def statsMap: SortedMap[String, Seq[Float]] =
     inMemoryStatsReceiver.stats.iterator.toMap.mapKeys(keyStr).toSortedMap
+
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def countersMap: SortedMap[String, Long] =
     inMemoryStatsReceiver.counters.iterator.toMap.mapKeys(keyStr).toSortedMap
+
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def gaugeMap: SortedMap[String, () => Float] =
     inMemoryStatsReceiver.gauges.iterator.toMap.mapKeys(keyStr).toSortedMap
 
+  /**
+   * Prints stats from the bound [[InMemoryStatsReceiver]] when applicable. If access to this method
+   * is attempted when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]
+   * this will throw an [[IllegalStateException]] as it is not expected that users call this
+   * when providing a custom [[StatsReceiver]] implementation via the [[statsReceiverOverride]].
+   *
+   * Instead users should prefer to print stats from their custom StatsReceiver implementation
+   * by other means.
+   *
+   * @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a
+   *        [[statsReceiverOverride]].
+   */
   def printStats(includeGauges: Boolean = true): Unit = {
     infoBanner(name + " Stats", disableLogging)
     for ((key, values) <- statsMap) {
@@ -390,30 +475,37 @@ class EmbeddedTwitterServer(
     }
   }
 
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def getCounter(name: String): Long = {
     countersMap.getOrElse(name, 0)
   }
 
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def assertCounter(name: String, expected: Long): Unit = {
     getCounter(name) should equal(expected)
   }
 
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def assertCounter(name: String)(callback: Long => Boolean): Unit = {
     callback(getCounter(name)) should be(true)
   }
 
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def getStat(name: String): Seq[Float] = {
     statsMap.getOrElse(name, Seq())
   }
 
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def assertStat(name: String, expected: Seq[Float]): Unit = {
     getStat(name) should equal(expected)
   }
 
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def getGauge(name: String): Float = {
     gaugeMap.get(name) map { _.apply() } getOrElse 0f
   }
 
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   def assertGauge(name: String, expected: Float): Unit = {
     val value = getGauge(name)
     value should equal(expected)
@@ -489,12 +581,14 @@ class EmbeddedTwitterServer(
       info(s"Applying GlobalFlag scoping to $name embedded server: $globalFlags")
 
       // take the globalFlags and map them to their local scoped functions
-      val globalFlagLocalFns: Iterable[ReducibleFn[Unit]] = globalFlags.map { case (k, v) =>
-        val f: ReducibleFn[Unit] = func => k.letParse[Unit](v){
-          info(s"Applying GlobalFlag${k.name}=$v")
-          func
-        }
-        f
+      val globalFlagLocalFns: Iterable[ReducibleFn[Unit]] = globalFlags.map {
+        case (k, v) =>
+          val f: ReducibleFn[Unit] = func =>
+            k.letParse[Unit](v) {
+              info(s"Applying GlobalFlag${k.name}=$v")
+              func
+          }
+          f
       }
 
       // reduce all of the functions down to a single input function that can accept `fn`
@@ -504,31 +598,31 @@ class EmbeddedTwitterServer(
       globalsFn(fn)
     }
 
-  private def main(allArgs: Array[String]): Unit = try {
-    twitterServer.nonExitingMain(allArgs)
-  } catch {
-    case e: OutOfMemoryError if e.getMessage == "PermGen space" =>
-      println(
-        "OutOfMemoryError(PermGen) in server startup. " +
-          "This is most likely due to the incorrect setting of a client " +
-          "flag (not defined or invalid). Increase your PermGen to see the exact error message (e.g. -XX:MaxPermSize=256m)"
-      )
-      e.printStackTrace()
-      System.exit(-1)
-    case e if !NonFatal(e) =>
-      println("Fatal exception in server startup.")
-      throw new Exception(e) // Need to rethrow as a NonFatal for FuturePool to "see" the exception :/
-  }
-
-  private def runNonExitingMain(): Unit = {
-    // we call distinct here b/c port flag args can potentially be added multiple times
-    val allArgs = combineArgs().distinct
+  private[this] def runNonExitingMain(): Unit = {
+    val allArgs = combineArgs()
     info("\nStarting " + name + " with args: " + allArgs.mkString(" "), disableLogging)
 
     _mainResult = futurePool {
-      withLocals(main(allArgs))
+      withLocals {
+        try {
+          twitterServer.nonExitingMain(allArgs)
+        } catch {
+          case e: OutOfMemoryError if e.getMessage == "PermGen space" =>
+            println(
+              "OutOfMemoryError(PermGen) in server startup. " +
+                "This is most likely due to the incorrect setting of a client " +
+                "flag (not defined or invalid). Increase your PermGen to see the exact error message (e.g. -XX:MaxPermSize=256m)"
+            )
+            e.printStackTrace()
+            System.exit(-1)
+          case e if !NonFatal(e) =>
+            println("Fatal exception in server startup.")
+            throw new Exception(e) // Need to rethrow as a NonFatal for FuturePool to "see" the exception :/
+        }
+      }
     }.onFailure { e =>
-      //If we rethrow, the exception will be suppressed by the Future Pool's monitor. Instead we save off the exception and rethrow outside the pool
+      // If we rethrow, the exception will be suppressed by the Future Pool's monitor.
+      // Instead we save off the exception and rethrow outside the pool
       startupFailedThrowable = Some(e)
     }
   }
@@ -538,32 +632,40 @@ class EmbeddedTwitterServer(
     throw startupFailedThrowable.get
   }
 
+  private[this] def serverStarted: Boolean = {
+    if (isInjectable) {
+      injectableServer.started
+    } else {
+      nonInjectableServerStarted()
+    }
+  }
+
   private def waitForServerStarted(): Unit = {
-    for (_ <- 1 to maxStartupTimeSeconds) {
-      info("Waiting for warmup phases to complete...", disableLogging)
+    breakable {
+      for (_ <- 1 to maxStartupTimeSeconds) {
+        info("Waiting for warmup phases to complete...", disableLogging)
 
-      throwIfStartupFailed()
+        throwIfStartupFailed()
 
-      if ((isInjectable && injectableServer.started)
-        || (!isInjectable && nonInjectableServerStarted)) {
-        /* TODO: RUN AND WARN ALWAYS
-           For now only run if failOnValidation = true until
-           we allow for a better way to isolate the server startup
-           in feature tests */
-        if (failOnLintViolation) {
-          checkStartupLintIssues()
+        if (serverStarted) {
+          /* TODO: RUN AND WARN ALWAYS
+          For now only run if failOnValidation = true until
+          we allow for a better way to isolate the server startup
+          in feature tests */
+          if (failOnLintViolation) {
+            checkStartupLintIssues()
+          }
+
+          started.set(true)
+          break
         }
 
-        started = true
-        logStartup()
-        return
+        Thread.sleep(1000)
       }
-
-      Thread.sleep(1000)
+      throw new StartupTimeoutException(
+        s"Embedded server: $name failed to startup within $maxStartupTimeSeconds seconds."
+      )
     }
-    throw new StartupTimeoutException(
-      s"Embedded server: $name failed to startup within $maxStartupTimeSeconds seconds."
-    )
   }
 
   private def checkStartupLintIssues(): Unit = {

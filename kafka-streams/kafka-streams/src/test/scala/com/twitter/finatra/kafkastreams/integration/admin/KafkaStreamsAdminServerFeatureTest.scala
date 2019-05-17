@@ -26,7 +26,8 @@ class KafkaStreamsAdminServerFeatureTest extends KafkaStreamsFeatureTest {
           .to(Sink)(Produced.`with`(UnKeyedSerde, Serdes.String))
       }
     },
-    flags = kafkaStreamsFlags ++ Map("kafka.application.id" -> ApplicationId)
+    flags = kafkaStreamsFlags ++ Map("kafka.application.id" -> ApplicationId),
+    disableTestLogging = true
   )
 
   override def beforeEach(): Unit = {

@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "19.4.0"
+val releaseVersion = "19.5.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -54,13 +54,11 @@ lazy val versions = new {
   val agrona = "0.9.22"
   val bijectionCore = "0.9.5"
   val commonsCodec = "1.9"
-  val commonsFileupload = "1.3.1"
-  val commonsIo = "2.4"
+  val commonsFileupload = "1.4"
   val commonsLang = "2.6"
   val fastutil = "8.1.1"
-  val guava = "19.0"
   val guice = "4.0"
-  val jackson = "2.9.6"
+  val jackson = "2.9.8"
   val jodaConvert = "1.2"
   val jodaTime = "2.5"
   val junit = "4.12"
@@ -75,7 +73,7 @@ lazy val versions = new {
   val scalaGuice = "4.1.0"
   val scalaTest = "3.0.0"
   val slf4j = "1.7.21"
-  val snakeyaml = "1.12"
+  val snakeyaml = "1.24"
   val specs2 = "2.4.17"
 }
 
@@ -240,11 +238,11 @@ lazy val finatraExamples =
   // START EXAMPLES
   Seq[sbt.ProjectReference](
     benchmarkServer,
+    exampleHttpServer,
     exampleHttpJavaServer,
     exampleInjectJavaServer,
     exampleTwitterServer,
     exampleWebDashboard,
-    helloWorld,
     streamingExample,
     thriftExampleServer,
     thriftJavaExampleServer,
@@ -270,7 +268,7 @@ lazy val root = (project in file("."))
       -- inProjects(benchmarks)
       // START EXAMPLES
       -- inProjects(benchmarkServer, exampleHttpJavaServer, exampleInjectJavaServer,
-         exampleTwitterServer, exampleWebDashboard, helloWorld,
+         exampleTwitterServer, exampleWebDashboard, exampleHttpServer,
          streamingExample, thriftExampleIdl, thriftExampleServer,
          thriftJavaExampleIdl, thriftJavaExampleServer, twitterClone)
       // END EXAMPLES
@@ -296,7 +294,6 @@ lazy val injectCore = (project in file("inject/inject-core"))
       "com.google.inject.extensions" % "guice-assistedinject" % versions.guice,
       "com.google.inject.extensions" % "guice-multibindings" % versions.guice,
       "com.twitter" %% "util-app" % versions.twLibVersion,
-      "commons-io" % "commons-io" % versions.commonsIo,
       "javax.inject" % "javax.inject" % "1",
       "joda-time" % "joda-time" % versions.jodaTime,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
@@ -405,7 +402,8 @@ lazy val injectApp = (project in file("inject/inject-app"))
     }
   ).dependsOn(
     injectCore % "test->test;compile->compile",
-    injectModules % Test)
+    injectModules % Test,
+    injectUtils)
 
 lazy val injectServerTestJarSources =
   Seq(
@@ -422,7 +420,6 @@ lazy val injectServer = (project in file("inject/inject-server"))
     moduleName := "inject-server",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*Ports.*;.*FinagleBuildRevision.*",
     libraryDependencies ++= Seq(
-      "com.google.guava" % "guava" % versions.guava % Test,
       "com.twitter" %% "finagle-stats" % versions.twLibVersion,
       "com.twitter" %% "twitter-server" % versions.twLibVersion,
       "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
@@ -560,7 +557,6 @@ lazy val utils = project
     libraryDependencies ++= Seq(
       "com.google.inject" % "guice" % versions.guice,
       "joda-time" % "joda-time" % versions.jodaTime,
-      "commons-io" % "commons-io" % versions.commonsIo,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "com.twitter" %% "util-core" % versions.twLibVersion
@@ -640,7 +636,6 @@ lazy val http = project
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;.*NonValidatingHttpHeadersResponse.*;com\\.twitter\\.finatra\\..*package.*;.*ThriftExceptionMapper.*;.*HttpResponseExceptionMapper.*;.*HttpResponseException.*",
     libraryDependencies ++= Seq(
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache exclude("com.google.guava", "guava"),
-      "com.google.guava" % "guava" % versions.guava,
       "com.twitter" %% "finagle-exp" % versions.twLibVersion,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
@@ -937,12 +932,12 @@ lazy val site = (project in file("doc"))
 
 // START EXAMPLES
 
-lazy val helloWorld = (project in file("examples/hello-world"))
+lazy val exampleHttpServer = (project in file("examples/http-server"))
   .settings(exampleServerSettings)
   .settings(noPublishSettings)
   .settings(
-    name := "hello-world",
-    moduleName := "hello-world"
+    name := "http-server",
+    moduleName := "http-server"
   ).dependsOn(
     http % "test->test;compile->compile",
     injectCore % "test->test",
@@ -1087,9 +1082,6 @@ lazy val exampleWebDashboard = (project in file("examples/web-dashboard"))
   .settings(
     name := "web-dashboard",
     moduleName := "web-dashboard",
-    libraryDependencies ++= Seq(
-      "com.google.guava" % "guava" % versions.guava
-    ),
     unmanagedResourceDirectories in Compile += baseDirectory.value / "src" / "main" / "webapp"
   ).dependsOn(
     http % "test->test;compile->compile",

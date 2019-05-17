@@ -1,7 +1,6 @@
 package com.twitter.finatra.http.request
 
-import com.google.common.net.{MediaType => CommonMediaTypes}
-import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.{MediaType => CommonMediaTypes, Request}
 import com.twitter.finatra.http.HttpHeaders
 import com.twitter.finatra.http.exceptions.{BadRequestException, NotAcceptableException}
 import com.twitter.finatra.http.fileupload.{FinagleRequestFileUpload, MultipartItem}
@@ -103,7 +102,7 @@ object RequestUtils {
       .collectFirst(callback)
       .getOrElse(
         throw new NotAcceptableException(
-          CommonMediaTypes.PLAIN_TEXT_UTF_8,
+          CommonMediaTypes.PlainTextUtf8,
           Seq("Not Acceptable Media Type")
         )
       )

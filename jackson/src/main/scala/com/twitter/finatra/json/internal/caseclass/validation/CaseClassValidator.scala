@@ -6,7 +6,7 @@ import java.lang.annotation.Annotation
 /**
  * Trait for defining a validator that will be triggered during Case Class validation.
  */
-private[finatra] trait CaseClassValidator {
+private[json] trait CaseClassValidator {
 
   def validateField[V](
     fieldValue: V,

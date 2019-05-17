@@ -2,7 +2,7 @@ package com.twitter.finatra.utils
 
 import com.twitter.finagle.context.{Contexts, Deadline}
 import com.twitter.inject.Logging
-import org.joda.time.DateTime
+import com.twitter.util.Time
 
 object DeadlineValues extends Logging {
 
@@ -14,7 +14,7 @@ object DeadlineValues extends Logging {
   def current(): Option[DeadlineValues] = {
     for (deadline <- Contexts.broadcast.get(Deadline)) yield {
       debug("Current Deadline: " + deadline)
-      val nowMillis = DateTime.now.getMillis
+      val nowMillis = Time.now.inMillis
       DeadlineValues(
         elapsed = nowMillis - deadline.timestamp.inMillis,
         remaining = deadline.deadline.inMillis - nowMillis

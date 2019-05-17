@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.tests.integration.messagebody.test
 
-import com.google.common.net.MediaType
+import com.twitter.finagle.http.MediaType
 import com.twitter.finagle.http.Status
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.tests.integration.messagebody.main.GreetingServer
@@ -28,7 +28,7 @@ class GreetingControllerIntegrationTest extends FeatureTest {
   test("get English json greeting") {
     server.httpGet(
       path = requestPath,
-      accept = MediaType.JSON_UTF_8,
+      accept = MediaType.JsonUtf8,
       andExpect = Status.Ok,
       withJsonBody = """{ "greeting" : "Hello Bob" }"""
     )
@@ -37,7 +37,7 @@ class GreetingControllerIntegrationTest extends FeatureTest {
   test("get Spanish json greeting") {
     server.httpGet(
       path = requestPath,
-      accept = MediaType.JSON_UTF_8,
+      accept = MediaType.JsonUtf8,
       headers = Map("Accept-Language" -> "es"),
       andExpect = Status.Ok,
       withJsonBody = """{ "greeting" : "Hola Bob" }"""

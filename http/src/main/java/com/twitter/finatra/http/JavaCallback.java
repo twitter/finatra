@@ -1,13 +1,7 @@
 package com.twitter.finatra.http;
 
-import com.twitter.finagle.http.Request;
+public interface JavaCallback<RequestType, ResponseType> {
 
-public interface JavaCallback {
-
-    /**
-     * Handle the HTTP Request
-     * @param request
-     * @return
-     */
-    Object handle(Request request);
+  /** Functional callback interface for Java HTTP routes */
+  ResponseType apply(RequestType request);
 }

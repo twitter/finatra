@@ -26,7 +26,7 @@ in Finatra revolves around the following definitions:
   interface. Finatra supports both `black-box testing <https://en.wikipedia.org/wiki/Black-box_testing>`__
   and `white-box testing <https://en.wikipedia.org/wiki/White-box_testing>`__ against a locally
   running version of a server. Classes can be selectively swapped out with dummy implementations or
-  mocks inserted, and internal state asserted. See an example feature test `here <https://github.com/twitter/finatra/blob/develop/examples/hello-world/src/test/scala/com/twitter/hello/HelloWorldFeatureTest.scala>`__.
+  mocks inserted, and internal state asserted. See an example feature test `here <https://github.com/twitter/finatra/blob/a79f56347acd2194e415975ab125e2509c8e91e5/examples/http-server/src/test/scala/com/twitter/hello/HelloWorldFeatureTest.scala>`__.
 
   .. note::
     It is worth noting that versions of these `Feature Tests <feature_tests.html>`__ could be re-used

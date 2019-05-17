@@ -49,3 +49,21 @@ Eg.,
         "nsfw: 'abc' is not a valid boolean"
       ]
     }
+
+Bypassing Validation
+--------------------
+
+You may desire to execute validation for specific case classes in certain scenarios, but bypass validation in others.
+For example, you may want to validate a `POST` request on the write path and store the JSON results somewhere, but
+bypass validating that same JSON for a `GET` request on the read path.
+
+You can create a `FinatraObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala>`__
+that will bypass validation like this:
+
+.. code:: scala
+
+    def create(injector: Injector = null): FinatraObjectMapper = {
+      val jacksonModule = NullValidationFinatraJacksonModule
+      new FinatraObjectMapper(
+        jacksonModule.provideScalaObjectMapper(injector))
+    }

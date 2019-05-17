@@ -1,8 +1,8 @@
 package com.twitter.inject.app.tests;
 
-public class SampleJavaAppService {
+class SampleJavaAppService {
 
-  public String sayHi(String message) {
+  String sayHi(String message) {
     return "hi " + message;
   }
 }

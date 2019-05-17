@@ -9,7 +9,6 @@ import com.twitter.finatra.http.tests.integration.doeverything.main.domain.TestU
 import com.twitter.finatra.test.LocalFilesystemTestUtils._
 import com.twitter.inject.server.FeatureTest
 import java.io.{File, FileWriter}
-import org.apache.commons.io.FileUtils
 
 class LocalDocRootDoEverythingServerFeatureTest
     extends FeatureTest
@@ -20,17 +19,17 @@ class LocalDocRootDoEverythingServerFeatureTest
 
     // create src/main/resources/templates directory and add files
     val templates = createFile(s"${BaseDirectory}src/main/resources/templates")
-    FileUtils.writeStringToFile(createFile(templates, "testuser.mustache"), testUserMustacheString)
-    FileUtils.writeStringToFile(
+    writeStringToFile(createFile(templates, "testuser.mustache"), testUserMustacheString)
+    writeStringToFile(
       createFile(templates, "testuser2.mustache"),
       testUser2MustacheString
     )
-    FileUtils.writeStringToFile(createFile(templates, "testHtml.mustache"), testHtmlMustacheString)
+    writeStringToFile(createFile(templates, "testHtml.mustache"), testHtmlMustacheString)
 
     // create src/main/webapp directory and add files
     val webapp = createFile(s"${BaseDirectory}src/main/webapp")
-    FileUtils.writeStringToFile(createFile(webapp, "testfile.txt"), testFileText)
-    FileUtils.writeStringToFile(createFile(webapp, "testindex.html"), testIndexHtml)
+    writeStringToFile(createFile(webapp, "testfile.txt"), testFileText)
+    writeStringToFile(createFile(webapp, "testindex.html"), testIndexHtml)
   }
 
   override protected def afterAll() = {

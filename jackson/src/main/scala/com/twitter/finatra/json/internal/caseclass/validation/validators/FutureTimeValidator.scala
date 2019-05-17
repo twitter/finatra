@@ -10,7 +10,7 @@ import com.twitter.finatra.validation.{
 }
 import org.joda.time.DateTime
 
-private[finatra] object FutureTimeValidator {
+private[json] object FutureTimeValidator {
 
   def errorMessage(resolver: ValidationMessageResolver, value: DateTime) = {
 
@@ -21,7 +21,7 @@ private[finatra] object FutureTimeValidator {
 /**
  * Validates if a datetime is in the future.
  */
-private[finatra] class FutureTimeValidator(
+private[json] class FutureTimeValidator(
   validationMessageResolver: ValidationMessageResolver,
   annotation: FutureTime
 ) extends Validator[FutureTime, DateTime](validationMessageResolver, annotation) {

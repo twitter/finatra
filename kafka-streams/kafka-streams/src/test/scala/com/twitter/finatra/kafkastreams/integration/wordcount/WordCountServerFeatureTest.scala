@@ -23,7 +23,8 @@ class WordCountServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
             .metricsRecordingLevelConfig(recordingLevel)
         }
       },
-      flags = kafkaStreamsFlags ++ Map("kafka.application.id" -> "wordcount-prod")
+      flags = kafkaStreamsFlags ++ Map("kafka.application.id" -> "wordcount-prod"),
+      disableTestLogging = true
     )
   }
 

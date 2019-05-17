@@ -1,18 +1,19 @@
 package com.twitter.inject.server.tests
 
-import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.http.Status
 import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest}
-import com.twitter.server.TwitterServer
-import com.twitter.util.{Await, Duration}
 
 /** Test a non-inject TwitterServer with the [[FeatureTest]] trait */
 class FeatureTestNonInjectionTest extends FeatureTest {
 
   override val server: EmbeddedTwitterServer =
     new EmbeddedTwitterServer(
-      twitterServer = new TestTwitterServer,
+      twitterServer = new NonInjectionTestServer(),
+      args = Seq("http.port=:0"),
       disableTestLogging = true)
+
+  /* Does not work since this we do not provide an InMemoryStatsReceiver but should not result in failures */
+  override val printStats: Boolean = true
 
   /**
    * Explicitly start the server before all tests, close will be attempted
@@ -24,6 +25,18 @@ class FeatureTestNonInjectionTest extends FeatureTest {
 
   test("TestServer#starts up") {
     server.assertHealthy()
+  }
+
+  test("TwitterServer#stats receivers") {
+    // for a non-injectable server that has provided no SR override
+    // we have no way of providing anything useful here
+    intercept[IllegalStateException] {
+      server.statsReceiver
+    }
+    // same as above, which means we also can't provide an in memory stats receiver
+    intercept[IllegalStateException] {
+      server.inMemoryStatsReceiver
+    }
   }
 
   test("TestServer#feature test") {
@@ -38,13 +51,4 @@ class FeatureTestNonInjectionTest extends FeatureTest {
     )
   }
 
-}
-
-class TestTwitterServer extends TwitterServer {
-  /* ensure enough time to close resources */
-  override val defaultCloseGracePeriod: Duration = 15.seconds
-  def main(): Unit = {
-    /* injectable TwitterServer automatically awaits on the admin, we need to do it explicitly here.*/
-    Await.ready(adminHttpServer)
-  }
 }

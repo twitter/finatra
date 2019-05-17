@@ -5,10 +5,10 @@ import com.twitter.finatra.kafka.interceptors.PublishTimeProducerInterceptor._
 import com.twitter.finagle.stats.{LoadedStatsReceiver, Stat, StatsReceiver}
 import com.twitter.finatra.kafka.utils.ConfigUtils
 import com.twitter.inject.Injector
+import com.twitter.util.Time
 import java.util
 import org.apache.kafka.clients.consumer.{ConsumerInterceptor, ConsumerRecords, OffsetAndMetadata}
 import org.apache.kafka.common.TopicPartition
-import org.joda.time.DateTimeUtils
 import scala.collection.mutable
 
 object MonitoringConsumerInterceptor {
@@ -41,7 +41,7 @@ class MonitoringConsumerInterceptor extends ConsumerInterceptor[Any, Any] {
 
   override def onConsume(records: ConsumerRecords[Any, Any]): ConsumerRecords[Any, Any] = {
     if (enabled) {
-      val now = DateTimeUtils.currentTimeMillis()
+      val now = Time.now.inMillis
       val iterator = records.iterator()
       while (iterator.hasNext) {
         val record = iterator.next()

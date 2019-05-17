@@ -1,8 +1,8 @@
 package com.twitter.finatra.httpclient
 
 import com.twitter.finagle.http.{Fields, Message, Method, Request, RequestProxy}
+import com.twitter.io.StreamIO
 import java.nio.charset.StandardCharsets.UTF_8
-import org.apache.commons.io.IOUtils
 
 /**
  * Provides a class for building <code>finagle.http.Request</code> objects
@@ -93,6 +93,6 @@ class RequestBuilder(override val request: Request) extends RequestProxy {
     contentType: String = Message.ContentTypeJson
   ): RequestBuilder = {
     val bodyStream = getClass.getResourceAsStream(resource)
-    body(IOUtils.toString(bodyStream), contentType)
+    body(StreamIO.buffer(bodyStream).toString(), contentType)
   }
 }

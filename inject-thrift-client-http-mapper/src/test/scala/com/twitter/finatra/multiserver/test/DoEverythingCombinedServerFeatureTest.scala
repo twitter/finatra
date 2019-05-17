@@ -2,7 +2,7 @@ package com.twitter.finatra.multiserver.test
 
 import com.twitter.adder.thriftscala.Adder
 import com.twitter.finagle.http.Status
-import com.twitter.finatra.http.EmbeddedHttpServer
+import com.twitter.finatra.http.{EmbeddedHttpServer, RouteHint}
 import com.twitter.finatra.multiserver.CombinedServer.{AdminAdd1Request, DoEverythingCombinedServer}
 import com.twitter.finatra.thrift.ThriftClient
 import com.twitter.inject.server.FeatureTest
@@ -67,7 +67,7 @@ class DoEverythingCombinedServerFeatureTest extends FeatureTest {
   test("add1 admin") {
     server.httpPost(
       "/admin/finatra/add1",
-      routeToAdminServer = true,
+      routeHint = RouteHint.AdminServer,
       postBody = server.mapper.writeValueAsString(AdminAdd1Request(num = 5)),
       andExpect = Status.Ok,
       withBody = "6"
@@ -77,7 +77,7 @@ class DoEverythingCombinedServerFeatureTest extends FeatureTest {
   test("admin foo") {
     server.httpGet(
       "/admin/foo",
-      routeToAdminServer = true,
+      routeHint = RouteHint.AdminServer,
       andExpect = Status.Ok,
       withBody = "Bar"
     )

@@ -3,7 +3,7 @@ package com.twitter.finatra.http.tests.integration.tweetexample.test
 import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finagle.http.{Fields, Status}
 import com.twitter.finatra.http.tests.integration.tweetexample.main.TweetsEndpointServer
-import com.twitter.finatra.http.{EmbeddedHttpServer, StreamingJsonTestHelper}
+import com.twitter.finatra.http.{EmbeddedHttpServer, RouteHint, StreamingJsonTestHelper}
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.{Await, Future}
@@ -129,6 +129,38 @@ class TweetsControllerIntegrationTest extends FeatureTest {
     )
   }
 
+  test("post Reader[Buf] to Reader[String]") {
+    server.httpPost(
+      "/tweets/reader_buf_to_string",
+      postBody = "[1,2,3,4,5]",
+      andExpect = Status.Ok,
+      withBody = """"[1,2,3,4,5]"""")
+  }
+
+  test("post Reader[Buf] to Reader[Buf]") {
+    server.httpPost(
+      "/tweets/reader_buf",
+      postBody = "[1,2,3,4,5]",
+      andExpect = Status.Ok,
+      withBody = "[1,2,3,4,5]")
+  }
+
+  test("post AsyncStream[Buf] to AsyncStream[String]") {
+    server.httpPost(
+      "/tweets/asyncStream_buf_to_string",
+      postBody = "[1,2,3,4,5]",
+      andExpect = Status.Ok,
+      withBody = """"[1,2,3,4,5]"""")
+  }
+
+  test("post AsyncStream[Buf] to AsyncStream[Buf]") {
+    server.httpPost(
+      "/tweets/asyncStream_buf",
+      postBody = "[1,2,3,4,5]",
+      andExpect = Status.Ok,
+      withBody = "[1,2,3,4,5]")
+  }
+
   test("post streaming json without chunks") {
     server.httpPost("/tweets/streaming", """
       [1,2,3,4,5]
@@ -200,6 +232,44 @@ class TweetsControllerIntegrationTest extends FeatureTest {
     )
   }
 
+  test("post streaming json with StreamingRequest") {
+    val request = RequestBuilder
+      .post("/tweets/streaming_with_streamingRequest")
+      .header("X-UserId", "123")
+      .chunked
+
+    val ids = (1 to 5)
+
+    // Write to request in separate thread
+    pool {
+      streamingJsonHelper.writeJsonArray(request, ids, delayMs = 10)
+    }
+
+    server.httpRequest(
+      request = request,
+      andExpect = Status.Ok,
+      withJsonBody = """
+        [
+          {
+            "id" : 1,
+            "user" : "Bob",
+            "msg" : "whats up"
+          },
+          {
+            "id" : 2,
+            "user" : "Sally",
+            "msg" : "yo"
+          },
+          {
+            "id" : 3,
+            "user" : "Fred",
+            "msg" : "hey"
+          }
+        ]
+        """
+    )
+  }
+
   test("get admin yo") {
     server.httpGet("/admin/finatra/yo", andExpect = Status.Ok, withBody = "yo yo")
   }
@@ -224,12 +294,17 @@ class TweetsControllerIntegrationTest extends FeatureTest {
     )
   }
 
+  test("get admin user from admin route without admin path") {
+    val response = server.httpGetJson[JsonNode]("/bestuser", routeHint = RouteHint.AdminServer)
+    assert(response.get("userName").textValue() == "123 from data://prod")
+  }
+
   test("get ping") {
     server.httpGet("/admin/ping", withBody = "pong")
   }
 
   test("get health") {
-    server.httpGet("/health", routeToAdminServer = true, withBody = "OK\n")
+    server.httpGet("/health", routeHint = RouteHint.AdminServer, withBody = "OK\n")
   }
 
   test("verify max request size overridden") {

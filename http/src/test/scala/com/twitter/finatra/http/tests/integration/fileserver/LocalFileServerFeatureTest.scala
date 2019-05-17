@@ -7,7 +7,6 @@ import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.{Controller, HttpServer}
 import com.twitter.finatra.test.LocalFilesystemTestUtils._
 import com.twitter.inject.Test
-import org.apache.commons.io.FileUtils
 
 class LocalFileServerFeatureTest extends Test {
 
@@ -35,7 +34,7 @@ class LocalFileServerFeatureTest extends Test {
     val path = "/tmp"
     val filename = "finatra-test-file.txt"
     val fileContent = "file content"
-    FileUtils.writeStringToFile(createFile(s"$path/$filename"), fileContent)
+    writeStringToFile(createFile(s"$path/$filename"), fileContent)
     assertServer(new Controller {
       get("/foo") { request: Request =>
         response.ok.fileOrIndex(filename, "index.html")
@@ -50,7 +49,7 @@ class LocalFileServerFeatureTest extends Test {
     val indexName = "index.html"
     val filename = "non-existing-file.txt"
     val indexContent = "index content"
-    FileUtils.writeStringToFile(createFile(s"$path/$indexName"), indexContent)
+    writeStringToFile(createFile(s"$path/$indexName"), indexContent)
     assertServer(new Controller {
       get("/foo") { request: Request =>
         response.ok.fileOrIndex(filename, indexName)

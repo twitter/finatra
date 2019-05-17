@@ -1,7 +1,5 @@
 package com.twitter.inject.thrift.modules
 
-import com.github.nscala_time.time
-import com.github.nscala_time.time.DurationBuilder
 import com.google.inject.Provides
 import com.twitter.finagle._
 import com.twitter.finagle.service.Retries.Budget
@@ -9,20 +7,17 @@ import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.thrift.service.Filterable
 import com.twitter.finagle.thrift.{ClientId, MethodIfaceBuilder, ServiceIfaceBuilder, ThriftService}
 import com.twitter.inject.annotations.Flag
-import com.twitter.inject.conversions.duration._
 import com.twitter.inject.exceptions.PossiblyRetryable
 import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
 import com.twitter.inject.thrift.modules.FilteredThriftClientModule.MaxDuration
 import com.twitter.inject.thrift.{AndThenService, NonFiltered}
 import com.twitter.inject.{Injector, TwitterModule}
-import com.twitter.util.{Monitor, NullMonitor, Try, Duration => TwitterDuration}
+import com.twitter.util.{Monitor, NullMonitor, Try, Duration}
 import javax.inject.Singleton
-import org.joda.time.Duration
-import scala.language.implicitConversions
 import scala.reflect.ClassTag
 
 object FilteredThriftClientModule {
-  val MaxDuration = Duration.millis(Long.MaxValue)
+  val MaxDuration = Duration.Top
 }
 
 /**
@@ -65,8 +60,7 @@ abstract class FilteredThriftClientModule[
 ](
   implicit serviceBuilder: ServiceIfaceBuilder[ServiceIface],
   methodBuilder: MethodIfaceBuilder[ServiceIface, FutureIface]
-) extends TwitterModule
-    with time.Implicits {
+) extends TwitterModule {
 
   override val frameworkModules = Seq(AndThenServiceModule, FilteredThriftClientFlagsModule)
 
@@ -102,7 +96,7 @@ abstract class FilteredThriftClientModule[
    *
    * @see [[com.twitter.finagle.param.ClientSessionParams#acquisitionTimeout]]
    * @see [[https://twitter.github.io/finagle/guide/Clients.html#timeouts-expiration]]
-   * @return an [[org.joda.time.Duration]] which represents the acquisition timeout
+   * @return an [[com.twitter.util.Duration]] which represents the acquisition timeout
    */
   protected def sessionAcquisitionTimeout: Duration = MaxDuration
 
@@ -237,7 +231,7 @@ abstract class FilteredThriftClientModule[
     clientId: ClientId,
     statsReceiver: StatsReceiver
   ): ServiceIface = {
-    val acquisitionTimeout = sessionAcquisitionTimeout.toTwitterDuration * timeoutMultiplier
+    val acquisitionTimeout = sessionAcquisitionTimeout * timeoutMultiplier
     val clientStatsReceiver = statsReceiver.scope("clnt")
 
     val thriftClient =
@@ -273,10 +267,4 @@ abstract class FilteredThriftClientModule[
 
   protected val PossiblyRetryableExceptions: PartialFunction[Try[_], Boolean] =
     PossiblyRetryable.PossiblyRetryableExceptions
-
-  /* Common Implicits */
-
-  implicit def toTwitterDuration(duration: DurationBuilder): TwitterDuration = {
-    TwitterDuration.fromMilliseconds(duration.toDuration.getMillis)
-  }
 }

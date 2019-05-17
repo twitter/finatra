@@ -31,6 +31,7 @@ class DoEverythingThriftServerStartupTest extends FeatureTest {
             super.postInjectorStartup()
           }
         },
+        disableTestLogging = true,
         globalFlags = Map(
           com.twitter.finagle.stats.logOnShutdown -> "true"
         )

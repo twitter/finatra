@@ -12,8 +12,8 @@ import finatra.quickstart.services.IdService
 
 class TwitterCloneFeatureTest extends FeatureTest with Mockito {
 
-  val firebaseClient = smartMock[FirebaseClient]
-  val idService = smartMock[IdService]
+  val firebaseClient: FirebaseClient = smartMock[FirebaseClient]
+  val idService: IdService = smartMock[IdService]
 
   /* Mock GET Request performed in TwitterCloneWarmup */
   firebaseClient.get("/tweets/123.json")(manifest[TweetResponse]) returns Future(None)

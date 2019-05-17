@@ -7,6 +7,97 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+19.5.0
+------
+
+Added
+~~~~~
+
+* inject-server/http/thrift: Allow users to specify a `StatsReceiver` implementation to use in the
+  underlying `EmbeddedTwitterServer` instead of always providing an `InMemoryStatsReceiver`
+  implementation. ``PHAB_ID=D315440``
+
+* finatra-http: Add ability for Java HTTP Controllers to use the RouteDSL for per-route filtering
+  and for route prefixing. ``PHAB_ID=D311625``
+
+* inject-request-scope: Add a `Filter.TypeAgnostic` implementation for the `FinagleRequestScopeFilter`
+  for better compatibility with Thrift servers. Update the `FinagleRequestScope` to make more idiomatic
+  use of `Context` locals. ``PHAB_ID=D310395``
+
+* finatra-http: Route params are now URL-decoded automatically. ``PHAB_ID=D309144``
+
+* finatra-jackson: Add ability to bypass case class validation using the
+  `NullValidationFinatraJacksonModule`. ``PHAB_ID=D307795``
+
+* inject-app: Add `c.t.inject.app.DtabResolution` to help users apply supplemental Dtabs added by
+  setting the dtab.add flag. This will append the supplemental Dtabs to the 
+  Dtab.base in a premain function. ``PHAB_ID=D303813``
+
+Changed
+~~~~~~~
+
+* finatra-http: Move when admin routes are added to the AdminHttpServer to the `postInjectorStartup`
+  phase, such that any admin routes are available to be hit during server warmup. Simplify `HttpWarmup`
+  utility to make it clear that it can and should only be used for sending requests to endpoints added
+  to the server's configured `HttpRouter`. The `forceRouteToAdminHttpMuxers` param has been renamed
+  to `admin` to signal that the request should be sent to the `HttpRouter#adminRoutingService` instead
+  of the `HttpRouter#externalRoutingService`. Routing to TwitterServer HTTP Admin Interface via this
+  utility never worked properly and the (broken) support has been dropped. ``PHAB_ID=D314152``
+
+* finatra-kafka: Update `com.twitter.finatra.kafka.test.KafkaTopic`, and
+  `com.twitter.finatra.kafka.test.utils.PollUtils` methods to take
+  `com.twitter.util.Duration` instead of `org.joda.time.Duration`. ``PHAB_ID=D314958``
+
+* finatra: Removed Commons IO as a dependency. ``PHAB_ID=D314606``
+
+* finatra-http: `com.twitter.finatra.http.EmbeddedHttpServer` methods which previously used the
+  `routeToAdminServer` parameter have been changed to use a `RouteHint` instead for added
+  flexibility in controlling where a test request is sent. ``PHAB_ID=D313984``
+
+* finatra-inject: Feature tests no longer default to printing metrics after tests.
+  This can be enabled on a per-test basis by overriding `FeatureTestMixin.printStats`
+  and setting it to `true`. ``PHAB_ID=D314329``
+
+* finatra-inject: Update `com.twitter.inject.utils.RetryPolicyUtils`,
+  `com.twitter.inject.thrift.modules.FilteredThriftClientModule`,  and
+  `com.twitter.inject.thrift.filters.ThriftClientFilterChain` methods to take
+  `com.twitter.util.Duration` instead of `org.joda.time.Duration`. ``PHAB_ID=D313153``
+
+* finatra: Fix Commons FileUpload vulnerability. Update `org.apache.commons-fileupload` from version
+  1.3.1 to version 1.4. This closes #PR-497. ``PHAB_ID=D310470``
+
+* finatra-http: Replace all usages of guava's `com.google.common.net.MediaType` with `String`.
+  You can migrate by calling `MediaType#toString` everywhere you passed a `MediaType` before.  ``PHAB_ID=D308761``
+
+* finatra-http: Add `http` scope to `shutdown.time` flag, making it `http.shutdown.time`.
+  ``PHAB_ID=D307552``
+
+* finatra-http: Remove deprecated `DefaultExceptionMapper`. Extend
+  `c.t.finatra.http.exceptions.ExceptionMapper[Throwable]` directly instead. ``PHAB_ID=D307520``
+
+* inject-app: Move override of `com.twitter.app.App#failfastOnFlagsNotParsed` up from
+  `c.t.inject.server.TwitterServer` to `com.twitter.inject.app.App` such that all Finatra-based
+  applications default to this behavior. ``PHAB_ID=D307858``
+
+* inject-app|server: change capturing of flag ordering from Modules for adding to the App's `c.t.app.Flags`
+  instance to match the semantics of directly calling `c.t.app.Flags#add`. Prefer `AtomicBoolean`
+  instances over where we currently use mutable `Boolean` instances in `c.t.inject.app.App`, `c.t.inject.app.TestInjector`,
+  and `c.t.inject.server.EmbeddedTwitterServer`. ``PHAB_ID=D306897``
+
+* finatra-examples: Update "twitter-clone" example to use `Dtabs` instead of the deprecated `resolverMap`.
+  Move the "hello-world" example to "http-server". ``PHAB_ID=D303813``
+
+Fixed
+~~~~~
+
+* finatra-jackson: Properly account for timezone in Joda `DateTime` deserialization. ``PHAB_ID=D312027``
+
+ * finatra-http: `EmbeddedHttpServer`'s `httpGetJson` method now properly passes
+   all parameters through to the underlying client call. ``PHAB_ID=D312151``
+
+Closed
+~~~~~~
+
 19.4.0
 ------
 
@@ -14,22 +105,24 @@ Added
 ~~~~~
 
 * inject-server: Add `globalFlags` argument to EmbeddedTwitterServer, which will
-   allow for scoping a `c.t.a.GlobalFlag` property change to the lifecycle of the
-   underlying TwitterServer, as a `c.t.a.GlobalFlag` is normally scoped to the JVM/process.
-   This change is also reflected in `EmbeddedHttpServer` and `EmbeddedThriftServer` constructors.
-   ``PHAB_ID=D288032``
+  allow for scoping a `c.t.a.GlobalFlag` property change to the lifecycle of the
+  underlying TwitterServer, as a `c.t.a.GlobalFlag` is normally scoped to the JVM/process.
+  This change is also reflected in `EmbeddedHttpServer` and `EmbeddedThriftServer` constructors.
+  ``PHAB_ID=D288032``
 
 * inject-utils: add `toOrderedMap` implicit conversion for `java.util.Map` ``PHAB_ID=D295005``
 
 * finatra-kafka-streams: Add flag `rocksdb.manifest.preallocation.size` with default value
-    `4.megabytes` to `c.t.f.k.c.RocksDbFlags` and set value in
-    `c.t.f.k.c.FinatraRocksDBConfig`. ``PHAB_ID=D290130``
+  `4.megabytes` to `c.t.f.k.c.RocksDbFlags` and set value in
+  `c.t.f.k.c.FinatraRocksDBConfig`. ``PHAB_ID=D290130``
 
 * finatra-http: Add `commaSeparatedList` boolean parameter to QueryParams, for
-   parsing comma-separated query parameters into collection types. ``PHAB_ID=D268989``
+  parsing comma-separated query parameters into collection types. ``PHAB_ID=D268989``
 
 Changed
 ~~~~~~~
+
+* finatra: Update snakeyaml to version 1.24. ``PHAB_ID=D232547``
 
 * finatra-kafka: Upgraded kafka libraries from 2.0.0 to 2.2.0.
   - `Kafka 2.0.1 Release Notes <https://archive.apache.org/dist/kafka/2.0.1/RELEASE_NOTES.html>`__

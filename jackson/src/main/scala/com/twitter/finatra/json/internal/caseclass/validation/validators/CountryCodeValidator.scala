@@ -10,7 +10,7 @@ import com.twitter.finatra.validation.{
 }
 import java.util.Locale
 
-private[finatra] object CountryCodeValidator {
+private[json] object CountryCodeValidator {
 
   def errorMessage(resolver: ValidationMessageResolver, value: Any) = {
 
@@ -29,7 +29,7 @@ private[finatra] object CountryCodeValidator {
   }
 }
 
-private[finatra] class CountryCodeValidator(
+private[json] class CountryCodeValidator(
   validationMessageResolver: ValidationMessageResolver,
   annotation: CountryCode
 ) extends Validator[CountryCode, Any](validationMessageResolver, annotation) {

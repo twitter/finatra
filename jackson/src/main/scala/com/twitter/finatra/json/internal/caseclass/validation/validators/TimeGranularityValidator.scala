@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit._
 import org.joda.time.{DateTime, DateTimeZone}
 
-private[finatra] object TimeGranularityValidator {
+private[json] object TimeGranularityValidator {
 
   def errorMessage(
     resolver: ValidationMessageResolver,
@@ -32,7 +32,7 @@ private[finatra] object TimeGranularityValidator {
 /**
  * Validates if a given value is of a given time granularity (e.g., days, hours, seconds)
  */
-private[finatra] class TimeGranularityValidator(
+private[json] class TimeGranularityValidator(
   validationMessageResolver: ValidationMessageResolver,
   annotation: TimeGranularity
 ) extends Validator[TimeGranularity, DateTime](validationMessageResolver, annotation) {

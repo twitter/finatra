@@ -1,4 +1,4 @@
-package com.twitter.hello.server;
+package com.twitter.hello.server.exceptions;
 
 import javax.inject.Inject;
 

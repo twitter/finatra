@@ -17,23 +17,26 @@ import scala.util.control.NonFatal
  *
  * @see [[com.twitter.inject.IntegrationTestMixin]]
  */
-trait FeatureTestMixin
-  extends SuiteMixin
-  with IntegrationTestMixin { this: Suite =>
+trait FeatureTestMixin extends SuiteMixin with IntegrationTestMixin { this: Suite =>
 
   protected def server: EmbeddedTwitterServer
 
   override protected def injector: Injector = server.injector
 
-  def printStats = true
+  def printStats: Boolean = false
 
   override protected def afterEach(): Unit = {
     super.afterEach()
-    if (server.isInjectable) {
-      if (printStats) {
-        server.printStats()
+    try {
+      if (server.usesInMemoryStatsReceiver) {
+        if (printStats) {
+          server.printStats()
+        }
+        server.clearStats()
       }
-      server.clearStats()
+    } catch {
+      case _: IllegalStateException => /* DO NOTHING */
+      // we don't have access to a StatsReceiver to perform these functions for the user
     }
   }
 

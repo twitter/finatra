@@ -12,7 +12,6 @@ import com.twitter.finagle.service.RetryPolicy._
 import com.twitter.finagle.service._
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.util.DefaultTimer
-import com.twitter.inject.conversions.duration._
 import com.twitter.inject.thrift.AndThenService
 import com.twitter.inject.thrift.internal.filters.{
   IncrementCounterFilter,
@@ -24,9 +23,8 @@ import com.twitter.inject.utils.ExceptionUtils._
 import com.twitter.inject.{Injector, Logging}
 import com.twitter.scrooge.{ThriftMethod, ThriftStruct}
 import com.twitter.util.tunable.Tunable
-import com.twitter.util.{Try, Duration => TwitterDuration}
+import com.twitter.util.{Try, Duration}
 import java.util.concurrent.TimeUnit
-import org.joda.time.Duration
 
 /**
  * A [[com.twitter.finagle.Filter]] chain builder which provides helper functions for installing and
@@ -213,7 +211,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
 
     withRetryPolicy(
       constantRetryPolicy(
-        delay = start.multipliedBy(retryMultiplier),
+        delay = start * retryMultiplier,
         retries = retries,
         shouldRetry = chooseShouldRetryFunction(shouldRetry, shouldRetryResponse)
       )
@@ -248,7 +246,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
 
     withRetryPolicy(
       exponentialRetryPolicy(
-        start = start.multipliedBy(retryMultiplier),
+        start = start * retryMultiplier,
         multiplier = multiplier,
         numRetries = retries,
         shouldRetry = chooseShouldRetryFunction(shouldRetry, shouldRetryResponse)
@@ -267,7 +265,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
    */
   def withRetryPolicy(
     retryPolicy: RetryPolicy[(Req, Try[Rep])],
-    retryMsg: ((Req, Try[Rep]), TwitterDuration) => String = defaultRetryMsg
+    retryMsg: ((Req, Try[Rep]), Duration) => String = defaultRetryMsg
   ): ThriftClientFilterChain[Req, Rep] = {
 
     retryFilter = new IncrementCounterFilter[Req, Rep](invocationsCounter)
@@ -291,7 +289,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
    * @return [[ThriftClientFilterChain]]
    */
   def withTimeout(duration: Duration): ThriftClientFilterChain[Req, Rep] = {
-    val twitterTimeout = duration.toTwitterDuration * timeoutMultiplier
+    val twitterTimeout = duration * timeoutMultiplier
 
     timeoutFilter = new TimeoutFilter[Req, Rep](
       twitterTimeout,
@@ -310,11 +308,11 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
    * @return [[ThriftClientFilterChain]]
    */
   def withTimeout(duration: Tunable[Duration]): ThriftClientFilterChain[Req, Rep] = {
-    val exceptionFn = (duration: TwitterDuration) =>
+    val exceptionFn = (duration: Duration) =>
       new GlobalRequestTimeoutException(duration * timeoutMultiplier)
 
     timeoutFilter = new TimeoutFilter[Req, Rep](
-      duration.map(d => d.toTwitterDuration),
+      duration,
       exceptionFn,
       DefaultTimer
     )
@@ -330,7 +328,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
    * @return [[ThriftClientFilterChain]]
    */
   def withRequestTimeout(duration: Duration): ThriftClientFilterChain[Req, Rep] = {
-    val twitterTimeout = duration.toTwitterDuration * timeoutMultiplier
+    val twitterTimeout = duration * timeoutMultiplier
 
     requestTimeoutFilter = new TimeoutFilter[Req, Rep](
       twitterTimeout,
@@ -349,11 +347,11 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
    * @return [[ThriftClientFilterChain]]
    */
   def withRequestTimeout(duration: Tunable[Duration]): ThriftClientFilterChain[Req, Rep] = {
-    val exceptionFn = (duration: TwitterDuration) =>
+    val exceptionFn = (duration: Duration) =>
       new IndividualRequestTimeoutException(duration * timeoutMultiplier)
 
     requestTimeoutFilter = new TimeoutFilter[Req, Rep](
-      duration.map(d => d.toTwitterDuration),
+      duration,
       exceptionFn,
       DefaultTimer
     )
@@ -456,7 +454,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
 
   /* Protected */
 
-  protected def defaultRetryMsg(requestAndResponse: (Req, Try[Rep]), duration: TwitterDuration) = {
+  protected def defaultRetryMsg(requestAndResponse: (Req, Try[Rep]), duration: Duration) = {
     val (_, response) = requestAndResponse
     s"Retrying ${ThriftMethodUtils.prettyStr(method)} = ${toDetailedExceptionMessage(response)} in ${duration.inMillis} ms"
   }
@@ -499,7 +497,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
 
   private def addRetryLogging(
     retryPolicy: RetryPolicy[(Req, Try[Rep])],
-    retryMsg: ((Req, Try[Rep]), TwitterDuration) => String
+    retryMsg: ((Req, Try[Rep]), Duration) => String
   ): RetryPolicy[(Req, Try[Rep])] = {
 
     new RetryPolicy[(Req, Try[Rep])] {
@@ -531,7 +529,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
   ): RetryPolicy[T] = {
 
     backoff(
-      decorrelatedJittered(start.toTwitterDuration, start.toTwitterDuration * multiplier) take numRetries
+      decorrelatedJittered(start, start * multiplier) take numRetries
     )(shouldRetry)
   }
 
@@ -541,7 +539,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
     retries: Int
   ): RetryPolicy[T] = {
 
-    backoff(constant(delay.toTwitterDuration) take retries)(shouldRetry)
+    backoff(constant(delay) take retries)(shouldRetry)
   }
 
   private[thrift] def toFilter: Filter[Req, Rep, Req, Rep] = {

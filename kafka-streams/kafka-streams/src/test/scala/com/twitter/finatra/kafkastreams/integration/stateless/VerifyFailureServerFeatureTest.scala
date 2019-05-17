@@ -13,7 +13,8 @@ class VerifyFailureServerFeatureTest extends KafkaStreamsMultiServerFeatureTest 
   test("verify stateful server will fail") {
     val server = new EmbeddedTwitterServer(
       new VerifyFailureServer,
-      flags = kafkaStreamsFlags ++ Map("kafka.application.id" -> "VerifyFailureServer")
+      flags = kafkaStreamsFlags ++ Map("kafka.application.id" -> "VerifyFailureServer"),
+      disableTestLogging = true
     )
 
     intercept[UnsupportedOperationException] {

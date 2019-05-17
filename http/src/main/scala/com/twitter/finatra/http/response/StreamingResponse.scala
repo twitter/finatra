@@ -161,7 +161,7 @@ class StreamingResponse[T, U] private (
     val writer = response.writer
 
     /* Orphan the future which writes to our response thread */
-    write(writer)
+    writeToWriter(writer)
       .respond(writerRespondFn)
       .ensure {
         debug("Closing chunked response")
@@ -175,7 +175,7 @@ class StreamingResponse[T, U] private (
     Future.value(response)
   }
 
-  private[this] def write(writer: Writer[Buf]): Future[Unit] = {
+  private[this] def writeToWriter(writer: Writer[Buf]): Future[Unit] = {
     streamTransformer(asyncStream).foreachF {
       case (item, buf) =>
         writer.write(buf).respond(onWrite(item, buf))

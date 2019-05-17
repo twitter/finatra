@@ -24,19 +24,20 @@ public class DoEverythingJavaController extends AbstractController {
 
     /** Define routes */
     public void configureRoutes() {
-        get("/hello", (Request request) -> helloService.hi(request.getParam("name")));
+        filter(new AppendToHeaderJavaFilter("test", "5"))
+          .filter(new AppendToHeaderJavaFilter("test", "6"))
+            .get("/hello", helloService::hi);
 
-        get("/response", (Request request) ->
-            response().ok(helloService.hi(request.getParam("name"))));
+        get("/response", (Request request) -> helloService.hi(request, false));
 
-        get("/goodbye", (Request request) -> new GoodbyeResponse("guest", "cya", 123));
+        get("/goodbye", helloService::goodbye);
 
         get(
             "/bar/baz/foo",
             "foo_get",
             false,
             null,
-            (Request request) -> new GoodbyeResponse("guest", "cya", 123));
+            helloService::goodbye);
 
         get("/admin/foo", true, (Request request) -> "admin route no index");
 
@@ -52,8 +53,9 @@ public class DoEverythingJavaController extends AbstractController {
                 Method.Get()),
             (Request request) -> "admin route with index");
 
-        get("/query", request ->
-            helloService.computeQueryResult(request.getParam("q")));
+        get("/query", helloService::computeQueryResult);
+
+        prefix("/1.0").get("/query", helloService::computeQueryResult);
 
         post("/post",  (Request request) -> "post");
 

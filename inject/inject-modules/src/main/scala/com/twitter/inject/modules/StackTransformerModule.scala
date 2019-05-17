@@ -14,7 +14,7 @@ object StackTransformerModule extends TwitterModule {
 
   private[this] def loadStackTransformer: StackTransformer =
     new StackTransformer {
-      private[this] val transformers = LoadService[StackTransformer]
+      private[this] val transformers = LoadService[StackTransformer]()
 
       val name: String = StackTransformerModule.this.getClass.getName
 

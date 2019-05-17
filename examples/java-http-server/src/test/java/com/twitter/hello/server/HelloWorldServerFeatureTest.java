@@ -77,6 +77,15 @@ public class HelloWorldServerFeatureTest extends Assert {
         assertEquals("pong", response.contentString());
     }
 
+    /** test echo endpoint */
+    @Test
+    public void testEchoEndpoint() {
+        Request request = RequestBuilder.get("/echo?q=hello%20world");
+        Response response = SERVER.httpRequest(request);
+        assertEquals(Status.Ok(), response.status());
+        assertEquals("hello world", response.contentString());
+    }
+
     /** test exception endpoint */
     @Test
     public void testExceptionEndpoint() {
@@ -90,6 +99,15 @@ public class HelloWorldServerFeatureTest extends Assert {
     @Test
     public void testMagicNumEndpoint() {
         Request request = RequestBuilder.get("/magicNum");
+        Response response = SERVER.httpRequest(request);
+        assertEquals(Status.Ok(), response.status());
+        assertEquals("42", response.contentString());
+    }
+
+    /** test prefixed magicNum endpoint */
+    @Test
+    public void testPrefixedMagicNumEndpoint() {
+        Request request = RequestBuilder.get("/v2/magicNum");
         Response response = SERVER.httpRequest(request);
         assertEquals(Status.Ok(), response.status());
         assertEquals("42", response.contentString());
@@ -111,5 +129,29 @@ public class HelloWorldServerFeatureTest extends Assert {
         Response response = SERVER.httpRequest(request);
         assertEquals(Status.Ok(), response.status());
         assertEquals("3.1459", response.contentString());
+    }
+
+    /** test anyMethod endpoint */
+    @Test
+    public void testAnyMethodEndpoint() {
+        Request request = RequestBuilder.get("/any/method");
+        Response response = SERVER.httpRequest(request);
+        assertEquals(Status.Ok(), response.status());
+        assertEquals("GET", response.contentString());
+
+        request = RequestBuilder.post("/any/method");
+        response = SERVER.httpRequest(request);
+        assertEquals(Status.Ok(), response.status());
+        assertEquals("POST", response.contentString());
+
+        request = RequestBuilder.head("/any/method");
+        response = SERVER.httpRequest(request);
+        assertEquals(Status.Ok(), response.status());
+        assertEquals("", response.contentString());
+
+        request = RequestBuilder.trace("/any/method");
+        response = SERVER.httpRequest(request);
+        assertEquals(Status.Ok(), response.status());
+        assertEquals("", response.contentString());
     }
 }

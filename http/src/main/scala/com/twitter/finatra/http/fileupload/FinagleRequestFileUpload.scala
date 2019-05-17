@@ -1,8 +1,8 @@
 package com.twitter.finatra.http.fileupload
 
 import com.twitter.finagle.http.{Method, Request}
+import com.twitter.io.StreamIO
 import org.apache.commons.fileupload.{FileItemFactory, FileItemIterator, FileUploadBase}
-import org.apache.commons.io.IOUtils
 import scala.collection.mutable
 
 class FinagleRequestFileUpload extends FileUploadBase {
@@ -15,7 +15,7 @@ class FinagleRequestFileUpload extends FileUploadBase {
         val multipartItemStream = itr.next()
 
         val multipartItemInMemory = MultipartItem(
-          data = IOUtils.toByteArray(multipartItemStream.openStream()),
+          data = StreamIO.buffer(multipartItemStream.openStream()).toByteArray,
           fieldName = multipartItemStream.getFieldName,
           isFormField = multipartItemStream.isFormField,
           contentType = Option(multipartItemStream.getContentType),

@@ -4,6 +4,7 @@ import com.google.inject.util.Modules
 import com.google.inject.{Module => GuiceModule, _}
 import com.twitter.app.Flag
 import com.twitter.inject.{Injector, Logging, TwitterBaseModule, TwitterModuleLifecycle}
+import com.twitter.inject.conversions.iterable._
 import scala.collection.JavaConverters._
 import scala.PartialFunction.condOpt
 
@@ -21,12 +22,12 @@ private[app] object InstalledModules {
     val allNonOverrideModules = {
       val frameworkModules = Seq(FlagsModule.create(flags), TwitterTypeConvertersModule)
 
-      val composedModules = modules flatMap findInstalledModules
+      val composedModules = modules.flatMap(findInstalledModules)
       modules ++ composedModules ++ frameworkModules
     }
 
     val allOverrideModules = {
-      val composedOverrideModules = overrideModules flatMap findInstalledModules
+      val composedOverrideModules = overrideModules.flatMap(findInstalledModules)
       overrideModules ++ composedOverrideModules
     }
 
@@ -58,28 +59,36 @@ private[app] object InstalledModules {
 
   /** Recursively capture all flags in the [[com.google.inject.Module]] object hierarchy. */
   private[app] def findModuleFlags(modules: Seq[GuiceModule]): Seq[Flag[_]] = {
-    (modules collect {
-      case injectModule: TwitterBaseModule =>
-        injectModule.flags ++
-          findModuleFlags(injectModule.modules) ++
-          findModuleFlags(injectModule.frameworkModules)
-    }).flatten.distinct
+    // Flags are stored in the App `com.twitter.app.Flags` member variable which is a
+    // Map[String, Flag[_]], where the key is the Flag#name. Thus, to ensure we correctly account
+    // for the "override" behavior of Flag#add (the last Flag with the same name added, wins),
+    // we need to ensure that we "reverse" our Sequence before performing a distinct operation
+    // discriminated by Flag#name.
+    modules
+      .collect {
+        case injectModule: TwitterBaseModule =>
+          injectModule.flags ++
+            findModuleFlags(injectModule.modules) ++
+            findModuleFlags(injectModule.frameworkModules)
+      }.flatten.reverse.distinctBy(_.name)
   }
 
   /** Recursively finds all 'composed' modules */
   private def findInstalledModules(module: GuiceModule): Seq[GuiceModule] = module match {
     case injectModule: TwitterBaseModule =>
       injectModule.modules ++
-        (injectModule.modules flatMap findInstalledModules) ++
-        injectModule.frameworkModules ++
-        (injectModule.frameworkModules flatMap findInstalledModules)
+      injectModule.modules.flatMap(findInstalledModules) ++
+      injectModule.frameworkModules ++
+      injectModule.frameworkModules.flatMap(findInstalledModules)
     case _ =>
       Seq()
   }
 }
 
-private[app] case class InstalledModules(injector: Injector, modules: Seq[GuiceModule])
-    extends Logging {
+private[app] case class InstalledModules(
+  injector: Injector,
+  modules: Seq[GuiceModule]
+) extends Logging {
 
   def postInjectorStartup(): Unit = {
     modules.foreach {
@@ -134,13 +143,11 @@ private[app] case class InstalledModules(injector: Injector, modules: Seq[GuiceM
    */
   private[this] def condOptModules(
     modules: Seq[GuiceModule]
-  )(
-    fn: (TwitterModuleLifecycle) => Unit
+  )(fn: TwitterModuleLifecycle => Unit
   ): Seq[ExitFunction] = modules.flatMap { module =>
     condOpt(module) {
       case injectModule: TwitterModuleLifecycle =>
-        () =>
-          fn(injectModule)
+        () => fn(injectModule)
     }
   }
 }

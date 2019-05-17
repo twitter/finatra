@@ -1,7 +1,6 @@
 junit_tests(
     sources = globs("com/twitter/hello/server/*.java"),
     dependencies = [
-        "3rdparty/jvm/com/google/guava",
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/junit",
         "3rdparty/jvm/org/scalatest",

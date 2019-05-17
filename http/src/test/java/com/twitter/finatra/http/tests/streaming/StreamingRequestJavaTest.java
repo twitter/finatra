@@ -30,6 +30,7 @@ public class StreamingRequestJavaTest extends Assert {
   private JsonStreamParser parser = new JsonStreamParser(FinatraObjectMapper.create(null));
 
   @Test
+  @SuppressWarnings({"unchecked", "rawtypes"})
   public void requestImplicitlyToAsyncStreamOfString() throws Exception {
     List<Buf> bufList = Arrays.asList(
       Bufs.UTF_8.apply(jsonStr.substring(0, 1)),
@@ -38,15 +39,14 @@ public class StreamingRequestJavaTest extends Assert {
 
     Reader<Buf> reader = Readers.fromSeq(bufList);
     Request request = Request.apply(Version.Http11(), Method.Post(), "/", reader);
-    StreamingRequest streamingRequest =
+    StreamingRequest<AsyncStream, String> streamingRequest =
       StreamingRequest.fromRequest(
         parser,
         request,
         FromReader.AsyncStreamFromReader(),
-        ManifestFactory.classType(String.class));
+        ManifestFactory.<String>classType(String.class));
 
-    AsyncStream<String> stream =
-      (AsyncStream<String>) streamingRequest.stream();
+    AsyncStream<String> stream = streamingRequest.stream();
     List<String> result = JavaConverters.seqAsJavaListConverter(
       Await.result(stream.toSeq())).asJava();
     List<String> expected = Arrays.asList("first", "second", "third");
@@ -54,6 +54,7 @@ public class StreamingRequestJavaTest extends Assert {
   }
 
   @Test
+  @SuppressWarnings({"unchecked", "rawtypes"})
   public void requestImplicitlyToReaderOfString() throws Exception {
     List<Buf> bufList = Arrays.asList(
       Bufs.UTF_8.apply(jsonStr.substring(0, 1)),
@@ -62,14 +63,14 @@ public class StreamingRequestJavaTest extends Assert {
 
     Reader<Buf> bufReader = Readers.fromSeq(bufList);
     Request request = Request.apply(Version.Http11(), Method.Post(), "/", bufReader);
-    StreamingRequest streamingRequest =
+    StreamingRequest<Reader, String> streamingRequest =
       StreamingRequest.fromRequest(
         parser,
         request,
         FromReader.ReaderIdentity(),
-        ManifestFactory.classType(String.class));
+        ManifestFactory.<String>classType(String.class));
 
-    Reader<String> reader = (Reader<String>) streamingRequest.stream();
+    Reader<String> reader = streamingRequest.stream();
     List<String> result =
       JavaConverters.seqAsJavaListConverter(
         Await.result(Readers.toAsyncStream(reader).toSeq())).asJava();

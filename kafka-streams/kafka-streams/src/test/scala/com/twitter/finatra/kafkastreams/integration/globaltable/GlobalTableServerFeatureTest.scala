@@ -20,7 +20,8 @@ class GlobalTableServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
             .withConfig("includeGlobalTableMetrics", "true")
         }
       },
-      flags = kafkaStreamsFlags ++ Map("kafka.application.id" -> "GlobalTableServer")
+      flags = kafkaStreamsFlags ++ Map("kafka.application.id" -> "GlobalTableServer"),
+      disableTestLogging = true
     )
 
     assert(server.gaugeMap.keys.exists { metric =>
@@ -38,7 +39,8 @@ class GlobalTableServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
             .withConfig("includeGlobalTableMetrics", "false")
         }
       },
-      flags = kafkaStreamsFlags ++ Map("kafka.application.id" -> "GlobalTableServer")
+      flags = kafkaStreamsFlags ++ Map("kafka.application.id" -> "GlobalTableServer"),
+      disableTestLogging = true
     )
 
     assert(!server.gaugeMap.keys.exists { metric =>

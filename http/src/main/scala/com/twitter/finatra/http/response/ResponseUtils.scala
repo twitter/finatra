@@ -14,11 +14,11 @@ object ResponseUtils {
     errorClass(response) == 2
   }
 
-  def is5xxResponse(response: Response) = {
+  def is5xxResponse(response: Response): Boolean = {
     errorClass(response) == 5
   }
 
-  def is4xxOr5xxResponse(response: Response) = {
+  def is4xxOr5xxResponse(response: Response): Boolean = {
     val errClass = errorClass(response)
     errClass == 4 || errClass == 5
   }
@@ -29,6 +29,14 @@ object ResponseUtils {
 
   def expectOkResponse(response: Response, withBody: String = null): Unit = {
     expectResponseStatus(response)(Ok, withBody)
+  }
+
+  def expectUnauthorizedResponse(response: Response): Unit = {
+    expectResponseStatus(response)(Unauthorized)
+  }
+
+  def expectUnauthorizedResponse(response: Response, withBody: String = null): Unit = {
+    expectResponseStatus(response)(Unauthorized, withBody)
   }
 
   def expectForbiddenResponse(response: Response): Unit = {

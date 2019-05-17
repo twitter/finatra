@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.tests.integration.messagebody.main.domain
 
-import com.google.common.net.MediaType
+import com.twitter.finagle.http.MediaType
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.marshalling.{MessageBodyWriter, WriterResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
@@ -42,10 +42,10 @@ class GreetingMessageBodyWriter @Inject()(mapper: FinatraObjectMapper)
   }
 
   private def writePlainResponse(greeting: String): WriterResponse = {
-    WriterResponse(MediaType.PLAIN_TEXT_UTF_8, greeting)
+    WriterResponse(MediaType.PlainTextUtf8, greeting)
   }
 
   private def writeJsonResponse(greeting: String): WriterResponse = {
-    WriterResponse(MediaType.JSON_UTF_8, mapper.writeValueAsBytes(Map("greeting" -> greeting)))
+    WriterResponse(MediaType.JsonUtf8, mapper.writeValueAsBytes(Map("greeting" -> greeting)))
   }
 }

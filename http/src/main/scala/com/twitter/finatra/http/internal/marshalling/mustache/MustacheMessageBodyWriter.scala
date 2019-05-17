@@ -1,6 +1,5 @@
 package com.twitter.finatra.http.internal.marshalling.mustache
 
-import com.google.common.net.MediaType
 import com.twitter.finatra.http.marshalling.mustache.{MustacheBodyComponent, MustacheService}
 import com.twitter.finatra.http.marshalling.{MessageBodyWriter, WriterResponse}
 import javax.inject.{Inject, Singleton}
@@ -17,7 +16,7 @@ class MustacheMessageBodyWriter @Inject()(
     val template = templateLookup.getTemplate(obj)
 
     WriterResponse(
-      MediaType.parse(template.contentType),
+      template.contentType,
       mustacheService.createBuffer(template.name, getScope(obj))
     )
   }

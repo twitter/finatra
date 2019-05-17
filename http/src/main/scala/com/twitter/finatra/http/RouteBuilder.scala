@@ -1,13 +1,14 @@
 package com.twitter.finatra.http
 
-import com.twitter.finagle.http.{Method => HttpMethod, RouteIndex}
+import com.twitter.finagle.http.{RouteIndex, Method => HttpMethod}
 import com.twitter.finatra.http.internal.marshalling.CallbackConverter
 import com.twitter.finatra.http.internal.routing.Route
-import com.twitter.inject.Injector
+import com.twitter.inject.{Injector, TypeUtils}
 import java.lang.annotation.Annotation
 import scala.reflect.classTag
+import scala.reflect.runtime.universe._
 
-private[http] class RouteBuilder[RequestType: Manifest, ResponseType: Manifest](
+private[http] class RouteBuilder[RequestType: TypeTag, ResponseType: TypeTag](
   method: HttpMethod,
   route: String,
   name: String,
@@ -29,8 +30,8 @@ private[http] class RouteBuilder[RequestType: Manifest, ResponseType: Manifest](
       index = index,
       callback = callbackConverter.convertToFutureResponse(callback),
       annotations = annotations,
-      requestClass = classTag[RequestType],
-      responseClass = classTag[ResponseType],
+      requestClass = classTag(TypeUtils.asManifest[RequestType]),
+      responseClass = classTag(TypeUtils.asManifest[ResponseType]),
       routeFilter = routeDsl.buildFilter(injector),
       filter = routeDsl.buildFilter(injector)
     )

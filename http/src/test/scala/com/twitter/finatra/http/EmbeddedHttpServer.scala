@@ -1,10 +1,11 @@
 package com.twitter.finatra.http
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.google.common.net.MediaType
+import com.twitter.finagle.http.MediaType
 import com.google.inject.Stage
 import com.twitter.app.GlobalFlag
 import com.twitter.finagle.http.{Method, Status, _}
+import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.JsonAwareEmbeddedHttpClient.jsonParseWithNormalizer
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.json.FinatraObjectMapper
@@ -41,11 +42,18 @@ import scala.collection.JavaConverters._
  * @param failOnLintViolation If server startup should fail due (and thus the test) to a detected lint rule issue after startup.
  * @param closeGracePeriod An Optional grace period to use instead of the underlying server's
  *                         `defaultGracePeriod` when closing the underlying server.
- * @param globalFlags An ordered map of [[GlobalFlag]] and the desired value to be set during the
- *                    scope of the underlying [[twitterServer]]'s lifecycle. The flags will be
- *                    applied in insertion order, with the first entry being applied closest to
- *                    the startup of the [[twitterServer]]. In order to ensure insertion ordering,
- *                    you should use a [[scala.collection.immutable.ListMap]].
+ * @param globalFlags           An ordered map of [[GlobalFlag]] and the desired value to be set during the
+ *                              scope of the underlying [[twitterServer]]'s lifecycle. The flags will be
+ *                              applied in insertion order, with the first entry being applied closest to
+ *                              the startup of the [[twitterServer]]. In order to ensure insertion ordering,
+ *                              you should use a [[scala.collection.immutable.ListMap]].
+ * @param statsReceiverOverride An optional [[StatsReceiver]] implementation that should be bound to the
+ *                              underlying server when testing with an injectable server. By default
+ *                              an injectable server under test will have an [[com.twitter.finagle.stats.InMemoryStatsReceiver]]
+ *                              implementation bound for the purpose of testing. In some cases, users may want to test using
+ *                              a custom [[StatsReceiver]] implementation instead and can provide and instance
+ *                              to use here. For non-injectable servers this can be a shared reference
+ *                              used in the server under test.
  */
 class EmbeddedHttpServer(
   override val twitterServer: Ports,
@@ -64,7 +72,8 @@ class EmbeddedHttpServer(
   maxStartupTimeSeconds: Int = 60,
   failOnLintViolation: Boolean = false,
   closeGracePeriod: Option[Duration] = None,
-  globalFlags: => Map[GlobalFlag[_], String] = Map()
+  globalFlags: => Map[GlobalFlag[_], String] = Map(),
+  statsReceiverOverride: Option[StatsReceiver] = None
 ) extends EmbeddedTwitterServer(
       twitterServer = twitterServer,
       flags = flags,
@@ -79,16 +88,16 @@ class EmbeddedHttpServer(
       maxStartupTimeSeconds = maxStartupTimeSeconds,
       failOnLintViolation = failOnLintViolation,
       closeGracePeriod = closeGracePeriod,
-      globalFlags = globalFlags
-    )
-  with ExternalHttpClient {
+      globalFlags = globalFlags,
+      statsReceiverOverride = statsReceiverOverride
+    ) with ExternalHttpClient {
 
   /* Additional Constructors */
 
   def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage) =
     this(twitterServer, flags = flags.asScala.toMap, stage = stage)
 
-  def this(twitterServer: Ports, flags: java.util.Map[String, String], globalFlags: java.util.LinkedHashMap[GlobalFlag[_], String], stage: Stage) =
+  def this(twitterServer: Ports, flags: java.util.Map[String, String], globalFlags: java.util.Map[GlobalFlag[_], String], stage: Stage) =
     this(twitterServer, flags = flags.asScala.toMap, stage = stage, globalFlags = globalFlags.toOrderedMap)
 
   /* Public */
@@ -99,7 +108,7 @@ class EmbeddedHttpServer(
    * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
    *
    * @param path - URI of the request
-   * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
+   * @param accept - add request Accept header with the given [[com.twitter.finagle.http.MediaType]]
    * @param headers - additional headers that should be passed with the request
    * @param suppress - suppress http client logging
    * @param andExpect - expected [[com.twitter.finagle.http.Status]] value
@@ -108,14 +117,14 @@ class EmbeddedHttpServer(
    * @param withJsonBody - expected body as JSON
    * @param withJsonBodyNormalizer - normalizer to use in conjunction with withJsonBody
    * @param withErrors - expected errors
-   * @param routeToAdminServer - force the request to the admin interface of the embedded server, false by default
+   * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
    * @return a [[com.twitter.finagle.http.Response]] on success otherwise an exception
    *         if any of the assertions defined by andExpect or withXXXX fail
    */
   def httpGet(
     path: String,
-    accept: MediaType = null,
+    accept: String = null,
     headers: Map[String, String] = Map(),
     suppress: Boolean = false,
     andExpect: Status = Status.Ok,
@@ -124,7 +133,7 @@ class EmbeddedHttpServer(
     withJsonBody: String = null,
     withJsonBodyNormalizer: JsonNode => JsonNode = null,
     withErrors: Seq[String] = null,
-    routeToAdminServer: Boolean = false,
+    routeHint: RouteHint = RouteHint.None,
     secure: Option[Boolean] = None
   ): Response = {
 
@@ -139,7 +148,7 @@ class EmbeddedHttpServer(
       withJsonBody,
       withJsonBodyNormalizer,
       withErrors,
-      routeToAdminServer,
+      routeHint,
       secure = secure.getOrElse(defaultHttpSecure)
     )
   }
@@ -152,7 +161,7 @@ class EmbeddedHttpServer(
    *
    * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
    * @param path - URI of the request
-   * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
+   * @param accept - add request Accept header with the given [[com.twitter.finagle.http.MediaType]]
    * @param headers - additional headers that should be passed with the request
    * @param suppress - suppress http client logging
    * @param andExpect - expected [[com.twitter.finagle.http.Status]] value
@@ -163,14 +172,14 @@ class EmbeddedHttpServer(
    * @param normalizeJsonParsedReturnValue - if the normalizer SHOULD be applied on the parsing of the
    *                                       response#contentString into type [[ResponseType]], default = false.
    * @param withErrors - expected errors
-   * @param routeToAdminServer - force the request to the admin interface of the embedded server, false by default.
+   * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
    * @tparam ResponseType - parse the response#contentString into type [[ResponseType]]
    * @return instance of type [[ResponseType]] serialized from the the response#contentString.
    */
   def httpGetJson[ResponseType: Manifest](
     path: String,
-    accept: MediaType = null,
+    accept: String = null,
     headers: Map[String, String] = Map(),
     suppress: Boolean = false,
     andExpect: Status = Status.Ok,
@@ -180,7 +189,7 @@ class EmbeddedHttpServer(
     withJsonBodyNormalizer: JsonNode => JsonNode = null,
     normalizeJsonParsedReturnValue: Boolean = true,
     withErrors: Seq[String] = null,
-    routeToAdminServer: Boolean = false,
+    routeHint: RouteHint = RouteHint.None,
     secure: Option[Boolean] = None
   ): ResponseType = {
 
@@ -191,13 +200,16 @@ class EmbeddedHttpServer(
     val response =
       httpGet(
         path,
-        accept = MediaType.JSON_UTF_8,
+        accept = MediaType.JsonUtf8,
         headers = headers,
         suppress = suppress,
         andExpect = andExpect,
         withLocation = withLocation,
         withJsonBody = withJsonBody,
-        withJsonBodyNormalizer = withJsonBodyNormalizer
+        withJsonBodyNormalizer = withJsonBodyNormalizer,
+        withErrors = withErrors,
+        routeHint = routeHint,
+        secure = secure
       )
 
     jsonParseWithNormalizer(
@@ -215,7 +227,7 @@ class EmbeddedHttpServer(
    *
    * @param path - URI of the request
    * @param postBody - body of the POST request
-   * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
+   * @param accept - add request Accept header with the given [[com.twitter.finagle.http.MediaType]]
    * @param suppress - suppress http client logging
    * @param contentType - request Content-Type header value, application/json by default
    * @param headers - additional headers that should be passed with the request
@@ -225,7 +237,7 @@ class EmbeddedHttpServer(
    * @param withJsonBody - expected body as JSON
    * @param withJsonBodyNormalizer - normalizer to use in conjunction with withJsonBody
    * @param withErrors - expected errors
-   * @param routeToAdminServer - force the request to the admin interface of the embedded server, false by default
+   * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
    * @return a [[com.twitter.finagle.http.Response]] on success otherwise an exception
    *         if any of the assertions defined by andExpect or withXXXX fail
@@ -233,7 +245,7 @@ class EmbeddedHttpServer(
   def httpPost(
     path: String,
     postBody: String,
-    accept: MediaType = null,
+    accept: String = null,
     suppress: Boolean = false,
     contentType: String = Message.ContentTypeJson,
     headers: Map[String, String] = Map(),
@@ -243,7 +255,7 @@ class EmbeddedHttpServer(
     withJsonBody: String = null,
     withJsonBodyNormalizer: JsonNode => JsonNode = null,
     withErrors: Seq[String] = null,
-    routeToAdminServer: Boolean = false,
+    routeHint: RouteHint = RouteHint.None,
     secure: Option[Boolean] = None
   ): Response = {
 
@@ -262,7 +274,7 @@ class EmbeddedHttpServer(
       withJsonBody,
       withJsonBodyNormalizer,
       withErrors,
-      routeToAdminServer,
+      routeHint,
       secure = secure.getOrElse(defaultHttpSecure)
     )
   }
@@ -286,7 +298,7 @@ class EmbeddedHttpServer(
    * @param normalizeJsonParsedReturnValue - if the normalizer SHOULD be applied on the parsing of the
    *                                       response#contentString into type [[ResponseType]], default = false.
    * @param withErrors - expected errors
-   * @param routeToAdminServer - force the request to the admin interface of the embedded server, false by default.
+   * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
    * @tparam ResponseType - parse the response#contentString into type [[ResponseType]]
    * @return instance of type [[ResponseType]] serialized from the the response#contentString.
@@ -303,7 +315,7 @@ class EmbeddedHttpServer(
     withJsonBodyNormalizer: JsonNode => JsonNode = null,
     normalizeJsonParsedReturnValue: Boolean = false,
     withErrors: Seq[String] = null,
-    routeToAdminServer: Boolean = false,
+    routeHint: RouteHint = RouteHint.None,
     secure: Option[Boolean] = None
   ): ResponseType = {
 
@@ -314,7 +326,7 @@ class EmbeddedHttpServer(
     val response = httpPost(
       path,
       postBody,
-      MediaType.JSON_UTF_8,
+      MediaType.JsonUtf8,
       suppress,
       Message.ContentTypeJson,
       headers,
@@ -324,7 +336,7 @@ class EmbeddedHttpServer(
       withJsonBody,
       withJsonBodyNormalizer,
       withErrors,
-      routeToAdminServer,
+      routeHint,
       secure
     )
 
@@ -343,7 +355,7 @@ class EmbeddedHttpServer(
    *
    * @param path - URI of the request
    * @param putBody - the body of the PUT request
-   * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
+   * @param accept - add request Accept header with the given [[com.twitter.finagle.http.MediaType]]
    * @param suppress - suppress http client logging
    * @param contentType - request Content-Type header value, application/json by default
    * @param headers - additional headers that should be passed with the request
@@ -353,7 +365,7 @@ class EmbeddedHttpServer(
    * @param withJsonBody - expected body as JSON
    * @param withJsonBodyNormalizer - normalizer to use in conjunction with withJsonBody.
    * @param withErrors - expected errors
-   * @param routeToAdminServer - force the request to the admin interface of the embedded server, false by default.
+   * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
    * @return a [[com.twitter.finagle.http.Response]] on success otherwise an exception
    *         if any of the assertions defined by andExpect or withXXXX fail
@@ -361,7 +373,7 @@ class EmbeddedHttpServer(
   def httpPut(
     path: String,
     putBody: String,
-    accept: MediaType = null,
+    accept: String = null,
     suppress: Boolean = false,
     contentType: String = Message.ContentTypeJson,
     headers: Map[String, String] = Map(),
@@ -371,7 +383,7 @@ class EmbeddedHttpServer(
     withJsonBody: String = null,
     withJsonBodyNormalizer: JsonNode => JsonNode = null,
     withErrors: Seq[String] = null,
-    routeToAdminServer: Boolean = false,
+    routeHint: RouteHint = RouteHint.None,
     secure: Option[Boolean] = None
   ): Response = {
 
@@ -390,7 +402,7 @@ class EmbeddedHttpServer(
       withJsonBody,
       withJsonBodyNormalizer,
       withErrors,
-      routeToAdminServer,
+      routeHint,
       secure = secure.getOrElse(defaultHttpSecure)
     )
   }
@@ -414,7 +426,7 @@ class EmbeddedHttpServer(
    * @param normalizeJsonParsedReturnValue - if the normalizer SHOULD be applied on the parsing of the
    *                                       response#contentString into type [[ResponseType]], default = false.
    * @param withErrors - expected errors
-   * @param routeToAdminServer - force the request to the admin interface of the embedded server, false by default.
+   * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
    * @tparam ResponseType - parse the response#contentString into type [[ResponseType]]
    * @return instance of type [[ResponseType]] serialized from the the response#contentString.
@@ -431,7 +443,7 @@ class EmbeddedHttpServer(
     withJsonBodyNormalizer: JsonNode => JsonNode = null,
     normalizeJsonParsedReturnValue: Boolean = false,
     withErrors: Seq[String] = null,
-    routeToAdminServer: Boolean = false,
+    routeHint: RouteHint = RouteHint.None,
     secure: Option[Boolean] = None
   ): ResponseType = {
 
@@ -442,7 +454,7 @@ class EmbeddedHttpServer(
     val response = httpPut(
       path,
       putBody,
-      MediaType.JSON_UTF_8,
+      MediaType.JsonUtf8,
       suppress,
       Message.ContentTypeJson,
       headers,
@@ -452,7 +464,7 @@ class EmbeddedHttpServer(
       withJsonBody,
       withJsonBodyNormalizer,
       withErrors,
-      routeToAdminServer,
+      routeHint,
       secure
     )
 
@@ -471,7 +483,7 @@ class EmbeddedHttpServer(
    *
    * @param path - URI of the request
    * @param deleteBody - the body of the DELETE request
-   * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
+   * @param accept - add request Accept header with the given [[com.twitter.finagle.http.MediaType]]
    * @param suppress - suppress http client logging
    * @param contentType - request Content-Type header value, application/json by default
    * @param headers - additional headers that should be passed with the request
@@ -481,7 +493,7 @@ class EmbeddedHttpServer(
    * @param withJsonBody - expected body as JSON
    * @param withJsonBodyNormalizer - normalizer to use in conjunction with withJsonBody.
    * @param withErrors - expected errors
-   * @param routeToAdminServer - force the request to the admin interface of the embedded server, false by default.
+   * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
    * @return a [[com.twitter.finagle.http.Response]] on success otherwise an exception
    *         if any of the assertions defined by andExpect or withXXXX fail
@@ -489,7 +501,7 @@ class EmbeddedHttpServer(
   def httpDelete(
     path: String,
     deleteBody: String = null,
-    accept: MediaType = null,
+    accept: String = null,
     suppress: Boolean = false,
     contentType: String = Message.ContentTypeJson,
     headers: Map[String, String] = Map(),
@@ -499,7 +511,7 @@ class EmbeddedHttpServer(
     withJsonBody: String = null,
     withJsonBodyNormalizer: JsonNode => JsonNode = null,
     withErrors: Seq[String] = null,
-    routeToAdminServer: Boolean = false,
+    routeHint: RouteHint = RouteHint.None,
     secure: Option[Boolean] = None
   ): Response = {
 
@@ -520,7 +532,7 @@ class EmbeddedHttpServer(
       withJsonBody,
       withJsonBodyNormalizer,
       withErrors,
-      routeToAdminServer,
+      routeHint,
       secure = secure.getOrElse(defaultHttpSecure)
     )
   }
@@ -544,7 +556,7 @@ class EmbeddedHttpServer(
    * @param normalizeJsonParsedReturnValue - if the normalizer SHOULD be applied on the parsing of the
    *                                       response#contentString into type [[ResponseType]], default = false.
    * @param withErrors - expected errors
-   * @param routeToAdminServer - force the request to the admin interface of the embedded server, false by default.
+   * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
    * @tparam ResponseType - parse the response#contentString into type [[ResponseType]]
    * @return instance of type [[ResponseType]] serialized from the the response#contentString.
@@ -561,7 +573,7 @@ class EmbeddedHttpServer(
     withJsonBodyNormalizer: JsonNode => JsonNode = null,
     normalizeJsonParsedReturnValue: Boolean = false,
     withErrors: Seq[String] = null,
-    routeToAdminServer: Boolean = false,
+    routeHint: RouteHint = RouteHint.None,
     secure: Option[Boolean] = None
   ): ResponseType = {
 
@@ -572,7 +584,7 @@ class EmbeddedHttpServer(
     val response = httpDelete(
       path,
       deleteBody,
-      MediaType.JSON_UTF_8,
+      MediaType.JsonUtf8,
       suppress,
       Message.ContentTypeJson,
       headers,
@@ -582,7 +594,7 @@ class EmbeddedHttpServer(
       withJsonBody,
       withJsonBodyNormalizer,
       withErrors,
-      routeToAdminServer,
+      routeHint,
       secure
     )
 
@@ -600,7 +612,7 @@ class EmbeddedHttpServer(
    * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
    *
    * @param path - URI of the request
-   * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
+   * @param accept - add request Accept header with the given [[com.twitter.finagle.http.MediaType]]
    * @param headers - additional headers that should be passed with the request
    * @param suppress - suppress http client logging
    * @param andExpect - expected [[com.twitter.finagle.http.Status]] value
@@ -609,14 +621,14 @@ class EmbeddedHttpServer(
    * @param withJsonBody - expected body as JSON
    * @param withJsonBodyNormalizer - normalizer to use in conjunction with withJsonBody
    * @param withErrors - expected errors
-   * @param routeToAdminServer - force the request to the admin interface of the embedded server, false by default
+   * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
    * @return a [[com.twitter.finagle.http.Response]] on success otherwise an exception
    *         if any of the assertions defined by andExpect or withXXXX fail
    */
   def httpOptions(
     path: String,
-    accept: MediaType = null,
+    accept: String = null,
     headers: Map[String, String] = Map(),
     suppress: Boolean = false,
     andExpect: Status = Status.Ok,
@@ -625,7 +637,7 @@ class EmbeddedHttpServer(
     withJsonBody: String = null,
     withJsonBodyNormalizer: JsonNode => JsonNode = null,
     withErrors: Seq[String] = null,
-    routeToAdminServer: Boolean = false,
+    routeHint: RouteHint = RouteHint.None,
     secure: Option[Boolean] = None
   ): Response = {
 
@@ -640,7 +652,7 @@ class EmbeddedHttpServer(
       withJsonBody,
       withJsonBodyNormalizer,
       withErrors,
-      routeToAdminServer,
+      routeHint,
       secure = secure.getOrElse(defaultHttpSecure)
     )
   }
@@ -652,7 +664,7 @@ class EmbeddedHttpServer(
    *
    * @param path - URI of the request
    * @param patchBody - the body of the PATCH request
-   * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
+   * @param accept - add request Accept header with the given [[com.twitter.finagle.http.MediaType]]
    * @param suppress - suppress http client logging
    * @param contentType - request Content-Type header value, application/json by default
    * @param headers - additional headers that should be passed with the request
@@ -662,7 +674,7 @@ class EmbeddedHttpServer(
    * @param withJsonBody - expected body as JSON
    * @param withJsonBodyNormalizer - normalizer to use in conjunction with withJsonBody
    * @param withErrors - expected errors
-   * @param routeToAdminServer - force the request to the admin interface of the embedded server, false by default
+   * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
    * @return a [[com.twitter.finagle.http.Response]] on success otherwise an exception
    *         if any of the assertions defined by andExpect or withXXXX fail
@@ -670,7 +682,7 @@ class EmbeddedHttpServer(
   def httpPatch(
     path: String,
     patchBody: String,
-    accept: MediaType = null,
+    accept: String = null,
     suppress: Boolean = false,
     contentType: String = Message.ContentTypeJson,
     headers: Map[String, String] = Map(),
@@ -680,7 +692,7 @@ class EmbeddedHttpServer(
     withJsonBody: String = null,
     withJsonBodyNormalizer: JsonNode => JsonNode = null,
     withErrors: Seq[String] = null,
-    routeToAdminServer: Boolean = false,
+    routeHint: RouteHint = RouteHint.None,
     secure: Option[Boolean] = None
   ): Response = {
 
@@ -699,7 +711,7 @@ class EmbeddedHttpServer(
       withJsonBody,
       withJsonBodyNormalizer,
       withErrors,
-      routeToAdminServer,
+      routeHint,
       secure = secure.getOrElse(defaultHttpSecure)
     )
   }
@@ -723,7 +735,7 @@ class EmbeddedHttpServer(
    * @param normalizeJsonParsedReturnValue - if the normalizer SHOULD be applied on the parsing of the
    *                                       response#contentString into type [[ResponseType]], default = false
    * @param withErrors - expected errors
-   * @param routeToAdminServer - force the request to the admin interface of the embedded server, false by default
+   * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
    * @tparam ResponseType - parse the response#contentString into type [[ResponseType]]
    * @return instance of type [[ResponseType]] serialized from the the response#contentString.
@@ -740,7 +752,7 @@ class EmbeddedHttpServer(
     withJsonBodyNormalizer: JsonNode => JsonNode = null,
     normalizeJsonParsedReturnValue: Boolean = false,
     withErrors: Seq[String] = null,
-    routeToAdminServer: Boolean = false,
+    routeHint: RouteHint = RouteHint.None,
     secure: Option[Boolean] = None
   ): ResponseType = {
 
@@ -751,7 +763,7 @@ class EmbeddedHttpServer(
     val response = httpPatch(
       path,
       patchBody,
-      MediaType.JSON_UTF_8,
+      MediaType.JsonUtf8,
       suppress,
       Message.ContentTypeJson,
       headers,
@@ -761,7 +773,7 @@ class EmbeddedHttpServer(
       withJsonBody,
       withJsonBodyNormalizer,
       withErrors,
-      routeToAdminServer,
+      routeHint,
       secure
     )
 
@@ -779,7 +791,7 @@ class EmbeddedHttpServer(
    * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
    *
    * @param path - URI of the request
-   * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
+   * @param accept - add request Accept header with the given [[com.twitter.finagle.http.MediaType]]
    * @param headers - additional headers that should be passed with the request
    * @param suppress - suppress http client logging
    * @param andExpect - expected [[com.twitter.finagle.http.Status]] value
@@ -788,14 +800,14 @@ class EmbeddedHttpServer(
    * @param withJsonBody - expected body as JSON
    * @param withJsonBodyNormalizer - normalizer to use in conjunction with withJsonBody
    * @param withErrors - expected errors
-   * @param routeToAdminServer - force the request to the admin interface of the embedded server, false by default
+   * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
    * @return a [[com.twitter.finagle.http.Response]] on success otherwise an exception
    *         if any of the assertions defined by andExpect or withXXXX fail
    */
   def httpHead(
     path: String,
-    accept: MediaType = null,
+    accept: String = null,
     headers: Map[String, String] = Map(),
     suppress: Boolean = false,
     andExpect: Status = Status.Ok,
@@ -804,7 +816,7 @@ class EmbeddedHttpServer(
     withJsonBody: String = null,
     withJsonBodyNormalizer: JsonNode => JsonNode = null,
     withErrors: Seq[String] = null,
-    routeToAdminServer: Boolean = false,
+    routeHint: RouteHint = RouteHint.None,
     secure: Option[Boolean] = None
   ): Response = {
 
@@ -819,7 +831,7 @@ class EmbeddedHttpServer(
       withJsonBody,
       withJsonBodyNormalizer,
       withErrors,
-      routeToAdminServer,
+      routeHint,
       secure = secure.getOrElse(defaultHttpSecure)
     )
   }
@@ -832,7 +844,7 @@ class EmbeddedHttpServer(
    * @param path - URI of the request
    * @param params - a Map[String,String] of form params to send in the request
    * @param multipart - if this form post is a multi-part request, false by default
-   * @param routeToAdminServer - force the request to the admin interface of the embedded server, false by default
+   * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param headers - additional headers that should be passed with the request
    * @param andExpect - expected [[com.twitter.finagle.http.Status]] value
    * @param withBody - expected body as a String
@@ -845,7 +857,7 @@ class EmbeddedHttpServer(
     path: String,
     params: Map[String, String],
     multipart: Boolean = false,
-    routeToAdminServer: Boolean = false,
+    routeHint: RouteHint = RouteHint.None,
     headers: Map[String, String] = Map.empty,
     andExpect: Status = Status.Ok,
     withBody: String = null,
@@ -857,7 +869,7 @@ class EmbeddedHttpServer(
       path = path,
       params = paramsToElements(params),
       multipart = multipart,
-      routeToAdminServer = routeToAdminServer,
+      routeHint = routeHint,
       headers = headers,
       andExpect = andExpect,
       withBody = withBody,
@@ -874,7 +886,7 @@ class EmbeddedHttpServer(
    * @param path - URI of the request
    * @param params - a Seq of [[com.twitter.finagle.http.FormElement]] to send in the request
    * @param multipart - if this form post is a multi-part request, true by default
-   * @param routeToAdminServer - force the request to the admin interface of the embedded server, false by default.
+   * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param headers - additional headers that should be passed with the request
    * @param andExpect - expected [[com.twitter.finagle.http.Status]] value
    * @param withBody - expected body as a String
@@ -887,7 +899,7 @@ class EmbeddedHttpServer(
     path: String,
     params: Seq[FormElement],
     multipart: Boolean = true,
-    routeToAdminServer: Boolean = false,
+    routeHint: RouteHint = RouteHint.None,
     headers: Map[String, String] = Map.empty,
     andExpect: Status = Status.Ok,
     withBody: String = null,
@@ -899,7 +911,7 @@ class EmbeddedHttpServer(
       path = path,
       params = params,
       multipart = multipart,
-      routeToAdminServer = routeToAdminServer,
+      routeHint = routeHint,
       headers = headers,
       andExpect = andExpect,
       withBody = withBody,
@@ -932,7 +944,7 @@ class EmbeddedHttpServer(
    * @param withJsonBody - expected body as JSON
    * @param withJsonBodyNormalizer - normalizer to use in conjunction with withJsonBody
    * @param withErrors - expected errors
-   * @param routeToAdminServer - force the request to the admin interface of the embedded server, false by default
+   * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
    * @return a [[com.twitter.finagle.http.Response]] on success otherwise an exception
    *         if any of the assertions defined by andExpect or withXXXX fail
@@ -946,7 +958,7 @@ class EmbeddedHttpServer(
     withJsonBody: String = null,
     withJsonBodyNormalizer: JsonNode => JsonNode = null,
     withErrors: Seq[String] = null,
-    routeToAdminServer: Boolean = false,
+    routeHint: RouteHint = RouteHint.None,
     secure: Option[Boolean] = None
   ): Response = {
 
@@ -960,7 +972,7 @@ class EmbeddedHttpServer(
       withJsonBody,
       withJsonBodyNormalizer,
       withErrors,
-      routeToAdminServer,
+      routeHint,
       secure = secure.getOrElse(defaultHttpSecure)
     )
   }
@@ -980,7 +992,7 @@ class EmbeddedHttpServer(
    * @param normalizeJsonParsedReturnValue - if the normalizer SHOULD be applied on the parsing of the
    *                                       response#contentString into type [[ResponseType]], default = false
    * @param withErrors - expected errors
-   * @param routeToAdminServer - force the request to the admin interface of the embedded server, false by default
+   * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
    * @return instance of type [[ResponseType]] serialized from the response#contentString
    */
@@ -994,7 +1006,7 @@ class EmbeddedHttpServer(
     withJsonBodyNormalizer: JsonNode => JsonNode = null,
     normalizeJsonParsedReturnValue: Boolean = false,
     withErrors: Seq[String] = null,
-    routeToAdminServer: Boolean = false,
+    routeHint: RouteHint = RouteHint.None,
     secure: Option[Boolean] = None
   ): ResponseType = {
 
@@ -1011,7 +1023,7 @@ class EmbeddedHttpServer(
       withJsonBody,
       withJsonBodyNormalizer,
       withErrors,
-      routeToAdminServer,
+      routeHint,
       secure
     )
 
@@ -1029,7 +1041,7 @@ class EmbeddedHttpServer(
     path: String,
     params: Seq[FormElement],
     multipart: Boolean,
-    routeToAdminServer: Boolean,
+    routeHint: RouteHint,
     headers: Map[String, String],
     andExpect: Status,
     withBody: String,
@@ -1044,7 +1056,7 @@ class EmbeddedHttpServer(
 
     jsonAwareHttpExecute(
       request,
-      routeToAdminServer = routeToAdminServer,
+      routeHint = routeHint,
       andExpect = andExpect,
       withBody = withBody,
       withJsonBody = withJsonBody,
@@ -1062,11 +1074,13 @@ class EmbeddedHttpServer(
     withJsonBody: String = null,
     withJsonBodyNormalizer: JsonNode => JsonNode = null,
     withErrors: Seq[String] = null, //TODO: Deprecate
-    routeToAdminServer: Boolean = false,
+    routeHint: RouteHint = RouteHint.None,
     secure: Boolean
   ): Response = {
     start() // ensure we have started the server
-    if (routeToAdminServer || matchesAdminRoute(request.method, request.path)) {
+    val routeToAdminServer = (routeHint == RouteHint.AdminServer) ||
+      (routeHint == RouteHint.None && matchesAdminRoute(request.method, request.path))
+    if (routeToAdminServer) {
       httpAdminClient(
         request,
         headers,

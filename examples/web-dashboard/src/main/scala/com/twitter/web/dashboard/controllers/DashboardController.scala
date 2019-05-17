@@ -1,6 +1,6 @@
 package com.twitter.web.dashboard.controllers
 
-import com.google.common.net.MediaType
+import com.twitter.finagle.http.MediaType
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 import com.twitter.web.dashboard.views.UserView
@@ -27,7 +27,7 @@ class DashboardController extends Controller {
 
   get("/document.xml") { request: Request =>
     response.ok
-      .contentType(MediaType.XML_UTF_8)
+      .contentType(MediaType.XmlUtf8)
       .body("""<?xml version="1.0" encoding="UTF-8" ?>
           |<records>
           |	<record>

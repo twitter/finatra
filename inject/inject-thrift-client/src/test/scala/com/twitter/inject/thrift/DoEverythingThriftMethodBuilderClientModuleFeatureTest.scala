@@ -17,11 +17,13 @@ class DoEverythingThriftMethodBuilderClientModuleFeatureTest extends FeatureTest
 
   private val greeterThriftServer = new EmbeddedThriftServer(
     twitterServer =
-      new TestThriftServer(new GreeterThriftService(httpServiceClientId).toThriftService)
+      new TestThriftServer(new GreeterThriftService(httpServiceClientId).toThriftService),
+    disableTestLogging = true
   )
 
   private val echoThriftServer = new EmbeddedThriftServer(
-    twitterServer = new TestThriftServer(new EchoThriftService(httpServiceClientId).toThriftService)
+    twitterServer = new TestThriftServer(new EchoThriftService(httpServiceClientId).toThriftService),
+    disableTestLogging = true
   )
 
   // Test an HttpServer with multiple clients

@@ -100,8 +100,6 @@ trait TwitterServer
 
   /* Protected */
 
-  override protected def failfastOnFlagsNotParsed: Boolean = true
-
   /**
    * Name used for registration in the [[com.twitter.util.registry.Library]]
    *

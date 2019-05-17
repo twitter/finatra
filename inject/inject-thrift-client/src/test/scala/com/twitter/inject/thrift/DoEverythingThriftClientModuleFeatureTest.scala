@@ -59,7 +59,7 @@ class DoEverythingThriftClientModuleFeatureTest extends FeatureTest with HttpTes
   private val clientIdString = "echo-http-service"
 
   override val server =
-    new EmbeddedThriftServer(twitterServer = new TestThriftServer(new MyEchoService))
+    new EmbeddedThriftServer(twitterServer = new TestThriftServer(new MyEchoService), disableTestLogging = true)
 
   private val httpServer1 = new EmbeddedHttpServer(
     twitterServer =

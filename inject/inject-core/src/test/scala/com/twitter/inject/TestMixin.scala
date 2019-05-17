@@ -9,7 +9,7 @@ import com.twitter.util.{
 }
 import java.nio.charset.{StandardCharsets => JChar}
 import java.util.TimeZone
-import org.apache.commons.io.IOUtils
+import com.twitter.io.StreamIO
 import org.joda.time.DateTimeZone
 import org.scalatest._
 
@@ -88,7 +88,7 @@ trait TestMixin
    * @see [[java.nio.charset.StandardCharsets.UTF_8]]
    */
   protected def resourceAsString(resource: String): String = {
-    IOUtils.toString(getClass.getResourceAsStream(resource), JChar.UTF_8)
+    StreamIO.buffer(getClass.getResourceAsStream(resource)).toString(JChar.UTF_8.displayName)
   }
 
   /**

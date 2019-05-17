@@ -4,7 +4,6 @@ scala_library(
     dependencies = [
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-core",
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
-        "3rdparty/jvm/com/fasterxml/jackson/datatype:jackson-datatype-joda",
         "3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala",
         "3rdparty/jvm/com/github/nscala_time",
         "3rdparty/jvm/com/google/inject:guice",
