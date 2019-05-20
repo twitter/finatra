@@ -2,7 +2,9 @@ package com.twitter.finatra.http.streaming
 
 import com.twitter.finagle.http.{Response, Status, Version}
 import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.io.Buf
 import com.twitter.util.Future
+import scala.language.higherKinds
 
 /**
  * StreamingResponse is an abstraction over an output Primitive Stream - Reader or AsyncStream.
@@ -16,8 +18,9 @@ private[http] final case class StreamingResponse[F[_]: ToReader, A] private (
   mapper: FinatraObjectMapper,
   val stream: F[A]) {
 
-  private[this] val reader = implicitly[ToReader[F]].apply(stream).map { i =>
-    mapper.writeValueAsBuf(i)
+  private[this] val reader = implicitly[ToReader[F]].apply(stream).map {
+    case str: String => Buf.Utf8(str)
+    case any => mapper.writeValueAsBuf(any)
   }
 
   /**

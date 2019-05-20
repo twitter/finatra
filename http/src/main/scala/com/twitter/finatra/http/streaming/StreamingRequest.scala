@@ -4,6 +4,7 @@ import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.json.internal.streaming.JsonStreamParser
 import com.twitter.io.{Buf, Reader}
+import scala.language.higherKinds
 
 private[http] object StreamingRequest {
 

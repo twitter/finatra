@@ -197,8 +197,30 @@ class TweetsControllerIntegrationTest extends FeatureTest {
     server.httpGet("/tweets/streaming_custom_tobuf", andExpect = Status.Ok, withBody = "ABC")
   }
 
+  test("get StreamingResponse with AsyncStream") {
+    server.httpGet("/tweets/streamingRep_with_asyncStream", andExpect = Status.Ok, withBody = "ABC")
+  }
+
+  test("get StreamingResponse with Reader") {
+    server.httpGet("/tweets/streamingRep_with_reader", andExpect = Status.Ok, withBody = "123")
+  }
+
   test("get streaming with transformer") {
     server.httpGet("/tweets/streaming_with_transformer", andExpect = Status.Ok, withBody = "abc")
+  }
+
+  test("get StreamingResponse with AsyncStream with transformer ") {
+    server.httpGet(
+      "/tweets/streamingRep_with_transformer_asyncStream",
+      andExpect = Status.Ok,
+      withBody = "abc")
+  }
+
+  test("get StreamingResponse with Reader with transformer") {
+    server.httpGet(
+      "/tweets/streamingRep_with_transformer_reader",
+      andExpect = Status.Ok,
+      withBody = "abc")
   }
 
   test("get streaming with onWrite") {

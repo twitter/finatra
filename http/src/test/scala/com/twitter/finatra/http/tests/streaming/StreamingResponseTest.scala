@@ -52,7 +52,16 @@ class StreamingResponseTest extends Test with Mockito {
     val response: Response = fromReader(reader)
     assert(
       Buf.decodeString(await(Reader.readAll(response.reader)), StandardCharsets.UTF_8) ==
-        "\"first\"\"second\"\"third\"")
+        "firstsecondthird")
+  }
+
+  test("Reader: Serialize and deserialize the Reader of bytes") {
+    val listByte = Array[Byte](1,2,3)
+    val reader: Reader[Byte] = Reader.fromSeq(listByte)
+    val response: Response = fromReader(reader)
+    assert(
+      Buf.decodeString(await(Reader.readAll(response.reader)), StandardCharsets.UTF_8) ==
+        "123")
   }
 
   test("Reader: Serialize and deserialize the Reader of Object") {
@@ -100,7 +109,16 @@ class StreamingResponseTest extends Test with Mockito {
     val response: Response = fromStream(stream)
     assert(
       Buf.decodeString(await(Reader.readAll(response.reader)), StandardCharsets.UTF_8) ==
-        "\"first\"\"second\"\"third\"")
+        "firstsecondthird")
+  }
+
+  test("AsyncStream: Serialize and deserialize the AsyncStream of int") {
+    val intSeq = Seq(1, 2, 3)
+    val stream: AsyncStream[Int] = AsyncStream.fromSeq(intSeq)
+    val response: Response = fromStream(stream)
+    assert(
+      Buf.decodeString(await(Reader.readAll(response.reader)), StandardCharsets.UTF_8) ==
+        "123")
   }
 
   // interrupt infinite AsyncStream

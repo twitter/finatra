@@ -3,8 +3,11 @@ package com.twitter.finatra.http.internal.marshalling
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http._
 import com.twitter.finatra.http.internal.marshalling.CallbackConverter.url
-import com.twitter.finatra.http.response.{ResponseBuilder, StreamingResponse}
-import com.twitter.finatra.http.streaming.{FromReader, StreamingRequest}
+import com.twitter.finatra.http.response.{
+  ResponseBuilder,
+  StreamingResponse => DeprecatedStreamingResponse
+}
+import com.twitter.finatra.http.streaming.{FromReader, StreamingRequest, StreamingResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.streaming.JsonStreamParser
 import com.twitter.inject.TypeUtils
@@ -12,8 +15,8 @@ import com.twitter.io.{Buf, Reader}
 import com.twitter.util.{Future, FuturePool, Promise}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext => ScalaExecutionContext, Future => ScalaFuture}
-import scala.util.{Failure, Success}
 import scala.reflect.runtime.universe._
+import scala.util.{Failure, Success}
 
 private object CallbackConverter {
   val url =
@@ -53,7 +56,7 @@ private[http] class CallbackConverter @Inject()(
     manifestRequestType match {
       case request if request == manifest[Request] =>
         callback.asInstanceOf[Request => ResponseType]
-      case streamingRequest if runtimeClassEqs[StreamingRequest[_, _]](streamingRequest) =>
+      case streamingRequest if runtimeClassEqs[StreamingRequest[Any, _]](streamingRequest) =>
         val streamIdentity = streamingRequest.typeArguments.head
         val streamType = streamingRequest.typeArguments.last
         request: Request =>
@@ -170,7 +173,8 @@ private[http] class CallbackConverter @Inject()(
   private def isStreamingType(manifested: Manifest[_]): Boolean = {
     runtimeClassEqs[AsyncStream[_]](manifested) ||
     runtimeClassEqs[Reader[_]](manifested) ||
-    runtimeClassEqs[StreamingResponse[_, _]](manifested)
+    runtimeClassEqs[DeprecatedStreamingResponse[_, _]](manifested) ||
+    runtimeClassEqs[StreamingResponse[Any, _]](manifested)
   }
 
   /**
@@ -185,6 +189,7 @@ private[http] class CallbackConverter @Inject()(
     requestCallback: Request => ResponseType,
     manifested: Manifest[_]
   ): Request => Future[Response] = {
+    // If the requestType is stream of Buf, pass it through without adding json fmt
     val (jsonPrefix, jsonSeparator, jsonSuffix) = {
       val typeArgs = TypeUtils.asManifest[RequestType].typeArguments
       if (typeArgs.size == 1 && typeArgs.head.runtimeClass == classOf[Buf]) {
@@ -197,37 +202,51 @@ private[http] class CallbackConverter @Inject()(
       case asyncStreamBuf if asyncStreamBuf == manifest[AsyncStream[Buf]] =>
         request: Request =>
           val asyncStream = requestCallback(request).asInstanceOf[AsyncStream[Buf]]
-          val streamingResponse =
-            StreamingResponse.apply[Buf](toBuf = a => a)(asyncStream = asyncStream)
-          streamingResponse.toFutureFinagleResponse
+          val depStreamingResponse =
+            DeprecatedStreamingResponse.apply[Buf](toBuf = a => a)(asyncStream = asyncStream)
+          depStreamingResponse.toFutureFinagleResponse
       case asyncStream if runtimeClassEqs[AsyncStream[_]](asyncStream) =>
         request: Request =>
           val asyncStream = requestCallback(request).asInstanceOf[AsyncStream[_]]
-          val streamingResponse =
-            StreamingResponse.apply(
+          val depStreamingResponse =
+            DeprecatedStreamingResponse.apply(
               toBuf = mapper.writeValueAsBuf,
               prefix = jsonPrefix,
               separator = jsonSeparator,
               suffix = jsonSuffix)(asyncStream = asyncStream)
-          streamingResponse.toFutureFinagleResponse
+          depStreamingResponse.toFutureFinagleResponse
       case readerBuf if readerBuf == manifest[Reader[Buf]] =>
         request: Request =>
           val reader = requestCallback(request).asInstanceOf[Reader[Buf]]
-          val streamingResponse =
-            StreamingResponse.apply[Buf](toBuf = a => a)(asyncStream = Reader.toAsyncStream(reader))
-          streamingResponse.toFutureFinagleResponse
+          val depStreamingResponse =
+            DeprecatedStreamingResponse.apply[Buf](toBuf = a => a)(
+              asyncStream = Reader.toAsyncStream(reader))
+          depStreamingResponse.toFutureFinagleResponse
       case reader if runtimeClassEqs[Reader[_]](reader) =>
         request: Request =>
           val reader = requestCallback(request).asInstanceOf[Reader[_]]
-          val streamingResponse = StreamingResponse.apply(
+          val depStreamingResponse = DeprecatedStreamingResponse.apply(
             toBuf = mapper.writeValueAsBuf,
             prefix = jsonPrefix,
             separator = jsonSeparator,
             suffix = jsonSuffix)(asyncStream = Reader.toAsyncStream(reader))
-          streamingResponse.toFutureFinagleResponse
-      case streamingResponse if runtimeClassEqs[StreamingResponse[_, _]](streamingResponse) =>
+          depStreamingResponse.toFutureFinagleResponse
+      case depStreamingResponse
+          if runtimeClassEqs[DeprecatedStreamingResponse[_, _]](depStreamingResponse) =>
         request: Request =>
-          requestCallback(request).asInstanceOf[StreamingResponse[_, _]].toFutureFinagleResponse
+          requestCallback(request)
+            .asInstanceOf[DeprecatedStreamingResponse[_, _]].toFutureFinagleResponse
+      case streamingResponse if runtimeClassEqs[StreamingResponse[Any, _]](streamingResponse) =>
+        request: Request =>
+          streamingResponse.typeArguments.head match {
+            case r: Reader[_] =>
+              requestCallback(request).asInstanceOf[StreamingResponse[Reader, _]].toFutureResponse
+            case as: AsyncStream[_] =>
+              requestCallback(request)
+                .asInstanceOf[StreamingResponse[AsyncStream, _]].toFutureResponse
+            case _ =>
+              requestCallback(request).asInstanceOf[StreamingResponse[Any, _]].toFutureResponse
+          }
     }
   }
 

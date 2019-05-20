@@ -5,7 +5,8 @@ import com.twitter.finagle.http.{Request, Response, Status, Method => HttpMethod
 import com.twitter.finatra.http.internal.marshalling.CallbackConverter
 import com.twitter.finatra.http.modules.{DocRootModule, MessageBodyModule, MustacheModule}
 import com.twitter.finatra.http.response.SimpleResponse
-import com.twitter.finatra.http.streaming.StreamingRequest
+import com.twitter.finatra.http.streaming.{StreamingRequest, StreamingResponse}
+import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.conversions.buf._
@@ -27,6 +28,7 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
     ).create
 
   val callbackConverter = injector.instance[CallbackConverter]
+  val mapper = injector.instance[FinatraObjectMapper]
 
   val ford = Car("Ford")
   val okResponse = SimpleResponse(Status.Ok, "bob")
@@ -299,8 +301,28 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
     assertOk(response, "[1,2]")
   }
 
+  test("StreamingResponse from Reader") {
+    val converted = callbackConverter.convertToFutureResponse(streamingResponseFromReader)
+    val response = await(converted(Request()))
+    await(Reader.readAll(response.reader)).utf8str should equal("Hello, World!")
+  }
+
+  test("StreamingResponse from AsyncStream") {
+    val converted = callbackConverter.convertToFutureResponse(streamingResponseFromAsyncStream)
+    val response = await(converted(Request()))
+    await(Reader.readAll(response.reader)).utf8str should equal("123")
+  }
+
   test("Null") {
     assertOk(callbackConverter.convertToFutureResponse(nullCallback), withBody = "")
+  }
+
+  def streamingResponseFromReader(request: Request): StreamingResponse[Reader, String] = {
+    StreamingResponse.apply(mapper, Reader.fromSeq(List("Hello", ", ", "World", "!")))
+  }
+
+  def streamingResponseFromAsyncStream(request: Request): StreamingResponse[AsyncStream, Int] = {
+    StreamingResponse.apply(mapper, AsyncStream(1,2,3))
   }
 
   def stringMapCallback(request: Request): Map[String, String] = {
@@ -424,11 +446,11 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
   }
 
   def asyncStreamRequestAndResponse(stream: AsyncStream[Int]): AsyncStream[String] = {
-    stream map { _.toString }
+    stream.map(_.toString)
   }
 
   def asyncStreamRequest(stream: AsyncStream[Int]): Future[String] = {
-    stream.toSeq() map { _.toString }
+    stream.toSeq().map(_.toString)
   }
 
   def asyncStreamResponse(request: Request): AsyncStream[Int] = {
