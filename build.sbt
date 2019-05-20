@@ -627,6 +627,7 @@ lazy val httpTestJarSources =
     "com/twitter/finatra/http/HttpMockResponses",
     "com/twitter/finatra/http/HttpTest",
     "com/twitter/finatra/http/JsonAwareEmbeddedHttpClient",
+    "com/twitter/finatra/http/RouteHint",
     "com/twitter/finatra/http/StreamingJsonTestHelper")
 lazy val http = project
   .settings(projectSettings)
