@@ -39,7 +39,7 @@ import scala.collection.JavaConverters._
  *                              underlying server when testing with an injectable server. By default
  *                              an injectable server under test will have an [[com.twitter.finagle.stats.InMemoryStatsReceiver]]
  *                              implementation bound for the purpose of testing. In some cases, users may want to test using
- *                              a custom [[StatsReceiver]] implementation instead and can provide and instance
+ *                              a custom [[StatsReceiver]] implementation instead and can provide an instance
  *                              to use here. For non-injectable servers this can be a shared reference
  *                              used in the server under test.
  */
