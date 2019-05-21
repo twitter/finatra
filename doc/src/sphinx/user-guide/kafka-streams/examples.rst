@@ -3,7 +3,7 @@
 Examples
 ========
 
-The `integration tests <https://github.com/twitter/finatra/blob/develop/kafka-streams/kafka-streams/src/test/scala/com/twitter/unittests/integration>`__ serve as a good collection of example Finatra Kafka Streams servers.
+The `integration tests <https://github.com/twitter/finatra/tree/develop/kafka-streams/kafka-streams/src/test/scala/com/twitter/finatra/kafkastreams/integration>`__ serve as a good collection of example Finatra Kafka Streams servers.
 
 Word Count Server
 -----------------
