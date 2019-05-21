@@ -7,6 +7,14 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+19.5.1
+------
+Fixed
+~~~~~
+
+* finatra: The added `c.t.finatra.http.RouteHint` was missing from the test-jar sources and has
+  been added. ``PHAB_ID=D317282``
+
 19.5.0
 ------
 
