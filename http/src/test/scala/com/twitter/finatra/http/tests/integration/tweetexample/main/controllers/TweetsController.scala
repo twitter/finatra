@@ -3,10 +3,13 @@ package com.twitter.finatra.http.tests.integration.tweetexample.main.controllers
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Fields, Request, Response, Status}
 import com.twitter.finatra.http.Controller
+import com.twitter.finatra.http.response.{
+  StreamingResponseUtils,
+  StreamingResponse => DeprecatedStreamingResponse
+}
+import com.twitter.finatra.http.streaming.StreamingRequest
 import com.twitter.finatra.http.tests.integration.tweetexample.main.domain.Tweet
 import com.twitter.finatra.http.tests.integration.tweetexample.main.services.TweetsRepository
-import com.twitter.finatra.http.response.{StreamingResponse, StreamingResponseUtils}
-import com.twitter.finatra.http.streaming.StreamingRequest
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.{Duration, Future, Try}
 import java.nio.charset.StandardCharsets
@@ -16,8 +19,7 @@ import scala.collection.mutable
 class TweetsController @Inject()(
   tweetsRepository: TweetsRepository,
   onWriteLog: mutable.ArrayBuffer[String]
-)
-  extends Controller {
+) extends Controller {
 
   get("/tweets/hello") { request: Request =>
     "hello world"
@@ -47,15 +49,22 @@ class TweetsController @Inject()(
     bufs
   }
 
-
   get("/tweets/streaming_json") { request: Request =>
     tweetsRepository.getByIds(Reader.fromSeq(Seq(0, 1, 2, 3, 4, 5)))
   }
 
   get("/tweets/streaming_custom_tobuf") { request: Request =>
-    StreamingResponse(Buf.Utf8.apply) {
+    DeprecatedStreamingResponse(Buf.Utf8.apply) {
       AsyncStream("A", "B", "C")
     }
+  }
+
+  get("/tweets/streamingRep_with_asyncStream") { _: Request =>
+    response.streaming(AsyncStream("A", "B", "C"))
+  }
+
+  get("/tweets/streamingRep_with_reader") { _: Request =>
+    response.streaming(Reader.fromSeq(Seq(1, 2, 3)))
   }
 
   get("/tweets/streaming_with_transformer") { _: Request =>
@@ -67,20 +76,27 @@ class TweetsController @Inject()(
 
     def onWrite(ignored: Unit, buf: Buf)(t: Try[Unit]): Unit = ()
 
-    StreamingResponse(
-        transformer,
-        Status.Ok,
-        Map.empty,
-        onWrite,
-        () => (),
-        Duration.Zero
-      ) {
+    DeprecatedStreamingResponse(
+      transformer,
+      Status.Ok,
+      Map.empty,
+      onWrite,
+      () => (),
+      Duration.Zero
+    ) {
       AsyncStream("A", "B", "C")
     }
   }
 
-  get("/tweets/streaming_with_onWrite") { _: Request =>
+  get("/tweets/streamingRep_with_transformer_asyncStream") { _: Request =>
+    response.streaming(AsyncStream("A", "B", "C").map(_.toLowerCase))
+  }
 
+  get("/tweets/streamingRep_with_transformer_reader") { _: Request =>
+    response.streaming(Reader.fromSeq(Seq("A", "B", "C")).map(_.toLowerCase))
+  }
+
+  get("/tweets/streaming_with_onWrite") { _: Request =>
     def serializeAndLowercase(as: AsyncStream[String]): AsyncStream[(String, Buf)] = {
       as.map(str => (str.toLowerCase, Buf.Utf8(str)))
     }
@@ -89,7 +105,7 @@ class TweetsController @Inject()(
       onWriteLog.append(lowerCased)
     }
 
-    StreamingResponse(
+    DeprecatedStreamingResponse(
       serializeAndLowercase,
       Status.Ok,
       Map.empty,
@@ -108,7 +124,7 @@ class TweetsController @Inject()(
       Fields.Pragma -> "no-cache"
     )
 
-    StreamingResponse(Buf.Utf8.apply, Status.Created, headers) {
+    DeprecatedStreamingResponse(Buf.Utf8.apply, Status.Created, headers) {
       AsyncStream("A", "B", "C")
     }
   }

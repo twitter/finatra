@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "19.5.0"
+val releaseVersion = "19.5.1"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -627,6 +627,7 @@ lazy val httpTestJarSources =
     "com/twitter/finatra/http/HttpMockResponses",
     "com/twitter/finatra/http/HttpTest",
     "com/twitter/finatra/http/JsonAwareEmbeddedHttpClient",
+    "com/twitter/finatra/http/RouteHint",
     "com/twitter/finatra/http/StreamingJsonTestHelper")
 lazy val http = project
   .settings(projectSettings)

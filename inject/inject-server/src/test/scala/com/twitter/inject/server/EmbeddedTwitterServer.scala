@@ -143,11 +143,11 @@ object EmbeddedTwitterServer {
  *                    applied in insertion order, with the first entry being applied closest to
  *                    the startup of the [[twitterServer]]. In order to ensure insertion ordering,
  *                    you should use a [[scala.collection.immutable.ListMap]].
- * @param statsReceiverOverride An optional [[StatsReceiver]] implementation that should is bound to the
+ * @param statsReceiverOverride An optional [[StatsReceiver]] implementation that should be bound to the
  *                              underlying server when testing with an injectable server. By default
  *                              an injectable server under test will have an [[InMemoryStatsReceiver]] implementation
  *                              bound for the purpose of testing. In some cases, users may want to test using
- *                              a custom [[StatsReceiver]] implementation instead and can provide and instance
+ *                              a custom [[StatsReceiver]] implementation instead and can provide an instance
  *                              to use here. For non-injectable servers this can be a shared reference
  *                              used in the server under test.
  */
