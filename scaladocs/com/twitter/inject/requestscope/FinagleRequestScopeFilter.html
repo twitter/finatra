@@ -134,13 +134,13 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.inject">inject</a></dd></dl></div>
     </li><li class="current-entities indented4">
-                        <span class="separator"></span>
-                        <a class="class" href="FinagleRequestScope.html" title="A Guice 'Request Scope' implemented with com.twitter.util.Local"></a>
-                        <a href="FinagleRequestScope.html" title="A Guice 'Request Scope' implemented with com.twitter.util.Local">FinagleRequestScope</a>
+                        <a class="object" href="FinagleRequestScope$.html" title=""></a>
+                        <a class="class" href="FinagleRequestScope.html" title="A Guice Custom Scope implemented with com.twitter.util.Local to mimic the behavior of the '@RequestScoped' scope using com.twitter.util.Local to work within the context of com.twitter.util.Futures."></a>
+                        <a href="FinagleRequestScope.html" title="A Guice Custom Scope implemented with com.twitter.util.Local to mimic the behavior of the '@RequestScoped' scope using com.twitter.util.Local to work within the context of com.twitter.util.Futures.">FinagleRequestScope</a>
                       </li><li class="current-entities indented4">
-                        <span class="separator"></span>
-                        <a class="class" href="" title=""></a>
-                        <a href="" title="">FinagleRequestScopeFilter</a>
+                        <a class="object" href="FinagleRequestScopeFilter$.html" title=""></a>
+                        <a class="class" href="" title="A com.twitter.finagle.Filter which is responsible for preparing scoping of the custom com.twitter.inject.requestscope.FinagleRequestScope around this Filter's underlying com.twitter.finagle.Service."></a>
+                        <a href="" title="A com.twitter.finagle.Filter which is responsible for preparing scoping of the custom com.twitter.inject.requestscope.FinagleRequestScope around this Filter's underlying com.twitter.finagle.Service.">FinagleRequestScopeFilter</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
                         <a class="object" href="FinagleRequestScopeModule$.html" title=""></a>
@@ -164,14 +164,16 @@
           <div id="content">
             <body class="class type">
       <div id="definition">
-        <div class="big-circle class">c</div>
+        <a href="FinagleRequestScopeFilter$.html" title="See companion object"><div class="big-circle class-companion-object">c</div></a>
         <p id="owner"><a href="../../../index.html" class="extype" name="com">com</a>.<a href="../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../index.html" class="extype" name="com.twitter.inject">inject</a>.<a href="index.html" class="extype" name="com.twitter.inject.requestscope">requestscope</a></p>
-        <h1>FinagleRequestScopeFilter<span class="permalink">
+        <h1><a href="FinagleRequestScopeFilter$.html" title="See companion object">FinagleRequestScopeFilter</a><span class="permalink">
       <a href="../../../../com/twitter/inject/requestscope/FinagleRequestScopeFilter.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
-        <h3><span class="morelinks"></span></h3>
+        <h3><span class="morelinks"><div>
+            Companion <a href="FinagleRequestScopeFilter$.html" title="See companion object">object FinagleRequestScopeFilter</a>
+          </div></span></h3>
       </div>
 
       <h4 id="signature" class="signature">
@@ -180,16 +182,20 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">FinagleRequestScopeFilter</span><span class="tparams">[<span name="Req">Req</span>, <span name="Rep">Rep</span>]</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/SimpleFilter.html#com.twitter.finagle.SimpleFilter" class="extype" name="com.twitter.finagle.SimpleFilter">SimpleFilter</a>[<span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Req">Req</span>, <span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Rep">Rep</span>]</span>
+        <span class="name">FinagleRequestScopeFilter</span><span class="tparams">[<span name="Req">Req</span>, <span name="Rep">Rep</span>]</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html#com.twitter.finagle.Filter" class="extype" name="com.twitter.finagle.Filter">Filter</a>[<span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Req">Req</span>, <span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Rep">Rep</span>, <span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Req">Req</span>, <span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Rep">Rep</span>]</span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html" class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</a> which is responsible for preparing scoping of the custom
+<a href="FinagleRequestScope.html" class="extype" name="com.twitter.inject.requestscope.FinagleRequestScope">com.twitter.inject.requestscope.FinagleRequestScope</a> around this Filter's underlying
+<span class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</span>.
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>if you wish to use a <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">com.twitter.finagle.Filter.TypeAgnostic</span> version of this
+      Filter, please see the <a href="FinagleRequestScopeFilter$$TypeAgnostic.html" class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.TypeAgnostic">com.twitter.inject.requestscope.FinagleRequestScopeFilter.TypeAgnostic</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/SimpleFilter.html#com.twitter.finagle.SimpleFilter" class="extype" name="com.twitter.finagle.SimpleFilter">SimpleFilter</a>[<span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Req">Req</span>, <span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Rep">Rep</span>], <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html#com.twitter.finagle.Filter" class="extype" name="com.twitter.finagle.Filter">Filter</a>[<span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Req">Req</span>, <span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Rep">Rep</span>, <span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Req">Req</span>, <span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Rep">Rep</span>], (<span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Req">Req</span>, <span class="extype" name="com.twitter.finagle.Service">Service</span>[<span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Req">Req</span>, <span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Rep">Rep</span>]) ⇒ <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Rep">Rep</span>], <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html#com.twitter.finagle.Filter" class="extype" name="com.twitter.finagle.Filter">Filter</a>[<span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Req">Req</span>, <span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Rep">Rep</span>, <span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Req">Req</span>, <span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Rep">Rep</span>], (<span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Req">Req</span>, <span class="extype" name="com.twitter.finagle.Service">Service</span>[<span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Req">Req</span>, <span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Rep">Rep</span>]) ⇒ <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Rep">Rep</span>], <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -215,7 +221,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter"><span>FinagleRequestScopeFilter</span></li><li class="in" name="com.twitter.finagle.SimpleFilter"><span>SimpleFilter</span></li><li class="in" name="com.twitter.finagle.Filter"><span>Filter</span></li><li class="in" name="scala.Function2"><span>Function2</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter"><span>FinagleRequestScopeFilter</span></li><li class="in" name="com.twitter.finagle.Filter"><span>Filter</span></li><li class="in" name="scala.Function2"><span>Function2</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -236,9 +242,9 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.twitter.inject.requestscope.FinagleRequestScopeFilter#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(finagleScope:com.twitter.inject.requestscope.FinagleRequestScope):com.twitter.inject.requestscope.FinagleRequestScopeFilter[Req,Rep]"></a><a id="&lt;init&gt;:FinagleRequestScopeFilter[Req,Rep]"></a>
+      <a id="&lt;init&gt;(finagleRequestScope:com.twitter.inject.requestscope.FinagleRequestScope):com.twitter.inject.requestscope.FinagleRequestScopeFilter[Req,Rep]"></a><a id="&lt;init&gt;:FinagleRequestScopeFilter[Req,Rep]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/requestscope/FinagleRequestScopeFilter.html#&lt;init&gt;(finagleScope:com.twitter.inject.requestscope.FinagleRequestScope):com.twitter.inject.requestscope.FinagleRequestScopeFilter[Req,Rep]" title="Permalink">
+      <a href="../../../../com/twitter/inject/requestscope/FinagleRequestScopeFilter.html#&lt;init&gt;(finagleRequestScope:com.twitter.inject.requestscope.FinagleRequestScope):com.twitter.inject.requestscope.FinagleRequestScopeFilter[Req,Rep]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -247,10 +253,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">FinagleRequestScopeFilter</span><span class="params">(<span name="finagleScope">finagleScope: <a href="FinagleRequestScope.html" class="extype" name="com.twitter.inject.requestscope.FinagleRequestScope">FinagleRequestScope</a></span>)</span>
+        <span class="name">FinagleRequestScopeFilter</span><span class="params">(<span name="finagleRequestScope">finagleRequestScope: <a href="FinagleRequestScope.html" class="extype" name="com.twitter.inject.requestscope.FinagleRequestScope">FinagleRequestScope</a></span>)</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">finagleRequestScope</dt><dd class="cmt"><p>the custom <span class="extype" name="com.google.inject.Scope">com.google.inject.Scope</span> to use.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Inject</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -758,9 +764,7 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.twitter.finagle.SimpleFilter">
-              <h3>Inherited from <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/SimpleFilter.html#com.twitter.finagle.SimpleFilter" class="extype" name="com.twitter.finagle.SimpleFilter">SimpleFilter</a>[<span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Req">Req</span>, <span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Rep">Rep</span>]</h3>
-            </div><div class="parent" name="com.twitter.finagle.Filter">
+        <div class="parent" name="com.twitter.finagle.Filter">
               <h3>Inherited from <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html#com.twitter.finagle.Filter" class="extype" name="com.twitter.finagle.Filter">Filter</a>[<span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Req">Req</span>, <span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Rep">Rep</span>, <span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Req">Req</span>, <span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Rep">Rep</span>]</h3>
             </div><div class="parent" name="scala.Function2">
               <h3>Inherited from (<span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Req">Req</span>, <span class="extype" name="com.twitter.finagle.Service">Service</span>[<span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Req">Req</span>, <span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Rep">Rep</span>]) ⇒ <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.Rep">Rep</span>]</h3>

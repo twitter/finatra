@@ -3,9 +3,13 @@
 Filtering Thrift Requests
 =========================
 
-The `ThriftRouter` allows you to build a global filter chain which will trigger on the request path when executing an RPC call to the ThriftController.
+Global Filters
+--------------
 
-Filters must be a subclass of the `c.t.finagle.Filter.TypeAgnostic <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com.twitter/finagle/Filter.scala>`__ which is a
+The `ThriftRouter` allows you to build a global Filter chain which will trigger on the request path
+when executing an RPC call to methods implemented by the added `Thrift Controller <controllers.html>`__.
+
+Filters must be a subclass of the `c.t.finagle.Filter.TypeAgnostic <https://github.com/twitter/finagle/blob/ee9cb4ec2c17b810354b36ff97816fc97efb6394/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala#L295>`__ which is a
 
 .. code:: scala
 
@@ -13,7 +17,8 @@ Filters must be a subclass of the `c.t.finagle.Filter.TypeAgnostic <https://gith
 
 that is polymorphic in `T`.
 
-If you want to apply a filter or filters in your Thrift server call the `ThriftRouter#filter` method, to register a `Filter.TypeAgnostic`.
+If you want to apply a Filter or Filters to **all** methods of your Thrift Controller, call the
+`ThriftRouter#filter` method, to register a `Filter.TypeAgnostic`:
 
 .. code:: scala
 
@@ -40,58 +45,150 @@ If you want to apply a filter or filters in your Thrift server call the `ThriftR
       }
     }
 
-Note, like `HTTP <../http/filters.html>`__, filters are applied **in the order** they are defined on all methods.
+Note, like `HTTP <../http/filters.html>`__, Filters are applied **in the order** they are defined on
+all methods. Filters can be added to the `ThriftRouter` by type (as in the example above) or by instance.
 
-For more information see the `Finagle User\'s Guide <https://twitter.github.io/finagle/guide/index.html>`__ section on `Filters <https://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters>`__.
+For more information see the `Finagle User\'s Guide <https://twitter.github.io/finagle/guide/index.html>`__
+section on `Filters <https://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters>`__.
+
+Per-method Filtering
+--------------------
+
+`TypeAgnostic` Filters
+~~~~~~~~~~~~~~~~~~~~~~
+
+You can filter by a `TypeAgnostic Filter <https://github.com/twitter/finagle/blob/ee9cb4ec2c17b810354b36ff97816fc97efb6394/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala#L295>`__
+per-method implemented in a Controller, by calling the `handle(ThriftMethod)#filtered` Function e.g.:
+
+.. code:: scala
+
+    import com.twitter.finagle.{Filter, Service, SimpleFilter}
+    import com.twitter.util.Future
+
+    val countEchoFilter = new Filter.TypeAgnostic {
+      private[this] val echos = stats.counter("echo_calls")
+      def toFilter[Req, Rep]: Filter[Req, Rep, Req, Rep] = new SimpleFilter[Req, Rep]{
+        def apply(request: Req, service: Service[Req, Rep]): Future[Rep] = {
+          echos.incr()
+          service(request)
+        }
+      }
+    }
+
+    ...
+
+    import com.foo.bar.thriftscala.EchoService.Echo
+    import com.twitter.finatra.thrift.Controller
+    import com.twitter.util.Future
+    import scala.util.control.NoStackTrace
+
+    class ExampleController extends Controller {
+
+      handle(Echo).filtered(countEchoFilter) { args: Echo.Args =>
+        if (args.msg == "clientError") {
+          Future.exception(new Exception("client error") with NoStackTrace)
+        } else {
+          Future.value(args.msg)
+        }
+      }
+    }
+
+Note that you can chain `handle(ThriftMethod)#filtered` calls arbitrarily deep.
+
+Typed Filters
+~~~~~~~~~~~~~
+
+If you'd like to specify a typed Filter, use the `handle(ThriftMethod)#withService` Function and apply
+your typed `Filter[-ReqIn, +RepOut, +ReqOut, -RepIn]` to your `Service[-ReqOut, +RepIn]` implementation.
+
+.. code:: scala
+
+    import com.foo.bar.thriftscala.EchoService.Echo
+    import com.twitter.finagle.{Filter, Service, SimpleFilter}
+    import com.twitter.inject.Logging
+    import com.twitter.util.Future
+
+    val echoLoggingFilter = new Filter[Echo.Args, String, Echo.Args, String] with Logging {
+      def apply(request: Echo.Args, service: Service[Echo.Args, String]): Future[String] = {
+        info(s"Received request message: ${request.msg}")
+        service(request)
+      }
+    }
+
+    ...
+
+    import com.foo.bar.thriftscala.EchoService.Echo
+    import com.twitter.finatra.thrift.Controller
+    import com.twitter.util.Future
+    import scala.util.control.NoStackTrace
+
+    class ExampleController extends Controller {
+
+      val svc: Service[Echo.Args, String] = Service.mk { args: Echo.Args =>
+        if (args.msg == "clientError") {
+          Future.exception(new Exception("client error") with NoStackTrace)
+        } else {
+          Future.value(args.msg)
+        }
+      }
+
+      handle(Echo).withService(new echoLoggingFilter.andThen(svc))
+    }
+
+For more information on the `handle(ThriftMethod)` DSL of the Controller, see the documentation on `Thrift
+Controllers <controllers.html#implementing-methods-with-handle-thriftmethod>`__.
 
 Request Scope
 -------------
 
 |Guice|_ supports `custom scopes <https://github.com/google/guice/wiki/CustomScopes>`__ in addition
-to the defined ``@Singleton``, ``@SessionScoped``, and ``@RequestScoped`` `scopes <https://github.com/google/guice/wiki/Scopes>`__.
+to the defined ``@Singleton``, ``@SessionScoped``, and ``@RequestScoped``
+`scopes <https://github.com/google/guice/wiki/Scopes>`__. ``@RequestScoped`` is often used to allow
+injection of instances which can change depending on the incoming request (e.g. the currently
+authenticated User).
 
-``@RequestScoped`` is often used to allow injection of instances which can change depending on the incoming request
-(e.g. the currently authenticated User).
-
-Finatra provides a custom implementation of the default |Guice|_ ``@RequestScoped`` functionality which works
-across Finagle non-blocking threads. The default |Guice|_ `@RequestScoped <https://github.com/google/guice/wiki/Scopes#scopes>`__
-implementation uses `ThreadLocals <https://docs.oracle.com/javase/7/docs/api/java/lang/ThreadLocal.html>`__
-which will not work within the context of a Twitter `c.t.util.Future <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala>`__.
+Finatra provides a custom implementation of the default |Guice|_ ``@RequestScoped`` functionality
+which works across Finagle non-blocking threads. The default |Guice|_
+`@RequestScoped <https://github.com/google/guice/wiki/Scopes#scopes>`__ implementation uses
+`ThreadLocals <https://docs.oracle.com/javase/7/docs/api/java/lang/ThreadLocal.html>`__ which will
+not work within the context of a Twitter `c.t.util.Future <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala>`__.
 
 .. note::
 
-     Fields added to the Finatra Request Scope will remain present in threads launched from a
-     Finagle `FuturePool <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala>`__.
+    Fields added to the Custom Request Scope will remain present in threads launched from a
+    `FuturePool <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala>`__.
 
-Adding Classes into the Finatra Request Scope
----------------------------------------------
+Adding Classes into the Custom Request Scope
+--------------------------------------------
 
-First add a dependency on `com.twitter:inject-request-scope`
+First add a dependency on `com.twitter:inject-request-scope` (`finatra/inject/inject-request-scope`).
 
 Then define a module which mixes in the `c.t.inject.requestscope.RequestScopeBinding` trait.
 This trait defines `#bindRequestScope[T]` which will bind the given type to an "unseeded"
-`Provider[T]` of the type *in* the "FinagleRequestScope". E.g.,
+`Provider[T]` of the type *in* the custom "FinagleRequestScope". E.g.,
 
 .. code:: scala
 
     import com.twitter.inject.TwitterModule
     import com.twitter.inject.requestscope.RequestScopeBinding
 
-    object UserModule
-      extends TwitterModule
-      with RequestScopeBinding {
+    object UserModule extends TwitterModule with RequestScopeBinding {
 
       override def configure(): Unit = {
         bindRequestScope[User]
       }
     }
 
-You must remember to "seed" this `Provider[T]` by obtaining an instance of the `FinagleRequestScope`
-and calling `#seed[T](instance)`. For request scoping, you would generally do this in another
-`Filter <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala>`__
+.. important::
+
+    Remember to include this Module in your `server's list of Modules <../thrift/server.html#thrift-server-definition>`__.
+
+You must then "seed" this `Provider[T]` by obtaining an instance of the `FinagleRequestScope`
+and calling `#seed[T](instance)`. For request scoping, you would generally do this in a
+`TypeAgnostic Filter <https://github.com/twitter/finagle/blob/ee9cb4ec2c17b810354b36ff97816fc97efb6394/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala#L295>`__
 executed on the request path.
 
-For example, to define a `Filter <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala>`__
+For example, to define a `TypeAgnostic Filter <https://github.com/twitter/finagle/blob/ee9cb4ec2c17b810354b36ff97816fc97efb6394/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala#L295>`__
 which seeds a `User` into the "FinagleRequestScope":
 
 .. code:: scala
@@ -103,24 +200,26 @@ which seeds a `User` into the "FinagleRequestScope":
 
     @Singleton
     class UserFilter @Inject()(
-        requestScope: FinagleRequestScope)
-      extends Filter.TypeAgnostic {
+      finagleRequestScope: FinagleRequestScope
+    ) extends Filter.TypeAgnostic {
 
-      override def toFilter[T, U]: Filter[T, U, T, U] = new Filter[T, U, T, U] {
-        override def apply[T, U](request: T, service: Service[T, U]): Future[U] = {
-          val userId = parseUserId(request) // User-defined method to parse a "user id" from the request
-          val user = User(userId)
-          requestScope.seed[User](user)
-          service(request)
+      def toFilter[Req, Rep]: Filter[Req, Rep, Req, Rep] =
+        new Filter[Req, Rep, Req, Rep] {
+          def apply[Req, Rep](request: Req, service: Service[Req, Rep]): Future[Rep] = {
+            val userId = parseUserId(request) // User-defined method to parse a "user id" from the request
+            val user = User(userId)
+            finagleRequestScope.seed[User](user)
+            service(request)
+          }
         }
-      }
     }
 
 
-Next, you must ensure to add the `FinagleRequestScopeFilter <https://github.com/twitter/finatra/tree/master/inject/inject-request-scope/src/main/scala/com/twitter/inject/requestscope/FinagleRequestScopeFilter.scala>`__ to your
-server before the defined `Filter <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala>`__ which seeds the provided instance.
+Next, add the `FinagleRequestScopeFilter.TypeAgnostic <https://github.com/twitter/finatra/tree/master/inject/inject-request-scope/src/main/scala/com/twitter/inject/requestscope/FinagleRequestScopeFilter.scala>`__
+to your server _above_ the defined `Filter <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala>`__ which seeds the provided instance.
 
-E.g., for the `UserFilter` defined above (shown with common filters in a recommended filter order):
+E.g., for the `UserFilter` defined above (shown with commonly recommended Filters in the recommended
+order):
 
 .. code:: scala
 
@@ -143,14 +242,15 @@ E.g., for the `UserFilter` defined above (shown with common filters in a recomme
           .filter[StatsFilter]
           .filter[ExceptionMappingFilter]
           .filter[ClientIdAcceptlistFilter]
-          .filter[FinagleRequestScopeFilter]
+          .filter[FinagleRequestScopeFilter.TypeAgnostic]
           .filter[UserFilter]
           .exceptionMapper[FinatraThriftExceptionMapper]
           .add[MyController]
         }
     }
 
-Lastly, wherever you need to access the Request scoped `User` inject a `User` or a `Provider[User]` type.
+Lastly, wherever you need to access the Request scoped `User` inject a `User` or a `Provider[User]`
+type.
 
 .. code:: scala
 

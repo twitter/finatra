@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Filtering HTTP Requests &#8212; Finatra 19.4.0 documentation</title>
+    <title>Filtering HTTP Requests &#8212; Finatra 19.5.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.4.0',
+        VERSION:     '19.5.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.4.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.5.1 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="HTTP Exception Mapping" href="exceptions.html" />
     <link rel="prev" title="Message Body Components" href="message_body.html" />
@@ -75,8 +75,8 @@
 <span id="http-filters"></span><h1>Filtering HTTP Requests<a class="headerlink" href="#filtering-http-requests" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="c-t-finatra-http-filters-commonfilters">
 <h2>c.t.finatra.http.filters.CommonFilters<a class="headerlink" href="#c-t-finatra-http-filters-commonfilters" title="Permalink to this headline">¶</a></h2>
-<p>Finatra composes &#8211; in defined order &#8211; several generally useful HTTP filters into <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala">c.t.finatra.http.filters.CommonFilters</a>.</p>
-<p><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala">CommonFilters</a> can be added in the same manner as any other filter. Included filters:</p>
+<p>Finatra composes &#8211; in defined order &#8211; several generally useful HTTP Filters into <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala">c.t.finatra.http.filters.CommonFilters</a>.</p>
+<p><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala">CommonFilters</a> can be added in the same manner as any other Filter. Included Filters:</p>
 <div class="section" id="c-t-finatra-http-filters-statsfilter-rarrow">
 <h3><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala">c.t.finatra.http.filters.StatsFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-statsfilter-rarrow" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
@@ -92,20 +92,26 @@
 <div class="section" id="c-t-finatra-http-filters-httpresponsefilter-rarrow">
 <h3><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/HttpResponseFilter.scala">c.t.finatra.http.filters.HttpResponseFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-httpresponsefilter-rarrow" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>an HTTP response conformance filter which, among other things, ensures <cite>Location</cite> response headers are properly specified.</li>
+<li>an HTTP response conformance Filter which, among other things, ensures <cite>Location</cite> response headers are properly specified.</li>
 </ul>
 </div>
 <div class="section" id="c-t-finatra-http-filters-exceptionmappingfilter-rarrow">
 <h3><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala">c.t.finatra.http.filters.ExceptionMappingFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-exceptionmappingfilter-rarrow" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>filter for use in mapping exceptions to HTTP responses. See <a class="reference external" href="exceptions.html#exceptionmappingfilter">ExceptionMappingFilter</a> for more information.</li>
+<li>Filter for use in mapping exceptions to HTTP responses. See <a class="reference external" href="exceptions.html#exceptionmappingfilter">ExceptionMappingFilter</a></li>
 </ul>
+<p>for more information.</p>
 </div>
 </div>
 <div class="section" id="global-filters">
 <h2>Global Filters<a class="headerlink" href="#global-filters" title="Permalink to this headline">¶</a></h2>
-<p>Filters by default execute <strong>after</strong> route matching. Meaning, for a given request the URI path is matched in the routing table before executing any filter. If you need to be able to run a filter <em>before</em> route matching, you can add the filter via <cite>HttpRouter#filter[T](beforeRouting = true)</cite>, this is especially useful if the filter manually inspects to see if it should apply on a given request URI path that may not exist in the routing table (e.g., is not defined by any controller added to the server).</p>
-<p>If you want to apply a filter or filters to <strong>all</strong> added controllers you can do the following:</p>
+<p>Filters by default execute <strong>after</strong> route matching. Meaning, for a given request the URI path is
+matched in the routing table before executing any Filter. If you need to be able to run a Filter
+<em>before</em> route matching, you can add the Filter via <cite>HttpRouter#filter[T](beforeRouting = true)</cite>,
+this is especially useful if the Filter manually inspects to see if it should apply on a given
+request URI path that may not exist in the routing table (e.g., is not defined by any controller
+added to the server).</p>
+<p>If you want to apply a Filter or Filters to <strong>all</strong> added controllers you can do the following:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import DoEverythingModule
 import ExampleController
 import com.twitter.finagle.http.Request
@@ -127,13 +133,15 @@ class ExampleServer extends HttpServer {
 }
 </pre></div>
 </div>
-<p>Note that filters &#8211; much like controller routes &#8211; are applied <strong>in the order defined</strong>.</p>
-<p>For more information see the <a class="reference external" href="https://twitter.github.io/finagle/guide/index.html">Finagle User&#8217;s Guide</a> section on <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters">Filters</a>.</p>
+<p>Note that Filters &#8211; much like controller routes &#8211; are applied <strong>in the order defined</strong>. Filters
+can be added to the <cite>HttpRouter</cite> by type (as in the example above) or by instance.</p>
+<p>For more information see the <a class="reference external" href="https://twitter.github.io/finagle/guide/index.html">Finagle User&#8217;s Guide</a>
+section on <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters">Filters</a>.</p>
 </div>
 <div class="section" id="per-controller-filters">
 <h2>Per-controller Filters<a class="headerlink" href="#per-controller-filters" title="Permalink to this headline">¶</a></h2>
-<p>It is also possible to add filters per controller, using <cite>HttpRouter#add[F1 &lt;: HttpFilter, C &lt;: Controller]</cite>.</p>
-<p>These filters will apply to all routes in the Controller.</p>
+<p>It is also possible to add Filters per controller, using <cite>HttpRouter#add[F1 &lt;: HttpFilter, C &lt;: Controller]</cite>.</p>
+<p>These Filters will apply to all routes in the Controller.</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import DoEverythingModule
 import ExampleController
 import ExampleFilter
@@ -156,12 +164,16 @@ class ExampleServer extends HttpServer {
 }
 </pre></div>
 </div>
-<p>Currently, <cite>HttpRouter#add</cite> supports in-lining up to ten (10) filters before a controller. If you need to include more than ten filters please consider combining them with <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/filters/MergedFilter.scala">c.t.finatra.filters.MergedFilter</a> in the same manner as <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala">c.t.finatra.http.filters.CommonFilters</a> then using the combined filter in your call to <cite>HttpRouter#add</cite>.</p>
-<p>In all the above usages, we are applying the filter <em>by type</em> allowing the framework to instantiate instances of the filters. However all of these methods support passing constructed instances.</p>
+<p>Currently, <cite>HttpRouter#add</cite> supports in-lining up to ten (10) filters before a Controller. If you
+need to include more than ten Filters please consider combining them with <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/filters/MergedFilter.scala">c.t.finatra.filters.MergedFilter</a>
+in the same manner as <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala">c.t.finatra.http.filters.CommonFilters</a>
+then using the combined Filter in your call to <cite>HttpRouter#add</cite>.</p>
+<p>In all the above usages, we are applying the Filter <em>by type</em> allowing the framework to instantiate
+instances of the Filters. However, all of these methods support passing constructed instances.</p>
 </div>
 <div class="section" id="per-route-filters">
 <h2>Per-route Filters<a class="headerlink" href="#per-route-filters" title="Permalink to this headline">¶</a></h2>
-<p>Additionally, you can define filters <em>inside</em> of a Controller per-route,
+<p>Additionally, you can specify Filters <em>inside</em> of a Controller per-route,
 e.g.,</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>class ExampleController @Inject()(
   exampleService: ExampleService
@@ -184,37 +196,36 @@ e.g.,</p>
 }
 </pre></div>
 </div>
-<p>As you can see, you can choose to apply the filter either by type or provide an instance. Note that
+<p>As you can see, you can choose to apply the Filter either by type or provide an instance. Note that
 you can chain <cite>Controller#filter</cite> calls arbitrarily deep.</p>
 </div>
 <div class="section" id="request-scope">
 <h2>Request Scope<a class="headerlink" href="#request-scope" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/google/guice">Guice</a> supports <a class="reference external" href="https://github.com/google/guice/wiki/CustomScopes">custom scopes</a> in addition
-to the defined <code class="docutils literal"><span class="pre">&#64;Singleton</span></code>, <code class="docutils literal"><span class="pre">&#64;SessionScoped</span></code>, and <code class="docutils literal"><span class="pre">&#64;RequestScoped</span></code> <a class="reference external" href="https://github.com/google/guice/wiki/Scopes">scopes</a>.</p>
-<p><code class="docutils literal"><span class="pre">&#64;RequestScoped</span></code> is often used to allow injection of instances which can change depending on the incoming request
-(e.g. the currently authenticated User).</p>
-<p>Finatra provides a custom implementation of the default <a class="reference external" href="https://github.com/google/guice">Guice</a> <code class="docutils literal"><span class="pre">&#64;RequestScoped</span></code> functionality which works
-across Finagle non-blocking threads. The default <a class="reference external" href="https://github.com/google/guice">Guice</a> <a class="reference external" href="https://github.com/google/guice/wiki/Scopes#scopes">&#64;RequestScoped</a>
+to the defined <code class="docutils literal"><span class="pre">&#64;Singleton</span></code>, <code class="docutils literal"><span class="pre">&#64;SessionScoped</span></code>, and <a class="reference external" href="https://github.com/google/guice/blob/master/extensions/servlet/src/com/google/inject/servlet/RequestScoped.java"><code class="docutils literal"><span class="pre">&#64;RequestScoped</span></code></a>
+<a class="reference external" href="https://github.com/google/guice/wiki/Scopes">scopes</a>. <a class="reference external" href="https://github.com/google/guice/blob/master/extensions/servlet/src/com/google/inject/servlet/RequestScoped.java"><code class="docutils literal"><span class="pre">&#64;RequestScoped</span></code></a> is often used to allow
+injection of instances which can change depending on the incoming request (e.g. the currently
+authenticated User).</p>
+<p>Finatra provides a custom implementation of the default <a class="reference external" href="https://github.com/google/guice">Guice</a> <a class="reference external" href="https://github.com/google/guice/blob/master/extensions/servlet/src/com/google/inject/servlet/RequestScoped.java"><code class="docutils literal"><span class="pre">&#64;RequestScoped</span></code></a> functionality
+which works across Finagle non-blocking threads. The default <a class="reference external" href="https://github.com/google/guice">Guice</a> <a class="reference external" href="https://github.com/google/guice/blob/master/extensions/servlet/src/com/google/inject/servlet/RequestScoped.java"><code class="docutils literal"><span class="pre">&#64;RequestScoped</span></code></a>
 implementation uses <a class="reference external" href="https://docs.oracle.com/javase/7/docs/api/java/lang/ThreadLocal.html">ThreadLocals</a>
 which will not work within the context of a Twitter <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala">c.t.util.Future</a>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Fields added to the Finatra Request Scope will remain present in threads launched from a
-Finagle <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala">FuturePool</a>.</p>
+<p class="last">Fields added to the Custom Request Scope will remain present in threads launched from a
+<a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala">FuturePool</a>.</p>
 </div>
 </div>
-<div class="section" id="adding-classes-into-the-finatra-request-scope">
-<h2>Adding Classes into the Finatra Request Scope<a class="headerlink" href="#adding-classes-into-the-finatra-request-scope" title="Permalink to this headline">¶</a></h2>
-<p>First add a dependency on <cite>com.twitter:inject-request-scope</cite></p>
+<div class="section" id="adding-classes-into-the-custom-request-scope">
+<h2>Adding Classes into the Custom Request Scope<a class="headerlink" href="#adding-classes-into-the-custom-request-scope" title="Permalink to this headline">¶</a></h2>
+<p>First add a dependency on <cite>com.twitter:inject-request-scope</cite> (<cite>finatra/inject/inject-request-scope</cite>).</p>
 <p>Then define a module which mixes in the <cite>c.t.inject.requestscope.RequestScopeBinding</cite> trait.
 This trait defines <cite>#bindRequestScope[T]</cite> which will bind the given type to an &#8220;unseeded&#8221;
-<cite>Provider[T]</cite> of the type <em>in</em> the &#8220;FinagleRequestScope&#8221;. E.g.,</p>
+<cite>Provider[T]</cite> of the type <em>in</em> the custom &#8220;FinagleRequestScope&#8221;. E.g.,</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.TwitterModule
 import com.twitter.inject.requestscope.RequestScopeBinding
 
-object UserModule
-  extends TwitterModule
-  with RequestScopeBinding {
+object UserModule extends TwitterModule with RequestScopeBinding {
 
   override def configure(): Unit = {
     bindRequestScope[User]
@@ -222,8 +233,12 @@ object UserModule
 }
 </pre></div>
 </div>
-<p>You must remember to &#8220;seed&#8221; this <cite>Provider[T]</cite> by obtaining an instance of the <cite>FinagleRequestScope</cite>
-and calling <cite>#seed[T](instance)</cite>. For request scoping, you would generally do this in another
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Remember to include this Module in your <a class="reference external" href="../http/server.html#http-server-definition">server&#8217;s list of Modules</a>.</p>
+</div>
+<p>You must then &#8220;seed&#8221; this <cite>Provider[T]</cite> by obtaining an instance of the <cite>FinagleRequestScope</cite>
+and calling <cite>#seed[T](instance)</cite>. For request scoping, you would generally do this in a
 <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala">Filter</a>
 executed on the request path.</p>
 <p>For example, to define a <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala">Filter</a>
@@ -236,21 +251,27 @@ import javax.inject.{Inject, Singleton}
 
 @Singleton
 class UserFilter @Inject()(
-  requestScope: FinagleRequestScope)
-  extends SimpleFilter[Request, Response] {
+  finagleRequestScope: FinagleRequestScope
+) extends SimpleFilter[Request, Response] {
 
-  override def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
+  def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
     val userId = parseUserId(request) // User-defined method to parse a &quot;user id&quot; from the request
     val user = User(userId)
-    requestScope.seed[User](user)
+    finagleRequestScope.seed[User](user)
     service(request)
   }
 }
 </pre></div>
 </div>
-<p>Next, you must ensure to add the <a class="reference external" href="https://github.com/twitter/finatra/tree/master/inject/inject-request-scope/src/main/scala/com/twitter/inject/requestscope/FinagleRequestScopeFilter.scala">FinagleRequestScopeFilter</a> to your
-server before the defined <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala">Filter</a> which seeds the provided instance.</p>
-<p>E.g., for the <cite>UserFilter</cite> defined above (shown with common filters in a recommended filter order):</p>
+<p>Next, add the <a class="reference external" href="https://github.com/twitter/finatra/tree/master/inject/inject-request-scope/src/main/scala/com/twitter/inject/requestscope/filters.scala">FinagleRequestScopeFilter</a> to your
+server _above_ the defined <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala">Filter</a> which seeds the provided instance.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <a class="reference external" href="https://github.com/twitter/finatra/tree/master/inject/inject-request-scope/src/main/scala/com/twitter/inject/requestscope/FinagleRequestScopeFilter.scala">FinagleRequestScopeFilter</a> expects
+&#8220;request&#8221; and &#8220;response&#8221; type parameters. In this case, they would be
+<cite>com.twitter.finagle.http.Request</cite> and <cite>com.twitter.finagle.http.Response</cite>.</p>
+</div>
+<p>E.g., for the <cite>UserFilter</cite> defined above (shown with common Filters in a recommended Filter order):</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter, TraceIdMDCFilter}
@@ -263,14 +284,15 @@ class Server extends HttpServer {
       .filter[LoggingMDCFilter[Request, Response]]
       .filter[TraceIdMDCFilter[Request, Response]]
       .filter[CommonFilters]
-      .filter[FinagleRequestScopeFilter]
+      .filter[FinagleRequestScopeFilter[Request, Response]]
       .filter[UserFilter]
       .add[MyController]
     }
 }
 </pre></div>
 </div>
-<p>Lastly, wherever you need to access the Request scoped <cite>User</cite> inject a <cite>User</cite> or a <cite>Provider[User]</cite> type.</p>
+<p>Lastly, wherever you need to access the Request scoped <cite>User</cite> inject a <cite>User</cite> or a <cite>Provider[User]</cite>
+type.</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 import javax.inject.{Inject, Provider, Singleton}
@@ -295,12 +317,18 @@ class MyController @Inject()(
 <div class="section" id="using-c-t-finagle-http-request-ctx">
 <h2>Using <cite>c.t.finagle.http.Request#ctx</cite><a class="headerlink" href="#using-c-t-finagle-http-request-ctx" title="Permalink to this headline">¶</a></h2>
 <p>Above we saw how to seed classes to the Finatra Request Scope using a <cite>Provider[T]</cite>.</p>
-<p>However, we recommend <em>not</em> seeding with a request scope <cite>Provider[T]</cite> but instead using Finagle&#8217;s <a class="reference external" href="https://github.com/twitter/finagle/blob/f970bd5b0c1b3f968694dcde33b47b21869b9f0e/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala#L29">c.t.finagle.http.Request#ctx</a>.
-Internally, for HTTP, we generally use the <cite>Request#ctx</cite> over <cite>Provider[T]</cite> even though we use <a class="reference external" href="https://github.com/google/guice">Guice</a> extensively.</p>
-<p>To use the <cite>Request#ctx</cite> technique, first create a <a class="reference external" href="https://github.com/twitter/util/blob/9fa550a269d2287b24e94921a352ba954f9f4bfb/util-collection/src/main/scala/com/twitter/collection/RecordSchema.scala#L6">RecordSchema</a> <a class="reference external" href="https://github.com/twitter/finagle/blob/f970bd5b0c1b3f968694dcde33b47b21869b9f0e/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala#L23">request field</a>, a &#8220;context&#8221;, and an HTTP <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala">Filter</a> which can set the value of the &#8220;context&#8221;.</p>
-<p>The &#8220;context&#8221; should define a method to retrieve the value from the <cite>Request#ctx</cite>. Typically, this method is defined in an <cite>implicit class</cite>
-which takes a <cite>c.t.finagle.http.Request</cite> as an argument. Importing the &#8220;context&#8221; members into scope thus allows for calling the method defined
-in the <cite>implicit class</cite> as though it were a method on the HTTP <cite>Request</cite> object.</p>
+<p>However, we recommend <em>not</em> seeding with a request scope <cite>Provider[T]</cite> but instead using Finagle&#8217;s
+<a class="reference external" href="https://github.com/twitter/finagle/blob/f970bd5b0c1b3f968694dcde33b47b21869b9f0e/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala#L29">c.t.finagle.http.Request#ctx</a>.
+Internally, for HTTP, we generally use the <cite>Request#ctx</cite> over <cite>Provider[T]</cite> even though we use
+<a class="reference external" href="https://github.com/google/guice">Guice</a> extensively.</p>
+<p>To use the <cite>Request#ctx</cite> technique, first create a <a class="reference external" href="https://github.com/twitter/util/blob/9fa550a269d2287b24e94921a352ba954f9f4bfb/util-collection/src/main/scala/com/twitter/collection/RecordSchema.scala#L6">RecordSchema</a>
+<a class="reference external" href="https://github.com/twitter/finagle/blob/f970bd5b0c1b3f968694dcde33b47b21869b9f0e/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala#L23">request field</a>,
+a &#8220;context&#8221;, and an HTTP <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala">Filter</a>
+which can set the value of the &#8220;context&#8221;.</p>
+<p>The &#8220;context&#8221; should define a method to retrieve the value from the <cite>Request#ctx</cite>. Typically, this
+method is defined in an <cite>implicit class</cite> which takes a <cite>c.t.finagle.http.Request</cite> as an argument.
+Importing the &#8220;context&#8221; members into scope thus allows for calling the method defined in the
+<cite>implicit class</cite> as though it were a method on the HTTP <cite>Request</cite> object.</p>
 <p>For example, a UserContext</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
 
@@ -325,7 +353,7 @@ object UserContext {
 </div>
 <p>And a <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala">Filter</a>
 which can set the <cite>User</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>// create a filter
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>// create a Filter
 class UserFilter extends SimpleFilter[Request, Response] {
   override def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
     UserContext.setUser(request)
@@ -334,8 +362,8 @@ class UserFilter extends SimpleFilter[Request, Response] {
 }
 </pre></div>
 </div>
-<p>In the above example, the retrieval method defined in the implicit class <cite>UserContextSyntax</cite> will then be available on the the <cite>request</cite>
-when the <cite>UserContext._</cite> members are imported:</p>
+<p>In the above example, the retrieval method defined in the implicit class <cite>UserContextSyntax</cite> will
+then be available on the the <cite>request</cite> when the <cite>UserContext._</cite> members are imported:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>// import the UserContext members into scope, the method Request#user
 // will now be available on the Request object.
 import UserContext._
@@ -383,7 +411,7 @@ class MyController() extends Controller {
 <li><a class="reference internal" href="#per-controller-filters">Per-controller Filters</a></li>
 <li><a class="reference internal" href="#per-route-filters">Per-route Filters</a></li>
 <li><a class="reference internal" href="#request-scope">Request Scope</a></li>
-<li><a class="reference internal" href="#adding-classes-into-the-finatra-request-scope">Adding Classes into the Finatra Request Scope</a></li>
+<li><a class="reference internal" href="#adding-classes-into-the-custom-request-scope">Adding Classes into the Custom Request Scope</a></li>
 <li><a class="reference internal" href="#using-c-t-finagle-http-request-ctx">Using <cite>c.t.finagle.http.Request#ctx</cite></a></li>
 </ul>
 </li>

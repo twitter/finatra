@@ -327,8 +327,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="com.twitter.finatra.http">http</a></dd></dl></div>
     </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="class" href="" title=""></a>
-                        <a href="" title="">AbstractController</a>
+                        <a class="class" href="" title="com.twitter.finatra.http.Controller for Java Compatibility"></a>
+                        <a href="" title="com.twitter.finatra.http.Controller for Java Compatibility">AbstractController</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
                         <a class="class" href="AbstractHttpServer.html" title="A Finagle server which exposes an external HTTP or HTTPS interfaces implemented by a Service[Request, Response] configured via an HttpRouter."></a>
@@ -385,7 +385,7 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><a href="Controller.html" class="extype" name="com.twitter.finatra.http.Controller">com.twitter.finatra.http.Controller</a> for Java Compatibility</p></div><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -458,7 +458,7 @@
 
         <div class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="com.twitter.finatra.http.AbstractController#configureRoutes" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="com.twitter.finatra.http.AbstractController#configureRoutes" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="configureRoutes():Unit"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/AbstractController.html#configureRoutes():Unit" title="Permalink">
@@ -473,7 +473,29 @@
         <span class="name">configureRoutes</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Java users should create and configure routes inside of this method.</p><div class="fullcomment"><div class="comment cmt"><p>Java users should create and configure routes inside of this method. E.g.
+</p></div><dl class="attributes block"> <div class="block">Example:
+               <ol><li class="cmt"><p></p><pre>public <span class="kw">class</span> MyController <span class="kw">extends</span> AbstractController {
+  <span class="kw">private</span> <span class="kw">final</span> AService aService;
+
+  @Inject
+  public MyController(
+    AService aService,
+    @Flag(<span class="lit">"cool.flag"</span>) <span class="std">String</span> coolFlagValue
+  ) {
+    <span class="kw">this</span>.aService = aService;
+  }
+
+  public void configureRoutes() {
+
+    get(<span class="lit">"/foo"</span>, (Request request) -&gt; Future.value(<span class="lit">"hello"</span>));
+
+    post(<span class="lit">"/baz"</span>, aService::doBaz);
+
+    put(<span class="lit">"/bar"</span>, (Request request) -&gt; aService.doBar(request, coolFlagValue));
+  }
+}</pre></li></ol>
+            </div></dl></div>
     </li></ol>
             </div>
 
@@ -528,10 +550,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#any" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="any(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="any(String,String,Boolean,RouteIndex,JavaCallback):Unit"></a>
+    </li><li name="com.twitter.finatra.http.RouteDSL#any" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="any(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="any(String,String,Boolean,RouteIndex,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#any(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#any(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -540,14 +562,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">any</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">any</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#any" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="any(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="any(String,Boolean,RouteIndex,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#any" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="any(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="any(String,Boolean,RouteIndex,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#any(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#any(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -556,14 +578,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">any</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">any</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#any" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="any(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="any(String,Boolean,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#any" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="any(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="any(String,Boolean,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#any(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#any(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -572,14 +594,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">any</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">any</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#any" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="any(route:String,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="any(String,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#any" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="any(route:String,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="any(String,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#any(route:String,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#any(route:String,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -588,14 +610,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">any</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">any</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
     </li><li name="com.twitter.finatra.http.RouteDSL#any" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="any[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$20:Manifest[RequestType],implicitevidence$21:Manifest[ResponseType]):Unit"></a><a id="any[RequestType,ResponseType](String,String,Boolean,Option[RouteIndex])((RequestType)⇒ResponseType)(Manifest[RequestType],Manifest[ResponseType]):Unit"></a>
+      <a id="any[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$20:reflect.runtime.universe.TypeTag[RequestType],implicitevidence$21:reflect.runtime.universe.TypeTag[ResponseType]):Unit"></a><a id="any[RequestType,ResponseType](String,String,Boolean,Option[RouteIndex])((RequestType)⇒ResponseType)(scala.reflect.api.JavaUniverse.TypeTag[RequestType],scala.reflect.api.JavaUniverse.TypeTag[ResponseType]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#any[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$20:Manifest[RequestType],implicitevidence$21:Manifest[ResponseType]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#any[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$20:reflect.runtime.universe.TypeTag[RequestType],implicitevidence$21:reflect.runtime.universe.TypeTag[ResponseType]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -604,7 +626,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">any</span><span class="tparams">[<span name="RequestType">RequestType</span>, <span name="ResponseType">ResponseType</span>]</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="index">index: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: (<span class="extype" name="com.twitter.finatra.http.RouteDSL.any.RequestType">RequestType</span>) ⇒ <span class="extype" name="com.twitter.finatra.http.RouteDSL.any.ResponseType">ResponseType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.any.RequestType">RequestType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.any.ResponseType">ResponseType</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">any</span><span class="tparams">[<span name="RequestType">RequestType</span>, <span name="ResponseType">ResponseType</span>]</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="index">index: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: (<span class="extype" name="com.twitter.finatra.http.RouteDSL.any.RequestType">RequestType</span>) ⇒ <span class="extype" name="com.twitter.finatra.http.RouteDSL.any.ResponseType">ResponseType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.any.RequestType">RequestType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.any.ResponseType">ResponseType</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
@@ -745,10 +767,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#delete" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="delete(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="delete(String,String,Boolean,RouteIndex,JavaCallback):Unit"></a>
+    </li><li name="com.twitter.finatra.http.RouteDSL#delete" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="delete(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="delete(String,String,Boolean,RouteIndex,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#delete(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#delete(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -757,14 +779,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">delete</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">delete</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#delete" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="delete(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="delete(String,Boolean,RouteIndex,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#delete" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="delete(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="delete(String,Boolean,RouteIndex,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#delete(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#delete(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -773,14 +795,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">delete</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">delete</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#delete" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="delete(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="delete(String,Boolean,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#delete" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="delete(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="delete(String,Boolean,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#delete(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#delete(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -789,14 +811,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">delete</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">delete</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#delete" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="delete(route:String,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="delete(String,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#delete" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="delete(route:String,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="delete(String,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#delete(route:String,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#delete(route:String,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -805,14 +827,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">delete</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">delete</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
     </li><li name="com.twitter.finatra.http.RouteDSL#delete" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="delete[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$10:Manifest[RequestType],implicitevidence$11:Manifest[ResponseType]):Unit"></a><a id="delete[RequestType,ResponseType](String,String,Boolean,Option[RouteIndex])((RequestType)⇒ResponseType)(Manifest[RequestType],Manifest[ResponseType]):Unit"></a>
+      <a id="delete[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$14:reflect.runtime.universe.TypeTag[RequestType],implicitevidence$15:reflect.runtime.universe.TypeTag[ResponseType]):Unit"></a><a id="delete[RequestType,ResponseType](String,String,Boolean,Option[RouteIndex])((RequestType)⇒ResponseType)(scala.reflect.api.JavaUniverse.TypeTag[RequestType],scala.reflect.api.JavaUniverse.TypeTag[ResponseType]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#delete[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$10:Manifest[RequestType],implicitevidence$11:Manifest[ResponseType]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#delete[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$14:reflect.runtime.universe.TypeTag[RequestType],implicitevidence$15:reflect.runtime.universe.TypeTag[ResponseType]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -821,7 +843,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">delete</span><span class="tparams">[<span name="RequestType">RequestType</span>, <span name="ResponseType">ResponseType</span>]</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="index">index: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: (<span class="extype" name="com.twitter.finatra.http.RouteDSL.delete.RequestType">RequestType</span>) ⇒ <span class="extype" name="com.twitter.finatra.http.RouteDSL.delete.ResponseType">ResponseType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.delete.RequestType">RequestType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.delete.ResponseType">ResponseType</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">delete</span><span class="tparams">[<span name="RequestType">RequestType</span>, <span name="ResponseType">ResponseType</span>]</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="index">index: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: (<span class="extype" name="com.twitter.finatra.http.RouteDSL.delete.RequestType">RequestType</span>) ⇒ <span class="extype" name="com.twitter.finatra.http.RouteDSL.delete.ResponseType">ResponseType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.delete.RequestType">RequestType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.delete.ResponseType">ResponseType</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
@@ -1007,10 +1029,10 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#get" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="get(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="get(String,String,Boolean,RouteIndex,JavaCallback):Unit"></a>
+    </li><li name="com.twitter.finatra.http.RouteDSL#get" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="get(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="get(String,String,Boolean,RouteIndex,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#get(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#get(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1019,14 +1041,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">get</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">get</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#get" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="get(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="get(String,Boolean,RouteIndex,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#get" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="get(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="get(String,Boolean,RouteIndex,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#get(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#get(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1035,14 +1057,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">get</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">get</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#get" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="get(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="get(String,Boolean,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#get" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="get(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="get(String,Boolean,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#get(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#get(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1051,14 +1073,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">get</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">get</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#get" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="get(route:String,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="get(String,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#get" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="get(route:String,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="get(String,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#get(route:String,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#get(route:String,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1067,14 +1089,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">get</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">get</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
     </li><li name="com.twitter.finatra.http.RouteDSL#get" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="get[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$4:Manifest[RequestType],implicitevidence$5:Manifest[ResponseType]):Unit"></a><a id="get[RequestType,ResponseType](String,String,Boolean,Option[RouteIndex])((RequestType)⇒ResponseType)(Manifest[RequestType],Manifest[ResponseType]):Unit"></a>
+      <a id="get[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$4:reflect.runtime.universe.TypeTag[RequestType],implicitevidence$5:reflect.runtime.universe.TypeTag[ResponseType]):Unit"></a><a id="get[RequestType,ResponseType](String,String,Boolean,Option[RouteIndex])((RequestType)⇒ResponseType)(scala.reflect.api.JavaUniverse.TypeTag[RequestType],scala.reflect.api.JavaUniverse.TypeTag[ResponseType]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#get[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$4:Manifest[RequestType],implicitevidence$5:Manifest[ResponseType]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#get[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$4:reflect.runtime.universe.TypeTag[RequestType],implicitevidence$5:reflect.runtime.universe.TypeTag[ResponseType]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1083,7 +1105,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">get</span><span class="tparams">[<span name="RequestType">RequestType</span>, <span name="ResponseType">ResponseType</span>]</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="index">index: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: (<span class="extype" name="com.twitter.finatra.http.RouteDSL.get.RequestType">RequestType</span>) ⇒ <span class="extype" name="com.twitter.finatra.http.RouteDSL.get.ResponseType">ResponseType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.get.RequestType">RequestType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.get.ResponseType">ResponseType</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">get</span><span class="tparams">[<span name="RequestType">RequestType</span>, <span name="ResponseType">ResponseType</span>]</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="index">index: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: (<span class="extype" name="com.twitter.finatra.http.RouteDSL.get.RequestType">RequestType</span>) ⇒ <span class="extype" name="com.twitter.finatra.http.RouteDSL.get.ResponseType">ResponseType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.get.RequestType">RequestType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.get.ResponseType">ResponseType</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
@@ -1125,10 +1147,10 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#head" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="head(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="head(String,String,Boolean,RouteIndex,JavaCallback):Unit"></a>
+    </li><li name="com.twitter.finatra.http.RouteDSL#head" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="head(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="head(String,String,Boolean,RouteIndex,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#head(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#head(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1137,14 +1159,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">head</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">head</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#head" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="head(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="head(String,Boolean,RouteIndex,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#head" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="head(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="head(String,Boolean,RouteIndex,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#head(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#head(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1153,14 +1175,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">head</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">head</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#head" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="head(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="head(String,Boolean,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#head" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="head(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="head(String,Boolean,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#head(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#head(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1169,14 +1191,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">head</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">head</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#head" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="head(route:String,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="head(String,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#head" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="head(route:String,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="head(String,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#head(route:String,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#head(route:String,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1185,14 +1207,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">head</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">head</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
     </li><li name="com.twitter.finatra.http.RouteDSL#head" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="head[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$16:Manifest[RequestType],implicitevidence$17:Manifest[ResponseType]):Unit"></a><a id="head[RequestType,ResponseType](String,String,Boolean,Option[RouteIndex])((RequestType)⇒ResponseType)(Manifest[RequestType],Manifest[ResponseType]):Unit"></a>
+      <a id="head[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$10:reflect.runtime.universe.TypeTag[RequestType],implicitevidence$11:reflect.runtime.universe.TypeTag[ResponseType]):Unit"></a><a id="head[RequestType,ResponseType](String,String,Boolean,Option[RouteIndex])((RequestType)⇒ResponseType)(scala.reflect.api.JavaUniverse.TypeTag[RequestType],scala.reflect.api.JavaUniverse.TypeTag[ResponseType]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#head[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$16:Manifest[RequestType],implicitevidence$17:Manifest[ResponseType]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#head[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$10:reflect.runtime.universe.TypeTag[RequestType],implicitevidence$11:reflect.runtime.universe.TypeTag[ResponseType]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1201,7 +1223,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">head</span><span class="tparams">[<span name="RequestType">RequestType</span>, <span name="ResponseType">ResponseType</span>]</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="index">index: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: (<span class="extype" name="com.twitter.finatra.http.RouteDSL.head.RequestType">RequestType</span>) ⇒ <span class="extype" name="com.twitter.finatra.http.RouteDSL.head.ResponseType">ResponseType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.head.RequestType">RequestType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.head.ResponseType">ResponseType</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">head</span><span class="tparams">[<span name="RequestType">RequestType</span>, <span name="ResponseType">ResponseType</span>]</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="index">index: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: (<span class="extype" name="com.twitter.finatra.http.RouteDSL.head.RequestType">RequestType</span>) ⇒ <span class="extype" name="com.twitter.finatra.http.RouteDSL.head.ResponseType">ResponseType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.head.RequestType">RequestType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.head.ResponseType">ResponseType</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
@@ -1547,10 +1569,10 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#options" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="options(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="options(String,String,Boolean,RouteIndex,JavaCallback):Unit"></a>
+    </li><li name="com.twitter.finatra.http.RouteDSL#options" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="options(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="options(String,String,Boolean,RouteIndex,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#options(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#options(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1559,14 +1581,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">options</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">options</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#options" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="options(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="options(String,Boolean,RouteIndex,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#options" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="options(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="options(String,Boolean,RouteIndex,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#options(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#options(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1575,14 +1597,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">options</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">options</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#options" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="options(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="options(String,Boolean,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#options" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="options(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="options(String,Boolean,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#options(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#options(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1591,14 +1613,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">options</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">options</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#options" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="options(route:String,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="options(String,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#options" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="options(route:String,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="options(String,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#options(route:String,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#options(route:String,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1607,14 +1629,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">options</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">options</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
     </li><li name="com.twitter.finatra.http.RouteDSL#options" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="options[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$12:Manifest[RequestType],implicitevidence$13:Manifest[ResponseType]):Unit"></a><a id="options[RequestType,ResponseType](String,String,Boolean,Option[RouteIndex])((RequestType)⇒ResponseType)(Manifest[RequestType],Manifest[ResponseType]):Unit"></a>
+      <a id="options[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$18:reflect.runtime.universe.TypeTag[RequestType],implicitevidence$19:reflect.runtime.universe.TypeTag[ResponseType]):Unit"></a><a id="options[RequestType,ResponseType](String,String,Boolean,Option[RouteIndex])((RequestType)⇒ResponseType)(scala.reflect.api.JavaUniverse.TypeTag[RequestType],scala.reflect.api.JavaUniverse.TypeTag[ResponseType]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#options[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$12:Manifest[RequestType],implicitevidence$13:Manifest[ResponseType]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#options[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$18:reflect.runtime.universe.TypeTag[RequestType],implicitevidence$19:reflect.runtime.universe.TypeTag[ResponseType]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1623,14 +1645,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">options</span><span class="tparams">[<span name="RequestType">RequestType</span>, <span name="ResponseType">ResponseType</span>]</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="index">index: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: (<span class="extype" name="com.twitter.finatra.http.RouteDSL.options.RequestType">RequestType</span>) ⇒ <span class="extype" name="com.twitter.finatra.http.RouteDSL.options.ResponseType">ResponseType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.options.RequestType">RequestType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.options.ResponseType">ResponseType</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">options</span><span class="tparams">[<span name="RequestType">RequestType</span>, <span name="ResponseType">ResponseType</span>]</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="index">index: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: (<span class="extype" name="com.twitter.finatra.http.RouteDSL.options.RequestType">RequestType</span>) ⇒ <span class="extype" name="com.twitter.finatra.http.RouteDSL.options.ResponseType">ResponseType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.options.RequestType">RequestType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.options.ResponseType">ResponseType</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#patch" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="patch(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="patch(String,String,Boolean,RouteIndex,JavaCallback):Unit"></a>
+    </li><li name="com.twitter.finatra.http.RouteDSL#patch" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="patch(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="patch(String,String,Boolean,RouteIndex,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#patch(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#patch(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1639,14 +1661,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">patch</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">patch</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#patch" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="patch(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="patch(String,Boolean,RouteIndex,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#patch" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="patch(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="patch(String,Boolean,RouteIndex,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#patch(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#patch(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1655,14 +1677,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">patch</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">patch</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#patch" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="patch(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="patch(String,Boolean,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#patch" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="patch(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="patch(String,Boolean,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#patch(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#patch(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1671,14 +1693,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">patch</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">patch</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#patch" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="patch(route:String,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="patch(String,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#patch" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="patch(route:String,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="patch(String,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#patch(route:String,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#patch(route:String,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1687,14 +1709,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">patch</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">patch</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
     </li><li name="com.twitter.finatra.http.RouteDSL#patch" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="patch[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$14:Manifest[RequestType],implicitevidence$15:Manifest[ResponseType]):Unit"></a><a id="patch[RequestType,ResponseType](String,String,Boolean,Option[RouteIndex])((RequestType)⇒ResponseType)(Manifest[RequestType],Manifest[ResponseType]):Unit"></a>
+      <a id="patch[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$12:reflect.runtime.universe.TypeTag[RequestType],implicitevidence$13:reflect.runtime.universe.TypeTag[ResponseType]):Unit"></a><a id="patch[RequestType,ResponseType](String,String,Boolean,Option[RouteIndex])((RequestType)⇒ResponseType)(scala.reflect.api.JavaUniverse.TypeTag[RequestType],scala.reflect.api.JavaUniverse.TypeTag[ResponseType]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#patch[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$14:Manifest[RequestType],implicitevidence$15:Manifest[ResponseType]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#patch[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$12:reflect.runtime.universe.TypeTag[RequestType],implicitevidence$13:reflect.runtime.universe.TypeTag[ResponseType]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1703,14 +1725,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">patch</span><span class="tparams">[<span name="RequestType">RequestType</span>, <span name="ResponseType">ResponseType</span>]</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="index">index: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: (<span class="extype" name="com.twitter.finatra.http.RouteDSL.patch.RequestType">RequestType</span>) ⇒ <span class="extype" name="com.twitter.finatra.http.RouteDSL.patch.ResponseType">ResponseType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.patch.RequestType">RequestType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.patch.ResponseType">ResponseType</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">patch</span><span class="tparams">[<span name="RequestType">RequestType</span>, <span name="ResponseType">ResponseType</span>]</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="index">index: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: (<span class="extype" name="com.twitter.finatra.http.RouteDSL.patch.RequestType">RequestType</span>) ⇒ <span class="extype" name="com.twitter.finatra.http.RouteDSL.patch.ResponseType">ResponseType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.patch.RequestType">RequestType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.patch.ResponseType">ResponseType</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#post" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="post(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="post(String,String,Boolean,RouteIndex,JavaCallback):Unit"></a>
+    </li><li name="com.twitter.finatra.http.RouteDSL#post" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="post(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="post(String,String,Boolean,RouteIndex,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#post(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#post(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1719,14 +1741,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">post</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">post</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#post" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="post(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="post(String,Boolean,RouteIndex,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#post" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="post(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="post(String,Boolean,RouteIndex,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#post(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#post(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1735,14 +1757,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">post</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">post</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#post" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="post(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="post(String,Boolean,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#post" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="post(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="post(String,Boolean,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#post(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#post(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1751,14 +1773,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">post</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">post</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#post" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="post(route:String,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="post(String,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#post" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="post(route:String,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="post(String,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#post(route:String,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#post(route:String,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1767,14 +1789,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">post</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">post</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
     </li><li name="com.twitter.finatra.http.RouteDSL#post" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="post[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$6:Manifest[RequestType],implicitevidence$7:Manifest[ResponseType]):Unit"></a><a id="post[RequestType,ResponseType](String,String,Boolean,Option[RouteIndex])((RequestType)⇒ResponseType)(Manifest[RequestType],Manifest[ResponseType]):Unit"></a>
+      <a id="post[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$6:reflect.runtime.universe.TypeTag[RequestType],implicitevidence$7:reflect.runtime.universe.TypeTag[ResponseType]):Unit"></a><a id="post[RequestType,ResponseType](String,String,Boolean,Option[RouteIndex])((RequestType)⇒ResponseType)(scala.reflect.api.JavaUniverse.TypeTag[RequestType],scala.reflect.api.JavaUniverse.TypeTag[ResponseType]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#post[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$6:Manifest[RequestType],implicitevidence$7:Manifest[ResponseType]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#post[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$6:reflect.runtime.universe.TypeTag[RequestType],implicitevidence$7:reflect.runtime.universe.TypeTag[ResponseType]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1783,7 +1805,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">post</span><span class="tparams">[<span name="RequestType">RequestType</span>, <span name="ResponseType">ResponseType</span>]</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="index">index: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: (<span class="extype" name="com.twitter.finatra.http.RouteDSL.post.RequestType">RequestType</span>) ⇒ <span class="extype" name="com.twitter.finatra.http.RouteDSL.post.ResponseType">ResponseType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.post.RequestType">RequestType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.post.ResponseType">ResponseType</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">post</span><span class="tparams">[<span name="RequestType">RequestType</span>, <span name="ResponseType">ResponseType</span>]</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="index">index: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: (<span class="extype" name="com.twitter.finatra.http.RouteDSL.post.RequestType">RequestType</span>) ⇒ <span class="extype" name="com.twitter.finatra.http.RouteDSL.post.ResponseType">ResponseType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.post.RequestType">RequestType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.post.ResponseType">ResponseType</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
@@ -1803,10 +1825,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#put" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="put(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="put(String,String,Boolean,RouteIndex,JavaCallback):Unit"></a>
+    </li><li name="com.twitter.finatra.http.RouteDSL#put" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="put(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="put(String,String,Boolean,RouteIndex,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#put(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#put(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1815,14 +1837,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">put</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">put</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#put" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="put(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="put(String,Boolean,RouteIndex,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#put" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="put(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="put(String,Boolean,RouteIndex,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#put(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#put(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1831,14 +1853,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">put</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">put</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#put" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="put(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="put(String,Boolean,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#put" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="put(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="put(String,Boolean,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#put(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#put(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1847,14 +1869,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">put</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">put</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#put" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="put(route:String,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="put(String,JavaCallback):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#put" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="put(route:String,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="put(String,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#put(route:String,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#put(route:String,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1863,14 +1885,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">put</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">put</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
     </li><li name="com.twitter.finatra.http.RouteDSL#put" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="put[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$8:Manifest[RequestType],implicitevidence$9:Manifest[ResponseType]):Unit"></a><a id="put[RequestType,ResponseType](String,String,Boolean,Option[RouteIndex])((RequestType)⇒ResponseType)(Manifest[RequestType],Manifest[ResponseType]):Unit"></a>
+      <a id="put[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$8:reflect.runtime.universe.TypeTag[RequestType],implicitevidence$9:reflect.runtime.universe.TypeTag[ResponseType]):Unit"></a><a id="put[RequestType,ResponseType](String,String,Boolean,Option[RouteIndex])((RequestType)⇒ResponseType)(scala.reflect.api.JavaUniverse.TypeTag[RequestType],scala.reflect.api.JavaUniverse.TypeTag[ResponseType]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#put[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$8:Manifest[RequestType],implicitevidence$9:Manifest[ResponseType]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#put[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$8:reflect.runtime.universe.TypeTag[RequestType],implicitevidence$9:reflect.runtime.universe.TypeTag[ResponseType]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1879,7 +1901,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">put</span><span class="tparams">[<span name="RequestType">RequestType</span>, <span name="ResponseType">ResponseType</span>]</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="index">index: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: (<span class="extype" name="com.twitter.finatra.http.RouteDSL.put.RequestType">RequestType</span>) ⇒ <span class="extype" name="com.twitter.finatra.http.RouteDSL.put.ResponseType">ResponseType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.put.RequestType">RequestType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.put.ResponseType">ResponseType</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">put</span><span class="tparams">[<span name="RequestType">RequestType</span>, <span name="ResponseType">ResponseType</span>]</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="index">index: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: (<span class="extype" name="com.twitter.finatra.http.RouteDSL.put.RequestType">RequestType</span>) ⇒ <span class="extype" name="com.twitter.finatra.http.RouteDSL.put.ResponseType">ResponseType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.put.RequestType">RequestType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.put.ResponseType">ResponseType</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
@@ -1947,70 +1969,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="trace(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="trace(String,String,Boolean,RouteIndex,JavaCallback):Unit"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#trace(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">trace</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="trace(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="trace(String,Boolean,RouteIndex,JavaCallback):Unit"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#trace(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">trace</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="trace(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="trace(String,Boolean,JavaCallback):Unit"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#trace(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">trace</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.AbstractController#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="trace(route:String,callback:com.twitter.finatra.http.JavaCallback):Unit"></a><a id="trace(String,JavaCallback):Unit"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#trace(route:String,callback:com.twitter.finatra.http.JavaCallback):Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">trace</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="com.twitter.util.logging.Logging#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trace(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="trace(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
@@ -2075,10 +2033,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.RouteDSL#trace" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="trace[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$18:Manifest[RequestType],implicitevidence$19:Manifest[ResponseType]):Unit"></a><a id="trace[RequestType,ResponseType](String,String,Boolean,Option[RouteIndex])((RequestType)⇒ResponseType)(Manifest[RequestType],Manifest[ResponseType]):Unit"></a>
+    </li><li name="com.twitter.finatra.http.RouteDSL#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="trace(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="trace(String,String,Boolean,RouteIndex,JavaCallback[Request,AnyRef]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractController.html#trace[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$18:Manifest[RequestType],implicitevidence$19:Manifest[ResponseType]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#trace(route:String,name:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2087,7 +2045,71 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">trace</span><span class="tparams">[<span name="RequestType">RequestType</span>, <span name="ResponseType">ResponseType</span>]</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="index">index: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: (<span class="extype" name="com.twitter.finatra.http.RouteDSL.trace.RequestType">RequestType</span>) ⇒ <span class="extype" name="com.twitter.finatra.http.RouteDSL.trace.ResponseType">ResponseType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.trace.RequestType">RequestType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.trace.ResponseType">ResponseType</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">trace</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="trace(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="trace(String,Boolean,RouteIndex,JavaCallback[Request,AnyRef]):Unit"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#trace(route:String,admin:Boolean,index:com.twitter.finagle.http.RouteIndex,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">trace</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="index">index: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="trace(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="trace(String,Boolean,JavaCallback[Request,AnyRef]):Unit"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#trace(route:String,admin:Boolean,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">trace</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="trace(route:String,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit"></a><a id="trace(String,JavaCallback[Request,AnyRef]):Unit"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#trace(route:String,callback:com.twitter.finatra.http.JavaCallback[com.twitter.finagle.http.Request,Object]):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">trace</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="JavaCallback.html" class="extype" name="com.twitter.finatra.http.JavaCallback">JavaCallback</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.RouteDSL#trace" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="trace[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$16:reflect.runtime.universe.TypeTag[RequestType],implicitevidence$17:reflect.runtime.universe.TypeTag[ResponseType]):Unit"></a><a id="trace[RequestType,ResponseType](String,String,Boolean,Option[RouteIndex])((RequestType)⇒ResponseType)(scala.reflect.api.JavaUniverse.TypeTag[RequestType],scala.reflect.api.JavaUniverse.TypeTag[ResponseType]):Unit"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractController.html#trace[RequestType,ResponseType](route:String,name:String,admin:Boolean,index:Option[com.twitter.finagle.http.RouteIndex])(callback:RequestType=&gt;ResponseType)(implicitevidence$16:reflect.runtime.universe.TypeTag[RequestType],implicitevidence$17:reflect.runtime.universe.TypeTag[ResponseType]):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">trace</span><span class="tparams">[<span name="RequestType">RequestType</span>, <span name="ResponseType">ResponseType</span>]</span><span class="params">(<span name="route">route: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="index">index: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RouteIndex.html#com.twitter.finagle.http.RouteIndex" class="extype" name="com.twitter.finagle.http.RouteIndex">RouteIndex</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: (<span class="extype" name="com.twitter.finatra.http.RouteDSL.trace.RequestType">RequestType</span>) ⇒ <span class="extype" name="com.twitter.finatra.http.RouteDSL.trace.ResponseType">ResponseType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.trace.RequestType">RequestType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.RouteDSL.trace.ResponseType">ResponseType</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>RouteDSL</dd></dl></div>

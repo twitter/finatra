@@ -151,12 +151,12 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.http">http</a></dd></dl></div>
     </li><li class="current-entities indented5">
                         <a class="object" href="HttpRouter$.html" title=""></a>
-                        <a class="class" href="" title=""></a>
-                        <a href="" title="">HttpRouter</a>
+                        <a class="class" href="" title="Builds &quot;external&quot; and &quot;admin&quot; instances of a com.twitter.finatra.http.internal.routing.RoutingService which is a subclass of a com.twitter.finagle.Service."></a>
+                        <a href="" title="Builds &quot;external&quot; and &quot;admin&quot; instances of a com.twitter.finatra.http.internal.routing.RoutingService which is a subclass of a com.twitter.finagle.Service.">HttpRouter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="HttpWarmup.html" title=""></a>
-                        <a href="HttpWarmup.html" title="">HttpWarmup</a>
+                        <a class="class" href="HttpWarmup.html" title="A utility for performing requests to endpoints defined by a configured HttpRouter for the purpose of warming up the HttpServer."></a>
+                        <a href="HttpWarmup.html" title="A utility for performing requests to endpoints defined by a configured HttpRouter for the purpose of warming up the HttpServer.">HttpWarmup</a>
                       </li>
               </ul>
             </div>
@@ -187,10 +187,15 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Annotations</dt><dd>
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Builds &quot;external&quot; and &quot;admin&quot; instances of a <span class="extype" name="com.twitter.finatra.http.internal.routing.RoutingService">com.twitter.finatra.http.internal.routing.RoutingService</span>
+which is a subclass of a <span class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</span>. The &quot;external&quot; <span class="extype" name="RoutingService">RoutingService</span> will
+be served on the bound external <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ListeningServer.html" class="extype" name="com.twitter.finagle.ListeningServer">com.twitter.finagle.ListeningServer</a>, the &quot;admin&quot; <span class="extype" name="RoutingService">RoutingService</span>
+will be added as endpoints to the <span class="extype" name="com.twitter.finagle.http.HttpMuxer">com.twitter.finagle.http.HttpMuxer</span> for serving on the
+TwitterServer HTTP Admin Interface.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Singleton</span><span class="args">()</span>
               
-        </dd></dl><div class="toggleContainer block">
+        </dd><dt>See also</dt><dd><span class="cmt"><p><a href="http://twitter.github.io/finatra/user-guide/http/controllers.html#controllers-and-routing" target="_blank">http://twitter.github.io/finatra/user-guide/http/controllers.html#controllers-and-routing</a></p></span><span class="cmt"><p><a href="http://twitter.github.io/finatra/user-guide/http/controllers.html#admin-paths" target="_blank">http://twitter.github.io/finatra/user-guide/http/controllers.html#admin-paths</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/twitter-server/Admin.html" target="_blank">TwitterServer HTTP Admin Interface</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>

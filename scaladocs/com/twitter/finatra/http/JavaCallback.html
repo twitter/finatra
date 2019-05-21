@@ -327,8 +327,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="com.twitter.finatra.http">http</a></dd></dl></div>
     </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="class" href="AbstractController.html" title=""></a>
-                        <a href="AbstractController.html" title="">AbstractController</a>
+                        <a class="class" href="AbstractController.html" title="com.twitter.finatra.http.Controller for Java Compatibility"></a>
+                        <a href="AbstractController.html" title="com.twitter.finatra.http.Controller for Java Compatibility">AbstractController</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
                         <a class="class" href="AbstractHttpServer.html" title="A Finagle server which exposes an external HTTP or HTTPS interfaces implemented by a Service[Request, Response] configured via an HttpRouter."></a>
@@ -380,7 +380,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">JavaCallback</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">JavaCallback</span><span class="tparams">[<span name="RequestType">RequestType</span>, <span name="ResponseType">ResponseType</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
 
@@ -439,10 +439,10 @@
 
         <div class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="com.twitter.finatra.http.JavaCallback#handle" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="handle(request:com.twitter.finagle.http.Request):Object"></a><a id="handle(Request):AnyRef"></a>
+              <ol><li name="com.twitter.finatra.http.JavaCallback#apply" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="apply(request:RequestType):ResponseType"></a><a id="apply(RequestType):ResponseType"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/JavaCallback.html#handle(request:com.twitter.finagle.http.Request):Object" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/JavaCallback.html#apply(request:RequestType):ResponseType" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -451,7 +451,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">handle</span><span class="params">(<span name="request">request: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">apply</span><span class="params">(<span name="request">request: <span class="extype" name="com.twitter.finatra.http.JavaCallback.RequestType">RequestType</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finatra.http.JavaCallback.ResponseType">ResponseType</span></span>
       </span>
       
       

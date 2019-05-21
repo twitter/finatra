@@ -134,13 +134,13 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.inject">inject</a></dd></dl></div>
     </li><li class="current-entities indented4">
-                        <span class="separator"></span>
-                        <a class="class" href="FinagleRequestScope.html" title="A Guice 'Request Scope' implemented with com.twitter.util.Local"></a>
-                        <a href="FinagleRequestScope.html" title="A Guice 'Request Scope' implemented with com.twitter.util.Local">FinagleRequestScope</a>
+                        <a class="object" href="FinagleRequestScope$.html" title=""></a>
+                        <a class="class" href="FinagleRequestScope.html" title="A Guice Custom Scope implemented with com.twitter.util.Local to mimic the behavior of the '@RequestScoped' scope using com.twitter.util.Local to work within the context of com.twitter.util.Futures."></a>
+                        <a href="FinagleRequestScope.html" title="A Guice Custom Scope implemented with com.twitter.util.Local to mimic the behavior of the '@RequestScoped' scope using com.twitter.util.Local to work within the context of com.twitter.util.Futures.">FinagleRequestScope</a>
                       </li><li class="current-entities indented4">
-                        <span class="separator"></span>
-                        <a class="class" href="FinagleRequestScopeFilter.html" title=""></a>
-                        <a href="FinagleRequestScopeFilter.html" title="">FinagleRequestScopeFilter</a>
+                        <a class="object" href="FinagleRequestScopeFilter$.html" title=""></a>
+                        <a class="class" href="FinagleRequestScopeFilter.html" title="A com.twitter.finagle.Filter which is responsible for preparing scoping of the custom com.twitter.inject.requestscope.FinagleRequestScope around this Filter's underlying com.twitter.finagle.Service."></a>
+                        <a href="FinagleRequestScopeFilter.html" title="A com.twitter.finagle.Filter which is responsible for preparing scoping of the custom com.twitter.inject.requestscope.FinagleRequestScope around this Filter's underlying com.twitter.finagle.Service.">FinagleRequestScopeFilter</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
                         <a class="object" href="FinagleRequestScopeModule$.html" title=""></a>
@@ -556,9 +556,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../google/inject/index.html" class="extype" name="com.google.inject">com.google.inject</a>] </dd><dt>Definition Classes</dt><dd>AbstractModule</dd></dl></div>
     </li><li name="com.twitter.inject.requestscope.RequestScopeBinding#bindRequestScope" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="bindRequestScope[T](implicitevidence$1:Manifest[T]):Unit"></a><a id="bindRequestScope[T](Manifest[T]):Unit"></a>
+      <a id="bindRequestScope[T]()(implicitevidence$1:Manifest[T]):Unit"></a><a id="bindRequestScope[T]()(Manifest[T]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/requestscope/RequestScopeBinding.html#bindRequestScope[T](implicitevidence$1:Manifest[T]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/inject/requestscope/RequestScopeBinding.html#bindRequestScope[T]()(implicitevidence$1:Manifest[T]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -567,7 +567,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bindRequestScope</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.requestscope.RequestScopeBinding.bindRequestScope.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">bindRequestScope</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.requestscope.RequestScopeBinding.bindRequestScope.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>

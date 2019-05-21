@@ -151,12 +151,12 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.http">http</a></dd></dl></div>
     </li><li class="current-entities indented5">
                         <a class="object" href="HttpRouter$.html" title=""></a>
-                        <a class="class" href="HttpRouter.html" title=""></a>
-                        <a href="HttpRouter.html" title="">HttpRouter</a>
+                        <a class="class" href="HttpRouter.html" title="Builds &quot;external&quot; and &quot;admin&quot; instances of a com.twitter.finatra.http.internal.routing.RoutingService which is a subclass of a com.twitter.finagle.Service."></a>
+                        <a href="HttpRouter.html" title="Builds &quot;external&quot; and &quot;admin&quot; instances of a com.twitter.finatra.http.internal.routing.RoutingService which is a subclass of a com.twitter.finagle.Service.">HttpRouter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="" title=""></a>
-                        <a href="" title="">HttpWarmup</a>
+                        <a class="class" href="" title="A utility for performing requests to endpoints defined by a configured HttpRouter for the purpose of warming up the HttpServer."></a>
+                        <a href="" title="A utility for performing requests to endpoints defined by a configured HttpRouter for the purpose of warming up the HttpServer.">HttpWarmup</a>
                       </li>
               </ul>
             </div>
@@ -185,7 +185,9 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A utility for performing requests to endpoints defined by a configured <a href="HttpRouter.html" class="extype" name="com.twitter.finatra.http.routing.HttpRouter">HttpRouter</a> for the
+purpose of warming up the <code>HttpServer</code>.
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>This only provides routing to user-defined routes of the configured <a href="HttpRouter.html" class="extype" name="com.twitter.finatra.http.routing.HttpRouter">HttpRouter</a>.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="HttpRouter.html" class="extype" name="com.twitter.finatra.http.routing.HttpRouter">com.twitter.finatra.http.routing.HttpRouter</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -250,7 +252,7 @@
         <span class="name">HttpWarmup</span><span class="params">(<span name="router">router: <a href="HttpRouter.html" class="extype" name="com.twitter.finatra.http.routing.HttpRouter">HttpRouter</a></span>, <span name="mapper">mapper: <a href="../../json/FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">FinatraObjectMapper</a></span>)</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">router</dt><dd class="cmt"><p>the configured <a href="HttpRouter.html" class="extype" name="com.twitter.finatra.http.routing.HttpRouter">com.twitter.finatra.http.routing.HttpRouter</a></p></dd><dt class="param">mapper</dt><dd class="cmt"><p>the configured server <a href="../../json/FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">com.twitter.finatra.json.FinatraObjectMapper</a></p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Inject</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -964,9 +966,9 @@
               
         </dd></dl></div>
     </li><li name="com.twitter.finatra.http.routing.HttpWarmup#send" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="send(request:=&gt;com.twitter.finagle.http.Request,forceRouteToAdminHttpMuxers:Boolean,times:Int,responseCallback:com.twitter.finagle.http.Response=&gt;Unit):Unit"></a><a id="send(⇒Request,Boolean,Int,(Response)⇒Unit):Unit"></a>
+      <a id="send(request:=&gt;com.twitter.finagle.http.Request,admin:Boolean,times:Int)(responseCallback:com.twitter.finagle.http.Response=&gt;Unit):Unit"></a><a id="send(⇒Request,Boolean,Int)((Response)⇒Unit):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/routing/HttpWarmup.html#send(request:=&gt;com.twitter.finagle.http.Request,forceRouteToAdminHttpMuxers:Boolean,times:Int,responseCallback:com.twitter.finagle.http.Response=&gt;Unit):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpWarmup.html#send(request:=&gt;com.twitter.finagle.http.Request,admin:Boolean,times:Int)(responseCallback:com.twitter.finagle.http.Response=&gt;Unit):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -975,15 +977,15 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">send</span><span class="params">(<span name="request">request: ⇒ <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a></span>, <span name="forceRouteToAdminHttpMuxers">forceRouteToAdminHttpMuxers: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="times">times: <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a> = <span class="symbol">1</span></span>, <span name="responseCallback">responseCallback: (<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a>) ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a> = <span class="symbol">identity</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">send</span><span class="params">(<span name="request">request: ⇒ <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="times">times: <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a> = <span class="symbol">1</span></span>)</span><span class="params">(<span name="responseCallback">responseCallback: (<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a>) ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a> = <span class="symbol">unitFunction</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <p class="shortcomment cmt">Send a request to warmup services that are not yet externally receiving traffic.</p><div class="fullcomment"><div class="comment cmt"><p>Send a request to warmup services that are not yet externally receiving traffic.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>- <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a> to send</p></dd><dt class="param">forceRouteToAdminHttpMuxers</dt><dd class="cmt"><p>- route the request to the HttpMuxer (e.g. needed for twitter-server admin
-                                   endpoints that do not start with /admin)</p></dd><dt class="param">times</dt><dd class="cmt"><p>- number of times to send the request</p></dd><dt class="param">responseCallback</dt><dd class="cmt"><p>- callback called for every response where assertions can be made. NOTE: be aware that
-                        failed assertions that throws Exceptions could prevent a server from restarting. This is
-                        generally when dependent services are unresponsive causing the warm-up request(s) to fail.
-                        As such, you should wrap your warm-up calls in these situations in a try/catch {}.</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a> to send.</p></dd><dt class="param">admin</dt><dd class="cmt"><p>if the request should be sent to a route that is intended to be exposed on the
+             TwitterServer HTTP admin interface.</p></dd><dt class="param">times</dt><dd class="cmt"><p>the number of times to send the request.</p></dd><dt class="param">responseCallback</dt><dd class="cmt"><p>a callback called for every response where assertions can be made.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>be aware that in the response callback, failed assertions that throw exceptions could
+      prevent a server from starting. This is generally when dependent services are
+      unresponsive, causing the warm-up request(s) to fail. As such, you should wrap your
+      warm-up calls in these situations in a try/catch {}.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="http://twitter.github.io/finatra/user-guide/http/controllers.html#controllers-and-routing" target="_blank">http://twitter.github.io/finatra/user-guide/http/controllers.html#controllers-and-routing</a></p></span><span class="cmt"><p><a href="http://twitter.github.io/finatra/user-guide/http/controllers.html#admin-paths" target="_blank">http://twitter.github.io/finatra/user-guide/http/controllers.html#admin-paths</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/twitter-server/Admin.html" target="_blank">TwitterServer HTTP Admin Interface</a></p></span></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">

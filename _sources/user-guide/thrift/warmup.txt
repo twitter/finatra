@@ -74,6 +74,7 @@ the following handler:
     import com.twitter.inject.Logging
     import com.twitter.inject.utils.Handler
     import com.twitter.util.{Await, Return, Throw, Try}
+    import scala.util.control.NonFatal
     import javax.inject.Inject
 
     class ExampleThriftWarmupHandler @Inject()(
@@ -97,7 +98,7 @@ the following handler:
                 }
             }
         } catch {
-          case e: Throwable =>
+          case NonFatal(e) =>
             // Here we don't want a warmup failure to prevent server start-up --
             // this is important if your service will call downstream services
             // during warmup that could be temporarily down or unavailable.

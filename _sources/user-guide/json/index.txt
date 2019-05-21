@@ -101,7 +101,7 @@ Finatra provides a custom `case class deserializer <https://github.com/twitter/f
 -  Throws a `JsonException` when required fields are missing from the parsed JSON.
 -  Use default values when fields are missing in the incoming JSON.
 -  Properly deserialize a `Seq[Long]` (see https://github.com/FasterXML/jackson-module-scala/issues/62).
--  Support `"wrapped values" <https://docs.scala-lang.org/overviews/core/value-classes.html>`__ using `WrappedValue` (needed since `jackson-module-scala <https://github.com/FasterXML/jackson-module-scala>`__ does not support the ``@JsonCreator`` annotation).
+-  Support `"wrapped values" <https://docs.scala-lang.org/overviews/core/value-classes.html>`__ using `WrappedValue`.
 -  Support for accumulating JSON parsing errors (instead of failing fast).
 -  Support for field and method level validations which also accumulate errors.
 
@@ -112,5 +112,9 @@ We recommend the use of `Java Enums <https://docs.oracle.com/javase/tutorial/jav
 
 The following `Jackson annotations <https://github.com/FasterXML/jackson-annotations>`__ may be useful when working with Enums:
 
--  ``@JsonCreator`` can be used for a custom fromString method
 -  ``@JsonValue`` can be used for on an overridden toString method
+
+Known limitations
+-----------------
+
+-  ``@JsonCreator`` is not supported. Finatra ignores this annotation (see: `#447 <https://github.com/twitter/finatra/issues/447>`).

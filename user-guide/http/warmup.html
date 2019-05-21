@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>HTTP Server Warmup &#8212; Finatra 19.4.0 documentation</title>
+    <title>HTTP Server Warmup &#8212; Finatra 19.5.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.4.0',
+        VERSION:     '19.5.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.4.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.5.1 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Jackson Integration" href="../json/index.html" />
     <link rel="prev" title="HTTP Exception Mapping" href="exceptions.html" />
@@ -131,6 +131,7 @@ following handler:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.routing.HttpWarmup
 import com.twitter.finatra.httpclient.RequestBuilder._
 import com.twitter.inject.utils.Handler
+import scala.util.control.NonFatal
 import javax.inject.Inject
 
 class ExampleWarmupHandler @Inject()(
@@ -139,10 +140,9 @@ class ExampleWarmupHandler @Inject()(
 
   override def handle(): Unit = {
     try {
-      warmup.send(
-        get(&quot;/ping&quot;))
+      warmup.send(get(&quot;/ping&quot;))()
     } catch {
-      case e: Throwable =&gt;
+      case NonFatal(e) =&gt;
         // Here we don&#39;t want a warmup failure to prevent server start-up --
         // this is important if your service will call downstream services
         // during warmup that could be temporarily down or unavailable.

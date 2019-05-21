@@ -433,7 +433,7 @@ builder-like API for creating responses.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: allow_$eq" class="name">allow_=</span><span class="params">(<span name="values">values: <span class="extype" name="scala.Iterable">Iterable</span>[<span class="extype" name="com.twitter.finagle.http.Method">Method</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span title="gt4s: allow_$eq" class="name">allow_=</span><span class="params">(<span name="values">values: <span class="extype" name="scala.Iterable">Iterable</span>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Method.html#com.twitter.finagle.http.Method" class="extype" name="com.twitter.finagle.http.Method">Method</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd></dl></div>
@@ -2857,26 +2857,7 @@ the response body.
 
         <div class="values members">
               <h3>Deprecated Value Members</h3>
-              <ol><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#contentType" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="contentType(mediaType:com.google.common.net.MediaType):ResponseBuilder.this.EnrichedResponse"></a><a id="contentType(MediaType):EnrichedResponse"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#contentType(mediaType:com.google.common.net.MediaType):ResponseBuilder.this.EnrichedResponse" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 2017-12-12) Use contentType(mediaType: String) using a String representation of the MediaType">contentType</span><span class="params">(<span name="mediaType">mediaType: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2017-12-12)</i> Use contentType(mediaType: String) using a String representation of the MediaType</p></dd></dl></div>
-    </li><li name="com.twitter.finagle.http.Response#getStatusCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="com.twitter.finagle.http.Response#getStatusCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getStatusCode():Int"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#getStatusCode():Int" title="Permalink">
@@ -2895,25 +2876,6 @@ the response body.
                 <span class="name">@deprecated</span>
               
         </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version Use <a href="#statusCode(value:Int):Response.this.type" class="extmbr" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#statusCode">statusCode</a> instead)</i> 2017-02-17</p></dd></dl></div>
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#header" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="header(k:String,v:com.google.common.net.MediaType):ResponseBuilder.this.EnrichedResponse"></a><a id="header(String,MediaType):EnrichedResponse"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#header(k:String,v:com.google.common.net.MediaType):ResponseBuilder.this.EnrichedResponse" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 2017-12-12) Use header(key: String, v: Any) using a String representation  of the MediaType">header</span><span class="params">(<span name="k">k: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2017-12-12)</i> Use header(key: String, v: Any) using a String representation  of the MediaType</p></dd></dl></div>
     </li><li name="com.twitter.finagle.http.Response#setStatusCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setStatusCode(value:Int):Unit"></a><a id="setStatusCode(Int):Unit"></a>
       <span class="permalink">

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Flags &#8212; Finatra 19.4.0 documentation</title>
+    <title>Flags &#8212; Finatra 19.5.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.4.0',
+        VERSION:     '19.5.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.4.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.5.1 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Future Gotchas" href="futures.html" />
     <link rel="prev" title="Binding Annotations" href="binding_annotations.html" />
@@ -225,9 +225,22 @@ not able to obtain enough type information to properly bind to any paramaterized
 <cite>Seq[T]</cite> or <cite>Map[K, V]</cite> as the <a class="reference external" href="https://github.com/twitter/util/blob/1bdeab56e49015c1f4c097ef76e47b93a079a239/util-app/src/main/scala/com/twitter/app/Flaggable.scala#L19"><code class="docutils literal"><span class="pre">Flaggable[T]</span></code></a> trait does not currently carry enough type
 information to construct the correct binding key.</p>
 </div>
-<p>When defining a Flag you can also simply dereference the Flag value directly within the Module or
-server (in lieu of using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/java/com/twitter/inject/annotations/Flag.java"><code class="docutils literal"><span class="pre">&#64;Flag</span></code></a> annotation). Just keep a local reference to the created Flag
-then use the <a class="reference external" href="https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L171">Flag#apply</a>,
+</div>
+<div class="section" id="holding-a-reference">
+<h3>Holding a Reference<a class="headerlink" href="#holding-a-reference" title="Permalink to this headline">¶</a></h3>
+<p>When defining a Flag you can also dereference the Flag value directly within the Module or server
+(in lieu of using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/java/com/twitter/inject/annotations/Flag.java"><code class="docutils literal"><span class="pre">&#64;Flag</span></code></a> annotation).</p>
+<div class="admonition caution">
+<p class="first admonition-title">Caution</p>
+<p>Note that holding onto a reference of a Flag can be potentially dangerous since Flag definitions
+can currently be overridden with another definition. Flags are distinct <a class="reference external" href="https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L251">by name only</a>. The Flag you are referencing can be replaced in the stateful <a class="reference external" href="https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L89">c.t.app.Flags</a>
+instance with another instance created with the same name. The last Flag added wins and thus
+when the Flags are parsed your reference may not get a parsed value, resulting in the reference
+retaining its default value or no value if it has no specified default.</p>
+<p class="last">You should only do this if you are guaranteed that the Flag defined for which you keep a
+reference will not be redefined making your reference obselete.</p>
+</div>
+<p>Keep a local reference to the created Flag then use the <a class="reference external" href="https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L171">Flag#apply</a>,
 <a class="reference external" href="https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L205">Flag#get</a>
 or other methods, depending e.g.:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Provides
@@ -246,14 +259,7 @@ object MyModule1 extends TwitterModule {
 }
 </pre></div>
 </div>
-<div class="admonition caution">
-<p class="first admonition-title">Caution</p>
-<p class="last">Note that holding onto a reference of a Flag can be potentially dangerous since Flag definitions can currently be overridden
-with another definition. Flags are distinct <a class="reference external" href="https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L251">by name only</a>. The Flag you are referencing can be replaced in the stateful <a class="reference external" href="https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L89">c.t.app.Flags</a>
-instance with another instance created with the same name. The last Flag added wins and thus when the Flags are parsed
-your reference may not get a parsed value, resulting in the reference retaining its default value or no value if it has no specified
-default.</p>
-</div>
+<p>Again, note that caution should be used when defining flags in this manner.</p>
 </div>
 <div class="section" id="flag-value-injection">
 <h3>Flag Value Injection<a class="headerlink" href="#flag-value-injection" title="Permalink to this headline">¶</a></h3>
@@ -533,6 +539,7 @@ instance of the <cite>ClientId</cite> type in any manner they choose.</p>
 <li><a class="reference internal" href="#how-to-define-flags">How To Define Flags</a><ul>
 <li><a class="reference internal" href="#flag-definitions">Flag Definitions</a></li>
 <li><a class="reference internal" href="#flag-annotation"><code class="docutils literal"><span class="pre">&#64;Flag</span></code> annotation</a></li>
+<li><a class="reference internal" href="#holding-a-reference">Holding a Reference</a></li>
 <li><a class="reference internal" href="#flag-value-injection">Flag Value Injection</a></li>
 </ul>
 </li>

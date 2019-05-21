@@ -163,10 +163,6 @@
                         <a href="ConflictException.html" title="">ConflictException</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="trait" href="DefaultExceptionMapper.html" title=""></a>
-                        <a href="DefaultExceptionMapper.html" title="">DefaultExceptionMapper</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
                         <a class="class" href="ExceptionManager.html" title="A class to register com.twitter.finatra.http.exceptions.ExceptionMappers and handle exceptions."></a>
                         <a href="ExceptionManager.html" title="A class to register com.twitter.finatra.http.exceptions.ExceptionMappers and handle exceptions.">ExceptionManager</a>
                       </li><li class="current-entities indented5">
@@ -299,9 +295,9 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.twitter.finatra.http.exceptions.HttpException#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(statusCode:com.twitter.finagle.http.Status,mediaType:com.google.common.net.MediaType,errors:Seq[String],headers:Seq[(String,String)]):com.twitter.finatra.http.exceptions.HttpException"></a><a id="&lt;init&gt;:HttpException"></a>
+      <a id="&lt;init&gt;(statusCode:com.twitter.finagle.http.Status,mediaType:String,errors:Seq[String],headers:Seq[(String,String)]):com.twitter.finatra.http.exceptions.HttpException"></a><a id="&lt;init&gt;:HttpException"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/HttpException.html#&lt;init&gt;(statusCode:com.twitter.finagle.http.Status,mediaType:com.google.common.net.MediaType,errors:Seq[String],headers:Seq[(String,String)]):com.twitter.finatra.http.exceptions.HttpException" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/HttpException.html#&lt;init&gt;(statusCode:com.twitter.finagle.http.Status,mediaType:String,errors:Seq[String],headers:Seq[(String,String)]):com.twitter.finatra.http.exceptions.HttpException" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -310,7 +306,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">HttpException</span><span class="params">(<span name="statusCode">statusCode: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Status.html#com.twitter.finagle.http.Status" class="extype" name="com.twitter.finagle.http.Status">Status</a></span>, <span name="mediaType">mediaType: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>, <span name="errors">errors: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Seq()</span></span>, <span name="headers">headers: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)] = <span class="symbol">Seq()</span></span>)</span>
+        <span class="name">HttpException</span><span class="params">(<span name="statusCode">statusCode: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Status.html#com.twitter.finagle.http.Status" class="extype" name="com.twitter.finagle.http.Status">Status</a></span>, <span name="mediaType">mediaType: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="errors">errors: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Seq()</span></span>, <span name="headers">headers: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)] = <span class="symbol">Seq()</span></span>)</span>
       </span>
       
       
@@ -694,9 +690,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="com.twitter.finatra.http.exceptions.HttpException#mediaType" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="mediaType:com.google.common.net.MediaType"></a><a id="mediaType:MediaType"></a>
+      <a id="mediaType:String"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/HttpException.html#mediaType:com.google.common.net.MediaType" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/HttpException.html#mediaType:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -705,7 +701,7 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">mediaType</span><span class="result">: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>
+        <span class="name">mediaType</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
       
