@@ -132,6 +132,10 @@ When creating an issue please try to ahere to the following format:
 
     List all relevant steps to reproduce the observed behavior.
 
+## Issue Triage [![Open Source Helpers](https://www.codetriage.com/twitter/finatra/badges/users.svg)](https://www.codetriage.com/twitter/finatra)
+
+You can triage issues which may include reproducing bug reports or asking for vital information, such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to [subscribe to finatra on CodeTriage](https://www.codetriage.com/twitter/finatra).
+
 ## Pull Requests
 
 Comments should be formatted to a width no greater than 80 columns.
