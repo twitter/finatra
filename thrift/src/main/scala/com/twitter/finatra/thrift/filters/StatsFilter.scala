@@ -103,9 +103,10 @@ class StatsFilter @Inject()(
     /**
      * The application of the [[ResponseClassifier]] differs from the Finagle default. This class attempts
      * to preserve information in the emitted metrics. That is, if an exception is returned, even if it
-     * is classified as a "success", we incr the the exception counter(s) (in addition to the "success"
+     * is classified as a "success", we incr the exception counter(s) (in addition to the "success"
      * or "failures" counters). Conversely, if a response (non-exception) is returned which is classified
-     * as a "failure", we incr the "failures" counter but we do not incr any exception counter.
+     * as a "failure", we incr the "failures" counter but we do not incr any exception counter. Finally,
+     * responses or exceptions classified as "ignorable" only increment the exception counter(s).
      *
      * {{{
      *                   *-----------------*---------------------------*
@@ -116,6 +117,8 @@ class StatsFilter @Inject()(
      *  |  SUCCESSFUL    | success.incr()  | success.incr(), exc.incr()|
      *  *----------------*-----------------*---------------------------*
      *  |    FAILED      | failed.incr()   | failed.incr(), exc.incr() |
+     *  *----------------*-----------------*---------------------------*
+     *  |   IGNORABLE    | (no-op)         | exc.incr()                |
      *  *----------------*-----------------*---------------------------*
      * }}}
      *
@@ -153,22 +156,32 @@ class StatsFilter @Inject()(
         ReqRep(request, response),
         ResponseClassifier.Default
       ) match {
+        case ResponseClass.Ignorable =>
+          countExceptions(response)
         case ResponseClass.Failed(_) =>
           stats.foreach(_.failuresCounter.incr())
-          countExceptions(stats, success = false, response)
+          countExceptions(response)
+          countPerMethodStats(stats, success = false, response)
         case ResponseClass.Successful(_) =>
           stats.foreach(_.successCounter.incr())
-          countExceptions(stats, success = true, response)
+          countExceptions(response)
+          countPerMethodStats(stats, success = true, response)
       }
     }
 
-    private[this] def countExceptions(
+    private[this] def countExceptions(response: Try[_]): Unit = response match {
+      case Throw(e) =>
+        exceptionCounter.incr()
+        exceptionStatsReceiver.counter(e.getClass.getName).incr()
+      case _ =>
+        // do nothing
+    }
+
+    private[this] def countPerMethodStats(
       stats: Option[ThriftMethodStats],
       success: Boolean,
       response: Try[_]): Unit = response match {
       case Throw(e) =>
-        exceptionCounter.incr()
-        exceptionStatsReceiver.counter(e.getClass.getName).incr()
         stats.foreach { perMethodStats =>
           if (success) perMethodStats.successesScope.counter(e.getClass.getName).incr()
           else perMethodStats.failuresScope.counter(e.getClass.getName).incr()
