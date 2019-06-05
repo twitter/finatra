@@ -33,46 +33,46 @@ class MultiServerDarkTrafficFeatureTest
     await(client123.magicNum()) should equal("26")
 
     // service stats
-    liveDoEverythingThriftServer.assertCounter("per_method_stats/magicNum/success", 1)
+    liveDoEverythingThriftServer.inMemoryStats.counters.assert("per_method_stats/magicNum/success", 1)
 
     // darkTrafficFilter stats
-    liveDoEverythingThriftServer.assertCounter("dark_traffic_filter/forwarded", 1)
-    liveDoEverythingThriftServer.assertCounter("dark_traffic_filter/skipped", 0)
+    liveDoEverythingThriftServer.inMemoryStats.counters.assert("dark_traffic_filter/forwarded", 1)
+    liveDoEverythingThriftServer.inMemoryStats.counters.get("dark_traffic_filter/skipped") should be(None)
 
     darkDoEverythingThriftServer
       .assertHealthy() // give a chance for the stat to be recorded on the dark service
     // "dark" service stats
-    darkDoEverythingThriftServer.assertCounter("per_method_stats/magicNum/success", 1)
+    darkDoEverythingThriftServer.inMemoryStats.counters.assert("per_method_stats/magicNum/success", 1)
   }
 
   test("uppercase not forwarded") {
     await(client123.uppercase("hello")) should equal("HELLO")
 
     // service stats
-    liveDoEverythingThriftServer.assertCounter("per_method_stats/uppercase/success", 1)
+    liveDoEverythingThriftServer.inMemoryStats.counters.assert("per_method_stats/uppercase/success", 1)
     // darkTrafficFilter stats
-    liveDoEverythingThriftServer.assertCounter("dark_traffic_filter/forwarded", 0)
-    liveDoEverythingThriftServer.assertCounter("dark_traffic_filter/skipped", 1)
+    liveDoEverythingThriftServer.inMemoryStats.counters.get("dark_traffic_filter/forwarded") should be(None)
+    liveDoEverythingThriftServer.inMemoryStats.counters.assert("dark_traffic_filter/skipped", 1)
 
     // "dark" service stats
     // no invocations on the doEverythingThriftServer1 as nothing is forwarded
-    darkDoEverythingThriftServer.assertCounter("per_method_stats/uppercase/success", 0)
+    darkDoEverythingThriftServer.inMemoryStats.counters.get("per_method_stats/uppercase/success") should be(None)
   }
 
   test("echo is forwarded") {
     await(client123.echo("words")) should equal("words")
 
     // service stats
-    liveDoEverythingThriftServer.assertCounter("per_method_stats/echo/success", 1)
+    liveDoEverythingThriftServer.inMemoryStats.counters.assert("per_method_stats/echo/success", 1)
 
     // darkTrafficFilter stats
-    liveDoEverythingThriftServer.assertCounter("dark_traffic_filter/forwarded", 1)
-    liveDoEverythingThriftServer.assertCounter("dark_traffic_filter/skipped", 0)
+    liveDoEverythingThriftServer.inMemoryStats.counters.assert("dark_traffic_filter/forwarded", 1)
+    liveDoEverythingThriftServer.inMemoryStats.counters.get("dark_traffic_filter/skipped") should be(None)
 
     darkDoEverythingThriftServer
       .assertHealthy() // give a chance for the stat to be recorded on the dark service
     // "dark" service stats
-    darkDoEverythingThriftServer.assertCounter("per_method_stats/echo/success", 1)
+    darkDoEverythingThriftServer.inMemoryStats.counters.assert("per_method_stats/echo/success", 1)
   }
 
   test("moreThanTwentyTwoArgs is not forwarded") {
@@ -105,14 +105,14 @@ class MultiServerDarkTrafficFeatureTest
     ) should equal("handled")
 
     // service stats
-    liveDoEverythingThriftServer.assertCounter("per_method_stats/moreThanTwentyTwoArgs/success", 1)
+    liveDoEverythingThriftServer.inMemoryStats.counters.assert("per_method_stats/moreThanTwentyTwoArgs/success", 1)
     // darkTrafficFilter stats
-    liveDoEverythingThriftServer.assertCounter("dark_traffic_filter/forwarded", 0)
-    liveDoEverythingThriftServer.assertCounter("dark_traffic_filter/skipped", 1)
+    liveDoEverythingThriftServer.inMemoryStats.counters.get("dark_traffic_filter/forwarded") should be(None)
+    liveDoEverythingThriftServer.inMemoryStats.counters.assert("dark_traffic_filter/skipped", 1)
 
     // "dark" service stats
     // no invocations on the doEverythingThriftServer1 as nothing is forwarded
-    darkDoEverythingThriftServer.assertCounter("per_method_stats/moreThanTwentyTwoArgs/success", 0)
+    darkDoEverythingThriftServer.inMemoryStats.counters.get("per_method_stats/moreThanTwentyTwoArgs/success") should be(None)
   }
 
   override protected def beforeEach(): Unit = {

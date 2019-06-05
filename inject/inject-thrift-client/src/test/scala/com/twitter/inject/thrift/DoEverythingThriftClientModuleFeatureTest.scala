@@ -54,7 +54,6 @@ object DoEverythingThriftClientModuleFeatureTest {
 }
 
 class DoEverythingThriftClientModuleFeatureTest extends FeatureTest with HttpTest {
-  override val printStats = false
 
   private val clientIdString = "echo-http-service"
 
@@ -115,8 +114,8 @@ class DoEverythingThriftClientModuleFeatureTest extends FeatureTest with HttpTes
     )
 
     httpServer1.httpGet(path = "/echo?msg=Bob", andExpect = Ok, withBody = "BobBobBob")
-    httpServer1.assertStat("route/config/POST/response_size", Seq(1, 1))
-    httpServer1.assertStat("route/echo/GET/response_size", Seq(9))
+    httpServer1.inMemoryStats.stats.assert("route/config/POST/response_size", Seq(1.0f, 1.0f))
+    httpServer1.inMemoryStats.stats.assert("route/echo/GET/response_size", Seq(9.0f))
   }
 
   // test EchoService.FutureIface
@@ -139,8 +138,8 @@ class DoEverythingThriftClientModuleFeatureTest extends FeatureTest with HttpTes
     )
 
     httpServer2.httpGet(path = "/echo?msg=Bob", andExpect = Ok, withBody = "BobBobBob")
-    httpServer2.assertStat("route/config/POST/response_size", Seq(1, 1))
-    httpServer2.assertStat("route/echo/GET/response_size", Seq(9))
+    httpServer2.inMemoryStats.stats.assert("route/config/POST/response_size", Seq(1.0f, 1.0f))
+    httpServer2.inMemoryStats.stats.assert("route/echo/GET/response_size", Seq(9.0f))
   }
 
   // test EchoService.MethodPerEndpoint
@@ -163,8 +162,8 @@ class DoEverythingThriftClientModuleFeatureTest extends FeatureTest with HttpTes
     )
 
     httpServer3.httpGet(path = "/echo?msg=Bob", andExpect = Ok, withBody = "BobBobBob")
-    httpServer3.assertStat("route/config/POST/response_size", Seq(1, 1))
-    httpServer3.assertStat("route/echo/GET/response_size", Seq(9))
+    httpServer3.inMemoryStats.stats.assert("route/config/POST/response_size", Seq(1.0f, 1.0f))
+    httpServer3.inMemoryStats.stats.assert("route/echo/GET/response_size", Seq(9.0f))
   }
 
   test("ThriftClient#asClosable") {

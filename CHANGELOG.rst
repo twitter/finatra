@@ -7,6 +7,11 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+* finatra-http: Add `c.t.inject.server.InMemoryStatsReceiverUtility` which allows for testing
+  assertions on metrics captured within an embedded server's `InMemoryStatsReceiver`. Update the
+  Kafka tests and utilities to use the `InMemoryStatsReceiverUtility` and mark the
+  `c.t.finatra.kafka.test.utilsInMemoryStatsUtil` as deprecated. ``PHAB_ID=D316806``
+
 19.5.1
 ------
 

@@ -12,10 +12,10 @@ import scala.language.implicitConversions
  * test to get an implicit conversion from a Twitter Future to a FutureConcept. It also provides
  * a default PatienceConfig which you can override in your test to suit your needs.
  *
- * @see <a href="https://doc.scalatest.org/3.0.0/index.html#org.scalatest.concurrent.ScalaFutures">ScalaFutures</a>
+ * @see [[https://doc.scalatest.org/3.0.0/index.html#org.scalatest.concurrent.ScalaFutures ScalaFutures]]
  */
 trait WhenReadyMixin {
-  protected implicit val patienceConfig =
+  protected implicit val patienceConfig: PatienceConfig =
     PatienceConfig(timeout = Span(5, Seconds), interval = Span(20, Millis))
 
   final protected implicit def convertTwitterFuture[T](twitterFuture: Future[T]): FutureConcept[T] =

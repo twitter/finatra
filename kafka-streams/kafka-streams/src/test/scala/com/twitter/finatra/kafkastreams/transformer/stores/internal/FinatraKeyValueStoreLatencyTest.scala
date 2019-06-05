@@ -2,8 +2,8 @@ package com.twitter.finatra.kafkastreams.transformer.stores.internal
 
 import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.finatra.kafka.serde.ScalaSerdes
-import com.twitter.finatra.kafka.test.utils.InMemoryStatsUtil
 import com.twitter.inject.Test
+import com.twitter.inject.server.InMemoryStatsReceiverUtility
 import org.apache.kafka.common.metrics.Metrics
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.utils.LogContext
@@ -11,7 +11,7 @@ import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.processor.internals.MockStreamsMetrics
 import org.apache.kafka.streams.state.internals.{RocksDBStoreFactory, ThreadCache}
 import org.apache.kafka.test.{InternalMockProcessorContext, NoOpRecordCollector, TestUtils}
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 class FinatraKeyValueStoreLatencyTest extends Test {
 
@@ -24,7 +24,7 @@ class FinatraKeyValueStoreLatencyTest extends Test {
   )
 
   private val statsReceiver = new InMemoryStatsReceiver()
-  private val statsUtil = new InMemoryStatsUtil(statsReceiver)
+  private val statsUtil = new InMemoryStatsReceiverUtility(statsReceiver)
   private val rocksDbStore = RocksDBStoreFactory.create("FinatraKeyValueStoreTest")
   private val keyValueStore = new MetricsFinatraKeyValueStore[Int, String](
     new FinatraKeyValueStoreImpl(rocksDbStore, rocksDbStore, ScalaSerdes.Int, Serdes.String),
@@ -60,7 +60,7 @@ class FinatraKeyValueStoreLatencyTest extends Test {
   private def getLatencyStat(name: String): Seq[Float] = {
     val latencyStatNamePrefix = "stores/FinatraKeyValueStoreTest"
     val latencyStatNameSuffix = "latency_us"
-    statsUtil.getStat(s"$latencyStatNamePrefix/$name/$latencyStatNameSuffix")
+    statsUtil.stats(s"$latencyStatNamePrefix/$name/$latencyStatNameSuffix")
   }
 
   private def assertNonzeroLatency(name: String) = {
@@ -101,7 +101,7 @@ class FinatraKeyValueStoreLatencyTest extends Test {
     keyValueStore.delete(Key1)
     assertNonzeroLatency(MetricsFinatraKeyValueStore.DeleteLatencyStatName)
 
-    keyValueStore.putAll(KeyValues1to10)
+    keyValueStore.putAll(KeyValues1to10.asJava)
     assertNonzeroLatency(MetricsFinatraKeyValueStore.PutAllLatencyStatName)
 
     keyValueStore.range(1, 5).close()

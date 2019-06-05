@@ -412,6 +412,8 @@ lazy val injectServerTestJarSources =
     "com/twitter/inject/server/EmbeddedTwitterServer",
     "com/twitter/inject/server/FeatureTest",
     "com/twitter/inject/server/FeatureTestMixin",
+    "com/twitter/inject/server/InMemoryStats",
+    "com/twitter/inject/server/InMemoryStatsReceiverUtility",
     "com/twitter/inject/server/package")
 lazy val injectServer = (project in file("inject/inject-server"))
   .settings(projectSettings)

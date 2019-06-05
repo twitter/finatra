@@ -3,7 +3,7 @@ package com.twitter.inject.server.tests
 import com.google.inject.name.Names
 import com.google.inject.{Module, Provides, Stage}
 import com.twitter.finagle.http.Status
-import com.twitter.finagle.stats.InMemoryStatsReceiver
+import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
 import com.twitter.inject.server.EmbeddedTwitterServer.ReducibleFn
 import com.twitter.inject.server.{EmbeddedTwitterServer, TwitterServer}
 import com.twitter.inject.{Test, TwitterModule}
@@ -13,7 +13,11 @@ import scala.collection.immutable.ListMap
 class EmbeddedTwitterServerIntegrationTest extends Test {
 
   test("server#start") {
-    val twitterServer = new TwitterServer {}
+    val twitterServer = new TwitterServer {
+      override def start(): Unit = {
+        injector.instance[StatsReceiver].counter("test/counter").incr()
+      }
+    }
     twitterServer.addFrameworkOverrideModules(new TwitterModule {})
     val embeddedServer = new EmbeddedTwitterServer(
       twitterServer = twitterServer,
@@ -22,6 +26,15 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
 
     try {
       embeddedServer.httpGetAdmin("/health", andExpect = Status.Ok, withBody = "OK\n")
+      embeddedServer.inMemoryStats.gauges.get("finagle/build/revision") should not be None
+
+      embeddedServer.inMemoryStats.counters.get("no/count") should be(None) // doesn't exist
+
+      embeddedServer.inMemoryStats.counters.waitFor("test/counter", 1L)
+      intercept[org.scalatest.exceptions.TestFailedDueToTimeoutException] {
+        // the counter will never have this value.
+        embeddedServer.inMemoryStats.counters.waitFor("test/counter", 11L)
+      }
     } finally {
       embeddedServer.close()
     }

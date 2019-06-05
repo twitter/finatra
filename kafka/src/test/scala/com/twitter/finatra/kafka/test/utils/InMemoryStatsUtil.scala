@@ -1,10 +1,12 @@
 package com.twitter.finatra.kafka.test.utils
 
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
-import com.twitter.inject.conversions.map._
+import com.twitter.inject.server.InMemoryStatsReceiverUtility
 import com.twitter.inject.{Injector, Logging}
 import org.scalatest.Matchers
 
+@deprecated("Use com.twitter.inject.server.InMemoryStatsReceiverUtility", "2019-05-17")
 object InMemoryStatsUtil {
   def apply(injector: Injector): InMemoryStatsUtil = {
     val inMemoryStatsReceiver = injector.instance[StatsReceiver].asInstanceOf[InMemoryStatsReceiver]
@@ -12,103 +14,60 @@ object InMemoryStatsUtil {
   }
 }
 
+@deprecated("Use com.twitter.inject.server.InMemoryStatsReceiverUtility", "2019-05-17")
 class InMemoryStatsUtil(val inMemoryStatsReceiver: InMemoryStatsReceiver)
     extends Logging
     with Matchers {
 
-  def statsMap: Map[String, Seq[Float]] = inMemoryStatsReceiver.stats.toMap.mapKeys(keyStr)
+  /** this class now proxies to the InMemoryStatsReceiverUtility */
+  private[this] val underlying: InMemoryStatsReceiverUtility =
+    new InMemoryStatsReceiverUtility(inMemoryStatsReceiver)
 
-  def countersMap: Map[String, Long] = inMemoryStatsReceiver.counters.iterator.toMap.mapKeys(keyStr)
+  def statsMap: Map[String, Seq[Float]] =
+    underlying.stats.toSortedMap.toMap
+
+  def countersMap: Map[String, Long] =
+    underlying.counters.toSortedMap.toMap
 
   def gaugeMap: Map[String, () => Float] =
-    inMemoryStatsReceiver.gauges.iterator.toMap.mapKeys(keyStr)
+    underlying.gauges.toSortedMap.mapValues(() => _).toMap
 
   def metricNames: Set[String] =
-    statsMap.keySet ++ countersMap.keySet ++ gaugeMap.keySet
+    underlying.names.toSet
 
-  def getCounter(name: String): Long = {
-    getOptionalCounter(name) getOrElse {
-      printStats()
-      throw new Exception(name + " not found")
-    }
-  }
+  def getCounter(name: String): Long =
+    underlying.counters(name)
 
-  def getOptionalCounter(name: String): Option[Long] = {
-    countersMap.get(name)
-  }
+  def getOptionalCounter(name: String): Option[Long] =
+    underlying.counters.get(name)
 
-  def assertCounter(name: String, expected: Long): Unit = {
-    val value = getCounter(name)
-    if (value != expected) {
-      printStats()
-    }
-    value should equal(expected)
-  }
+  def assertCounter(name: String, expected: Long): Unit =
+    underlying.counters.assert(name, expected)
 
-  def assertCounter(name: String)(callback: Long => Boolean): Unit = {
-    callback(getCounter(name)) should be(true)
-  }
+  def assertCounter(name: String)(callback: Long => Boolean): Unit =
+    underlying.counters.assert(name)(callback)
 
-  def getStat(name: String): Seq[Float] = {
-    statsMap.getOrElse(name, throw new Exception(name + " not found"))
-  }
+  def getStat(name: String): Seq[Float] = underlying.stats(name)
 
-  def assertStat(name: String, expected: Seq[Float]): Unit = {
-    val value = getStat(name)
-    if (value != expected) {
-      printStats()
-    }
-    value should equal(expected)
-  }
+  def assertStat(name: String, expected: Seq[Float]): Unit =
+    underlying.stats.assert(name, expected)
 
-  def getGauge(name: String): Float = {
-    getOptionalGauge(name) getOrElse (throw new Exception(name + " not found"))
-  }
+  def getGauge(name: String): Float =
+    underlying.gauges(name)
 
-  def getOptionalGauge(name: String): Option[Float] = {
-    gaugeMap.get(name) map { _.apply() }
-  }
+  def getOptionalGauge(name: String): Option[Float] =
+    underlying.gauges.get(name)
 
-  def assertGauge(name: String, expected: Float): Unit = {
-    val value = getGauge(name)
-    if (value != expected) {
-      printStats()
-    }
-    assert(value == expected)
-  }
+  def assertGauge(name: String, expected: Float): Unit =
+    underlying.gauges.assert(name, expected)
 
-  def printStats(): Unit = {
-    info(" Stats")
-    for ((key, values) <- statsMap.toSortedMap) {
-      val avg = values.sum / values.size
-      val valuesStr = values.mkString("[", ", ", "]")
-      info(f"$key%-70s = $avg = $valuesStr")
-    }
+  def printStats(): Unit = underlying.print()
 
-    info("\nCounters:")
-    for ((key, value) <- countersMap.toSortedMap) {
-      info(f"$key%-70s = $value")
-    }
+  def waitForGauge(name: String, expected: Float): Unit =
+    underlying.gauges.waitFor(name, expected)
 
-    info("\nGauges:")
-    for ((key, value) <- gaugeMap.toSortedMap) {
-      info(f"$key%-70s = ${value()}")
-    }
-  }
-
-  def waitForGauge(name: String, expected: Float): Unit = {
-    waitForGaugeUntil(name, _ == expected)
-  }
-
-  def waitForGaugeUntil(name: String, predicate: Float => Boolean): Unit = {
-    PollUtils
-      .poll[Option[Float]](func = getOptionalGauge(name), exhaustedTriesMessage = result => {
-        printStats()
-        s"Gauge $name $result did not satisfy predicate"
-      })(until = { result =>
-        result.nonEmpty && predicate(result.get)
-      }).get
-  }
+  def waitForGaugeUntil(name: String, predicate: Float => Boolean): Unit =
+    underlying.gauges.waitFor(name)(predicate)
 
   /**
    * Wait for a counter's value to equal the expected
@@ -117,34 +76,14 @@ class InMemoryStatsUtil(val inMemoryStatsReceiver: InMemoryStatsReceiver)
    * @param failIfActualOverExpected Enable to have test fail fast once the current value is greater than the expected value
    * @return
    */
+  @deprecated(
+    "Use `InMemoryStatsReceiverUtility#counters#waitFor`. The `failIfActualOverExpected` param is no longer ever used here.",
+    "2019-05-17"
+  )
   def waitForCounter(
     name: String,
     expected: Long,
     failIfActualOverExpected: Boolean = true
-  ): Unit = {
-    PollUtils
-      .poll[Option[Long]](func = getOptionalCounter(name), exhaustedTriesMessage = result => {
-        printStats()
-        s"Counter $name $result != $expected"
-      })(until = { result =>
-        if (failIfActualOverExpected && result.isDefined) {
-          assert(result.get <= expected, "Actual counter value is greater than the expected value")
-        }
-        result.getOrElse(0) == expected
-      })
-  }
-
-  def waitForCounterUntil(name: String, predicate: Long => Boolean): Long = {
-    PollUtils
-      .poll[Option[Long]](func = getOptionalCounter(name), exhaustedTriesMessage = result => {
-        printStats()
-        s"Counter $name $result did not satisfy predicate"
-      })(until = { result =>
-        result.nonEmpty && predicate(result.get)
-      }).get
-  }
-
-  private def keyStr(keys: Seq[String]): String = {
-    keys.mkString("/")
-  }
+  ): Unit =
+    underlying.counters.waitFor(name, 60.seconds)(_ == expected) // waits up to 60 seconds as per default from PollUtils
 }

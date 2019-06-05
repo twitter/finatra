@@ -2,12 +2,12 @@ package com.twitter.finatra.kafkastreams.transformer
 
 import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, NullStatsReceiver, StatsReceiver}
-import com.twitter.finatra.kafka.test.utils.InMemoryStatsUtil
 import com.twitter.finatra.kafkastreams.config.KafkaStreamsConfig
 import com.twitter.finatra.kafkastreams.transformer.domain.Time
 import com.twitter.finatra.kafkastreams.transformer.stores.CachingKeyValueStores
 import com.twitter.finatra.kafkastreams.transformer.watermarks.Watermark
 import com.twitter.inject.Test
+import com.twitter.inject.server.InMemoryStatsReceiverUtility
 import com.twitter.util.Duration
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.StreamsConfig
@@ -58,7 +58,7 @@ class FinatraTransformerTest extends Test with com.twitter.inject.Mockito {
       new FinatraTransformer[String, String, String, String](NullStatsReceiver)
       with CachingKeyValueStores[String, String, String, String] {
         private val cache =
-          getCachingKeyValueStore[String, String]("mystore", onFlushedEntry(_, _, _))
+          getCachingKeyValueStore[String, String]("mystore", onFlushedEntry)
 
         override def commitInterval: Duration = 1.second
 
@@ -72,7 +72,7 @@ class FinatraTransformerTest extends Test with com.twitter.inject.Mockito {
       }
 
     val inMemoryStatsReceiver = new InMemoryStatsReceiver
-    val statUtils = new InMemoryStatsUtil(inMemoryStatsReceiver)
+    val statUtils = new InMemoryStatsReceiverUtility(inMemoryStatsReceiver)
 
     val context = Mockito.spy(new CachingFinatraMockProcessorContext(inMemoryStatsReceiver))
     transformer.init(context)
@@ -82,12 +82,12 @@ class FinatraTransformerTest extends Test with com.twitter.inject.Mockito {
 
     context.setTime(secondMessageTimestamp)
     transformer.transform(secondKey, secondValue)
-    statUtils.assertGauge("stores/mystore/numCacheEntries", 2)
+    statUtils.gauges.assert("stores/mystore/numCacheEntries", 2.0f)
 
     transformer.onFlush()
     assertForwardedMessage(context, firstKey, firstValue, secondMessageTimestamp)
     assertForwardedMessage(context, secondKey, secondValue, secondMessageTimestamp)
-    statUtils.assertGauge("stores/mystore/numCacheEntries", 0)
+    statUtils.gauges.assert("stores/mystore/numCacheEntries", 0.0f)
   }
 
   private def assertForwardedMessage(
@@ -115,7 +115,7 @@ class FinatraTransformerTest extends Test with com.twitter.inject.Mockito {
     })
   }
 
-  val config = new KafkaStreamsConfig()
+  val config: KafkaStreamsConfig = new KafkaStreamsConfig()
     .commitInterval(Duration.Top)
     .applicationId("test-app")
     .bootstrapServers("127.0.0.1:1000")

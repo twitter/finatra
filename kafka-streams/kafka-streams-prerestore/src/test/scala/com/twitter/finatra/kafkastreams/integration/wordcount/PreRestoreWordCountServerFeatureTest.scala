@@ -3,7 +3,6 @@ package com.twitter.finatra.kafkastreams.integration.wordcount
 import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.kafka.serde.ScalaSerdes
-import com.twitter.finatra.kafka.test.utils.InMemoryStatsUtil
 import com.twitter.finatra.kafkastreams.test.KafkaStreamsMultiServerFeatureTest
 import com.twitter.util.{Await, Duration}
 import org.apache.kafka.common.serialization.Serdes
@@ -48,7 +47,7 @@ class PreRestoreWordCountServerFeatureTest extends KafkaStreamsMultiServerFeatur
     val server = createServer(preRestore = false)
     //val countsStore = kafkaStateStore[String, Long]("CountsStore", server)
     server.start()
-    val serverStats = InMemoryStatsUtil(server.injector)
+    val serverStats = server.inMemoryStats
 
     textLinesTopic.publish(1L -> "hello world hello")
     /*countsStore.queryKeyValueUntilValue("hello", 2L)
@@ -56,7 +55,7 @@ class PreRestoreWordCountServerFeatureTest extends KafkaStreamsMultiServerFeatur
 
     textLinesTopic.publish(1L -> "world world")
     //countsStore.queryKeyValueUntilValue("world", 3L)
-    serverStats.waitForGauge("kafka/thread1/restore_consumer/records_consumed_total", 0)
+    serverStats.gauges.waitFor("kafka/thread1/restore_consumer/records_consumed_total", 0.0f)
 
     for (i <- 1 to 1000) {
       textLinesTopic.publish(1L -> s"foo$i")

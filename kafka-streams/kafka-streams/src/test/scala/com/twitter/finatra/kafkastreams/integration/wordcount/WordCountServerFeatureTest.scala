@@ -1,7 +1,7 @@
 package com.twitter.finatra.kafkastreams.integration.wordcount
 
+import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.kafka.serde.ScalaSerdes
-import com.twitter.finatra.kafka.test.utils.InMemoryStatsUtil
 import com.twitter.finatra.kafkastreams.config.KafkaStreamsConfig
 import com.twitter.finatra.kafkastreams.internal.stats.KafkaStreamsFinagleMetricsReporter
 import com.twitter.finatra.kafkastreams.test.KafkaStreamsMultiServerFeatureTest
@@ -43,36 +43,28 @@ class WordCountServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
 
   test("word count") {
     val serverBeforeRestart = createServer()
-    val serverBeforeRestartStats = InMemoryStatsUtil(serverBeforeRestart.injector)
+    val serverBeforeRestartStats = serverBeforeRestart.inMemoryStats
     serverBeforeRestart.start()
 
     textLinesTopic.publish(1L -> "hello world hello")
-    serverBeforeRestartStats.waitForGauge(
-      "kafka/thread1/consumer/TextLinesTopic/records_consumed_total",
-      1
-    )
+    serverBeforeRestartStats.gauges.waitFor(
+      "kafka/thread1/consumer/TextLinesTopic/records_consumed_total", 60.seconds)(_ == 1.0f)
     wordsWithCountsTopic.consumeAsManyMessagesUntilMap(Map("world" -> 1L, "hello" -> 2L))
 
     textLinesTopic.publish(1L -> "world world")
-    serverBeforeRestartStats.waitForGauge(
-      "kafka/thread1/consumer/TextLinesTopic/records_consumed_total",
-      2
-    )
+    serverBeforeRestartStats.gauges.waitFor(
+      "kafka/thread1/consumer/TextLinesTopic/records_consumed_total", 60.seconds)(_ == 2.0f)
     wordsWithCountsTopic.consumeAsManyMessagesUntilMap(Map("world" -> 3L))
-    serverBeforeRestartStats.waitForGaugeUntil(
-      "kafka/thread1/producer/wordcount_prod_CountsStore_changelog/record_send_total",
-      _ >= 3
-    )
-    serverBeforeRestartStats.waitForGaugeUntil(
-      "kafka/thread1/producer/WordsWithCountsTopic/record_send_total",
-      _ >= 3
-    )
+    serverBeforeRestartStats.gauges.waitFor(
+      "kafka/thread1/producer/wordcount_prod_CountsStore_changelog/record_send_total", 60.seconds)(_ >= 3.0f)
+    serverBeforeRestartStats.gauges.waitFor(
+      "kafka/thread1/producer/WordsWithCountsTopic/record_send_total", 60.seconds)(_ >= 3.0f)
 
-    serverBeforeRestart.assertGauge("kafka/stream/state", 2)
+    serverBeforeRestartStats.gauges.assert("kafka/stream/state", 2.0f)
     assert(countsChangelogTopic.consumeValue() > 0)
     assert(
-      serverBeforeRestart
-        .getGauge("kafka/thread1/producer/wordcount_prod_CountsStore_changelog/byte_total") > 0
+      serverBeforeRestartStats
+        .gauges("kafka/thread1/producer/wordcount_prod_CountsStore_changelog/byte_total") > 0.0f
     )
     assertTimeSincePublishedSet(
       serverBeforeRestart,
@@ -88,24 +80,22 @@ class WordCountServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
 
     val serverAfterRestart = createServer()
     serverAfterRestart.start()
-    val serverAfterRestartStats = InMemoryStatsUtil(serverAfterRestart.injector)
-    serverAfterRestartStats.waitForGaugeUntil(
-      "kafka/stream/finatra_state_restore_listener/restore_time_elapsed_ms",
-      _ >= 0
-    )
+    val serverAfterRestartStats = serverAfterRestart.inMemoryStats
+    serverAfterRestartStats.gauges.waitFor(
+      "kafka/stream/finatra_state_restore_listener/restore_time_elapsed_ms", 60.seconds)(_ >= 0.0f)
 
     textLinesTopic.publish(1L -> "world world")
     wordsWithCountsTopic.consumeAsManyMessagesUntilMap(Map("world" -> 5L))
 
     // Why isn't the records_consumed_total stat > 0 in the feature test?
     // val serverAfterRestartStats = new InMemoryStatsUtil(serverAfterRestart.injector)
-    // serverAfterRestartStats.waitForGaugeUntil("kafka/thread2/restore_consumer/records_consumed_total", _ > 0)
-    serverAfterRestart.getStat(
+    // serverAfterRestartStats.gauges.waitForUntil("kafka/thread2/restore_consumer/records_consumed_total", _ > 0)
+    serverAfterRestartStats.stats.get(
       "kafka/consumer/wordcount-prod-CountsStore-changelog/time_since_record_published_ms"
-    ) should equal(Seq())
-    serverAfterRestart.getStat(
+    ) should be(None)
+    serverAfterRestartStats.stats.get(
       "kafka/consumer/wordcount-prod-CountsStore-changelog/time_since_record_timestamp_ms"
-    ) should equal(Seq())
+    ) should be(None)
     serverAfterRestart.close()
     Await.result(serverAfterRestart.mainResult)
   }
@@ -113,22 +103,24 @@ class WordCountServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
   test("ensure debug metrics not included if RecordingLevel is not DEBUG") {
     val debugServer = createServer(recordingLevel = RecordingLevel.DEBUG)
     debugServer.start()
-    val debugServerStats = InMemoryStatsUtil(debugServer.injector)
+    val debugServerStats = debugServer.inMemoryStats
 
     textLinesTopic.publish(1L -> "hello world hello")
-    debugServerStats.waitForGauge("kafka/thread1/consumer/TextLinesTopic/records_consumed_total", 1)
-    val debugServerMetricNames = debugServerStats.metricNames
+    debugServerStats.gauges.waitFor(
+      "kafka/thread1/consumer/TextLinesTopic/records_consumed_total", 60.seconds)(_ == 1.0f)
+    val debugServerMetricNames = debugServerStats.names
 
     debugServer.close()
     resetStreamThreadId()
 
     val infoServer = createServer(recordingLevel = RecordingLevel.INFO)
     infoServer.start()
-    val infoServerStats = InMemoryStatsUtil(infoServer.injector)
+    val infoServerStats = infoServer.inMemoryStats
 
     textLinesTopic.publish(1L -> "hello world hello")
-    infoServerStats.waitForGauge("kafka/thread1/consumer/TextLinesTopic/records_consumed_total", 1)
-    val infoServerMetricNames = infoServerStats.metricNames
+    infoServerStats.gauges.waitFor(
+      "kafka/thread1/consumer/TextLinesTopic/records_consumed_total", 60.seconds)(_ == 1.0f)
+    val infoServerMetricNames = infoServerStats.names
 
     infoServer.close()
 
@@ -145,8 +137,8 @@ class WordCountServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
 
   private def assertTimeSincePublishedSet(server: EmbeddedTwitterServer, topic: String): Unit = {
     assert(
-      server.getStat(topic).nonEmpty &&
-        server.getStat(topic).forall(_ >= 0)
+      server.inMemoryStats.stats.get(topic).nonEmpty &&
+        server.inMemoryStats.stats(topic).forall(_ >= 0.0f)
     )
   }
 }
