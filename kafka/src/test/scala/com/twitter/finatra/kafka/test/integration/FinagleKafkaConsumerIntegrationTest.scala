@@ -7,6 +7,7 @@ import com.twitter.finatra.kafka.test.EmbeddedKafka
 import com.twitter.util.{Duration, Time}
 import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.common.serialization.Serdes
+import scala.collection.JavaConverters._
 
 class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
   private val testTopic = kafkaTopic(Serdes.String, Serdes.String, "test-topic")
@@ -33,6 +34,27 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
       .build()
   }
 
+  private def getNativeTestProducer() = {
+    FinagleKafkaProducerBuilder()
+      .dest(brokers.map(_.brokerList()).mkString(","))
+      .clientId("test-producer")
+      .ackMode(AckMode.ALL)
+      .keySerializer(Serdes.String.serializer)
+      .valueSerializer(Serdes.String.serializer)
+      .buildClient()
+  }
+
+  private def getNativeTestConsumer() = {
+    FinagleKafkaConsumerBuilder()
+      .dest(brokers.map(_.brokerList()).mkString(","))
+      .clientId("test-consumer")
+      .groupId(KafkaGroupId("test-group"))
+      .keyDeserializer(Serdes.String.deserializer)
+      .valueDeserializer(Serdes.String.deserializer)
+      .requestTimeout(Duration.fromSeconds(1))
+      .buildClient()
+  }
+
   test("endOffset returns 0 for empty topic with no events") {
     val consumer = getTestConsumer()
     val emptyTopicPartition = new TopicPartition(emptyTestTopic.topic, 0)
@@ -40,6 +62,21 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
       assert(await(consumer.endOffset(emptyTopicPartition)) == 0)
     } finally {
       await(consumer.close())
+    }
+  }
+
+  test("endOffset increases by 1 after publish with native consumer") {
+    val producer = getTestProducer()
+    val consumer = getNativeTestConsumer()
+    val topicPartition = new TopicPartition(testTopic.topic, 0)
+    val initEndOffset = consumer.endOffsets(List(topicPartition).asJava).get(topicPartition)
+
+    try {
+      await(producer.send(testTopic.topic, "Foo", "Bar", System.currentTimeMillis))
+      val finishEndOffset = consumer.endOffsets(List(topicPartition).asJava).get(topicPartition)
+      assert(finishEndOffset == initEndOffset + 1)
+     } finally {
+      await(producer.close())
     }
   }
 

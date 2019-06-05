@@ -7,6 +7,10 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+* finatra-kafka: Deprecate in `c.t.finatra.kafka.consumers.FinagleKafkaConsumer`.
+  Add `c.t.finatra.kafka.consumers.FinagleKafkaConsumer.buildClient` and
+  `c.t.finatra.kafka.producters.FinagleKafkaProducer.buildClient`. ``PHAB_ID=D321699``
+
 * finatra-http: Add `c.t.inject.server.InMemoryStatsReceiverUtility` which allows for testing
   assertions on metrics captured within an embedded server's `InMemoryStatsReceiver`. Update the
   Kafka tests and utilities to use the `InMemoryStatsReceiverUtility` and mark the

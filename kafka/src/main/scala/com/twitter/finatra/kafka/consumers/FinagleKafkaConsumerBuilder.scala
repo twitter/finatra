@@ -6,7 +6,7 @@ import com.twitter.finatra.kafka.domain.SeekStrategy
 import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter
 import com.twitter.util.Duration
 import java.util.Properties
-import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.consumer.{ConsumerConfig, KafkaConsumer}
 import org.apache.kafka.common.serialization.Deserializer
 
 /**
@@ -21,57 +21,69 @@ import org.apache.kafka.common.serialization.Deserializer
  * @tparam Self The type of the concrete builder that includes these methods.
  */
 trait FinagleKafkaConsumerBuilderMethods[K, V, Self] extends KafkaConsumerConfigMethods[Self] {
-  protected def finagleConsumerConfig: FinagleKafkaConsumerConfig[K, V]
+  protected def config: FinagleKafkaConsumerConfig[K, V]
   protected def fromFinagleConsumerConfig(config: FinagleKafkaConsumerConfig[K, V]): This
 
   override protected def configMap: Map[String, String] =
-    finagleConsumerConfig.kafkaConsumerConfig.configMap
+    config.kafkaConsumerConfig.configMap
   override protected def fromConfigMap(configMap: Map[String, String]): This =
     fromFinagleConsumerConfig(
-      finagleConsumerConfig.copy(kafkaConsumerConfig = KafkaConsumerConfig(configMap))
+      config.copy(kafkaConsumerConfig = KafkaConsumerConfig(configMap))
     )
 
   /**
    * Deserializer class for key
    */
   def keyDeserializer(keyDeserializer: Deserializer[K]): This =
-    fromFinagleConsumerConfig(finagleConsumerConfig.copy(keyDeserializer = Some(keyDeserializer)))
+    fromFinagleConsumerConfig(config.copy(keyDeserializer = Some(keyDeserializer)))
 
   /**
    * Deserializer class for value
    */
   def valueDeserializer(valueDeserializer: Deserializer[V]): This =
     fromFinagleConsumerConfig(
-      finagleConsumerConfig.copy(valueDeserializer = Some(valueDeserializer))
+      config.copy(valueDeserializer = Some(valueDeserializer))
     )
 
   /**
    * Default poll timeout in milliseconds
    */
   def pollTimeout(pollTimeout: Duration): This =
-    fromFinagleConsumerConfig(finagleConsumerConfig.copy(pollTimeout = pollTimeout))
+    fromFinagleConsumerConfig(config.copy(pollTimeout = pollTimeout))
 
   /**
    * Whether the consumer should start from end, beginning or from the offset
    */
   def seekStrategy(seekStrategy: SeekStrategy): This =
-    fromFinagleConsumerConfig(finagleConsumerConfig.copy(seekStrategy = seekStrategy))
+    fromFinagleConsumerConfig(config.copy(seekStrategy = seekStrategy))
 
   /**
    * If using SeekStrategy.REWIND, specify the duration back in time to rewind and start consuming from
    */
   def rewindDuration(rewindDuration: Duration): This =
-    fromFinagleConsumerConfig(finagleConsumerConfig.copy(rewindDuration = Some(rewindDuration)))
+    fromFinagleConsumerConfig(config.copy(rewindDuration = Some(rewindDuration)))
 
   /**
    * For KafkaFinagleMetricsReporter: whether to include node-level metrics.
    */
   def includeNodeMetrics(include: Boolean): This =
-    fromFinagleConsumerConfig(finagleConsumerConfig.copy(includeNodeMetrics = include))
+    fromFinagleConsumerConfig(config.copy(includeNodeMetrics = include))
 
+  @deprecated("Use buildClient instead", "2018-05-30")
   def build(): FinagleKafkaConsumer[K, V] = {
-    validateConfigs(finagleConsumerConfig)
-    new FinagleKafkaConsumer[K, V](finagleConsumerConfig)
+    validateConfigs(config)
+    new FinagleKafkaConsumer[K, V](config)
+  }
+
+  /**
+   * Create the native KafkaConsumer client.
+   */
+  def buildClient() : KafkaConsumer[K, V] = {
+    validateConfigs(config)
+    new KafkaConsumer[K, V](
+      config.properties,
+      config.keyDeserializer.get,
+      config.valueDeserializer.get)
   }
 
   protected def validateConfigs(config: FinagleKafkaConsumerConfig[K, V]) = {
@@ -91,7 +103,7 @@ trait FinagleKafkaConsumerBuilderMethods[K, V, Self] extends KafkaConsumerConfig
 }
 
 case class FinagleKafkaConsumerBuilder[K, V](
-  override protected val finagleConsumerConfig: FinagleKafkaConsumerConfig[K, V] =
+  override protected val config: FinagleKafkaConsumerConfig[K, V] =
     FinagleKafkaConsumerConfig[K, V]())
     extends FinagleKafkaConsumerBuilderMethods[K, V, FinagleKafkaConsumerBuilder[K, V]] {
   override protected def fromFinagleConsumerConfig(config: FinagleKafkaConsumerConfig[K, V]): This =

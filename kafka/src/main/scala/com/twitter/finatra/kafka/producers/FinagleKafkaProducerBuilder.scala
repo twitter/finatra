@@ -5,6 +5,7 @@ import com.twitter.finatra.kafka.config.{KafkaConfig, ToKafkaProperties}
 import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter
 import java.util.Properties
 import org.apache.kafka.clients.producer.ProducerConfig
+import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.common.serialization.Serializer
 
 case class FinagleKafkaProducerBuilder[K, V](
@@ -42,6 +43,17 @@ case class FinagleKafkaProducerBuilder[K, V](
   def build(): FinagleKafkaProducer[K, V] = {
     validateConfigs(config)
     new FinagleKafkaProducer[K, V](config)
+  }
+
+  /**
+   * Create the native KafkaProducer client.
+   */
+  def buildClient() : KafkaProducer[K, V] = {
+    validateConfigs(config)
+    new KafkaProducer[K, V](
+      config.properties,
+      config.keySerializer.get,
+      config.valueSerializer.get)
   }
 
   private def validateConfigs(config: FinagleKafkaProducerConfig[K, V]) = {
