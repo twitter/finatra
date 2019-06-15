@@ -191,13 +191,14 @@ private[kafkastreams] class KafkaStreamsFinagleMetricsReporter extends KafkaFina
     val partition = parsePartitionTag(allTags)
     val rocksDbStateId = Option(allTags.remove("rocksdb-state-id")).map("/" + _).getOrElse("")
     val rocksDbWindowId = Option(allTags.remove("rocksdb-window-id")).map("/" + _).getOrElse("")
+    val rocksDbWindowStateId = Option(allTags.remove("rocksdb-window-state-id")).map("/" + _).getOrElse("")
     val inMemWindowId = Option(allTags.remove("in-mem-window-id")).map("/" + _).getOrElse("")
     val inMemoryStateId = Option(allTags.remove("in-memory-state-id")).map("/" + _).getOrElse("")
     val recordCacheId = Option(allTags.remove("record-cache-id")).map("/" + _).getOrElse("")
 
     val otherTagsStr = createOtherTagsStr(metric, allTags)
 
-    component + taskId + rocksDbStateId + rocksDbWindowId + inMemWindowId + inMemoryStateId +
+    component + taskId + rocksDbStateId + rocksDbWindowId + rocksDbWindowStateId + inMemWindowId + inMemoryStateId +
       recordCacheId + topic + partition + otherTagsStr + nodeId + processorNodeId + "/" + metricName
   }
 

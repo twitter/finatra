@@ -6,6 +6,8 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 
 Unreleased
 ----------
+* finatra-kafka: Update finatra exported metrics to contains KafkaMetrics 'rocksdb-window-state-id'.
+  ``PHAB_ID=D326320``
 
 Added
 ~~~~~
