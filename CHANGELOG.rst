@@ -30,6 +30,11 @@ Changed
   Add `c.t.finatra.kafka.consumers.FinagleKafkaConsumer.buildClient` and
   `c.t.finatra.kafka.producters.FinagleKafkaProducer.buildClient`. ``PHAB_ID=D321699``
 
+Fixed
+~~~~~
+
+* finatra: Add an explicit dependency on `com.sun.activation` to allow for using
+  Finatra with JDK 11. This fixes #484. ``PHAB_ID=D328724``
 
 19.5.1
 ------
