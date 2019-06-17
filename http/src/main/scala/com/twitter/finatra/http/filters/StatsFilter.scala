@@ -24,7 +24,6 @@ private object StatsFilter {
         requestTime = if (perEndpoint) Some(statsReceiver.stat("time")) else None,
         statusCodeTime = statsReceiver.scope("time").stat(statusCode.toString),
         statusClassTime = statsReceiver.scope("time").stat(statusClass),
-        responseSize = statsReceiver.stat("response_size"),
         successCount = if (perEndpoint) Some(statsReceiver.counter("success")) else None,
         failuresCount = if (perEndpoint) Some(statsReceiver.counter("failures")) else None
       )
@@ -39,7 +38,6 @@ private object StatsFilter {
     requestTime: Option[Stat],
     statusCodeTime: Stat,
     statusClassTime: Stat,
-    responseSize: Stat,
     successCount: Option[Counter],
     failuresCount: Option[Counter]
   ) {
@@ -53,7 +51,6 @@ private object StatsFilter {
       statusCodeTime.add(durationMs.toFloat)
       statusClassTime.add(durationMs.toFloat)
 
-      responseSize.add(response.length.toFloat)
       if (success) {
         successCount.foreach(_.incr())
       } else {
@@ -75,13 +72,11 @@ private object StatsFilter {
  *   route/foo/GET/status/200 1
  *   route/foo/GET/status/2XX 1
  *   route/foo/GET/success 1
- *   route/foo/GET/response_size 13.000000 [13.0]
  *   route/foo/GET/time 857.000000 [857.0]
  *   route/foo/GET/time/200 857.000000 [857.0]
  *   route/foo/GET/time/2XX 857.000000 [857.0]
  *   status/200 1
  *   status/2XX 1
- *   response_size 13.000000 [13.0]
  *   time/200 857.000000 [857.0]
  *   time/2XX 857.000000 [857.0]
  * }}}
@@ -94,13 +89,11 @@ private object StatsFilter {
  *   route/foo/GET/status/500 1
  *   route/foo/GET/status/5XX 1
  *   route/foo/GET/success 0
- *   route/foo/GET/response_size 0.000000 [0.0]
  *   route/foo/GET/time 86.000000 [86.0]
  *   route/foo/GET/time/500 86.000000 [86.0]
  *   route/foo/GET/time/5XX 86.000000 [86.0]
  *   status/500 1
  *   status/5XX 1
- *   response_size 0.000000 [0.0]
  *   time/500 86.000000 [86.0]
  *   time/5XX 86.000000 [86.0]
  * }}}

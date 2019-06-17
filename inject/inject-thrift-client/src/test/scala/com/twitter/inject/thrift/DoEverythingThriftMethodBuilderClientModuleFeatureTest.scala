@@ -86,9 +86,6 @@ class DoEverythingThriftMethodBuilderClientModuleFeatureTest extends FeatureTest
     intercept[Exception] {
       server.httpGet(path = "/hi?name=Bob", andExpect = Ok, withBody = "Hi Bob")
     }
-    // http server route stat
-    server.inMemoryStats.stats.assert("route/hi/GET/response_size", Seq(5.0f))
-
     // per-method -- all the requests in this test were to the same method
     /* assert counters added by ThriftServicePerEndpoint#statsFilter */
     server.inMemoryStats.counters
@@ -111,9 +108,6 @@ class DoEverythingThriftMethodBuilderClientModuleFeatureTest extends FeatureTest
 
   test("Say hello") {
     server.httpGet(path = "/hello?name=Bob", andExpect = Ok, withBody = "Hello Bob")
-    // http server route stat
-    server.inMemoryStats.stats.assert("route/hello/GET/response_size", Seq(9.0f))
-
     // per-method -- all the requests in this test were to the same method
     /* assert counters added by ThriftServicePerEndpoint#statsFilter */
     server.inMemoryStats.counters
@@ -140,9 +134,6 @@ class DoEverythingThriftMethodBuilderClientModuleFeatureTest extends FeatureTest
       andExpect = Ok,
       withBody = "Bye Bob of 18 years!"
     )
-    // http server route stat
-    server.inMemoryStats.stats.assert("route/bye/GET/response_size", Seq(20.0f))
-
     // per-method -- all the requests in this test were to the same method
     /* assert counters added by ThriftServicePerEndpoint#statsFilter */
     server.inMemoryStats.counters
@@ -179,10 +170,6 @@ class DoEverythingThriftMethodBuilderClientModuleFeatureTest extends FeatureTest
     )
 
     server.httpGet(path = "/echo?msg=Bob", andExpect = Ok, withBody = "BobBobBob")
-    // http server route stats
-    server.inMemoryStats.stats.assert("route/config/POST/response_size", Seq(1.0f, 1.0f))
-    server.inMemoryStats.stats.assert("route/echo/GET/response_size", Seq(9.0f))
-
     // per-method -- all the requests in this test were to the same method
     /* assert counters added by ThriftServicePerEndpoint#statsFilter */
     server.inMemoryStats.counters

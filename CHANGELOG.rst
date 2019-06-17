@@ -23,6 +23,9 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-http: Removed deprecated `response_size` stat from `c.t.finatra.http.filters.StatsFilter`.
+  ``PHAB_ID=D328254``
+
 * finatra-kafka: Deprecate in `c.t.finatra.kafka.consumers.FinagleKafkaConsumer`.
   Add `c.t.finatra.kafka.consumers.FinagleKafkaConsumer.buildClient` and
   `c.t.finatra.kafka.producters.FinagleKafkaProducer.buildClient`. ``PHAB_ID=D321699``
