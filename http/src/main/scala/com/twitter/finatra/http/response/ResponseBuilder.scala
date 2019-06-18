@@ -167,7 +167,7 @@ class ResponseBuilder @Inject()(
    * @tparam F The Primitive Stream type.
    * @tparam A The type of streaming values.
    */
-  private[http] def streaming[F[_]: ToReader, A](stream: F[A]): http.streaming.StreamingResponse[F, A] =
+  private[finatra] def streaming[F[_]: ToReader, A](stream: F[A]): http.streaming.StreamingResponse[F, A] =
     http.streaming.StreamingResponse(objectMapper, stream)
 
   private def fullMimeTypeValue(mimeType: String): String = {
