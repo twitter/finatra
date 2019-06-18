@@ -265,8 +265,7 @@ class LegacyDoEverythingThriftServerFeatureTest extends FeatureTest {
     val question = Question("fail")
     await(client123.ask(question)) should equal(Answer("DoEverythingException caught"))
     server.inMemoryStats.counters.assert("per_method_stats/ask/success", 1)
-    server.inMemoryStats.counters.get("per_method_stats/ask/failures") should be(
-      None)
+    server.inMemoryStats.counters.get("per_method_stats/ask/failures") should be(None)
   }
 
   test("Per-endpoint stats scope") {
@@ -274,7 +273,7 @@ class LegacyDoEverythingThriftServerFeatureTest extends FeatureTest {
     await(client123.ask(question)) should equal(Answer("DoEverythingException caught"))
     server.inMemoryStats.counters.assert("srv/thrift/ask/requests", 1)
     server.inMemoryStats.counters.assert("srv/thrift/ask/success", 1)
-    server.inMemoryStats.counters.assert("srv/thrift/ask/failures", 0)
+    server.inMemoryStats.counters.get("srv/thrift/ask/failures") should be(None)
   }
 
   private def await[T](f: Future[T]): T = {

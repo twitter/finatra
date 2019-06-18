@@ -25,7 +25,8 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
   )
 
   /* Higher-kinded interface type */
-  val client123: DoEverything[Future] = server.thriftClient[DoEverything[Future]](clientId = "client123")
+  val client123: DoEverything[Future] =
+    server.thriftClient[DoEverything[Future]](clientId = "client123")
   /* Method-Per-Endpoint type: https://twitter.github.io/scrooge/Finagle.html#id1 */
   val methodPerEndpointClient123: DoEverything.MethodPerEndpoint =
     server.thriftClient[DoEverything.MethodPerEndpoint](clientId = "client123")
@@ -85,16 +86,22 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
     val service = filter.andThen(servicePerEndpoint123.uppercase)
     await(service(DoEverything.Uppercase.Args("hello"))) should equal("GOODBYE")
 
-    val filter2 = new Filter[scrooge.Request[DoEverything.Uppercase.Args], scrooge.Response[
-      DoEverything.Uppercase.SuccessType
-    ], scrooge.Request[DoEverything.Uppercase.Args], scrooge.Response[
-      DoEverything.Uppercase.SuccessType
-    ]] {
+    val filter2 = new Filter[
+      scrooge.Request[DoEverything.Uppercase.Args],
+      scrooge.Response[
+        DoEverything.Uppercase.SuccessType
+      ],
+      scrooge.Request[DoEverything.Uppercase.Args],
+      scrooge.Response[
+        DoEverything.Uppercase.SuccessType
+      ]] {
       override def apply(
         request: scrooge.Request[DoEverything.Uppercase.Args],
-        service: Service[scrooge.Request[DoEverything.Uppercase.Args], scrooge.Response[
-          DoEverything.Uppercase.SuccessType
-        ]]
+        service: Service[
+          scrooge.Request[DoEverything.Uppercase.Args],
+          scrooge.Response[
+            DoEverything.Uppercase.SuccessType
+          ]]
       ): Future[scrooge.Response[DoEverything.Uppercase.SuccessType]] = {
         val filteredRequest: scrooge.Request[DoEverything.Uppercase.Args] =
           scrooge.Request(Map("com.twitter.test.header" -> Seq(Buf.Utf8("foo"))), request.args)
@@ -248,9 +255,7 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
   }
 
   test("GET /admin/registry.json") {
-    val response = server.httpGetAdmin(
-      "/admin/registry.json",
-      andExpect = Status.Ok)
+    val response = server.httpGetAdmin("/admin/registry.json", andExpect = Status.Ok)
 
     val mapper = new ObjectMapper() with ScalaObjectMapper
     mapper.registerModule(DefaultScalaModule)
@@ -274,11 +279,12 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
     val methods = thrift("methods").asInstanceOf[Map[String, Any]]
     methods.size should be > 0
 
-    methods.foreach { case (_, data) =>
-      data.isInstanceOf[Map[_, _]] should be(true)
-      val methodJsonInformation = data.asInstanceOf[Map[String, Any]]
-      methodJsonInformation.contains("service_name") should be(true)
-      methodJsonInformation.contains("class") should be(true)
+    methods.foreach {
+      case (_, data) =>
+        data.isInstanceOf[Map[_, _]] should be(true)
+        val methodJsonInformation = data.asInstanceOf[Map[String, Any]]
+        methodJsonInformation.contains("service_name") should be(true)
+        methodJsonInformation.contains("class") should be(true)
     }
   }
 
@@ -302,7 +308,7 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
     await(client123.ask(question)) should equal(Answer("ReqRep DoEverythingException caught"))
     server.inMemoryStats.counters.assert("srv/thrift/ask/requests", 1)
     server.inMemoryStats.counters.assert("srv/thrift/ask/success", 1)
-    server.inMemoryStats.counters.assert("srv/thrift/ask/failures", 0) //eagerly created
+    server.inMemoryStats.counters.get("srv/thrift/ask/failures") should be(None)
   }
 
   test("per-endpoint filtering") {
