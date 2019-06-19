@@ -6,9 +6,6 @@ import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest, TwitterSer
 /** Test an injectable TwitterServer with the [[FeatureTest]] trait */
 class FeatureTestTest extends FeatureTest {
 
-  /* Disable printing of stats for injectable TwitterServer under test */
-  override val printStats = false
-
   override val server: EmbeddedTwitterServer =
     new EmbeddedTwitterServer(
       twitterServer = new TwitterServer {},

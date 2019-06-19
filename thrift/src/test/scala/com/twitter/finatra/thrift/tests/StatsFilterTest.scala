@@ -2,7 +2,7 @@ package com.twitter.finatra.thrift.tests
 
 import com.twitter.conversions.DurationOps._
 import com.twitter.doeverything.thriftscala.DoEverything
-import com.twitter.finagle.Service
+import com.twitter.finagle.{Failure, Service}
 import com.twitter.finagle.service.{ReqRep, ResponseClass, ResponseClassifier}
 import com.twitter.finagle.thrift.MethodMetadata
 import com.twitter.finagle.stats.InMemoryStatsReceiver
@@ -23,6 +23,27 @@ class StatsFilterTest extends Test {
   def newFilter(responseClassifier: ThriftResponseClassifier) = {
     new StatsFilter(statsReceiver, responseClassifier)
   }
+
+  test("ignorables are ignored") {
+    val statsFilter = newFilter(ThriftResponseClassifier(ResponseClassifier.Default))
+    val service = statsFilter.andThen(Service.mk[String, String] {
+      case "hi" => Future.const(Throw(Failure.ignorable("meh")))
+      case _ => Future.exception(new Exception("oops"))
+    })
+
+    withService(service) {
+      Await.ready(service("hi"), 2.seconds)
+      statsReceiver.counters(List("exceptions")) should equal(1)
+      statsReceiver.counters(List("per_method_stats", "echo", "failures")) should equal(0)
+      statsReceiver.counters(List("per_method_stats", "echo", "success")) should equal(0)
+      Await.ready(service("hello"), 2.seconds)
+      statsReceiver.counters(List("exceptions")) should equal(2)
+      statsReceiver.counters(List("per_method_stats", "echo", "failures")) should equal(1)
+      statsReceiver.counters(List("per_method_stats", "echo", "success")) should equal(0)
+      statsReceiver.stats.get(List("per_method_stats", "echo", "latency_ms")) should not be None
+    }
+  }
+
 
   test("successful request") {
     val statsFilter = newFilter(

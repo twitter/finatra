@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.tests.filters
 
 import com.twitter.conversions.DurationOps._
-import com.twitter.finagle.Service
+import com.twitter.finagle.{Failure, Service}
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.service.{ReqRep, ResponseClass, ResponseClassifier}
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
@@ -30,6 +30,27 @@ class StatsFilterTest extends Test with Mockito {
   override protected def afterEach(): Unit = {
     statsReceiver.clear()
     super.afterEach()
+  }
+
+  test("ignorables are ignored") {
+    val statsFilter = new StatsFilter[Request](
+      statsReceiver,
+      HttpResponseClassifier(ResponseClassifier.Default)
+    )
+
+    val request = Request()
+    val service = Service.mk[Request, Response] { _ =>
+      Future.const(Throw(Failure.ignorable("oops")))
+    }
+
+    withService(service) {
+      Await.ready(statsFilter.apply(request, service), 2.seconds)
+      /* only global counters and histos */
+      assert(statsReceiver.counters.get(Seq("status", "5XX")).isEmpty)
+      assert(statsReceiver.counters.get(Seq("status", "2XX")).isEmpty)
+      assert(statsReceiver.stats.get(Seq("time", "5XX")).isEmpty)
+      assert(statsReceiver.stats.get(Seq("time", "2XX")).isEmpty)
+    }
   }
 
   test("failed request") {

@@ -117,4 +117,4 @@ The following `Jackson annotations <https://github.com/FasterXML/jackson-annotat
 Known limitations
 -----------------
 
--  ``@JsonCreator`` is not supported. Finatra ignores this annotation (see: `#447 <https://github.com/twitter/finatra/issues/447>`).
+-  ``@JsonCreator`` is not supported. Finatra ignores this annotation (see: `#447 <https://github.com/twitter/finatra/issues/447>`__).

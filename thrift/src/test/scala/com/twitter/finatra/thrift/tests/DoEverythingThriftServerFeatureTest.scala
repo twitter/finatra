@@ -1,5 +1,8 @@
 package com.twitter.finatra.thrift.tests
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.twitter.conversions.DurationOps._
 import com.twitter.doeverything.thriftscala.{Answer, DoEverything, Question}
 import com.twitter.finagle.http.Status
@@ -13,7 +16,6 @@ import com.twitter.io.Buf
 import com.twitter.scrooge
 import com.twitter.util.{Await, Future}
 import org.apache.thrift.TApplicationException
-import scala.util.parsing.json.JSON
 
 class DoEverythingThriftServerFeatureTest extends FeatureTest {
   override val server = new EmbeddedThriftServer(
@@ -23,7 +25,8 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
   )
 
   /* Higher-kinded interface type */
-  val client123: DoEverything[Future] = server.thriftClient[DoEverything[Future]](clientId = "client123")
+  val client123: DoEverything[Future] =
+    server.thriftClient[DoEverything[Future]](clientId = "client123")
   /* Method-Per-Endpoint type: https://twitter.github.io/scrooge/Finagle.html#id1 */
   val methodPerEndpointClient123: DoEverything.MethodPerEndpoint =
     server.thriftClient[DoEverything.MethodPerEndpoint](clientId = "client123")
@@ -83,16 +86,22 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
     val service = filter.andThen(servicePerEndpoint123.uppercase)
     await(service(DoEverything.Uppercase.Args("hello"))) should equal("GOODBYE")
 
-    val filter2 = new Filter[scrooge.Request[DoEverything.Uppercase.Args], scrooge.Response[
-      DoEverything.Uppercase.SuccessType
-    ], scrooge.Request[DoEverything.Uppercase.Args], scrooge.Response[
-      DoEverything.Uppercase.SuccessType
-    ]] {
+    val filter2 = new Filter[
+      scrooge.Request[DoEverything.Uppercase.Args],
+      scrooge.Response[
+        DoEverything.Uppercase.SuccessType
+      ],
+      scrooge.Request[DoEverything.Uppercase.Args],
+      scrooge.Response[
+        DoEverything.Uppercase.SuccessType
+      ]] {
       override def apply(
         request: scrooge.Request[DoEverything.Uppercase.Args],
-        service: Service[scrooge.Request[DoEverything.Uppercase.Args], scrooge.Response[
-          DoEverything.Uppercase.SuccessType
-        ]]
+        service: Service[
+          scrooge.Request[DoEverything.Uppercase.Args],
+          scrooge.Response[
+            DoEverything.Uppercase.SuccessType
+          ]]
       ): Future[scrooge.Response[DoEverything.Uppercase.SuccessType]] = {
         val filteredRequest: scrooge.Request[DoEverything.Uppercase.Args] =
           scrooge.Request(Map("com.twitter.test.header" -> Seq(Buf.Utf8("foo"))), request.args)
@@ -246,12 +255,13 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
   }
 
   test("GET /admin/registry.json") {
-    val response = server.httpGetAdmin(
-      "/admin/registry.json",
-      andExpect = Status.Ok)
+    val response = server.httpGetAdmin("/admin/registry.json", andExpect = Status.Ok)
+
+    val mapper = new ObjectMapper() with ScalaObjectMapper
+    mapper.registerModule(DefaultScalaModule)
 
     val json: Map[String, Any] =
-      JSON.parseFull(response.contentString).get.asInstanceOf[Map[String, Any]]
+      mapper.readValue(response.contentString, classOf[Map[String, Any]])
 
     val registry = json("registry").asInstanceOf[Map[String, Any]]
     registry.contains("library") should be(true)
@@ -269,35 +279,36 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
     val methods = thrift("methods").asInstanceOf[Map[String, Any]]
     methods.size should be > 0
 
-    methods.foreach { case (_, data) =>
-      data.isInstanceOf[Map[_, _]] should be(true)
-      val methodJsonInformation = data.asInstanceOf[Map[String, Any]]
-      methodJsonInformation.contains("service_name") should be(true)
-      methodJsonInformation.contains("class") should be(true)
+    methods.foreach {
+      case (_, data) =>
+        data.isInstanceOf[Map[_, _]] should be(true)
+        val methodJsonInformation = data.asInstanceOf[Map[String, Any]]
+        methodJsonInformation.contains("service_name") should be(true)
+        methodJsonInformation.contains("class") should be(true)
     }
   }
 
   test("Basic server stats") {
     await(client123.uppercase("Hi")) should equal("HI")
-    server.assertCounter("srv/thrift/sent_bytes")(_ > 0)
-    server.assertCounter("srv/thrift/received_bytes")(_ > 0)
-    server.assertCounter("srv/thrift/requests", 1L)
-    server.assertCounter("srv/thrift/success", 1L)
+    server.inMemoryStats.counters.assert("srv/thrift/sent_bytes")(_ > 0)
+    server.inMemoryStats.counters.assert("srv/thrift/received_bytes")(_ > 0)
+    server.inMemoryStats.counters.assert("srv/thrift/requests", 1)
+    server.inMemoryStats.counters.assert("srv/thrift/success", 1)
   }
 
   test("Per-method stats scope") {
     val question = Question("fail")
     await(client123.ask(question)) should equal(Answer("ReqRep DoEverythingException caught"))
-    server.assertCounter("per_method_stats/ask/success", 1L)
-    server.assertCounter("per_method_stats/ask/failures", 0L)
+    server.inMemoryStats.counters.assert("per_method_stats/ask/success", 1)
+    server.inMemoryStats.counters.get("per_method_stats/ask/failures") should be(None)
   }
 
   test("Per-endpoint stats scope") {
     val question = Question("fail")
     await(client123.ask(question)) should equal(Answer("ReqRep DoEverythingException caught"))
-    server.assertCounter("srv/thrift/ask/requests", 1L)
-    server.assertCounter("srv/thrift/ask/success", 1L)
-    server.assertCounter("srv/thrift/ask/failures", 0L)
+    server.inMemoryStats.counters.assert("srv/thrift/ask/requests", 1)
+    server.inMemoryStats.counters.assert("srv/thrift/ask/success", 1)
+    server.inMemoryStats.counters.get("srv/thrift/ask/failures") should be(None)
   }
 
   test("per-endpoint filtering") {
@@ -305,7 +316,7 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
     await(client123.echo("a"))
     await(client123.echo2("a"))
     await(client123.uppercase("a"))
-    server.assertCounter("echo_calls", 2L)
+    server.inMemoryStats.counters.assert("echo_calls", 2)
   }
 
   private def await[T](f: Future[T]): T = {

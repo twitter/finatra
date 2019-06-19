@@ -20,7 +20,6 @@ object DoEverythingReqRepThriftMethodBuilderClientModuleFeatureTest {
 class DoEverythingReqRepThriftMethodBuilderClientModuleFeatureTest
   extends FeatureTest
   with HttpTest {
-  override val printStats = false
 
   private val requestHeaderKey = "com.twitter.greeter.test.header"
   private val httpServiceClientId = "http-service"
@@ -66,15 +65,15 @@ class DoEverythingReqRepThriftMethodBuilderClientModuleFeatureTest
 
     // per-method -- all the requests in this test were to the same method
     /* assert counters added by ThriftServicePerEndpoint#statsFilter */
-    server.assertCounter("clnt/greeter-thrift-client/Greeter/hi/requests", 3)
-    server.assertCounter("clnt/greeter-thrift-client/Greeter/hi/success", 1)
-    server.assertCounter("clnt/greeter-thrift-client/Greeter/hi/failures", 2)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/hi/requests", 3)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/hi/success", 1)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/hi/failures", 2)
     /* assert MethodBuilder stats exist */
-    server.getStat("clnt/greeter-thrift-client/hi/logical/request_latency_ms") should not be Seq()
-    server.getStat("clnt/greeter-thrift-client/hi/retries") should be(Seq(2.0))
+    server.inMemoryStats.stats.get("clnt/greeter-thrift-client/hi/logical/request_latency_ms") should not be None
+    server.inMemoryStats.stats.assert("clnt/greeter-thrift-client/hi/retries", Seq(2.0f))
     /* assert MethodBuilder counters */
-    server.assertCounter("clnt/greeter-thrift-client/hi/logical/requests", 1)
-    server.assertCounter("clnt/greeter-thrift-client/hi/logical/success", 1)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/hi/logical/requests", 1)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/hi/logical/success", 1)
   }
 
   test("Say hello") {
@@ -85,15 +84,15 @@ class DoEverythingReqRepThriftMethodBuilderClientModuleFeatureTest
 
     // per-method -- all the requests in this test were to the same method
     /* assert counters added by ThriftServicePerEndpoint#statsFilter */
-    server.assertCounter("clnt/greeter-thrift-client/Greeter/hello/requests", 3)
-    server.assertCounter("clnt/greeter-thrift-client/Greeter/hello/success", 1)
-    server.assertCounter("clnt/greeter-thrift-client/Greeter/hello/failures", 2)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/hello/requests", 3)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/hello/success", 1)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/hello/failures", 2)
     /* assert MethodBuilder stats exist */
-    server.getStat("clnt/greeter-thrift-client/hello/logical/request_latency_ms") should not be Seq()
-    server.getStat("clnt/greeter-thrift-client/hello/retries") should be(Seq(2.0))
+    server.inMemoryStats.stats.get("clnt/greeter-thrift-client/hello/logical/request_latency_ms") should not be None
+    server.inMemoryStats.stats.assert("clnt/greeter-thrift-client/hello/retries", Seq(2.0f))
     /* assert MethodBuilder counters */
-    server.assertCounter("clnt/greeter-thrift-client/hello/logical/requests", 1)
-    server.assertCounter("clnt/greeter-thrift-client/hello/logical/success", 1)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/hello/logical/requests", 1)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/hello/logical/success", 1)
   }
 
   test("Say bye") {
@@ -105,14 +104,14 @@ class DoEverythingReqRepThriftMethodBuilderClientModuleFeatureTest
 
     // per-method -- all the requests in this test were to the same method
     /* assert counters added by ThriftServicePerEndpoint#statsFilter */
-    server.assertCounter("clnt/greeter-thrift-client/Greeter/bye/requests", 3)
-    server.assertCounter("clnt/greeter-thrift-client/Greeter/bye/success", 1)
-    server.assertCounter("clnt/greeter-thrift-client/Greeter/bye/failures", 2)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/bye/requests", 3)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/bye/success", 1)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/bye/failures", 2)
     /* assert MethodBuilder stats exist */
-    server.getStat("clnt/greeter-thrift-client/bye/logical/request_latency_ms") should not be Seq()
-    server.getStat("clnt/greeter-thrift-client/bye/retries") should be(Seq(2.0))
+    server.inMemoryStats.stats.get("clnt/greeter-thrift-client/bye/logical/request_latency_ms") should not be None
+    server.inMemoryStats.stats.assert("clnt/greeter-thrift-client/bye/retries", Seq(2.0f))
     /* assert MethodBuilder counters */
-    server.assertCounter("clnt/greeter-thrift-client/bye/logical/requests", 1)
-    server.assertCounter("clnt/greeter-thrift-client/bye/logical/success", 1)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/bye/logical/requests", 1)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/bye/logical/success", 1)
   }
 }

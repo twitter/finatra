@@ -253,8 +253,8 @@ class EmbeddedTwitterServer(
   /** Returns the [[StatsReceiver]] for the underlying server when applicable */
   lazy val statsReceiver: StatsReceiver =
     if (isInjectable) injector.instance[StatsReceiver]
-    else statsReceiverOverride.getOrElse(
-      throw new IllegalStateException(
+    else
+      statsReceiverOverride.getOrElse(throw new IllegalStateException(
         "Accessing the underlying StatsReceiver is only supported with an injectable server or when an override is provided."))
 
   lazy val usesInMemoryStatsReceiver: Boolean =
@@ -272,6 +272,10 @@ class EmbeddedTwitterServer(
       throw new IllegalStateException(
         "The configured StatsReceiver implementation is not of type InMemoryStatsReceiver.")
   }
+
+  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
+  lazy val inMemoryStats: InMemoryStatsReceiverUtility =
+    new InMemoryStatsReceiverUtility(inMemoryStatsReceiver)
 
   lazy val adminHostAndPort: String = PortUtils.loopbackAddressForPort(httpAdminPort())
 
@@ -421,24 +425,51 @@ class EmbeddedTwitterServer(
 
   /* InMemoryStatsReceiver Functions */
 
-  /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
+  /**
+   * Prints stats from the bound [[InMemoryStatsReceiver]] when applicable. If access to this method
+   * is attempted when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]
+   * this will throw an [[IllegalStateException]] as it is not expected that users call this
+   * when providing a custom [[StatsReceiver]] implementation via the [[statsReceiverOverride]].
+   * Instead, users should prefer to print stats from their custom [[StatsReceiver]] implementation
+   * by other means.
+   *
+   * @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a
+   *        [[statsReceiverOverride]].
+   */
+  def printStats(): Unit = {
+    infoBanner(name + " Stats", disableLogging)
+    inMemoryStats.print()
+  }
+
+  /**
+   * Clears all metrics of the bound [[InMemoryStatsReceiver]] when applicable. If access to this
+   * method is attempted when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]
+   * this will throw an [[IllegalStateException]] as it is not expected that users call this
+   * when providing a custom [[StatsReceiver]] implementation via the [[statsReceiverOverride]].
+   * Instead, users should prefer to clear stats from their custom [[StatsReceiver]] implementation
+   * by other means.
+   *
+   * @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a
+   *         [[statsReceiverOverride]].
+   */
   def clearStats(): Unit = {
-    inMemoryStatsReceiver.counters.clear()
-    inMemoryStatsReceiver.stats.clear()
-    inMemoryStatsReceiver.gauges.clear()
+    inMemoryStats.clear()
   }
 
   /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
+  @deprecated("Use the inMemoryStatsReceiverUtility#statsMap directly", "2019-05-17")
   def statsMap: SortedMap[String, Seq[Float]] =
-    inMemoryStatsReceiver.stats.iterator.toMap.mapKeys(keyStr).toSortedMap
+    inMemoryStats.stats.toSortedMap
 
   /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
+  @deprecated("Use the inMemoryStatsReceiverUtility#countersMap directly", "2019-05-17")
   def countersMap: SortedMap[String, Long] =
-    inMemoryStatsReceiver.counters.iterator.toMap.mapKeys(keyStr).toSortedMap
+    inMemoryStats.counters.toSortedMap
 
   /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
+  @deprecated("Use the inMemoryStatsReceiverUtility#gaugeMap directly", "2019-05-17")
   def gaugeMap: SortedMap[String, () => Float] =
-    inMemoryStatsReceiver.gauges.iterator.toMap.mapKeys(keyStr).toSortedMap
+    inMemoryStats.gauges.toSortedMap.mapValues(() => _)
 
   /**
    * Prints stats from the bound [[InMemoryStatsReceiver]] when applicable. If access to this method
@@ -452,63 +483,52 @@ class EmbeddedTwitterServer(
    * @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a
    *        [[statsReceiverOverride]].
    */
-  def printStats(includeGauges: Boolean = true): Unit = {
-    infoBanner(name + " Stats", disableLogging)
-    for ((key, values) <- statsMap) {
-      val avg = values.sum / values.size
-      val valuesStr = values.mkString("[", ", ", "]")
-      info(f"$key%-70s = $avg = $valuesStr", disableLogging)
-    }
-
-    info("\nCounters:", disableLogging)
-    for ((key, value) <- countersMap) {
-      info(f"$key%-70s = $value", disableLogging)
-    }
-
-    if (includeGauges) {
-      info("\nGauges:", disableLogging)
-      for ((key, value) <- inMemoryStatsReceiver.gauges.iterator.toMap
-          .mapKeys(keyStr)
-          .toSortedMap) {
-        info(f"$key%-70s = ${value()}", disableLogging)
-      }
-    }
-  }
+  @deprecated(
+    "Use printStats(). The `includeGauges` parameter is ignored and gauge values will now always be printed from the underlying InMemoryStatsReceiver.",
+    "2019-05-17"
+  )
+  def printStats(includeGauges: Boolean): Unit = this.printStats()
 
   /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
+  @deprecated("Use the inMemoryStatsReceiverUtility#counters#apply", "2019-05-17")
   def getCounter(name: String): Long = {
-    countersMap.getOrElse(name, 0)
+    inMemoryStats.counters.get(name).getOrElse(0)
   }
 
   /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
+  @deprecated("Use the inMemoryStatsReceiverUtility#counters#assert", "2019-05-17")
   def assertCounter(name: String, expected: Long): Unit = {
     getCounter(name) should equal(expected)
   }
 
   /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
+  @deprecated("Use the inMemoryStatsReceiverUtility#counters#assert", "2019-05-17")
   def assertCounter(name: String)(callback: Long => Boolean): Unit = {
     callback(getCounter(name)) should be(true)
   }
 
   /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
+  @deprecated("Use the inMemoryStatsReceiverUtility#stats#apply", "2019-05-17")
   def getStat(name: String): Seq[Float] = {
-    statsMap.getOrElse(name, Seq())
+    inMemoryStats.stats.get(name).getOrElse(Seq.empty[Float])
   }
 
   /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
+  @deprecated("Use the inMemoryStatsReceiverUtility#stats#assert", "2019-05-17")
   def assertStat(name: String, expected: Seq[Float]): Unit = {
     getStat(name) should equal(expected)
   }
 
   /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
+  @deprecated("Use the inMemoryStatsReceiverUtility#gauges#apply", "2019-05-17")
   def getGauge(name: String): Float = {
-    gaugeMap.get(name) map { _.apply() } getOrElse 0f
+    inMemoryStats.gauges.get(name).getOrElse(0)
   }
 
   /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
+  @deprecated("Use the inMemoryStatsReceiverUtility#gauges#assert", "2019-05-17")
   def assertGauge(name: String, expected: Float): Unit = {
-    val value = getGauge(name)
-    value should equal(expected)
+    getGauge(name) should equal(expected)
   }
 
   /* Protected */
@@ -547,11 +567,6 @@ class EmbeddedTwitterServer(
   }
 
   /* Private */
-
-  /* StatsReceiver key utility */
-  private def keyStr(keys: Seq[String]): String = {
-    keys.mkString("/")
-  }
 
   private def flagsAsArgs(flags: Map[String, String]): Iterable[String] = {
     flags.map { case (k, v) => "-" + k + "=" + v }

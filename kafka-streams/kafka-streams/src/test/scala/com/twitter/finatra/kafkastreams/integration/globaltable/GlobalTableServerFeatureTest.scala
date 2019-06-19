@@ -24,7 +24,7 @@ class GlobalTableServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
       disableTestLogging = true
     )
 
-    assert(server.gaugeMap.keys.exists { metric =>
+    assert(server.inMemoryStats.gauges.toSortedMap.keys.exists { metric =>
       globalTableClientIdPatterns.exists(metric.contains)
     })
     server.close()
@@ -43,7 +43,7 @@ class GlobalTableServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
       disableTestLogging = true
     )
 
-    assert(!server.gaugeMap.keys.exists { metric =>
+    assert(!server.inMemoryStats.gauges.toSortedMap.keys.exists { metric =>
       globalTableClientIdPatterns.exists(metric.contains)
     })
     server.close()

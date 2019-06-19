@@ -26,11 +26,14 @@ class WordCountInMemoryServerFeatureTest extends KafkaStreamsFeatureTest {
       "hello" -> 1,
       "hello" -> 2
     )
-    server.assertGauge(
+    server.inMemoryStats.gauges.assert(
       "kafka/thread1/producer/wordcount_prod_CountsStore_changelog/record_send_total",
-      3
+      3.0f
     )
-    server.assertGauge("kafka/thread1/producer/WordsWithCountsTopic/record_send_total", 3)
+    server.inMemoryStats.gauges.assert(
+      "kafka/thread1/producer/WordsWithCountsTopic/record_send_total",
+      3.0f
+    )
 
     textLinesTopic.publish(1L -> "world world")
     waitForKafkaMetric("kafka/thread1/consumer/TextLinesTopic/records_consumed_total", 2)
@@ -38,13 +41,18 @@ class WordCountInMemoryServerFeatureTest extends KafkaStreamsFeatureTest {
       "world" -> 2,
       "world" -> 3
     )
-    server.assertGauge(
+    server.inMemoryStats.gauges.assert(
       "kafka/thread1/producer/wordcount_prod_CountsStore_changelog/record_send_total",
-      5
+      5.0f
     )
-    server.assertGauge("kafka/thread1/producer/WordsWithCountsTopic/record_send_total", 5)
-
-    server.assertGauge("kafka/stream/state", 2)
+    server.inMemoryStats.gauges.assert(
+      "kafka/thread1/producer/WordsWithCountsTopic/record_send_total",
+      5.0f
+    )
+    server.inMemoryStats.gauges.assert(
+      "kafka/stream/state",
+      2.0f
+    )
     server.printStats()
   }
 }

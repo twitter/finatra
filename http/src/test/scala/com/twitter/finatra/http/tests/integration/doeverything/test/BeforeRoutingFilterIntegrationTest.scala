@@ -29,8 +29,8 @@ class BeforeRoutingFilterIntegrationTest extends Test with Mockito {
         "/a_route_uri",
         andExpect = Status.InternalServerError)
 
-      server.assertCounter("route/a_route_uri/GET/status/500/mapped/Exception", 1L)
-      server.assertCounter("service/failure/Internal/Unhandled/java.lang.Exception", 1L)
+      server.inMemoryStats.counters.assert("route/a_route_uri/GET/status/500/mapped/Exception", 1)
+      server.inMemoryStats.counters.assert("service/failure/Internal/Unhandled/java.lang.Exception", 1)
     } finally {
       server.close()
     }
@@ -53,8 +53,8 @@ class BeforeRoutingFilterIntegrationTest extends Test with Mockito {
         "/failing",
         andExpect = Status.InternalServerError)
 
-      server.assertCounter("route/failing/GET/status/500/mapped/Exception", 1L)
-      server.assertCounter("service/failure/Internal/Unhandled/java.lang.Exception", 1L)
+      server.inMemoryStats.counters.assert("route/failing/GET/status/500/mapped/Exception", 1)
+      server.inMemoryStats.counters.assert("service/failure/Internal/Unhandled/java.lang.Exception", 1)
     } finally {
       server.close()
     }

@@ -5,9 +5,9 @@ import com.twitter.finatra.kafka.domain.AckMode
 import com.twitter.finatra.kafka.producers.FinagleKafkaProducerBuilder
 import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter
 import com.twitter.finatra.kafka.test.EmbeddedKafka
-import com.twitter.finatra.kafka.test.utils.InMemoryStatsUtil
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
+import com.twitter.inject.server.InMemoryStatsReceiverUtility
 import com.twitter.util.{Await, Duration, Time}
 import org.apache.kafka.common.serialization.Serdes
 
@@ -35,15 +35,15 @@ class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
     try {
       Await.result(producer.send("test-topic", "Foo", "Bar", System.currentTimeMillis))
 
-      val statsUtils = InMemoryStatsUtil(injector)
-      statsUtils.printStats()
+      val statsUtils = InMemoryStatsReceiverUtility(injector)
+      statsUtils.print()
 
-      statsUtils.assertGauge("kafka/test_producer/record_send_total", 1)
-      val onSendLag = statsUtils.getStat("kafka/test_producer/record_timestamp_on_send_lag")
+      statsUtils.gauges.assert("kafka/test_producer/record_send_total", 1.0f)
+      val onSendLag = statsUtils.stats("kafka/test_producer/record_timestamp_on_send_lag")
       assert(onSendLag.size == 1)
       assert(onSendLag.head >= 0)
 
-      val onSuccessLag = statsUtils.getStat("kafka/test_producer/record_timestamp_on_success_lag")
+      val onSuccessLag = statsUtils.stats("kafka/test_producer/record_timestamp_on_success_lag")
       assert(onSuccessLag.size == 1)
       assert(onSuccessLag.head >= onSendLag.head)
 
@@ -54,9 +54,9 @@ class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
         Await.result(producer.send("test-topic", "Hello", "World", System.currentTimeMillis))
       }
 
-      statsUtils.printStats()
-      statsUtils.assertGauge("kafka/test_producer/record_error_total", 1)
-      val onFailureLag = statsUtils.getStat("kafka/test_producer/record_timestamp_on_failure_lag")
+      statsUtils.print()
+      statsUtils.gauges.assert("kafka/test_producer/record_error_total", 1.0f)
+      val onFailureLag = statsUtils.stats("kafka/test_producer/record_timestamp_on_failure_lag")
       assert(onFailureLag.size == 1)
       assert(onFailureLag.head >= 0)
     } finally {

@@ -1,10 +1,13 @@
 package com.twitter.inject.logback
 
 import ch.qos.logback.classic.layout.TTLLLayout
-import ch.qos.logback.classic.{BasicConfigurator, Level, LoggerContext}
 import ch.qos.logback.classic.spi.ILoggingEvent
+import ch.qos.logback.classic.{BasicConfigurator, Level, LoggerContext}
 import ch.qos.logback.core.encoder.LayoutWrappingEncoder
 import ch.qos.logback.core.{ConsoleAppender, LogbackAsyncAppenderBase, TestLogbackAsyncAppender}
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.twitter.finagle.http.{Request, Status}
 import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.finatra.http.routing.HttpRouter
@@ -13,13 +16,12 @@ import com.twitter.inject.{Logging, Test}
 import java.util.concurrent.LinkedBlockingQueue
 import org.slf4j.LoggerFactory
 import scala.collection.JavaConverters._
-import scala.util.parsing.json.JSON
 
 private object AppendTestHttpServerFeatureTest {
   class TestConfigurator(
     inMemoryStatsReceiver: InMemoryStatsReceiver,
-    asyncAppender: LogbackAsyncAppenderBase
-  ) extends BasicConfigurator {
+    asyncAppender: LogbackAsyncAppenderBase)
+      extends BasicConfigurator {
 
     override def configure(lc: LoggerContext): Unit = {
       setContext(lc)
@@ -73,9 +75,12 @@ class AppendTestHttpServerFeatureTest extends Test {
     testWithAppender(inMemoryStatsReceiver, loggerCtx) { appender: TestLogbackAsyncAppender =>
       server.assertHealthy()
 
+      val mapper = new ObjectMapper() with ScalaObjectMapper
+      mapper.registerModule(DefaultScalaModule)
+
       val response = server.httpGetAdmin("/admin/registry.json", andExpect = Status.Ok)
       val json: Map[String, Any] =
-        JSON.parseFull(response.contentString).get.asInstanceOf[Map[String, Any]]
+        mapper.readValue(response.contentString, classOf[Map[String, Any]])
 
       val registry = json("registry").asInstanceOf[Map[String, Any]]
       registry.contains("library") should be(true)
@@ -114,15 +119,24 @@ class AppendTestHttpServerFeatureTest extends Test {
       server.assertHealthy()
       server.httpGet("/log_events")
 
-      server.assertCounter(s"logback/appender/$appenderStatName/events/discarded/debug", 5)
-      server.assertCounter(s"logback/appender/$appenderStatName/events/discarded/info", 5)
-      server.assertCounter(s"logback/appender/$appenderStatName/events/discarded/trace", 5)
-      server.assertCounter(s"logback/appender/$appenderStatName/events/discarded/warn", 0)
-      server.assertCounter(s"logback/appender/$appenderStatName/events/discarded/error", 0)
+      server.inMemoryStats.counters
+        .assert(s"logback/appender/$appenderStatName/events/discarded/debug", 5)
+      server.inMemoryStats.counters
+        .assert(s"logback/appender/$appenderStatName/events/discarded/info", 5)
+      server.inMemoryStats.counters
+        .assert(s"logback/appender/$appenderStatName/events/discarded/trace", 5)
+      server.inMemoryStats.counters
+        .get(s"logback/appender/$appenderStatName/events/discarded/warn") should be(None)
+      server.inMemoryStats.counters
+        .get(s"logback/appender/$appenderStatName/events/discarded/error") should be(None)
 
-      server.assertGauge(s"logback/appender/$appenderStatName/discard/threshold", appender.getDiscardingThreshold)
-      server.assertGauge(s"logback/appender/$appenderStatName/max_flush_time", appender.getMaxFlushTime)
-      server.assertGauge(s"logback/appender/$appenderStatName/queue_size", appender.getQueueSize)
+      server.inMemoryStats.gauges.assert(
+        s"logback/appender/$appenderStatName/discard/threshold",
+        appender.getDiscardingThreshold)
+      server.inMemoryStats.gauges
+        .assert(s"logback/appender/$appenderStatName/max_flush_time", appender.getMaxFlushTime)
+      server.inMemoryStats.gauges
+        .assert(s"logback/appender/$appenderStatName/queue_size", appender.getQueueSize)
     }
 
     server.close()
@@ -149,15 +163,24 @@ class AppendTestHttpServerFeatureTest extends Test {
       server.assertHealthy()
       server.httpGet("/log_events")
 
-      server.assertCounter(s"logback/appender/$appenderStatName/events/discarded/error", 5)
-      server.assertCounter(s"logback/appender/$appenderStatName/events/discarded/warn", 5)
-      server.assertCounter(s"logback/appender/$appenderStatName/events/discarded/debug", 5)
-      server.assertCounter(s"logback/appender/$appenderStatName/events/discarded/info", 5)
-      server.assertCounter(s"logback/appender/$appenderStatName/events/discarded/trace", 5)
+      server.inMemoryStats.counters
+        .assert(s"logback/appender/$appenderStatName/events/discarded/error", 5)
+      server.inMemoryStats.counters
+        .assert(s"logback/appender/$appenderStatName/events/discarded/warn", 5)
+      server.inMemoryStats.counters
+        .assert(s"logback/appender/$appenderStatName/events/discarded/debug", 5)
+      server.inMemoryStats.counters
+        .assert(s"logback/appender/$appenderStatName/events/discarded/info", 5)
+      server.inMemoryStats.counters
+        .assert(s"logback/appender/$appenderStatName/events/discarded/trace", 5)
 
-      server.assertGauge(s"logback/appender/$appenderStatName/discard/threshold", appender.getDiscardingThreshold)
-      server.assertGauge(s"logback/appender/$appenderStatName/max_flush_time", appender.getMaxFlushTime)
-      server.assertGauge(s"logback/appender/$appenderStatName/queue_size", appender.getQueueSize)
+      server.inMemoryStats.gauges.assert(
+        s"logback/appender/$appenderStatName/discard/threshold",
+        appender.getDiscardingThreshold)
+      server.inMemoryStats.gauges
+        .assert(s"logback/appender/$appenderStatName/max_flush_time", appender.getMaxFlushTime)
+      server.inMemoryStats.gauges
+        .assert(s"logback/appender/$appenderStatName/queue_size", appender.getQueueSize)
 
       // no events make it to the unit test console appender
       consoleAppenderQueue.size() should equal(0)
@@ -171,7 +194,8 @@ class AppendTestHttpServerFeatureTest extends Test {
     loggerCtx: LoggerContext,
     consoleAppenderQueueOpt: Option[LinkedBlockingQueue[ILoggingEvent]] = None,
     neverBlock: Boolean = false
-  )(fn: (TestLogbackAsyncAppender) => Unit): Unit = {
+  )(fn: TestLogbackAsyncAppender => Unit
+  ): Unit = {
 
     /* Stop the current LoggerContext */
     loggerCtx.stop()
@@ -240,7 +264,8 @@ class AppendTestHttpServerFeatureTest extends Test {
   ): TestLogbackAsyncAppender = {
 
     /* if neverBlock is true, we want to stop the async worker thread for testing */
-    val appender = new TestLogbackAsyncAppender(inMemoryStatsReceiver, stopAsyncWorkerThread = neverBlock)
+    val appender =
+      new TestLogbackAsyncAppender(inMemoryStatsReceiver, stopAsyncWorkerThread = neverBlock)
     appender.setQueueSize(1)
     appender.setDiscardingThreshold(appender.getQueueSize * 2)
     appender.setMaxFlushTime(5) // in millis

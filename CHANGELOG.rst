@@ -7,8 +7,42 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+19.6.0
+------
+
+Added
+~~~~~
+
+* inject-modules: Introduce a `StackClientModuleTrait` to aid in configuring modules for generic
+  Finagle Stack Clients. ``PHAB_ID=D324891``
+
+* finatra-http: Add `c.t.inject.server.InMemoryStatsReceiverUtility` which allows for testing
+  assertions on metrics captured within an embedded server's `InMemoryStatsReceiver`. Update the
+  Kafka tests and utilities to use the `InMemoryStatsReceiverUtility` and mark the
+  `c.t.finatra.kafka.test.utilsInMemoryStatsUtil` as deprecated. ``PHAB_ID=D316806``
+
+Changed
+~~~~~~~
+
+* finatra-http: Removed deprecated `response_size` stat from `c.t.finatra.http.filters.StatsFilter`.
+  ``PHAB_ID=D328254``
+
+* finatra-kafka: Update finatra exported metrics to contains KafkaMetrics 'rocksdb-window-state-id'.
+  ``PHAB_ID=D326320``
+
+* finatra-kafka: Deprecate in `c.t.finatra.kafka.consumers.FinagleKafkaConsumer`.
+  Add `c.t.finatra.kafka.consumers.FinagleKafkaConsumer.buildClient` and
+  `c.t.finatra.kafka.producters.FinagleKafkaProducer.buildClient`. ``PHAB_ID=D321699``
+
+Fixed
+~~~~~
+
+* finatra: Add an explicit dependency on `com.sun.activation` to allow for using
+  Finatra with JDK 11. This fixes #484. ``PHAB_ID=D328724``
+
 19.5.1
 ------
+
 Fixed
 ~~~~~
 

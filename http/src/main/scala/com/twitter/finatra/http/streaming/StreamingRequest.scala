@@ -40,7 +40,7 @@ private[http] object StreamingRequest {
  * @tparam F The Primitive Stream type.
  * @tparam A The type of streaming values.
  */
-private[http] final class StreamingRequest[F[_]: FromReader, A: Manifest] private (
+final class StreamingRequest[F[_]: FromReader, A: Manifest] private (
   parser: JsonStreamParser,
   reader: Reader[Buf]) {
 

@@ -10,7 +10,6 @@ import com.twitter.inject.thrift.integration.{TestHttpServer, TestThriftServer}
 class DoEverythingFilteredThriftClientModuleFeatureTest
   extends FeatureTest
   with HttpTest {
-  override val printStats = false
 
   private val thriftServer = new EmbeddedThriftServer(
     twitterServer = new TestThriftServer(new GreeterThriftService),
@@ -44,13 +43,13 @@ class DoEverythingFilteredThriftClientModuleFeatureTest
     server.httpGet(path = "/hi?name=Bob", andExpect = Ok, withBody = "Hi Bob")
 
     // per-method -- all the requests in this test were to the same method
-    server.assertCounter("clnt/greeter-thrift-client/Greeter/hi/invocations", 1)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/hi/invocations", 1)
     /* assert counters added by ThriftServicePerEndpoint#statsFilter */
-    server.assertCounter("clnt/greeter-thrift-client/Greeter/hi/requests", 4)
-    server.assertCounter("clnt/greeter-thrift-client/Greeter/hi/success", 2)
-    server.assertCounter("clnt/greeter-thrift-client/Greeter/hi/failures", 2)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/hi/requests", 4)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/hi/success", 2)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/hi/failures", 2)
     /* assert latency stat exists */
-    server.getStat("clnt/greeter-thrift-client/Greeter/hi/latency_ms") should not be Seq()
+    server.inMemoryStats.stats.get("clnt/greeter-thrift-client/Greeter/hi/latency_ms") should not be None
   }
 
   test("Say bye") {
@@ -61,13 +60,13 @@ class DoEverythingFilteredThriftClientModuleFeatureTest
     )
 
     // per-method -- all the requests in this test were to the same method
-    server.assertCounter("clnt/greeter-thrift-client/Greeter/bye/invocations", 1)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/bye/invocations", 1)
     /* assert counters added by StatsFilter */
-    server.assertCounter("clnt/greeter-thrift-client/Greeter/bye/requests", 3)
-    server.assertCounter("clnt/greeter-thrift-client/Greeter/bye/success", 1)
-    server.assertCounter("clnt/greeter-thrift-client/Greeter/bye/failures", 2)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/bye/requests", 3)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/bye/success", 1)
+    server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/bye/failures", 2)
     /* assert latency stat exists */
-    server.getStat("clnt/greeter-thrift-client/Greeter/bye/latency_ms") should not be Seq()
-    server.getStat("clnt/greeter-thrift-client/Greeter/bye/request_latency_ms") should not be Seq()
+    server.inMemoryStats.stats.get("clnt/greeter-thrift-client/Greeter/bye/latency_ms") should not be None
+    server.inMemoryStats.stats.get("clnt/greeter-thrift-client/Greeter/bye/request_latency_ms") should not be None
   }
 }

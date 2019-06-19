@@ -7,7 +7,7 @@ import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.response.{HttpResponseClassifier, SimpleResponse}
 import com.twitter.inject.Logging
-import com.twitter.util.{Duration, Future, Memoize, Return, Stopwatch, Throw}
+import com.twitter.util._
 import javax.inject.{Inject, Singleton}
 
 private object StatsFilter {
@@ -24,7 +24,6 @@ private object StatsFilter {
         requestTime = if (perEndpoint) Some(statsReceiver.stat("time")) else None,
         statusCodeTime = statsReceiver.scope("time").stat(statusCode.toString),
         statusClassTime = statsReceiver.scope("time").stat(statusClass),
-        responseSize = statsReceiver.stat("response_size"),
         successCount = if (perEndpoint) Some(statsReceiver.counter("success")) else None,
         failuresCount = if (perEndpoint) Some(statsReceiver.counter("failures")) else None
       )
@@ -39,7 +38,6 @@ private object StatsFilter {
     requestTime: Option[Stat],
     statusCodeTime: Stat,
     statusClassTime: Stat,
-    responseSize: Stat,
     successCount: Option[Counter],
     failuresCount: Option[Counter]
   ) {
@@ -53,7 +51,6 @@ private object StatsFilter {
       statusCodeTime.add(durationMs.toFloat)
       statusClassTime.add(durationMs.toFloat)
 
-      responseSize.add(response.length.toFloat)
       if (success) {
         successCount.foreach(_.incr())
       } else {
@@ -75,13 +72,11 @@ private object StatsFilter {
  *   route/foo/GET/status/200 1
  *   route/foo/GET/status/2XX 1
  *   route/foo/GET/success 1
- *   route/foo/GET/response_size 13.000000 [13.0]
  *   route/foo/GET/time 857.000000 [857.0]
  *   route/foo/GET/time/200 857.000000 [857.0]
  *   route/foo/GET/time/2XX 857.000000 [857.0]
  *   status/200 1
  *   status/2XX 1
- *   response_size 13.000000 [13.0]
  *   time/200 857.000000 [857.0]
  *   time/2XX 857.000000 [857.0]
  * }}}
@@ -94,13 +89,11 @@ private object StatsFilter {
  *   route/foo/GET/status/500 1
  *   route/foo/GET/status/5XX 1
  *   route/foo/GET/success 0
- *   route/foo/GET/response_size 0.000000 [0.0]
  *   route/foo/GET/time 86.000000 [86.0]
  *   route/foo/GET/time/500 86.000000 [86.0]
  *   route/foo/GET/time/5XX 86.000000 [86.0]
  *   status/500 1
  *   status/5XX 1
- *   response_size 0.000000 [0.0]
  *   time/500 86.000000 [86.0]
  *   time/5XX 86.000000 [86.0]
  * }}}
@@ -161,9 +154,10 @@ class StatsFilter[R <: Request] @Inject()(
   /**
    * The application of the [[ResponseClassifier]] differs from the Finagle default. This class attempts
    * to preserve information in the emitted metrics. That is, if an exception is returned, even if it
-   * is classified as a "success", we incr the the exception counter(s) (in addition to the "success"
+   * is classified as a "success", we incr the exception counter(s) (in addition to the "success"
    * or "failures" counters). Conversely, if a response (non-exception) is returned which is classified
-   * as a "failure", we incr the "failures" counter but we do not incr any exception counter.
+   * as a "failure", we incr the "failures" counter but we do not incr any exception counter. Finally,
+   * responses or exceptions classified as "ignorable" only increment the exception counter(s).
    *
    * {{{
    *                   *-----------------*---------------------------*
@@ -174,6 +168,8 @@ class StatsFilter[R <: Request] @Inject()(
    *  |  SUCCESSFUL    | success.incr()  | success.incr(), exc.incr()|
    *  *----------------*-----------------*---------------------------*
    *  |    FAILED      | failed.incr()   | failed.incr(), exc.incr() |
+   *  *----------------|-----------------|---------------------------|
+   *  |   IGNORABLE    | (no-op)         | exc.incr()                |
    *  *----------------*-----------------*---------------------------*
    * }}}
    *
@@ -187,21 +183,11 @@ class StatsFilter[R <: Request] @Inject()(
         ReqRep(request, response),
         ResponseClassifier.Default
       ) match {
-        case ResponseClass.Failed(_) => false
-        case ResponseClass.Successful(_) => true
-      }
-
-      response match {
-        case Throw(e) =>
-          warn(
-            s"Uncaught exception: ${e.getClass.getName}. " +
-              s"Please ensure ${classOf[ExceptionMappingFilter[_]].getName} is installed. " +
-              s"For more details see: $url"
-          )
-          // Treat exceptions as empty 500 errors
-          count(elapsed(), request, SimpleResponse(Status.InternalServerError), success = success)
-        case Return(rep) =>
-          count(elapsed(), request, rep, success = success)
+        case ResponseClass.Ignorable => // Do nothing.
+        case ResponseClass.Failed(_) =>
+          count(elapsed(), request, response, success = false)
+        case ResponseClass.Successful(_) =>
+          count(elapsed(), request, response, success = true)
       }
     }
   }
@@ -211,8 +197,20 @@ class StatsFilter[R <: Request] @Inject()(
   private def count(
     duration: Duration,
     request: Request,
-    response: Response,
-    success: Boolean): Unit = {
+    tryResponse: Try[Response],
+    success: Boolean
+  ): Unit = {
+    val response = tryResponse match {
+      case Return(v) => v
+      case Throw(e) =>
+        warn(
+          s"Uncaught exception: ${e.getClass.getName}. " +
+            s"Please ensure ${classOf[ExceptionMappingFilter[_]].getName} is installed. " +
+            s"For more details see: $url"
+        )
+        // Treat exceptions as empty 500 errors
+        SimpleResponse(Status.InternalServerError)
+    }
     globalStats(response.statusCode).count(duration, response, success)
     RouteInfo(request).foreach { routeInfo =>
       perRouteStats((routeInfo, request.method, response.statusCode))

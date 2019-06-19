@@ -15,7 +15,7 @@ case class AsyncStreamKafkaConsumerBuilder[K, V](
       asyncStreamConsumerConfig.copy(finagleKafkaConsumerConfig = config)
     )
 
-  override protected def finagleConsumerConfig: FinagleKafkaConsumerConfig[K, V] =
+  override protected def config: FinagleKafkaConsumerConfig[K, V] =
     asyncStreamConsumerConfig.finagleKafkaConsumerConfig
 
   def topics(topics: Set[KafkaTopic]): This =

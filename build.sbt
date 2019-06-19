@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "19.5.1"
+val releaseVersion = "19.6.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -412,6 +412,8 @@ lazy val injectServerTestJarSources =
     "com/twitter/inject/server/EmbeddedTwitterServer",
     "com/twitter/inject/server/FeatureTest",
     "com/twitter/inject/server/FeatureTestMixin",
+    "com/twitter/inject/server/InMemoryStats",
+    "com/twitter/inject/server/InMemoryStatsReceiverUtility",
     "com/twitter/inject/server/package")
 lazy val injectServer = (project in file("inject/inject-server"))
   .settings(projectSettings)
@@ -636,6 +638,7 @@ lazy val http = project
     moduleName := "finatra-http",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;.*NonValidatingHttpHeadersResponse.*;com\\.twitter\\.finatra\\..*package.*;.*ThriftExceptionMapper.*;.*HttpResponseExceptionMapper.*;.*HttpResponseException.*",
     libraryDependencies ++= Seq(
+      "com.sun.activation" % "javax.activation" % "1.2.0",
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache exclude("com.google.guava", "guava"),
       "com.twitter" %% "finagle-exp" % versions.twLibVersion,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,

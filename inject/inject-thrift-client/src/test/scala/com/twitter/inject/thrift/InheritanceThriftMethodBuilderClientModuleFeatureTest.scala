@@ -11,7 +11,6 @@ import com.twitter.serviceB.thriftscala.ServiceB
 class InheritanceThriftMethodBuilderClientModuleFeatureTest
   extends FeatureTest
   with HttpTest {
-  override val printStats = false
 
   private val httpClientId: String = "http-server"
 
@@ -49,15 +48,15 @@ class InheritanceThriftMethodBuilderClientModuleFeatureTest
 
     // per-method -- all the requests in this test were to the same method
     /* assert counters added by ThriftServicePerEndpoint#statsFilter */
-    server.assertCounter("clnt/serviceB-thrift-client/ServiceA/echo/requests", 1)
-    server.assertCounter("clnt/serviceB-thrift-client/ServiceA/echo/success", 1)
-    server.assertCounter("clnt/serviceB-thrift-client/ServiceA/echo/failures", 0)
+    server.inMemoryStats.counters.assert("clnt/serviceB-thrift-client/ServiceA/echo/requests", 1)
+    server.inMemoryStats.counters.assert("clnt/serviceB-thrift-client/ServiceA/echo/success", 1)
+    server.inMemoryStats.counters.get("clnt/serviceB-thrift-client/ServiceA/echo/failures") should be(None)
     /* assert MethodBuilder stats exist */
-    server.getStat("clnt/serviceB-thrift-client/echo/logical/request_latency_ms") should not be Seq()
-    server.getStat("clnt/serviceB-thrift-client/echo/retries") should be(Seq(0.0))
+    server.inMemoryStats.stats.get("clnt/serviceB-thrift-client/echo/logical/request_latency_ms") should not be None
+    server.inMemoryStats.stats.assert("clnt/serviceB-thrift-client/echo/retries", Seq(0.0f))
     /* assert MethodBuilder counters */
-    server.assertCounter("clnt/serviceB-thrift-client/echo/logical/requests", 1)
-    server.assertCounter("clnt/serviceB-thrift-client/echo/logical/success", 1)
+    server.inMemoryStats.counters.assert("clnt/serviceB-thrift-client/echo/logical/requests", 1)
+    server.inMemoryStats.counters.assert("clnt/serviceB-thrift-client/echo/logical/success", 1)
   }
 
   test("ping") {
@@ -65,14 +64,14 @@ class InheritanceThriftMethodBuilderClientModuleFeatureTest
 
     // per-method -- all the requests in this test were to the same method
     /* assert counters added by ThriftServicePerEndpoint#statsFilter */
-    server.assertCounter("clnt/serviceB-thrift-client/ServiceB/ping/requests", 1)
-    server.assertCounter("clnt/serviceB-thrift-client/ServiceB/ping/success", 1)
-    server.assertCounter("clnt/serviceB-thrift-client/ServiceB/ping/failures", 0)
+    server.inMemoryStats.counters.assert("clnt/serviceB-thrift-client/ServiceB/ping/requests", 1)
+    server.inMemoryStats.counters.assert("clnt/serviceB-thrift-client/ServiceB/ping/success", 1)
+    server.inMemoryStats.counters.get("clnt/serviceB-thrift-client/ServiceB/ping/failures") should be(None)
     /* assert MethodBuilder stats exist */
-    server.getStat("clnt/serviceB-thrift-client/ping/logical/request_latency_ms") should not be Seq()
+    server.inMemoryStats.stats.get("clnt/serviceB-thrift-client/ping/logical/request_latency_ms") should not be None
     // retries are disabled, thus no "clnt/serviceB-thrift-client/ping/retries" stat
     /* assert MethodBuilder counters */
-    server.assertCounter("clnt/serviceB-thrift-client/ping/logical/requests", 1)
-    server.assertCounter("clnt/serviceB-thrift-client/ping/logical/success", 1)
+    server.inMemoryStats.counters.assert("clnt/serviceB-thrift-client/ping/logical/requests", 1)
+    server.inMemoryStats.counters.assert("clnt/serviceB-thrift-client/ping/logical/success", 1)
   }
 }
