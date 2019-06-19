@@ -6,8 +6,9 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 
 Unreleased
 ----------
-* finatra-kafka: Update finatra exported metrics to contains KafkaMetrics 'rocksdb-window-state-id'.
-  ``PHAB_ID=D326320``
+
+19.6.0
+------
 
 Added
 ~~~~~
@@ -25,6 +26,9 @@ Changed
 
 * finatra-http: Removed deprecated `response_size` stat from `c.t.finatra.http.filters.StatsFilter`.
   ``PHAB_ID=D328254``
+
+* finatra-kafka: Update finatra exported metrics to contains KafkaMetrics 'rocksdb-window-state-id'.
+  ``PHAB_ID=D326320``
 
 * finatra-kafka: Deprecate in `c.t.finatra.kafka.consumers.FinagleKafkaConsumer`.
   Add `c.t.finatra.kafka.consumers.FinagleKafkaConsumer.buildClient` and
