@@ -80,7 +80,6 @@ By providing an implementation that is aware of the Scrooge-generated `Request` 
       }
     }
 
-
 Add the Controller to the Server
 --------------------------------
 
@@ -127,6 +126,38 @@ If you want to modularize or componentize to have a better separation of concern
 In the above example the `Controller` implementation forwards handling of the various methods to the injected services directly.
 
 How you structure and call other classes from the `Controller` implementation is completely up to you to implement in whatever way makes sense for your service or team.
+
+Per-Method Stats
+----------------
+
+Per-method stats recording is provided by Finatra in the `c.t.finatra.thrift.filters.StatsFilter <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/StatsFilter.scala>`__.
+
+.. code:: scala
+
+    import com.twitter.example.thriftscala.ExampleService
+    import com.twitter.finatra.thrift.Controller
+    import com.twitter.util.Future
+    import com.twitter.scrooge.{Request, Response}
+
+    class ExampleThriftController extends Controller(ExampleService) {
+
+      handle(Add1).withFn { request: Request[Add1.Args] =>
+        val num = request.args.num
+        val headers = request.headers
+
+        log(s"Add1 called with $num and headers: $headers")
+        Future(Response(num + 1))
+      }
+    }
+
+
+yields the following stats:
+
+::
+
+    per_method_stats/add1/failures 0
+    per_method_stats/add1/success 1
+    per_method_stats/add1/latency_ms 8.666667 [5.0, 3.0, 2.0]
 
 Deprecated/Legacy Controller Information
 ----------------------------------------

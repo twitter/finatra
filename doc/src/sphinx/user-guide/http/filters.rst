@@ -3,39 +3,53 @@
 Filtering HTTP Requests
 =======================
 
-c.t.finatra.http.filters.CommonFilters
---------------------------------------
-
-Finatra composes -- in defined order -- several generally useful HTTP Filters into `c.t.finatra.http.filters.CommonFilters <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala>`__.
-
-`CommonFilters <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala>`__ can be added in the same manner as any other Filter. Included Filters:
-
-`c.t.finatra.http.filters.StatsFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala>`__ |rarrow|
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- a drop-in replacement for the `Finagle StatsFilter <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/service/StatsFilter.scala>`__ and can provide `per-route stats <controllers.html#per-route-stats>`__.
-
 `c.t.finatra.http.filters.AccessLoggingFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/AccessLoggingFilter.scala>`__ |rarrow|
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - provides for "Common Log Format" style logging for HTTP requests and responses.
+
+`c.t.finatra.http.filters.ExceptionMappingFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala>`__ |rarrow|
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Filter for use in mapping exceptions to HTTP responses. See `ExceptionMappingFilter <exceptions.html#exceptionmappingfilter>`__ for more information.
+
+`c.t.finatra.http.filters.HttpNackFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/HttpNackFilter.scala>`__ |rarrow|
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- ensures that Finagle `Nacks <https://twitter.github.io/finagle/guide/Glossary.html?highlight=nack>`__ are propagated as HTTP headers in responses.
 
 `c.t.finatra.http.filters.HttpResponseFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/HttpResponseFilter.scala>`__ |rarrow|
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - an HTTP response conformance Filter which, among other things, ensures `Location` response headers are properly specified.
 
-`c.t.finatra.http.filters.ExceptionMappingFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala>`__ |rarrow|
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`c.t.finatra.http.filters.LoggingMDCFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/LoggingMDCFilter.scala>`__ |rarrow|
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- Filter for use in mapping exceptions to HTTP responses. See `ExceptionMappingFilter <exceptions.html#exceptionmappingfilter>`__
-for more information.
+- properly initializes the framework's `Mapped Diagnostic Context (MDC) <https://www.slf4j.org/manual.html#mdc>`__ adapter for logging.
+
+`c.t.finatra.http.filters.StatsFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala>`__ |rarrow|
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- a drop-in replacement for the `Finagle StatsFilter <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/service/StatsFilter.scala>`__ which can additionally provide `per-route stats <controllers.html#per-route-stats>`__.
+
+`c.t.finatra.http.filters.TraceIdMDCFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/TraceIdMDCFilter.scala>`__ |rarrow|
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- places the current Finagle `TraceId <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/tracing/TraceId.scala>`__ local into the `Mapped Diagnostic Context (MDC) <https://www.slf4j.org/manual.html#mdc>`__.
+
+
+.. admonition:: c.t.finatra.http.filters.CommonFilters
+
+  Finatra composes -- in a recommended order -- several typically useful HTTP Filters into 
+  `c.t.finatra.http.filters.CommonFilters <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala>`__.
+  `CommonFilters` can be added in the same manner as any other Filter.
 
 Global Filters
 --------------
 
-Filters by default execute **after** route matching. Meaning, for a given request the URI path is
-matched in the routing table before executing any Filter. If you need to be able to run a Filter
+Filters by default execute **after** route matching. Meaning, for a given request, the URI path is
+matched in the routing table **before** executing any Filter. If you need to be able to run a Filter
 *before* route matching, you can add the Filter via `HttpRouter#filter[T](beforeRouting = true)`,
 this is especially useful if the Filter manually inspects to see if it should apply on a given
 request URI path that may not exist in the routing table (e.g., is not defined by any controller
