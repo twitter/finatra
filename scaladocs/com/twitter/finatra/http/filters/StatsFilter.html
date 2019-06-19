@@ -215,26 +215,22 @@ route/foo/GET/requests <span class="num">1</span>
 route/foo/GET/status/<span class="num">200</span> <span class="num">1</span>
 route/foo/GET/status/<span class="num">2</span>XX <span class="num">1</span>
 route/foo/GET/success <span class="num">1</span>
-route/foo/GET/response_size <span class="num">13.000000</span> [<span class="num">13.0</span>]
 route/foo/GET/time <span class="num">857.000000</span> [<span class="num">857.0</span>]
 route/foo/GET/time/<span class="num">200</span> <span class="num">857.000000</span> [<span class="num">857.0</span>]
 route/foo/GET/time/<span class="num">2</span>XX <span class="num">857.000000</span> [<span class="num">857.0</span>]
 status/<span class="num">200</span> <span class="num">1</span>
 status/<span class="num">2</span>XX <span class="num">1</span>
-response_size <span class="num">13.000000</span> [<span class="num">13.0</span>]
 time/<span class="num">200</span> <span class="num">857.000000</span> [<span class="num">857.0</span>]
 time/<span class="num">2</span>XX <span class="num">857.000000</span> [<span class="num">857.0</span>]</pre><p>Example stats for a failed GET request to a route named <code>/foo</code>:</p><pre>route/foo/GET/failures <span class="num">1</span>
 route/foo/GET/requests <span class="num">1</span>
 route/foo/GET/status/<span class="num">500</span> <span class="num">1</span>
 route/foo/GET/status/<span class="num">5</span>XX <span class="num">1</span>
 route/foo/GET/success <span class="num">0</span>
-route/foo/GET/response_size <span class="num">0.000000</span> [<span class="num">0.0</span>]
 route/foo/GET/time <span class="num">86.000000</span> [<span class="num">86.0</span>]
 route/foo/GET/time/<span class="num">500</span> <span class="num">86.000000</span> [<span class="num">86.0</span>]
 route/foo/GET/time/<span class="num">5</span>XX <span class="num">86.000000</span> [<span class="num">86.0</span>]
 status/<span class="num">500</span> <span class="num">1</span>
 status/<span class="num">5</span>XX <span class="num">1</span>
-response_size <span class="num">0.000000</span> [<span class="num">0.0</span>]
 time/<span class="num">500</span> <span class="num">86.000000</span> [<span class="num">86.0</span>]
 time/<span class="num">5</span>XX <span class="num">86.000000</span> [<span class="num">86.0</span>]</pre></div><dl class="paramcmts block"><dt class="tparam">R</dt><dd class="cmt"><p>the type of the <a href="" class="extype" name="com.twitter.finatra.http.filters.StatsFilter">StatsFilter</a> which is upper bounded by the
           <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a> type.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
@@ -488,9 +484,10 @@ defaulted to <span class="extype" name="HttpResponseClassifier.ServerErrorsAsFai
       
       <p class="shortcomment cmt">The application of the <span class="extype" name="ResponseClassifier">ResponseClassifier</span> differs from the Finagle default.</p><div class="fullcomment"><div class="comment cmt"><p>The application of the <span class="extype" name="ResponseClassifier">ResponseClassifier</span> differs from the Finagle default. This class attempts
 to preserve information in the emitted metrics. That is, if an exception is returned, even if it
-is classified as a &quot;success&quot;, we incr the the exception counter(s) (in addition to the &quot;success&quot;
+is classified as a &quot;success&quot;, we incr the exception counter(s) (in addition to the &quot;success&quot;
 or &quot;failures&quot; counters). Conversely, if a response (non-exception) is returned which is classified
-as a &quot;failure&quot;, we incr the &quot;failures&quot; counter but we do not incr any exception counter.</p><pre>                 *-----------------*---------------------------*
+as a &quot;failure&quot;, we incr the &quot;failures&quot; counter but we do not incr any exception counter. Finally,
+responses or exceptions classified as &quot;ignorable&quot; only increment the exception counter(s).</p><pre>                 *-----------------*---------------------------*
                  |              Returned Response              |
 *----------------*-----------------*---------------------------*
 | Classification |    RESPONSE     |        EXCEPTION          |
@@ -498,6 +495,8 @@ as a &quot;failure&quot;, we incr the &quot;failures&quot; counter but we do not
 |  SUCCESSFUL    | success.incr()  | success.incr(), exc.incr()|
 *----------------*-----------------*---------------------------*
 |    FAILED      | failed.incr()   | failed.incr(), exc.incr() |
+*----------------|-----------------|---------------------------|
+|   IGNORABLE    | (no-op)         | exc.incr()                |
 *----------------*-----------------*---------------------------*</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.http.filters.StatsFilter">StatsFilter</a> → Filter → Function2</dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/StatsFilter.html" class="extype" name="com.twitter.finagle.service.StatsFilter">com.twitter.finagle.service.StatsFilter</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/index.html#ResponseClassifier=PartialFunction[com.twitter.finagle.service.ReqRep,com.twitter.finagle.service.ResponseClass]" class="extype" name="com.twitter.finagle.service">com.twitter.finagle.service.ResponseClassifier</a></p></span></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>

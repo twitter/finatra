@@ -3,6 +3,19 @@
 Creating an injectable |TwitterServer|_
 =======================================
 
+Lifecycle
+---------
+
+If you haven't already, take a look at the |TwitterServer|_
+`lifecycle documentation <../getting-started/lifecycle.html#c-t-server-twitterserver-lifecycle>`__.
+You may also want to look at the |c.t.app.App|_
+`lifecycle documentation <../getting-started/lifecycle.html#c-t-app-app-lifecycle>`__ as well since
+|c.t.server.TwitterServer|_ is an extension of |c.t.app.App|_ and thus inherits the |c.t.app.App|_
+lifecycle.
+
+Getting Started
+---------------
+
 To create an injectable |c.t.server.TwitterServer|_, first depend on the `inject-server` library. We
 also recommend using `Logback <https://logback.qos.ch/>`__ as your
 `SLF4J <https://www.slf4j.org/manual.html>`__ implementation. E.g.,
@@ -225,6 +238,9 @@ More Information
 For more information on the server lifecycle see the `Application and Server Lifecycle <../getting-started/lifecycle.html>`__
 section which contains details around the order of lifecycle events during `startup <../getting-started/lifecycle.html#startup>`__
 and considerations during `shutdown <../getting-started/lifecycle.html#shutdown>`__.
+
+.. |c.t.app.App| replace:: `util-app App`
+.. _c.t.app.App: https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala
 
 .. |c.t.inject.server.TwitterServer| replace:: ``c.t.inject.server.TwitterServer``
 .. _c.t.inject.server.TwitterServer: https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala

@@ -30,7 +30,7 @@ transitively provide SLF4J bridges for the following logging providers:
    Note, if you are not using `c.t.inject.server.TwitterServer` or a subclass, e.g., you are
    building a command line application directly with `c.t.inject.app.App`, you can include the
    `LoggingModule <https://github.com/twitter/finatra/blob/develop/inject/inject-modules/src/main/scala/com/twitter/inject/modules/LoggerModule.scala>`__
-   to attempt installation the `SLF4JBridgeHandler <https://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html>`__.
+   to attempt installation of the `SLF4JBridgeHandler <https://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html>`__.
 
 For more information on the SLF4J bridges see the SLF4J
 `Bridging legacy APIs <https://www.slf4j.org/legacy.html>`__ documentation.

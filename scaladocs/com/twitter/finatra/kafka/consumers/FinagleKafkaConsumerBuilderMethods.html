@@ -300,10 +300,10 @@ FinagleKafkaConsumer (pollTimeout and seekStrategy).
 
         <div class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilderMethods#finagleConsumerConfig" visbl="prt" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="finagleConsumerConfig:com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerConfig[K,V]"></a><a id="finagleConsumerConfig:FinagleKafkaConsumerConfig[K,V]"></a>
+              <ol><li name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilderMethods#config" visbl="prt" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="config:com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerConfig[K,V]"></a><a id="config:FinagleKafkaConsumerConfig[K,V]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/consumers/FinagleKafkaConsumerBuilderMethods.html#finagleConsumerConfig:com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerConfig[K,V]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/FinagleKafkaConsumerBuilderMethods.html#config:com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerConfig[K,V]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -312,7 +312,7 @@ FinagleKafkaConsumer (pollTimeout and seekStrategy).
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">finagleConsumerConfig</span><span class="result">: <a href="FinagleKafkaConsumerConfig.html" class="extype" name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerConfig">FinagleKafkaConsumerConfig</a>[<span class="extype" name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilderMethods.K">K</span>, <span class="extype" name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilderMethods.V">V</span>]</span>
+        <span class="name">config</span><span class="result">: <a href="FinagleKafkaConsumerConfig.html" class="extype" name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerConfig">FinagleKafkaConsumerConfig</a>[<span class="extype" name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilderMethods.K">K</span>, <span class="extype" name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilderMethods.V">V</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
@@ -450,10 +450,10 @@ FinagleKafkaConsumer (pollTimeout and seekStrategy).
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="KafkaConsumerConfigMethods.html" class="extype" name="com.twitter.finatra.kafka.consumers.KafkaConsumerConfigMethods">KafkaConsumerConfigMethods</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilderMethods#build" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="build():com.twitter.finatra.kafka.consumers.FinagleKafkaConsumer[K,V]"></a><a id="build():FinagleKafkaConsumer[K,V]"></a>
+    </li><li name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilderMethods#buildClient" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="buildClient():org.apache.kafka.clients.consumer.KafkaConsumer[K,V]"></a><a id="buildClient():KafkaConsumer[K,V]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/consumers/FinagleKafkaConsumerBuilderMethods.html#build():com.twitter.finatra.kafka.consumers.FinagleKafkaConsumer[K,V]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/FinagleKafkaConsumerBuilderMethods.html#buildClient():org.apache.kafka.clients.consumer.KafkaConsumer[K,V]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -462,10 +462,10 @@ FinagleKafkaConsumer (pollTimeout and seekStrategy).
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">build</span><span class="params">()</span><span class="result">: <a href="FinagleKafkaConsumer.html" class="extype" name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumer">FinagleKafkaConsumer</a>[<span class="extype" name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilderMethods.K">K</span>, <span class="extype" name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilderMethods.V">V</span>]</span>
+        <span class="name">buildClient</span><span class="params">()</span><span class="result">: <span class="extype" name="org.apache.kafka.clients.consumer.KafkaConsumer">KafkaConsumer</span>[<span class="extype" name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilderMethods.K">K</span>, <span class="extype" name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilderMethods.V">V</span>]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">Create the native KafkaConsumer client.</p>
     </li><li name="com.twitter.finatra.kafka.consumers.KafkaConsumerConfigMethods#checkCrcs" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="checkCrcs(boolean:Boolean):KafkaConsumerConfigMethods.this.This"></a><a id="checkCrcs(Boolean):This"></a>
       <span class="permalink">
@@ -2129,7 +2129,29 @@ FinagleKafkaConsumer (pollTimeout and seekStrategy).
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilderMethods#build" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="build():com.twitter.finatra.kafka.consumers.FinagleKafkaConsumer[K,V]"></a><a id="build():FinagleKafkaConsumer[K,V]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/FinagleKafkaConsumerBuilderMethods.html#build():com.twitter.finatra.kafka.consumers.FinagleKafkaConsumer[K,V]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2018-05-30) Use buildClient instead">build</span><span class="params">()</span><span class="result">: <a href="FinagleKafkaConsumer.html" class="extype" name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumer">FinagleKafkaConsumer</a>[<span class="extype" name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilderMethods.K">K</span>, <span class="extype" name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilderMethods.V">V</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2018-05-30)</i> Use buildClient instead</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

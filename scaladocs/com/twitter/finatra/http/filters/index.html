@@ -357,6 +357,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.http">http</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.streaming" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="streaming"></a><a id="streaming:streaming"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/http/index.html#streaming" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../streaming/index.html"><span class="name">streaming</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.http">http</a></dd></dl></div>
     </li>
               </ul>
             </div>
@@ -551,26 +567,22 @@ route/foo/GET/requests <span class="num">1</span>
 route/foo/GET/status/<span class="num">200</span> <span class="num">1</span>
 route/foo/GET/status/<span class="num">2</span>XX <span class="num">1</span>
 route/foo/GET/success <span class="num">1</span>
-route/foo/GET/response_size <span class="num">13.000000</span> [<span class="num">13.0</span>]
 route/foo/GET/time <span class="num">857.000000</span> [<span class="num">857.0</span>]
 route/foo/GET/time/<span class="num">200</span> <span class="num">857.000000</span> [<span class="num">857.0</span>]
 route/foo/GET/time/<span class="num">2</span>XX <span class="num">857.000000</span> [<span class="num">857.0</span>]
 status/<span class="num">200</span> <span class="num">1</span>
 status/<span class="num">2</span>XX <span class="num">1</span>
-response_size <span class="num">13.000000</span> [<span class="num">13.0</span>]
 time/<span class="num">200</span> <span class="num">857.000000</span> [<span class="num">857.0</span>]
 time/<span class="num">2</span>XX <span class="num">857.000000</span> [<span class="num">857.0</span>]</pre><p>Example stats for a failed GET request to a route named <code>/foo</code>:</p><pre>route/foo/GET/failures <span class="num">1</span>
 route/foo/GET/requests <span class="num">1</span>
 route/foo/GET/status/<span class="num">500</span> <span class="num">1</span>
 route/foo/GET/status/<span class="num">5</span>XX <span class="num">1</span>
 route/foo/GET/success <span class="num">0</span>
-route/foo/GET/response_size <span class="num">0.000000</span> [<span class="num">0.0</span>]
 route/foo/GET/time <span class="num">86.000000</span> [<span class="num">86.0</span>]
 route/foo/GET/time/<span class="num">500</span> <span class="num">86.000000</span> [<span class="num">86.0</span>]
 route/foo/GET/time/<span class="num">5</span>XX <span class="num">86.000000</span> [<span class="num">86.0</span>]
 status/<span class="num">500</span> <span class="num">1</span>
 status/<span class="num">5</span>XX <span class="num">1</span>
-response_size <span class="num">0.000000</span> [<span class="num">0.0</span>]
 time/<span class="num">500</span> <span class="num">86.000000</span> [<span class="num">86.0</span>]
 time/<span class="num">5</span>XX <span class="num">86.000000</span> [<span class="num">86.0</span>]</pre></div><dl class="paramcmts block"><dt class="tparam">R</dt><dd class="cmt"><p>the type of the <a href="StatsFilter.html" class="extype" name="com.twitter.finatra.http.filters.StatsFilter">StatsFilter</a> which is upper bounded by the
           <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a> type.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>

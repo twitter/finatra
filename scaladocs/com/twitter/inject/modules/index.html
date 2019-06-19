@@ -267,6 +267,10 @@
                         <a href="LoggerModule$.html" title="A com.twitter.inject.TwitterModule which attempts to install the SLF4JBridgeHandler when the slf4j-jdk14 logging implementation is not present on the classpath.">LoggerModule</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
+                        <a class="trait" href="StackClientModuleTrait.html" title="A module for configuring a Finagle StackClient."></a>
+                        <a href="StackClientModuleTrait.html" title="A module for configuring a Finagle StackClient.">StackClientModuleTrait</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
                         <a class="object" href="StackTransformerModule$.html" title="Provides a com.twitter.inject.StackTransformer to the dependency injection context."></a>
                         <a href="StackTransformerModule$.html" title="Provides a com.twitter.inject.StackTransformer to the dependency injection context.">StackTransformerModule</a>
                       </li><li class="current-entities indented4">
@@ -398,7 +402,67 @@
         <div id="allMembers">
         
 
-        
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.twitter.inject.modules.StackClientModuleTrait" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="StackClientModuleTrait[Req,Rep,ClientType&lt;:com.twitter.finagle.client.EndpointerStackClient[Req,Rep,ClientType]]extendsTwitterModule"></a><a id="StackClientModuleTrait[Req,Rep,ClientType&lt;:EndpointerStackClient[Req,Rep,ClientType]]:StackClientModuleTrait[Req,Rep,ClientType]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/modules/index.html#StackClientModuleTrait[Req,Rep,ClientType&lt;:com.twitter.finagle.client.EndpointerStackClient[Req,Rep,ClientType]]extendsTwitterModule" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="A module for configuring a Finagle StackClient." href="StackClientModuleTrait.html"><span class="name">StackClientModuleTrait</span></a><span class="tparams">[<span name="Req">Req</span>, <span name="Rep">Rep</span>, <span name="ClientType">ClientType &lt;: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/client/EndpointerStackClient.html#com.twitter.finagle.client.EndpointerStackClient" class="extype" name="com.twitter.finagle.client.EndpointerStackClient">EndpointerStackClient</a>[<span class="extype" name="com.twitter.inject.modules.StackClientModuleTrait.Req">Req</span>, <span class="extype" name="com.twitter.inject.modules.StackClientModuleTrait.Rep">Rep</span>, <span class="extype" name="com.twitter.inject.modules.StackClientModuleTrait.ClientType">ClientType</span>]</span>]</span><span class="result"> extends <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A module for configuring a Finagle StackClient.</p><div class="fullcomment"><div class="comment cmt"><p>A module for configuring a Finagle StackClient. Binding is explicitly not handled by this
+trait and implementors are responsible for managing their own binding annotations.
+</p></div><dl class="attributes block"> <div class="block">Example:
+               <ol><li class="cmt"><p></p><pre><span class="kw">abstract</span> <span class="kw">class</span> MyClientModule
+  <span class="kw">extends</span> StackClientModuleTrait[Request, Response, MyClient] {
+
+  <span class="kw">protected</span> <span class="kw">def</span> baseClient: MyClient = MyClient.client
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> sessionAcquisitionTimeout: Duration = <span class="num">1.</span>seconds
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> requestTimeout: Duration = <span class="num">5.</span>seconds
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> retryBudget: RetryBudget = RetryBudget(<span class="num">15.</span>seconds, <span class="num">5</span>, <span class="num">.1</span>)
+
+  <span class="cmt">// if you want to customize the client configuration</span>
+  <span class="cmt">// you can:</span>
+  <span class="cmt">//</span>
+  <span class="cmt">// def configureClient(injector: Injector, client: MyClient): MyClient =</span>
+  <span class="cmt">//   client.</span>
+  <span class="cmt">//     withTracer(NullTracer)</span>
+  <span class="cmt">//     withStatsReceiver(NullStatsReceiver)</span>
+  <span class="cmt">//</span>
+  <span class="cmt">// depending on your client type, you may want to provide a global instance,</span>
+  <span class="cmt">// otherwise you might want to specify how your consumers can provide a binding</span>
+  <span class="cmt">// for an instance to the client</span>
+  <span class="cmt">//</span>
+  <span class="cmt">// ex:</span>
+  <span class="cmt">// @Provides</span>
+  <span class="cmt">// @Singleton</span>
+  <span class="cmt">// def provideMyClient(injector: Injector, statsReceiver: StatsReceiver): MyClient =</span>
+  <span class="cmt">//   newClient(injector, statsReceiver)</span>
+  <span class="cmt">//</span>
+  <span class="cmt">// Or create a service directly</span>
+  <span class="cmt">//</span>
+  <span class="cmt">// ex:</span>
+  <span class="cmt">// @Provides</span>
+  <span class="cmt">// @Singleton</span>
+  <span class="cmt">// def provideMyService(</span>
+  <span class="cmt">//   injector: Injector,</span>
+  <span class="cmt">//   statsReceiver: StatsReceiver</span>
+  <span class="cmt">// ): Service[Request, Response] =</span>
+  <span class="cmt">//     myCoolFilter.andThen(newService(injector, statsReceiver))</span>
+}</pre></li></ol>
+            </div><dt>Note</dt><dd><span class="cmt"><p>Extending this module for HTTP and ThriftMux clients should not be necessary, as there
+      are fully supported modules for creating those clients.</p></span></dd></dl></div>
+    </li></ol>
+            </div>
 
         
 
