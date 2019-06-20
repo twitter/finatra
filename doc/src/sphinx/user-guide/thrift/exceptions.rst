@@ -25,14 +25,77 @@ The Finatra framework adds a `default <#default-exception-mapper>`__ `ExceptionM
 `ThriftServer` which provides a root-level *no-op* mapping for exceptions. You can register
 additional mappers or override the default altogether.
 
-For instance, if you want to map a `java.lang.ClassCastException` to a `ThriftException` -- e.g.,
-`ClientError(ClientErrorCause, errorMessage)`, which is defined in `finatra_thrift_exceptions.thrift <https://github.com/twitter/finatra/blob/develop/thrift/src/main/thrift/finatra-thrift/finatra_thrift_exceptions.thrift>`__
-you could create the following `ExceptionMapper`:
+Given the following Thrift IDL:
+
+::
+
+    namespace java com.twitter.example.thriftjava
+    #@namespace scala com.twitter.example.thriftscala
+    namespace rb ExampleService
+
+    exception UnknownClientIdError {
+      1: string message
+    }
+
+    exception NoClientIdError {
+      1: string message
+    }
+
+    enum ClientErrorCause {
+      /** Improperly-formatted request can't be fulfilled. */
+      BAD_REQUEST     = 0,
+
+      /** Required request authorization failed. */
+      UNAUTHORIZED    = 1,
+
+      /** Server timed out while fulfilling the request. */
+      REQUEST_TIMEOUT = 2,
+
+      /** Initiating client has exceeded its maximum rate. */
+      RATE_LIMITED    = 3
+    }
+
+    exception ClientError {
+      1: ClientErrorCause errorCause
+      2: string message
+    }
+
+    enum ServerErrorCause {
+      /** Generic server error. */
+      INTERNAL_SERVER_ERROR = 0,
+
+      /** Server lacks the ability to fulfill the request. */
+      NOT_IMPLEMENTED       = 1,
+
+      /** Request cannot be fulfilled due to error from dependent service. */
+      DEPENDENCY_ERROR      = 2,
+
+      /** Server is currently unavailable. */
+      SERVICE_UNAVAILABLE   = 3
+    }
+
+    exception ServerError {
+      1: ServerErrorCause errorCause
+      2: string message
+    }
+
+    service ExampleService {
+      i32 add1(
+        1: i32 num
+      ) throws (
+        1: ServerError serverError,
+        2: UnknownClientIdError unknownClientIdError
+        3: NoClientIdError kClientError
+      )
+    }
+
+If you wanted to map a `java.lang.ClassCastException` to an exception specified in the Thrift
+IDL, you could create the following `ExceptionMapper`:
 
 .. code:: scala
 
+  import com.twitter.example.thriftscala.{ClientError, ClientErrorCause}
   import com.twitter.finatra.thrift.exceptions.ExceptionMapper
-  import com.twitter.finatra.thrift.thriftscala.{ClientError, ClientErrorCause}
   import com.twitter.util.Future
   import java.lang.ClassCastException
   import javax.inject.Singleton
@@ -60,7 +123,8 @@ Then register this exception mapper in your server.
         router
           .filter[ExceptionMappingFilter]
           .exceptionMapper[ClassCastExceptionMapper]
-        ...
+        
+        ???
       }
 
 You can see here we register the exception mapper *by type* allowing the framework to instantiate
@@ -109,19 +173,6 @@ the type.
 In this manner, an `ExceptionMapper[Throwable]` will be the last mapper invoked and acts as the
 "default". Therefore to change the framework "default" mapper, simply add a new mapper over the
 `Throwable` type (i.e., `ExceptionMapper[Throwable]`) to the `ExceptionManager`.
-
-Finatra Thrift Exceptions and Mapper
-------------------------------------
-
-The Finatra framework provides both a `FinatraThriftExceptionMapper and FinatraJavaThriftExceptionMapper <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/exceptions/finatrathriftexceptions.scala>`__
-for mapping exceptions to the `finatra_thrift_exceptions.thrift <https://github.com/twitter/finatra/blob/develop/thrift/src/main/thrift/finatra-thrift/finatra_thrift_exceptions.thrift>`__
-defined exceptions.
-
-For an example of including and using these exceptions see the test Thrift IDL defined `here <https://github.com/twitter/finatra/blob/develop/thrift/src/test/thrift/doeverything.thrift>`__.
-
-If you are using `finatra_thrift_exceptions.thrift <https://github.com/twitter/finatra/blob/develop/thrift/src/main/thrift/finatra-thrift/finatra_thrift_exceptions.thrift>`__,
-then it is recommended that your register one of the above mappers appropriate to the generated
-language you are using.
 
 Override Default Behavior
 -------------------------

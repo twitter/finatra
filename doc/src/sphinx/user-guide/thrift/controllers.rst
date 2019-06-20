@@ -18,18 +18,61 @@ For example, given the following thrift IDL: `example_service.thrift`
     #@namespace scala com.twitter.example.thriftscala
     namespace rb ExampleService
 
-    include "finatra-thrift/finatra_thrift_exceptions.thrift"
+    exception UnknownClientIdError {
+      1: string message
+    }
+
+    exception NoClientIdError {
+      1: string message
+    }
+
+    enum ClientErrorCause {
+      /** Improperly-formatted request can't be fulfilled. */
+      BAD_REQUEST     = 0,
+
+      /** Required request authorization failed. */
+      UNAUTHORIZED    = 1,
+
+      /** Server timed out while fulfilling the request. */
+      REQUEST_TIMEOUT = 2,
+
+      /** Initiating client has exceeded its maximum rate. */
+      RATE_LIMITED    = 3
+    }
+
+    exception ClientError {
+      1: ClientErrorCause errorCause
+      2: string message
+    }
+
+    enum ServerErrorCause {
+      /** Generic server error. */
+      INTERNAL_SERVER_ERROR = 0,
+
+      /** Server lacks the ability to fulfill the request. */
+      NOT_IMPLEMENTED       = 1,
+
+      /** Request cannot be fulfilled due to error from dependent service. */
+      DEPENDENCY_ERROR      = 2,
+
+      /** Server is currently unavailable. */
+      SERVICE_UNAVAILABLE   = 3
+    }
+
+    exception ServerError {
+      1: ServerErrorCause errorCause
+      2: string message
+    }
 
     service ExampleService {
       i32 add1(
         1: i32 num
       ) throws (
-        1: finatra_thrift_exceptions.ServerError serverError,
-        2: finatra_thrift_exceptions.UnknownClientIdError unknownClientIdError
-        3: finatra_thrift_exceptions.NoClientIdError kClientError
+        1: ServerError serverError,
+        2: UnknownClientIdError unknownClientIdError
+        3: NoClientIdError kClientError
       )
     }
-
 
 We can implement the following Thrift Controller:
 
