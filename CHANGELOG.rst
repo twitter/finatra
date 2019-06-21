@@ -7,6 +7,12 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
+* finatra-jackson: Add `com.twitter.util.Time` deserializer with `JsonFormat` support.
+  ``PHAB_ID=D330682``
+
 19.6.0
 ------
 

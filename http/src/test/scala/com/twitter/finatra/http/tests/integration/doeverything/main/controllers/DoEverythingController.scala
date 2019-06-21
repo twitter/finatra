@@ -894,6 +894,10 @@ class DoEverythingController @Inject()(
   post("/seqCaseClass") { r: Seq[TestUser] =>
     r
   }
+
+  post("/ctu-time") { r: DomainTwitterTimeRequest =>
+    r
+  }
 }
 
 case class MultipleInjectableValueParams(@RouteParam @QueryParam id: String)

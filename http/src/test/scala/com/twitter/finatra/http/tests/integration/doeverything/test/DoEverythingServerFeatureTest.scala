@@ -18,7 +18,7 @@ import com.twitter.finatra.json.JsonDiff._
 import com.twitter.inject.Mockito
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.{Buf, StreamIO}
-import com.twitter.util.Future
+import com.twitter.util.{Future, Time}
 import com.twitter.{logging => ctl}
 import java.net.{ConnectException, InetSocketAddress, SocketAddress}
 import org.scalatest.exceptions.TestFailedException
@@ -2466,6 +2466,28 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     }
 
     com.twitter.finagle.stats.logOnShutdown() should equal(false) // verify default value unchanged
+  }
+
+  test("POST /ctu-time") {
+    server.httpPost("/ctu-time",
+      postBody =
+        s"""
+           |{
+           |  "time": "${Time.now.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")}"
+           |}
+         """.stripMargin,
+      andExpect = Status.Ok
+    )
+
+    server.httpPost("/ctu-time",
+      postBody =
+        s"""
+           |{
+           |  "time": "${Time.now.format("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")}"
+           |}
+         """.stripMargin,
+      andExpect = Status.InternalServerError
+    )
   }
 }
 
