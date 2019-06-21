@@ -3,30 +3,215 @@
 Feature Tests
 =============
 
-.. note:: If you are calling an |c.t.util.Await|_ function on a |c.t.util.Future|_ return type in a
+.. tip::
+
+    If you are calling an |c.t.util.Await|_ function on a |c.t.util.Future|_ return type in a
     test, it is generally considered good practice to ensure that your |c.t.util.Await|_ call
-    includes a timeout duration, e.g., |c.t.util.Await#ready|_.
+    includes a timeout duration, otherwise you may inadvertently cause your test to hang indefinitely
+    if the awaited |c.t.util.Future|_ never completes.
+
+    The base `c.t.inject.TestMixin <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/TestMixin.scala>`__ exposes an `#await <https://github.com/twitter/finatra/blob/ea0b7a6655f4a8df84b5933c0ade19cae311c098/inject/inject-core/src/test/scala/com/twitter/inject/TestMixin.scala#L103>`__ function which will call |c.t.util.Await#result|_
+    with a test-defined `default timeout <https://github.com/twitter/finatra/blob/ea0b7a6655f4a8df84b5933c0ade19cae311c098/inject/inject-core/src/test/scala/com/twitter/inject/TestMixin.scala#L75>`__. This can be used in place of calling |c.t.util.Await#result|_ directly.
 
 If you are familiar with `Gherkin <https://docs.behat.org/en/v2.5/guides/1.gherkin.html>`__ or
 `Cucumber <https://github.com/cucumber/cucumber/wiki/Feature-Introduction>`__ or other similar
-testing languages and frameworks, then `feature testing <https://wiki.documentfoundation.org/QA/Testing/Feature_Tests>`__
-will feel somewhat familiar. In Finatra, a feature test always consists of an application or a server
+testing languages and frameworks, then `FeatureTesting <https://wiki.documentfoundation.org/QA/Testing/Feature_Tests>`__
+will feel somewhat familiar. In Finatra, a FeatureTest always consists of an application or a server
 under test. See the |c.t.inject.server.FeatureTest|_ trait.
 
-We highly recommend writing feature tests for your services as they provide a very good signal of
+.. caution::
+
+    The `server` is specified as a `def` in the |c.t.inject.server.FeatureTestMixin|_ trait.
+
+    If you only want to start **one instance** of your server per test file, make sure to override this
+    `def` with a `val`. See: `Sharing a Server Fixture Between Many Feature Tests <#sharing-a-server-fixture-between-many-feature-tests>`__ for information on how to properly share a server test fixture.
+
+We highly recommend writing FeatureTests for your services as they provide a very good signal of
 whether you have correctly implemented the features of your service. If you haven't implemented the
 feature correctly, it almost doesn't matter that you have lots of unit tests.
 
-HTTP Server
------------
+|c.t.server.TwitterServer|_
+---------------------------
 
-For example, to write a feature test for an HTTP server, extend the |c.t.inject.server.FeatureTest|_
+Finatra’s |c.t.inject.server.FeatureTest|_ utility can be used for testing any extension of |c.t.server.TwitterServer|_. 
+That is, you can start a locally running server and write tests that issue requests to it as long as the 
+server extends from |c.t.server.TwitterServer|_ -- the server under test does not specifically have to 
+be a server written using the Finatra framework.
+
+.. note:: 
+
+  Some advanced features (like the automatic injection of an `InMemoryStatsReceiver <https://github.com/twitter/util/blob/develop/util-stats/src/main/scala/com/twitter/finagle/stats/InMemoryStatsReceiver.scala>`__ for performing metrics assertions) 
+  that require use of injection will not be available if you only extend |c.t.server.TwitterServer|_ but you will be able 
+  to start the server and test it in a controlled environment.
+
+  For more information on creating an "injectable" TwitterServer, |c.t.inject.server.TwitterServer|_ see the documentation 
+  `here <../twitter-server/index.html>`__.
+
+Here’s an example of writing a test that starts a |c.t.server.TwitterServer|_ and asserts that it reports itself “healthy”.
+
+Given a simple |c.t.server.TwitterServer|_:
+
+.. code:: scala
+
+    import com.twitter.finagle.{Http, ListeningServer, Service}
+    import com.twitter.finagle.http.{Status, Response, Request}
+    import com.twitter.server.TwitterServer
+    import com.twitter.util.{Await, Future}
+     
+    class MyTwitterServer extends TwitterServer {
+      val defaultHttpPortValue: String = ":8888"
+      private val httpPortFlag =
+        flag("http.port", defaultHttpPortValue, "External HTTP server port")
+     
+      private def responseString: String = "Hello, world!"
+      private val service = Service.mk[Request, Response] { request =>
+        val response =
+          Response(request.version, Status.Ok)
+        response.contentString = responseString
+        Future.value(response)
+      }
+
+      /** Simple way to expose the bound port once the external listening server is started */
+      @volatile var httpExternalPort: Option[Int] = None
+     
+      def main(): Unit = {
+        val server: ListeningServer = Http.server
+          .withLabel("http")
+          .serve(httpPortFlag(), service)
+        info(s"Serving on port ${httpPortFlag()}")
+        info(s"Serving admin interface on port ${adminPort()}")
+        onExit {
+          Await.result(server.close())
+        }
+        httpExternalPort = Some(server.boundAddress.asInstanceOf[InetSocketAddress].getPort)
+        Await.ready(server)
+      }
+    }
+
+Writing the FeatureTest
+~~~~~~~~~~~~~~~~~~~~~~~
+
+First, extend the |c.t.inject.server.FeatureTest|_ trait. Then override the `server` definition 
+with an instance of your |EmbeddedTwitterServer|_ which wraps your |c.t.server.TwitterServer|_ 
+under test.
+
+.. code:: scala
+
+    import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest}
+    
+    class MyTwitterServerFeatureTest extends FeatureTest {
+      
+      override protected val server =
+        new EmbeddedTwitterServer(new MyTwitterServer)
+      
+      test("MyTwitterServer#starts") {
+        server.isHealthy should be(true)
+      }
+    }
+
+For an "injectable" TwitterServer, |c.t.inject.server.TwitterServer|_ the test would look exactly the same.
+
+
+Disabling Clients using `Dtabs`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you have Finagle clients defined in your server which are using `Dtab <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Dtab.scala>`__ delegation tables for client resolution and want to 
+keep them from making remote connections when your server starts, you can override the `Dtab` of the clients by 
+passing the `-dtab.add` flag (defined by the `c.t.finagle.DtabFlags <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/DtabFlags.scala>`__ trait mixed into `c.t.server.TwitterServer <https://github.com/twitter/twitter-server/blob/55d6d28862f7f260f3171342ad8ca363553bac40/server/src/main/scala/com/twitter/server/TwitterServer.scala#L40>`__) 
+to your server under test.
+
+.. code:: scala
+
+    import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest}
+ 
+    class MyTwitterServerFeatureTest extends FeatureTest {
+     
+      override protected val server =
+        new EmbeddedTwitterServer(
+          twitterServer = new MyTwitterServer,
+          flags = Map(
+            "dtab.add" -> "/$/inet=>/$/nil;/zk=>/$/nil"
+        )
+     
+      test("MyTwitterServer#starts") {
+        server.isHealthy should be(true)
+      }
+    }
+
+Creating a Client to the Server Under Test
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default the |EmbeddedTwitterServer|_ will create a Finagle HTTP client to the 
+`TwitterServer HTTP Admin interface <https://twitter.github.io/twitter-server/Admin.html>`__ 
+accessible via `EmbeddedTwitterServer#httpAdminClient`. 
+
+To get any bound *external* port of the server under test, you’ll need to structure your code to expose 
+it for your test to be able to read once the server has been started. That is, the `c.t.finagle.ListeningServer <https://github.com/twitter/finagle/blob/cda049e7db679f62588eda1a18eadc846acb0b30/finagle-core/src/main/scala/com/twitter/finagle/Server.scala#L13>`__ 
+started in your |c.t.server.TwitterServer|_ `main()` needs to be exposed such that you can call `server.boundAddress` 
+after the server has been started.
+
+Assuming we have exposed this bound port as written above with `MyTwitterServer#httpExternalPort` we could create
+a client:
+
+.. code:: scala
+
+    import com.twitter.finagle.Http
+    import com.twitter.finagle.http.{Request, Status}
+    import com.twitter.finatra.httpclient.RequestBuilder
+    import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest}
+    import java.net.InetAddress
+     
+    class MyTwitterServerFeatureTest extends FeatureTest {
+
+      private val testServer = new MyTwitterServer
+     
+      override protected val server =
+        new EmbeddedTwitterServer(
+          twitterServer = testServer,
+          flags = Map(
+            "dtab.add" -> "/$/inet=>/$/nil;/zk=>/$/nil"
+        )
+     
+      private lazy val httpClient =
+        Http.client
+          .withSessionQualifier.noFailFast
+          .withSessionQualifier.noFailureAccrual
+          .newService(
+            s"${InetAddress
+                  .getLoopbackAddress
+                  .getHostAddress
+              }:${testServer.httpExternalPort.get}")
+     
+      override protected def beforeAll(): Unit = {
+        server.start()
+      }
+     
+      test("MyTwitterServer#starts") {
+        server.isHealthy should be(true)
+      }
+
+      test("MyTwitterServer#feature") {
+        val request = RequestBuilder.get("/foo")
+
+        val response = await(httpClient(request))
+        response.status should equal(Status.Ok)
+      }
+    }
+
+This is where using the Finatra `c.t.finatra.http.HttpServer` or `c.t.finatra.thrift.ThriftServer` can help since much of the 
+client creation work can then be done for you by the framework's testing tools, e.g., the |EmbeddedHttpServer|_ or
+|EmbeddedThriftServer|_ without the need to add code to expose anything your external `ListeningServer`.
+
+`c.t.finatra.http.HttpServer`
+-----------------------------
+
+To write a FeatureTest for an `c.t.finatra.http.HttpServer`, extend the |c.t.inject.server.FeatureTest|_
 trait. Then override the `server` definition with an instance of your |EmbeddedHttpServer|_.
 
 .. code:: scala
 
-    import com.twitter.finatra.http.EmbeddedHttpServer
     import com.twitter.finagle.http.Status
+    import com.twitter.finatra.http.EmbeddedHttpServer
     import com.twitter.inject.server.FeatureTest
 
     class ExampleServerFeatureTest extends FeatureTest {
@@ -36,15 +221,51 @@ trait. Then override the `server` definition with an instance of your |EmbeddedH
         server.httpGet(
           path = "/",
           andExpect = Status.Ok)
+      }
 
-        ???
+      test("ExampleServer#perform another feature with a response") {
+        val response = server.httpGet(
+          path = "/foo",
+          andExpect = Status.Ok)
+
+        response.contentString should equal("Hello, world!")  
       }
     }
 
-Thrift Server
--------------
+Note: The |EmbeddedHttpServer|_ creates a client to the external HTTP interface defined by the server and exposes
+methods which use the client for issuing HTTP requests to the server under test.
 
-Similarly, to write a feature test for a Thrift server and create a `Finagle <https://twitter.github.io/finagle/>`__
+You can also create a `c.t.finagle.http.Request` and execute it with the test HTTP client. Finatra has a simple `RequestBuilder <https://github.com/twitter/finatra/blob/develop/httpclient/src/main/scala/com/twitter/finatra/httpclient/RequestBuilder.scala>`__
+to help easily construct a `c.t.finagle.http.Request`.
+
+.. code:: scala
+
+    import com.twitter.finagle.http.Status
+    import com.twitter.finatra.http.EmbeddedHttpServer
+    import com.twitter.finatra.httpclient.RequestBuilder
+    import com.twitter.inject.server.FeatureTest
+
+    class ExampleServerFeatureTest extends FeatureTest {
+      override val server = new EmbeddedHttpServer(new ExampleServer)
+
+      test("ExampleServer#perform feature") {
+        server.httpGet(
+          path = "/",
+          andExpect = Status.Ok)
+      }
+
+      test("ExampleServer#perform feature with built request") {
+        val request = RequestBuilder.get("/")
+
+        val response = server.httpClient(request)
+        response.status should equal(Status.Ok)
+      }
+    }
+
+`c.t.finatra.thrift.ThriftServer`
+---------------------------------
+
+Similarly, to write a FeatureTest for a `c.t.finatra.thrift.ThriftServer` and create a `Finagle <https://twitter.github.io/finagle/>`__
 `client <#thrift-tests>`__ to it, extend the |c.t.inject.server.FeatureTest|_ trait, override the
 `server` definition with an instance of your |EmbeddedThriftServer|_, and then create a Thrift client
 from the |EmbeddedThriftServer|_.
@@ -64,9 +285,14 @@ from the |EmbeddedThriftServer|_.
         server.thriftClient[ExampleThrift[Future]](clientId = "client123")
 
       test("ExampleThriftServer#return data accordingly") {
-        Await.result(client.doExample("input"), 2.seconds) should equal("output")
+        await(client.doExample("input")) should equal("output")
       }
     }
+
+.. tip::
+
+    Again, note that tests should **always** define a timeout for any |c.t.util.Await|_ call. We use the `#await <https://github.com/twitter/finatra/blob/ea0b7a6655f4a8df84b5933c0ade19cae311c098/inject/inject-core/src/test/scala/com/twitter/inject/TestMixin.scala#L103>`__ 
+    function in the above example.
 
 Thrift Client Interface Types
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -139,9 +365,11 @@ could close the client in the ScalaTest `afterAll` lifecycle block. E.g.,
     import com.twitter.conversions.DurationOps._
     import com.twitter.finatra.thrift.EmbeddedThriftServer
     import com.twitter.inject.server.FeatureTest
-    import com.twitter.util.Await
+    import com.twitter.util.{Await, Duration}
 
     class ExampleThriftServerFeatureTest extends FeatureTest {
+      override val defaultAwaitTimeout: Duration = 2.seconds
+
       override val server = new EmbeddedThriftServer(new ExampleThriftServer)
 
       lazy val client: ExampleThrift.ServicePerEndpoint =
@@ -150,19 +378,19 @@ could close the client in the ScalaTest `afterAll` lifecycle block. E.g.,
       ...
 
       override protected def afterAll(): Unit = {
-        Await.result(client.asClosable.close(), 2.seconds)
+        await(client.asClosable.close())
         super.afterAll()
       }
 
-Note that the above example sets a `timeout` of `2.seconds` on awaiting the close of the test Thrift
+Note that the above example use a default `timeout` of `2.seconds` on awaiting the close of the test Thrift
 client interface. You can and should adjust this value -- either up or down -- as appropriate for
 your testing.
 
-Combined HTTP & Thrift Server
------------------------------
+Combined `c.t.finatra.http.HttpServer` & `c.t.finatra.thrift.ThriftServer`
+--------------------------------------------------------------------------
 
 If you are extending both `c.t.finatra.http.HttpServer` **and** `c.t.finatra.thrift.ThriftServer`
-then you can feature test by constructing an `EmbeddedHttpServer with ThriftClient`, e.g.,
+then you can FeatureTest by constructing an `EmbeddedHttpServer with ThriftClient`, e.g.,
 
 .. code:: scala
 
@@ -187,24 +415,16 @@ then you can feature test by constructing an `EmbeddedHttpServer with ThriftClie
         }
 
        "ExampleCombinedServer#return data accordingly") {
-          Await.result(client.doExample("input"), 2.seconds) should equal("output")
+          await(client.doExample("input")) should equal("output")
         }
       }
     }
-
-
-.. caution::
-
-    The `server` is specified as a `def` in the |c.t.inject.server.FeatureTestMixin|_ trait.
-
-    If you only want to start **one instance** of your server per test file make sure to override this
-    `def` with a `val`.
 
 Sharing a Server Fixture Between Many Feature Tests
 ---------------------------------------------------
 
 There may be times in testing where you want to share an embedded server configuration among
-different feature tests. That is, you want to be able to create and setup the embedded server in the
+different FeatureTests. That is, you want to be able to create and setup the embedded server in the
 same way (perhaps with minor configuration changes) across many different test files. An idea might
 be to define a "base" test trait which extends |c.t.inject.server.FeatureTest|_ that your tests
 can extend.
@@ -214,11 +434,11 @@ is generally considered a best practice to not share an instance of an embedded 
 issues can arise when this "base" trait overrides and implements the |c.t.inject.server.FeatureTest|_
 trait ``def server``.
 
-Thus, we recommend *always* implementing the abstract ``def server`` in each actual feature test
+Thus, we recommend *always* implementing the abstract ``def server`` in each actual FeatureTest
 implementation.
 
 This does not mean that you cannot share a configured embedded server fixture. To do so effectively
-and efficiently, have the "base" trait simply define a utility method which allows a feature test
+and efficiently, have the "base" trait simply define a utility method which allows a FeatureTest
 to obtain an instance of an embedded server fixture which it can then set as *its* embedded server
 for testing.
 
@@ -250,13 +470,13 @@ For example, we could define a "base" testing trait:
        .bind[Baz].toInstance(bazImpl)
     }
 
-This "base" trait can define a method for obtaining a properly configured Embedded server for test
+This "base" trait defines a method for obtaining a properly configured embedded server for test
 implementations to use. Then in tests we could do:
 
 .. code:: scala
 
     class MyServiceFirstFeatureTest extends BaseMyServiceFeatureTest {
-      // We override and implement the c.t.inject.server.FeatureTest#server in our actual test file
+      // We override and implement the c.t.inject.server.FeatureTest#server as a val in our actual test file
       override val server = buildExampleServiceTestServer(
         "firstFeatureServer",
         Map("aaa.baz" -> "forty-two"))
@@ -279,20 +499,25 @@ implementations to use. Then in tests we could do:
       }
     }
 
-The reasons behind this are several. Primarily, many servers under test end up being composed of
-singletons (in addition to the framework defining singletons for configuration and startup). When
-this is the case, you can run into issues with inconsistent state of a shared embedded server
-fixture due to multiple tests accessing it potentially in parallel. Semantics change depending on
-your build system and testing framework. But it is generally a good practice to not share a single
-instance of an embedded server.
+The reasons behind this are several. Firstly, embedded servers close over specific configuration 
+state (flags and args) of the server under test. Additionally, many servers are composed of JVM 
+singletons (framework and potentially user-defined) which expect to be the only instance present or
+running at any given time. That is, there are no guarantees of thread-safety by default.
 
-Secondly, when the server is defined as a `val` in a trait from which many tests inherit, the same
-server can end up being started multiple times, even if you are running a single test. Some build
-systems optimize their test runs by first loading all tests before running a single test file or
-test case. In these instances all tests will be instantiated and thus any constructor `val` is
-eagerly loaded. This could therefore start the embedded server `val` in each test inheriting from
-the "base" trait and can generally lead to undesirable performance when testing.
+Thus, you can run into issues with inconsistent state of a shared embedded server fixture due to multiple 
+tests accessing it potentially in parallel. Semantics change depending on your build system and testing 
+framework. But it is generally a good practice to *not* share a single instance of an embedded server.
 
+Secondly, when the server is defined as a `val` in, say, a base trait from which many tests inherit 
+the same server can end up being started multiple times -- even if you are running a single test. Some build
+systems optimize their test runs by first loading all tests before running a single test file or test case. 
+In these instances, all tests will be instantiated and thus any constructor `val` is eagerly loaded. This 
+could therefore start the embedded server `val` in each test inheriting from the "base" trait and can 
+generally lead to undesirable performance when testing.
+
+.. note::
+
+   Finatra's testing utilities attempt to start servers lazily but any eager reference to the server's injector would trigger the server to start in order to create and return the injector.
 
 Examples:
 ---------
@@ -325,6 +550,9 @@ More Information
 .. |c.t.inject.server.FeatureTestMixin| replace:: `c.t.inject.server.FeatureTestMixin`
 .. _c.t.inject.server.FeatureTestMixin: https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTestMixin.scala#L24
 
+.. |EmbeddedTwitterServer| replace:: `EmbeddedTwitterServer`
+.. _EmbeddedTwitterServer: https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala
+
 .. |EmbeddedHttpServer| replace:: `EmbeddedHttpServer`
 .. _EmbeddedHttpServer: https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala
 
@@ -347,4 +575,13 @@ More Information
 .. _c.t.util.Future: https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala
 
 .. |c.t.util.Await#ready| replace:: `c.t.util.Await#ready`
-.. _c.t.util.Await#ready: https://github.com/twitter/util/blob/54f314d1f4b37d302f685e99b1ac416e48532a04/util-core/src/main/scala/com/twitter/util/Awaitable.scala#L127
+.. _c.t.util.Await#ready: https://github.com/twitter/util/blob/0d77572c76c7c54c0b10a1d25856af16148fe3c4/util-core/src/main/scala/com/twitter/util/Awaitable.scala#L140
+
+.. |c.t.util.Await#result| replace:: `c.t.util.Await#result`
+.. _c.t.util.Await#result: https://github.com/twitter/util/blob/54f314d1f4b37d302f685e99b1ac416e48532a04/util-core/src/main/scala/com/twitter/util/Awaitable.scala#L127
+
+.. |c.t.server.TwitterServer| replace:: `c.t.server.TwitterServer`
+.. _c.t.server.TwitterServer: https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala
+
+.. |c.t.inject.server.TwitterServer| replace:: `c.t.inject.server.TwitterServer`
+.. _c.t.inject.server.TwitterServer: https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala
