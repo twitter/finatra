@@ -15,7 +15,7 @@ Feature Tests
 
 If you are familiar with `Gherkin <https://docs.behat.org/en/v2.5/guides/1.gherkin.html>`__ or
 `Cucumber <https://github.com/cucumber/cucumber/wiki/Feature-Introduction>`__ or other similar
-testing languages and frameworks, then `FeatureTesting <https://wiki.documentfoundation.org/QA/Testing/Feature_Tests>`__
+testing languages and frameworks, then `Feature Testing <https://wiki.documentfoundation.org/QA/Testing/Feature_Tests>`__
 will feel somewhat familiar. In Finatra, a FeatureTest always consists of an application or a server
 under test. See the |c.t.inject.server.FeatureTest|_ trait.
 
