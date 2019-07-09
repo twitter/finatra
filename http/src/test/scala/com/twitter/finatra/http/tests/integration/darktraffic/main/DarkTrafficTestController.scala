@@ -2,8 +2,12 @@ package com.twitter.finatra.http.tests.integration.darktraffic.main
 
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
+import com.twitter.finatra.json.FinatraObjectMapper
+import javax.inject.Inject
 
-class DarkTrafficTestController extends Controller {
+case class Foo(name: String)
+
+class DarkTrafficTestController @Inject()(objectMapper: FinatraObjectMapper) extends Controller {
   get("/plaintext") { request: Request =>
     "Hello, World!"
   }
@@ -12,8 +16,8 @@ class DarkTrafficTestController extends Controller {
     response.ok(request.contentString)
   }
 
-  post("/foo") { request: Request =>
-    "bar"
+  post("/foo") { foo: Foo =>
+    foo.name
   }
 
   delete("/delete") { request: Request =>
