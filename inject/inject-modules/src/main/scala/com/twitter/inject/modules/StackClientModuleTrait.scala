@@ -17,7 +17,7 @@ import com.twitter.util.{Await, Closable, Duration, Monitor, NullMonitor}
  *            abstract class MyClientModule
  *              extends StackClientModuleTrait[Request, Response, MyClient] {
  *
- *              protected def baseClient: MyClient = MyClient.client
+ *              override protected final def baseClient: MyClient = MyClient.client
  *              override protected def sessionAcquisitionTimeout: Duration = 1.seconds
  *              override protected def requestTimeout: Duration = 5.seconds
  *              override protected def retryBudget: RetryBudget = RetryBudget(15.seconds, 5, .1)
@@ -25,7 +25,7 @@ import com.twitter.util.{Await, Closable, Duration, Monitor, NullMonitor}
  *              // if you want to customize the client configuration
  *              // you can:
  *              //
- *              // def configureClient(injector: Injector, client: MyClient): MyClient =
+ *              // override def configureClient(injector: Injector, client: MyClient): MyClient =
  *              //   client.
  *              //     withTracer(NullTracer)
  *              //     withStatsReceiver(NullStatsReceiver)
@@ -37,15 +37,18 @@ import com.twitter.util.{Await, Closable, Duration, Monitor, NullMonitor}
  *              // ex:
  *              // @Provides
  *              // @Singleton
- *              // def provideMyClient(injector: Injector, statsReceiver: StatsReceiver): MyClient =
- *              //   newClient(injector, statsReceiver)
+ *              // final def provideMyClient(
+ *              //   injector: Injector,
+ *              //   statsReceiver: StatsReceiver
+ *              //  ): MyClient =
+ *              //    newClient(injector, statsReceiver)
  *              //
  *              // Or create a service directly
  *              //
  *              // ex:
  *              // @Provides
  *              // @Singleton
- *              // def provideMyService(
+ *              // final def provideMyService(
  *              //   injector: Injector,
  *              //   statsReceiver: StatsReceiver
  *              // ): Service[Request, Response] =

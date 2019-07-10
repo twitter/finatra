@@ -1,16 +1,22 @@
 package finatra.quickstart.modules
 
-import com.twitter.finatra.httpclient.modules.HttpClientModule
+import com.google.inject.{Provides, Singleton}
+import com.twitter.finatra.httpclient.HttpClient
+import com.twitter.finatra.httpclient.modules.HttpClientModuleTrait
 import com.twitter.finatra.http.response.ResponseUtils._
 import com.twitter.conversions.DurationOps._
+import com.twitter.finagle.Http
+import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.inject.Injector
 import com.twitter.inject.utils.RetryPolicyUtils._
 
-object FirebaseHttpClientModule extends HttpClientModule {
+object FirebaseHttpClientModule extends HttpClientModuleTrait {
 
   private val sslHostFlag = flag("firebase.host", "", "firebase hostname")
 
-  override def sslHostname = Some(sslHostFlag())
   override val dest = "/s/firebaseio/finatra"
+  override val label = "firebase"
 
   override def retryPolicy =
     Some(
@@ -21,4 +27,17 @@ object FirebaseHttpClientModule extends HttpClientModule {
         shouldRetry = Http4xxOr5xxResponses
       )
     )
+
+  override protected def configureClient(
+    injector: Injector,
+    client: Http.Client
+  ): Http.Client = client.withTls(sslHostFlag())
+
+  @Provides
+  @Singleton
+  final def provideHttpClient(
+    injector: Injector,
+    statsReceiver: StatsReceiver,
+    mapper: FinatraObjectMapper
+  ): HttpClient = newHttpClient(injector, statsReceiver, mapper)
 }

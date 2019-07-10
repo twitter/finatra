@@ -699,6 +699,7 @@ lazy val httpclient = project
     }
   ).dependsOn(
     jackson,
+    injectModules,
     injectUtils,
     injectApp % "test->test",
     injectCore % "test->test")

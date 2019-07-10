@@ -13,6 +13,63 @@ Added
 * finatra-jackson: Add `com.twitter.util.Time` deserializer with `JsonFormat` support.
   ``PHAB_ID=D330682``
 
+Changed
+~~~~~~~
+
+* finatra-httpclient: introduce new `HttpClientModuleTrait` and deprecate `HttpClientModule`.
+  The `HttpClientModule` has been modified to extend from `HttpClientModuleTrait` to allow
+  for bridging the two implementations. `c.t.f.httpclient.RichHttpClient` has also been deprecated
+  as part of this change. The new `HttpClientModuleTrait` allows for direct configuration of the
+  underling `c.t.finagle.Http.Client`. The new `HttpClientModuleTrait` does not provide any
+  default bindings, so it is up to users to supply them - this allows for custom binding
+  annotations and binding multiple `HttpClient`s, which was not previously possible with
+  `HttpClientModule`. ``PHAB_ID=D338320``
+
+  To migrate,
+
+  ```
+  class MyHttpClientModule extends HttpClientModule {
+    override val dest = "flag!mydest"
+    override val sslHostname = Some("sslHost")
+  }
+
+  ```
+
+  becomes
+
+  ```
+  class MyHttpClientModule extends HttpClientModuleTrait {
+    override val dest = "flag!mydest"
+    override val label = "myhttpclient"
+    val sslHostname = "sslHost"
+
+    // we only override in this example for TLS configuration with the `sslHostname`
+    override def configureClient(
+      injector: Injector,
+      client: Http.Client
+    ): Http.Client = client.withTls(sslHostname)
+
+    @Singleton
+    @Provides
+    final def provideHttpClient(
+      injector: Injector,
+      statsReceiver: StatsReceiver,
+      mapper: FinatraObjectMapper
+    ): HttpClient = newHttpClient(injector, statsReceiver, mapper)
+
+    // Note that `provideHttpClient` no longer needs an injected `Service[Request, Response]` so
+    // the following is only needed if you require a `Service[Request, Response]` elsewhere:
+
+    @Singleton
+    @Provides
+    final def provideHttpService(
+      injector: Injector,
+      statsReceiver: StatsReceiver
+    ): Service[Request, Response] = newService(injector, statsReceiver)
+
+  }
+  ```
+
 19.6.0
 ------
 
