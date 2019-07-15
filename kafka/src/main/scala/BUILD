@@ -6,7 +6,7 @@ scala_library(
         name = "finatra-kafka",
         repo = artifactory,
     ),
-    strict_deps = False,
+    strict_deps = True,
     dependencies = [
         "3rdparty/jvm/org/apache/kafka:kafka-clients",
         "finagle/finagle-core/src/main/scala",
@@ -16,7 +16,7 @@ scala_library(
         "finatra/kafka/src/main/java",
         "finatra/utils",
         "scrooge/scrooge-serializer/src/main/scala",
-        "util/util-codec/src/main/scala",
+        "util/util-codec/src/main/scala/com/twitter/util",
     ],
     exports = [
         "3rdparty/jvm/org/apache/kafka:kafka-clients",
@@ -26,6 +26,5 @@ scala_library(
         "finatra/inject/inject-utils",
         "finatra/utils",
         "scrooge/scrooge-serializer/src/main/scala",
-        "util/util-codec/src/main/scala",
     ],
 )

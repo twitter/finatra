@@ -18,6 +18,9 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-kafka: BUILD file update compile and runtime deps.
+  ``PHAB_ID=D337742``
+
 * finatra-httpclient: introduce new `HttpClientModuleTrait` and deprecate `HttpClientModule`.
   The `HttpClientModule` has been modified to extend from `HttpClientModuleTrait` to allow
   for bridging the two implementations. `c.t.f.httpclient.RichHttpClient` has also been deprecated
