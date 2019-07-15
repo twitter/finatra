@@ -10,6 +10,8 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-kafka-streams: Adding test/sample for `FinatraDslWindowedAggregations.aggregate`. ``PHAB_ID=D322558``
+
 * finatra-jackson: Add `com.twitter.util.Time` deserializer with `JsonFormat` support.
   ``PHAB_ID=D330682``
 
