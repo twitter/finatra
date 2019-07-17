@@ -64,19 +64,21 @@ class DarkTrafficTestServerFeatureTest extends FeatureTest with Mockito {
     }
   }
 
-  test("DarkTrafficServer#Post method not forwarded") {
-    liveServer.httpPost("/foo", postBody = "", andExpect = Ok, withBody = "bar")
+  test("DarkTrafficServer#Post method is forwarded") {
+    liveServer.httpPost("/foo", postBody = """{"name":"bar"}""", andExpect = Ok, withBody = "bar")
 
     // service stats
     liveServer.inMemoryStats.counters.assert("route/foo/POST/status/200", 1)
 
     // darkTrafficFilter stats
-    liveServer.inMemoryStats.counters.get("dark_traffic_filter/forwarded") should be(None)
-    liveServer.inMemoryStats.counters.assert("dark_traffic_filter/skipped", 1)
+    liveServer.inMemoryStats.counters.assert("dark_traffic_filter/forwarded", 1)
+    liveServer.inMemoryStats.counters.get("dark_traffic_filter/skipped") should be(None)
 
     server.assertHealthy()
     // "dark" service stats
-    server.inMemoryStats.counters.get("route/foo/POST/status/200") should be(None)
+    eventually {
+      server.inMemoryStats.counters.assert("route/foo/POST/status/200", 1)
+    }
   }
 
   test("DarkTrafficServer#Delete method not forwarded") {

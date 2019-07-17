@@ -15,7 +15,7 @@ object DarkServerTestModule extends DarkTrafficFilterModule {
    */
   override def enableSampling(injector: Injector): Request => Boolean = { request =>
     request.method match {
-      case Post | Delete => false
+      case Delete => false
       case _ => true
     }
   }

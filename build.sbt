@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "19.6.0"
+val releaseVersion = "19.7.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -699,6 +699,7 @@ lazy val httpclient = project
     }
   ).dependsOn(
     jackson,
+    injectModules,
     injectUtils,
     injectApp % "test->test",
     injectCore % "test->test")
@@ -783,7 +784,7 @@ lazy val kafka = (project in file("kafka"))
       "com.twitter" %% "finagle-exp" % versions.twLibVersion,
       "com.twitter" %% "finagle-thrift" % versions.twLibVersion,
       "com.twitter" %% "scrooge-serializer" % versions.twLibVersion,
-      "com.twitter" %% "util-core" % versions.twLibVersion,
+      "com.twitter" %% "util-codec" % versions.twLibVersion,
       "org.apache.kafka" %% "kafka" % versions.kafka % "compile->compile;test->test",
       "org.apache.kafka" %% "kafka" % versions.kafka % "test" classifier "test",
       "org.apache.kafka" % "kafka-clients" % versions.kafka % "test->test",
@@ -866,13 +867,7 @@ lazy val kafkaStreamsPrerestore = (project in file("kafka-streams/kafka-streams-
     excludeDependencies ++= kafkaStreamsExclusionRules,
     excludeFilter in unmanagedResources := "BUILD"
   ).dependsOn(
-    injectCore % "test->test;compile->compile",
-    injectSlf4j % "test->test;compile->compile",
-    injectUtils % "test->test;compile->compile",
-    kafkaStreams % "test->test;compile->compile",
-    kafkaStreamsStaticPartitioning % "test->test;compile->compile",
-    thrift % "test->test;compile->compile",
-    utils % "test->test;compile->compile")
+  kafkaStreamsStaticPartitioning % "test->test;compile->compile")
 
 lazy val kafkaStreamsQueryableThrift = (project in file("kafka-streams/kafka-streams-queryable-thrift"))
   .settings(projectSettings)
@@ -887,14 +882,8 @@ lazy val kafkaStreamsQueryableThrift = (project in file("kafka-streams/kafka-str
     scroogeLanguages in Test := Seq("java", "scala"),
     excludeFilter in unmanagedResources := "BUILD"
   ).dependsOn(
-    injectCore % "test->test;compile->compile",
-    injectSlf4j % "test->test;compile->compile",
-    injectUtils % "test->test;compile->compile",
-    kafkaStreams % "test->test;compile->compile",
-    kafkaStreamsQueryableThriftClient %  "test->test;compile->compile",
-    kafkaStreamsStaticPartitioning % "test->test;compile->compile",
-    thrift % "test->test;compile->compile",
-    utils % "test->test;compile->compile")
+    injectCore % "test->test;compile->compile", 
+    kafkaStreamsStaticPartitioning % "test->test;compile->compile")
 
 lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))
   .settings(projectSettings)
@@ -903,6 +892,7 @@ lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))
     moduleName := "finatra-kafka-streams",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
     libraryDependencies ++= Seq(
+      "com.twitter" %% "util-jvm" % versions.twLibVersion,
       "it.unimi.dsi" % "fastutil" % versions.fastutil,
       "jakarta.ws.rs" % "jakarta.ws.rs-api" % "2.1.3",
       "org.agrona" % "agrona" % versions.agrona,

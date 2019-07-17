@@ -1,31 +1,33 @@
 package com.twitter.finatra.httpclient.modules
 
 import com.google.inject.Provides
-import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finagle.service.RetryPolicy
+import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.finagle.{Http, Resolvers, Service}
 import com.twitter.finatra.httpclient.{HttpClient, RichHttpClient}
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.inject.TwitterModule
-import com.twitter.util.Try
+import com.twitter.inject.Injector
 import javax.inject.Singleton
 
-abstract class HttpClientModule extends TwitterModule {
+@deprecated("Please use com.twitter.finatra.httpclient.modules.HttpClientModuleTrait directly.", "07-08-2019")
+abstract class HttpClientModule extends HttpClientModuleTrait {
 
-  def dest: String
-
-  // override and set to a non-empty value if the dest requires a Host header
-  def hostname: String = ""
-
-  def retryPolicy: Option[RetryPolicy[Try[Response]]] = None
-
-  def defaultHeaders: Map[String, String] = Map()
+  // for backwards compatibility purposes, mirrors the behavior of a client w/o label specified
+  override def label: String = Resolvers.evalLabeled(dest)._2
 
   def sslHostname: Option[String] = None
 
+  override def configureClient(
+    injector: Injector,
+    client: Http.Client
+  ): Http.Client = sslHostname match {
+    case Some(sslHost) => client.withTls(sslHost)
+    case _ => client
+  }
+
   @Singleton
   @Provides
-  def provideHttpClient(
+  final def provideHttpClient(
     mapper: FinatraObjectMapper,
     httpService: Service[Request, Response]
   ): HttpClient = {
@@ -41,7 +43,15 @@ abstract class HttpClientModule extends TwitterModule {
 
   @Singleton
   @Provides
-  def provideHttpService: Service[Request, Response] = {
+  final def provideHttpService(
+    injector: Injector,
+    statsReceiver: StatsReceiver
+  ): Service[Request, Response] = newService(injector, statsReceiver)
+
+  // retained for binary compatibility
+  @deprecated("Use provideHttpService(injector, statsReceiver). This method no longer binds " +
+    "to the Injector's object graph.", "07-09-2019")
+  final def provideHttpService: Service[Request, Response] = {
     sslHostname match {
       case Some(ssl) =>
         RichHttpClient.newSslClientService(sslHostname = ssl, dest = dest)
@@ -49,4 +59,5 @@ abstract class HttpClientModule extends TwitterModule {
         RichHttpClient.newClientService(dest = dest)
     }
   }
+
 }

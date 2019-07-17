@@ -6,7 +6,7 @@ scala_library(
         name = "finatra-streams-prerestore",
         repo = artifactory,
     ),
-    strict_deps = False,
+    strict_deps = True,
     dependencies = [
         "finatra/kafka-streams/kafka-streams-static-partitioning/src/main/scala",
     ],

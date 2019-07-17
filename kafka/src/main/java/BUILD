@@ -6,6 +6,7 @@ java_library(
         name = "finatra-kafka-java",
         repo = artifactory,
     ),
+    strict_deps = True,
     dependencies = [
     ],
     exports = [

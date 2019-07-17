@@ -1,14 +1,17 @@
 package com.twitter.finatra.httpclient
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.google.inject.Provides
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response, Status}
-import com.twitter.finatra.httpclient.modules.HttpClientModule
+import com.twitter.finatra.httpclient.modules.HttpClientModuleTrait
 import com.twitter.finatra.httpclient.test.InMemoryHttpService
+import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.inject.{Injector, IntegrationTest}
 import com.twitter.inject.app.TestInjector
 import com.twitter.util.Await
+import javax.inject.Singleton
 
 class HttpClientIntegrationTest extends IntegrationTest {
 
@@ -73,9 +76,24 @@ class HttpClientIntegrationTest extends IntegrationTest {
     Await.result(httpClient.get("/foo")) should be(mockResponse) //Purposely using deprecated method for test coverage
   }
 
-  object MyHttpClientModule extends HttpClientModule {
+  object MyHttpClientModule extends HttpClientModuleTrait {
     override val dest = "/my-http-service"
+    override val label = "test-client"
     override val hostname = "hostname123"
     override val defaultHeaders = Map("a" -> "b")
+
+    @Singleton
+    @Provides
+    def providesHttpClient(
+      mapper: FinatraObjectMapper,
+      service: Service[Request, Response]
+    ): HttpClient = new HttpClient(
+      hostname = hostname,
+      httpService = service,
+      retryPolicy = retryPolicy,
+      defaultHeaders = defaultHeaders,
+      mapper = mapper
+    )
   }
+
 }

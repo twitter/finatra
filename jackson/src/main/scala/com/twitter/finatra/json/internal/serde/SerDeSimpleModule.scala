@@ -15,4 +15,5 @@ private[finatra] object SerDeSimpleModule extends SimpleModule {
     classOf[DateTime],
     new JodaDatetimeDeserializer(FormatConfig.DEFAULT_DATETIME_PARSER))
   addDeserializer(classOf[ctu.Duration], DurationStringDeserializer)
+  addDeserializer(classOf[ctu.Time], TimeStringDeserializer())
 }

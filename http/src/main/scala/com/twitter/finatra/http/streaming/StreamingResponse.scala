@@ -16,9 +16,10 @@ import scala.language.higherKinds
  */
 private[http] final case class StreamingResponse[F[_]: ToReader, A] private (
   mapper: FinatraObjectMapper,
-  val stream: F[A]) {
+  stream: F[A]) {
 
   private[this] val reader = implicitly[ToReader[F]].apply(stream).map {
+    case buf: Buf => buf
     case str: String => Buf.Utf8(str)
     case any => mapper.writeValueAsBuf(any)
   }

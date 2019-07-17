@@ -1,7 +1,7 @@
 junit_tests(
     sources = rglobs("*.scala"),
     compiler_option_sets = {"fatal_warnings"},
-    strict_deps = False,
+    strict_deps = True,
     dependencies = [
         "3rdparty/jvm/ch/qos/logback:logback-classic",
         "3rdparty/jvm/org/apache/kafka:kafka-clients-test",

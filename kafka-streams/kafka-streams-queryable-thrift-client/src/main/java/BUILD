@@ -1,6 +1,7 @@
 java_library(
     sources = rglobs("*.java"),
     compiler_option_sets = {},
+    strict_deps = True,
     dependencies = [
     ],
     exports = [

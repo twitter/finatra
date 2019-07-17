@@ -9,16 +9,13 @@ scala_library(
         name = "finatra-streams-queryable-thrift-client",
         repo = artifactory,
     ),
-    strict_deps = False,
+    strict_deps = True,
     dependencies = [
-        "3rdparty/jvm/com/twitter/bijection:core",
         "finagle/finagle-serversets",
-        "finatra/inject/inject-thrift-client",
-        "finatra/kafka-streams/kafka-streams-queryable-thrift-client/src/main/java:pants-workaround",
+        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-thrift-client/src/main/scala",
     ],
     exports = [
-        "3rdparty/jvm/com/twitter/bijection:core",
         "finagle/finagle-serversets",
-        "finatra/inject/inject-thrift-client",
     ],
 )

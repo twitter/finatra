@@ -8,12 +8,6 @@ java_library(
         name = "finatra-streams-java",
         repo = artifactory,
     ),
-    dependencies = [
-        "3rdparty/jvm/org/apache/kafka:kafka-clients",
-        "3rdparty/jvm/org/apache/kafka:kafka-streams",
-    ],
-    exports = [
-        "3rdparty/jvm/org/apache/kafka:kafka-clients",
-        "3rdparty/jvm/org/apache/kafka:kafka-streams",
-    ],
+    strict_deps = True,
+    dependencies = [],
 )
