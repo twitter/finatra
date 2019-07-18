@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Defining Thrift Controllers &#8212; Finatra 19.6.0 documentation</title>
+    <title>Defining Thrift Controllers &#8212; Finatra 19.7.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.6.0',
+        VERSION:     '19.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.6.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.7.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Filtering Thrift Requests" href="filters.html" />
     <link rel="prev" title="Thrift Server Definition" href="server.html" />
@@ -82,15 +82,59 @@
 #@namespace scala com.twitter.example.thriftscala
 namespace rb ExampleService
 
-include &quot;finatra-thrift/finatra_thrift_exceptions.thrift&quot;
+exception UnknownClientIdError {
+  1: string message
+}
+
+exception NoClientIdError {
+  1: string message
+}
+
+enum ClientErrorCause {
+  /** Improperly-formatted request can&#39;t be fulfilled. */
+  BAD_REQUEST     = 0,
+
+  /** Required request authorization failed. */
+  UNAUTHORIZED    = 1,
+
+  /** Server timed out while fulfilling the request. */
+  REQUEST_TIMEOUT = 2,
+
+  /** Initiating client has exceeded its maximum rate. */
+  RATE_LIMITED    = 3
+}
+
+exception ClientError {
+  1: ClientErrorCause errorCause
+  2: string message
+}
+
+enum ServerErrorCause {
+  /** Generic server error. */
+  INTERNAL_SERVER_ERROR = 0,
+
+  /** Server lacks the ability to fulfill the request. */
+  NOT_IMPLEMENTED       = 1,
+
+  /** Request cannot be fulfilled due to error from dependent service. */
+  DEPENDENCY_ERROR      = 2,
+
+  /** Server is currently unavailable. */
+  SERVICE_UNAVAILABLE   = 3
+}
+
+exception ServerError {
+  1: ServerErrorCause errorCause
+  2: string message
+}
 
 service ExampleService {
   i32 add1(
     1: i32 num
   ) throws (
-    1: finatra_thrift_exceptions.ServerError serverError,
-    2: finatra_thrift_exceptions.UnknownClientIdError unknownClientIdError
-    3: finatra_thrift_exceptions.NoClientIdError kClientError
+    1: ServerError serverError,
+    2: UnknownClientIdError unknownClientIdError
+    3: NoClientIdError kClientError
   )
 }
 </pre></div>
@@ -174,6 +218,33 @@ Controller:</p>
 <p>In the above example the <cite>Controller</cite> implementation forwards handling of the various methods to the injected services directly.</p>
 <p>How you structure and call other classes from the <cite>Controller</cite> implementation is completely up to you to implement in whatever way makes sense for your service or team.</p>
 </div>
+<div class="section" id="per-method-stats">
+<h2>Per-Method Stats<a class="headerlink" href="#per-method-stats" title="Permalink to this headline">¶</a></h2>
+<p>Per-method stats recording is provided by Finatra in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/StatsFilter.scala">c.t.finatra.thrift.filters.StatsFilter</a>.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.example.thriftscala.ExampleService
+import com.twitter.finatra.thrift.Controller
+import com.twitter.util.Future
+import com.twitter.scrooge.{Request, Response}
+
+class ExampleThriftController extends Controller(ExampleService) {
+
+  handle(Add1).withFn { request: Request[Add1.Args] =&gt;
+    val num = request.args.num
+    val headers = request.headers
+
+    log(s&quot;Add1 called with $num and headers: $headers&quot;)
+    Future(Response(num + 1))
+  }
+}
+</pre></div>
+</div>
+<p>yields the following stats:</p>
+<div class="highlight-text"><div class="highlight"><pre><span></span>per_method_stats/add1/failures 0
+per_method_stats/add1/success 1
+per_method_stats/add1/latency_ms 8.666667 [5.0, 3.0, 2.0]
+</pre></div>
+</div>
+</div>
 <div class="section" id="deprecated-legacy-controller-information">
 <h2>Deprecated/Legacy Controller Information<a class="headerlink" href="#deprecated-legacy-controller-information" title="Permalink to this headline">¶</a></h2>
 <p>Prior to constructing a <cite>Controller</cite> by extending <cite>Controller(GeneratedThriftSerivce)</cite>, a Controller was constructed by creating a class that extended <cite>Controller with GeneratedThriftSerivce.BaseServiceIface</cite>. Constructing a Controller this way is still possible but deprecated.</p>
@@ -228,6 +299,7 @@ class ExampleThriftController
 <li><a class="reference internal" href="#scrooge-request-and-response-wrappers">Scrooge <cite>Request</cite> and <cite>Response</cite> Wrappers</a></li>
 <li><a class="reference internal" href="#add-the-controller-to-the-server">Add the Controller to the Server</a></li>
 <li><a class="reference internal" href="#but-i-don-t-want-to-write-all-of-my-code-inside-of-one-controller-class">But I don&#8217;t want to write all of my code inside of one Controller class</a></li>
+<li><a class="reference internal" href="#per-method-stats">Per-Method Stats</a></li>
 <li><a class="reference internal" href="#deprecated-legacy-controller-information">Deprecated/Legacy Controller Information</a></li>
 <li><a class="reference internal" href="#more-information">More information</a></li>
 </ul>

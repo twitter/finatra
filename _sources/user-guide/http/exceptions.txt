@@ -52,9 +52,10 @@ ExceptionMappingFilter
 
 Using exception mappers requires you to include the `c.t.finatra.http.filters.ExceptionMappingFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala>`__ in your server's filter chain.
 
-**Note**: the `ExceptionMappingFilter` is included as part of `c.t.finatra.http.filters.CommonFilters <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala>`__. Thus if you are using the `c.t.finatra.http.filters.CommonFilters <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala>`__ the ExceptionMappingFilter is already installed.
+.. note::
 
-See `Filters <filters.html#c-t-finatra-http-filters-commonfilters>`__ for more information on the `c.t.finatra.http.filters.CommonFilters`.
+  The `ExceptionMappingFilter` is included as part of `c.t.finatra.http.filters.CommonFilters <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala>`__. 
+  Thus if you have installed the `c.t.finatra.http.filters.CommonFilters <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala>`__ the ExceptionMappingFilter is already installed.
 
 To manually add the `ExceptionMappingFilter`:
 

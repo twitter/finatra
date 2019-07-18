@@ -183,7 +183,7 @@ trait and implementors are responsible for managing their own binding annotation
                <ol><li class="cmt"><p></p><pre><span class="kw">abstract</span> <span class="kw">class</span> MyClientModule
   <span class="kw">extends</span> StackClientModuleTrait[Request, Response, MyClient] {
 
-  <span class="kw">protected</span> <span class="kw">def</span> baseClient: MyClient = MyClient.client
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">final</span> <span class="kw">def</span> baseClient: MyClient = MyClient.client
   <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> sessionAcquisitionTimeout: Duration = <span class="num">1.</span>seconds
   <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> requestTimeout: Duration = <span class="num">5.</span>seconds
   <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> retryBudget: RetryBudget = RetryBudget(<span class="num">15.</span>seconds, <span class="num">5</span>, <span class="num">.1</span>)
@@ -191,7 +191,7 @@ trait and implementors are responsible for managing their own binding annotation
   <span class="cmt">// if you want to customize the client configuration</span>
   <span class="cmt">// you can:</span>
   <span class="cmt">//</span>
-  <span class="cmt">// def configureClient(injector: Injector, client: MyClient): MyClient =</span>
+  <span class="cmt">// override def configureClient(injector: Injector, client: MyClient): MyClient =</span>
   <span class="cmt">//   client.</span>
   <span class="cmt">//     withTracer(NullTracer)</span>
   <span class="cmt">//     withStatsReceiver(NullStatsReceiver)</span>
@@ -203,15 +203,18 @@ trait and implementors are responsible for managing their own binding annotation
   <span class="cmt">// ex:</span>
   <span class="cmt">// @Provides</span>
   <span class="cmt">// @Singleton</span>
-  <span class="cmt">// def provideMyClient(injector: Injector, statsReceiver: StatsReceiver): MyClient =</span>
-  <span class="cmt">//   newClient(injector, statsReceiver)</span>
+  <span class="cmt">// final def provideMyClient(</span>
+  <span class="cmt">//   injector: Injector,</span>
+  <span class="cmt">//   statsReceiver: StatsReceiver</span>
+  <span class="cmt">//  ): MyClient =</span>
+  <span class="cmt">//    newClient(injector, statsReceiver)</span>
   <span class="cmt">//</span>
   <span class="cmt">// Or create a service directly</span>
   <span class="cmt">//</span>
   <span class="cmt">// ex:</span>
   <span class="cmt">// @Provides</span>
   <span class="cmt">// @Singleton</span>
-  <span class="cmt">// def provideMyService(</span>
+  <span class="cmt">// final def provideMyService(</span>
   <span class="cmt">//   injector: Injector,</span>
   <span class="cmt">//   statsReceiver: StatsReceiver</span>
   <span class="cmt">// ): Service[Request, Response] =</span>
@@ -223,7 +226,12 @@ trait and implementors are responsible for managing their own binding annotation
             Linear Supertypes
           </span>
           <div class="superTypes hiddenContent"><a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>, <a href="../TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a>, <a href="../TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a>, <a href="../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">util.logging.Logging</a>, <a href="../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a>, <span class="extype" name="com.google.inject.AbstractModule">AbstractModule</span>, <span class="extype" name="com.google.inject.Module">Module</span>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
-        </div></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">
+              Known Subclasses
+            </span>
+            <div class="subClasses hiddenContent"><a href="../../finatra/httpclient/modules/HttpClientModuleTrait.html" class="extype" name="com.twitter.finatra.httpclient.modules.HttpClientModuleTrait">HttpClientModuleTrait</a>, <a href="../../finatra/httpclient/modules/HttpClientModule.html" class="extype" name="com.twitter.finatra.httpclient.modules.HttpClientModule">HttpClientModule</a></div>
+          </div></div>
         
 
       <div id="mbrsel">

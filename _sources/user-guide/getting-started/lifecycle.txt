@@ -37,8 +37,8 @@ method or in the application or server callbacks.
 See the `Creating an injectable App <../app/index.html>`__ and
 `Creating an injectable TwitterServer <../twitter-server/index.html>`__ sections for more information.
 
-|c.t.app.App| Lifecycle
------------------------
+|c.t.app.App|_ Lifecycle
+------------------------
 
 Finatra servers are, at their base, |c.t.app.App|_ applications. Therefore it will help to first
 cover the |c.t.app.App|_ lifecycle.
@@ -111,6 +111,9 @@ The lifecycle could thus be represented:
             run all onExit {} blocks
             run all Closables registered via closeOnExitLast()
 
+|c.t.inject.app.App|_ Lifecycle
+-------------------------------
+
 The Finatra |c.t.inject.app.App|_ extends the |c.t.app.App|_ lifecycle by adding more structure to the
 defined `main()` method.
 
@@ -143,8 +146,8 @@ The lifecycle for a Finatra "injectable" App |c.t.inject.app.App|_ can be descri
 For more information on creating an "injectable" App with Finatra, see the documentation
 `here <../app/index.html>`__.
 
-|c.t.server.TwitterServer| Lifecycle
-------------------------------------
+|c.t.server.TwitterServer|_ Lifecycle
+-------------------------------------
 
 |c.t.server.TwitterServer|_ is an extension of |c.t.app.App|_ and thus inherits the |c.t.app.App|_
 lifecycle, but adds the ability to include "warmup" lifecycle phases which are just a refinement of
@@ -165,6 +168,9 @@ accepting traffic. This is done by calling `warmupComplete()`.
 To add these phases, users would mix-in the |c.t.server.Lifecycle.Warmup|_ trait into their
 |c.t.server.TwitterServer|_ extension.
 
+|c.t.inject.server.TwitterServer|_ Lifecycle
+--------------------------------------------
+
 Finatra defines an "injectable" TwitterServer, |c.t.inject.server.TwitterServer|_ which itself is an
 extension of |c.t.server.TwitterServer|_ and the Finatra "injectable" App, |c.t.inject.app.App|_.
 
@@ -176,7 +182,7 @@ For more information on creating an "injectable" TwitterServer with Finatra, see
 `here <../twitter-server/index.html>`__.
 
 Server Startup Lifecycle
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Finatra servers inherit the |c.t.app.App|_ lifecycle and, as mentioned, also mix-in the TwitterServer
 |c.t.server.Lifecycle.Warmup|_ trait. On top of that, Finatra further refines the lifecycle by adding
@@ -229,7 +235,7 @@ Visually:
 .. image:: ../../_static/FinatraLifecycle.png
 
 Server Shutdown Lifecycle
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Upon *graceful* shutdown of an application or a server, all registered `onExit`, `closeOnExit`, and
 `closeOnExitLast` blocks are executed. See
@@ -265,7 +271,7 @@ which could lead to data inconsistencies in your server if the "subscriber" is s
 the "publisher" has closed.
 
 Ordering `onExit` and `closeOnExit` functions?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Assuming, that the `#close()` method of both returns `Future[Unit]`, e.g. like a |c.t.util.Closable|_,
 a way of doing this could be:
@@ -336,7 +342,7 @@ The "publisher" is guaranteed be closed **after** the closing of "subscriberA", 
 "subscriberC".
 
 What to do if you don't have a |c.t.util.Closable|_?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can simply use the `onExit` block to perform any shutdown logic, or you can wrap a function in
 a |c.t.util.Closable|_ to be passed to `closeOnExit` or `closeOnExitLast`.

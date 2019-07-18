@@ -153,6 +153,10 @@
                         <span class="separator"></span>
                         <a class="class" href="" title=""></a>
                         <a href="" title="">HttpClientModule</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="trait" href="HttpClientModuleTrait.html" title="Extending this trait allows for configuring an com.twitter.finagle.Http.Client and/or a com.twitter.finatra.httpclient.HttpClient."></a>
+                        <a href="HttpClientModuleTrait.html" title="Extending this trait allows for configuring an com.twitter.finagle.Http.Client and/or a com.twitter.finatra.httpclient.HttpClient.">HttpClientModuleTrait</a>
                       </li>
               </ul>
             </div>
@@ -176,16 +180,19 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">HttpClientModule</span><span class="result"> extends <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></span>
+        <span class="name deprecated" title="Deprecated: (Since version 07-08-2019) Please use com.twitter.finatra.httpclient.modules.HttpClientModuleTrait directly.">HttpClientModule</span><span class="result"> extends <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> with <a href="HttpClientModuleTrait.html" class="extype" name="com.twitter.finatra.httpclient.modules.HttpClientModuleTrait">HttpClientModuleTrait</a></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 07-08-2019)</i> Please use com.twitter.finatra.httpclient.modules.HttpClientModuleTrait directly.</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>, <a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a>, <a href="../../../inject/TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a>, <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <a href="../../../inject/TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a>, <span class="extype" name="com.google.inject.AbstractModule">AbstractModule</span>, <span class="extype" name="com.google.inject.Module">Module</span>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="HttpClientModuleTrait.html" class="extype" name="com.twitter.finatra.httpclient.modules.HttpClientModuleTrait">HttpClientModuleTrait</a>, <a href="../../../inject/modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a>, <span class="extype" name="com.twitter.finagle.Http.Client">Client</span>], <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>, <a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a>, <a href="../../../inject/TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a>, <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <a href="../../../inject/TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a>, <span class="extype" name="com.google.inject.AbstractModule">AbstractModule</span>, <span class="extype" name="com.google.inject.Module">Module</span>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -211,7 +218,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.httpclient.modules.HttpClientModule"><span>HttpClientModule</span></li><li class="in" name="com.twitter.inject.TwitterModule"><span>TwitterModule</span></li><li class="in" name="com.twitter.inject.TwitterBaseModule"><span>TwitterBaseModule</span></li><li class="in" name="com.twitter.inject.TwitterModuleLifecycle"><span>TwitterModuleLifecycle</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.inject.TwitterModuleFlags"><span>TwitterModuleFlags</span></li><li class="in" name="com.google.inject.AbstractModule"><span>AbstractModule</span></li><li class="in" name="com.google.inject.Module"><span>Module</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.httpclient.modules.HttpClientModule"><span>HttpClientModule</span></li><li class="in" name="com.twitter.finatra.httpclient.modules.HttpClientModuleTrait"><span>HttpClientModuleTrait</span></li><li class="in" name="com.twitter.inject.modules.StackClientModuleTrait"><span>StackClientModuleTrait</span></li><li class="in" name="com.twitter.inject.TwitterModule"><span>TwitterModule</span></li><li class="in" name="com.twitter.inject.TwitterBaseModule"><span>TwitterBaseModule</span></li><li class="in" name="com.twitter.inject.TwitterModuleLifecycle"><span>TwitterModuleLifecycle</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.inject.TwitterModuleFlags"><span>TwitterModuleFlags</span></li><li class="in" name="com.google.inject.AbstractModule"><span>AbstractModule</span></li><li class="in" name="com.google.inject.Module"><span>Module</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -254,7 +261,7 @@
 
         <div class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="com.twitter.finatra.httpclient.modules.HttpClientModule#dest" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="com.twitter.inject.modules.StackClientModuleTrait#dest" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="dest:String"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#dest:String" title="Permalink">
@@ -269,7 +276,7 @@
         <span class="name">dest</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Destination of Finagle client.</p><div class="fullcomment"><div class="comment cmt"><p>Destination of Finagle client.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../inject/modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/guide/Names.html" target="_blank">Names and Naming in Finagle</a></p></span></dd></dl></div>
     </li></ol>
             </div>
 
@@ -391,6 +398,37 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
+    </li><li name="com.twitter.inject.modules.StackClientModuleTrait#asClosable" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asClosable(client:ClientType):com.twitter.util.Closable"></a><a id="asClosable(Client):Closable"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#asClosable(client:ClientType):com.twitter.util.Closable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asClosable</span><span class="params">(<span name="client">client: <span class="extype" name="com.twitter.finagle.Http.Client">Client</span></span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Closable.html#com.twitter.util.Closable" class="extype" name="com.twitter.util.Closable">Closable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">This method should be overridden by implementors IF the <span class="extype" name="ClientType">ClientType</span> does not
+extend <span class="extype" name="Closable">Closable</span>.</p><div class="fullcomment"><div class="comment cmt"><p>This method should be overridden by implementors IF the <span class="extype" name="ClientType">ClientType</span> does not
+extend <span class="extype" name="Closable">Closable</span>. This method should wrap an underlying client as a Closable
+to ensure that resources are dealt with cleanly upon shutdown.
+</p></div><dl class="paramcmts block"><dt class="param">client</dt><dd class="cmt"><p>The client that does not extend Closable</p></dd><dt>returns</dt><dd class="cmt"><p>The <span class="extype" name="Closable">Closable</span> whose logic cleans up <code>client</code>'s resources</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd><div class="block">Examples:
+               <ol><li class="cmt"><p></p><pre><span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> asClosable(client: ClientType): Closable =
+  clientType.asClosable</pre></li>, <li class="cmt"><p></p><pre><span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> asClosable(client: ClientType): Closable =
+  Closable.make { deadline <span class="kw">=&gt;</span>
+    <span class="cmt">// Use a FuturePool to ensure the task is completed asynchronously</span>
+    <span class="cmt">// and allow for enforcing the deadline Time.</span>
+    FuturePool
+      .unboundedPool {
+        clientType.closeSession() <span class="cmt">// clean-up resources</span>
+      }.by(deadline)(DefaultTimer)
+  }</pre></li></ol>
+            </div></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
@@ -407,6 +445,26 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.twitter.finatra.httpclient.modules.HttpClientModuleTrait#baseClient" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="baseClient:com.twitter.finagle.Http.Client"></a><a id="baseClient:Client"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#baseClient:com.twitter.finagle.Http.Client" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">baseClient</span><span class="result">: <span class="extype" name="com.twitter.finagle.Http.Client">Client</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Create a base Finagle Stack Client of type <span class="extype" name="ClientType">ClientType</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Create a base Finagle Stack Client of type <span class="extype" name="ClientType">ClientType</span>. This method should not try to do
+any configuration on the created client.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The base <span class="extype" name="ClientType">ClientType</span> client, without any custom configuration.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpClientModuleTrait.html" class="extype" name="com.twitter.finatra.httpclient.modules.HttpClientModuleTrait">HttpClientModuleTrait</a> → <a href="../../../inject/modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd><div class="block">Examples:
+               <ol><li class="cmt"><p></p><pre><span class="kw">override</span> <span class="kw">def</span> createBaseClient(): Http.Client = Http.client</pre></li>, <li class="cmt"><p></p><pre><span class="kw">override</span> <span class="kw">def</span> createBaseClient(): ThriftMux.Client = ThriftMux.client</pre></li>, <li class="cmt"><p></p><pre><span class="kw">override</span> <span class="kw">def</span> createBaseClient(): Memcached.Client =  Memcached.client</pre></li></ol>
+            </div></dl></div>
     </li><li name="com.twitter.inject.TwitterModule#bind" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="bind[T,A&lt;:java.lang.annotation.Annotation](implicitevidence$10:Manifest[T],implicitevidence$11:Manifest[A]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]"></a><a id="bind[T,A&lt;:Annotation](Manifest[T],Manifest[A]):ScalaAnnotatedBindingBuilder[T]"></a>
       <span class="permalink">
@@ -749,6 +807,30 @@ the application <code>onExit</code> function to be executed on graceful shutdown
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AbstractModule → Module</dd></dl></div>
+    </li><li name="com.twitter.finatra.httpclient.modules.HttpClientModule#configureClient" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="configureClient(injector:com.twitter.inject.Injector,client:com.twitter.finagle.Http.Client):com.twitter.finagle.Http.Client"></a><a id="configureClient(Injector,Client):Client"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#configureClient(injector:com.twitter.inject.Injector,client:com.twitter.finagle.Http.Client):com.twitter.finagle.Http.Client" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">configureClient</span><span class="params">(<span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="client">client: <span class="extype" name="com.twitter.finagle.Http.Client">Client</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.Http.Client">Client</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">This method allows for further configuration of the <span class="extype" name="ClientType">ClientType</span> client for parameters not exposed by
+this module or for overriding defaults provided herein, e.g.,</p><div class="fullcomment"><div class="comment cmt"><p>This method allows for further configuration of the <span class="extype" name="ClientType">ClientType</span> client for parameters not exposed by
+this module or for overriding defaults provided herein, e.g.,</p><pre><span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configureClient(client: Example.Client): Example.Client = {
+  client
+    .withStatsReceiver(someOtherScopedStatsReceiver)
+    .withMonitor(myAwesomeMonitor)
+    .withTracer(notTheDefaultTracer)
+}</pre></div><dl class="paramcmts block"><dt class="param">injector</dt><dd class="cmt"><p>the <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">com.twitter.inject.Injector</a> which can be used to help configure the
+                given <span class="extype" name="ClientType">ClientType</span> client.</p></dd><dt class="param">client</dt><dd class="cmt"><p>the <span class="extype" name="ClientType">ClientType</span> client to configure.</p></dd><dt>returns</dt><dd class="cmt"><p>a configured <span class="extype" name="ClientType">ClientType</span> client.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.httpclient.modules.HttpClientModule">HttpClientModule</a> → <a href="../../../inject/modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#convertToTypes" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="convertToTypes(x$1:com.google.inject.matcher.Matcher[_&gt;:com.google.inject.TypeLiteral[_]],x$2:com.google.inject.spi.TypeConverter):Unit"></a><a id="convertToTypes(Matcher[_&gt;:TypeLiteral[_]],TypeConverter):Unit"></a>
       <span class="permalink">
@@ -946,7 +1028,45 @@ provided as an application argument (as they have no default value to be used).
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
-    </li><li name="com.twitter.finatra.httpclient.modules.HttpClientModule#defaultHeaders" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.inject.modules.StackClientModuleTrait#defaultClosableAwaitPeriod" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="defaultClosableAwaitPeriod:com.twitter.util.Duration"></a><a id="defaultClosableAwaitPeriod:Duration"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#defaultClosableAwaitPeriod:com.twitter.util.Duration" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defaultClosableAwaitPeriod</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Default amount of time to block in <span class="extype" name="com.twitter.util.Awaitable.result(timeout:">Duration)</span> on
+a <span class="extype" name="Closable">Closable</span> to close that is registered in a <code>closeOnExit</code> block.</p><div class="fullcomment"><div class="comment cmt"><p>Default amount of time to block in <span class="extype" name="com.twitter.util.Awaitable.result(timeout:">Duration)</span> on
+a <span class="extype" name="Closable">Closable</span> to close that is registered in a <code>closeOnExit</code> block.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html" class="extype" name="com.twitter.util.Duration">com.twitter.util.Duration</a></p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.util.Awaitable.result(timeout:">Duration)</span></p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.modules.StackClientModuleTrait#defaultClosableGracePeriod" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="defaultClosableGracePeriod:com.twitter.util.Duration"></a><a id="defaultClosableGracePeriod:Duration"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#defaultClosableGracePeriod:com.twitter.util.Duration" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defaultClosableGracePeriod</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Default amount of time to wait for any <span class="extype" name="Closable">Closable</span> being registered in a <code>closeOnExit</code> block.</p><div class="fullcomment"><div class="comment cmt"><p>Default amount of time to wait for any <span class="extype" name="Closable">Closable</span> being registered in a <code>closeOnExit</code> block.
+Note that this timeout is advisory, as it attempts to give the close function some leeway, for
+example to drain clients or finish up other tasks.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html" class="extype" name="com.twitter.util.Duration">com.twitter.util.Duration</a></p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.util.Closable.close(after:">Duration)</span></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.httpclient.modules.HttpClientModuleTrait#defaultHeaders" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultHeaders:Map[String,String]"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#defaultHeaders:Map[String,String]" title="Permalink">
@@ -961,7 +1081,7 @@ provided as an application argument (as they have no default value to be used).
         <span class="name">defaultHeaders</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="HttpClientModuleTrait.html" class="extype" name="com.twitter.finatra.httpclient.modules.HttpClientModuleTrait">HttpClientModuleTrait</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -1149,6 +1269,22 @@ a value provided as an application argument (as they have no default value to be
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
+    </li><li name="com.twitter.inject.modules.StackClientModuleTrait#frameworkConfigureClient" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="frameworkConfigureClient(injector:com.twitter.inject.Injector,client:ClientType):ClientType"></a><a id="frameworkConfigureClient(Injector,Client):Client"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#frameworkConfigureClient(injector:com.twitter.inject.Injector,client:ClientType):ClientType" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">frameworkConfigureClient</span><span class="params">(<span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="client">client: <span class="extype" name="com.twitter.finagle.Http.Client">Client</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.Http.Client">Client</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../index.html" class="extype" name="com.twitter">com.twitter</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterBaseModule#frameworkModules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="frameworkModules:Seq[com.google.inject.Module]"></a><a id="frameworkModules:Seq[Module]"></a>
       <span class="permalink">
@@ -1285,7 +1421,7 @@ a value provided as an application argument (as they have no default value to be
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.httpclient.modules.HttpClientModule#hostname" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.httpclient.modules.HttpClientModuleTrait#hostname" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hostname:String"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#hostname:String" title="Permalink">
@@ -1300,7 +1436,7 @@ a value provided as an application argument (as they have no default value to be
         <span class="name">hostname</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="HttpClientModuleTrait.html" class="extype" name="com.twitter.finatra.httpclient.modules.HttpClientModuleTrait">HttpClientModuleTrait</a></dd></dl></div>
     </li><li name="com.twitter.util.logging.Logging#info" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="info(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="info(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
@@ -1573,6 +1709,22 @@ a value provided as an application argument (as they have no default value to be
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="com.twitter.finatra.httpclient.modules.HttpClientModule#label" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="label:String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#label:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">label</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Finagle client label.</p><div class="fullcomment"><div class="comment cmt"><p>Finagle client label.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.httpclient.modules.HttpClientModule">HttpClientModule</a> → <a href="../../../inject/modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/guide/Clients.html#observability" target="_blank">Clients Observability</a></p></span></dd></dl></div>
     </li><li name="com.twitter.util.logging.Logging#logger" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="logger:com.twitter.util.logging.Logger"></a><a id="logger:Logger"></a>
       <span class="permalink">
@@ -1624,6 +1776,25 @@ a value provided as an application argument (as they have no default value to be
 TwitterModules with flag definitions can be supported.</p><p>However, AbstractModule.install can still be used for non-TwitterModules, and is sometimes preferred
 due to install being deferred until after flag parsing occurs.
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
+    </li><li name="com.twitter.inject.modules.StackClientModuleTrait#monitor" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="monitor:com.twitter.util.Monitor"></a><a id="monitor:Monitor"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#monitor:com.twitter.util.Monitor" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">monitor</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Monitor.html#com.twitter.util.Monitor" class="extype" name="com.twitter.util.Monitor">Monitor</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Function to add a user-defined Monitor.</p><div class="fullcomment"><div class="comment cmt"><p>Function to add a user-defined Monitor. A <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/util/DefaultMonitor.html" class="extype" name="com.twitter.finagle.util.DefaultMonitor">com.twitter.finagle.util.DefaultMonitor</a> will be
+installed implicitly which handles all exceptions caught in the stack. Exceptions that are not
+handled by a user-defined monitor are propagated to the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/util/DefaultMonitor.html" class="extype" name="com.twitter.finagle.util.DefaultMonitor">com.twitter.finagle.util.DefaultMonitor</a>.</p><p>NullMonitor has no influence on DefaultMonitor behavior here.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -1640,6 +1811,61 @@ due to install being deferred until after flag parsing occurs.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="com.twitter.inject.modules.StackClientModuleTrait#newClient" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="newClient(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):ClientType"></a><a id="newClient(Injector,StatsReceiver):Client"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#newClient(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):ClientType" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">newClient</span><span class="params">(<span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.Http.Client">Client</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">This method will generate a fully configured <span class="extype" name="ClientType">ClientType</span>
+</p><div class="fullcomment"><div class="comment cmt"><p>This method will generate a fully configured <span class="extype" name="ClientType">ClientType</span>
+</p></div><dl class="paramcmts block"><dt class="param">injector</dt><dd class="cmt"><p>the <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">com.twitter.inject.Injector</a> which can be used to help configure the
+                given <span class="extype" name="ClientType">ClientType</span> client.</p></dd><dt class="param">statsReceiver</dt><dd class="cmt"><p>The <span class="extype" name="StatsReceiver">StatsReceiver</span> to use with the generated <span class="extype" name="ClientType">ClientType</span></p></dd><dt>returns</dt><dd class="cmt"><p>A configured <span class="extype" name="ClientType">ClientType</span></p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.httpclient.modules.HttpClientModuleTrait#newHttpClient" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="newHttpClient(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver,mapper:com.twitter.finatra.json.FinatraObjectMapper):com.twitter.finatra.httpclient.HttpClient"></a><a id="newHttpClient(Injector,StatsReceiver,FinatraObjectMapper):HttpClient"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#newHttpClient(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver,mapper:com.twitter.finatra.json.FinatraObjectMapper):com.twitter.finatra.httpclient.HttpClient" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">newHttpClient</span><span class="params">(<span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>, <span name="mapper">mapper: <a href="../../json/FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">FinatraObjectMapper</a></span>)</span><span class="result">: <a href="../HttpClient.html" class="extype" name="com.twitter.finatra.httpclient.HttpClient">HttpClient</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="HttpClientModuleTrait.html" class="extype" name="com.twitter.finatra.httpclient.modules.HttpClientModuleTrait">HttpClientModuleTrait</a></dd></dl></div>
+    </li><li name="com.twitter.inject.modules.StackClientModuleTrait#newService" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="newService(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.Service[Req,Rep]"></a><a id="newService(Injector,StatsReceiver):Service[Request,Response]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#newService(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.Service[Req,Rep]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">newService</span><span class="params">(<span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.Service">Service</span>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">This method will generate a <code>Service[Req, Rep]</code> from the configured <span class="extype" name="ClientType">ClientType</span>
+generated by calling <span class="extype" name="newClient()">newClient()</span>.</p><div class="fullcomment"><div class="comment cmt"><p>This method will generate a <code>Service[Req, Rep]</code> from the configured <span class="extype" name="ClientType">ClientType</span>
+generated by calling <span class="extype" name="newClient()">newClient()</span>.
+</p></div><dl class="paramcmts block"><dt class="param">injector</dt><dd class="cmt"><p>the <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">com.twitter.inject.Injector</a> which can be used to help configure the
+                given <span class="extype" name="ClientType">ClientType</span> client.</p></dd><dt class="param">statsReceiver</dt><dd class="cmt"><p>The <span class="extype" name="StatsReceiver">StatsReceiver</span> to use with the generated <code>Service[Req, Rep]</code>.</p></dd><dt>returns</dt><dd class="cmt"><p>A <code>Service[Req, Rep]</code> that overlays the <span class="extype" name="ClientType">ClientType</span></p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
@@ -1686,7 +1912,7 @@ due to install being deferred until after flag parsing occurs.
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -1700,18 +1926,18 @@ due to install being deferred until after flag parsing occurs.
               
         </dd></dl></div>
     </li><li name="com.twitter.finatra.httpclient.modules.HttpClientModule#provideHttpService" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="provideHttpService:com.twitter.finagle.Service[com.twitter.finagle.http.Request,com.twitter.finagle.http.Response]"></a><a id="provideHttpService:Service[Request,Response]"></a>
+      <a id="provideHttpService(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.Service[com.twitter.finagle.http.Request,com.twitter.finagle.http.Response]"></a><a id="provideHttpService(Injector,StatsReceiver):Service[Request,Response]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#provideHttpService:com.twitter.finagle.Service[com.twitter.finagle.http.Request,com.twitter.finagle.http.Response]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#provideHttpService(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.Service[com.twitter.finagle.http.Request,com.twitter.finagle.http.Response]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">provideHttpService</span><span class="result">: <span class="extype" name="com.twitter.finagle.Service">Service</span>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a>]</span>
+        <span class="name">provideHttpService</span><span class="params">(<span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.Service">Service</span>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
@@ -1755,6 +1981,24 @@ due to install being deferred until after flag parsing occurs.
                 <span class="name">@transient</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="com.twitter.inject.modules.StackClientModuleTrait#requestTimeout" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="requestTimeout:com.twitter.util.Duration"></a><a id="requestTimeout:Duration"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#requestTimeout:com.twitter.util.Duration" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">requestTimeout</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Configures a &quot;global&quot; request <code>timeout</code> on the Finagle client (default: unbounded).</p><div class="fullcomment"><div class="comment cmt"><p>Configures a &quot;global&quot; request <code>timeout</code> on the Finagle client (default: unbounded).
+This will set *all* requests to *every* method to have the same total timeout.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <span class="extype" name="Duration">Duration</span> which represents the total request timeout</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/param/CommonParams.html#withRequestTimeout(timeout:com.twitter.util.tunable.Tunable[com.twitter.util.Duration]):A" class="extype" name="com.twitter.finagle.param.CommonParams">com.twitter.finagle.param.CommonParams.withRequestTimeout</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/guide/Clients.html#timeouts-expiration" target="_blank">https://twitter.github.io/finagle/guide/Clients.html#timeouts-expiration</a></p></span></dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#requireBinding" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="requireBinding(x$1:Class[_]):Unit"></a><a id="requireBinding(Class[_]):Unit"></a>
       <span class="permalink">
@@ -1787,7 +2031,25 @@ due to install being deferred until after flag parsing occurs.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../google/inject/index.html" class="extype" name="com.google.inject">com.google.inject</a>] </dd><dt>Definition Classes</dt><dd>AbstractModule</dd></dl></div>
-    </li><li name="com.twitter.finatra.httpclient.modules.HttpClientModule#retryPolicy" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.inject.modules.StackClientModuleTrait#retryBudget" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="retryBudget:com.twitter.finagle.service.RetryBudget"></a><a id="retryBudget:RetryBudget"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#retryBudget:com.twitter.finagle.service.RetryBudget" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">retryBudget</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/RetryBudget.html#com.twitter.finagle.service.RetryBudget" class="extype" name="com.twitter.finagle.service.RetryBudget">RetryBudget</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Default <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/RetryBudget.html" class="extype" name="com.twitter.finagle.service.RetryBudget">com.twitter.finagle.service.RetryBudget</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Default <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/RetryBudget.html" class="extype" name="com.twitter.finagle.service.RetryBudget">com.twitter.finagle.service.RetryBudget</a>. It is highly recommended that budgets
+be shared between all filters that retry or re-queue requests to prevent retry storms.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a default <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/RetryBudget.html" class="extype" name="com.twitter.finagle.service.RetryBudget">com.twitter.finagle.service.RetryBudget</a></p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/guide/Clients.html#retries" target="_blank">https://twitter.github.io/finagle/guide/Clients.html#retries</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.httpclient.modules.HttpClientModuleTrait#retryPolicy" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="retryPolicy:Option[com.twitter.finagle.service.RetryPolicy[com.twitter.util.Try[com.twitter.finagle.http.Response]]]"></a><a id="retryPolicy:Option[RetryPolicy[Try[Response]]]"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#retryPolicy:Option[com.twitter.finagle.service.RetryPolicy[com.twitter.util.Try[com.twitter.finagle.http.Response]]]" title="Permalink">
@@ -1802,7 +2064,24 @@ due to install being deferred until after flag parsing occurs.
         <span class="name">retryPolicy</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/RetryPolicy.html#com.twitter.finagle.service.RetryPolicy" class="extype" name="com.twitter.finagle.service.RetryPolicy">RetryPolicy</a>[<a href="https://twitter.github.io/util/docs/com/twitter/util/Try.html#com.twitter.util.Try" class="extype" name="com.twitter.util.Try">Try</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a>]]]</span>
       </span>
       
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="HttpClientModuleTrait.html" class="extype" name="com.twitter.finatra.httpclient.modules.HttpClientModuleTrait">HttpClientModuleTrait</a></dd></dl></div>
+    </li><li name="com.twitter.inject.modules.StackClientModuleTrait#sessionAcquisitionTimeout" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="sessionAcquisitionTimeout:com.twitter.util.Duration"></a><a id="sessionAcquisitionTimeout:Duration"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#sessionAcquisitionTimeout:com.twitter.util.Duration" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sessionAcquisitionTimeout</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>
+      </span>
       
+      <p class="shortcomment cmt">Configures the session acquisition <code>timeout</code> of this client (default: unbounded).</p><div class="fullcomment"><div class="comment cmt"><p>Configures the session acquisition <code>timeout</code> of this client (default: unbounded).
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <span class="extype" name="Duration">Duration</span> which represents the acquisition timeout</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/param/ClientSessionParams.html#acquisitionTimeout(timeout:com.twitter.util.Duration):A" class="extype" name="com.twitter.finagle.param.ClientSessionParams">com.twitter.finagle.param.ClientSessionParams.acquisitionTimeout</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/guide/Clients.html#timeouts-expiration" target="_blank">https://twitter.github.io/finagle/guide/Clients.html#timeouts-expiration</a></p></span></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModuleLifecycle#singletonPostWarmupComplete" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="singletonPostWarmupComplete(injector:com.twitter.inject.Injector):Unit"></a><a id="singletonPostWarmupComplete(Injector):Unit"></a>
       <span class="permalink">
@@ -2152,11 +2431,37 @@ due to install being deferred until after flag parsing occurs.
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="com.twitter.finatra.httpclient.modules.HttpClientModule#provideHttpService" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="provideHttpService:com.twitter.finagle.Service[com.twitter.finagle.http.Request,com.twitter.finagle.http.Response]"></a><a id="provideHttpService:Service[Request,Response]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModule.html#provideHttpService:com.twitter.finagle.Service[com.twitter.finagle.http.Request,com.twitter.finagle.http.Response]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 07-09-2019)">provideHttpService</span><span class="result">: <span class="extype" name="com.twitter.finagle.Service">Service</span>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 07-09-2019)</i></p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.twitter.inject.TwitterModule">
+        <div class="parent" name="com.twitter.finatra.httpclient.modules.HttpClientModuleTrait">
+              <h3>Inherited from <a href="HttpClientModuleTrait.html" class="extype" name="com.twitter.finatra.httpclient.modules.HttpClientModuleTrait">HttpClientModuleTrait</a></h3>
+            </div><div class="parent" name="com.twitter.inject.modules.StackClientModuleTrait">
+              <h3>Inherited from <a href="../../../inject/modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a>, <span class="extype" name="com.twitter.finagle.Http.Client">Client</span>]</h3>
+            </div><div class="parent" name="com.twitter.inject.TwitterModule">
               <h3>Inherited from <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></h3>
             </div><div class="parent" name="com.twitter.inject.TwitterBaseModule">
               <h3>Inherited from <a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></h3>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Filtering Thrift Requests &#8212; Finatra 19.6.0 documentation</title>
+    <title>Filtering Thrift Requests &#8212; Finatra 19.7.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.6.0',
+        VERSION:     '19.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.6.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.7.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Thrift Exception Mapping" href="exceptions.html" />
     <link rel="prev" title="Defining Thrift Controllers" href="controllers.html" />
@@ -73,8 +73,49 @@
             
   <div class="section" id="filtering-thrift-requests">
 <span id="thrift-filters"></span><h1>Filtering Thrift Requests<a class="headerlink" href="#filtering-thrift-requests" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="c-t-finatra-thrift-filters-accessloggingfilter-rarrow">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/AccessLoggingFilter.scala">c.t.finatra.thrift.filters.AccessLoggingFilter</a> →<a class="headerlink" href="#c-t-finatra-thrift-filters-accessloggingfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>provides for psuedo &#8220;Common Log Format&#8221; style logging for Thrift requests and responses.</li>
+</ul>
+</div>
+<div class="section" id="c-t-finatra-thrift-filters-darktrafficfilter-rarrow">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/DarkTrafficFilter.scala">c.t.finatra.thrift.filters.DarkTrafficFilter</a> →<a class="headerlink" href="#c-t-finatra-thrift-filters-darktrafficfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>An implementation of <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-exp/src/main/scala/com/twitter/finagle/exp/AbstractDarkTrafficFilter.scala">com.twitter.finagle.exp.AbstractDarkTrafficFilter</a> which extends <a class="reference external" href="https://github.com/twitter/finagle/blob/afb191ab8eda132197dd2679cd614fc968767fc4/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala#L295">com.twitter.finagle.Filter.TypeAgnostic</a> and thus works in a Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/routing/routers.scala#L128Z">ThriftRouter</a> Filter chain.</li>
+</ul>
+</div>
+<div class="section" id="c-t-finatra-thrift-filters-exceptionmappingfilter-rarrow">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/ExceptionMappingFilter.scala">c.t.finatra.thrift.filters.ExceptionMappingFilter</a> →<a class="headerlink" href="#c-t-finatra-thrift-filters-exceptionmappingfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Filter for use in mapping exceptions to Thrift responses. See <a class="reference external" href="exceptions.html#exceptionmappingfilter">ExceptionMappingFilter</a> for more information.</li>
+</ul>
+</div>
+<div class="section" id="c-t-finatra-thrift-filters-loggingmdcfilter-rarrow">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/LoggingMDCFilter.scala">c.t.finatra.thrift.filters.LoggingMDCFilter</a> →<a class="headerlink" href="#c-t-finatra-thrift-filters-loggingmdcfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>properly initializes the framework&#8217;s <a class="reference external" href="https://www.slf4j.org/manual.html#mdc">Mapped Diagnostic Context (MDC)</a> adapter for logging.</li>
+</ul>
+</div>
+<div class="section" id="c-t-finatra-thrift-filters-statsfilter-rarrow">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/StatsFilter.scala">c.t.finatra.thrift.filters.StatsFilter</a> →<a class="headerlink" href="#c-t-finatra-thrift-filters-statsfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Tracks <a class="reference external" href="controllers.html#per-method-stats">per-method stats</a> scoped under <cite>per_method_stats/&lt;method&gt;</cite> including success/failure (with exceptions) counters, and a latency (in millis) histogram.</li>
+</ul>
+</div>
+<div class="section" id="c-t-finatra-http-filters-thriftmdcfilter-rarrow">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/ThriftMDCFilter.scala">c.t.finatra.http.filters.ThriftMDCFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-thriftmdcfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>places the current Finagle <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-thrift/src/main/scala/com/twitter/finagle/thrift/MethodMetadata.scala">MethodMetadata</a> and <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/thrift/ClientId.scala">ClientId</a> locals into the <a class="reference external" href="https://www.slf4j.org/manual.html#mdc">Mapped Diagnostic Context (MDC)</a>.</li>
+</ul>
+</div>
+<div class="section" id="c-t-finatra-http-filters-traceidmdcfilter-rarrow">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/TraceIdMDCFilter.scala">c.t.finatra.http.filters.TraceIdMDCFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-traceidmdcfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>places the current Finagle <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/tracing/TraceId.scala">TraceId</a> local into the <a class="reference external" href="https://www.slf4j.org/manual.html#mdc">Mapped Diagnostic Context (MDC)</a>.</li>
+</ul>
 <div class="section" id="global-filters">
-<h2>Global Filters<a class="headerlink" href="#global-filters" title="Permalink to this headline">¶</a></h2>
+<h3>Global Filters<a class="headerlink" href="#global-filters" title="Permalink to this headline">¶</a></h3>
 <p>The <cite>ThriftRouter</cite> allows you to build a global Filter chain which will trigger on the request path
 when executing an RPC call to methods implemented by the added <a class="reference external" href="controllers.html">Thrift Controller</a>.</p>
 <p>Filters must be a subclass of the <a class="reference external" href="https://github.com/twitter/finagle/blob/ee9cb4ec2c17b810354b36ff97816fc97efb6394/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala#L295">c.t.finagle.Filter.TypeAgnostic</a> which is a</p>
@@ -114,9 +155,9 @@ all methods. Filters can be added to the <cite>ThriftRouter</cite> by type (as i
 section on <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters">Filters</a>.</p>
 </div>
 <div class="section" id="per-method-filtering">
-<h2>Per-method Filtering<a class="headerlink" href="#per-method-filtering" title="Permalink to this headline">¶</a></h2>
+<h3>Per-method Filtering<a class="headerlink" href="#per-method-filtering" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="typeagnostic-filters">
-<h3><cite>TypeAgnostic</cite> Filters<a class="headerlink" href="#typeagnostic-filters" title="Permalink to this headline">¶</a></h3>
+<h4><cite>TypeAgnostic</cite> Filters<a class="headerlink" href="#typeagnostic-filters" title="Permalink to this headline">¶</a></h4>
 <p>You can filter by a <a class="reference external" href="https://github.com/twitter/finagle/blob/ee9cb4ec2c17b810354b36ff97816fc97efb6394/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala#L295">TypeAgnostic Filter</a>
 per-method implemented in a Controller, by calling the <cite>handle(ThriftMethod)#filtered</cite> Function e.g.:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.{Filter, Service, SimpleFilter}
@@ -154,7 +195,7 @@ class ExampleController extends Controller {
 <p>Note that you can chain <cite>handle(ThriftMethod)#filtered</cite> calls arbitrarily deep.</p>
 </div>
 <div class="section" id="typed-filters">
-<h3>Typed Filters<a class="headerlink" href="#typed-filters" title="Permalink to this headline">¶</a></h3>
+<h4>Typed Filters<a class="headerlink" href="#typed-filters" title="Permalink to this headline">¶</a></h4>
 <p>If you&#8217;d like to specify a typed Filter, use the <cite>handle(ThriftMethod)#withService</cite> Function and apply
 your typed <cite>Filter[-ReqIn, +RepOut, +ReqOut, -RepIn]</cite> to your <cite>Service[-ReqOut, +RepIn]</cite> implementation.</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.foo.bar.thriftscala.EchoService.Echo
@@ -195,7 +236,7 @@ Controllers</a>.</p>
 </div>
 </div>
 <div class="section" id="request-scope">
-<h2>Request Scope<a class="headerlink" href="#request-scope" title="Permalink to this headline">¶</a></h2>
+<h3>Request Scope<a class="headerlink" href="#request-scope" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="https://github.com/google/guice">Guice</a> supports <a class="reference external" href="https://github.com/google/guice/wiki/CustomScopes">custom scopes</a> in addition
 to the defined <code class="docutils literal"><span class="pre">&#64;Singleton</span></code>, <code class="docutils literal"><span class="pre">&#64;SessionScoped</span></code>, and <code class="docutils literal"><span class="pre">&#64;RequestScoped</span></code>
 <a class="reference external" href="https://github.com/google/guice/wiki/Scopes">scopes</a>. <code class="docutils literal"><span class="pre">&#64;RequestScoped</span></code> is often used to allow
@@ -213,7 +254,7 @@ not work within the context of a Twitter <a class="reference external" href="htt
 </div>
 </div>
 <div class="section" id="adding-classes-into-the-custom-request-scope">
-<h2>Adding Classes into the Custom Request Scope<a class="headerlink" href="#adding-classes-into-the-custom-request-scope" title="Permalink to this headline">¶</a></h2>
+<h3>Adding Classes into the Custom Request Scope<a class="headerlink" href="#adding-classes-into-the-custom-request-scope" title="Permalink to this headline">¶</a></h3>
 <p>First add a dependency on <cite>com.twitter:inject-request-scope</cite> (<cite>finatra/inject/inject-request-scope</cite>).</p>
 <p>Then define a module which mixes in the <cite>c.t.inject.requestscope.RequestScopeBinding</cite> trait.
 This trait defines <cite>#bindRequestScope[T]</cite> which will bind the given type to an &#8220;unseeded&#8221;
@@ -316,6 +357,7 @@ class MyController @Inject()(
 </div>
 </div>
 </div>
+</div>
 
 
           </div>
@@ -339,6 +381,13 @@ class MyController @Inject()(
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Filtering Thrift Requests</a><ul>
+<li><a class="reference internal" href="#c-t-finatra-thrift-filters-accessloggingfilter-rarrow">c.t.finatra.thrift.filters.AccessLoggingFilter →</a></li>
+<li><a class="reference internal" href="#c-t-finatra-thrift-filters-darktrafficfilter-rarrow">c.t.finatra.thrift.filters.DarkTrafficFilter →</a></li>
+<li><a class="reference internal" href="#c-t-finatra-thrift-filters-exceptionmappingfilter-rarrow">c.t.finatra.thrift.filters.ExceptionMappingFilter →</a></li>
+<li><a class="reference internal" href="#c-t-finatra-thrift-filters-loggingmdcfilter-rarrow">c.t.finatra.thrift.filters.LoggingMDCFilter →</a></li>
+<li><a class="reference internal" href="#c-t-finatra-thrift-filters-statsfilter-rarrow">c.t.finatra.thrift.filters.StatsFilter →</a></li>
+<li><a class="reference internal" href="#c-t-finatra-http-filters-thriftmdcfilter-rarrow">c.t.finatra.http.filters.ThriftMDCFilter →</a></li>
+<li><a class="reference internal" href="#c-t-finatra-http-filters-traceidmdcfilter-rarrow">c.t.finatra.http.filters.TraceIdMDCFilter →</a><ul>
 <li><a class="reference internal" href="#global-filters">Global Filters</a></li>
 <li><a class="reference internal" href="#per-method-filtering">Per-method Filtering</a><ul>
 <li><a class="reference internal" href="#typeagnostic-filters"><cite>TypeAgnostic</cite> Filters</a></li>
@@ -347,6 +396,8 @@ class MyController @Inject()(
 </li>
 <li><a class="reference internal" href="#request-scope">Request Scope</a></li>
 <li><a class="reference internal" href="#adding-classes-into-the-custom-request-scope">Adding Classes into the Custom Request Scope</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

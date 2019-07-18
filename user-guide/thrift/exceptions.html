@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Thrift Exception Mapping &#8212; Finatra 19.6.0 documentation</title>
+    <title>Thrift Exception Mapping &#8212; Finatra 19.7.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.6.0',
+        VERSION:     '19.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.6.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.7.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Thrift Server Warmup" href="warmup.html" />
     <link rel="prev" title="Filtering Thrift Requests" href="filters.html" />
@@ -89,11 +89,72 @@ another action). You are encouraged to do what makes sense for your use case or 
 <p>The Finatra framework adds a <a class="reference external" href="#default-exception-mapper">default</a> <cite>ExceptionMapper</cite> to your
 <cite>ThriftServer</cite> which provides a root-level <em>no-op</em> mapping for exceptions. You can register
 additional mappers or override the default altogether.</p>
-<p>For instance, if you want to map a <cite>java.lang.ClassCastException</cite> to a <cite>ThriftException</cite> &#8211; e.g.,
-<cite>ClientError(ClientErrorCause, errorMessage)</cite>, which is defined in <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/thrift/finatra-thrift/finatra_thrift_exceptions.thrift">finatra_thrift_exceptions.thrift</a>
-you could create the following <cite>ExceptionMapper</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.exceptions.ExceptionMapper
-import com.twitter.finatra.thrift.thriftscala.{ClientError, ClientErrorCause}
+<p>Given the following Thrift IDL:</p>
+<div class="highlight-text"><div class="highlight"><pre><span></span>namespace java com.twitter.example.thriftjava
+#@namespace scala com.twitter.example.thriftscala
+namespace rb ExampleService
+
+exception UnknownClientIdError {
+  1: string message
+}
+
+exception NoClientIdError {
+  1: string message
+}
+
+enum ClientErrorCause {
+  /** Improperly-formatted request can&#39;t be fulfilled. */
+  BAD_REQUEST     = 0,
+
+  /** Required request authorization failed. */
+  UNAUTHORIZED    = 1,
+
+  /** Server timed out while fulfilling the request. */
+  REQUEST_TIMEOUT = 2,
+
+  /** Initiating client has exceeded its maximum rate. */
+  RATE_LIMITED    = 3
+}
+
+exception ClientError {
+  1: ClientErrorCause errorCause
+  2: string message
+}
+
+enum ServerErrorCause {
+  /** Generic server error. */
+  INTERNAL_SERVER_ERROR = 0,
+
+  /** Server lacks the ability to fulfill the request. */
+  NOT_IMPLEMENTED       = 1,
+
+  /** Request cannot be fulfilled due to error from dependent service. */
+  DEPENDENCY_ERROR      = 2,
+
+  /** Server is currently unavailable. */
+  SERVICE_UNAVAILABLE   = 3
+}
+
+exception ServerError {
+  1: ServerErrorCause errorCause
+  2: string message
+}
+
+service ExampleService {
+  i32 add1(
+    1: i32 num
+  ) throws (
+    1: ServerError serverError,
+    2: UnknownClientIdError unknownClientIdError
+    3: NoClientIdError kClientError
+  )
+}
+</pre></div>
+</div>
+<p>If you wanted to map a <cite>java.lang.ClassCastException</cite> to an exception specified in the Thrift
+IDL, you could create the following <cite>ExceptionMapper</cite>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.example.thriftscala.{ClientError, ClientErrorCause}
+import com.twitter.finatra.thrift.exceptions.ExceptionMapper
 import com.twitter.util.Future
 import java.lang.ClassCastException
 import javax.inject.Singleton
@@ -119,7 +180,8 @@ class MyThriftServer extends ThriftServer {
     router
       .filter[ExceptionMappingFilter]
       .exceptionMapper[ClassCastExceptionMapper]
-    ...
+
+    ???
   }
 </pre></div>
 </div>
@@ -170,16 +232,6 @@ the type.</p>
 <p>In this manner, an <cite>ExceptionMapper[Throwable]</cite> will be the last mapper invoked and acts as the
 &#8220;default&#8221;. Therefore to change the framework &#8220;default&#8221; mapper, simply add a new mapper over the
 <cite>Throwable</cite> type (i.e., <cite>ExceptionMapper[Throwable]</cite>) to the <cite>ExceptionManager</cite>.</p>
-</div>
-<div class="section" id="finatra-thrift-exceptions-and-mapper">
-<h2>Finatra Thrift Exceptions and Mapper<a class="headerlink" href="#finatra-thrift-exceptions-and-mapper" title="Permalink to this headline">¶</a></h2>
-<p>The Finatra framework provides both a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/exceptions/finatrathriftexceptions.scala">FinatraThriftExceptionMapper and FinatraJavaThriftExceptionMapper</a>
-for mapping exceptions to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/thrift/finatra-thrift/finatra_thrift_exceptions.thrift">finatra_thrift_exceptions.thrift</a>
-defined exceptions.</p>
-<p>For an example of including and using these exceptions see the test Thrift IDL defined <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/thrift/doeverything.thrift">here</a>.</p>
-<p>If you are using <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/thrift/finatra-thrift/finatra_thrift_exceptions.thrift">finatra_thrift_exceptions.thrift</a>,
-then it is recommended that your register one of the above mappers appropriate to the generated
-language you are using.</p>
 </div>
 <div class="section" id="override-default-behavior">
 <h2>Override Default Behavior<a class="headerlink" href="#override-default-behavior" title="Permalink to this headline">¶</a></h2>
@@ -276,7 +328,6 @@ public Collection&lt;Module&gt; javaModules() {
 <li><a class="reference internal" href="#how">How?</a></li>
 <li><a class="reference internal" href="#exceptionmappingfilter">ExceptionMappingFilter</a></li>
 <li><a class="reference internal" href="#default-exception-mapper">Default Exception Mapper</a></li>
-<li><a class="reference internal" href="#finatra-thrift-exceptions-and-mapper">Finatra Thrift Exceptions and Mapper</a></li>
 <li><a class="reference internal" href="#override-default-behavior">Override Default Behavior</a></li>
 <li><a class="reference internal" href="#register-an-exception-mapper">Register an Exception Mapper</a></li>
 </ul>

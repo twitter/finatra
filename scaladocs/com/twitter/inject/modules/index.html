@@ -425,7 +425,7 @@ trait and implementors are responsible for managing their own binding annotation
                <ol><li class="cmt"><p></p><pre><span class="kw">abstract</span> <span class="kw">class</span> MyClientModule
   <span class="kw">extends</span> StackClientModuleTrait[Request, Response, MyClient] {
 
-  <span class="kw">protected</span> <span class="kw">def</span> baseClient: MyClient = MyClient.client
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">final</span> <span class="kw">def</span> baseClient: MyClient = MyClient.client
   <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> sessionAcquisitionTimeout: Duration = <span class="num">1.</span>seconds
   <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> requestTimeout: Duration = <span class="num">5.</span>seconds
   <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> retryBudget: RetryBudget = RetryBudget(<span class="num">15.</span>seconds, <span class="num">5</span>, <span class="num">.1</span>)
@@ -433,7 +433,7 @@ trait and implementors are responsible for managing their own binding annotation
   <span class="cmt">// if you want to customize the client configuration</span>
   <span class="cmt">// you can:</span>
   <span class="cmt">//</span>
-  <span class="cmt">// def configureClient(injector: Injector, client: MyClient): MyClient =</span>
+  <span class="cmt">// override def configureClient(injector: Injector, client: MyClient): MyClient =</span>
   <span class="cmt">//   client.</span>
   <span class="cmt">//     withTracer(NullTracer)</span>
   <span class="cmt">//     withStatsReceiver(NullStatsReceiver)</span>
@@ -445,15 +445,18 @@ trait and implementors are responsible for managing their own binding annotation
   <span class="cmt">// ex:</span>
   <span class="cmt">// @Provides</span>
   <span class="cmt">// @Singleton</span>
-  <span class="cmt">// def provideMyClient(injector: Injector, statsReceiver: StatsReceiver): MyClient =</span>
-  <span class="cmt">//   newClient(injector, statsReceiver)</span>
+  <span class="cmt">// final def provideMyClient(</span>
+  <span class="cmt">//   injector: Injector,</span>
+  <span class="cmt">//   statsReceiver: StatsReceiver</span>
+  <span class="cmt">//  ): MyClient =</span>
+  <span class="cmt">//    newClient(injector, statsReceiver)</span>
   <span class="cmt">//</span>
   <span class="cmt">// Or create a service directly</span>
   <span class="cmt">//</span>
   <span class="cmt">// ex:</span>
   <span class="cmt">// @Provides</span>
   <span class="cmt">// @Singleton</span>
-  <span class="cmt">// def provideMyService(</span>
+  <span class="cmt">// final def provideMyService(</span>
   <span class="cmt">//   injector: Injector,</span>
   <span class="cmt">//   statsReceiver: StatsReceiver</span>
   <span class="cmt">// ): Service[Request, Response] =</span>

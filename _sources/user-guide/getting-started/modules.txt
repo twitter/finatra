@@ -40,13 +40,14 @@ However, when an instance of `MyService` is requested to be provided by the inje
 will attempt to provide all constructor arguments from the object graph -- instantiating classes as
 necessary.
 
-The injector will look for public no-arg constructors failing if it cannot find one. In this case,
+The injector will look for public no-arg constructors. If the injector cannot find
+a no-arg constructor, it attempts to find a `Provider` of the instance. In this case,
 `c.t.finagle.Service` *does not* have a public no-arg constructor so the injector needs help to
 satisfy the `MyService` constructor (for more information on constructor injection see the Guice
 `documentation <https://github.com/google/guice/wiki/Injections#constructor-injection>`__).
 
-To provide this assistance, we can create a module which defines a provider of this type to the
-object graph for the injector to use.
+To help the injector, we can create a module which defines a provider of this
+type to the object graph for the injector to use.
 
 .. code:: scala
 

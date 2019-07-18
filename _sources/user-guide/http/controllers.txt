@@ -117,7 +117,7 @@ group routes related to a single resource into one controller.
 Per-Route Stats
 ^^^^^^^^^^^^^^^
 
-The per-route stating provided by Finatra in the `c.t.finatra.http.filters.StatsFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala>`__
+The per-route stats recording provided by Finatra in the `c.t.finatra.http.filters.StatsFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala>`__
 works best when the above convention is followed.
 
 .. code:: scala
