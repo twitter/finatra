@@ -318,11 +318,11 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
   }
 
   def streamingResponseFromReader(request: Request): StreamingResponse[Reader, String] = {
-    StreamingResponse.apply(mapper, Reader.fromSeq(List("Hello", ", ", "World", "!")))
+    new StreamingResponse(mapper, Reader.fromSeq(List("Hello", ", ", "World", "!")))
   }
 
   def streamingResponseFromAsyncStream(request: Request): StreamingResponse[AsyncStream, Int] = {
-    StreamingResponse.apply(mapper, AsyncStream(1,2,3))
+    new StreamingResponse(mapper, AsyncStream(1,2,3))
   }
 
   def stringMapCallback(request: Request): Map[String, String] = {

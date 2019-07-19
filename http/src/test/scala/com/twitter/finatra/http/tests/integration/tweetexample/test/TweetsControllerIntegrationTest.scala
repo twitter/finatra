@@ -202,7 +202,9 @@ class TweetsControllerIntegrationTest extends FeatureTest {
   }
 
   test("get StreamingResponse with Reader") {
-    server.httpGet("/tweets/streamingRep_with_reader", andExpect = Status.Ok, withBody = "123")
+    val response = server.httpGet("/tweets/streamingRep_with_reader", andExpect = Status.Accepted, withBody = "123")
+    response.headerMap.getAll("key1") should equal(Seq("value1", "value2", "value3"))
+    response.headerMap.getAll("key2") should equal(Seq("v4", "v5", "v6"))
   }
 
   test("get streaming with transformer") {

@@ -1,4 +1,4 @@
-package com.twitter.finatra.streaming
+package com.twitter.streaming
 
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finatra.http.Controller

@@ -64,7 +64,11 @@ class TweetsController @Inject()(
   }
 
   get("/tweets/streamingRep_with_reader") { _: Request =>
-    response.streaming(Reader.fromSeq(Seq(1, 2, 3)))
+    val headerMap = Map[String, Seq[String]](
+      "key1" -> Seq("value1", "value2", "value3"),
+      "key2" -> Seq("v4", "v5", "v6")
+    )
+    response.streaming(Reader.fromSeq(Seq(1, 2, 3)), status = Status.Accepted, headers = headerMap)
   }
 
   get("/tweets/streaming_with_transformer") { _: Request =>

@@ -30,7 +30,7 @@ class StreamingResponseTest extends Test with Mockito {
   // Reader tests
   private def fromReader[A](reader: Reader[A]): Response = {
     val streamingResponse = responseBuilder.streaming(reader)
-    await(streamingResponse.toFutureResponse)
+    await(streamingResponse.toFutureResponse())
   }
 
   private def infiniteReader[A](item: A): Reader[A] = {
@@ -144,5 +144,16 @@ class StreamingResponseTest extends Test with Mockito {
       await(burnLoop(response.reader))
     }
     assert(await(response.reader.onClose) == StreamTermination.Discarded)
+  }
+
+  test("Response header map is correctly set") {
+    val headerMap = Map[String, Seq[String]](
+      "key1" -> Seq("value1", "value2", "value3"),
+      "key2" -> Seq("v4", "v5", "v6")
+    )
+    val streamingResponse = responseBuilder.streaming(Reader.value("content"), headers = headerMap)
+    val response = await(streamingResponse.toFutureResponse())
+    assert(response.headerMap.getAll("key1") == Seq("value1", "value2", "value3"))
+    assert(response.headerMap.getAll("key2") == Seq("v4", "v5", "v6"))
   }
 }
