@@ -62,7 +62,7 @@ private[http] class CallbackConverter @Inject()(
         request: Request =>
           val streamingRequest = streamIdentity match {
             case reader if runtimeClassEqs[Reader[_]](reader) =>
-              StreamingRequest(jsonStreamParser, request.reader)(
+              StreamingRequest(jsonStreamParser, request)(
                 FromReader.ReaderIdentity,
                 streamType)
             case asyncStream if runtimeClassEqs[AsyncStream[_]](asyncStream) =>

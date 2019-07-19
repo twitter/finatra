@@ -40,7 +40,7 @@ public class StreamingRequestJavaTest extends Assert {
     Reader<Buf> reader = Readers.fromSeq(bufList);
     Request request = Request.apply(Version.Http11(), Method.Post(), "/", reader);
     StreamingRequest<AsyncStream, String> streamingRequest =
-      StreamingRequest.fromRequest(
+      StreamingRequest.apply(
         parser,
         request,
         FromReader.AsyncStreamFromReader(),
@@ -64,7 +64,7 @@ public class StreamingRequestJavaTest extends Assert {
     Reader<Buf> bufReader = Readers.fromSeq(bufList);
     Request request = Request.apply(Version.Http11(), Method.Post(), "/", bufReader);
     StreamingRequest<Reader, String> streamingRequest =
-      StreamingRequest.fromRequest(
+      StreamingRequest.apply(
         parser,
         request,
         FromReader.ReaderIdentity(),

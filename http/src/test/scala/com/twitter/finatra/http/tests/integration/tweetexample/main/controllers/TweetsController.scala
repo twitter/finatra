@@ -18,8 +18,8 @@ import scala.collection.mutable
 
 class TweetsController @Inject()(
   tweetsRepository: TweetsRepository,
-  onWriteLog: mutable.ArrayBuffer[String]
-) extends Controller {
+  onWriteLog: mutable.ArrayBuffer[String])
+    extends Controller {
 
   get("/tweets/hello") { request: Request =>
     "hello world"
@@ -142,9 +142,16 @@ class TweetsController @Inject()(
     Future(response)
   }
 
-  post("/tweets/streaming_with_streamingRequest") { request: StreamingRequest[Reader, Long] =>
-    val reader = request.stream
-    tweetsRepository.getByIds(reader)
+  post("/tweets/streaming_with_streamingRequest") {
+    streamingRequest: StreamingRequest[Reader, Long] =>
+      val reader = streamingRequest.stream
+      tweetsRepository.getByIds(reader)
+  }
+
+  get("/tweets/not_streaming_with_streamingRequest/:id") {
+    streamingRequest: StreamingRequest[Reader, Long] =>
+      val id = streamingRequest.request.params("id").toLong
+      tweetsRepository.getById(id)
   }
 
   get("/tweets/") { request: Request =>

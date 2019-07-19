@@ -292,6 +292,19 @@ class TweetsControllerIntegrationTest extends FeatureTest {
     )
   }
 
+  test("get tweet 1 via streamingRequest") {
+    val request = RequestBuilder
+      .get("/tweets/not_streaming_with_streamingRequest/1")
+      .header("X-UserId", "123")
+      .chunked
+
+    server.httpRequest(
+      request = request,
+      andExpect = Status.Ok,
+      withJsonBody = """{ "idonly" : 1 }"""
+    )
+  }
+
   test("get admin yo") {
     server.httpGet("/admin/finatra/yo", andExpect = Status.Ok, withBody = "yo yo")
   }

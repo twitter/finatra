@@ -3,15 +3,18 @@ package com.twitter.finatra.http.streaming
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.json.internal.streaming.JsonStreamParser
-import com.twitter.io.{Buf, Reader}
 import scala.language.higherKinds
 
 private[http] object StreamingRequest {
 
+  /**
+   * Convert a Request to a StreamingRequest over the provided primitive stream type.
+   */
   def apply[F[_]: FromReader, A: Manifest](
     parser: JsonStreamParser,
-    reader: Reader[Buf]
-  ): StreamingRequest[F, A] = new StreamingRequest(parser, reader)
+    request: Request
+  ): StreamingRequest[F, A] =
+    new StreamingRequest(parser, request)
 
   /**
    * Convert a Request To a StreamingRequest over AsyncStream[A]
@@ -20,32 +23,24 @@ private[http] object StreamingRequest {
     parser: JsonStreamParser,
     request: Request
   ): StreamingRequest[AsyncStream, A] =
-    new StreamingRequest[AsyncStream, A](parser, request.reader)
-
-  /**
-   * Convert a Request to StreamingRequest over the provided primitive stream type.
-   */
-  def fromRequest[F[_]: FromReader, A: Manifest](
-    parser: JsonStreamParser,
-    request: Request
-  ): StreamingRequest[F, A] =
-    new StreamingRequest(parser, request.reader)
+    new StreamingRequest[AsyncStream, A](parser, request)
 }
 
 /**
  * StreamingRequest is an abstraction over an input Primitive Stream - Reader or AsyncStream.
- * It carries the stream as well as some Http Request metadata.
+ * It carries the stream as well as the original Http Request.
+ *
  * @param parser Parse bufs to objects.
- * @param reader See [[com.twitter.finagle.http.Message#reader()]].
+ * @param request Finagle Http Request.
  * @tparam F The Primitive Stream type.
  * @tparam A The type of streaming values.
  */
 final class StreamingRequest[F[_]: FromReader, A: Manifest] private (
   parser: JsonStreamParser,
-  reader: Reader[Buf]) {
+  val request: Request) {
 
   /**
    * Convert the Reader[Buf] to the provided stream primitive.
    */
-  val stream: F[A] = implicitly[FromReader[F]].apply(parser.parseJson[A](reader))
+  val stream: F[A] = implicitly[FromReader[F]].apply(parser.parseJson[A](request.reader))
 }
