@@ -163,11 +163,13 @@ trait ThriftServerTrait extends TwitterServer {
 
     thriftServer = build(
       thriftPortFlag(),
-      configureThriftServer(
-        ThriftMux.server
-          .withLabel(thriftServerNameFlag())
-          .withStatsReceiver(injector.instance[StatsReceiver].scope("srv"))
-          .withResponseClassifier(injector.instance[ThriftResponseClassifier])
+      frameworkConfigureServer(
+        configureThriftServer(
+          ThriftMux.server
+            .withLabel(thriftServerNameFlag())
+            .withStatsReceiver(injector.instance[StatsReceiver].scope("srv"))
+            .withResponseClassifier(injector.instance[ThriftResponseClassifier])
+        )
       )
     )
 
@@ -211,6 +213,11 @@ trait ThriftServerTrait extends TwitterServer {
    * @return a configured ThriftMux.Server.
    */
   protected def configureThriftServer(server: ThriftMux.Server): ThriftMux.Server = {
+    server
+  }
+
+  /* Configuration of the server reserved by the framework */
+  protected[finatra] def frameworkConfigureServer(server: ThriftMux.Server): ThriftMux.Server = {
     server
   }
 

@@ -270,7 +270,9 @@ trait HttpServerTrait extends TwitterServer {
       httpServer =
         build(
           address,
-          configureHttpServer(defaultHttpServer(httpServerNameFlag()))
+          frameworkConfigureHttpServer(
+            configureHttpServer(defaultHttpServer(httpServerNameFlag()))
+          )
       )
 
       onExit {
@@ -291,7 +293,9 @@ trait HttpServerTrait extends TwitterServer {
       httpsServer =
         build(
           address,
-          configureHttpsServer(defaultHttpServer(httpsServerNameFlag())
+          frameworkConfigureHttpsServer(
+            configureHttpsServer(defaultHttpServer(httpsServerNameFlag())
+          )
         )
       )
 
@@ -368,6 +372,16 @@ trait HttpServerTrait extends TwitterServer {
    * @return a configured Http.Server.
    */
   protected def configureHttpsServer(server: Http.Server): Http.Server = {
+    server
+  }
+
+  /* Configuration of the HTTP server reserved by the framework */
+  protected[finatra] def frameworkConfigureHttpServer(server: Http.Server): Http.Server = {
+    server
+  }
+
+  /* Configuration of the HTTPS server reserved by the framework */
+  protected[finatra] def frameworkConfigureHttpsServer(server: Http.Server): Http.Server = {
     server
   }
 
