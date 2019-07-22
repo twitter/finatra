@@ -1,12 +1,16 @@
 package com.twitter.inject.modules.tests
 
 import com.google.inject.{Guice, Provides}
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.{ClientConnection, Service, ServiceFactory, Stack, Stackable}
 import com.twitter.finagle.client.{EndpointerModule, EndpointerStackClient, StackClient}
+import com.twitter.finagle.factory.TimeoutFactory
+import com.twitter.finagle.param.{Label, Monitor, Stats}
+import com.twitter.finagle.service.{Retries, RetryBudget, TimeoutFilter}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.inject.{Injector, InjectorModule, Test, TwitterModule}
 import com.twitter.inject.modules.{StackClientModuleTrait, StatsReceiverModule}
-import com.twitter.util.{Future, Time}
+import com.twitter.util.{Closable, Duration, Future, NullMonitor, Time}
 import java.net.SocketAddress
 import javax.inject.Singleton
 
@@ -16,6 +20,54 @@ class StackClientModuleTraitTest extends Test {
   test("can create a module for a new stack client") {
     val injector = Guice.createInjector(TestModule, InjectorModule, StatsReceiverModule)
     injector.getInstance(Test.Client.getClass) should not be null
+  }
+
+  // The following tests take a base/default module configuration and layer customization on
+  // top, using the different extension methods. The configuration ordering is:
+  // initialClientConfig -> configureClient -> frameworkConfigureClient
+
+  test("verify client initial configuration") {
+    val injector = Guice.createInjector(DefaultTestModule, InjectorModule, StatsReceiverModule)
+    val clnt = injector.getInstance(classOf[Test.Client])
+    assert(clnt.params[TimeoutFilter.Param].timeout == Duration.Top)
+    assert(clnt.params[TimeoutFactory.Param].timeout == Duration.Top)
+    assert(clnt.params[Stats].statsReceiver.isNull)
+    assert(clnt.params[Monitor].monitor == NullMonitor)
+    assert(clnt.params[Label].label == "test-client")
+    assert(clnt.params[Retries.Budget].retryBudget.balance == RetryBudget().balance)
+  }
+
+  test("verify client initial configuration with parameter override") {
+    val injector = Guice.createInjector(TestModule, InjectorModule, StatsReceiverModule)
+    val clnt = injector.getInstance(classOf[Test.Client])
+    assert(clnt.params[TimeoutFilter.Param].timeout == 200.milliseconds)
+    assert(clnt.params[TimeoutFactory.Param].timeout == 1.second)
+    assert(clnt.params[Stats].statsReceiver.isNull)
+    assert(clnt.params[Monitor].monitor == com.twitter.util.RootMonitor)
+    assert(clnt.params[Label].label == "test-client")
+    assert(clnt.params[Retries.Budget].retryBudget.balance == RetryBudget(1.second, 100, .3).balance)
+  }
+
+  test("verify client custom configuration override") {
+    val injector = Guice.createInjector(CustomizedTestModule, InjectorModule, StatsReceiverModule)
+    val clnt = injector.getInstance(classOf[Test.Client])
+    assert(clnt.params[TimeoutFilter.Param].timeout == 100.milliseconds)
+    assert(clnt.params[TimeoutFactory.Param].timeout == 1.second)
+    assert(clnt.params[Stats].statsReceiver.isNull)
+    assert(clnt.params[Monitor].monitor == com.twitter.util.RootMonitor)
+    assert(clnt.params[Label].label == "test-client")
+    assert(clnt.params[Retries.Budget].retryBudget.balance == RetryBudget(1.second, 100, .3).balance)
+  }
+
+  test("verify framework client configuration override") {
+    val injector = Guice.createInjector(FrameworkTestModule, InjectorModule, StatsReceiverModule)
+    val clnt = injector.getInstance(classOf[Test.Client])
+    assert(clnt.params[TimeoutFilter.Param].timeout == 50.milliseconds)
+    assert(clnt.params[TimeoutFactory.Param].timeout == 1.second)
+    assert(clnt.params[Stats].statsReceiver.isNull)
+    assert(clnt.params[Monitor].monitor == com.twitter.util.RootMonitor)
+    assert(clnt.params[Label].label == "test-client")
+    assert(clnt.params[Retries.Budget].retryBudget.balance == RetryBudget(1.second, 100, .3).balance)
   }
 }
 
@@ -30,7 +82,7 @@ object StackClientModuleTraitTest {
     case class Client(
       stack: Stack[ServiceFactory[Request, Response]] = StackClient.newStack,
       params: Stack.Params = StackClient.defaultParams)
-      extends EndpointerStackClient[Request, Response, Client] {
+      extends EndpointerStackClient[Request, Response, Client] with Closable {
 
       override protected def endpointer: Stackable[ServiceFactory[Request, Response]] =
         new EndpointerModule[Request, Response](
@@ -48,15 +100,20 @@ object StackClientModuleTraitTest {
         params: Stack.Params
       ): Test.Client = this.copy(stack = stack, params = params)
 
+      /**
+       * Close the resource with the given deadline. This deadline is advisory,
+       * giving the callee some leeway, for example to drain clients or finish
+       * up other tasks.
+       */
+      override def close(deadline: Time): Future[Unit] = Future.Done
     }
 
     def client: Test.Client = Client()
   }
 
-  object TestModule extends TestModule
+  object DefaultTestModule extends DefaultTestModule
 
-  // A module that allows us to provide a concrete `Test.Client` for testing
-  class TestModule
+  class DefaultTestModule
     extends TwitterModule
       with StackClientModuleTrait[Request, Response, Test.Client] {
     def label: String = "test-client"
@@ -65,8 +122,32 @@ object StackClientModuleTraitTest {
 
     @Provides
     @Singleton
-    def providesTestClient(injector: Injector, statsReceiver: StatsReceiver): Test.Client =
+    final def providesTestClient(injector: Injector, statsReceiver: StatsReceiver): Test.Client =
       newClient(injector, statsReceiver)
+  }
+
+  object TestModule extends TestModule
+
+  // A module that allows us to provide a concrete `Test.Client` for testing
+  class TestModule extends DefaultTestModule {
+    override protected def requestTimeout: Duration = 200.milliseconds
+    override protected def sessionAcquisitionTimeout: Duration = 1.second
+    override protected def retryBudget: RetryBudget = RetryBudget(1.second, 100, .3)
+    override protected def monitor = com.twitter.util.RootMonitor
+  }
+
+  object CustomizedTestModule extends CustomizedTestModule
+
+  // A module that allows us to provide a concrete `Test.Client` for testing
+  class CustomizedTestModule extends TestModule {
+    override protected def configureClient(injector: Injector, client: Test.Client): Test.Client =
+      client.withRequestTimeout(100.milliseconds)
+  }
+
+  // A module that allows us to provide a concrete `Test.Client` for testing
+  object FrameworkTestModule extends CustomizedTestModule {
+    override protected[twitter] def frameworkConfigureClient(injector: Injector, client: Test.Client): Test.Client =
+      client.withRequestTimeout(50.milliseconds)
   }
 
 }

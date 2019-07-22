@@ -502,9 +502,10 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "com.twitter" %% "finagle-http" % versions.twLibVersion % Test)
   ).dependsOn(
-    injectCore % "test->test;compile->compile",
+    injectCore,
     injectUtils,
     injectApp % "test->test;compile->compile",
+    injectModules % "test->test;compile->compile",
     injectThrift,
     http % "test->test",
     thrift % "test->test")

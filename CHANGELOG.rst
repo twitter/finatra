@@ -18,6 +18,9 @@ Added
 Changed
 ~~~~~~~
 
+* inject-thrift-client: make ThriftClientModuleTrait extend StackClientModuleTrait for symmetry
+  with other protocol client modules. ``PHAB_ID=D342710``
+
 * finatra-http: Deprecated `c.t.finatra.http.response.StreamingResponse`, Use
   `c.t.finatra.http.response.ResponseBuilder.streaming` to construct a
   `c.t.finatra.http.streaming.StreamingResponse` instead. ``PHAB_ID=D342703``

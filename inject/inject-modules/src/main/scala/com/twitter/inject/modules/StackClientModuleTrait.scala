@@ -1,15 +1,16 @@
 package com.twitter.inject.modules
 
 import com.twitter.conversions.DurationOps._
-import com.twitter.finagle.Service
-import com.twitter.finagle.client.EndpointerStackClient
+import com.twitter.finagle.{Service, Stack}
+import com.twitter.finagle.client.StackBasedClient
+import com.twitter.finagle.param.{ClientParams, CommonParams, WithClientSession}
 import com.twitter.finagle.service.RetryBudget
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.inject.{Injector, TwitterModule}
 import com.twitter.util.{Await, Closable, Duration, Monitor, NullMonitor}
 
 /**
- * A module for configuring a Finagle StackClient. Binding is explicitly not handled by this
+ * A module for configuring a Finagle [[StackBasedClient]]. Binding is explicitly not handled by this
  * trait and implementors are responsible for managing their own binding annotations.
  *
  * @example
@@ -57,9 +58,21 @@ import com.twitter.util.{Await, Closable, Duration, Monitor, NullMonitor}
  *          }}}
  * @note Extending this module for HTTP and ThriftMux clients should not be necessary, as there
  *       are fully supported modules for creating those clients.
+ *
+ * @note The ordering of client configuration may be important. The underlying clients will be
+ *       configured and created in the following order:
+ *         baseClient -> initialClientConfiguration -> configureClient -> frameworkConfigureClient
  */
-trait StackClientModuleTrait[Req, Rep, ClientType <: EndpointerStackClient[Req, Rep, ClientType]]
-    extends TwitterModule {
+trait StackClientModuleTrait[
+  Req,
+  Rep,
+  ClientType <: StackBasedClient[Req, Rep]
+    with Stack.Parameterized[ClientType]
+    with CommonParams[ClientType]
+    with ClientParams[ClientType]
+    with WithClientSession[ClientType]
+]
+  extends TwitterModule {
 
   /**
    * Finagle client label.
@@ -106,6 +119,7 @@ trait StackClientModuleTrait[Req, Rep, ClientType <: EndpointerStackClient[Req, 
    * This will set *all* requests to *every* method to have the same total timeout.
    *
    * @return a [[Duration]] which represents the total request timeout
+   *
    * @see [[com.twitter.finagle.param.CommonParams.withRequestTimeout]]
    * @see [[https://twitter.github.io/finagle/guide/Clients.html#timeouts-expiration]]
    */
@@ -140,6 +154,36 @@ trait StackClientModuleTrait[Req, Rep, ClientType <: EndpointerStackClient[Req, 
    * @return The base [[ClientType]] client, without any custom configuration.
    */
   protected def baseClient: ClientType
+
+  /**
+   * Initial configuration of the underlying client. This is exposed to allow for customization
+   * of the base client configuration. All user facing extensions should be done via [[configureClient]].
+   *
+   * @example {{{
+   *         override protected final def initialClientConfiguration(
+   *           injector: Injector,
+   *           client: ClientType,
+   *           statsReceiver: StatsReceiver
+   *         ): ThriftMux.Client =
+   *           super.initialClientConfiguration(injector, client, statsReceiver)
+   *             .withClientId(injector.instance[ClientId]
+   *         }}}
+   *
+   * @return The base configured [[ClientType]] client, without any custom end-user configuration.
+   */
+  protected def initialClientConfiguration(
+    injector: Injector,
+    client: ClientType,
+    statsReceiver: StatsReceiver
+  ): ClientType = {
+    client
+      .withSession.acquisitionTimeout(sessionAcquisitionTimeout)
+      .withRequestTimeout(requestTimeout)
+      .withStatsReceiver(statsReceiver)
+      .withMonitor(monitor)
+      .withLabel(label)
+      .withRetryBudget(retryBudget)
+  }
 
   /**
    * This method allows for further configuration of the [[ClientType]] client for parameters not exposed by
@@ -221,12 +265,7 @@ trait StackClientModuleTrait[Req, Rep, ClientType <: EndpointerStackClient[Req, 
         injector,
         configureClient(
           injector,
-          baseClient.withSession.acquisitionTimeout(sessionAcquisitionTimeout)
-            .withRequestTimeout(requestTimeout)
-            .withStatsReceiver(clientStatsReceiver)
-            .withMonitor(monitor)
-            .withLabel(label)
-            .withRetryBudget(retryBudget)
+          initialClientConfiguration(injector, baseClient, clientStatsReceiver)
         )
       )
 
