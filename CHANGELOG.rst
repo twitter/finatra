@@ -25,6 +25,8 @@ Changed
   `c.t.finatra.http.response.ResponseBuilder.streaming` to construct a
   `c.t.finatra.http.streaming.StreamingResponse` instead. ``PHAB_ID=D342703``
 
+* finatra: Upgrade to Jackson 2.9.9. ``PHAB_ID=D345969``
+
 19.7.0
 ------
 

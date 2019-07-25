@@ -29,8 +29,6 @@ private[finatra] class AsyncJsonParser {
   private[this] var position: Int = 0
   // offset that records the length of parsed bytes in parser, accumulated every chunk
   private[this] var offset: Int = 0
-  // offset of a sliced buf, this offset should not be accumulated
-  private[this] var slicedBufOffset = 0
   private[this] var depth: Int = 0
 
   /**
@@ -43,7 +41,6 @@ private[finatra] class AsyncJsonParser {
     buf match {
       case Buf.ByteArray.Owned((bytes, begin, end)) =>
         feeder.feedInput(bytes, begin, end)
-        slicedBufOffset = begin
       case Buf.ByteArray.Shared(bytes) =>
         feeder.feedInput(bytes, 0, bytes.length)
       case b =>
@@ -59,10 +56,10 @@ private[finatra] class AsyncJsonParser {
       updateOpenBrace()
       if (startInitialArray) {
         // exclude the initial `[`
-        position = parser.getCurrentLocation.getByteOffset.toInt - slicedBufOffset - offset
+        position = parser.getCurrentLocation.getByteOffset.toInt - offset
       } else if (startObjectArray) {
         // include the starting token of the object or array
-        position = parser.getCurrentLocation.getByteOffset.toInt - slicedBufOffset - offset - 1
+        position = parser.getCurrentLocation.getByteOffset.toInt - offset - 1
       } else if (endObjectArray) {
         result += getSlicedBuf()
       } else if (endInitialArray) {
@@ -80,7 +77,7 @@ private[finatra] class AsyncJsonParser {
   private def getSlicedBuf(): Buf = {
 
     remaining.position(position)
-    val newPosition = parser.getCurrentLocation.getByteOffset.toInt - slicedBufOffset - offset
+    val newPosition = parser.getCurrentLocation.getByteOffset.toInt - offset
     val buf = remaining.slice()
     buf.limit(newPosition - position)
 
