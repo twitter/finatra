@@ -169,7 +169,7 @@ class ResponseBuilder @Inject()(
    * @tparam F The Primitive Stream type.
    * @tparam A The type of streaming values.
    */
-  def streaming[F[_]: ToReader, A](
+  def streaming[F[_]: ToReader, A: Manifest](
     stream: F[A],
     status: Status = Status.Ok,
     headers: Map[String, Seq[String]] = Map.empty
@@ -177,7 +177,7 @@ class ResponseBuilder @Inject()(
     new http.streaming.StreamingResponse(objectMapper, stream, status, headers)
 
   /** Java support for streaming */
-  def streaming[F[_]: ToReader, A](stream: F[A]): http.streaming.StreamingResponse[F, A] =
+  def streaming[F[_]: ToReader, A: Manifest](stream: F[A]): http.streaming.StreamingResponse[F, A] =
     streaming(stream, Status.Ok, Map.empty)
 
   private def fullMimeTypeValue(mimeType: String): String = {

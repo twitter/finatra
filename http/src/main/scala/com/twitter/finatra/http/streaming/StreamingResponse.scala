@@ -2,8 +2,9 @@ package com.twitter.finatra.http.streaming
 
 import com.twitter.finagle.http.{Response, Status, Version}
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.io.Buf
+import com.twitter.io.{Buf, Reader}
 import com.twitter.util.Future
+import java.util.concurrent.atomic.AtomicBoolean
 import scala.language.higherKinds
 
 /**
@@ -19,16 +20,33 @@ import scala.language.higherKinds
  *
  * @note Users should construct this via c.t.finatra.http.response.ResponseBuilder#streaming
  */
-final class StreamingResponse[F[_]: ToReader, A] private[http] (
+final class StreamingResponse[F[_]: ToReader, A: Manifest] private[http] (
   mapper: FinatraObjectMapper,
   stream: F[A],
   status: Status = Status.Ok,
   headers: Map[String, Seq[String]] = Map.empty) {
 
-  private[this] val reader = implicitly[ToReader[F]].apply(stream).map {
-    case buf: Buf => buf
-    case str: String => Buf.Utf8(str)
-    case any => mapper.writeValueAsBuf(any)
+  private[this] val head = new AtomicBoolean(true)
+  private[this] val reader: Reader[Buf] = implicitly[ToReader[F]].apply(stream) match {
+    case bufReader if manifest[A] == manifest[Buf] => bufReader.asInstanceOf[Reader[Buf]]
+    case stringReader if manifest[A] == manifest[String] =>
+      stringReader.map(i => Buf.Utf8(i.asInstanceOf[String]))
+    case anyReader => toJsonArray(anyReader)
+  }
+
+  private[this] def toJsonArray(reader: Reader[A]): Reader[Buf] = {
+    Reader.fromSeq(
+      Seq(
+        Reader.fromBuf(Buf.Utf8("[")),
+        reader.map { i =>
+          if (head.compareAndSet(true, false)) {
+            mapper.writeValueAsBuf(i)
+          } else {
+            Buf.Utf8(",").concat(mapper.writeValueAsBuf(i))
+          }
+        },
+        Reader.fromBuf(Buf.Utf8("]"))
+      )).flatten
   }
 
   private[this] def setHeaders(response: Response, headerMap: Map[String, Seq[String]]): Unit = {

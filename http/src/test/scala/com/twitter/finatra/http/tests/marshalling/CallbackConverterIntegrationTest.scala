@@ -310,7 +310,7 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
   test("StreamingResponse from AsyncStream") {
     val converted = callbackConverter.convertToFutureResponse(streamingResponseFromAsyncStream)
     val response = await(converted(Request()))
-    await(Reader.readAll(response.reader)).utf8str should equal("123")
+    await(Reader.readAll(response.reader)).utf8str should equal("[1,2,3]")
   }
 
   test("Null") {

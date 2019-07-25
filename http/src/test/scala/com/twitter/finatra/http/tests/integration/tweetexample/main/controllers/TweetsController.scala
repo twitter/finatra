@@ -158,6 +158,22 @@ class TweetsController @Inject()(
       tweetsRepository.getById(id)
   }
 
+  post("/tweets/streaming_req_over_json") {
+    streamingRequest: StreamingRequest[Reader, Tweet] =>
+      val tweetReader = streamingRequest.stream
+      val result: Reader[Long] = tweetReader.map { tweet =>
+        tweet.id
+      }
+      response.streaming(result)
+  }
+
+  get("/tweets/streaming_rep_over_json") {
+    streamingRequest: StreamingRequest[Reader, Long] =>
+      val idReader = streamingRequest.stream
+      val tweetReader: Reader[Tweet] = tweetsRepository.getByIds(idReader)
+      response.streaming(tweetReader)
+  }
+
   get("/tweets/") { request: Request =>
     "tweets root"
   }
