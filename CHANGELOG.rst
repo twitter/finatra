@@ -15,6 +15,10 @@ Added
   `c.t.finatra.http.streaming.StreamingResponse` ``PHAB_ID=D342703``.
   Examples are located in finatra/examples/streaming-example/.
 
+* finatra-jackson: Add the ability to specify `fields` in the `MethodValidation` annotation.
+  ``PHAB_ID=D338079``
+
+
 Changed
 ~~~~~~~
 

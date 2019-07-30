@@ -16,7 +16,7 @@ class OneOfValidatorTest extends ValidatorTest with GeneratorDrivenPropertyCheck
 
   test("pass validation for single value") {
     oneOfValues.foreach { value =>
-      validate[OneOfExample](value) should equal(Valid)
+      validate[OneOfExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -34,13 +34,13 @@ class OneOfValidatorTest extends ValidatorTest with GeneratorDrivenPropertyCheck
     val passValue = Gen.nonEmptyContainerOf[Seq, String](Gen.oneOf(oneOfValues.toSeq))
 
     forAll(passValue) { value =>
-      validate[OneOfSeqExample](value) should equal(Valid)
+      validate[OneOfSeqExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
   test("pass validation for empty seq") {
     val emptySeq = Seq.empty
-    validate[OneOfSeqExample](emptySeq) should equal(Valid)
+    validate[OneOfSeqExample](emptySeq).isInstanceOf[Valid] shouldBe true
   }
 
   test("fail validation for invalid value in seq") {

@@ -17,7 +17,7 @@ trait TestRequest {
 
   protected[this] def validateFormat(formatValue: Option[String], formatKey: String): ValidationResult = {
     if (formatValue.isEmpty) {
-      ValidationResult.Valid
+      ValidationResult.Valid()
     } else {
       val actualFormat = formatValue.get
       val errorMsg = s"Bad parameter value: <$actualFormat>." +

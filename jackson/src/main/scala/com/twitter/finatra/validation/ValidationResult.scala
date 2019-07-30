@@ -1,16 +1,28 @@
 package com.twitter.finatra.validation
 
+import java.lang.annotation.Annotation
+
 sealed trait ValidationResult {
   def isValid: Boolean
+  def annotation: Option[Annotation]
 }
 
 object ValidationResult {
-  case object Valid extends ValidationResult {
-    override val isValid = true
+  object Valid {
+    def apply(annotation: Option[Annotation] = None) = new Valid(annotation)
   }
 
-  case class Invalid(message: String, code: ErrorCode = ErrorCode.Unknown)
-      extends ValidationResult {
+  case class Valid(
+    override val annotation: Option[Annotation] = None
+  ) extends ValidationResult {
+    override val isValid: Boolean = true
+  }
+
+  case class Invalid(
+    message: String,
+    code: ErrorCode = ErrorCode.Unknown,
+    override val annotation: Option[Annotation] = None
+  ) extends ValidationResult {
     override val isValid = false
   }
 
@@ -32,7 +44,7 @@ object ValidationResult {
     code: ErrorCode = ErrorCode.Unknown
   ): ValidationResult = {
     if (condition)
-      Valid
+      Valid()
     else
       Invalid(message, code)
   }

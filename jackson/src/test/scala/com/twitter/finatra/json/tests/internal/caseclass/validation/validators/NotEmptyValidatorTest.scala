@@ -16,7 +16,7 @@ class NotEmptyValidatorTest extends ValidatorTest with GeneratorDrivenPropertyCh
     val passValue = Gen.alphaStr.filter(_.size > 0)
 
     forAll(passValue) { value =>
-      validate[NotEmptyExample](value) should equal(Valid)
+      validate[NotEmptyExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -34,7 +34,7 @@ class NotEmptyValidatorTest extends ValidatorTest with GeneratorDrivenPropertyCh
     val passValue = whiteSpaceValue.map(_.mkString)
 
     forAll(passValue) { value =>
-      validate[NotEmptyExample](value) should equal(Valid)
+      validate[NotEmptyExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -42,7 +42,7 @@ class NotEmptyValidatorTest extends ValidatorTest with GeneratorDrivenPropertyCh
     val passValue = Gen.nonEmptyContainerOf[Seq, String](Gen.alphaStr)
 
     forAll(passValue) { value =>
-      validate[NotEmptySeqExample](value) should equal(Valid)
+      validate[NotEmptySeqExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 

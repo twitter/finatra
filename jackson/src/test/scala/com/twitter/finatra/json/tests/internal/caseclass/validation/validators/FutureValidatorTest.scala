@@ -15,7 +15,7 @@ class FutureValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChec
 
     forAll(futureDateTimeMillis) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[FutureExample](dateTimeValue) should equal(Valid)
+      validate[FutureExample](dateTimeValue).isInstanceOf[Valid] shouldBe true
     }
   }
 

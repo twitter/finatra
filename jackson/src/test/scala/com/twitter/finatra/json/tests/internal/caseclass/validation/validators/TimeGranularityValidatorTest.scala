@@ -33,7 +33,7 @@ class TimeGranularityValidatorTest extends ValidatorTest with GeneratorDrivenPro
 
     forAll(dayGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[TimeGranularityDaysExample](dateTimeValue) should equal(Valid)
+      validate[TimeGranularityDaysExample](dateTimeValue).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -64,7 +64,7 @@ class TimeGranularityValidatorTest extends ValidatorTest with GeneratorDrivenPro
 
     forAll(hourGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[TimeGranularityHoursExample](dateTimeValue) should equal(Valid)
+      validate[TimeGranularityHoursExample](dateTimeValue).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -95,7 +95,7 @@ class TimeGranularityValidatorTest extends ValidatorTest with GeneratorDrivenPro
 
     forAll(minGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[TimeGranularityMinutesExample](dateTimeValue) should equal(Valid)
+      validate[TimeGranularityMinutesExample](dateTimeValue).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -126,7 +126,7 @@ class TimeGranularityValidatorTest extends ValidatorTest with GeneratorDrivenPro
 
     forAll(secondGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[TimeGranularitySecondsExample](dateTimeValue) should equal(Valid)
+      validate[TimeGranularitySecondsExample](dateTimeValue).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -153,7 +153,7 @@ class TimeGranularityValidatorTest extends ValidatorTest with GeneratorDrivenPro
 
     forAll(millisGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[TimeGranularityMillisecondsExample](dateTimeValue) should equal(Valid)
+      validate[TimeGranularityMillisecondsExample](dateTimeValue).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -166,7 +166,7 @@ class TimeGranularityValidatorTest extends ValidatorTest with GeneratorDrivenPro
 
     forAll(microGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[TimeGranularityMicrosecondsExample](dateTimeValue) should equal(Valid)
+      validate[TimeGranularityMicrosecondsExample](dateTimeValue).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -179,7 +179,7 @@ class TimeGranularityValidatorTest extends ValidatorTest with GeneratorDrivenPro
 
     forAll(nanoGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[TimeGranularityNanosecondsExample](dateTimeValue) should equal(Valid)
+      validate[TimeGranularityNanosecondsExample](dateTimeValue).isInstanceOf[Valid] shouldBe true
     }
   }
 

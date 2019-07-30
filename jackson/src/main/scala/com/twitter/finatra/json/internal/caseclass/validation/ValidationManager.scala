@@ -17,7 +17,7 @@ class ValidationManager(validationMessageResolver: ValidationMessageResolver)
 
   private val validatorMap = mutable.Map[Annotation, Validator[_, _]]()
 
-  private val methodValidationMap = mutable.Map[Class[_], Seq[Method]]()
+  private val methodValidationMap = mutable.Map[Class[_], Seq[(Method, Annotation)]]()
 
   /* Public */
 
@@ -32,8 +32,15 @@ class ValidationManager(validationMessageResolver: ValidationMessageResolver)
     for {
       annotation <- fieldValidationAnnotations
       result = isValid(fieldValue, findValidator[V](annotation))
-      if !result.isValid
-    } yield result
+      resultWithAnnotation = result match {
+        case invalid @ Invalid(_, _, _) =>
+          invalid.copy(annotation = Some(annotation))
+
+        case valid @ Valid(_) =>
+          valid // no need to copy as we are only concerned with the invalid results
+      }
+      if !resultWithAnnotation.isValid
+    } yield resultWithAnnotation
   }
 
   /**
@@ -42,10 +49,17 @@ class ValidationManager(validationMessageResolver: ValidationMessageResolver)
    */
   override def validateObject(obj: Any): Seq[ValidationResult] = {
     for {
-      method <- findMethodValidations(obj.getClass)
+      (method, annotation) <- findMethodValidations(obj.getClass)
       result = method.invoke(obj).asInstanceOf[ValidationResult]
-      if !result.isValid
-    } yield result
+      resultWithAnnotation = result match {
+        case invalid @ Invalid(_, _, _) =>
+          invalid.copy(annotation = Some(annotation))
+
+        case valid @ Valid(_) =>
+          valid // no need to copy as we are only concerned with the invalid results
+      }
+      if !resultWithAnnotation.isValid
+    } yield resultWithAnnotation
   }
 
   def getValidator[A <: Annotation, V](annotation: A): Validator[A, V] = {
@@ -53,12 +67,12 @@ class ValidationManager(validationMessageResolver: ValidationMessageResolver)
     createValidator(validatorClass, annotation)
   }
 
-  def getMethodValidations(clazz: Class[_]): Seq[Method] = {
+  def getMethodValidations(clazz: Class[_]): Seq[(Method, Annotation)] = {
     for {
       method <- clazz.getMethods
       annotation <- method.getAnnotations
       if isMethodValidationAnnotation(annotation)
-    } yield method
+    } yield (method, annotation)
   }
 
   def isValidationAnnotation(annotation: Annotation): Boolean = {
@@ -85,7 +99,7 @@ class ValidationManager(validationMessageResolver: ValidationMessageResolver)
       case Some(actualVal) =>
         validator.isValid(actualVal)
       case _ =>
-        Valid
+        Valid()
     }
   }
 
@@ -105,7 +119,7 @@ class ValidationManager(validationMessageResolver: ValidationMessageResolver)
       .asInstanceOf[Validator[_, V]]
   }
 
-  private def findMethodValidations(clazz: Class[_]): Seq[Method] = {
+  private def findMethodValidations(clazz: Class[_]): Seq[(Method, Annotation)] = {
     methodValidationMap.getOrElseUpdate(clazz, getMethodValidations(clazz))
   }
 

@@ -40,7 +40,7 @@ class RangeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyCheck
     val passValue = Gen.choose(1, 50)
 
     forAll(passValue) { value =>
-      validate[RangeIntExample](value) should equal(Valid)
+      validate[RangeIntExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -58,7 +58,7 @@ class RangeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyCheck
     val passValue = Gen.choose(1L, 50L)
 
     forAll(passValue) { value =>
-      validate[RangeLongExample](value) should equal(Valid)
+      validate[RangeLongExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -76,7 +76,7 @@ class RangeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyCheck
     val passValue = Gen.choose(1.0, 50.0)
 
     forAll(passValue) { value =>
-      validate[RangeDoubleExample](value) should equal(Valid)
+      validate[RangeDoubleExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -94,7 +94,7 @@ class RangeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyCheck
     val passValue = Gen.choose(1.0F, 50.0F)
 
     forAll(passValue) { value =>
-      validate[RangeFloatExample](value) should equal(Valid)
+      validate[RangeFloatExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -114,7 +114,7 @@ class RangeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyCheck
     } yield BigDecimal(double)
 
     forAll(passBigDecimalValue) { value =>
-      validate[RangeBigDecimalExample](value) should equal(Valid)
+      validate[RangeBigDecimalExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -135,7 +135,7 @@ class RangeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyCheck
     } yield BigInt(int)
 
     forAll(passBigIntValue) { value =>
-      validate[RangeBigIntExample](value) should equal(Valid)
+      validate[RangeBigIntExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -156,7 +156,7 @@ class RangeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyCheck
     } yield BigDecimal(double)
 
     forAll(passBigDecimalValue) { value =>
-      validate[RangeLargestLongBigDecimalExample](value) should equal(Valid)
+      validate[RangeLargestLongBigDecimalExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -173,7 +173,7 @@ class RangeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyCheck
     } yield BigInt(int)
 
     forAll(passBigIntValue) { value =>
-      validate[RangeLargestLongBigIntExample](value) should equal(Valid)
+      validate[RangeLargestLongBigIntExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -190,7 +190,7 @@ class RangeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyCheck
     } yield BigInt(int)
 
     forAll(passBigIntValue) { value =>
-      validate[RangeSmallestLongBigIntExample](value) should equal(Valid)
+      validate[RangeSmallestLongBigIntExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -207,7 +207,7 @@ class RangeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyCheck
     } yield BigDecimal(double)
 
     forAll(passBigDecimalValue) { value =>
-      validate[RangeSmallestLongBigDecimalExample](value) should equal(Valid)
+      validate[RangeSmallestLongBigDecimalExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 

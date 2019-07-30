@@ -14,7 +14,7 @@ class UUIDValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks
     val passValue = Gen.uuid
 
     forAll(passValue) { value =>
-      validate[UUIDExample](value.toString) should equal(Valid)
+      validate[UUIDExample](value.toString).isInstanceOf[Valid] shouldBe true
     }
   }
 
