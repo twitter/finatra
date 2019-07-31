@@ -8,9 +8,6 @@ sealed trait ValidationResult {
 }
 
 object ValidationResult {
-  object Valid {
-    def apply(annotation: Option[Annotation] = None) = new Valid(annotation)
-  }
 
   case class Valid(
     override val annotation: Option[Annotation] = None
