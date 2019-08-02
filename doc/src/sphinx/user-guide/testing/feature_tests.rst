@@ -26,9 +26,7 @@ under test. See the |c.t.inject.server.FeatureTest|_ trait.
     If you only want to start **one instance** of your server per test file, make sure to override this
     `def` with a `val`. See: `Sharing a Server Fixture Between Many Feature Tests <#sharing-a-server-fixture-between-many-feature-tests>`__ for information on how to properly share a server test fixture.
 
-We highly recommend writing FeatureTests for your services as they provide a very good signal of
-whether you have correctly implemented the features of your service. If you haven't implemented the
-feature correctly, it almost doesn't matter that you have lots of unit tests.
+We highly recommend writing `FeatureTests` for your services as they provide a very good signal of whether you have correctly implemented the features of your service. As always, it is important to always ask yourself, "*what are we trying to test?*" and to do what makes sense for your team but we recommend including `FeatureTests` in your test suite.
 
 |c.t.server.TwitterServer|_
 ---------------------------
@@ -113,7 +111,7 @@ For an "injectable" TwitterServer, |c.t.inject.server.TwitterServer|_ the test w
 
 
 Disabling Clients using `Dtabs`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you have Finagle clients defined in your server which are using `Dtab <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Dtab.scala>`__ delegation tables for client resolution and want to 
 keep them from making remote connections when your server starts, you can override the `Dtab` of the clients by 

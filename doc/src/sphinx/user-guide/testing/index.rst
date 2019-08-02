@@ -51,6 +51,10 @@ For more information on `ScalaTest <https://www.scalatest.org/>`__, see the `Sca
 To make use of another ScalaTest testing style, such as `FunSpec <https://doc.scalatest.org/3.0.0/#org.scalatest.FunSpec>`__ 
 or others, see `Test Mixins <mixins.html>`__.
 
+Resources on Writing Tests
+--------------------------
+- `The Tao of Testing: Chapter 4 - How to Write Tests <https://jasonpolites.github.io/tao-of-testing/ch4-1.1.html>`__
+
 More Information
 ----------------
 

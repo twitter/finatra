@@ -322,13 +322,13 @@ Flags are set by passing them as arguments to your java application. E.g.,
 
 .. code:: bash
 
-    $ java -jar finatra-hello-world-assembly-2.0.0.jar -key=value
+    $ java -jar finatra-http-server-assembly-2.0.0.jar -key=value
 
 An example of this is passing the `-help` Flag to see usage for running a Finatra server, e.g.
 
 .. code:: bash
 
-    $ java -jar finatra-hello-world-assembly-2.0.0.jar -help
+    $ java -jar finatra-http-server-assembly-2.0.0.jar -help
     HelloWorldServer
       -alarm_durations='1.seconds,5.seconds': 2 alarm durations
       -help='false': Show this help
