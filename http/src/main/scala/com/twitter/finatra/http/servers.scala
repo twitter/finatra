@@ -21,18 +21,15 @@ import java.net.InetSocketAddress
 
 private object HttpServerTrait {
   /**
-   * Sentinel used to indicate no http/https announcement.
+   * Sentinel used to indicate no http/https server(s) announcement(s).
    */
   val NoHttpAnnouncement: String = ""
 }
 
 /**
- * A basic HttpServer. To implement, override
- * {{{
- *   protected def httpService: Service[Request, Response]
- * }}}
+ * A basic HttpServer implemented by a {{{com.twitter.finagle.Service[Request, Response]}}}.
  *
- * with your `Service[Request, Response]` implementation.
+ * @note Java users are encouraged to use [[AbstractHttpServerTrait]] instead.
  */
 trait HttpServerTrait extends TwitterServer {
 
@@ -405,6 +402,13 @@ trait HttpServerTrait extends TwitterServer {
     port().toOption.map(PortUtils.parseAddr)
   }
 }
+
+/**
+ * A basic HttpServer implemented by a {{{com.twitter.finagle.Service<Request, Response>}}}.
+ *
+ * @note Scala users are encouraged to use [[HttpServerTrait]] instead.
+ */
+abstract class AbstractHttpServerTrait extends HttpServerTrait
 
 /**
  * A Finagle server which exposes external HTTP or HTTPS interfaces implemented by a

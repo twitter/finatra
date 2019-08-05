@@ -117,6 +117,7 @@ Testing
    http/controllers
    http/requests
    http/responses
+   http/streaming
    http/message_body
    http/filters
    http/exceptions
