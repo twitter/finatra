@@ -223,6 +223,10 @@
                         <a href="AbstractThriftServer.html" title="A Finagle server which exposes an external Thrift interface implemented by a Service[Array[Byte], Array[Byte]] configured via a JavaThriftRouter.">AbstractThriftServer</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
+                        <a class="class" href="AbstractThriftServerTrait.html" title="A basic ThriftServer implemented by a"></a>
+                        <a href="AbstractThriftServerTrait.html" title="A basic ThriftServer implemented by a">AbstractThriftServerTrait</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
                         <a class="class" href="Controller.html" title=""></a>
                         <a href="Controller.html" title="">Controller</a>
                       </li><li class="current-entities indented4">
@@ -239,12 +243,12 @@
                         <a href="ThriftRequest.html" title="ThriftRequest was created to provide some metadata about a request.">ThriftRequest</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="trait" href="ThriftServer.html" title="A Finagle server which exposes an external Thrift interface implemented by a Service[Array[Byte], Array[Byte]] configured via a ThriftRouter."></a>
-                        <a href="ThriftServer.html" title="A Finagle server which exposes an external Thrift interface implemented by a Service[Array[Byte], Array[Byte]] configured via a ThriftRouter.">ThriftServer</a>
+                        <a class="trait" href="ThriftServer.html" title="A Finagle server which exposes an external Thrift interface implemented by a"></a>
+                        <a href="ThriftServer.html" title="A Finagle server which exposes an external Thrift interface implemented by a">ThriftServer</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="trait" href="" title="A basic ThriftServer."></a>
-                        <a href="" title="A basic ThriftServer.">ThriftServerTrait</a>
+                        <a class="trait" href="" title="A basic ThriftServer implemented by a"></a>
+                        <a href="" title="A basic ThriftServer implemented by a">ThriftServerTrait</a>
                       </li>
               </ul>
             </div>
@@ -273,8 +277,9 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A basic ThriftServer. To implement, override</p><pre><span class="kw">protected</span> <span class="kw">def</span> thriftService: Service[<span class="std">Array</span>[<span class="std">Byte</span>], <span class="std">Array</span>[<span class="std">Byte</span>]]</pre><p>with your <code>Service[Array[Byte], Array[Byte]]</code> implementation.
-</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A basic ThriftServer implemented by a </p><pre>com.twitter.finagle.Service[<span class="std">Array</span>[<span class="std">Byte</span>], <span class="std">Array</span>[<span class="std">Byte</span>]]</pre><p>.</p><p>com.twitter.finagle.Service[Array[Byte], Array[Byte]]
+}}}
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>Java users are encouraged to use <a href="AbstractThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.AbstractThriftServerTrait">AbstractThriftServerTrait</a> instead.</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -283,7 +288,7 @@
             <span class="toggle">
               Known Subclasses
             </span>
-            <div class="subClasses hiddenContent"><a href="AbstractThriftServer.html" class="extype" name="com.twitter.finatra.thrift.AbstractThriftServer">AbstractThriftServer</a>, <a href="ThriftServer.html" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a></div>
+            <div class="subClasses hiddenContent"><a href="AbstractThriftServer.html" class="extype" name="com.twitter.finatra.thrift.AbstractThriftServer">AbstractThriftServer</a>, <a href="AbstractThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.AbstractThriftServerTrait">AbstractThriftServerTrait</a>, <a href="ThriftServer.html" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a></div>
           </div></div>
         
 
@@ -1497,6 +1502,22 @@ Note: Disabling the admin server allows services to be deployed into environment
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>App</dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.ThriftServerTrait#frameworkConfigureServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="frameworkConfigureServer(server:com.twitter.finagle.ThriftMux.Server):com.twitter.finagle.ThriftMux.Server"></a><a id="frameworkConfigureServer(Server):Server"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#frameworkConfigureServer(server:com.twitter.finagle.ThriftMux.Server):com.twitter.finagle.ThriftMux.Server" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">frameworkConfigureServer</span><span class="params">(<span name="server">server: <span class="extype" name="com.twitter.finagle.ThriftMux.Server">Server</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.ThriftMux.Server">Server</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../index.html" class="extype" name="com.twitter.finatra">com.twitter.finatra</a>] </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">

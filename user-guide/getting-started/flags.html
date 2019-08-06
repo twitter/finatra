@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Flags &#8212; Finatra 19.7.0 documentation</title>
+    <title>Flags &#8212; Finatra 19.8.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.7.0',
+        VERSION:     '19.8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.7.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.8.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Future Gotchas" href="futures.html" />
     <link rel="prev" title="Binding Annotations" href="binding_annotations.html" />
@@ -345,11 +345,11 @@ on startup of your application or server.</p>
 <div class="section" id="passing-flag-values-as-command-line-arguments">
 <h2>Passing Flag Values as Command-Line Arguments<a class="headerlink" href="#passing-flag-values-as-command-line-arguments" title="Permalink to this headline">¶</a></h2>
 <p>Flags are set by passing them as arguments to your java application. E.g.,</p>
-<div class="code bash highlight-text"><div class="highlight"><pre><span></span>$ java -jar finatra-hello-world-assembly-2.0.0.jar -key=value
+<div class="code bash highlight-text"><div class="highlight"><pre><span></span>$ java -jar finatra-http-server-assembly-2.0.0.jar -key=value
 </pre></div>
 </div>
 <p>An example of this is passing the <cite>-help</cite> Flag to see usage for running a Finatra server, e.g.</p>
-<div class="code bash highlight-text"><div class="highlight"><pre><span></span>$ java -jar finatra-hello-world-assembly-2.0.0.jar -help
+<div class="code bash highlight-text"><div class="highlight"><pre><span></span>$ java -jar finatra-http-server-assembly-2.0.0.jar -help
 HelloWorldServer
   -alarm_durations=&#39;1.seconds,5.seconds&#39;: 2 alarm durations
   -help=&#39;false&#39;: Show this help

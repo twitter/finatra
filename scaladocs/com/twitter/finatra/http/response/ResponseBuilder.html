@@ -1704,6 +1704,41 @@ contained within the <a href="https://twitter.github.io/finagle/docs/com/twitter
       </span>
       
       
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder#streaming" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="streaming[F[_],A](stream:F[A])(implicitevidence$3:com.twitter.finatra.http.streaming.ToReader[F],implicitevidence$4:Manifest[A]):com.twitter.finatra.http.streaming.StreamingResponse[F,A]"></a><a id="streaming[F[_],A](F[A])(ToReader[F],Manifest[A]):streaming.StreamingResponse[F,A]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder.html#streaming[F[_],A](stream:F[A])(implicitevidence$3:com.twitter.finatra.http.streaming.ToReader[F],implicitevidence$4:Manifest[A]):com.twitter.finatra.http.streaming.StreamingResponse[F,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">streaming</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="stream">stream: <span class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.streaming.F">F</span>[<span class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.streaming.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../streaming/ToReader.html" class="extype" name="com.twitter.finatra.http.streaming.ToReader">ToReader</a>[<span class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.streaming.F">F</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.streaming.A">A</span>]</span>)</span><span class="result">: <a href="../streaming/StreamingResponse.html" class="extype" name="com.twitter.finatra.http.streaming.StreamingResponse">streaming.StreamingResponse</a>[<span class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.streaming.F">F</span>, <span class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.streaming.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Java support for streaming</p>
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder#streaming" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="streaming[F[_],A](stream:F[A],status:com.twitter.finagle.http.Status,headers:Map[String,Seq[String]])(implicitevidence$1:com.twitter.finatra.http.streaming.ToReader[F],implicitevidence$2:Manifest[A]):com.twitter.finatra.http.streaming.StreamingResponse[F,A]"></a><a id="streaming[F[_],A](F[A],Status,Map[String,Seq[String]])(ToReader[F],Manifest[A]):streaming.StreamingResponse[F,A]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder.html#streaming[F[_],A](stream:F[A],status:com.twitter.finagle.http.Status,headers:Map[String,Seq[String]])(implicitevidence$1:com.twitter.finatra.http.streaming.ToReader[F],implicitevidence$2:Manifest[A]):com.twitter.finatra.http.streaming.StreamingResponse[F,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">streaming</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="stream">stream: <span class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.streaming.F">F</span>[<span class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.streaming.A">A</span>]</span>, <span name="status">status: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Status.html#com.twitter.finagle.http.Status" class="extype" name="com.twitter.finagle.http.Status">Status</a> = <span class="symbol"><span class="name"><a href="../../../../index.html">Status.Ok</a></span></span></span>, <span name="headers">headers: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]] = <span class="symbol">Map.empty</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../streaming/ToReader.html" class="extype" name="com.twitter.finatra.http.streaming.ToReader">ToReader</a>[<span class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.streaming.F">F</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.streaming.A">A</span>]</span>)</span><span class="result">: <a href="../streaming/StreamingResponse.html" class="extype" name="com.twitter.finatra.http.streaming.StreamingResponse">streaming.StreamingResponse</a>[<span class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.streaming.F">F</span>, <span class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.streaming.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Create a StreamingResponse which can be converted to a
+<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html" class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</a> later.</p><div class="fullcomment"><div class="comment cmt"><p>Create a StreamingResponse which can be converted to a
+<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html" class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</a> later.
+</p></div><dl class="paramcmts block"><dt class="tparam">F</dt><dd class="cmt"><p>The Primitive Stream type.</p></dd><dt class="tparam">A</dt><dd class="cmt"><p>The type of streaming values.</p></dd><dt class="param">stream</dt><dd class="cmt"><p>The output stream.</p></dd><dt class="param">status</dt><dd class="cmt"><p>Represents an HTTP status code.</p></dd><dt class="param">headers</dt><dd class="cmt"><p>A Map of message headers.</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">

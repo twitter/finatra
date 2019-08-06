@@ -65,13 +65,13 @@ Examples
 ^^^^^^^^
 
 See the
-`logback.xml <https://github.com/twitter/finatra/blob/develop/examples/hello-world/src/main/resources/logback.xml>`__
+`logback.xml <https://github.com/twitter/finatra/blob/develop/examples/http-server/src/main/resources/logback.xml>`__
 configuration file in the
-`hello-world <https://github.com/twitter/finatra/tree/develop/examples/hello-world>`__
+`http-server <https://github.com/twitter/finatra/tree/develop/examples/http-server>`__
 example project for example Logback configurations.
 
 The example
-`logback.xml <https://github.com/twitter/finatra/blob/develop/examples/hello-world/src/main/resources/logback.xml>`__
+`logback.xml <https://github.com/twitter/finatra/blob/develop/examples/http-server/src/main/resources/logback.xml>`__
 configuration file makes use of `Logback's variable substitution <https://logback.qos.ch/manual/configuration.html#variableSubstitution>`__
 
 .. code:: xml

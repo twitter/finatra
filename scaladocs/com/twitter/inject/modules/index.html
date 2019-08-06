@@ -267,8 +267,8 @@
                         <a href="LoggerModule$.html" title="A com.twitter.inject.TwitterModule which attempts to install the SLF4JBridgeHandler when the slf4j-jdk14 logging implementation is not present on the classpath.">LoggerModule</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="trait" href="StackClientModuleTrait.html" title="A module for configuring a Finagle StackClient."></a>
-                        <a href="StackClientModuleTrait.html" title="A module for configuring a Finagle StackClient.">StackClientModuleTrait</a>
+                        <a class="trait" href="StackClientModuleTrait.html" title="A module for configuring a Finagle StackBasedClient."></a>
+                        <a href="StackClientModuleTrait.html" title="A module for configuring a Finagle StackBasedClient.">StackClientModuleTrait</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
                         <a class="object" href="StackTransformerModule$.html" title="Provides a com.twitter.inject.StackTransformer to the dependency injection context."></a>
@@ -405,9 +405,9 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="com.twitter.inject.modules.StackClientModuleTrait" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="StackClientModuleTrait[Req,Rep,ClientType&lt;:com.twitter.finagle.client.EndpointerStackClient[Req,Rep,ClientType]]extendsTwitterModule"></a><a id="StackClientModuleTrait[Req,Rep,ClientType&lt;:EndpointerStackClient[Req,Rep,ClientType]]:StackClientModuleTrait[Req,Rep,ClientType]"></a>
+      <a id="StackClientModuleTrait[Req,Rep,ClientType&lt;:com.twitter.finagle.client.StackBasedClient[Req,Rep]withcom.twitter.finagle.Stack.Parameterized[ClientType]withcom.twitter.finagle.param.CommonParams[ClientType]withcom.twitter.finagle.param.ClientParams[ClientType]withcom.twitter.finagle.param.WithClientSession[ClientType]]extendsTwitterModule"></a><a id="StackClientModuleTrait[Req,Rep,ClientType&lt;:StackBasedClient[Req,Rep]withParameterized[ClientType]withCommonParams[ClientType]withClientParams[ClientType]withWithClientSession[ClientType]]:StackClientModuleTrait[Req,Rep,ClientType]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/modules/index.html#StackClientModuleTrait[Req,Rep,ClientType&lt;:com.twitter.finagle.client.EndpointerStackClient[Req,Rep,ClientType]]extendsTwitterModule" title="Permalink">
+      <a href="../../../../com/twitter/inject/modules/index.html#StackClientModuleTrait[Req,Rep,ClientType&lt;:com.twitter.finagle.client.StackBasedClient[Req,Rep]withcom.twitter.finagle.Stack.Parameterized[ClientType]withcom.twitter.finagle.param.CommonParams[ClientType]withcom.twitter.finagle.param.ClientParams[ClientType]withcom.twitter.finagle.param.WithClientSession[ClientType]]extendsTwitterModule" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -416,10 +416,10 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="A module for configuring a Finagle StackClient." href="StackClientModuleTrait.html"><span class="name">StackClientModuleTrait</span></a><span class="tparams">[<span name="Req">Req</span>, <span name="Rep">Rep</span>, <span name="ClientType">ClientType &lt;: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/client/EndpointerStackClient.html#com.twitter.finagle.client.EndpointerStackClient" class="extype" name="com.twitter.finagle.client.EndpointerStackClient">EndpointerStackClient</a>[<span class="extype" name="com.twitter.inject.modules.StackClientModuleTrait.Req">Req</span>, <span class="extype" name="com.twitter.inject.modules.StackClientModuleTrait.Rep">Rep</span>, <span class="extype" name="com.twitter.inject.modules.StackClientModuleTrait.ClientType">ClientType</span>]</span>]</span><span class="result"> extends <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></span>
+        <a title="A module for configuring a Finagle StackBasedClient." href="StackClientModuleTrait.html"><span class="name">StackClientModuleTrait</span></a><span class="tparams">[<span name="Req">Req</span>, <span name="Rep">Rep</span>, <span name="ClientType">ClientType &lt;: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/client/StackBasedClient.html#com.twitter.finagle.client.StackBasedClient" class="extype" name="com.twitter.finagle.client.StackBasedClient">StackBasedClient</a>[<span class="extype" name="com.twitter.inject.modules.StackClientModuleTrait.Req">Req</span>, <span class="extype" name="com.twitter.inject.modules.StackClientModuleTrait.Rep">Rep</span>] with <span class="extype" name="com.twitter.finagle.Stack.Parameterized">Parameterized</span>[<span class="extype" name="com.twitter.inject.modules.StackClientModuleTrait.ClientType">ClientType</span>] with <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/param/CommonParams.html#com.twitter.finagle.param.CommonParams" class="extype" name="com.twitter.finagle.param.CommonParams">CommonParams</a>[<span class="extype" name="com.twitter.inject.modules.StackClientModuleTrait.ClientType">ClientType</span>] with <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/param/ClientParams.html#com.twitter.finagle.param.ClientParams" class="extype" name="com.twitter.finagle.param.ClientParams">ClientParams</a>[<span class="extype" name="com.twitter.inject.modules.StackClientModuleTrait.ClientType">ClientType</span>] with <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/param/WithClientSession.html#com.twitter.finagle.param.WithClientSession" class="extype" name="com.twitter.finagle.param.WithClientSession">WithClientSession</a>[<span class="extype" name="com.twitter.inject.modules.StackClientModuleTrait.ClientType">ClientType</span>]</span>]</span><span class="result"> extends <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></span>
       </span>
       
-      <p class="shortcomment cmt">A module for configuring a Finagle StackClient.</p><div class="fullcomment"><div class="comment cmt"><p>A module for configuring a Finagle StackClient. Binding is explicitly not handled by this
+      <p class="shortcomment cmt">A module for configuring a Finagle <span class="extype" name="StackBasedClient">StackBasedClient</span>.</p><div class="fullcomment"><div class="comment cmt"><p>A module for configuring a Finagle <span class="extype" name="StackBasedClient">StackBasedClient</span>. Binding is explicitly not handled by this
 trait and implementors are responsible for managing their own binding annotations.
 </p></div><dl class="attributes block"> <div class="block">Example:
                <ol><li class="cmt"><p></p><pre><span class="kw">abstract</span> <span class="kw">class</span> MyClientModule
@@ -463,7 +463,9 @@ trait and implementors are responsible for managing their own binding annotation
   <span class="cmt">//     myCoolFilter.andThen(newService(injector, statsReceiver))</span>
 }</pre></li></ol>
             </div><dt>Note</dt><dd><span class="cmt"><p>Extending this module for HTTP and ThriftMux clients should not be necessary, as there
-      are fully supported modules for creating those clients.</p></span></dd></dl></div>
+      are fully supported modules for creating those clients.</p></span>, <span class="cmt"><p>The ordering of client configuration may be important. The underlying clients will be
+      configured and created in the following order:
+        baseClient -&gt; initialClientConfiguration -&gt; configureClient -&gt; frameworkConfigureClient</p></span></dd></dl></div>
     </li></ol>
             </div>
 

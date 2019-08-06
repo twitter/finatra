@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Embedded Servers and Apps &#8212; Finatra 19.7.0 documentation</title>
+    <title>Embedded Servers and Apps &#8212; Finatra 19.8.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.7.0',
+        VERSION:     '19.8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.7.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.8.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Feature Tests" href="feature_tests.html" />
     <link rel="prev" title="Testing Features" href="index.html" />
@@ -130,7 +130,7 @@ class ExampleServerFeatureTest extends FeatureTest {
 still use <a class="reference external" href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#let[R](t:T)(f:=%3ER):R"><cite>Flag.let</cite></a> or <a class="reference external" href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#letClear[R](f:=%3ER):R"><cite>Flag.letClear</cite></a> in tests. Note that if an embedded server takes
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L142">globalFlags</a>
 arguments, they will take precedents over an outer <a class="reference external" href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#let[R](t:T)(f:=%3ER):R"><cite>Flag.let</cite></a>. It is recommended to test using
-<a class="reference external" href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#let[R](t:T)(f:=%3ER):R"><cite>Flag.let</cite></a> or <a href="#id3"><span class="problematic" id="id4">|FlagLegClear|_</span></a> on a <a class="reference external" href="https://github.com/twitter/util/blob/f2a05474ec41f34146d710bdc2a789efd6da9d21/util-app/src/main/scala/com/twitter/app/GlobalFlag.scala"><cite>GlobalFlag</cite></a> in places where the global flag value is read once and not
+<a class="reference external" href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#let[R](t:T)(f:=%3ER):R"><cite>Flag.let</cite></a> or <a class="reference external" href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#letClear[R](f:=%3ER):R"><cite>Flag.letClear</cite></a> on a <a class="reference external" href="https://github.com/twitter/util/blob/f2a05474ec41f34146d710bdc2a789efd6da9d21/util-app/src/main/scala/com/twitter/app/GlobalFlag.scala"><cite>GlobalFlag</cite></a> in places where the global flag value is read once and not
 treated as a runtime variable, otherwise behavior can be unexpected across thread boundaries.
 For example,</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.EmbeddedHttpServer
@@ -181,6 +181,40 @@ to stdout after each test by default.</p>
 <p>See: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject-thrift-client-http-mapper/src/test/scala/com/twitter/finatra/multiserver/test/MultiServerFeatureTest.scala">c.t.finatra.multiserver.test.MultiServerFeatureTest</a>
 for an example usage.</p>
 </div>
+<div class="section" id="testing-a-c-t-inject-app-app">
+<h2>Testing a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><cite>c.t.inject.app.App</cite></a><a class="headerlink" href="#testing-a-c-t-inject-app-app" title="Permalink to this headline">¶</a></h2>
+<p>Finatra supports creating an <em>injectable</em> <cite>c.t.app.App</cite> (documentation <a class="reference external" href="../app/index.html">here</a>) with <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><cite>c.t.inject.app.App</cite></a>. To test, simply wrap your <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><cite>c.t.inject.app.App</cite></a> with an <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala">c.t.inject.app.EmbeddedApp</a>.</p>
+<p>For example,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.Test
+import com.twitter.inject.app.EmbeddedApp
+
+class MyAppTest extends Test {
+
+  // build an EmbeddedApp
+  def newApp: EmbeddedApp =
+    new EmbeddedApp(new MyApp).bind[Foo].toInstance(new Foo(2))
+
+  test(&quot;MyApp#run&quot;) {
+    newApp.main(&quot;username&quot; -&gt; &quot;jack&quot;)
+  }
+
+  test(&quot;MyApp#works as expected&quot;) {
+    val localTestInstanceApp = newApp
+    localTestInstanceApp.main(&quot;username&quot; -&gt; &quot;jill&quot;)
+
+    // expect behavior against instances from the `localTestInstanceApp` injector
+    localTestInstanceApp.injector.instance[Foo].value should be(Foo(2))
+  }
+}
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Note: every call to <cite>EmbeddedApp#main</cite> will run the application with the given flags. If your application is stateful,
+you may want to ensure that a new instance of your application under test (like written above) is created per
+test run.</p>
+</div>
+</div>
 <div class="section" id="more-information">
 <h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -220,6 +254,7 @@ for an example usage.</p>
 <li><a class="reference internal" href="#">Embedded Servers and Apps</a><ul>
 <li><a class="reference internal" href="#testing-with-global-flags">Testing With <cite>Global Flags</cite></a></li>
 <li><a class="reference internal" href="#inmemorystatsreceiver">InMemoryStatsReceiver</a></li>
+<li><a class="reference internal" href="#testing-a-c-t-inject-app-app">Testing a <cite>c.t.inject.app.App</cite></a></li>
 <li><a class="reference internal" href="#more-information">More Information</a></li>
 </ul>
 </li>

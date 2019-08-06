@@ -346,6 +346,10 @@
                         <a class="class" href="StreamingRequest.html" title="StreamingRequest is an abstraction over an input Primitive Stream - Reader or AsyncStream."></a>
                         <a href="StreamingRequest.html" title="StreamingRequest is an abstraction over an input Primitive Stream - Reader or AsyncStream.">StreamingRequest</a>
                       </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="StreamingResponse.html" title="StreamingResponse is an abstraction over an output Primitive Stream - Reader or AsyncStream."></a>
+                        <a href="StreamingResponse.html" title="StreamingResponse is an abstraction over an output Primitive Stream - Reader or AsyncStream.">StreamingResponse</a>
+                      </li><li class="current-entities indented5">
                         <a class="object" href="ToReader$.html" title=""></a>
                         <a class="class" href="ToReader.html" title="Used for StreamingResponse to convert stream from other primitive stream types to Reader."></a>
                         <a href="ToReader.html" title="Used for StreamingResponse to convert stream from other primitive stream types to Reader.">ToReader</a>
@@ -428,7 +432,26 @@
       </span>
       
       <p class="shortcomment cmt">StreamingRequest is an abstraction over an input Primitive Stream - Reader or AsyncStream.</p><div class="fullcomment"><div class="comment cmt"><p>StreamingRequest is an abstraction over an input Primitive Stream - Reader or AsyncStream.
-It carries the stream as well as some Http Request metadata.</p></div><dl class="paramcmts block"><dt class="tparam">F</dt><dd class="cmt"><p>The Primitive Stream type.</p></dd><dt class="tparam">A</dt><dd class="cmt"><p>The type of streaming values.</p></dd></dl></div>
+It carries the stream as well as the original Http Request.
+</p></div><dl class="paramcmts block"><dt class="tparam">F</dt><dd class="cmt"><p>The Primitive Stream type.</p></dd><dt class="tparam">A</dt><dd class="cmt"><p>The type of streaming values.</p></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.streaming.StreamingResponse" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="StreamingResponse[F[_],A]extendsAnyRef"></a><a id="StreamingResponse[F[_],A]:StreamingResponse[F,A]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/streaming/index.html#StreamingResponse[F[_],A]extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="StreamingResponse is an abstraction over an output Primitive Stream - Reader or AsyncStream." href="StreamingResponse.html"><span class="name">StreamingResponse</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">StreamingResponse is an abstraction over an output Primitive Stream - Reader or AsyncStream.</p><div class="fullcomment"><div class="comment cmt"><p>StreamingResponse is an abstraction over an output Primitive Stream - Reader or AsyncStream.
+It carries the output stream as well as some HTTP Response metadata.
+</p></div><dl class="paramcmts block"><dt class="tparam">F</dt><dd class="cmt"><p>The Primitive Stream type.</p></dd><dt class="tparam">A</dt><dd class="cmt"><p>The type of streaming values.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>Users should construct this via c.t.finatra.http.response.ResponseBuilder#streaming</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.streaming.ToReader" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="ToReader[F[_]]extendsAnyRef"></a><a id="ToReader[F[_]]:ToReader[F]"></a>
       <span class="permalink">

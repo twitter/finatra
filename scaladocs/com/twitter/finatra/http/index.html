@@ -383,6 +383,10 @@
                         <a href="AbstractHttpServer.html" title="A Finagle server which exposes an external HTTP or HTTPS interfaces implemented by a Service[Request, Response] configured via an HttpRouter.">AbstractHttpServer</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
+                        <a class="class" href="AbstractHttpServerTrait.html" title="A basic HttpServer implemented by a"></a>
+                        <a href="AbstractHttpServerTrait.html" title="A basic HttpServer implemented by a">AbstractHttpServerTrait</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
                         <a class="class" href="Controller.html" title=""></a>
                         <a href="Controller.html" title="">Controller</a>
                       </li><li class="current-entities indented4">
@@ -395,8 +399,8 @@
                         <a href="HttpServer.html" title="A Finagle server which exposes external HTTP or HTTPS interfaces implemented by a Service[Request, Response] configured via an HttpRouter.">HttpServer</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="trait" href="HttpServerTrait.html" title="A basic HttpServer."></a>
-                        <a href="HttpServerTrait.html" title="A basic HttpServer.">HttpServerTrait</a>
+                        <a class="trait" href="HttpServerTrait.html" title="A basic HttpServer implemented by a"></a>
+                        <a href="HttpServerTrait.html" title="A basic HttpServer implemented by a">HttpServerTrait</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
                         <a class="trait" href="JavaCallback.html" title=""></a>
@@ -697,6 +701,24 @@
 <code>Service[Request, Response]</code> configured via an <span class="extype" name="HttpRouter">HttpRouter</span>. This abstract class is
 intended for use from Java or with generated Java code.
 </p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>Scala users are encouraged to use <a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a> instead.</p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.AbstractHttpServerTrait" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="AbstractHttpServerTraitextendsHttpServerTrait"></a><a id="AbstractHttpServerTrait:AbstractHttpServerTrait"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/http/index.html#AbstractHttpServerTraitextendsHttpServerTrait" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="A basic HttpServer implemented by a" href="AbstractHttpServerTrait.html"><span class="name">AbstractHttpServerTrait</span></a><span class="result"> extends <a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A basic HttpServer implemented by a </p><div class="fullcomment"><div class="comment cmt"><p>A basic HttpServer implemented by a </p><pre>com.twitter.finagle.Service&lt;Request, Response&gt;</pre><p>.</p><p>com.twitter.finagle.Service&lt;Request, Response&gt;
+}}}
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>Scala users are encouraged to use <a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a> instead.</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.Controller" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ControllerextendsRouteDSLwithLogging"></a><a id="Controller:Controller"></a>
       <span class="permalink">
@@ -745,11 +767,12 @@ intended for use from Scala or with generated Scala code.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="A basic HttpServer." href="HttpServerTrait.html"><span class="name">HttpServerTrait</span></a><span class="result"> extends <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a></span>
+        <a title="A basic HttpServer implemented by a" href="HttpServerTrait.html"><span class="name">HttpServerTrait</span></a><span class="result"> extends <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a></span>
       </span>
       
-      <p class="shortcomment cmt">A basic HttpServer.</p><div class="fullcomment"><div class="comment cmt"><p>A basic HttpServer. To implement, override</p><pre><span class="kw">protected</span> <span class="kw">def</span> httpService: Service[Request, Response]</pre><p>with your <code>Service[Request, Response]</code> implementation.
-</p></div></div>
+      <p class="shortcomment cmt">A basic HttpServer implemented by a </p><div class="fullcomment"><div class="comment cmt"><p>A basic HttpServer implemented by a </p><pre>com.twitter.finagle.Service[Request, Response]</pre><p>.</p><p>com.twitter.finagle.Service[Request, Response]
+}}}
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>Java users are encouraged to use <a href="AbstractHttpServerTrait.html" class="extype" name="com.twitter.finatra.http.AbstractHttpServerTrait">AbstractHttpServerTrait</a> instead.</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.JavaCallback" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="JavaCallback[RequestType,ResponseType]extendsObject"></a><a id="JavaCallback[RequestType,ResponseType]:JavaCallback[RequestType,ResponseType]"></a>
       <span class="permalink">

@@ -1582,6 +1582,32 @@ a value provided as an application argument (as they have no default value to be
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="com.twitter.inject.modules.StackClientModuleTrait#initialClientConfiguration" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="initialClientConfiguration(injector:com.twitter.inject.Injector,client:ClientType,statsReceiver:com.twitter.finagle.stats.StatsReceiver):ClientType"></a><a id="initialClientConfiguration(Injector,Client,StatsReceiver):Client"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModuleTrait.html#initialClientConfiguration(injector:com.twitter.inject.Injector,client:ClientType,statsReceiver:com.twitter.finagle.stats.StatsReceiver):ClientType" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">initialClientConfiguration</span><span class="params">(<span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="client">client: <span class="extype" name="com.twitter.finagle.Http.Client">Client</span></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.Http.Client">Client</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Initial configuration of the underlying client.</p><div class="fullcomment"><div class="comment cmt"><p>Initial configuration of the underlying client. This is exposed to allow for customization
+of the base client configuration. All user facing extensions should be done via <a href="../../../inject/modules/StackClientModuleTrait.html#configureClient(injector:com.twitter.inject.Injector,client:ClientType):ClientType" class="extmbr" name="com.twitter.inject.modules.StackClientModuleTrait#configureClient">configureClient</a>.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The base configured <span class="extype" name="ClientType">ClientType</span> client, without any custom end-user configuration.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd><div class="block">Example:
+               <ol><li class="cmt"><p></p><pre><span class="kw">override</span> <span class="kw">protected</span> <span class="kw">final</span> <span class="kw">def</span> initialClientConfiguration(
+  injector: Injector,
+  client: ClientType,
+  statsReceiver: StatsReceiver
+): ThriftMux.Client =
+  <span class="kw">super</span>.initialClientConfiguration(injector, client, statsReceiver)
+    .withClientId(injector.instance[ClientId]</pre></li></ol>
+            </div></dl></div>
     </li><li name="com.twitter.inject.TwitterModule#install" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="install(module:com.google.inject.Module):Unit"></a><a id="install(Module):Unit"></a>
       <span class="permalink">

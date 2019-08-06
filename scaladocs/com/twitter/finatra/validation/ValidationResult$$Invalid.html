@@ -155,8 +155,8 @@
                         <a href="" title="">Invalid</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="object" href="ValidationResult$$Valid$.html" title=""></a>
-                        <a href="ValidationResult$$Valid$.html" title="">Valid</a>
+                        <a class="class" href="ValidationResult$$Valid.html" title=""></a>
+                        <a href="ValidationResult$$Valid.html" title="">Valid</a>
                       </li>
               </ul>
             </div>
@@ -180,7 +180,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Invalid</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="code">code: <a href="ErrorCode.html" class="extype" name="com.twitter.finatra.validation.ErrorCode">ErrorCode</a> = <span class="symbol"><span class="name"><a href="ErrorCode$.html">ErrorCode.Unknown</a></span></span></span>)</span><span class="result"> extends <a href="ValidationResult.html" class="extype" name="com.twitter.finatra.validation.ValidationResult">ValidationResult</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">Invalid</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="code">code: <a href="ErrorCode.html" class="extype" name="com.twitter.finatra.validation.ErrorCode">ErrorCode</a> = <span class="symbol"><span class="name"><a href="ErrorCode$.html">ErrorCode.Unknown</a></span></span></span>, <span name="annotation">annotation: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="java.lang.annotation.Annotation">Annotation</span>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <a href="ValidationResult.html" class="extype" name="com.twitter.finatra.validation.ValidationResult">ValidationResult</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       </h4>
 
@@ -236,9 +236,9 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.twitter.finatra.validation.ValidationResult.Invalid#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(message:String,code:com.twitter.finatra.validation.ErrorCode):com.twitter.finatra.validation.ValidationResult.Invalid"></a><a id="&lt;init&gt;:Invalid"></a>
+      <a id="&lt;init&gt;(message:String,code:com.twitter.finatra.validation.ErrorCode,annotation:Option[java.lang.annotation.Annotation]):com.twitter.finatra.validation.ValidationResult.Invalid"></a><a id="&lt;init&gt;:Invalid"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/validation/ValidationResult$$Invalid.html#&lt;init&gt;(message:String,code:com.twitter.finatra.validation.ErrorCode):com.twitter.finatra.validation.ValidationResult.Invalid" title="Permalink">
+      <a href="../../../../com/twitter/finatra/validation/ValidationResult$$Invalid.html#&lt;init&gt;(message:String,code:com.twitter.finatra.validation.ErrorCode,annotation:Option[java.lang.annotation.Annotation]):com.twitter.finatra.validation.ValidationResult.Invalid" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -247,7 +247,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Invalid</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="code">code: <a href="ErrorCode.html" class="extype" name="com.twitter.finatra.validation.ErrorCode">ErrorCode</a> = <span class="symbol"><span class="name"><a href="ErrorCode$.html">ErrorCode.Unknown</a></span></span></span>)</span>
+        <span class="name">Invalid</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="code">code: <a href="ErrorCode.html" class="extype" name="com.twitter.finatra.validation.ErrorCode">ErrorCode</a> = <span class="symbol"><span class="name"><a href="ErrorCode$.html">ErrorCode.Unknown</a></span></span></span>, <span name="annotation">annotation: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="java.lang.annotation.Annotation">Annotation</span>] = <span class="symbol">None</span></span>)</span>
       </span>
       
       
@@ -309,6 +309,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.twitter.finatra.validation.ValidationResult.Invalid#annotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="annotation:Option[java.lang.annotation.Annotation]"></a><a id="annotation:Option[Annotation]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/validation/ValidationResult$$Invalid.html#annotation:Option[java.lang.annotation.Annotation]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">annotation</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="java.lang.annotation.Annotation">Annotation</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.validation.ValidationResult.Invalid">Invalid</a> → <a href="ValidationResult.html" class="extype" name="com.twitter.finatra.validation.ValidationResult">ValidationResult</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">

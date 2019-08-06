@@ -35,13 +35,31 @@ Create a new class which extends `c.t.finatra.http.HttpServer <https://github.co
       }
     }
 
+Or in Java, extend the `c.t.finatra.http.AbstractHttpServer <https://github.com/twitter/finatra/blob/100b858ca2786199114247e1440a1bfb4a460b28/http/src/main/scala/com/twitter/finatra/http/servers.scala#L505>`__:
 
-A more complete example includes adding Modules, a Controller, and Filters.
+.. code:: java
+
+    import com.twitter.app.Flaggable;
+    import com.twitter.finatra.http.AbstractHttpServer;
+    import com.twitter.finatra.http.routing.HttpRouter;
+
+    public class ExampleServer extends AbstractHttpServer {
+
+      public ExampleServer() {
+        flag().create("magic.number", 55, "This is a magic number.", Flaggable.ofJavaInteger());
+      }
+
+      @Override
+      public void configureHttp(HttpRouter router) {
+        ...
+      }
+    }
+
+A more complete example includes adding Modules, a Controller, and Filters. In Scala:
 
 .. code:: scala
 
-    import DoEverythingModule
-    import ExampleController
+    import com.google.inject.Module
     import com.twitter.finatra.http.HttpServer
     import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter, TraceIdMDCFilter}
     import com.twitter.finatra.http.routing.HttpRouter
@@ -50,8 +68,8 @@ A more complete example includes adding Modules, a Controller, and Filters.
 
     class ExampleServer extends HttpServer {
 
-      override val modules = Seq(
-        DoEverythingModule)
+      override val modules: Seq[Module] = Seq(
+        ExampleModule)
 
       override def configureHttp(router: HttpRouter): Unit = {
         router
@@ -62,8 +80,86 @@ A more complete example includes adding Modules, a Controller, and Filters.
       }
     }
 
+in Java:
+
+.. code:: java
+
+    import com.google.common.collect.ImmutableList;
+    import com.google.inject.Module;
+    import com.twitter.app.Flaggable;
+    import com.twitter.finatra.http.AbstractHttpServer;
+    import com.twitter.finatra.http.filters.CommonFilters;
+    import com.twitter.finatra.http.routing.HttpRouter;
+    import com.twitter.finatra.http.filters.CommonFilters; 
+    import com.twitter.finatra.http.filters.LoggingMDCFilter; 
+    import com.twitter.finatra.http.filters.TraceIdMDCFilter;
+    import java.util.Collection;
+
+    public class ExampleServer extends AbstractHttpServer {
+
+      public ExampleServer() {
+          flag().create("magic.number", 55, "This is a magic number.", Flaggable.ofJavaInteger());
+      }
+
+      @Override
+      public Collection<Module> javaModules() {
+          return ImmutableList.<Module>of(
+              ExampleModule$.MODULE$);
+      }
+
+      @Override
+      public void configureHttp(HttpRouter httpRouter) {
+          httpRouter
+              .filter(LoggingMDCFilter<Request, Response>.class)
+              .filter(TraceIdMDCFilter<Request, Response>.class)
+              .filter(CommonFilters.class)
+              .add(ExampleController.class);
+      }
+    }
+
+.. tip::
+
+    Note: to add `Modules <../getting-started/modules.html>`__ to your Java server override the
+    `javaModules()` method.
+
 Simplistically, a server can be thought of as a collection of `controllers <controllers.html>`__ composed with `filters <filters.html>`__.
 Additionally, a server can define `modules <../getting-started/modules.html>`__ for providing instances to the object graph and how to `map exceptions <../http/exceptions.html>`__ to HTTP responses.
+
+Naming Convention
+-----------------
+
+The Finatra convention is to create a Scala `object <https://twitter.github.io/scala_school/basics2.html#object>`__ 
+with a name ending in "Main" that extends your server class. The server *class* can be used in 
+testing as this allows your server to be instantiated multiple times in tests without worrying about 
+static state persisting across test runs in the same JVM.
+
+.. code:: scala
+
+    object ExampleServerMain extends ExampleServer
+
+The static object, e.g., `ExampleServerMain`, would then contain a static `main()` method for the server
+to serve as the `application entry point <https://docs.oracle.com/javase/tutorial/deployment/jar/appman.html>`__
+for running the server in all other cases.
+
+Java Naming Convention
+~~~~~~~~~~~~~~~~~~~~~~
+
+In Java you would create a separate "main" class which defines a static `main()` method and accepts args
+for flag parsing:
+
+.. code:: java
+
+    public final class ExampleServerMain {
+        private ExampleServerMain() {
+        }
+
+        public static void main(String[] args) {
+            new ExampleServer().main(args);
+        }
+    }
+
+This would be the class used as the `application entry point <https://docs.oracle.com/javase/tutorial/deployment/jar/appman.html>`__
+for running the server.
 
 Creating an HTTPS Server
 ------------------------
@@ -161,12 +257,66 @@ pass a value for the `-http.port` flag), e.g.,
       }
     }
 
-Naming Convention
------------------
+Serving a Finagle `Service[Request, Response]`
+----------------------------------------------
 
-The Finatra convention is to create a Scala `object <https://twitter.github.io/scala_school/basics2.html#object>`__ with a name ending in "Main" that extends your server class.
-The server class can be used in testing as this allows your server to be instantiated multiple times in tests without worrying about static state persisting across test runs in the same JVM.
-The static object, e.g., `ExampleServerMain`, which contains the static main method for the server would then be used as the `application entry point <https://docs.oracle.com/javase/tutorial/deployment/jar/appman.html>`__ for running the server in all other cases.
+You have the option to serve a manually constructed Finagle `Service[Request, Response]` instead of
+creating an `HTTP Controller <./controllers.html>`_ and having the framework construct a
+`Service[Request, Response]` via the `HttpRouter`.
+
+To do so, extend the `HttpServerTrait` (or `AbstractHttpServerTrait` in Java) and implement the
+`httpService: Service[Request, Response]` method:
+
+.. code:: scala
+
+    import com.google.inject.Module
+    import com.twitter.finagle.Service
+    import com.twitter.finatra.http.HttpServerTrait
+    import com.twitter.finatra.http.filters.{LoggingMDCFilter, TraceIdMDCFilter}
+
+    object ExampleServerMain extends ExampleServer
+
+    class ExampleServer extends HttpServerTrait {
+
+      override val modules: Seq[Module] = Seq(
+        ExampleModule)
+
+      // the `Service[Request, Response]` to serve
+      override def httpService: Service[Request, Response] = ???
+    }
+
+in Java:
+
+.. code:: java
+
+    import com.google.common.collect.ImmutableList;
+    import com.google.inject.Module;
+    import com.twitter.finagle.Service;
+    import com.twitter.finatra.http.AbstractHttpServerTrait;
+    import java.util.Collection;
+
+    public class ExampleServer extends AbstractHttpServer {
+
+      @Override
+      public Collection<Module> javaModules() {
+        return ImmutableList.<Module>of(ExampleModule$.MODULE$);
+      }
+
+      @Override
+      public Service<Request, Response> httpService() {
+        // the `Service<Request, Response>` to serve
+        return null;
+      }
+    }
+
+.. important::
+
+    The `HttpRouter` exposes a DSL for users which the framework uses to construct a filtered
+    `Service[Request, Response]`.
+
+    Note, you must choose one or the other: either implement your service with a
+    `Controller <./controllers.html>`_ added via the `HttpRouter` **or** serve a manually
+    constructed Finagle `Service[Request, Response]`.
 
 Override Default Behavior
 -------------------------

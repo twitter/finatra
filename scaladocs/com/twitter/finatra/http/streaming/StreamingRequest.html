@@ -154,6 +154,10 @@
                         <a class="class" href="" title="StreamingRequest is an abstraction over an input Primitive Stream - Reader or AsyncStream."></a>
                         <a href="" title="StreamingRequest is an abstraction over an input Primitive Stream - Reader or AsyncStream.">StreamingRequest</a>
                       </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="StreamingResponse.html" title="StreamingResponse is an abstraction over an output Primitive Stream - Reader or AsyncStream."></a>
+                        <a href="StreamingResponse.html" title="StreamingResponse is an abstraction over an output Primitive Stream - Reader or AsyncStream.">StreamingResponse</a>
+                      </li><li class="current-entities indented5">
                         <a class="object" href="ToReader$.html" title=""></a>
                         <a class="class" href="ToReader.html" title="Used for StreamingResponse to convert stream from other primitive stream types to Reader."></a>
                         <a href="ToReader.html" title="Used for StreamingResponse to convert stream from other primitive stream types to Reader.">ToReader</a>
@@ -186,7 +190,8 @@
 
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>StreamingRequest is an abstraction over an input Primitive Stream - Reader or AsyncStream.
-It carries the stream as well as some Http Request metadata.</p></div><dl class="paramcmts block"><dt class="tparam">F</dt><dd class="cmt"><p>The Primitive Stream type.</p></dd><dt class="tparam">A</dt><dd class="cmt"><p>The type of streaming values.</p></dd></dl><div class="toggleContainer block">
+It carries the stream as well as the original Http Request.
+</p></div><dl class="paramcmts block"><dt class="tparam">F</dt><dd class="cmt"><p>The Primitive Stream type.</p></dd><dt class="tparam">A</dt><dd class="cmt"><p>The type of streaming values.</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -493,6 +498,22 @@ It carries the stream as well as some Http Request metadata.</p></div><dl class=
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="com.twitter.finatra.http.streaming.StreamingRequest#request" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="request:com.twitter.finagle.http.Request"></a><a id="request:Request"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/streaming/StreamingRequest.html#request:com.twitter.finagle.http.Request" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">request</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a></span>
+      </span>
+      
+      
     </li><li name="com.twitter.finatra.http.streaming.StreamingRequest#stream" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="stream:F[A]"></a>
       <span class="permalink">
