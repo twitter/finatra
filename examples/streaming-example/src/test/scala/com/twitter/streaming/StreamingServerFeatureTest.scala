@@ -1,4 +1,4 @@
-package com.twitter.finatra.streaming
+package com.twitter.streaming
 
 import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.http.{Request, Response}

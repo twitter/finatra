@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "19.7.0"
+val releaseVersion = "19.8.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -58,7 +58,7 @@ lazy val versions = new {
   val commonsLang = "2.6"
   val fastutil = "8.1.1"
   val guice = "4.0"
-  val jackson = "2.9.8"
+  val jackson = "2.9.9"
   val jodaConvert = "1.2"
   val jodaTime = "2.5"
   val junit = "4.12"
@@ -502,9 +502,10 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "com.twitter" %% "finagle-http" % versions.twLibVersion % Test)
   ).dependsOn(
-    injectCore % "test->test;compile->compile",
+    injectCore,
     injectUtils,
     injectApp % "test->test;compile->compile",
+    injectModules % "test->test;compile->compile",
     injectThrift,
     http % "test->test",
     thrift % "test->test")

@@ -23,7 +23,7 @@ object CommonMethodValidations {
         "both %s and %s are required for a valid range".format(startTimeProperty, endTimeProperty)
       )
     else
-      Valid
+      Valid()
   }
 
   def validateTimeRange(

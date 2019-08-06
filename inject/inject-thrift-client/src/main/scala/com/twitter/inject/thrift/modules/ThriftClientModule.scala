@@ -1,12 +1,10 @@
 package com.twitter.inject.thrift.modules
 
 import com.google.inject.Provides
-import com.twitter.finagle._
-import com.twitter.finagle.service.RetryBudget
+import com.twitter.finagle.ThriftMux
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.thrift.ClientId
 import com.twitter.inject.{Injector, TwitterModule}
-import com.twitter.util.{Await, Duration, Monitor, NullMonitor}
 import javax.inject.Singleton
 import scala.reflect.ClassTag
 
@@ -34,18 +32,12 @@ abstract class ThriftClientModule[ThriftService: ClassTag]
   extends TwitterModule
   with ThriftClientModuleTrait {
 
-  protected def sessionAcquisitionTimeout: Duration = Duration.Top
-
-  protected def requestTimeout: Duration = Duration.Top
-
-  protected def retryBudget: RetryBudget = RetryBudget()
-
-  protected def monitor: Monitor = NullMonitor
-
-  protected def configureThriftMuxClient(
+  override protected final def initialClientConfiguration(
     injector: Injector,
-    client: ThriftMux.Client
-  ): ThriftMux.Client = client
+    client: ThriftMux.Client,
+    statsReceiver: StatsReceiver
+  ): ThriftMux.Client = super.initialClientConfiguration(injector, client, statsReceiver)
+    .withClientId(injector.instance[ClientId])
 
   @Singleton
   @Provides
@@ -53,27 +45,7 @@ abstract class ThriftClientModule[ThriftService: ClassTag]
     injector: Injector,
     clientId: ClientId,
     statsReceiver: StatsReceiver
-  ): ThriftService = {
-    val clientStatsReceiver = statsReceiver.scope("clnt")
+  ): ThriftService = newClient(injector, statsReceiver)
+    .build[ThriftService](dest, label)
 
-    val thriftService =
-      configureThriftMuxClient(
-        injector,
-        ThriftMux.client.withSession
-          .acquisitionTimeout(sessionAcquisitionTimeout)
-          .withRequestTimeout(requestTimeout)
-          .withStatsReceiver(clientStatsReceiver)
-          .withClientId(clientId)
-          .withMonitor(monitor)
-          .withLabel(label)
-          .withRetryBudget(retryBudget)
-      ).build[ThriftService](dest, label)
-
-    closeOnExit {
-      val closable = asClosable(thriftService)
-      Await.result(
-        closable.close(defaultClosableGracePeriod), defaultClosableAwaitPeriod)
-    }
-    thriftService
-  }
 }

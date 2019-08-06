@@ -32,6 +32,10 @@ A method validation is a case class method annotated with ``@MethodValidation`` 
 For an example see the `Car <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/test/scala/com/twitter/finatra/json/tests/internal/caseclass/validation/domain/Car.scala#L26>`__ test case class. Additionally, see the
 `CommonMethodValidations <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/validation/CommonMethodValidations.scala>`__ for pre-defined commonly useful method validations.
 
+The ``@MethodValidation`` annotation also supports specifying an optional ``fields`` parameter to
+state which fields are being evaluated in the validation. If the evaluation fails the resulting
+exception will contain details about each of the fields specified in the annotation.
+
 Validation Errors
 -----------------
 

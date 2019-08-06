@@ -3,11 +3,11 @@ package com.twitter.finatra.http.tests.integration.tweetexample.test
 import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finagle.http.{Fields, Status}
 import com.twitter.finatra.http.tests.integration.tweetexample.main.TweetsEndpointServer
+import com.twitter.finatra.http.tests.integration.tweetexample.main.domain.Tweet
 import com.twitter.finatra.http.{EmbeddedHttpServer, RouteHint, StreamingJsonTestHelper}
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.{Await, Future}
-
 import scala.collection.mutable
 
 class TweetsControllerIntegrationTest extends FeatureTest {
@@ -202,7 +202,9 @@ class TweetsControllerIntegrationTest extends FeatureTest {
   }
 
   test("get StreamingResponse with Reader") {
-    server.httpGet("/tweets/streamingRep_with_reader", andExpect = Status.Ok, withBody = "123")
+    val response = server.httpGet("/tweets/streamingRep_with_reader", andExpect = Status.Accepted, withBody = "[1,2,3]")
+    response.headerMap.getAll("key1") should equal(Seq("value1", "value2", "value3"))
+    response.headerMap.getAll("key2") should equal(Seq("v4", "v5", "v6"))
   }
 
   test("get streaming with transformer") {
@@ -257,6 +259,76 @@ class TweetsControllerIntegrationTest extends FeatureTest {
   test("post streaming json with StreamingRequest") {
     val request = RequestBuilder
       .post("/tweets/streaming_with_streamingRequest")
+      .header("X-UserId", "123")
+      .chunked
+
+    val ids = (1 to 5)
+
+    // Write to request in separate thread
+    pool {
+      streamingJsonHelper.writeJsonArray(request, ids, delayMs = 10)
+    }
+
+    server.httpRequest(
+      request = request,
+      andExpect = Status.Ok,
+      withJsonBody = """
+        [
+          {
+            "id" : 1,
+            "user" : "Bob",
+            "msg" : "whats up"
+          },
+          {
+            "id" : 2,
+            "user" : "Sally",
+            "msg" : "yo"
+          },
+          {
+            "id" : 3,
+            "user" : "Fred",
+            "msg" : "hey"
+          }
+        ]
+        """
+    )
+  }
+
+  test("get tweet 1 via streamingRequest") {
+    val request = RequestBuilder
+      .get("/tweets/not_streaming_with_streamingRequest/1")
+      .header("X-UserId", "123")
+      .chunked
+
+    server.httpRequest(
+      request = request,
+      andExpect = Status.Ok,
+      withJsonBody = """{ "idonly" : 1 }"""
+    )
+  }
+
+  test("post tweets") {
+    val request = RequestBuilder
+      .post("/tweets/streaming_req_over_json")
+      .header("X-UserId", "123")
+      .chunked
+
+    val tweets = List(Tweet(1L, "Bob", "whats up"), Tweet(2L, "Sally", "yo"), Tweet(3L, "Fred", "hey"))
+
+    // Write to request in separate thread
+    pool {
+      streamingJsonHelper.writeJsonArray(request, tweets, delayMs = 10)
+    }
+    server.httpRequest(
+      request = request,
+      andExpect = Status.Ok,
+      withJsonBody = "[1,2,3]"
+    )
+  }
+
+  test("get streaming json with StreamingResponse") {
+    val request = RequestBuilder
+      .get("/tweets/streaming_rep_over_json")
       .header("X-UserId", "123")
       .chunked
 

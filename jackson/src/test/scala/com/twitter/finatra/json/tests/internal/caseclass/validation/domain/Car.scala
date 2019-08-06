@@ -39,7 +39,7 @@ case class Car(
     )
   }
 
-  @MethodValidation
+  @MethodValidation(fields=Array("ownershipEnd"))
   def ownershipTimesValid = {
     CommonMethodValidations.validateTimeRange(
       ownershipStart,
@@ -49,7 +49,7 @@ case class Car(
     )
   }
 
-  @MethodValidation
+  @MethodValidation(fields=Array("warrantyStart", "warrantyEnd"))
   def warrantyTimeValid = {
     CommonMethodValidations.validateTimeRange(
       warrantyStart,

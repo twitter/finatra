@@ -18,7 +18,7 @@ class CountryCodeValidatorTest extends ValidatorTest with GeneratorDrivenPropert
 
   test("pass validation for valid country code") {
     countryCodes.foreach { value =>
-      validate[CountryCodeExample](value) should equal(Valid)
+      validate[CountryCodeExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -34,13 +34,13 @@ class CountryCodeValidatorTest extends ValidatorTest with GeneratorDrivenPropert
     val passValue = Gen.containerOf[Seq, String](Gen.oneOf(countryCodes))
 
     forAll(passValue) { value =>
-      validate[CountryCodeSeqExample](value) should equal(Valid)
+      validate[CountryCodeSeqExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
   test("pass validation for empty seq") {
     val emptyValue = Seq.empty
-    validate[CountryCodeSeqExample](emptyValue) should equal(Valid)
+    validate[CountryCodeSeqExample](emptyValue).isInstanceOf[Valid] shouldBe true
   }
 
   test("fail validation for invalid country codes in seq") {
@@ -57,7 +57,7 @@ class CountryCodeValidatorTest extends ValidatorTest with GeneratorDrivenPropert
     val passValue = Gen.containerOf[Array, String](Gen.oneOf(countryCodes))
 
     forAll(passValue) { value =>
-      validate[CountryCodeArrayExample](value) should equal(Valid)
+      validate[CountryCodeArrayExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 

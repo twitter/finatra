@@ -66,9 +66,8 @@ which can then be included in your server Filter chain.
 Example
 -------
 
-The `hello-world <https://github.com/twitter/finatra/tree/develop/examples/hello-world>`__
-example Logback `configuration <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/examples/hello-world/src/main/resources/logback.xml#L25>`__
-references the contextual key `traceId` which will be logged with every statement sent to a Logback
+Here's an example Logback `configuration <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/examples/hello-world/src/main/resources/logback.xml#L25>`__
+which references the contextual key `traceId` which will be logged with every statement sent to a Logback
 `Appender <https://logback.qos.ch/manual/appenders.html>`__. It is the responsibility of the
 application to populate the MDC with this contextual information. In this case, the `traceId` is
 added by including the http `TraceIdMDCLoggingFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/TraceIdMDCFilter.scala>`__

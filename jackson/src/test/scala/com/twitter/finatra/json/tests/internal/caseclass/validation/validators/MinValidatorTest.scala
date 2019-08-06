@@ -28,7 +28,7 @@ class MinValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks 
     val passValue = Gen.choose(1, Int.MaxValue)
 
     forAll(passValue) { value: Int =>
-      validate[MinIntExample](value) should equal(Valid)
+      validate[MinIntExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -46,7 +46,7 @@ class MinValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks 
     val passValue = Gen.choose(1L, Long.MaxValue)
 
     forAll(passValue) { value =>
-      validate[MinLongExample](value) should equal(Valid)
+      validate[MinLongExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -67,7 +67,7 @@ class MinValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks 
     val passValue = Gen.choose(0.1, Double.MaxValue)
 
     forAll(passValue) { value =>
-      validate[MinDoubleExample](value) should equal(Valid)
+      validate[MinDoubleExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -88,7 +88,7 @@ class MinValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks 
     val passValue = Gen.choose(0.1F, Float.MaxValue)
 
     forAll(passValue) { value =>
-      validate[MinFloatExample](value) should equal(Valid)
+      validate[MinFloatExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -111,7 +111,7 @@ class MinValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks 
     } yield BigInt(long)
 
     forAll(passBigIntValue) { value =>
-      validate[MinBigIntExample](value) should equal(Valid)
+      validate[MinBigIntExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -121,13 +121,13 @@ class MinValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks 
     } yield BigInt(long)
 
     forAll(passBigIntValue) { value =>
-      validate[MinSmallestLongBigIntExample](value) should equal(Valid)
+      validate[MinSmallestLongBigIntExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
   test("pass validation for very large big int type") {
     val passValue = BigInt(Long.MaxValue)
-    validate[MinLargestLongBigIntExample](passValue) should equal(Valid)
+    validate[MinLargestLongBigIntExample](passValue).isInstanceOf[Valid] shouldBe true
   }
 
   test("fail validation for big int type") {
@@ -171,7 +171,7 @@ class MinValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks 
     } yield BigDecimal(double)
 
     forAll(passBigDecimalValue) { value =>
-      validate[MinBigDecimalExample](value) should equal(Valid)
+      validate[MinBigDecimalExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -181,13 +181,13 @@ class MinValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks 
     } yield BigDecimal(double)
 
     forAll(passBigDecimalValue) { value =>
-      validate[MinSmallestLongBigDecimalExample](value) should equal(Valid)
+      validate[MinSmallestLongBigDecimalExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
   test("pass validation for very large big decimal type") {
     val passValue = BigDecimal(Long.MaxValue)
-    validate[MinLargestLongBigDecimalExample](passValue) should equal(Valid)
+    validate[MinLargestLongBigDecimalExample](passValue).isInstanceOf[Valid] shouldBe true
   }
 
   test("fail validation for big decimal type") {
@@ -234,7 +234,7 @@ class MinValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks 
     } yield n ++ m
 
     forAll(passValue) { value =>
-      validate[MinSeqExample](value) should equal(Valid)
+      validate[MinSeqExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -260,7 +260,7 @@ class MinValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks 
     } yield n ++ m
 
     forAll(passValue) { value =>
-      validate[MinArrayExample](value) should equal(Valid)
+      validate[MinArrayExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 

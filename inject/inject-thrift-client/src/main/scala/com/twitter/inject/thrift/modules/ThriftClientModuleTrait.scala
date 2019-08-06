@@ -1,81 +1,15 @@
 package com.twitter.inject.thrift.modules
 
-import com.twitter.conversions.DurationOps._
-import com.twitter.finagle.ThriftMux
-import com.twitter.finagle.service.RetryBudget
+import com.twitter.finagle.thrift.ThriftClientRequest
+import com.twitter.finagle.{ThriftMux}
+import com.twitter.inject.modules.StackClientModuleTrait
 import com.twitter.inject.{Injector, Logging}
 import com.twitter.scrooge.AsClosableMethodName
-import com.twitter.util.{Closable, Duration, Monitor}
+import com.twitter.util.Closable
 
-private[twitter] trait ThriftClientModuleTrait extends Logging {
+private[twitter] trait ThriftClientModuleTrait extends StackClientModuleTrait[ThriftClientRequest, Array[Byte], ThriftMux.Client] with Logging {
 
-  /**
-   * ThriftMux client label.
-   * @see [[https://twitter.github.io/finagle/guide/Clients.html#observability Clients Observability]]
-   */
-  def label: String
-
-  /**
-   * Destination of ThriftMux client.
-   * @see [[https://twitter.github.io/finagle/guide/Names.html Names and Naming in Finagle]]
-   */
-  def dest: String
-
-  /**
-   * Default amount of time to wait for any [[Closable]] being registered in a `closeOnExit` block.
-   * Note that this timeout is advisory, as it attempts to give the close function some leeway, for
-   * example to drain clients or finish up other tasks.
-   *
-   * @return a [[com.twitter.util.Duration]]
-   * @see [[com.twitter.util.Closable.close(after: Duration)]]
-   */
-  protected def defaultClosableGracePeriod: Duration = 1.second
-
-  /**
-   * Default amount of time to block in [[com.twitter.util.Awaitable.result(timeout: Duration)]] on
-   * a [[Closable]] to close that is registered in a `closeOnExit` block.
-   *
-   * @return a [[com.twitter.util.Duration]]
-   * @see [[com.twitter.util.Awaitable.result(timeout: Duration)]]
-   */
-  protected def defaultClosableAwaitPeriod: Duration = 2.seconds
-
-  /**
-   * Configures the session acquisition `timeout` of this client (default: unbounded).
-   *
-   * @return a [[Duration]] which represents the acquisition timeout
-   * @see [[com.twitter.finagle.param.ClientSessionParams.acquisitionTimeout]]
-   * @see [[https://twitter.github.io/finagle/guide/Clients.html#timeouts-expiration]]
-   */
-  protected def sessionAcquisitionTimeout: Duration
-
-  /**
-   * Configures a "global" request `timeout` on the ThriftMux client (default: unbounded).
-   * This will set *all* requests to *every* method to have the same total timeout.
-   *
-   * @return a [[Duration]] which represents the total request timeout
-   * @see [[com.twitter.finagle.param.CommonParams.withRequestTimeout]]
-   * @see [[https://twitter.github.io/finagle/guide/Clients.html#timeouts-expiration]]
-   */
-  protected def requestTimeout: Duration
-
-  /**
-   * Default [[com.twitter.finagle.service.RetryBudget]]. It is highly recommended that budgets
-   * be shared between all filters that retry or re-queue requests to prevent retry storms.
-   *
-   * @return a default [[com.twitter.finagle.service.RetryBudget]]
-   * @see [[https://twitter.github.io/finagle/guide/Clients.html#retries]]
-   */
-  protected def retryBudget: RetryBudget
-
-  /**
-   * Function to add a user-defined Monitor. A [[com.twitter.finagle.util.DefaultMonitor]] will be
-   * installed implicitly which handles all exceptions caught in the stack. Exceptions that are not
-   * handled by a user-defined monitor are propagated to the [[com.twitter.finagle.util.DefaultMonitor]].
-   *
-   * NullMonitor has no influence on DefaultMonitor behavior here.
-   */
-  protected def monitor: Monitor
+  override protected final def baseClient: ThriftMux.Client = ThriftMux.client
 
   /**
    * This method allows for further configuration of the ThriftMux client for parameters not exposed by
@@ -101,11 +35,21 @@ private[twitter] trait ThriftClientModuleTrait extends Logging {
   protected def configureThriftMuxClient(
     injector: Injector,
     client: ThriftMux.Client
-  ): ThriftMux.Client
+  ): ThriftMux.Client = client
+
+  // while this trait is the preferred configuration method for the StackClientModuleTrait,
+  // this class pre-dates the StackClientModuleTrait and the user facing API has been to
+  // use `configureThriftMuxClient`, which we will retain by making this final.
+  override protected final def configureClient(
+    injector: Injector,
+    client: ThriftMux.Client
+  ): ThriftMux.Client = configureThriftMuxClient(injector, client)
 
   /* Private */
 
-  private[modules] def asClosable(thriftService: Any): Closable = {
+  override protected def asClosable(client: ThriftMux.Client): Closable = asClosableThriftService(client)
+
+  private[modules] def asClosableThriftService(thriftService: Any): Closable = {
     thriftService match {
       case closable: Closable => closable
       case _ =>

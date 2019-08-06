@@ -18,8 +18,8 @@ import scala.collection.mutable
 
 class TweetsController @Inject()(
   tweetsRepository: TweetsRepository,
-  onWriteLog: mutable.ArrayBuffer[String]
-) extends Controller {
+  onWriteLog: mutable.ArrayBuffer[String])
+    extends Controller {
 
   get("/tweets/hello") { request: Request =>
     "hello world"
@@ -64,7 +64,11 @@ class TweetsController @Inject()(
   }
 
   get("/tweets/streamingRep_with_reader") { _: Request =>
-    response.streaming(Reader.fromSeq(Seq(1, 2, 3)))
+    val headerMap = Map[String, Seq[String]](
+      "key1" -> Seq("value1", "value2", "value3"),
+      "key2" -> Seq("v4", "v5", "v6")
+    )
+    response.streaming(Reader.fromSeq(Seq(1, 2, 3)), status = Status.Accepted, headers = headerMap)
   }
 
   get("/tweets/streaming_with_transformer") { _: Request =>
@@ -142,9 +146,32 @@ class TweetsController @Inject()(
     Future(response)
   }
 
-  post("/tweets/streaming_with_streamingRequest") { request: StreamingRequest[Reader, Long] =>
-    val reader = request.stream
-    tweetsRepository.getByIds(reader)
+  post("/tweets/streaming_with_streamingRequest") {
+    streamingRequest: StreamingRequest[Reader, Long] =>
+      val reader = streamingRequest.stream
+      tweetsRepository.getByIds(reader)
+  }
+
+  get("/tweets/not_streaming_with_streamingRequest/:id") {
+    streamingRequest: StreamingRequest[Reader, Long] =>
+      val id = streamingRequest.request.params("id").toLong
+      tweetsRepository.getById(id)
+  }
+
+  post("/tweets/streaming_req_over_json") {
+    streamingRequest: StreamingRequest[Reader, Tweet] =>
+      val tweetReader = streamingRequest.stream
+      val result: Reader[Long] = tweetReader.map { tweet =>
+        tweet.id
+      }
+      response.streaming(result)
+  }
+
+  get("/tweets/streaming_rep_over_json") {
+    streamingRequest: StreamingRequest[Reader, Long] =>
+      val idReader = streamingRequest.stream
+      val tweetReader: Reader[Tweet] = tweetsRepository.getByIds(idReader)
+      response.streaming(tweetReader)
   }
 
   get("/tweets/") { request: Request =>

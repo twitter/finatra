@@ -7,6 +7,33 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+19.8.0
+------
+
+Added
+~~~~~
+
+* finatra-http: Introduce the new streaming request and response types:
+  `c.t.finatra.http.streaming.StreamingRequest` ``PHAB_ID=D342728``,
+  `c.t.finatra.http.streaming.StreamingResponse` ``PHAB_ID=D342703``.
+  Examples are located in finatra/examples/streaming-example/.
+
+* finatra-jackson: Add the ability to specify `fields` in the `MethodValidation` annotation.
+  ``PHAB_ID=D338079``
+
+
+Changed
+~~~~~~~
+
+* inject-thrift-client: make ThriftClientModuleTrait extend StackClientModuleTrait for symmetry
+  with other protocol client modules. ``PHAB_ID=D342710``
+
+* finatra-http: Deprecated `c.t.finatra.http.response.StreamingResponse`, Use
+  `c.t.finatra.http.response.ResponseBuilder.streaming` to construct a
+  `c.t.finatra.http.streaming.StreamingResponse` instead. ``PHAB_ID=D342703``
+
+* finatra: Upgrade to Jackson 2.9.9. ``PHAB_ID=D345969``
+
 19.7.0
 ------
 

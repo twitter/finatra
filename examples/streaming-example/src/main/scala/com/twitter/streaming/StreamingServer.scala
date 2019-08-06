@@ -1,4 +1,4 @@
-package com.twitter.finatra.streaming
+package com.twitter.streaming
 
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.filters.CommonFilters

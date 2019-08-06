@@ -1,7 +1,6 @@
 package com.twitter.inject.thrift.modules
 
 import com.google.inject.Provides
-import com.twitter.finagle.service.RetryBudget
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.thrift.ClientId
 import com.twitter.finagle.thrift.service.{
@@ -12,7 +11,7 @@ import com.twitter.finagle.thrift.service.{
 import com.twitter.finagle.{ThriftMux, thriftmux}
 import com.twitter.inject.thrift.ThriftMethodBuilderFactory
 import com.twitter.inject.{Injector, TwitterModule}
-import com.twitter.util.{Await, Duration, Monitor, NullMonitor}
+import com.twitter.util.Await
 import javax.inject.Singleton
 
 /**
@@ -47,19 +46,6 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
   methodPerEndpointBuilder: MethodPerEndpointBuilder[ServicePerEndpoint, MethodPerEndpoint]
 ) extends TwitterModule
     with ThriftClientModuleTrait {
-
-  protected def sessionAcquisitionTimeout: Duration = Duration.Top
-
-  protected def requestTimeout: Duration = Duration.Top
-
-  protected def retryBudget: RetryBudget = RetryBudget()
-
-  protected def monitor: Monitor = NullMonitor
-
-  protected def configureThriftMuxClient(
-    injector: Injector,
-    client: ThriftMux.Client
-  ): ThriftMux.Client = client
 
   /**
    * This method allows for extended configuration of the base MethodBuilder (e.g., the MethodBuilder
@@ -112,6 +98,14 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
     servicePerEndpoint: ServicePerEndpoint
   ): ServicePerEndpoint = servicePerEndpoint
 
+  override protected final def initialClientConfiguration(
+    injector: Injector,
+    client: ThriftMux.Client,
+    statsReceiver: StatsReceiver
+  ): ThriftMux.Client = super.initialClientConfiguration(injector, client, statsReceiver)
+    .withClientId(injector.instance[ClientId])
+    .withPerEndpointStats
+
   @Provides
   @Singleton
   final def providesMethodPerEndpoint(
@@ -128,7 +122,7 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
     clientId: ClientId,
     statsReceiver: StatsReceiver
   ): ServicePerEndpoint = {
-    createThriftMuxClient(injector, clientId, statsReceiver)
+    val thriftMuxClient = newClient(injector, statsReceiver)
 
     val methodBuilder =
       configureMethodBuilder(injector, thriftMuxClient.methodBuilder(dest))
@@ -140,37 +134,10 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
         servicePerEndpoint = methodBuilder.servicePerEndpoint[ServicePerEndpoint])
 
     closeOnExit {
-      val closable = asClosable(configuredServicePerEndpoint)
+      val closable = asClosableThriftService(configuredServicePerEndpoint)
       Await.result(closable.close(defaultClosableGracePeriod), defaultClosableAwaitPeriod)
     }
     configuredServicePerEndpoint
   }
 
-  /* Private */
-
-  // We want each module to be able to configure a ThriftMux.client independently
-  // and it is needed by the instances to be exposed to the object graph, however we do
-  // not want the client to be exposed in the object graph as including multiple modules
-  // in a server would attempt to bind the same type multiple times which would error.
-  // Thus we use mutation to create and configure a ThriftMux.Client.
-  private[this] var thriftMuxClient: ThriftMux.Client = _
-  private[this] def createThriftMuxClient(
-    injector: Injector,
-    clientId: ClientId,
-    statsReceiver: StatsReceiver
-  ): Unit = {
-    val clientStatsReceiver = statsReceiver.scope("clnt")
-
-    thriftMuxClient =
-      configureThriftMuxClient(injector,
-        ThriftMux.client.withSession
-          .acquisitionTimeout(sessionAcquisitionTimeout)
-          .withRequestTimeout(requestTimeout)
-          .withStatsReceiver(clientStatsReceiver)
-          .withClientId(clientId)
-          .withMonitor(monitor)
-          .withLabel(label)
-          .withRetryBudget(retryBudget))
-          .withPerEndpointStats
-  }
 }

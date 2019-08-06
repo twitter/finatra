@@ -74,7 +74,7 @@ private[json] class PatternValidator(
 
   private def validateRegex: ValidationResult =
     regex match {
-      case Return(_) => Valid
+      case Return(_) => Valid()
       case Throw(ex) => Invalid(ex.getClass.getName, errorCode(ex, regexp))
     }
 

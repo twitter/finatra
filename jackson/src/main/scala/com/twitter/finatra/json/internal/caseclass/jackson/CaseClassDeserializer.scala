@@ -12,10 +12,11 @@ import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidatio
 import com.twitter.finatra.json.internal.caseclass.exceptions._
 import com.twitter.finatra.json.internal.caseclass.validation.ValidationProvider
 import com.twitter.finatra.response.JsonCamelCase
-import com.twitter.finatra.validation.ErrorCode
 import com.twitter.finatra.validation.ValidationResult._
+import com.twitter.finatra.validation.{ErrorCode, MethodValidation}
 import com.twitter.inject.Logging
 import com.twitter.inject.domain.WrappedValue
+import java.lang.annotation.Annotation
 import java.lang.reflect.InvocationTargetException
 import javax.annotation.concurrent.ThreadSafe
 import scala.collection.mutable.ArrayBuffer
@@ -39,8 +40,8 @@ private[finatra] class CaseClassDeserializer(
   javaType: JavaType,
   config: DeserializationConfig,
   beanDesc: BeanDescription,
-  validationProvider: ValidationProvider
-) extends JsonDeserializer[AnyRef]
+  validationProvider: ValidationProvider)
+    extends JsonDeserializer[AnyRef]
     with Logging {
 
   private val caseClassFields =
@@ -193,7 +194,7 @@ private[finatra] class CaseClassDeserializer(
               Invalid(JacksonUtils.errorMessage(e), ErrorCode.JsonProcessingError(e))
             )
           )
-        case e: RepeatedCommaSeparatedQueryParameterException =>
+        case _: RepeatedCommaSeparatedQueryParameterException =>
           addException(
             field,
             CaseClassValidationException(
@@ -256,7 +257,9 @@ private[finatra] class CaseClassDeserializer(
     field: CaseClassField
   ): Seq[CaseClassValidationException] = {
     for {
-      invalid @ Invalid(_, _) <- validationManager.validateField(value, field.validationAnnotations)
+      invalid @ Invalid(_, _, _) <- validationManager.validateField(
+        value,
+        field.validationAnnotations)
     } yield {
       CaseClassValidationException(PropertyPath.leaf(field.name), invalid)
     }
@@ -266,12 +269,21 @@ private[finatra] class CaseClassDeserializer(
     fieldErrors: Seq[CaseClassValidationException],
     obj: Any
   ): Unit = {
-    val methodValidationErrors = for {
-      invalid @ Invalid(_, _) <- validationManager.validateObject(obj)
-    } yield CaseClassValidationException(PropertyPath.empty, invalid)
+    val methodValidationErrors: Seq[Seq[CaseClassValidationException]] = for {
+      invalid @ Invalid(_, _, _) <- validationManager.validateObject(obj)
+      fields = extractFieldsFromAnnotation(invalid.annotation)
+      propertyPaths = fields.map(PropertyPath.leaf)
+      exceptions = propertyPaths.map(CaseClassValidationException(_, invalid))
+    } yield {
+      if (exceptions.isEmpty) {
+        Seq(CaseClassValidationException(PropertyPath.empty, invalid))
+      } else {
+        exceptions
+      }
+    }
 
     if (methodValidationErrors.nonEmpty) {
-      throw CaseClassMappingException(fieldErrors.toSet ++ methodValidationErrors.toSet)
+      throw CaseClassMappingException(fieldErrors.toSet ++ methodValidationErrors.flatten.toSet)
     }
   }
 
@@ -286,6 +298,15 @@ private[finatra] class CaseClassDeserializer(
   private[this] def append[T](buffer: ArrayBuffer[T], seqToAppend: Seq[T]): Unit = {
     if (seqToAppend.nonEmpty) {
       buffer ++= seqToAppend
+    }
+  }
+
+  private[this] def extractFieldsFromAnnotation(annotation: Option[Annotation]): Seq[String] = {
+    annotation match {
+      case Some(annot) if annot.isInstanceOf[MethodValidation] =>
+        annot.asInstanceOf[MethodValidation].fields().filter(_.nonEmpty)
+      case _ =>
+        Seq.empty[String]
     }
   }
 }

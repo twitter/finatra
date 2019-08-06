@@ -84,6 +84,11 @@ Then to test:
     }
   }
 
+.. important::
+
+    Note: every call to `EmbeddedApp#main` will run the application with the given flags. If your application is stateful, 
+    you may want to ensure that a new instance of your application under test is created per test run.
+
 Java Example
 ------------
 

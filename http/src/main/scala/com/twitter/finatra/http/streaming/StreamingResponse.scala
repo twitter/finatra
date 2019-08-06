@@ -2,38 +2,67 @@ package com.twitter.finatra.http.streaming
 
 import com.twitter.finagle.http.{Response, Status, Version}
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.io.Buf
+import com.twitter.io.{Buf, Reader}
 import com.twitter.util.Future
+import java.util.concurrent.atomic.AtomicBoolean
 import scala.language.higherKinds
 
 /**
  * StreamingResponse is an abstraction over an output Primitive Stream - Reader or AsyncStream.
  * It carries the output stream as well as some HTTP Response metadata.
  *
+ * @param mapper Server's configured FinatraObjectMapper.
  * @param stream The output stream.
+ * @param status Represents an HTTP status code.
+ * @param headers A Map of message headers.
  * @tparam F The Primitive Stream type.
  * @tparam A The type of streaming values.
+ *
+ * @note Users should construct this via c.t.finatra.http.response.ResponseBuilder#streaming
  */
-private[http] final case class StreamingResponse[F[_]: ToReader, A] private (
+final class StreamingResponse[F[_]: ToReader, A: Manifest] private[http] (
   mapper: FinatraObjectMapper,
-  stream: F[A]) {
+  stream: F[A],
+  status: Status = Status.Ok,
+  headers: Map[String, Seq[String]] = Map.empty) {
 
-  private[this] val reader = implicitly[ToReader[F]].apply(stream).map {
-    case buf: Buf => buf
-    case str: String => Buf.Utf8(str)
-    case any => mapper.writeValueAsBuf(any)
+  private[this] val head = new AtomicBoolean(true)
+  private[this] val reader: Reader[Buf] = implicitly[ToReader[F]].apply(stream) match {
+    case bufReader if manifest[A] == manifest[Buf] => bufReader.asInstanceOf[Reader[Buf]]
+    case stringReader if manifest[A] == manifest[String] =>
+      stringReader.map(i => Buf.Utf8(i.asInstanceOf[String]))
+    case anyReader => toJsonArray(anyReader)
+  }
+
+  private[this] def toJsonArray(reader: Reader[A]): Reader[Buf] = {
+    Reader.fromSeq(
+      Seq(
+        Reader.fromBuf(Buf.Utf8("[")),
+        reader.map { i =>
+          if (head.compareAndSet(true, false)) {
+            mapper.writeValueAsBuf(i)
+          } else {
+            Buf.Utf8(",").concat(mapper.writeValueAsBuf(i))
+          }
+        },
+        Reader.fromBuf(Buf.Utf8("]"))
+      )).flatten
+  }
+
+  private[this] def setHeaders(response: Response, headerMap: Map[String, Seq[String]]): Unit = {
+    for {
+      (key, values) <- headerMap
+      value <- values
+    } response.headerMap.add(key, value)
   }
 
   /**
-   * Write the stream to a Finagle Response.
+   * Construct a Future of Finagle Http Response via the output stream and
+   * some HTTP Response metadata.
    */
-  def toFutureResponse(
-    version: Version = Version.Http11,
-    status: Status = Status.Ok
-  ): Future[Response] = {
-    Future.value(Response(version, status, reader))
+  def toFutureResponse(): Future[Response] = {
+    val response = Response(Version.Http11, status, reader)
+    setHeaders(response, headers)
+    Future.value(response)
   }
-
-  /** For Java support */
-  def toFutureResponse: Future[Response] = toFutureResponse()
 }

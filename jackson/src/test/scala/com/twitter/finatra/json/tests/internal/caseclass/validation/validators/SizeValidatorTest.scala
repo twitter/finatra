@@ -19,7 +19,7 @@ class SizeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks
     } yield Array.fill(size) { 0 }
 
     forAll(passValue) { value =>
-      validate[SizeArrayExample](value) should equal(Valid)
+      validate[SizeArrayExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -53,7 +53,7 @@ class SizeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks
     } yield Seq.fill(size) { 0 }
 
     forAll(passValue) { value =>
-      validate[SizeSeqExample](value) should equal(Valid)
+      validate[SizeSeqExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
@@ -87,7 +87,7 @@ class SizeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks
     } yield List.fill(size) { 'a' }.mkString
 
     forAll(passValue) { value =>
-      validate[SizeStringExample](value) should equal(Valid)
+      validate[SizeStringExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 

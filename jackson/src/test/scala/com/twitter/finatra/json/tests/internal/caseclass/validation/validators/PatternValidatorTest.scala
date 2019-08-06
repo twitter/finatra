@@ -21,12 +21,12 @@ class PatternValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChe
         Gen.choose(10, 100)
       }
     forAll(passValue) { value =>
-      validate[NumberPatternArrayExample](value) should equal(Valid)
+      validate[NumberPatternArrayExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 
   test("pass validation when regex matches") {
-    validate[NumberPatternExample]("12345") should equal(Valid)
+    validate[NumberPatternExample]("12345").isInstanceOf[Valid] shouldBe true
 
   }
 
@@ -53,7 +53,7 @@ class PatternValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChe
 
   test("pass validation when regex matches for traversable type") {
     forAll(Traversable("1234", "6666")) { value =>
-      validate[NumberPatternArrayExample](value) should equal(Valid)
+      validate[NumberPatternArrayExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
 

@@ -41,6 +41,7 @@ HTTP Server
 - :doc:`http/controllers`
 - :doc:`http/requests`
 - :doc:`http/responses`
+- :doc:`http/streaming`
 - :doc:`http/message_body`
 - :doc:`http/filters`
 - :doc:`http/exceptions`
@@ -116,6 +117,7 @@ Testing
    http/controllers
    http/requests
    http/responses
+   http/streaming
    http/message_body
    http/filters
    http/exceptions

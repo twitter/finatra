@@ -160,15 +160,25 @@ class ResponseBuilder @Inject()(
   def create(response: Response): EnrichedResponse = new EnrichedResponse(response)
 
   /**
-   * Experimental, create a StreamingResponse which can be converted to a
+   * Create a StreamingResponse which can be converted to a
    * [[com.twitter.finagle.http.Response]] later.
    *
    * @param stream The output stream.
+   * @param status Represents an HTTP status code.
+   * @param headers A Map of message headers.
    * @tparam F The Primitive Stream type.
    * @tparam A The type of streaming values.
    */
-  private[finatra] def streaming[F[_]: ToReader, A](stream: F[A]): http.streaming.StreamingResponse[F, A] =
-    http.streaming.StreamingResponse(objectMapper, stream)
+  def streaming[F[_]: ToReader, A: Manifest](
+    stream: F[A],
+    status: Status = Status.Ok,
+    headers: Map[String, Seq[String]] = Map.empty
+  ): http.streaming.StreamingResponse[F, A] =
+    new http.streaming.StreamingResponse(objectMapper, stream, status, headers)
+
+  /** Java support for streaming */
+  def streaming[F[_]: ToReader, A: Manifest](stream: F[A]): http.streaming.StreamingResponse[F, A] =
+    streaming(stream, Status.Ok, Map.empty)
 
   private def fullMimeTypeValue(mimeType: String): String = {
     mimeTypeCache.computeIfAbsent(mimeType, whenMimeTypeAbsent)

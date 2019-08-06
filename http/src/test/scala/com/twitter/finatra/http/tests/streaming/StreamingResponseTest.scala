@@ -28,9 +28,9 @@ class StreamingResponseTest extends Test with Mockito {
   )
 
   // Reader tests
-  private def fromReader[A](reader: Reader[A]): Response = {
+  private def fromReader[A: Manifest](reader: Reader[A]): Response = {
     val streamingResponse = responseBuilder.streaming(reader)
-    await(streamingResponse.toFutureResponse)
+    await(streamingResponse.toFutureResponse())
   }
 
   private def infiniteReader[A](item: A): Reader[A] = {
@@ -41,8 +41,9 @@ class StreamingResponseTest extends Test with Mockito {
   test("Reader: Empty Reader") {
     val reader = Reader.empty
     val response: Response = fromReader(reader)
-    // observe the EOS
-    response.reader.read()
+    assert(
+      Buf.decodeString(await(Reader.readAll(response.reader)), StandardCharsets.UTF_8) ==
+        "[]")
     assert(await(response.reader.onClose) == StreamTermination.FullyRead)
   }
 
@@ -55,13 +56,13 @@ class StreamingResponseTest extends Test with Mockito {
         "firstsecondthird")
   }
 
-  test("Reader: Serialize and deserialize the Reader of bytes") {
-    val listByte = Array[Byte](1,2,3)
-    val reader: Reader[Byte] = Reader.fromSeq(listByte)
+  test("Reader: Serialize and deserialize the Reader of Float") {
+    val listFloat = Array[Float](1,2,3)
+    val reader: Reader[Float] = Reader.fromSeq(listFloat)
     val response: Response = fromReader(reader)
     assert(
       Buf.decodeString(await(Reader.readAll(response.reader)), StandardCharsets.UTF_8) ==
-        "123")
+        "[1.0,2.0,3.0]")
   }
 
   test("Reader: Serialize and deserialize the Reader of Buf") {
@@ -78,7 +79,7 @@ class StreamingResponseTest extends Test with Mockito {
     val response = fromReader(reader)
     assert(
       Buf.decodeString(await(Reader.readAll(response.reader)), StandardCharsets.UTF_8) ==
-        """{"v1":1,"v2":"first"}{"v1":2,"v2":"second"}"""
+        """[{"v1":1,"v2":"first"},{"v1":2,"v2":"second"}]"""
     )
   }
 
@@ -93,7 +94,7 @@ class StreamingResponseTest extends Test with Mockito {
   }
 
   // AsyncStream tests
-  private def fromStream[A](stream: AsyncStream[A]): Response = {
+  private def fromStream[A: Manifest](stream: AsyncStream[A]): Response = {
     val streamingResponse = responseBuilder.streaming(stream)
     await(streamingResponse.toFutureResponse())
   }
@@ -105,8 +106,9 @@ class StreamingResponseTest extends Test with Mockito {
   test("AsyncStream: Empty AsyncStream") {
     val stream = AsyncStream.empty
     val response: Response = fromStream(stream)
-    // observe the EOS
-    response.reader.read()
+    assert(
+      Buf.decodeString(await(Reader.readAll(response.reader)), StandardCharsets.UTF_8) ==
+        "[]")
     assert(await(response.reader.onClose) == StreamTermination.FullyRead)
   }
 
@@ -125,7 +127,7 @@ class StreamingResponseTest extends Test with Mockito {
     val response: Response = fromStream(stream)
     assert(
       Buf.decodeString(await(Reader.readAll(response.reader)), StandardCharsets.UTF_8) ==
-        "123")
+        "[1,2,3]")
   }
 
   test("AsyncStream: Serialize and deserialize the AsyncStream of Buf") {
@@ -144,5 +146,16 @@ class StreamingResponseTest extends Test with Mockito {
       await(burnLoop(response.reader))
     }
     assert(await(response.reader.onClose) == StreamTermination.Discarded)
+  }
+
+  test("Response header map is correctly set") {
+    val headerMap = Map[String, Seq[String]](
+      "key1" -> Seq("value1", "value2", "value3"),
+      "key2" -> Seq("v4", "v5", "v6")
+    )
+    val streamingResponse = responseBuilder.streaming(Reader.value("content"), headers = headerMap)
+    val response = await(streamingResponse.toFutureResponse())
+    assert(response.headerMap.getAll("key1") == Seq("value1", "value2", "value3"))
+    assert(response.headerMap.getAll("key2") == Seq("v4", "v5", "v6"))
   }
 }

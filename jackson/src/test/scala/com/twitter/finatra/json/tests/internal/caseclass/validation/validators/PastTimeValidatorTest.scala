@@ -15,7 +15,7 @@ class PastTimeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyCh
 
     forAll(passDateTimeMillis) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[PastExample](dateTimeValue) should equal(Valid)
+      validate[PastExample](dateTimeValue).isInstanceOf[Valid] shouldBe true
     }
   }
 

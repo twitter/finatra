@@ -16,20 +16,16 @@ import com.twitter.inject.server.{PortUtils, TwitterServer}
 import com.twitter.util.{Await, Duration}
 
 private object ThriftServerTrait {
-
   /**
-   * Sentinel used to indicate no announcement.
+   * Sentinel used to indicate no thrift server announcement.
    */
   val NoThriftAnnouncement: String = ""
 }
 
 /**
- * A basic ThriftServer. To implement, override
- * {{{
- *   protected def thriftService: Service[Array[Byte], Array[Byte]]
- * }}}
+ * A basic ThriftServer implemented by a {{{com.twitter.finagle.Service[Array[Byte], Array[Byte]]}}}.
  *
- * with your `Service[Array[Byte], Array[Byte]]` implementation.
+ * @note Java users are encouraged to use [[AbstractThriftServerTrait]] instead.
  */
 trait ThriftServerTrait extends TwitterServer {
 
@@ -163,11 +159,13 @@ trait ThriftServerTrait extends TwitterServer {
 
     thriftServer = build(
       thriftPortFlag(),
-      configureThriftServer(
-        ThriftMux.server
-          .withLabel(thriftServerNameFlag())
-          .withStatsReceiver(injector.instance[StatsReceiver].scope("srv"))
-          .withResponseClassifier(injector.instance[ThriftResponseClassifier])
+      frameworkConfigureServer(
+        configureThriftServer(
+          ThriftMux.server
+            .withLabel(thriftServerNameFlag())
+            .withStatsReceiver(injector.instance[StatsReceiver].scope("srv"))
+            .withResponseClassifier(injector.instance[ThriftResponseClassifier])
+        )
       )
     )
 
@@ -214,6 +212,11 @@ trait ThriftServerTrait extends TwitterServer {
     server
   }
 
+  /* Configuration of the server reserved by the framework */
+  protected[finatra] def frameworkConfigureServer(server: ThriftMux.Server): ThriftMux.Server = {
+    server
+  }
+
   /**
    * Construct a [[com.twitter.finagle.ListeningServer]] from the given String addr
    * and configured [[ThriftMux.Server]] stack.
@@ -228,8 +231,15 @@ trait ThriftServerTrait extends TwitterServer {
 }
 
 /**
+ * A basic ThriftServer implemented by a {{{com.twitter.finagle.Service<byte[], byte[]>}}}.
+ *
+ * @note Scala users are encouraged to use [[ThriftServerTrait]] instead.
+ */
+abstract class AbstractThriftServerTrait extends ThriftServerTrait
+
+/**
  * A Finagle server which exposes an external Thrift interface implemented by a
- * `Service[Array[Byte], Array[Byte]]` configured via a [[ThriftRouter]]. This trait is
+ * {{{Service<byte[], byte[]>}}} configured via a [[ThriftRouter]]. This trait is
  * intended for use from Scala or with generated Scala code.
  *
  * @note Java users are encouraged to use [[AbstractThriftServer]] instead.
@@ -277,7 +287,7 @@ trait ThriftServer extends ThriftServerTrait {
  *
  * @note Scala users are encouraged to use [[ThriftServer]] instead.
  */
-abstract class AbstractThriftServer extends ThriftServerTrait {
+abstract class AbstractThriftServer extends AbstractThriftServerTrait {
 
   /** This Server returns a [[JavaThriftRouter]] configured `Service[Array[Byte], Array[Byte]]` */
   protected final def thriftService: Service[Array[Byte], Array[Byte]] = {

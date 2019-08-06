@@ -32,7 +32,7 @@ class StreamingRequestTest extends Test {
       Buf.Utf8(jsonStr.substring(4))))
     val request = Request(Version.Http11, Method.Post, "/", reader)
 
-    val streamingRequest = StreamingRequest.fromRequest[Reader, String](parser, request)
+    val streamingRequest = StreamingRequest[Reader, String](parser, request)
     assert(await(Reader.toAsyncStream(streamingRequest.stream).toSeq()) ==
       Seq("first", "second", "third"))
   }
@@ -44,7 +44,7 @@ class StreamingRequestTest extends Test {
       Buf.Utf8(jsonStr.substring(4))))
     val request = Request(Version.Http11, Method.Post, "/", reader)
 
-    val streamingRequest = StreamingRequest.fromRequest[AsyncStream, String](parser, request)
+    val streamingRequest = StreamingRequest[AsyncStream, String](parser, request)
     assert(await(streamingRequest.stream.toSeq()) ==
       Seq("first", "second", "third"))
   }
@@ -56,7 +56,7 @@ class StreamingRequestTest extends Test {
       Buf.Utf8("""v1":2,"v2":"second"}]""")))
     val request = Request(Version.Http11, Method.Post, "/", reader)
 
-    val streamingRequest = StreamingRequest.fromRequest[AsyncStream, BarClass](parser, request)
+    val streamingRequest = StreamingRequest[AsyncStream, BarClass](parser, request)
     assert(await(streamingRequest.stream.toSeq()) ==
       Seq(BarClass(1, "first"), BarClass(2, "second")))
   }

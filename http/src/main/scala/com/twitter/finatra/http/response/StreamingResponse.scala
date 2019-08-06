@@ -9,6 +9,8 @@ import com.twitter.util._
 
 import scala.util.control.NonFatal
 
+@deprecated("Use c.t.finatra.http.response.ResponseBuilder.streaming to construct a" +
+  "c.t.finatra.http.streaming.StreamingResponse instead", "2019-07-18")
 object StreamingResponse {
 
   /*
@@ -131,6 +133,8 @@ object StreamingResponse {
   }
 }
 
+@deprecated("Use c.t.finatra.http.response.ResponseBuilder.streaming to construct a" +
+  "c.t.finatra.http.streaming.StreamingResponse instead", "2019-07-18")
 class StreamingResponse[T, U] private (
   streamTransformer: AsyncStream[T] => AsyncStream[(U, Buf)],
   status: Status,

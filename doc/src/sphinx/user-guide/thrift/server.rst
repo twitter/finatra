@@ -36,7 +36,7 @@ Create a new class that extends `c.t.finatra.thrift.ThriftServer <https://github
       }
     }
 
-Or in Java, that extends the `c.t.finatra.thrift.AbstractThriftServer <https://github.com/twitter/finatra/blob/700e741f41368d9bc2ba76489e0641c4cfb8545a/thrift/src/main/scala/com/twitter/finatra/thrift/servers.scala#L168>`__:
+Or in Java, extend the `c.t.finatra.thrift.AbstractThriftServer <https://github.com/twitter/finatra/blob/700e741f41368d9bc2ba76489e0641c4cfb8545a/thrift/src/main/scala/com/twitter/finatra/thrift/servers.scala#L168>`__:
 
 .. code:: java
 
@@ -55,7 +55,7 @@ A more complete example includes adding Modules, a Controller, and Filters.
 
 .. code:: scala
 
-    import DoEverythingModule
+    import com.google.inject.Module
     import com.twitter.finatra.thrift.ThriftServer
     import com.twitter.finatra.thrift.filters.{LoggingMDCFilter, TraceIdMDCFilter}
     import com.twitter.finatra.thrift.routing.ThriftRouter
@@ -64,8 +64,8 @@ A more complete example includes adding Modules, a Controller, and Filters.
 
     class ExampleServer extends ThriftServer {
 
-      override val modules = Seq(
-        DoEverythingModule)
+      override val modules: Seq[Module] = Seq(
+        ExampleModule)
 
       override def configureThrift(router: ThriftRouter): Unit = {
         router
@@ -79,7 +79,6 @@ in Java:
 
 .. code:: java
 
-    import DoEverythingModule;
     import com.google.common.collect.ImmutableList;
     import com.google.inject.Module;
     import com.twitter.finatra.thrift.AbstractThriftServer;
@@ -92,7 +91,7 @@ in Java:
 
       @Override
       public Collection<Module> javaModules() {
-        return ImmutableList.<Module>of(new DoEverythingModule());
+        return ImmutableList.<Module>of(ExampleModule$.MODULE$);
       }
 
       @Override
@@ -114,6 +113,42 @@ The server can be thought of as a collection of `controllers <controllers.html>`
 `filters <filters.html>`__. Additionally, a server can define `modules <../getting-started/modules.html>`__
 for providing instances to the object graph.
 
+Naming Convention
+-----------------
+
+The Finatra convention is to create a Scala `object <https://twitter.github.io/scala_school/basics2.html#object>`__
+with a name ending in "Main" that extends your server class. The server *class* can be used in
+testing as this allows your server to be instantiated multiple times in tests without worrying about
+static state persisting across test runs in the same JVM.
+
+.. code:: scala
+
+    object ExampleServerMain extends ExampleServer
+
+The static object, e.g., `ExampleServerMain`, would then contain a static `main()` method for the server
+to serve as the `application entry point <https://docs.oracle.com/javase/tutorial/deployment/jar/appman.html>`__
+for running the server in all other cases.
+
+Java Naming Convention
+~~~~~~~~~~~~~~~~~~~~~~
+
+In Java you would create a separate "main" class which defines a static `main()` method and accepts args
+for flag parsing:
+
+.. code:: java
+
+    public final class ExampleServerMain {
+        private ExampleServerMain() {
+        }
+
+        public static void main(String[] args) {
+            new ExampleServer().main(args);
+        }
+    }
+
+This would be the class used as the `application entry point <https://docs.oracle.com/javase/tutorial/deployment/jar/appman.html>`__
+for running the server.
+
 Using Generated Java Code
 -------------------------
 
@@ -131,41 +166,66 @@ means:
 - if you write your server in Scala you can use either generated Java or generated Scala code.
 - if you write your server in Java you MUST use generated Java code.
 
-Naming Convention
------------------
+Serving a Finagle `Service[Array[Byte], Array[Byte]]`
+-----------------------------------------------------
 
-The Finatra convention is to create a Scala `object <https://twitter.github.io/scala_school/basics2.html#object>`__
-with a name ending in "Main" that extends your server class. The server *class* can be used in
-testing as this allows your server to be instantiated multiple times in tests without worrying about
-static state persisting across test runs in the same JVM.
+You have the option to serve a manually constructed Finagle `Service[Array[Byte], Array[Byte]]`
+instead of creating a `Thrift Controller <./controllers.html>`_ and having the framework construct
+a `Service[Array[Byte], Array[Byte]]` via the `ThriftRouter`.
+
+To do so, extend the `ThriftServerTrait` (or `AbstractThriftServerTrait` in Java) and implement the
+`thriftService: Service[Array[Byte], Array[Byte]]` method:
 
 .. code:: scala
 
+    import com.google.inject.Module
+    import com.twitter.finagle.Service
+    import com.twitter.finatra.thrift.ThriftServerTrait
+    import com.twitter.finatra.thrift.filters.{LoggingMDCFilter, TraceIdMDCFilter}
+
     object ExampleServerMain extends ExampleServer
 
-The static object, e.g., `ExampleServerMain`, which then contains a static main method for the server
-would then be used as the `application entry point <https://docs.oracle.com/javase/tutorial/deployment/jar/appman.html>`__
-for running the server in all other cases.
+    class ExampleServer extends ThriftServerTrait {
 
-Java Naming Convention
-~~~~~~~~~~~~~~~~~~~~~~
+      override val modules: Seq[Module] = Seq(
+        ExampleModule)
 
-In Java you would create a separate "main" class which defines a main method and accepts args
-for flag parsing:
+      // the `Service[Array[Byte], Array[Byte]]` to serve
+      override def thriftService: Service[Array[Byte], Array[Byte]] = ???
+    }
+
+in Java:
 
 .. code:: java
 
-    public final class ExampleServerMain {
-        private ExampleServerMain() {
-        }
+    import com.google.common.collect.ImmutableList;
+    import com.google.inject.Module;
+    import com.twitter.finagle.Service;
+    import com.twitter.finatra.thrift.AbstractThriftServerTrait;
+    import java.util.Collection;
 
-        public static void main(String[] args) {
-            new ExampleServer().main(args);
-        }
+    public class ExampleServer extends AbstractThriftServerTrait {
+
+      @Override
+      public Collection<Module> javaModules() {
+        return ImmutableList.<Module>of(ExampleModule$.MODULE$);
+      }
+
+      @Override
+      public Service<byte[], byte[]> thriftService() {
+        // the `Service<byte[], byte[]>` to serve
+        return null;
+      }
     }
 
-This would be the class used as the `application entry point <https://docs.oracle.com/javase/tutorial/deployment/jar/appman.html>`__
-for running the server.
+.. important::
+
+    The `ThriftRouter` exposes a DSL for users which the framework uses to construct a filtered
+    `Service[Array[Byte], Array[Byte]]`.
+
+    Note, you must choose one or the other: either implement your service with a
+    `Controller <./controllers.html>`_ added via the `ThriftRouter` **or** serve a manually
+    constructed Finagle `Service[Array[Byte], Array[Byte]]`.
 
 Override Default Behavior
 -------------------------
