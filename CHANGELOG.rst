@@ -7,6 +7,28 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
+Changed
+~~~~~~~
+
+Fixed
+~~~~~
+
+* inject-app: Update `c.t.inject.app.App` to only recurse through modules once. We currently
+  call `TwitterModule#modules` more than once in reading flags and parsing the list of modules
+  over which to create the injector. When `TwitterModule#modules` is a function that inlines the
+  instantiation of new modules we can end up creating multiple instances causing issues with the 
+  list of flags defined in the application. This is especially true in instances of `TwitterModule` 
+  implemented in Java as there is no way to implement the trait `TwitterModule#modules` method as a 
+  eagerly evaluated value. We also don't provide an ergonomic method for Java users to define 
+  dependent modules like we do in apps and servers via `App#javaModules`. Thus we also add a 
+  `TwitterModule#javaModules` function which expresses a better API for Java users. ``PHAB_ID=D349587``
+
+Closed
+~~~~~~
+
 19.8.0
 ------
 
@@ -20,7 +42,6 @@ Added
 
 * finatra-jackson: Add the ability to specify `fields` in the `MethodValidation` annotation.
   ``PHAB_ID=D338079``
-
 
 Changed
 ~~~~~~~

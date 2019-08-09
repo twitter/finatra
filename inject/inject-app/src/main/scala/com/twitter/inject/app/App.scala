@@ -2,8 +2,7 @@ package com.twitter.inject.app
 
 import com.google.inject.{Module, Stage}
 import com.twitter.inject.annotations.Lifecycle
-import com.twitter.inject.app.internal.InstalledModules
-import com.twitter.inject.app.internal.InstalledModules.findModuleFlags
+import com.twitter.inject.app.internal.{Modules, InstalledModules}
 import com.twitter.inject.{Injector, InjectorModule, Logging}
 import java.util.concurrent.atomic.AtomicBoolean
 import scala.collection.JavaConverters._
@@ -24,7 +23,20 @@ abstract class AbstractApp extends App
  */
 trait App extends com.twitter.app.App with Logging {
 
-  private[inject] lazy val requiredModules = frameworkModules ++ modules ++ javaModules.asScala
+  /**
+   * All modules composed within this application (including modules referenced only from
+   * other modules).
+   *
+   * @note `required` modules appends "framework" modules first as they map to framework
+   *       "defaults" which users can override.
+   *       `override` modules appends "framework" modules last as the map to the BindDSL
+   *       for testing.
+   */
+  private[this] lazy val appModules: Modules =
+    new Modules(
+      required = frameworkModules ++ modules ++ javaModules.asScala, // user modules should replace framework
+      overrides = overrideModules ++ javaOverrideModules.asScala ++ frameworkOverrideModules // framework should replace user modules
+    )
 
   /* Mutable State */
 
@@ -35,19 +47,15 @@ trait App extends com.twitter.app.App with Logging {
   private[inject] def started: Boolean = _started.get
 
   private[inject] var stage: Stage = Stage.PRODUCTION
-  private var installedModules: InstalledModules = _
+  private[this] var installedModules: InstalledModules = _
 
   /* Lifecycle */
 
   init {
     info("Process started")
 
-    /* Get all module flags */
-    val allModules = requiredModules ++ frameworkOverrideModules ++ overrideModules ++ javaOverrideModules.asScala
-    val allModuleFlags = findModuleFlags(allModules)
-
-    /* Register all flags */
-    allModuleFlags.foreach(flag.add)
+    /* Register all flags from Modules */
+    appModules.addFlags(flag)
   }
 
   /** DO NOT BLOCK */
@@ -87,10 +95,14 @@ trait App extends com.twitter.app.App with Logging {
 
   override protected def failfastOnFlagsNotParsed: Boolean = true
 
-  /** Production modules */
+  /**
+   * Production modules.
+   *
+   * @note Java users should prefer [[javaModules]].
+   */
   protected def modules: Seq[Module] = Seq()
 
-  /** Production modules from Java */
+  /** Production modules from Java. */
   protected def javaModules: java.util.Collection[Module] = new java.util.ArrayList[Module]()
 
   /**
@@ -139,10 +151,8 @@ trait App extends com.twitter.app.App with Logging {
 
   /** ONLY INTENDED FOR USE BY THE FRAMEWORK. */
   protected[inject] def loadModules(): InstalledModules = {
-    InstalledModules.create(
+    appModules.install(
       flags = flag.getAll(includeGlobal = false).toSeq,
-      modules = requiredModules,
-      overrideModules = overrideModules ++ javaOverrideModules.asScala ++ frameworkOverrideModules,
       stage = stage
     )
   }

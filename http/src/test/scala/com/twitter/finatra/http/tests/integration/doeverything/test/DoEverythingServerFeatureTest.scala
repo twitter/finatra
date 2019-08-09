@@ -56,6 +56,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
 
   override val server: EmbeddedHttpServer = new EmbeddedHttpServer(
     args = Array("-magicNum=1", "-moduleMagicNum=2"),
+    flags = Map("something.flag" -> "foobar"),
     twitterServer = new DoEverythingServer,
     disableTestLogging = true
   ).bind[HttpClient].toInstance(httpClient)
@@ -2451,6 +2452,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
             super.postInjectorStartup()
           }
         },
+        flags = Map("something.flag" -> "foobar"),
         globalFlags = Map(
           com.twitter.finagle.stats.logOnShutdown -> "true"
         )

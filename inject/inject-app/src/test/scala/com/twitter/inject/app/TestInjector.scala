@@ -3,7 +3,7 @@ package com.twitter.inject.app
 import com.google.inject.{Module, Stage}
 import com.twitter.app.{Flag, FlagParseException, FlagUsageError, Flags}
 import com.twitter.inject.Injector
-import com.twitter.inject.app.internal.InstalledModules
+import com.twitter.inject.app.internal.Modules
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -123,17 +123,14 @@ class TestInjector(
 
   private[this] def start(): Unit = {
     if (_started.compareAndSet(false, true)) {
-      val moduleFlags = InstalledModules.findModuleFlags(modules ++ overrides)
-      moduleFlags.foreach(flag.add)
-      parseFlags(flag, flags, moduleFlags)
+      val injectorModules = new Modules(modules, overrides)
+      injectorModules.addFlags(flag)
+      parseFlags(flag, flags, injectorModules.moduleFlags)
 
-      underlying = InstalledModules
-        .create(
+      underlying = injectorModules
+        .install(
           flags = flag.getAll(includeGlobal = false).toSeq,
-          modules = modules,
-          overrideModules = overrides,
-          stage = stage
-        )
+          stage = stage)
         .injector
     }
   }

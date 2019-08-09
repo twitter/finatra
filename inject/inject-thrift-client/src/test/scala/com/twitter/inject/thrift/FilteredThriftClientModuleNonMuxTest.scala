@@ -5,12 +5,12 @@ import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
 import com.twitter.inject.thrift.modules.{FilteredThriftClientModule, ThriftClientIdModule}
-import com.twitter.inject.{InjectorModule, IntegrationTest, TypeUtils}
+import com.twitter.inject.{Injector, InjectorModule, IntegrationTest, TypeUtils}
 import com.twitter.util.Future
 
 class FilteredThriftClientModuleNonMuxTest extends IntegrationTest {
 
-  override val injector = TestInjector(
+  override val injector: Injector = TestInjector(
     modules = Seq(
       FilteredThriftClientModuleNonMux,
       ThriftClientIdModule,

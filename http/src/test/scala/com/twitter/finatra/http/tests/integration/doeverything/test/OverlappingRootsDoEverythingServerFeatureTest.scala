@@ -39,7 +39,8 @@ class OverlappingRootsDoEverythingServerFeatureTest
   override val server = new EmbeddedHttpServer(
     flags = Map(
       "local.doc.root" -> s"${BaseDirectory}src/main/webapp",
-      "mustache.templates.dir" -> s"/templates"
+      "mustache.templates.dir" -> s"/templates",
+      "something.flag" -> "foobar"
     ),
     args = Array("-magicNum=1", "-moduleMagicNum=2"),
     twitterServer = new DoEverythingServer

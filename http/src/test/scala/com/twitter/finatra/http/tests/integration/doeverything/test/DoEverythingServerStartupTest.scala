@@ -10,7 +10,9 @@ class DoEverythingServerStartupTest extends FeatureTest {
   override val server =
     new EmbeddedHttpServer(
       twitterServer = new DoEverythingServer,
-      flags = Map("https.port" -> ":0"), // for testing `EmbeddedHttpServer.logStartup` method
+      flags = Map(
+        "something.flag" -> "foobar",
+        "https.port" -> ":0"), // for testing `EmbeddedHttpServer.logStartup` method
       stage = Stage.PRODUCTION)
 
   test("DoEverythingServer#startup") {

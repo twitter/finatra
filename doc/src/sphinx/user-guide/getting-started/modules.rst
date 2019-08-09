@@ -78,6 +78,37 @@ type to the object graph for the injector to use.
       }
     }
 
+or in Java:
+
+.. code:: java
+
+    import com.google.inject.Provides;
+    import com.twitter.finagle.Service;
+    import com.twitter.finagle.http.Request;
+    import com.twitter.finagle.http.Response;
+    import com.twitter.inject.TwitterModule;
+    import javax.inject.Singleton;
+
+    public class MyModule1 extends TwitterModule {
+      private Flag<String> dest = createFlag(
+        /*name*/ "client.dest",
+        /*default*/ "defaultDestIfNoneProvided",
+        /*help*/ "The client dest to use.",
+        /*flaggable*/ Flaggable.ofString());
+
+      private Flag<String> label = createFlag(
+        /*name*/ "client.label",
+        /*default*/ "defaultLabelIfNoneProvided",
+        /*help*/ "The client label to use.",
+        /*flaggable*/ Flaggable.ofString());
+
+      @Singleton
+      @Provides
+      public Service<Request, Response> providesHttpClient() {
+        return Http.newClient(dest.apply(), label.apply());
+      }
+    }
+
 Here we define a module to construct a singleton `Finagle Client <https://twitter.github.io/finagle/guide/Clients.html>`__
 of type `Service[Request, Response]` which uses `flag values provided through command line arguments <flags.html#passing-flag-values-as-command-line-arguments>`__
 to set the values of `label` and `dest`.
@@ -145,10 +176,12 @@ A server can be configured with a list of modules:
 
 .. code:: scala
 
+    import com.google.inject.Module
     import com.twitter.finatra.http.HttpServer
 
     class Server extends HttpServer {
-      override val modules = Seq(
+
+      override val modules: Seq[Module] = Seq(
         MyModule1,
         MyModule2,
         ClientIdModule,
@@ -158,14 +191,45 @@ A server can be configured with a list of modules:
       ???
     }
 
+and in Java:
+
+.. code:: java
+
+    import com.google.common.collect.ImmutableList;
+    import com.google.inject.Module;
+    import com.twitter.finatra.http.AbstractHttpServer;
+    import java.util.Collection;
+
+    public class Server extends AbstractHttpServer {
+
+      @Override
+      public Collection<Module> javaModules() {
+        return ImmutableList.<Module>of(
+            MyModule1$.MODULE$,
+            MyModule2$.MODULE$,
+            ClientIdModule$.MODULE$,
+            ClientAModule$.MODULE$,
+            ClientBModule$.MODULE$);
+        )
+      }
+
+      ...
+    }
 
 How explicit to be in listing the modules for your server is up to you. If you include a module that
-is all ready `included by another module <modules.html#modules-depending-on-other-modules>`__,
-Finatra will de-dupe the module list so there is no penalty, but you may want to prefer to define
+is already `included by another module <modules.html#modules-depending-on-other-modules>`__,
+Finatra will de-duplicate the module list so there is no penalty, but you may want to prefer to define
 your list of modules as `DRY <https://en.wikipedia.org/wiki/Don%27t_repeat_yourself>`__ as possible.
 
 For more information on server configuration see the `HTTP <../http/server.html>`__ or
 `Thrift <../thrift/server.html>`__ sections.
+
+.. note::
+
+    In Java, Flag creation is implemented with two explicit methods: `createFlag<T> <https://github.com/twitter/finatra/blob/9a1380eb6527ef9e3d7f6cc0f7ced620217cdca0/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleFlags.scala#L26>`_
+    and `createMandatoryFlag<T> <https://github.com/twitter/finatra/blob/9a1380eb6527ef9e3d7f6cc0f7ced620217cdca0/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleFlags.scala#L44>`_.
+    Where "mandatory" means a Flag defined with no default value meaning a user-supplied value is
+    required, or mandatory in order to use the Flag.
 
 Module Lifecycle
 ----------------
@@ -251,12 +315,13 @@ method.
 
 .. code:: scala
 
-    import com.google.inject.Provides
+    import com.google.inject.{Module, Provides}
     import com.twitter.inject.TwitterModule
     import javax.inject.Singleton
 
     object BarModule extends TwitterModule {
-      override val modules = Seq(FooModule)
+
+      override val modules: Seq[Module] = Seq(FooModule)
 
       @Singleton
       @Provides
@@ -265,15 +330,41 @@ method.
       }
     }
 
+in Java:
+
+.. code:: java
+
+    import com.google.common.collect.ImmutableList;
+    import com.google.inject.Module;
+    import com.google.inject.Provides;
+    import com.twitter.inject.TwitterModule;
+    import javax.inject.Singleton;
+    import java.util.Collection;
+
+    public class BarModule extends TwitterModule {
+
+      @Override
+      public Collection<Module> javaModules() {
+        return ImmutableList.<Module>of(
+            FooModule$.MODULE$);
+      }
+
+      @Singleton
+      @Provides
+      public Bar providesBar(Foo foo) {
+        return new Bar(foo);
+      }
+    }
+
 What's happening here?
 
-Firstly, we've defined a `BarModule` that overrides the `modules` val with a `Seq` of modules that
-includes the `FooModule`. This guarantees that if the `FooModule` is not mixed into the list of
-modules for a server, the `BarModule` ensures it will be installed since it's declared as a
-dependency and thus there will be a bound instance of `Foo` available for use in providing an
-instance of `Bar`.
+Firstly, we've defined a `BarModule` that overrides the `modules` val with a `Seq` (or the
+`javaModules` def with a `Collection` in Java) of modules that includes the `FooModule`. This
+guarantees that if the `FooModule` is not mixed into the list of modules for a server, the `BarModule`
+ensures it will be installed since it's declared as a dependency and thus there will be a bound
+instance of `Foo` available for use in providing an instance of `Bar`.
 
-Finatra will de-dupe all modules before installing, so it is OK if a module appears twice in the
+Finatra will de-duplicate all modules before installing, so it is OK if a module appears twice in the
 server configuration, though you should strive to make this the exception.
 
 Secondly, we've defined a method which provides a `Bar` instance and add an argument of type `Foo`
@@ -282,7 +373,7 @@ which will be provided by the Injector since injection is by type and the argume
 
 Why? 
 
-Because the Injector is what calls the `providesBar` method. When the Injector needs to provide an
+Because the injector is what calls the `providesBar` method. When the injector needs to provide an
 instance of `Bar` it looks for a "provider" of `Bar` in the list of modules. It will thus try to
 supply all arguments to the function from the object graph.
 
@@ -291,12 +382,13 @@ needs both a `Foo` and a `Bar` instance we could define a `BazModule`:
 
 .. code:: scala
 
-    import com.google.inject.Provides
+    import com.google.inject.{Module, Provides}
     import com.twitter.inject.TwitterModule
     import javax.inject.Singleton
 
     object BazModule extends TwitterModule {
-      override val modules = Seq(
+
+      override val modules: Seq[Module] = Seq(
         FooModule,
         BarModule)
 
@@ -306,6 +398,33 @@ needs both a `Foo` and a `Bar` instance we could define a `BazModule`:
         foo: Foo,
         bar: Bar): Baz = {
         new Baz(foo, bar)
+      }
+    }
+
+in Java:
+
+.. code:: java
+
+    import com.google.common.collect.ImmutableList;
+    import com.google.inject.Module;
+    import com.google.inject.Provides;
+    import com.twitter.inject.TwitterModule;
+    import javax.inject.Singleton;
+    import java.util.Collection;
+
+    public class BazModule extends TwitterModule {
+
+      @Override
+      public Collection<Module> javaModules() {
+        return ImmutableList.<Module>of(
+            FooModule$.MODULE$,
+            BarModule$.MODULE$);
+      }
+
+      @Singleton
+      @Provides
+      public Baz providesBaz(Foo foo, Bar bar) {
+        return new Baz(foo, bar);
       }
     }
 
