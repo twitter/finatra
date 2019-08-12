@@ -58,6 +58,10 @@ trait KafkaConfigMethods[Self] extends KafkaConfig {
     fromConfigMap(configMap + (key -> value.bytes.toString))
   }
 
+  def withConfig(keyValuesMap: Map[String, String]): This = {
+    fromConfigMap(configMap ++ keyValuesMap)
+  }
+
   protected def withClassName[T: Manifest](key: String): This = {
     fromConfigMap(configMap + (key -> manifest[T].runtimeClass.getName))
   }

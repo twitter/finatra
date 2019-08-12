@@ -10,6 +10,9 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-kafka:  Add `withConfig` method variant which takes a `Map[String, String]`
+                  to allow for more complex configurations ``PHAB_ID=D354389``
+
 Changed
 ~~~~~~~
 
