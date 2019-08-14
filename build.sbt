@@ -23,12 +23,28 @@ lazy val noPublishSettings = Seq(
   publishTo := Some(Resolver.file("Unused transient repository", file("target/unusedrepo")))
 )
 
+def gcJavaOptions: Seq[String] = {
+  Seq(
+    "-XX:+UseParNewGC",
+    "-XX:+UseConcMarkSweepGC",
+    "-XX:+CMSParallelRemarkEnabled",
+    "-XX:+CMSClassUnloadingEnabled",
+    "-XX:ReservedCodeCacheSize=128m",
+    "-XX:SurvivorRatio=128",
+    "-XX:MaxTenuringThreshold=0",
+    "-Xss8M",
+    "-Xms512M",
+    "-Xmx2G"
+  )
+}
+
 def travisTestJavaOptions: Seq[String] = {
   // When building on travis-ci, we want to suppress logging to error level only.
   val travisBuild = sys.env.getOrElse("TRAVIS", "false").toBoolean
   if (travisBuild) {
     Seq(
       "-DSKIP_FLAKY=true",
+      "-DSKIP_FLAKY_TRAVIS=true",
       "-Dsbt.log.noformat=true",
       "-Dorg.slf4j.simpleLogger.defaultLogLevel=error",
       "-Dcom.twitter.inject.test.logging.disabled",
@@ -107,6 +123,12 @@ lazy val baseSettings = Seq(
   scalaCompilerOptions,
   javacOptions in (Compile, compile) ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint:unchecked"),
   javacOptions in doc ++= Seq("-source", "1.8"),
+  javaOptions ++= Seq(
+    "-Djava.net.preferIPv4Stack=true",
+    "-XX:+AggressiveOpts",
+    "-server"
+  ),
+  javaOptions ++= gcJavaOptions,
   // -a: print stack traces for failing asserts
   testOptions += Tests.Argument(TestFrameworks.JUnit, "-a", "-v"),
   // broken in 2.12 due to: https://issues.scala-lang.org/browse/SI-10134
