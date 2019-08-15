@@ -3,7 +3,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 
-val releaseVersion = "19.9.0-SNAPSHOT"
+val releaseVersion = "19.8.1"
 
 addSbtPlugin("com.twitter" % "scrooge-sbt-plugin" % releaseVersion)
 
