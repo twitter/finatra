@@ -5,6 +5,7 @@ import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.filters.HttpResponseFilter
 import com.twitter.inject.Test
 import com.twitter.util.Future
+import java.net.URLEncoder
 import org.scalatest.Assertion
 
 class HttpResponseFilterTest extends Test {
@@ -140,6 +141,19 @@ class HttpResponseFilterTest extends Test {
     val request = mkRequest
     val service = mkService(Some(location))
     checkResponse(request, service, Some("http://www.twitter.com?query#fragment"))
+  }
+
+  test("HttpResponseFilter wont inject CRLF into response headers") {
+    val svc = new HttpResponseFilter[Request]().andThen(Service.mk { _: Request =>
+      val resp = Response()
+      val encodedCRLF = URLEncoder.encode("\r\ninvalid: header", "UTF-8")
+      resp.location = s"foo.com/next?what=${encodedCRLF}"
+      Future.value(resp)
+    })
+
+    intercept[IllegalArgumentException] {
+      await(svc(mkRequest))
+    }
   }
 
   private[this] def mkRequest: Request = {
