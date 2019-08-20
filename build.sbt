@@ -46,7 +46,6 @@ def travisTestJavaOptions: Seq[String] = {
     Seq(
       "-DSKIP_FLAKY=true",
       "-DSKIP_FLAKY_TRAVIS=true",
-      "-Dsbt.log.noformat=true",
       "-Dorg.slf4j.simpleLogger.defaultLogLevel=error",
       "-Dcom.twitter.inject.test.logging.disabled",
       // Needed to avoid cryptic EOFException crashes in forked tests
