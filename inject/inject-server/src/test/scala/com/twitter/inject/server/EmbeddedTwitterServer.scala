@@ -600,7 +600,7 @@ class EmbeddedTwitterServer(
         case (k, v) =>
           val f: ReducibleFn[Unit] = func =>
             k.letParse[Unit](v) {
-              info(s"Applying GlobalFlag${k.name}=$v")
+              info(s"Applying GlobalFlag: ${k.name}=$v")
               func
           }
           f
