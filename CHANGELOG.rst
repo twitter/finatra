@@ -48,6 +48,7 @@ Added
 
 Changed
 ~~~~~~~
+* finatra-kafka: Make KafkaConsumerConfig config public from FinagleKafkaConsumerBuilder. ``PHAB_ID=D362058``
 
 * inject-thrift-client: make ThriftClientModuleTrait extend StackClientModuleTrait for symmetry
   with other protocol client modules. ``PHAB_ID=D342710``
