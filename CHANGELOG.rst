@@ -16,6 +16,8 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-kafka-streams: Improve StaticPartitioning error message ``PHAB_ID=D351368``
+
 Fixed
 ~~~~~
 

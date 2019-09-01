@@ -16,7 +16,6 @@ object StaticPartitioningStreamAssignor {
   val StreamsPreRestoreConfig = "streams.prerestore"
   val ApplicationNumInstances = "application.num.instances"
 
-  //TODO: Generalize
   def parseShardId(applicationServerHost: String): ServiceShardId = {
     val firstPeriodIndex = applicationServerHost.indexOf('.')
 
@@ -25,8 +24,11 @@ object StaticPartitioningStreamAssignor {
     } catch {
       case NonFatal(e) =>
         throw new Exception(
-          "StaticPartitioning currently requires flag 'kafka.application.server' to be set to the Aurora service proxy hostname " +
-            "e.g. 0.tweet-word-count.prod.team1.service.smf1.twitter.com:12345"
+          "Finatra Kafka Stream's StaticPartitioning functionality requires the " +
+            "'kafka.application.server' flag value to be specified as '<kafka.current.shard>.<unused_hostname>:<unused_port>" +
+            " where unused_hostname can be empty and unused_port must be > 0. As an example, to configure the server" +
+            " that represents shard #5, you can set 'kafka.application.server=5.:80'. In this example, port 80 is unused and does not" +
+            " need to represent an actual open port"
         )
     }
 
