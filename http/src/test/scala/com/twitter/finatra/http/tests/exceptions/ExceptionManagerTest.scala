@@ -2,16 +2,12 @@ package com.twitter.finatra.http.tests.exceptions
 
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finagle.stats.InMemoryStatsReceiver
-import com.twitter.finatra.http.exceptions.{
-  ExceptionManager,
-  ExceptionMapper,
-  ExceptionMapperCollection
-}
+import com.twitter.finatra.http.exceptions.{ExceptionManager, ExceptionMapper, ExceptionMapperCollection}
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.Test
-import org.apache.commons.lang.RandomStringUtils
+import scala.util.Random
 
 class ExceptionManagerTest extends Test {
 
@@ -22,9 +18,9 @@ class ExceptionManagerTest extends Test {
     new ExceptionManager(TestInjector().create, new InMemoryStatsReceiver)
 
   def randomUri: String = {
-    val version = s"${RandomStringUtils.randomNumeric(1)}.${RandomStringUtils.randomNumeric(1)}"
-    val pathPart1 = RandomStringUtils.randomAlphabetic(5).toLowerCase()
-    val pathPart2 = RandomStringUtils.randomAlphabetic(5).toLowerCase()
+    val version = s"${Random.alphanumeric.take(1).mkString}.${Random.alphanumeric.take(1).mkString}"
+    val pathPart1 = Random.alphanumeric.take(5).mkString.toLowerCase()
+    val pathPart2 = Random.alphanumeric.take(5).mkString.toLowerCase()
     s"/$version/$pathPart1/resource/$pathPart2"
   }
 

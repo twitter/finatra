@@ -2,7 +2,6 @@ package com.twitter.finatra.json.utils
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finatra.json.FinatraObjectMapper
-import org.apache.commons.lang.StringUtils
 
 object JsonDiffResult {
 
@@ -29,7 +28,7 @@ case class JsonDiffResult(
     val receivedJsonSorted = JsonDiffUtil.sortedString(received)
 
     val expectedHeader = "Expected: "
-    val diffStartIdx = StringUtils.indexOfDifference(receivedJsonSorted, expectedJsonSorted)
+    val diffStartIdx = receivedJsonSorted.zip(expectedJsonSorted).indexWhere { case (x, y) => x != y }
 
     val message = new StringBuilder
     message.append(" " * (expectedHeader.length + diffStartIdx) + "*\n")

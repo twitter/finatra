@@ -16,6 +16,9 @@ Added
 Changed
 ~~~~~~~
 
+* finatra: Remove commons-lang as a dependency and replace it with alternatives from stdlib 
+           when possible. ``PHAB_ID=D354013``
+
 * inject-server: Changed `c.t.inject.server.InMemoryStatsReceiverUtility` to show the expected and
   actual values as part of the error message when metric values do not match. ``PHAB_ID=D360470``
   

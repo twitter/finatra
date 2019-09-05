@@ -18,7 +18,6 @@ scala_library(
         "3rdparty/jvm/com/google/inject/extensions:guice-multibindings",
         "3rdparty/jvm/com/sun/activation:javax.activation",
         "3rdparty/jvm/commons-fileupload",
-        "3rdparty/jvm/commons-lang",
         "3rdparty/jvm/javax/inject:javax.inject",
         "3rdparty/jvm/net/codingwell:scala-guice",
         "3rdparty/jvm/org/apache/thrift:libthrift",

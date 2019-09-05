@@ -142,7 +142,7 @@ response and a JSON representation of the type using the `HttpServer <https://gi
 `configured <../json/index.html#configuration>`__ `FinatraObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala>`__
 to convert the type to JSON.
 
-For primitive and `wrapper <https://commons.apache.org/proper/commons-lang/javadocs/api-2.6/org/apache/commons/lang/ClassUtils.html#wrapperToPrimitive(java.lang.Class)>`__
+For primitive and boxed
 types, the default writer implementation will render a `plain/text` content-type response using the
 type's `toString` value.
 

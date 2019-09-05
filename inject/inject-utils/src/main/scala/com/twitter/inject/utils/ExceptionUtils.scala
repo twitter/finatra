@@ -3,7 +3,6 @@ package com.twitter.inject.utils
 import com.twitter.finagle.{FailedFastException, SourcedException, TimeoutException}
 import com.twitter.util.Throwables._
 import com.twitter.util.{Throw, Try}
-import org.apache.commons.lang.StringUtils._
 
 object ExceptionUtils {
 
@@ -12,7 +11,7 @@ object ExceptionUtils {
   }
 
   def stripNewlines(str: String): String = {
-    replace(str, "\n\twith NoSources", "")
+    str.replace("\n\twith NoSources", "")
   }
 
   def toExceptionDetails(exception: Throwable): String = {
