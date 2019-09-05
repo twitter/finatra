@@ -7,7 +7,7 @@ import com.twitter.inject.conversions.map._
 import com.twitter.util.Duration
 import java.io.{ByteArrayOutputStream, PrintStream}
 import java.nio.charset.StandardCharsets
-import org.scalatest.Matchers
+import org.scalatest.{Assertion, Matchers}
 import org.scalatest.concurrent.{Eventually, PatienceConfiguration}
 import org.scalatest.time.{Millis, Span}
 import scala.collection.{SortedMap, SortedSet}
@@ -41,7 +41,7 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
     extends Matchers
     with Eventually {
 
-  class Counters private[InMemoryStatsReceiverUtility]() extends InMemoryStats[Long] {
+  class Counters private[InMemoryStatsReceiverUtility] () extends InMemoryStats[Long] {
 
     /**
      * Returns a sorted `Map` of collected [[com.twitter.finagle.stats.Counter]] values from the
@@ -90,13 +90,13 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
      */
     def apply(name: String): Long = this.get(name).getOrElse {
       print()
-      throw new IllegalArgumentException(name + " not found")
+      throw new IllegalArgumentException(s"""Counter "$name" was not found""")
     }
 
     /**
      * Asserts that the [[com.twitter.finagle.stats.Counter]] represented by the given name
-     * has the given expected value. If the returned value does match the expected a
-     * [[org.scalatest.exceptions.TestFailedException]] will be thrown.
+     * has the given expected value. If the returned lookup value does not match the expected value
+     * a [[org.scalatest.exceptions.TestFailedException]] will be thrown.
      *
      * @note If a [[com.twitter.finagle.stats.Counter]] with the given name does not exist an
      * [[IllegalArgumentException]] will be thrown.
@@ -106,7 +106,7 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
      * @param expected the expected value of the [[com.twitter.finagle.stats.Counter]].
      */
     def assert(name: String, expected: Long): Unit =
-      this.assert(name)(_ == expected)
+      this.apply(name) should equal(expected)
 
     /** For Java compatibility */
     def expect(name: String, expected: Long): Unit =
@@ -144,8 +144,7 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
      * @see [[org.scalatest.concurrent.Eventually.eventually]]
      * @see [[waitFor(name: String, predicate: Long => Boolean, timeout: Duration)]]
      */
-    def waitFor(name: String, expected: Long): Unit =
-      this.waitFor(name)(_ == expected)
+    def waitFor(name: String, expected: Long): Unit = this.assertCounter(name, expected)
 
     /**
      * Waits for the [[com.twitter.finagle.stats.Counter]] represented by the given name to
@@ -163,21 +162,35 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
      * @see [[org.scalatest.concurrent.Eventually.eventually]]
      */
     def waitFor(name: String, timeout: Duration = 150.millis)(predicate: Long => Boolean): Unit =
-      eventually(timeout) {
-        val counterOpt = this.get(name)
-        withClue(s"""Counter "$name" was not found:""") {
-          counterOpt should not be None
-        }
-        withClue(s"""Asserted predicate for counter "$name" never evaluated to true:""") {
-          predicate(counterOpt.get) should be(true)
-        }
+      this.assertCounter(name, predicate, timeout)
+
+    private def assertCounter(
+      name: String,
+      predicate: Long => Boolean,
+      timeout: Duration
+    ): Assertion = eventually(timeout) {
+      val actualValue: Long = this.apply(name)
+      withClue(s"""Asserted predicate for counter "$name" never evaluated to true:""") {
+        predicate(actualValue) should be(true)
       }
+    }
+
+    private def assertCounter(
+      name: String,
+      expectedValue: Long,
+      timeout: Duration = 150.millis
+    ): Assertion = eventually(timeout) {
+      val actualValue: Long = this.apply(name)
+      withClue(s"""Expected "$expectedValue" for counter "$name" but got "$actualValue"""") {
+        actualValue should equal(expectedValue)
+      }
+    }
 
     private[InMemoryStatsReceiverUtility] def clear(): Unit =
       inMemoryStatsReceiver.counters.clear()
   }
 
-  class Stats private[InMemoryStatsReceiverUtility]() extends InMemoryStats[Seq[Float]] {
+  class Stats private[InMemoryStatsReceiverUtility] () extends InMemoryStats[Seq[Float]] {
 
     /**
      * Returns a sorted `Map` of collected [[com.twitter.finagle.stats.Stat]] values from the
@@ -227,7 +240,7 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
      */
     def apply(name: String): Seq[Float] = this.get(name).getOrElse {
       print()
-      throw new IllegalArgumentException(name + " not found")
+      throw new IllegalArgumentException(s"""Stat "$name" was not found""")
     }
 
     /**
@@ -285,8 +298,7 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
      * @see [[org.scalatest.concurrent.Eventually.eventually]]
      * @see [[waitFor(name: String, predicate: Seq[Float] => Boolean, timeout: Duration)]]
      */
-    override def waitFor(name: String, expected: Seq[Float]): Unit =
-      this.waitFor(name)(_ == expected)
+    override def waitFor(name: String, expected: Seq[Float]): Unit = this.assertStat(name, expected)
 
     /**
      * Waits for the metric represented by the given name to
@@ -303,23 +315,39 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
      *
      * @see [[org.scalatest.concurrent.Eventually.eventually]]
      */
-    override def waitFor(name: String, timeout: Duration = 150.millis)
-      (predicate: Seq[Float] => Boolean): Unit =
-        eventually(timeout) {
-          val statOpt = this.get(name)
-          withClue(s"""Stat "$name" was not found:""") {
-            statOpt should not be None
-          }
-          withClue(s"""Asserted predicate for stat "$name" never evaluated to true:""") {
-            predicate(statOpt.get) should be(true)
-          }
-        }
+    override def waitFor(
+      name: String,
+      timeout: Duration = 150.millis
+    )(predicate: Seq[Float] => Boolean
+    ): Unit = this.assertStat(name, predicate, timeout)
+
+    private def assertStat(
+      name: String,
+      predicate: Seq[Float] => Boolean,
+      timeout: Duration
+    ): Assertion = eventually(timeout) {
+      val actualValue: Seq[Float] = this.apply(name)
+      withClue(s"""Asserted predicate for stat "$name" never evaluated to true:""") {
+        predicate(actualValue) should be(true)
+      }
+    }
+
+    private def assertStat(
+      name: String,
+      expectedValue: Seq[Float],
+      timeout: Duration = 150.millis
+    ): Assertion = eventually(timeout) {
+      val actualValue: Seq[Float] = this.apply(name)
+      withClue(s"""Expected "$expectedValue" for stat "$name" but got "$actualValue":""") {
+        actualValue should equal(expectedValue)
+      }
+    }
 
     private[InMemoryStatsReceiverUtility] def clear(): Unit =
       inMemoryStatsReceiver.stats.clear()
   }
 
-  class Gauges private[InMemoryStatsReceiverUtility]() extends InMemoryStats[Float] {
+  class Gauges private[InMemoryStatsReceiverUtility] () extends InMemoryStats[Float] {
 
     /**
      * Returns a sorted `Map` of collected [[com.twitter.finagle.stats.Gauge]] values from the
@@ -369,7 +397,7 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
      */
     def apply(name: String): Float = this.get(name).getOrElse {
       print()
-      throw new IllegalArgumentException(name + " not found")
+      throw new IllegalArgumentException(s"""Gauge "$name" was not found""")
     }
 
     /**
@@ -423,8 +451,7 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
      * @see [[org.scalatest.concurrent.Eventually.eventually]]
      * @see [[waitFor(name: String, predicate: Long => Boolean, timeout: Duration)]]
      */
-    def waitFor(name: String, expected: Float): Unit =
-      this.waitFor(name)(_ == expected)
+    def waitFor(name: String, expected: Float): Unit = this.assertGauge(name, expected)
 
     /**
      * Waits for the [[com.twitter.finagle.stats.Gauge]] represented by the given name to
@@ -442,15 +469,29 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
      * @see [[org.scalatest.concurrent.Eventually.eventually]]
      */
     def waitFor(name: String, timeout: Duration = 150.millis)(predicate: Float => Boolean): Unit =
-      eventually(timeout) {
-        val gaugeOpt = this.get(name)
-        withClue(s"""Gauge "$name" was not found:""") {
-          gaugeOpt should not be None
-        }
-        withClue(s"""Asserted predicate for gauge "$name" never evaluated to true:""") {
-          predicate(gaugeOpt.get) should be(true)
-        }
+      this.assertGauge(name, predicate, timeout)
+
+    private def assertGauge(
+      name: String,
+      predicate: Float => Boolean,
+      timeout: Duration
+    ): Assertion = eventually(timeout) {
+      val actualValue: Float = this.apply(name)
+      withClue(s"""Asserted predicate for gauge "$name" never evaluated to true:""") {
+        predicate(actualValue) should be(true)
       }
+    }
+
+    private def assertGauge(
+      name: String,
+      expectedValue: Float,
+      timeout: Duration = 150.millis
+    ): Assertion = eventually(timeout) {
+      val actualValue: Float = this.apply(name)
+      withClue(s"""Expected "$expectedValue" for gauge "$name" but got "$actualValue":""") {
+        actualValue should equal(expectedValue)
+      }
+    }
 
     private[InMemoryStatsReceiverUtility] def clear(): Unit =
       inMemoryStatsReceiver.gauges.clear()

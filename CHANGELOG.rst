@@ -16,6 +16,9 @@ Added
 Changed
 ~~~~~~~
 
+* inject-server: Changed `c.t.inject.server.InMemoryStatsReceiverUtility` to show the expected and
+  actual values as part of the error message when metric values do not match. ``PHAB_ID=D360470``
+  
 * finatra-kafka-streams: Improve StaticPartitioning error message ``PHAB_ID=D351368``
 
 Fixed
