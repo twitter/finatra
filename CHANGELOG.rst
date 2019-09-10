@@ -27,6 +27,9 @@ Changed
 Fixed
 ~~~~~
 
+* finatra-http:  Support Http 405 response code, improve routing performance for non-constant route
+                 ``PHAB_ID=D278146``
+
 * inject-app: Update `c.t.inject.app.App` to only recurse through modules once. We currently
   call `TwitterModule#modules` more than once in reading flags and parsing the list of modules
   over which to create the injector. When `TwitterModule#modules` is a function that inlines the

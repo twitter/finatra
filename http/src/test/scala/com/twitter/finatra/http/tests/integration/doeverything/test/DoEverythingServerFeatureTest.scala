@@ -586,7 +586,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   }
 
   test("GET /put (NotFound)") {
-    server.httpGet("/put", andExpect = NotFound) //TODO: Should be 405 Method Not Allowed
+    server.httpGet("/put", andExpect = NotFound)
   }
 
   test("putJson") {
@@ -716,7 +716,9 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   }
 
   test("GET /putAndPost (NotFound)") {
-    server.httpGet("/putAndPost", andExpect = NotFound) //TODO: Should be 405 Method Not Allowed
+    val response = server.httpGet("/putAndPost", andExpect = MethodNotAllowed)
+    response.headerMap.get("allow") should equal(
+      Some("CONNECT, GET, POST, PUT, DELETE, OPTIONS, PATCH, HEAD, TRACE"))
   }
 
   test("POST /postAndPut") {
@@ -728,7 +730,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   }
 
   test("GET /postAndPut (NotFound)") {
-    server.httpGet("/postAndPut", andExpect = NotFound) //TODO: Should be 405 Method Not Allowed
+    server.httpGet("/postAndPut", andExpect = MethodNotAllowed)
   }
 
   test("GET /true") {

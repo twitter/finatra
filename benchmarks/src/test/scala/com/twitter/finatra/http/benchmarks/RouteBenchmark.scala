@@ -12,9 +12,7 @@ import scala.reflect.classTag
  * ./sbt 'project benchmarks' 'jmh:run RouteBenchmark'
  */
 @State(Scope.Thread)
-class RouteBenchmark
-  extends StdBenchAnnotations
-  with HttpBenchmark {
+class RouteBenchmark extends StdBenchAnnotations with HttpBenchmark {
 
   val route = Route(
     name = "groups",
@@ -57,17 +55,22 @@ class RouteBenchmark
 
   @Benchmark
   def testRoute(): Option[Future[Response]] = {
-    route.handle(postGroupsRequest, postGroupsPath, bypassFilters = false)
+    route.handle(request = postGroupsRequest, routeParams = Map.empty, bypassFilters = false)
   }
 
   @Benchmark
   def testRouteWithPathParams(): Option[Future[Response]] = {
-    routeWithPathParams.handle(postGroups123Request, postGroups123Path, bypassFilters = false)
+    routeWithPathParams.handle(
+      request = postGroups123Request,
+      routeParams = Map("id" -> "123"),
+      bypassFilters = false)
   }
 
   @Benchmark
   def testRouteWithUrlEncodedPathParams(): Option[Future[Response]] = {
-    routeWithPathParams.handle(postGroupsUrlEncodedRequest,
-      postGroupsUrlEncodedPath, bypassFilters = false)
+    routeWithPathParams.handle(
+      request = postGroupsUrlEncodedRequest,
+      routeParams = Map.empty,
+      bypassFilters = false)
   }
 }

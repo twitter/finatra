@@ -1,66 +1,56 @@
 package com.twitter.finatra.http.internal.routing
 
-import com.twitter.finagle.http.{Method, Request, Response}
+import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finatra.http.exceptions.MethodNotAllowedException
 import com.twitter.inject.conversions.iterable._
 import com.twitter.util.Future
-import java.util.{HashMap => JMap}
 
 private[http] object Routes {
-
-  def createForMethod(routes: Seq[Route], method: Method): Routes =
-    new Routes((routes filter { _.method == method }).toArray)
+  def createRoutes(routes: Seq[Route]): Routes = new Routes(routes.toArray)
 }
 
 // optimized
 private[http] class Routes(routes: Array[Route]) {
 
-  //Assert unique paths
-  {
-    val distinctRoutes = routes.toSeq.distinctBy { _.path }
-    assert(
-      routes.length == distinctRoutes.length,
-      "Found non-unique routes " + routes.diff(distinctRoutes).map(_.summary).mkString(", ")
-    )
+  /** Assert unique paths per method */
+  routes.groupBy(_.method).foreach {
+    case (_, routesPerMethod) =>
+      val distinctRoutes = routesPerMethod.toSeq.distinctBy { _.path }
+      assert(
+        routesPerMethod.length == distinctRoutes.length,
+        "Found non-unique routes " + routesPerMethod
+          .diff(distinctRoutes).map(_.summary).mkString(", ")
+      )
   }
 
   private[this] val (constantRoutes, nonConstantRoutes) = {
     routes partition { _.constantRoute }
   }
 
-  //Note we subtract 1 because our while loop starts at -1 and increments before the array lookup
-  private[this] val nonConstantRoutesLimit = nonConstantRoutes.length - 1
-
-  private[this] val constantRouteMap: JMap[String, Route] = {
-    val jMap = new JMap[String, Route]()
-    for (route <- constantRoutes) {
-      jMap.put(route.path, route)
-    }
-    jMap
-  }
+  private[this] val constantRouteMap: ConstantRouteMap = new ConstantRouteMap(constantRoutes)
+  private[this] val trie: Trie = new Trie(nonConstantRoutes)
 
   def handle(request: Request, bypassFilters: Boolean = false): Option[Future[Response]] = {
-    val path = request.path // Store path since Request#path is derived
-    val secondaryPath = if (!path.endsWith("/")) path + "/" else null
+    /** Store path since Request#path is derived */
+    val path = request.path
+    val method = request.method
 
-    // look for constant route matches
-    val constantRouteResult = constantRouteMap.get(path)
-    val secondaryConstantRouteResult = constantRouteMap.get(secondaryPath)
-    if (constantRouteResult != null) {
-      constantRouteResult.handleMatch(request, bypassFilters)
-    } else if (secondaryPath != null && secondaryConstantRouteResult != null) {
-      if (secondaryConstantRouteResult.hasOptionalTrailingSlash)
-        secondaryConstantRouteResult.handleMatch(request, bypassFilters)
-      else
-        None
+    val constantRoute = constantRouteMap.find(path, method)
+    val constantRouteOpt = constantRoute.routeOpt
+    val methodNotAllowed = constantRoute.methodNotAllowed
+
+    if (constantRouteOpt.isDefined) {
+      constantRouteOpt.get.handleMatch(request, bypassFilters)
     } else {
-      var response: Option[Future[Response]] = None
-      var nonConstantRouteIdx = -1
-      while (response.isEmpty && nonConstantRouteIdx < nonConstantRoutesLimit) {
-        nonConstantRouteIdx += 1
-        val currentRoute = nonConstantRoutes(nonConstantRouteIdx)
-        response = currentRoute.handle(request, path, bypassFilters)
+      val nonConstantRouteOpt = trie.find(path, method)
+      nonConstantRouteOpt match {
+        case Some(RouteAndParameter(nonConstantRoute, routeParams)) =>
+          nonConstantRoute.handle(request, bypassFilters, routeParams)
+        case None if methodNotAllowed =>
+          throw new MethodNotAllowedException(
+            error = "The method " + method + " is not allowed on path " + path)
+        case _ => None
       }
-      response
     }
   }
 }
