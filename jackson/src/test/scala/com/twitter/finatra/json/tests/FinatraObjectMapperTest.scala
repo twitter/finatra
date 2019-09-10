@@ -1,35 +1,19 @@
 package com.twitter.finatra.json.tests
 
 import com.fasterxml.jackson.databind.node.{IntNode, TreeTraversingParser}
-import com.fasterxml.jackson.databind.{
-  JsonMappingException,
-  JsonNode,
-  ObjectMapper,
-  PropertyNamingStrategy
-}
+import com.fasterxml.jackson.databind.{JsonMappingException, JsonNode, ObjectMapper, PropertyNamingStrategy}
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.annotations.{CamelCaseMapper, SnakeCaseMapper}
-import com.twitter.finatra.json.internal.caseclass.exceptions.{
-  CaseClassMappingException,
-  CaseClassValidationException,
-  JsonInjectionNotSupportedException,
-  RequestFieldInjectionNotSupportedException
-}
+import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassMappingException, CaseClassValidationException, JsonInjectionNotSupportedException, RequestFieldInjectionNotSupportedException}
 import com.twitter.finatra.json.internal.caseclass.reflection.MissingExpectedType
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.finatra.json.tests.internal.Obj.{
-  NestedCaseClassInObject,
-  NestedCaseClassInObjectWithNestedCaseClassInObjectParam
-}
+import com.twitter.finatra.json.tests.internal.Obj.{NestedCaseClassInObject, NestedCaseClassInObjectWithNestedCaseClassInObjectParam}
 import com.twitter.finatra.json.tests.internal.TypeAndCompanion.NestedCaseClassInCompanion
 import com.twitter.finatra.json.tests.internal._
 import com.twitter.finatra.json.tests.internal.caseclass.jackson.Aum
-import com.twitter.finatra.json.tests.internal.internal.{
-  SimplePersonInPackageObject,
-  SimplePersonInPackageObjectWithoutConstructorParams
-}
+import com.twitter.finatra.json.tests.internal.internal.{SimplePersonInPackageObject, SimplePersonInPackageObjectWithoutConstructorParams}
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.inject.{Logging, Test}
 import com.twitter.inject.app.TestInjector
@@ -38,8 +22,8 @@ import com.twitter.io.Buf
 import com.twitter.util.Duration
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 import java.util.concurrent.TimeUnit
-import org.apache.commons.lang.RandomStringUtils
 import org.joda.time.{DateTime, DateTimeZone}
+import scala.util.Random
 
 class FinatraObjectMapperTest extends Test with Logging {
 
@@ -1287,7 +1271,7 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("Support sealed traits and case objects#json serialization") {
-    val vin = RandomStringUtils.randomAlphanumeric(17)
+    val vin = Random.alphanumeric.take(17).mkString
     val vehicle = Vehicle(vin, Audi)
 
     mapper.writeValueAsString(vehicle) should equal(s"""{"vin":"$vin","type":"audi"}""")

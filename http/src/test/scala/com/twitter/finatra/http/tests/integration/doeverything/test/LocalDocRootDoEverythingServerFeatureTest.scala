@@ -41,7 +41,8 @@ class LocalDocRootDoEverythingServerFeatureTest
   override val server = new EmbeddedHttpServer(
     flags = Map(
       "local.doc.root" -> s"${BaseDirectory}src/main/webapp",
-      "mustache.templates.dir" -> s"${BaseDirectory}src/main/resources/templates"
+      "mustache.templates.dir" -> s"${BaseDirectory}src/main/resources/templates",
+      "something.flag" -> "foobar"
     ),
     args = Array("-magicNum=1", "-moduleMagicNum=2"),
     twitterServer = new DoEverythingServer

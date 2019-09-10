@@ -4,6 +4,11 @@ scala_library(
         "com/twitter/inject/logback/*.scala",
     ),
     compiler_option_sets = {"fatal_warnings"},
+    provides = scala_artifact(
+        org = "com.twitter",
+        name = "inject-logback",
+        repo = artifactory,
+    ),
     dependencies = [
         "3rdparty/jvm/ch/qos/logback:logback-classic",
         "3rdparty/jvm/ch/qos/logback:logback-core",

@@ -4,14 +4,14 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "19.8.0"
+val releaseVersion = "19.9.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
   scalaVersion := "2.12.8",
   crossScalaVersions := Seq("2.11.12", "2.12.8"),
   scalaModuleInfo := scalaModuleInfo.value.map(_.withOverrideScalaVersion(true)),
-  fork in Test := true,
+  fork in Test := true, // We have to fork to get the JavaOptions
   javaOptions in Test ++= travisTestJavaOptions
 )
 
@@ -23,13 +23,29 @@ lazy val noPublishSettings = Seq(
   publishTo := Some(Resolver.file("Unused transient repository", file("target/unusedrepo")))
 )
 
+def gcJavaOptions: Seq[String] = {
+  Seq(
+    "-XX:+UseParNewGC",
+    "-XX:+UseConcMarkSweepGC",
+    "-XX:+CMSParallelRemarkEnabled",
+    "-XX:+CMSClassUnloadingEnabled",
+    "-XX:ReservedCodeCacheSize=128m",
+    "-XX:SurvivorRatio=128",
+    "-XX:MaxTenuringThreshold=0",
+    "-Xss8M",
+    "-Xms512M",
+    "-Xmx2G"
+  )
+}
+
 def travisTestJavaOptions: Seq[String] = {
   // When building on travis-ci, we want to suppress logging to error level only.
+  // https://docs.travis-ci.com/user/environment-variables/#default-environment-variables
   val travisBuild = sys.env.getOrElse("TRAVIS", "false").toBoolean
   if (travisBuild) {
     Seq(
       "-DSKIP_FLAKY=true",
-      "-Dsbt.log.noformat=true",
+      "-DSKIP_FLAKY_TRAVIS=true",
       "-Dorg.slf4j.simpleLogger.defaultLogLevel=error",
       "-Dcom.twitter.inject.test.logging.disabled",
       // Needed to avoid cryptic EOFException crashes in forked tests
@@ -107,6 +123,12 @@ lazy val baseSettings = Seq(
   scalaCompilerOptions,
   javacOptions in (Compile, compile) ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint:unchecked"),
   javacOptions in doc ++= Seq("-source", "1.8"),
+  javaOptions ++= Seq(
+    "-Djava.net.preferIPv4Stack=true",
+    "-XX:+AggressiveOpts",
+    "-server"
+  ),
+  javaOptions ++= gcJavaOptions,
   // -a: print stack traces for failing asserts
   testOptions += Tests.Argument(TestFrameworks.JUnit, "-a", "-v"),
   // broken in 2.12 due to: https://issues.scala-lang.org/browse/SI-10134
@@ -517,8 +539,7 @@ lazy val injectUtils = (project in file("inject/inject-utils"))
     moduleName := "inject-utils",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
-      "com.twitter" %% "util-core" % versions.twLibVersion,
-      "commons-lang" % "commons-lang" % versions.commonsLang
+      "com.twitter" %% "util-core" % versions.twLibVersion
     )
   ).dependsOn(
     injectCore % "test->test;compile->compile")

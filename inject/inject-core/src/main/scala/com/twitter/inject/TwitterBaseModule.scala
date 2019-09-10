@@ -16,8 +16,13 @@ trait TwitterBaseModule extends TwitterModuleFlags with TwitterModuleLifecycle {
    *
    * However, AbstractModule.install can still be used for non-TwitterModules, and is sometimes preferred
    * due to install being deferred until after flag parsing occurs.
+   *
+   * @note Java users should prefer [[javaModules]].
    */
   protected[inject] def modules: Seq[Module] = Seq()
+
+  /** Additional modules to be composed into this module from Java */
+  protected[inject] def javaModules: java.util.Collection[Module] = new java.util.ArrayList[Module]()
 
   /**
    * Additional framework modules to be composed into this module

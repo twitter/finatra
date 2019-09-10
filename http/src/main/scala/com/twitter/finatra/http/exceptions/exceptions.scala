@@ -166,3 +166,22 @@ case class NotAcceptableException(
   override val mediaType: String,
   override val errors: Seq[String]
 ) extends HttpException(Status.NotAcceptable, mediaType, errors)
+
+object MethodNotAllowedException {
+  def plainText(body: String): MethodNotAllowedException = {
+    new MethodNotAllowedException(MediaType.PlainTextUtf8, Seq(body))
+  }
+
+  def apply(errors: String*): MethodNotAllowedException = {
+    new MethodNotAllowedException(MediaType.JsonUtf8, errors)
+  }
+}
+
+case class MethodNotAllowedException(
+  override val mediaType: String,
+  override val errors: Seq[String]
+) extends HttpException(Status.MethodNotAllowed, mediaType, errors) {
+  def this(error: String) = {
+    this(MediaType.JsonUtf8, Seq(error))
+  }
+}

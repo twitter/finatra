@@ -1,11 +1,12 @@
 package com.twitter.inject.app.tests.internal
 
+import com.google.inject.Stage
 import com.twitter.inject.Test
-import com.twitter.inject.app.internal.InstalledModules
+import com.twitter.inject.app.internal.Modules
 
-class InstalledModulesTest extends Test {
+class ModulesTest extends Test {
 
-  test("Modules are de-duped") {
+  test("Modules are distinct") {
     val counter = 0
 
     val module1 = new TestModuleClass("instance1", counter)
@@ -19,10 +20,12 @@ class InstalledModulesTest extends Test {
 
     modules.size should be(5)
 
-    val installedModules = InstalledModules.create(
+    val installedModules = new Modules(
+      modules,
+      Seq.empty
+    ).install(
       flags = Seq.empty,
-      modules = modules,
-      overrideModules = Seq.empty)
+      stage = Stage.PRODUCTION)
 
     // there are only 3 distinct modules, TestModuleObject, TestModuleClass(instance1), TestModuleClass(instance2)
     installedModules.modules.size should be(5) // the framework adds two modules: FlagsModule and TwitterTypeConvertersModule
@@ -36,12 +39,12 @@ class InstalledModulesTest extends Test {
     stateMap.internals("key") should be(1)
   }
 
-  test("Modules are deduped in a stable order") {
+  test("Modules are distinct in a stable order") {
     val modules = (0 until 10).map { i =>
       new TestModuleClass(s"instance$i", 0)
     }
 
-    val deduped = InstalledModules.dedupeModules(
+    val deduped = Modules.distinctModules(
       modules.zip(modules).flatMap { case (one, two) => Seq(one, two) })
     deduped should equal(modules)
   }

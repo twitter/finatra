@@ -1,7 +1,6 @@
 package com.twitter.inject.conversions
 
 import com.twitter.conversions.StringOps
-import org.apache.commons.{lang => acl}
 
 object string {
 
@@ -21,7 +20,11 @@ object string {
     }
 
     def ellipse(len: Int): String = {
-      acl.StringUtils.abbreviate(self, len + 3) // adding 3 for the ellipses :-/
+      if (self.length <= len) {
+        self
+      } else {
+        self.take(len) + "..."
+      }
     }
 
     /**

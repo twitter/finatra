@@ -5,7 +5,6 @@ import com.twitter.finatra.http.marshalling.{DefaultMessageBodyWriter, WriterRes
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.inject.annotations.Flag
 import javax.inject.Inject
-import org.apache.commons.lang.ClassUtils
 
 private[finatra] class DefaultMessageBodyWriterImpl @Inject()(
   @Flag("http.response.charset.enabled") includeContentTypeCharset: Boolean,
@@ -33,8 +32,17 @@ private[finatra] class DefaultMessageBodyWriterImpl @Inject()(
 
   /* Private */
 
-  // Note: The following method is included in commons-lang 3.1+
-  private def isPrimitiveOrWrapper(clazz: Class[_]): Boolean = {
-    clazz.isPrimitive || ClassUtils.wrapperToPrimitive(clazz) != null
-  }
+  private[this] def isPrimitiveWrapper(clazz: Class[_]): Boolean =
+    clazz == classOf[java.lang.Double] ||
+      clazz == classOf[java.lang.Float] ||
+      clazz == classOf[java.lang.Long] ||
+      clazz == classOf[java.lang.Integer] ||
+      clazz == classOf[java.lang.Short] ||
+      clazz == classOf[java.lang.Character] ||
+      clazz == classOf[java.lang.Byte] ||
+      clazz == classOf[java.lang.Boolean] ||
+      clazz == classOf[java.lang.Void]
+
+  private def isPrimitiveOrWrapper(clazz: Class[_]): Boolean =
+    clazz.isPrimitive || isPrimitiveWrapper(clazz)
 }

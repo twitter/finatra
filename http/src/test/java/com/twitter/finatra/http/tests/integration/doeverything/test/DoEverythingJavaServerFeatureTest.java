@@ -1,8 +1,8 @@
 package com.twitter.finatra.http.tests.integration.doeverything.test;
 
 import java.util.Collection;
-import java.util.Collections;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.Stage;
 
 import org.junit.AfterClass;
@@ -25,7 +25,11 @@ public class DoEverythingJavaServerFeatureTest extends Assert {
     private static final EmbeddedHttpServer SERVER =
         new EmbeddedHttpServer(
             new DoEverythingJavaServer(),
-            Collections.emptyMap(),
+            ImmutableMap.<String, String>of(
+                "moduleC.flag", "hello, world",
+                "moduleB.flag", "3.1415926",
+                "moduleA.flag", "42"
+            ),
             Stage.DEVELOPMENT);
 
     @BeforeClass

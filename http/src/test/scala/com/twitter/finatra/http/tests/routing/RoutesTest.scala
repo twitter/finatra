@@ -12,7 +12,7 @@ import scala.reflect.classTag
 class RoutesTest extends Test with OptionValues {
 
   test("constant route") {
-    val routes = Routes.createForMethod(Seq(createRoute(Method.Get, "/groups/")), Method.Get)
+    val routes = Routes.createRoutes(Seq(createRoute(Method.Get, "/groups/")))
 
     routes.handle(Request("/groups/")) should be('defined)
 
@@ -22,7 +22,7 @@ class RoutesTest extends Test with OptionValues {
   }
 
   test("constant route (bypassFilters = true)") {
-    val routes = Routes.createForMethod(Seq(createRoute(Method.Get, "/groups/")), Method.Get)
+    val routes = Routes.createRoutes(Seq(createRoute(Method.Get, "/groups/")))
 
     routes.handle(Request("/groups/"), bypassFilters = true) should be('defined)
 
@@ -32,7 +32,7 @@ class RoutesTest extends Test with OptionValues {
   }
 
   test("constant route with optional trailing slashes") {
-    val routes = Routes.createForMethod(Seq(createRoute(Method.Get, "/groups/?")), Method.Get)
+    val routes = Routes.createRoutes(Seq(createRoute(Method.Get, "/groups/?")))
 
     routes.handle(Request("/groups/")) should be('defined)
 
@@ -42,7 +42,7 @@ class RoutesTest extends Test with OptionValues {
   }
 
   test("constant route with optional trailing slashes (bypassFilters = true)") {
-    val routes = Routes.createForMethod(Seq(createRoute(Method.Get, "/groups/?")), Method.Get)
+    val routes = Routes.createRoutes(Seq(createRoute(Method.Get, "/groups/?")))
 
     routes.handle(Request("/groups/"), bypassFilters = true) should be('defined)
 
@@ -52,7 +52,7 @@ class RoutesTest extends Test with OptionValues {
   }
 
   test("constant route with wildcard") {
-    val routes = Routes.createForMethod(Seq(createRoute(Method.Get, "/groups/:*")), Method.Get)
+    val routes = Routes.createRoutes(Seq(createRoute(Method.Get, "/groups/:*")))
 
     routes.handle(Request("/groups/index.html")) should be('defined)
 
@@ -62,7 +62,7 @@ class RoutesTest extends Test with OptionValues {
   }
 
   test("constant route with wildcard and optional trailing slashes") {
-    val routes = Routes.createForMethod(Seq(createRoute(Method.Get, "/groups/:*/?")), Method.Get)
+    val routes = Routes.createRoutes(Seq(createRoute(Method.Get, "/groups/:*/?")))
 
     routes.handle(Request("/groups/index.html")) should be('defined)
 
@@ -72,7 +72,7 @@ class RoutesTest extends Test with OptionValues {
   }
 
   test("path pattern route") {
-    val routes = Routes.createForMethod(Seq(createRoute(Method.Get, "/groups/:id")), Method.Get)
+    val routes = Routes.createRoutes(Seq(createRoute(Method.Get, "/groups/:id")))
 
     routes.handle(Request("/groups/1")) should be('defined)
 
@@ -80,7 +80,7 @@ class RoutesTest extends Test with OptionValues {
   }
 
   test("path pattern route (bypassFilters = true)") {
-    val routes = Routes.createForMethod(Seq(createRoute(Method.Get, "/groups/:id")), Method.Get)
+    val routes = Routes.createRoutes(Seq(createRoute(Method.Get, "/groups/:id")))
 
     routes.handle(Request("/groups/1"), bypassFilters = true) should be('defined)
 
@@ -88,7 +88,7 @@ class RoutesTest extends Test with OptionValues {
   }
 
   test("path pattern route with optional trailing slash") {
-    val routes = Routes.createForMethod(Seq(createRoute(Method.Get, "/groups/:id/?")), Method.Get)
+    val routes = Routes.createRoutes(Seq(createRoute(Method.Get, "/groups/:id/?")))
 
     routes.handle(Request("/groups/1")) should be('defined)
 
@@ -98,18 +98,18 @@ class RoutesTest extends Test with OptionValues {
   }
 
   test("path pattern route with wildcard") {
-    val routes = Routes.createForMethod(Seq(createRoute(Method.Get, "/groups/:id/:*")), Method.Get)
+    val routes = Routes.createRoutes(Seq(createRoute(Method.Get, "/groups/:id/:*")))
 
     routes.handle(Request("/groups/1/foo")) should be('defined)
 
-    routes.handle(Request("/groups/1/foo/")) should be('defined)
+    routes.handle(Request("/groups/1/foo/bar")) should be('defined)
 
     routes.handle(Request("/groups/")) should be('empty)
   }
 
   test("path pattern route with wildcard and optional trailing slash identifier") {
     val routes =
-      Routes.createForMethod(Seq(createRoute(Method.Get, "/groups/:id/:*/?")), Method.Get)
+      Routes.createRoutes(Seq(createRoute(Method.Get, "/groups/:id/:*/?")))
 
     routes.handle(Request("/groups/1/foo")) should be('defined)
 
@@ -119,7 +119,7 @@ class RoutesTest extends Test with OptionValues {
   }
 
   test("route info") {
-    val routes = Routes.createForMethod(Seq(createRoute(Method.Get, "/groups/")), Method.Get)
+    val routes = Routes.createRoutes(Seq(createRoute(Method.Get, "/groups/")))
 
     val request = Request("/groups/")
     routes.handle(request) should be('defined)
@@ -128,7 +128,7 @@ class RoutesTest extends Test with OptionValues {
   }
 
   test("route info (bypassFilters = true)") {
-    val routes = Routes.createForMethod(Seq(createRoute(Method.Get, "/groups/")), Method.Get)
+    val routes = Routes.createRoutes(Seq(createRoute(Method.Get, "/groups/")))
 
     val request = Request("/groups/")
     routes.handle(request, bypassFilters = true) should be('defined)

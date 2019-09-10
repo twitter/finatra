@@ -2,7 +2,7 @@ package com.twitter.server.tests
 
 import com.twitter.inject.Test
 import com.twitter.server.internal.FinagleBuildRevision
-import org.apache.commons.lang.RandomStringUtils
+import scala.util.Random
 
 class FinagleBuildRevisionTest extends Test {
 
@@ -13,7 +13,7 @@ class FinagleBuildRevisionTest extends Test {
   }
 
   test("fail revision parsing") {
-    FinagleBuildRevision.convertBuildRevision(RandomStringUtils.randomAlphanumeric(20)) should be(
+    FinagleBuildRevision.convertBuildRevision(Random.alphanumeric.take(20).mkString) should be(
       -1L
     )
   }

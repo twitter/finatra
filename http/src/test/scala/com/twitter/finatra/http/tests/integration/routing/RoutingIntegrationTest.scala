@@ -130,7 +130,7 @@ class RoutingIntegrationTest extends Test {
 
       server.httpPut("/proxy/thingamagic/99898936", putBody = "", andExpect = Status.Ok)
 
-      server.httpPost("/foo", postBody = "", andExpect = Status.NotFound)
+      server.httpPost("/foo", postBody = "", andExpect = Status.MethodNotAllowed)
 
       server.httpRequest(
         Request(Trace, "/proxy/thingamagic/99898936"),

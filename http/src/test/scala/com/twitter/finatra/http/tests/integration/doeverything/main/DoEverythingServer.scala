@@ -35,7 +35,7 @@ class DoEverythingServer extends HttpServer {
   flag("magicNum", "26", "Magic number")
 
   override val modules: Seq[Module] = Seq(
-    DoEverythingModule,
+    new DoEverythingModule,
     new HttpClientModule {
       override val dest = "localhost:1234"
     }

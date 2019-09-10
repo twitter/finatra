@@ -9,7 +9,6 @@ junit_tests(
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
         "3rdparty/jvm/com/google/inject/extensions:guice-multibindings",
         "3rdparty/jvm/com/google/inject/extensions:guice-testlib",
-        "3rdparty/jvm/commons-lang",
         "3rdparty/jvm/joda-time",
         "3rdparty/jvm/net/codingwell:scala-guice",
         "3rdparty/jvm/org/openjdk/jmh:jmh-core",

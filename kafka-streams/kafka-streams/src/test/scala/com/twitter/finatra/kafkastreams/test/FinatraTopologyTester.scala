@@ -52,6 +52,17 @@ object FinatraTopologyTester {
     emitWatermarkPerMessage: Boolean = true,
     autoWatermarkInterval: Duration = 0.millis
   ): FinatraTopologyTester = {
+    // Any Module manipulation needs to happen before init
+    val inMemoryStatsReceiver = new InMemoryStatsReceiver
+    AppAccessor.callAddFrameworkOverrideModules(
+      server,
+      overrideModules.toList :+ new TwitterModule {
+        override def configure(): Unit = {
+          bind[StatsReceiver].toInstance(inMemoryStatsReceiver)
+        }
+      }
+    )
+
     AppAccessor.callInits(server)
 
     val stateDir = TestDirectoryUtils.newTempDirectory()
@@ -67,16 +78,6 @@ object FinatraTopologyTester {
         emitWatermarkPerMessage = emitWatermarkPerMessage,
         autoWatermarkInterval = autoWatermarkInterval
       )
-    )
-
-    val inMemoryStatsReceiver = new InMemoryStatsReceiver
-    AppAccessor.callAddFrameworkOverrideModules(
-      server,
-      overrideModules.toList :+ new TwitterModule {
-        override def configure(): Unit = {
-          bind[StatsReceiver].toInstance(inMemoryStatsReceiver)
-        }
-      }
     )
 
     val injector = AppAccessor.loadAndSetInstalledModules(server)

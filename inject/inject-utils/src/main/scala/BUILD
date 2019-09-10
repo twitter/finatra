@@ -8,7 +8,6 @@ scala_library(
     ),
     dependencies = [
         "3rdparty/jvm/com/github/nscala_time",
-        "3rdparty/jvm/commons-lang",
         "3rdparty/jvm/joda-time",
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "finagle/finagle-core/src/main/scala",

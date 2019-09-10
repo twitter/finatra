@@ -53,14 +53,7 @@ private[twitter] abstract class AdminHttpClient private[twitter] (
   }
 
   def adminHttpServerRoutes: Seq[AdminHttpServer.Route] = {
-    import org.apache.commons.lang.reflect.FieldUtils
-    // TODO: expose this in the AdminHttpServer
-    val allRoutesField = FieldUtils.getField(
-      twitterServer.getClass,
-      "com$twitter$server$AdminHttpServer$$allRoutes",
-      true
-    )
-    allRoutesField.get(twitterServer).asInstanceOf[Seq[AdminHttpServer.Route]]
+    twitterServer.routes
   }
 
   /* Protected */

@@ -12,24 +12,38 @@ import scala.reflect.classTag
  * ./sbt 'project benchmarks' 'jmh:run RoutingServiceBenchmark'
  */
 @State(Scope.Thread)
-class RoutingServiceBenchmark
-  extends StdBenchAnnotations
-  with HttpBenchmark {
+class RoutingServiceBenchmark extends StdBenchAnnotations with HttpBenchmark {
 
   val routes: Seq[Route] = Seq(
-    route("/groups/"),
-    route("/groups/:id"),
-    route("/tasks/"),
-    route("/tasks/:id"),
-    route("/foo/"),
-    route("/foo/:id"),
-    route("/users/"),
-    route("/users/:id")
+    route("/groups/verified/vip/top10/"),
+    route("/groups/verified/vip/top10/:id"),
+    route("/tasks/easy/top10/:id"),
+    route("/tasks/starter/top10/:id"),
+    route("/users/test/temp/top10/"),
+    route("/users/test/temp/top10/:id"),
+    route("/groups/vip/top10/"),
+    route("/groups/vip/top10/:id"),
+    route("/groups/vip/top10/:id/:name"),
+    route("/foo/bar/baz/top10/"),
+    route("/foo/bar/baz/:id"),
+    route("/foo/baz/baz/:name"),
+    route("/groups/verified/vip/top5/"),
+    route("/groups/verified/vip/top5/:id"),
+    route("/tasks/easy/top5/:id"),
+    route("/tasks/starter/top5/:id"),
+    route("/users/test/temp/top5/"),
+    route("/users/test/temp/top5/:id"),
+    route("/groups/vip/top5/"),
+    route("/groups/vip/top5/:id"),
+    route("/groups/vip/top5/:id/:name"),
+    route("/foo/bar/baz/top5/"),
+    route("/foo/bar/baz/top5/:id"),
+    route("/foo/baz/baz/top5/:name")
   )
 
   val routingService: RoutingService = new RoutingService(routes)
-  val getRequest1: Request = Request("/users/")
-  val getRequest2: Request = Request("/users/123")
+  val getRequest1: Request = Request("/foo/bar/baz/top5/")
+  val getRequest2: Request = Request("/groups/vip/top5/123/jack")
 
   @Benchmark
   def timeOldLastConstant(): Future[Response] = {

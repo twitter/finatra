@@ -56,20 +56,13 @@ private[http] case class Route(
     this.copy(filter = filter.andThen(this.filter))
   }
 
-  // Note: incomingPath is an optimization to avoid calling request.path for every potential route
+  /** Endpoint to handle non-constant route with route parameters */
   def handle(
     request: Request,
-    incomingPath: String,
-    bypassFilters: Boolean
+    bypassFilters: Boolean,
+    routeParams: Map[String, String]
   ): Option[Future[Response]] = {
-    val path = toMatchPath(incomingPath)
-    val routeParamsOpt = pattern.extract(path)
-
-    if (routeParamsOpt.isEmpty) {
-      None
-    } else {
-      handleMatch(createRequest(request, routeParamsOpt.get), bypassFilters)
-    }
+    handleMatch(createRequest(request, routeParams), bypassFilters)
   }
 
   def handleMatch(request: Request, bypassFilters: Boolean): Some[Future[Response]] = {
@@ -86,15 +79,7 @@ private[http] case class Route(
     if (routeParams.isEmpty)
       request
     else
-      new RequestWithRouteParams(request, routeParams)
-  }
-
-  /** routes are stored with the optional trailing slash, thus we add it to match if not present */
-  private[this] def toMatchPath(incomingPath: String): String = {
-    if (hasOptionalTrailingSlash && !incomingPath.endsWith("/"))
-      incomingPath + "/"
-    else
-      incomingPath
+    new RequestWithRouteParams(request, routeParams)
   }
 
   /** normalize a URI to a route path */

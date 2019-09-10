@@ -49,7 +49,7 @@ trait FeatureTestMixin extends SuiteMixin with IntegrationTestMixin { this: Suit
         server.assertCleanShutdown()
       } catch {
         case NonFatal(e) =>
-          error(e.getMessage, e)
+          e.printStackTrace(System.err)
       }
     }
   }
