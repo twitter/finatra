@@ -7,6 +7,13 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Fixed
+~~~~~
+
+* inject-logback: A `NullReferenceException` could be thrown during metrics
+  collection due to an incorrect logback.xml configuration. This has been fixed.
+  ``PHAB_ID=D369234``
+  
 19.9.0
 ------
 
