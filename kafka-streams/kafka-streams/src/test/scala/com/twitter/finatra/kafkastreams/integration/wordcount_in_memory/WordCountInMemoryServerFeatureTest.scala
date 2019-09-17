@@ -53,6 +53,5 @@ class WordCountInMemoryServerFeatureTest extends KafkaStreamsFeatureTest {
       "kafka/stream/state",
       2.0f
     )
-    server.printStats()
   }
 }

@@ -75,7 +75,6 @@ class WordCountServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
       "kafka/consumer/wordcount-prod-CountsStore-repartition/time_since_record_published_ms"
     )
 
-    serverBeforeRestart.printStats()
     serverBeforeRestart.close()
 
     val serverAfterRestart = createServer()
