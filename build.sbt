@@ -69,9 +69,7 @@ lazy val versions = new {
 
   val agrona = "0.9.22"
   val bijectionCore = "0.9.5"
-  val commonsCodec = "1.9"
   val commonsFileupload = "1.4"
-  val commonsLang = "2.6"
   val fastutil = "8.1.1"
   val guice = "4.0"
   val jackson = "2.9.9"
@@ -700,7 +698,6 @@ lazy val httpclient = project
     name := "finatra-httpclient",
     moduleName := "finatra-httpclient",
     libraryDependencies ++= Seq(
-      "commons-codec" % "commons-codec" % versions.commonsCodec,
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "com.twitter" %% "twitter-server" % versions.twLibVersion % Test,
