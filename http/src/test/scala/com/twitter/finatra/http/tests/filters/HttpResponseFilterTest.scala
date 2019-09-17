@@ -16,6 +16,14 @@ class HttpResponseFilterTest extends Test {
 
   private[this] val host = "www.twitter.com"
 
+  test("foo") {
+    assert(System.getProperty("com.twitter.inject.test.logging.disabled") != null)
+  }
+
+  test("env") {
+    assert(System.getProperties.toString == "lol")
+  }
+
   test("test response header") {
     val service = mkService()
     val request = mkRequest
