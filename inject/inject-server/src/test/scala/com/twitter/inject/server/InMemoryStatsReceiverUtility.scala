@@ -396,7 +396,6 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
      *         in the underlying [[InMemoryStatsReceiver]], otherwise an [[IllegalArgumentException]].
      */
     def apply(name: String): Float = this.get(name).getOrElse {
-      print()
       throw new IllegalArgumentException(s"""Gauge "$name" was not found""")
     }
 
