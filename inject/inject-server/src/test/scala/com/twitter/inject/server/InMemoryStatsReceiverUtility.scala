@@ -88,8 +88,22 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
      * @return the current [[Long]] value of the [[com.twitter.finagle.stats.Counter]] if it exists
      *         in the underlying [[InMemoryStatsReceiver]], otherwise an [[IllegalArgumentException]].
      */
-    def apply(name: String): Long = this.get(name).getOrElse {
-      print()
+    def apply(name: String): Long = this.apply(name, verbose = true)
+
+    /**
+     * Returns the [[Long]] value for the [[com.twitter.finagle.stats.Counter]] collected with
+     * the given name or an [[IllegalArgumentException]] if the [[com.twitter.finagle.stats.Counter]]
+     * does not exist in the underlying [[InMemoryStatsReceiver]].
+     *
+     * @param name the registered `String` to use as the lookup key for a collected
+     *             [[com.twitter.finagle.stats.Counter]].
+     * @param verbose if the current stats should be printed.
+     *
+     * @return the current [[Long]] value of the [[com.twitter.finagle.stats.Counter]] if it exists
+     *         in the underlying [[InMemoryStatsReceiver]], otherwise an [[IllegalArgumentException]].
+     */
+    def apply(name: String, verbose: Boolean): Long = this.get(name).getOrElse {
+      if (verbose) print()
       throw new IllegalArgumentException(s"""Counter "$name" was not found""")
     }
 
@@ -169,7 +183,7 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
       predicate: Long => Boolean,
       timeout: Duration
     ): Assertion = eventually(timeout) {
-      val actualValue: Long = this.apply(name)
+      val actualValue: Long = this.apply(name, verbose = false)
       withClue(s"""Asserted predicate for counter "$name" never evaluated to true:""") {
         predicate(actualValue) should be(true)
       }
@@ -180,7 +194,7 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
       expectedValue: Long,
       timeout: Duration = 150.millis
     ): Assertion = eventually(timeout) {
-      val actualValue: Long = this.apply(name)
+      val actualValue: Long = this.apply(name, verbose = false)
       withClue(s"""Expected "$expectedValue" for counter "$name" but got "$actualValue"""") {
         actualValue should equal(expectedValue)
       }
@@ -238,8 +252,22 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
      * @return the current [[Seq]] of values of the [[com.twitter.finagle.stats.Stat]] if it exists
      *         in the underlying [[InMemoryStatsReceiver]], otherwise an [[IllegalArgumentException]].
      */
-    def apply(name: String): Seq[Float] = this.get(name).getOrElse {
-      print()
+    def apply(name: String): Seq[Float] = this.apply(name, verbose = true)
+
+    /**
+     * Returns the [[Seq]] of values for the [[com.twitter.finagle.stats.Stat]] with the given
+     * name or an [[IllegalArgumentException]] if the [[com.twitter.finagle.stats.Stat]] does not
+     * exist in the underlying [[InMemoryStatsReceiver]].
+     *
+     * @param name the registered `String` to use as the lookup key for a collected
+     *             [[com.twitter.finagle.stats.Stat]].
+     * @param verbose if the current stats should be printed.
+     *
+     * @return the current [[Seq]] of values of the [[com.twitter.finagle.stats.Stat]] if it exists
+     *         in the underlying [[InMemoryStatsReceiver]], otherwise an [[IllegalArgumentException]].
+     */
+    def apply(name: String, verbose: Boolean): Seq[Float] = this.get(name).getOrElse {
+      if (verbose) print()
       throw new IllegalArgumentException(s"""Stat "$name" was not found""")
     }
 
@@ -326,7 +354,7 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
       predicate: Seq[Float] => Boolean,
       timeout: Duration
     ): Assertion = eventually(timeout) {
-      val actualValue: Seq[Float] = this.apply(name)
+      val actualValue: Seq[Float] = this.apply(name, verbose = false)
       withClue(s"""Asserted predicate for stat "$name" never evaluated to true:""") {
         predicate(actualValue) should be(true)
       }
@@ -337,7 +365,7 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
       expectedValue: Seq[Float],
       timeout: Duration = 150.millis
     ): Assertion = eventually(timeout) {
-      val actualValue: Seq[Float] = this.apply(name)
+      val actualValue: Seq[Float] = this.apply(name, verbose = false)
       withClue(s"""Expected "$expectedValue" for stat "$name" but got "$actualValue":""") {
         actualValue should equal(expectedValue)
       }
@@ -395,8 +423,22 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
      * @return the current [[Float]] value of the [[com.twitter.finagle.stats.Gauge]] if it exists
      *         in the underlying [[InMemoryStatsReceiver]], otherwise an [[IllegalArgumentException]].
      */
-    def apply(name: String): Float = this.get(name).getOrElse {
-      print()
+    def apply(name: String): Float = this.apply(name, verbose = true)
+
+    /**
+     * Returns the [[Float]] value for the [[com.twitter.finagle.stats.Gauge]] collected with the
+     * given name or an [[IllegalArgumentException]] if the [[com.twitter.finagle.stats.Gauge]] does
+     * not exist in the underlying [[InMemoryStatsReceiver]].
+     *
+     * @param name the registered `String` to use as the lookup key for a collected
+     *             [[com.twitter.finagle.stats.Gauge]].
+     * @param verbose if the current stats should be printed
+     *
+     * @return the current [[Float]] value of the [[com.twitter.finagle.stats.Gauge]] if it exists
+     *         in the underlying [[InMemoryStatsReceiver]], otherwise an [[IllegalArgumentException]].
+     */
+    def apply(name: String, verbose: Boolean): Float = this.get(name).getOrElse {
+      if (verbose) print()
       throw new IllegalArgumentException(s"""Gauge "$name" was not found""")
     }
 
@@ -476,7 +518,7 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
       predicate: Float => Boolean,
       timeout: Duration
     ): Assertion = eventually(timeout) {
-      val actualValue: Float = this.apply(name)
+      val actualValue: Float = this.apply(name, verbose = false)
       withClue(s"""Asserted predicate for gauge "$name" never evaluated to true:""") {
         predicate(actualValue) should be(true)
       }
@@ -487,7 +529,7 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
       expectedValue: Float,
       timeout: Duration = 150.millis
     ): Assertion = eventually(timeout) {
-      val actualValue: Float = this.apply(name)
+      val actualValue: Float = this.apply(name, verbose = false)
       withClue(s"""Expected "$expectedValue" for gauge "$name" but got "$actualValue":""") {
         actualValue should equal(expectedValue)
       }
