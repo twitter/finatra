@@ -72,7 +72,7 @@ class WordCountServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
     )
     assertTimeSincePublishedSet(
       serverBeforeRestart,
-      "kafka/consumer/wordcount-prod-CountsStore-repartition/time_since_record_published_ms"
+      "kafka/consumer/wordcount_prod_CountsStore_repartition/time_since_record_published_ms"
     )
 
     serverBeforeRestart.close()
@@ -90,10 +90,10 @@ class WordCountServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
     // val serverAfterRestartStats = new InMemoryStatsUtil(serverAfterRestart.injector)
     // serverAfterRestartStats.gauges.waitForUntil("kafka/thread2/restore_consumer/records_consumed_total", _ > 0)
     serverAfterRestartStats.stats.get(
-      "kafka/consumer/wordcount-prod-CountsStore-changelog/time_since_record_published_ms"
+      "kafka/consumer/wordcount_prod_CountsStore_changelog/time_since_record_published_ms"
     ) should be(None)
     serverAfterRestartStats.stats.get(
-      "kafka/consumer/wordcount-prod-CountsStore-changelog/time_since_record_timestamp_ms"
+      "kafka/consumer/wordcoun_prod_CountsStore_changelog/time_since_record_timestamp_ms"
     ) should be(None)
     serverAfterRestart.close()
     Await.result(serverAfterRestart.mainResult)

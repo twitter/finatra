@@ -10,6 +10,9 @@ Unreleased
 Fixed
 ~~~~~
 
+* finatra-kafka: Sanitize topic name in MonitoringConsumer stats scope
+  ``PHAB_ID=D373402``
+
 * inject-server: Fix printing of all stats from the underlying `InMemoryStatsReceiver` in
   the `eventually` loop for stat assertion. Address finatra/kafka test logging for
   finatra/kakfa-streams/kafka-streams and finatra/kafka. ``PHAB__ID=D372108``
@@ -17,7 +20,7 @@ Fixed
 * inject-logback: A `NullReferenceException` could be thrown during metrics
   collection due to an incorrect logback.xml configuration. This has been fixed.
   ``PHAB_ID=D369234``
-  
+
 19.9.0
 ------
 
