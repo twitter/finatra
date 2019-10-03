@@ -2,7 +2,6 @@ scala_library(
     sources = rglobs("*.scala"),
     compiler_option_sets = {"fatal_warnings"},
     dependencies = [
-        "3rdparty/jvm/com/fasterxml/jackson/core:jackson-core",
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
         "3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala",
         "3rdparty/jvm/com/github/nscala_time",
@@ -22,10 +21,8 @@ scala_library(
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/jackson/src/main/scala",
-        "finatra/utils/src/main/scala",
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",
-        "util/util-core/src/main/scala",
         "util/util-lint/src/main/scala",
         "util/util-logging/src/main/scala",
         "util/util-slf4j-api/src/main/scala",
