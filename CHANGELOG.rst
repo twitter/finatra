@@ -7,8 +7,21 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+
+* finatra-jackson: Update jackson reflection to use `org.json.reflect` instead of
+  custom reflection. This enables support for parsing case classes defined over generic
+  types, e.g., `case class Page[T](data: T)`. As a result of this change, use of `lazy val`
+  for trait members which are mixed into case classes for use in deserialization is no
+  longer supported. This addresses issue #480. ``PHAB_ID=D368822``
+
 Fixed
 ~~~~~
+
+* finatra-jackson: Add support for parsing of case classes defined over generic types
+  (even nested, and multiple), e.g., `case class Page[T, U] (data: List[T], column: U)`.
+  Fixes issue #408. ``PHAB_ID=D368822``
 
 * finatra-kafka: Sanitize topic name in MonitoringConsumer stats scope
   ``PHAB_ID=D373402``
@@ -27,14 +40,14 @@ Fixed
 Added
 ~~~~~
 
-* finatra-kafka:  Add `withConfig` method variant which takes a `Map[String, String]`
-                  to allow for more complex configurations ``PHAB_ID=D354389``
+* finatra-kafka: Add `withConfig` method variant which takes a `Map[String, String]`
+  to allow for more complex configurations ``PHAB_ID=D354389``
 
 Changed
 ~~~~~~~
 
 * finatra: Remove commons-lang as a dependency and replace it with alternatives from stdlib 
-           when possible. ``PHAB_ID=D354013``
+  when possible. ``PHAB_ID=D354013``
 
 * inject-server: Changed `c.t.inject.server.InMemoryStatsReceiverUtility` to show the expected and
   actual values as part of the error message when metric values do not match. ``PHAB_ID=D360470``
@@ -44,8 +57,8 @@ Changed
 Fixed
 ~~~~~
 
-* finatra-http:  Support Http 405 response code, improve routing performance for non-constant route
-                 ``PHAB_ID=D278146``
+* finatra-http: Support Http 405 response code, improve routing performance for non-constant route
+  ``PHAB_ID=D278146``
 
 * inject-app: Update `c.t.inject.app.App` to only recurse through modules once. We currently
   call `TwitterModule#modules` more than once in reading flags and parsing the list of modules

@@ -75,6 +75,7 @@ lazy val versions = new {
   val jackson = "2.9.9"
   val jodaConvert = "1.2"
   val jodaTime = "2.5"
+  val json4s = "3.6.7"
   val junit = "4.12"
   val kafka = "2.2.0"
   val libThrift = "0.10.0"
@@ -616,7 +617,7 @@ lazy val jackson = project
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson,
-      "org.scala-lang" % "scalap" % scalaVersion.value,
+      "org.json4s" %% "json4s-core" % versions.json4s,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "com.twitter" %% "util-core" % versions.twLibVersion
     ),

@@ -1,6 +1,7 @@
 package com.twitter.finatra.http.tests.integration.json
 
-import com.twitter.finatra.request.{Header, QueryParam}
+import com.twitter.finagle.http.Request
+import com.twitter.finatra.request.{Header, QueryParam, RouteParam}
 import com.twitter.finatra.validation.{MethodValidation, Size, ValidationResult}
 
 case class PersonWithThingsRequest(
@@ -11,6 +12,13 @@ case class PersonWithThingsRequest(
 
 case class Things(
   @Size(min = 1, max = 2) names: Seq[String])
+
+case class GenericWithRequest[T](data: T, request: Request)
+
+case class WithBooleanRequest(
+  @RouteParam id: Int,
+  @QueryParam completeOnly: Boolean = false
+)
 
 trait TestRequest {
   protected[this] val ValidFormats: Seq[String] = Seq("compact", "default", "detailed")
@@ -84,8 +92,8 @@ case class UserLookupRequest(
   @Header("Accept") acceptHeader: Option[String] = None)
   extends TestRequest {
 
-  lazy val validationPassesForIds: Boolean = ids.forall(validateListOfLongIds)
-  lazy val validationPassesForNames: Boolean = validateListOfUsers(names)
+  def validationPassesForIds: Boolean = ids.forall(validateListOfLongIds)
+  def validationPassesForNames: Boolean = validateListOfUsers(names)
 
   @MethodValidation
   def validateIds(): ValidationResult =

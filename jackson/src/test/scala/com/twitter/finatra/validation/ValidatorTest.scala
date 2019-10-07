@@ -1,11 +1,12 @@
 package com.twitter.finatra.validation
 
 import com.twitter.finatra.json.internal.caseclass.jackson.CaseClassField._
-import com.twitter.finatra.json.internal.caseclass.reflection.CaseClassSigParser._
+import com.twitter.finatra.json.internal.caseclass.jackson.ConstructorParam
 import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils
 import com.twitter.finatra.json.internal.caseclass.validation.ValidationManager
 import com.twitter.inject.Test
 import java.lang.annotation.Annotation
+import org.json4s.reflect.{ClassDescriptor, Reflector, classDescribable}
 
 class ValidatorTest extends Test {
 
@@ -23,7 +24,12 @@ class ValidatorTest extends Test {
   }
 
   def getValidationAnnotations(clazz: Class[_], paramName: String): Seq[Annotation] = {
-    val constructorParams = parseConstructorParams(clazz)
+    val constructorParams: Seq[ConstructorParam] =
+      Reflector
+        .describe(classDescribable(clazz))
+        .asInstanceOf[ClassDescriptor]
+        .constructors.head
+        .params.map(param => ConstructorParam(param.name, param.argType))
     val annotations = findAnnotations(clazz, constructorParams)
 
     for {

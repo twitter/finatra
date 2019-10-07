@@ -25,8 +25,7 @@ scala_library(
         "3rdparty/jvm/joda-time",
         "3rdparty/jvm/net/codingwell:scala-guice",
         "3rdparty/jvm/org/apache/thrift:libthrift",
-        "3rdparty/jvm/org/scala-lang:scala-compiler",
-        "3rdparty/jvm/org/scala-lang:scalap",
+        "3rdparty/jvm/org/json4s:json4s-core",
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "finagle/finagle-http/src/main/scala",
         "finatra/inject/inject-core/src/main/scala",
@@ -41,6 +40,5 @@ scala_library(
     exports = [
         "3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala",
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
-        "3rdparty/jvm/org/scala-lang:scalap",
     ],
 )

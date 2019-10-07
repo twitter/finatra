@@ -161,7 +161,8 @@ class CaseClassFieldTest extends Test {
     val helloField: CaseClassField = fields.head
     helloField.annotations.size should equal(2)
     helloField.annotations.exists(_.annotationType() == classOf[JsonProperty]) should be(true)
-    helloField.annotations.head.asInstanceOf[JsonProperty].value() should equal("goodbyeWorld") // from Baz
+    helloField.annotations.head
+      .asInstanceOf[JsonProperty].value() should equal("goodbyeWorld") // from Baz
 
     helloField.annotations.exists(_.annotationType() == classOf[Header]) should be(true)
     helloField.annotations.last.asInstanceOf[Header].value() should be("accept") // from Bar
@@ -178,7 +179,8 @@ class CaseClassFieldTest extends Test {
     val helloField: CaseClassField = fields.head
     helloField.annotations.size should equal(2)
     helloField.annotations.exists(_.annotationType() == classOf[JsonProperty]) should be(true)
-    helloField.annotations.head.asInstanceOf[JsonProperty].value() should equal("goodbye") // from BarBaz
+    helloField.annotations.head
+      .asInstanceOf[JsonProperty].value() should equal("goodbye") // from BarBaz
 
     helloField.annotations.exists(_.annotationType() == classOf[Header]) should be(true)
     helloField.annotations.last.asInstanceOf[Header].value() should be("accept") // from Bar
@@ -238,5 +240,17 @@ class CaseClassFieldTest extends Test {
     uriField.annotations.size should equal(1)
     uriField.annotations.exists(_.annotationType() == classOf[JsonProperty]) should be(true)
     uriField.annotations.head.asInstanceOf[JsonProperty].value() should equal("folder")
+  }
+
+  test("Seq[Long]") {
+    val fields = CaseClassField.createFields(
+      classOf[CaseClassWithArrayLong],
+      PropertyNamingStrategy.LOWER_CAMEL_CASE,
+      TypeFactory.defaultInstance
+    )
+
+    fields.length should equal(1)
+    val arrayField: CaseClassField = fields.head
+    arrayField.javaType.getTypeName should be("[array type, component type: [simple type, class long]]")
   }
 }

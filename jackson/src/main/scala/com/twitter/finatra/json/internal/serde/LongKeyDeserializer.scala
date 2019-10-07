@@ -3,8 +3,8 @@ package com.twitter.finatra.json.internal.serde
 import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.deser.KeyDeserializers
 import com.fasterxml.jackson.module.scala.JacksonModule
-import com.twitter.finatra.json.internal.caseclass.reflection.CaseClassSigParser
 import com.twitter.inject.domain.WrappedValue
+import org.json4s.reflect.{classDescribable, ClassDescriptor, Reflector}
 
 private[finatra] class LongKeyDeserializer(clazz: Class[_]) extends KeyDeserializer {
   private val constructor = clazz.getConstructor(classOf[Long])
@@ -38,8 +38,13 @@ private[finatra] object LongKeyDeserializers extends JacksonModule {
   }
 
   private def isWrappedLong(clazz: Class[_]): Boolean = {
-    val constructorParams = CaseClassSigParser.parseConstructorParams(clazz)
-    constructorParams.head.scalaType.primitiveAwareErasure == classOf[Long]
+    val reflector =
+      Reflector.describe(classDescribable(clazz))
+        .asInstanceOf[ClassDescriptor]
+        .constructors
+        .head
+    val erased = reflector.params.head.argType.erasure
+    erased == classOf[Long] || erased.getName == "long"
   }
 
   this += { _.addKeyDeserializers(keyDeserializers) }

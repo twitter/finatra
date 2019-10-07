@@ -45,7 +45,12 @@ private[finatra] class CaseClassDeserializer(
     with Logging {
 
   private val caseClassFields =
-    CaseClassField.createFields(javaType.getRawClass, propertyNamingStrategy, config.getTypeFactory)
+    CaseClassField.createFields(
+      javaType.getRawClass,
+      propertyNamingStrategy,
+      config.getTypeFactory
+    )
+  private val typeBindings: Map[String, JavaType] = parseTypeBindings
 
   private val numConstructorArgs = caseClassFields.size
   private val constructor = {
@@ -145,7 +150,7 @@ private[finatra] class CaseClassDeserializer(
 
     for (field <- caseClassFields) {
       try {
-        val value = field.parse(context, jp.getCodec, jsonNode)
+        val value = field.parse(context, jp.getCodec, jsonNode, typeBindings)
         addConstructorValue(value)
 
         if (field.validationAnnotations.nonEmpty) {
@@ -169,7 +174,7 @@ private[finatra] class CaseClassDeserializer(
               PropertyPath.leaf(field.name),
               Invalid(
                 s"'${e.getValue.toString}' is not a " +
-                  s"valid ${e.getTargetType.getSimpleName}${validValuesString(e)}",
+                  s"valid ${boxedClassName(e.getTargetType.getSimpleName)}${validValuesString(e)}",
                 ErrorCode.JsonProcessingError(e)
               )
             )
@@ -179,7 +184,10 @@ private[finatra] class CaseClassDeserializer(
             field,
             CaseClassValidationException(
               PropertyPath.leaf(field.name),
-              Invalid(e.getMessage, ErrorCode.JsonProcessingError(e))
+              Invalid(
+                s"'${jsonNode.asText("")}' is not a " +
+                  s"valid ${boxedClassName(e.getTargetType.getSimpleName)}${validValuesString(e)}",
+                ErrorCode.JsonProcessingError(e))
             )
           )
         case e: CaseClassMappingException =>
@@ -241,14 +249,8 @@ private[finatra] class CaseClassDeserializer(
       constructor.newInstance(constructorValues: _*).asInstanceOf[Object]
     } catch {
       case e @ (_: InvocationTargetException | _: ExceptionInInitializerError) =>
-        warn(
-          "Add validation to avoid instantiating invalid object of type: " + javaType.getRawClass
-        )
         // propagate the underlying cause of the failed instantiation if available
-        if (e.getCause == null)
-          throw e
-        else
-          throw e.getCause
+        if (e.getCause == null) throw e else throw e.getCause
     }
   }
 
@@ -309,4 +311,28 @@ private[finatra] class CaseClassDeserializer(
         Seq.empty[String]
     }
   }
+
+  private[this] def boxedClassName(name: String): String = name match {
+    case "boolean" => classOf[java.lang.Boolean].getSimpleName
+    case "byte" => classOf[java.lang.Byte].getSimpleName
+    case "short" => classOf[java.lang.Short].getSimpleName
+    case "char" => classOf[java.lang.Character].getSimpleName
+    case "int" => classOf[java.lang.Integer].getSimpleName
+    case "long" => classOf[java.lang.Long].getSimpleName
+    case "float" => classOf[java.lang.Float].getSimpleName
+    case "double" => classOf[java.lang.Double].getSimpleName
+    case _ => name
+  }
+
+  private[this] def parseTypeBindings: Map[String, JavaType] =
+    Option(javaType.getBindings) match {
+      case Some(bindings) =>
+        val m = scala.collection.mutable.Map[String, JavaType]()
+        for (i <- 0 to bindings.size()) {
+          val key = bindings.getBoundName(i) // we assume value is not null if key is not null
+          if (key != null) m += key -> bindings.getBoundType(i)
+        }
+        m.toMap
+      case _ => Map.empty[String, JavaType]
+    }
 }

@@ -1,26 +1,44 @@
 package com.twitter.finatra.json.tests
 
+import com.fasterxml.jackson.core.`type`.TypeReference
 import com.fasterxml.jackson.databind.node.{IntNode, TreeTraversingParser}
-import com.fasterxml.jackson.databind.{JsonMappingException, JsonNode, ObjectMapper, PropertyNamingStrategy}
+import com.fasterxml.jackson.databind.{
+  JsonMappingException,
+  JsonNode,
+  ObjectMapper,
+  PropertyNamingStrategy
+}
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.annotations.{CamelCaseMapper, SnakeCaseMapper}
-import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassMappingException, CaseClassValidationException, JsonInjectionNotSupportedException, RequestFieldInjectionNotSupportedException}
-import com.twitter.finatra.json.internal.caseclass.reflection.MissingExpectedType
+import com.twitter.finatra.json.internal.caseclass.exceptions.{
+  CaseClassMappingException,
+  CaseClassValidationException,
+  JsonInjectionNotSupportedException,
+  RequestFieldInjectionNotSupportedException
+}
+import com.twitter.finatra.json.internal.caseclass.jackson.MissingExpectedType
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.finatra.json.tests.internal.Obj.{NestedCaseClassInObject, NestedCaseClassInObjectWithNestedCaseClassInObjectParam}
+import com.twitter.finatra.json.tests.internal.Obj.{
+  NestedCaseClassInObject,
+  NestedCaseClassInObjectWithNestedCaseClassInObjectParam
+}
 import com.twitter.finatra.json.tests.internal.TypeAndCompanion.NestedCaseClassInCompanion
 import com.twitter.finatra.json.tests.internal._
 import com.twitter.finatra.json.tests.internal.caseclass.jackson.Aum
-import com.twitter.finatra.json.tests.internal.internal.{SimplePersonInPackageObject, SimplePersonInPackageObjectWithoutConstructorParams}
+import com.twitter.finatra.json.tests.internal.internal.{
+  SimplePersonInPackageObject,
+  SimplePersonInPackageObjectWithoutConstructorParams
+}
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
-import com.twitter.inject.{Logging, Test}
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.conversions.time._
+import com.twitter.inject.{Logging, Test}
 import com.twitter.io.Buf
 import com.twitter.util.Duration
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
+import java.lang.reflect.{ParameterizedType, Type}
 import java.util.concurrent.TimeUnit
 import org.joda.time.{DateTime, DateTimeZone}
 import scala.util.Random
@@ -34,6 +52,76 @@ class FinatraObjectMapperTest extends Test with Logging {
   /* Test Injector */
   private[this] val injector =
     TestInjector(FinatraJacksonModule).create
+
+  private[this] def typeFromManifest(m: Manifest[_]): Type =
+    if (m.typeArguments.isEmpty) {
+      m.runtimeClass
+    } else {
+      new ParameterizedType {
+        override def getRawType: Class[_] = m.runtimeClass
+        override def getActualTypeArguments: Array[Type] =
+          m.typeArguments.map(typeFromManifest).toArray
+        override def getOwnerType: Null = null
+      }
+    }
+
+  private[this] def typeReference[T: Manifest]: TypeReference[T] = new TypeReference[T] {
+    override def getType: Type = typeFromManifest(manifest[T])
+  }
+
+  def deserialize[T: Manifest](mapper: ObjectMapper, value: String): T =
+    mapper.readValue(value, typeReference[T])
+
+  // based on Jackson test to ensure compatibility:
+  // https://github.com/FasterXML/jackson-module-scala/blob/fa7cf702e0f61467d726384af88de9ea1f798b97/src/test/scala/com/fasterxml/jackson/module/scala/deser/CaseClassDeserializerTest.scala#L78-L81
+  test("generic types") {
+    parse[GenericTestCaseClass[Int]]("""{"data" : 3}""") should equal(GenericTestCaseClass[Int](3))
+    parse[GenericTestCaseClass[String]]("""{"data" : "Hello, World"}""") should equal(
+      GenericTestCaseClass("Hello, World"))
+    parse[GenericTestCaseClass[Double]]("""{"data" : 3.14}""") should equal(
+      GenericTestCaseClass(3.14d))
+
+    parse[CaseClassWithTypes[String, Int]]("""{"first": "Bob", "second" : 42}""") should equal(
+      CaseClassWithTypes("Bob", 42))
+    parse[CaseClassWithTypes[Int, Float]]("""{"first": 127, "second" : 39.0}""") should equal(
+      CaseClassWithTypes(127, 39.0f))
+
+    parse[CaseClassWithMapTypes[String, Float]](
+      """{"data": {"pi": 3.14, "inverse fine structure constant": 137.035}}""") should equal(
+      CaseClassWithMapTypes(
+        Map[String, Float]("pi" -> 3.14f, "inverse fine structure constant" -> 137.035f))
+    )
+    parse[CaseClassWithManyTypes[Int, Float, String]](
+      """{"one": 1, "two": 3.1, "three": "Hello, World!"}""") should equal(
+      CaseClassWithManyTypes(1, 3.1f, "Hello, World!"))
+
+    val result = Page(
+      List(
+        Person(1, "Bob Marley", Some(32), Some(32), "Music Master"),
+        Person(2, "Jimi Hendrix", Some(27), None, "Melody Man")),
+      5,
+      None,
+      None)
+    val input =
+      """
+              |{
+              |  "data": [
+              |    {"id": 1, "name": "Bob Marley", "age": 32, "age_with_default": 32, "nickname": "Music Master"},
+              |    {"id": 2, "name": "Jimi Hendrix", "age": 27, "nickname": "Melody Man"}
+              |  ],
+              |  "page_size": 5
+              |}
+            """.stripMargin
+
+    // test with default scala module
+    val defaultScalaObjectMapper = new ObjectMapper with ScalaObjectMapper
+    defaultScalaObjectMapper.registerModule(DefaultScalaModule)
+    defaultScalaObjectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+    deserialize[Page[Person]](defaultScalaObjectMapper, input) should equal(result)
+
+    // test with FinatraObjectMapper
+    deserialize[Page[Person]](mapper.objectMapper, input) should equal(result)
+  }
 
   test("JsonProperty#annotation inheritance") {
     val aumJson = """{"i":1,"j":"J"}"""
@@ -180,6 +268,19 @@ class FinatraObjectMapperTest extends Test with Logging {
         "model: field is required",
         "passengers.age: 'blah' is not a valid Integer",
         "passengers.name: field is required"
+      )
+    )
+  }
+
+  test("simple test#parse char") {
+    assertJsonParse[CaseClassCharacter](
+      """
+        |{
+        |"c" : -1
+        |}
+      """.stripMargin,
+      withErrors = Seq(
+        "c: '' is not a valid Character"
       )
     )
   }
@@ -374,7 +475,7 @@ class FinatraObjectMapperTest extends Test with Logging {
          "date_time4" : ""
        }""",
       withErrors = Seq(
-        "age3: error parsing ''",
+        "age3: '' is not a valid Integer",
         "age: 'old' is not a valid Integer",
         """date_time3: field cannot be negative""",
         """date_time4: field cannot be empty""",
@@ -456,7 +557,6 @@ class FinatraObjectMapperTest extends Test with Logging {
   test(
     "wrapped values#direct WrappedValue for String when asked to parse wrapped json object should throw exception"
   ) {
-    val origObj = WrappedValueString("1")
     intercept[JsonMappingException] {
       parse[WrappedValueString]("""{"value": "1"}""")
     }
@@ -607,7 +707,7 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("A basic case class is parsable from a JSON object with corresponding fields") {
-    parse[CaseClass]("""{"id":1,"name":"Coda"}""") should be(CaseClass(1, "Coda"))
+    parse[CaseClass]("""{"id":111,"name":"Coda"}""") should be(CaseClass(111L, "Coda"))
   }
 
   test("A basic case class is parsable from a JSON object with extra fields") {
@@ -822,7 +922,7 @@ class FinatraObjectMapperTest extends Test with Logging {
                  "next_cursor" : "2892e7ab37d44c6a15b438f78e8d76ed$"
                }"""
     val entityIdsResponse = parse[TestEntityIdsResponse](json)
-    entityIdsResponse.entityIds.sorted.size should be > (0)
+    entityIdsResponse.entityIds.sorted.size should be > 0
   }
 
   test("complex with companion class") {
@@ -833,7 +933,7 @@ class FinatraObjectMapperTest extends Test with Logging {
                  "next_cursor" : "2892e7ab37d44c6a15b438f78e8d76ed$"
                }"""
     val entityIdsResponse = parse[TestEntityIdsResponseWithCompanion](json)
-    entityIdsResponse.entityIds.sorted.size should be > (0)
+    entityIdsResponse.entityIds.sorted.size should be > 0
   }
 
   val json = """
@@ -861,18 +961,14 @@ class FinatraObjectMapperTest extends Test with Logging {
                "float": 34.5,
                "double": 44.9,
                "any": true,
-               "any_ref": "wah"
+               "any_ref": "wah",
+               "int_map": {
+                 "1": "1"
+               },
+               "long_map": {
+                 "2": 2
+               }
              }"""
-  /* TODO
-     "intMap": {
-       "1": "1"
-     },
-     "longMap": {
-       "2": 2
-     }
-   }
-   """
-   */
 
   test(
     "A case class with members of all ScalaSig types " +
@@ -888,7 +984,7 @@ class FinatraObjectMapperTest extends Test with Logging {
       indexedSeq = IndexedSeq(16, 17, 18),
       vector = Vector(22, 23, 24),
       bigDecimal = BigDecimal("12.0"),
-      bigInt = 13, //todo
+      bigInt = 13,
       int = 1,
       long = 2L,
       char = 'x',
@@ -898,9 +994,9 @@ class FinatraObjectMapperTest extends Test with Logging {
       float = 34.5f,
       double = 44.9d,
       any = true,
-      anyRef = "wah"
-      //intMap = Map(1 -> 1), //TODO
-      //longMap = Map(2L -> 2L) //TODO
+      anyRef = "wah",
+      intMap = Map(1 -> 1),
+      longMap = Map(2L -> 2L)
     )
 
     got should be(expected)
@@ -1003,7 +1099,7 @@ class FinatraObjectMapperTest extends Test with Logging {
         "age" : 21
       }
       """)
-    bob should equal(Person(1, "Bob", Some(21), None, "unknown"))
+    bob should equal(Person(1, "Bob", Some(21), None))
   }
 
   test("missing required field") {
@@ -1134,7 +1230,7 @@ class FinatraObjectMapperTest extends Test with Logging {
     val request = Request()
     val json = """{ "foo": "true" }"""
     request.setContentString(json)
-    request.headerMap.set("Content-Length", json.size.toString)
+    request.headerMap.set("Content-Length", json.length.toString)
     val result = mapper.parse[CaseClassWithBoolean](request)
     assert(result == CaseClassWithBoolean(true))
   }
@@ -1234,7 +1330,7 @@ class FinatraObjectMapperTest extends Test with Logging {
 
   test("case class in package object uses default when name not specified") {
     parse[SimplePersonInPackageObject]("""{}""") should equal(
-      SimplePersonInPackageObject("default-name")
+      SimplePersonInPackageObject()
     )
   }
 

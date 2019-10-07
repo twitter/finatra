@@ -1,5 +1,6 @@
 package com.twitter.finatra.http.internal.marshalling
 
+import com.fasterxml.jackson.databind.`type`.SimpleType
 import com.fasterxml.jackson.databind.{
   BeanProperty,
   DeserializationContext,
@@ -68,7 +69,7 @@ private[http] class RequestInjectableValues(
           case Some(value) =>
             val modifiedParamsValue = handleExtendedBooleans(forProperty, value)
             convert(forProperty, modifiedParamsValue)
-          case None => null
+          case _ => null
         }
       }
     } else if (hasAnnotation[Header](forProperty)) {
@@ -109,6 +110,12 @@ private[http] class RequestInjectableValues(
         None
       else
         Option(convert(forType.containedType(0), propertyValue))
+    else if (forType.getRawClass == classOf[Boolean] && propertyValue == "")
+      // for backwards compatibility: injected booleans with no value should
+      // return null and not attempt conversion
+      null
+    else if (forType.isPrimitive)
+      objectMapper.convert(propertyValue, getSimpleJavaType(forType))
     else
       objectMapper.convert(propertyValue, forType)
   }
@@ -143,7 +150,7 @@ private[http] class RequestInjectableValues(
   private def handleExtendedBooleans(forProperty: BeanProperty, propertyValue: Any): Any = {
     if (hasAnnotation[QueryParam](forProperty)) {
       val forType = forProperty.getType
-      if (forType.getRawClass == classOf[java.lang.Boolean]) {
+      if (isBoolean(forType.getRawClass)) {
         matchExtendedBooleans(propertyValue.asInstanceOf[String])
       } else if (isSeqOfBools(forType)) {
         propertyValue.asInstanceOf[Seq[String]].map(matchExtendedBooleans)
@@ -156,8 +163,8 @@ private[http] class RequestInjectableValues(
   }
 
   private def matchExtendedBooleans(value: String): String = value match {
-    case "t" | "1" => "true"
-    case "f" | "0" => "false"
+    case "t" | "T" | "1" => "true"
+    case "f" | "F" | "0" => "false"
     case _ => value
   }
 
@@ -180,8 +187,7 @@ private[http] class RequestInjectableValues(
   }
 
   private lazy val isSeqOfBools: JavaType => Boolean = { forType =>
-    forType.getRawClass == classOf[Seq[_]] &&
-    forType.containedType(0).getRawClass == classOf[java.lang.Boolean]
+    forType.getRawClass == classOf[Seq[_]] && isBoolean(forType.containedType(0).getRawClass)
   }
 
   private lazy val hasAnnotation: (BeanProperty, Seq[Class[_ <: Annotation]]) => Boolean = {
@@ -192,4 +198,23 @@ private[http] class RequestInjectableValues(
   private lazy val isRequest: BeanProperty => Boolean = { forProperty =>
     forProperty.getType.getRawClass == classOf[Request]
   }
+
+  private[this] def isBoolean(clazz: Class[_]): Boolean = {
+    // handle both java.lang.Boolean class and boolean primitive
+    clazz == classOf[java.lang.Boolean] || clazz.getName == "boolean"
+  }
+
+  // convert primitives to boxed types to maintain backwards compatibility for object conversion
+  private[this] def getSimpleJavaType(javaType: JavaType): JavaType =
+    javaType.getRawClass.getName match {
+      case "boolean" => SimpleType.constructUnsafe(classOf[java.lang.Boolean])
+      case "byte" => SimpleType.constructUnsafe(classOf[java.lang.Byte])
+      case "short" => SimpleType.constructUnsafe(classOf[java.lang.Short])
+      case "char" => SimpleType.constructUnsafe(classOf[java.lang.Character])
+      case "int" => SimpleType.constructUnsafe(classOf[java.lang.Integer])
+      case "long" => SimpleType.constructUnsafe(classOf[java.lang.Long])
+      case "float" => SimpleType.constructUnsafe(classOf[java.lang.Float])
+      case "double" => SimpleType.constructUnsafe(classOf[java.lang.Double])
+      case _ => javaType
+    }
 }
