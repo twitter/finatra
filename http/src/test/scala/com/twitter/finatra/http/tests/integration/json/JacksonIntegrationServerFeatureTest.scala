@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.tests.integration.json
 
-import com.twitter.finagle.http.Response
+import com.twitter.finagle.http.{Response, Status}
 import com.twitter.finagle.http.Status.BadRequest
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
@@ -35,6 +35,16 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
                   "validationPassesForNames" -> request.validationPassesForNames
                 )
             }
+
+            post("/foo/bar") { request: GenericWithRequest[Int] =>
+              Map(
+                "data" -> request.data
+              )
+            }
+
+            get("/with/boolean/:id") { request: WithBooleanRequest =>
+              Map("id" -> request.id, "complete_only" -> request.completeOnly)
+            }
           })
       }
     },
@@ -59,6 +69,27 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
       """,
       andExpect = BadRequest,
       withJsonBody = """{"errors":["things: Unable to parse"]}"""
+    )
+  }
+
+  test("/POST /foo/bar") {
+    server.httpPost(
+      "/foo/bar",
+      """
+        |{
+        |  "data": 42
+        |}
+      """.stripMargin,
+      andExpect =  Status.Ok,
+      withJsonBody = """{"data": 42}"""
+    )
+  }
+
+  test("/POST /with/boolean") {
+    server.httpGet(
+      "/with/boolean/12345?complete_only=1",
+      andExpect =  Status.Ok,
+      withJsonBody = """{"id": 12345, "complete_only": true}"""
     )
   }
 

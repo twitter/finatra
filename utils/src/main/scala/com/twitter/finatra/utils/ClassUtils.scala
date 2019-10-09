@@ -4,7 +4,7 @@ import com.twitter.util.Memoize
 
 object ClassUtils {
 
-  val simpleName = Memoize { clazz: Class[_] =>
+  val simpleName: Class[_] => String = Memoize { clazz: Class[_] =>
     clazz.getSimpleName
   }
 }

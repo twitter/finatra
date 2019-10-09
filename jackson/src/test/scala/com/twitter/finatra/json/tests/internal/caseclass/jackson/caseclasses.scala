@@ -70,3 +70,4 @@ case class TestTraitImpl(
   lazy val testBar: String = "bar"
 }
 
+case class CaseClassWithArrayLong(array: Array[Long])

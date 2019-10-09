@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "19.9.0"
+val releaseVersion = "19.10.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -69,14 +69,13 @@ lazy val versions = new {
 
   val agrona = "0.9.22"
   val bijectionCore = "0.9.5"
-  val commonsCodec = "1.9"
   val commonsFileupload = "1.4"
-  val commonsLang = "2.6"
   val fastutil = "8.1.1"
   val guice = "4.0"
   val jackson = "2.9.9"
   val jodaConvert = "1.2"
   val jodaTime = "2.5"
+  val json4s = "3.6.7"
   val junit = "4.12"
   val kafka = "2.2.0"
   val libThrift = "0.10.0"
@@ -618,7 +617,7 @@ lazy val jackson = project
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson,
-      "org.scala-lang" % "scalap" % scalaVersion.value,
+      "org.json4s" %% "json4s-core" % versions.json4s,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "com.twitter" %% "util-core" % versions.twLibVersion
     ),
@@ -700,7 +699,6 @@ lazy val httpclient = project
     name := "finatra-httpclient",
     moduleName := "finatra-httpclient",
     libraryDependencies ++= Seq(
-      "commons-codec" % "commons-codec" % versions.commonsCodec,
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "com.twitter" %% "twitter-server" % versions.twLibVersion % Test,

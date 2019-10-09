@@ -1,3 +1,23 @@
+junit_tests(
+    sources = globs(
+        "com/twitter/finatra/kafka/consumers/*.scala",
+        "com/twitter/finatra/kafka/serde/*.scala",
+        "com/twitter/finatra/kafka/test/integration/*.scala",
+    ),
+    compiler_option_sets = {"fatal_warnings"},
+    strict_deps = True,
+    dependencies = [
+        ":test-deps",
+        "3rdparty/jvm/org/apache/zookeeper:zookeeper-server",
+        "3rdparty/jvm/org/slf4j:slf4j-simple",
+        "finatra/inject/inject-modules/src/test/scala:test-deps",
+        "finatra/jackson/src/test/scala:test-deps",
+        "finatra/kafka/src/main/java",
+        "finatra/kafka/src/test/resources",
+        "finatra/kafka/src/test/thrift:thrift-scala",
+    ],
+)
+
 scala_library(
     name = "test-deps",
     sources = globs(
@@ -43,19 +63,5 @@ scala_library(
         "finatra/inject/inject-server/src/test/scala:test-deps",
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/kafka/src/main/scala",
-    ],
-)
-
-junit_tests(
-    sources = rglobs("*.scala"),
-    compiler_option_sets = {"fatal_warnings"},
-    strict_deps = True,
-    dependencies = [
-        ":test-deps",
-        "3rdparty/jvm/org/apache/zookeeper:zookeeper-server",
-        "finatra/inject/inject-modules/src/test/scala:test-deps",
-        "finatra/jackson/src/test/scala:test-deps",
-        "finatra/kafka/src/main/java",
-        "finatra/kafka/src/test/thrift:thrift-scala",
     ],
 )

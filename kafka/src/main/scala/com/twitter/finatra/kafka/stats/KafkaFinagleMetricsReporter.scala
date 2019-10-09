@@ -11,7 +11,7 @@ import scala.collection.mutable
 
 object KafkaFinagleMetricsReporter {
 
-  private[kafka] val IncludeNodeMetrics = "include.node.metrics"
+  private[kafka] val IncludeNodeMetrics: String = "include.node.metrics"
 
   //Hack to allow tests to use an injected StatsReceiver suitable for assertions
   private var globalStatsReceiver: StatsReceiver = LoadedStatsReceiver
@@ -20,16 +20,16 @@ object KafkaFinagleMetricsReporter {
     globalStatsReceiver = injector.instance[StatsReceiver]
   }
 
-  def sanitizeMetricName(metricName: String) = {
+  def sanitizeMetricName(metricName: String): String = {
     KafkaFinagleMetricsReporter.notAllowedMetricPattern
       .matcher(metricName)
       .replaceAll("_")
   }
 
-  private val notAllowedMetricPattern =
+  private val notAllowedMetricPattern: Pattern =
     Pattern.compile("-| -> |: |, |\\(|\\)| |[^\\w\\d]&&[^./]")
 
-  private val rateMetricsToIgnore = Set(
+  private val rateMetricsToIgnore: Set[String] = Set(
     "batch-split-rate",
     "buffer-exhausted-rate",
     "byte-rate",

@@ -77,7 +77,7 @@ class FinatraJacksonModule extends TwitterModule {
 
     mapper.setPropertyNamingStrategy(propertyNamingStrategy)
     mapper.registerModules(defaultJacksonModules.asJava)
-    finatraCaseClassModule foreach mapper.registerModule
+    finatraCaseClassModule.foreach(mapper.registerModule)
     mapper.registerModules(additionalJacksonModules.asJava)
 
     if (numbersAsStrings) {
@@ -95,7 +95,7 @@ class FinatraJacksonModule extends TwitterModule {
 
   /** Jackson Modules to load */
   protected def defaultJacksonModules: Seq[JacksonModule] =
-    Seq(new JodaModule, DefaultScalaModule, LongKeyDeserializers, SerDeSimpleModule) //FinatraModule's need to be added 'last' so they can override existing deser's
+    Seq(new JodaModule, DefaultScalaModule, LongKeyDeserializers, SerDeSimpleModule) //FinatraModules need to be added 'last' so they can override existing deser's
 
   protected def finatraCaseClassModule: Option[JacksonModule] = {
     Some(CaseClassModule)

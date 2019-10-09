@@ -99,7 +99,7 @@ abstract class LogbackAsyncAppenderBase(
     )
     gauges.add(
       scopedStatsReceiver.addGauge("current_queue_size") {
-        this.getNumberOfElementsInQueue.toFloat
+        if (this.blockingQueue eq null) 0 else this.getNumberOfElementsInQueue.toFloat
       }
     )
     exportRegistryEntries()

@@ -61,6 +61,7 @@ scala_library(
         "3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala",
         "3rdparty/jvm/junit",
         "3rdparty/jvm/org/joda:joda-convert",
+        "3rdparty/jvm/org/json4s:json4s-core",
         "3rdparty/jvm/org/scalatest",
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "finatra/inject/inject-core/src/main/scala",
@@ -71,6 +72,7 @@ scala_library(
         "util/util-slf4j-api/src/main/scala",
     ],
     exports = [
+        "3rdparty/jvm/org/json4s:json4s-core",
         "finatra/jackson/src/main/scala",
     ],
 )

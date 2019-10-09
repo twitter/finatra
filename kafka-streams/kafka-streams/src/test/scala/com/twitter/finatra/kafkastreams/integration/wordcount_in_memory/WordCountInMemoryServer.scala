@@ -16,7 +16,7 @@ class WordCountInMemoryServer extends KafkaStreamsTwitterServer {
 
   override protected def configureKafkaStreams(builder: StreamsBuilder): Unit = {
     builder.asScala
-      .stream("TextLinesTopic")(Consumed.`with`(Serdes.Bytes, Serdes.String))
+      .stream("text-lines-topic")(Consumed.`with`(Serdes.Bytes, Serdes.String))
       .flatMapValues(_.split(' '))
       .groupBy((_, word) => word)(Grouped.`with`(Serdes.String, Serdes.String))
       .count()(

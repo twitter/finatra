@@ -38,6 +38,16 @@ case class CaseClassWithLazyVal(id: Long) {
   lazy val woo = "yeah"
 }
 
+case class GenericTestCaseClass[T](data: T)
+
+case class Page[T](data: List[T], pageSize: Int, next: Option[Long], previous: Option[Long])
+
+case class CaseClassWithTypes[T, U](first: T, second: U)
+
+case class CaseClassWithMapTypes[T, U](data: Map[T, U])
+
+case class CaseClassWithManyTypes[R, S, T](one: R, two: S, three: T)
+
 case class CaseClassWithIgnoredField(id: Long) {
   @JsonIgnore
   val ignoreMe = "Foo"
@@ -152,9 +162,11 @@ case class CaseClassWithSeqWrappedValueLongWithValidation(seq: Seq[WrappedValueL
 
 case class Foo(name: String)
 
+case class CaseClassCharacter(c: Char)
+
 case class Car(id: Long, make: CarMake, model: String, passengers: Seq[Person]) {
 
-  def validateId = {
+  def validateId: ValidationResult = {
     ValidationResult.validate(id > 0, "id must be > 0")
   }
 }

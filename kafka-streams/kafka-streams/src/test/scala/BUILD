@@ -56,7 +56,6 @@ junit_tests(
     compiler_option_sets = {"fatal_warnings"},
     strict_deps = True,
     dependencies = [
-        "3rdparty/jvm/ch/qos/logback:logback-classic",
         "3rdparty/jvm/org/apache/kafka:kafka-clients-test",
         "3rdparty/jvm/org/apache/kafka:kafka-streams",
         "3rdparty/jvm/org/apache/kafka:kafka-streams-test",
@@ -64,6 +63,7 @@ junit_tests(
         "3rdparty/jvm/org/apache/kafka:kafka-test",
         "3rdparty/jvm/org/apache/zookeeper:zookeeper-client",
         "3rdparty/jvm/org/apache/zookeeper:zookeeper-server",
+        "3rdparty/jvm/org/slf4j:slf4j-simple",
         "finatra/inject/inject-app/src/main/scala",
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-core/src/test/scala:test-deps",

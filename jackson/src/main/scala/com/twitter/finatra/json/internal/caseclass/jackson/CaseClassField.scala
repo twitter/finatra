@@ -11,19 +11,16 @@ import com.twitter.finatra.json.internal.caseclass.exceptions.{
   CaseClassValidationException,
   FinatraJsonMappingException
 }
-import com.twitter.finatra.json.internal.caseclass.reflection.{
-  CaseClassSigParser,
-  ConstructorParam,
-  DefaultMethodUtils
-}
 import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils._
-import com.twitter.finatra.json.internal.caseclass.utils.FieldInjection
+import com.twitter.finatra.json.internal.caseclass.utils.{DefaultMethodUtils, FieldInjection}
 import com.twitter.finatra.request.{FormParam, Header, QueryParam}
 import com.twitter.finatra.validation.ValidationResult._
 import com.twitter.finatra.validation.{ErrorCode, Validation}
 import com.twitter.inject.Logging
 import com.twitter.inject.conversions.string._
 import java.lang.annotation.Annotation
+import java.lang.reflect.Type
+import org.json4s.reflect.{ClassDescriptor, Reflector, ScalaSigReader}
 import scala.annotation.tailrec
 import scala.reflect.NameTransformer
 
@@ -34,7 +31,27 @@ private[finatra] object CaseClassField {
     namingStrategy: PropertyNamingStrategy,
     typeFactory: TypeFactory
   ): Seq[CaseClassField] = {
-    val constructorParams: Seq[ConstructorParam] = CaseClassSigParser.parseConstructorParams(clazz)
+    /*
+     In order to handle generics, we need to keep track of any type params defined on the case
+     class and the type parameter names. We will then keep track of any passed type bindings when
+     parsing and map the type parameter name to its bound JavaType, e.g. for a case class,
+     `case class Page[T](data: List[T])` and given a parsing type: `mapper.parse[Page[Person]]`
+     we want to be able to map the type param `T` to the `Person` JavaType.
+     */
+    val constructorTypes: Array[Type] =
+      clazz.getConstructors.head.getGenericParameterTypes
+
+    val clazzDescriptor = Reflector.describe(clazz).asInstanceOf[ClassDescriptor]
+    // nested classes inside of other class is not supported
+    if (clazz.getName.contains("$") &&
+      clazzDescriptor.mostComprehensive.exists(_.name == ScalaSigReader.OuterFieldName)) {
+      throw new MissingExpectedType(clazz)
+    }
+
+    val constructorParams: Seq[ConstructorParam] =
+      clazzDescriptor.constructors.head.params.map { param =>
+        ConstructorParam(param.name, param.argType)
+      }
     assert(
       clazz.getConstructors.head.getParameterCount == constructorParams.size,
       "Non-static inner 'case classes' not supported"
@@ -43,9 +60,6 @@ private[finatra] object CaseClassField {
     // field name to list of parsed annotations
     val annotationsMap: Map[String, Seq[Annotation]] = findAnnotations(clazz, constructorParams)
 
-    val companionObject = Class.forName(clazz.getName + "$").getField("MODULE$").get(null)
-    val companionObjectClass = companionObject.getClass
-
     for ((constructorParam, idx) <- constructorParams.zipWithIndex) yield {
       val fieldAnnotations: Seq[Annotation] = annotationsMap.getOrElse(constructorParam.name, Nil)
       val name = jsonNameForField(fieldAnnotations, namingStrategy, constructorParam.name)
@@ -53,10 +67,11 @@ private[finatra] object CaseClassField {
 
       CaseClassField(
         name = name,
+        reflectionType = constructorTypes(idx),
+        scalaType = constructorParam.scalaType,
         javaType = JacksonTypes.javaType(typeFactory, constructorParam.scalaType),
         parentClass = clazz,
-        defaultFuncOpt =
-          DefaultMethodUtils.defaultFunction(companionObjectClass, companionObject, idx),
+        defaultFuncOpt = DefaultMethodUtils.defaultFunction(clazzDescriptor, idx),
         annotations = fieldAnnotations,
         deserializer = deserializer
       )
@@ -161,6 +176,8 @@ private[finatra] object CaseClassField {
 
 private[finatra] case class CaseClassField(
   name: String,
+  reflectionType: Type,
+  scalaType: org.json4s.reflect.ScalaType,
   javaType: JavaType,
   parentClass: Class[_],
   defaultFuncOpt: Option[() => Object],
@@ -172,6 +189,19 @@ private[finatra] case class CaseClassField(
   private val isString = javaType.getRawClass == classOf[String]
   private val AttributeInfo(attributeType, attributeName) = findAttributeInfo(name, annotations)
   private val fieldInjection = new FieldInjection(name, javaType, parentClass, annotations)
+  private val parameterizedTypeBindings: Seq[String] = reflectionType match {
+    case pti: sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl =>
+      pti.getActualTypeArguments.collect {
+        case tvi: sun.reflect.generics.reflectiveObjects.TypeVariableImpl[_]
+            if tvi.getTypeName != null =>
+          tvi.getTypeName
+      }
+    case tvi: sun.reflect.generics.reflectiveObjects.TypeVariableImpl[_] =>
+      Seq(tvi.getTypeName)
+    case _ =>
+      Seq.empty[String]
+  }
+
   private lazy val firstTypeParam = javaType.containedType(0)
   private lazy val requiredFieldException = CaseClassValidationException(
     CaseClassValidationException.PropertyPath.leaf(attributeName),
@@ -204,7 +234,8 @@ private[finatra] case class CaseClassField(
   def parse(
     context: DeserializationContext,
     codec: ObjectCodec,
-    objectJsonNode: JsonNode
+    objectJsonNode: JsonNode,
+    typeBindings: Map[String, JavaType]
   ): Object = {
     if (fieldInjection.isInjectable)
       fieldInjection
@@ -217,7 +248,21 @@ private[finatra] case class CaseClassField(
         if (isOption)
           Option(parseFieldValue(codec, fieldJsonNode, firstTypeParam, context))
         else
-          assertNotNull(fieldJsonNode, parseFieldValue(codec, fieldJsonNode, javaType, context))
+          assertNotNull(
+            fieldJsonNode,
+            parseFieldValue(
+              codec,
+              fieldJsonNode,
+              if (parameterizedTypeBindings.nonEmpty)
+                JacksonTypes.javaType(
+                  context.getTypeFactory,
+                  this.scalaType,
+                  parameterizedTypeBindings,
+                  typeBindings)
+              else javaType,
+              context
+            )
+          )
       else if (defaultFuncOpt.isDefined)
         defaultFuncOpt.get.apply()
       else if (isOption)
@@ -228,6 +273,8 @@ private[finatra] case class CaseClassField(
   }
 
   /* Private */
+
+//  private[this]
 
   //optimized
   private[this] def parseFieldValue(

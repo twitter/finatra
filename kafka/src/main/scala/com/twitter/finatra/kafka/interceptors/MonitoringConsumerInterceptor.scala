@@ -3,6 +3,7 @@ package com.twitter.finatra.kafka.interceptors
 import com.google.common.primitives.Longs
 import com.twitter.finatra.kafka.interceptors.PublishTimeProducerInterceptor._
 import com.twitter.finagle.stats.{LoadedStatsReceiver, Stat, StatsReceiver}
+import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter
 import com.twitter.finatra.kafka.utils.ConfigUtils
 import com.twitter.inject.Injector
 import com.twitter.util.Time
@@ -88,7 +89,7 @@ class MonitoringConsumerInterceptor extends ConsumerInterceptor[Any, Any] {
 
   private def createNewStat(topicName: String, statName: String): Stat = {
     consumerStatsReceiver
-      .scope(topicName)
+      .scope(KafkaFinagleMetricsReporter.sanitizeMetricName(topicName))
       .stat(statName)
   }
 
