@@ -3,7 +3,7 @@ package com.twitter.finatra.http.tests.internal.routing
 import com.twitter.finagle.Filter
 import com.twitter.finatra.http.AnyMethod
 import com.twitter.finagle.http.{Method, Request, Response}
-import com.twitter.finatra.http.exceptions.MethodNotAllowedException
+import com.twitter.finatra.http.exceptions.UnsupportedMethodException
 import com.twitter.finatra.http.internal.routing.{Route, Trie}
 import com.twitter.inject.Test
 import com.twitter.util.Future
@@ -27,11 +27,11 @@ class TrieTest extends Test {
 
     routePath should be("/user/:id")
     routeParams.size should be(1)
-    routeParams.get("id").get should be("1234")
+    routeParams("id") should be("1234")
   }
 
-  test("Look up PUT /user/123 should be return a MethodNotAllowed exception") {
-    intercept[MethodNotAllowedException] {
+  test("Look up PUT /user/123 should be return a UnsupportedMethodException") {
+    intercept[UnsupportedMethodException] {
       trie.find("/user/123", Method.Put)
     }
   }
@@ -43,8 +43,8 @@ class TrieTest extends Test {
 
     routePath should be("/user/:id/:file.csv")
     routeParams.size should be(2)
-    routeParams.get("id").get should be("1234")
-    routeParams.get("file").get should be("list")
+    routeParams("id") should be("1234")
+    routeParams("file") should be("list")
   }
 
   test("Look up GET /tweets/user/list.txt should be defined") {
@@ -54,7 +54,7 @@ class TrieTest extends Test {
 
     routePath should be("/tweets/user/list.:format")
     routeParams.size should be(1)
-    routeParams.get("format").get should be("txt")
+    routeParams("format") should be("txt")
   }
 
   // AnyMethod should match any method names
@@ -65,7 +65,7 @@ class TrieTest extends Test {
 
     routePath should be("/tweets/:id")
     routeParams.size should be(1)
-    routeParams.get("id").get should be("1234")
+    routeParams("id") should be("1234")
   }
 
   // :* should match everything in that segment
@@ -76,7 +76,7 @@ class TrieTest extends Test {
 
     routePath should be("/:*")
     routeParams.size should be(1)
-    routeParams.get("*").get should be("foo/bar")
+    routeParams("*") should be("foo/bar")
   }
 
   test("optional trailing slash identifier should match paths with or without trailing slash ") {
@@ -85,11 +85,11 @@ class TrieTest extends Test {
 
     routeWithSlash.route.path should be("/dms/:id/")
     routeWithSlash.routeParams.size should be(1)
-    routeWithSlash.routeParams.get("id").get should be("1234")
+    routeWithSlash.routeParams("id") should be("1234")
 
     routeWithoutSlash.route.path should be("/dms/:id/")
     routeWithoutSlash.routeParams.size should be(1)
-    routeWithoutSlash.routeParams.get("id").get should be("1234")
+    routeWithoutSlash.routeParams("id") should be("1234")
   }
 
   /* ---------------------------------------------------------------- *

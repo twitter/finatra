@@ -236,9 +236,12 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   }
 
   test("json response to /example") {
-    val response = server.httpGet("/example/routing/json/1")
-    response.statusCode should equal(200)
+    val response = server.httpGet("/example/routing/json/1", andExpect = Ok)
     jsonDiff(response.contentString, """{"id":"1","name":"bob","magic":"1","module_magic":"2"}""")
+  }
+
+  test("json response to /example with encoding issue") {
+    val response = server.httpGet("/example/routing/json/1%%", andExpect = BadRequest)
   }
 
   test("GET /stringMap") {

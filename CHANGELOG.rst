@@ -7,6 +7,14 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Fixed
+~~~~~
+
+* finatra-http: Better handling of URI decoding issues when extracting path parameters for
+  routing. If we cannot extract a path pattern, and the exception is not intercepted by a
+  user-defined Exception Mapper, we will now explicitly return a `400 - BAD REQUEST`.
+  Fixes #507. ``PHAB_ID=D381357``
+
 19.10.0
 -------
 
