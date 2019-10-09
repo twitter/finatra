@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Modules &#8212; Finatra 19.8.0 documentation</title>
+    <title>Modules &#8212; Finatra 19.10.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.8.0',
+        VERSION:     '19.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.8.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.10.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Binding Annotations" href="binding_annotations.html" />
     <link rel="prev" title="Application and Server Lifecycle" href="lifecycle.html" />
@@ -137,6 +137,35 @@ object MyModule1 extends TwitterModule {
 }
 </pre></div>
 </div>
+<p>or in Java:</p>
+<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Provides;
+import com.twitter.finagle.Service;
+import com.twitter.finagle.http.Request;
+import com.twitter.finagle.http.Response;
+import com.twitter.inject.TwitterModule;
+import javax.inject.Singleton;
+
+public class MyModule1 extends TwitterModule {
+  private Flag&lt;String&gt; dest = createFlag(
+    /*name*/ &quot;client.dest&quot;,
+    /*default*/ &quot;defaultDestIfNoneProvided&quot;,
+    /*help*/ &quot;The client dest to use.&quot;,
+    /*flaggable*/ Flaggable.ofString());
+
+  private Flag&lt;String&gt; label = createFlag(
+    /*name*/ &quot;client.label&quot;,
+    /*default*/ &quot;defaultLabelIfNoneProvided&quot;,
+    /*help*/ &quot;The client label to use.&quot;,
+    /*flaggable*/ Flaggable.ofString());
+
+  @Singleton
+  @Provides
+  public Service&lt;Request, Response&gt; providesHttpClient() {
+    return Http.newClient(dest.apply(), label.apply());
+  }
+}
+</pre></div>
+</div>
 <p>Here we define a module to construct a singleton <a class="reference external" href="https://twitter.github.io/finagle/guide/Clients.html">Finagle Client</a>
 of type <cite>Service[Request, Response]</cite> which uses <a class="reference external" href="flags.html#passing-flag-values-as-command-line-arguments">flag values provided through command line arguments</a>
 to set the values of <cite>label</cite> and <cite>dest</cite>.</p>
@@ -192,10 +221,12 @@ per JVM process.</li>
 <div class="section" id="module-configuration-in-servers">
 <h2>Module Configuration in Servers<a class="headerlink" href="#module-configuration-in-servers" title="Permalink to this headline">¶</a></h2>
 <p>A server can be configured with a list of modules:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.HttpServer
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
+import com.twitter.finatra.http.HttpServer
 
 class Server extends HttpServer {
-  override val modules = Seq(
+
+  override val modules: Seq[Module] = Seq(
     MyModule1,
     MyModule2,
     ClientIdModule,
@@ -206,12 +237,42 @@ class Server extends HttpServer {
 }
 </pre></div>
 </div>
+<p>and in Java:</p>
+<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.google.common.collect.ImmutableList;
+import com.google.inject.Module;
+import com.twitter.finatra.http.AbstractHttpServer;
+import java.util.Collection;
+
+public class Server extends AbstractHttpServer {
+
+  @Override
+  public Collection&lt;Module&gt; javaModules() {
+    return ImmutableList.&lt;Module&gt;of(
+        MyModule1$.MODULE$,
+        MyModule2$.MODULE$,
+        ClientIdModule$.MODULE$,
+        ClientAModule$.MODULE$,
+        ClientBModule$.MODULE$);
+    )
+  }
+
+  ...
+}
+</pre></div>
+</div>
 <p>How explicit to be in listing the modules for your server is up to you. If you include a module that
-is all ready <a class="reference external" href="modules.html#modules-depending-on-other-modules">included by another module</a>,
-Finatra will de-dupe the module list so there is no penalty, but you may want to prefer to define
+is already <a class="reference external" href="modules.html#modules-depending-on-other-modules">included by another module</a>,
+Finatra will de-duplicate the module list so there is no penalty, but you may want to prefer to define
 your list of modules as <a class="reference external" href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">DRY</a> as possible.</p>
 <p>For more information on server configuration see the <a class="reference external" href="../http/server.html">HTTP</a> or
 <a class="reference external" href="../thrift/server.html">Thrift</a> sections.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In Java, Flag creation is implemented with two explicit methods: <a class="reference external" href="https://github.com/twitter/finatra/blob/9a1380eb6527ef9e3d7f6cc0f7ced620217cdca0/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleFlags.scala#L26">createFlag&lt;T&gt;</a>
+and <a class="reference external" href="https://github.com/twitter/finatra/blob/9a1380eb6527ef9e3d7f6cc0f7ced620217cdca0/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleFlags.scala#L44">createMandatoryFlag&lt;T&gt;</a>.
+Where &#8220;mandatory&#8221; means a Flag defined with no default value meaning a user-supplied value is
+required, or mandatory in order to use the Flag.</p>
+</div>
 </div>
 <div class="section" id="module-lifecycle">
 <h2>Module Lifecycle<a class="headerlink" href="#module-lifecycle" title="Permalink to this headline">¶</a></h2>
@@ -281,12 +342,13 @@ class MyClassFoo @Inject()(foo: Foo) {
 <p>You can do something similar in a module. However, instead of the injection point being the
 constructor annotated with <code class="docutils literal"><span class="pre">&#64;Inject</span></code>, it is the argument list of any <code class="docutils literal"><span class="pre">&#64;Provides</span></code>-annotated
 method.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Provides
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.{Module, Provides}
 import com.twitter.inject.TwitterModule
 import javax.inject.Singleton
 
 object BarModule extends TwitterModule {
-  override val modules = Seq(FooModule)
+
+  override val modules: Seq[Module] = Seq(FooModule)
 
   @Singleton
   @Provides
@@ -296,29 +358,54 @@ object BarModule extends TwitterModule {
 }
 </pre></div>
 </div>
+<p>in Java:</p>
+<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.google.common.collect.ImmutableList;
+import com.google.inject.Module;
+import com.google.inject.Provides;
+import com.twitter.inject.TwitterModule;
+import javax.inject.Singleton;
+import java.util.Collection;
+
+public class BarModule extends TwitterModule {
+
+  @Override
+  public Collection&lt;Module&gt; javaModules() {
+    return ImmutableList.&lt;Module&gt;of(
+        FooModule$.MODULE$);
+  }
+
+  @Singleton
+  @Provides
+  public Bar providesBar(Foo foo) {
+    return new Bar(foo);
+  }
+}
+</pre></div>
+</div>
 <p>What&#8217;s happening here?</p>
-<p>Firstly, we&#8217;ve defined a <cite>BarModule</cite> that overrides the <cite>modules</cite> val with a <cite>Seq</cite> of modules that
-includes the <cite>FooModule</cite>. This guarantees that if the <cite>FooModule</cite> is not mixed into the list of
-modules for a server, the <cite>BarModule</cite> ensures it will be installed since it&#8217;s declared as a
-dependency and thus there will be a bound instance of <cite>Foo</cite> available for use in providing an
-instance of <cite>Bar</cite>.</p>
-<p>Finatra will de-dupe all modules before installing, so it is OK if a module appears twice in the
+<p>Firstly, we&#8217;ve defined a <cite>BarModule</cite> that overrides the <cite>modules</cite> val with a <cite>Seq</cite> (or the
+<cite>javaModules</cite> def with a <cite>Collection</cite> in Java) of modules that includes the <cite>FooModule</cite>. This
+guarantees that if the <cite>FooModule</cite> is not mixed into the list of modules for a server, the <cite>BarModule</cite>
+ensures it will be installed since it&#8217;s declared as a dependency and thus there will be a bound
+instance of <cite>Foo</cite> available for use in providing an instance of <cite>Bar</cite>.</p>
+<p>Finatra will de-duplicate all modules before installing, so it is OK if a module appears twice in the
 server configuration, though you should strive to make this the exception.</p>
 <p>Secondly, we&#8217;ve defined a method which provides a <cite>Bar</cite> instance and add an argument of type <cite>Foo</cite>
 which will be provided by the Injector since injection is by type and the argument list to an
 <code class="docutils literal"><span class="pre">&#64;Provides</span></code> annotated method in a module is an injection point.</p>
 <p>Why?</p>
-<p>Because the Injector is what calls the <cite>providesBar</cite> method. When the Injector needs to provide an
+<p>Because the injector is what calls the <cite>providesBar</cite> method. When the injector needs to provide an
 instance of <cite>Bar</cite> it looks for a &#8220;provider&#8221; of <cite>Bar</cite> in the list of modules. It will thus try to
 supply all arguments to the function from the object graph.</p>
 <p>We could continue this through another module. For example, if we wanted to provide a <cite>Baz</cite> which
 needs both a <cite>Foo</cite> and a <cite>Bar</cite> instance we could define a <cite>BazModule</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Provides
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.{Module, Provides}
 import com.twitter.inject.TwitterModule
 import javax.inject.Singleton
 
 object BazModule extends TwitterModule {
-  override val modules = Seq(
+
+  override val modules: Seq[Module] = Seq(
     FooModule,
     BarModule)
 
@@ -328,6 +415,31 @@ object BazModule extends TwitterModule {
     foo: Foo,
     bar: Bar): Baz = {
     new Baz(foo, bar)
+  }
+}
+</pre></div>
+</div>
+<p>in Java:</p>
+<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.google.common.collect.ImmutableList;
+import com.google.inject.Module;
+import com.google.inject.Provides;
+import com.twitter.inject.TwitterModule;
+import javax.inject.Singleton;
+import java.util.Collection;
+
+public class BazModule extends TwitterModule {
+
+  @Override
+  public Collection&lt;Module&gt; javaModules() {
+    return ImmutableList.&lt;Module&gt;of(
+        FooModule$.MODULE$,
+        BarModule$.MODULE$);
+  }
+
+  @Singleton
+  @Provides
+  public Baz providesBaz(Foo foo, Bar bar) {
+    return new Baz(foo, bar);
   }
 }
 </pre></div>

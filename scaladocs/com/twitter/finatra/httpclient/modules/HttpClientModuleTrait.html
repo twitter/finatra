@@ -1800,6 +1800,22 @@ of the base client configuration. All user facing extensions should be done via 
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="com.twitter.inject.TwitterBaseModule#javaModules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="javaModules:java.util.Collection[com.google.inject.Module]"></a><a id="javaModules:Collection[Module]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/httpclient/modules/HttpClientModuleTrait.html#javaModules:java.util.Collection[com.google.inject.Module]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">javaModules</span><span class="result">: <span class="extype" name="java.util.Collection">Collection</span>[<span class="extype" name="com.google.inject.Module">Module</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Additional modules to be composed into this module from Java</p><div class="fullcomment"><div class="comment cmt"><p>Additional modules to be composed into this module from Java</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
     </li><li name="com.twitter.util.logging.Logging#logger" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="logger:com.twitter.util.logging.Logger"></a><a id="logger:Logger"></a>
       <span class="permalink">
@@ -1850,7 +1866,7 @@ of the base client configuration. All user facing extensions should be done via 
       <p class="shortcomment cmt">Additional modules to be composed into this module</p><div class="fullcomment"><div class="comment cmt"><p>Additional modules to be composed into this module</p><p>NOTE: This Seq of modules is generally used instead of the standard Guice 'install' method so that
 TwitterModules with flag definitions can be supported.</p><p>However, AbstractModule.install can still be used for non-TwitterModules, and is sometimes preferred
 due to install being deferred until after flag parsing occurs.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd><dt>Note</dt><dd><span class="cmt"><p>Java users should prefer <a href="../../../inject/TwitterBaseModule.html#javaModules:java.util.Collection[com.google.inject.Module]" class="extmbr" name="com.twitter.inject.TwitterBaseModule#javaModules">javaModules</a>.</p></span></dd></dl></div>
     </li><li name="com.twitter.inject.modules.StackClientModuleTrait#monitor" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="monitor:com.twitter.util.Monitor"></a><a id="monitor:Monitor"></a>
       <span class="permalink">
