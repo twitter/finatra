@@ -15,6 +15,12 @@ Fixed
   user-defined Exception Mapper, we will now explicitly return a `400 - BAD REQUEST`.
   Fixes #507. ``PHAB_ID=D381357``
 
+Added
+~~~~~
+
+* inject-core: Add support for optional binding in `c.t.inject.TwitterModule`.
+  ``PHAB_ID=D386288``
+
 19.10.0
 -------
 

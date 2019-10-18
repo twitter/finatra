@@ -4,7 +4,7 @@ import com.twitter.app.{Flag, Flaggable}
 import scala.collection.mutable.ArrayBuffer
 
 /**
- * Guice/twitter.util.Flag integrations
+ * Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules
  */
 trait TwitterModuleFlags {
 

@@ -1,22 +1,16 @@
 package com.twitter.inject
 
-import com.google.inject.{Key, Module}
-import net.codingwell.scalaguice._
+import com.google.inject.Module
 
-/**
- * Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules
- */
 trait TwitterBaseModule extends TwitterModuleFlags with TwitterModuleLifecycle {
 
   /**
-   * Additional modules to be composed into this module
+   * Additional modules to be composed into this module. This list of modules is generally used
+   * ''instead'' of the [[TwitterModule.install]] method to properly support the
+   * [[TwitterModuleLifecycle]] for [[TwitterModule]] instances.
    *
-   * NOTE: This Seq of modules is generally used instead of the standard Guice 'install' method so that
-   * TwitterModules with flag definitions can be supported.
-   *
-   * However, AbstractModule.install can still be used for non-TwitterModules, and is sometimes preferred
-   * due to install being deferred until after flag parsing occurs.
-   *
+   * @note [[TwitterModule.install(module: Module)]] can still be used for non-[[TwitterModule]] 1
+   *      instances, and is sometimes preferred due to `install` being deferred until after flag parsing occurs.
    * @note Java users should prefer [[javaModules]].
    */
   protected[inject] def modules: Seq[Module] = Seq()
@@ -24,12 +18,6 @@ trait TwitterBaseModule extends TwitterModuleFlags with TwitterModuleLifecycle {
   /** Additional modules to be composed into this module from Java */
   protected[inject] def javaModules: java.util.Collection[Module] = new java.util.ArrayList[Module]()
 
-  /**
-   * Additional framework modules to be composed into this module
-   */
+  /** Additional framework modules to be composed into this module. */
   protected[inject] def frameworkModules: Seq[Module] = Seq()
-
-  protected def createKey[T: Manifest]: Key[T] = {
-    Key.get(typeLiteral[T])
-  }
 }
