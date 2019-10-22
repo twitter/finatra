@@ -1,13 +1,12 @@
 package com.twitter.finatra.http.internal.marshalling
 
-import javax.inject.{Inject, Singleton}
-
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.inject.Injector
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.marshalling.DefaultMessageBodyReader
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.request.JsonIgnoreBody
+import javax.inject.{Inject, Singleton}
 
 private[finatra] object DefaultMessageBodyReaderImpl {
   private val EmptyObjectNode = new ObjectNode(null)

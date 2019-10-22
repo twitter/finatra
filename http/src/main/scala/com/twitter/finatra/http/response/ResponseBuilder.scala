@@ -6,7 +6,7 @@ import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.exceptions.HttpResponseException
-import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
+import com.twitter.finatra.http.marshalling.MessageBodyManager
 import com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent
 import com.twitter.finatra.http.streaming.ToReader
 import com.twitter.finatra.json.FinatraObjectMapper

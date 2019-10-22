@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.modules
 
 import com.github.mustachejava.{DefaultMustacheFactory, Mustache, MustacheFactory}
-import com.google.inject.Provides
+import com.google.inject.{Module, Provides}
 import com.twitter.finatra.http.internal.marshalling.mustache.ScalaObjectHandler
 import com.twitter.finatra.utils.FileResolver
 import com.twitter.inject.TwitterModule
@@ -14,7 +14,7 @@ object MustacheModule extends TwitterModule {
   private val templatesDir =
     flag("mustache.templates.dir", "templates", "templates resource directory")
 
-  override def modules = Seq(DocRootModule, MessageBodyModule)
+  override def modules: Seq[Module] = Seq(DocRootModule, MessageBodyModule)
 
   @Provides
   @Singleton
@@ -46,8 +46,8 @@ object MustacheModule extends TwitterModule {
  */
 private final class LocalFilesystemDefaultMustacheFactory(
   templatesDirectory: String,
-  resolver: FileResolver
-) extends DefaultMustacheFactory {
+  resolver: FileResolver)
+    extends DefaultMustacheFactory {
   setObjectHandler(new ScalaObjectHandler)
 
   override def getReader(resourceName: String): Reader = {

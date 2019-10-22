@@ -1,6 +1,7 @@
-package com.twitter.finatra.http.internal.routing
+package com.twitter.finatra.http.routing
 
 import com.twitter.finagle.Filter
+import com.twitter.finatra.http.internal.routing.Route
 import com.twitter.inject.internal.LibraryRegistry
 
 /** Performs registration of HTTP domain entities in a LibraryRegistry */
@@ -48,7 +49,7 @@ private[http] class Registrar(registry: LibraryRegistry) {
    *         }
    * }}}
    *
-   * @param route the [[com.twitter.finatra.http.internal.routing.Route]] to register.
+   * @param route the [[Route]] to register.
    */
   def register(route: Route): Unit = {
     val name = if (route.name.isEmpty) route.path else route.name

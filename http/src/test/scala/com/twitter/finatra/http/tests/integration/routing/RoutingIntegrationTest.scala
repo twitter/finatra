@@ -5,8 +5,7 @@ import com.twitter.finagle.http._
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.finatra.http.{Controller, HttpServer}
+import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
 import com.twitter.inject.Test
 import com.twitter.util.Future
 import org.scalatest.Matchers
@@ -160,13 +159,13 @@ class CheckRouteInfoFilter extends SimpleFilter[Request, Response] with Matchers
 }
 
 class NullController extends Controller {
-  get("/foo", name = "my_foo") { request: Request =>
+  get("/foo", name = "my_foo") { _: Request =>
     response.ok
   }
 }
 
 class AmazingController extends Controller {
-  get("/foo", name = "my_foo") { request: Request =>
+  get("/foo", name = "my_foo") { _: Request =>
     response.ok
   }
 

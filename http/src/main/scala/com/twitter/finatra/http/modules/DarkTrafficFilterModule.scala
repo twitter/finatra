@@ -1,18 +1,33 @@
 package com.twitter.finatra.http.modules
 
-import com.google.inject.{Provides, Singleton}
+import com.google.inject.Provides
+import com.twitter.app.Flag
 import com.twitter.finagle.exp.DarkTrafficFilter
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.{Filter, Http, Service}
-import com.twitter.finatra.annotations.{CanonicalResourceFilter, DarkTrafficFilterType, DarkTrafficService}
-import com.twitter.finatra.http.HttpHeaders
+import com.twitter.finatra.annotations.{
+  CanonicalResourceFilter,
+  DarkTrafficFilterType,
+  DarkTrafficService
+}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.inject.{Injector, TwitterModule}
+import javax.inject.Singleton
+
+/* exposed for testing */
+private[finatra] object DarkTrafficFilterModule {
+  /**
+   * HTTP `'''Canonical-Resource'''` header field name, used in Diffy Proxy
+   * @see [[https://github.com/twitter/diffy/tree/master/example Diffy Project]]
+   */
+  val CanonicalResource = "Canonical-Resource"
+}
 
 abstract class DarkTrafficFilterModule extends TwitterModule {
+  import DarkTrafficFilterModule._
 
-  private val destFlag =
+  private val destFlag: Flag[String] =
     flag[String]("http.dark.service.dest", "Resolvable name/dest of dark traffic service")
 
   /**
@@ -43,10 +58,7 @@ abstract class DarkTrafficFilterModule extends TwitterModule {
    *
    * @return a configured instance of the [[Http.Client]]
    */
-  protected def configureHttpClient(
-    injector: Injector,
-    client: Http.Client
-  ): Http.Client = client
+  protected def configureHttpClient(injector: Injector, client: Http.Client): Http.Client = client
 
   @Provides
   @Singleton
@@ -102,11 +114,8 @@ abstract class DarkTrafficFilterModule extends TwitterModule {
         val nameOrPath =
           if (info.name.nonEmpty) info.name
           else info.path
-        request
-          .headerMap
-          .set(
-            HttpHeaders.CanonicalResource,
-            s"${request.method.toString}_$nameOrPath")
+        request.headerMap
+          .set(CanonicalResource, s"${request.method.toString}_$nameOrPath")
       }
       service(request)
     }
@@ -114,9 +123,7 @@ abstract class DarkTrafficFilterModule extends TwitterModule {
 
   /* Private */
 
-  private[this] def defaultHttpClient(
-    statsReceiver: StatsReceiver
-  ): Http.Client =
+  private[this] def defaultHttpClient(statsReceiver: StatsReceiver): Http.Client =
     Http.client
       .withStatsReceiver(statsReceiver)
 }

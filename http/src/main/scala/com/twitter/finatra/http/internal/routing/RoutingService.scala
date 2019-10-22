@@ -1,8 +1,8 @@
 package com.twitter.finatra.http.internal.routing
 
 import com.twitter.finagle.Service
-import com.twitter.finagle.http.{Fields, Method, Request, Response, Status}
 import com.twitter.finagle.http.Method._
+import com.twitter.finagle.http.{Fields, Method, Request, Response, Status}
 import com.twitter.finatra.http.exceptions.{
   RouteParamExtractionException,
   UnsupportedMethodException

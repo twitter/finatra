@@ -3,7 +3,7 @@ package com.twitter.finatra.http.tests.streaming
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.Response
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
+import com.twitter.finatra.http.marshalling.MessageBodyManager
 import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.utils.FileResolver

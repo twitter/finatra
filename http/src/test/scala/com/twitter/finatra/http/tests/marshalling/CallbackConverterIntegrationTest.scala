@@ -2,7 +2,7 @@ package com.twitter.finatra.http.tests.marshalling
 
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Request, Response, Status, Method => HttpMethod}
-import com.twitter.finatra.http.internal.marshalling.CallbackConverter
+import com.twitter.finatra.http.internal.routing.CallbackConverter
 import com.twitter.finatra.http.modules.{DocRootModule, MessageBodyModule, MustacheModule}
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.http.streaming.{StreamingRequest, StreamingResponse}
@@ -11,14 +11,14 @@ import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.conversions.buf._
 import com.twitter.inject.modules.StatsReceiverModule
-import com.twitter.inject.{IntegrationTest, Mockito}
+import com.twitter.inject.{Injector, IntegrationTest, Mockito}
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.Future
 import scala.concurrent.{Future => ScalaFuture}
 
 class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
 
-  override val injector =
+  override val injector: Injector =
     TestInjector(
       MessageBodyModule,
       FinatraJacksonModule,
@@ -27,8 +27,8 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
       StatsReceiverModule
     ).create
 
-  val callbackConverter = injector.instance[CallbackConverter]
-  val mapper = injector.instance[FinatraObjectMapper]
+  private val callbackConverter = injector.instance[CallbackConverter]
+  private val mapper = injector.instance[FinatraObjectMapper]
 
   val ford = Car("Ford")
   val okResponse = SimpleResponse(Status.Ok, "bob")
@@ -349,11 +349,11 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
     null
   }
 
-  def noParameterCallback = {
+  def noParameterCallback: String = {
     "hello world"
   }
 
-  def intParameterCallback(i: Int) = {
+  def intParameterCallback(i: Int): String = {
     "int"
   }
 

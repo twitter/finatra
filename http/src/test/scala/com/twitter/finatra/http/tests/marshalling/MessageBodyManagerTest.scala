@@ -1,8 +1,7 @@
 package com.twitter.finatra.http.tests.marshalling
 
 import com.twitter.finagle.http.Request
-import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
-import com.twitter.finatra.http.marshalling.MessageBodyReader
+import com.twitter.finatra.http.marshalling.{MessageBodyManager, MessageBodyReader}
 import com.twitter.finatra.http.modules.{MessageBodyModule, MustacheModule}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.inject.{Mockito, Test}

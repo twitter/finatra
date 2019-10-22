@@ -3,6 +3,7 @@ package com.twitter.finatra.http
 import com.twitter.finagle.Filter
 import com.twitter.finagle.http.Method._
 import com.twitter.finagle.http.{Method, Request, RouteIndex}
+import com.twitter.finatra.http.request.AnyMethod
 import com.twitter.inject.Injector
 import com.twitter.util.Var
 import scala.collection.mutable.ArrayBuffer

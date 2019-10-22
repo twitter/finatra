@@ -1,11 +1,12 @@
 package com.twitter.finatra.http.modules
 
-//TODO: use this in HttpServer once we're on Guice v4
+import com.google.inject.Module
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.inject.TwitterModule
 import com.twitter.inject.modules.StatsReceiverModule
 
+@deprecated("Define the modules separately", "2019-10-16")
 object ResponseBuilderModule extends TwitterModule {
-  override val modules =
+  override val modules: Seq[Module] =
     Seq(FinatraJacksonModule, DocRootModule, MessageBodyModule, MustacheModule, StatsReceiverModule)
 }

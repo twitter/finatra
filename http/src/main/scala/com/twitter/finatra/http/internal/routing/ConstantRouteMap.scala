@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.internal.routing
 
 import com.twitter.finagle.http.Method
-import com.twitter.finatra.http.AnyMethod
+import com.twitter.finatra.http.request.AnyMethod
 import scala.collection.mutable.{AnyRefMap => AMap}
 
 private[http] case class MatchedConstantRoute(routeOpt: Option[Route] = None, methodNotAllowed: Boolean = false)

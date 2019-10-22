@@ -9,7 +9,7 @@ import javax.inject.Inject
 class AdminController @Inject()(@Prod prodUsers: UserService, @Staging stagingUsers: UserService)
     extends Controller {
 
-  get("/admin/finatra/yo") { request: Request =>
+  get("/admin/finatra/yo") { _: Request =>
     "yo yo"
   }
 
@@ -20,7 +20,7 @@ class AdminController @Inject()(@Prod prodUsers: UserService, @Staging stagingUs
   }
 
   // explicitly test an admin route which doesn't use admin path
-  get("/bestuser", admin = true) { request: Request =>
+  get("/bestuser", admin = true) { _: Request =>
     val userId = "123"
     val user = prodUsers.get(userId)
     Map("userId" -> userId, "userName" -> user)

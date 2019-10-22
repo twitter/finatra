@@ -6,6 +6,10 @@ import javax.inject.{Inject, Singleton}
 
 /**
  * A typical collection of Filters for HTTP services. Ordering of Filters is important.
+ * This is meant to be a convenience utility and does not serve all cases. It is primarily
+ * meant to be illustrative of a recommended order of organization for the given filters which
+ * can be chained together manually but which are collected here for the many cases where
+ * you only need the functionality implemented here.
  *
  * @note Filter ordering is determined by the implementation of [[MergedFilter]] and can be
  *       read as Requests enter the top Filter and progress down, Responses traverse in the

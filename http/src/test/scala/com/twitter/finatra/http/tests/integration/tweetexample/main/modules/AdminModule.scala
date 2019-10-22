@@ -1,17 +1,14 @@
 package com.twitter.finatra.http.tests.integration.tweetexample.main.modules
 
-import com.google.inject.{Exposed, Provides}
-import com.twitter.finatra.http.tests.integration.tweetexample.main.services.admin.{
-  DatabaseClient,
-  UserService
-}
+import com.google.inject.{Exposed, Module, Provides}
+import com.twitter.finatra.http.tests.integration.tweetexample.main.services.admin.{DatabaseClient, UserService}
 import com.twitter.finatra.test.{Prod, Staging}
 import com.twitter.inject.{TwitterModule, TwitterPrivateModule}
 import javax.inject.Singleton
 
 object AdminModule extends TwitterModule {
 
-  override val modules = Seq(
+  override val modules: Seq[Module] = Seq(
     // Prod
     new TwitterPrivateModule {
 
@@ -25,7 +22,7 @@ object AdminModule extends TwitterModule {
 
       @Singleton
       @Provides
-      def providesProdDatabaseClient = {
+      def providesProdDatabaseClient: DatabaseClient = {
         new DatabaseClient("data://prod")
       }
     },
@@ -42,7 +39,7 @@ object AdminModule extends TwitterModule {
 
       @Singleton
       @Provides
-      def providesStagingDatabaseClient = {
+      def providesStagingDatabaseClient: DatabaseClient = {
         new DatabaseClient("data://staging")
       }
     }

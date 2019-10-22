@@ -2,8 +2,7 @@ package com.twitter.finatra.http.tests.integration.doeverything.main.controllers
 
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
-import com.twitter.finatra.http.request.HttpForward
-import com.twitter.finatra.http.request.HttpForward._
+import com.twitter.finatra.http.routing.HttpForward
 
 class MaxForwardController(maxDepth: Int, forward: HttpForward) extends Controller {
 
@@ -11,7 +10,7 @@ class MaxForwardController(maxDepth: Int, forward: HttpForward) extends Controll
     this(maxDepth = Integer.MAX_VALUE, forward = forward)
 
   get("/max") { request: Request =>
-    request.ctx.apply(DepthField) match {
+    request.ctx.apply(HttpForward.DepthField) match {
       case Some(depth) =>
         if (depth < maxDepth) {
           forward(request, "/helper/max")
@@ -27,7 +26,7 @@ class MaxForwardController(maxDepth: Int, forward: HttpForward) extends Controll
     forward(request, "/helper/infinity")
   }
 
-  get("/max/ok") { request: Request =>
+  get("/max/ok") { _: Request =>
     response.ok
   }
 }

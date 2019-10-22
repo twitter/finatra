@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.{
 }
 import com.google.inject.{Injector, Key}
 import com.twitter.finagle.http.Request
-import com.twitter.finatra.http.internal.marshalling.RequestInjectableValues.SeqWithSingleEmptyString
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.caseclass.exceptions.RepeatedCommaSeparatedQueryParameterException
 import com.twitter.finatra.request.{FormParam, Header, QueryParam, RouteParam}
@@ -24,6 +23,8 @@ private[http] class RequestInjectableValues(
   request: Request,
   injector: Injector)
     extends InjectableValues {
+
+  import RequestInjectableValues._
 
   private val requestParamsAnnotations: Seq[Class[_ <: Annotation]] =
     Seq(classOf[RouteParam], classOf[QueryParam], classOf[FormParam])

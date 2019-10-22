@@ -10,15 +10,15 @@ import com.twitter.finatra.http.response.ResponseBuilder;
 public class HelloWorldExceptionMapper
     extends AbstractExceptionMapper<HelloWorldException> {
 
-    private ResponseBuilder response;
+  private ResponseBuilder response;
 
-    @Inject
-    public HelloWorldExceptionMapper(ResponseBuilder responseBuilder) {
-        this.response = responseBuilder;
-    }
+  @Inject
+  public HelloWorldExceptionMapper(ResponseBuilder responseBuilder) {
+    this.response = responseBuilder;
+  }
 
-    @Override
-    public Response toResponse(Request request, HelloWorldException throwable) {
-        return response.internalServerError(throwable.getMessage());
-    }
+  @Override
+  public Response toResponse(Request request, HelloWorldException throwable) {
+    return response.internalServerError(throwable.getMessage());
+  }
 }

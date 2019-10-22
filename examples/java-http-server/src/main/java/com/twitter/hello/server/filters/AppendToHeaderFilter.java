@@ -21,13 +21,13 @@ public class AppendToHeaderFilter extends SimpleFilter<Request, Response> {
   public Future<Response> apply(Request request, Service<Request, Response> service) {
     String oldValue =
         (String) request.headerMap().getOrElse(
-          headerName,
-          new AbstractFunction0<String>() {
-            @Override
-            public String apply() {
-              return "";
+            headerName,
+            new AbstractFunction0<String>() {
+              @Override
+              public String apply() {
+                return "";
+              }
             }
-          }
         );
     request.headerMap().update(headerName, oldValue + headerValue);
     return service.apply(request);

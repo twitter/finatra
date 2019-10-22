@@ -1,10 +1,10 @@
 package com.twitter.finatra.http.tests.internal.routing
 
 import com.twitter.finagle.Filter
-import com.twitter.finatra.http.AnyMethod
 import com.twitter.finagle.http.{Method, Request, Response}
 import com.twitter.finatra.http.exceptions.UnsupportedMethodException
 import com.twitter.finatra.http.internal.routing.{Route, Trie}
+import com.twitter.finatra.http.request.AnyMethod
 import com.twitter.inject.Test
 import com.twitter.util.Future
 import scala.reflect.classTag
@@ -96,7 +96,7 @@ class TrieTest extends Test {
    *                             Utils                                *
    * ---------------------------------------------------------------- */
   protected def defaultCallback(request: Request): Future[Response] =
-    Future.value(Response())
+    Future.value(request).map(_ => Response())
 
   def route(method: Method, path: String) =
     Route(

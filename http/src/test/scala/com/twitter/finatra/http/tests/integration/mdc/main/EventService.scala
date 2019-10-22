@@ -4,5 +4,7 @@ import com.twitter.util.Future
 
 class EventService {
 
-  def registerEvent(notificationEvent: NotificationEvent): Future[Unit] = Future.Done
+  def registerEvent(notificationEvent: NotificationEvent): Future[Unit] = {
+    Future.value(notificationEvent).flatMap(_ => Future.Done)
+  }
 }

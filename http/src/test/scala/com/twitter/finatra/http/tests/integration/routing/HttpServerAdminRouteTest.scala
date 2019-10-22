@@ -2,30 +2,32 @@ package com.twitter.finatra.http.tests.integration.routing
 
 import com.twitter.finagle.http._
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.finatra.http.{Controller, HttpServer}
+import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
 import com.twitter.inject.Test
 
 class HttpServerAdminRouteTest extends Test {
 
   test("Server#not allow conflicting admin routes") {
-    val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
-      override protected def configureHttp(router: HttpRouter): Unit = {
-        router.add(new Controller {
-          get("/healthy", name = "Health", admin = true) { request: Request =>
-            response.ok("OK\n")
-          }
+    val server = new EmbeddedHttpServer(
+      twitterServer = new HttpServer {
+        override protected def configureHttp(router: HttpRouter): Unit = {
+          router.add(new Controller {
+            get("/healthy", name = "Health", admin = true) { _: Request =>
+              response.ok("OK\n")
+            }
 
-          get("/quitquitquit", name = "Quit", admin = true) { request: Request =>
-            response.ok("go away")
-          }
+            get("/quitquitquit", name = "Quit", admin = true) { _: Request =>
+              response.ok("go away")
+            }
 
-          post("/abortabortabort", admin = true) { request: Request =>
-            response.ok("go away now")
-          }
-        })
-      }
-    })
+            post("/abortabortabort", admin = true) { _: Request =>
+              response.ok("go away now")
+            }
+          })
+        }
+      },
+      disableTestLogging = true
+    )
 
     try {
       // defines overlapping admin route paths
@@ -38,72 +40,75 @@ class HttpServerAdminRouteTest extends Test {
   }
 
   test("Server#properly add routes to admin index") {
-    val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
-      override protected def configureHttp(router: HttpRouter): Unit = {
-        router.add(new Controller {
-          get(
-            "/admin/finatra/stuff/:id",
-            admin = true,
-            index = Some(RouteIndex(alias = "", group = "Finatra"))
-          ) { request: Request =>
-            response.ok.json(request.params("id"))
-          }
+    val server = new EmbeddedHttpServer(
+      twitterServer = new HttpServer {
+        override protected def configureHttp(router: HttpRouter): Unit = {
+          router.add(new Controller {
+            get(
+              "/admin/finatra/stuff/:id",
+              admin = true,
+              index = Some(RouteIndex(alias = "", group = "Finatra"))
+            ) { request: Request =>
+              response.ok.json(request.params("id"))
+            }
 
-          get("/admin/finatra/foo", index = Some(RouteIndex(alias = "", group = "Finatra"))) {
-            request: Request =>
-              response.ok.json("bar")
-          }
+            get("/admin/finatra/foo", index = Some(RouteIndex(alias = "", group = "Finatra"))) {
+              _: Request =>
+                response.ok.json("bar")
+            }
 
-          post("/admin/resource", admin = true) { request: Request =>
-            response.ok("affirmative")
-          }
+            post("/admin/resource", admin = true) { _: Request =>
+              response.ok("affirmative")
+            }
 
-          get(
-            "/admin/thisisacustompath",
-            admin = true,
-            index = Some(RouteIndex(alias = "Custom", group = "My Service"))
-          ) { request: Request =>
-            response.ok.json("pong")
-          }
+            get(
+              "/admin/thisisacustompath",
+              admin = true,
+              index = Some(RouteIndex(alias = "Custom", group = "My Service"))
+            ) { _: Request =>
+              response.ok.json("pong")
+            }
 
-          get("/admin/externalroute") { request: Request =>
-            response.ok.json("external")
-          }
+            get("/admin/externalroute") { _: Request =>
+              response.ok.json("external")
+            }
 
-          post("/special/admin/route", admin = true) { request: Request =>
-            response.created.location("/special/admin/foo")
-          }
+            post("/special/admin/route", admin = true) { _: Request =>
+              response.created.location("/special/admin/foo")
+            }
 
-          get(
-            "/another/admin/route",
-            admin = true,
-            index = Some(RouteIndex(alias = "Special", group = "My Service"))
-          ) { request: Request =>
-            response.ok("pong")
-          }
+            get(
+              "/another/admin/route",
+              admin = true,
+              index = Some(RouteIndex(alias = "Special", group = "My Service"))
+            ) { _: Request =>
+              response.ok("pong")
+            }
 
-          post(
-            "/admin/finatra/ok/computer",
-            admin = true,
-            index = Some(RouteIndex(alias = "", group = "Finatra"))
-          ) { request: Request =>
-            response.ok("roger.")
-          }
+            post(
+              "/admin/finatra/ok/computer",
+              admin = true,
+              index = Some(RouteIndex(alias = "", group = "Finatra"))
+            ) { _: Request =>
+              response.ok("roger.")
+            }
 
-          get("/admin/threadName", admin = true) {
-            request: Request =>
-              info("in /admin/threadName")
-              response.ok(Thread.currentThread.getName)
-          }
+            get("/admin/threadName", admin = true) {
+              _: Request =>
+                info("in /admin/threadName")
+                response.ok(Thread.currentThread.getName)
+            }
 
-          get("/admin/finatra/threadName", admin = true) {
-            request: Request =>
-              info("in /admin/finatra/threadName")
-              response.ok(Thread.currentThread.getName)
-          }
-        })
-      }
-    })
+            get("/admin/finatra/threadName", admin = true) {
+              _: Request =>
+                info("in /admin/finatra/threadName")
+                response.ok(Thread.currentThread.getName)
+            }
+          })
+        }
+      },
+      disableTestLogging = true
+    )
 
     try {
       server.start()
@@ -157,15 +162,18 @@ class HttpServerAdminRouteTest extends Test {
   test("Server#Add HttpMuxer handler for /admin/finatra and non-constant or non-GET routes") {
     // if we only add non-constant routes to the admin there should still be a handler
     // registered on the HttpMuxer
-    val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
-      override protected def configureHttp(router: HttpRouter): Unit = {
-        router.add(new Controller {
-          get("/admin/finatra/prefix/resource/:id") { request: Request =>
-            response.ok.json(request.params("id"))
-          }
-        })
-      }
-    })
+    val server = new EmbeddedHttpServer(
+      twitterServer = new HttpServer {
+        override protected def configureHttp(router: HttpRouter): Unit = {
+          router.add(new Controller {
+            get("/admin/finatra/prefix/resource/:id") { request: Request =>
+              response.ok.json(request.params("id"))
+            }
+          })
+        }
+      },
+      disableTestLogging = true
+    )
 
     try {
       server.start()
@@ -178,15 +186,18 @@ class HttpServerAdminRouteTest extends Test {
   }
 
   test("Server#Non-constant admin route does not start") {
-    val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
-      override protected def configureHttp(router: HttpRouter): Unit = {
-        router.add(new Controller {
-          get("/prefix/resource/:id", admin = true) { request: Request =>
-            response.ok.json(request.params("id"))
-          }
-        })
-      }
-    })
+    val server = new EmbeddedHttpServer(
+      twitterServer = new HttpServer {
+        override protected def configureHttp(router: HttpRouter): Unit = {
+          router.add(new Controller {
+            get("/prefix/resource/:id", admin = true) { request: Request =>
+              response.ok.json(request.params("id"))
+            }
+          })
+        }
+      },
+      disableTestLogging = true
+    )
 
     try {
       // non-constant admin routes not supported
@@ -199,28 +210,31 @@ class HttpServerAdminRouteTest extends Test {
   }
 
   test("Server#Similar paths but differing Http Methods") {
-    val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
-      override protected def configureHttp(router: HttpRouter): Unit = {
-        router.add(new Controller {
+    val server = new EmbeddedHttpServer(
+      twitterServer = new HttpServer {
+        override protected def configureHttp(router: HttpRouter): Unit = {
+          router.add(new Controller {
 
-          post("/foo/bar") { request: Request =>
-            response.ok.location("baz")
-          }
+            post("/foo/bar") { _: Request =>
+              response.ok.location("baz")
+            }
 
-          get("/foo/bar", admin = true) { request: Request =>
-            "baz"
-          }
+            get("/foo/bar", admin = true) { _: Request =>
+              "baz"
+            }
 
-          post("/great/work", admin = true) { request: Request =>
-            "this is an admin POST route"
-          }
+            post("/great/work", admin = true) { _: Request =>
+              "this is an admin POST route"
+            }
 
-          get("/great/work") { request: Request =>
-            "this is an external GET route"
-          }
-        })
-      }
-    })
+            get("/great/work") { _: Request =>
+              "this is an external GET route"
+            }
+          })
+        }
+      },
+      disableTestLogging = true
+    )
 
     try {
       server.start()
@@ -260,17 +274,18 @@ class HttpServerAdminRouteTest extends Test {
       twitterServer = new HttpServer {
         override protected def configureHttp(router: HttpRouter): Unit = {
           router.add(new Controller {
-            get("/admin/finatra/explicit/test/route", admin = true) { r: Request =>
+            get("/admin/finatra/explicit/test/route", admin = true) { _: Request =>
               "on the admin interface"
             }
 
             // routes that start with /admin/finatra ALWAYS added to admin
-            get("/admin/finatra/implied/test/roue") { r: Request =>
+            get("/admin/finatra/implied/test/roue") { _: Request =>
               response.ok("on the admin interface")
             }
           })
         }
-      }
+      },
+      disableTestLogging = true
     )
 
     try {

@@ -25,10 +25,10 @@ class TestFilter(
 }
 
 class RouteDSLTest extends Test {
-  val identityService =
+  private val identityService =
     Service.mk[Request, Response](request => Future.value(Response(request)))
 
-  val injector = TestInjector().create
+  private val injector = TestInjector().create
 
   test("RouteDSL") {
     val routeDSL = new RouteDSL {}
@@ -41,11 +41,11 @@ class RouteDSLTest extends Test {
   test("RouteDSL fails when route is not prefixed with leading slash") {
     intercept[IllegalArgumentException] {
       new RouteDSL {
-        get("foo") { request: Request => // <---- this should fail
+        get("foo") { _: Request => // <---- this should fail
           "bar"
         }
 
-        post("/foo") { request: Request =>
+        post("/foo") { _: Request =>
           "another bar"
         }
       }

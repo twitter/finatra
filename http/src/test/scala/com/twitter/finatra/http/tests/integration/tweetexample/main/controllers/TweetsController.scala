@@ -21,7 +21,7 @@ class TweetsController @Inject()(
   onWriteLog: mutable.ArrayBuffer[String])
     extends Controller {
 
-  get("/tweets/hello") { request: Request =>
+  get("/tweets/hello") { _: Request =>
     "hello world"
   }
 
@@ -49,11 +49,11 @@ class TweetsController @Inject()(
     bufs
   }
 
-  get("/tweets/streaming_json") { request: Request =>
+  get("/tweets/streaming_json") { _: Request =>
     tweetsRepository.getByIds(Reader.fromSeq(Seq(0, 1, 2, 3, 4, 5)))
   }
 
-  get("/tweets/streaming_custom_tobuf") { request: Request =>
+  get("/tweets/streaming_custom_tobuf") { _: Request =>
     DeprecatedStreamingResponse(Buf.Utf8.apply) {
       AsyncStream("A", "B", "C")
     }
@@ -75,8 +75,8 @@ class TweetsController @Inject()(
     def lowercaseTransformer(as: AsyncStream[String]) = as.map(_.toLowerCase)
 
     val transformer = (lowercaseTransformer _)
-      .andThen(StreamingResponseUtils.toBufTransformer(Buf.Utf8.apply) _)
-      .andThen(StreamingResponseUtils.tupleTransformer(()) _)
+      .andThen(StreamingResponseUtils.toBufTransformer(Buf.Utf8.apply))
+      .andThen(StreamingResponseUtils.tupleTransformer(()))
 
     def onWrite(ignored: Unit, buf: Buf)(t: Try[Unit]): Unit = ()
 
@@ -121,7 +121,7 @@ class TweetsController @Inject()(
     }
   }
 
-  get("/tweets/streaming_custom_tobuf_with_custom_headers") { request: Request =>
+  get("/tweets/streaming_custom_tobuf_with_custom_headers") { _: Request =>
     val headers = Map(
       Fields.ContentType -> "text/event-stream;charset=UTF-8",
       Fields.CacheControl -> "no-cache, no-store, max-age=0, must-revalidate",
@@ -133,7 +133,7 @@ class TweetsController @Inject()(
     }
   }
 
-  get("/tweets/streaming_manual_writes") { request: Request =>
+  get("/tweets/streaming_manual_writes") { _: Request =>
     val response = Response()
     response.setChunked(true)
 
@@ -174,7 +174,7 @@ class TweetsController @Inject()(
       response.streaming(tweetReader)
   }
 
-  get("/tweets/") { request: Request =>
+  get("/tweets/") { _: Request =>
     "tweets root"
   }
 

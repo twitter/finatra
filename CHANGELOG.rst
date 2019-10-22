@@ -21,6 +21,13 @@ Added
 * inject-core: Add support for optional binding in `c.t.inject.TwitterModule`.
   ``PHAB_ID=D386288``
 
+Changed
+~~~~~~~
+
+* finatra-http: Updated package structure for Pants 1:1:1 layout. Moved `META-INF/mime.types` file
+  to finatra/utils which is where the `FileResolver` is located for proper resolution of mime types
+  from file extension. ``PHAB_ID=D385792``
+
 19.10.0
 -------
 

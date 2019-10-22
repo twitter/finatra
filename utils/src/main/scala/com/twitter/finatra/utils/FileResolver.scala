@@ -64,9 +64,8 @@ class FileResolver @Inject()(
       getClasspathInputStream(path).isDefined
   }
 
-  def getContentType(file: String) = {
+  def getContentType(file: String): String =
     extMap.getContentType(dottedFileExtension(file))
-  }
 
   def getFileExtension(filename: String): String = {
     val lastSeparator = getLastSeperatorIndex(filename)
@@ -86,9 +85,7 @@ class FileResolver @Inject()(
     if (lastUnixPos > lastWindowPos) lastUnixPos else lastWindowPos
   }
 
-  private def isDirectory(path: String): Boolean = {
-    path.endsWith("/")
-  }
+  private def isDirectory(path: String): Boolean = path.endsWith("/")
 
   private def getClasspathInputStream(path: String): Option[InputStream] = {
     val actualPath = if (!docRoot.isEmpty) s"$actualDocRoot$path" else path
@@ -113,7 +110,5 @@ class FileResolver @Inject()(
       None
   }
 
-  private def dottedFileExtension(uri: String) = {
-    '.' + getFileExtension(uri)
-  }
+  private def dottedFileExtension(uri: String) = '.' + getFileExtension(uri)
 }

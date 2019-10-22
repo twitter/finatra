@@ -1,12 +1,9 @@
-package com.twitter.finatra.http.internal.marshalling
+package com.twitter.finatra.http.internal.routing
 
 import com.twitter.concurrent.AsyncStream
-import com.twitter.finagle.http._
-import com.twitter.finatra.http.internal.marshalling.CallbackConverter.url
-import com.twitter.finatra.http.response.{
-  ResponseBuilder,
-  StreamingResponse => DeprecatedStreamingResponse
-}
+import com.twitter.finagle.http.{Fields, Request, Response, Status, Version}
+import com.twitter.finatra.http.marshalling.MessageBodyManager
+import com.twitter.finatra.http.response.{ResponseBuilder, StreamingResponse => DeprecatedStreamingResponse}
 import com.twitter.finatra.http.streaming.{FromReader, StreamingRequest, StreamingResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.streaming.JsonStreamParser
@@ -28,6 +25,8 @@ private[http] class CallbackConverter @Inject()(
   responseBuilder: ResponseBuilder,
   mapper: FinatraObjectMapper,
   jsonStreamParser: JsonStreamParser) {
+
+  import CallbackConverter._
 
   /* Public */
 

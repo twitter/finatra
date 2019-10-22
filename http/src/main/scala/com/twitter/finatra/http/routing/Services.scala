@@ -1,4 +1,4 @@
-package com.twitter.finatra.http.internal.routing
+package com.twitter.finatra.http.routing
 
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response}

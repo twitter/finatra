@@ -4,14 +4,20 @@ import com.google.inject.Module
 import com.twitter.app.Flag
 import com.twitter.conversions.StorageUnitOps._
 import com.twitter.conversions.DurationOps._
-import com.twitter.finagle._
+import com.twitter.finagle.{Http, ListeningServer, NullServer, Service}
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.service.NilService
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finatra.http.internal.routing.AdminHttpRouter
-import com.twitter.finatra.http.modules._
+import com.twitter.finatra.http.modules.{
+  AccessLogModule,
+  DocRootModule,
+  ExceptionManagerModule,
+  HttpResponseClassifierModule,
+  MessageBodyModule,
+  MustacheModule
+}
 import com.twitter.finatra.http.response.HttpResponseClassifier
-import com.twitter.finatra.http.routing.HttpRouter
+import com.twitter.finatra.http.routing.{AdminHttpRouter, HttpRouter}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.conversions.string._
@@ -20,6 +26,7 @@ import com.twitter.util.{Await, Duration, StorageUnit}
 import java.net.InetSocketAddress
 
 private object HttpServerTrait {
+
   /**
    * Sentinel used to indicate no http/https server(s) announcement(s).
    */
@@ -34,8 +41,7 @@ private object HttpServerTrait {
 trait HttpServerTrait extends TwitterServer {
 
   /** Add Framework Modules */
-  addFrameworkModule(
-    httpResponseClassifierModule)
+  addFrameworkModule(httpResponseClassifierModule)
 
   /**
    * Default external HTTP port used as the [[Flag]] default value for [[httpPortFlag]]. This can be
@@ -206,7 +212,9 @@ trait HttpServerTrait extends TwitterServer {
    * @see [[com.twitter.finatra.http.HttpServerTrait.defaultHttpAnnouncement]]
    * @see [[https://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
    */
-  private val httpAnnounceFlag = flag[String]("http.announce", defaultHttpAnnouncement,
+  private val httpAnnounceFlag = flag[String](
+    "http.announce",
+    defaultHttpAnnouncement,
     "Address for announcing HTTP server. Empty string indicates no announcement.")
 
   /**
@@ -231,7 +239,9 @@ trait HttpServerTrait extends TwitterServer {
    * @see [[com.twitter.finatra.http.HttpServerTrait.defaultHttpsAnnouncement]]
    * @see [[https://twitter.github.io/finatra/user-guide/getting-started/flags.html#passing-flag-values-as-command-line-arguments]]
    */
-  private val httpsAnnounceFlag = flag[String]("https.announce", defaultHttpsAnnouncement,
+  private val httpsAnnounceFlag = flag[String](
+    "https.announce",
+    defaultHttpsAnnouncement,
     "Address for announcing HTTPS server. Empty string indicates no announcement.")
 
   /* Private Mutable State */
@@ -264,12 +274,11 @@ trait HttpServerTrait extends TwitterServer {
 
     // START HTTP
     for (address <- parsePort(httpPortFlag)) {
-      httpServer =
-        build(
-          address,
-          frameworkConfigureHttpServer(
-            configureHttpServer(defaultHttpServer(httpServerNameFlag()))
-          )
+      httpServer = build(
+        address,
+        frameworkConfigureHttpServer(
+          configureHttpServer(defaultHttpServer(httpServerNameFlag()))
+        )
       )
 
       onExit {
@@ -287,12 +296,10 @@ trait HttpServerTrait extends TwitterServer {
 
     // START HTTPS
     for (address <- parsePort(httpsPortFlag)) {
-      httpsServer =
-        build(
-          address,
-          frameworkConfigureHttpsServer(
-            configureHttpsServer(defaultHttpServer(httpsServerNameFlag())
-          )
+      httpsServer = build(
+        address,
+        frameworkConfigureHttpsServer(
+          configureHttpsServer(defaultHttpServer(httpsServerNameFlag()))
         )
       )
 
@@ -437,7 +444,10 @@ trait HttpServer extends HttpServerTrait {
   protected final def httpService: Service[Request, Response] = NilService
 
   /** Serve the `Service[Request, Response]` from the configured [[HttpRouter]]. */
-  override protected[http] final def build(addr: InetSocketAddress, server: Http.Server): ListeningServer = {
+  override protected[http] final def build(
+    addr: InetSocketAddress,
+    server: Http.Server
+  ): ListeningServer = {
     val router = injector.instance[HttpRouter]
     server.serve(addr, router.services.externalService)
   }

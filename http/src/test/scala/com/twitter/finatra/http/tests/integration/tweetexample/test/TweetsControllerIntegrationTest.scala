@@ -7,18 +7,19 @@ import com.twitter.finatra.http.tests.integration.tweetexample.main.domain.Tweet
 import com.twitter.finatra.http.{EmbeddedHttpServer, RouteHint, StreamingJsonTestHelper}
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
-import com.twitter.util.{Await, Future}
+import com.twitter.util.Future
 import scala.collection.mutable
 
 class TweetsControllerIntegrationTest extends FeatureTest {
 
   val onWriteLog: mutable.ArrayBuffer[String] = new mutable.ArrayBuffer[String]()
 
-  override val server = new EmbeddedHttpServer(
+  override val server: EmbeddedHttpServer = new EmbeddedHttpServer(
     new TweetsEndpointServer,
     defaultRequestHeaders = Map("X-UserId" -> "123"),
     // Set client flags to also start on HTTPS port
-    flags = Map("https.port" -> ":0", "cert.path" -> "", "key.path" -> "")
+    flags = Map("https.port" -> ":0", "cert.path" -> "", "key.path" -> ""),
+    disableTestLogging = true
   ).bind[mutable.ArrayBuffer[String]].toInstance(onWriteLog)
 
   lazy val streamingJsonHelper =
@@ -202,7 +203,10 @@ class TweetsControllerIntegrationTest extends FeatureTest {
   }
 
   test("get StreamingResponse with Reader") {
-    val response = server.httpGet("/tweets/streamingRep_with_reader", andExpect = Status.Accepted, withBody = "[1,2,3]")
+    val response = server.httpGet(
+      "/tweets/streamingRep_with_reader",
+      andExpect = Status.Accepted,
+      withBody = "[1,2,3]")
     response.headerMap.getAll("key1") should equal(Seq("value1", "value2", "value3"))
     response.headerMap.getAll("key2") should equal(Seq("v4", "v5", "v6"))
   }
@@ -313,7 +317,8 @@ class TweetsControllerIntegrationTest extends FeatureTest {
       .header("X-UserId", "123")
       .chunked
 
-    val tweets = List(Tweet(1L, "Bob", "whats up"), Tweet(2L, "Sally", "yo"), Tweet(3L, "Fred", "hey"))
+    val tweets =
+      List(Tweet(1L, "Bob", "whats up"), Tweet(2L, "Sally", "yo"), Tweet(3L, "Fred", "hey"))
 
     // Write to request in separate thread
     pool {
@@ -370,9 +375,9 @@ class TweetsControllerIntegrationTest extends FeatureTest {
 
   test("get hello in parallel") {
     pending // disabling until pool shutdown added
-    Await.result {
+    await {
       Future.collect {
-        for (i <- 1 to 500) yield {
+        for (_ <- 1 to 500) yield {
           pool {
             sayHello()
           }
@@ -408,7 +413,7 @@ class TweetsControllerIntegrationTest extends FeatureTest {
     maxRequestSize should equal("10485760.bytes")
   }
 
-  def sayHello() = {
+  def sayHello(): Unit = {
     server.httpGet(
       "/tweets/hello",
       andExpect = Status.Ok,

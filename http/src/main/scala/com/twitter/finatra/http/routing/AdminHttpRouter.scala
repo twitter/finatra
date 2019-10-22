@@ -1,11 +1,10 @@
-package com.twitter.finatra.http.internal.routing
+package com.twitter.finatra.http.routing
 
 import com.twitter.finagle.http.{HttpMuxer, Method}
-import com.twitter.finatra.http._
-import com.twitter.finatra.http.routing.HttpRouter
+import com.twitter.finatra.http.internal.routing.Route
+import com.twitter.finatra.http.request.AnyMethod
 import com.twitter.inject.Logging
 import com.twitter.server.AdminHttpServer
-import com.twitter.server.AdminHttpServer._
 import com.twitter.util.lint.{Category, GlobalRules, Issue, Rule}
 
 private[http] object AdminHttpRouter extends Logging {
@@ -24,7 +23,7 @@ private[http] object AdminHttpRouter extends Logging {
    * only on paths behind /admin/finatra.
    */
   def addAdminRoutes(
-    server: HttpServerTrait,
+    server: AdminHttpServer,
     router: HttpRouter,
     twitterServerAdminRoutes: Seq[AdminHttpServer.Route]
   ): Unit = {
@@ -107,7 +106,7 @@ private[http] object AdminHttpRouter extends Logging {
     routes.map { route =>
       route.index match {
         case Some(index) =>
-          mkRoute(
+          AdminHttpServer.mkRoute(
             path = route.path,
             handler = router.services.adminService,
             alias = if (index.alias.nonEmpty) index.alias else route.path,
@@ -116,7 +115,7 @@ private[http] object AdminHttpRouter extends Logging {
             method = route.method
           )
         case _ =>
-          mkRoute(
+          AdminHttpServer.mkRoute(
             path = route.path,
             handler = router.services.adminService,
             alias = route.path,

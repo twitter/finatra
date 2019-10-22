@@ -2,7 +2,7 @@ package com.twitter.finatra.http.marshalling
 
 /**
  * A marker trait denoting the default [[MessageBodyWriter]] for the HTTP server. This default
- * [[MessageBodyWriter]] is invoked by either the [[com.twitter.finatra.http.internal.marshalling.CallbackConverter]]
+ * [[MessageBodyWriter]] is invoked by either the `com.twitter.finatra.http.internal.CallbackConverter`
  * (by invoking the [[com.twitter.finatra.http.response.ResponseBuilder]]) or
  * [[com.twitter.finatra.http.response.ResponseBuilder#write]] directly to return a suitable
  * response for a given return type.
@@ -23,7 +23,7 @@ package com.twitter.finatra.http.marshalling
  * response using the server's configured [[com.twitter.finatra.json.FinatraObjectMapper]].
  *
  * @see [[com.twitter.finatra.http.internal.marshalling.DefaultMessageBodyWriterImpl]]
- * @see [[com.twitter.finatra.http.internal.marshalling.MessageBodyManager]]
+ * @see [[MessageBodyManager]]
  * @see [[com.twitter.finatra.http.modules.MessageBodyModule]]
  * @see [[com.twitter.finatra.http.HttpServer.messageBodyModule]]
  * @see [[https://twitter.github.io/finatra/user-guide/json/routing.html#responses]]

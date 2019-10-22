@@ -1,10 +1,8 @@
 package com.twitter.finatra.http.tests.request
 
-import com.twitter.finagle.http.{HeaderMap, Request}
-import com.twitter.finatra.http.HttpHeaders
+import com.twitter.finagle.http.{Fields, HeaderMap, Request}
 import com.twitter.finatra.http.exceptions.{BadRequestException, NotAcceptableException}
-import com.twitter.finatra.http.request.ContentType
-import com.twitter.finatra.http.request.RequestUtils
+import com.twitter.finatra.http.request.{ContentType, RequestUtils}
 import com.twitter.inject.{Mockito, Test}
 import java.net.URI
 
@@ -56,7 +54,7 @@ class RequestUtilsTest extends Test with Mockito {
 
   test("respondTo text/html content-type in request") {
     val request = smartMock[Request]
-    request.headerMap returns HeaderMap(HttpHeaders.Accept -> ContentType.HTML.toString)
+    request.headerMap returns HeaderMap(Fields.Accept -> ContentType.HTML.toString)
 
     val response = RequestUtils.respondTo(request) {
       case ContentType.HTML => true
@@ -68,7 +66,7 @@ class RequestUtilsTest extends Test with Mockito {
 
   test("respondTo application/json content-type in request") {
     val request = smartMock[Request]
-    request.headerMap returns HeaderMap(HttpHeaders.Accept -> ContentType.JSON.toString)
+    request.headerMap returns HeaderMap(Fields.Accept -> ContentType.JSON.toString)
 
     val response = RequestUtils.respondTo(request) {
       case ContentType.JSON => true
@@ -81,7 +79,7 @@ class RequestUtilsTest extends Test with Mockito {
   test("return NotAcceptableException for request") {
     val request = smartMock[Request]
     // accept application/json
-    request.headerMap returns HeaderMap(HttpHeaders.Accept -> ContentType.JSON.toString)
+    request.headerMap returns HeaderMap(Fields.Accept -> ContentType.JSON.toString)
 
     intercept[NotAcceptableException] {
       // only handle text/html

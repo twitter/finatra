@@ -18,7 +18,7 @@ import org.mockito.Mockito;
 import com.twitter.concurrent.AsyncStream;
 import com.twitter.finagle.http.Response;
 import com.twitter.finagle.stats.StatsReceiver;
-import com.twitter.finatra.http.internal.marshalling.MessageBodyManager;
+import com.twitter.finatra.http.marshalling.MessageBodyManager;
 import com.twitter.finatra.http.response.ResponseBuilder;
 import com.twitter.finatra.http.streaming.StreamingResponse;
 import com.twitter.finatra.http.streaming.ToReader;

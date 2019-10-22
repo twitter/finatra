@@ -1,8 +1,8 @@
 package com.twitter.finatra.http.internal.routing
 
 import com.twitter.finagle.http.Method
-import com.twitter.finatra.http.AnyMethod
 import com.twitter.finatra.http.exceptions.UnsupportedMethodException
+import com.twitter.finatra.http.request.AnyMethod
 import scala.annotation.tailrec
 import scala.collection.mutable.{ArrayBuffer, AnyRefMap => AMap, LinkedHashMap => LMap}
 

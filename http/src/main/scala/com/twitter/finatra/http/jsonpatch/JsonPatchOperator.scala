@@ -3,9 +3,9 @@ package com.twitter.finatra.http.jsonpatch
 import com.fasterxml.jackson.core.JsonPointer
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.{ArrayNode, ObjectNode}
-import com.google.inject.{Inject, Singleton}
 import com.twitter.finatra.json.FinatraObjectMapper
 import scala.annotation.tailrec
+import javax.inject.{Inject, Singleton}
 
 /**
  * A utility class for operating on a case class by converting it to a JsonNode.

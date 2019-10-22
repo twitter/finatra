@@ -7,7 +7,7 @@ import com.twitter.finagle.service.{ReqRep, ResponseClass, ResponseClassifier}
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.filters.StatsFilter
-import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
+import com.twitter.finatra.http.marshalling.MessageBodyManager
 import com.twitter.finatra.http.response.{HttpResponseClassifier, ResponseBuilder}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.utils.FileResolver

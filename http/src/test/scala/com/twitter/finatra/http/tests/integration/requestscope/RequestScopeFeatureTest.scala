@@ -1,5 +1,6 @@
 package com.twitter.finatra.http.tests.integration.requestscope
 
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
@@ -8,28 +9,21 @@ import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
 import com.twitter.finatra.utils.FuturePools
 import com.twitter.inject.TwitterModule
-import com.twitter.inject.requestscope.{
-  FinagleRequestScope,
-  FinagleRequestScopeFilter,
-  RequestScopeBinding
-}
+import com.twitter.inject.requestscope.{FinagleRequestScope, FinagleRequestScopeFilter, RequestScopeBinding}
 import com.twitter.inject.server.FeatureTest
-import com.twitter.conversions.DurationOps._
 import com.twitter.inject.utils.RetryPolicyUtils.constantRetry
 import com.twitter.inject.utils.RetryUtils.retryFuture
-import com.twitter.util.{Await, Future, Return}
+import com.twitter.util.{Future, Return}
 import java.util.concurrent.ConcurrentLinkedQueue
 import javax.inject.{Inject, Provider}
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 class RequestScopeFeatureTest extends FeatureTest {
 
-  override val server = new EmbeddedHttpServer(new PooledServer)
-
-  def await[T](f: Future[T]): T = Await.result(f, 5.seconds)
+  override val server = new EmbeddedHttpServer(new PooledServer, disableTestLogging = true)
 
   test("request scope propagates to multiple future pools") {
-    for (i <- 1 to 50) {
+    for (_ <- 1 to 50) {
       server.httpGet(
         "/hi?msg=hello",
         headers = Map("Username" -> "Bob"),
@@ -57,7 +51,7 @@ class RequestScopeFeatureTest extends FeatureTest {
         case Return(expectedMatches) => !expectedMatches
       })) {
 
-        Future.value(FuturePooledController.msgLog.toSeq.sorted == expectedMsgs)
+        Future.value(FuturePooledController.msgLog.asScala.toSeq.sorted == expectedMsgs)
       }) should be(true)
 
       FuturePooledController.msgLog.clear()

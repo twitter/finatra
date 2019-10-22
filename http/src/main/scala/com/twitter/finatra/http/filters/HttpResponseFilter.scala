@@ -1,9 +1,8 @@
 package com.twitter.finatra.http.filters
 
 import com.twitter.conversions.DurationOps._
-import com.twitter.finagle.http.{MediaType, Message, Request, Response}
+import com.twitter.finagle.http.{Fields, MediaType, Message, Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
-import com.twitter.finatra.http.HttpHeaders
 import com.twitter.finatra.http.request.RequestUtils
 import com.twitter.inject.Logging
 import com.twitter.util.{Future, Return, ScheduledThreadPoolTimer, Throw, Try}
@@ -48,11 +47,11 @@ class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] with Lo
    * @see Content-Type: [[https://tools.ietf.org/html/rfc7231#section-3.1.1.5 Section 3.1.1.5 of RFC 7231]]
    */
   private def setResponseHeaders(response: Response): Unit = {
-    response.headerMap.setUnsafe(HttpHeaders.Server, "Finatra")
-    response.headerMap.setUnsafe(HttpHeaders.Date, currentDateValue)
+    response.headerMap.setUnsafe(Fields.Server, "Finatra")
+    response.headerMap.setUnsafe(Fields.Date, currentDateValue)
     if (response.contentType.isEmpty && response.length != 0) {
       // see: https://www.w3.org/Protocols/rfc2616/rfc2616-sec7.html#sec7.2.1
-      response.headerMap.setUnsafe(HttpHeaders.ContentType, MediaType.OctetStream)
+      response.headerMap.setUnsafe(Fields.ContentType, MediaType.OctetStream)
     }
   }
 
@@ -67,7 +66,7 @@ class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] with Lo
           )
         case Return(uri) if uri.getScheme == null =>
           response.headerMap.set(
-            HttpHeaders.Location,
+            Fields.Location,
             RequestUtils.normalizedURIWithoutScheme(uri, request)
           )
         case _ =>

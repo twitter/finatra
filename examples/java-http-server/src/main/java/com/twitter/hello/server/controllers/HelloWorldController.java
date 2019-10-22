@@ -47,12 +47,12 @@ public class HelloWorldController extends AbstractController {
     get("/echo", helloService::echo);
 
     filter(new AppendToHeaderFilter("foo", "2"))
-      .filter(new AppendToHeaderFilter("foo", "3"))
-      .get("/ping", request -> {
-        assert request.headerMap().getAll("foo").mkString("").equals("123");
-        return Future.value("pong");
-      }
-    );
+        .filter(new AppendToHeaderFilter("foo", "3"))
+        .get("/ping", request -> {
+              assert request.headerMap().getAll("foo").mkString("").equals("123");
+              return Future.value("pong");
+            }
+        );
 
     get("/exception", request -> new HelloWorldException("error processing request"));
 

@@ -1,9 +1,8 @@
-package com.twitter.finatra.http.request
+package com.twitter.finatra.http.routing
 
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.exceptions.MaxForwardsExceededException
-import com.twitter.finatra.http.internal.request.ForwardedRequest
-import com.twitter.finatra.http.routing.HttpRouter
+import com.twitter.finatra.http.request.ForwardedRequest
 import com.twitter.inject.Logging
 import com.twitter.util.Future
 import javax.inject.{Inject, Singleton}

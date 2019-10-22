@@ -2,8 +2,7 @@ package com.twitter.finatra.http.tests.integration.startup
 
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.finatra.http.{Controller, HttpServer}
+import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
 import com.twitter.inject.Test
 
 class HttpServerStartupIntegrationTest extends Test {

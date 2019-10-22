@@ -201,7 +201,6 @@ class MediaRange(
 ) extends MediaType(mediaType, mediaSubType, parameters) {
 
   /**
-
    * @return true if `mimeType` matches this media type, otherwise false
    */
   def accepts(mimeType: String): Boolean =

@@ -1,13 +1,13 @@
 package com.twitter.finatra.http.tests.response
 
 import com.twitter.finagle.http.MediaType
-import com.twitter.finagle.http.{Cookie => FinagleCookie, Request, Response, Status}
+import com.twitter.finagle.http.{Request, Response, Status, Cookie => FinagleCookie}
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
+import com.twitter.finatra.http.marshalling.MessageBodyManager
 import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.utils.FileResolver
-import com.twitter.inject.{Test, Mockito}
+import com.twitter.inject.{Mockito, Test}
 import com.twitter.util.Await
 import java.io.{File, FileWriter}
 

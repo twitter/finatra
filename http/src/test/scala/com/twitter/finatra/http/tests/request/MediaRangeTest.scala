@@ -18,7 +18,7 @@ class MediaRangeTest extends Test {
     parsed.head
   }
 
-  def parseInvalidMediaRange(mediaRange: String) = {
+  def parseInvalidMediaRange(mediaRange: String): Seq[MediaRange] = {
     MediaRange.parseAndSort(mediaRange)
   }
 

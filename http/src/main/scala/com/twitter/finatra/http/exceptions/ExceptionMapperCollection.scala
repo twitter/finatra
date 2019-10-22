@@ -4,7 +4,7 @@ import scala.collection.mutable.ArrayBuffer
 
 /**
  * Represents a collection of [[com.twitter.finatra.http.exceptions.ExceptionMapper]]s
- * which is a Traversable[Manifest[ExceptionMapper[_\]\]\].
+ * which is a {{{Traversable[Manifest[ExceptionMapper[_]]]}}}.
  */
 class ExceptionMapperCollection extends Traversable[Manifest[ExceptionMapper[_]]] {
 

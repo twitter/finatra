@@ -3,8 +3,6 @@ package com.twitter.finatra.http.internal.routing
 import com.twitter.finagle.http.{Method, Request, Response, RouteIndex}
 import com.twitter.finagle.{Filter, Service}
 import com.twitter.finatra.http.contexts.RouteInfo
-import com.twitter.finatra.http.internal.request.RequestWithRouteParams
-import com.twitter.finatra.http.internal.routing.Route._
 import com.twitter.util.Future
 import java.lang.annotation.Annotation
 import scala.reflect.ClassTag
@@ -26,8 +24,8 @@ private[http] case class Route(
   requestClass: ClassTag[_],
   responseClass: ClassTag[_],
   routeFilter: Filter[Request, Response, Request, Response], // specific filter chain defined for this route
-  filter: Filter[Request, Response, Request, Response] // global filter chain to apply to this route
-) {
+  filter: Filter[Request, Response, Request, Response]) { // global filter chain to apply to this route
+  import Route._
 
   val path: String = normalizeUriToPath(uri)
 
@@ -79,7 +77,7 @@ private[http] case class Route(
     if (routeParams.isEmpty)
       request
     else
-    new RequestWithRouteParams(request, routeParams)
+      new RequestWithRouteParams(request, routeParams)
   }
 
   /** normalize a URI to a route path */
