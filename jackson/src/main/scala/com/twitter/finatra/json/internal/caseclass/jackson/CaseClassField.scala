@@ -7,17 +7,15 @@ import com.fasterxml.jackson.databind.`type`.TypeFactory
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.node.TreeTraversingParser
 import com.fasterxml.jackson.databind.util.ClassUtil
-import com.twitter.finatra.json.internal.caseclass.exceptions.{
-  CaseClassValidationException,
-  FinatraJsonMappingException
-}
-import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils._
+import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassValidationException, FinatraJsonMappingException}
+import com.twitter.inject.utils.AnnotationUtils._
 import com.twitter.finatra.json.internal.caseclass.utils.{DefaultMethodUtils, FieldInjection}
 import com.twitter.finatra.request.{FormParam, Header, QueryParam}
 import com.twitter.finatra.validation.ValidationResult._
 import com.twitter.finatra.validation.{ErrorCode, Validation}
 import com.twitter.inject.Logging
 import com.twitter.inject.conversions.string._
+import com.twitter.inject.utils.AnnotationUtils
 import java.lang.annotation.Annotation
 import java.lang.reflect.Type
 import org.json4s.reflect.{ClassDescriptor, Reflector, ScalaSigReader}
@@ -82,69 +80,8 @@ private[finatra] object CaseClassField {
   private[finatra] def findAnnotations(
     clazz: Class[_],
     constructorParams: Seq[ConstructorParam]
-  ): Map[String, Seq[Annotation]] = {
-    // for case classes, the annotations are only visible on the constructor.
-    val clazzConstructorAnnotations: Array[Array[Annotation]] =
-      clazz.getConstructors.head.getParameterAnnotations
-
-    // find case class field annotations
-    val clazzAnnotations: Map[String, Seq[Annotation]] = (for {
-      (field, index) <- constructorParams.zipWithIndex
-      fieldAnnotations = clazzConstructorAnnotations(index)
-    } yield {
-      field.name -> fieldAnnotations.toSeq
-    }).toMap
-
-    // find inherited annotations
-    val inheritedAnnotations: Map[String, Seq[Annotation]] =
-      findDeclaredMethodAnnotations(clazz, Map.empty[String, Seq[Annotation]])
-
-    // Merge the two maps: if the same annotation for a given field occurs in both lists, we keep
-    // the clazz annotation to in effect "override" what was specified by inheritance. That is, it
-    // is not expected that annotations are ever additive (in the sense that you can configure a
-    // single field through multiple declarations of the same annotation) but rather either-or.
-    clazzAnnotations.map {
-      case (field: String, annotations: Seq[Annotation]) =>
-        val inherited: Seq[Annotation] =
-          inheritedAnnotations.getOrElse(field, Nil)
-        // want to prefer what is coming in from clazz annotations over inherited
-        field -> mergeAnnotationLists(annotations, inherited)
-    }
-  }
-
-  private[this] def findDeclaredMethodAnnotations(
-    clazz: Class[_],
-    found: Map[String, Seq[Annotation]]
-  ): Map[String, Seq[Annotation]] = {
-    // clazz declared method annotations
-    val interfaceDeclaredAnnotations: Map[String, Seq[Annotation]] =
-      clazz.getDeclaredMethods
-        .map { method =>
-          method.getName -> method.getDeclaredAnnotations.toSeq
-        }.toMap.map {
-          case (key, values) =>
-            key -> mergeAnnotationLists(values, found.getOrElse(key, Seq.empty[Annotation]))
-        }
-
-    // interface declared method annotations
-    clazz.getInterfaces.foldLeft(interfaceDeclaredAnnotations) {
-      (acc: Map[String, Seq[Annotation]], interface: Class[_]) =>
-        acc.map {
-          case (key, values) =>
-            key -> mergeAnnotationLists(
-              values,
-              findDeclaredMethodAnnotations(interface, acc).getOrElse(key, Seq.empty[Annotation]))
-        }
-    }
-  }
-
-  /** Prefer values in A over B */
-  private[this] def mergeAnnotationLists(
-    a: Seq[Annotation],
-    b: Seq[Annotation]
-  ): Seq[Annotation] = {
-    a ++ b.filterNot(bAnnotation => a.exists(_.annotationType() == bAnnotation.annotationType()))
-  }
+  ): Map[String, Seq[Annotation]] =
+    AnnotationUtils.findAnnotations(clazz, constructorParams.map(_.name))
 
   private[this] def jsonNameForField(
     annotations: Seq[Annotation],

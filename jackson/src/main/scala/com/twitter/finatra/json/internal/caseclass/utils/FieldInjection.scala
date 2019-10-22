@@ -8,7 +8,7 @@ import com.google.inject.{BindingAnnotation, ConfigurationException, Key}
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.json.internal.caseclass.exceptions.{JsonInjectException, JsonInjectionNotSupportedException}
 import com.twitter.finatra.json.internal.caseclass.jackson.ImmutableAnnotations
-import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils._
+import com.twitter.inject.utils.AnnotationUtils._
 import com.twitter.finatra.json.internal.caseclass.utils.FieldInjection.InjectableAnnotations
 import com.twitter.finatra.request.{FormParam, Header, QueryParam, RouteParam}
 import com.twitter.inject.Logging

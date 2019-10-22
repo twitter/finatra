@@ -1,10 +1,8 @@
 package com.twitter.finatra.validation
 
-import com.twitter.finatra.json.internal.caseclass.jackson.CaseClassField._
-import com.twitter.finatra.json.internal.caseclass.jackson.ConstructorParam
-import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils
 import com.twitter.finatra.json.internal.caseclass.validation.ValidationManager
 import com.twitter.inject.Test
+import com.twitter.inject.utils.AnnotationUtils
 import java.lang.annotation.Annotation
 import org.json4s.reflect.{ClassDescriptor, Reflector, classDescribable}
 
@@ -24,18 +22,18 @@ class ValidatorTest extends Test {
   }
 
   def getValidationAnnotations(clazz: Class[_], paramName: String): Seq[Annotation] = {
-    val constructorParams: Seq[ConstructorParam] =
+    val fieldNames: Seq[String] =
       Reflector
         .describe(classDescribable(clazz))
         .asInstanceOf[ClassDescriptor]
         .constructors.head
-        .params.map(param => ConstructorParam(param.name, param.argType))
-    val annotations = findAnnotations(clazz, constructorParams)
+        .params.map(_.name)
+    val annotations = AnnotationUtils.findAnnotations(clazz, fieldNames)
 
     for {
-      param <- constructorParams
-      paramAnnotations = annotations(param.name)
-      if param.name.equals(paramName)
+      field <- fieldNames
+      paramAnnotations = annotations(field)
+      if field.equals(paramName)
       annotation <- paramAnnotations
       if validationManager.isValidationAnnotation(annotation)
     } yield annotation
@@ -55,10 +53,8 @@ class ValidatorTest extends Test {
     annotations: Seq[Annotation]
   ): A = {
     AnnotationUtils.findAnnotation(annotationClass, annotations) match {
-      case Some(annotation) =>
-        annotation.asInstanceOf[A]
-      case _ =>
-        throw new IllegalArgumentException("Unknown annotation: " + annotationClass)
+      case Some(annotation) => annotation.asInstanceOf[A]
+      case _ => throw new IllegalArgumentException("Unknown annotation: " + annotationClass)
     }
   }
 }

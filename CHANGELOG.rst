@@ -24,6 +24,9 @@ Added
 Changed
 ~~~~~~~
 
+* inject-utils: Move `AnnotationUtils` to `c.t.inject.utils.AnnotationUtils` and make public
+  for use. ``PHAB_ID=D388241``
+
 * finatra-http: Updated package structure for Pants 1:1:1 layout. Moved `META-INF/mime.types` file
   to finatra/utils which is where the `FileResolver` is located for proper resolution of mime types
   from file extension. ``PHAB_ID=D385792``
