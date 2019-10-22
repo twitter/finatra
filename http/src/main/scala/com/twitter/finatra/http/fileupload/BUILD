@@ -6,6 +6,7 @@ scala_library(
         name = "finatra-http-fileupload",
         repo = artifactory,
     ),
+    strict_deps = "True",
     dependencies = [
         "3rdparty/jvm/commons-fileupload",
         "finagle/finagle-base-http/src/main/scala",

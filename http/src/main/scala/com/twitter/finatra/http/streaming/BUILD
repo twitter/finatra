@@ -6,6 +6,7 @@ scala_library(
         name = "finatra-http-streaming",
         repo = artifactory,
     ),
+    strict_deps = "True",
     dependencies = [
         "finagle/finagle-base-http/src/main/scala",
         "finatra/jackson/src/main/scala",

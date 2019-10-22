@@ -6,6 +6,7 @@ scala_library(
         name = "finatra-http-routing",
         repo = artifactory,
     ),
+    strict_deps = "True",
     dependencies = [
         "3rdparty/jvm/javax/inject:javax.inject",
         "finagle/finagle-base-http/src/main/scala",

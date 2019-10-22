@@ -18,7 +18,7 @@ junit_tests(
         "finagle/finagle-thrift/src/main/scala",
         "finagle/finagle-thriftmux/src/main/scala",
         "finatra/http/src/main/scala",
-        "finatra/http/src/test/scala:test-deps",
+        "finatra/http/src/test/scala/com/twitter/finatra/http",
         "finatra/inject/inject-app/src/main/scala",
         "finatra/inject/inject-app/src/test/scala:test-deps",
         "finatra/inject/inject-core/src/main/scala",

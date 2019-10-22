@@ -6,6 +6,7 @@ scala_library(
         name = "finatra-http-marshalling-mustache",
         repo = artifactory,
     ),
+    strict_deps = "True",
     dependencies = [
         "3rdparty/jvm/com/github/spullara/mustache/java",
         "3rdparty/jvm/javax/inject:javax.inject",

@@ -6,4 +6,5 @@ java_library(
         name = "finatra-http-java-response",
         repo = artifactory,
     ),
+    strict_deps = "True",
 )

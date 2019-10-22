@@ -6,6 +6,7 @@ scala_library(
         name = "finatra-http-modules",
         repo = artifactory,
     ),
+    strict_deps = "True",
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/javax/inject:javax.inject",
@@ -22,6 +23,7 @@ scala_library(
         "finatra/http/src/main/scala/com/twitter/finatra/http/internal/marshalling",
         "finatra/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/mustache",
         "finatra/http/src/main/scala/com/twitter/finatra/http/response",
+        "finatra/inject/inject-app/src/main/java",
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-modules/src/main/scala",
         "finatra/utils/src/main/java/com/twitter/finatra/annotations",

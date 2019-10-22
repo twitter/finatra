@@ -6,6 +6,7 @@ scala_library(
         name = "finatra-http-conversions",
         repo = artifactory,
     ),
+    strict_deps = "True",
     dependencies = [
         "finagle/finagle-base-http/src/main/scala",
         "finatra/http/src/main/scala/com/twitter/finatra/http/exceptions",

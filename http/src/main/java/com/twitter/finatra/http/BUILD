@@ -6,4 +6,5 @@ java_library(
         name = "finatra-http-java-core",
         repo = artifactory,
     ),
+    strict_deps = "True",
 )

@@ -6,6 +6,7 @@ java_library(
         name = "finatra-http-java-request",
         repo = artifactory,
     ),
+    strict_deps = "True",
     dependencies = [
         "finagle/finagle-base-http/src/main/scala",
     ],

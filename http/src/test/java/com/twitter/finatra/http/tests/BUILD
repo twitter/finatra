@@ -1,8 +1,5 @@
 junit_tests(
-    sources = rglobs(
-        "com/twitter/finatra/http/*.java",
-        "com/twitter/finatra/test/*.java",
-    ),
+    sources = rglobs("*.java"),
     compiler_option_sets = {"fatal_warnings"},
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
@@ -15,7 +12,7 @@ junit_tests(
         "finatra/http/src/main/java",
         "finatra/http/src/main/scala",
         "finatra/http/src/test/resources",
-        "finatra/http/src/test/scala:test-deps",
+        "finatra/http/src/test/scala/com/twitter/finatra/http",
         "finatra/httpclient/src/main/scala",
         "finatra/inject/inject-app/src/main/scala",
         "finatra/inject/inject-core/src/main/scala",

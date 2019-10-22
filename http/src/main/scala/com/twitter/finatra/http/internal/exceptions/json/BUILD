@@ -6,6 +6,7 @@ scala_library(
         name = "finatra-http-exceptions-json-internal",
         repo = artifactory,
     ),
+    strict_deps = "True",
     dependencies = [
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-core",
         "3rdparty/jvm/javax/inject:javax.inject",

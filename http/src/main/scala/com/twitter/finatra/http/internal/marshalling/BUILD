@@ -6,6 +6,7 @@ scala_library(
         name = "finatra-http-marshalling-internal",
         repo = artifactory,
     ),
+    strict_deps = "True",
     dependencies = [
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
         "3rdparty/jvm/com/google/inject:guice",

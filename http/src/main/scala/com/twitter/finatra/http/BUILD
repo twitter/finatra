@@ -10,6 +10,7 @@ scala_library(
         name = "finatra-http-server",
         repo = artifactory,
     ),
+    strict_deps = "True",
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "finagle/finagle-base-http/src/main/scala",
@@ -52,6 +53,7 @@ scala_library(
         name = "finatra-http-controller",
         repo = artifactory,
     ),
+    strict_deps = "True",
     dependencies = [
         "3rdparty/jvm/javax/inject:javax.inject",
         "finagle/finagle-core/src/main/scala",
@@ -87,11 +89,10 @@ scala_library(
         name = "finatra-http-headers",
         repo = artifactory,
     ),
+    strict_deps = "True",
     tags = {
         # users should use finagle/finagle-base-http/src/main/scala/
         # com.twitter.finagle.http.Fields.scala
         "deprecated",
     },
-    dependencies = [
-    ],
 )

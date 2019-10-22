@@ -6,6 +6,7 @@ scala_library(
         name = "finatra-http-exceptions",
         repo = artifactory,
     ),
+    strict_deps = "True",
     dependencies = [
         "3rdparty/jvm/javax/inject:javax.inject",
         "3rdparty/jvm/net/codingwell:scala-guice",
@@ -20,5 +21,6 @@ scala_library(
         "3rdparty/jvm/javax/inject:javax.inject",
         "finagle/finagle-base-http/src/main/scala",
         "finatra/inject/inject-core/src/main/scala",
+        "finatra/inject/inject-utils/src/main/scala",
     ],
 )

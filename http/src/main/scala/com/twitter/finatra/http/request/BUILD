@@ -1,14 +1,12 @@
 scala_library(
-    sources = globs(
-        "*.scala",
-        "com/twitter/finatra/http/internal/request/*.scala",
-    ),
+    sources = globs("*.scala"),
     compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-http-request",
         repo = artifactory,
     ),
+    strict_deps = "True",
     dependencies = [
         "finagle/finagle-base-http/src/main/scala",
         "finatra/http/src/main/java/com/twitter/finatra/http/request",

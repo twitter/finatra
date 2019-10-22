@@ -6,6 +6,7 @@ scala_library(
         name = "finatra-http-marshalling",
         repo = artifactory,
     ),
+    strict_deps = "True",
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/javax/inject:javax.inject",
