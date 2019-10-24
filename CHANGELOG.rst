@@ -7,6 +7,8 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+* finatra: Add initial support for JDK 11 compatibility. ``PHAB_ID=D365075``
+
 Fixed
 ~~~~~
 
