@@ -24,6 +24,9 @@ Added
 Changed
 ~~~~~~~
 
+* inject-ports: Add `finatra/inject/inject-ports` which has `c.t.inject.server.Ports` and
+  `c.t.inject.server.PortUtils`. ``PHAB_ID=D388277``
+
 * inject-utils: Move `AnnotationUtils` to `c.t.inject.utils.AnnotationUtils` and make public
   for use. ``PHAB_ID=D388241``
 

@@ -1,10 +1,18 @@
 package com.twitter.inject.server.tests
 
-import com.twitter.finagle.stats.{Counter, Gauge, InMemoryStatsReceiver, Stat, StatsReceiver, Verbosity}
+import com.twitter.finagle.stats.{
+  Counter,
+  Gauge,
+  InMemoryStatsReceiver,
+  Stat,
+  StatsReceiver,
+  Verbosity
+}
 import java.io.PrintStream
 import scala.collection.mutable
 
-class TestStatsReceiver extends StatsReceiver {
+/* Fake stats receiver for testing integration */
+private[tests] class TestStatsReceiver extends StatsReceiver {
   private[this] val underlying: InMemoryStatsReceiver = new InMemoryStatsReceiver
 
   val counters: mutable.Map[Seq[String], Long] = underlying.counters

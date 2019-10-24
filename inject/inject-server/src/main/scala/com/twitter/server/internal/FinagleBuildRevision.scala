@@ -20,6 +20,7 @@ object FinagleBuildRevision extends Logging {
 
   /* Private */
 
+  /* exposed for testing */
   private[server] def convertBuildRevision(revision: String): Long = {
     try {
       java.lang.Long.parseUnsignedLong(revision.take(10), 16)

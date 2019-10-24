@@ -7,8 +7,8 @@ import com.twitter.finagle.client.ClientRegistry
 import com.twitter.inject.Logging
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.app.App
-import com.twitter.inject.internal.modules.LibraryModule
 import com.twitter.inject.modules.StatsReceiverModule
+import com.twitter.inject.modules.internal.LibraryModule
 import com.twitter.inject.utils.Handler
 import com.twitter.server.Lifecycle.Warmup
 import com.twitter.server.internal.FinagleBuildRevision

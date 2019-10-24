@@ -10,7 +10,6 @@ scala_library(
         repo = artifactory,
     ),
     dependencies = [
-        "3rdparty/jvm/com/fasterxml/jackson/core:jackson-annotations",
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
         "3rdparty/jvm/com/google/inject/extensions:guice-multibindings",
@@ -18,6 +17,8 @@ scala_library(
         "3rdparty/jvm/joda-time",
         "3rdparty/jvm/net/codingwell:scala-guice",
         "3rdparty/jvm/org/joda:joda-convert",
+        # we add the slf4j-api logging bridges to ensure that any dependents
+        # of the library have bridges on their classpath at runtime.
         "3rdparty/jvm/org/slf4j:jcl-over-slf4j",
         "3rdparty/jvm/org/slf4j:jul-to-slf4j",
         "3rdparty/jvm/org/slf4j:log4j-over-slf4j",

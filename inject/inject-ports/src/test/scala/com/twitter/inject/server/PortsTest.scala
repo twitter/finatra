@@ -1,7 +1,6 @@
-package com.twitter.inject.server.tests
+package com.twitter.inject.server
 
 import com.twitter.inject.Test
-import com.twitter.inject.server.Ports
 
 class PortsTest extends Test {
 

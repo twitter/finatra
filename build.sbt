@@ -238,6 +238,7 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   injectCore,
   injectLogback,
   injectModules,
+  injectPorts,
   injectRequestScope,
   injectServer,
   injectSlf4j,
@@ -249,9 +250,9 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   kafka,
   kafkaStreams,
   kafkaStreamsPrerestore,
-  kafkaStreamsStaticPartitioning,
-  kafkaStreamsQueryableThriftClient,
   kafkaStreamsQueryableThrift,
+  kafkaStreamsQueryableThriftClient,
+  kafkaStreamsStaticPartitioning,
   thrift,
   utils)
 
@@ -426,6 +427,21 @@ lazy val injectApp = (project in file("inject/inject-app"))
     injectModules % Test,
     injectUtils)
 
+lazy val injectPorts = (project in file("inject/inject-ports"))
+  .settings(projectSettings)
+  .settings(
+    name := "inject-ports",
+    moduleName := "inject-ports",
+    ScoverageKeys.coverageExcludedPackages := "<empty>",
+    libraryDependencies ++= Seq(
+      "com.twitter" %% "finagle-core" % versions.twLibVersion,
+      "com.twitter" %% "twitter-server" % versions.twLibVersion,
+      "com.twitter" %% "util-app" % versions.twLibVersion
+    )
+  ).dependsOn(
+    injectCore % "test->test"
+  )
+
 lazy val injectServerTestJarSources =
   Seq(
     "com/twitter/inject/server/AdminHttpClient",
@@ -441,7 +457,7 @@ lazy val injectServer = (project in file("inject/inject-server"))
   .settings(
     name := "inject-server",
     moduleName := "inject-server",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*Ports.*;.*FinagleBuildRevision.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-stats" % versions.twLibVersion,
       "com.twitter" %% "twitter-server" % versions.twLibVersion,
@@ -466,6 +482,7 @@ lazy val injectServer = (project in file("inject/inject-server"))
   ).dependsOn(
     injectApp % "test->test;compile->compile",
     injectModules % "test->test;compile->compile",
+    injectPorts % "test->test;compile->compile",
     injectSlf4j,
     injectUtils)
 
@@ -686,6 +703,7 @@ lazy val http = project
   ).dependsOn(
     jackson % "test->test;compile->compile",
     injectRequestScope % Test,
+    injectPorts % "test->test",
     injectSlf4j,
     injectServer % "test->test;compile->compile",
     httpclient % "test->test",
@@ -761,6 +779,7 @@ lazy val thrift = project
       previous.filter(mappingContainsAnyPath(_, thriftTestJarSources))
     }
   ).dependsOn(
+    injectPorts % "test->test",
     injectServer % "test->test;compile->compile",
     injectSlf4j,
     injectThrift,

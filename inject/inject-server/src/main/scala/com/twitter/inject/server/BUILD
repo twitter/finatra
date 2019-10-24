@@ -1,0 +1,43 @@
+scala_library(
+    sources = globs("*.scala"),
+    compiler_option_sets = {"fatal_warnings"},
+    provides = scala_artifact(
+        org = "com.twitter",
+        name = "inject-server-core",
+        repo = artifactory,
+    ),
+    strict_deps = "True",
+    dependencies = [
+        "3rdparty/jvm/com/google/inject:guice",
+        "3rdparty/jvm/org/slf4j:slf4j-api",
+        "3rdparty/jvm/net/codingwell:scala-guice",
+        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-http/src/main/scala",
+        # ensure dependents have finagle-stats StatsReceiver implementation at runtime.
+        "finagle/finagle-stats/src/main/scala",
+        "finatra/inject/inject-app/src/main/scala",
+        "finatra/inject/inject-core/src/main/scala",
+        "finatra/inject/inject-modules/src/main/scala",
+        "finatra/inject/inject-ports/src/main/scala/com/twitter/inject/server",
+        "finatra/inject/inject-server/src/main/scala/com/twitter/server/internal",
+        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-utils/src/main/scala",
+        "twitter-server/server/src/main/scala",
+        "util/util-app/src/main/scala",
+        "util/util-core/src/main/scala/com/twitter/util",
+        "util/util-lint/src/main/scala",
+        # for DeprecatedLoggingFlags trait
+        "util/util-logging/src/main/scala",
+        "util/util-stats/src/main/scala",
+    ],
+    exports = [
+        "3rdparty/jvm/net/codingwell:scala-guice",
+        "finatra/inject/inject-app/src/main/scala",
+        "finatra/inject/inject-ports/src/main/scala/com/twitter/inject/server",
+        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-utils/src/main/scala",
+        "twitter-server/server/src/main/scala",
+        "util/util-app/src/main/scala",
+        "util/util-core/src/main/scala/com/twitter/util",
+    ],
+)

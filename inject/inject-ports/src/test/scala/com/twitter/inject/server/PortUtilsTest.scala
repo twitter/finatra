@@ -1,8 +1,7 @@
-package com.twitter.inject.server.tests
+package com.twitter.inject.server
 
 import com.twitter.finagle.ListeningServer
 import com.twitter.inject.Test
-import com.twitter.inject.server.PortUtils
 import com.twitter.util.Awaitable.CanAwait
 import com.twitter.util.{Time, Duration, Future}
 import java.net.InetSocketAddress
