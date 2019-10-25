@@ -5,7 +5,9 @@ scala_library(
         "com/twitter/finatra/thrift/tests/doeverything/exceptions/*.scala",
     ),
     compiler_option_sets = {"fatal_warnings"},
+    strict_deps = True,
     dependencies = [
+        "3rdparty/jvm/javax/inject:javax.inject",
         "finagle/finagle-core/src/main/scala",
         "finatra/thrift/src/main/scala",
         "finatra/thrift/src/test/thrift:doeverything-thrift-java",
@@ -22,6 +24,7 @@ scala_library(
         name = "finatra-thrift-tests",
         repo = artifactory,
     ),
+    strict_deps = True,
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
@@ -56,9 +59,11 @@ junit_tests(
         "com/twitter/finatra/thrift/tests/*.scala",
     ),
     compiler_option_sets = {"fatal_warnings"},
+    strict_deps = True,
     dependencies = [
         ":doeverything-exceptions",
         ":test-deps",
+        "3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala",
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
         "3rdparty/jvm/com/google/inject/extensions:guice-multibindings",
@@ -70,6 +75,7 @@ junit_tests(
         "3rdparty/jvm/org/slf4j:slf4j-simple",
         "finagle/finagle-core/src/main/scala",
         "finagle/finagle-http/src/main/scala",
+        "finagle/finagle-stats-core/src/main/scala",
         "finagle/finagle-thrift/src/main/scala",
         "finagle/finagle-thriftmux/src/main/scala",
         "finatra/inject/inject-app/src/main/scala",

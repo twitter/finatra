@@ -4,7 +4,7 @@ import com.twitter.conversions.DurationOps._
 import com.twitter.converter.thriftscala.Converter
 import com.twitter.converter.thriftscala.Converter.Uppercase
 import com.twitter.finagle.{Filter, Service}
-import com.twitter.finatra.thrift._
+import com.twitter.finatra.thrift.{Controller, _}
 import com.twitter.finatra.thrift.filters.{AccessLoggingFilter, ExceptionMappingFilter, StatsFilter}
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.tests.EmbeddedThriftServerControllerFeatureTest._

@@ -26,6 +26,8 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-thrift: Updated BUILD files for Pants 1:1:1 layout. ``PHAB_ID=D388297``
+
 * inject-ports: Add `finatra/inject/inject-ports` which has `c.t.inject.server.Ports` and
   `c.t.inject.server.PortUtils`. ``PHAB_ID=D388277``
 

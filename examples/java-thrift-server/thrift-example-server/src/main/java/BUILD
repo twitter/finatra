@@ -4,6 +4,7 @@ java_library(
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/javax/inject:javax.inject",
+        "finagle/finagle-thriftmux/src/main/scala",
         "finatra/examples/java-thrift-server/thrift-example-idl",
         "finatra/examples/java-thrift-server/thrift-example-server/src/main/resources",
         "finatra/inject/inject-core/src/main/scala",

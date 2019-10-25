@@ -1,7 +1,7 @@
 package com.twitter.finatra.thrift
 
-import com.twitter.finagle.{Filter, Service}
 import com.twitter.finagle.thrift.{GeneratedThriftService, ToThriftService}
+import com.twitter.finagle.{Filter, Service}
 import com.twitter.finatra.thrift.internal.ThriftMethodService
 import com.twitter.inject.Logging
 import com.twitter.scrooge.{Request, Response, ThriftMethod}
