@@ -1,4 +1,4 @@
-package com.twitter.inject.app.tests;
+package com.twitter.inject.app;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -9,9 +9,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.twitter.inject.Injector;
+import com.twitter.inject.annotations.Down;
 import com.twitter.inject.annotations.Flags;
-import com.twitter.inject.app.TestInjector;
-import com.twitter.inject.app.TestInjector$;
 
 public class TestInjectorJavaTest extends Assert {
 

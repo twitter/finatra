@@ -1,4 +1,4 @@
-package com.twitter.inject.app.tests.internal
+package com.twitter.inject.app.tests
 
 import javax.inject.Singleton
 

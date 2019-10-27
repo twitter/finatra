@@ -13,7 +13,7 @@ scala_library(
         "3rdparty/jvm/javax/inject:javax.inject",
         "finagle/finagle-base-http/src/main/scala",
         "finatra/http/src/main/scala/com/twitter/finatra/http/marshalling",
-        "finatra/inject/inject-app/src/main/java",
+        "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",
         "finatra/jackson/src/main/scala",
     ],
     exports = [

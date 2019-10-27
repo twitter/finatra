@@ -1,4 +1,4 @@
-package com.twitter.inject.app.tests;
+package com.twitter.inject.annotations;
 
 import java.lang.annotation.Annotation;
 

@@ -4,7 +4,7 @@ import com.google.inject.Provides
 import com.google.inject.name.Names
 import com.twitter.app.GlobalFlag
 import com.twitter.finagle.Service
-import com.twitter.inject.annotations.{Flag, Flags}
+import com.twitter.inject.annotations.{Annotations, Down, Flag, Flags, Up}
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.{Mockito, Test, TwitterModule, TypeUtils}
 import com.twitter.util.Future

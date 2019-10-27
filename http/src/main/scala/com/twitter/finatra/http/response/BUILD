@@ -17,7 +17,7 @@ scala_library(
         "finatra/http/src/main/scala/com/twitter/finatra/http/marshalling",
         "finatra/http/src/main/scala/com/twitter/finatra/http/marshalling/mustache",
         "finatra/http/src/main/scala/com/twitter/finatra/http/streaming",
-        "finatra/inject/inject-app/src/main/java",
+        "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/jackson/src/main/scala",

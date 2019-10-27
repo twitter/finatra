@@ -1,9 +1,7 @@
-package com.twitter.inject.app.tests;
+package com.twitter.inject.app;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.twitter.inject.app.EmbeddedApp;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;

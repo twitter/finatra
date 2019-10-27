@@ -12,7 +12,7 @@ scala_library(
         "finagle/finagle-core/src/main/scala",
         "finagle/finagle-thrift/src/main/scala",
         "finagle/finagle-thriftmux/src/main/scala",
-        "finatra/inject/inject-app/src/main/java",
+        "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/inject/inject-thrift/src/main/scala",

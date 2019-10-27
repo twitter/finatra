@@ -1,4 +1,4 @@
-package com.twitter.inject.app.tests.internal
+package com.twitter.inject.app.tests
 
 import com.google.inject.name.Names
 import com.twitter.inject.{Injector, TwitterModule}

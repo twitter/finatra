@@ -1,4 +1,4 @@
-package com.twitter.inject.app.tests;
+package com.twitter.inject.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -11,5 +11,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD})
 @BindingAnnotation
-public @interface Down {
+public @interface Up {
 }

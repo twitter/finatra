@@ -29,7 +29,7 @@ trait App extends com.twitter.app.App with Logging {
    *
    * @note `required` modules appends "framework" modules first as they map to framework
    *       "defaults" which users can override.
-   *       `override` modules appends "framework" modules last as the map to the BindDSL
+   *       `override` modules appends "framework" modules last as they map to the BindDSL
    *       for testing.
    */
   private[this] lazy val appModules: Modules =
@@ -130,7 +130,7 @@ trait App extends com.twitter.app.App with Logging {
    * We take special care to make sure the module is not null, since a common bug
    * is overriding the default methods using a val instead of a def
    */
-  protected def addFrameworkModule(module: Module): Unit = {
+  protected[twitter] def addFrameworkModule(module: Module): Unit = {
     assert(
       module != null,
       "Module cannot be null. If you are overriding a default module, " +
@@ -140,7 +140,7 @@ trait App extends com.twitter.app.App with Logging {
   }
 
   /** ONLY INTENDED FOR USE BY THE FRAMEWORK. */
-  protected def addFrameworkModules(modules: Module*): Unit = {
+  protected[twitter] def addFrameworkModules(modules: Module*): Unit = {
     modules.foreach(addFrameworkModule)
   }
 

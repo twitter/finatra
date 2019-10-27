@@ -15,7 +15,7 @@ scala_library(
         "finagle/finagle-http/src/main/scala",
         # ensure dependents have finagle-stats StatsReceiver implementation at runtime.
         "finagle/finagle-stats/src/main/scala",
-        "finatra/inject/inject-app/src/main/scala",
+        "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app",
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-modules/src/main/scala",
         "finatra/inject/inject-ports/src/main/scala/com/twitter/inject/server",
@@ -32,7 +32,7 @@ scala_library(
     ],
     exports = [
         "3rdparty/jvm/net/codingwell:scala-guice",
-        "finatra/inject/inject-app/src/main/scala",
+        "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app",
         "finatra/inject/inject-ports/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",

@@ -1,11 +1,10 @@
-package com.twitter.inject.app.tests;
+package com.twitter.inject.app;
 
 import java.util.Collection;
 import java.util.Collections;
 
 import com.google.inject.Module;
 
-import com.twitter.inject.app.AbstractApp;
 import com.twitter.inject.modules.LoggerModule$;
 
 public class SampleJavaApp extends AbstractApp {
