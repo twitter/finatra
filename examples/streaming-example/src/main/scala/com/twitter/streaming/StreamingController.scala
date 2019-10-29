@@ -15,7 +15,7 @@ class StreamingController extends Controller {
   post("/tweets/streaming/reader") { streamingRequest: StreamingRequest[Reader, Tweet] =>
     // Create a `Reader` to pass to the `StreamingResponse`,
     // you could apply all your transformer logic here
-    val responseReader: Reader[String] = streamingRequest.stream.map(_.text)
+    val responseReader: Reader[String] = streamingRequest.stream.map(_.text + "\n")
     response.streaming(responseReader)
   }
 
@@ -27,7 +27,7 @@ class StreamingController extends Controller {
     streamingRequest: StreamingRequest[Reader, Tweet] =>
       // A closable resource that needs to listen to the close of the stream
       val closable = Closable.nop
-      val responseReader: Reader[String] = streamingRequest.stream.map(_.text)
+      val responseReader: Reader[String] = streamingRequest.stream.map(_.text + "\n")
       responseReader.onClose.ensure(closable.close())
       response.streaming(responseReader)
   }
@@ -41,7 +41,7 @@ class StreamingController extends Controller {
     val requestAsyncStream: AsyncStream[Tweet] = streamingRequest.stream
 
     // Apply transformer logic for `AsyncStream`
-    val transformedStream: AsyncStream[String] = requestAsyncStream.map(_.text)
+    val transformedStream: AsyncStream[String] = requestAsyncStream.map(_.text + "\n")
     // Convert the asyncStream to a reader, because it is preferred to create a `StreamingResponse`
     // backed by a `Reader`
     response.streaming(Reader.fromAsyncStream(transformedStream))
