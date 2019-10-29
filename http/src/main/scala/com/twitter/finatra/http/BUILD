@@ -23,6 +23,7 @@ scala_library(
         "finatra/inject/inject-server/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/jackson/src/main/scala",
+        "finatra/utils/src/main/scala/com/twitter/finatra/modules",
         "util/util-app/src/main/scala",
         "util/util-core/src/main/scala/com/twitter/conversions",
         "util/util-core/src/main/scala/com/twitter/util",

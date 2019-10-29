@@ -63,6 +63,7 @@ junit_tests(
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/jackson/src/main/scala",
         "finatra/jackson/src/test/scala:test-deps",
+        "finatra/utils/src/main/scala/com/twitter/finatra/modules",
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",
         "finatra/utils/src/test/scala:test-deps",
         "twitter-server/server/src/main/scala",

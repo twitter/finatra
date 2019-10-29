@@ -1,11 +1,21 @@
 package com.twitter.finatra.utils
 
 import com.twitter.inject.Logging
-import com.twitter.inject.annotations.Flag
 import com.twitter.inject.conversions.boolean._
 import java.io.{BufferedInputStream, File, FileInputStream, InputStream}
+import java.nio.file.{Files, Paths}
 import javax.activation.MimetypesFileTypeMap
-import javax.inject.{Inject, Singleton}
+
+object FileResolver {
+
+  /** Creates a new [[FileResolver]] with the given local document root. */
+  def newLocalResolver(root: String): FileResolver =
+    new FileResolver(localDocRoot = root, docRoot = "")
+
+  /** Creates a new [[FileResolver]] with the given document root. */
+  def newResolver(root: String): FileResolver =
+    new FileResolver(localDocRoot = "", docRoot = root)
+}
 
 /**
  * Non-optimized file resolver. The resolver takes in two possible parameters,
@@ -20,13 +30,8 @@ import javax.inject.{Inject, Singleton}
  *
  * @param localDocRoot - File serving directory for local development only.
  * @param docRoot - File serving directory/namespace for classpath resources.
- * @see com.twitter.finatra.http.modules.DocRootModule
  */
-@Singleton
-class FileResolver @Inject()(
-  @Flag("local.doc.root") localDocRoot: String,
-  @Flag("doc.root") docRoot: String
-) extends Logging {
+class FileResolver(localDocRoot: String, docRoot: String) extends Logging {
 
   // assertions -- cannot have both doc roots set
   if (localDocRoot.nonEmpty && docRoot.nonEmpty) {
@@ -45,23 +50,25 @@ class FileResolver @Inject()(
 
   def getInputStream(path: String): Option[InputStream] = {
     assert(path.startsWith("/"))
-    if (isDirectory(path))
+    if (isDirectory(path)) {
       None
-    else if (localFileMode)
+    } else if (localFileMode) {
       getLocalFileInputStream(path)
-    else
+    } else {
       getClasspathInputStream(path)
+    }
   }
 
   def exists(path: String): Boolean = {
     assert(path.startsWith("/"))
-    if (isDirectory(path))
+    if (isDirectory(path)) {
       false
-    else if (localFileMode)
+    } else if (localFileMode) {
       // try absolute path first, then under local.doc.root
-      new File(path).exists || new File(localDocRoot, path).exists
-    else
+      Files.exists(Paths.get(path)) || Files.exists(Paths.get(localDocRoot, path))
+    } else {
       getClasspathInputStream(path).isDefined
+    }
   }
 
   def getContentType(file: String): String =
@@ -75,19 +82,19 @@ class FileResolver @Inject()(
 
   /* Private */
 
-  private final val UNIX_SEPARATOR = '/'
-  private final val WINDOWS_SEPARATOR = '\\'
-  private final val EXTENSION_SEPARATOR = '.'
+  private[this] final val UNIX_SEPARATOR = '/'
+  private[this] final val WINDOWS_SEPARATOR = '\\'
+  private[this] final val EXTENSION_SEPARATOR = '.'
 
-  private def getLastSeperatorIndex(filename: String): Int = {
+  private[this] def getLastSeperatorIndex(filename: String): Int = {
     val lastUnixPos = filename.lastIndexOf(UNIX_SEPARATOR)
     val lastWindowPos = filename.lastIndexOf(WINDOWS_SEPARATOR)
     if (lastUnixPos > lastWindowPos) lastUnixPos else lastWindowPos
   }
 
-  private def isDirectory(path: String): Boolean = path.endsWith("/")
+  private[this] def isDirectory(path: String): Boolean = path.endsWith("/")
 
-  private def getClasspathInputStream(path: String): Option[InputStream] = {
+  private[this] def getClasspathInputStream(path: String): Option[InputStream] = {
     val actualPath = if (!docRoot.isEmpty) s"$actualDocRoot$path" else path
     for {
       is <- Option(getClass.getResourceAsStream(actualPath))
@@ -96,19 +103,18 @@ class FileResolver @Inject()(
     } yield bis
   }
 
-  private def getLocalFileInputStream(path: String): Option[InputStream] = {
-    // try absolute path first, then under local.doc.root
-    val file =
-      if (new File(path).exists)
-        new File(path)
-      else
-        new File(localDocRoot, path)
+  private[this] def getLocalFileInputStream(path: String): Option[InputStream] = {
+    // try absolute path first, then under local DocumentRoot
+    val file = if (Files.exists(Paths.get(path))) {
+      new File(path)
+    } else {
+      new File(localDocRoot, path)
+    }
 
-    if (file.exists)
+    if (file.exists) {
       Option(new BufferedInputStream(new FileInputStream(file)))
-    else
-      None
+    } else None
   }
 
-  private def dottedFileExtension(uri: String) = '.' + getFileExtension(uri)
+  private[this] def dottedFileExtension(uri: String) = '.' + getFileExtension(uri)
 }

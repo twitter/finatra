@@ -6,6 +6,7 @@ java_library(
         name = "finatra-utils-java-annotations",
         repo = artifactory,
     ),
+    strict_deps = True,
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
     ],

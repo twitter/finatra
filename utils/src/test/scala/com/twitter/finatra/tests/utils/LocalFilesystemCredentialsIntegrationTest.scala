@@ -10,7 +10,7 @@ import java.io.File
 
 object LocalFilesystemCredentialsIntegrationTest {
 
-  val CredentialsText =
+  val CredentialsText: String =
     """
       |test_token: asdf
       |test_authorization_id: 123456
@@ -19,7 +19,7 @@ object LocalFilesystemCredentialsIntegrationTest {
 
 class LocalFilesystemCredentialsIntegrationTest extends IntegrationTest {
 
-  override protected def beforeAll() = {
+  override protected def beforeAll(): Unit = {
     super.beforeAll()
 
     // create keys/finatra directory and add credentials.yml
@@ -27,7 +27,7 @@ class LocalFilesystemCredentialsIntegrationTest extends IntegrationTest {
     writeStringToFile(createFile(credentialsBasePath, "credentials.yml"), CredentialsText)
   }
 
-  override protected def afterAll() = {
+  override protected def afterAll(): Unit = {
     // try to help clean up
     new File(s"${BaseDirectory}keys").delete
     super.afterAll()

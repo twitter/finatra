@@ -10,7 +10,6 @@ import com.twitter.finagle.service.NilService
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.modules.{
   AccessLogModule,
-  DocRootModule,
   ExceptionManagerModule,
   HttpResponseClassifierModule,
   MessageBodyModule,
@@ -18,6 +17,7 @@ import com.twitter.finatra.http.modules.{
 }
 import com.twitter.finatra.http.response.HttpResponseClassifier
 import com.twitter.finatra.http.routing.{AdminHttpRouter, HttpRouter}
+import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.conversions.string._
@@ -429,7 +429,7 @@ trait HttpServer extends HttpServerTrait {
   /** Add Framework Modules */
   addFrameworkModules(
     accessLogModule,
-    DocRootModule,
+    FileResolverModule,
     ExceptionManagerModule,
     jacksonModule,
     messageBodyModule,

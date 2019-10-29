@@ -21,7 +21,7 @@ class StatsFilterTest extends Test with Mockito {
 
   private[this] lazy val responseBuilder = new ResponseBuilder(
     objectMapper = FinatraObjectMapper.create(),
-    fileResolver = new FileResolver(localDocRoot = "src/main/webapp/", docRoot = ""),
+    fileResolver = FileResolver.newLocalResolver("src/main/webapp/"),
     messageBodyManager = mock[MessageBodyManager],
     statsReceiver = mock[StatsReceiver],
     includeContentTypeCharset = true

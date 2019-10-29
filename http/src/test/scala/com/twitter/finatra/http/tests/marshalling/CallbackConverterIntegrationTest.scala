@@ -3,11 +3,12 @@ package com.twitter.finatra.http.tests.marshalling
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Request, Response, Status, Method => HttpMethod}
 import com.twitter.finatra.http.internal.routing.CallbackConverter
-import com.twitter.finatra.http.modules.{DocRootModule, MessageBodyModule, MustacheModule}
+import com.twitter.finatra.http.modules.{MessageBodyModule, MustacheModule}
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.http.streaming.{StreamingRequest, StreamingResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.modules.FinatraJacksonModule
+import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.conversions.buf._
 import com.twitter.inject.modules.StatsReceiverModule
@@ -23,7 +24,7 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
       MessageBodyModule,
       FinatraJacksonModule,
       MustacheModule,
-      DocRootModule,
+      FileResolverModule,
       StatsReceiverModule
     ).create
 

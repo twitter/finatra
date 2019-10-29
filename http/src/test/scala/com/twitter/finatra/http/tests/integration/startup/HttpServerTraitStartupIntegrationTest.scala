@@ -4,9 +4,10 @@ import com.google.inject.Module
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.service.NullService
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finatra.http.modules.{DocRootModule, MessageBodyModule, MustacheModule}
+import com.twitter.finatra.http.modules.{MessageBodyModule, MustacheModule}
 import com.twitter.finatra.http.{EmbeddedHttpServer, HttpServerTrait}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
+import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.inject.Test
 import com.twitter.inject.modules.StatsReceiverModule
 
@@ -17,7 +18,7 @@ class HttpServerTraitStartupIntegrationTest extends Test {
       twitterServer = new HttpServerTrait {
         override val modules: Seq[Module] = Seq(
           FinatraJacksonModule,
-          DocRootModule,
+          FileResolverModule,
           MessageBodyModule,
           MustacheModule,
           StatsReceiverModule)
@@ -42,7 +43,7 @@ class HttpServerTraitStartupIntegrationTest extends Test {
         override val disableAdminHttpServer = true
         override val modules: Seq[Module] = Seq(
           FinatraJacksonModule,
-          DocRootModule,
+          FileResolverModule,
           MessageBodyModule,
           MustacheModule,
           StatsReceiverModule)

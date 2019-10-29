@@ -4,7 +4,7 @@ import java.io.{File, FileOutputStream, IOException, OutputStream}
 import java.nio.charset.StandardCharsets
 
 object LocalFilesystemTestUtils {
-  val BaseDirectory = addSlash(System.getProperty("java.io.tmpdir"))
+  val BaseDirectory: String = addSlash(System.getProperty("java.io.tmpdir"))
 
   def createFile(path: String): File = {
     val f = new File(path); f.deleteOnExit(); f

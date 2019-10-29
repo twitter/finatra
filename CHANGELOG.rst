@@ -7,8 +7,6 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
-* finatra: Add initial support for JDK 11 compatibility. ``PHAB_ID=D365075``
-
 Fixed
 ~~~~~
 
@@ -20,11 +18,22 @@ Fixed
 Added
 ~~~~~
 
+* finatra: Add initial support for JDK 11 compatibility. ``PHAB_ID=D365075``
+
 * inject-core: Add support for optional binding in `c.t.inject.TwitterModule`.
   ``PHAB_ID=D386288``
 
 Changed
 ~~~~~~~
+
+* finatra: Deprecate `c.t.finatra.http.modules.DocRootModule`. Introduce `FileResolverModule`.
+  The `DocRootModule` defines configuration flags for the `FileResolver` which was moved from
+  `finatra/http` to a more correctly generic location in `finatra/utils`. However, configuration for
+  injection of a properly configured `FileResolver` is still incorrectly tied to HTTP because of the
+  `DocRootModule`. Thus, we deprecate the `DocRootModule` and introduce the
+  `c.t.finatra.modules.FileResolverModule` which is defined closer to the
+  `c.t.finatra.utils.FileResolver` in `finatra/utils`. This allows the `FileResolver` to be properly
+  configured outside of HTTP concerns. ``PHAB_ID=D390932``
 
 * finatra-thrift: Updated BUILD files for Pants 1:1:1 layout. ``PHAB_ID=D388297``
 
