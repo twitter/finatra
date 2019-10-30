@@ -1,5 +1,6 @@
 package com.twitter.finatra.thrift.tests.doeverything
 
+import com.google.inject.Module
 import com.twitter.finagle.{Filter, ThriftMux}
 import com.twitter.finagle.tracing.NullTracer
 import com.twitter.finatra.annotations.DarkTrafficFilterType
@@ -18,7 +19,7 @@ class DoEverythingThriftServer extends ThriftServer {
 
   flag("magicNum", "26", "Magic number")
 
-  override val modules =
+  override val modules: Seq[Module] =
     Seq(new DoEverythingThriftServerDarkTrafficFilterModule)
 
   override protected def configureThriftServer(server: ThriftMux.Server): ThriftMux.Server = {
