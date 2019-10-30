@@ -8,7 +8,7 @@ import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.utils.FileResolver
 import com.twitter.inject.{Mockito, Test}
-import com.twitter.io.{Buf, Reader, StreamTermination}
+import com.twitter.io.{Buf, BufReader, Reader, StreamTermination}
 import com.twitter.util.Future
 import java.nio.charset.StandardCharsets
 
@@ -42,7 +42,7 @@ class StreamingResponseTest extends Test with Mockito {
     val reader = Reader.empty
     val response: Response = fromReader(reader)
     assert(
-      Buf.decodeString(await(Reader.readAll(response.reader)), StandardCharsets.UTF_8) ==
+      Buf.decodeString(await(BufReader.readAll(response.reader)), StandardCharsets.UTF_8) ==
         "[]")
     assert(await(response.reader.onClose) == StreamTermination.FullyRead)
   }
@@ -52,7 +52,7 @@ class StreamingResponseTest extends Test with Mockito {
     val reader: Reader[String] = Reader.fromSeq(stringSeq)
     val response: Response = fromReader(reader)
     assert(
-      Buf.decodeString(await(Reader.readAll(response.reader)), StandardCharsets.UTF_8) ==
+      Buf.decodeString(await(BufReader.readAll(response.reader)), StandardCharsets.UTF_8) ==
         "firstsecondthird")
   }
 
@@ -61,7 +61,7 @@ class StreamingResponseTest extends Test with Mockito {
     val reader: Reader[Float] = Reader.fromSeq(listFloat)
     val response: Response = fromReader(reader)
     assert(
-      Buf.decodeString(await(Reader.readAll(response.reader)), StandardCharsets.UTF_8) ==
+      Buf.decodeString(await(BufReader.readAll(response.reader)), StandardCharsets.UTF_8) ==
         "[1.0,2.0,3.0]")
   }
 
@@ -69,7 +69,7 @@ class StreamingResponseTest extends Test with Mockito {
     val bufSeq = Seq(Buf.ByteArray(1,2,3), Buf.ByteArray(4,5,6))
     val reader: Reader[Buf] = Reader.fromSeq(bufSeq)
     val response: Response = fromReader(reader)
-    assert(await(Reader.readAll(response.reader)) == bufSeq.head.concat(bufSeq.last))
+    assert(await(BufReader.readAll(response.reader)) == bufSeq.head.concat(bufSeq.last))
   }
 
   test("Reader: Serialize and deserialize the Reader of Object") {
@@ -78,7 +78,7 @@ class StreamingResponseTest extends Test with Mockito {
     val reader: Reader[BarClass] = Reader.fromSeq(ojSeq)
     val response = fromReader(reader)
     assert(
-      Buf.decodeString(await(Reader.readAll(response.reader)), StandardCharsets.UTF_8) ==
+      Buf.decodeString(await(BufReader.readAll(response.reader)), StandardCharsets.UTF_8) ==
         """[{"v1":1,"v2":"first"},{"v1":2,"v2":"second"}]"""
     )
   }
@@ -107,7 +107,7 @@ class StreamingResponseTest extends Test with Mockito {
     val stream = AsyncStream.empty
     val response: Response = fromStream(stream)
     assert(
-      Buf.decodeString(await(Reader.readAll(response.reader)), StandardCharsets.UTF_8) ==
+      Buf.decodeString(await(BufReader.readAll(response.reader)), StandardCharsets.UTF_8) ==
         "[]")
     assert(await(response.reader.onClose) == StreamTermination.FullyRead)
   }
@@ -117,7 +117,7 @@ class StreamingResponseTest extends Test with Mockito {
     val stream: AsyncStream[String] = AsyncStream.fromSeq(stringSeq)
     val response: Response = fromStream(stream)
     assert(
-      Buf.decodeString(await(Reader.readAll(response.reader)), StandardCharsets.UTF_8) ==
+      Buf.decodeString(await(BufReader.readAll(response.reader)), StandardCharsets.UTF_8) ==
         "firstsecondthird")
   }
 
@@ -126,7 +126,7 @@ class StreamingResponseTest extends Test with Mockito {
     val stream: AsyncStream[Int] = AsyncStream.fromSeq(intSeq)
     val response: Response = fromStream(stream)
     assert(
-      Buf.decodeString(await(Reader.readAll(response.reader)), StandardCharsets.UTF_8) ==
+      Buf.decodeString(await(BufReader.readAll(response.reader)), StandardCharsets.UTF_8) ==
         "[1,2,3]")
   }
 
@@ -134,7 +134,7 @@ class StreamingResponseTest extends Test with Mockito {
     val bufSeq = Seq(Buf.ByteArray(1,2,3), Buf.ByteArray(4,5,6))
     val stream: AsyncStream[Buf] = AsyncStream.fromSeq(bufSeq)
     val response: Response = fromStream(stream)
-    assert(await(Reader.readAll(response.reader)) == bufSeq.head.concat(bufSeq.last))
+    assert(await(BufReader.readAll(response.reader)) == bufSeq.head.concat(bufSeq.last))
   }
 
   // interrupt infinite AsyncStream

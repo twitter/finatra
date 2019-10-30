@@ -13,7 +13,7 @@ import com.twitter.inject.app.TestInjector
 import com.twitter.inject.conversions.buf._
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.{Injector, IntegrationTest, Mockito}
-import com.twitter.io.{Buf, Reader}
+import com.twitter.io.{Buf, BufReader, Reader}
 import com.twitter.util.Future
 import scala.concurrent.{Future => ScalaFuture}
 
@@ -219,7 +219,7 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
 
     val response = await(converted(Request()))
     response.status should equal(Status.Ok)
-    await(Reader.readAll(response.reader)).utf8str should equal("[1,2,3]")
+    await(BufReader.readAll(response.reader)).utf8str should equal("[1,2,3]")
   }
 
   test("AsyncStream request and response") {
@@ -234,7 +234,7 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
 
     val response = await(converted(request))
     response.status should equal(Status.Ok)
-    await(Reader.readAll(response.reader)).utf8str should equal("""["1","2"]""")
+    await(BufReader.readAll(response.reader)).utf8str should equal("""["1","2"]""")
   }
 
   test("Reader request") {
@@ -256,7 +256,7 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
 
     val response = await(converted(Request()))
     response.status should equal(Status.Ok)
-    await(Reader.readAll(response.reader)).utf8str should equal("[1.1,2.2,3.3]")
+    await(BufReader.readAll(response.reader)).utf8str should equal("[1.1,2.2,3.3]")
   }
 
   test("Reader request and response") {
@@ -271,7 +271,7 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
 
     val response = await(converted(request))
     response.status should equal(Status.Ok)
-    await(Reader.readAll(response.reader)).utf8str should equal("""["1","2"]""")
+    await(BufReader.readAll(response.reader)).utf8str should equal("""["1","2"]""")
   }
 
   test("StreamingRequest with Reader") {
@@ -305,13 +305,13 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
   test("StreamingResponse from Reader") {
     val converted = callbackConverter.convertToFutureResponse(streamingResponseFromReader)
     val response = await(converted(Request()))
-    await(Reader.readAll(response.reader)).utf8str should equal("Hello, World!")
+    await(BufReader.readAll(response.reader)).utf8str should equal("Hello, World!")
   }
 
   test("StreamingResponse from AsyncStream") {
     val converted = callbackConverter.convertToFutureResponse(streamingResponseFromAsyncStream)
     val response = await(converted(Request()))
-    await(Reader.readAll(response.reader)).utf8str should equal("[1,2,3]")
+    await(BufReader.readAll(response.reader)).utf8str should equal("[1,2,3]")
   }
 
   test("Null") {
