@@ -37,12 +37,20 @@ class TweetsController @Inject()(
     bufs.map(buf => Buf.decodeString(buf, StandardCharsets.UTF_8))
   }
 
+  post("/tweets/reader_int_to_string") { ints: Reader[Int] =>
+    ints.map(buf => buf.toString)
+  }
+
   post("/tweets/reader_buf") { bufs: Reader[Buf] =>
     bufs
   }
 
   post("/tweets/asyncStream_buf_to_string") { bufs: AsyncStream[Buf] =>
     bufs.map(buf => Buf.decodeString(buf, StandardCharsets.UTF_8))
+  }
+
+  post("/tweets/asyncStream_int_to_string") { ints: AsyncStream[Int] =>
+    ints.map(buf => buf.toString)
   }
 
   post("/tweets/asyncStream_buf") { bufs: AsyncStream[Buf] =>
@@ -61,6 +69,14 @@ class TweetsController @Inject()(
 
   get("/tweets/streamingRep_with_asyncStream") { _: Request =>
     response.streaming(AsyncStream("A", "B", "C"))
+  }
+
+  post("/tweets/request_to_string") { request: Request =>
+    request.contentString
+  }
+
+  post("/tweets/request_to_futurestring") { request: Request =>
+    Future(request.contentString)
   }
 
   get("/tweets/streamingRep_with_reader") { _: Request =>

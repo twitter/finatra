@@ -26,6 +26,11 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-http: (BREAKING API CHANGE) `AsyncStream[Buf] => AsyncStream[String]` and
+  `Reader[Buf] => Reader[String]` handlers will always be tread the output as a JSON arrays of
+  `Strings`. Whereas, before, the incoming bytes would have been converted to `String` and
+  returned as-is. ``PHAB_ID=D392551``
+
 * finatra: Deprecate `c.t.finatra.http.modules.DocRootModule`. Introduce `FileResolverModule`.
   The `DocRootModule` defines configuration flags for the `FileResolver` which was moved from
   `finatra/http` to a more correctly generic location in `finatra/utils`. However, configuration for

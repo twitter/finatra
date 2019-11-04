@@ -188,48 +188,23 @@ private[http] class CallbackConverter @Inject()(
     requestCallback: Request => ResponseType,
     manifested: Manifest[_]
   ): Request => Future[Response] = {
-    // If the requestType is stream of Buf, pass it through without adding json fmt
-    val (jsonPrefix, jsonSeparator, jsonSuffix) = {
-      val typeArgs = TypeUtils.asManifest[RequestType].typeArguments
-      if (typeArgs.size == 1 && typeArgs.head.runtimeClass == classOf[Buf]) {
-        (None, None, None)
-      } else {
-        (Some(Buf.Utf8("[")), Some(Buf.Utf8(",")), Some(Buf.Utf8("]")))
-      }
-    }
     manifested match {
       case asyncStreamBuf if asyncStreamBuf == manifest[AsyncStream[Buf]] =>
         request: Request =>
           val asyncStream = requestCallback(request).asInstanceOf[AsyncStream[Buf]]
-          val depStreamingResponse =
-            DeprecatedStreamingResponse.apply[Buf](toBuf = a => a)(asyncStream = asyncStream)
-          depStreamingResponse.toFutureFinagleResponse
+          responseBuilder.streaming(asyncStream).toFutureResponse()
       case asyncStream if runtimeClassEqs[AsyncStream[_]](asyncStream) =>
         request: Request =>
           val asyncStream = requestCallback(request).asInstanceOf[AsyncStream[_]]
-          val depStreamingResponse =
-            DeprecatedStreamingResponse.apply(
-              toBuf = mapper.writeValueAsBuf,
-              prefix = jsonPrefix,
-              separator = jsonSeparator,
-              suffix = jsonSuffix)(asyncStream = asyncStream)
-          depStreamingResponse.toFutureFinagleResponse
+          responseBuilder.streaming(asyncStream).toFutureResponse()
       case readerBuf if readerBuf == manifest[Reader[Buf]] =>
         request: Request =>
           val reader = requestCallback(request).asInstanceOf[Reader[Buf]]
-          val depStreamingResponse =
-            DeprecatedStreamingResponse.apply[Buf](toBuf = a => a)(
-              asyncStream = Reader.toAsyncStream(reader))
-          depStreamingResponse.toFutureFinagleResponse
+          responseBuilder.streaming(reader).toFutureResponse()
       case reader if runtimeClassEqs[Reader[_]](reader) =>
         request: Request =>
           val reader = requestCallback(request).asInstanceOf[Reader[_]]
-          val depStreamingResponse = DeprecatedStreamingResponse.apply(
-            toBuf = mapper.writeValueAsBuf,
-            prefix = jsonPrefix,
-            separator = jsonSeparator,
-            suffix = jsonSuffix)(asyncStream = Reader.toAsyncStream(reader))
-          depStreamingResponse.toFutureFinagleResponse
+          responseBuilder.streaming(reader).toFutureResponse()
       case depStreamingResponse
           if runtimeClassEqs[DeprecatedStreamingResponse[_, _]](depStreamingResponse) =>
         request: Request =>
@@ -238,13 +213,13 @@ private[http] class CallbackConverter @Inject()(
       case streamingResponse if runtimeClassEqs[StreamingResponse[Any, _]](streamingResponse) =>
         request: Request =>
           streamingResponse.typeArguments.head match {
-            case r: Reader[_] =>
-              requestCallback(request).asInstanceOf[StreamingResponse[Reader, _]].toFutureResponse
-            case as: AsyncStream[_] =>
+            case _: Reader[_] =>
+              requestCallback(request).asInstanceOf[StreamingResponse[Reader, _]].toFutureResponse()
+            case _: AsyncStream[_] =>
               requestCallback(request)
-                .asInstanceOf[StreamingResponse[AsyncStream, _]].toFutureResponse
+                .asInstanceOf[StreamingResponse[AsyncStream, _]].toFutureResponse()
             case _ =>
-              requestCallback(request).asInstanceOf[StreamingResponse[Any, _]].toFutureResponse
+              requestCallback(request).asInstanceOf[StreamingResponse[Any, _]].toFutureResponse()
           }
     }
   }

@@ -135,7 +135,15 @@ class TweetsControllerIntegrationTest extends FeatureTest {
       "/tweets/reader_buf_to_string",
       postBody = "[1,2,3,4,5]",
       andExpect = Status.Ok,
-      withBody = """"[1,2,3,4,5]"""")
+      withBody = """["[1,2,3,4,5]"]""")
+  }
+
+  test("post Reader[Int] to Reader[String]") {
+    server.httpPost(
+      "/tweets/reader_int_to_string",
+      postBody = "[1,2,3,4,5]",
+      andExpect = Status.Ok,
+      withBody = """["1","2","3","4","5"]""")
   }
 
   test("post Reader[Buf] to Reader[Buf]") {
@@ -151,7 +159,15 @@ class TweetsControllerIntegrationTest extends FeatureTest {
       "/tweets/asyncStream_buf_to_string",
       postBody = "[1,2,3,4,5]",
       andExpect = Status.Ok,
-      withBody = """"[1,2,3,4,5]"""")
+      withBody = """["[1,2,3,4,5]"]""")
+  }
+
+  test("post AsyncStream[Int] to AsyncStream[String]") {
+    server.httpPost(
+      "/tweets/asyncStream_int_to_string",
+      postBody = "[1,2,3,4,5]",
+      andExpect = Status.Ok,
+      withBody = """["1","2","3","4","5"]""")
   }
 
   test("post AsyncStream[Buf] to AsyncStream[Buf]") {
@@ -166,6 +182,22 @@ class TweetsControllerIntegrationTest extends FeatureTest {
     server.httpPost("/tweets/streaming", """
       [1,2,3,4,5]
       """)
+  }
+
+  test("String to String") {
+    server.httpPost(
+      "/tweets/request_to_string",
+      postBody = "[1,2,3,4,5]",
+      andExpect = Status.Ok,
+      withBody = """[1,2,3,4,5]""")
+  }
+
+  test("String to Future[String]") {
+    server.httpPost(
+      "/tweets/request_to_futurestring",
+      postBody = "[1,2,3,4,5]",
+      andExpect = Status.Ok,
+      withBody = """[1,2,3,4,5]""")
   }
 
   test("get streaming json") {
