@@ -7,6 +7,54 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+19.11.0
+-------
+
+Fixed
+~~~~~
+
+* finatra-http: Better handling of URI decoding issues when extracting path parameters for
+  routing. If we cannot extract a path pattern, and the exception is not intercepted by a
+  user-defined Exception Mapper, we will now explicitly return a `400 - BAD REQUEST`.
+  Fixes #507. ``PHAB_ID=D381357``
+
+Added
+~~~~~
+
+* finatra: Add initial support for JDK 11 compatibility. ``PHAB_ID=D365075``
+
+* inject-core: Add support for optional binding in `c.t.inject.TwitterModule`.
+  ``PHAB_ID=D386288``
+
+Changed
+~~~~~~~
+
+* finatra-http: (BREAKING API CHANGE) `AsyncStream[Buf] => AsyncStream[String]` and
+  `Reader[Buf] => Reader[String]` handlers will always be tread the output as a JSON arrays of
+  `Strings`. Whereas, before, the incoming bytes would have been converted to `String` and
+  returned as-is. ``PHAB_ID=D392551``
+
+* finatra: Deprecate `c.t.finatra.http.modules.DocRootModule`. Introduce `FileResolverModule`.
+  The `DocRootModule` defines configuration flags for the `FileResolver` which was moved from
+  `finatra/http` to a more correctly generic location in `finatra/utils`. However, configuration for
+  injection of a properly configured `FileResolver` is still incorrectly tied to HTTP because of the
+  `DocRootModule`. Thus, we deprecate the `DocRootModule` and introduce the
+  `c.t.finatra.modules.FileResolverModule` which is defined closer to the
+  `c.t.finatra.utils.FileResolver` in `finatra/utils`. This allows the `FileResolver` to be properly
+  configured outside of HTTP concerns. ``PHAB_ID=D390932``
+
+* finatra-thrift: Updated BUILD files for Pants 1:1:1 layout. ``PHAB_ID=D388297``
+
+* inject-ports: Add `finatra/inject/inject-ports` which has `c.t.inject.server.Ports` and
+  `c.t.inject.server.PortUtils`. ``PHAB_ID=D388277``
+
+* inject-utils: Move `AnnotationUtils` to `c.t.inject.utils.AnnotationUtils` and make public
+  for use. ``PHAB_ID=D388241``
+
+* finatra-http: Updated package structure for Pants 1:1:1 layout. Moved `META-INF/mime.types` file
+  to finatra/utils which is where the `FileResolver` is located for proper resolution of mime types
+  from file extension. ``PHAB_ID=D385792``
+
 19.10.0
 -------
 

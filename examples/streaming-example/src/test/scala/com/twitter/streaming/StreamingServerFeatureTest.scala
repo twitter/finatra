@@ -5,8 +5,8 @@ import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.{EmbeddedHttpServer, StreamingJsonTestHelper}
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
-import com.twitter.io.{Buf, Reader}
-import com.twitter.util.{Await, Future}
+import com.twitter.io.Buf
+import com.twitter.util.{Duration, Future}
 
 object StreamingServerFeatureTest {
   val TweetMsgPrefix: String = "msg: "
@@ -14,27 +14,19 @@ object StreamingServerFeatureTest {
 
   /* Response Implicit Utils */
   implicit class RichResponse(val self: Response) extends AnyVal {
-    def readerStrings: Reader[String] = {
-      self.reader.map {
-        case Buf.Utf8(str) =>
-          str
-      }
-    }
-
     def getReaderStrings: Future[Seq[String]] = {
-      var readerString: Seq[String] = Seq.empty[String]
 
-      def readString(stringSeq: Seq[String]): Future[Unit] = {
-        readerStrings.read().map {
-          case Some(str) =>
-            println("Read:\t" + str)
-            readerString = readerString :+ str
-            readString(readerString)
+      def readString(acc: String): Future[Seq[String]] = {
+        self.reader.read().flatMap {
+          case Some(Buf.Utf8(str)) =>
+            println("Read:\t" + str.replace("\n", "\\n"))
+            readString(acc + str)
           case None =>
+            Future.value(acc.split("\n").toSeq)
         }
       }
 
-      readString(readerString).map(_ => readerString)
+      readString("")
     }
   }
 }
@@ -42,7 +34,9 @@ object StreamingServerFeatureTest {
 class StreamingServerFeatureTest extends FeatureTest {
   import StreamingServerFeatureTest._
 
-  def await[T](f: Future[T]): T = Await.result(f, 5.seconds)
+  // our response stream has a delay between messages so 5 seconds might cut it close
+  // in slow CI environments like Travis so we are bumping timeouts to 10 seconds.
+  override protected def defaultAwaitTimeout: Duration = 10.seconds
 
   override val server = new EmbeddedHttpServer(new StreamingServer, streamResponse = true)
 

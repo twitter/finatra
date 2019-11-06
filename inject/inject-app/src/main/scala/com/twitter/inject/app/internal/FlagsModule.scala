@@ -5,7 +5,7 @@ import com.twitter.inject.annotations.Flags
 import com.twitter.inject.{Logging, TwitterModule}
 import javax.inject.Provider
 
-private[app] object FlagsModule {
+private[twitter] object FlagsModule {
   def create(flags: Seq[com.twitter.app.Flag[_]]): FlagsModule = {
     val flagsMap = (for (flag <- flags) yield {
       flag.name -> flag.getWithDefault
@@ -15,7 +15,7 @@ private[app] object FlagsModule {
   }
 }
 
-private[app] class FlagsModule(flagsMap: Map[String, Option[Any]])
+private[twitter] class FlagsModule(flagsMap: Map[String, Option[Any]])
     extends TwitterModule
     with Logging {
 

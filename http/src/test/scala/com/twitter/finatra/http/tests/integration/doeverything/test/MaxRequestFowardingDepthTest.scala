@@ -1,8 +1,7 @@
 package com.twitter.finatra.http.tests.integration.doeverything.test
 
 import com.twitter.finagle.http.Status._
-import com.twitter.finatra.http.request.HttpForward
-import com.twitter.finatra.http.routing.HttpRouter
+import com.twitter.finatra.http.routing.{HttpForward, HttpRouter}
 import com.twitter.finatra.http.tests.integration.doeverything.main.controllers._
 import com.twitter.finatra.http.{EmbeddedHttpServer, HttpServer}
 import com.twitter.inject.Test

@@ -4,7 +4,7 @@ import com.twitter.finagle.http.{Request => FinagleRequest}
 import com.twitter.finatra.http.Controller
 
 class NonGuiceController extends Controller {
-  get("/NonGuice") { request: FinagleRequest =>
+  get("/NonGuice") { _: FinagleRequest =>
     "pong"
   }
 }

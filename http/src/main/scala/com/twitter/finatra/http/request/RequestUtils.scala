@@ -1,7 +1,6 @@
 package com.twitter.finatra.http.request
 
-import com.twitter.finagle.http.{MediaType => CommonMediaTypes, Request}
-import com.twitter.finatra.http.HttpHeaders
+import com.twitter.finagle.http.{Fields, Request}
 import com.twitter.finatra.http.exceptions.{BadRequestException, NotAcceptableException}
 import com.twitter.finatra.http.fileupload.{FinagleRequestFileUpload, MultipartItem}
 import com.twitter.inject.conversions.string._
@@ -92,7 +91,7 @@ object RequestUtils {
    * text/html; q=0.8, application/json
    */
   def respondTo[T](request: Request)(callback: PartialFunction[ContentType, T]): T = {
-    val acceptHeader = request.headerMap.getOrElse(HttpHeaders.Accept, "*/*")
+    val acceptHeader = request.headerMap.getOrElse(Fields.Accept, "*/*")
     val mediaRanges = MediaRange.parseAndSort(acceptHeader)
 
     val contentTypes = mediaRanges map { mediaRange =>
@@ -102,7 +101,7 @@ object RequestUtils {
       .collectFirst(callback)
       .getOrElse(
         throw new NotAcceptableException(
-          CommonMediaTypes.PlainTextUtf8,
+          com.twitter.finagle.http.MediaType.PlainTextUtf8,
           Seq("Not Acceptable Media Type")
         )
       )

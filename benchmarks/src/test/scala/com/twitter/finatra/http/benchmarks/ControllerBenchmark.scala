@@ -9,9 +9,10 @@ import com.twitter.finatra.http.filters.HttpResponseFilter
 import com.twitter.finatra.http.modules._
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.json.modules.FinatraJacksonModule
+import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.inject.{Injector, TwitterModule}
 import com.twitter.inject.app.TestInjector
-import com.twitter.inject.internal.modules.LibraryModule
+import com.twitter.inject.modules.internal.LibraryModule
 import com.twitter.util.Future
 import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 
@@ -30,7 +31,7 @@ class ControllerBenchmark extends StdBenchAnnotations {
         MessageBodyModule,
         FinatraJacksonModule,
         MustacheModule,
-        DocRootModule,
+        FileResolverModule,
         NullStatsReceiverModule
       )
     ).create

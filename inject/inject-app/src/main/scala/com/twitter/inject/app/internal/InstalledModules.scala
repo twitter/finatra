@@ -14,7 +14,7 @@ import scala.PartialFunction.condOpt
  * @param injector the [[com.twitter.inject.Injector]] built from the [[com.google.inject.Module]]s
  * @param modules the list of [[com.google.inject.Module]]s from which the [[com.twitter.inject.Injector]] was created.
  */
-private[app] case class InstalledModules(injector: Injector, modules: Seq[Module]) extends Logging {
+private[twitter] case class InstalledModules(injector: Injector, modules: Seq[Module]) extends Logging {
 
   def postInjectorStartup(): Unit = {
     modules.foreach {

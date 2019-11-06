@@ -1,10 +1,9 @@
 package com.twitter.finatra.http
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.twitter.finagle.http.MediaType
 import com.google.inject.Stage
 import com.twitter.app.GlobalFlag
-import com.twitter.finagle.http.{Method, Status, _}
+import com.twitter.finagle.http.{MediaType, Method, Status, _}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.JsonAwareEmbeddedHttpClient.jsonParseWithNormalizer
 import com.twitter.finatra.http.routing.HttpRouter
@@ -73,8 +72,8 @@ class EmbeddedHttpServer(
   failOnLintViolation: Boolean = false,
   closeGracePeriod: Option[Duration] = None,
   globalFlags: => Map[GlobalFlag[_], String] = Map(),
-  statsReceiverOverride: Option[StatsReceiver] = None
-) extends EmbeddedTwitterServer(
+  statsReceiverOverride: Option[StatsReceiver] = None)
+    extends EmbeddedTwitterServer(
       twitterServer = twitterServer,
       flags = flags,
       args = args,
@@ -90,15 +89,25 @@ class EmbeddedHttpServer(
       closeGracePeriod = closeGracePeriod,
       globalFlags = globalFlags,
       statsReceiverOverride = statsReceiverOverride
-    ) with ExternalHttpClient {
+    )
+    with ExternalHttpClient {
 
   /* Additional Constructors */
 
   def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage) =
     this(twitterServer, flags = flags.asScala.toMap, stage = stage)
 
-  def this(twitterServer: Ports, flags: java.util.Map[String, String], globalFlags: java.util.Map[GlobalFlag[_], String], stage: Stage) =
-    this(twitterServer, flags = flags.asScala.toMap, stage = stage, globalFlags = globalFlags.toOrderedMap)
+  def this(
+    twitterServer: Ports,
+    flags: java.util.Map[String, String],
+    globalFlags: java.util.Map[GlobalFlag[_], String],
+    stage: Stage
+  ) =
+    this(
+      twitterServer,
+      flags = flags.asScala.toMap,
+      stage = stage,
+      globalFlags = globalFlags.toOrderedMap)
 
   /* Public */
 
@@ -1118,7 +1127,7 @@ class EmbeddedHttpServer(
 
   private def matchesAdminRoute(method: Method, path: String): Boolean = {
     path.startsWith(HttpRouter.FinatraAdminPrefix) ||
-      adminHttpRouteMatchesPath(method -> path)
+    adminHttpRouteMatchesPath(method -> path)
   }
 
   private[this] val adminHttpRouteMatchesPath: ((Method, String)) => Boolean =

@@ -24,7 +24,7 @@ package com.twitter.finatra.kafka.serde.internal
 import java.util
 import org.apache.kafka.common.serialization.{Deserializer, Serde, Serializer, _}
 
-private[serde] object IntSerde extends BaseSerde[Int] {
+object IntSerde extends BaseSerde[Int] {
   private val innerSerializer = new IntegerSerializer
   private val innerDeserializer = new IntegerDeserializer
 
@@ -36,7 +36,7 @@ private[serde] object IntSerde extends BaseSerde[Int] {
 
 }
 
-private[serde] object LongSerde extends BaseSerde[Long] {
+object LongSerde extends BaseSerde[Long] {
   private val innerSerializer = new LongSerializer
   private val innerDeserializer = new LongDeserializer
 
@@ -48,7 +48,7 @@ private[serde] object LongSerde extends BaseSerde[Long] {
 
 }
 
-private[serde] object DoubleSerde extends BaseSerde[Double] {
+object DoubleSerde extends BaseSerde[Double] {
   private val innerSerializer = new DoubleSerializer
   private val innerDeserializer = new DoubleDeserializer
 

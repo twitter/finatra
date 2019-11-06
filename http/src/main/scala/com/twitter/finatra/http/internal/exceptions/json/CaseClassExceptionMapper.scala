@@ -13,6 +13,6 @@ private[http] class CaseClassExceptionMapper @Inject()(response: ResponseBuilder
   override def toResponse(request: Request, e: CaseClassMappingException): Response =
     response.badRequest.json(errorsResponse(e))
 
-  private def errorsResponse(e: CaseClassMappingException): ErrorsResponse =
-    ErrorsResponse(e.errors map { _.getMessage })
+  private[this] def errorsResponse(e: CaseClassMappingException): ErrorsResponse =
+    ErrorsResponse(e.errors.map(_.getMessage))
 }

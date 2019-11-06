@@ -4,8 +4,8 @@ import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.filters.ExceptionMappingFilter
-import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
 import com.twitter.finatra.http.routing.HttpRouter
+import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
 import com.twitter.inject.{Mockito, Test}
 import com.twitter.util.Future
 import org.scalatest.Matchers

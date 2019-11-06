@@ -7,8 +7,9 @@ import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.exceptions._
 import com.twitter.finatra.http.jsonpatch.{JsonPatch, JsonPatchOperator, JsonPatchUtility}
 import com.twitter.finatra.http.marshalling.mustache.MustacheService
-import com.twitter.finatra.http.request.{HttpForward, RequestUtils}
+import com.twitter.finatra.http.request.RequestUtils
 import com.twitter.finatra.http.response._
+import com.twitter.finatra.http.routing.HttpForward
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain._
 import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions._
 import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{AppendToHeaderFilter, ForbiddenFilter, IdentityFilter}
@@ -41,6 +42,8 @@ class DoEverythingController @Inject()(
   mustacheService: MustacheService,
   httpClient: HttpClient
 ) extends Controller {
+  assert(exampleService != null)
+  assert(multiService != null)
 
   private val flakyCount = new AtomicInteger()
   private val helloWorldText = "Hello, World!"

@@ -1,10 +1,10 @@
 package com.twitter.finatra.http.internal.routing
 
 import com.twitter.finagle.http.Method
-import com.twitter.finatra.http.AnyMethod
+import com.twitter.finatra.http.request.AnyMethod
 import scala.collection.mutable.{AnyRefMap => AMap}
 
-private[http] case class MatchedConstantRoute (routeOpt: Option[Route] = None, methodNotAllowed: Boolean = false)
+private[http] case class MatchedConstantRoute(routeOpt: Option[Route] = None, methodNotAllowed: Boolean = false)
 
 private[http] class ConstantRouteMap(constantRoutes: Seq[Route]) {
   // Use AnyRefMap for faster look up performance
@@ -14,7 +14,8 @@ private[http] class ConstantRouteMap(constantRoutes: Seq[Route]) {
   for (route <- constantRoutes) {
     val path = route.path
     storeRoute(path, route)
-    // When the route has an optional trailing slash identifier, store both paths with or without trailing slash
+    // When the route has an optional trailing slash identifier
+    // store both paths with and without trailing slash
     if (route.hasOptionalTrailingSlash) {
       val pathWithoutSlash = path.substring(0, path.length - 1)
       storeRoute(pathWithoutSlash, route)

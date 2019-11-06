@@ -12,10 +12,12 @@ class ComplexService @Inject()(
   @Named("str2") string2: String,
   defaultInt: Int,
   @Flag("moduleDuration") duration1: Duration,
-  @Assisted name: String
-) {
+  @Assisted name: String) {
 
-  def execute = {
-    exampleService.doit + " " + name + " " + duration1.inMillis
-  }
+  assert(defaultString == "" || defaultString == "default string")
+  assert(string1 != null)
+  assert(string2 != null)
+  assert(defaultInt == 0 || defaultInt == 11)
+
+  def execute: String = exampleService.doit + " " + name + " " + duration1.inMillis
 }

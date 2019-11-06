@@ -4,11 +4,14 @@ import com.google.inject.Module
 import com.twitter.finatra.http.internal.marshalling.mustache.MustacheMessageBodyWriter
 import com.twitter.finatra.http.internal.marshalling.{
   DefaultMessageBodyReaderImpl,
-  DefaultMessageBodyWriterImpl,
+  DefaultMessageBodyWriterImpl
+}
+import com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent
+import com.twitter.finatra.http.marshalling.{
+  DefaultMessageBodyReader,
+  DefaultMessageBodyWriter,
   MessageBodyManager
 }
-import com.twitter.finatra.http.marshalling.{DefaultMessageBodyReader, DefaultMessageBodyWriter}
-import com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent
 import com.twitter.finatra.http.response.Mustache
 import com.twitter.inject.{Injector, InjectorModule, TwitterModule}
 
@@ -21,7 +24,7 @@ import com.twitter.inject.{Injector, InjectorModule, TwitterModule}
  *
  * @see [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]]
  * @see [[com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter]]
- * @see [[com.twitter.finatra.http.internal.marshalling.MessageBodyManager]]
+ * @see [[MessageBodyManager]]
  */
 object MessageBodyModule extends TwitterModule {
 

@@ -56,7 +56,7 @@ class FutureHttpConversionsTest extends Test {
 
   def assertSearchServiceFailure(searchService: SearchService, expectedException: Throwable): Unit = {
     val e = intercept[HttpException] {
-      Await.result(searchService.search("processed needle"))
+      await(searchService.search("processed needle"))
     }
     e should equal(expectedException)
   }
@@ -92,13 +92,25 @@ class FutureHttpConversionsTest extends Test {
     /* Private */
 
     private def auth(user: String, pass: String): Future[Long] = {
+      log(user, pass)
       future1Response
     }
 
-    private def searchByTerm(authToken: Long, term: String) = future2Response
+    private def searchByTerm(authToken: Long, term: String) = {
+      log(authToken, term)
+      future2Response
+    }
 
     private def processResult(result: String): String = {
       "processed " + result
+    }
+
+    private def log(authToken: Long, term: String): String = {
+      s"$authToken:${term.map(_ => "X")}"
+    }
+
+    private def log(user: String, pass: String): String = {
+      s"$user:${pass.map(_ => "X")}"
     }
   }
 

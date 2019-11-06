@@ -29,15 +29,6 @@ import scala.util.control.NonFatal
  * "root" exception mapper.
  *
  * @see [[com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper]]
- *
- * Note: When searching for the parent exception mapper, it would be nice
- * to traverse the entire class linearization so it works for
- * traits/mixins too [1]. Unfortunately, implementing this would require
- * a lot more reflection and it might not be threadsafe [2]. Doing it in
- * Scala 2.11 might be easier and safer.
- *
- * [1] https://stackoverflow.com/questions/15623498/handy-ways-to-show-linearization-of-a-class
- * [2] https://docs.scala-lang.org/overviews/reflection/thread-safety.html
  */
 @Singleton
 class ExceptionManager(injector: Injector, statsReceiver: StatsReceiver) {

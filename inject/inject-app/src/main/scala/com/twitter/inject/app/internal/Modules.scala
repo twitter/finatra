@@ -6,10 +6,13 @@ import com.twitter.inject.{Injector, TwitterBaseModule}
 import com.twitter.inject.conversions.iterable._
 import scala.collection.JavaConverters._
 
-private[app] object Modules {
+object Modules {
 
-  /** De-duplicate a given sequence of  [[com.google.inject.Module]]. */
-  def distinctModules(
+  /**
+   * De-duplicate a given sequence of  [[com.google.inject.Module]].
+   * Exposed for testing.
+   */
+  private[app] def distinctModules(
     modules: Seq[com.google.inject.Module]
   ): Seq[com.google.inject.Module] = {
     // De-dupe all the modules using a `java.util.IdentityHashMap` with the modules as keys
@@ -26,7 +29,7 @@ private[app] object Modules {
   }
 
   /** Capture all flags in the [[com.google.inject.Module]] object hierarchy. */
-  def findModuleFlags(modules: Seq[com.google.inject.Module]): Seq[Flag[_]] = {
+  private def findModuleFlags(modules: Seq[com.google.inject.Module]): Seq[Flag[_]] = {
     // Flags are stored in the App `com.twitter.app.Flags` member variable which is a
     // Map[String, Flag[_]], where the key is the Flag#name. Thus, to ensure we correctly account
     // for the "override" behavior of Flag#add (the last Flag with the same name added, wins),
@@ -38,7 +41,7 @@ private[app] object Modules {
   }
 
   /** Recursively find all 'composed' modules */
-  def findInstalledModules(
+  private def findInstalledModules(
     module: com.google.inject.Module
   ): Seq[com.google.inject.Module] = module match {
     case injectModule: TwitterBaseModule =>
@@ -73,7 +76,7 @@ private[app] object Modules {
  * @see [[com.twitter.inject.TwitterBaseModule#javaModules]]
  * @see [[com.twitter.inject.TwitterBaseModule#frameworkModules]]
  */
-private[app] class Modules(required: Seq[Module], overrides: Seq[Module]) {
+private[twitter] class Modules(required: Seq[Module], overrides: Seq[Module]) {
   import Modules._
 
   val modules: Seq[Module] = {

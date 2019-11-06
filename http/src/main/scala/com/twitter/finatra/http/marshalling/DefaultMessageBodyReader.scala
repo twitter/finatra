@@ -4,7 +4,7 @@ import com.twitter.finagle.http.Request
 
 /**
  * Marker trait denoting the default [[MessageBodyReader]] for the HTTP server. This default
- * [[MessageBodyReader]] is invoked when the [[com.twitter.finatra.http.internal.marshalling.CallbackConverter]]
+ * [[MessageBodyReader]] is invoked when the `com.twitter.finatra.http.internal.CallbackConverter`
  * cannot find a suitable [[MessageBodyReader]] to convert the incoming Finagle request into the
  * route callback input type. E.g., given a defined route in a Controller:
  *
@@ -14,8 +14,8 @@ import com.twitter.finagle.http.Request
  *   }
  * }}}
  *
- * The [[com.twitter.finatra.http.internal.marshalling.CallbackConverter]] attempts to locate a
- * [[com.twitter.finatra.http.internal.marshalling.MessageBodyManager]] which can parse a Finagle
+ * The `com.twitter.finatra.http.internal.CallbackConverter` attempts to locate a
+ * [[MessageBodyManager]] which can parse a Finagle
  * request into the input type `T`. If one is not found, this default is invoked.
  *
  * The framework binds [[com.twitter.finatra.http.internal.marshalling.DefaultMessageBodyReaderImpl]]
@@ -41,7 +41,7 @@ import com.twitter.finagle.http.Request
  * ever generate a single type `T` from it's `parse[T]` implementation.
  *
  * @see [[com.twitter.finatra.http.internal.marshalling.DefaultMessageBodyReaderImpl]]
- * @see [[com.twitter.finatra.http.internal.marshalling.MessageBodyManager]]
+ * @see [[MessageBodyManager]]
  * @see [[com.twitter.finatra.http.modules.MessageBodyModule]]
  * @see [[com.twitter.finatra.http.HttpServer.messageBodyModule]]
  * @see [[https://twitter.github.io/finatra/user-guide/json/routing.html#requests]]

@@ -1,38 +1,6 @@
-scala_library(
-    sources = rglobs("*.scala"),
-    compiler_option_sets = {"fatal_warnings"},
-    java_sources = [
-        "finatra/inject/inject-app/src/main/java",
-    ],
-    provides = scala_artifact(
-        org = "com.twitter",
-        name = "inject-app",
-        repo = artifactory,
-    ),
+target(
     dependencies = [
-        "3rdparty/jvm/com/fasterxml/jackson/core:jackson-annotations",
-        "3rdparty/jvm/com/google/inject:guice",
-        "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
-        "3rdparty/jvm/com/google/inject/extensions:guice-multibindings",
-        "3rdparty/jvm/javax/inject:javax.inject",
-        "3rdparty/jvm/joda-time",
-        "3rdparty/jvm/net/codingwell:scala-guice",
-        "3rdparty/jvm/org/joda:joda-convert",
-        "3rdparty/jvm/org/slf4j:jcl-over-slf4j",
-        "3rdparty/jvm/org/slf4j:jul-to-slf4j",
-        "3rdparty/jvm/org/slf4j:log4j-over-slf4j",
-        "3rdparty/jvm/org/slf4j:slf4j-api",
-        "finatra/inject/inject-app/src/main/java:pants-workaround",
-        "finatra/inject/inject-core/src/main/scala",
-        "finatra/inject/inject-slf4j/src/main/scala",
-        "finatra/inject/inject-utils/src/main/scala",
-        "util/util-app/src/main/scala",
-        "util/util-core/src/main/scala",
-        "util/util-slf4j-api/src/main/scala",
-    ],
-    exports = [
-        "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
-        "3rdparty/jvm/net/codingwell:scala-guice",
-        "util/util-slf4j-api/src/main/scala",
+        "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",
+        "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app",
     ],
 )

@@ -16,22 +16,22 @@ import com.twitter.hello.server.modules.MagicNumberModule;
 
 public class HelloWorldServer extends AbstractHttpServer {
 
-    public HelloWorldServer() {
-        flag().create("magic.number", 55, "This is a magic number.", Flaggable.ofJavaInteger());
-    }
+  public HelloWorldServer() {
+    flag().create("magic.number", 55, "This is a magic number.", Flaggable.ofJavaInteger());
+  }
 
-    @Override
-    public Collection<Module> javaModules() {
-        return ImmutableList.<Module>of(
-            new MagicNumberModule());
-    }
+  @Override
+  public Collection<Module> javaModules() {
+    return ImmutableList.<Module>of(
+        new MagicNumberModule());
+  }
 
-    @Override
-    public void configureHttp(HttpRouter httpRouter) {
-        httpRouter
-            .filter(CommonFilters.class)
-            .filter(new AppendToHeaderFilter("foo", "1"))
-            .add(HelloWorldController.class)
-            .exceptionMapper(HelloWorldExceptionMapper.class);
-    }
+  @Override
+  public void configureHttp(HttpRouter httpRouter) {
+    httpRouter
+        .filter(CommonFilters.class)
+        .filter(new AppendToHeaderFilter("foo", "1"))
+        .add(HelloWorldController.class)
+        .exceptionMapper(HelloWorldExceptionMapper.class);
+  }
 }

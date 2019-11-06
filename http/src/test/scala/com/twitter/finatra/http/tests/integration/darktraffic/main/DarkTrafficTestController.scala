@@ -8,7 +8,7 @@ import javax.inject.Inject
 case class Foo(name: String)
 
 class DarkTrafficTestController @Inject()(objectMapper: FinatraObjectMapper) extends Controller {
-  get("/plaintext") { request: Request =>
+  get("/plaintext") { _: Request =>
     "Hello, World!"
   }
 
@@ -20,7 +20,11 @@ class DarkTrafficTestController @Inject()(objectMapper: FinatraObjectMapper) ext
     foo.name
   }
 
-  delete("/delete") { request: Request =>
+  post("/bar") { request: Request =>
+    objectMapper.parse[Foo](request.getContentString())
+  }
+
+  delete("/delete") { _: Request =>
     "delete"
   }
 }

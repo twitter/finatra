@@ -2,7 +2,7 @@ package com.twitter.finatra.http.tests.integration.darktraffic.main
 
 import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.Http
-import com.twitter.finagle.http.Method.{Delete, Post}
+import com.twitter.finagle.http.Method.Delete
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.modules.DarkTrafficFilterModule
 import com.twitter.inject.Injector
@@ -32,8 +32,8 @@ object DarkServerTestModule extends DarkTrafficFilterModule {
     injector: Injector,
     client: Http.Client
   ): Http.Client = {
-    client
-      .withSession.acquisitionTimeout(100.millis)
+    client.withSession
+      .acquisitionTimeout(100.millis)
       .withRequestTimeout(100.millis)
   }
 }

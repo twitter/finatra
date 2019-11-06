@@ -10,8 +10,10 @@ object option {
     //In companion so can be called from httpfuture.scala
     def toFutureOrFail[A](option: Option[A], throwable: => Throwable) = {
       option match {
-        case Some(returnVal) => Future.value(returnVal)
-        case None => Future.exception(throwable)
+        case Some(returnVal) =>
+          Future.value(returnVal)
+        case None =>
+          Future.exception(throwable)
       }
     }
 
@@ -49,7 +51,7 @@ object option {
      * @return a formatted string using the Option value if defined,
      *         otherwise an empty-string.
      */
-    def format(fmtStr: String) = self match {
+    def format(fmtStr: String): String = self match {
       case Some(value) => fmtStr.format(value)
       case None => ""
     }

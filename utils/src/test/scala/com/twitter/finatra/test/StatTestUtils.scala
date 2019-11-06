@@ -12,12 +12,12 @@ object StatTestUtils extends Matchers {
   }
 
   def assertCounter(statsReceiver: InMemoryStatsReceiver, name: String, expectedValue: Long): Unit = {
-    val actualValue = statsReceiver.counters.get(Seq(name)) getOrElse 0L
+    val actualValue = statsReceiver.counters.getOrElse(Seq(name), 0L)
     actualValue should equal(expectedValue)
   }
 
   def assertGauge(statsReceiver: InMemoryStatsReceiver, name: String, expectedValue: Float): Unit = {
-    val actualValue = statsReceiver.gauges.get(Seq(name)).getOrElse(() => 0f)
+    val actualValue = statsReceiver.gauges.getOrElse(Seq(name), () => 0f)
     if (expectedValue != actualValue()) {
       println("Failure asserting " + name)
       actualValue() should equal(expectedValue)
@@ -25,7 +25,7 @@ object StatTestUtils extends Matchers {
   }
 
   def printStatsAndCounters(statsReceiver: InMemoryStatsReceiver): Unit = {
-    def pretty(map: Iterator[(Seq[String], Any)]) = {
+    def pretty(map: Iterator[(Seq[String], Any)]): Unit = {
       for ((keys, value) <- map) {
         println(keys.mkString("/") + " = " + value)
       }
@@ -36,7 +36,7 @@ object StatTestUtils extends Matchers {
     pretty(statsReceiver.gauges.iterator)
   }
 
-  def pretty(map: Iterator[(Seq[String], Any)]) = {
+  def pretty(map: Iterator[(Seq[String], Any)]): Unit = {
     for ((keys, value) <- map) {
       println(keys.mkString("/") + " = " + value)
     }
@@ -66,7 +66,7 @@ object StatTestUtils extends Matchers {
 
   private def ellipses(any: Any, max: Int) = {
     val str = any.toString
-    if (str.size > max)
+    if (str.length > max)
       str.take(max) + "..."
     else
       str

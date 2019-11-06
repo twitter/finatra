@@ -1,0 +1,25 @@
+scala_library(
+    sources = globs("*.scala"),
+    compiler_option_sets = {"fatal_warnings"},
+    provides = scala_artifact(
+        org = "com.twitter",
+        name = "finatra-thrift-routing",
+        repo = artifactory,
+    ),
+    strict_deps = True,
+    dependencies = [
+        "3rdparty/jvm/javax/inject:javax.inject",
+        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-thrift/src/main/scala",
+        "finagle/finagle-thriftmux/src/main/scala",
+        "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",
+        "finatra/inject/inject-core/src/main/scala",
+        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-thrift/src/main/scala",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift:controller",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/exceptions",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/internal",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/internal/routing",
+        "scrooge/scrooge-core/src/main/scala",
+    ],
+)

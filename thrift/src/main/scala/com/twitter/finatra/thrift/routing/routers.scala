@@ -1,11 +1,11 @@
 package com.twitter.finatra.thrift.routing
 
 import com.twitter.finagle
-import com.twitter.finagle.param
 import com.twitter.finagle.service.NilService
 import com.twitter.finagle.thrift.{RichServerParam, ThriftService, ToThriftService}
-import com.twitter.finagle.{Filter, Thrift, ThriftMux, Service, ServiceFactory, Stack}
-import com.twitter.finatra.thrift._
+import com.twitter.finagle._
+import com.twitter.finatra.thrift.Controller
+import com.twitter.finatra.thrift.ScroogeServiceImpl
 import com.twitter.finatra.thrift.exceptions.{ExceptionManager, ExceptionMapper}
 import com.twitter.finatra.thrift.internal.routing.{NullThriftService, Registrar}
 import com.twitter.inject.TypeUtils._
@@ -13,8 +13,8 @@ import com.twitter.inject.annotations.Flag
 import com.twitter.inject.internal.LibraryRegistry
 import com.twitter.inject.{Injector, Logging, StackTransformer}
 import com.twitter.scrooge.{Request, Response, ThriftMethod}
-import java.lang.reflect.{Method => JMethod}
 import java.lang.annotation.{Annotation => JavaAnnotation}
+import java.lang.reflect.{Method => JMethod}
 import javax.inject.{Inject, Singleton}
 import org.apache.thrift.protocol.TProtocolFactory
 

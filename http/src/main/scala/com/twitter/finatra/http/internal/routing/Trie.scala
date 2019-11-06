@@ -1,8 +1,8 @@
 package com.twitter.finatra.http.internal.routing
 
 import com.twitter.finagle.http.Method
-import com.twitter.finatra.http.exceptions.MethodNotAllowedException
-import com.twitter.finatra.http.AnyMethod
+import com.twitter.finatra.http.exceptions.UnsupportedMethodException
+import com.twitter.finatra.http.request.AnyMethod
 import scala.annotation.tailrec
 import scala.collection.mutable.{ArrayBuffer, AnyRefMap => AMap, LinkedHashMap => LMap}
 
@@ -40,8 +40,8 @@ private[http] class Trie(routes: Seq[Route]) {
     // error first, then found a match later on. So just checking if methodNotAllowed is true here
     // won't be enough.
     if (matchedNonConstantRoute.routeAndParamOpt.isEmpty && matchedNonConstantRoute.methodNotAllowed) {
-      throw new MethodNotAllowedException(
-        error = "The method " + method + " is not allowed on path " + path)
+      throw new UnsupportedMethodException(
+        "The method " + method + " is not allowed on path " + path)
     }
     matchedNonConstantRoute.routeAndParamOpt
   }
@@ -65,8 +65,10 @@ private[http] class Trie(routes: Seq[Route]) {
           case Some(route) =>
             if (isMatchedRoute(node, route, path)) {
               val incomingPath = toMatchPath(route.hasOptionalTrailingSlash, path)
-              var matchedParams: Map[String, String] = Map.empty[String, String]
-              node.pattern.head.extract(incomingPath).foreach(params => matchedParams = params)
+
+              val matchedParams: Map[String, String] =
+                node.pattern.head.extract(incomingPath).getOrElse(Map.empty[String, String])
+
               if (matchedParams.isEmpty) {
                 MatchedNonConstantRoute()
               } else {

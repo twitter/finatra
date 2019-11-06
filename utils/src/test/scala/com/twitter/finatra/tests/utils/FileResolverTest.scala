@@ -1,4 +1,4 @@
-package com.twitter.finatra.http.tests.routing
+package com.twitter.finatra.tests.utils
 
 import com.twitter.finatra.utils.FileResolver
 import com.twitter.inject.Test

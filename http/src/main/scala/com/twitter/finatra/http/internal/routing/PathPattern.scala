@@ -1,5 +1,6 @@
 package com.twitter.finatra.http.internal.routing
 
+import com.twitter.finatra.http.exceptions.RouteParamExtractionException
 import com.twitter.inject.Logging
 import io.netty.handler.codec.http.QueryStringDecoder
 import java.util.regex.Matcher
@@ -58,8 +59,17 @@ private[http] case class PathPattern(regex: Regex, captureNames: Seq[String] = S
 
     for (captureName <- captureNames) {
       idx += 1
-      builder += captureName -> QueryStringDecoder.decodeComponent(matcher.group(idx))
+      builder += captureName -> decodeComponent(matcher.group(idx))
     }
     builder.result()
+  }
+
+  private[this] def decodeComponent(component: String): String = {
+    try {
+      QueryStringDecoder.decodeComponent(component)
+    } catch {
+      case e: IllegalArgumentException =>
+        throw new RouteParamExtractionException(e)
+    }
   }
 }

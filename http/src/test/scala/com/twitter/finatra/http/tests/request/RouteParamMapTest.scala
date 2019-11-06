@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.tests.request
 
 import com.twitter.finagle.http.MapParamMap
-import com.twitter.finatra.http.internal.request.RouteParamMap
+import com.twitter.finatra.http.internal.routing.RouteParamMap
 import com.twitter.inject.Test
 
 class RouteParamMapTest extends Test {

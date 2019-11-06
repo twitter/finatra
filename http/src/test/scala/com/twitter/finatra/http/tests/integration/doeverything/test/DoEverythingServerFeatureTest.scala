@@ -1,18 +1,17 @@
 package com.twitter.finatra.http.tests.integration.doeverything.test
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.twitter.finagle.http.MediaType
 import com.google.inject.name.Names
 import com.google.inject.{Key, TypeLiteral}
 import com.twitter.finagle.http.Method._
 import com.twitter.finagle.http.Status._
-import com.twitter.finagle.http._
+import com.twitter.finagle.http.{MediaType, _}
 import com.twitter.finagle.http.codec.HttpCodec
 import com.twitter.finagle.{Failure, FailureFlags}
-import com.twitter.finatra.http.{EmbeddedHttpServer, RouteHint}
 import com.twitter.finatra.http.tests.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.SomethingStreamedResponse
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.DoEverythingService
+import com.twitter.finatra.http.{EmbeddedHttpServer, RouteHint}
 import com.twitter.finatra.httpclient.{HttpClient, RequestBuilder}
 import com.twitter.finatra.json.JsonDiff._
 import com.twitter.inject.Mockito
@@ -22,27 +21,24 @@ import com.twitter.util.{Future, Time}
 import com.twitter.{logging => ctl}
 import java.net.{ConnectException, InetSocketAddress, SocketAddress}
 import org.scalatest.exceptions.TestFailedException
-import scala.util.parsing.json.JSON
 
 object DoEverythingServerFeatureTest {
   private val TestFailureRemoteAddr: SocketAddress = new InetSocketAddress("localhost", 1234)
 
   private val ConnectionFailedFailure =
     Failure(
-      why = "Connection refused: localhost/127.0.0.1:1234 at remote address: localhost/127.0.0.1:1234. Remote Info: Not Available",
-      cause =
-        new com.twitter.finagle.ConnectionFailedException(
-          Some(new TestConnectException(new ConnectException(), TestFailureRemoteAddr)),
-          Some(TestFailureRemoteAddr)) {
-          override def logLevel: ctl.Level = ctl.Level.INFO
-        },
+      why =
+        "Connection refused: localhost/127.0.0.1:1234 at remote address: localhost/127.0.0.1:1234. Remote Info: Not Available",
+      cause = new com.twitter.finagle.ConnectionFailedException(
+        Some(new TestConnectException(new ConnectException(), TestFailureRemoteAddr)),
+        Some(TestFailureRemoteAddr)) {
+        override def logLevel: ctl.Level = ctl.Level.INFO
+      },
       flags = 8
     )
 
-  private class TestConnectException(
-    exception: ConnectException,
-    remoteAddress: SocketAddress)
-    extends ConnectException(exception.getMessage + ": " + remoteAddress) {
+  private class TestConnectException(exception: ConnectException, remoteAddress: SocketAddress)
+      extends ConnectException(exception.getMessage + ": " + remoteAddress) {
     initCause(exception)
     setStackTrace(exception.getStackTrace)
 
@@ -55,7 +51,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   val httpClient: HttpClient = smartMock[HttpClient]
 
   override val server: EmbeddedHttpServer = new EmbeddedHttpServer(
-    args = Array("-magicNum=1", "-moduleMagicNum=2"),
+    args = Array("-magicNum=1", "-moduleMagicNum=2", "-moduleString=nondefault"),
     flags = Map("something.flag" -> "foobar"),
     twitterServer = new DoEverythingServer,
     disableTestLogging = true
@@ -102,12 +98,10 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   }
 
   test("GET /admin/registry.json") {
-    val response = server.httpGetAdmin(
-      "/admin/registry.json",
-      andExpect = Status.Ok)
+    val response = server.httpGetAdmin("/admin/registry.json", andExpect = Status.Ok)
 
     val json: Map[String, Any] =
-      JSON.parseFull(response.contentString).get.asInstanceOf[Map[String, Any]]
+      server.mapper.parse[Map[String, Any]](response.contentString)
 
     val registry = json("registry").asInstanceOf[Map[String, Any]]
     registry.contains("library") should be(true)
@@ -214,16 +208,19 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test("GET /acceptHeaders") {
     server.httpGet(
       "/acceptHeaders",
-      headers = Map("Accept" -> "text/plain", "Accept-Charset" -> "utf-8", "Accept-Encoding" -> "gzip, deflate"),
-      withJsonBody =
-        """
+      headers = Map(
+        "Accept" -> "text/plain",
+        "Accept-Charset" -> "utf-8",
+        "Accept-Encoding" -> "gzip, deflate"),
+      withJsonBody = """
           |{
           |  "Accept": "text/plain",
           |  "Accept-Charset": "utf-8",
           |  "Accept-Charset-Again": "utf-8",
           |  "Accept-Encoding": "gzip, deflate"
           |}
-        """.stripMargin)
+        """.stripMargin
+    )
   }
 
   test("response should contain server/date headers") {
@@ -236,9 +233,12 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   }
 
   test("json response to /example") {
-    val response = server.httpGet("/example/routing/json/1")
-    response.statusCode should equal(200)
+    val response = server.httpGet("/example/routing/json/1", andExpect = Ok)
     jsonDiff(response.contentString, """{"id":"1","name":"bob","magic":"1","module_magic":"2"}""")
+  }
+
+  test("json response to /example with encoding issue") {
+    server.httpGet("/example/routing/json/1%%", andExpect = BadRequest)
   }
 
   test("GET /stringMap") {
@@ -844,18 +844,26 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   }
 
   test("POST json user") {
-    server.httpPost("/users", """
+    server.httpPost(
+      "/users",
+      """
           {
             "name" : "bob"
           }
-      """, andExpect = Ok, withBody = "bob")
+      """,
+      andExpect = Ok,
+      withBody = "bob")
   }
 
   test("POST json user with missing required field") {
-    server.httpPost("/users", """
+    server.httpPost(
+      "/users",
+      """
           {
           }
-      """, andExpect = BadRequest, withErrors = Seq("name: field is required"))
+      """,
+      andExpect = BadRequest,
+      withErrors = Seq("name: field is required"))
   }
 
   test("POST body with multi-byte characters") {
@@ -871,19 +879,27 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   }
 
   test("POST json user with failed field validation") {
-    server.httpPost("/users", """
+    server.httpPost(
+      "/users",
+      """
           {
             "name": "a"
           }
-      """, andExpect = BadRequest, withErrors = Seq("name: size [1] is not between 2 and 20"))
+      """,
+      andExpect = BadRequest,
+      withErrors = Seq("name: size [1] is not between 2 and 20"))
   }
 
   test("POST json user with null required field") {
-    server.httpPost("/users", """
+    server.httpPost(
+      "/users",
+      """
           {
             "name": null
           }
-      """, andExpect = BadRequest, withErrors = Seq("name: field is required"))
+      """,
+      andExpect = BadRequest,
+      withErrors = Seq("name: field is required"))
   }
 
   test("POST json with failed array element validation") {
@@ -913,11 +929,15 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   }
 
   test("POST json user with failed method validation") {
-    server.httpPost("/users", """
+    server.httpPost(
+      "/users",
+      """
           {
             "name": "foo"
           }
-      """, andExpect = BadRequest, withErrors = Seq("name cannot be foo"))
+      """,
+      andExpect = BadRequest,
+      withErrors = Seq("name cannot be foo"))
   }
 
   test("POST json user with invalid field validation") {
@@ -947,20 +967,28 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   }
 
   test("POST json user with invalid content type") {
-    server.httpPost("/users", """
+    server.httpPost(
+      "/users",
+      """
           {
             "name" : "bob"
           }
-      """, contentType = "foo", andExpect = BadRequest)
+      """,
+      contentType = "foo",
+      andExpect = BadRequest)
   }
 
   test(
     "POST json user with missing required field when message body reader uses intermediate JsonNode"
   ) {
-    server.httpPost("/userWithMessageBodyReader", """
+    server.httpPost(
+      "/userWithMessageBodyReader",
+      """
           {
           }
-      """, andExpect = BadRequest, withErrors = Seq("name: field is required"))
+      """,
+      andExpect = BadRequest,
+      withErrors = Seq("name: field is required"))
   }
 
   test(
@@ -979,11 +1007,14 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   }
 
   test("POST invalid JSON") {
-    server.httpPost("/userWithMessageBodyReader", """
+    server.httpPost(
+      "/userWithMessageBodyReader",
+      """
           [{
             "name": "foo"
           }]
-      """, andExpect = BadRequest)
+      """,
+      andExpect = BadRequest)
   }
 
   test("injector test") {
@@ -1157,7 +1188,6 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     )
   }
 
-
   test("GET with query parameters as long sequence") {
     server.httpGet(
       "/RequestWithQueryParamSeqLong?foo=1&foo=2&foo=3",
@@ -1204,7 +1234,8 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     server.httpGet(
       "/RequestWithCommaSeparatedQueryParamSeqLong?foo=1&foo=2,3",
       andExpect = BadRequest,
-      withJsonBody = """{
+      withJsonBody =
+        """{
               "errors":[
                 "foo: Repeating foo is not allowed. Pass multiple values as a single comma-separated string."
               ]
@@ -1216,7 +1247,8 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     server.httpGet(
       "/RequestWithCommaSeparatedQueryParamSeqLong?foo=1,2&foo=3,4",
       andExpect = BadRequest,
-      withJsonBody = """{
+      withJsonBody =
+        """{
               "errors":[
                 "foo: Repeating foo is not allowed. Pass multiple values as a single comma-separated string."
               ]
@@ -2082,9 +2114,11 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test("JsonPatch fails when out of bound indices are input for test") {
     val request = RequestBuilder
       .patch("/jsonPatch/innerSeqCaseClass")
-      .body("""[
+      .body(
+        """[
           |{"op": "test", "path": "/bears/2", "value": "Bear Grylls"}
-          |]""".stripMargin, contentType = Message.ContentTypeJsonPatch)
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
 
     server.httpRequestJson[JsonNode](
       request = request,
@@ -2096,9 +2130,11 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test("JsonPatch fails when out of bound indices are input for replace") {
     val request = RequestBuilder
       .patch("/jsonPatch/innerSeqCaseClass")
-      .body("""[
+      .body(
+        """[
           |{"op": "replace", "path": "/bears/2", "value": "panda"}
-          |]""".stripMargin, contentType = Message.ContentTypeJsonPatch)
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
 
     server.httpRequestJson[JsonNode](
       request = request,
@@ -2111,9 +2147,11 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test("JsonPatch fails when out of bound indices are input for add") {
     val request = RequestBuilder
       .patch("/jsonPatch/innerSeqCaseClass")
-      .body("""[
+      .body(
+        """[
           |{"op": "add", "path": "/bears/3", "value": "brown"}
-          |]""".stripMargin, contentType = Message.ContentTypeJsonPatch)
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
 
     server.httpRequestJson[JsonNode](
       request = request,
@@ -2125,9 +2163,11 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test("JsonPatch fails when out of bound indices are input for copy") {
     val request = RequestBuilder
       .patch("/jsonPatch/innerSeqCaseClass")
-      .body("""[
+      .body(
+        """[
           |{"op": "copy", "from": "/bears/3", "path": "/bears/4"}
-          |]""".stripMargin, contentType = Message.ContentTypeJsonPatch)
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
 
     server.httpRequestJson[JsonNode](
       request = request,
@@ -2139,9 +2179,11 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test("JsonPatch fails when out of bound indices are input for move") {
     val request = RequestBuilder
       .patch("/jsonPatch/innerSeqCaseClass")
-      .body("""[
+      .body(
+        """[
           |{"op": "move", "from": "/bears/4", "path": "/bears/8"}
-          |]""".stripMargin, contentType = Message.ContentTypeJsonPatch)
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
 
     server.httpRequestJson[JsonNode](
       request = request,
@@ -2239,9 +2281,11 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test("JsonPatch fails when property names are input for array operations") {
     val request = RequestBuilder
       .patch("/jsonPatch/innerSeqCaseClass")
-      .body("""[
+      .body(
+        """[
           |{"op": "add", "path": "/bears/first_bear", "value": "brown"}
-          |]""".stripMargin, contentType = Message.ContentTypeJsonPatch)
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
 
     server.httpRequestJson[JsonNode](
       request = request,
@@ -2253,9 +2297,11 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test("JsonPatch fails when array indices aren't integers") {
     val request = RequestBuilder
       .patch("/jsonPatch/innerSeqCaseClass")
-      .body("""[
+      .body(
+        """[
           |{"op": "add", "path": "/bears/1e0", "value": "brown"}
-          |]""".stripMargin, contentType = Message.ContentTypeJsonPatch)
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
 
     server.httpRequestJson[JsonNode](
       request = request,
@@ -2344,8 +2390,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     val response = server.httpRequest(
       request = RequestBuilder.get("/mustache.html"),
       andExpect = Ok,
-      withBody =
-        """<div class="nav">
+      withBody = """<div class="nav">
           |  <table cellpadding="0" cellspacing="0">
           |    <tr>
           |        <th>Name</th>
@@ -2368,8 +2413,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test("/invalidValidationRequest") {
     server.httpPost(
       path = "/invalidValidationRequest",
-      postBody =
-        """
+      postBody = """
           |{
           |  "name": "Bob Smith"
           |}
@@ -2382,14 +2426,14 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test("/invalidValidationRequestWithCause") {
     server.httpPost(
       path = "/invalidValidationRequestWithCause",
-      postBody =
-        """
+      postBody = """
           |{
           |  "name": "Bob Smith"
           |}
         """.stripMargin,
       andExpect = InternalServerError,
-      withBody = "Class [class java.lang.String] is not supported by class com.twitter.finatra.json.internal.caseclass.validation.validators.MaxValidator"
+      withBody =
+        "Class [class java.lang.String] is not supported by class com.twitter.finatra.json.internal.caseclass.validation.validators.MaxValidator"
     )
   }
 
@@ -2427,7 +2471,8 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
           [{"name": "a"}, {"name": "b"}, {"name": "c"}]
       """,
       andExpect = BadRequest,
-      withJsonBody = """{"errors":["name: size [1] is not between 2 and 20"]}""")
+      withJsonBody = """{"errors":["name: size [1] is not between 2 and 20"]}"""
+    )
   }
 
   test("GET /httpclient") {
@@ -2435,9 +2480,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
 
     httpClient.execute(any[Request]).returns(Future.exception(ConnectionFailedFailure))
 
-    server.httpGet(
-      "/httpclient",
-      andExpect = Status.InternalServerError)
+    server.httpGet("/httpclient", andExpect = Status.InternalServerError)
   }
 
   test("DoEverythingServer#support specifying GlobalFlags") {
@@ -2457,7 +2500,8 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
         flags = Map("something.flag" -> "foobar"),
         globalFlags = Map(
           com.twitter.finagle.stats.logOnShutdown -> "true"
-        )
+        ),
+        disableTestLogging = true
       )
       try {
         srvr.start() // start the server, otherwise the scope will never be entered
@@ -2473,9 +2517,9 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   }
 
   test("POST /ctu-time") {
-    server.httpPost("/ctu-time",
-      postBody =
-        s"""
+    server.httpPost(
+      "/ctu-time",
+      postBody = s"""
            |{
            |  "time": "${Time.now.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")}"
            |}
@@ -2483,9 +2527,9 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
       andExpect = Status.Ok
     )
 
-    server.httpPost("/ctu-time",
-      postBody =
-        s"""
+    server.httpPost(
+      "/ctu-time",
+      postBody = s"""
            |{
            |  "time": "${Time.now.format("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")}"
            |}
@@ -2494,4 +2538,3 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     )
   }
 }
-

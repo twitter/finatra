@@ -5,7 +5,5 @@ import javax.inject.Singleton
 @Singleton
 class DoEverythingService {
 
-  def doit = {
-    "done"
-  }
+  def doit: String = "done"
 }

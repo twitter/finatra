@@ -10,6 +10,7 @@ junit_tests(
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-core/src/test/scala:test-deps",
         "finatra/inject/inject-utils/src/main/scala",
+        "finatra/inject/inject-utils/src/test/java/com/twitter/inject/annotations",
         "finatra/inject/inject-utils/src/test/resources",
         "util/util-core/src/main/scala",
         "util/util-slf4j-api/src/main/scala",

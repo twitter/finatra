@@ -1,8 +1,7 @@
 package com.twitter.finatra.http
 
 import com.twitter.finagle.http.{RouteIndex, Method => HttpMethod}
-import com.twitter.finatra.http.internal.marshalling.CallbackConverter
-import com.twitter.finatra.http.internal.routing.Route
+import com.twitter.finatra.http.internal.routing.{CallbackConverter, Route}
 import com.twitter.inject.{Injector, TypeUtils}
 import java.lang.annotation.Annotation
 import scala.reflect.classTag

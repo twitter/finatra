@@ -11,7 +11,7 @@ class ExceptionManagerTest extends Test {
   def newExceptionManager =
     new ExceptionManager(TestInjector().create, new InMemoryStatsReceiver)
 
-  val exceptionManager = newExceptionManager
+  val exceptionManager: ExceptionManager = newExceptionManager
 
   exceptionManager.add[RootExceptionMapper]
   exceptionManager.add[TypeOneExceptionMapper]

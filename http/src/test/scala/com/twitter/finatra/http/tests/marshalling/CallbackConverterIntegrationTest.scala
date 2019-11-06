@@ -2,33 +2,34 @@ package com.twitter.finatra.http.tests.marshalling
 
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Request, Response, Status, Method => HttpMethod}
-import com.twitter.finatra.http.internal.marshalling.CallbackConverter
-import com.twitter.finatra.http.modules.{DocRootModule, MessageBodyModule, MustacheModule}
+import com.twitter.finatra.http.internal.routing.CallbackConverter
+import com.twitter.finatra.http.modules.{MessageBodyModule, MustacheModule}
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.http.streaming.{StreamingRequest, StreamingResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.modules.FinatraJacksonModule
+import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.conversions.buf._
 import com.twitter.inject.modules.StatsReceiverModule
-import com.twitter.inject.{IntegrationTest, Mockito}
-import com.twitter.io.{Buf, Reader}
+import com.twitter.inject.{Injector, IntegrationTest, Mockito}
+import com.twitter.io.{Buf, BufReader, Reader}
 import com.twitter.util.Future
 import scala.concurrent.{Future => ScalaFuture}
 
 class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
 
-  override val injector =
+  override val injector: Injector =
     TestInjector(
       MessageBodyModule,
       FinatraJacksonModule,
       MustacheModule,
-      DocRootModule,
+      FileResolverModule,
       StatsReceiverModule
     ).create
 
-  val callbackConverter = injector.instance[CallbackConverter]
-  val mapper = injector.instance[FinatraObjectMapper]
+  private val callbackConverter = injector.instance[CallbackConverter]
+  private val mapper = injector.instance[FinatraObjectMapper]
 
   val ford = Car("Ford")
   val okResponse = SimpleResponse(Status.Ok, "bob")
@@ -218,10 +219,10 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
 
     val response = await(converted(Request()))
     response.status should equal(Status.Ok)
-    await(Reader.readAll(response.reader)).utf8str should equal("[1,2,3]")
+    await(BufReader.readAll(response.reader)).utf8str should equal("[1,2,3]")
   }
 
-  test("AsyncStream request and response") {
+  test("AsyncStream request and response (String)") {
     val jsonStr = "[1,2]"
     val request = Request(HttpMethod.Post, "/")
     request.setChunked(true)
@@ -229,11 +230,26 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
       request.writer.close()
     }
 
-    val converted = callbackConverter.convertToFutureResponse(asyncStreamRequestAndResponse)
+    val converted = callbackConverter.convertToFutureResponse(asyncStreamRequestAndResponseString)
 
     val response = await(converted(request))
     response.status should equal(Status.Ok)
-    await(Reader.readAll(response.reader)).utf8str should equal("""["1","2"]""")
+    await(BufReader.readAll(response.reader)).utf8str should equal("""["1","2"]""")
+  }
+
+  test("AsyncStream request and response (Int)") {
+    val jsonStr = "[1,2]"
+    val request = Request(HttpMethod.Post, "/")
+    request.setChunked(true)
+    request.writer.write(Buf.Utf8(jsonStr)) ensure {
+      request.writer.close()
+    }
+
+    val converted = callbackConverter.convertToFutureResponse(asyncStreamRequestAndResponseInt)
+
+    val response = await(converted(request))
+    response.status should equal(Status.Ok)
+    await(BufReader.readAll(response.reader)).utf8str should equal("""[1,2]""")
   }
 
   test("Reader request") {
@@ -255,10 +271,10 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
 
     val response = await(converted(Request()))
     response.status should equal(Status.Ok)
-    await(Reader.readAll(response.reader)).utf8str should equal("[1.1,2.2,3.3]")
+    await(BufReader.readAll(response.reader)).utf8str should equal("[1.1,2.2,3.3]")
   }
 
-  test("Reader request and response") {
+  test("Reader request and response (String)") {
     val jsonStr = "[1,2]"
     val request = Request(HttpMethod.Post, "/")
     request.setChunked(true)
@@ -266,11 +282,26 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
       request.writer.close()
     }
 
-    val converted = callbackConverter.convertToFutureResponse(readerRequestAndResponse)
+    val converted = callbackConverter.convertToFutureResponse(readerRequestAndResponseString)
 
     val response = await(converted(request))
     response.status should equal(Status.Ok)
-    await(Reader.readAll(response.reader)).utf8str should equal("""["1","2"]""")
+    await(BufReader.readAll(response.reader)).utf8str should equal("""["1","2"]""")
+  }
+
+  test("Reader request and response (Int)") {
+    val jsonStr = "[1,2]"
+    val request = Request(HttpMethod.Post, "/")
+    request.setChunked(true)
+    request.writer.write(Buf.Utf8(jsonStr)) ensure {
+      request.writer.close()
+    }
+
+    val converted = callbackConverter.convertToFutureResponse(readerRequestAndResponseInt)
+
+    val response = await(converted(request))
+    response.status should equal(Status.Ok)
+    await(BufReader.readAll(response.reader)).utf8str should equal("""[1,2]""")
   }
 
   test("StreamingRequest with Reader") {
@@ -304,13 +335,13 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
   test("StreamingResponse from Reader") {
     val converted = callbackConverter.convertToFutureResponse(streamingResponseFromReader)
     val response = await(converted(Request()))
-    await(Reader.readAll(response.reader)).utf8str should equal("Hello, World!")
+    await(BufReader.readAll(response.reader)).utf8str should equal("Hello, World!")
   }
 
   test("StreamingResponse from AsyncStream") {
     val converted = callbackConverter.convertToFutureResponse(streamingResponseFromAsyncStream)
     val response = await(converted(Request()))
-    await(Reader.readAll(response.reader)).utf8str should equal("[1,2,3]")
+    await(BufReader.readAll(response.reader)).utf8str should equal("[1,2,3]")
   }
 
   test("Null") {
@@ -349,11 +380,11 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
     null
   }
 
-  def noParameterCallback = {
+  def noParameterCallback: String = {
     "hello world"
   }
 
-  def intParameterCallback(i: Int) = {
+  def intParameterCallback(i: Int): String = {
     "int"
   }
 
@@ -445,8 +476,12 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
     ScalaFuture.successful(Seq(ford))
   }
 
-  def asyncStreamRequestAndResponse(stream: AsyncStream[Int]): AsyncStream[String] = {
+  def asyncStreamRequestAndResponseString(stream: AsyncStream[Int]): AsyncStream[String] = {
     stream.map(_.toString)
+  }
+
+  def asyncStreamRequestAndResponseInt(stream: AsyncStream[Int]): AsyncStream[Int] = {
+    stream
   }
 
   def asyncStreamRequest(stream: AsyncStream[Int]): Future[String] = {
@@ -471,8 +506,12 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
     Reader.fromSeq(Seq(1.1, 2.2, 3.3))
   }
 
-  def readerRequestAndResponse(reader: Reader[Int]): Reader[String] = {
+  def readerRequestAndResponseString(reader: Reader[Int]): Reader[String] = {
     reader.map(_.toString)
+  }
+
+  def readerRequestAndResponseInt(reader: Reader[Int]): Reader[Int] = {
+    reader
   }
 
   def streamingRequestWithReader(

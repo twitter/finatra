@@ -6,7 +6,7 @@ junit_tests(
         "3rdparty/jvm/org/slf4j:slf4j-simple",
         "finagle/finagle-base-http/src/main/scala",
         "finatra/examples/java-http-server/src/main/java",
-        "finatra/http/src/test/scala:test-deps",
+        "finatra/http/src/test/scala/com/twitter/finatra/http",
         "finatra/httpclient/src/main/scala",
         "finatra/inject/inject-app/src/main/scala",
         "finatra/inject/inject-server/src/main/scala",

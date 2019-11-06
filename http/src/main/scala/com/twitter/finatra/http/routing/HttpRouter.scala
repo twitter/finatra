@@ -7,16 +7,8 @@ import com.twitter.finatra.http.exceptions.{
   ExceptionMapper,
   ExceptionMapperCollection
 }
-import com.twitter.finatra.http.internal.marshalling.{CallbackConverter, MessageBodyManager}
-import com.twitter.finatra.http.internal.routing.{
-  Registrar,
-  Route,
-  RoutesByType,
-  RoutingService,
-  Services
-}
-import com.twitter.finatra.http.marshalling.MessageBodyComponent
-import com.twitter.finatra.http.routing.HttpRouter._
+import com.twitter.finatra.http.internal.routing.{CallbackConverter, Route, RoutingService}
+import com.twitter.finatra.http.marshalling.{MessageBodyComponent, MessageBodyManager}
 import com.twitter.finatra.http.{AbstractController, Controller, HttpFilter}
 import com.twitter.inject.TypeUtils._
 import com.twitter.inject.internal.LibraryRegistry
@@ -30,7 +22,7 @@ object HttpRouter {
 }
 
 /**
- * Builds "external" and "admin" instances of a [[com.twitter.finatra.http.internal.routing.RoutingService]]
+ * Builds "external" and "admin" instances of a [[RoutingService]]
  * which is a subclass of a [[com.twitter.finagle.Service]]. The "external" [[RoutingService]] will
  * be served on the bound external [[com.twitter.finagle.ListeningServer]], the "admin" [[RoutingService]]
  * will be added as endpoints to the [[com.twitter.finagle.http.HttpMuxer]] for serving on the
@@ -47,6 +39,7 @@ class HttpRouter @Inject()(
   messageBodyManager: MessageBodyManager,
   exceptionManager: ExceptionManager)
     extends Logging {
+  import HttpRouter._
 
   /* Mutable State */
   private[finatra] var maxRequestForwardingDepth: Int = 5
@@ -213,7 +206,8 @@ class HttpRouter @Inject()(
     C <: Controller: Manifest
   ]: HttpRouter =
     addFiltered[C](
-      injector.instance[F1]
+      injector
+        .instance[F1]
         .andThen(injector.instance[F2])
     )
 
@@ -225,7 +219,8 @@ class HttpRouter @Inject()(
     C <: Controller: Manifest
   ]: HttpRouter =
     addFiltered[C](
-      injector.instance[F1]
+      injector
+        .instance[F1]
         .andThen(injector.instance[F2])
         .andThen(injector.instance[F3])
     )
@@ -239,7 +234,8 @@ class HttpRouter @Inject()(
     C <: Controller: Manifest
   ]: HttpRouter =
     addFiltered[C](
-      injector.instance[F1]
+      injector
+        .instance[F1]
         .andThen(injector.instance[F2])
         .andThen(injector.instance[F3])
         .andThen(injector.instance[F4])
@@ -255,7 +251,8 @@ class HttpRouter @Inject()(
     C <: Controller: Manifest
   ]: HttpRouter =
     addFiltered[C](
-      injector.instance[F1]
+      injector
+        .instance[F1]
         .andThen(injector.instance[F2])
         .andThen(injector.instance[F3])
         .andThen(injector.instance[F4])
@@ -273,7 +270,8 @@ class HttpRouter @Inject()(
     C <: Controller: Manifest
   ]: HttpRouter =
     addFiltered[C](
-      injector.instance[F1]
+      injector
+        .instance[F1]
         .andThen(injector.instance[F2])
         .andThen(injector.instance[F3])
         .andThen(injector.instance[F4])
@@ -293,7 +291,8 @@ class HttpRouter @Inject()(
     C <: Controller: Manifest
   ]: HttpRouter =
     addFiltered[C](
-      injector.instance[F1]
+      injector
+        .instance[F1]
         .andThen(injector.instance[F2])
         .andThen(injector.instance[F3])
         .andThen(injector.instance[F4])
@@ -315,7 +314,8 @@ class HttpRouter @Inject()(
     C <: Controller: Manifest
   ]: HttpRouter =
     addFiltered[C](
-      injector.instance[F1]
+      injector
+        .instance[F1]
         .andThen(injector.instance[F2])
         .andThen(injector.instance[F3])
         .andThen(injector.instance[F4])
@@ -339,7 +339,8 @@ class HttpRouter @Inject()(
     C <: Controller: Manifest
   ]: HttpRouter =
     addFiltered[C](
-      injector.instance[F1]
+      injector
+        .instance[F1]
         .andThen(injector.instance[F2])
         .andThen(injector.instance[F3])
         .andThen(injector.instance[F4])
@@ -365,7 +366,8 @@ class HttpRouter @Inject()(
     C <: Controller: Manifest
   ]: HttpRouter =
     addFiltered[C](
-      injector.instance[F1]
+      injector
+        .instance[F1]
         .andThen(injector.instance[F2])
         .andThen(injector.instance[F3])
         .andThen(injector.instance[F4])

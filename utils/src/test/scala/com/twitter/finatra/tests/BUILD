@@ -1,0 +1,22 @@
+junit_tests(
+    sources = rglobs("*.scala"),
+    dependencies = [
+        "3rdparty/jvm/com/github/nscala_time",
+        "3rdparty/jvm/joda-time",
+        "3rdparty/jvm/org/scalatest",
+        "3rdparty/jvm/org/slf4j:slf4j-nop",
+        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-http/src/main/scala",
+        "finatra/inject/inject-app/src/test/scala:test-deps",
+        "finatra/inject/inject-core/src/main/scala",
+        "finatra/inject/inject-core/src/test/scala:test-deps",
+        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-utils/src/main/scala",
+        "finatra/utils/src/main/scala/com/twitter/finatra/filters",
+        "finatra/utils/src/main/scala/com/twitter/finatra/modules",
+        "finatra/utils/src/main/scala/com/twitter/finatra/utils",
+        "finatra/utils/src/test/scala/com/twitter/finatra/modules",
+        "finatra/utils/src/test/scala/com/twitter/finatra/test",
+        "util/util-core/src/main/scala/com/twitter/util",
+    ],
+)

@@ -20,10 +20,10 @@ private object HttpWarmup {
  *
  * @note This only provides routing to user-defined routes of the configured [[HttpRouter]].
  *
- * @param router the configured [[com.twitter.finatra.http.routing.HttpRouter]]
+ * @param router the configured [[HttpRouter]]
  * @param mapper the configured server [[com.twitter.finatra.json.FinatraObjectMapper]]
  *
- * @see [[com.twitter.finatra.http.routing.HttpRouter]]
+ * @see [[HttpRouter]]
  */
 class HttpWarmup @Inject()(router: HttpRouter, mapper: FinatraObjectMapper) extends Logging {
   import HttpWarmup._

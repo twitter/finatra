@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "19.10.0"
+val releaseVersion = "19.11.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -24,8 +24,31 @@ lazy val noPublishSettings = Seq(
 )
 
 def gcJavaOptions: Seq[String] = {
+  val javaVersion = System.getProperty("java.version")
+  if (javaVersion.startsWith("1.8")) {
+    jdk8GcJavaOptions
+  } else {
+    jdk11GcJavaOptions
+  }
+}
+
+def jdk8GcJavaOptions: Seq[String] = {
   Seq(
     "-XX:+UseParNewGC",
+    "-XX:+UseConcMarkSweepGC",
+    "-XX:+CMSParallelRemarkEnabled",
+    "-XX:+CMSClassUnloadingEnabled",
+    "-XX:ReservedCodeCacheSize=128m",
+    "-XX:SurvivorRatio=128",
+    "-XX:MaxTenuringThreshold=0",
+    "-Xss8M",
+    "-Xms512M",
+    "-Xmx2G"
+  )
+}
+
+def jdk11GcJavaOptions: Seq[String] = {
+  Seq(
     "-XX:+UseConcMarkSweepGC",
     "-XX:+CMSParallelRemarkEnabled",
     "-XX:+CMSClassUnloadingEnabled",
@@ -90,6 +113,8 @@ lazy val versions = new {
   val slf4j = "1.7.21"
   val snakeyaml = "1.24"
   val specs2 = "2.4.17"
+  val javaxBind = "2.3.0"
+  val javaxActivation = "1.1.1"
 }
 
 lazy val scalaCompilerOptions = scalacOptions ++= Seq(
@@ -238,6 +263,7 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   injectCore,
   injectLogback,
   injectModules,
+  injectPorts,
   injectRequestScope,
   injectServer,
   injectSlf4j,
@@ -249,9 +275,9 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   kafka,
   kafkaStreams,
   kafkaStreamsPrerestore,
-  kafkaStreamsStaticPartitioning,
-  kafkaStreamsQueryableThriftClient,
   kafkaStreamsQueryableThrift,
+  kafkaStreamsQueryableThriftClient,
+  kafkaStreamsStaticPartitioning,
   thrift,
   utils)
 
@@ -426,6 +452,21 @@ lazy val injectApp = (project in file("inject/inject-app"))
     injectModules % Test,
     injectUtils)
 
+lazy val injectPorts = (project in file("inject/inject-ports"))
+  .settings(projectSettings)
+  .settings(
+    name := "inject-ports",
+    moduleName := "inject-ports",
+    ScoverageKeys.coverageExcludedPackages := "<empty>",
+    libraryDependencies ++= Seq(
+      "com.twitter" %% "finagle-core" % versions.twLibVersion,
+      "com.twitter" %% "twitter-server" % versions.twLibVersion,
+      "com.twitter" %% "util-app" % versions.twLibVersion
+    )
+  ).dependsOn(
+    injectCore % "test->test"
+  )
+
 lazy val injectServerTestJarSources =
   Seq(
     "com/twitter/inject/server/AdminHttpClient",
@@ -441,7 +482,7 @@ lazy val injectServer = (project in file("inject/inject-server"))
   .settings(
     name := "inject-server",
     moduleName := "inject-server",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*Ports.*;.*FinagleBuildRevision.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-stats" % versions.twLibVersion,
       "com.twitter" %% "twitter-server" % versions.twLibVersion,
@@ -466,6 +507,7 @@ lazy val injectServer = (project in file("inject/inject-server"))
   ).dependsOn(
     injectApp % "test->test;compile->compile",
     injectModules % "test->test;compile->compile",
+    injectPorts % "test->test;compile->compile",
     injectSlf4j,
     injectUtils)
 
@@ -538,7 +580,8 @@ lazy val injectUtils = (project in file("inject/inject-utils"))
     moduleName := "inject-utils",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
-      "com.twitter" %% "util-core" % versions.twLibVersion
+      "com.twitter" %% "util-core" % versions.twLibVersion,
+      "javax.xml.bind" % "jaxb-api" % versions.javaxBind
     )
   ).dependsOn(
     injectCore % "test->test;compile->compile")
@@ -578,11 +621,13 @@ lazy val utils = project
     moduleName := "finatra-utils",
     ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*ClassUtils.*;.*WrappedValue.*;.*DeadlineValues.*;.*RichBuf.*;.*RichByteBuf.*",
     libraryDependencies ++= Seq(
+      "com.sun.activation" % "javax.activation" % "1.2.0",
       "com.google.inject" % "guice" % versions.guice,
       "joda-time" % "joda-time" % versions.jodaTime,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
-      "com.twitter" %% "util-core" % versions.twLibVersion
+      "com.twitter" %% "util-core" % versions.twLibVersion,
+      "javax.activation" % "activation" % versions.javaxActivation
     ),
     publishArtifact in Test := true,
     mappings in (Test, packageBin) := {
@@ -612,7 +657,7 @@ lazy val jackson = project
   .settings(
     name := "finatra-jackson",
     moduleName := "finatra-jackson",
-    ScoverageKeys.coverageExcludedPackages := ".*CaseClassSigParser.*;.*JacksonToGuiceTypeConverter.*;.*DurationMillisSerializer.*;.*ByteBufferUtils.*",
+    ScoverageKeys.coverageExcludedPackages := ".*JacksonToGuiceTypeConverter.*;.*DurationMillisSerializer.*;.*ByteBufferUtils.*",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
@@ -659,7 +704,6 @@ lazy val http = project
     moduleName := "finatra-http",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;.*NonValidatingHttpHeadersResponse.*;com\\.twitter\\.finatra\\..*package.*;.*ThriftExceptionMapper.*;.*HttpResponseExceptionMapper.*;.*HttpResponseException.*",
     libraryDependencies ++= Seq(
-      "com.sun.activation" % "javax.activation" % "1.2.0",
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache exclude("com.google.guava", "guava"),
       "com.twitter" %% "finagle-exp" % versions.twLibVersion,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
@@ -686,6 +730,7 @@ lazy val http = project
   ).dependsOn(
     jackson % "test->test;compile->compile",
     injectRequestScope % Test,
+    injectPorts % "test->test",
     injectSlf4j,
     injectServer % "test->test;compile->compile",
     httpclient % "test->test",
@@ -761,6 +806,7 @@ lazy val thrift = project
       previous.filter(mappingContainsAnyPath(_, thriftTestJarSources))
     }
   ).dependsOn(
+    injectPorts % "test->test",
     injectServer % "test->test;compile->compile",
     injectSlf4j,
     injectThrift,

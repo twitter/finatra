@@ -18,7 +18,7 @@ import org.mockito.Mockito;
 import com.twitter.concurrent.AsyncStream;
 import com.twitter.finagle.http.Response;
 import com.twitter.finagle.stats.StatsReceiver;
-import com.twitter.finatra.http.internal.marshalling.MessageBodyManager;
+import com.twitter.finatra.http.marshalling.MessageBodyManager;
 import com.twitter.finatra.http.response.ResponseBuilder;
 import com.twitter.finatra.http.streaming.StreamingResponse;
 import com.twitter.finatra.http.streaming.ToReader;
@@ -26,6 +26,7 @@ import com.twitter.finatra.json.FinatraObjectMapper;
 import com.twitter.finatra.utils.FileResolver;
 
 import com.twitter.io.Buf;
+import com.twitter.io.BufReaders;
 import com.twitter.io.Bufs;
 import com.twitter.io.Reader;
 import com.twitter.io.Readers;
@@ -76,7 +77,7 @@ public class StreamingResponseJavaTest extends Assert {
   public void emptyReader() throws Exception {
     Reader<Object> reader = Readers.newEmptyReader();
     Response response = fromReader(reader, ManifestFactory.Object());
-    Future<Buf> fBuf = Readers.readAll(response.reader());
+    Future<Buf> fBuf = BufReaders.readAll(response.reader());
     String result = Buf.decodeString(await(fBuf), StandardCharsets.UTF_8);
     Assert.assertEquals("[]", result);
     Assert.assertEquals(
@@ -88,7 +89,7 @@ public class StreamingResponseJavaTest extends Assert {
     List<String> stringList = Arrays.asList("first", "second", "third");
     Reader<String> reader = Readers.fromSeq(stringList);
     Response response = fromReader(reader, ManifestFactory.<String>classType(String.class));
-    Future<Buf> fBuf = Readers.readAll(response.reader());
+    Future<Buf> fBuf = BufReaders.readAll(response.reader());
     String result = Buf.decodeString(await(fBuf), StandardCharsets.UTF_8);
     Assert.assertEquals("firstsecondthird", result);
   }
@@ -100,7 +101,7 @@ public class StreamingResponseJavaTest extends Assert {
     List<FooClass> fooList = Arrays.asList(f1, f2);
     Reader<FooClass> reader = Readers.fromSeq(fooList);
     Response response = fromReader(reader, ManifestFactory.<FooClass>classType(FooClass.class));
-    Future<Buf> fBuf = Readers.readAll(response.reader());
+    Future<Buf> fBuf = BufReaders.readAll(response.reader());
     String result = Buf.decodeString(await(fBuf), StandardCharsets.UTF_8);
     Assert.assertEquals("[{\"v1\":1,\"v2\":\"first\"},{\"v1\":2,\"v2\":\"second\"}]", result);
   }
@@ -129,7 +130,7 @@ public class StreamingResponseJavaTest extends Assert {
     AsyncStream<String> stream = AsyncStream.fromSeq(
       JavaConverters.asScalaIteratorConverter(stringList.iterator()).asScala().toSeq());
     Response response = fromStream(stream, ManifestFactory.<String>classType(String.class));
-    Future<Buf> fBuf = Readers.readAll(response.reader());
+    Future<Buf> fBuf = BufReaders.readAll(response.reader());
     String result = Buf.decodeString(await(fBuf), StandardCharsets.UTF_8);
     Assert.assertEquals("firstsecondthird", result);
   }
