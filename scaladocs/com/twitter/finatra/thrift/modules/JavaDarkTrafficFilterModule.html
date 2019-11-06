@@ -395,9 +395,9 @@ sent to the dark service.
               
         </dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModule#addTypeConverter" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="addTypeConverter[T](converter:com.google.inject.spi.TypeConverter)(implicitevidence$3:Manifest[T]):Unit"></a><a id="addTypeConverter[T](TypeConverter)(Manifest[T]):Unit"></a>
+      <a id="addTypeConverter[T](converter:com.google.inject.spi.TypeConverter)(implicitevidence$2:Manifest[T]):Unit"></a><a id="addTypeConverter[T](TypeConverter)(Manifest[T]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#addTypeConverter[T](converter:com.google.inject.spi.TypeConverter)(implicitevidence$3:Manifest[T]):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#addTypeConverter[T](converter:com.google.inject.spi.TypeConverter)(implicitevidence$2:Manifest[T]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -409,7 +409,9 @@ sent to the dark service.
         <span class="name">addTypeConverter</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="converter">converter: <span class="extype" name="com.google.inject.spi.TypeConverter">TypeConverter</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.addTypeConverter.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
+      <p class="shortcomment cmt">Binds a type converter.</p><div class="fullcomment"><div class="comment cmt"><p>Binds a type converter. The injector will use the given converter to
+convert string constants to matching types as needed.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type to match that the converter can handle</p></dd><dt class="param">converter</dt><dd class="cmt"><p>converts values</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
@@ -427,25 +429,9 @@ sent to the dark service.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModule#bind" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="bind[T,A&lt;:java.lang.annotation.Annotation](implicitevidence$10:Manifest[T],implicitevidence$11:Manifest[A]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]"></a><a id="bind[T,A&lt;:Annotation](Manifest[T],Manifest[A]):ScalaAnnotatedBindingBuilder[T]"></a>
+      <a id="bind[T](annotation:java.lang.annotation.Annotation)(implicitevidence$10:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]"></a><a id="bind[T](Annotation)(Manifest[T]):ScalaAnnotatedBindingBuilder[T]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bind[T,A&lt;:java.lang.annotation.Annotation](implicitevidence$10:Manifest[T],implicitevidence$11:Manifest[A]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">bind</span><span class="tparams">[<span name="T">T</span>, <span name="A">A &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bind.T">T</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bind.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder">ScalaAnnotatedBindingBuilder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bind.T">T</span>]</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
-    </li><li name="com.twitter.inject.TwitterModule#bind" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="bind[T](annotation:java.lang.annotation.Annotation)(implicitevidence$9:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]"></a><a id="bind[T](Annotation)(Manifest[T]):ScalaAnnotatedBindingBuilder[T]"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bind[T](annotation:java.lang.annotation.Annotation)(implicitevidence$9:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bind[T](annotation:java.lang.annotation.Annotation)(implicitevidence$10:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -457,11 +443,37 @@ sent to the dark service.
         <span class="name">bind</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="annotation">annotation: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bind.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder">ScalaAnnotatedBindingBuilder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bind.T">T</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html" target="_blank">com.google.inject.Binder</a>
+of type <span class="extype" name="T">T</span> with no <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scope.html" target="_blank">com.google.inject.Scope</a>
+that is bound with a binding annotation.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html" target="_blank">com.google.inject.Binder</a>
+of type <span class="extype" name="T">T</span> with no <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scope.html" target="_blank">com.google.inject.Scope</a>
+that is bound with a binding annotation.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scopes.html#NO_SCOPE" target="_blank">No Scope</a></p></span></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModule#bind" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="bind[T](implicitevidence$8:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]"></a><a id="bind[T](Manifest[T]):ScalaAnnotatedBindingBuilder[T]"></a>
+      <a id="bind[T,A&lt;:java.lang.annotation.Annotation](implicitevidence$8:Manifest[T],implicitevidence$9:Manifest[A]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]"></a><a id="bind[T,A&lt;:Annotation](Manifest[T],Manifest[A]):ScalaAnnotatedBindingBuilder[T]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bind[T](implicitevidence$8:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bind[T,A&lt;:java.lang.annotation.Annotation](implicitevidence$8:Manifest[T],implicitevidence$9:Manifest[A]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bind</span><span class="tparams">[<span name="T">T</span>, <span name="A">A &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bind.T">T</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bind.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder">ScalaAnnotatedBindingBuilder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bind.T">T</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html" target="_blank">com.google.inject.Binder</a>
+of type <span class="extype" name="T">T</span> with no <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scope.html" target="_blank">com.google.inject.Scope</a>
+that is bound with a binding annotation <span class="extype" name="A">A</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html" target="_blank">com.google.inject.Binder</a>
+of type <span class="extype" name="T">T</span> with no <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scope.html" target="_blank">com.google.inject.Scope</a>
+that is bound with a binding annotation <span class="extype" name="A">A</span>.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scopes.html#NO_SCOPE" target="_blank">No Scope</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.TwitterModule#bind" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bind[T](implicitevidence$7:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]"></a><a id="bind[T](Manifest[T]):ScalaAnnotatedBindingBuilder[T]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bind[T](implicitevidence$7:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -473,7 +485,12 @@ sent to the dark service.
         <span class="name">bind</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bind.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder">ScalaAnnotatedBindingBuilder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bind.T">T</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html" target="_blank">com.google.inject.Binder</a>
+of type <span class="extype" name="T">T</span> with no <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scope.html" target="_blank">com.google.inject.Scope</a>
+that is bound with no binding annotation.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html" target="_blank">com.google.inject.Binder</a>
+of type <span class="extype" name="T">T</span> with no <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scope.html" target="_blank">com.google.inject.Scope</a>
+that is bound with no binding annotation.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scopes.html#NO_SCOPE" target="_blank">No Scope</a></p></span></dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#bind" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="bind[T](x$1:Class[T]):com.google.inject.binder.AnnotatedBindingBuilder[T]"></a><a id="bind[T](Class[T]):AnnotatedBindingBuilder[T]"></a>
       <span class="permalink">
@@ -523,9 +540,9 @@ sent to the dark service.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../google/inject/index.html" class="extype" name="com.google.inject">com.google.inject</a>] </dd><dt>Definition Classes</dt><dd>AbstractModule</dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModule#bindAssistedFactory" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="bindAssistedFactory[T]()(implicitevidence$2:Manifest[T]):Unit"></a><a id="bindAssistedFactory[T]()(Manifest[T]):Unit"></a>
+      <a id="bindAssistedFactory[T]()(implicitevidence$1:Manifest[T]):Unit"></a><a id="bindAssistedFactory[T]()(Manifest[T]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bindAssistedFactory[T]()(implicitevidence$2:Manifest[T]):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bindAssistedFactory[T]()(implicitevidence$1:Manifest[T]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -537,7 +554,12 @@ sent to the dark service.
         <span class="name">bindAssistedFactory</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindAssistedFactory.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
+      <p class="shortcomment cmt">Provides for installing and building a factory that combines the caller's arguments with
+injector-supplied values to construct objects.</p><div class="fullcomment"><div class="comment cmt"><p>Provides for installing and building a factory that combines the caller's arguments with
+injector-supplied values to construct objects. This is preferable to calling <code>install</code>
+on the <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> which provides the factory as install is not supported for
+<a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> types.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the assisted injection factory</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/assistedinject/AssistedInject.html" target="_blank">com.google.inject.assistedinject.AssitedInject</a></p></span><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/assistedinject/FactoryModuleBuilder.html" target="_blank">com.google.inject.assistedinject.FactoryModuleBuilder</a></p></span><span class="cmt"><p><a href="https://github.com/google/guice/wiki/AssistedInject" target="_blank">Assisted Injection</a></p></span></dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#bindConstant" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="bindConstant():com.google.inject.binder.AnnotatedConstantBindingBuilder"></a><a id="bindConstant():AnnotatedConstantBindingBuilder"></a>
       <span class="permalink">
@@ -608,6 +630,329 @@ sent to the dark service.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../google/inject/index.html" class="extype" name="com.google.inject">com.google.inject</a>] </dd><dt>Definition Classes</dt><dd>AbstractModule</dd></dl></div>
+    </li><li name="com.twitter.inject.TwitterModule#bindMultiple" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bindMultiple[T](annotation:java.lang.annotation.Annotation)(implicitevidence$15:Manifest[T]):net.codingwell.scalaguice.ScalaMultibinder[T]"></a><a id="bindMultiple[T](Annotation)(Manifest[T]):ScalaMultibinder[T]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bindMultiple[T](annotation:java.lang.annotation.Annotation)(implicitevidence$15:Manifest[T]):net.codingwell.scalaguice.ScalaMultibinder[T]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bindMultiple</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="annotation">annotation: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindMultiple.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaMultibinder">ScalaMultibinder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindMultiple.T">T</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/Multibinder.html" target="_blank">com.google.inject.multibindings.Multibinder</a>
+that collects instances of type <span class="extype" name="T">T</span> in a <a href="http://www.scala-lang.org/api/2.12.8/scala/collection/immutable/Set.html" class="extype" name="scala.collection.immutable.Set">scala.collection.immutable.Set</a> that is itself
+bound with a binding annotation.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/Multibinder.html" target="_blank">com.google.inject.multibindings.Multibinder</a>
+that collects instances of type <span class="extype" name="T">T</span> in a <a href="http://www.scala-lang.org/api/2.12.8/scala/collection/immutable/Set.html" class="extype" name="scala.collection.immutable.Set">scala.collection.immutable.Set</a> that is itself
+bound with a binding annotation.</p><p>An API to bind multiple values separately, only to later inject them as a complete collection.
+&quot;Multibinding&quot; is intended for use in your application's module:</p><pre><span class="kw">class</span> SnacksModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bindMultiple[Snack].addBinding.toInstance(<span class="kw">new</span> Twix())
+    bindMultiple[Snack].addBinding.toProvider[SnickersProvider]
+    bindMultiple[Snack].addBinding.to[Skittles]
+  }
+}</pre><p>With this binding, a <code>Set[Snack]</code> can now be injected:</p><pre><span class="kw">class</span> SnackMachine @Inject()(<span class="std">Set</span>[Snack] snacks)</pre><p>Contributing multibindings from different modules is also supported. For example, it is okay
+for both <code>CandyModule</code> and <code>ChipsModule</code> to create their own <code>Multibinder[Snack]</code>, and to each
+contribute bindings to the set of snacks. When that set is injected, it will contain elements
+from both modules.</p><p>The set's iteration order is consistent with the binding order. This is convenient when multiple
+elements are contributed by the same module because that module can order its bindings
+appropriately. Avoid relying on the iteration order of elements contributed by different modules,
+since there is no equivalent mechanism to order modules.</p><p>The set is unmodifiable. Elements can only be added to the set by configuring the multibinder.
+Elements can never be removed from the set.</p><p>Elements are resolved at set injection time. If an element is bound to a provider, that
+provider's get method will be called each time the set is injected (unless the binding is
+also scoped).</p><p>Annotations can be used to create different sets of the same element type. Each distinct
+annotation gets its own independent collection of elements.</p><p>Elements <b>MUST</b> be distinct. If multiple bound elements have the same value, set injection will fail.</p><p>Elements <b>MUST</b> be non-null. If any set element is null, set injection will fail.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/Multibinder.html" target="_blank">com.google.inject.multibindings.Multibinder</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.TwitterModule#bindMultiple" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bindMultiple[T,A&lt;:java.lang.annotation.Annotation](implicitevidence$13:Manifest[T],implicitevidence$14:Manifest[A]):net.codingwell.scalaguice.ScalaMultibinder[T]"></a><a id="bindMultiple[T,A&lt;:Annotation](Manifest[T],Manifest[A]):ScalaMultibinder[T]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bindMultiple[T,A&lt;:java.lang.annotation.Annotation](implicitevidence$13:Manifest[T],implicitevidence$14:Manifest[A]):net.codingwell.scalaguice.ScalaMultibinder[T]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bindMultiple</span><span class="tparams">[<span name="T">T</span>, <span name="A">A &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindMultiple.T">T</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindMultiple.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaMultibinder">ScalaMultibinder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindMultiple.T">T</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/Multibinder.html" target="_blank">com.google.inject.multibindings.Multibinder</a>
+that collects instances of type <span class="extype" name="T">T</span> in a <a href="http://www.scala-lang.org/api/2.12.8/scala/collection/immutable/Set.html" class="extype" name="scala.collection.immutable.Set">scala.collection.immutable.Set</a> that is itself bound with a binding
+annotation <span class="extype" name="A">A</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/Multibinder.html" target="_blank">com.google.inject.multibindings.Multibinder</a>
+that collects instances of type <span class="extype" name="T">T</span> in a <a href="http://www.scala-lang.org/api/2.12.8/scala/collection/immutable/Set.html" class="extype" name="scala.collection.immutable.Set">scala.collection.immutable.Set</a> that is itself bound with a binding
+annotation <span class="extype" name="A">A</span>.</p><p>An API to bind multiple values separately, only to later inject them as a complete collection.
+&quot;Multibinding&quot; is intended for use in your application's module:</p><pre><span class="kw">class</span> SnacksModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bindMultiple[Snack].addBinding.toInstance(<span class="kw">new</span> Twix())
+    bindMultiple[Snack].addBinding.toProvider[SnickersProvider]
+    bindMultiple[Snack].addBinding.to[Skittles]
+  }
+}</pre><p>With this binding, a <code>Set[Snack]</code> can now be injected:</p><pre><span class="kw">class</span> SnackMachine @Inject()(<span class="std">Set</span>[Snack] snacks)</pre><p>Contributing multibindings from different modules is also supported. For example, it is okay
+for both <code>CandyModule</code> and <code>ChipsModule</code> to create their own <code>Multibinder[Snack]</code>, and to each
+contribute bindings to the set of snacks. When that set is injected, it will contain elements
+from both modules.</p><p>The set's iteration order is consistent with the binding order. This is convenient when multiple
+elements are contributed by the same module because that module can order its bindings
+appropriately. Avoid relying on the iteration order of elements contributed by different modules,
+since there is no equivalent mechanism to order modules.</p><p>The set is unmodifiable. Elements can only be added to the set by configuring the multibinder.
+Elements can never be removed from the set.</p><p>Elements are resolved at set injection time. If an element is bound to a provider, that
+provider's get method will be called each time the set is injected (unless the binding is
+also scoped).</p><p>Annotations can be used to create different sets of the same element type. Each distinct
+annotation gets its own independent collection of elements.</p><p>Elements <b>MUST</b> be distinct. If multiple bound elements have the same value, set injection will fail.</p><p>Elements <b>MUST</b> be non-null. If any set element is null, set injection will fail.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/Multibinder.html" target="_blank">com.google.inject.multibindings.Multibinder</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.TwitterModule#bindMultiple" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bindMultiple[T](implicitevidence$12:Manifest[T]):net.codingwell.scalaguice.ScalaMultibinder[T]"></a><a id="bindMultiple[T](Manifest[T]):ScalaMultibinder[T]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bindMultiple[T](implicitevidence$12:Manifest[T]):net.codingwell.scalaguice.ScalaMultibinder[T]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bindMultiple</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindMultiple.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaMultibinder">ScalaMultibinder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindMultiple.T">T</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/Multibinder.html" target="_blank">com.google.inject.multibindings.Multibinder</a>
+that collects instances of type <span class="extype" name="T">T</span> in a <a href="http://www.scala-lang.org/api/2.12.8/scala/collection/immutable/Set.html" class="extype" name="scala.collection.immutable.Set">scala.collection.immutable.Set</a> that is itself
+bound with no binding annotation.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/Multibinder.html" target="_blank">com.google.inject.multibindings.Multibinder</a>
+that collects instances of type <span class="extype" name="T">T</span> in a <a href="http://www.scala-lang.org/api/2.12.8/scala/collection/immutable/Set.html" class="extype" name="scala.collection.immutable.Set">scala.collection.immutable.Set</a> that is itself
+bound with no binding annotation.</p><p>An API to bind multiple values separately, only to later inject them as a complete collection.
+&quot;Multibinding&quot; is intended for use in your application's module:</p><pre><span class="kw">class</span> SnacksModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bindMultiple[Snack].addBinding.toInstance(<span class="kw">new</span> Twix())
+    bindMultiple[Snack].addBinding.toProvider[SnickersProvider]
+    bindMultiple[Snack].addBinding.to[Skittles]
+  }
+}</pre><p>With this binding, a <code>Set[Snack]</code> can now be injected:</p><pre><span class="kw">class</span> SnackMachine @Inject()(<span class="std">Set</span>[Snack] snacks)</pre><p>Contributing multibindings from different modules is also supported. For example, it is okay
+for both <code>CandyModule</code> and <code>ChipsModule</code> to create their own <code>Multibinder[Snack]</code>, and to each
+contribute bindings to the set of snacks. When that set is injected, it will contain elements
+from both modules.</p><p>The set's iteration order is consistent with the binding order. This is convenient when multiple
+elements are contributed by the same module because that module can order its bindings
+appropriately. Avoid relying on the iteration order of elements contributed by different modules,
+since there is no equivalent mechanism to order modules.</p><p>The set is unmodifiable. Elements can only be added to the set by configuring the multibinder.
+Elements can never be removed from the set.</p><p>Elements are resolved at set injection time. If an element is bound to a provider, that
+provider's get method will be called each time the set is injected (unless the binding is
+also scoped).</p><p>Annotations can be used to create different sets of the same element type. Each distinct
+annotation gets its own independent collection of elements.</p><p>Elements <b>MUST</b> be distinct. If multiple bound elements have the same value, set injection will fail.</p><p>Elements <b>MUST</b> be non-null. If any set element is null, set injection will fail.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/Multibinder.html" target="_blank">com.google.inject.multibindings.Multibinder</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.TwitterModule#bindOption" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bindOption[T](annotation:java.lang.annotation.Annotation)(implicitevidence$19:Manifest[T]):net.codingwell.scalaguice.ScalaOptionBinder[T]"></a><a id="bindOption[T](Annotation)(Manifest[T]):ScalaOptionBinder[T]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bindOption[T](annotation:java.lang.annotation.Annotation)(implicitevidence$19:Manifest[T]):net.codingwell.scalaguice.ScalaOptionBinder[T]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bindOption</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="annotation">annotation: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindOption.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaOptionBinder">ScalaOptionBinder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindOption.T">T</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/OptionalBinder.html" target="_blank">com.google.inject.multibindings.OptionalBinder</a>
+that binds an instance of <span class="extype" name="T">T</span> in a <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html" class="extype" name="scala.Option">scala.Option</a> that is itself bound with a
+binding annotation.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/OptionalBinder.html" target="_blank">com.google.inject.multibindings.OptionalBinder</a>
+that binds an instance of <span class="extype" name="T">T</span> in a <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html" class="extype" name="scala.Option">scala.Option</a> that is itself bound with a
+binding annotation.</p><p>Calling this method will always supply the bindings: <code>Option[T]</code> and <code>Option[Provider[T]]</code>. If
+<code>setBinding</code> or <code>setDefault</code> are called, it will also bind <code>T</code>.</p><p><code>setDefault</code> is intended for use by frameworks that need a default value. User code can call
+<code>setBinding</code> to override the default.</p><p><b>Warning:</b> even if <code>setBinding</code> is called, the default binding will still exist in the
+object graph. If it is a singleton, it will be instantiated in <code>Stage.PRODUCTION</code>.</p><p>If <code>setDefault</code> or <code>setBinding</code> are linked to Providers, the Provider may return null. If it
+does, the Option bindings will be a None. Binding <code>setBinding</code> to a Provider that returns
+null will not cause <code>OptionalBinder</code> to fall back to the <code>setDefault</code> binding.</p><p>If neither <code>setDefault</code> nor <code>setBinding</code> are called, it will try to link to a user-supplied
+binding of the same type. If no binding exists, the options will be absent. Otherwise, if a
+user-supplied binding of that type exists, or if <code>setBinding</code> or <code>setDefault</code> are called, the
+options will return <code>Some(T)</code> if they are bound to a non-null value, otherwise <code>None</code>.</p><p>Values are resolved at injection time. If a value is bound to a provider, that provider's
+get method will be called each time the option is injected (unless the binding is also
+scoped, or an option of provider is injected).</p><p>Annotations are used to create different options of the same key/value type. Each distinct
+annotation gets its own independent binding. For example:</p><pre><span class="kw">class</span> FrameworkModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bindOption[Renamer]
+  }
+}</pre><p>With this module, an <code>Option[Renamer]</code> can now be injected. With no other bindings, the
+option will be None. Users can specify bindings in one of two ways:</p><p>Option 1:</p><pre><span class="kw">class</span> UserRenamerModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bind[Renamer].to[ReplacingRenamer]
+  }
+}</pre><p>or Option 2:</p><pre><span class="kw">class</span> UserRenamerModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bindOption[Renamer].setBinding.to[ReplacingRenamer]
+  }
+}</pre><p>With both options, the <code>Option[Renamer]</code> will be present and supply the <code>ReplacingRenamer</code>.</p><p>Default values can be supplied using:</p><pre> <span class="kw">class</span> FrameworkModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bindOption[<span class="std">String</span>, LookupUrl].setDefault.toInstance(DefaultLookupUrl)
+  }
+}</pre><p>With the above module, code can inject an <code>@LookupUrl</code>-annotated String and it will supply
+the <code>DefaultLookupUrl</code>. A user can change this value by binding:</p><pre><span class="kw">class</span> UserLookupModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bindOption[<span class="std">String</span>, LookupUrl].setBinding.toInstance(CustomLookupUrl)
+  }
+}</pre><p>which will override the default value.</p><p>If one module uses <code>setDefault</code> the only way to override the default is to use <code>setBinding</code>.
+It is an error for a user to specify the binding without using
+<a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/OptionalBinder.html" target="_blank">com.google.inject.multibindings.OptionalBinder</a>
+if <code>setDefault</code> or <code>setBinding</code> are called. For example:</p><pre> <span class="kw">class</span> FrameworkModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bindOption[<span class="std">String</span>, LookupUrl].setDefault.toInstance(DefaultLookupUrl)
+  }
+}
+<span class="kw">class</span> UserLookupModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bind[<span class="std">String</span>, LookupUrl].toInstance(CustomLookupUrl);
+  }
+}</pre><p>would generate an error, because both the framework and the user are trying to bind <code>@LookupUrl</code> String.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/OptionalBinder.html" target="_blank">com.google.inject.multibindings.OptionalBinder</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.TwitterModule#bindOption" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bindOption[T,A&lt;:java.lang.annotation.Annotation](implicitevidence$17:Manifest[T],implicitevidence$18:Manifest[A]):net.codingwell.scalaguice.ScalaOptionBinder[T]"></a><a id="bindOption[T,A&lt;:Annotation](Manifest[T],Manifest[A]):ScalaOptionBinder[T]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bindOption[T,A&lt;:java.lang.annotation.Annotation](implicitevidence$17:Manifest[T],implicitevidence$18:Manifest[A]):net.codingwell.scalaguice.ScalaOptionBinder[T]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bindOption</span><span class="tparams">[<span name="T">T</span>, <span name="A">A &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindOption.T">T</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindOption.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaOptionBinder">ScalaOptionBinder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindOption.T">T</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/OptionalBinder.html" target="_blank">com.google.inject.multibindings.OptionalBinder</a>
+that binds an instance of <span class="extype" name="T">T</span> in a <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html" class="extype" name="scala.Option">scala.Option</a> that is itself bound with a binding
+annotation <span class="extype" name="A">A</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/OptionalBinder.html" target="_blank">com.google.inject.multibindings.OptionalBinder</a>
+that binds an instance of <span class="extype" name="T">T</span> in a <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html" class="extype" name="scala.Option">scala.Option</a> that is itself bound with a binding
+annotation <span class="extype" name="A">A</span>.</p><p>Calling this method will always supply the bindings: <code>Option[T]</code> and <code>Option[Provider[T]]</code>. If
+<code>setBinding</code> or <code>setDefault</code> are called, it will also bind <code>T</code>.</p><p><code>setDefault</code> is intended for use by frameworks that need a default value. User code can call
+<code>setBinding</code> to override the default.</p><p><b>Warning:</b> even if <code>setBinding</code> is called, the default binding will still exist in the
+object graph. If it is a singleton, it will be instantiated in <code>Stage.PRODUCTION</code>.</p><p>If <code>setDefault</code> or <code>setBinding</code> are linked to Providers, the Provider may return null. If it
+does, the Option bindings will be a None. Binding <code>setBinding</code> to a Provider that returns
+null will not cause <code>OptionalBinder</code> to fall back to the <code>setDefault</code> binding.</p><p>If neither <code>setDefault</code> nor <code>setBinding</code> are called, it will try to link to a user-supplied
+binding of the same type. If no binding exists, the options will be absent. Otherwise, if a
+user-supplied binding of that type exists, or if <code>setBinding</code> or <code>setDefault</code> are called, the
+options will return <code>Some(T)</code> if they are bound to a non-null value, otherwise <code>None</code>.</p><p>Values are resolved at injection time. If a value is bound to a provider, that provider's
+get method will be called each time the option is injected (unless the binding is also
+scoped, or an option of provider is injected).</p><p>Annotations are used to create different options of the same key/value type. Each distinct
+annotation gets its own independent binding. For example:</p><pre><span class="kw">class</span> FrameworkModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bindOption[Renamer]
+  }
+}</pre><p>With this module, an <code>Option[Renamer]</code> can now be injected. With no other bindings, the
+option will be None. Users can specify bindings in one of two ways:</p><p>Option 1:</p><pre><span class="kw">class</span> UserRenamerModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bind[Renamer].to[ReplacingRenamer]
+  }
+}</pre><p>or Option 2:</p><pre><span class="kw">class</span> UserRenamerModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bindOption[Renamer].setBinding.to[ReplacingRenamer]
+  }
+}</pre><p>With both options, the <code>Option[Renamer]</code> will be present and supply the <code>ReplacingRenamer</code>.</p><p>Default values can be supplied using:</p><pre> <span class="kw">class</span> FrameworkModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bindOption[<span class="std">String</span>, LookupUrl].setDefault.toInstance(DefaultLookupUrl)
+  }
+}</pre><p>With the above module, code can inject an <code>@LookupUrl</code>-annotated String and it will supply
+the <code>DefaultLookupUrl</code>. A user can change this value by binding:</p><pre><span class="kw">class</span> UserLookupModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bindOption[<span class="std">String</span>, LookupUrl].setBinding.toInstance(CustomLookupUrl)
+  }
+}</pre><p>which will override the default value.</p><p>If one module uses <code>setDefault</code> the only way to override the default is to use <code>setBinding</code>.
+It is an error for a user to specify the binding without using
+<a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/OptionalBinder.html" target="_blank">com.google.inject.multibindings.OptionalBinder</a>
+if <code>setDefault</code> or <code>setBinding</code> are called. For example:</p><pre> <span class="kw">class</span> FrameworkModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bindOption[<span class="std">String</span>, LookupUrl].setDefault.toInstance(DefaultLookupUrl)
+  }
+}
+<span class="kw">class</span> UserLookupModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bind[<span class="std">String</span>, LookupUrl].toInstance(CustomLookupUrl);
+  }
+}</pre><p>would generate an error, because both the framework and the user are trying to bind <code>@LookupUrl</code> String.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/OptionalBinder.html" target="_blank">com.google.inject.multibindings.OptionalBinder</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.TwitterModule#bindOption" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bindOption[T](implicitevidence$16:Manifest[T]):net.codingwell.scalaguice.ScalaOptionBinder[T]"></a><a id="bindOption[T](Manifest[T]):ScalaOptionBinder[T]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bindOption[T](implicitevidence$16:Manifest[T]):net.codingwell.scalaguice.ScalaOptionBinder[T]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bindOption</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindOption.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaOptionBinder">ScalaOptionBinder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindOption.T">T</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/OptionalBinder.html" target="_blank">com.google.inject.multibindings.OptionalBinder</a>
+that binds an instance of <span class="extype" name="T">T</span> in a <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html" class="extype" name="scala.Option">scala.Option</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/OptionalBinder.html" target="_blank">com.google.inject.multibindings.OptionalBinder</a>
+that binds an instance of <span class="extype" name="T">T</span> in a <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html" class="extype" name="scala.Option">scala.Option</a>.</p><p>Calling this method will always supply the bindings: <code>Option[T]</code> and <code>Option[Provider[T]]</code>. If
+<code>setBinding</code> or <code>setDefault</code> are called, it will also bind <code>T</code>.</p><p><code>setDefault</code> is intended for use by frameworks that need a default value. User code can call
+<code>setBinding</code> to override the default.</p><p><b>Warning:</b> even if <code>setBinding</code> is called, the default binding will still exist in the
+object graph. If it is a singleton, it will be instantiated in <code>Stage.PRODUCTION</code>.</p><p>If <code>setDefault</code> or <code>setBinding</code> are linked to Providers, the Provider may return null. If it
+does, the Option bindings will be a None. Binding <code>setBinding</code> to a Provider that returns
+null will not cause <code>OptionalBinder</code> to fall back to the <code>setDefault</code> binding.</p><p>If neither <code>setDefault</code> nor <code>setBinding</code> are called, it will try to link to a user-supplied
+binding of the same type. If no binding exists, the options will be absent. Otherwise, if a
+user-supplied binding of that type exists, or if <code>setBinding</code> or <code>setDefault</code> are called, the
+options will return <code>Some(T)</code> if they are bound to a non-null value, otherwise <code>None</code>.</p><p>Values are resolved at injection time. If a value is bound to a provider, that provider's
+get method will be called each time the option is injected (unless the binding is also
+scoped, or an option of provider is injected).</p><p>Annotations are used to create different options of the same key/value type. Each distinct
+annotation gets its own independent binding. For example:</p><pre><span class="kw">class</span> FrameworkModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bindOption[Renamer]
+  }
+}</pre><p>With this module, an <code>Option[Renamer]</code> can now be injected. With no other bindings, the
+option will be None. Users can specify bindings in one of two ways:</p><p>Option 1:</p><pre><span class="kw">class</span> UserRenamerModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bind[Renamer].to[ReplacingRenamer]
+  }
+}</pre><p>or Option 2:</p><pre><span class="kw">class</span> UserRenamerModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bindOption[Renamer].setBinding.to[ReplacingRenamer]
+  }
+}</pre><p>With both options, the <code>Option[Renamer]</code> will be present and supply the <code>ReplacingRenamer</code>.</p><p>Default values can be supplied using:</p><pre> <span class="kw">class</span> FrameworkModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bindOption[<span class="std">String</span>, LookupUrl].setDefault.toInstance(DefaultLookupUrl)
+  }
+}</pre><p>With the above module, code can inject an <code>@LookupUrl</code>-annotated String and it will supply
+the <code>DefaultLookupUrl</code>. A user can change this value by binding:</p><pre><span class="kw">class</span> UserLookupModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bindOption[<span class="std">String</span>, LookupUrl].setBinding.toInstance(CustomLookupUrl)
+  }
+}</pre><p>which will override the default value.</p><p>If one module uses <code>setDefault</code> the only way to override the default is to use <code>setBinding</code>.
+It is an error for a user to specify the binding without using
+<a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/OptionalBinder.html" target="_blank">com.google.inject.multibindings.OptionalBinder</a>
+if <code>setDefault</code> or <code>setBinding</code> are called. For example:</p><pre> <span class="kw">class</span> FrameworkModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bindOption[<span class="std">String</span>, LookupUrl].setDefault.toInstance(DefaultLookupUrl)
+  }
+}
+<span class="kw">class</span> UserLookupModule <span class="kw">extends</span> TwitterModule {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+    bind[<span class="std">String</span>, LookupUrl].toInstance(CustomLookupUrl);
+  }
+}</pre><p>would generate an error, because both the framework and the user are trying to bind <code>@LookupUrl</code> String.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/OptionalBinder.html" target="_blank">com.google.inject.multibindings.OptionalBinder</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.TwitterModule#bindScope" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bindScope[T&lt;:java.lang.annotation.Annotation](scope:com.google.inject.Scope)(implicitevidence$20:Manifest[T]):Unit"></a><a id="bindScope[T&lt;:Annotation](Scope)(Manifest[T]):Unit"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bindScope[T&lt;:java.lang.annotation.Annotation](scope:com.google.inject.Scope)(implicitevidence$20:Manifest[T]):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bindScope</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>]</span><span class="params">(<span name="scope">scope: <span class="extype" name="com.google.inject.Scope">Scope</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindScope.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Binds a <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scope.html" target="_blank">com.google.inject.Scope</a> to an annotation.</p><div class="fullcomment"><div class="comment cmt"><p>Binds a <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scope.html" target="_blank">com.google.inject.Scope</a> to an annotation.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#bindScope" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="bindScope(x$1:Class[_&lt;:java.lang.annotation.Annotation],x$2:com.google.inject.Scope):Unit"></a><a id="bindScope(Class[_&lt;:Annotation],Scope):Unit"></a>
       <span class="permalink">
@@ -625,25 +970,9 @@ sent to the dark service.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../google/inject/index.html" class="extype" name="com.google.inject">com.google.inject</a>] </dd><dt>Definition Classes</dt><dd>AbstractModule</dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModule#bindSingleton" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="bindSingleton[T,A&lt;:java.lang.annotation.Annotation](implicitevidence$6:Manifest[T],implicitevidence$7:Manifest[A]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]"></a><a id="bindSingleton[T,A&lt;:Annotation](Manifest[T],Manifest[A]):ScalaAnnotatedBindingBuilder[T]"></a>
+      <a id="bindSingleton[T](annotation:java.lang.annotation.Annotation)(implicitevidence$6:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]"></a><a id="bindSingleton[T](Annotation)(Manifest[T]):ScalaAnnotatedBindingBuilder[T]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bindSingleton[T,A&lt;:java.lang.annotation.Annotation](implicitevidence$6:Manifest[T],implicitevidence$7:Manifest[A]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">bindSingleton</span><span class="tparams">[<span name="T">T</span>, <span name="A">A &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindSingleton.T">T</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindSingleton.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder">ScalaAnnotatedBindingBuilder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindSingleton.T">T</span>]</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
-    </li><li name="com.twitter.inject.TwitterModule#bindSingleton" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="bindSingleton[T](annotation:java.lang.annotation.Annotation)(implicitevidence$5:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]"></a><a id="bindSingleton[T](Annotation)(Manifest[T]):ScalaAnnotatedBindingBuilder[T]"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bindSingleton[T](annotation:java.lang.annotation.Annotation)(implicitevidence$5:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bindSingleton[T](annotation:java.lang.annotation.Annotation)(implicitevidence$6:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -655,11 +984,33 @@ sent to the dark service.
         <span class="name">bindSingleton</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="annotation">annotation: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindSingleton.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder">ScalaAnnotatedBindingBuilder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindSingleton.T">T</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html" target="_blank">com.google.inject.Binder</a>
+of type <span class="extype" name="T">T</span> singleton-scoped that is bound with a binding annotation.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html" target="_blank">com.google.inject.Binder</a>
+of type <span class="extype" name="T">T</span> singleton-scoped that is bound with a binding annotation.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scopes.html#SINGLETON" target="_blank">Singleton Scope</a></p></span></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModule#bindSingleton" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="bindSingleton[T](implicitevidence$4:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]"></a><a id="bindSingleton[T](Manifest[T]):ScalaAnnotatedBindingBuilder[T]"></a>
+      <a id="bindSingleton[T,A&lt;:java.lang.annotation.Annotation](implicitevidence$4:Manifest[T],implicitevidence$5:Manifest[A]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]"></a><a id="bindSingleton[T,A&lt;:Annotation](Manifest[T],Manifest[A]):ScalaAnnotatedBindingBuilder[T]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bindSingleton[T](implicitevidence$4:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bindSingleton[T,A&lt;:java.lang.annotation.Annotation](implicitevidence$4:Manifest[T],implicitevidence$5:Manifest[A]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bindSingleton</span><span class="tparams">[<span name="T">T</span>, <span name="A">A &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindSingleton.T">T</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindSingleton.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder">ScalaAnnotatedBindingBuilder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindSingleton.T">T</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html" target="_blank">com.google.inject.Binder</a>
+of type <span class="extype" name="T">T</span> singleton-scoped that is bound with a binding annotation <span class="extype" name="A">A</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html" target="_blank">com.google.inject.Binder</a>
+of type <span class="extype" name="T">T</span> singleton-scoped that is bound with a binding annotation <span class="extype" name="A">A</span>.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scopes.html#SINGLETON" target="_blank">Singleton Scope</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.TwitterModule#bindSingleton" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bindSingleton[T](implicitevidence$3:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]"></a><a id="bindSingleton[T](Manifest[T]):ScalaAnnotatedBindingBuilder[T]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#bindSingleton[T](implicitevidence$3:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -671,7 +1022,10 @@ sent to the dark service.
         <span class="name">bindSingleton</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindSingleton.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder">ScalaAnnotatedBindingBuilder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindSingleton.T">T</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html" target="_blank">com.google.inject.Binder</a>
+of type <span class="extype" name="T">T</span> singleton-scoped that is bound with no binding annotation.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html" target="_blank">com.google.inject.Binder</a>
+of type <span class="extype" name="T">T</span> singleton-scoped that is bound with no binding annotation.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scopes.html#SINGLETON" target="_blank">Singleton Scope</a></p></span></dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#binder" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="binder():com.google.inject.Binder"></a><a id="binder():Binder"></a>
       <span class="permalink">
@@ -783,7 +1137,12 @@ the application <code>onExit</code> function to be executed on graceful shutdown
         <span class="name">configure</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> → AbstractModule</dd></dl></div>
+      <p class="shortcomment cmt">Configures a <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html" target="_blank">com.google.inject.Binder</a>
+via the exposed methods.</p><div class="fullcomment"><div class="comment cmt"><p>Configures a <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html" target="_blank">com.google.inject.Binder</a>
+via the exposed methods. A default implementation is provided such that extensions using
+only <code>@Provides</code>-annotated methods do not need to implement an empty
+<span class="extype" name="TwitterModule.configure()">TwitterModule.configure()</span> method.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> → AbstractModule</dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://static.javadoc.io/com.google.inject/guice/4.1.0/com/google/inject/AbstractModule.html#configure--" target="_blank">com.google.inject.AbstractModule#configure()</a></p></span></dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#configure" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configure(x$1:com.google.inject.Binder):Unit"></a><a id="configure(Binder):Unit"></a>
       <span class="permalink">
@@ -850,22 +1209,6 @@ the application <code>onExit</code> function to be executed on graceful shutdown
       <p class="shortcomment cmt">A Java-friendly method for creating a named <span class="extype" name="Flag">Flag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>A Java-friendly method for creating a named <span class="extype" name="Flag">Flag</span>.
 </p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">default</dt><dd class="cmt"><p>a default value for the <span class="extype" name="Flag">Flag</span> when no value is given as an application
                argument.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
-    </li><li name="com.twitter.inject.TwitterBaseModule#createKey" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="createKey[T](implicitevidence$1:Manifest[T]):com.google.inject.Key[T]"></a><a id="createKey[T](Manifest[T]):Key[T]"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#createKey[T](implicitevidence$1:Manifest[T]):com.google.inject.Key[T]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">createKey</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterBaseModule.createKey.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.Key">Key</span>[<span class="extype" name="com.twitter.inject.TwitterBaseModule.createKey.T">T</span>]</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModuleFlags#createMandatoryFlag" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="createMandatoryFlag[T](String,String,String,Flaggable[T]):Flag[T]"></a>
       <span class="permalink">
@@ -884,22 +1227,6 @@ the application <code>onExit</code> function to be executed on graceful shutdown
       <p class="shortcomment cmt">A Java-friendly way to create a &quot;mandatory&quot; <span class="extype" name="Flag">Flag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>A Java-friendly way to create a &quot;mandatory&quot; <span class="extype" name="Flag">Flag</span>. &quot;Mandatory&quot; flags MUST have a value
 provided as an application argument (as they have no default value to be used).
 </p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">usage</dt><dd class="cmt"><p>a string describing the type of the <span class="extype" name="Flag">Flag</span>, i.e.: Integer.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
-    </li><li name="com.twitter.inject.TwitterModule#createMultiBinder" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="createMultiBinder[MultiBindType](implicitevidence$12:Manifest[MultiBindType]):net.codingwell.scalaguice.ScalaMultibinder[MultiBindType]"></a><a id="createMultiBinder[MultiBindType](Manifest[MultiBindType]):ScalaMultibinder[MultiBindType]"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#createMultiBinder[MultiBindType](implicitevidence$12:Manifest[MultiBindType]):net.codingwell.scalaguice.ScalaMultibinder[MultiBindType]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">createMultiBinder</span><span class="tparams">[<span name="MultiBindType">MultiBindType</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.createMultiBinder.MultiBindType">MultiBindType</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaMultibinder">ScalaMultibinder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.createMultiBinder.MultiBindType">MultiBindType</span>]</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#currentStage" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="currentStage():com.google.inject.Stage"></a><a id="currentStage():Stage"></a>
       <span class="permalink">
@@ -1298,9 +1625,7 @@ instead of concurrently.
         <span class="name">frameworkModules</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.google.inject.Module">Module</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Additional framework modules to be composed into this module
-</p><div class="fullcomment"><div class="comment cmt"><p>Additional framework modules to be composed into this module
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
+      <p class="shortcomment cmt">Additional framework modules to be composed into this module.</p><div class="fullcomment"><div class="comment cmt"><p>Additional framework modules to be composed into this module.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -1318,6 +1643,34 @@ instead of concurrently.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
                 <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="com.twitter.inject.TwitterModule#getMembersInjector" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getMembersInjector[T](implicitevidence$23:Manifest[T]):com.google.inject.MembersInjector[T]"></a><a id="getMembersInjector[T](Manifest[T]):MembersInjector[T]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#getMembersInjector[T](implicitevidence$23:Manifest[T]):com.google.inject.MembersInjector[T]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getMembersInjector</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.getMembersInjector.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.MembersInjector">MembersInjector</span>[<span class="extype" name="com.twitter.inject.TwitterModule.getMembersInjector.T">T</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns the members injector used to inject dependencies into methods and fields on instances
+of the given type <span class="extype" name="T">T</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the members injector used to inject dependencies into methods and fields on instances
+of the given type <span class="extype" name="T">T</span>. The returned members injector will not be valid until the main
+<a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a> has been created. The members injector will throw an
+<span class="extype" name="IllegalStateException">IllegalStateException</span> if you try to use it beforehand.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type to get members injector for</p></dd><dt>returns</dt><dd class="cmt"><p>a <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/MembersInjector.html" target="_blank">com.google.inject.MembersInjector</a>
+        of type <span class="extype" name="T">T</span></p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="scala.this.throws.&lt;init&gt;$default$1[IllegalStateException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#getMembersInjector" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1353,9 +1706,9 @@ instead of concurrently.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../google/inject/index.html" class="extype" name="com.google.inject">com.google.inject</a>] </dd><dt>Definition Classes</dt><dd>AbstractModule</dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModule#getProvider" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getProvider[T](implicitevidence$1:Manifest[T]):com.google.inject.Provider[T]"></a><a id="getProvider[T](Manifest[T]):Provider[T]"></a>
+      <a id="getProvider[T](implicitevidence$22:Manifest[T]):com.google.inject.Provider[T]"></a><a id="getProvider[T](Manifest[T]):Provider[T]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#getProvider[T](implicitevidence$1:Manifest[T]):com.google.inject.Provider[T]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#getProvider[T](implicitevidence$22:Manifest[T]):com.google.inject.Provider[T]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1367,7 +1720,18 @@ instead of concurrently.
         <span class="name">getProvider</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.getProvider.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.Provider">Provider</span>[<span class="extype" name="com.twitter.inject.TwitterModule.getProvider.T">T</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns the provider used to obtain instances for the given injection type <span class="extype" name="T">T</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the provider used to obtain instances for the given injection type <span class="extype" name="T">T</span>.
+The returned provider will not be valid until the <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a> has been
+created. The provider will throw an <span class="extype" name="IllegalStateException">IllegalStateException</span> if you
+try to use it beforehand.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>the type for the provider to find.</p></dd><dt>returns</dt><dd class="cmt"><p>the <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Provider.html" target="_blank">com.google.inject.Provider</a>
+        of type <span class="extype" name="T">T</span></p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="scala.this.throws.&lt;init&gt;$default$1[IllegalStateException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#getProvider" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getProvider[T](x$1:Class[T]):com.google.inject.Provider[T]"></a><a id="getProvider[T](Class[T]):Provider[T]"></a>
       <span class="permalink">
@@ -1514,7 +1878,19 @@ instead of concurrently.
         <span class="name">install</span><span class="params">(<span name="module">module: <span class="extype" name="com.google.inject.Module">Module</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> → AbstractModule</dd></dl></div>
+      <p class="shortcomment cmt">Uses the given <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Module.html" target="_blank">com.google.inject.Module</a>
+to configure more bindings.</p><div class="fullcomment"><div class="comment cmt"><p>Uses the given <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Module.html" target="_blank">com.google.inject.Module</a>
+to configure more bindings. This is not supported for instances of type <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> and
+will throw an <span class="extype" name="UnsupportedOperationException">UnsupportedOperationException</span> if attempted on an instance of <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>.
+This is to properly support the <a href="../../../inject/TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a> for <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> instances.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> → AbstractModule</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="scala.this.throws.&lt;init&gt;$default$1[UnsupportedOperationException]">...</span>
+    </span>)</span>
+              
+        </dd><dt>Note</dt><dd><span class="cmt"><p><span class="extype" name="TwitterModule.install(module:">Module)</span> can still be used for non-<a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> instances, and is
+sometimes preferred due to <code>install</code> being deferred until after flag parsing occurs.</p></span></dd></dl></div>
     </li><li name="com.twitter.util.logging.Logging#isDebugEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isDebugEnabled(marker:org.slf4j.Marker):Boolean"></a><a id="isDebugEnabled(Marker):Boolean"></a>
       <span class="permalink">
@@ -1770,10 +2146,11 @@ instead of concurrently.
         <span class="name">modules</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.google.inject.Module">Module</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Additional modules to be composed into this module</p><div class="fullcomment"><div class="comment cmt"><p>Additional modules to be composed into this module</p><p>NOTE: This Seq of modules is generally used instead of the standard Guice 'install' method so that
-TwitterModules with flag definitions can be supported.</p><p>However, AbstractModule.install can still be used for non-TwitterModules, and is sometimes preferred
-due to install being deferred until after flag parsing occurs.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd><dt>Note</dt><dd><span class="cmt"><p>Java users should prefer <a href="../../../inject/TwitterBaseModule.html#javaModules:java.util.Collection[com.google.inject.Module]" class="extmbr" name="com.twitter.inject.TwitterBaseModule#javaModules">javaModules</a>.</p></span></dd></dl></div>
+      <p class="shortcomment cmt">Additional modules to be composed into this module.</p><div class="fullcomment"><div class="comment cmt"><p>Additional modules to be composed into this module. This list of modules is generally used
+<i>instead</i> of the <a href="../../../inject/TwitterModule.html#install(module:com.google.inject.Module):Unit" class="extmbr" name="com.twitter.inject.TwitterModule#install">TwitterModule.install</a> method to properly support the
+<a href="../../../inject/TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a> for <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> instances.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd><dt>Note</dt><dd><span class="cmt"><p><span class="extype" name="TwitterModule.install(module:">Module)</span> can still be used for non-<a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> 1
+     instances, and is sometimes preferred due to <code>install</code> being deferred until after flag parsing occurs.</p></span>, <span class="cmt"><p>Java users should prefer <a href="../../../inject/TwitterBaseModule.html#javaModules:java.util.Collection[com.google.inject.Module]" class="extmbr" name="com.twitter.inject.TwitterBaseModule#javaModules">javaModules</a>.</p></span></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -1883,6 +2260,25 @@ due to install being deferred until after flag parsing occurs.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../google/inject/index.html" class="extype" name="com.google.inject">com.google.inject</a>] </dd><dt>Definition Classes</dt><dd>AbstractModule</dd></dl></div>
+    </li><li name="com.twitter.inject.TwitterModule#requestStaticInjection" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="requestStaticInjection[T]()(implicitevidence$21:Manifest[T]):Unit"></a><a id="requestStaticInjection[T]()(Manifest[T]):Unit"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#requestStaticInjection[T]()(implicitevidence$21:Manifest[T]):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">requestStaticInjection</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.requestStaticInjection.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Upon successful creation, the <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a> will inject static fields and methods in
+the given classes.</p><div class="fullcomment"><div class="comment cmt"><p>Upon successful creation, the <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a> will inject static fields and methods in
+the given classes.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type for which static members will be injected</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#requestStaticInjection" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="requestStaticInjection(x$1:Class[_]*):Unit"></a><a id="requestStaticInjection(&lt;repeated...&gt;[Class[_]]):Unit"></a>
       <span class="permalink">
@@ -2267,7 +2663,29 @@ due to install being deferred until after flag parsing occurs.
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="com.twitter.inject.TwitterModule#createMultiBinder" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createMultiBinder[MultiBindType](implicitevidence$11:Manifest[MultiBindType]):net.codingwell.scalaguice.ScalaMultibinder[MultiBindType]"></a><a id="createMultiBinder[MultiBindType](Manifest[MultiBindType]):ScalaMultibinder[MultiBindType]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/JavaDarkTrafficFilterModule.html#createMultiBinder[MultiBindType](implicitevidence$11:Manifest[MultiBindType]):net.codingwell.scalaguice.ScalaMultibinder[MultiBindType]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2019-10-16) Use bindMultiple[T]">createMultiBinder</span><span class="tparams">[<span name="MultiBindType">MultiBindType</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.createMultiBinder.MultiBindType">MultiBindType</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaMultibinder">ScalaMultibinder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.createMultiBinder.MultiBindType">MultiBindType</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2019-10-16)</i> Use bindMultiple[T]</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

@@ -65,13 +65,8 @@ To add a test-jar dependency, depend on the appropriate module with the `tests` 
 
     "com.twitter" %% "finatra-http" % "\ |release|\ " % "test" classifier "tests"
 
-or
-
-.. parsed-literal::
-
-    "com.twitter" %% "finatra-thrift" % "\ |release|\ " % "test" classifier "tests"
-
-See the `sbt <https://www.scala-sbt.org/>`__ documentation for more information on using `ivy configurations and classifiers <https://www.scala-sbt.org/0.13/docs/Library-Management.html>`__.
+.. tip::
+    See the `sbt <https://www.scala-sbt.org/>`__ documentation for more information on using `ivy configurations and classifiers <https://www.scala-sbt.org/1.x/docs/Library-Management.html>`__.    
 
 And with `Maven <https://maven.apache.org/>`__:
 
@@ -85,23 +80,23 @@ And with `Maven <https://maven.apache.org/>`__:
       <version>\ |release|\ </version>
     </dependency>
 
-or
+Since `transitive test-scoped dependencies are not resolved <https://maven.apache.org/plugins/maven-jar-plugin/examples/create-test-jar.html>`__ using this approach with neither Maven nor sbt, you will need to specify all other required test-scoped dependencies manually.
+
+E.g.,
 
 .. parsed-literal::
 
-    <dependency>
-      <groupId>com.twitter</groupId>
-      <artifactId>finatra-thrift_2.12</artifactId>
-      <scope>test</scope>
-      <type>test-jar</type>
-      <version>\ |release|\ </version>
-    </dependency>
+    libraryDependencies ++= Seq(
+        "com.twitter" %% "finatra-jackson" % "\ |release|\ " % "test" classifier "tests",
+        "com.twitter" %% "inject-server" % "\ |release|\ " % "test" classifier "tests",
+        "com.twitter" %% "inject-app" % "\ |release|\ " % "test" classifier "tests",
+        "com.twitter" %% "inject-core" % "\ |release|\ " % "test" classifier "tests",
+        "com.twitter" %% "inject-modules" % "\ |release|\ " % "test" classifier "tests"
+    )
 
-There is a `downside <https://maven.apache.org/plugins/maven-jar-plugin/examples/create-test-jar.html>`__ to publishing test-jars in this manner: transitive test-scoped dependencies are not resolved. Maven and sbt only resolve compile-time dependencies transitively, so you will need to specify all other required test-scoped dependencies manually.
+For example, the `finatra-http` test-jar depends on the `inject-app` test-jar (among others). Therefore, you will have to **manually add** a dependency on the `inject-app` test-jar when using the `finatra-http` test-jar since the `inject-app` test-jar will not be resolved transitively. 
 
-For example, the `finatra-http` test-jar depends on the `inject-app` test-jar (among others). You will have to **manually add** a dependency on the `inject-app` test-jar when using the `finatra-http` test-jar since the `inject-app` test-jar will not be resolvedtransitively. 
-
-Using the `sbt-dependency-graph <https://github.com/jrudolph/sbt-dependency-graph>`__ plugin, you can list the dependencies of the `finatra-http` test configuration for the `packageBin` task:
+Using the `sbt-dependency-graph <https://github.com/jrudolph/sbt-dependency-graph>`__ plugin, you can list the dependencies of the `finatra-http` test configuration for the `packageBin` task to help in understanding the dependencies to add:
 
 .. code:: bash
 

@@ -343,24 +343,24 @@
                         <a href="StackTransformer.html" title="StackTransformer allows plugins to modify Finatra filters before they are applied to controller routes.">StackTransformer</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
-                        <a class="trait" href="TwitterBaseModule.html" title="Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules"></a>
-                        <a href="TwitterBaseModule.html" title="Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules">TwitterBaseModule</a>
+                        <a class="trait" href="TwitterBaseModule.html" title=""></a>
+                        <a href="TwitterBaseModule.html" title="">TwitterBaseModule</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
-                        <a class="class" href="TwitterModule.html" title=""></a>
-                        <a href="TwitterModule.html" title="">TwitterModule</a>
+                        <a class="class" href="TwitterModule.html" title="A support class for Module implementations which exposes a DSL for binding via type parameters."></a>
+                        <a href="TwitterModule.html" title="A support class for Module implementations which exposes a DSL for binding via type parameters.">TwitterModule</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
-                        <a class="trait" href="TwitterModuleFlags.html" title="Guice/twitter.util.Flag integrations"></a>
-                        <a href="TwitterModuleFlags.html" title="Guice/twitter.util.Flag integrations">TwitterModuleFlags</a>
+                        <a class="trait" href="TwitterModuleFlags.html" title="Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules"></a>
+                        <a href="TwitterModuleFlags.html" title="Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules">TwitterModuleFlags</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="trait" href="TwitterModuleLifecycle.html" title="com.twitter.inject.TwitterModule to com.twitter.inject.app.App lifecycle integration."></a>
                         <a href="TwitterModuleLifecycle.html" title="com.twitter.inject.TwitterModule to com.twitter.inject.app.App lifecycle integration.">TwitterModuleLifecycle</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
-                        <a class="class" href="" title=""></a>
-                        <a href="" title="">TwitterPrivateModule</a>
+                        <a class="class" href="" title="A module whose configuration information is hidden from its environment by default."></a>
+                        <a href="" title="A module whose configuration information is hidden from its environment by default.">TwitterPrivateModule</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="object" href="TypeUtils$.html" title=""></a>
@@ -393,7 +393,12 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A module whose configuration information is hidden from its environment by default. Only bindings
+that are explicitly exposed will be available to other modules and to the users of the injector.
+This module may expose the bindings it creates and the bindings of the modules it installs.
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>Calling <a href="https://static.javadoc.io/com.google.inject/guice/4.1.0/com/google/inject/PrivateModule.html#install-com.google.inject.Module-" target="_blank">com.google.inject.PrivateModule#install</a>
+      in the <span class="extype" name="configure()">configure()</span> method is not supported. Please set <a href="TwitterBaseModule.html#modules:Seq[com.google.inject.Module]" class="extmbr" name="com.twitter.inject.TwitterBaseModule#modules">TwitterBaseModule.modules</a>
+      (or <a href="TwitterBaseModule.html#javaModules:java.util.Collection[com.google.inject.Module]" class="extmbr" name="com.twitter.inject.TwitterBaseModule#javaModules">TwitterBaseModule.javaModules</a>) to a non-empty list instead.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://static.javadoc.io/com.google.inject/guice/4.1.0/com/google/inject/PrivateModule.html" target="_blank">com.google.inject.PrivateModule</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finatra/user-guide/getting-started/modules.html" target="_blank">Writing Modules in Finatra</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -912,7 +917,12 @@ the application <code>onExit</code> function to be executed on graceful shutdown
         <span class="name">configure</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.TwitterPrivateModule">TwitterPrivateModule</a> → PrivateModule</dd></dl></div>
+      <p class="shortcomment cmt">Configures a <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html" target="_blank">com.google.inject.Binder</a>
+via the exposed methods.</p><div class="fullcomment"><div class="comment cmt"><p>Configures a <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html" target="_blank">com.google.inject.Binder</a>
+via the exposed methods. A default implementation is provided such that extensions using
+only <code>@Provider</code>-annotated methods do not need to implement an empty
+<span class="extype" name="TwitterModule.configure()">TwitterModule.configure()</span> method.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.TwitterPrivateModule">TwitterPrivateModule</a> → PrivateModule</dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.google.inject.PrivateModule#configure">com.google.inject.PrivateModule#configure</span></p></span><span class="cmt"><p><a href="https://static.javadoc.io/com.google.inject/guice/4.1.0/com/google/inject/PrivateModule.html#configure--" target="_blank">com.google.inject.PrivateModule#configure()</a></p></span></dd></dl></div>
     </li><li name="com.google.inject.PrivateModule#configure" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configure(x$1:com.google.inject.Binder):Unit"></a><a id="configure(Binder):Unit"></a>
       <span class="permalink">
@@ -963,22 +973,6 @@ the application <code>onExit</code> function to be executed on graceful shutdown
       <p class="shortcomment cmt">A Java-friendly method for creating a named <span class="extype" name="Flag">Flag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>A Java-friendly method for creating a named <span class="extype" name="Flag">Flag</span>.
 </p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">default</dt><dd class="cmt"><p>a default value for the <span class="extype" name="Flag">Flag</span> when no value is given as an application
                argument.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
-    </li><li name="com.twitter.inject.TwitterBaseModule#createKey" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="createKey[T](implicitevidence$1:Manifest[T]):com.google.inject.Key[T]"></a><a id="createKey[T](Manifest[T]):Key[T]"></a>
-      <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterPrivateModule.html#createKey[T](implicitevidence$1:Manifest[T]):com.google.inject.Key[T]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">createKey</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterBaseModule.createKey.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.Key">Key</span>[<span class="extype" name="com.twitter.inject.TwitterBaseModule.createKey.T">T</span>]</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModuleFlags#createMandatoryFlag" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="createMandatoryFlag[T](String,String,String,Flaggable[T]):Flag[T]"></a>
       <span class="permalink">
@@ -1376,9 +1370,7 @@ a value provided as an application argument (as they have no default value to be
         <span class="name">frameworkModules</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.google.inject.Module">Module</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Additional framework modules to be composed into this module
-</p><div class="fullcomment"><div class="comment cmt"><p>Additional framework modules to be composed into this module
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
+      <p class="shortcomment cmt">Additional framework modules to be composed into this module.</p><div class="fullcomment"><div class="comment cmt"><p>Additional framework modules to be composed into this module.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -1848,10 +1840,11 @@ a value provided as an application argument (as they have no default value to be
         <span class="name">modules</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.google.inject.Module">Module</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Additional modules to be composed into this module</p><div class="fullcomment"><div class="comment cmt"><p>Additional modules to be composed into this module</p><p>NOTE: This Seq of modules is generally used instead of the standard Guice 'install' method so that
-TwitterModules with flag definitions can be supported.</p><p>However, AbstractModule.install can still be used for non-TwitterModules, and is sometimes preferred
-due to install being deferred until after flag parsing occurs.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd><dt>Note</dt><dd><span class="cmt"><p>Java users should prefer <a href="TwitterBaseModule.html#javaModules:java.util.Collection[com.google.inject.Module]" class="extmbr" name="com.twitter.inject.TwitterBaseModule#javaModules">javaModules</a>.</p></span></dd></dl></div>
+      <p class="shortcomment cmt">Additional modules to be composed into this module.</p><div class="fullcomment"><div class="comment cmt"><p>Additional modules to be composed into this module. This list of modules is generally used
+<i>instead</i> of the <a href="TwitterModule.html#install(module:com.google.inject.Module):Unit" class="extmbr" name="com.twitter.inject.TwitterModule#install">TwitterModule.install</a> method to properly support the
+<a href="TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a> for <a href="TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> instances.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd><dt>Note</dt><dd><span class="cmt"><p><span class="extype" name="TwitterModule.install(module:">Module)</span> can still be used for non-<a href="TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> 1
+     instances, and is sometimes preferred due to <code>install</code> being deferred until after flag parsing occurs.</p></span>, <span class="cmt"><p>Java users should prefer <a href="TwitterBaseModule.html#javaModules:java.util.Collection[com.google.inject.Module]" class="extmbr" name="com.twitter.inject.TwitterBaseModule#javaModules">javaModules</a>.</p></span></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">

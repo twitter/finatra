@@ -171,16 +171,16 @@
                         <a href="ExceptionMapper.html" title="An ExceptionMapper converts a T-typed throwable to an HTTP response.">ExceptionMapper</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="ExceptionMapperCollection.html" title="Represents a collection of com.twitter.finatra.http.exceptions.ExceptionMappers which is a Traversable[Manifest[ExceptionMapper[_\]\]\]."></a>
-                        <a href="ExceptionMapperCollection.html" title="Represents a collection of com.twitter.finatra.http.exceptions.ExceptionMappers which is a Traversable[Manifest[ExceptionMapper[_\]\]\].">ExceptionMapperCollection</a>
+                        <a class="class" href="ExceptionMapperCollection.html" title="Represents a collection of com.twitter.finatra.http.exceptions.ExceptionMappers which is a"></a>
+                        <a href="ExceptionMapperCollection.html" title="Represents a collection of com.twitter.finatra.http.exceptions.ExceptionMappers which is a">ExceptionMapperCollection</a>
                       </li><li class="current-entities indented5">
                         <a class="object" href="ForbiddenException$.html" title=""></a>
                         <a class="class" href="ForbiddenException.html" title=""></a>
                         <a href="ForbiddenException.html" title="">ForbiddenException</a>
                       </li><li class="current-entities indented5">
-                        <a class="object" href="HttpException$.html" title="HttpException which will be rendered as an HTTP response."></a>
-                        <a class="class" href="" title=""></a>
-                        <a href="" title="">HttpException</a>
+                        <a class="object" href="HttpException$.html" title=""></a>
+                        <a class="class" href="" title="An Exception which will be rendered as an HTTP response."></a>
+                        <a href="" title="An Exception which will be rendered as an HTTP response.">HttpException</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="class" href="HttpNackException.html" title=""></a>
@@ -195,8 +195,8 @@
                         <a href="InternalServerErrorException.html" title="">InternalServerErrorException</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="MaxForwardsExceededException.html" title=""></a>
-                        <a href="MaxForwardsExceededException.html" title="">MaxForwardsExceededException</a>
+                        <a class="class" href="MaxForwardsExceededException.html" title="Denotes that Controller forwarding exceeded the maximum depth."></a>
+                        <a href="MaxForwardsExceededException.html" title="Denotes that Controller forwarding exceeded the maximum depth.">MaxForwardsExceededException</a>
                       </li><li class="current-entities indented5">
                         <a class="object" href="MethodNotAllowedException$.html" title=""></a>
                         <a class="class" href="MethodNotAllowedException.html" title=""></a>
@@ -210,9 +210,17 @@
                         <a class="class" href="NotFoundException.html" title=""></a>
                         <a href="NotFoundException.html" title="">NotFoundException</a>
                       </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="RouteParamExtractionException.html" title="Used to denote an exception which occurred during routing while attempting to extract the capture value of a route param from an incoming request URI, e.g., for a defined route: /user/:id, extracting the text &quot;123&quot; from an incoming request URI of /user/123."></a>
+                        <a href="RouteParamExtractionException.html" title="Used to denote an exception which occurred during routing while attempting to extract the capture value of a route param from an incoming request URI, e.g., for a defined route: /user/:id, extracting the text &quot;123&quot; from an incoming request URI of /user/123.">RouteParamExtractionException</a>
+                      </li><li class="current-entities indented5">
                         <a class="object" href="ServiceUnavailableException$.html" title=""></a>
                         <a class="class" href="ServiceUnavailableException.html" title=""></a>
                         <a href="ServiceUnavailableException.html" title="">ServiceUnavailableException</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="UnsupportedMethodException.html" title="Used to denote that an incoming request HTTP method (verb) is not supported by a matched route (that is a route exists which matches the incoming request URI but is not defined over the incoming request method)."></a>
+                        <a href="UnsupportedMethodException.html" title="Used to denote that an incoming request HTTP method (verb) is not supported by a matched route (that is a route exists which matches the incoming request URI but is not defined over the incoming request method).">UnsupportedMethodException</a>
                       </li>
               </ul>
             </div>
@@ -243,7 +251,8 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An <span class="extype" name="Exception">Exception</span> which will be rendered as an HTTP response.
+</p></div><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>

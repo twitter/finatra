@@ -235,7 +235,7 @@ For more information on referencing files in Finatra, see the
 .. _c.t.finatra.http.response.ResponseBuilder: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala
 
 .. |MessageBodyManager| replace:: `MessageBodyManager`
-.. _MessageBodyManager: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala
+.. _MessageBodyManager: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala
 
 .. |MessageBodyManager#addByAnnotation| replace:: `MessageBodyManager#addByAnnotation`
 .. _MessageBodyManager#addByAnnotation: https://github.com/twitter/finatra/blob/6e09e95b95b20d2599a6210dfa0ce4c82dbe636b/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala#L54

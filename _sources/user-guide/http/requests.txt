@@ -112,6 +112,10 @@ Thus, this route would respond:
 
 Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/IdAndNameRequest.scala>`__.
 
+.. note::
+
+    Route parameter names are case sensitive.
+
 ------------
 
 `@QueryParam <https://github.com/twitter/finatra/blob/develop/jackson/src/main/java/com/twitter/finatra/request/QueryParam.java>`__
@@ -181,6 +185,10 @@ Note that turning this on will disallow repeating the 'ids' parameter, ie.
 
 will return a Bad Request with an appropriate error message when `commaSeparatedList` is `true`.
 
+.. note::
+
+    Query parameter names are case sensitive.
+
 ------------
 
 `@FormParam <https://github.com/twitter/finatra/blob/develop/jackson/src/main/java/com/twitter/finatra/request/FormParam.java>`__
@@ -190,6 +198,10 @@ Read a value from a form field with the case class field's name or as the value 
 ``@FormParam`` annotation from the request body.
 
 Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/FormPostRequest.scala>`__.
+
+.. note::
+
+    Form parameter names are case sensitive.
 
 ------------
 
@@ -219,8 +231,7 @@ Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/sca
     names. Otherwise, an ``@QueryParam`` could end up parsing an ``@RouteParam`` or ``@FormParam``
     field.
 
-    Also note that request parameters and headers are accessed **case-insensitively**. Thus, the
-    annotated fields:
+    Also note that headers are accessed **case-insensitively**. Thus, the annotated fields:
 
     .. code:: scala
 
@@ -229,8 +240,7 @@ Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/sca
         @Header("aCcEpT-cHaRsEt") acceptCharset: String
         @Header `accept-charset`: String
 
-    would all retrieve **the same value** from the request headers map. The same is true for
-    ``@RouteParam``, ``@QueryParam``, and ``@FormParam``.
+    would all retrieve **the same value** from the request headers map.
 
 ------------
 

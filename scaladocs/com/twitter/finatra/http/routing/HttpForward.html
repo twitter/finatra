@@ -133,10 +133,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.http.request" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="request"></a><a id="request:request"></a>
+    </li><li name="com.twitter.finatra.http.routing" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="routing"></a><a id="routing:routing"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/index.html#request" title="Permalink">
+      <a href="../../../../com/twitter/finatra/http/index.html#routing" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -145,30 +145,22 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="" href="index.html"><span class="name">request</span></a>
+        <a title="" href="index.html"><span class="name">routing</span></a>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.http">http</a></dd></dl></div>
     </li><li class="current-entities indented5">
-                        <span class="separator"></span>
-                        <a class="class" href="ContentType.html" title=""></a>
-                        <a href="ContentType.html" title="">ContentType</a>
-                      </li><li class="current-entities indented5">
                         <a class="object" href="HttpForward$.html" title=""></a>
                         <a class="class" href="" title=""></a>
                         <a href="" title="">HttpForward</a>
                       </li><li class="current-entities indented5">
-                        <a class="object" href="MediaRange$.html" title=""></a>
-                        <a class="class" href="MediaRange.html" title="A media range as defined by RFC 2616 14.1"></a>
-                        <a href="MediaRange.html" title="A media range as defined by RFC 2616 14.1">MediaRange</a>
+                        <a class="object" href="HttpRouter$.html" title=""></a>
+                        <a class="class" href="HttpRouter.html" title="Builds &quot;external&quot; and &quot;admin&quot; instances of a RoutingService which is a subclass of a com.twitter.finagle.Service."></a>
+                        <a href="HttpRouter.html" title="Builds &quot;external&quot; and &quot;admin&quot; instances of a RoutingService which is a subclass of a com.twitter.finagle.Service.">HttpRouter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="MediaType.html" title="A media type as defined by RFC 2616 3.7."></a>
-                        <a href="MediaType.html" title="A media type as defined by RFC 2616 3.7.">MediaType</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
-                        <a class="object" href="RequestUtils$.html" title=""></a>
-                        <a href="RequestUtils$.html" title="">RequestUtils</a>
+                        <a class="class" href="HttpWarmup.html" title="A utility for performing requests to endpoints defined by a configured HttpRouter for the purpose of warming up the HttpServer."></a>
+                        <a href="HttpWarmup.html" title="A utility for performing requests to endpoints defined by a configured HttpRouter for the purpose of warming up the HttpServer.">HttpWarmup</a>
                       </li>
               </ul>
             </div>
@@ -177,9 +169,9 @@
             <body class="class type">
       <div id="definition">
         <a href="HttpForward$.html" title="See companion object"><div class="big-circle class-companion-object">c</div></a>
-        <p id="owner"><a href="../../../../index.html" class="extype" name="com">com</a>.<a href="../../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../index.html" class="extype" name="com.twitter.finatra.http">http</a>.<a href="index.html" class="extype" name="com.twitter.finatra.http.request">request</a></p>
+        <p id="owner"><a href="../../../../index.html" class="extype" name="com">com</a>.<a href="../../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../index.html" class="extype" name="com.twitter.finatra.http">http</a>.<a href="index.html" class="extype" name="com.twitter.finatra.http.routing">routing</a></p>
         <h1><a href="HttpForward$.html" title="See companion object">HttpForward</a><span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
@@ -232,7 +224,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.http.request.HttpForward"><span>HttpForward</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.http.routing.HttpForward"><span>HttpForward</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -252,10 +244,10 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="com.twitter.finatra.http.request.HttpForward#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(router:com.twitter.finatra.http.routing.HttpRouter):com.twitter.finatra.http.request.HttpForward"></a><a id="&lt;init&gt;:HttpForward"></a>
+              <ol><li name="com.twitter.finatra.http.routing.HttpForward#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(router:com.twitter.finatra.http.routing.HttpRouter):com.twitter.finatra.http.routing.HttpForward"></a><a id="&lt;init&gt;:HttpForward"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#&lt;init&gt;(router:com.twitter.finatra.http.routing.HttpRouter):com.twitter.finatra.http.request.HttpForward" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#&lt;init&gt;(router:com.twitter.finatra.http.routing.HttpRouter):com.twitter.finatra.http.routing.HttpForward" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -264,7 +256,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">HttpForward</span><span class="params">(<span name="router">router: <a href="../routing/HttpRouter.html" class="extype" name="com.twitter.finatra.http.routing.HttpRouter">HttpRouter</a></span>)</span>
+        <span class="name">HttpForward</span><span class="params">(<span name="router">router: <a href="HttpRouter.html" class="extype" name="com.twitter.finatra.http.routing.HttpRouter">HttpRouter</a></span>)</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
@@ -284,7 +276,7 @@
                 <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#!=(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#!=(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -300,7 +292,7 @@
     </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html###():Int" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html###():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -316,7 +308,7 @@
     </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#==(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#==(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -329,10 +321,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.request.HttpForward#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.routing.HttpForward#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="apply(request:com.twitter.finagle.http.Request,path:String):com.twitter.util.Future[com.twitter.finagle.http.Response]"></a><a id="apply(Request,String):Future[Response]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#apply(request:com.twitter.finagle.http.Request,path:String):com.twitter.util.Future[com.twitter.finagle.http.Response]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#apply(request:com.twitter.finagle.http.Request,path:String):com.twitter.util.Future[com.twitter.finagle.http.Response]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -353,7 +345,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#asInstanceOf[T0]:T0" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#asInstanceOf[T0]:T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -369,7 +361,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#clone():Object" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#clone():Object" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -393,7 +385,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#debug" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debug(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="debug(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#debug(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#debug(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -409,7 +401,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#debug" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debug(message:=&gt;Any,cause:Throwable):Unit"></a><a id="debug(⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#debug(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#debug(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -425,7 +417,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#debug" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debug(marker:org.slf4j.Marker,message:=&gt;Any):Unit"></a><a id="debug(Marker,⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#debug(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#debug(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -441,7 +433,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#debug" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debug(message:=&gt;Any):Unit"></a><a id="debug(⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#debug(message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#debug(message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -457,7 +449,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.inject.Logging#debugFutureResult" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debugFutureResult[T](msg:String)(func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]"></a><a id="debugFutureResult[T](String)(⇒Future[T]):Future[T]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#debugFutureResult[T](msg:String)(func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#debugFutureResult[T](msg:String)(func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -474,7 +466,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#debugResult" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debugResult[T](message:=&gt;String)(fn:=&gt;T):T"></a><a id="debugResult[T](⇒String)(⇒T):T"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#debugResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#debugResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -490,7 +482,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#eq(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -506,7 +498,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#equals(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#equals(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -522,7 +514,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#error" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="error(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="error(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#error(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#error(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -538,7 +530,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#error" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="error(message:=&gt;Any,cause:Throwable):Unit"></a><a id="error(⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#error(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#error(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -554,7 +546,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#error" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="error(marker:org.slf4j.Marker,message:=&gt;Any):Unit"></a><a id="error(Marker,⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#error(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#error(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -570,7 +562,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#error" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="error(message:=&gt;Any):Unit"></a><a id="error(⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#error(message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#error(message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -586,7 +578,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#errorResult" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="errorResult[T](message:=&gt;String)(fn:=&gt;T):T"></a><a id="errorResult[T](⇒String)(⇒T):T"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#errorResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#errorResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -602,7 +594,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#finalize():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#finalize():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -624,7 +616,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#getClass():Class[_]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#getClass():Class[_]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -643,7 +635,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#hashCode():Int" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#hashCode():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -662,7 +654,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#info" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="info(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="info(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#info(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#info(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -678,7 +670,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#info" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="info(message:=&gt;Any,cause:Throwable):Unit"></a><a id="info(⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#info(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#info(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -694,7 +686,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#info" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="info(marker:org.slf4j.Marker,message:=&gt;Any):Unit"></a><a id="info(Marker,⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#info(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#info(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -710,7 +702,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#info" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="info(message:=&gt;Any):Unit"></a><a id="info(⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#info(message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#info(message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -726,7 +718,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#infoResult" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="infoResult[T](message:=&gt;String)(fn:=&gt;T):T"></a><a id="infoResult[T](⇒String)(⇒T):T"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#infoResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#infoResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -742,7 +734,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#isDebugEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isDebugEnabled(marker:org.slf4j.Marker):Boolean"></a><a id="isDebugEnabled(Marker):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#isDebugEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#isDebugEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -758,7 +750,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#isDebugEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isDebugEnabled:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#isDebugEnabled:Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#isDebugEnabled:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -774,7 +766,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#isErrorEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isErrorEnabled(marker:org.slf4j.Marker):Boolean"></a><a id="isErrorEnabled(Marker):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#isErrorEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#isErrorEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -790,7 +782,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#isErrorEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isErrorEnabled:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#isErrorEnabled:Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#isErrorEnabled:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -806,7 +798,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#isInfoEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInfoEnabled(marker:org.slf4j.Marker):Boolean"></a><a id="isInfoEnabled(Marker):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#isInfoEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#isInfoEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -822,7 +814,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#isInfoEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInfoEnabled:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#isInfoEnabled:Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#isInfoEnabled:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -838,7 +830,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#isInstanceOf[T0]:Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#isInstanceOf[T0]:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -854,7 +846,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#isTraceEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isTraceEnabled(marker:org.slf4j.Marker):Boolean"></a><a id="isTraceEnabled(Marker):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#isTraceEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#isTraceEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -870,7 +862,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#isTraceEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isTraceEnabled:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#isTraceEnabled:Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#isTraceEnabled:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -886,7 +878,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#isWarnEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isWarnEnabled(marker:org.slf4j.Marker):Boolean"></a><a id="isWarnEnabled(Marker):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#isWarnEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#isWarnEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -902,7 +894,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#isWarnEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isWarnEnabled:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#isWarnEnabled:Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#isWarnEnabled:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -918,7 +910,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#logger" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="logger:com.twitter.util.logging.Logger"></a><a id="logger:Logger"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#logger:com.twitter.util.logging.Logger" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#logger:com.twitter.util.logging.Logger" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -934,7 +926,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#loggerName" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loggerName:String"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#loggerName:String" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#loggerName:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -950,7 +942,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#ne(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -966,7 +958,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#notify():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#notify():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -985,7 +977,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#notifyAll():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#notifyAll():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1004,7 +996,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1020,7 +1012,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.inject.Logging#time" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="time[T](formatStr:String)(func:=&gt;T):T"></a><a id="time[T](String)(⇒T):T"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#time[T](formatStr:String)(func:=&gt;T):T" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#time[T](formatStr:String)(func:=&gt;T):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1036,7 +1028,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#toString():String" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#toString():String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1052,7 +1044,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trace(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="trace(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#trace(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#trace(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1068,7 +1060,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trace(message:=&gt;Any,cause:Throwable):Unit"></a><a id="trace(⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#trace(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#trace(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1084,7 +1076,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trace(marker:org.slf4j.Marker,message:=&gt;Any):Unit"></a><a id="trace(Marker,⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#trace(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#trace(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1100,7 +1092,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trace(message:=&gt;Any):Unit"></a><a id="trace(⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#trace(message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#trace(message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1116,7 +1108,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#traceResult" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="traceResult[T](message:=&gt;String)(fn:=&gt;T):T"></a><a id="traceResult[T](⇒String)(⇒T):T"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#traceResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#traceResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1132,7 +1124,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#wait():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#wait():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1154,7 +1146,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1176,7 +1168,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#wait(x$1:Long):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#wait(x$1:Long):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1200,7 +1192,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#warn" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warn(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="warn(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#warn(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#warn(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1216,7 +1208,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#warn" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warn(message:=&gt;Any,cause:Throwable):Unit"></a><a id="warn(⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#warn(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#warn(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1232,7 +1224,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#warn" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warn(marker:org.slf4j.Marker,message:=&gt;Any):Unit"></a><a id="warn(Marker,⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#warn(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#warn(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1248,7 +1240,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#warn" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warn(message:=&gt;Any):Unit"></a><a id="warn(⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#warn(message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#warn(message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1264,7 +1256,7 @@ in the server filter chain, any per-route stats will be reported as the
     </li><li name="com.twitter.util.logging.Logging#warnResult" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warnResult[T](message:=&gt;String)(fn:=&gt;T):T"></a><a id="warnResult[T](⇒String)(⇒T):T"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html#warnResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/HttpForward.html#warnResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>

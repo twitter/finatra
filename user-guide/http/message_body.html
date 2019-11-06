@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Message Body Components &#8212; Finatra 19.10.0 documentation</title>
+    <title>Message Body Components &#8212; Finatra 19.11.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.10.0',
+        VERSION:     '19.11.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.10.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.11.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Filtering HTTP Requests" href="filters.html" />
     <link rel="prev" title="HTTP Streaming" href="streaming.html" />
@@ -121,7 +121,7 @@ class ExampleController extends Controller {
 </div>
 <p>will trigger the framework to search for a registered message body reader that can convert the incoming
 Finagle HTTP request to <cite>MyModelObject</cite>. If a message body reader for the <cite>MyModelObject</cite> type
-cannot be found the <cite>DefaultMessageBodyReader</cite> implementation configured in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a>
+cannot be found the <cite>DefaultMessageBodyReader</cite> implementation configured in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a>
 will be used.</p>
 <div class="section" id="defaultmessagebodyreader">
 <h3><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyReader.scala"><code class="docutils literal"><span class="pre">DefaultMessageBodyReader</span></code></a><a class="headerlink" href="#defaultmessagebodyreader" title="Permalink to this headline">¶</a></h3>
@@ -184,7 +184,7 @@ class ExampleController extends Controller {
 <p>will trigger the framework to search for a registered message body writer that can convert the
 <cite>MyRenderableObjectType</cite> type into a Finagle HTTP response. If a message body writer for the
 <cite>MyRenderableObjectType</cite> type cannot be found the <cite>DefaultMessageBodyWriter</cite> implementation
-configured in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a> will be used.</p>
+configured in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a> will be used.</p>
 <div class="section" id="defaultmessagebodywriter">
 <h3><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyWriter.scala"><code class="docutils literal"><span class="pre">DefaultMessageBodyWriter</span></code></a><a class="headerlink" href="#defaultmessagebodywriter" title="Permalink to this headline">¶</a></h3>
 <p>The framework provides a default message body writer implementation: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyWriterImpl.scala"><cite>c.t.finatra.http.internal.marshalling.DefaultMessageBodyWriterImpl</cite></a>
@@ -203,10 +203,10 @@ provide a different <cite>DefaultMessageBodyWriter</cite> implementation.</p>
 </div>
 </div>
 <div class="section" id="messagebodymanager">
-<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a><a class="headerlink" href="#messagebodymanager" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a> registers message body components. Generally, you will not need to interact
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a><a class="headerlink" href="#messagebodymanager" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a> registers message body components. Generally, you will not need to interact
 directly with the manager as a DSL for registration of components is provided by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala"><cite>HttpRouter</cite></a>
-(which uses the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a> underneath).</p>
+(which uses the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a> underneath).</p>
 </div>
 <div class="section" id="c-t-finatra-http-modules-messagebodymodule">
 <h2><cite>c.t.finatra.http.modules.MessageBodyModule</cite><a class="headerlink" href="#c-t-finatra-http-modules-messagebodymodule" title="Permalink to this headline">¶</a></h2>
@@ -243,8 +243,8 @@ the <a class="reference external" href="https://github.com/twitter/finatra/blob/
 <a class="reference external" href="https://mustache.github.io/">Mustache</a> template specified by either the component configuration
 or as a parameter configured in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/java/com.twitter.finatra.http.response.Mustache.java"><code class="docutils literal"><span class="pre">&#64;Mustache</span></code></a> annotation.</p>
 <p>See the <a class="reference external" href="https://github.com/twitter/finatra/blob/6e09e95b95b20d2599a6210dfa0ce4c82dbe636b/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala#L54"><cite>MessageBodyManager#addByAnnotation</cite></a> and <a class="reference external" href="https://github.com/twitter/finatra/blob/6e09e95b95b20d2599a6210dfa0ce4c82dbe636b/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala#L60"><cite>MessageBodyManager#addByComponentType</cite></a> methods
-for  adding an annotated <a class="reference external" href="https://mustache.github.io/">Mustache</a> view to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a>
-and adding a <cite>MessageBodyComponent</cite> by type to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a> which will instantiate an
+for  adding an annotated <a class="reference external" href="https://mustache.github.io/">Mustache</a> view to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a>
+and adding a <cite>MessageBodyComponent</cite> by type to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a> which will instantiate an
 instance of the type via the injector.</p>
 <p>For examples of how to use the Finatra <a class="reference external" href="https://mustache.github.io/">Mustache</a> support, please
 see the Finatra <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/examples/web-dashboard"><cite>web-dashboard</cite></a> example and the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/controllers/MustacheController.scala"><cite>MustacheController</cite></a> used in integration tests.</p>

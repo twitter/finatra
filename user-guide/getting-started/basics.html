@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Dependency Injection &#8212; Finatra 19.10.0 documentation</title>
+    <title>Dependency Injection &#8212; Finatra 19.11.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.10.0',
+        VERSION:     '19.11.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.10.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.11.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Understanding the Codebase" href="framework.html" />
     <link rel="prev" title="User’s Guide" href="../index.html" />
@@ -104,6 +104,187 @@
 <h1>Dependency Injection and Testing<a class="headerlink" href="#dependency-injection-and-testing" title="Permalink to this headline">¶</a></h1>
 <p>There are many resources around this topic but we recommend taking a look at <a class="reference external" href="https://jasonpolites.github.io/tao-of-testing/ch3-1.1.html">The Tao of Testing: Chapter 3 - Dependency Injection</a> as a primer for how <a class="reference external" href="https://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a> can help to write more testable code.</p>
 </div>
+<div class="section" id="dependency-injection-best-practices">
+<h1>Dependency Injection Best Practices<a class="headerlink" href="#dependency-injection-best-practices" title="Permalink to this headline">¶</a></h1>
+<p>To aid in making code more testable here are a few best practices to consider when working with Dependency Injection. These are generally good to follow regardless of the dependency injection framework being used and some are described in detail in the Google <a class="reference external" href="https://github.com/google/guice/wiki">Guice documentation</a>.</p>
+<div class="section" id="use-constructor-injection">
+<h2>Use Constructor Injection<a class="headerlink" href="#use-constructor-injection" title="Permalink to this headline">¶</a></h2>
+<p>Finatra highly recommends using constructor injection to create immutable objects. Immutability allows objects to be simple, shareable and composable. For example:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class RealPaymentService @Inject()(
+  paymentQueue: PaymentQueue,
+  notifier: Notifier
+)
+</pre></div>
+</div>
+<p>or in Java</p>
+<div class="code java highlight-text"><div class="highlight"><pre><span></span>public class RealPaymentService {
+  private final PaymentQueue paymentQueue;
+  private final Notifier notifier;
+
+  @Inject
+  public RealPaymentService(
+    PaymentQueue paymentQueue,
+    Notifier notifier
+  ) {
+    this.paymentQueue = paymentQueue;
+    this.notifier = notifier;
+  }
+}
+</pre></div>
+</div>
+<p>This clearly expresses that the <cite>RealPaymentService</cite> class requires a <cite>PaymentQueue</cite> and a <cite>Notifier</cite> for instantiation and allows for instantiation via injector <em>or</em> manual instantiation of the class. This way of defining injectable members for a class is preferable to <a class="reference external" href="https://github.com/google/guice/wiki/Injections#field-injection">Field Injection</a> or <a class="reference external" href="https://github.com/google/guice/wiki/Injections#method-injection">Method Injection</a>.</p>
+<p>If you want to be able to inject a type that is not a class you own, then prefer defining a <a class="reference external" href="./modules.html">Module</a> which can provide an (ideally immutable) instance to the object graph.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The Guice documentation recommends <a class="reference external" href="https://github.com/google/guice/wiki/KeepConstructorsHidden">keeping constructors hidden</a> for classes which are meant to be instantiated by the injector. If you prefer constructor injection to create immutable objects, the difference between manual instantiation and injector instantiation should only come down to scoping of the created instance, i.e., is it a Singleton (the same instance every time from the injector). Finatra takes the approach of the <cite>&#64;Inject</cite> annotation being metadata in that it signals that the class <em>can</em> be instantiated by the injector but it is not a requirement.</p>
+<p class="last">We leave reducing the visibility of constructors to your discretion as a matter of what makes sense for your project or team.</p>
+</div>
+</div>
+<div class="section" id="inject-direct-dependencies">
+<h2>Inject direct dependencies<a class="headerlink" href="#inject-direct-dependencies" title="Permalink to this headline">¶</a></h2>
+<p>Avoid injecting an object simply as a way to get another object. For instance do not inject a <cite>Customer</cite> simply to obtain an <cite>Account</cite>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class Budget @Inject()(
+  customer: Customer
+) {
+  val account: Account = customer.purchasingAccount
+}
+</pre></div>
+</div>
+<p>Instead, you should prefer to inject this dependency directly since this can make testing easier because your tests do not need to know anything about the <cite>Customer</cite> object. This is where defining a <a class="reference external" href="./modules.html">Module</a> is useful. Using an <cite>&#64;Provides</cite>-annotated method you can create a binding for <cite>Account</cite> which comes from a <cite>Customer</cite> binding:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class CustomersModule extends TwitterModule {
+
+  @Provides
+  def providePurchasingAccount(
+    customer: Customer
+  ): Account = {
+    customer.purchasingAccount
+  }
+}
+</pre></div>
+</div>
+<p>Injecting this binding makes the code simpler:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class Budget @Inject()(account: Account)
+</pre></div>
+</div>
+</div>
+<div class="section" id="avoid-cyclic-dependencies">
+<h2>Avoid cyclic dependencies<a class="headerlink" href="#avoid-cyclic-dependencies" title="Permalink to this headline">¶</a></h2>
+<p>This is good practice in general and cycles often reflect insufficiently granular decomposition. For instance, assume you have a <cite>Store</cite>, a <cite>Boss</cite>, and a <cite>Clerk</cite>.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class Store @Inject()(boss: Boss) {
+  def incomingCustomer(customer: Customer): Unit = ???
+  def nextCustomer: Customer = ???
+}
+
+class Boss @Inject()(clerk: Clerk)
+
+class Clerk()
+</pre></div>
+</div>
+<p>So far, so good. Constructing a <cite>Store</cite> constructs a new <cite>Boss</cite> which in turn constructs a new <cite>Clerk</cite>. However, to give the <cite>Clerk</cite> a <cite>Customer</cite> in order to make a sale, the <cite>Clerk</cite> needs a reference to the <cite>Store</cite> to get those customers:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class Store @Inject()(boss: Boss) {
+  def incomingCustomer(customer: Customer): Unit = ???
+  def nextCustomer: Customer = ???
+}
+
+class Boss @Inject()(clerk: Clerk)
+
+class Clerk @Inject()(store: Store) {
+  def doSale(): Unit = {
+    val customer = store.nextCustomer
+    ...
+  }
+}
+</pre></div>
+</div>
+<p>which now leads to a cycle, <cite>Clerk</cite> -&gt; <cite>Store</cite> -&gt; <cite>Boss</cite> -&gt; <cite>Clerk</cite>.</p>
+<div class="section" id="eliminate-the-cycle-preferred">
+<h3>Eliminate the cycle (preferred)<a class="headerlink" href="#eliminate-the-cycle-preferred" title="Permalink to this headline">¶</a></h3>
+<p>One way to eliminate such cycles is to extract the dependency case into a separate class. In the contrived example, we could introduce a way of representing a line of eager customers as a <cite>CustomerLine</cite> which can be injected into a <cite>Clerk</cite> or a <cite>Store</cite>.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class Store @Inject()(boss: Boss, customers: CustomerLine) {
+  def incomingCustomer(customer: Customer): Unit = ???
+  def nextCustomer: Customer = ???
+}
+
+class Clerk @Inject()(customers: CustomerLine) {
+  def doSale(): Unit = {
+    val customer = customers.nextCustomer
+    ...
+  }
+}
+</pre></div>
+</div>
+<p><cite>Store</cite> and <cite>Clerk</cite> now both depend on a <cite>CustomerLine</cite> (you should ensure that they use the same instance) and thus no longer a cycle in the graph.</p>
+</div>
+<div class="section" id="use-a-provider">
+<h3>Use a Provider<a class="headerlink" href="#use-a-provider" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://github.com/google/guice/wiki/InjectingProviders">Injecting a Provider</a> allows you to inject a seam into the dependency graph. In this case, the <cite>Clerk</cite> still depends on a <cite>Store</cite> but the <cite>Clerk</cite> does not dereference the <cite>Store</cite> until needed by asking for it from the <cite>Provider[Store]</cite>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class Clerk @Inject()(
+  Provider[Store] storeProvider
+) {
+  def doSale(): Unit = {
+    val customer = storeProvider.get.nextCustomer
+  }
+}
+</pre></div>
+</div>
+<p>Note: you should ensure in this case that the <cite>Store</cite> is bound as a <cite>Singleton</cite> (otherwise the <cite>Provider.get</cite> will instantiate a new <cite>Store</cite> which ends up in the cycle).</p>
+</div>
+</div>
+<div class="section" id="avoid-i-o-with-providers">
+<h2>Avoid I/O with Providers<a class="headerlink" href="#avoid-i-o-with-providers" title="Permalink to this headline">¶</a></h2>
+<p>As we saw in the above example, Providers can be a useful API but it lacks some semantics that you should be aware of:</p>
+<ul class="simple">
+<li>If you need to recover from specific failures the Provider API only returns a generic <cite>ProvisionException</cite>. You can <a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/com/google/inject/ProvisionException.html#getErrorMessages()">iterate through the causes</a> but you will not be able to catch the specific type. See <a class="reference external" href="https://github.com/google/guice/wiki/ThrowingProviders">ThrowingProviders</a> for a way to declare thrown exceptions from a <cite>Provider</cite>.</li>
+<li>No support for timeout. Thus you can deadlock waiting on the <cite>Provider</cite> to be available with a call to <cite>Provider.get</cite>.</li>
+<li>There is no retry for obtaining the instance from a Provider. If <cite>Provider.get</cite> is unavailable, multiple calls to <cite>get</cite> may simply throw multiple exceptions.</li>
+</ul>
+</div>
+<div class="section" id="avoid-conditional-logic-in-modules">
+<h2>Avoid conditional logic in modules<a class="headerlink" href="#avoid-conditional-logic-in-modules" title="Permalink to this headline">¶</a></h2>
+<p>It can be tempting to create <a class="reference external" href="./modules.html">Modules</a> which have conditional logic and can be configured to operate differently for different environments. We strongly recommend avoiding this pattern and the framework provides utilities (including <a class="reference external" href="./flags.html">Flags</a>) to help in this regard.</p>
+<p>Please avoid doing this:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>// DO NOT DO THIS
+class FooModule(fooServer: String) extends TwitterModule {
+  override protected def configure(): Unit = {
+    if (fooServer != null) {
+      bind[String](Names.named(&quot;fooServer&quot;)).toInstance(fooServer)
+      bind[FooService].to[RemoteService]
+    } else {
+      bind[FooService].to[InMemoryFooService]
+    }
+  }
+}
+
+// NOR THIS
+class FooModule extends TwitterModule {
+  val env = flag(&quot;env&quot;, &quot;remote&quot;, &quot;the environment&quot;)
+
+  override protected def configure(): Unit = {
+    if (env() == &quot;remote&quot;) {
+      bind[String](Names.named(&quot;fooServer&quot;)).toInstance(fooServer)
+      bind[FooService].to[RemoteService]
+    } else {
+      bind[FooService].to[InMemoryFooService]
+    }
+  }
+}
+</pre></div>
+</div>
+<p>We <strong>strongly</strong> recommend that <em>only production code ever be deployed to production</em> and thus configuration which should change per environment be externalized via <a class="reference external" href="./flags.html">Flags</a> and logic that should change per environment be encapsulated within <a class="reference external" href="../testing/override_modules.html">override modules</a> (that are not located with the production code &#8211; e.g., production code in <cite>src/main/scala</cite> and test code in <cite>src/test/scala</cite>).</p>
+<p>For more information see the sections on <a class="reference external" href="./flags.html">Flags</a>, <a class="reference external" href="./modules.html">Modules</a>, and <a class="reference external" href="../testing/override_modules.html">Override Modules</a>.</p>
+</div>
+<div class="section" id="make-use-of-the-twittermodule-lifecycle">
+<h2>Make use of the <cite>TwitterModule</cite> lifecycle<a class="headerlink" href="#make-use-of-the-twittermodule-lifecycle" title="Permalink to this headline">¶</a></h2>
+<p>Finatra adds a lifecycle to Modules which is directly tied to the <a class="reference external" href="./lifecycle.html">server (or application) lifecycle</a> in which the module is used. This allows users to overcome some of the limitations of a standard <cite>AbstractModule</cite>.</p>
+<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/f275df9ea4e00ea3690e63e72a5445bb2c98cea7/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala#L9">c.t.inject.TwitterModuleLifecycle</a> defines several phases which allow users to setup and teardown or close <cite>Singleton</cite> scoped resources. Thus, you are able to bind closable resources with a defined way to release them.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Please note that the lifecycle is for <strong>Singleton</strong>-scoped resources and users should still avoid binding unscoped resources without ways to shutdown or close them.</p>
+</div>
+<p>See: Guice&#8217;s documentation on <a class="reference external" href="https://github.com/google/guice/wiki/ModulesShouldBeFastAndSideEffectFree">Modules should be fast and side-effect free</a> and <a class="reference external" href="https://github.com/google/guice/wiki/Avoid-Injecting-Closable-Resources">Avoid Injecting Closable Resources</a>.</p>
+<p>For more information on Finatra Modules see the documentation <a class="reference external" href="./modules.html">here</a>.</p>
+</div>
+</div>
 
 
           </div>
@@ -128,6 +309,19 @@
   <ul>
 <li><a class="reference internal" href="#">Dependency Injection</a></li>
 <li><a class="reference internal" href="#dependency-injection-and-testing">Dependency Injection and Testing</a></li>
+<li><a class="reference internal" href="#dependency-injection-best-practices">Dependency Injection Best Practices</a><ul>
+<li><a class="reference internal" href="#use-constructor-injection">Use Constructor Injection</a></li>
+<li><a class="reference internal" href="#inject-direct-dependencies">Inject direct dependencies</a></li>
+<li><a class="reference internal" href="#avoid-cyclic-dependencies">Avoid cyclic dependencies</a><ul>
+<li><a class="reference internal" href="#eliminate-the-cycle-preferred">Eliminate the cycle (preferred)</a></li>
+<li><a class="reference internal" href="#use-a-provider">Use a Provider</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#avoid-i-o-with-providers">Avoid I/O with Providers</a></li>
+<li><a class="reference internal" href="#avoid-conditional-logic-in-modules">Avoid conditional logic in modules</a></li>
+<li><a class="reference internal" href="#make-use-of-the-twittermodule-lifecycle">Make use of the <cite>TwitterModule</cite> lifecycle</a></li>
+</ul>
+</li>
 </ul>
 <h3>Related Topics</h3>
 <ul>

@@ -44,7 +44,7 @@ A request to ``GET /foo`` will produce a response:
     }
 
 
-**Note:** If you change the default `MessageBodyWriter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/FinatraDefaultMessageBodyWriter.scala>`__ implementation (used by the `MessageBodyManager <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala>`__)
+**Note:** If you change the default `MessageBodyWriter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyWriterImpl.scala>`__ implementation (used by the `MessageBodyManager <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala>`__)
 this will no longer be the default behavior, depending.
 
 You can also always use the `ResponseBuilder`_ to explicitly render a JSON response.

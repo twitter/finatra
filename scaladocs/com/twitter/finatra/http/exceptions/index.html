@@ -203,16 +203,16 @@
                         <a href="ExceptionMapper.html" title="An ExceptionMapper converts a T-typed throwable to an HTTP response.">ExceptionMapper</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="ExceptionMapperCollection.html" title="Represents a collection of com.twitter.finatra.http.exceptions.ExceptionMappers which is a Traversable[Manifest[ExceptionMapper[_\]\]\]."></a>
-                        <a href="ExceptionMapperCollection.html" title="Represents a collection of com.twitter.finatra.http.exceptions.ExceptionMappers which is a Traversable[Manifest[ExceptionMapper[_\]\]\].">ExceptionMapperCollection</a>
+                        <a class="class" href="ExceptionMapperCollection.html" title="Represents a collection of com.twitter.finatra.http.exceptions.ExceptionMappers which is a"></a>
+                        <a href="ExceptionMapperCollection.html" title="Represents a collection of com.twitter.finatra.http.exceptions.ExceptionMappers which is a">ExceptionMapperCollection</a>
                       </li><li class="current-entities indented5">
                         <a class="object" href="ForbiddenException$.html" title=""></a>
                         <a class="class" href="ForbiddenException.html" title=""></a>
                         <a href="ForbiddenException.html" title="">ForbiddenException</a>
                       </li><li class="current-entities indented5">
-                        <a class="object" href="HttpException$.html" title="HttpException which will be rendered as an HTTP response."></a>
-                        <a class="class" href="HttpException.html" title=""></a>
-                        <a href="HttpException.html" title="">HttpException</a>
+                        <a class="object" href="HttpException$.html" title=""></a>
+                        <a class="class" href="HttpException.html" title="An Exception which will be rendered as an HTTP response."></a>
+                        <a href="HttpException.html" title="An Exception which will be rendered as an HTTP response.">HttpException</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="class" href="HttpNackException.html" title=""></a>
@@ -227,8 +227,8 @@
                         <a href="InternalServerErrorException.html" title="">InternalServerErrorException</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="MaxForwardsExceededException.html" title=""></a>
-                        <a href="MaxForwardsExceededException.html" title="">MaxForwardsExceededException</a>
+                        <a class="class" href="MaxForwardsExceededException.html" title="Denotes that Controller forwarding exceeded the maximum depth."></a>
+                        <a href="MaxForwardsExceededException.html" title="Denotes that Controller forwarding exceeded the maximum depth.">MaxForwardsExceededException</a>
                       </li><li class="current-entities indented5">
                         <a class="object" href="MethodNotAllowedException$.html" title=""></a>
                         <a class="class" href="MethodNotAllowedException.html" title=""></a>
@@ -242,9 +242,17 @@
                         <a class="class" href="NotFoundException.html" title=""></a>
                         <a href="NotFoundException.html" title="">NotFoundException</a>
                       </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="RouteParamExtractionException.html" title="Used to denote an exception which occurred during routing while attempting to extract the capture value of a route param from an incoming request URI, e.g., for a defined route: /user/:id, extracting the text &quot;123&quot; from an incoming request URI of /user/123."></a>
+                        <a href="RouteParamExtractionException.html" title="Used to denote an exception which occurred during routing while attempting to extract the capture value of a route param from an incoming request URI, e.g., for a defined route: /user/:id, extracting the text &quot;123&quot; from an incoming request URI of /user/123.">RouteParamExtractionException</a>
+                      </li><li class="current-entities indented5">
                         <a class="object" href="ServiceUnavailableException$.html" title=""></a>
                         <a class="class" href="ServiceUnavailableException.html" title=""></a>
                         <a href="ServiceUnavailableException.html" title="">ServiceUnavailableException</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="UnsupportedMethodException.html" title="Used to denote that an incoming request HTTP method (verb) is not supported by a matched route (that is a route exists which matches the incoming request URI but is not defined over the incoming request method)."></a>
+                        <a href="UnsupportedMethodException.html" title="Used to denote that an incoming request HTTP method (verb) is not supported by a matched route (that is a route exists which matches the incoming request URI but is not defined over the incoming request method).">UnsupportedMethodException</a>
                       </li><li name="com.twitter.finatra.http.fileupload" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fileupload"></a><a id="fileupload:fileupload"></a>
       <span class="permalink">
@@ -544,14 +552,7 @@ free to register their own ExceptionMapper[Throwable] which overrides the
 </p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Singleton</span><span class="args">()</span>
               
-        </dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper">com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper</span>
-Note: When searching for the parent exception mapper, it would be nice
-to traverse the entire class linearization so it works for
-traits/mixins too [1]. Unfortunately, implementing this would require
-a lot more reflection and it might not be threadsafe [2]. Doing it in
-Scala 2.11 might be easier and safer.
-[1] https://stackoverflow.com/questions/15623498/handy-ways-to-show-linearization-of-a-class
-[2] https://docs.scala-lang.org/overviews/reflection/thread-safety.html</p></span></dd></dl></div>
+        </dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper">com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper</span></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.exceptions.ExceptionMapper" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="ExceptionMapper[T&lt;:Throwable]extendsAnyRef"></a><a id="ExceptionMapper[T&lt;:Throwable]:ExceptionMapper[T]"></a>
       <span class="permalink">
@@ -569,7 +570,7 @@ Scala 2.11 might be easier and safer.
       
       <p class="shortcomment cmt">An ExceptionMapper converts a <code>T</code>-typed throwable to an HTTP response.</p><div class="fullcomment"><div class="comment cmt"><p>An ExceptionMapper converts a <code>T</code>-typed throwable to an HTTP response.</p><p>Java users should use the <a href="AbstractExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.AbstractExceptionMapper">AbstractExceptionMapper</a>.
 </p></div></div>
-    </li><li name="com.twitter.finatra.http.exceptions.ExceptionMapperCollection" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.exceptions.ExceptionMapperCollection" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ExceptionMapperCollectionextendsTraversable[Manifest[com.twitter.finatra.http.exceptions.ExceptionMapper[_]]]"></a><a id="ExceptionMapperCollection:ExceptionMapperCollection"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/exceptions/index.html#ExceptionMapperCollectionextendsTraversable[Manifest[com.twitter.finatra.http.exceptions.ExceptionMapper[_]]]" title="Permalink">
@@ -581,11 +582,14 @@ Scala 2.11 might be easier and safer.
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="Represents a collection of com.twitter.finatra.http.exceptions.ExceptionMappers which is a Traversable[Manifest[ExceptionMapper[_\]\]\]." href="ExceptionMapperCollection.html"><span class="name">ExceptionMapperCollection</span></a><span class="result"> extends <span class="extype" name="scala.Traversable">Traversable</span>[<span class="extype" name="scala.Predef.Manifest">Manifest</span>[<a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">ExceptionMapper</a>[_]]]</span>
+        <a title="Represents a collection of com.twitter.finatra.http.exceptions.ExceptionMappers which is a" href="ExceptionMapperCollection.html"><span class="name">ExceptionMapperCollection</span></a><span class="result"> extends <span class="extype" name="scala.Traversable">Traversable</span>[<span class="extype" name="scala.Predef.Manifest">Manifest</span>[<a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">ExceptionMapper</a>[_]]]</span>
       </span>
       
       <p class="shortcomment cmt">Represents a collection of <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a>s
-which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
+which is a </p><div class="fullcomment"><div class="comment cmt"><p>Represents a collection of <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a>s
+which is a </p><pre>Traversable[<span class="std">Manifest</span>[ExceptionMapper[_]]]</pre><p>.</p><p>Traversable[Manifest[ExceptionMapper[_]]]
+}}}
+</p></div></div>
     </li><li name="com.twitter.finatra.http.exceptions.ForbiddenException" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ForbiddenExceptionextendsHttpExceptionwithProductwithSerializable"></a><a id="ForbiddenException:ForbiddenException"></a>
       <span class="permalink">
@@ -614,10 +618,10 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="HttpException.html"><span class="name">HttpException</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span></span>
+        <a title="An Exception which will be rendered as an HTTP response." href="HttpException.html"><span class="name">HttpException</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span></span>
       </span>
       
-      
+      <p class="shortcomment cmt">An <span class="extype" name="Exception">Exception</span> which will be rendered as an HTTP response.</p>
     </li><li name="com.twitter.finatra.http.exceptions.HttpNackException" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="HttpNackExceptionextendsExceptionwithNoStackTrace"></a><a id="HttpNackException:HttpNackException"></a>
       <span class="permalink">
@@ -666,7 +670,7 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
       </span>
       
       
-    </li><li name="com.twitter.finatra.http.exceptions.MaxForwardsExceededException" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.exceptions.MaxForwardsExceededException" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="MaxForwardsExceededExceptionextendsException"></a><a id="MaxForwardsExceededException:MaxForwardsExceededException"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/exceptions/index.html#MaxForwardsExceededExceptionextendsException" title="Permalink">
@@ -678,10 +682,11 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="MaxForwardsExceededException.html"><span class="name">MaxForwardsExceededException</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span></span>
+        <a title="Denotes that Controller forwarding exceeded the maximum depth." href="MaxForwardsExceededException.html"><span class="name">MaxForwardsExceededException</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Denotes that Controller forwarding exceeded the maximum depth.</p><div class="fullcomment"><div class="comment cmt"><p>Denotes that Controller forwarding exceeded the maximum depth.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpForward">com.twitter.finatra.http.HttpForward</span></p></span><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpRouter#withMaxRequestForwardingDepth">com.twitter.finatra.http.HttpRouter#withMaxRequestForwardingDepth</span></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.exceptions.MethodNotAllowedException" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="MethodNotAllowedExceptionextendsHttpExceptionwithProductwithSerializable"></a><a id="MethodNotAllowedException:MethodNotAllowedException"></a>
       <span class="permalink">
@@ -730,6 +735,60 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
       </span>
       
       
+    </li><li name="com.twitter.finatra.http.exceptions.RouteParamExtractionException" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="RouteParamExtractionExceptionextendsExceptionwithNoStackTrace"></a><a id="RouteParamExtractionException:RouteParamExtractionException"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/index.html#RouteParamExtractionExceptionextendsExceptionwithNoStackTrace" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Used to denote an exception which occurred during routing while attempting to extract the capture value of a route param from an incoming request URI, e.g., for a defined route: /user/:id, extracting the text &quot;123&quot; from an incoming request URI of /user/123." href="RouteParamExtractionException.html"><span class="name">RouteParamExtractionException</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="http://www.scala-lang.org/api/2.12.8/scala/util/control/NoStackTrace.html#scala.util.control.NoStackTrace" class="extype" name="scala.util.control.NoStackTrace">NoStackTrace</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Used to denote an exception which occurred during routing while attempting to
+extract the capture value of a route param from an incoming request URI, e.g.,
+for a defined route: <code>/user/:id</code>, extracting the text &quot;123&quot; from an incoming
+request URI of <code>/user/123</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Used to denote an exception which occurred during routing while attempting to
+extract the capture value of a route param from an incoming request URI, e.g.,
+for a defined route: <code>/user/:id</code>, extracting the text &quot;123&quot; from an incoming
+request URI of <code>/user/123</code>.</p><p>This exception is handled by the framework but is public to allow users to customize
+their server behavior via an installed <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">ExceptionMapper</a> over this exception type, if
+desired. Note, that this exception occurs **before** routing and thus any user-defined
+<a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">ExceptionMapper</a> should be added to an <a href="ExceptionManager.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionManager">ExceptionManager</a> installed on an
+<a href="../filters/ExceptionMappingFilter.html" class="extype" name="com.twitter.finatra.http.filters.ExceptionMappingFilter">com.twitter.finatra.http.filters.ExceptionMappingFilter</a> that is installed with
+<code>beforeRouting = true</code>.</p><pre><span class="kw">class</span> RouteParamExtractionExceptionMapper
+  <span class="kw">extends</span> ExceptionMapper[RouteParamExtractionException] {
+  <span class="kw">def</span> toResponse(request: Request, throwable: RouteParamExtractionException): Response  = ???
+}
+
+...
+
+<span class="kw">val</span> beforeRoutingExceptionManager: ExceptionManager =
+  <span class="kw">new</span> ExceptionManager(injector, injector.instance[StatsReceiver])
+
+beforeRoutingExceptionManager.add[RouteParamExtractionExceptionMapper]
+
+...
+
+<span class="kw">override</span> <span class="kw">def</span> configureHttp(router: HttpRouter) {
+  router
+    .filter(<span class="kw">new</span> ExceptionMappingFilter[Request](beforeRoutingExceptionManager), beforeRouting = <span class="kw">true</span>)
+    .add[MyAPIController]
+}
+
+<span class="cmt">// or without a custom `ExceptionManager` (uses the default configured by the `ExceptionManagerModule`):</span>
+
+<span class="kw">override</span> <span class="kw">def</span> configureHttp(router: HttpRouter) {
+ router
+   .filter[ExceptionMappingFilter[Request]](beforeRouting = <span class="kw">true</span>)
+   .add[MyAPIController]
+   .exceptionMapper[RouteParamExtractionExceptionMapper]
+ }</pre></div></div>
     </li><li name="com.twitter.finatra.http.exceptions.ServiceUnavailableException" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ServiceUnavailableExceptionextendsHttpExceptionwithProductwithSerializable"></a><a id="ServiceUnavailableException:ServiceUnavailableException"></a>
       <span class="permalink">
@@ -746,6 +805,58 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
       </span>
       
       
+    </li><li name="com.twitter.finatra.http.exceptions.UnsupportedMethodException" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="UnsupportedMethodExceptionextendsExceptionwithNoStackTrace"></a><a id="UnsupportedMethodException:UnsupportedMethodException"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/index.html#UnsupportedMethodExceptionextendsExceptionwithNoStackTrace" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Used to denote that an incoming request HTTP method (verb) is not supported by a matched route (that is a route exists which matches the incoming request URI but is not defined over the incoming request method)." href="UnsupportedMethodException.html"><span class="name">UnsupportedMethodException</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="http://www.scala-lang.org/api/2.12.8/scala/util/control/NoStackTrace.html#scala.util.control.NoStackTrace" class="extype" name="scala.util.control.NoStackTrace">NoStackTrace</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Used to denote that an incoming request HTTP method (verb) is not supported by a
+matched route (that is a route exists which matches the incoming request URI but
+is not defined over the incoming request method).</p><div class="fullcomment"><div class="comment cmt"><p>Used to denote that an incoming request HTTP method (verb) is not supported by a
+matched route (that is a route exists which matches the incoming request URI but
+is not defined over the incoming request method).</p><p>This exception is handled by the framework but is public to allow users to customize
+their server behavior via an installed <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">ExceptionMapper</a> over this exception type, if
+desired. Note, that this exception occurs **before** routing and thus any user-defined
+<a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">ExceptionMapper</a> should be added to an <a href="ExceptionManager.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionManager">ExceptionManager</a> installed on an
+<a href="../filters/ExceptionMappingFilter.html" class="extype" name="com.twitter.finatra.http.filters.ExceptionMappingFilter">com.twitter.finatra.http.filters.ExceptionMappingFilter</a> that is installed with
+<code>beforeRouting = true</code>.</p><pre><span class="kw">class</span> UnsupportedMethodExceptionMapper
+  <span class="kw">extends</span> ExceptionMapper[UnsupportedMethodException] {
+  <span class="kw">def</span> toResponse(request: Request, throwable: UnsupportedMethodException): Response  = ???
+}
+
+...
+
+<span class="kw">val</span> beforeRoutingExceptionManager: ExceptionManager =
+  <span class="kw">new</span> ExceptionManager(injector, injector.instance[StatsReceiver])
+
+beforeRoutingExceptionManager.add[UnsupportedMethodException]
+
+...
+
+<span class="kw">override</span> <span class="kw">def</span> configureHttp(router: HttpRouter) {
+  router
+    .filter(<span class="kw">new</span> ExceptionMappingFilter[Request](beforeRoutingExceptionManager), beforeRouting = <span class="kw">true</span>)
+    .add[MyAPIController]
+}
+
+<span class="cmt">// or without a custom `ExceptionManager` (uses the default configured by the `ExceptionManagerModule`):</span>
+
+<span class="kw">override</span> <span class="kw">def</span> configureHttp(router: HttpRouter) {
+ router
+   .filter[ExceptionMappingFilter[Request]](beforeRouting = <span class="kw">true</span>)
+   .add[MyAPIController]
+   .exceptionMapper[UnsupportedMethodExceptionMapper]
+ }</pre></div></div>
     </li></ol>
             </div>
 
@@ -814,10 +925,10 @@ which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="HttpException which will be rendered as an HTTP response." href="HttpException$.html"><span class="name">HttpException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="HttpException$.html"><span class="name">HttpException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
-      <p class="shortcomment cmt">HttpException which will be rendered as an HTTP response.</p>
+      
     </li><li name="com.twitter.finatra.http.exceptions.InternalServerErrorException" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="InternalServerErrorException"></a><a id="InternalServerErrorException:InternalServerErrorException"></a>
       <span class="permalink">

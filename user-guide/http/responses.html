@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>HTTP Responses &#8212; Finatra 19.10.0 documentation</title>
+    <title>HTTP Responses &#8212; Finatra 19.11.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.10.0',
+        VERSION:     '19.11.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.10.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.11.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="HTTP Streaming" href="streaming.html" />
     <link rel="prev" title="HTTP Requests" href="requests.html" />
@@ -107,7 +107,7 @@ get(&quot;/foo&quot;) { request: Request =&gt;
 }
 </pre></div>
 </div>
-<p><strong>Note:</strong> If you change the default <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/FinatraDefaultMessageBodyWriter.scala">MessageBodyWriter</a> implementation (used by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala">MessageBodyManager</a>)
+<p><strong>Note:</strong> If you change the default <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyWriterImpl.scala">MessageBodyWriter</a> implementation (used by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala">MessageBodyManager</a>)
 this will no longer be the default behavior, depending.</p>
 <p>You can also always use the <a class="reference internal" href="#responsebuilder">ResponseBuilder</a> to explicitly render a JSON response.</p>
 </div>

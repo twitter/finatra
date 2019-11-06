@@ -375,24 +375,24 @@
                         <a href="StackTransformer.html" title="StackTransformer allows plugins to modify Finatra filters before they are applied to controller routes.">StackTransformer</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
-                        <a class="trait" href="TwitterBaseModule.html" title="Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules"></a>
-                        <a href="TwitterBaseModule.html" title="Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules">TwitterBaseModule</a>
+                        <a class="trait" href="TwitterBaseModule.html" title=""></a>
+                        <a href="TwitterBaseModule.html" title="">TwitterBaseModule</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
-                        <a class="class" href="TwitterModule.html" title=""></a>
-                        <a href="TwitterModule.html" title="">TwitterModule</a>
+                        <a class="class" href="TwitterModule.html" title="A support class for Module implementations which exposes a DSL for binding via type parameters."></a>
+                        <a href="TwitterModule.html" title="A support class for Module implementations which exposes a DSL for binding via type parameters.">TwitterModule</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
-                        <a class="trait" href="TwitterModuleFlags.html" title="Guice/twitter.util.Flag integrations"></a>
-                        <a href="TwitterModuleFlags.html" title="Guice/twitter.util.Flag integrations">TwitterModuleFlags</a>
+                        <a class="trait" href="TwitterModuleFlags.html" title="Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules"></a>
+                        <a href="TwitterModuleFlags.html" title="Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules">TwitterModuleFlags</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="trait" href="TwitterModuleLifecycle.html" title="com.twitter.inject.TwitterModule to com.twitter.inject.app.App lifecycle integration."></a>
                         <a href="TwitterModuleLifecycle.html" title="com.twitter.inject.TwitterModule to com.twitter.inject.app.App lifecycle integration.">TwitterModuleLifecycle</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
-                        <a class="class" href="TwitterPrivateModule.html" title=""></a>
-                        <a href="TwitterPrivateModule.html" title="">TwitterPrivateModule</a>
+                        <a class="class" href="TwitterPrivateModule.html" title="A module whose configuration information is hidden from its environment by default."></a>
+                        <a href="TwitterPrivateModule.html" title="A module whose configuration information is hidden from its environment by default.">TwitterPrivateModule</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="object" href="TypeUtils$.html" title=""></a>
@@ -561,12 +561,11 @@ service-level but not at the route-level (e.g. admission controllers).
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules" href="TwitterBaseModule.html"><span class="name">TwitterBaseModule</span></a><span class="result"> extends <a href="TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a> with <a href="TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a></span>
+        <a title="" href="TwitterBaseModule.html"><span class="name">TwitterBaseModule</span></a><span class="result"> extends <a href="TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a> with <a href="TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a></span>
       </span>
       
-      <p class="shortcomment cmt">Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules
-</p>
-    </li><li name="com.twitter.inject.TwitterModule" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      
+    </li><li name="com.twitter.inject.TwitterModule" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="TwitterModuleextendsAbstractModulewithTwitterBaseModulewithLogging"></a><a id="TwitterModule:TwitterModule"></a>
       <span class="permalink">
       <a href="../../../com/twitter/inject/index.html#TwitterModuleextendsAbstractModulewithTwitterBaseModulewithLogging" title="Permalink">
@@ -578,10 +577,41 @@ service-level but not at the route-level (e.g. admission controllers).
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="TwitterModule.html"><span class="name">TwitterModule</span></a><span class="result"> extends <span class="extype" name="com.google.inject.AbstractModule">AbstractModule</span> with <a href="TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a> with <a href="Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+        <a title="A support class for Module implementations which exposes a DSL for binding via type parameters." href="TwitterModule.html"><span class="name">TwitterModule</span></a><span class="result"> extends <span class="extype" name="com.google.inject.AbstractModule">AbstractModule</span> with <a href="TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a> with <a href="Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">A support class for <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Module.html" target="_blank">Module</a>
+implementations which exposes a DSL for binding via type parameters.</p><div class="fullcomment"><div class="comment cmt"><p>A support class for <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Module.html" target="_blank">Module</a>
+implementations which exposes a DSL for binding via type parameters. Extend this class,
+override the <code>configure</code> method and call the <code>bind</code> methods, or define custom <code>@Provides</code>
+annotated methods. This class also provides an integration with <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html" class="extype" name="com.twitter.app.Flag">com.twitter.app.Flag</a> types
+which allows for passing external configuration to aid in the creation of bound types. Lastly, it
+is also possible to define a list of other <a href="TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> instances which this <a href="TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>
+&quot;depends&quot; on by setting the <a href="TwitterBaseModule.html#modules:Seq[com.google.inject.Module]" class="extmbr" name="com.twitter.inject.TwitterBaseModule#modules">TwitterBaseModule.modules</a> (or <a href="TwitterBaseModule.html#javaModules:java.util.Collection[com.google.inject.Module]" class="extmbr" name="com.twitter.inject.TwitterBaseModule#javaModules">TwitterBaseModule.javaModules</a>)
+to a non-empty list. This will ensure that when only this <a href="TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> instance is used to
+compose an <a href="Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a> the &quot;dependent&quot; list of modules will also be installed.
+</p></div><dl class="attributes block"> <div class="block">Example:
+               <ol><li class="cmt"><p></p><pre><span class="kw">object</span> MyModule <span class="kw">extends</span> TwitterModule {
+ flag[<span class="std">String</span>](name = <span class="lit">"card.gateway"</span>, help = <span class="lit">"The processing gateway to use for credit cards."</span>)
+
+ <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configure(): <span class="std">Unit</span> = {
+   bind[Service].to[ServiceImpl].in[Singleton]
+   bind[CreditCardPaymentService]
+   bind[Bar[Foo]].to[FooBarImpl]
+   bind[PaymentService].to[CreditCardPaymentService]
+ }
+
+ @Singleton
+ @Provides
+ <span class="kw">def</span> provideCreditCardServiceProcessor(
+   @Flag(<span class="lit">"card.gateway"</span>) gateway: <span class="std">String</span>
+ ): CreditCardProcessor = {
+   <span class="kw">new</span> CreditCardProcessor(gateway)
+ }
+}</pre></li></ol>
+            </div><dt>Note</dt><dd><span class="cmt"><p>Attempting to bind the same type multiple times with no discriminating
+      <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/BindingAnnotation.html" target="_blank">com.google.inject.BindingAnnotation</a>
+      will result in an exception during injector construction.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://static.javadoc.io/com.google.inject/guice/4.1.0/com/google/inject/AbstractModule.html" target="_blank">com.google.inject.AbstractModule</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finatra/user-guide/getting-started/modules.html" target="_blank">Writing Modules in Finatra</a></p></span></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModuleFlags" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="TwitterModuleFlagsextendsAnyRef"></a><a id="TwitterModuleFlags:TwitterModuleFlags"></a>
       <span class="permalink">
@@ -594,10 +624,10 @@ service-level but not at the route-level (e.g. admission controllers).
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Guice/twitter.util.Flag integrations" href="TwitterModuleFlags.html"><span class="name">TwitterModuleFlags</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <a title="Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules" href="TwitterModuleFlags.html"><span class="name">TwitterModuleFlags</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       
-      <p class="shortcomment cmt">Guice/twitter.util.Flag integrations
+      <p class="shortcomment cmt">Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules
 </p>
     </li><li name="com.twitter.inject.TwitterModuleLifecycle" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="TwitterModuleLifecycleextendsLogging"></a><a id="TwitterModuleLifecycle:TwitterModuleLifecycle"></a>
@@ -615,7 +645,7 @@ service-level but not at the route-level (e.g. admission controllers).
       </span>
       
       <p class="shortcomment cmt"><a href="TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> to com.twitter.inject.app.App lifecycle integration.</p>
-    </li><li name="com.twitter.inject.TwitterPrivateModule" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.inject.TwitterPrivateModule" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="TwitterPrivateModuleextendsPrivateModulewithTwitterBaseModulewithScalaPrivateModule"></a><a id="TwitterPrivateModule:TwitterPrivateModule"></a>
       <span class="permalink">
       <a href="../../../com/twitter/inject/index.html#TwitterPrivateModuleextendsPrivateModulewithTwitterBaseModulewithScalaPrivateModule" title="Permalink">
@@ -627,10 +657,15 @@ service-level but not at the route-level (e.g. admission controllers).
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="TwitterPrivateModule.html"><span class="name">TwitterPrivateModule</span></a><span class="result"> extends <span class="extype" name="com.google.inject.PrivateModule">PrivateModule</span> with <a href="TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a> with <span class="extype" name="net.codingwell.scalaguice.ScalaPrivateModule">ScalaPrivateModule</span></span>
+        <a title="A module whose configuration information is hidden from its environment by default." href="TwitterPrivateModule.html"><span class="name">TwitterPrivateModule</span></a><span class="result"> extends <span class="extype" name="com.google.inject.PrivateModule">PrivateModule</span> with <a href="TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a> with <span class="extype" name="net.codingwell.scalaguice.ScalaPrivateModule">ScalaPrivateModule</span></span>
       </span>
       
-      
+      <p class="shortcomment cmt">A module whose configuration information is hidden from its environment by default.</p><div class="fullcomment"><div class="comment cmt"><p>A module whose configuration information is hidden from its environment by default. Only bindings
+that are explicitly exposed will be available to other modules and to the users of the injector.
+This module may expose the bindings it creates and the bindings of the modules it installs.
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>Calling <a href="https://static.javadoc.io/com.google.inject/guice/4.1.0/com/google/inject/PrivateModule.html#install-com.google.inject.Module-" target="_blank">com.google.inject.PrivateModule#install</a>
+      in the <span class="extype" name="configure()">configure()</span> method is not supported. Please set <a href="TwitterBaseModule.html#modules:Seq[com.google.inject.Module]" class="extmbr" name="com.twitter.inject.TwitterBaseModule#modules">TwitterBaseModule.modules</a>
+      (or <a href="TwitterBaseModule.html#javaModules:java.util.Collection[com.google.inject.Module]" class="extmbr" name="com.twitter.inject.TwitterBaseModule#javaModules">TwitterBaseModule.javaModules</a>) to a non-empty list instead.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://static.javadoc.io/com.google.inject/guice/4.1.0/com/google/inject/PrivateModule.html" target="_blank">com.google.inject.PrivateModule</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finatra/user-guide/getting-started/modules.html" target="_blank">Writing Modules in Finatra</a></p></span></dd></dl></div>
     </li></ol>
             </div>
 

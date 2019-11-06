@@ -326,9 +326,13 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.http">http</a></dd></dl></div>
     </li><li class="current-entities indented5">
+                        <a class="object" href="HttpForward$.html" title=""></a>
+                        <a class="class" href="HttpForward.html" title=""></a>
+                        <a href="HttpForward.html" title="">HttpForward</a>
+                      </li><li class="current-entities indented5">
                         <a class="object" href="HttpRouter$.html" title=""></a>
-                        <a class="class" href="HttpRouter.html" title="Builds &quot;external&quot; and &quot;admin&quot; instances of a com.twitter.finatra.http.internal.routing.RoutingService which is a subclass of a com.twitter.finagle.Service."></a>
-                        <a href="HttpRouter.html" title="Builds &quot;external&quot; and &quot;admin&quot; instances of a com.twitter.finatra.http.internal.routing.RoutingService which is a subclass of a com.twitter.finagle.Service.">HttpRouter</a>
+                        <a class="class" href="HttpRouter.html" title="Builds &quot;external&quot; and &quot;admin&quot; instances of a RoutingService which is a subclass of a com.twitter.finagle.Service."></a>
+                        <a href="HttpRouter.html" title="Builds &quot;external&quot; and &quot;admin&quot; instances of a RoutingService which is a subclass of a com.twitter.finagle.Service.">HttpRouter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="class" href="HttpWarmup.html" title="A utility for performing requests to endpoints defined by a configured HttpRouter for the purpose of warming up the HttpServer."></a>
@@ -412,7 +416,26 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.twitter.finatra.http.routing.HttpRouter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="com.twitter.finatra.http.routing.HttpForward" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="HttpForwardextendsLogging"></a><a id="HttpForward:HttpForward"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/index.html#HttpForwardextendsLogging" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="HttpForward.html"><span class="name">HttpForward</span></a><span class="result"> extends <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Singleton</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="com.twitter.finatra.http.routing.HttpRouter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="HttpRouterextendsLogging"></a><a id="HttpRouter:HttpRouter"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/routing/index.html#HttpRouterextendsLogging" title="Permalink">
@@ -424,11 +447,11 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="Builds &quot;external&quot; and &quot;admin&quot; instances of a com.twitter.finatra.http.internal.routing.RoutingService which is a subclass of a com.twitter.finagle.Service." href="HttpRouter.html"><span class="name">HttpRouter</span></a><span class="result"> extends <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+        <a title="Builds &quot;external&quot; and &quot;admin&quot; instances of a RoutingService which is a subclass of a com.twitter.finagle.Service." href="HttpRouter.html"><span class="name">HttpRouter</span></a><span class="result"> extends <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
       </span>
       
-      <p class="shortcomment cmt">Builds &quot;external&quot; and &quot;admin&quot; instances of a <span class="extype" name="com.twitter.finatra.http.internal.routing.RoutingService">com.twitter.finatra.http.internal.routing.RoutingService</span>
-which is a subclass of a <span class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Builds &quot;external&quot; and &quot;admin&quot; instances of a <span class="extype" name="com.twitter.finatra.http.internal.routing.RoutingService">com.twitter.finatra.http.internal.routing.RoutingService</span>
+      <p class="shortcomment cmt">Builds &quot;external&quot; and &quot;admin&quot; instances of a <span class="extype" name="RoutingService">RoutingService</span>
+which is a subclass of a <span class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Builds &quot;external&quot; and &quot;admin&quot; instances of a <span class="extype" name="RoutingService">RoutingService</span>
 which is a subclass of a <span class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</span>. The &quot;external&quot; <span class="extype" name="RoutingService">RoutingService</span> will
 be served on the bound external <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ListeningServer.html" class="extype" name="com.twitter.finagle.ListeningServer">com.twitter.finagle.ListeningServer</a>, the &quot;admin&quot; <span class="extype" name="RoutingService">RoutingService</span>
 will be added as endpoints to the <span class="extype" name="com.twitter.finagle.http.HttpMuxer">com.twitter.finagle.http.HttpMuxer</span> for serving on the
@@ -455,7 +478,7 @@ TwitterServer HTTP Admin Interface.
       <p class="shortcomment cmt">A utility for performing requests to endpoints defined by a configured <a href="HttpRouter.html" class="extype" name="com.twitter.finatra.http.routing.HttpRouter">HttpRouter</a> for the
 purpose of warming up the <code>HttpServer</code>.</p><div class="fullcomment"><div class="comment cmt"><p>A utility for performing requests to endpoints defined by a configured <a href="HttpRouter.html" class="extype" name="com.twitter.finatra.http.routing.HttpRouter">HttpRouter</a> for the
 purpose of warming up the <code>HttpServer</code>.
-</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>This only provides routing to user-defined routes of the configured <a href="HttpRouter.html" class="extype" name="com.twitter.finatra.http.routing.HttpRouter">HttpRouter</a>.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="HttpRouter.html" class="extype" name="com.twitter.finatra.http.routing.HttpRouter">com.twitter.finatra.http.routing.HttpRouter</a></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>This only provides routing to user-defined routes of the configured <a href="HttpRouter.html" class="extype" name="com.twitter.finatra.http.routing.HttpRouter">HttpRouter</a>.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="HttpRouter.html" class="extype" name="com.twitter.finatra.http.routing.HttpRouter">HttpRouter</a></p></span></dd></dl></div>
     </li></ol>
             </div>
 
@@ -464,7 +487,23 @@ purpose of warming up the <code>HttpServer</code>.
         <div class="values members">
               <h3>Value Members</h3>
               <ol>
-                <li name="com.twitter.finatra.http.routing.HttpRouter" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+                <li name="com.twitter.finatra.http.routing.HttpForward" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="HttpForward"></a><a id="HttpForward:HttpForward"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/routing/index.html#HttpForward" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="HttpForward$.html"><span class="name">HttpForward</span></a>
+      </span>
+      
+      
+    </li><li name="com.twitter.finatra.http.routing.HttpRouter" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="HttpRouter"></a><a id="HttpRouter:HttpRouter"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/routing/index.html#HttpRouter" title="Permalink">
