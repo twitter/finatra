@@ -226,12 +226,15 @@ class TweetsControllerIntegrationTest extends FeatureTest {
     )
   }
 
-  test("get streaming custom toBuf") {
-    server.httpGet("/tweets/streaming_custom_tobuf", andExpect = Status.Ok, withBody = "ABC")
+  test("get streaming custom toBuf (Deprecated)") {
+    server.httpGet("/tweets/streaming_custom_tobuf_deprecated", andExpect = Status.Ok, withBody = "ABC")
   }
 
   test("get StreamingResponse with AsyncStream") {
-    server.httpGet("/tweets/streamingRep_with_asyncStream", andExpect = Status.Ok, withBody = "ABC")
+    server.httpGet(
+      "/tweets/streamingRep_with_asyncStream",
+      andExpect = Status.Ok,
+      withJsonBody = """["A","B","C"]""")
   }
 
   test("get StreamingResponse with Reader") {
@@ -243,22 +246,22 @@ class TweetsControllerIntegrationTest extends FeatureTest {
     response.headerMap.getAll("key2") should equal(Seq("v4", "v5", "v6"))
   }
 
-  test("get streaming with transformer") {
-    server.httpGet("/tweets/streaming_with_transformer", andExpect = Status.Ok, withBody = "abc")
+  test("get streaming with transformer (Deprecated)") {
+    server.httpGet("/tweets/streaming_with_transformer_deprecated", andExpect = Status.Ok, withBody = "abc")
   }
 
   test("get StreamingResponse with AsyncStream with transformer ") {
     server.httpGet(
       "/tweets/streamingRep_with_transformer_asyncStream",
       andExpect = Status.Ok,
-      withBody = "abc")
+      withJsonBody = """["a","b","c"]""")
   }
 
   test("get StreamingResponse with Reader with transformer") {
     server.httpGet(
       "/tweets/streamingRep_with_transformer_reader",
       andExpect = Status.Ok,
-      withBody = "abc")
+      withJsonBody = """["a","b","c"]""")
   }
 
   test("get streaming with onWrite") {
@@ -266,11 +269,11 @@ class TweetsControllerIntegrationTest extends FeatureTest {
     assert(onWriteLog == Seq("a", "b", "c"))
   }
 
-  test("get streaming custom toBuf with custom headers") {
+  test("get streaming custom toBuf with custom headers (Deprecated)") {
     val response = server.httpGet(
-      "/tweets/streaming_custom_tobuf_with_custom_headers",
+      "/tweets/streaming_custom_tobuf_with_custom_headers_deprecated",
       andExpect = Status.Created,
-      withBody = "ABC"
+      withJsonBody = "ABC"
     )
 
     response.headerMap.contains(Fields.ContentType) should equal(true)
@@ -280,6 +283,24 @@ class TweetsControllerIntegrationTest extends FeatureTest {
     response.headerMap.contains(Fields.CacheControl) should equal(true)
     response.headerMap.get(Fields.CacheControl).get should equal(
       "no-cache, no-store, max-age=0, must-revalidate"
+    )
+
+  }
+
+  test("get streaming custom toBuf with custom headers") {
+    val response = server.httpGet(
+      "/tweets/streaming_custom_tobuf_with_custom_headers",
+      andExpect = Status.Created,
+      withJsonBody = """["A","B","C"]"""
+    )
+
+    response.headerMap.contains(Fields.ContentType) should equal(true)
+    response.headerMap.get(Fields.ContentType).get should equal("text/event-stream;charset=UTF-8")
+    response.headerMap.contains(Fields.Pragma) should equal(true)
+    response.headerMap.get(Fields.Pragma).get should equal("no-cache")
+    response.headerMap.contains(Fields.CacheControl) should equal(true)
+    response.headerMap.getAll(Fields.CacheControl) should equal(
+      Seq("no-cache", "no-store", "max-age=0", "must-revalidate")
     )
 
   }

@@ -91,7 +91,7 @@ public class StreamingResponseJavaTest extends Assert {
     Response response = fromReader(reader, ManifestFactory.<String>classType(String.class));
     Future<Buf> fBuf = BufReaders.readAll(response.reader());
     String result = Buf.decodeString(await(fBuf), StandardCharsets.UTF_8);
-    Assert.assertEquals("firstsecondthird", result);
+    Assert.assertEquals("[\"first\",\"second\",\"third\"]", result);
   }
 
   @Test
@@ -132,7 +132,7 @@ public class StreamingResponseJavaTest extends Assert {
     Response response = fromStream(stream, ManifestFactory.<String>classType(String.class));
     Future<Buf> fBuf = BufReaders.readAll(response.reader());
     String result = Buf.decodeString(await(fBuf), StandardCharsets.UTF_8);
-    Assert.assertEquals("firstsecondthird", result);
+    Assert.assertEquals("[\"first\",\"second\",\"third\"]", result);
   }
 
 }

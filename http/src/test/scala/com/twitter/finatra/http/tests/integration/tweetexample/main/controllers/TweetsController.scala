@@ -61,7 +61,7 @@ class TweetsController @Inject()(
     tweetsRepository.getByIds(Reader.fromSeq(Seq(0, 1, 2, 3, 4, 5)))
   }
 
-  get("/tweets/streaming_custom_tobuf") { _: Request =>
+  get("/tweets/streaming_custom_tobuf_deprecated") { _: Request =>
     DeprecatedStreamingResponse(Buf.Utf8.apply) {
       AsyncStream("A", "B", "C")
     }
@@ -87,7 +87,7 @@ class TweetsController @Inject()(
     response.streaming(Reader.fromSeq(Seq(1, 2, 3)), status = Status.Accepted, headers = headerMap)
   }
 
-  get("/tweets/streaming_with_transformer") { _: Request =>
+  get("/tweets/streaming_with_transformer_deprecated") { _: Request =>
     def lowercaseTransformer(as: AsyncStream[String]) = as.map(_.toLowerCase)
 
     val transformer = (lowercaseTransformer _)
@@ -116,7 +116,7 @@ class TweetsController @Inject()(
     response.streaming(Reader.fromSeq(Seq("A", "B", "C")).map(_.toLowerCase))
   }
 
-  get("/tweets/streaming_with_onWrite") { _: Request =>
+  get("/tweets/streaming_with_onWrite_deprecated") { _: Request =>
     def serializeAndLowercase(as: AsyncStream[String]): AsyncStream[(String, Buf)] = {
       as.map(str => (str.toLowerCase, Buf.Utf8(str)))
     }
@@ -137,7 +137,7 @@ class TweetsController @Inject()(
     }
   }
 
-  get("/tweets/streaming_custom_tobuf_with_custom_headers") { _: Request =>
+  get("/tweets/streaming_custom_tobuf_with_custom_headers_deprecated") { _: Request =>
     val headers = Map(
       Fields.ContentType -> "text/event-stream;charset=UTF-8",
       Fields.CacheControl -> "no-cache, no-store, max-age=0, must-revalidate",
@@ -147,6 +147,32 @@ class TweetsController @Inject()(
     DeprecatedStreamingResponse(Buf.Utf8.apply, Status.Created, headers) {
       AsyncStream("A", "B", "C")
     }
+  }
+
+  get("/tweets/streaming_with_onWrite") { _: Request =>
+    def onWrite(lowerCased: String, buf: Buf): Buf = {
+      onWriteLog.append(lowerCased)
+      buf
+    }
+    val reader = Reader
+      .fromSeq(Seq("A", "B", "C"))
+      .map { str =>
+        (str.toLowerCase, Buf.Utf8(str))
+      }
+      .map {
+        case (loweredCase, buf) => onWrite(loweredCase, buf)
+      }
+    response.streaming(reader).toFutureResponse()
+  }
+
+  get("/tweets/streaming_custom_tobuf_with_custom_headers") { _: Request =>
+    val headers = Map(
+      Fields.ContentType -> Seq("text/event-stream;charset=UTF-8"),
+      Fields.CacheControl -> Seq("no-cache", "no-store", "max-age=0", "must-revalidate"),
+      Fields.Pragma -> Seq("no-cache")
+    )
+
+    response.streaming(AsyncStream("A", "B", "C"), Status.Created, headers).toFutureResponse()
   }
 
   get("/tweets/streaming_manual_writes") { _: Request =>
@@ -174,20 +200,18 @@ class TweetsController @Inject()(
       tweetsRepository.getById(id)
   }
 
-  post("/tweets/streaming_req_over_json") {
-    streamingRequest: StreamingRequest[Reader, Tweet] =>
-      val tweetReader = streamingRequest.stream
-      val result: Reader[Long] = tweetReader.map { tweet =>
-        tweet.id
-      }
-      response.streaming(result)
+  post("/tweets/streaming_req_over_json") { streamingRequest: StreamingRequest[Reader, Tweet] =>
+    val tweetReader = streamingRequest.stream
+    val result: Reader[Long] = tweetReader.map { tweet =>
+      tweet.id
+    }
+    response.streaming(result)
   }
 
-  get("/tweets/streaming_rep_over_json") {
-    streamingRequest: StreamingRequest[Reader, Long] =>
-      val idReader = streamingRequest.stream
-      val tweetReader: Reader[Tweet] = tweetsRepository.getByIds(idReader)
-      response.streaming(tweetReader)
+  get("/tweets/streaming_rep_over_json") { streamingRequest: StreamingRequest[Reader, Long] =>
+    val idReader = streamingRequest.stream
+    val tweetReader: Reader[Tweet] = tweetsRepository.getByIds(idReader)
+    response.streaming(tweetReader)
   }
 
   get("/tweets/") { _: Request =>

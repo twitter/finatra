@@ -36,6 +36,11 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-http: (BREAKING API CHANGE) `StreamingResponse[Reader, String]` and
+  `StreamingResponse[AsyncStream, String]` now streaming `String` messages as JSON instead of
+  returning as-is. Concatenating text messages need to be handled from the Controller by users.
+  ``PHAB_ID=D394904``
+
 * finatra-http: (BREAKING API CHANGE) `AsyncStream[Buf] => AsyncStream[String]` and
   `Reader[Buf] => Reader[String]` handlers will always be tread the output as a JSON arrays of
   `Strings`. Whereas, before, the incoming bytes would have been converted to `String` and
