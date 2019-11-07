@@ -5,6 +5,7 @@ import com.twitter.finatra.http.internal.routing.Route
 import com.twitter.finatra.http.request.AnyMethod
 import com.twitter.inject.Logging
 import com.twitter.server.AdminHttpServer
+import com.twitter.server.filters.AdminThreadPoolFilter
 import com.twitter.util.lint.{Category, GlobalRules, Issue, Rule}
 
 private[http] object AdminHttpRouter extends Logging {
@@ -65,7 +66,7 @@ private[http] object AdminHttpRouter extends Logging {
     server
       .addAdminRoutes(
         toAdminHttpServerRoutes(adminIndexRoutes, router)
-          .map(AdminHttpServer.Route.isolate)
+          .map(AdminThreadPoolFilter.isolateRoute)
       )
 
     // Add rich handler for all other routes
@@ -73,7 +74,7 @@ private[http] object AdminHttpRouter extends Logging {
       HttpMuxer
         .addRichHandler(
           HttpRouter.FinatraAdminPrefix,
-          AdminHttpServer.Route.isolate(router.services.adminService)
+          AdminThreadPoolFilter.isolateService(router.services.adminService)
         )
     }
   }
