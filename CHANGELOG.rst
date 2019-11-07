@@ -7,6 +7,13 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Fixed
+~~~~~
+
+* finatra: Remove `com.sun.activation` dependency from `build.sbt` file. The dependency
+  duplicates the `javax.activation` dependency and as a result can cause a uber-JAR to fail
+  to build. ``PHAB_ID=D396506``
+
 19.11.0
 -------
 
