@@ -240,7 +240,7 @@ abstract class TwitterModule extends AbstractModule with TwitterBaseModule with 
    *
    * @tparam T type of the assisted injection factory
    *
-   * @see [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/assistedinject/AssistedInject.html com.google.inject.assistedinject.AssitedInject]]
+   * @see [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/assistedinject/AssistedInject.html com.google.inject.assistedinject.AssistedInject]]
    * @see [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/assistedinject/FactoryModuleBuilder.html com.google.inject.assistedinject.FactoryModuleBuilder]]
    * @see [[https://github.com/google/guice/wiki/AssistedInject Assisted Injection]]
    */
