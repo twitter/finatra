@@ -1,7 +1,7 @@
 .. _json_routing:
 
-JSON Integration with Routing
-=============================
+JSON Integration with HTTP Routing
+==================================
 
 Requests
 --------

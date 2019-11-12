@@ -2,18 +2,18 @@ package com.twitter.finatra.http.tests.marshalling
 
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.marshalling.{MessageBodyManager, MessageBodyReader}
-import com.twitter.finatra.http.modules.{MessageBodyModule, MustacheModule}
+import com.twitter.finatra.http.modules.MessageBodyModule
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.inject.{Mockito, Test}
 import com.twitter.inject.app.TestInjector
 
 class MessageBodyManagerTest extends Test with Mockito {
 
-  val request = mock[Request]
-  val injector =
-    TestInjector(MessageBodyModule, FinatraJacksonModule, MustacheModule).create
+  private val request = mock[Request]
+  private val injector =
+    TestInjector(MessageBodyModule, FinatraJacksonModule).create
 
-  val messageBodyManager = injector.instance[MessageBodyManager]
+  private val messageBodyManager = injector.instance[MessageBodyManager]
   messageBodyManager.add[DogMessageBodyReader]()
   messageBodyManager.add[FatherMessageBodyReader]()
   messageBodyManager.add(new Car2MessageBodyReader)

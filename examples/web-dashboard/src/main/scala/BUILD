@@ -15,6 +15,8 @@ scala_library(
         "finagle/finagle-zipkin-scribe/src/main/scala",
         "finatra/examples/web-dashboard/src/main/resources",
         "finatra/examples/web-dashboard/src/main/webapp",
+        "finatra/http-mustache/src/main/java/com/twitter/finatra/http/annotations",
+        "finatra/http-mustache/src/main/scala/com/twitter/finatra/http/modules",
         "finatra/http/src/main/java",
         "finatra/http/src/main/scala",
         "finatra/inject/inject-app/src/main/scala",

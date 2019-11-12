@@ -7,6 +7,23 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+
+* finatra-http: (BREAKING CHANGE) Remove automatic handling of Mustache rendering from
+  `finatra/http` and break Mustache support into two separate libraries: `finatra/mustache`
+  and `finatra/http-mustache`.
+
+  HTTP services that want the framework to automatically negotiate Mustache template rendering
+  via the Finatra HTTP `MessageBodyComponents` framework must now bring this concern into their
+  HTTP services via the `finatra/http-mustache` `c.t.finatra.http.modules.MustacheModule` as the
+  HTTP framework support for specifying a `MustacheModule` in the `HttpServer` has been removed.
+  I.e., add this module to the server's list of modules.
+
+  Additionally, it is also now possible to use Mustache templating completely independent of
+  Finatra HTTP concerns by consuming and using only the `finatra/mustache` library which will
+  render Strings via defined Mustache templates. ``PHAB_ID=D387629``
+
 Fixed
 ~~~~~
 

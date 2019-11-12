@@ -1,14 +1,14 @@
 package com.twitter.finatra.http.internal.marshalling
 
 import com.twitter.finagle.http.MediaType
-import com.twitter.finatra.http.marshalling.{DefaultMessageBodyWriter, WriterResponse}
+import com.twitter.finatra.http.marshalling.{DefaultMessageBodyWriter, MessageBodyFlags, WriterResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.inject.annotations.Flag
 import javax.inject.{Inject, Singleton}
 
 @Singleton
 private[finatra] class DefaultMessageBodyWriterImpl @Inject()(
-  @Flag("http.response.charset.enabled") includeContentTypeCharset: Boolean,
+  @Flag(MessageBodyFlags.ResponseCharsetEnabled) includeContentTypeCharset: Boolean,
   mapper: FinatraObjectMapper
 ) extends DefaultMessageBodyWriter {
 

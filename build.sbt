@@ -258,6 +258,8 @@ lazy val exampleServerSettings = baseServerSettings ++ Seq(
 lazy val finatraModules = Seq[sbt.ProjectReference](
   benchmarks,
   http,
+  httpAnnotations,
+  httpMustache,
   httpclient,
   injectApp,
   injectCore,
@@ -278,6 +280,7 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   kafkaStreamsQueryableThrift,
   kafkaStreamsQueryableThriftClient,
   kafkaStreamsStaticPartitioning,
+  mustache,
   thrift,
   utils)
 
@@ -607,6 +610,7 @@ lazy val benchmarks = project
   .settings(noPublishSettings)
   .dependsOn(
     http,
+    httpMustache % "test",
     injectRequestScope,
     injectCore % "test->test",
     injectApp % "test->test;compile->compile")
@@ -687,6 +691,24 @@ lazy val jackson = project
     injectApp % "test->test",
     injectUtils)
 
+lazy val mustache = project
+  .settings(projectSettings)
+  .settings(
+    name := "finatra-mustache",
+    moduleName := "finatra-mustache",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*",
+    libraryDependencies ++= Seq(
+      "javax.inject" % "javax.inject" % "1",
+      "com.github.spullara.mustache.java" % "compiler" % versions.mustache exclude("com.google.guava", "guava"),
+      "com.google.inject" % "guice" % versions.guice,
+      "com.twitter" %% "util-core" % versions.twLibVersion
+    )
+  ).dependsOn(
+  injectApp % "test->test;compile->compile",
+  injectCore % "test->test;compile->compile",
+  utils
+)
+
 lazy val httpTestJarSources =
   Seq(
     "com/twitter/finatra/http/EmbeddedHttpServer",
@@ -701,9 +723,8 @@ lazy val http = project
   .settings(
     name := "finatra-http",
     moduleName := "finatra-http",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;.*NonValidatingHttpHeadersResponse.*;com\\.twitter\\.finatra\\..*package.*;.*ThriftExceptionMapper.*;.*HttpResponseExceptionMapper.*;.*HttpResponseException.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*ThriftExceptionMapper.*;.*HttpResponseExceptionMapper.*;.*HttpResponseException.*",
     libraryDependencies ++= Seq(
-      "com.github.spullara.mustache.java" % "compiler" % versions.mustache exclude("com.google.guava", "guava"),
       "com.twitter" %% "finagle-exp" % versions.twLibVersion,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
@@ -727,12 +748,41 @@ lazy val http = project
       previous.filter(mappingContainsAnyPath(_, httpTestJarSources))
     }
   ).dependsOn(
-    jackson % "test->test;compile->compile",
+    httpAnnotations,
+    httpclient % "test->test",
     injectRequestScope % Test,
     injectPorts % "test->test",
     injectSlf4j,
     injectServer % "test->test;compile->compile",
-    httpclient % "test->test",
+    jackson % "test->test;compile->compile",
+    utils % "test->test;compile->compile"
+  )
+
+lazy val httpAnnotations = (project in file("http-annotations"))
+  .settings(projectSettings)
+  .settings(
+    name := "finatra-http-annotations",
+    moduleName := "finatra-http-annotations"
+  )
+
+lazy val httpMustache = (project in file("http-mustache"))
+  .settings(projectSettings)
+  .settings(
+    name := "finatra-http-mustache",
+    moduleName := "finatra-http-mustache",
+    libraryDependencies ++= Seq(
+      "javax.inject" % "javax.inject" % "1",
+      "com.github.spullara.mustache.java" % "compiler" % versions.mustache exclude("com.google.guava", "guava"),
+      "com.google.inject" % "guice" % versions.guice,
+      "com.twitter" %% "finagle-http" % versions.twLibVersion,
+      "com.twitter" %% "util-core" % versions.twLibVersion
+    )
+  ).dependsOn(
+    http % "test->test;compile->compile",
+    httpAnnotations,
+    injectCore % "test->test;compile->compile",
+    injectUtils,
+    mustache % "test->test;compile->compile",
     utils % "test->test;compile->compile")
 
 lazy val httpclientTestJarSources =
@@ -1144,10 +1194,12 @@ lazy val exampleWebDashboard = (project in file("examples/web-dashboard"))
     unmanagedResourceDirectories in Compile += baseDirectory.value / "src" / "main" / "webapp"
   ).dependsOn(
     http % "test->test;compile->compile",
+    httpMustache,
     httpclient,
     injectCore % "test->test",
     injectSlf4j,
-    injectLogback)
+    injectLogback,
+    mustache)
 
 lazy val exampleTwitterServer = (project in file("examples/example-twitter-server"))
   .settings(exampleServerSettings)

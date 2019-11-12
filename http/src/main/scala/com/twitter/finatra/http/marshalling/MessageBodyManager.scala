@@ -2,7 +2,7 @@ package com.twitter.finatra.http.marshalling
 
 import com.google.inject.internal.MoreTypes.ParameterizedTypeImpl
 import com.twitter.finagle.http.Request
-import com.twitter.finatra.http.response.Mustache
+import com.twitter.finatra.http.annotations.{MessageBodyWriter => MessageBodyWriterAnnotation}
 import com.twitter.inject.Injector
 import com.twitter.inject.TypeUtils.singleTypeParam
 import com.twitter.inject.conversions.map._
@@ -44,7 +44,6 @@ class MessageBodyManager @Inject()(
   private[this] val classTypeToReader = mutable.Map[Type, MessageBodyReader[Any]]()
   private[this] val classTypeToWriter = mutable.Map[Type, MessageBodyWriter[Any]]()
 
-  private[this] val writerAnnotations: Seq[Class[_ <: Annotation]] = Seq(classOf[Mustache])
   private[this] val annotationTypeToWriter = mutable.Map[Type, MessageBodyWriter[Any]]()
 
   private[this] val readerCache =
@@ -73,8 +72,12 @@ class MessageBodyManager @Inject()(
 
   final def addByAnnotation[Ann <: Annotation: Manifest, T <: MessageBodyWriter[_]: Manifest](): Unit = {
     val messageBodyWriter = injector.instance[T]
-    val annot = manifest[Ann].runtimeClass.asInstanceOf[Class[Ann]]
-    annotationTypeToWriter(annot) = messageBodyWriter.asInstanceOf[MessageBodyWriter[Any]]
+    val annotation = manifest[Ann].runtimeClass.asInstanceOf[Class[Ann]]
+    val requiredAnnotationClazz = classOf[MessageBodyWriterAnnotation]
+    assert(
+      annotation.isAnnotationPresent(requiredAnnotationClazz),
+      s"The annotation: ${annotation.getSimpleName} is not annotated with the required ${requiredAnnotationClazz.getName} annotation.")
+    annotationTypeToWriter(annotation) = messageBodyWriter.asInstanceOf[MessageBodyWriter[Any]]
   }
 
   final def addByComponentType[M <: MessageBodyComponent: Manifest, T <: MessageBodyWriter[_]: Manifest](): Unit = {
@@ -131,7 +134,7 @@ class MessageBodyManager @Inject()(
 
   private[this] def add[MessageBodyComp: Manifest](typeToReadOrWrite: Type): Unit = {
     typeToReadOrWrite match {
-      case p: ParameterizedTypeImpl =>
+      case _: ParameterizedTypeImpl =>
         throw new IllegalArgumentException("Adding a message body component with parameterized types, e.g. MessageBodyReader[Map[String, String]] is not supported.")
       case _ =>
         val messageBodyComponent = injector.instance[MessageBodyComp]
@@ -150,10 +153,13 @@ class MessageBodyManager @Inject()(
 
   private[this] def classAnnotationToWriter(clazz: Class[_]): Option[MessageBodyWriter[Any]] = {
     // we stop at the first supported annotation for looking up a writer
-    clazz.getAnnotations.collectFirst {
-      case annotation if writerAnnotations.contains(annotation.annotationType()) => annotation
-    }.flatMap { annotation =>
-      annotationTypeToWriter.get(annotation.annotationType)
-    }
+    clazz
+      .getAnnotations
+      .collectFirst(isRequiredAnnotationPresent)
+      .flatMap(a => annotationTypeToWriter.get(a.annotationType))
+  }
+
+  private[this] val isRequiredAnnotationPresent: PartialFunction[Annotation, Annotation] = {
+    case annotation: Annotation if annotation.annotationType.isAnnotationPresent(classOf[MessageBodyWriterAnnotation]) => annotation
   }
 }

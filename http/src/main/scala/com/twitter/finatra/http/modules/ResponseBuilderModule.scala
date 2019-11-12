@@ -9,5 +9,5 @@ import com.twitter.inject.modules.StatsReceiverModule
 @deprecated("Define the modules separately", "2019-10-16")
 object ResponseBuilderModule extends TwitterModule {
   override val modules: Seq[Module] =
-    Seq(FinatraJacksonModule, FileResolverModule, MessageBodyModule, MustacheModule, StatsReceiverModule)
+    Seq(FinatraJacksonModule, FileResolverModule, MessageBodyModule, StatsReceiverModule)
 }

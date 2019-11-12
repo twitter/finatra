@@ -8,7 +8,6 @@ import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.utils.FileResolver
 import com.twitter.inject.{Mockito, Test}
-import com.twitter.util.Await
 import java.io.{File, FileWriter}
 
 class ResponseBuilderTest extends Test with Mockito {
@@ -127,12 +126,10 @@ class ResponseBuilderTest extends Test with Mockito {
       .contentType
       .get should equal("Foo")
 
-    Await.result(responseBuilder.ok.toFuture).status should equal(Status.Ok)
+    await(responseBuilder.ok.toFuture).status should equal(Status.Ok)
   }
 
-  def assertFooBarCookie(
-    response: ResponseBuilderTest.this.responseBuilder.EnrichedResponse
-  ): Unit = {
+  def assertFooBarCookie(response: Response): Unit = {
     val cookie = response.getCookies().next()
     cookie.name should equal("foo")
     cookie.value should equal("bar")
