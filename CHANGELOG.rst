@@ -27,6 +27,11 @@ Changed
 Fixed
 ~~~~~
 
+* inject-server: Addressed a race condition that could allow for an `AdminHttpServer` to be
+  started, even when the `disableAdminHttpServer` property was set. The `AdminHttpServer` will
+  no longer start prior to the warm-up phase if disabled. The `disableAdminHttpServer` property
+  has also been moved to `com.twitter.server.AdminHttpServer`. `PHAB_ID=D397925``
+
 * finatra: Remove `com.sun.activation` dependency from `build.sbt` file. The dependency
   duplicates the `javax.activation` dependency and as a result can cause a uber-JAR to fail
   to build. ``PHAB_ID=D396506``
