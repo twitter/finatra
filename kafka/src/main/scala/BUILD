@@ -10,7 +10,7 @@ scala_library(
     dependencies = [
         "3rdparty/jvm/org/apache/kafka:kafka-clients",
         "finagle/finagle-core/src/main/scala",
-        "finatra/inject/inject-core",
+        "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-slf4j",
         "finatra/inject/inject-utils",
         "finatra/kafka/src/main/java",
@@ -21,7 +21,7 @@ scala_library(
     exports = [
         "3rdparty/jvm/org/apache/kafka:kafka-clients",
         "finagle/finagle-core/src/main/scala",
-        "finatra/inject/inject-core",
+        "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-slf4j",
         "finatra/inject/inject-utils",
         "finatra/utils/src/main/scala",
