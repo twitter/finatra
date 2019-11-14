@@ -1,7 +1,7 @@
 package com.twitter.finatra.kafka.test
 
-import com.twitter.conversions.StorageUnitOps._
 import com.twitter.conversions.DurationOps._
+import com.twitter.conversions.StorageUnitOps._
 import com.twitter.finatra.kafka.modules.KafkaBootstrapModule
 import com.twitter.inject.{Logging, Test}
 import com.twitter.util.Duration
@@ -24,7 +24,7 @@ trait EmbeddedKafka extends Test with Logging {
 
   protected def groupInitialRebalanceDelay: Duration = 0.seconds
 
-  protected def maxMessageBytes = 20.megabytes.bytes
+  protected def maxMessageBytes: Long = 20.megabytes.bytes
 
   protected val emptyBytes: Bytes = Bytes.wrap(Array.emptyByteArray)
 
@@ -107,7 +107,7 @@ trait EmbeddedKafka extends Test with Logging {
   }
 
   //Note: EmbeddedKafkaCluster appears to only be closable through a JUnit ExternalResource
-  protected def closeEmbeddedKafka() = {
+  protected def closeEmbeddedKafka(): Unit = {
     val afterMethod = classOf[EmbeddedKafkaCluster].getDeclaredMethod("after")
     afterMethod.setAccessible(true)
     afterMethod.invoke(kafkaCluster)
