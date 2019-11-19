@@ -56,7 +56,7 @@ private[twitter] trait ThriftClientModuleTrait extends StackClientModuleTrait[Th
         val asClosableMethodOpt =
           thriftService
             .getClass
-            .getDeclaredMethods
+            .getMethods
             .find(_.getName == AsClosableMethodName)
         asClosableMethodOpt match {
           case Some(method) =>

@@ -27,6 +27,10 @@ Changed
 Fixed
 ~~~~~
 
+* inject-modules: Removed the extra registration for closing a client, which used to log false
+  warnings when startup a ClientModule. Only register close after materialized clients.
+  ``PHAB_ID=D401288``
+
 * inject-server: Addressed a race condition that could allow for an `AdminHttpServer` to be
   started, even when the `disableAdminHttpServer` property was set. The `AdminHttpServer` will
   no longer start prior to the warm-up phase if disabled. The `disableAdminHttpServer` property

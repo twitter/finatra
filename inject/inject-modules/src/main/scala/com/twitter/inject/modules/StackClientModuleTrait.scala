@@ -260,22 +260,13 @@ trait StackClientModuleTrait[
     // the `baseClient` will be configured with the properties exposed by this trait,
     // followed by any custom configuration provided by overriding `configureClient`,
     // and finally applying the `frameworkConfigureClient` configuration
-    val client =
-      frameworkConfigureClient(
+    frameworkConfigureClient(
+      injector,
+      configureClient(
         injector,
-        configureClient(
-          injector,
-          initialClientConfiguration(injector, baseClient, clientStatsReceiver)
-        )
+        initialClientConfiguration(injector, baseClient, clientStatsReceiver)
       )
-
-    handleCloseOnExit {
-      client match {
-        case closable: Closable => closable
-        case _ => asClosable(client)
-      }
-    }
-    client
+    )
   }
 
   /**
@@ -293,7 +284,9 @@ trait StackClientModuleTrait[
     statsReceiver: StatsReceiver
   ): Service[Req, Rep] = {
     val service = newClient(injector, statsReceiver).newService(dest, label)
-    handleCloseOnExit(service)
+    closeOnExit {
+      Await.result(service.close(defaultClosableGracePeriod), defaultClosableAwaitPeriod)
+    }
     service
   }
 
@@ -302,11 +295,4 @@ trait StackClientModuleTrait[
     injector: Injector,
     client: ClientType
   ): ClientType = client
-
-  /* Private */
-
-  private[this] final def handleCloseOnExit(closable: Closable): Unit = closeOnExit {
-    Await.result(closable.close(defaultClosableGracePeriod), defaultClosableAwaitPeriod)
-  }
-
 }

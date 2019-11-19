@@ -5,6 +5,7 @@ import com.twitter.finagle.ThriftMux
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.thrift.ClientId
 import com.twitter.inject.{Injector, TwitterModule}
+import com.twitter.util.Await
 import javax.inject.Singleton
 import scala.reflect.ClassTag
 
@@ -45,7 +46,13 @@ abstract class ThriftClientModule[ThriftService: ClassTag]
     injector: Injector,
     clientId: ClientId,
     statsReceiver: StatsReceiver
-  ): ThriftService = newClient(injector, statsReceiver)
-    .build[ThriftService](dest, label)
+  ): ThriftService = {
+    val thriftmuxClient = newClient(injector, statsReceiver).build[ThriftService](dest, label)
+    closeOnExit {
+      val closable = asClosableThriftService(thriftmuxClient)
+      Await.result(closable.close(defaultClosableGracePeriod), defaultClosableAwaitPeriod)
+    }
+    thriftmuxClient
+  }
 
 }
