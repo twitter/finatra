@@ -10,6 +10,8 @@ Unreleased
 Changed
 ~~~~~~~
 
+* finatra-http: Remove deprecated `DocRootModule`. ``PHAB_ID=D404723``
+
 * finatra-http: (BREAKING CHANGE) Remove automatic handling of Mustache rendering from
   `finatra/http` and break Mustache support into two separate libraries: `finatra/mustache`
   and `finatra/http-mustache`.
