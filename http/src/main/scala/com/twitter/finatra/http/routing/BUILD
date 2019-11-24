@@ -14,6 +14,7 @@ scala_library(
         "finatra/http/src/main/scala/com/twitter/finatra/http/exceptions",
         "finatra/http/src/main/scala/com/twitter/finatra/http/internal/routing",
         "finatra/http/src/main/scala/com/twitter/finatra/http/request",
+        "finatra/inject/inject-core/src/main/scala/com/twitter/inject/internal",
         "finatra/inject/inject-slf4j/src/main/scala",
         "twitter-server/server/src/main/scala",
         "util/util-core/src/main/scala/com/twitter/util",

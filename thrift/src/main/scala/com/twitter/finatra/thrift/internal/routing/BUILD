@@ -9,7 +9,8 @@ scala_library(
     strict_deps = True,
     dependencies = [
         "finagle/finagle-thrift/src/main/scala",
-        "finatra/inject/inject-core/src/main/scala",
+        "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
+        "finatra/inject/inject-core/src/main/scala/com/twitter/inject/internal",
         "scrooge/scrooge-core/src/main/scala",
     ],
 )
