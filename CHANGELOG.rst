@@ -10,6 +10,9 @@ Unreleased
 Changed
 ~~~~~~~
 
+* finatra: (BREAKING API CHANGE) Upgrade Jackson dependency from version `2.9.9` to
+  version `2.10.1` ``PHAB_ID=D402722``
+
 * finatra-http: Remove deprecated `DocRootModule`. ``PHAB_ID=D404723``
 
 * finatra-http: (BREAKING CHANGE) Remove automatic handling of Mustache rendering from

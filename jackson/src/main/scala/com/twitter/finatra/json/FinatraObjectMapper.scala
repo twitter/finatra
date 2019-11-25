@@ -3,7 +3,7 @@ package com.twitter.finatra.json
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream
 import com.fasterxml.jackson.databind._
-import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
+import com.fasterxml.jackson.module.scala.ScalaObjectMapper
 import com.google.inject.Injector
 import com.twitter.finagle.http.{Message, Request, Response}
 import com.twitter.finatra.json.internal.caseclass.exceptions.RequestFieldInjectionNotSupportedException

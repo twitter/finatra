@@ -644,7 +644,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
       withJsonBody = """
         {
           "errors":[
-            "Unrecognized token 'invalid': was expecting ('true', 'false' or 'null')"
+            "Unrecognized token 'invalid': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')"
           ]
         }"""
     )
