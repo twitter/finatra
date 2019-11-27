@@ -2,34 +2,18 @@ package com.twitter.finatra.json.tests
 
 import com.fasterxml.jackson.core.`type`.TypeReference
 import com.fasterxml.jackson.databind.node.{IntNode, TreeTraversingParser}
-import com.fasterxml.jackson.databind.{
-  JsonMappingException,
-  JsonNode,
-  ObjectMapper,
-  PropertyNamingStrategy
-}
+import com.fasterxml.jackson.databind.{JsonMappingException, JsonNode, ObjectMapper, PropertyNamingStrategy}
 import com.fasterxml.jackson.module.scala.{DefaultScalaModule, ScalaObjectMapper}
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.annotations.{CamelCaseMapper, SnakeCaseMapper}
-import com.twitter.finatra.json.internal.caseclass.exceptions.{
-  CaseClassMappingException,
-  CaseClassValidationException,
-  JsonInjectionNotSupportedException,
-  RequestFieldInjectionNotSupportedException
-}
+import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassMappingException, CaseClassValidationException, JsonInjectionNotSupportedException, RequestFieldInjectionNotSupportedException}
 import com.twitter.finatra.json.internal.caseclass.jackson.MissingExpectedType
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.finatra.json.tests.internal.Obj.{
-  NestedCaseClassInObject,
-  NestedCaseClassInObjectWithNestedCaseClassInObjectParam
-}
+import com.twitter.finatra.json.tests.internal.Obj.{NestedCaseClassInObject, NestedCaseClassInObjectWithNestedCaseClassInObjectParam}
 import com.twitter.finatra.json.tests.internal.TypeAndCompanion.NestedCaseClassInCompanion
 import com.twitter.finatra.json.tests.internal._
 import com.twitter.finatra.json.tests.internal.caseclass.jackson.Aum
-import com.twitter.finatra.json.tests.internal.internal.{
-  SimplePersonInPackageObject,
-  SimplePersonInPackageObjectWithoutConstructorParams
-}
+import com.twitter.finatra.json.tests.internal.internal.{SimplePersonInPackageObject, SimplePersonInPackageObjectWithoutConstructorParams}
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.conversions.time._

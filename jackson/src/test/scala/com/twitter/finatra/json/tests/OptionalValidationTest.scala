@@ -19,7 +19,7 @@ private object OptionalValidationTest {
     @Min(0) upperBound: Int,
     state: State) {
     @MethodValidation
-    def method = ValidationResult.validate(
+    def method: ValidationResult = ValidationResult.validate(
       lowerBound <= upperBound,
       "Lower Bound cannot be greater than Upper Bound"
     )

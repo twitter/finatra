@@ -1,7 +1,7 @@
 junit_tests(
     sources = rglobs(
-        "com/twitter/finatra/json/tests/*.scala",
         "com/twitter/finatra/json/tests/*.java",
+        "com/twitter/finatra/json/tests/*.scala",
     ),
     dependencies = [
         ":test-deps",
@@ -36,6 +36,9 @@ junit_tests(
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/jackson/src/main/java",
         "finatra/jackson/src/main/scala",
+        "finatra/validation/src/main/java/com/twitter/finatra/validation",
+        "finatra/validation/src/main/scala/com/twitter/finatra/validation",
+        "finatra/validation/src/test/scala/com/twitter/finatra/validation",
         "util/util-core/src/main/scala",
         "util/util-slf4j-api/src/main/scala",
     ],
@@ -45,8 +48,7 @@ scala_library(
     name = "test-deps",
     sources = globs(
         "com/twitter/finatra/json/*.scala",
-        "com/twitter/finatra/validation/*.scala",
-        "com/twitter/finatra/validation/*.java",
+        "com/twitter/finatra/json/*.java",
     ),
     compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
@@ -69,6 +71,7 @@ scala_library(
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/jackson/src/main/scala",
+        "finatra/validation/src/test/scala/com/twitter/finatra/validation",
         "util/util-core/src/main/scala",
         "util/util-slf4j-api/src/main/scala",
     ],

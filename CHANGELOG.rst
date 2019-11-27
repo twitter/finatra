@@ -45,6 +45,13 @@ Fixed
   duplicates the `javax.activation` dependency and as a result can cause a uber-JAR to fail
   to build. ``PHAB_ID=D396506``
 
+Added
+~~~~~
+
+* finatra-jackson: (BREAKING API CHANGE) Move all Case Class annotation validation related logic to
+  a new library in finatra-validation. Please update your library dependencies to the new library if
+  you are using case class validations. ``PHAB_ID=D386969``
+
 19.11.0
 -------
 

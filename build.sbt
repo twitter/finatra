@@ -651,10 +651,47 @@ lazy val utils = project
     injectServer % "test->test",
     injectUtils)
 
+lazy val validationTestJarSources =
+  Seq(
+    "com/twitter/finatra/validation/ValidatorTest"
+  )
+lazy val validation = project
+  .settings(projectSettings)
+  .settings(
+    name := "finatra-validation",
+    moduleName := "finatra-validation",
+    libraryDependencies ++= Seq(
+      "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
+      "joda-time" % "joda-time" % versions.jodaTime,
+      "org.json4s" %% "json4s-core" % versions.json4s,
+      "com.twitter" %% "util-core" % versions.twLibVersion
+    ),
+    // special-case to only scaladoc what's necessary as some of the tests cannot generate scaladocs
+    sources in Test in doc := {
+      val previous: Seq[File] = (sources in Test in doc).value
+      previous.filter(file => validationTestJarSources.foldLeft(false)(_ || file.getPath.contains(_)))
+    },
+    publishArtifact in Test := true,
+    mappings in (Test, packageBin) := {
+      val previous = (mappings in (Test, packageBin)).value
+      previous.filter(mappingContainsAnyPath(_, validationTestJarSources))
+    },
+    mappings in (Test, packageDoc) := {
+      val previous = (mappings in (Test, packageDoc)).value
+      previous.filter(mappingContainsAnyPath(_, validationTestJarSources))
+    },
+    mappings in (Test, packageSrc) := {
+      val previous = (mappings in (Test, packageSrc)).value
+      previous.filter(mappingContainsAnyPath(_, validationTestJarSources))
+    }
+  ).dependsOn(
+  injectCore % "test->test;compile->compile",
+  injectUtils)
+
 lazy val jacksonTestJarSources =
   Seq(
-    "com/twitter/finatra/validation",
-    "com/twitter/finatra/json/JsonDiff")
+    "com/twitter/finatra/json/JsonDiff"
+    )
 lazy val jackson = project
   .settings(projectSettings)
   .settings(
@@ -689,7 +726,8 @@ lazy val jackson = project
     }
   ).dependsOn(
     injectApp % "test->test",
-    injectUtils)
+    injectUtils,
+    validation % "test->test;compile->compile")
 
 lazy val mustache = project
   .settings(projectSettings)
@@ -755,7 +793,8 @@ lazy val http = project
     injectSlf4j,
     injectServer % "test->test;compile->compile",
     jackson % "test->test;compile->compile",
-    utils % "test->test;compile->compile"
+    utils % "test->test;compile->compile",
+    validation % "test"
   )
 
 lazy val httpAnnotations = (project in file("http-annotations"))
@@ -1080,7 +1119,8 @@ lazy val twitterClone = (project in file("examples/twitter-clone"))
     httpclient,
     injectCore % "test->test",
     injectSlf4j,
-    injectLogback)
+    injectLogback,
+    validation)
 
 lazy val benchmarkServer = (project in file("examples/benchmark-server"))
   .settings(baseServerSettings)

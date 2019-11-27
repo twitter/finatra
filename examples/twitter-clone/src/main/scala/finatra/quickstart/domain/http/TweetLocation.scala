@@ -1,6 +1,6 @@
 package finatra.quickstart.domain.http
 
-import com.twitter.finatra.validation._
+import com.twitter.finatra.validation.Range
 import finatra.quickstart.domain.Location
 
 case class TweetLocation(

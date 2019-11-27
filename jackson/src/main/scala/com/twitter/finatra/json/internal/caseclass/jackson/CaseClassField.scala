@@ -8,14 +8,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.node.TreeTraversingParser
 import com.fasterxml.jackson.databind.util.ClassUtil
 import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassValidationException, FinatraJsonMappingException}
-import com.twitter.inject.utils.AnnotationUtils._
 import com.twitter.finatra.json.internal.caseclass.utils.{DefaultMethodUtils, FieldInjection}
 import com.twitter.finatra.request.{FormParam, Header, QueryParam}
-import com.twitter.finatra.validation.ValidationResult._
-import com.twitter.finatra.validation.{ErrorCode, Validation}
+import com.twitter.finatra.validation.ValidationResult.Invalid
+import com.twitter.finatra.validation.{ErrorCode, ValidationProvider}
 import com.twitter.inject.Logging
 import com.twitter.inject.conversions.string._
 import com.twitter.inject.utils.AnnotationUtils
+import com.twitter.inject.utils.AnnotationUtils._
 import java.lang.annotation.Annotation
 import java.lang.reflect.Type
 import org.json4s.reflect.{ClassDescriptor, Reflector, ScalaSigReader}
@@ -27,7 +27,8 @@ private[finatra] object CaseClassField {
   def createFields(
     clazz: Class[_],
     namingStrategy: PropertyNamingStrategy,
-    typeFactory: TypeFactory
+    typeFactory: TypeFactory,
+    validationProvider: ValidationProvider
   ): Seq[CaseClassField] = {
     /*
      In order to handle generics, we need to keep track of any type params defined on the case
@@ -71,7 +72,8 @@ private[finatra] object CaseClassField {
         parentClass = clazz,
         defaultFuncOpt = DefaultMethodUtils.defaultFunction(clazzDescriptor, idx),
         annotations = fieldAnnotations,
-        deserializer = deserializer
+        deserializer = deserializer,
+        validationProvider = validationProvider
       )
     }
   }
@@ -119,7 +121,8 @@ private[finatra] case class CaseClassField(
   parentClass: Class[_],
   defaultFuncOpt: Option[() => Object],
   annotations: Seq[Annotation],
-  deserializer: Option[JsonDeserializer[Object]])
+  deserializer: Option[JsonDeserializer[Object]],
+  validationProvider: ValidationProvider)
     extends Logging {
 
   private val isOption = javaType.getRawClass == classOf[Option[_]]
@@ -155,7 +158,8 @@ private[finatra] case class CaseClassField(
   }
 
   val validationAnnotations: Seq[Annotation] =
-    filterIfAnnotationPresent[Validation](annotations)
+    annotations.filter(
+      _.annotationType.isAnnotationPresent(validationProvider.validationAnnotation))
 
   /**
    * Parse the field from a JsonNode representing a JSON object

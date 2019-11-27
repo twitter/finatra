@@ -2287,7 +2287,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
         """.stripMargin,
       andExpect = InternalServerError,
       withBody =
-        "Class [class java.lang.String] is not supported by class com.twitter.finatra.json.internal.caseclass.validation.validators.MaxValidator"
+        "Class [class java.lang.String] is not supported by class com.twitter.finatra.validation.MaxValidator"
     )
   }
 

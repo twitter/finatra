@@ -10,10 +10,9 @@ import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.exc.{InvalidFormatException, MismatchedInputException}
 import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidationException.PropertyPath
 import com.twitter.finatra.json.internal.caseclass.exceptions._
-import com.twitter.finatra.json.internal.caseclass.validation.ValidationProvider
 import com.twitter.finatra.response.JsonCamelCase
-import com.twitter.finatra.validation.ValidationResult._
-import com.twitter.finatra.validation.{ErrorCode, MethodValidation}
+import com.twitter.finatra.validation.ValidationResult.Invalid
+import com.twitter.finatra.validation.{ErrorCode, MethodValidation, ValidationProvider}
 import com.twitter.inject.Logging
 import com.twitter.inject.domain.WrappedValue
 import java.lang.annotation.Annotation
@@ -48,7 +47,8 @@ private[finatra] class CaseClassDeserializer(
     CaseClassField.createFields(
       javaType.getRawClass,
       propertyNamingStrategy,
-      config.getTypeFactory
+      config.getTypeFactory,
+      validationProvider
     )
   private val typeBindings: Map[String, JavaType] = parseTypeBindings
 
@@ -187,7 +187,8 @@ private[finatra] class CaseClassDeserializer(
               Invalid(
                 s"'${jsonNode.asText("")}' is not a " +
                   s"valid ${boxedClassName(e.getTargetType.getSimpleName)}${validValuesString(e)}",
-                ErrorCode.JsonProcessingError(e))
+                ErrorCode.JsonProcessingError(e)
+              )
             )
           )
         case e: CaseClassMappingException =>
@@ -272,7 +273,7 @@ private[finatra] class CaseClassDeserializer(
     obj: Any
   ): Unit = {
     val methodValidationErrors: Seq[Seq[CaseClassValidationException]] = for {
-      invalid @ Invalid(_, _, _) <- validationManager.validateObject(obj)
+      invalid @ Invalid(_, _, _) <- validationManager.validateMethods(obj)
       fields = extractFieldsFromAnnotation(invalid.annotation)
       propertyPaths = fields.map(PropertyPath.leaf)
       exceptions = propertyPaths.map(CaseClassValidationException(_, invalid))

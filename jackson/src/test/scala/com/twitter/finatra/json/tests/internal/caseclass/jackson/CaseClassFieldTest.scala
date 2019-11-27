@@ -5,14 +5,10 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.`type`.TypeFactory
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.NumberDeserializers.BigDecimalDeserializer
-import com.twitter.finatra.json.internal.caseclass.jackson.CaseClassField
-import com.twitter.finatra.json.tests.internal.{
-  WithEmptyJsonProperty,
-  WithNonemptyJsonProperty,
-  WithoutJsonPropertyAnnotation
-}
+import com.twitter.finatra.json.internal.caseclass.jackson.{CaseClassField, NullCaseClassValidationProvider}
+import com.twitter.finatra.json.tests.internal.{WithEmptyJsonProperty, WithNonemptyJsonProperty, WithoutJsonPropertyAnnotation}
 import com.twitter.finatra.request.{Header, QueryParam}
-import com.twitter.finatra.validation.NotEmpty
+import com.twitter.finatra.validation.{NotEmpty, NotEmptyInternal}
 import com.twitter.inject.Test
 
 class CaseClassFieldTest extends Test {
@@ -21,7 +17,8 @@ class CaseClassFieldTest extends Test {
     val fields = CaseClassField.createFields(
       classOf[WithEmptyJsonProperty],
       PropertyNamingStrategy.LOWER_CAMEL_CASE,
-      TypeFactory.defaultInstance
+      TypeFactory.defaultInstance,
+      NullCaseClassValidationProvider
     )
 
     fields.length should equal(1)
@@ -32,7 +29,8 @@ class CaseClassFieldTest extends Test {
     val fields = CaseClassField.createFields(
       classOf[WithoutJsonPropertyAnnotation],
       PropertyNamingStrategy.LOWER_CAMEL_CASE,
-      TypeFactory.defaultInstance
+      TypeFactory.defaultInstance,
+      NullCaseClassValidationProvider
     )
 
     fields.length should equal(1)
@@ -43,7 +41,8 @@ class CaseClassFieldTest extends Test {
     val fields = CaseClassField.createFields(
       classOf[WithNonemptyJsonProperty],
       PropertyNamingStrategy.LOWER_CAMEL_CASE,
-      TypeFactory.defaultInstance
+      TypeFactory.defaultInstance,
+      NullCaseClassValidationProvider
     )
 
     fields.length should equal(1)
@@ -54,7 +53,8 @@ class CaseClassFieldTest extends Test {
     val fields = CaseClassField.createFields(
       classOf[Aum],
       PropertyNamingStrategy.LOWER_CAMEL_CASE,
-      TypeFactory.defaultInstance
+      TypeFactory.defaultInstance,
+      NullCaseClassValidationProvider
     )
 
     fields.length should equal(2)
@@ -74,7 +74,8 @@ class CaseClassFieldTest extends Test {
     val fields = CaseClassField.createFields(
       classOf[FooBar],
       PropertyNamingStrategy.LOWER_CAMEL_CASE,
-      TypeFactory.defaultInstance
+      TypeFactory.defaultInstance,
+      NullCaseClassValidationProvider
     )
 
     fields.length should equal(1)
@@ -91,7 +92,8 @@ class CaseClassFieldTest extends Test {
     val fields = CaseClassField.createFields(
       classOf[TestTraitImpl],
       PropertyNamingStrategy.LOWER_CAMEL_CASE,
-      TypeFactory.defaultInstance
+      TypeFactory.defaultInstance,
+      NullCaseClassValidationProvider
     )
 
     /*
@@ -151,10 +153,11 @@ class CaseClassFieldTest extends Test {
   }
 
   test("CaseClassField.createFields sees inherited JsonProperty annotation 4") {
-    val fields = CaseClassField.createFields(
+    val fields: Seq[CaseClassField] = CaseClassField.createFields(
       classOf[FooBaz],
       PropertyNamingStrategy.LOWER_CAMEL_CASE,
-      TypeFactory.defaultInstance
+      TypeFactory.defaultInstance,
+      NullCaseClassValidationProvider
     )
 
     fields.length should equal(1)
@@ -172,7 +175,8 @@ class CaseClassFieldTest extends Test {
     val fields = CaseClassField.createFields(
       classOf[FooBarBaz],
       PropertyNamingStrategy.LOWER_CAMEL_CASE,
-      TypeFactory.defaultInstance
+      TypeFactory.defaultInstance,
+      NullCaseClassValidationProvider
     )
 
     fields.length should equal(1)
@@ -190,7 +194,8 @@ class CaseClassFieldTest extends Test {
     val fields = CaseClassField.createFields(
       classOf[File],
       PropertyNamingStrategy.LOWER_CAMEL_CASE,
-      TypeFactory.defaultInstance
+      TypeFactory.defaultInstance,
+      NullCaseClassValidationProvider
     )
 
     fields.length should equal(1)
@@ -204,7 +209,8 @@ class CaseClassFieldTest extends Test {
     val fields = CaseClassField.createFields(
       classOf[Folder],
       PropertyNamingStrategy.LOWER_CAMEL_CASE,
-      TypeFactory.defaultInstance
+      TypeFactory.defaultInstance,
+      NullCaseClassValidationProvider
     )
 
     fields.length should equal(1)
@@ -218,7 +224,8 @@ class CaseClassFieldTest extends Test {
     val fields = CaseClassField.createFields(
       classOf[LoadableFile],
       PropertyNamingStrategy.LOWER_CAMEL_CASE,
-      TypeFactory.defaultInstance
+      TypeFactory.defaultInstance,
+      NullCaseClassValidationProvider
     )
 
     fields.length should equal(1)
@@ -232,7 +239,8 @@ class CaseClassFieldTest extends Test {
     val fields = CaseClassField.createFields(
       classOf[LoadableFolder],
       PropertyNamingStrategy.LOWER_CAMEL_CASE,
-      TypeFactory.defaultInstance
+      TypeFactory.defaultInstance,
+      NullCaseClassValidationProvider
     )
 
     fields.length should equal(1)
@@ -246,11 +254,24 @@ class CaseClassFieldTest extends Test {
     val fields = CaseClassField.createFields(
       classOf[CaseClassWithArrayLong],
       PropertyNamingStrategy.LOWER_CAMEL_CASE,
-      TypeFactory.defaultInstance
+      TypeFactory.defaultInstance,
+      NullCaseClassValidationProvider
     )
 
     fields.length should equal(1)
     val arrayField: CaseClassField = fields.head
     arrayField.javaType.getTypeName should be("[array type, component type: [simple type, class long]]")
+  }
+
+  test("CaseClassField should filter case class annotations correctly") {
+    val fields = CaseClassField.createFields(
+      classOf[TestTraitImpl],
+      PropertyNamingStrategy.LOWER_CAMEL_CASE,
+      TypeFactory.defaultInstance,
+      NullCaseClassValidationProvider
+    )
+    val nameField = fields.filter(_.name == "name")
+    val fieldAnnotations = nameField.flatMap(_.validationAnnotations)
+    fieldAnnotations.head.annotationType() should be (classOf[NotEmptyInternal])
   }
 }

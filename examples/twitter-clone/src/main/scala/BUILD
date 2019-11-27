@@ -21,6 +21,7 @@ scala_library(
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/jackson/src/main/scala",
+        "finatra/validation/src/main/scala/com/twitter/finatra/validation",
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",
         "util/util-lint/src/main/scala",

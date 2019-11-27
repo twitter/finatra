@@ -1,8 +1,7 @@
 package com.twitter.finatra.json.modules
 
 import com.fasterxml.jackson.module.scala._
-import com.twitter.finatra.json.internal.caseclass.jackson.CaseClassDeserializers
-import com.twitter.finatra.json.internal.caseclass.validation.NullValidationProvider
+import com.twitter.finatra.json.internal.caseclass.jackson.{CaseClassDeserializers, NullCaseClassValidationProvider}
 
 /**
  * Module that supports skipping validation of Finatra validation annotations.
@@ -10,5 +9,5 @@ import com.twitter.finatra.json.internal.caseclass.validation.NullValidationProv
 private[json] object NullValidationCaseClassModule extends JacksonModule {
   override def getModuleName = "NullValidationCaseClassModule"
 
-  this += { _.addDeserializers(new CaseClassDeserializers(NullValidationProvider)) }
+  this += { _.addDeserializers(new CaseClassDeserializers(NullCaseClassValidationProvider)) }
 }

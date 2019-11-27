@@ -2,10 +2,7 @@ package com.twitter.finatra.json.internal.caseclass.jackson
 
 import com.fasterxml.jackson.databind.deser.Deserializers
 import com.fasterxml.jackson.databind.{BeanDescription, DeserializationConfig, JavaType}
-import com.twitter.finatra.json.internal.caseclass.validation.{
-  DefaultValidationProvider,
-  ValidationProvider
-}
+import com.twitter.finatra.validation.{CaseClassValidationProvider, ValidationProvider}
 
 private object CaseClassDeserializers {
   val PRODUCT: Class[Product] = classOf[Product]
@@ -14,8 +11,8 @@ private object CaseClassDeserializers {
 }
 
 private[finatra] class CaseClassDeserializers(
-  validationProvider: ValidationProvider = DefaultValidationProvider
-) extends Deserializers.Base {
+  validationProvider: ValidationProvider = CaseClassValidationProvider)
+    extends Deserializers.Base {
 
   import CaseClassDeserializers._
 
