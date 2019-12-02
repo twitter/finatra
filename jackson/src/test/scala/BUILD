@@ -48,7 +48,6 @@ scala_library(
     name = "test-deps",
     sources = globs(
         "com/twitter/finatra/json/*.scala",
-        "com/twitter/finatra/json/*.java",
     ),
     compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
