@@ -3,149 +3,25 @@ package com.twitter.finatra.http.response
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Response, Status}
 import com.twitter.inject.Logging
-import com.twitter.io.ReaderDiscardedException
-import com.twitter.io.{Buf, Writer}
+import com.twitter.io.{Buf, ReaderDiscardedException, Writer}
 import com.twitter.util._
-
 import scala.util.control.NonFatal
 
-@deprecated("Use c.t.finatra.http.response.ResponseBuilder.streaming to construct a" +
-  "c.t.finatra.http.streaming.StreamingResponse instead", "2019-07-18")
-object StreamingResponse {
-
-  /*
-   * Constants used for creating a JSON array from a callback returning an AsyncStream
-   */
-  private val JsonArrayPrefix = Some(Buf.Utf8("["))
-  private val JsonArraySeparator = Some(Buf.Utf8(","))
-  private val JsonArraySuffix = Some(Buf.Utf8("]"))
-
-  /**
-   * Construct a [[StreamingResponse]] from an `AsyncStream` and an `AsyncStream[T] => AsyncStream[(U, Buf)]`
-   *
-   * A [[StreamingResponse]] is useful for streaming data back to the client in chunks: data will
-   * be rendered to the client as it resolves from the `AsyncStream` while also utilizing the
-   * back-pressure mechanisms provide by the underlying transport, preventing unnecessary resource
-   * consumption for properly constructed `AsyncStream`s.
-   *
-   * @param streamTransformer Function which converts AsyncStream[T] to AsyncStream[(U, Buf)]
-   * @param status Status code of the generated response.
-   * @param headers Headers for the generated response.
-   * @param onDisconnect A hook to clean up resources upon disconnection, either normally or exceptionally.
-   * @param closeGracePeriod The grace period provided to close the Response.writer.
-   * @param asyncStream The data that will represent the body of the response.
-   * @tparam T The incoming type.
-   * @tparam U An auxiliary type passed to onWrite which may be helpful when executing the onWrite callback.
-   *
-   */
-  def apply[T, U](
-    streamTransformer: AsyncStream[T] => AsyncStream[(U, Buf)],
-    status: Status,
-    headers: Map[String, String],
-    onWrite: (U, Buf) => Try[Unit] => Unit,
-    onDisconnect: () => Unit,
-    closeGracePeriod: Duration
-  )(asyncStream: => AsyncStream[T]): StreamingResponse[T, U] = {
-    new StreamingResponse[T, U](
-      streamTransformer,
-      status,
-      headers,
-      asyncStream,
-      onWrite,
-      onDisconnect,
-      closeGracePeriod
-    )
-  }
-
-  /**
-   * Construct a [[StreamingResponse]] from an `AsyncStream` and a `toBuf`
-   *
-   * @param toBuf Function for converting messages to a binary `Buf` representation.
-   * @param status Status code of the generated response.
-   * @param headers Headers for the generated response.
-   * @param prefix Optional first chunk of the response body. Note that a separator will not be
-   *               added between the prefix and the elements of the `AsyncStream`.
-   * @param separator Separator to be interleaved between each result of the `AsyncStream`.
-   * @param suffix Suffix to append to the end of the `AsyncStream`. Note that a separator will
-   *               not be included between the last stream chunk and the suffix.
-   * @param closeOnFinish A hook for cleaning up resources after completion of the rendering
-   *                      process. Note that this will be called regardless of whether rendering
-   *                      the body is successful.
-   * @param closeGracePeriod The grace period provided to the closeable in closeOnFinish
-   * @param asyncStream The data that will represent the body of the response.
-   */
-  def apply[T](
-    toBuf: T => Buf,
-    status: Status = Status.Ok,
-    headers: Map[String, String] = Map(),
-    prefix: Option[Buf] = None,
-    separator: Option[Buf] = None,
-    suffix: Option[Buf] = None,
-    closeOnFinish: Closable = Closable.nop,
-    closeGracePeriod: Duration = Duration.Zero
-  )(asyncStream: => AsyncStream[T]): StreamingResponse[T, Unit] = {
-
-    val chainedTransformers: AsyncStream[T] => AsyncStream[(Unit, Buf)] = {
-      (StreamingResponseUtils.toBufTransformer(toBuf) _)
-        .andThen(StreamingResponseUtils.separatorTransformer(separator))
-        .andThen(StreamingResponseUtils.prefixTransformer(prefix))
-        .andThen(StreamingResponseUtils.suffixTransformer(suffix))
-        .andThen(StreamingResponseUtils.tupleTransformer(()))
-    }
-
-    def onDisconnect(): Unit = {
-      closeOnFinish.close(closeGracePeriod)
-      ()
-    }
-
-    def onWrite(ignored: Unit, buf: Buf)(t: Try[Unit]): Unit = ()
-
-    StreamingResponse[T, Unit](
-      streamTransformer = chainedTransformers,
-      status = status,
-      headers = headers,
-      onDisconnect = onDisconnect,
-      onWrite = onWrite,
-      closeGracePeriod = closeGracePeriod
-    ) {
-      asyncStream
-    }
-  }
-
-  def jsonArray[T](
-    toBuf: T => Buf,
-    status: Status = Status.Ok,
-    headers: Map[String, String] = Map(),
-    closeOnFinish: Closable = Closable.nop,
-    asyncStream: => AsyncStream[T]
-  ): StreamingResponse[T, Unit] = {
-    StreamingResponse.apply(
-      toBuf = toBuf,
-      status = status,
-      headers = headers,
-      prefix = JsonArrayPrefix,
-      separator = JsonArraySeparator,
-      suffix = JsonArraySuffix,
-      closeOnFinish = closeOnFinish
-    ) {
-      asyncStream
-    }
-  }
-}
-
-@deprecated("Use c.t.finatra.http.response.ResponseBuilder.streaming to construct a" +
-  "c.t.finatra.http.streaming.StreamingResponse instead", "2019-07-18")
-class StreamingResponse[T, U] private (
+@deprecated(
+  "Use c.t.finatra.http.response.ResponseBuilder.streaming to construct a " +
+    "c.t.finatra.http.streaming.StreamingResponse instead",
+  "2019-07-18")
+private[twitter] class StreamingResponse[T, U](
   streamTransformer: AsyncStream[T] => AsyncStream[(U, Buf)],
   status: Status,
   headers: Map[String, String],
   asyncStream: => AsyncStream[T],
   onWrite: (U, Buf) => Try[Unit] => Unit,
   onDisconnect: () => Unit,
-  closeGracePeriod: Duration
-) extends Logging {
+  closeGracePeriod: Duration)
+    extends Logging {
 
-  private[this] val writerRespondFn: (Try[Unit] => Unit) = {
+  private[this] val writerRespondFn: Try[Unit] => Unit = {
     case Return(_) =>
       debug("Success writing to chunked response")
     case Throw(e) =>
