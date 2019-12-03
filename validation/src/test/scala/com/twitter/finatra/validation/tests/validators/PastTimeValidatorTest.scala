@@ -4,9 +4,9 @@ import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
 import com.twitter.finatra.validation.{ErrorCode, PastTime, PastTimeValidator, ValidationResult, ValidatorTest}
 import org.joda.time.DateTime
 import org.scalacheck.Gen
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
-class PastTimeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks {
+class PastTimeValidatorTest extends ValidatorTest with ScalaCheckDrivenPropertyChecks {
 
   test("pass validation for valid datetime") {
     val passDateTimeMillis =

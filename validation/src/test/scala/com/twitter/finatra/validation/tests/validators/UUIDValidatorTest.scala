@@ -3,11 +3,11 @@ package com.twitter.finatra.validation.tests.validators
 import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
 import com.twitter.finatra.validation.{ErrorCode, UUID, UUIDValidator, ValidationResult, ValidatorTest}
 import org.scalacheck.Gen
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 case class UUIDExample(@UUID uuid: String)
 
-class UUIDValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks {
+class UUIDValidatorTest extends ValidatorTest with ScalaCheckDrivenPropertyChecks {
 
   test("pass validation for valid uuid") {
     val passValue = Gen.uuid

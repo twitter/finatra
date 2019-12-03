@@ -3,14 +3,14 @@ package com.twitter.finatra.validation.tests.validators
 import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
 import com.twitter.finatra.validation.{ErrorCode, Size, SizeValidator, ValidationResult, ValidatorTest}
 import org.scalacheck.Gen
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 case class SizeArrayExample(@Size(min = 10, max = 50) sizeValue: Array[Int])
 case class SizeSeqExample(@Size(min = 10, max = 50) sizeValue: Array[Int])
 case class SizeInvalidTypeExample(@Size(min = 10, max = 50) sizeValue: Int)
 case class SizeStringExample(@Size(min = 10, max = 140) sizeValue: String)
 
-class SizeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks {
+class SizeValidatorTest extends ValidatorTest with ScalaCheckDrivenPropertyChecks {
 
   test("pass validation for array type") {
     val passValue = for {

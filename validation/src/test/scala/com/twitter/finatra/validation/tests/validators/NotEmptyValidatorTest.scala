@@ -3,13 +3,13 @@ package com.twitter.finatra.validation.tests.validators
 import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
 import com.twitter.finatra.validation.{ErrorCode, NotEmpty, NotEmptyValidator, ValidationResult, ValidatorTest}
 import org.scalacheck.Gen
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 case class NotEmptyExample(@NotEmpty stringValue: String)
 case class NotEmptySeqExample(@NotEmpty stringValue: Seq[String])
 case class NotEmptyInvalidTypeExample(@NotEmpty stringValue: Long)
 
-class NotEmptyValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks {
+class NotEmptyValidatorTest extends ValidatorTest with ScalaCheckDrivenPropertyChecks {
 
   test("pass validation for valid value") {
     val passValue = Gen.alphaStr.filter(_.length > 0)

@@ -3,14 +3,14 @@ package com.twitter.finatra.validation.tests.validators
 import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
 import com.twitter.finatra.validation.{ErrorCode, Pattern, PatternValidator, ValidationResult, ValidatorTest}
 import org.scalacheck.Gen
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 case class NumberPatternExample(@Pattern(regexp = "[0-9]+") stringValue: String)
 case class NumberPatternArrayExample(@Pattern(regexp = "[0-9]+") stringValue: Array[String])
 case class EmptyPatternExample(@Pattern(regexp = "") stringValue: String)
 case class InvalidPatternExample(@Pattern(regexp = "([)") stringValue: String)
 
-class PatternValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks {
+class PatternValidatorTest extends ValidatorTest with ScalaCheckDrivenPropertyChecks {
 
   test("pass validation when regex matches for array type") {
     val passValue = for {

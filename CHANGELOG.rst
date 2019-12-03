@@ -10,6 +10,9 @@ Unreleased
 Changed
 ~~~~~~~
 
+* finatra: Update Google Guice version to 4.1.0, update ScalaTest to 3.0.8, and ScalaCheck
+  to 1.14.0. ``PHAB_ID=D408309``
+
 * finatra-http: Remove deprecated `c.t.finatra.http.HttpHeaders`. Users should use
   `com.twitter.finagle.http.Fields` instead. ``PHAB_ID=D407290``
 

@@ -3,7 +3,7 @@ package com.twitter.finatra.validation.tests.validators
 import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
 import com.twitter.finatra.validation.{ErrorCode, Max, MaxValidator, ValidationResult, ValidatorTest}
 import org.scalacheck.Gen
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 case class MaxIntExample(@Max(0) numberValue: Int)
 case class MaxDoubleExample(@Max(0) numberValue: Double)
@@ -21,7 +21,7 @@ case class MaxSeqExample(@Max(100) numberValue: Seq[Int])
 case class MaxArrayExample(@Max(100) numberValue: Array[Int])
 case class MaxInvalidTypeExample(@Max(100) numberValue: String)
 
-class MaxValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks {
+class MaxValidatorTest extends ValidatorTest with ScalaCheckDrivenPropertyChecks {
 
   test("pass validation for int type") {
     val passValue = Gen.choose(Int.MinValue, 0)

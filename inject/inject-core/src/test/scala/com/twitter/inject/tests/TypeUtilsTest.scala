@@ -2,13 +2,13 @@ package com.twitter.inject.tests
 
 import com.twitter.inject.{Test, TypeUtils}
 import org.scalacheck.Arbitrary
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import scala.reflect.runtime.universe._
 
 trait A
 trait B
 
-class TypeUtilsTest extends Test with GeneratorDrivenPropertyChecks {
+class TypeUtilsTest extends Test with ScalaCheckDrivenPropertyChecks {
 
   test("asManifest handles AnyVal/Any/Null/Nothing") {
     forAll(Arbitrary.arbAnyVal.arbitrary) { anyVal =>

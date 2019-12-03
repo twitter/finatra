@@ -3,13 +3,13 @@ package com.twitter.finatra.validation.tests.validators
 import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
 import com.twitter.finatra.validation.{ErrorCode, OneOf, OneOfValidator, ValidationResult, ValidatorTest}
 import org.scalacheck.Gen
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 case class OneOfExample(@OneOf(value = Array("a", "B", "c")) enumValue: String)
 case class OneOfSeqExample(@OneOf(Array("a", "B", "c")) enumValue: Seq[String])
 case class OneOfInvalidTypeExample(@OneOf(Array("a", "B", "c")) enumValue: Long)
 
-class OneOfValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks {
+class OneOfValidatorTest extends ValidatorTest with ScalaCheckDrivenPropertyChecks {
 
   val oneOfValues: Set[String] = Set("a", "B", "c")
 

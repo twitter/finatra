@@ -3,7 +3,7 @@ package com.twitter.finatra.validation.tests.validators
 import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
 import com.twitter.finatra.validation.{ErrorCode, Min, MinValidator, ValidationResult, ValidatorTest}
 import org.scalacheck.Gen
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 case class MinIntExample(@Min(1) numberValue: Int)
 case class MinLongExample(@Min(1) numberValue: Long)
@@ -21,7 +21,7 @@ case class MinSeqExample(@Min(10) numberValue: Seq[Int])
 case class MinArrayExample(@Min(10) numberValue: Array[Int])
 case class MinInvalidTypeExample(@Min(10) numberValue: String)
 
-class MinValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks {
+class MinValidatorTest extends ValidatorTest with ScalaCheckDrivenPropertyChecks {
 
   test("pass validation for int type") {
     val passValue = Gen.choose(1, Int.MaxValue)

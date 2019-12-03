@@ -3,7 +3,7 @@ package com.twitter.finatra.validation.tests.validators
 import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
 import com.twitter.finatra.validation.{ErrorCode, Range, RangeValidator, ValidationResult, ValidatorTest}
 import org.scalacheck.Gen
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 case class RangeIntExample(@Range(min = 1, max = 50) pointValue: Int)
 case class RangeLongExample(@Range(min = 1, max = 50) pointValue: Long)
@@ -33,7 +33,7 @@ case class RangeSecondSmallestLongBigIntExample(
 )
 case class RangeInvalidTypeExample(@Range(min = 1, max = 5) pointValue: String)
 
-class RangeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks {
+class RangeValidatorTest extends ValidatorTest with ScalaCheckDrivenPropertyChecks {
 
   test("pass validation for int type") {
     val passValue = Gen.choose(1, 50)

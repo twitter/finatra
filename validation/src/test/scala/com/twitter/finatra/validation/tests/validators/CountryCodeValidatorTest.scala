@@ -4,14 +4,14 @@ import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
 import com.twitter.finatra.validation.{CountryCode, CountryCodeValidator, ErrorCode, ValidationResult, ValidatorTest}
 import java.util.Locale
 import org.scalacheck.Gen
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 case class CountryCodeExample(@CountryCode countryCode: String)
 case class CountryCodeSeqExample(@CountryCode countryCode: Seq[String])
 case class CountryCodeArrayExample(@CountryCode countryCode: Array[String])
 case class CountryCodeInvalidTypeExample(@CountryCode countryCode: Long)
 
-class CountryCodeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks {
+class CountryCodeValidatorTest extends ValidatorTest with ScalaCheckDrivenPropertyChecks {
 
   private val countryCodes = Locale.getISOCountries.toSeq
 

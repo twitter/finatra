@@ -5,7 +5,7 @@ import com.twitter.finatra.validation.{ErrorCode, TimeGranularity, TimeGranulari
 import java.util.concurrent.TimeUnit
 import org.joda.time.DateTime
 import org.scalacheck.Gen
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 case class TimeGranularityNanosecondsExample(
   @TimeGranularity(TimeUnit.NANOSECONDS) timeValue: DateTime
@@ -21,7 +21,7 @@ case class TimeGranularityMinutesExample(@TimeGranularity(TimeUnit.MINUTES) time
 case class TimeGranularityHoursExample(@TimeGranularity(TimeUnit.HOURS) timeValue: DateTime)
 case class TimeGranularityDaysExample(@TimeGranularity(TimeUnit.DAYS) timeValue: DateTime)
 
-class TimeGranularityValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks {
+class TimeGranularityValidatorTest extends ValidatorTest with ScalaCheckDrivenPropertyChecks {
 
   test("pass validation for a day granularity value") {
     val dayGranularity = for {
