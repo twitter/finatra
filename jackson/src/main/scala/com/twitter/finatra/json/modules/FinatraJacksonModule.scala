@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonGenerator.Feature
 import com.fasterxml.jackson.databind.{Module => JacksonModule, _}
 import com.fasterxml.jackson.datatype.joda.JodaModule
 import com.fasterxml.jackson.module.scala._
+import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.google.inject.{Injector, Provides}
 import com.twitter.finatra.annotations.{CamelCaseMapper, SnakeCaseMapper}
 import com.twitter.finatra.json.FinatraObjectMapper

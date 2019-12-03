@@ -6,7 +6,8 @@ import ch.qos.logback.classic.{BasicConfigurator, Level, LoggerContext}
 import ch.qos.logback.core.encoder.LayoutWrappingEncoder
 import ch.qos.logback.core.{ConsoleAppender, LogbackAsyncAppenderBase, TestLogbackAsyncAppender}
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.scala.{DefaultScalaModule, ScalaObjectMapper}
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.twitter.finagle.http.{Request, Status}
 import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.finatra.http.routing.HttpRouter

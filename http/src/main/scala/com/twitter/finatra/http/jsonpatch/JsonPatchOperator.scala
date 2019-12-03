@@ -216,7 +216,7 @@ class JsonPatchOperator @Inject()(mapper: FinatraObjectMapper) {
       throw new JsonPatchException("invalid path for add operation")
     } else if (path.tail.matches) {
       target match {
-        case on: ObjectNode => on.set[ObjectNode](path.getMatchingProperty, value)
+        case on: ObjectNode => on.set(path.getMatchingProperty, value)
         case an: ArrayNode =>
           // this does not use the 'getLeafIndex' helper function because 'add' indexes are slightly different.
           // Gotcha: '<= an.size' and not '< an.size' because we may (of course) add at the end of the array
@@ -268,7 +268,7 @@ class JsonPatchOperator @Inject()(mapper: FinatraObjectMapper) {
       throw new JsonPatchException("invalid path for replace operation")
     } else if (path.tail.matches) {
       target match {
-        case on: ObjectNode => on.set[ObjectNode](path.getMatchingProperty, value)
+        case on: ObjectNode => on.set(path.getMatchingProperty, value)
         case an: ArrayNode => an.set(getLeafIndex(path, an, "replace"), value)
         case _ => throw new JsonPatchException("invalid target for replace")
       }
