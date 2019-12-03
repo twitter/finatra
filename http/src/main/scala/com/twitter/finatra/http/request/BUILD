@@ -10,7 +10,6 @@ scala_library(
     dependencies = [
         "finagle/finagle-base-http/src/main/scala",
         "finatra/http/src/main/java/com/twitter/finatra/http/request",
-        "finatra/http/src/main/scala/com/twitter/finatra/http:headers",
         "finatra/http/src/main/scala/com/twitter/finatra/http/exceptions",
         "finatra/http/src/main/scala/com/twitter/finatra/http/fileupload",
         "finatra/inject/inject-slf4j/src/main/scala",

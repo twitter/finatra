@@ -9,7 +9,6 @@ target(
         "finatra/http/src/main/java/com/twitter/finatra/http/request",
         "finatra/http/src/main/scala/com/twitter/finatra/http",
         "finatra/http/src/main/scala/com/twitter/finatra/http:controller",
-        "finatra/http/src/main/scala/com/twitter/finatra/http:headers",
         "finatra/http/src/main/scala/com/twitter/finatra/http/contexts",
         "finatra/http/src/main/scala/com/twitter/finatra/http/conversions",
         "finatra/http/src/main/scala/com/twitter/finatra/http/exceptions",

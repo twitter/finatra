@@ -10,6 +10,9 @@ Unreleased
 Changed
 ~~~~~~~
 
+* finatra-http: Remove deprecated `c.t.finatra.http.HttpHeaders`. Users should use
+  `com.twitter.finagle.http.Fields` instead. ``PHAB_ID=D407290``
+
 * finatra: (BREAKING API CHANGE) Upgrade Jackson dependency from version `2.9.9` to
   version `2.10.1` ``PHAB_ID=D402722``
 

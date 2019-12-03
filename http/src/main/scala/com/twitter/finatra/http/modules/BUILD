@@ -15,7 +15,6 @@ scala_library(
         "finagle/finagle-core/src/main/scala",
         "finagle/finagle-exp/src/main/scala",
         "finagle/finagle-http/src/main/scala",
-        "finatra/http/src/main/scala/com/twitter/finatra/http:headers",
         "finatra/http/src/main/scala/com/twitter/finatra/http/contexts",
         "finatra/http/src/main/scala/com/twitter/finatra/http/exceptions",
         "finatra/http/src/main/scala/com/twitter/finatra/http/internal/exceptions",
