@@ -10,6 +10,10 @@ Unreleased
 Changed
 ~~~~~~~
 
+* finatra-jackson: Update `c.t.finatra.json.internal.caseclass.utils.FieldInjection`
+  to also catch `ValueInstantiationException` due to
+  https://github.com/FasterXML/jackson-databind/issues/2126. ``PHAB_ID=D407296``
+
 * finatra-http: Remove deprecated `c.t.finatra.http.HttpHeaders`. Users should use
   `com.twitter.finagle.http.Fields` instead. ``PHAB_ID=D407290``
 
