@@ -431,7 +431,14 @@ lazy val injectApp = (project in file("inject/inject-app"))
     libraryDependencies ++= Seq(
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "com.twitter" %% "util-core" % versions.twLibVersion,
-      "org.slf4j" % "slf4j-api" % versions.slf4j
+      "org.slf4j" % "slf4j-api" % versions.slf4j,
+      // -------- BEGIN: slf4j-api logging bridges -------------------------------
+      // Add the slf4j-api logging bridges to ensure that any dependents
+      // of the library have bridges on their classpath at runtime.
+      "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
+      "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
+      "org.slf4j" % "log4j-over-slf4j" % versions.slf4j
+      // -------- END: slf4j-api logging bridges ---------------------------------  
     ),
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*TypeConverter.*",
     publishArtifact in Test := true,
