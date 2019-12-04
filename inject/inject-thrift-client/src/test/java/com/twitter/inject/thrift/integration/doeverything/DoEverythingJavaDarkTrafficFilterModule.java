@@ -1,7 +1,8 @@
-package com.twitter.finatra.thrift.tests.doeverything;
+package com.twitter.inject.thrift.integration.doeverything;
 
-import com.twitter.finatra.thrift.modules.JavaDarkTrafficFilterModule;
 import com.twitter.inject.Injector;
+import com.twitter.inject.thrift.modules.JavaDarkTrafficFilterModule;
+
 import com.twitter.util.Function;
 
 public class DoEverythingJavaDarkTrafficFilterModule extends JavaDarkTrafficFilterModule {

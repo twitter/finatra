@@ -10,6 +10,25 @@ Unreleased
 Changed
 ~~~~~~~
 
+* finatra: (BREAKING API CHANGE) move DarkTrafficFilter and related modules
+  from `finatra/thrift` to `inject/inject-thrift-client`. The modules now extend
+  from `c.t.inject.thrift.modules.ThriftClientModuleTrait` for more uniform configuration.
+  The following changes were made:
+
+    * c.t.finatra.thrift.filters.DarkTrafficFilter ->
+      c.t.inject.thrift.filters.DarkTrafficFilter
+
+    * c.t.finatra.thrift.modules.DarkTrafficFilterModule ->
+      c.t.inject.thrift.modules.DarkTrafficFilterModule
+
+    * c.t.finatra.thrift.modules.ReqRepDarkTrafficFilterModule ->
+      c.t.inject.thrift.modules.ReqRepDarkTrafficFilterModule
+
+    * c.t.finatra.thrift.modules.JavaDarkTrafficFilterModule ->
+      c.t.inject.thrift.modules.JavaDarkTrafficFilterModule
+
+  ``PHAB_ID=D401051``
+
 * finatra: Update Google Guice version to 4.1.0, update ScalaTest to 3.0.8, and ScalaCheck
   to 1.14.0. ``PHAB_ID=D408309``
 

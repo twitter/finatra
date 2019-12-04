@@ -102,9 +102,15 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
     injector: Injector,
     client: ThriftMux.Client,
     statsReceiver: StatsReceiver
-  ): ThriftMux.Client = super.initialClientConfiguration(injector, client, statsReceiver)
-    .withClientId(injector.instance[ClientId])
-    .withPerEndpointStats
+  ): ThriftMux.Client =
+    super
+      .initialClientConfiguration(injector, client, statsReceiver)
+      .withPerEndpointStats
+
+  override protected final def scopeStatsReceiver(
+    injector: Injector,
+    statsReceiver: StatsReceiver
+  ): StatsReceiver = super.scopeStatsReceiver(injector, statsReceiver)
 
   @Provides
   @Singleton

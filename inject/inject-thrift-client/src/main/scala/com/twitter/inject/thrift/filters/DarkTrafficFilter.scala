@@ -1,4 +1,4 @@
-package com.twitter.finatra.thrift.filters
+package com.twitter.inject.thrift.filters
 
 import com.twitter.finagle.exp.AbstractDarkTrafficFilter
 import com.twitter.finagle.stats.StatsReceiver
@@ -8,7 +8,6 @@ import com.twitter.inject.Logging
 import com.twitter.util.Future
 import javax.inject.Singleton
 import scala.reflect.ClassTag
-
 
 sealed abstract class BaseDarkTrafficFilter(
   forwardAfterService: Boolean,

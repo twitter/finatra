@@ -38,7 +38,11 @@ abstract class ThriftClientModule[ThriftService: ClassTag]
     client: ThriftMux.Client,
     statsReceiver: StatsReceiver
   ): ThriftMux.Client = super.initialClientConfiguration(injector, client, statsReceiver)
-    .withClientId(injector.instance[ClientId])
+
+  override protected final def scopeStatsReceiver(
+    injector: Injector,
+    statsReceiver: StatsReceiver
+  ): StatsReceiver = super.scopeStatsReceiver(injector, statsReceiver)
 
   @Singleton
   @Provides

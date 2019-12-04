@@ -565,6 +565,8 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
     name := "inject-thrift-client",
     moduleName := "inject-thrift-client",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*;.*LatencyFilter.*",
+    scroogeLanguages in Test := Seq("java", "scala"),
+    scroogePublishThrift in Test := true,
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-exp" % versions.twLibVersion,
       "com.twitter" %% "finagle-thrift" % versions.twLibVersion,
@@ -578,7 +580,8 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
     injectModules % "test->test;compile->compile",
     injectThrift,
     http % "test->test",
-    thrift % "test->test")
+    thrift % "test->test",
+    utils)
 
 lazy val injectUtils = (project in file("inject/inject-utils"))
   .settings(projectSettings)
@@ -901,8 +904,7 @@ lazy val thrift = project
     injectPorts % "test->test",
     injectServer % "test->test;compile->compile",
     injectSlf4j,
-    injectThrift,
-    utils)
+    injectThrift)
 
 lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-http-mapper"))
   .settings(projectSettings)

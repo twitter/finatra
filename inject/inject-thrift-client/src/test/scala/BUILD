@@ -30,6 +30,7 @@ junit_tests(
         "finatra/inject/inject-thrift-client/src/main/scala",
         "finatra/inject/inject-thrift-client/src/test/thrift:greeter-thrift-scala",
         "finatra/inject/inject-thrift/src/main/scala",
+        "finatra/thrift/src/main/scala",
         "finatra/thrift/src/test/scala:test-deps",
         "scrooge/scrooge-core/src/main/scala",
         "twitter-server/server/src/main/scala",
