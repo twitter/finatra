@@ -85,6 +85,32 @@ object AnnotationUtils {
     annotation.annotationType.isAnnotationPresent(manifest[A].runtimeClass.asInstanceOf[Class[A]])
 
   /**
+   * Determines if the given [[A]] is annotated by an [[Annotation]] of the given
+   * type param [[ToFindAnnotation]].
+   *
+   * @tparam ToFindAnnotation the [[Annotation]] to match.
+   * @tparam A the type of the [[Annotation]] to determine if is annotated on the [[A]].
+   *
+   * @return true if the given [[Annotation]] is annotated with an [[Annotation]] of type [[ToFindAnnotation]],
+   *         false otherwise.
+   */
+  def isAnnotationPresent[
+    ToFindAnnotation <: Annotation: Manifest,
+    A <: Annotation: Manifest
+  ]: Boolean = {
+    val annotationToFindClazz: Class[Annotation] =
+      manifest[ToFindAnnotation]
+        .runtimeClass
+        .asInstanceOf[Class[Annotation]]
+    val annotationsByTypeArray: Array[Annotation] =
+      manifest[A]
+        .runtimeClass
+        .asInstanceOf[Class[A]]
+        .getAnnotationsByType(annotationToFindClazz)
+    annotationsByTypeArray != null && annotationsByTypeArray.nonEmpty
+  }
+
+  /**
    * Attempts to find annotations per `case class` field returning a mapping of field name to list
    * of any found annotations.
    *

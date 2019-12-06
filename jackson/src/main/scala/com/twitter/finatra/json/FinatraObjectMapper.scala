@@ -1,12 +1,10 @@
 package com.twitter.finatra.json
 
 import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream
 import com.fasterxml.jackson.databind._
+import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.google.inject.Injector
-import com.twitter.finagle.http.{Message, Request, Response}
-import com.twitter.finatra.json.internal.caseclass.exceptions.RequestFieldInjectionNotSupportedException
 import com.twitter.finatra.json.internal.serde.ArrayElementsOnNewLinesPrettyPrinter
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.io.Buf
@@ -23,21 +21,6 @@ object FinatraObjectMapper {
     val jacksonModule = new FinatraJacksonModule()
     new FinatraObjectMapper(jacksonModule.provideScalaObjectMapper(injector))
   }
-
-  def parseMessageBody[T : Manifest](message: Message, reader: ObjectReader): T = {
-    val inputStream = message.getInputStream()
-    try {
-      reader.readValue[T](inputStream)
-    } finally {
-      inputStream.close()
-    }
-  }
-
-  def parseRequestBody[T : Manifest](request: Request, reader: ObjectReader): T =
-    parseMessageBody[T](request, reader)
-
-  def parseResponseBody[T : Manifest](response: Response, reader: ObjectReader): T =
-    parseMessageBody[T](response, reader)
 }
 
 case class FinatraObjectMapper(objectMapper: ObjectMapper with ScalaObjectMapper) {
@@ -50,47 +33,37 @@ case class FinatraObjectMapper(objectMapper: ObjectMapper with ScalaObjectMapper
     objectMapper.getPropertyNamingStrategy
   }
 
-  def reader[T : Manifest]: ObjectReader = {
+  def reader[T: Manifest]: ObjectReader = {
     objectMapper.readerFor[T]
   }
 
-  def parse[T : Manifest](message: Message): T = {
-    if (message.isRequest) {
-      val length = message.contentLength.getOrElse(0L)
-      if (length == 0) {
-        throw new RequestFieldInjectionNotSupportedException()
-      }
-    }
-    FinatraObjectMapper.parseMessageBody(message, objectMapper.readerFor[T])
-  }
-
-  def parse[T : Manifest](byteBuffer: ByteBuffer): T = {
+  def parse[T: Manifest](byteBuffer: ByteBuffer): T = {
     val is = new ByteBufferBackedInputStream(byteBuffer)
     objectMapper.readValue[T](is)
   }
 
-  def parse[T : Manifest](buf: Buf): T = {
+  def parse[T: Manifest](buf: Buf): T = {
     parse[T](Buf.ByteBuffer.Shared.extract(buf))
   }
 
-  def parse[T : Manifest](jsonNode: JsonNode): T = {
+  def parse[T: Manifest](jsonNode: JsonNode): T = {
     convert[T](jsonNode)
   }
 
   /** Parse InputStream (caller must close) */
-  def parse[T : Manifest](inputStream: InputStream): T = {
+  def parse[T: Manifest](inputStream: InputStream): T = {
     objectMapper.readValue[T](inputStream)
   }
 
-  def parse[T : Manifest](bytes: Array[Byte]): T = {
+  def parse[T: Manifest](bytes: Array[Byte]): T = {
     objectMapper.readValue[T](bytes)
   }
 
-  def parse[T : Manifest](string: String): T = {
+  def parse[T: Manifest](string: String): T = {
     objectMapper.readValue[T](string)
   }
 
-  def parse[T : Manifest](jsonParser: JsonParser): T = {
+  def parse[T: Manifest](jsonParser: JsonParser): T = {
     objectMapper.readValue[T](jsonParser)
   }
 
@@ -103,7 +76,7 @@ case class FinatraObjectMapper(objectMapper: ObjectMapper with ScalaObjectMapper
    The wrapping occurs because CaseClassMappingException is an IOException (because we extend JsonMappingException which extends JsonProcessingException which extends IOException).
    We must extend JsonMappingException otherwise CaseClassMappingException is not properly handled when deserializing into nested case-classes
    */
-  def convert[T : Manifest](any: Any): T = {
+  def convert[T: Manifest](any: Any): T = {
     try {
       objectMapper.convertValue[T](any)
     } catch {

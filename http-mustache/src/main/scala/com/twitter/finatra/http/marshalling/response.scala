@@ -30,6 +30,6 @@ object response {
      */
     def view(obj: Any): EnrichedResponse = view("", obj)
 
-    private[this] def getContentType = self.underlying.headerMap.get(Fields.ContentType)
+    private[this] def getContentType = self.response.headerMap.get(Fields.ContentType)
   }
 }

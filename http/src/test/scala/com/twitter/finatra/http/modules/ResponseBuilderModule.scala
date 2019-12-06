@@ -6,7 +6,7 @@ import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.inject.TwitterModule
 import com.twitter.inject.modules.StatsReceiverModule
 
-@deprecated("Define the modules separately", "2019-10-16")
+/** A helper to encapsulate all the necessary modules for injecting a [[com.twitter.finatra.http.response.ResponseBuilder]] */
 object ResponseBuilderModule extends TwitterModule {
   override val modules: Seq[Module] =
     Seq(FinatraJacksonModule, FileResolverModule, MessageBodyModule, StatsReceiverModule)

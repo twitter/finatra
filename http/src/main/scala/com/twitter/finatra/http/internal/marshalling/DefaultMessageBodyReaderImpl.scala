@@ -2,8 +2,8 @@ package com.twitter.finatra.http.internal.marshalling
 
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.inject.Injector
-import com.twitter.finagle.http.Request
-import com.twitter.finatra.http.marshalling.DefaultMessageBodyReader
+import com.twitter.finagle.http.{MediaType, Message, Request}
+import com.twitter.finatra.http.marshalling.{DefaultMessageBodyReader, MessageBodyReader}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.request.JsonIgnoreBody
 import javax.inject.{Inject, Singleton}
@@ -20,17 +20,21 @@ private[finatra] class DefaultMessageBodyReaderImpl @Inject()(
 
   /* Public */
 
-  override def parse[T: Manifest](request: Request): T = {
-    val requestAwareObjectReader = {
-      val requestInjectableValues = new RequestInjectableValues(objectMapper, request, injector)
-      objectMapper.reader[T].`with`(requestInjectableValues)
+  override def parse[T: Manifest](message: Message): T = {
+    val requestAwareObjectReader = message match {
+      case request: Request =>
+        val requestInjectableValues =
+          new RequestInjectableValues(objectMapper,request, injector)
+        objectMapper.reader[T].`with`(requestInjectableValues)
+      case _ =>
+        objectMapper.reader[T]
     }
 
-    val length = request.contentLength.getOrElse(0L)
-    if (length > 0 && isJsonEncoded(request) && !ignoresBody)
-      FinatraObjectMapper.parseRequestBody(request, requestAwareObjectReader)
+    val length = message.contentLength.getOrElse(0L)
+    if (length > 0 && isJsonEncoded(message) && !ignoresBody[T])
+      MessageBodyReader.parseMessageBody[T](message, requestAwareObjectReader)
     else
-      requestAwareObjectReader.readValue(DefaultMessageBodyReaderImpl.EmptyObjectNode)
+      requestAwareObjectReader.readValue[T](DefaultMessageBodyReaderImpl.EmptyObjectNode)
   }
 
   /* Private */
@@ -39,9 +43,7 @@ private[finatra] class DefaultMessageBodyReaderImpl @Inject()(
     manifest[T].runtimeClass.isAnnotationPresent(classOf[JsonIgnoreBody])
   }
 
-  private def isJsonEncoded(request: Request): Boolean = {
-    request.contentType.exists { contentType =>
-      contentType.startsWith("application/json")
-    }
-  }
+  private def isJsonEncoded(message: Message): Boolean =
+    message.contentType.exists(_.startsWith(MediaType.Json)) ||
+      message.acceptMediaTypes.exists(_.startsWith(MediaType.Json))
 }

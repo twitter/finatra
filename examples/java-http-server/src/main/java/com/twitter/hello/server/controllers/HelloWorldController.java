@@ -64,6 +64,8 @@ public class HelloWorldController extends AbstractController {
 
     get("/moduleMagicFloatNum", request -> Future.value(moduleMagicFloatingNumber));
 
+    post("/catFancy", helloService::cat);
+
     any("/any/method", helloService::handleAnyMethod);
   }
 }

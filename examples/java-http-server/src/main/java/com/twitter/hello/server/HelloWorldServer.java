@@ -2,6 +2,8 @@ package com.twitter.hello.server;
 
 import java.util.Collection;
 
+import scala.reflect.ManifestFactory;
+
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Module;
 
@@ -32,6 +34,8 @@ public class HelloWorldServer extends AbstractHttpServer {
         .filter(CommonFilters.class)
         .filter(new AppendToHeaderFilter("foo", "1"))
         .add(HelloWorldController.class)
+        .register(ManifestFactory.classType(CatMessageBodyReader.class))
+        .register(ManifestFactory.classType(DogMessageBodyWriter.class))
         .exceptionMapper(HelloWorldExceptionMapper.class);
   }
 }

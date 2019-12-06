@@ -25,8 +25,8 @@ object MustacheModule extends TwitterModule {
   override def singletonStartup(injector: Injector): Unit = {
     debug("Configuring Mustache")
     val manager = injector.instance[MessageBodyManager]
-    manager.addByAnnotation[Mustache, MustacheMessageBodyWriter]()
-    manager.addByComponentType[MustacheBodyComponent, MustacheMessageBodyWriter]()
+    manager.addWriterByAnnotation[Mustache, MustacheMessageBodyWriter]()
+    manager.addWriterByComponentType[MustacheBodyComponent, MustacheMessageBodyWriter]()
   }
 
 }

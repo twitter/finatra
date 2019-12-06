@@ -1,30 +1,33 @@
 package com.twitter.finatra.http.tests.response
 
-import com.twitter.finagle.http.MediaType
-import com.twitter.finagle.http.{Request, Response, Status, Cookie => FinagleCookie}
-import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finatra.http.marshalling.MessageBodyManager
+import com.twitter.finagle.http.{Fields, MediaType, Request, Response, Status, Cookie => FinagleCookie}
+import com.twitter.finatra.http.marshalling.MessageBodyFlags
+import com.twitter.finatra.http.modules.ResponseBuilderModule
 import com.twitter.finatra.http.response.ResponseBuilder
-import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.utils.FileResolver
-import com.twitter.inject.{Mockito, Test}
+import com.twitter.finatra.modules.FileResolverFlags
+import com.twitter.inject.app.TestInjector
+import com.twitter.inject.{Injector, IntegrationTest, Mockito}
 import java.io.{File, FileWriter}
 
-class ResponseBuilderTest extends Test with Mockito {
+class ResponseBuilderTest extends IntegrationTest with Mockito {
 
-  protected lazy val responseBuilder = new ResponseBuilder(
-    objectMapper = FinatraObjectMapper.create(),
-    fileResolver = new FileResolver(localDocRoot = "src/main/webapp/", docRoot = ""),
-    messageBodyManager = mock[MessageBodyManager],
-    statsReceiver = mock[StatsReceiver],
-    includeContentTypeCharset = true
-  )
+  override protected val injector: Injector =
+    TestInjector(
+      modules = Seq(ResponseBuilderModule),
+      flags = Map(
+        FileResolverFlags.LocalDocRoot -> "src/main/webapp/",
+        MessageBodyFlags.ResponseCharsetEnabled -> "true"
+      )
+    ).create
+
+  private lazy val responseBuilder = injector.instance[ResponseBuilder]
 
   test("handle simple response body") {
     val content = "test body"
     val response = responseBuilder.ok(content)
 
     response.getContentString() should equal(content)
+    response.contentLengthOrElse(0) should equal(content.length)
   }
 
   test("handle simple response body with request") {
@@ -47,7 +50,8 @@ class ResponseBuilderTest extends Test with Mockito {
     val response = responseBuilder.ok(tempFile)
 
     response.getContentString() should equal(expectedContent)
-    response.headerMap("Content-Type") should equal("application/json; charset=utf-8")
+    response.contentLengthOrElse(0) should equal(expectedContent.length)
+    response.headerMap(Fields.ContentType) should equal(MediaType.JsonUtf8)
   }
 
   test("convert to an exception") {
@@ -58,8 +62,24 @@ class ResponseBuilderTest extends Test with Mockito {
 
   test("cookies") {
     assertFooBarCookie(responseBuilder.ok.cookie("foo", "bar"))
-
     assertFooBarCookie(responseBuilder.ok.cookie(new FinagleCookie("foo", "bar")))
+  }
+
+  test("appropriate response content type") {
+    // we should only return the charset on appropriate content types
+    val bytes: Array[Byte] = Array[Byte](10, -32, 17, 22)
+    var response = responseBuilder.ok(bytes)
+    response.headerMap(Fields.ContentType) should be(MediaType.OctetStream) // does not include charset
+    response.contentLengthOrElse(0) should equal(bytes.length)
+
+    response = responseBuilder.ok("""Hello, world""")
+    response.headerMap(Fields.ContentType) should be(MediaType.PlainTextUtf8) // includes charset
+    response.contentLengthOrElse(0) should equal("""Hello, world""".length)
+
+    val toMapValue = Map("key1" -> "value1", "key2" -> "value2")
+    response = responseBuilder.ok(toMapValue)
+    response.headerMap(Fields.ContentType) should be(MediaType.JsonUtf8) // includes charset
+    response.contentLengthOrElse(0) > 0 should be(true)
   }
 
   test("properly return responses") {

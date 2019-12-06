@@ -10,11 +10,11 @@ object ("message body reader") or how to transform a given type `T` into a |c.t.
 `MessageBodyComponent <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyComponent.scala>`_
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-A |MessageBodyComponent| is a marker trait to indicate that a class type
-is expected to be handled by either a message body reader or writer. That is, the trait allows for
-registration of an implementation type of the trait to a reader or writer for either converting a |c.t.finagle.http.Request|_
-into the type (via a message body reader) or converting the type into a |c.t.finagle.http.Response|_
-(via a message body writer).
+A |MessageBodyComponent| is a marker trait to indicate that a class is either a message body reader
+or writer or is expected to be handled by either a message body reader or writer. That is, the
+trait allows for registration of an implementation to a reader or writer for either converting
+a |c.t.finagle.http.Request|_ into the type (via a message body reader) or converting the type
+into a |c.t.finagle.http.Response|_ (via a message body writer).
 
 Message Body Readers
 --------------------
@@ -208,8 +208,8 @@ object graph has been created but before the server has started.
 
       override def singletonStartup(injector: Injector): Unit = {
         val manager = injector.instance[MessageBodyManager]
-        manager.addByAnnotation[MyRenderable, MyRenderableObjectMessageBodyWriter]()
-        manager.addByComponent[MyRenderableObjectType, MyRenderableObjectMessageBodyWriter]()
+        manager.addWriterByAnnotation[MyRenderable, MyRenderableObjectMessageBodyWriter]()
+        manager.addWriterByComponent[MyRenderableObjectType, MyRenderableObjectMessageBodyWriter]()
       }
     }
 
@@ -224,21 +224,19 @@ to a function in the |ResponseBuilder|_.
 `MessageBodyManager <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala>`_
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-The |MessageBodyManager|_ registers message body components (readers
-and writers). Generally, you will not need to interact directly with the manager because the
-|HttpRouter|_ provides a DSL for registration of components to the
-bound |MessageBodyManager|_.
+The |MessageBodyManager|_ registers message body components (readers and writers). Generally, you
+will not need to interact directly with the manager because the |HttpRouter|_ provides a DSL for
+registration of components to the bound |MessageBodyManager|_.
 
 `MessageBodyModule <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MessageBodyModule.scala>`_
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 
-The |DefaultMessageBodyReader|_, and the |DefaultMessageBodyWriter|_
-are provided by the framework via configuration in the |MessageBodyModule|_.
+The |DefaultMessageBodyReader|_, and the |DefaultMessageBodyWriter|_ are provided by the framework
+via configuration in the |MessageBodyModule|_.
 
 To override the framework defaults, create an instance of a `TwitterModule <../getting-started/modules.html>`__
-which provides customized implementations for the default reader and writer.
-
-Set this module by overriding the `protected def messageBodyModule` in your server.
+which provides customized implementations for the default reader and writer. Set this module by
+overriding the `protected def messageBodyModule` in your server.
 
 .. code:: scala
 
@@ -269,7 +267,7 @@ See `Framework Modules <server.html#framework-modules>`__ for more information.
     automatically.
 
     If you replace the `MessageBodyModule` completely and do not retain the binding of the
-    framework `DefaultMessageBodyReader` implementation you will lose this functionality.
+    framework `DefaultMessageBodyReader` implementation, you will lose this functionality.
 
     Thus it is recommended that you choose to *extend* the `c.t.finatra.http.modules.MessageBodyModule`
     in order to customize your logic and remember to invoke `super` for overridden methods to ensure

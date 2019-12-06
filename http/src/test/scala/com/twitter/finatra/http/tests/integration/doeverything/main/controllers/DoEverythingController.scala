@@ -6,6 +6,7 @@ import com.twitter.finatra.annotations.CamelCaseMapper
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.exceptions._
 import com.twitter.finatra.http.jsonpatch.{JsonPatch, JsonPatchOperator, JsonPatchUtility}
+import com.twitter.finatra.http.marshalling.mapper._
 import com.twitter.finatra.http.request.RequestUtils
 import com.twitter.finatra.http.response._
 import com.twitter.finatra.http.routing.HttpForward
@@ -463,7 +464,7 @@ class DoEverythingController @Inject()(
   }
 
   post("/requestInjectionsNotAvailable") { request: Request =>
-    val requestWithInjections = objectMapper.parse[RequestWithInjections](request)
+    val requestWithInjections = objectMapper.parseMessageBody[RequestWithInjections](request)
     requestWithInjections.id.id +
       requestWithInjections.id2.map(_.id).getOrElse(0L) +
       requestWithInjections.id3.getOrElse(0) +
@@ -475,7 +476,7 @@ class DoEverythingController @Inject()(
   }
 
   get("/requestInjectionsNotAvailable") { request: Request =>
-    val requestWithInjections = objectMapper.parse[RequestWithInjections](request)
+    val requestWithInjections = objectMapper.parseMessageBody[RequestWithInjections](request)
     requestWithInjections.id.id +
       requestWithInjections.id2.map(_.id).getOrElse(0L) +
       requestWithInjections.id3.getOrElse(0) +

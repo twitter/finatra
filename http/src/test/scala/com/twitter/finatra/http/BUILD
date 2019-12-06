@@ -1,5 +1,9 @@
 scala_library(
-    sources = globs("*.scala"),
+    sources = globs(
+        "*.scala",
+        "modules/*.scala",
+        "response/*.scala",
+    ),
     compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
         org = "com.twitter",
@@ -14,14 +18,17 @@ scala_library(
         "finagle/finagle-base-http/src/main/scala",
         "finagle/finagle-core/src/main/scala",
         "finatra/http/src/main/scala/com/twitter/finatra/http",
+        "finatra/http/src/main/scala/com/twitter/finatra/http/response",
         "finatra/http/src/main/scala/com/twitter/finatra/http/routing",
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-core/src/test/scala:test-deps",
+        "finatra/inject/inject-modules/src/main/scala",
         "finatra/inject/inject-server/src/main/scala",
         "finatra/inject/inject-server/src/test/scala:test-deps",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/jackson/src/main/scala",
         "finatra/jackson/src/test/scala:test-deps",
+        "finatra/utils/src/main/scala/com/twitter/finatra/modules",
         "finatra/validation/src/main/scala/com/twitter/finatra/validation",
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",

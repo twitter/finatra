@@ -1,7 +1,8 @@
 package com.twitter.finatra.httpclient
 
+import com.fasterxml.jackson.databind.ObjectReader
 import com.twitter.finagle.Service
-import com.twitter.finagle.http.{Request, Response, Status}
+import com.twitter.finagle.http.{Message, Request, Response, Status}
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.inject.Logging
@@ -46,7 +47,7 @@ class HttpClient(
       if (httpResponse.status != expectedStatus) {
         Future.exception(new HttpClientException(httpResponse.status, httpResponse.contentString))
       } else {
-        Future(FinatraObjectMapper.parseResponseBody[T](httpResponse, mapper.reader[T]))
+        Future(parseMessageBody[T](httpResponse, mapper.reader[T]))
           .transformException { e =>
             new HttpClientException(httpResponse.status, s"${e.getClass.getName} - ${e.getMessage}")
           }
@@ -77,6 +78,15 @@ class HttpClient(
       for ((key, value) <- defaultHeaders) {
         request.headerMap.set(key, value)
       }
+    }
+  }
+
+  private def parseMessageBody[T: Manifest](message: Message, reader: ObjectReader): T = {
+    val inputStream = message.getInputStream()
+    try {
+      reader.readValue[T](inputStream)
+    } finally {
+      inputStream.close()
     }
   }
 }

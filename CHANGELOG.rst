@@ -10,6 +10,27 @@ Unreleased
 Changed
 ~~~~~~~
 
+* finatra-http|jackson (BREAKING API CHANGE): Move parsing of message body contents
+  from `finatra/jackson` via the `FinatraObjectMapper` `#parseMessageBody`, `#parseRequestBody`,
+  and `#parseResponseBody` methods to `finatra/http` with functionality replicated via an
+  implicit which enhances a given `FinatraObjectMapper`. Additionally we have updated
+  finatra-http the `MessageBodyComponent` API to use `c.t.finagle.http.Message` instead
+  of `c.t.finagle.http.Request` and `c.t.finagle.http.Response`. This means that users can use the
+  `MessageBodyComponent` API to read the body of Finagle HTTP requests or responses and all HTTP
+  concerns are co-located in finatra-http instead of being partially implemented in finatra-jackson.
+
+  In updating the `MessageBodyComponent` API we have removed support for polymorphic `MessageBodyReader`
+  types, that is we have simplified the `MessageBodyReader` API to no longer express the `#parse`
+  method parameterized to a subtype of the class type. This API allowed parsing a message body
+  into a subtype solely through the presence of a given type parameter but the resulting API has
+  proven to be extremely clunky. We feel that the same behavior is achievable in other ways (such
+  as adapting the type after parsing) and the improvement and simplification of the
+  `MessageBodyReader` API to be worth removing the awkward method signature.
+
+  Lastly, we have fixed the returned charset encoding on response content-type header to be
+  applicable only where appropriate instead of always being added when the
+  `http.response.charset.enabled` flag is set to true. ``PHAB_ID=D400560``
+
 * finatra: (BREAKING API CHANGE) move DarkTrafficFilter and related modules
   from `finatra/thrift` to `inject/inject-thrift-client`. The modules now extend
   from `c.t.inject.thrift.modules.ThriftClientModuleTrait` for more uniform configuration.

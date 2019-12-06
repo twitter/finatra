@@ -8,6 +8,7 @@ scala_library(
     ),
     strict_deps = "True",
     dependencies = [
+        "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/javax/inject:javax.inject",
         "3rdparty/jvm/net/codingwell:scala-guice",
@@ -15,6 +16,7 @@ scala_library(
         "finatra/http-annotations/src/main/java/com/twitter/finatra/http/annotations",
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
+        "finatra/jackson/src/main/scala",
     ],
     exports = [
         "3rdparty/jvm/com/google/inject:guice",

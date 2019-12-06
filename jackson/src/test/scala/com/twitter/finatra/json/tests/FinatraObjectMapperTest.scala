@@ -1197,59 +1197,6 @@ class FinatraObjectMapperTest extends Test with Logging {
     mapper.parse[JsonNode](jsonParser) should equal(jsonNode)
   }
 
-  test("parseRequest") {
-    val request = Request()
-    request.setContentString("""{"msg": "hi"}""")
-
-    val jsonNode = FinatraObjectMapper
-      .parseRequestBody[JsonNode](request, mapper.objectMapper.readerFor[JsonNode])
-
-    jsonNode.get("msg").textValue() should equal("hi")
-  }
-
-  test("Parse message not supported when content length not set") {
-    val request = Request()
-    request.setContentString("""{ "foo": "true" }""")
-    intercept[RequestFieldInjectionNotSupportedException] {
-      mapper.parse[CaseClassWithBoolean](request)
-    }
-  }
-
-  test("Parse message") {
-    val request = Request()
-    val json = """{ "foo": "true" }"""
-    request.setContentString(json)
-    request.headerMap.set("Content-Length", json.length.toString)
-    val result = mapper.parse[CaseClassWithBoolean](request)
-    assert(result == CaseClassWithBoolean(true))
-  }
-
-  test("parse with Request") {
-    val request = Request()
-    request.setContentString("""{"msg": "hi"}""")
-
-    intercept[RequestFieldInjectionNotSupportedException] {
-      mapper.parse[JsonNode](request)
-    }
-  }
-
-  test("parse with Response") {
-    val response = Response()
-    response.setContentString("""{"msg": "hi"}""")
-
-    mapper.parse[JsonNode](response).get("msg").textValue() should equal("hi")
-  }
-
-  test("parseResponse") {
-    val response = Response()
-    response.setContentString("""{"msg": "hi"}""")
-
-    val jsonNode = FinatraObjectMapper
-      .parseResponseBody[JsonNode](response, mapper.objectMapper.readerFor[JsonNode])
-
-    jsonNode.get("msg").textValue() should equal("hi")
-  }
-
   test("writeValue") {
     val os = new ByteArrayOutputStream()
     mapper.writeValue(Map("msg" -> "hi"), os)

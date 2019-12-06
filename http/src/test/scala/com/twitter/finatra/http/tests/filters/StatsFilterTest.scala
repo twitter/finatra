@@ -1,16 +1,13 @@
 package com.twitter.finatra.http.tests.filters
 
 import com.twitter.conversions.DurationOps._
-import com.twitter.finagle.{Failure, Service}
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.service.{ReqRep, ResponseClass, ResponseClassifier}
-import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
+import com.twitter.finagle.stats.InMemoryStatsReceiver
+import com.twitter.finagle.{Failure, Service}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.filters.StatsFilter
-import com.twitter.finatra.http.marshalling.MessageBodyManager
-import com.twitter.finatra.http.response.{HttpResponseClassifier, ResponseBuilder}
-import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.utils.FileResolver
+import com.twitter.finatra.http.response.{DefaultResponseBuilder, HttpResponseClassifier}
 import com.twitter.inject.{Mockito, Test}
 import com.twitter.util.{Await, Future, Return, Throw}
 
@@ -18,14 +15,7 @@ class StatsFilterTest extends Test with Mockito {
 
   private[this] val statsReceiver = new InMemoryStatsReceiver
   private[this] val routeInfo = RouteInfo("foo", "/foo/123")
-
-  private[this] lazy val responseBuilder = new ResponseBuilder(
-    objectMapper = FinatraObjectMapper.create(),
-    fileResolver = FileResolver.newLocalResolver("src/main/webapp/"),
-    messageBodyManager = mock[MessageBodyManager],
-    statsReceiver = mock[StatsReceiver],
-    includeContentTypeCharset = true
-  )
+  private[this] val responseBuilder = DefaultResponseBuilder.Instance
 
   override protected def afterEach(): Unit = {
     statsReceiver.clear()

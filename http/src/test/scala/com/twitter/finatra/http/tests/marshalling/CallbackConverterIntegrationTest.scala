@@ -17,7 +17,16 @@ import com.twitter.io.{Buf, BufReader, Reader}
 import com.twitter.util.Future
 import scala.concurrent.{Future => ScalaFuture}
 
+object CallbackConverterIntegrationTest {
+  case class Car(name: String) extends CarTrait
+
+  trait CarTrait {
+    val name: String
+  }
+}
+
 class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
+  import CallbackConverterIntegrationTest._
 
   override val injector: Injector =
     TestInjector(
@@ -553,10 +562,4 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
     val response = await(convertedFunc(Request()))
     response.status should equal(expectedStatus)
   }
-}
-
-case class Car(name: String) extends CarTrait
-
-trait CarTrait {
-  val name: String
 }
