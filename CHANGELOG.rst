@@ -10,6 +10,17 @@ Unreleased
 Changed
 ~~~~~~~
 
+* finatra: Correctly track Ignorable Exceptions in per-method StatsFilter.  Responses
+  marked as Ignorable are tracked in the global requests and exceptions metrics but
+  were not counted under the per-method metrics.  There are now counts of `ignored`
+  and total `requests` as well as ignored requests by Exception for each method. E.g.
+
+  per_method_stats/foo/ignored 1
+  per_method_stats/foo/ignored/java.lang.Exception 1
+  per_method_stats/foo/requests 1
+
+  ``PHAB_ID=D407474``
+
 * finatra-http|jackson (BREAKING API CHANGE): Move parsing of message body contents
   from `finatra/jackson` via the `FinatraObjectMapper` `#parseMessageBody`, `#parseRequestBody`,
   and `#parseResponseBody` methods to `finatra/http` with functionality replicated via an
