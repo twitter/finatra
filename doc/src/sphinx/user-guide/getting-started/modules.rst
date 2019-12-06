@@ -150,7 +150,7 @@ For example:
 The argument `foo: Foo` will be "injected" in the sense that the injector will attempt to provide
 an instance of `foo` when invoking the method.
 
-See `Module Configuration in Severs <#module-configuration-in-servers>`__.
+See `Module Configuration in Servers <#module-configuration-in-servers>`__.
 
 Using Flags in Modules
 ^^^^^^^^^^^^^^^^^^^^^^
