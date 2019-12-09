@@ -10,6 +10,8 @@ Unreleased
 Changed
 ~~~~~~~
 
+* finatra: Upgrade to jackson 2.9.10 and jackson-databind 2.9.10.1 ``PHAB_ID=D410846``
+
 * finatra: Correctly track Ignorable Exceptions in per-method StatsFilter.  Responses
   marked as Ignorable are tracked in the global requests and exceptions metrics but
   were not counted under the per-method metrics.  There are now counts of `ignored`

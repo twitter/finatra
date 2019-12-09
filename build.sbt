@@ -95,7 +95,8 @@ lazy val versions = new {
   val commonsFileupload = "1.4"
   val fastutil = "8.1.1"
   val guice = "4.1.0"
-  val jackson = "2.9.9"
+  val jackson = "2.9.10"
+  val jacksonDatabind = "2.9.10.1"
   val jodaConvert = "1.2"
   val jodaTime = "2.5"
   val json4s = "3.6.7"
@@ -668,7 +669,7 @@ lazy val validation = project
     name := "finatra-validation",
     moduleName := "finatra-validation",
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
+      "com.fasterxml.jackson.core" % "jackson-databind" % versions.jacksonDatabind,
       "joda-time" % "joda-time" % versions.jodaTime,
       "org.json4s" %% "json4s-core" % versions.json4s,
       "com.twitter" %% "util-core" % versions.twLibVersion
@@ -706,7 +707,7 @@ lazy val jackson = project
     moduleName := "finatra-jackson",
     ScoverageKeys.coverageExcludedPackages := ".*JacksonToGuiceTypeConverter.*;.*DurationMillisSerializer.*;.*ByteBufferUtils.*",
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
+      "com.fasterxml.jackson.core" % "jackson-databind" % versions.jacksonDatabind,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson,
       "org.json4s" %% "json4s-core" % versions.json4s,
