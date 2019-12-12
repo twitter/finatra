@@ -1,5 +1,5 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main.domain
 
-import com.twitter.finatra.request.FormParam
+import com.twitter.finatra.request.{FormParam, RouteParam}
 
-case class FormPostRequest(@FormParam name: String, @FormParam age: Int)
+case class FormPostRequest(@FormParam name: String, @FormParam age: Int, @RouteParam cardId: String)

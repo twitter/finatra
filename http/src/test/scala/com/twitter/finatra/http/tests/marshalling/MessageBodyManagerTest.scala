@@ -157,7 +157,7 @@ class MessageBodyManagerTest extends Test with Mockito {
     val json = """{"msg": "hi"}"""
     response.setContentString(json)
     response.headerMap.set(Fields.ContentLength, json.length.toString)
-    response.headerMap.set(Fields.Accept, MediaType.Json)
+    response.headerMap.set(Fields.ContentType, MediaType.Json)
 
     val jsonNode = defaultMessageBodyReader.parse[JsonNode](response)
     jsonNode.get("msg").textValue() should equal("hi")

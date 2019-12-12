@@ -398,8 +398,9 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
 
   test("POST /formPost") {
     server.httpFormPost(
-      "/formPost",
+      "/formPost/1f234s",
       params = Map("name" -> "bob", "age" -> "18"),
+      headers = Map(Fields.Accept -> MediaType.JsonUtf8),
       andExpect = Ok,
       withBody = "bob"
     )
@@ -1762,7 +1763,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
 
   test("Bad request for missing form param") {
     server.httpFormPost(
-      "/formPost",
+      "/formPost/fi33n2",
       params = Map("name" -> "bob"),
       andExpect = BadRequest,
       withBody = """{"errors":["age: formParam is required"]}"""

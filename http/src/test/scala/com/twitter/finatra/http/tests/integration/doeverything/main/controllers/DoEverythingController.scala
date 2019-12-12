@@ -205,7 +205,7 @@ class DoEverythingController @Inject()(
     "bar"
   }
 
-  post("/formPost") { formPost: FormPostRequest =>
+  post("/formPost/:card_id") { formPost: FormPostRequest =>
     formPost.name
   }
 

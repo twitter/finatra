@@ -21,7 +21,7 @@ private[finatra] class DefaultMessageBodyReaderImpl @Inject()(
   /* Public */
 
   override def parse[T: Manifest](message: Message): T = {
-    val requestAwareObjectReader = message match {
+    val objectReader = message match {
       case request: Request =>
         val requestInjectableValues =
           new RequestInjectableValues(objectMapper,request, injector)
@@ -30,11 +30,19 @@ private[finatra] class DefaultMessageBodyReaderImpl @Inject()(
         objectMapper.reader[T]
     }
 
-    val length = message.contentLength.getOrElse(0L)
-    if (length > 0 && isJsonEncoded(message) && !ignoresBody[T])
-      MessageBodyReader.parseMessageBody[T](message, requestAwareObjectReader)
-    else
-      requestAwareObjectReader.readValue[T](DefaultMessageBodyReaderImpl.EmptyObjectNode)
+    val hasMessageBody = message.contentLength match {
+      case Some(length) if length > 0 => true
+      case _ => false
+    }
+
+    if (hasMessageBody && !ignoresBody[T] && isBodyJsonEncoded(message)) {
+      // the body of the message should be parsed by the object reader
+      MessageBodyReader.parseMessageBody[T](message, objectReader)
+    } else {
+      // use the object reader simply to trigger the framework
+      // case class deserializer over an empty object node
+      objectReader.readValue[T](DefaultMessageBodyReaderImpl.EmptyObjectNode)
+    }
   }
 
   /* Private */
@@ -43,7 +51,6 @@ private[finatra] class DefaultMessageBodyReaderImpl @Inject()(
     manifest[T].runtimeClass.isAnnotationPresent(classOf[JsonIgnoreBody])
   }
 
-  private def isJsonEncoded(message: Message): Boolean =
-    message.contentType.exists(_.startsWith(MediaType.Json)) ||
-      message.acceptMediaTypes.exists(_.startsWith(MediaType.Json))
+  private def isBodyJsonEncoded(message: Message): Boolean =
+    message.contentType.exists(_.startsWith(MediaType.Json))
 }

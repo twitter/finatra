@@ -90,6 +90,9 @@ Changed
 Fixed
 ~~~~~
 
+* finatra-http: Fixed issue in the `DefaultMessageBodyReaderImpl` that determines if the incoming
+  message is "json encoded". ``PHAB_ID=D412993``
+
 * inject-modules: Removed the extra registration for closing a client, which used to log false
   warnings when startup a ClientModule. Only register close after materialized clients.
   ``PHAB_ID=D401288``
