@@ -10,8 +10,6 @@ Unreleased
 Changed
 ~~~~~~~
 
-* finatra: Update Google Guice version to 4.2.0 ``PHAB_ID=D372886``
-
 * finatra: Upgrade to jackson 2.9.10 and jackson-databind 2.9.10.1 ``PHAB_ID=D410846``
 
 * finatra: Correctly track Ignorable Exceptions in per-method StatsFilter.  Responses
@@ -208,12 +206,12 @@ Added
 Changed
 ~~~~~~~
 
-* finatra: Remove commons-lang as a dependency and replace it with alternatives from stdlib
+* finatra: Remove commons-lang as a dependency and replace it with alternatives from stdlib 
   when possible. ``PHAB_ID=D354013``
 
 * inject-server: Changed `c.t.inject.server.InMemoryStatsReceiverUtility` to show the expected and
   actual values as part of the error message when metric values do not match. ``PHAB_ID=D360470``
-
+  
 * finatra-kafka-streams: Improve StaticPartitioning error message ``PHAB_ID=D351368``
 
 Fixed
@@ -225,11 +223,11 @@ Fixed
 * inject-app: Update `c.t.inject.app.App` to only recurse through modules once. We currently
   call `TwitterModule#modules` more than once in reading flags and parsing the list of modules
   over which to create the injector. When `TwitterModule#modules` is a function that inlines the
-  instantiation of new modules we can end up creating multiple instances causing issues with the
-  list of flags defined in the application. This is especially true in instances of `TwitterModule`
-  implemented in Java as there is no way to implement the trait `TwitterModule#modules` method as a
-  eagerly evaluated value. We also don't provide an ergonomic method for Java users to define
-  dependent modules like we do in apps and servers via `App#javaModules`. Thus we also add a
+  instantiation of new modules we can end up creating multiple instances causing issues with the 
+  list of flags defined in the application. This is especially true in instances of `TwitterModule` 
+  implemented in Java as there is no way to implement the trait `TwitterModule#modules` method as a 
+  eagerly evaluated value. We also don't provide an ergonomic method for Java users to define 
+  dependent modules like we do in apps and servers via `App#javaModules`. Thus we also add a 
   `TwitterModule#javaModules` function which expresses a better API for Java users. ``PHAB_ID=D349587``
 
 Closed
@@ -398,7 +396,7 @@ Added
   `NullValidationFinatraJacksonModule`. ``PHAB_ID=D307795``
 
 * inject-app: Add `c.t.inject.app.DtabResolution` to help users apply supplemental Dtabs added by
-  setting the dtab.add flag. This will append the supplemental Dtabs to the
+  setting the dtab.add flag. This will append the supplemental Dtabs to the 
   Dtab.base in a premain function. ``PHAB_ID=D303813``
 
 Changed
