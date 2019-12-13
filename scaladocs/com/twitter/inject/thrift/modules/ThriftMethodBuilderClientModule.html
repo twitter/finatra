@@ -155,12 +155,24 @@
                         <a href="AndThenServiceModule$.html" title="">AndThenServiceModule</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
+                        <a class="class" href="DarkTrafficFilterModule.html" title="A TwitterModule which configures and binds a DarkTrafficFilter to the object graph, for use with Controllers constructed using the legacy method."></a>
+                        <a href="DarkTrafficFilterModule.html" title="A TwitterModule which configures and binds a DarkTrafficFilter to the object graph, for use with Controllers constructed using the legacy method.">DarkTrafficFilterModule</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
                         <a class="object" href="FilteredThriftClientFlagsModule$.html" title=""></a>
                         <a href="FilteredThriftClientFlagsModule$.html" title="">FilteredThriftClientFlagsModule</a>
                       </li><li class="current-entities indented5">
                         <a class="object" href="FilteredThriftClientModule$.html" title=""></a>
                         <a class="class" href="FilteredThriftClientModule.html" title="Provides a FutureIface in the form of RemoteService[Future] for making calls to a remote service."></a>
                         <a href="FilteredThriftClientModule.html" title="Provides a FutureIface in the form of RemoteService[Future] for making calls to a remote service.">FilteredThriftClientModule</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="JavaDarkTrafficFilterModule.html" title="A com.twitter.inject.TwitterModule which configures and binds a JavaDarkTrafficFilter to the object graph."></a>
+                        <a href="JavaDarkTrafficFilterModule.html" title="A com.twitter.inject.TwitterModule which configures and binds a JavaDarkTrafficFilter to the object graph.">JavaDarkTrafficFilterModule</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="ReqRepDarkTrafficFilterModule.html" title="A com.twitter.inject.TwitterModule which configures and binds a DarkTrafficFilter to the object graph."></a>
+                        <a href="ReqRepDarkTrafficFilterModule.html" title="A com.twitter.inject.TwitterModule which configures and binds a DarkTrafficFilter to the object graph.">ReqRepDarkTrafficFilterModule</a>
                       </li><li class="current-entities indented5">
                         <a class="object" href="ThriftClientIdModule$.html" title=""></a>
                         <a class="class" href="ThriftClientIdModule.html" title="Provides a com.twitter.finagle.thrift.ClientId binding with a value configurable via a com.twitter.app.Flag."></a>
@@ -214,7 +226,7 @@ per-method which can then be used directly or can be wrapped by a <code>MethodPe
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><span class="extype" name="com.twitter.inject.thrift.modules.ThriftClientModuleTrait">ThriftClientModuleTrait</span>, <a href="../../modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ThriftClientRequest.html#com.twitter.finagle.thrift.ThriftClientRequest" class="extype" name="com.twitter.finagle.thrift.ThriftClientRequest">ThriftClientRequest</a>, <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>], <span class="extype" name="com.twitter.finagle.ThriftMux.Client">Client</span>], <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>, <a href="../../TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a>, <a href="../../TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a>, <a href="../../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">util.logging.Logging</a>, <a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a>, <span class="extype" name="com.google.inject.AbstractModule">AbstractModule</span>, <span class="extype" name="com.google.inject.Module">Module</span>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="com.twitter.inject.thrift.modules.ThriftClientModuleTrait">ThriftClientModuleTrait</span>, <a href="../../modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ThriftClientRequest.html#com.twitter.finagle.thrift.ThriftClientRequest" class="extype" name="com.twitter.finagle.thrift.ThriftClientRequest">ThriftClientRequest</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>], <span class="extype" name="com.twitter.finagle.ThriftMux.Client">Client</span>], <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>, <a href="../../TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a>, <a href="../../TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a>, <a href="../../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">util.logging.Logging</a>, <a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a>, <span class="extype" name="com.google.inject.AbstractModule">AbstractModule</span>, <span class="extype" name="com.google.inject.Module">Module</span>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -636,7 +648,7 @@ injector-supplied values to construct objects.</p><div class="fullcomment"><div 
 injector-supplied values to construct objects. This is preferable to calling <code>install</code>
 on the <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> which provides the factory as install is not supported for
 <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> types.
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the assisted injection factory</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/assistedinject/AssistedInject.html" target="_blank">com.google.inject.assistedinject.AssitedInject</a></p></span><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/assistedinject/FactoryModuleBuilder.html" target="_blank">com.google.inject.assistedinject.FactoryModuleBuilder</a></p></span><span class="cmt"><p><a href="https://github.com/google/guice/wiki/AssistedInject" target="_blank">Assisted Injection</a></p></span></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the assisted injection factory</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/assistedinject/AssistedInject.html" target="_blank">com.google.inject.assistedinject.AssistedInject</a></p></span><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/assistedinject/FactoryModuleBuilder.html" target="_blank">com.google.inject.assistedinject.FactoryModuleBuilder</a></p></span><span class="cmt"><p><a href="https://github.com/google/guice/wiki/AssistedInject" target="_blank">Assisted Injection</a></p></span></dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#bindConstant" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="bindConstant():com.google.inject.binder.AnnotatedConstantBindingBuilder"></a><a id="bindConstant():AnnotatedConstantBindingBuilder"></a>
       <span class="permalink">
@@ -1119,6 +1131,29 @@ of type <span class="extype" name="T">T</span> singleton-scoped that is bound wi
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../google/inject/index.html" class="extype" name="com.google.inject">com.google.inject</a>] </dd><dt>Definition Classes</dt><dd>AbstractModule</dd></dl></div>
+    </li><li name="com.twitter.inject.thrift.modules.ThriftClientModuleTrait#clientId" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clientId(injector:com.twitter.inject.Injector):com.twitter.finagle.thrift.ClientId"></a><a id="clientId(Injector):ClientId"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/inject/thrift/modules/ThriftMethodBuilderClientModule.html#clientId(injector:com.twitter.inject.Injector):com.twitter.finagle.thrift.ClientId" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clientId</span><span class="params">(<span name="injector">injector: <a href="../../Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>)</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ClientId.html#com.twitter.finagle.thrift.ClientId" class="extype" name="com.twitter.finagle.thrift.ClientId">ClientId</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Override to supply a custom <span class="extype" name="ClientId">ClientId</span>, e.g.,
+  override protected def clientId(injector: Injector): ClientId = ClientId(&quot;myclient&quot;)
+}}}
+</p><div class="fullcomment"><div class="comment cmt"><p>Override to supply a custom <span class="extype" name="ClientId">ClientId</span>, e.g.,
+  override protected def clientId(injector: Injector): ClientId = ClientId(&quot;myclient&quot;)
+}}}
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>ThriftClientModuleTrait</dd><dt>Note</dt><dd><span class="cmt"><p>The default requires a <span class="extype" name="ClientId">ClientId</span> be bound to the <span class="extype" name="injector">injector</span>,
+      for example via a <a href="ThriftClientIdModule.html" class="extype" name="com.twitter.inject.thrift.modules.ThriftClientIdModule">ThriftClientIdModule</a>.</p></span></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
@@ -1299,7 +1334,6 @@ this module or for overriding defaults provided herein, e.g.,</p><pre><span clas
     .withStatsReceiver(someOtherScopedStatsReceiver)
     .withMonitor(myAwesomeMonitor)
     .withTracer(notTheDefaultTracer)
-    .withClientId(injector.instance[ClientId])
     .withResponseClassifier(ThriftResponseClassifier.ThriftExceptionsAsFailures)
 }</pre></div><dl class="paramcmts block"><dt class="param">injector</dt><dd class="cmt"><p>the <a href="../../Injector.html" class="extype" name="com.twitter.inject.Injector">com.twitter.inject.Injector</a> which can be used to help configure the
                 given <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ThriftMux$$Client.html" class="extype" name="com.twitter.finagle.ThriftMux.Client">com.twitter.finagle.ThriftMux.Client</a>.</p></dd><dt class="param">client</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ThriftMux$$Client.html" class="extype" name="com.twitter.finagle.ThriftMux.Client">com.twitter.finagle.ThriftMux.Client</a> to configure.</p></dd><dt>returns</dt><dd class="cmt"><p>a configured <span class="extype" name="ThriftMux.Client">ThriftMux.Client</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>ThriftClientModuleTrait</dd></dl></div>
@@ -1693,10 +1727,10 @@ a value provided as an application argument (as they have no default value to be
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
-    </li><li name="com.twitter.inject.modules.StackClientModuleTrait#frameworkConfigureClient" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="frameworkConfigureClient(injector:com.twitter.inject.Injector,client:ClientType):ClientType"></a><a id="frameworkConfigureClient(Injector,Client):Client"></a>
+    </li><li name="com.twitter.inject.thrift.modules.ThriftClientModuleTrait#frameworkConfigureClient" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="frameworkConfigureClient(injector:com.twitter.inject.Injector,client:com.twitter.finagle.ThriftMux.Client):com.twitter.finagle.ThriftMux.Client"></a><a id="frameworkConfigureClient(Injector,Client):Client"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/inject/thrift/modules/ThriftMethodBuilderClientModule.html#frameworkConfigureClient(injector:com.twitter.inject.Injector,client:ClientType):ClientType" title="Permalink">
+      <a href="../../../../../com/twitter/inject/thrift/modules/ThriftMethodBuilderClientModule.html#frameworkConfigureClient(injector:com.twitter.inject.Injector,client:com.twitter.finagle.ThriftMux.Client):com.twitter.finagle.ThriftMux.Client" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1708,7 +1742,7 @@ a value provided as an application argument (as they have no default value to be
         <span class="name">frameworkConfigureClient</span><span class="params">(<span name="injector">injector: <a href="../../Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="client">client: <span class="extype" name="com.twitter.finagle.ThriftMux.Client">Client</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.ThriftMux.Client">Client</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../index.html" class="extype" name="com.twitter">com.twitter</a>] </dd><dt>Definition Classes</dt><dd><a href="../../modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../index.html" class="extype" name="com.twitter">com.twitter</a>] </dd><dt>Definition Classes</dt><dd>ThriftClientModuleTrait → <a href="../../modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterBaseModule#frameworkModules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="frameworkModules:Seq[com.google.inject.Module]"></a><a id="frameworkModules:Seq[Module]"></a>
       <span class="permalink">
@@ -1979,7 +2013,7 @@ try to use it beforehand.
       
       <p class="shortcomment cmt">Initial configuration of the underlying client.</p><div class="fullcomment"><div class="comment cmt"><p>Initial configuration of the underlying client. This is exposed to allow for customization
 of the base client configuration. All user facing extensions should be done via <a href="#configureClient(injector:com.twitter.inject.Injector,client:com.twitter.finagle.ThriftMux.Client):com.twitter.finagle.ThriftMux.Client" class="extmbr" name="com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule#configureClient">configureClient</a>.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The base configured <span class="extype" name="ClientType">ClientType</span> client, without any custom end-user configuration.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule">ThriftMethodBuilderClientModule</a> → <a href="../../modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd><div class="block">Example:
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The base configured <span class="extype" name="ClientType">ClientType</span> client, without any custom end-user configuration.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule">ThriftMethodBuilderClientModule</a> → ThriftClientModuleTrait → <a href="../../modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd><div class="block">Example:
                <ol><li class="cmt"><p></p><pre><span class="kw">override</span> <span class="kw">protected</span> <span class="kw">final</span> <span class="kw">def</span> initialClientConfiguration(
   injector: Injector,
   client: ClientType,
@@ -2295,10 +2329,10 @@ handled by a user-defined monitor are propagated to the <a href="https://twitter
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.twitter.inject.modules.StackClientModuleTrait#newClient" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="newClient(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):ClientType"></a><a id="newClient(Injector,StatsReceiver):Client"></a>
+    </li><li name="com.twitter.inject.thrift.modules.ThriftClientModuleTrait#newClient" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="newClient(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.ThriftMux.Client"></a><a id="newClient(Injector,StatsReceiver):Client"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/inject/thrift/modules/ThriftMethodBuilderClientModule.html#newClient(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):ClientType" title="Permalink">
+      <a href="../../../../../com/twitter/inject/thrift/modules/ThriftMethodBuilderClientModule.html#newClient(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.ThriftMux.Client" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2313,7 +2347,15 @@ handled by a user-defined monitor are propagated to the <a href="https://twitter
       <p class="shortcomment cmt">This method will generate a fully configured <span class="extype" name="ClientType">ClientType</span>
 </p><div class="fullcomment"><div class="comment cmt"><p>This method will generate a fully configured <span class="extype" name="ClientType">ClientType</span>
 </p></div><dl class="paramcmts block"><dt class="param">injector</dt><dd class="cmt"><p>the <a href="../../Injector.html" class="extype" name="com.twitter.inject.Injector">com.twitter.inject.Injector</a> which can be used to help configure the
-                given <span class="extype" name="ClientType">ClientType</span> client.</p></dd><dt class="param">statsReceiver</dt><dd class="cmt"><p>The <span class="extype" name="StatsReceiver">StatsReceiver</span> to use with the generated <span class="extype" name="ClientType">ClientType</span></p></dd><dt>returns</dt><dd class="cmt"><p>A configured <span class="extype" name="ClientType">ClientType</span></p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd></dl></div>
+                given <span class="extype" name="ClientType">ClientType</span> client.</p></dd><dt class="param">statsReceiver</dt><dd class="cmt"><p>The <span class="extype" name="StatsReceiver">StatsReceiver</span> to use with the generated <span class="extype" name="ClientType">ClientType</span></p></dd><dt>returns</dt><dd class="cmt"><p>A configured <span class="extype" name="ClientType">ClientType</span></p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>ThriftClientModuleTrait → <a href="../../modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd><dt>Note</dt><dd><span class="cmt"><p>The ability to override this method is exposed for Java compatibility purposes, where the
+      type information in this trait can be erased from this trait to a more generic
+      <span class="extype" name="ClientType">ClientType</span>, which can cause Java compilation failures. See
+      https://issues.scala-lang.org/browse/SI-8905.
+      When overriding this method, it should treat this method as final, outside of providing
+      a more specific return type. For example:</p><pre><span class="kw">override</span> <span class="kw">protected</span> <span class="kw">final</span> <span class="kw">def</span> newClient(
+  injector: Injector,
+  statsReceiver: StatsReceiver
+): Http.Client = <span class="kw">super</span>.newClient(injector, statsReceiver)</pre></span></dd></dl></div>
     </li><li name="com.twitter.inject.modules.StackClientModuleTrait#newService" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="newService(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.Service[Req,Rep]"></a><a id="newService(Injector,StatsReceiver):Service[ThriftClientRequest,Array[Byte]]"></a>
       <span class="permalink">
@@ -2326,7 +2368,7 @@ handled by a user-defined monitor are propagated to the <a href="https://twitter
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">newService</span><span class="params">(<span name="injector">injector: <a href="../../Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.Service">Service</span>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ThriftClientRequest.html#com.twitter.finagle.thrift.ThriftClientRequest" class="extype" name="com.twitter.finagle.thrift.ThriftClientRequest">ThriftClientRequest</a>, <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]]</span>
+        <span class="name">newService</span><span class="params">(<span name="injector">injector: <a href="../../Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.Service">Service</span>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ThriftClientRequest.html#com.twitter.finagle.thrift.ThriftClientRequest" class="extype" name="com.twitter.finagle.thrift.ThriftClientRequest">ThriftClientRequest</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]]</span>
       </span>
       
       <p class="shortcomment cmt">This method will generate a <code>Service[Req, Rep]</code> from the configured <span class="extype" name="ClientType">ClientType</span>
@@ -2536,6 +2578,28 @@ This will set *all* requests to *every* method to have the same total timeout.
       <p class="shortcomment cmt">Default <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/RetryBudget.html" class="extype" name="com.twitter.finagle.service.RetryBudget">com.twitter.finagle.service.RetryBudget</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Default <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/RetryBudget.html" class="extype" name="com.twitter.finagle.service.RetryBudget">com.twitter.finagle.service.RetryBudget</a>. It is highly recommended that budgets
 be shared between all filters that retry or re-queue requests to prevent retry storms.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a default <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/RetryBudget.html" class="extype" name="com.twitter.finagle.service.RetryBudget">com.twitter.finagle.service.RetryBudget</a></p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/guide/Clients.html#retries" target="_blank">https://twitter.github.io/finagle/guide/Clients.html#retries</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule#scopeStatsReceiver" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="scopeStatsReceiver(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.stats.StatsReceiver"></a><a id="scopeStatsReceiver(Injector,StatsReceiver):StatsReceiver"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/inject/thrift/modules/ThriftMethodBuilderClientModule.html#scopeStatsReceiver(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.stats.StatsReceiver" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">scopeStatsReceiver</span><span class="params">(<span name="injector">injector: <a href="../../Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Provide a customized base scope for the <span class="extype" name="StatsReceiver">StatsReceiver</span> exposed by this module, e.g.,
+*
+* </p><div class="fullcomment"><div class="comment cmt"><p>Provide a customized base scope for the <span class="extype" name="StatsReceiver">StatsReceiver</span> exposed by this module, e.g.,
+*
+* </p><pre><span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> scopeStatsReceiver(injector: Injector, statsReceiver: StatsReceiver): StatsReceiver =
+ statsReceiver.scope(<span class="lit">"clnt"</span>, <span class="lit">"custom_scope"</span>)</pre></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule">ThriftMethodBuilderClientModule</a> → <a href="../../modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a></dd><dt>Note</dt><dd><span class="cmt"><p>The default scope is &quot;clnt&quot;.</p></span>, <span class="cmt"><p>Changing the default scope can have negative impacts on observability of metrics. Use
+      caution when changing this value.</p></span></dd></dl></div>
     </li><li name="com.twitter.inject.modules.StackClientModuleTrait#sessionAcquisitionTimeout" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="sessionAcquisitionTimeout:com.twitter.util.Duration"></a><a id="sessionAcquisitionTimeout:Duration"></a>
       <span class="permalink">
@@ -2915,7 +2979,7 @@ be shared between all filters that retry or re-queue requests to prevent retry s
         <div class="parent" name="com.twitter.inject.thrift.modules.ThriftClientModuleTrait">
               <h3>Inherited from <span class="extype" name="com.twitter.inject.thrift.modules.ThriftClientModuleTrait">ThriftClientModuleTrait</span></h3>
             </div><div class="parent" name="com.twitter.inject.modules.StackClientModuleTrait">
-              <h3>Inherited from <a href="../../modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ThriftClientRequest.html#com.twitter.finagle.thrift.ThriftClientRequest" class="extype" name="com.twitter.finagle.thrift.ThriftClientRequest">ThriftClientRequest</a>, <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>], <span class="extype" name="com.twitter.finagle.ThriftMux.Client">Client</span>]</h3>
+              <h3>Inherited from <a href="../../modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ThriftClientRequest.html#com.twitter.finagle.thrift.ThriftClientRequest" class="extype" name="com.twitter.finagle.thrift.ThriftClientRequest">ThriftClientRequest</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>], <span class="extype" name="com.twitter.finagle.ThriftMux.Client">Client</span>]</h3>
             </div><div class="parent" name="com.twitter.inject.TwitterModule">
               <h3>Inherited from <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></h3>
             </div><div class="parent" name="com.twitter.inject.TwitterBaseModule">

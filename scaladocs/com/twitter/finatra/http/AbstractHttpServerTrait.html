@@ -133,6 +133,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra">finatra</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.annotations" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="annotations"></a><a id="annotations:annotations"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/http/index.html#annotations" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="annotations/index.html"><span class="name">annotations</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="com.twitter.finatra.http">http</a></dd></dl></div>
     </li><li name="com.twitter.finatra.http.contexts" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="contexts"></a><a id="contexts:contexts"></a>
       <span class="permalink">
@@ -359,10 +375,6 @@
                         <a href="Controller.html" title="">Controller</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="object" href="HttpHeaders$.html" title=""></a>
-                        <a href="HttpHeaders$.html" title="">HttpHeaders</a>
-                      </li><li class="current-entities indented4">
-                        <span class="separator"></span>
                         <a class="trait" href="HttpServer.html" title="A Finagle server which exposes external HTTP or HTTPS interfaces implemented by a Service[Request, Response] configured via an HttpRouter."></a>
                         <a href="HttpServer.html" title="A Finagle server which exposes external HTTP or HTTPS interfaces implemented by a Service[Request, Response] configured via an HttpRouter.">HttpServer</a>
                       </li><li class="current-entities indented4">
@@ -492,7 +504,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">httpService</span><span class="result">: <span class="extype" name="com.twitter.finagle.Service">Service</span>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a>]</span>
+        <span class="name">httpService</span><span class="result">: <span class="extype" name="com.twitter.finagle.Service">Service</span>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <span class="extype" name="com.twitter.finagle.http.Response">Response</span>]</span>
       </span>
       
       <p class="shortcomment cmt">The Finagle <code>Service[Request, Response]</code> to serve on either configured <span class="extype" name="ListeningServer">ListeningServer</span>.</p><div class="fullcomment"><div class="comment cmt"><p>The Finagle <code>Service[Request, Response]</code> to serve on either configured <span class="extype" name="ListeningServer">ListeningServer</span>.</p><p>Users must override with an implementation to serve a <code>Service[Request, Response]</code></p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd></dl></div>
@@ -783,7 +795,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">args</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">args</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>App</dd></dl></div>
@@ -1501,7 +1513,7 @@ represents the deadline for the closing of this server which can be overridden t
 different default programmatically when a flag value cannot be passed.</p><p>In general, users should prefer setting the <span class="extype" name="shutdownTimeoutFlag">shutdownTimeoutFlag</span> <span class="extype" name="Flag">Flag</span> value.
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HttpServerTrait.html" class="extype" name="com.twitter.finatra.http.HttpServerTrait">HttpServerTrait</a></dd><dt>Note</dt><dd><span class="cmt"><p>the value is used to denote a delta &quot;from now&quot;, that is this value is applied as:
       <code>server.close(shutdownTimeoutDuration.fromNow())</code></p></span></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.util.Closable.close(deadline:">Time)</span></p></span><span class="cmt"><p><a href="https://github.com/twitter/util/blob/b0a5d06269b9526b4408239ce1441b2a213dd0df/util-core/src/main/scala/com/twitter/util/Duration.scala#L436" target="_blank">https://github.com/twitter/util/blob/b0a5d06269b9526b4408239ce1441b2a213dd0df/util-core/src/main/scala/com/twitter/util/Duration.scala#L436</a></p></span><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.HttpServerTrait.shutdownTimeoutFlag">com.twitter.finatra.http.HttpServerTrait.shutdownTimeoutFlag</span></p></span></dd></dl></div>
-    </li><li name="com.twitter.inject.server.TwitterServer#disableAdminHttpServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.server.AdminHttpServer#disableAdminHttpServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="disableAdminHttpServer:Boolean"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/AbstractHttpServerTrait.html#disableAdminHttpServer:Boolean" title="Permalink">
@@ -1516,9 +1528,7 @@ different default programmatically when a flag value cannot be passed.</p><p>In 
         <span class="name">disableAdminHttpServer</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
-      <p class="shortcomment cmt">If true, the Twitter-Server admin server will be disabled.</p><div class="fullcomment"><div class="comment cmt"><p>If true, the Twitter-Server admin server will be disabled.
-Note: Disabling the admin server allows services to be deployed into environments where only a single port is allowed
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>AdminHttpServer</dd></dl></div>
     </li><li name="com.twitter.finagle.DtabFlags#dtabAddBaseFlag" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="dtabAddBaseFlag:com.twitter.app.Flag[com.twitter.finagle.Dtab]"></a><a id="dtabAddBaseFlag:Flag[Dtab]"></a>
       <span class="permalink">
@@ -2452,7 +2462,7 @@ If you think you need this in your main server you are most likely doing somethi
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">main</span><span class="params">(<span name="args">args: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">main</span><span class="params">(<span name="args">args: <a href="http://www.scala-lang.org/api/2.12.8/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>App</dd></dl></div>
@@ -2517,7 +2527,7 @@ If you think you need this in your main server you are most likely doing somethi
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">nonExitingMain</span><span class="params">(<span name="args">args: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">nonExitingMain</span><span class="params">(<span name="args">args: <a href="http://www.scala-lang.org/api/2.12.8/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>App</dd></dl></div>
@@ -2621,7 +2631,7 @@ If you think you need this in your main server you are most likely doing somethi
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseArgs</span><span class="params">(<span name="args">args: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">parseArgs</span><span class="params">(<span name="args">args: <a href="http://www.scala-lang.org/api/2.12.8/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>App</dd></dl></div>

@@ -635,7 +635,7 @@ injector-supplied values to construct objects.</p><div class="fullcomment"><div 
 injector-supplied values to construct objects. This is preferable to calling <code>install</code>
 on the <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> which provides the factory as install is not supported for
 <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> types.
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the assisted injection factory</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/assistedinject/AssistedInject.html" target="_blank">com.google.inject.assistedinject.AssitedInject</a></p></span><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/assistedinject/FactoryModuleBuilder.html" target="_blank">com.google.inject.assistedinject.FactoryModuleBuilder</a></p></span><span class="cmt"><p><a href="https://github.com/google/guice/wiki/AssistedInject" target="_blank">Assisted Injection</a></p></span></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the assisted injection factory</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/assistedinject/AssistedInject.html" target="_blank">com.google.inject.assistedinject.AssistedInject</a></p></span><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/assistedinject/FactoryModuleBuilder.html" target="_blank">com.google.inject.assistedinject.FactoryModuleBuilder</a></p></span><span class="cmt"><p><a href="https://github.com/google/guice/wiki/AssistedInject" target="_blank">Assisted Injection</a></p></span></dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#bindConstant" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="bindConstant():com.google.inject.binder.AnnotatedConstantBindingBuilder"></a><a id="bindConstant():AnnotatedConstantBindingBuilder"></a>
       <span class="permalink">
@@ -2227,7 +2227,7 @@ handled by a user-defined monitor are propagated to the <a href="https://twitter
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -2237,7 +2237,15 @@ handled by a user-defined monitor are propagated to the <a href="https://twitter
       <p class="shortcomment cmt">This method will generate a fully configured <span class="extype" name="ClientType">ClientType</span>
 </p><div class="fullcomment"><div class="comment cmt"><p>This method will generate a fully configured <span class="extype" name="ClientType">ClientType</span>
 </p></div><dl class="paramcmts block"><dt class="param">injector</dt><dd class="cmt"><p>the <a href="../Injector.html" class="extype" name="com.twitter.inject.Injector">com.twitter.inject.Injector</a> which can be used to help configure the
-                given <span class="extype" name="ClientType">ClientType</span> client.</p></dd><dt class="param">statsReceiver</dt><dd class="cmt"><p>The <span class="extype" name="StatsReceiver">StatsReceiver</span> to use with the generated <span class="extype" name="ClientType">ClientType</span></p></dd><dt>returns</dt><dd class="cmt"><p>A configured <span class="extype" name="ClientType">ClientType</span></p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+                given <span class="extype" name="ClientType">ClientType</span> client.</p></dd><dt class="param">statsReceiver</dt><dd class="cmt"><p>The <span class="extype" name="StatsReceiver">StatsReceiver</span> to use with the generated <span class="extype" name="ClientType">ClientType</span></p></dd><dt>returns</dt><dd class="cmt"><p>A configured <span class="extype" name="ClientType">ClientType</span></p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Note</dt><dd><span class="cmt"><p>The ability to override this method is exposed for Java compatibility purposes, where the
+      type information in this trait can be erased from this trait to a more generic
+      <span class="extype" name="ClientType">ClientType</span>, which can cause Java compilation failures. See
+      https://issues.scala-lang.org/browse/SI-8905.
+      When overriding this method, it should treat this method as final, outside of providing
+      a more specific return type. For example:</p><pre><span class="kw">override</span> <span class="kw">protected</span> <span class="kw">final</span> <span class="kw">def</span> newClient(
+  injector: Injector,
+  statsReceiver: StatsReceiver
+): Http.Client = <span class="kw">super</span>.newClient(injector, statsReceiver)</pre></span></dd></dl></div>
     </li><li name="com.twitter.inject.modules.StackClientModuleTrait#newService" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="newService(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.Service[Req,Rep]"></a><a id="newService(Injector,StatsReceiver):Service[Req,Rep]"></a>
       <span class="permalink">
@@ -2418,6 +2426,28 @@ This will set *all* requests to *every* method to have the same total timeout.
       <p class="shortcomment cmt">Default <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/RetryBudget.html" class="extype" name="com.twitter.finagle.service.RetryBudget">com.twitter.finagle.service.RetryBudget</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Default <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/RetryBudget.html" class="extype" name="com.twitter.finagle.service.RetryBudget">com.twitter.finagle.service.RetryBudget</a>. It is highly recommended that budgets
 be shared between all filters that retry or re-queue requests to prevent retry storms.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a default <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/RetryBudget.html" class="extype" name="com.twitter.finagle.service.RetryBudget">com.twitter.finagle.service.RetryBudget</a></p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/guide/Clients.html#retries" target="_blank">https://twitter.github.io/finagle/guide/Clients.html#retries</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.modules.StackClientModuleTrait#scopeStatsReceiver" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="scopeStatsReceiver(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.stats.StatsReceiver"></a><a id="scopeStatsReceiver(Injector,StatsReceiver):StatsReceiver"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/modules/StackClientModuleTrait.html#scopeStatsReceiver(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.stats.StatsReceiver" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">scopeStatsReceiver</span><span class="params">(<span name="injector">injector: <a href="../Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Provide a customized base scope for the <span class="extype" name="StatsReceiver">StatsReceiver</span> exposed by this module, e.g.,
+*
+* </p><div class="fullcomment"><div class="comment cmt"><p>Provide a customized base scope for the <span class="extype" name="StatsReceiver">StatsReceiver</span> exposed by this module, e.g.,
+*
+* </p><pre><span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> scopeStatsReceiver(injector: Injector, statsReceiver: StatsReceiver): StatsReceiver =
+ statsReceiver.scope(<span class="lit">"clnt"</span>, <span class="lit">"custom_scope"</span>)</pre></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Note</dt><dd><span class="cmt"><p>The default scope is &quot;clnt&quot;.</p></span>, <span class="cmt"><p>Changing the default scope can have negative impacts on observability of metrics. Use
+      caution when changing this value.</p></span></dd></dl></div>
     </li><li name="com.twitter.inject.modules.StackClientModuleTrait#sessionAcquisitionTimeout" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="sessionAcquisitionTimeout:com.twitter.util.Duration"></a><a id="sessionAcquisitionTimeout:Duration"></a>
       <span class="permalink">

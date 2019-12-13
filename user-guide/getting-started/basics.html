@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Dependency Injection &#8212; Finatra 19.11.0 documentation</title>
+    <title>Dependency Injection &#8212; Finatra 19.12.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.11.0',
+        VERSION:     '19.12.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.11.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.12.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Understanding the Codebase" href="framework.html" />
     <link rel="prev" title="User’s Guide" href="../index.html" />
@@ -110,14 +110,22 @@
 <div class="section" id="use-constructor-injection">
 <h2>Use Constructor Injection<a class="headerlink" href="#use-constructor-injection" title="Permalink to this headline">¶</a></h2>
 <p>Finatra highly recommends using constructor injection to create immutable objects. Immutability allows objects to be simple, shareable and composable. For example:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class RealPaymentService @Inject()(
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import javax.inject.Inject
+
+class RealPaymentService @Inject()(
   paymentQueue: PaymentQueue,
   notifier: Notifier
 )
 </pre></div>
 </div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">While it may look odd, please note the position of the <cite>&#64;Inject()</cite> on the Scala class constructor. The parens are needed as the syntax requires constructor annotations to have exactly one parameter list, possibly empty.</p>
+</div>
 <p>or in Java</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>public class RealPaymentService {
+<div class="code java highlight-text"><div class="highlight"><pre><span></span>import javax.inject.Inject;
+
+public class RealPaymentService {
   private final PaymentQueue paymentQueue;
   private final Notifier notifier;
 
@@ -133,11 +141,81 @@
 </pre></div>
 </div>
 <p>This clearly expresses that the <cite>RealPaymentService</cite> class requires a <cite>PaymentQueue</cite> and a <cite>Notifier</cite> for instantiation and allows for instantiation via injector <em>or</em> manual instantiation of the class. This way of defining injectable members for a class is preferable to <a class="reference external" href="https://github.com/google/guice/wiki/Injections#field-injection">Field Injection</a> or <a class="reference external" href="https://github.com/google/guice/wiki/Injections#method-injection">Method Injection</a>.</p>
-<p>If you want to be able to inject a type that is not a class you own, then prefer defining a <a class="reference external" href="./modules.html">Module</a> which can provide an (ideally immutable) instance to the object graph.</p>
+<div class="admonition-do-not-use-constructor-default-parameter-values admonition">
+<p class="first admonition-title">Do not use constructor default parameter values</p>
+<p>Scala allows for <a class="reference external" href="https://docs.scala-lang.org/tour/default-parameter-values.html">default parameter values</a>.
+E.g., you can define a class with a constructor like so:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class RealPaymentService (
+  paymentQueue: PaymentQueue = new DefaultPaymentQueue,
+  notifier: Notifier = new DefaultNotifier
+)
+</pre></div>
+</div>
+<p>However, if you want to allow for the injector to be able to create this class by adding <cite>&#64;Inject()</cite> to the constructor it is highly recommended that you <strong>do not provide a default value for any constructor parameters</strong> as this can confuse the injector.</p>
+<p class="last">If you want to provide an instance with defaulted state for injection, prefer providing the instance via a defined
+<a class="reference external" href="./modules.html">Module</a> instead.</p>
+</div>
+<div class="section" id="assistedinject">
+<h3>AssistedInject<a class="headerlink" href="#assistedinject" title="Permalink to this headline">¶</a></h3>
+<p>There may be cases where you do not want the injector to provide all arguments of the constructor. In these cases
+you could use <a class="reference external" href="https://github.com/google/guice/wiki/AssistedInject">AssistedInject</a>.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.assistedinject.Assisted
+import javax.inject.Inject
+
+class RealPaymentService @Inject()(
+  @Assisted paymentQueue: PaymentQueue,
+  notifier: Notifier
+)
+</pre></div>
+</div>
+<p>where &#8220;assisted&#8221; here means that injection will be <em>assisted</em> by having a user-supplied value provided for
+the annotated field to use in constructing an instance of the object.</p>
+<p>You would typically also create a &#8220;factory&#8221; which exposes a method that accepts the <cite>&#64;Assisted</cite> annotated field:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>trait RealPaymentServiceFactory {
+  def create(paymentQueue: PaymentQueue): RealPaymentService
+}
+</pre></div>
+</div>
+<p>Then bind this as an &#8220;assisted factory&#8221; in a <cite>TwitterModule</cite> and include the module in your server&#8217;s
+list of modules.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.TwitterModule
+
+class PaymentServiceModule extends TwitterModule {
+
+  override def configure(): Unit = {
+    bindAssistedFactory[RealPaymentServiceFactory]()
+  }
+}
+</pre></div>
+</div>
+<p>To obtain an instance you would get a reference to the factory from the injector and call the
+factory method:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>val factory = injector.instance[RealPaymentServiceFactory]
+val paymentService: RealPaymentService = factory.create(new MyPaymentQueue)
+</pre></div>
+</div>
+<p>For Java examples please see the <a class="reference external" href="https://github.com/google/guice/wiki/AssistedInject">Guice documentation</a>.</p>
+</div>
+<div class="section" id="field-injection-not-recommended">
+<h3>Field Injection (not recommended)<a class="headerlink" href="#field-injection-not-recommended" title="Permalink to this headline">¶</a></h3>
+<p>If you want to do field injection in a Scala class (again, not recommended), you would do so inside of the defined class on a mutable member of the class. Note that this introduces mutability into your class and is not something generally recommended.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import javax.inject.Inject
+
+class LessIdealPaymentService {
+  @Inject
+  private var notifier: Notifier = _
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="injecting-third-party-code">
+<h3>Injecting third-party code<a class="headerlink" href="#injecting-third-party-code" title="Permalink to this headline">¶</a></h3>
+<p>If you want to be able to inject a type that is not a class you own &#8211; meaning you cannot annotate the class or its constructor since it is not your code but you want to be able to inject an instance of the type, then prefer defining a <a class="reference external" href="./modules.html">Module</a> which can provide an (ideally immutable) instance of the class to the object graph.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>The Guice documentation recommends <a class="reference external" href="https://github.com/google/guice/wiki/KeepConstructorsHidden">keeping constructors hidden</a> for classes which are meant to be instantiated by the injector. If you prefer constructor injection to create immutable objects, the difference between manual instantiation and injector instantiation should only come down to scoping of the created instance, i.e., is it a Singleton (the same instance every time from the injector). Finatra takes the approach of the <cite>&#64;Inject</cite> annotation being metadata in that it signals that the class <em>can</em> be instantiated by the injector but it is not a requirement.</p>
 <p class="last">We leave reducing the visibility of constructors to your discretion as a matter of what makes sense for your project or team.</p>
+</div>
 </div>
 </div>
 <div class="section" id="inject-direct-dependencies">
@@ -270,7 +348,10 @@ class FooModule extends TwitterModule {
 }
 </pre></div>
 </div>
-<p>We <strong>strongly</strong> recommend that <em>only production code ever be deployed to production</em> and thus configuration which should change per environment be externalized via <a class="reference external" href="./flags.html">Flags</a> and logic that should change per environment be encapsulated within <a class="reference external" href="../testing/override_modules.html">override modules</a> (that are not located with the production code &#8211; e.g., production code in <cite>src/main/scala</cite> and test code in <cite>src/test/scala</cite>).</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">We <strong>strongly</strong> recommend that <em>only production code ever be deployed to production</em> and thus configuration which should change per environment be externalized via <a class="reference external" href="./flags.html">Flags</a> and logic that should differ per environment be encapsulated within <a class="reference external" href="../testing/override_modules.html">override modules</a> (that are not located with the production code &#8211; e.g., production code in <cite>src/main/scala</cite> and test code in <cite>src/test/scala</cite>).</p>
+</div>
 <p>For more information see the sections on <a class="reference external" href="./flags.html">Flags</a>, <a class="reference external" href="./modules.html">Modules</a>, and <a class="reference external" href="../testing/override_modules.html">Override Modules</a>.</p>
 </div>
 <div class="section" id="make-use-of-the-twittermodule-lifecycle">
@@ -310,7 +391,12 @@ class FooModule extends TwitterModule {
 <li><a class="reference internal" href="#">Dependency Injection</a></li>
 <li><a class="reference internal" href="#dependency-injection-and-testing">Dependency Injection and Testing</a></li>
 <li><a class="reference internal" href="#dependency-injection-best-practices">Dependency Injection Best Practices</a><ul>
-<li><a class="reference internal" href="#use-constructor-injection">Use Constructor Injection</a></li>
+<li><a class="reference internal" href="#use-constructor-injection">Use Constructor Injection</a><ul>
+<li><a class="reference internal" href="#assistedinject">AssistedInject</a></li>
+<li><a class="reference internal" href="#field-injection-not-recommended">Field Injection (not recommended)</a></li>
+<li><a class="reference internal" href="#injecting-third-party-code">Injecting third-party code</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#inject-direct-dependencies">Inject direct dependencies</a></li>
 <li><a class="reference internal" href="#avoid-cyclic-dependencies">Avoid cyclic dependencies</a><ul>
 <li><a class="reference internal" href="#eliminate-the-cycle-preferred">Eliminate the cycle (preferred)</a></li>

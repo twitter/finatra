@@ -3,14 +3,18 @@
 Message Body Components
 =======================
 
-Message body components specify how to parse an incoming Finagle
-`HTTP request <https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala>`__
-into a model or domain object ("message body reader") and how to transform a given  type `T` into a
-Finagle `HTTP response <https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Response.scala>`__
+Message body components specify how to parse an incoming |c.t.finagle.http.Request|_ into a model or domain
+object ("message body reader") or how to transform a given type `T` into a |c.t.finagle.http.Response|_
 ("message body writer").
 
-.. note:: Classes in *internal* packages (i.e., `com.twitter.finatra.http.internal`) are not expected to be used directly and no guarantee is
-          given as to the stability of their interfaces. Please do not use these classes directly.
+`MessageBodyComponent <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyComponent.scala>`_
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+A |MessageBodyComponent| is a marker trait to indicate that a class is either a message body reader
+or writer or is expected to be handled by either a message body reader or writer. That is, the
+trait allows for registration of an implementation to a reader or writer for either converting
+a |c.t.finagle.http.Request|_ into the type (via a message body reader) or converting the type
+into a |c.t.finagle.http.Response|_ (via a message body writer).
 
 Message Body Readers
 --------------------
@@ -39,8 +43,9 @@ Message body readers can be registered through the |HttpRouter|_ much like addin
       }
     }
 
-Message body readers are used to convert an incoming Finagle HTTP request into a type `T` which is
-specified as the input type for a route callback.
+Message body readers are invoked by the framework to convert an incoming |c.t.finagle.http.Request|_
+into a type `T` when `T` is specified as the input type for a `Controller <controllers.html>`__ route
+callback or when `T` is passed as a body to a function in the |ResponseBuilder|_.
 
 E.g., a controller with a route specified:
 
@@ -55,32 +60,33 @@ E.g., a controller with a route specified:
       }
 
 will trigger the framework to search for a registered message body reader that can convert the incoming
-Finagle HTTP request to `MyModelObject`. If a message body reader for the `MyModelObject` type
-cannot be found the `DefaultMessageBodyReader` implementation configured in the |MessageBodyManager|_
-will be used.
+|c.t.finagle.http.Request|_ body contents into `MyModelObject`.
 
-|DefaultMessageBodyReader|_
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If a message body reader for the `MyModelObject` type cannot be found the `DefaultMessageBodyReader`
+implementation configured in the |MessageBodyManager|_ will be used.
 
-The framework provides a default message body reader implementation: |c.t.finatra.http.internal.marshalling.DefaultMessageBodyReaderImpl|_
-which is invoked when a more specific message body reader cannot be found to convert an incoming
-Finagle HTTP request.
+`DefaultMessageBodyReader <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyReader.scala>`_
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The `DefaultMessageBodyReaderImpl` parses an incoming Finagle HTTP request
+The framework provides a default message body reader:
+|DefaultMessageBodyReader|_ which is invoked when a more specific
+message body reader cannot be found to convert an incoming |c.t.finagle.http.Request|_ body.
+
+The |DefaultMessageBodyReader|_ parses an incoming |c.t.finagle.http.Request|_
 `body <https://github.com/twitter/finagle/blob/f61b6f99c7d108b458d5adcb9891ff6ddda7f125/finagle-base-http/src/main/scala/com/twitter/finagle/http/Message.scala#L440>`__
 as JSON, marshalling it into the given callback input type using the `HttpServer <https://github.com/twitter/finatra/blob/712edf91c0361fd9907deaef06e0bd61384f6a7e/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L81>`__
 `configured <../json/index.html#configuration>`__ `FinatraObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala>`__
 and is the basis of the `JSON integration with routing <../json/routing.html>`_.
 
-This default behavior is overridable. See the `c.t.finatra.http.modules.MessageBodyModule` 
-`section <#c-t-finatra-http-modules-messagebodymodule>`__ for more information on how to 
-provide a different `DefaultMessageBodyReader` implementation.
+This default behavior is overridable. See the `MessageBodyModule` `section <#id4>`__ for more
+information on how to provide a different `DefaultMessageBodyReader` implementation.
 
 Message Body Writers
 --------------------
 
-Like message body readers, writers can be registered through the |HttpRouter|_ -- again like adding
-a `Controller <controllers.html>`__ or a `Filter <filters.html>`__.
+Like message body readers, writers can be registered through the
+|HttpRouter|_ -- again like adding a `Controller <controllers.html>`__
+or a `Filter <filters.html>`__.
 
 .. code:: scala
 
@@ -104,9 +110,10 @@ a `Controller <controllers.html>`__ or a `Filter <filters.html>`__.
      }
     }
 
-Message body writers are used to specify conversion from a type `T` to a Finagle HTTP response. This
-can be for the purpose of informing the framework how to render the return type of a route callback
-or how to render a type passed as a body to a function in the |c.t.finatra.http.response.ResponseBuilder|_.
+Message body writers are used to specify conversion from a type `T` to a |c.t.finagle.http.Response|_.
+This can be for the purpose of informing the framework how to render the return type `T` of a route
+callback or how to render the type `T` when passed as a body to a function in the
+|ResponseBuilder|_.
 
 E.g., a controller with a route specified:
 
@@ -126,47 +133,110 @@ E.g., a controller with a route specified:
       }
 
 will trigger the framework to search for a registered message body writer that can convert the
-`MyRenderableObjectType` type into a Finagle HTTP response. If a message body writer for the
-`MyRenderableObjectType` type cannot be found the `DefaultMessageBodyWriter` implementation
-configured in the |MessageBodyManager|_ will be used.
+`MyRenderableObjectType` type into a |c.t.finagle.http.Response|_.
 
-|DefaultMessageBodyWriter|_
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If a message body writer for the `MyRenderableObjectType` type cannot be found the
+`DefaultMessageBodyWriter` implementation configured in the |MessageBodyManager|_ will be used.
 
-The framework provides a default message body writer implementation: |c.t.finatra.http.internal.marshalling.DefaultMessageBodyWriterImpl|_
+`DefaultMessageBodyWriter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyWriter.scala>`_
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The framework provides a default message body writer: |DefaultMessageBodyWriter|_
 which is invoked when a more specific message body writer cannot be found to convert given type `T`
-into a Finagle HTTP response.
+into a |c.t.finagle.http.Response|_.
 
-The `DefaultMessageBodyWriterImpl` converts any non-primitive type to a `application/json` content-type
-response and a JSON representation of the type using the `HttpServer <https://github.com/twitter/finatra/blob/712edf91c0361fd9907deaef06e0bd61384f6a7e/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L81>`__ 
+The `DefaultMessageBodyWriter` converts any non-primitive type to an `application/json` content type
+response and a JSON representation of the type using the
+`HttpServer <https://github.com/twitter/finatra/blob/712edf91c0361fd9907deaef06e0bd61384f6a7e/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L81>`__
 `configured <../json/index.html#configuration>`__ `FinatraObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala>`__
 to convert the type to JSON.
 
-For primitive and boxed
-types, the default writer implementation will render a `plain/text` content-type response using the
-type's `toString` value.
+For primitive and boxed types, the default writer implementation will render a `plain/text`
+content type response using the type's `toString` value.
 
-This default behavior is overridable. See the `c.t.finatra.http.modules.MessageBodyModule` 
+Again, the default behavior is overridable. See the `c.t.finatra.http.modules.MessageBodyModule`
 `section <#c-t-finatra-http-modules-messagebodymodule>`__ for more information on how to 
 provide a different `DefaultMessageBodyWriter` implementation.
 
-|MessageBodyManager|_
----------------------
+`@MessageBodyWriter` Annotation
+-------------------------------
 
-The |MessageBodyManager|_ registers message body components. Generally, you will not need to interact
-directly with the manager as a DSL for registration of components is provided by the |HttpRouter|_
-(which uses the |MessageBodyManager|_ underneath).
+A message body writer can be invoked on a class that is annotated with a `MessageBodyWriter`
+`annotation <https://github.com/twitter/finatra/blob/develop/http-annotations/src/main/java/com/twitter/finatra/http/annotations/MessagebodyWriter.java>`_.
+That is, a class which is annotated with an annotation that is itself annotated with `@MessageBodyWriter`.
 
-`c.t.finatra.http.modules.MessageBodyModule`
---------------------------------------------
+For example. If you have `MyRenderableObjectMessageBodyWriter` and you want to signal to the framework
+to invoke this message body writer when trying to convert a given class to a |c.t.finagle.http.Response|_,
+you can create a custom annotation and annotate the class like so:
+
+.. code:: java
+
+    import java.lang.annotation.Retention;
+    import java.lang.annotation.Target;
+
+    import com.twitter.finatra.http.annotations.MessageBodyWriter;
+
+    import static java.lang.annotation.ElementType.PARAMETER;
+    import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+    @Target(PARAMETER)
+    @Retention(RUNTIME)
+    @MessageBodyWriter
+    public @interface MyRenderable {}
+
+.. code:: scala
+
+    import MyRenderable
+
+    @MyRenderable
+    case class SomeValues(name: String, age: Int, address: String)
+
+You would then create a custom `Module <../getting-started/modules.html>`__ to register the
+annotation to your `MyRenderableObjectMessageBodyWriter`. You will need to do this registration in the
+`TwitterModule#singletonStartup` lifecycle method which ensures that registration will happen after the
+object graph has been created but before the server has started.
+
+.. code:: scala
+
+    import MyRenderable
+    import MyRenderableObjectMessageBodyWriter
+    import MyRenderableObjectType
+    import com.twitter.finatra.http.marshalling.MessageBodyManager
+    import com.twitter.inject.{Injector, TwitterModule}
+
+    object MyRenderableObjectMessageBodyModule extends TwitterModule {
+
+      override def singletonStartup(injector: Injector): Unit = {
+        val manager = injector.instance[MessageBodyManager]
+        manager.addWriterByAnnotation[MyRenderable, MyRenderableObjectMessageBodyWriter]()
+        manager.addWriterByComponent[MyRenderableObjectType, MyRenderableObjectMessageBodyWriter]()
+      }
+    }
+
+In this way, whenever an instance of `SomeValues` (|MessageBodyManager#addByAnnotation|_) or
+`MyRenderableObjectType` (|MessageBodyManager#addByComponentType|_) is passed to the
+framework to render as a |c.t.finagle.http.Response|_ the `MyRenderableObjectMessageBodyWriter`
+will be invoked.
+
+Again, this happens when these types are returned from a route callback or when passed as a body
+to a function in the |ResponseBuilder|_.
+
+`MessageBodyManager <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala>`_
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+The |MessageBodyManager|_ registers message body components (readers and writers). Generally, you
+will not need to interact directly with the manager because the |HttpRouter|_ provides a DSL for
+registration of components to the bound |MessageBodyManager|_.
+
+`MessageBodyModule <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MessageBodyModule.scala>`_
+---------------------------------------------------------------------------------------------------------------------------------------------------
 
 The |DefaultMessageBodyReader|_, and the |DefaultMessageBodyWriter|_ are provided by the framework
-via the |c.t.finatra.http.modules.MessageBodyModule|_.
+via configuration in the |MessageBodyModule|_.
 
-To override the framework defaults, create a `TwitterModule <../getting-started/modules.html>`__
-which provides customized implementations for the default reader and writer.
-
-Set this module by overriding the `protected def messageBodyModule` in your server.
+To override the framework defaults, create an instance of a `TwitterModule <../getting-started/modules.html>`__
+which provides customized implementations for the default reader and writer. Set this module by
+overriding the `protected def messageBodyModule` in your server.
 
 .. code:: scala
 
@@ -185,56 +255,85 @@ class, e.g.,
 
 .. code:: scala
 
-    override def messageBodyModule = new MyCustomMessageBodyModule
+    override val messageBodyModule = new MyCustomMessageBodyModule
 
 See `Framework Modules <server.html#framework-modules>`__ for more information.
+
+.. caution::
+
+    Care should be taken when replacing the framework default `c.t.finatra.http.modules.MessageBodyModule`.
+    This module binds the framework `DefaultMessageBodyReader` implementation which is what provides
+    the logic for marshalling HTTP request bodies as `JSON into case classes <../json/routing.html>`_
+    automatically.
+
+    If you replace the `MessageBodyModule` completely and do not retain the binding of the
+    framework `DefaultMessageBodyReader` implementation, you will lose this functionality.
+
+    Thus it is recommended that you choose to *extend* the `c.t.finatra.http.modules.MessageBodyModule`
+    in order to customize your logic and remember to invoke `super` for overridden methods to ensure
+    default behavior is retained if so desired. E.g.,
+
+    .. code:: scala
+
+        import com.twitter.finatra.http.modules.MessageBodyModule
+        import com.twitter.inject.Injector
+
+        object MyCustomMessageBodyModule extends MessageBodyModule {
+
+          override def singletonStartup(injector: Injector): Unit = {
+            super.singletonStartup(injector)
+            ???
+          }
+        }
+
+    See: `Custom Request Case class <./requests.html#custom-request-case-class>`_ documentation
+    for more information on the JSON integration with routing.
 
 `Mustache <https://mustache.github.io/>`__ Support 
 --------------------------------------------------
 
-`Mustache <https://mustache.github.io/>`__ support is provided through a combination of the
-|c.t.finatra.http.modules.MessageBodyModule|_ and a specific `Mustache <https://mustache.github.io/>`__
-message body writer.
+`Mustache <https://mustache.github.io/>`__ support for HTTP servers is provided by the `finatra/http-mustache <https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/http-mustache>`_
+library.
 
-Finatra provides the |c.t.finatra.http.internal.marshalling.mustache.MustacheMessageBodyWriter|_ which
-transforms either a |c.t.finatra.http.marshalling.MessageBodyComponent|_ or an object annotated with
-the |@Mustache|_ annotation. The transformation is performed using a referenced
-`Mustache <https://mustache.github.io/>`__ template specified by either the component configuration
-or as a parameter configured in the |@Mustache|_ annotation.
+This library provides the |MustacheMessageBodyWriter|_ which transforms an object into a 
+|c.t.finagle.http.Response|_ using a provided Mustache template.
 
-See the |MessageBodyManager#addByAnnotation|_ and |MessageBodyManager#addByComponentType|_ methods
-for  adding an annotated `Mustache <https://mustache.github.io/>`__ view to the |MessageBodyManager|_
-and adding a `MessageBodyComponent` by type to the |MessageBodyManager|_ which will instantiate an
-instance of the type via the injector.
+Additionally, the library provides:
 
-For examples of how to use the Finatra `Mustache <https://mustache.github.io/>`__ support, please
-see the Finatra |web-dashboard|_ example and the |MustacheController|_ used in integration tests.
+- a `MustacheBodyComponent` case class which is a `Mustache <https://mustache.github.io/>`__ specific `MessageBodyComponent`.
+- the |@Mustache|_ annotation which is a `MessageBodyWriter` `annotation <#messagebodywriter-annotation>`__.
+- and a `MustacheModule` which registers the annotation and the component to the |MustacheMessageBodyWriter|_
+  for allowing the framework to automatically handle `MustacheBodyComponent` instances or |@Mustache|_ 
+  annotated classes.
 
-To better understand how `Mustache <https://mustache.github.io/>`__ templates are found, please see
-|MustacheTemplateLookup|_ and the corresponding |MustacheTemplateLookupTest|_. 
+The transformation is performed using a referenced `Mustache <https://mustache.github.io/>`__ template
+specified by either the `MustacheBodyComponent` configuration or as a parameter configured in
+the |@Mustache|_ annotation.
 
-For more information on referencing files in Finatra, see the 
-`Working with Files <../files/index.html>`__ section.
+You must include the `MustacheModule` in your server's list of modules in order for the framework
+to negotiate rendering of `Mustache <https://mustache.github.io/>`__ templates via `MessageBodyComponents`.
 
-.. |HttpRouter| replace:: `HttpRouter`
+For more information the Finatra's Mustache integration with HTTP see the documentation `here <../mustache/routing.html>`_.
+
+.. |c.t.finagle.http.Request| replace:: `c.t.finagle.http.Request`
+.. _c.t.finagle.http.Request: https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala
+
+.. |c.t.finagle.http.Response| replace:: `c.t.finagle.http.Response`
+.. _c.t.finagle.http.Response: https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Response.scala
+
+.. |HttpRouter| replace:: `c.t.finatra.http.routing.HttpRouter`
 .. _HttpRouter: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala
 
-.. |DefaultMessageBodyReader| replace:: ``DefaultMessageBodyReader``
+.. |DefaultMessageBodyReader| replace:: `c.t.finatra.http.marshalling.DefaultMessageBodyReader`
 .. _DefaultMessageBodyReader: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyReader.scala
 
-.. |c.t.finatra.http.internal.marshalling.DefaultMessageBodyReaderImpl| replace:: `c.t.finatra.http.internal.marshalling.DefaultMessageBodyReaderImpl`
-.. _c.t.finatra.http.internal.marshalling.DefaultMessageBodyReaderImpl: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyReaderImpl.scala
-
-.. |DefaultMessageBodyWriter| replace:: ``DefaultMessageBodyWriter``
+.. |DefaultMessageBodyWriter| replace:: `c.t.finatra.http.marshalling.DefaultMessageBodyWriter`
 .. _DefaultMessageBodyWriter: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyWriter.scala
 
-.. |c.t.finatra.http.internal.marshalling.DefaultMessageBodyWriterImpl| replace:: `c.t.finatra.http.internal.marshalling.DefaultMessageBodyWriterImpl`
-.. _c.t.finatra.http.internal.marshalling.DefaultMessageBodyWriterImpl: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyWriterImpl.scala
+.. |ResponseBuilder| replace:: `c.t.finatra.http.response.ResponseBuilder`
+.. _ResponseBuilder: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala
 
-.. |c.t.finatra.http.response.ResponseBuilder| replace:: `c.t.finatra.http.response.ResponseBuilder`
-.. _c.t.finatra.http.response.ResponseBuilder: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala
-
-.. |MessageBodyManager| replace:: `MessageBodyManager`
+.. |MessageBodyManager| replace:: `c.t.finatra.http.marshalling.MessageBodyManager`
 .. _MessageBodyManager: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala
 
 .. |MessageBodyManager#addByAnnotation| replace:: `MessageBodyManager#addByAnnotation`
@@ -243,29 +342,14 @@ For more information on referencing files in Finatra, see the
 .. |MessageBodyManager#addByComponentType| replace:: `MessageBodyManager#addByComponentType`
 .. _MessageBodyManager#addByComponentType: https://github.com/twitter/finatra/blob/6e09e95b95b20d2599a6210dfa0ce4c82dbe636b/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala#L60
 
-.. |c.t.finatra.http.modules.MessageBodyModule| replace:: `c.t.finatra.http.modules.MessageBodyModule`
-.. _c.t.finatra.http.modules.MessageBodyModule:  https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MessageBodyModule.scala
+.. |MessageBodyModule| replace:: `c.t.finatra.http.modules.MessageBodyModule`
+.. _MessageBodyModule:  https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MessageBodyModule.scala
 
-.. |c.t.finatra.http.modules.MustacheModule| replace:: `c.t.finatra.http.modules.MustacheModule`
-.. _c.t.finatra.http.modules.MustacheModule:
+.. |MessageBodyComponent| replace:: `c.t.finatra.http.marshalling.MessageBodyComponent`
+.. _MessageBodyComponent: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyComponent.scala
 
-.. |c.t.finatra.http.internal.marshalling.mustache.MustacheMessageBodyWriter| replace:: `c.t.finatra.http.internal.marshalling.mustache.MustacheMessageBodyWriter`
-.. _c.t.finatra.http.internal.marshalling.mustache.MustacheMessageBodyWriter: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/mustache/MustacheMessageBodyWriter.scala
-
-.. |c.t.finatra.http.marshalling.MessageBodyComponent| replace:: `c.t.finatra.http.marshalling.MessageBodyComponent`
-.. _c.t.finatra.http.marshalling.MessageBodyComponent: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyComponent.scala
+.. |MustacheMessageBodyWriter| replace:: `c.t.finatra.mustache.writer.MustacheMessageBodyWriter`
+.. _MustacheMessageBodyWriter: https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/writer/MustacheMessageBodyWriter.scala
 
 .. |@Mustache| replace:: ``@Mustache``
-.. _@Mustache: https://github.com/twitter/finatra/blob/develop/http/src/main/java/com.twitter.finatra.http.response.Mustache.java
-
-.. |web-dashboard| replace:: `web-dashboard`
-.. _web-dashboard: https://github.com/twitter/finatra/tree/develop/examples/web-dashboard
-
-.. |MustacheController| replace:: `MustacheController`
-.. _MustacheController: https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/controllers/MustacheController.scala
-
-.. |MustacheTemplateLookup| replace:: `MustacheTemplateLookup`
-.. _MustacheTemplateLookup: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/mustache/MustacheTemplateLookup.scala
-
-.. |MustacheTemplateLookupTest| replace:: `MustacheTemplateLookupTest`
-.. _MustacheTemplateLookupTest: https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/internal/marshalling/mustache/MustacheTemplateLookupTest.scala
+.. _@Mustache: https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/java/com/twitter/finatra/http/annotations/Mustache.java

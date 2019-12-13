@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>HTTP Streaming &#8212; Finatra 19.11.0 documentation</title>
+    <title>HTTP Streaming &#8212; Finatra 19.12.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.11.0',
+        VERSION:     '19.12.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.11.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.12.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Message Body Components" href="message_body.html" />
     <link rel="prev" title="HTTP Responses" href="responses.html" />
@@ -73,55 +73,93 @@
             
   <div class="section" id="http-streaming">
 <span id="id1"></span><h1>HTTP Streaming<a class="headerlink" href="#http-streaming" title="Permalink to this headline">¶</a></h1>
-<p>Finatra supports streaming over HTTP with a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/streaming/StreamingRequest.scala">StreamingRequest</a> or a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/streaming/StreamingResponse.scala">StreamingResponse</a>.
-A <cite>StreamingRequest</cite>/<cite>StreamingResponse</cite> is an HTTP Request/Response that carries a stream of objects in its body (preferably in the form of <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/io/Reader.scala">Reader</a>, or <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/concurrent/AsyncStream.scala">AsyncStream</a>). You can create and access the stream via <cite>request.stream</cite> or <cite>response.stream</cite>.</p>
-<div class="section" id="advantages">
-<h2>Advantages<a class="headerlink" href="#advantages" title="Permalink to this headline">¶</a></h2>
-<p>The major advantages of Finatra HTTP Streaming include:</p>
+<p>Finatra supports streaming over HTTP by defining the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/streaming/StreamingRequest.scala">StreamingRequest</a> or a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/streaming/StreamingResponse.scala">StreamingResponse</a> request/response types. A <cite>StreamingRequest</cite>/<cite>StreamingResponse</cite> is an HTTP Request/Response that carries a stream of objects in its body. We support using either of our streaming primitives, <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/io/Reader.scala">Reader</a> or <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/concurrent/AsyncStream.scala">AsyncStream</a>, but we recommend using <cite>Reader</cite> as it has better support for resource management.</p>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Ability to stream at object level instead of bytes.<ul>
-<li><cite>StreamingResponse</cite> will serialize a Json object to a Json string with its <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala">ObjectMapper</a>.</li>
-<li><cite>StreamingRequest</cite> will deserialize a valid Json string to a Json object with its <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/streaming/JsonStreamParser.scala">JsonStreamParser</a>.</li>
+<li>The ability to program in terms of streams of domain objects instead of bytes. For example:<ul>
+<li>A <cite>StreamingRequest</cite> will deserialize a valid JSON string to a domain object using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/streaming/JsonStreamParser.scala">JsonStreamParser</a>.</li>
+<li>A <cite>StreamingResponse</cite> will convert a domain object to a JSON string using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala">ObjectMapper</a>.</li>
 </ul>
 </li>
-<li>Resource management by listening to the result from <cite>Reader#onClose</cite>.</li>
-<li>Easy manipulation of each stream chunk via <cite>Reader#map</cite>.</li>
-<li>Built-in <a class="reference external" href="https://docbird.twitter.biz/finagle/Metrics.html#streaming">streaming metrics</a> to gain more insights into streams&#8217; health.</li>
+<li>The ability to bypass the <cite>ObjectMappper</cite> and <cite>JsonStreamParser</cite> by dealing with streams of <cite>Buf</cite> directly.</li>
+<li>The ability to perform resource management by using the signal from <cite>Reader#onClose</cite>.</li>
+<li>The ability to perform composable operations over streams using <cite>map</cite> and <cite>flatMap</cite>.</li>
+<li>Built-in <a class="reference external" href="https://docbird.twitter.biz/finagle/Metrics.html#streaming">streaming metrics</a> to gain more insights into a streams&#8217; health.</li>
 </ul>
 </div>
-<div class="section" id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>How to stream from your controller:</li>
-</ul>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.streaming.StreamingRequest
-import com.twitter.io.Reader
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Finatra streaming support lets controllers stream input, output, or both. By recognizing the input and output signatures of a handler as either a <cite>Reader</cite>, <cite>StreamingRequest</cite>, or <cite>StreamingResponse</cite>, Finatra will make the necessary conversions.</p>
+<p><cite>StreamingRequest</cite> and <cite>StreamingResponse</cite> are fully featured Request/Response objects and allow you control over, and access to, request parameters and headers. If instead, you only need to consume or return data without having to inspect the request or modify the response, you can deal completely in terms of our streaming primitives.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.Controller
+import com.twitter.finatra.http.streaming.StreamingRequest
+import com.twitter.io.{Buf, Reader}
 
-post(&quot;/tweets/streaming/reader&quot;) { streamingRequest: StreamingRequest[Reader, Tweet] =&gt;
-  // create a `Reader` with any object types to pass to the `StreamingResponse`
-  val responseReader: Reader[String] = streamingRequest.stream.map(_.text)
-  // create a `StreamingResponse` via `ResponseBuilder`
-  response.streaming(responseReader)
+case class Tweet(text: String)
+
+class MyTweetController extends Controller {
+
+  // StreamingRequest[Reader, Tweet] =&gt; StreamingResponse[Reader, String]
+  post(&quot;/tweets/streaming/request/response&quot;) { streamingRequest: StreamingRequest[Reader, Tweet] =&gt;
+    // In this case we need to look at a specific header
+    val specialHeader: String = streamingRequest.request.headerMap(&quot;Special-Header&quot;)
+    // Grab the input stream and do some work with it
+    val responseReader: Reader[String] = streamingRequest.stream.map(_.text + specialHeader)
+    // create a `StreamingResponse` via `ResponseBuilder` with our special header
+    response.streaming(responseReader, headers = Map(&quot;Special-Header&quot; -&gt; Seq(&quot;Thank you!&quot;)))
+  }
+
+  // Reader[Tweet] =&gt; StreamingResponse[Reader, String]
+  post(&quot;/tweets/streaming/reader/response&quot;) { tweetReader: Reader[Tweet] =&gt;
+    // Grab the input stream and do some work with it
+    val responseReader: Reader[String] = tweetReader.map(_.text)
+    // create a `StreamingResponse` via `ResponseBuilder` with our special header
+    response.streaming(responseReader, headers = Map(&quot;Special-Header&quot; -&gt; Seq(&quot;Thank you!&quot;)))
+  }
+
+  // Reader[Tweet] =&gt; Reader[String]
+  post(&quot;/tweets/streaming/reader/reader&quot;) { tweetReader: Reader[Tweet] =&gt;
+    // Grab the tweets, do some work with them and return the result
+    tweetReader.map(_.text)
+  }
+
+  // Reader[Buf] =&gt; Reader[Buf]
+  post(&quot;/tweets/streaming/reader/reader/bytes&quot;) { byteReader: Reader[Buf] =&gt;
+    // Grab the raw bytes, do some work with them and return the result
+    byteReader.map(bytes =&gt; Buf.Utf8(bytes.toString + &quot;hi&quot;))
+  }
+
 }
 </pre></div>
 </div>
-<ul class="simple">
-<li>How to stream with resource management:</li>
-</ul>
+<p>Resource management is performed by listening to <cite>Reader#onClose</cite>.</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.streaming.StreamingRequest
 import com.twitter.io.Reader
 import com.twitter.util.Closable
 
-post(&quot;/tweets/streaming/reader_with_resource_management&quot;) {
-  streamingRequest: StreamingRequest[Reader, Tweet] =&gt;
-  // A closable resource that needs to listen to the close of the stream
-  val closable = Closable.nop
-  // create a `Reader` with any object types to pass to the `StreamingResponse`
-  val responseReader: Reader[String] = streamingRequest.stream.map(_.text)
-  // close the resource after `reader#onClose` is resolved
-  responseReader.onClose.ensure(closable.close())
-  // create a `StreamingResponse` via `ResponseBuilder`
-  response.streaming(responseReader)
+trait Resource extends Closable {
+  def lookup(test: String): String
+}
+
+class MyOtherTweetController extends Controller {
+  def closableResource(): Resource = ???
+
+  post(&quot;/tweets/streaming/reader_with_resource_management&quot;) {
+    streamingRequest: StreamingRequest[Reader, Tweet] =&gt;
+      val resource = closableResource()
+
+      // create a `Reader` with any object types to pass to the `StreamingResponse`
+      val responseReader: Reader[String] = streamingRequest.stream.map(
+        tweet =&gt; resource.lookup(tweet.text)
+      )
+
+      // close the resource after `reader#onClose` is resolved
+      responseReader.onClose.ensure(resource.close())
+
+      // create a `StreamingResponse` via `ResponseBuilder`
+      response.streaming(responseReader)
+  }
 }
 </pre></div>
 </div>
@@ -151,8 +189,8 @@ post(&quot;/tweets/streaming/reader_with_resource_management&quot;) {
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">HTTP Streaming</a><ul>
-<li><a class="reference internal" href="#advantages">Advantages</a></li>
-<li><a class="reference internal" href="#example">Example</a></li>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
 </ul>

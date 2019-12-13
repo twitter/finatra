@@ -171,20 +171,8 @@
                         <a href="AccessLoggingFilter.html" title="AccessLoggingFilter attempts to follow the Common Log Format as closely as possible.">AccessLoggingFilter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="BaseDarkTrafficFilter.html" title=""></a>
-                        <a href="BaseDarkTrafficFilter.html" title="">BaseDarkTrafficFilter</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
-                        <a class="class" href="DarkTrafficFilter.html" title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finagle.Filter.TypeAgnostic and thus works in a Finatra ThriftRouter filter chain."></a>
-                        <a href="DarkTrafficFilter.html" title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finagle.Filter.TypeAgnostic and thus works in a Finatra ThriftRouter filter chain.">DarkTrafficFilter</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
                         <a class="class" href="ExceptionMappingFilter.html" title="A ThriftFilter which handles exceptions by rescuing the exception and passing it to the ExceptionManager to handle it."></a>
                         <a href="ExceptionMappingFilter.html" title="A ThriftFilter which handles exceptions by rescuing the exception and passing it to the ExceptionManager to handle it.">ExceptionMappingFilter</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
-                        <a class="class" href="JavaDarkTrafficFilter.html" title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finagle.Filter.TypeAgnostic for use with generated Java code."></a>
-                        <a href="JavaDarkTrafficFilter.html" title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finagle.Filter.TypeAgnostic for use with generated Java code.">JavaDarkTrafficFilter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="class" href="LoggingMDCFilter.html" title=""></a>
@@ -333,48 +321,6 @@ possible.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Singleton</span><span class="args">()</span>
               
         </dd><dt>See also</dt><dd><span class="cmt"><p>https://en.wikipedia.org/wiki/Common_Log_Format</p></span></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.filters.BaseDarkTrafficFilter" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="BaseDarkTrafficFilterextendsFilter.TypeAgnosticwithAbstractDarkTrafficFilterwithLogging"></a><a id="BaseDarkTrafficFilter:BaseDarkTrafficFilter"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/filters/index.html#BaseDarkTrafficFilterextendsFilter.TypeAgnosticwithAbstractDarkTrafficFilterwithLogging" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">sealed abstract </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="BaseDarkTrafficFilter.html"><span class="name">BaseDarkTrafficFilter</span></a><span class="result"> extends <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span> with <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/exp/AbstractDarkTrafficFilter.html#com.twitter.finagle.exp.AbstractDarkTrafficFilter" class="extype" name="com.twitter.finagle.exp.AbstractDarkTrafficFilter">AbstractDarkTrafficFilter</a> with <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
-      </span>
-      
-      
-    </li><li name="com.twitter.finatra.thrift.filters.DarkTrafficFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="DarkTrafficFilter[ServiceIface]extendsBaseDarkTrafficFilter"></a><a id="DarkTrafficFilter[ServiceIface]:DarkTrafficFilter[ServiceIface]"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/filters/index.html#DarkTrafficFilter[ServiceIface]extendsBaseDarkTrafficFilter" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finagle.Filter.TypeAgnostic and thus works in a Finatra ThriftRouter filter chain." href="DarkTrafficFilter.html"><span class="name">DarkTrafficFilter</span></a><span class="tparams">[<span name="ServiceIface">ServiceIface</span>]</span><span class="result"> extends <a href="BaseDarkTrafficFilter.html" class="extype" name="com.twitter.finatra.thrift.filters.BaseDarkTrafficFilter">BaseDarkTrafficFilter</a></span>
-      </span>
-      
-      <p class="shortcomment cmt">An implementation of <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/exp/AbstractDarkTrafficFilter.html" class="extype" name="com.twitter.finagle.exp.AbstractDarkTrafficFilter">com.twitter.finagle.exp.AbstractDarkTrafficFilter</a> which extends
-<span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">com.twitter.finagle.Filter.TypeAgnostic</span> and thus works in a Finatra ThriftRouter
-filter chain.</p><div class="fullcomment"><div class="comment cmt"><p>An implementation of <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/exp/AbstractDarkTrafficFilter.html" class="extype" name="com.twitter.finagle.exp.AbstractDarkTrafficFilter">com.twitter.finagle.exp.AbstractDarkTrafficFilter</a> which extends
-<span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">com.twitter.finagle.Filter.TypeAgnostic</span> and thus works in a Finatra ThriftRouter
-filter chain. This differs from the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/exp/DarkTrafficFilter.html" class="extype" name="com.twitter.finagle.exp.DarkTrafficFilter">com.twitter.finagle.exp.DarkTrafficFilter</a> in that
-this class is typed to work like other ThriftFilters as agnostic to types until apply() is
-invoked.
-</p></div><dl class="paramcmts block"><dt class="tparam">ServiceIface</dt><dd class="cmt"><p>- the type of the Service to take dark traffic.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@Singleton</span><span class="args">()</span>
-              
-        </dd><dt>Note</dt><dd><span class="cmt"><p>This Filter only works for Scala services. Java users should use the <code>JavaDarkTrafficFilter</code>.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/exp/AbstractDarkTrafficFilter.html" class="extype" name="com.twitter.finagle.exp.AbstractDarkTrafficFilter">com.twitter.finagle.exp.AbstractDarkTrafficFilter</a></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.filters.ExceptionMappingFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ExceptionMappingFilterextendsFilter.TypeAgnostic"></a><a id="ExceptionMappingFilter:ExceptionMappingFilter"></a>
       <span class="permalink">
@@ -397,28 +343,6 @@ it to the <span class="extype" name="ExceptionManager">ExceptionManager</span> t
                 <span class="name">@Singleton</span><span class="args">()</span>
               
         </dd><dt>Note</dt><dd><span class="cmt"><p>This Filter SHOULD be as close to the start of the Filter chain as possible</p></span></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.filters.JavaDarkTrafficFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="JavaDarkTrafficFilterextendsBaseDarkTrafficFilter"></a><a id="JavaDarkTrafficFilter:JavaDarkTrafficFilter"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/filters/index.html#JavaDarkTrafficFilterextendsBaseDarkTrafficFilter" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finagle.Filter.TypeAgnostic for use with generated Java code." href="JavaDarkTrafficFilter.html"><span class="name">JavaDarkTrafficFilter</span></a><span class="result"> extends <a href="BaseDarkTrafficFilter.html" class="extype" name="com.twitter.finatra.thrift.filters.BaseDarkTrafficFilter">BaseDarkTrafficFilter</a></span>
-      </span>
-      
-      <p class="shortcomment cmt">An implementation of <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/exp/AbstractDarkTrafficFilter.html" class="extype" name="com.twitter.finagle.exp.AbstractDarkTrafficFilter">com.twitter.finagle.exp.AbstractDarkTrafficFilter</a> which extends
-<span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">com.twitter.finagle.Filter.TypeAgnostic</span> for use with generated Java code.</p><div class="fullcomment"><div class="comment cmt"><p>An implementation of <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/exp/AbstractDarkTrafficFilter.html" class="extype" name="com.twitter.finagle.exp.AbstractDarkTrafficFilter">com.twitter.finagle.exp.AbstractDarkTrafficFilter</a> which extends
-<span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">com.twitter.finagle.Filter.TypeAgnostic</span> for use with generated Java code.
-</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@Singleton</span><span class="args">()</span>
-              
-        </dd><dt>Note</dt><dd><span class="cmt"><p>This filter is expected to be applied on a <code>Service[Array[Byte], Array[Byte]]</code></p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ThriftMux$.html#newService(dest:com.twitter.finagle.Name,label:String):com.twitter.finagle.Service[com.twitter.finagle.thrift.ThriftClientRequest,Array[Byte]]" class="extype" name="com.twitter.finagle.ThriftMux">com.twitter.finagle.ThriftMux.newService</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/exp/AbstractDarkTrafficFilter.html" class="extype" name="com.twitter.finagle.exp.AbstractDarkTrafficFilter">com.twitter.finagle.exp.AbstractDarkTrafficFilter</a></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.filters.LoggingMDCFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="LoggingMDCFilterextendsFilter.TypeAgnostic"></a><a id="LoggingMDCFilter:LoggingMDCFilter"></a>
       <span class="permalink">
@@ -454,13 +378,27 @@ it to the <span class="extype" name="ExceptionManager">ExceptionManager</span> t
       </span>
       
       <p class="shortcomment cmt">Tracks &quot;per method&quot; statistics scoped under <code>per_method_stats/&lt;method&gt;</code> including:</p><div class="fullcomment"><div class="comment cmt"><p>Tracks &quot;per method&quot; statistics scoped under <code>per_method_stats/&lt;method&gt;</code> including:</p><ul><li>success/failure (with exceptions) counters</li><li>latency_ms histogram</li></ul><p>Example stats for a successful request to a method named <code>foo</code>:</p><pre>per_method_stats/foo/failures <span class="num">0</span>
+per_method_stats/foo/ignored <span class="num">0</span>
+per_method_stats/foo/requests <span class="num">1</span>
 per_method_stats/foo/success <span class="num">1</span>
 per_method_stats/foo/latency_ms <span class="num">43.000000</span> [<span class="num">43.0</span>]</pre><p>Example stats, for a failed request to a method named <code>foo</code>:</p><pre>exceptions <span class="num">1</span>
 exceptions/java.lang.Exception <span class="num">1</span>
 per_method_stats/foo/failures <span class="num">1</span>
 per_method_stats/foo/failures/java.lang.Exception <span class="num">1</span>
+per_method_stats/foo/ignored <span class="num">0</span>
+per_method_stats/foo/requests <span class="num">1</span>
 per_method_stats/foo/success <span class="num">0</span>
-per_method_stats/foo/latency_ms <span class="num">43.000000</span> [<span class="num">43.0</span>]</pre></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+per_method_stats/foo/latency_ms <span class="num">43.000000</span> [<span class="num">43.0</span>]</pre><p>Example stats, for a failed request to a method named <code>foo</code> with a <span class="extype" name="ResponseClassifier">ResponseClassifier</span> which
+classifies <span class="extype" name="java.lang.Exception">java.lang.Exception</span> as Ignorable:</p><pre>exceptions <span class="num">1</span>
+exceptions/java.lang.Exception <span class="num">1</span>
+per_method_stats/foo/failures <span class="num">0</span>
+per_method_stats/foo/ignored <span class="num">1</span>
+per_method_stats/foo/ignored/java.lang.Exception <span class="num">1</span>
+per_method_stats/foo/requests <span class="num">1</span>
+per_method_stats/foo/success <span class="num">0</span>
+per_method_stats/foo/latency_ms <span class="num">43.000000</span> [<span class="num">43.0</span>]</pre><p>requests == success + failures + ignored
+The logical success rate for a method can be calculated as <code>success / (success + failures)</code>
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Singleton</span><span class="args">()</span>
               
         </dd><dt>Note</dt><dd><span class="cmt"><p>It is expected that this Filter is inserted ABOVE the <a href="ExceptionMappingFilter.html" class="extype" name="com.twitter.finatra.thrift.filters.ExceptionMappingFilter">ExceptionMappingFilter</a> in a

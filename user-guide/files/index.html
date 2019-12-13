@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Working With Files &#8212; Finatra 19.11.0 documentation</title>
+    <title>Working With Files &#8212; Finatra 19.12.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.11.0',
+        VERSION:     '19.12.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,10 +26,10 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.11.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.12.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Scrooge and Finagle" href="../thrift/basics.html" />
-    <link rel="prev" title="JSON Validation Framework" href="../json/validations.html" />
+    <link rel="prev" title="Mustache Integration with HTTP Routing" href="../mustache/routing.html" />
    
   
   <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
@@ -59,7 +59,7 @@
           <a href="../thrift/basics.html" title="Scrooge and Finagle"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../json/validations.html" title="JSON Validation Framework"
+          <a href="../mustache/routing.html" title="Mustache Integration with HTTP Routing"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
@@ -116,79 +116,7 @@ get(&quot;/:*&quot;) { request: Request =&gt;
 }
 </pre></div>
 </div>
-</div>
-<div class="section" id="mustache-templating">
-<h2>Mustache Templating<a class="headerlink" href="#mustache-templating" title="Permalink to this headline">¶</a></h2>
-<p>Finatra supports the rendering of mustache templates. The framework provides a default <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MustacheModule.scala">MustacheModule</a> but this is configurable. To set your own module, override the mustacheModule def in <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L63">c.t.finatra.http.HttpServer</a>, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class ExampleServer extends HttpServer {
-  override val mustacheModule = MyCustomizedMustacheModule
-  ...
-}
-</pre></div>
-</div>
-<p>See the <a class="reference external" href="../http/server.html#framework-modules">&#8220;Overriding Default Behavior&#8221;</a> section for more information on providing a customized framework module in your server.</p>
-<p>By default mustache templates are loaded from the classpath root. To configure a classpath &#8220;namespace&#8221; for loading mustache templates, set the <cite>-mustache.templates.dir</cite> flag.</p>
-<div class="section" id="local-filesystem">
-<h3>Local filesystem<a class="headerlink" href="#local-filesystem" title="Permalink to this headline">¶</a></h3>
-<p>When you set the <cite>-local.doc.root</cite> flag, the MustacheModule will instead load templates from the local filesystem and templates will be reloaded on every render. This is to aid in local development. Note, that the interplay between the <cite>mustache.temaplates.dir</cite> and the <cite>local.doc.root</cite> flag is as follows:</p>
-<ul>
-<li><p class="first">in &#8220;local file mode&#8221; (e.g., when the <cite>-local.doc.root</cite> flag is set to a <strong>non-empty</strong> value) the framework will try to load a template first
-from the absolute path under <cite>mustache.templates.dir</cite></p>
-</li>
-<li><p class="first">if the template is not found it will then be loaded from a location of <cite>mustache.templates.dir</cite> relative to the specified <cite>-local.doc.root</cite>, value e.g,</p>
-<div class="code bash highlight-text"><div class="highlight"><pre><span></span>/${local.doc.root}/${mustache.templates.dir}/template.mustache
-</pre></div>
-</div>
-</li>
-</ul>
-</div>
-<div class="section" id="rendering">
-<h3>Rendering<a class="headerlink" href="#rendering" title="Permalink to this headline">¶</a></h3>
-<p>The framework will use mustache to render callback return types that are annotated with the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/java/com/twitter/finatra/http/response/Mustache.java">&#64;Mustache</a> annotation.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>@Mustache(&quot;foo&quot;)
-case class FooView(
-  name: String)
-
-get(&quot;/foo&quot;) { request: Request =&gt;
-  FooView(&quot;abc&quot;)
-}
-</pre></div>
-</div>
-<p>The value of the <code class="docutils literal"><span class="pre">&#64;Mustache</span></code> annotation is assumed by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/mustache/MustacheMessageBodyWriter.scala">MustacheMessageBodyWriter</a> to be the template filename without the suffix (which the framework <strong>always assumes</strong> to be <cite>.mustache</cite>).</p>
-<p>Or you can manually create a response that explicitly references a template, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>get(&quot;/foo&quot;) { request: Request =&gt;
-  response.ok.view(
-    &quot;foo.mustache&quot;,
-    FooClass(&quot;abc&quot;))
-}
-</pre></div>
-</div>
-<p>Or you can programmatically render a template into a string using <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/http/src/main/scala/com/twitter/finatra/http/marshalling/mustache/MustacheService.scala#L36">c.t.finatra.http.marshalling.mustache.MustacheService#createString</a> method. This is useful for embedding the resultant content inside a field in a response.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class TestUserView(
-  age: Int,
-  name: String,
-  friends: Seq[String])
-
-case class TestCaseClassWithHtml(
-  address: String,
-  phone: String,
-  renderedHtml: String)
-
-get(&quot;/testClassWithHtml&quot;) { r: Request =&gt;
-  val testUser = TestUserView(
-    28,
-    &quot;Bob Smith&quot;,
-    Seq(&quot;user1&quot;, &quot;user2&quot;))
-
-  TestCaseClassWithHtml(
-    address = &quot;123 Main St. Anywhere, CA US 90210&quot;,
-    phone = &quot;+12221234567&quot;,
-    renderedHtml = xml.Utility.escape(mustacheService.createString(&quot;testHtml.mustache&quot;, testUser)))
-}
-</pre></div>
-</div>
 <p>See the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala">test class</a> for more examples.</p>
-</div>
 </div>
 </div>
 
@@ -216,11 +144,6 @@ get(&quot;/testClassWithHtml&quot;) { r: Request =&gt;
 <li><a class="reference internal" href="#">Working With Files</a><ul>
 <li><a class="reference internal" href="#file-locations">File Locations</a></li>
 <li><a class="reference internal" href="#file-serving-examples">File Serving Examples</a></li>
-<li><a class="reference internal" href="#mustache-templating">Mustache Templating</a><ul>
-<li><a class="reference internal" href="#local-filesystem">Local filesystem</a></li>
-<li><a class="reference internal" href="#rendering">Rendering</a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -228,7 +151,7 @@ get(&quot;/testClassWithHtml&quot;) { r: Request =&gt;
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
   <li><a href="../index.html">User&#8217;s Guide</a><ul>
-      <li>Previous: <a href="../json/validations.html" title="previous chapter">JSON Validation Framework</a></li>
+      <li>Previous: <a href="../mustache/routing.html" title="previous chapter">Mustache Integration with HTTP Routing</a></li>
       <li>Next: <a href="../thrift/basics.html" title="next chapter">Scrooge and Finagle</a></li>
   </ul></li>
   </ul></li>

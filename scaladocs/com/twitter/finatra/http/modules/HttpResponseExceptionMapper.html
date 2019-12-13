@@ -159,10 +159,6 @@
                         <a href="DarkTrafficFilterModule.html" title="">DarkTrafficFilterModule</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="object" href="DocRootModule$.html" title=""></a>
-                        <a href="DocRootModule$.html" title="">DocRootModule</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
                         <a class="object" href="HttpResponseClassifierModule$.html" title=""></a>
                         <a href="HttpResponseClassifierModule$.html" title="">HttpResponseClassifierModule</a>
                       </li><li class="current-entities indented5">
@@ -171,16 +167,16 @@
                         <a href="" title="">HttpResponseExceptionMapper</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
+                        <a class="object" href="MessageBodyFlagsModule$.html" title=""></a>
+                        <a href="MessageBodyFlagsModule$.html" title="">MessageBodyFlagsModule</a>
+                      </li><li class="current-entities indented5">
                         <a class="object" href="MessageBodyModule$.html" title="Provided implementations for the com.twitter.finatra.http.marshalling.DefaultMessageBodyReader and the com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter."></a>
-                        <a href="MessageBodyModule$.html" title="Provided implementations for the com.twitter.finatra.http.marshalling.DefaultMessageBodyReader and the com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter.">MessageBodyModule</a>
+                        <a class="class" href="MessageBodyModule.html" title=""></a>
+                        <a href="MessageBodyModule.html" title="">MessageBodyModule</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="object" href="MustacheModule$.html" title=""></a>
-                        <a href="MustacheModule$.html" title="">MustacheModule</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
-                        <a class="object" href="ResponseBuilderModule$.html" title=""></a>
-                        <a href="ResponseBuilderModule$.html" title="">ResponseBuilderModule</a>
+                        <a class="object" href="MustacheModule$.html" title="This TwitterModule ties together Mustache and HTTP by registering a Mustache-specific com.twitter.finatra.http.marshalling.MessageBodyWriter to the com.twitter.finatra.http.marshalling.MessageBodyManager."></a>
+                        <a href="MustacheModule$.html" title="This TwitterModule ties together Mustache and HTTP by registering a Mustache-specific com.twitter.finatra.http.marshalling.MessageBodyWriter to the com.twitter.finatra.http.marshalling.MessageBodyManager.">MustacheModule</a>
                       </li>
               </ul>
             </div>
@@ -1034,10 +1030,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toResponse</span><span class="params">(<span name="request">request: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a></span>, <span name="e">e: <a href="../exceptions/HttpResponseException.html" class="extype" name="com.twitter.finatra.http.exceptions.HttpResponseException">HttpResponseException</a></span>)</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a></span>
+        <span class="name">toResponse</span><span class="params">(<span name="request">request: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a></span>, <span name="e">e: <a href="../exceptions/HttpResponseException.html" class="extype" name="com.twitter.finatra.http.exceptions.HttpResponseException">HttpResponseException</a></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.http.Response">Response</span></span>
       </span>
       
-      <p class="shortcomment cmt">Maps an exception of <span class="extype" name="T">T</span> to a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html" class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</a></p><div class="fullcomment"><div class="comment cmt"><p>Maps an exception of <span class="extype" name="T">T</span> to a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html" class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</a></p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>- the incoming <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a></p></dd><dt>returns</dt><dd class="cmt"><p>a valid <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html" class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</a></p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.http.modules.HttpResponseExceptionMapper">HttpResponseExceptionMapper</a> → <a href="../exceptions/ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">ExceptionMapper</a></dd></dl></div>
+      <p class="shortcomment cmt">Maps an exception of <span class="extype" name="T">T</span> to a <span class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</span></p><div class="fullcomment"><div class="comment cmt"><p>Maps an exception of <span class="extype" name="T">T</span> to a <span class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</span></p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>- the incoming <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a></p></dd><dt>returns</dt><dd class="cmt"><p>a valid <span class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</span></p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.http.modules.HttpResponseExceptionMapper">HttpResponseExceptionMapper</a> → <a href="../exceptions/ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">ExceptionMapper</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">

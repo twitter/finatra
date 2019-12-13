@@ -13,7 +13,7 @@ custom `request case class <#custom-request-case-class>`__, or a type parsable b
 Finagle `c.t.finagle.http.Request`
 ----------------------------------
 
-This is a `c.t.finagle.http.Request <https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request>`__
+This is a `c.t.finagle.http.Request <https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html>`__
 which contains common HTTP attributes.
 
 Custom "request" case class

@@ -155,20 +155,8 @@
                         <a href="AccessLoggingFilter.html" title="AccessLoggingFilter attempts to follow the Common Log Format as closely as possible.">AccessLoggingFilter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="BaseDarkTrafficFilter.html" title=""></a>
-                        <a href="BaseDarkTrafficFilter.html" title="">BaseDarkTrafficFilter</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
-                        <a class="class" href="DarkTrafficFilter.html" title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finagle.Filter.TypeAgnostic and thus works in a Finatra ThriftRouter filter chain."></a>
-                        <a href="DarkTrafficFilter.html" title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finagle.Filter.TypeAgnostic and thus works in a Finatra ThriftRouter filter chain.">DarkTrafficFilter</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
                         <a class="class" href="ExceptionMappingFilter.html" title="A ThriftFilter which handles exceptions by rescuing the exception and passing it to the ExceptionManager to handle it."></a>
                         <a href="ExceptionMappingFilter.html" title="A ThriftFilter which handles exceptions by rescuing the exception and passing it to the ExceptionManager to handle it.">ExceptionMappingFilter</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
-                        <a class="class" href="JavaDarkTrafficFilter.html" title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finagle.Filter.TypeAgnostic for use with generated Java code."></a>
-                        <a href="JavaDarkTrafficFilter.html" title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finagle.Filter.TypeAgnostic for use with generated Java code.">JavaDarkTrafficFilter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="class" href="LoggingMDCFilter.html" title=""></a>
@@ -214,13 +202,27 @@
 
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Tracks &quot;per method&quot; statistics scoped under <code>per_method_stats/&lt;method&gt;</code> including:</p><ul><li>success/failure (with exceptions) counters</li><li>latency_ms histogram</li></ul><p>Example stats for a successful request to a method named <code>foo</code>:</p><pre>per_method_stats/foo/failures <span class="num">0</span>
+per_method_stats/foo/ignored <span class="num">0</span>
+per_method_stats/foo/requests <span class="num">1</span>
 per_method_stats/foo/success <span class="num">1</span>
 per_method_stats/foo/latency_ms <span class="num">43.000000</span> [<span class="num">43.0</span>]</pre><p>Example stats, for a failed request to a method named <code>foo</code>:</p><pre>exceptions <span class="num">1</span>
 exceptions/java.lang.Exception <span class="num">1</span>
 per_method_stats/foo/failures <span class="num">1</span>
 per_method_stats/foo/failures/java.lang.Exception <span class="num">1</span>
+per_method_stats/foo/ignored <span class="num">0</span>
+per_method_stats/foo/requests <span class="num">1</span>
 per_method_stats/foo/success <span class="num">0</span>
-per_method_stats/foo/latency_ms <span class="num">43.000000</span> [<span class="num">43.0</span>]</pre></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+per_method_stats/foo/latency_ms <span class="num">43.000000</span> [<span class="num">43.0</span>]</pre><p>Example stats, for a failed request to a method named <code>foo</code> with a <span class="extype" name="ResponseClassifier">ResponseClassifier</span> which
+classifies <span class="extype" name="java.lang.Exception">java.lang.Exception</span> as Ignorable:</p><pre>exceptions <span class="num">1</span>
+exceptions/java.lang.Exception <span class="num">1</span>
+per_method_stats/foo/failures <span class="num">0</span>
+per_method_stats/foo/ignored <span class="num">1</span>
+per_method_stats/foo/ignored/java.lang.Exception <span class="num">1</span>
+per_method_stats/foo/requests <span class="num">1</span>
+per_method_stats/foo/success <span class="num">0</span>
+per_method_stats/foo/latency_ms <span class="num">43.000000</span> [<span class="num">43.0</span>]</pre><p>requests == success + failures + ignored
+The logical success rate for a method can be calculated as <code>success / (success + failures)</code>
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Singleton</span><span class="args">()</span>
               
         </dd><dt>Note</dt><dd><span class="cmt"><p>It is expected that this Filter is inserted ABOVE the <a href="ExceptionMappingFilter.html" class="extype" name="com.twitter.finatra.thrift.filters.ExceptionMappingFilter">ExceptionMappingFilter</a> in a

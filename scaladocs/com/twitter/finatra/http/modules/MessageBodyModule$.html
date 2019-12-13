@@ -159,10 +159,6 @@
                         <a href="DarkTrafficFilterModule.html" title="">DarkTrafficFilterModule</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="object" href="DocRootModule$.html" title=""></a>
-                        <a href="DocRootModule$.html" title="">DocRootModule</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
                         <a class="object" href="HttpResponseClassifierModule$.html" title=""></a>
                         <a href="HttpResponseClassifierModule$.html" title="">HttpResponseClassifierModule</a>
                       </li><li class="current-entities indented5">
@@ -171,16 +167,16 @@
                         <a href="HttpResponseExceptionMapper.html" title="">HttpResponseExceptionMapper</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
+                        <a class="object" href="MessageBodyFlagsModule$.html" title=""></a>
+                        <a href="MessageBodyFlagsModule$.html" title="">MessageBodyFlagsModule</a>
+                      </li><li class="current-entities indented5">
                         <a class="object" href="" title="Provided implementations for the com.twitter.finatra.http.marshalling.DefaultMessageBodyReader and the com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter."></a>
-                        <a href="" title="Provided implementations for the com.twitter.finatra.http.marshalling.DefaultMessageBodyReader and the com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter.">MessageBodyModule</a>
+                        <a class="class" href="MessageBodyModule.html" title=""></a>
+                        <a href="MessageBodyModule.html" title="">MessageBodyModule</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="object" href="MustacheModule$.html" title=""></a>
-                        <a href="MustacheModule$.html" title="">MustacheModule</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
-                        <a class="object" href="ResponseBuilderModule$.html" title=""></a>
-                        <a href="ResponseBuilderModule$.html" title="">ResponseBuilderModule</a>
+                        <a class="object" href="MustacheModule$.html" title="This TwitterModule ties together Mustache and HTTP by registering a Mustache-specific com.twitter.finatra.http.marshalling.MessageBodyWriter to the com.twitter.finatra.http.marshalling.MessageBodyManager."></a>
+                        <a href="MustacheModule$.html" title="This TwitterModule ties together Mustache and HTTP by registering a Mustache-specific com.twitter.finatra.http.marshalling.MessageBodyWriter to the com.twitter.finatra.http.marshalling.MessageBodyManager.">MustacheModule</a>
                       </li>
               </ul>
             </div>
@@ -188,14 +184,16 @@
           <div id="content">
             <body class="object value">
       <div id="definition">
-        <div class="big-circle object">o</div>
+        <a href="MessageBodyModule.html" title="See companion class"><div class="big-circle object-companion-class">o</div></a>
         <p id="owner"><a href="../../../../index.html" class="extype" name="com">com</a>.<a href="../../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../index.html" class="extype" name="com.twitter.finatra.http">http</a>.<a href="index.html" class="extype" name="com.twitter.finatra.http.modules">modules</a></p>
-        <h1>MessageBodyModule<span class="permalink">
+        <h1><a href="MessageBodyModule.html" title="See companion class">MessageBodyModule</a><span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/modules/MessageBodyModule$.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
-        <h3><span class="morelinks"></span></h3>
+        <h3><span class="morelinks"><div>
+            Companion <a href="MessageBodyModule.html" title="See companion class">class MessageBodyModule</a>
+          </div></span></h3>
       </div>
 
       <h4 id="signature" class="signature">
@@ -204,19 +202,18 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">MessageBodyModule</span><span class="result"> extends <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></span>
+        <span class="name">MessageBodyModule</span><span class="result"> extends <a href="MessageBodyModule.html" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">MessageBodyModule</a></span>
       </span>
       </h4>
 
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Provided implementations for the <a href="../marshalling/DefaultMessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyReader">com.twitter.finatra.http.marshalling.DefaultMessageBodyReader</a>
-and the <a href="../marshalling/DefaultMessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter">com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter</a>.</p><p>Also binds the <a href="../internal/marshalling/mustache/MustacheMessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.internal.marshalling.mustache.MustacheMessageBodyWriter">com.twitter.finatra.http.internal.marshalling.mustache.MustacheMessageBodyWriter</a>
-which provides the mustache rendering support for the framework.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../marshalling/DefaultMessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyReader">com.twitter.finatra.http.marshalling.DefaultMessageBodyReader</a></p></span><span class="cmt"><p><a href="../marshalling/DefaultMessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter">com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter</a></p></span><span class="cmt"><p><span class="extype" name="MessageBodyManager">MessageBodyManager</span></p></span></dd></dl><div class="toggleContainer block">
+and the <a href="../marshalling/DefaultMessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter">com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter</a>.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../marshalling/DefaultMessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyReader">com.twitter.finatra.http.marshalling.DefaultMessageBodyReader</a></p></span><span class="cmt"><p><a href="../marshalling/DefaultMessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter">com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter</a></p></span><span class="cmt"><p><a href="../marshalling/MessageBodyManager.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyManager">com.twitter.finatra.http.marshalling.MessageBodyManager</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>, <a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a>, <a href="../../../inject/TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a>, <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <a href="../../../inject/TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a>, <span class="extype" name="com.google.inject.AbstractModule">AbstractModule</span>, <span class="extype" name="com.google.inject.Module">Module</span>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="MessageBodyModule.html" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">MessageBodyModule</a>, <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>, <a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a>, <a href="../../../inject/TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a>, <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <a href="../../../inject/TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a>, <span class="extype" name="com.google.inject.AbstractModule">AbstractModule</span>, <span class="extype" name="com.google.inject.Module">Module</span>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -242,7 +239,7 @@ which provides the mustache rendering support for the framework.
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.http.modules.MessageBodyModule"><span>MessageBodyModule</span></li><li class="in" name="com.twitter.inject.TwitterModule"><span>TwitterModule</span></li><li class="in" name="com.twitter.inject.TwitterBaseModule"><span>TwitterBaseModule</span></li><li class="in" name="com.twitter.inject.TwitterModuleLifecycle"><span>TwitterModuleLifecycle</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.inject.TwitterModuleFlags"><span>TwitterModuleFlags</span></li><li class="in" name="com.google.inject.AbstractModule"><span>AbstractModule</span></li><li class="in" name="com.google.inject.Module"><span>Module</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.http.modules.MessageBodyModule"><span>MessageBodyModule</span></li><li class="in" name="com.twitter.finatra.http.modules.MessageBodyModule"><span>MessageBodyModule</span></li><li class="in" name="com.twitter.inject.TwitterModule"><span>TwitterModule</span></li><li class="in" name="com.twitter.inject.TwitterBaseModule"><span>TwitterBaseModule</span></li><li class="in" name="com.twitter.inject.TwitterModuleLifecycle"><span>TwitterModuleLifecycle</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.inject.TwitterModuleFlags"><span>TwitterModuleFlags</span></li><li class="in" name="com.google.inject.AbstractModule"><span>AbstractModule</span></li><li class="in" name="com.google.inject.Module"><span>Module</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -533,7 +530,7 @@ injector-supplied values to construct objects.</p><div class="fullcomment"><div 
 injector-supplied values to construct objects. This is preferable to calling <code>install</code>
 on the <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> which provides the factory as install is not supported for
 <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> types.
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the assisted injection factory</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/assistedinject/AssistedInject.html" target="_blank">com.google.inject.assistedinject.AssitedInject</a></p></span><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/assistedinject/FactoryModuleBuilder.html" target="_blank">com.google.inject.assistedinject.FactoryModuleBuilder</a></p></span><span class="cmt"><p><a href="https://github.com/google/guice/wiki/AssistedInject" target="_blank">Assisted Injection</a></p></span></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the assisted injection factory</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/assistedinject/AssistedInject.html" target="_blank">com.google.inject.assistedinject.AssistedInject</a></p></span><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/assistedinject/FactoryModuleBuilder.html" target="_blank">com.google.inject.assistedinject.FactoryModuleBuilder</a></p></span><span class="cmt"><p><a href="https://github.com/google/guice/wiki/AssistedInject" target="_blank">Assisted Injection</a></p></span></dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#bindConstant" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="bindConstant():com.google.inject.binder.AnnotatedConstantBindingBuilder"></a><a id="bindConstant():AnnotatedConstantBindingBuilder"></a>
       <span class="permalink">
@@ -1084,7 +1081,7 @@ via the exposed methods.</p><div class="fullcomment"><div class="comment cmt"><p
 via the exposed methods. A default implementation is provided such that extensions using
 only <code>@Provides</code>-annotated methods do not need to implement an empty
 <span class="extype" name="TwitterModule.configure()">TwitterModule.configure()</span> method.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">MessageBodyModule</a> → <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> → AbstractModule</dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://static.javadoc.io/com.google.inject/guice/4.1.0/com/google/inject/AbstractModule.html#configure--" target="_blank">com.google.inject.AbstractModule#configure()</a></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MessageBodyModule.html" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">MessageBodyModule</a> → <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> → AbstractModule</dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://static.javadoc.io/com.google.inject/guice/4.1.0/com/google/inject/AbstractModule.html#configure--" target="_blank">com.google.inject.AbstractModule#configure()</a></p></span></dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#configure" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configure(x$1:com.google.inject.Binder):Unit"></a><a id="configure(Binder):Unit"></a>
       <span class="permalink">
@@ -1976,8 +1973,8 @@ sometimes preferred due to <code>install</code> being deferred until after flag 
       <p class="shortcomment cmt">Additional modules to be composed into this module.</p><div class="fullcomment"><div class="comment cmt"><p>Additional modules to be composed into this module. This list of modules is generally used
 <i>instead</i> of the <span class="extype" name="TwitterModule.install">TwitterModule.install</span> method to properly support the
 <span class="extype" name="TwitterModuleLifecycle">TwitterModuleLifecycle</span> for <span class="extype" name="TwitterModule">TwitterModule</span> instances.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">MessageBodyModule</a> → <a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd><dt>Note</dt><dd><span class="cmt"><p><span class="extype" name="TwitterModule.install(module:">Module)</span> can still be used for non-<span class="extype" name="TwitterModule">TwitterModule</span> 1
-     instances, and is sometimes preferred due to <code>install</code> being deferred until after flag parsing occurs.</p></span>, <span class="cmt"><p>Java users should prefer <a href="#javaModules:java.util.Collection[com.google.inject.Module]" class="extmbr" name="com.twitter.finatra.http.modules.MessageBodyModule#javaModules">javaModules</a>.</p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MessageBodyModule.html" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">MessageBodyModule</a> → <a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd><dt>Note</dt><dd><span class="cmt"><p><span class="extype" name="TwitterModule.install(module:">Module)</span> can still be used for non-<span class="extype" name="TwitterModule">TwitterModule</span> 1
+     instances, and is sometimes preferred due to <code>install</code> being deferred until after flag parsing occurs.</p></span>, <span class="cmt"><p>Java users should prefer <a href="MessageBodyModule.html#javaModules:java.util.Collection[com.google.inject.Module]" class="extmbr" name="com.twitter.finatra.http.modules.MessageBodyModule#javaModules">javaModules</a>.</p></span></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -2152,7 +2149,7 @@ the given classes.
       
       <p class="shortcomment cmt">Invoked on graceful shutdown of the application.</p><div class="fullcomment"><div class="comment cmt"><p>Invoked on graceful shutdown of the application.</p><p>This method should only get singleton instances from the injector.
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.http.modules.MessageBodyModule#singletonStartup" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.inject.TwitterModuleLifecycle#singletonStartup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="singletonStartup(injector:com.twitter.inject.Injector):Unit"></a><a id="singletonStartup(Injector):Unit"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/modules/MessageBodyModule$.html#singletonStartup(injector:com.twitter.inject.Injector):Unit" title="Permalink">
@@ -2168,7 +2165,7 @@ the given classes.
       </span>
       
       <p class="shortcomment cmt">Invoked after the injector is started.</p><div class="fullcomment"><div class="comment cmt"><p>Invoked after the injector is started.</p><p>This method should only get singleton instances from the injector.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">MessageBodyModule</a> → <a href="../../../inject/TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
@@ -2477,7 +2474,9 @@ the given classes.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.twitter.inject.TwitterModule">
+        <div class="parent" name="com.twitter.finatra.http.modules.MessageBodyModule">
+              <h3>Inherited from <a href="MessageBodyModule.html" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">MessageBodyModule</a></h3>
+            </div><div class="parent" name="com.twitter.inject.TwitterModule">
               <h3>Inherited from <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></h3>
             </div><div class="parent" name="com.twitter.inject.TwitterBaseModule">
               <h3>Inherited from <a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></h3>

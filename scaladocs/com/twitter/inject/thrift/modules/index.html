@@ -171,12 +171,24 @@
                         <a href="AndThenServiceModule$.html" title="">AndThenServiceModule</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
+                        <a class="class" href="DarkTrafficFilterModule.html" title="A TwitterModule which configures and binds a DarkTrafficFilter to the object graph, for use with Controllers constructed using the legacy method."></a>
+                        <a href="DarkTrafficFilterModule.html" title="A TwitterModule which configures and binds a DarkTrafficFilter to the object graph, for use with Controllers constructed using the legacy method.">DarkTrafficFilterModule</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
                         <a class="object" href="FilteredThriftClientFlagsModule$.html" title=""></a>
                         <a href="FilteredThriftClientFlagsModule$.html" title="">FilteredThriftClientFlagsModule</a>
                       </li><li class="current-entities indented5">
                         <a class="object" href="FilteredThriftClientModule$.html" title=""></a>
                         <a class="class" href="FilteredThriftClientModule.html" title="Provides a FutureIface in the form of RemoteService[Future] for making calls to a remote service."></a>
                         <a href="FilteredThriftClientModule.html" title="Provides a FutureIface in the form of RemoteService[Future] for making calls to a remote service.">FilteredThriftClientModule</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="JavaDarkTrafficFilterModule.html" title="A com.twitter.inject.TwitterModule which configures and binds a JavaDarkTrafficFilter to the object graph."></a>
+                        <a href="JavaDarkTrafficFilterModule.html" title="A com.twitter.inject.TwitterModule which configures and binds a JavaDarkTrafficFilter to the object graph.">JavaDarkTrafficFilterModule</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="ReqRepDarkTrafficFilterModule.html" title="A com.twitter.inject.TwitterModule which configures and binds a DarkTrafficFilter to the object graph."></a>
+                        <a href="ReqRepDarkTrafficFilterModule.html" title="A com.twitter.inject.TwitterModule which configures and binds a DarkTrafficFilter to the object graph.">ReqRepDarkTrafficFilterModule</a>
                       </li><li class="current-entities indented5">
                         <a class="object" href="ThriftClientIdModule$.html" title=""></a>
                         <a class="class" href="ThriftClientIdModule.html" title="Provides a com.twitter.finagle.thrift.ClientId binding with a value configurable via a com.twitter.app.Flag."></a>
@@ -268,7 +280,50 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.twitter.inject.thrift.modules.ThriftClientIdModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="com.twitter.inject.thrift.modules.JavaDarkTrafficFilterModule" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="JavaDarkTrafficFilterModuleextendsTwitterModulewithDarkTrafficFilterModuleTrait"></a><a id="JavaDarkTrafficFilterModule:JavaDarkTrafficFilterModule"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/inject/thrift/modules/index.html#JavaDarkTrafficFilterModuleextendsTwitterModulewithDarkTrafficFilterModuleTrait" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="A com.twitter.inject.TwitterModule which configures and binds a JavaDarkTrafficFilter to the object graph." href="JavaDarkTrafficFilterModule.html"><span class="name">JavaDarkTrafficFilterModule</span></a><span class="result"> extends <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> with <span class="extype" name="com.twitter.inject.thrift.modules.DarkTrafficFilterModuleTrait">DarkTrafficFilterModuleTrait</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">A <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which configures and binds a <span class="extype" name="JavaDarkTrafficFilter">JavaDarkTrafficFilter</span> to the object graph.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which configures and binds a <span class="extype" name="JavaDarkTrafficFilter">JavaDarkTrafficFilter</span> to the object graph.
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>This is only applicable with code that uses generated Java classes as it expects to configure
+      the <span class="extype" name="JavaDarkTrafficFilter">JavaDarkTrafficFilter</span> over a <span class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</span> that is generated from
+      Finagle via generated Java code. Users of generated Scala code should use the
+      <a href="ReqRepDarkTrafficFilterModule.html" class="extype" name="com.twitter.inject.thrift.modules.ReqRepDarkTrafficFilterModule">ReqRepDarkTrafficFilterModule</a>.</p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.thrift.modules.ReqRepDarkTrafficFilterModule" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ReqRepDarkTrafficFilterModule[MethodIface&lt;:com.twitter.finagle.thrift.service.Filterable[MethodIface]]extendsTwitterModulewithDarkTrafficFilterModuleTrait"></a><a id="ReqRepDarkTrafficFilterModule[MethodIface&lt;:Filterable[MethodIface]]:ReqRepDarkTrafficFilterModule[MethodIface]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/inject/thrift/modules/index.html#ReqRepDarkTrafficFilterModule[MethodIface&lt;:com.twitter.finagle.thrift.service.Filterable[MethodIface]]extendsTwitterModulewithDarkTrafficFilterModuleTrait" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="A com.twitter.inject.TwitterModule which configures and binds a DarkTrafficFilter to the object graph." href="ReqRepDarkTrafficFilterModule.html"><span class="name">ReqRepDarkTrafficFilterModule</span></a><span class="tparams">[<span name="MethodIface">MethodIface &lt;: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/service/Filterable.html#com.twitter.finagle.thrift.service.Filterable" class="extype" name="com.twitter.finagle.thrift.service.Filterable">Filterable</a>[<span class="extype" name="com.twitter.inject.thrift.modules.ReqRepDarkTrafficFilterModule.MethodIface">MethodIface</span>]</span>]</span><span class="result"> extends <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> with <span class="extype" name="com.twitter.inject.thrift.modules.DarkTrafficFilterModuleTrait">DarkTrafficFilterModuleTrait</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">A <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which configures and binds a <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> to the object graph.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which configures and binds a <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> to the object graph.
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>This <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> module is to be used with <code>Controllers</code> which are constructed by
+      extending <code>Controller(GeneratedThriftService)</code>. For Controllers that are constructed using
+      the deprecated method of extending <code>Controller with GeneratedThriftService.BaseServiceIface</code>,
+      Use the <a href="DarkTrafficFilterModule.html" class="extype" name="com.twitter.inject.thrift.modules.DarkTrafficFilterModule">DarkTrafficFilterModule</a> above.</p></span>, <span class="cmt"><p>This is only applicable in Scala as it uses generated Scala classes and expects to configure
+      the <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> over a <span class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</span> that is generated from
+      Finagle via generated Scala code. Users of generated Java code should use the
+      <a href="JavaDarkTrafficFilterModule.html" class="extype" name="com.twitter.inject.thrift.modules.JavaDarkTrafficFilterModule">JavaDarkTrafficFilterModule</a>.</p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.thrift.modules.ThriftClientIdModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ThriftClientIdModuleextendsTwitterModule"></a><a id="ThriftClientIdModule:ThriftClientIdModule"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/inject/thrift/modules/index.html#ThriftClientIdModuleextendsTwitterModule" title="Permalink">
@@ -336,6 +391,34 @@ per-method which can then be used directly or can be wrapped by a <code>MethodPe
       order in which responses return. See the <a href="../ThriftMethodBuilderFactory.html" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilderFactory">ThriftMethodBuilderFactory</a> for more information.</p></span>, <span class="cmt"><p>This <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> expects a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ClientId.html" class="extype" name="com.twitter.finagle.thrift.ClientId">com.twitter.finagle.thrift.ClientId</a> to be bound to
       the object graph but does not assume how it is done. A <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ClientId.html" class="extype" name="com.twitter.finagle.thrift.ClientId">com.twitter.finagle.thrift.ClientId</a>
       can be bound by including the <a href="ThriftClientIdModule.html" class="extype" name="com.twitter.inject.thrift.modules.ThriftClientIdModule">ThriftClientIdModule</a> in your server configuration.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/scrooge/Finagle.html#id1" target="_blank">MethodPerEndpoint</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/scrooge/Finagle.html#id2" target="_blank">ServicePerEndpoint</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/scrooge/Finagle.html#id3" target="_blank">ReqRepServicePerEndpoint</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/guide/Clients.html" target="_blank">Finagle Clients</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux" target="_blank">What is ThriftMux?</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.thrift.modules.DarkTrafficFilterModule" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="DarkTrafficFilterModule[ServiceIface&lt;:com.twitter.finagle.thrift.service.Filterable[ServiceIface]]extendsTwitterModulewithDarkTrafficFilterModuleTrait"></a><a id="DarkTrafficFilterModule[ServiceIface&lt;:Filterable[ServiceIface]]:DarkTrafficFilterModule[ServiceIface]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/inject/thrift/modules/index.html#DarkTrafficFilterModule[ServiceIface&lt;:com.twitter.finagle.thrift.service.Filterable[ServiceIface]]extendsTwitterModulewithDarkTrafficFilterModuleTrait" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="A TwitterModule which configures and binds a DarkTrafficFilter to the object graph, for use with Controllers constructed using the legacy method." href="DarkTrafficFilterModule.html"><span class="name deprecated" title="Deprecated: (Since version 12-03-2019) Use ReqRepDarkTrafficFilterModule">DarkTrafficFilterModule</span></a><span class="tparams">[<span name="ServiceIface">ServiceIface &lt;: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/service/Filterable.html#com.twitter.finagle.thrift.service.Filterable" class="extype" name="com.twitter.finagle.thrift.service.Filterable">Filterable</a>[<span class="extype" name="com.twitter.inject.thrift.modules.DarkTrafficFilterModule.ServiceIface">ServiceIface</span>]</span>]</span><span class="result"> extends <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> with <span class="extype" name="com.twitter.inject.thrift.modules.DarkTrafficFilterModuleTrait">DarkTrafficFilterModuleTrait</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">A <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> which configures and binds a <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> to the object graph, for
+use with <span class="extype" name="Controllers">Controllers</span> constructed using the legacy method.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> which configures and binds a <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> to the object graph, for
+use with <span class="extype" name="Controllers">Controllers</span> constructed using the legacy method.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 12-03-2019)</i> Use ReqRepDarkTrafficFilterModule</p></dd><dt>Note</dt><dd><span class="cmt"><p>This <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> module is to be used with <span class="extype" name="Controllers">Controllers</span> which are constructed using
+      the deprecated method of extending the <code>BaseServiceIface</code> of the generated Thrift service.
+      For services that construct their Controllers by extending
+      <code>Controller(GeneratedThriftService)</code>, use the <span class="extype" name="ReqRepDarkTrafficFilter">ReqRepDarkTrafficFilter</span> instead</p></span>, <span class="cmt"><p>This is only applicable in Scala as it uses generated Scala classes and expects to configure
+      the <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> over a <span class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</span> that is generated from
+      Finagle via generated Scala code. Users of generated Java code should use the
+      <a href="JavaDarkTrafficFilterModule.html" class="extype" name="com.twitter.inject.thrift.modules.JavaDarkTrafficFilterModule">JavaDarkTrafficFilterModule</a>.</p></span></dd></dl></div>
     </li><li name="com.twitter.inject.thrift.modules.FilteredThriftClientModule" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="FilteredThriftClientModule[FutureIface&lt;:com.twitter.finagle.thrift.ThriftService,ServiceIface&lt;:com.twitter.finagle.thrift.service.Filterable[ServiceIface]]extendsTwitterModule"></a><a id="FilteredThriftClientModule[FutureIface&lt;:ThriftService,ServiceIface&lt;:Filterable[ServiceIface]]:FilteredThriftClientModule[FutureIface,ServiceIface]"></a>
       <span class="permalink">
