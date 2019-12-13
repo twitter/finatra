@@ -283,7 +283,8 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   kafkaStreamsStaticPartitioning,
   mustache,
   thrift,
-  utils)
+  utils,
+  validation)
 
 lazy val finatraExamples =
   // START EXAMPLES
