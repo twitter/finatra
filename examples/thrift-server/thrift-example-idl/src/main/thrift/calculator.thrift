@@ -1,4 +1,5 @@
 namespace java com.twitter.calculator.thriftjava
+namespace py gen.calculator
 #@namespace scala com.twitter.calculator.thriftscala
 namespace rb Calculator
 namespace go calculator

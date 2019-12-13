@@ -53,7 +53,7 @@ class StreamingResponseTest extends Test with Mockito {
     val response: Response = fromReader(reader)
     assert(
       Buf.decodeString(await(BufReader.readAll(response.reader)), StandardCharsets.UTF_8) ==
-        "firstsecondthird")
+        """["first","second","third"]""")
   }
 
   test("Reader: Serialize and deserialize the Reader of Float") {
@@ -118,7 +118,7 @@ class StreamingResponseTest extends Test with Mockito {
     val response: Response = fromStream(stream)
     assert(
       Buf.decodeString(await(BufReader.readAll(response.reader)), StandardCharsets.UTF_8) ==
-        "firstsecondthird")
+        """["first","second","third"]""")
   }
 
   test("AsyncStream: Serialize and deserialize the AsyncStream of int") {

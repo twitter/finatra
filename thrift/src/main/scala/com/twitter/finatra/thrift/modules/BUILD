@@ -17,6 +17,5 @@ scala_library(
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/filters",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/internal/exceptions",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/response",
-        "finatra/utils/src/main/java/com/twitter/finatra/annotations",
     ],
 )

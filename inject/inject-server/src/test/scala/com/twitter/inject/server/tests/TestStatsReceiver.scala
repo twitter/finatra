@@ -1,13 +1,6 @@
 package com.twitter.inject.server.tests
 
-import com.twitter.finagle.stats.{
-  Counter,
-  Gauge,
-  InMemoryStatsReceiver,
-  Stat,
-  StatsReceiver,
-  Verbosity
-}
+import com.twitter.finagle.stats.{Counter, CounterSchema, Gauge, GaugeSchema, HistogramSchema, InMemoryStatsReceiver, Stat, StatsReceiver}
 import java.io.PrintStream
 import scala.collection.mutable
 
@@ -31,14 +24,14 @@ private[tests] class TestStatsReceiver extends StatsReceiver {
   /**
    * Get a [[Counter counter]] with the given `name`.
    */
-  override def counter(verbosity: Verbosity, name: String*): Counter =
-    underlying.counter(verbosity, name: _*)
+  def counter(schema: CounterSchema): Counter =
+    underlying.counter(schema)
 
   /**
    * Get a [[Stat stat]] with the given name.
    */
-  override def stat(verbosity: Verbosity, name: String*): Stat =
-    underlying.stat(verbosity, name: _*)
+  def stat(schema: HistogramSchema): Stat =
+    underlying.stat(schema)
 
   /**
    * Add the function `f` as a [[Gauge gauge]] with the given name.
@@ -56,8 +49,8 @@ private[tests] class TestStatsReceiver extends StatsReceiver {
    *      to store the returned [[Gauge gauge]] that can give the desired lifecycle.
    * @see [[https://docs.oracle.com/javase/7/docs/api/java/lang/ref/WeakReference.html java.lang.ref.WeakReference]]
    */
-  override def addGauge(verbosity: Verbosity, name: String*)(f: => Float): Gauge =
-    underlying.addGauge(verbosity, name: _*)(f)
+  def addGauge(schema: GaugeSchema)(f: => Float): Gauge =
+    underlying.addGauge(schema)(f)
 
   override def toString: String = "TestStatsReceiver"
 

@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class CarMessageBodyWriter @Inject()(mapper: FinatraObjectMapper) extends MessageBodyWriter[Car] {
 
-  override def write(car: Car) = {
+  override def write(car: Car): WriterResponse = {
     WriterResponse(MediaType.JsonUtf8, mapper.writeValueAsBytes(Map("car" -> car.name)))
   }
 }

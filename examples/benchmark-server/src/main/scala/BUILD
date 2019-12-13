@@ -5,7 +5,6 @@ scala_library(
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
         "3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala",
         "3rdparty/jvm/com/google/inject:guice",
-        "3rdparty/jvm/org/slf4j:slf4j-nop",
         "finagle/finagle-core/src/main/scala",
         "finagle/finagle-http/src/main/scala",
         "finatra/http/src/main/scala",

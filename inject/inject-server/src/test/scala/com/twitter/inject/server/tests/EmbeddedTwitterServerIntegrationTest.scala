@@ -345,6 +345,30 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
     com.twitter.finagle.stats.logOnShutdown() should equal(false) //verify default value unchanged
   }
 
+  test("server#support disabling AdminHttpServer") {
+    @volatile var awaitablesContainAdmin: Boolean = true
+    val server =
+        new EmbeddedTwitterServer(
+          twitterServer = new TwitterServer {
+            override val disableAdminHttpServer: Boolean = true
+
+            override def postWarmup(): Unit = {
+              // we need to verify that the admin is not started or expecting closure
+              awaitablesContainAdmin = awaitables.contains(adminHttpServer)
+              super.postWarmup()
+            }
+          },
+          disableTestLogging = true
+        ).bind[String].toInstance("helloworld")
+
+    try {
+      server.start()
+      awaitablesContainAdmin should equal(false) // verify that we never started the adminHttpServer
+    } finally {
+      server.close()
+    }
+  }
+
   /* utility method tests */
 
   test("method#reduceScopedFunction") {

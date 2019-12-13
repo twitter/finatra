@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "19.11.0"
+val releaseVersion = "19.12.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -94,8 +94,9 @@ lazy val versions = new {
   val bijectionCore = "0.9.5"
   val commonsFileupload = "1.4"
   val fastutil = "8.1.1"
-  val guice = "4.0"
-  val jackson = "2.9.9"
+  val guice = "4.1.0"
+  val jackson = "2.9.10"
+  val jacksonDatabind = "2.9.10.1"
   val jodaConvert = "1.2"
   val jodaTime = "2.5"
   val json4s = "3.6.7"
@@ -107,9 +108,9 @@ lazy val versions = new {
   val mustache = "0.8.18"
   val nscalaTime = "2.14.0"
   val rocksdbjni = "5.14.2"
-  val scalaCheck = "1.13.4"
+  val scalaCheck = "1.14.0"
   val scalaGuice = "4.1.0"
-  val scalaTest = "3.0.0"
+  val scalaTest = "3.0.8"
   val slf4j = "1.7.21"
   val snakeyaml = "1.24"
   val specs2 = "2.4.17"
@@ -258,6 +259,8 @@ lazy val exampleServerSettings = baseServerSettings ++ Seq(
 lazy val finatraModules = Seq[sbt.ProjectReference](
   benchmarks,
   http,
+  httpAnnotations,
+  httpMustache,
   httpclient,
   injectApp,
   injectCore,
@@ -278,6 +281,7 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   kafkaStreamsQueryableThrift,
   kafkaStreamsQueryableThriftClient,
   kafkaStreamsStaticPartitioning,
+  mustache,
   thrift,
   utils)
 
@@ -428,10 +432,14 @@ lazy val injectApp = (project in file("inject/inject-app"))
     libraryDependencies ++= Seq(
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "com.twitter" %% "util-core" % versions.twLibVersion,
+      "org.slf4j" % "slf4j-api" % versions.slf4j,
+      // -------- BEGIN: slf4j-api logging bridges -------------------------------
+      // Add the slf4j-api logging bridges to ensure that any dependents
+      // of the library have bridges on their classpath at runtime.
       "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
       "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
-      "org.slf4j" % "log4j-over-slf4j" % versions.slf4j,
-      "org.slf4j" % "slf4j-api" % versions.slf4j
+      "org.slf4j" % "log4j-over-slf4j" % versions.slf4j
+      // -------- END: slf4j-api logging bridges ---------------------------------  
     ),
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*TypeConverter.*",
     publishArtifact in Test := true,
@@ -558,6 +566,8 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
     name := "inject-thrift-client",
     moduleName := "inject-thrift-client",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*;.*LatencyFilter.*",
+    scroogeLanguages in Test := Seq("java", "scala"),
+    scroogePublishThrift in Test := true,
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-exp" % versions.twLibVersion,
       "com.twitter" %% "finagle-thrift" % versions.twLibVersion,
@@ -571,7 +581,8 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
     injectModules % "test->test;compile->compile",
     injectThrift,
     http % "test->test",
-    thrift % "test->test")
+    thrift % "test->test",
+    utils)
 
 lazy val injectUtils = (project in file("inject/inject-utils"))
   .settings(projectSettings)
@@ -607,6 +618,7 @@ lazy val benchmarks = project
   .settings(noPublishSettings)
   .dependsOn(
     http,
+    httpMustache % "test",
     injectRequestScope,
     injectCore % "test->test",
     injectApp % "test->test;compile->compile")
@@ -621,7 +633,6 @@ lazy val utils = project
     moduleName := "finatra-utils",
     ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*ClassUtils.*;.*WrappedValue.*;.*DeadlineValues.*;.*RichBuf.*;.*RichByteBuf.*",
     libraryDependencies ++= Seq(
-      "com.sun.activation" % "javax.activation" % "1.2.0",
       "com.google.inject" % "guice" % versions.guice,
       "joda-time" % "joda-time" % versions.jodaTime,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
@@ -648,10 +659,47 @@ lazy val utils = project
     injectServer % "test->test",
     injectUtils)
 
+lazy val validationTestJarSources =
+  Seq(
+    "com/twitter/finatra/validation/ValidatorTest"
+  )
+lazy val validation = project
+  .settings(projectSettings)
+  .settings(
+    name := "finatra-validation",
+    moduleName := "finatra-validation",
+    libraryDependencies ++= Seq(
+      "com.fasterxml.jackson.core" % "jackson-databind" % versions.jacksonDatabind,
+      "joda-time" % "joda-time" % versions.jodaTime,
+      "org.json4s" %% "json4s-core" % versions.json4s,
+      "com.twitter" %% "util-core" % versions.twLibVersion
+    ),
+    // special-case to only scaladoc what's necessary as some of the tests cannot generate scaladocs
+    sources in Test in doc := {
+      val previous: Seq[File] = (sources in Test in doc).value
+      previous.filter(file => validationTestJarSources.foldLeft(false)(_ || file.getPath.contains(_)))
+    },
+    publishArtifact in Test := true,
+    mappings in (Test, packageBin) := {
+      val previous = (mappings in (Test, packageBin)).value
+      previous.filter(mappingContainsAnyPath(_, validationTestJarSources))
+    },
+    mappings in (Test, packageDoc) := {
+      val previous = (mappings in (Test, packageDoc)).value
+      previous.filter(mappingContainsAnyPath(_, validationTestJarSources))
+    },
+    mappings in (Test, packageSrc) := {
+      val previous = (mappings in (Test, packageSrc)).value
+      previous.filter(mappingContainsAnyPath(_, validationTestJarSources))
+    }
+  ).dependsOn(
+  injectCore % "test->test;compile->compile",
+  injectUtils)
+
 lazy val jacksonTestJarSources =
   Seq(
-    "com/twitter/finatra/validation",
-    "com/twitter/finatra/json/JsonDiff")
+    "com/twitter/finatra/json/JsonDiff"
+    )
 lazy val jackson = project
   .settings(projectSettings)
   .settings(
@@ -659,7 +707,7 @@ lazy val jackson = project
     moduleName := "finatra-jackson",
     ScoverageKeys.coverageExcludedPackages := ".*JacksonToGuiceTypeConverter.*;.*DurationMillisSerializer.*;.*ByteBufferUtils.*",
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
+      "com.fasterxml.jackson.core" % "jackson-databind" % versions.jacksonDatabind,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson,
       "org.json4s" %% "json4s-core" % versions.json4s,
@@ -686,7 +734,26 @@ lazy val jackson = project
     }
   ).dependsOn(
     injectApp % "test->test",
-    injectUtils)
+    injectUtils,
+    validation % "test->test;compile->compile")
+
+lazy val mustache = project
+  .settings(projectSettings)
+  .settings(
+    name := "finatra-mustache",
+    moduleName := "finatra-mustache",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*",
+    libraryDependencies ++= Seq(
+      "javax.inject" % "javax.inject" % "1",
+      "com.github.spullara.mustache.java" % "compiler" % versions.mustache exclude("com.google.guava", "guava"),
+      "com.google.inject" % "guice" % versions.guice,
+      "com.twitter" %% "util-core" % versions.twLibVersion
+    )
+  ).dependsOn(
+  injectApp % "test->test;compile->compile",
+  injectCore % "test->test;compile->compile",
+  utils
+)
 
 lazy val httpTestJarSources =
   Seq(
@@ -696,15 +763,16 @@ lazy val httpTestJarSources =
     "com/twitter/finatra/http/HttpTest",
     "com/twitter/finatra/http/JsonAwareEmbeddedHttpClient",
     "com/twitter/finatra/http/RouteHint",
-    "com/twitter/finatra/http/StreamingJsonTestHelper")
+    "com/twitter/finatra/http/StreamingJsonTestHelper",
+    "com/twitter/finatra/http/modules/ResponseBuilderModule",
+    "com/twitter/finatra/http/response/DefaultResponseBuilder")
 lazy val http = project
   .settings(projectSettings)
   .settings(
     name := "finatra-http",
     moduleName := "finatra-http",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;.*NonValidatingHttpHeadersResponse.*;com\\.twitter\\.finatra\\..*package.*;.*ThriftExceptionMapper.*;.*HttpResponseExceptionMapper.*;.*HttpResponseException.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*ThriftExceptionMapper.*;.*HttpResponseExceptionMapper.*;.*HttpResponseException.*",
     libraryDependencies ++= Seq(
-      "com.github.spullara.mustache.java" % "compiler" % versions.mustache exclude("com.google.guava", "guava"),
       "com.twitter" %% "finagle-exp" % versions.twLibVersion,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
@@ -728,12 +796,42 @@ lazy val http = project
       previous.filter(mappingContainsAnyPath(_, httpTestJarSources))
     }
   ).dependsOn(
-    jackson % "test->test;compile->compile",
+    httpAnnotations,
+    httpclient % "test->test",
     injectRequestScope % Test,
     injectPorts % "test->test",
     injectSlf4j,
     injectServer % "test->test;compile->compile",
-    httpclient % "test->test",
+    jackson % "test->test;compile->compile",
+    utils % "test->test;compile->compile",
+    validation % "test"
+  )
+
+lazy val httpAnnotations = (project in file("http-annotations"))
+  .settings(projectSettings)
+  .settings(
+    name := "finatra-http-annotations",
+    moduleName := "finatra-http-annotations"
+  )
+
+lazy val httpMustache = (project in file("http-mustache"))
+  .settings(projectSettings)
+  .settings(
+    name := "finatra-http-mustache",
+    moduleName := "finatra-http-mustache",
+    libraryDependencies ++= Seq(
+      "javax.inject" % "javax.inject" % "1",
+      "com.github.spullara.mustache.java" % "compiler" % versions.mustache exclude("com.google.guava", "guava"),
+      "com.google.inject" % "guice" % versions.guice,
+      "com.twitter" %% "finagle-http" % versions.twLibVersion,
+      "com.twitter" %% "util-core" % versions.twLibVersion
+    )
+  ).dependsOn(
+    http % "test->test;compile->compile",
+    httpAnnotations,
+    injectCore % "test->test;compile->compile",
+    injectUtils,
+    mustache % "test->test;compile->compile",
     utils % "test->test;compile->compile")
 
 lazy val httpclientTestJarSources =
@@ -809,8 +907,7 @@ lazy val thrift = project
     injectPorts % "test->test",
     injectServer % "test->test;compile->compile",
     injectSlf4j,
-    injectThrift,
-    utils)
+    injectThrift)
 
 lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-http-mapper"))
   .settings(projectSettings)
@@ -1031,7 +1128,8 @@ lazy val twitterClone = (project in file("examples/twitter-clone"))
     httpclient,
     injectCore % "test->test",
     injectSlf4j,
-    injectLogback)
+    injectLogback,
+    validation)
 
 lazy val benchmarkServer = (project in file("examples/benchmark-server"))
   .settings(baseServerSettings)
@@ -1145,10 +1243,12 @@ lazy val exampleWebDashboard = (project in file("examples/web-dashboard"))
     unmanagedResourceDirectories in Compile += baseDirectory.value / "src" / "main" / "webapp"
   ).dependsOn(
     http % "test->test;compile->compile",
+    httpMustache,
     httpclient,
     injectCore % "test->test",
     injectSlf4j,
-    injectLogback)
+    injectLogback,
+    mustache)
 
 lazy val exampleTwitterServer = (project in file("examples/example-twitter-server"))
   .settings(exampleServerSettings)

@@ -16,6 +16,7 @@ jvm_binary(
     main = "com.twitter.finatra.http.benchmark.FinatraBenchmarkServerMain",
     dependencies = [
         ":benchmark-server",
+        "3rdparty/jvm/org/slf4j:slf4j-nop",
         "twitter-server/logback-classic/src/main/scala",
     ],
     excludes = [
@@ -29,6 +30,7 @@ jvm_binary(
     main = "com.twitter.finatra.http.benchmark.FinagleBenchmarkServerMain",
     dependencies = [
         ":benchmark-server",
+        "3rdparty/jvm/org/slf4j:slf4j-nop",
     ],
     excludes = [
         exclude("org.slf4j", "slf4j-jdk14"),

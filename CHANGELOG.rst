@@ -7,6 +7,113 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+19.12.0
+-------
+
+Changed
+~~~~~~~
+
+* finatra: Upgrade to jackson 2.9.10 and jackson-databind 2.9.10.1 ``PHAB_ID=D410846``
+
+* finatra: Correctly track Ignorable Exceptions in per-method StatsFilter.  Responses
+  marked as Ignorable are tracked in the global requests and exceptions metrics but
+  were not counted under the per-method metrics.  There are now counts of `ignored`
+  and total `requests` as well as ignored requests by Exception for each method. E.g.
+
+  per_method_stats/foo/ignored 1
+  per_method_stats/foo/ignored/java.lang.Exception 1
+  per_method_stats/foo/requests 1
+
+  ``PHAB_ID=D407474``
+
+* finatra-http|jackson (BREAKING API CHANGE): Move parsing of message body contents
+  from `finatra/jackson` via the `FinatraObjectMapper` `#parseMessageBody`, `#parseRequestBody`,
+  and `#parseResponseBody` methods to `finatra/http` with functionality replicated via an
+  implicit which enhances a given `FinatraObjectMapper`. Additionally we have updated
+  finatra-http the `MessageBodyComponent` API to use `c.t.finagle.http.Message` instead
+  of `c.t.finagle.http.Request` and `c.t.finagle.http.Response`. This means that users can use the
+  `MessageBodyComponent` API to read the body of Finagle HTTP requests or responses and all HTTP
+  concerns are co-located in finatra-http instead of being partially implemented in finatra-jackson.
+
+  In updating the `MessageBodyComponent` API we have removed support for polymorphic `MessageBodyReader`
+  types, that is we have simplified the `MessageBodyReader` API to no longer express the `#parse`
+  method parameterized to a subtype of the class type. This API allowed parsing a message body
+  into a subtype solely through the presence of a given type parameter but the resulting API has
+  proven to be extremely clunky. We feel that the same behavior is achievable in other ways (such
+  as adapting the type after parsing) and the improvement and simplification of the
+  `MessageBodyReader` API to be worth removing the awkward method signature.
+
+  Lastly, we have fixed the returned charset encoding on response content-type header to be
+  applicable only where appropriate instead of always being added when the
+  `http.response.charset.enabled` flag is set to true. ``PHAB_ID=D400560``
+
+* finatra: (BREAKING API CHANGE) move DarkTrafficFilter and related modules
+  from `finatra/thrift` to `inject/inject-thrift-client`. The modules now extend
+  from `c.t.inject.thrift.modules.ThriftClientModuleTrait` for more uniform configuration.
+  The following changes were made:
+
+    * c.t.finatra.thrift.filters.DarkTrafficFilter ->
+      c.t.inject.thrift.filters.DarkTrafficFilter
+
+    * c.t.finatra.thrift.modules.DarkTrafficFilterModule ->
+      c.t.inject.thrift.modules.DarkTrafficFilterModule
+
+    * c.t.finatra.thrift.modules.ReqRepDarkTrafficFilterModule ->
+      c.t.inject.thrift.modules.ReqRepDarkTrafficFilterModule
+
+    * c.t.finatra.thrift.modules.JavaDarkTrafficFilterModule ->
+      c.t.inject.thrift.modules.JavaDarkTrafficFilterModule
+
+  ``PHAB_ID=D401051``
+
+* finatra: Update Google Guice version to 4.1.0, update ScalaTest to 3.0.8, and ScalaCheck
+  to 1.14.0. ``PHAB_ID=D408309``
+
+* finatra-http: Remove deprecated `c.t.finatra.http.HttpHeaders`. Users should use
+  `com.twitter.finagle.http.Fields` instead. ``PHAB_ID=D407290``
+
+* finatra-http: Remove deprecated `DocRootModule`. ``PHAB_ID=D404723``
+
+* finatra-http: (BREAKING CHANGE) Remove automatic handling of Mustache rendering from
+  `finatra/http` and break Mustache support into two separate libraries: `finatra/mustache`
+  and `finatra/http-mustache`.
+
+  HTTP services that want the framework to automatically negotiate Mustache template rendering
+  via the Finatra HTTP `MessageBodyComponents` framework must now bring this concern into their
+  HTTP services via the `finatra/http-mustache` `c.t.finatra.http.modules.MustacheModule` as the
+  HTTP framework support for specifying a `MustacheModule` in the `HttpServer` has been removed.
+  I.e., add this module to the server's list of modules.
+
+  Additionally, it is also now possible to use Mustache templating completely independent of
+  Finatra HTTP concerns by consuming and using only the `finatra/mustache` library which will
+  render Strings via defined Mustache templates. ``PHAB_ID=D387629``
+
+Fixed
+~~~~~
+
+* finatra-http: Fixed issue in the `DefaultMessageBodyReaderImpl` that determines if the incoming
+  message is "json encoded". ``PHAB_ID=D412993``
+
+* inject-modules: Removed the extra registration for closing a client, which used to log false
+  warnings when startup a ClientModule. Only register close after materialized clients.
+  ``PHAB_ID=D401288``
+
+* inject-server: Addressed a race condition that could allow for an `AdminHttpServer` to be
+  started, even when the `disableAdminHttpServer` property was set. The `AdminHttpServer` will
+  no longer start prior to the warm-up phase if disabled. The `disableAdminHttpServer` property
+  has also been moved to `com.twitter.server.AdminHttpServer`. `PHAB_ID=D397925``
+
+* finatra: Remove `com.sun.activation` dependency from `build.sbt` file. The dependency
+  duplicates the `javax.activation` dependency and as a result can cause a uber-JAR to fail
+  to build. ``PHAB_ID=D396506``
+
+Added
+~~~~~
+
+* finatra-jackson: (BREAKING API CHANGE) Move all Case Class annotation validation related logic to
+  a new library in finatra-validation. Please update your library dependencies to the new library if
+  you are using case class validations. ``PHAB_ID=D386969``
+
 19.11.0
 -------
 
@@ -28,6 +135,11 @@ Added
 
 Changed
 ~~~~~~~
+
+* finatra-http: (BREAKING API CHANGE) `StreamingResponse[Reader, String]` and
+  `StreamingResponse[AsyncStream, String]` now streaming `String` messages as JSON instead of
+  returning as-is. Concatenating text messages need to be handled from the Controller by users.
+  ``PHAB_ID=D394904``
 
 * finatra-http: (BREAKING API CHANGE) `AsyncStream[Buf] => AsyncStream[String]` and
   `Reader[Buf] => Reader[String]` handlers will always be tread the output as a JSON arrays of

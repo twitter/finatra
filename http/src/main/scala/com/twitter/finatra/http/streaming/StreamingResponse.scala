@@ -29,8 +29,6 @@ final class StreamingResponse[F[_]: ToReader, A: Manifest] private[http] (
   private[this] val head = new AtomicBoolean(true)
   private[this] val reader: Reader[Buf] = implicitly[ToReader[F]].apply(stream) match {
     case bufReader if manifest[A] == manifest[Buf] => bufReader.asInstanceOf[Reader[Buf]]
-    case stringReader if manifest[A] == manifest[String] =>
-      stringReader.map(i => Buf.Utf8(i.asInstanceOf[String]))
     case anyReader => toJsonArray(anyReader)
   }
 

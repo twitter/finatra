@@ -1,34 +1,17 @@
 package com.twitter.streaming
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.conversions.DurationOps._
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finatra.http.{EmbeddedHttpServer, StreamingJsonTestHelper}
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
-import com.twitter.io.Buf
+import com.twitter.io.BufReader
 import com.twitter.util.{Duration, Future}
 
 object StreamingServerFeatureTest {
   val TweetMsgPrefix: String = "msg: "
   val TweetLocation: String = "US"
-
-  /* Response Implicit Utils */
-  implicit class RichResponse(val self: Response) extends AnyVal {
-    def getReaderStrings: Future[Seq[String]] = {
-
-      def readString(acc: String): Future[Seq[String]] = {
-        self.reader.read().flatMap {
-          case Some(Buf.Utf8(str)) =>
-            println("Read:\t" + str.replace("\n", "\\n"))
-            readString(acc + str)
-          case None =>
-            Future.value(acc.split("\n").toSeq)
-        }
-      }
-
-      readString("")
-    }
-  }
 }
 
 class StreamingServerFeatureTest extends FeatureTest {
@@ -43,41 +26,46 @@ class StreamingServerFeatureTest extends FeatureTest {
   lazy val streamingJsonHelper =
     new StreamingJsonTestHelper(server.mapper)
 
+  // these streaming endpoints remove the TweetLocation from the original tweets
   test("streamingRequest#post via Reader") {
-    val readerStrings = verifyStreamingEndpoint("/tweets/streaming/reader")
-    val readerString = await(readerStrings.map(_.head))
-    assert(readerString.equals(TweetMsgPrefix + "1"))
+    val response = verifyStreamingEndpointPost("/tweets/streaming/reader")
+    val firstItem = getFirstItem(response)
+    assert(firstItem.equals(TweetMsgPrefix + "1"))
   }
 
-  test("streamingRequest with resource management") {
-    val readerStrings = verifyStreamingEndpoint("/tweets/streaming/reader_with_resource_management")
-    val readerString = await(readerStrings.map(_.head))
-    assert(readerString.equals(TweetMsgPrefix + "1"))
+  test("streamingRequest#post with resource management") {
+    val response = verifyStreamingEndpointPost("/tweets/streaming/reader_with_resource_management")
+    val firstItem = getFirstItem(response)
+    assert(firstItem.equals(TweetMsgPrefix + "1"))
   }
 
   test("streamingRequest#post via AsyncStream") {
-    val readerStrings = verifyStreamingEndpoint("/tweets/streaming/asyncstream")
-    val readerString = await(readerStrings.map(_.head))
-    assert(readerString.equals(TweetMsgPrefix + "1"))
+    val response = verifyStreamingEndpointPost("/tweets/streaming/asyncstream")
+    val firstItem = getFirstItem(response)
+    assert(firstItem.equals(TweetMsgPrefix + "1"))
   }
 
   test("streaming#post json") {
-    verifyStreamingEndpoint("/tweets")
+    verifyStreamingEndpointPost("/tweets")
   }
 
   /* -----------------------------------------------------------------------------------------------
    *                                              Utils
    * ---------------------------------------------------------------------------------------------*/
-  private def verifyStreamingEndpoint(url: String): Future[Seq[String]] = {
+  private def verifyStreamingEndpointPost(url: String): Response = {
     val request = RequestBuilder.post(url).chunked
     streamTweets(request)
-    val response = server.httpRequest(request)
-    response.getReaderStrings
+    server.httpRequest(request, andExpect = Status.Ok)
+  }
+
+  private def getFirstItem(response: Response): String = {
+    val buf = await(BufReader.readAll(response.reader))
+    server.mapper.parse[JsonNode](buf).get(0).asText()
   }
 
   private def streamTweets(request: Request): Future[Unit] = {
     val tweets = for (i <- 1 to 100) yield {
-      Tweet(text = TweetMsgPrefix + s"$i", location = Some(TweetLocation))
+      Tweet(msg = TweetMsgPrefix + s"$i", location = Some(TweetLocation))
     }
     // Write to request in separate thread
     pool {

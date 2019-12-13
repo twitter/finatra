@@ -3,7 +3,7 @@ package com.twitter.finatra.http.tests.marshalling
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Request, Response, Status, Method => HttpMethod}
 import com.twitter.finatra.http.internal.routing.CallbackConverter
-import com.twitter.finatra.http.modules.{MessageBodyModule, MustacheModule}
+import com.twitter.finatra.http.modules.MessageBodyModule
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.http.streaming.{StreamingRequest, StreamingResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
@@ -17,13 +17,21 @@ import com.twitter.io.{Buf, BufReader, Reader}
 import com.twitter.util.Future
 import scala.concurrent.{Future => ScalaFuture}
 
+object CallbackConverterIntegrationTest {
+  case class Car(name: String) extends CarTrait
+
+  trait CarTrait {
+    val name: String
+  }
+}
+
 class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
+  import CallbackConverterIntegrationTest._
 
   override val injector: Injector =
     TestInjector(
       MessageBodyModule,
       FinatraJacksonModule,
-      MustacheModule,
       FileResolverModule,
       StatsReceiverModule
     ).create
@@ -335,7 +343,7 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
   test("StreamingResponse from Reader") {
     val converted = callbackConverter.convertToFutureResponse(streamingResponseFromReader)
     val response = await(converted(Request()))
-    await(BufReader.readAll(response.reader)).utf8str should equal("Hello, World!")
+    await(BufReader.readAll(response.reader)).utf8str should equal("""["Hello",", ","World","!"]""")
   }
 
   test("StreamingResponse from AsyncStream") {
@@ -554,10 +562,4 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
     val response = await(convertedFunc(Request()))
     response.status should equal(expectedStatus)
   }
-}
-
-case class Car(name: String) extends CarTrait
-
-trait CarTrait {
-  val name: String
 }

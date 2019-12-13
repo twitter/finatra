@@ -1,0 +1,23 @@
+junit_tests(
+    sources = rglobs("*.scala"),
+    dependencies = [
+        "3rdparty/jvm/org/slf4j:slf4j-nop",
+        "finagle/finagle-base-http/src/main/scala",
+        "finatra/http-mustache/src/main/java/com/twitter/finatra/http/annotations",
+        "finatra/http-mustache/src/main/scala/com/twitter/finatra/http/marshalling",
+        "finatra/http-mustache/src/main/scala/com/twitter/finatra/http/modules",
+        "finatra/http-mustache/src/test/resources",
+        "finatra/http/src/main/scala/com/twitter/finatra/http",
+        "finatra/http/src/main/scala/com/twitter/finatra/http:controller",
+        "finatra/http/src/main/scala/com/twitter/finatra/http/filters",
+        "finatra/http/src/main/scala/com/twitter/finatra/http/marshalling",
+        "finatra/http/src/test/scala/com/twitter/finatra/http",
+        "finatra/httpclient/src/main/scala",
+        "finatra/inject/inject-core/src/test/scala:test-deps",
+        "finatra/mustache/src/main/scala/com/twitter/finatra/mustache/marshalling",
+        "finatra/mustache/src/main/scala/com/twitter/finatra/mustache/modules",
+        "finatra/utils/src/main/scala/com/twitter/finatra/modules",
+        "finatra/utils/src/test/scala/com/twitter/finatra/test",
+        "util/util-core/src/main/scala/com/twitter/io",
+    ],
+)

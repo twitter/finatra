@@ -29,6 +29,7 @@ scala_library(
         "finatra/inject/inject-thrift-client/src/main/java:pants-workaround",
         "finatra/inject/inject-thrift/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
+        "finatra/utils/src/main/java/com/twitter/finatra/annotations",
         "scrooge/scrooge-core/src/main/scala",
         "util/util-app/src/main/scala",
         "util/util-core/src/main/scala",

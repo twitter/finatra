@@ -15,6 +15,7 @@ scala_library(
         "finatra/http/src/main/scala/com/twitter/finatra/http/marshalling",
         "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",
         "finatra/jackson/src/main/scala",
+        "finatra/utils/src/main/scala/com/twitter/finatra/utils",
     ],
     exports = [
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",

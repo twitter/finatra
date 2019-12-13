@@ -11,7 +11,6 @@ scala_library(
         "3rdparty/jvm/javax/inject:javax.inject",
         "finagle/finagle-base-http/src/main/scala",
         "finagle/finagle-core/src/main/scala",
-        "finatra/http/src/main/scala/com/twitter/finatra/http:headers",
         "finatra/http/src/main/scala/com/twitter/finatra/http/contexts",
         "finatra/http/src/main/scala/com/twitter/finatra/http/exceptions",
         "finatra/http/src/main/scala/com/twitter/finatra/http/request",

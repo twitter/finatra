@@ -1,7 +1,8 @@
 package com.twitter.inject.thrift.modules
 
-import com.twitter.finagle.thrift.ThriftClientRequest
-import com.twitter.finagle.{ThriftMux}
+import com.twitter.finagle.thrift.{ClientId, ThriftClientRequest}
+import com.twitter.finagle.ThriftMux
+import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.inject.modules.StackClientModuleTrait
 import com.twitter.inject.{Injector, Logging}
 import com.twitter.scrooge.AsClosableMethodName
@@ -10,6 +11,16 @@ import com.twitter.util.Closable
 private[twitter] trait ThriftClientModuleTrait extends StackClientModuleTrait[ThriftClientRequest, Array[Byte], ThriftMux.Client] with Logging {
 
   override protected final def baseClient: ThriftMux.Client = ThriftMux.client
+
+  /**
+   * Override to supply a custom [[ClientId]], e.g.,
+   *   override protected def clientId(injector: Injector): ClientId = ClientId("myclient")
+   * }}}
+   *
+   * @note The default requires a [[ClientId]] be bound to the [[injector]],
+   *       for example via a [[ThriftClientIdModule]].
+   */
+  protected def clientId(injector: Injector): ClientId = injector.instance[ClientId]
 
   /**
    * This method allows for further configuration of the ThriftMux client for parameters not exposed by
@@ -22,7 +33,6 @@ private[twitter] trait ThriftClientModuleTrait extends StackClientModuleTrait[Th
    *       .withStatsReceiver(someOtherScopedStatsReceiver)
    *       .withMonitor(myAwesomeMonitor)
    *       .withTracer(notTheDefaultTracer)
-   *       .withClientId(injector.instance[ClientId])
    *       .withResponseClassifier(ThriftResponseClassifier.ThriftExceptionsAsFailures)
    *   }
    *}}}
@@ -45,6 +55,26 @@ private[twitter] trait ThriftClientModuleTrait extends StackClientModuleTrait[Th
     client: ThriftMux.Client
   ): ThriftMux.Client = configureThriftMuxClient(injector, client)
 
+  // Java friendly: https://issues.scala-lang.org/browse/SI-8905
+  override protected final def newClient(
+    injector: Injector,
+    statsReceiver: StatsReceiver
+  ): ThriftMux.Client = super.newClient(injector, statsReceiver)
+
+  // Java friendly: https://issues.scala-lang.org/browse/SI-8905 - only an issue in Scala 2.11
+  override protected[twitter] def frameworkConfigureClient(
+    injector: Injector,
+    client: ThriftMux.Client
+  ): ThriftMux.Client = super.frameworkConfigureClient(injector, client)
+
+  override protected def initialClientConfiguration(
+    injector: Injector,
+    client: ThriftMux.Client,
+    statsReceiver: StatsReceiver
+  ): ThriftMux.Client =
+    super.initialClientConfiguration(injector, client, statsReceiver)
+    .withClientId(clientId(injector))
+
   /* Private */
 
   override protected def asClosable(client: ThriftMux.Client): Closable = asClosableThriftService(client)
@@ -56,7 +86,7 @@ private[twitter] trait ThriftClientModuleTrait extends StackClientModuleTrait[Th
         val asClosableMethodOpt =
           thriftService
             .getClass
-            .getDeclaredMethods
+            .getMethods
             .find(_.getName == AsClosableMethodName)
         asClosableMethodOpt match {
           case Some(method) =>

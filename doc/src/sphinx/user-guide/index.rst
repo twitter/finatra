@@ -54,6 +54,12 @@ JSON
 - :doc:`json/routing`
 - :doc:`json/validations`
 
+Mustache
+--------
+
+- :doc:`mustache/index`
+- :doc:`mustache/routing`
+
 Files
 -----
 
@@ -125,6 +131,8 @@ Testing
    json/index
    json/routing
    json/validations
+   mustache/index
+   mustache/routing
    files/index
    thrift/basics
    thrift/server

@@ -206,6 +206,21 @@ trait StackClientModuleTrait[
   protected def configureClient(injector: Injector, client: ClientType): ClientType = client
 
   /**
+   * Provide a customized base scope for the [[StatsReceiver]] exposed by this module, e.g.,
+   * *
+   * * {{{
+   *    override protected def scopeStatsReceiver(injector: Injector, statsReceiver: StatsReceiver): StatsReceiver =
+   *     statsReceiver.scope("clnt", "custom_scope")
+   *   }}}
+   *
+   * @note The default scope is "clnt".
+   * @note Changing the default scope can have negative impacts on observability of metrics. Use
+   *       caution when changing this value.
+   */
+  protected def scopeStatsReceiver(injector: Injector, statsReceiver: StatsReceiver): StatsReceiver =
+    statsReceiver.scope("clnt")
+
+  /**
    * This method should be overridden by implementors IF the [[ClientType]] does not
    * extend [[Closable]]. This method should wrap an underlying client as a Closable
    * to ensure that resources are dealt with cleanly upon shutdown.
@@ -250,32 +265,37 @@ trait StackClientModuleTrait[
    * @param statsReceiver The [[StatsReceiver]] to use with the generated [[ClientType]]
    *
    * @return A configured [[ClientType]]
+   *
+   * @note The ability to override this method is exposed for Java compatibility purposes, where the
+   *       type information in this trait can be erased from this trait to a more generic
+   *       [[ClientType]], which can cause Java compilation failures. See
+   *       https://issues.scala-lang.org/browse/SI-8905.
+   *       When overriding this method, it should treat this method as final, outside of providing
+   *       a more specific return type. For example:
+   *
+   *       {{{
+   *         override protected final def newClient(
+   *           injector: Injector,
+   *           statsReceiver: StatsReceiver
+   *         ): Http.Client = super.newClient(injector, statsReceiver)
+   *       }}}
    */
-  protected final def newClient(
+  protected def newClient(
     injector: Injector,
     statsReceiver: StatsReceiver
   ): ClientType = {
-    val clientStatsReceiver = statsReceiver.scope("clnt")
+    val clientStatsReceiver = scopeStatsReceiver(injector, statsReceiver)
 
     // the `baseClient` will be configured with the properties exposed by this trait,
     // followed by any custom configuration provided by overriding `configureClient`,
     // and finally applying the `frameworkConfigureClient` configuration
-    val client =
-      frameworkConfigureClient(
+    frameworkConfigureClient(
+      injector,
+      configureClient(
         injector,
-        configureClient(
-          injector,
-          initialClientConfiguration(injector, baseClient, clientStatsReceiver)
-        )
+        initialClientConfiguration(injector, baseClient, clientStatsReceiver)
       )
-
-    handleCloseOnExit {
-      client match {
-        case closable: Closable => closable
-        case _ => asClosable(client)
-      }
-    }
-    client
+    )
   }
 
   /**
@@ -293,7 +313,9 @@ trait StackClientModuleTrait[
     statsReceiver: StatsReceiver
   ): Service[Req, Rep] = {
     val service = newClient(injector, statsReceiver).newService(dest, label)
-    handleCloseOnExit(service)
+    closeOnExit {
+      Await.result(service.close(defaultClosableGracePeriod), defaultClosableAwaitPeriod)
+    }
     service
   }
 
@@ -302,11 +324,4 @@ trait StackClientModuleTrait[
     injector: Injector,
     client: ClientType
   ): ClientType = client
-
-  /* Private */
-
-  private[this] final def handleCloseOnExit(closable: Closable): Unit = closeOnExit {
-    Await.result(closable.close(defaultClosableGracePeriod), defaultClosableAwaitPeriod)
-  }
-
 }

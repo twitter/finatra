@@ -8,9 +8,19 @@ import com.twitter.finatra.http.jsonpatch.{JsonPatchExceptionMapper, JsonPatchMe
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.tests.integration.doeverything.main.controllers._
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.DomainTestUserReader
-import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions.{BarExceptionMapper, FooBarBazExceptionMapper, FooExceptionMapper}
-import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{AppendToHeaderFilter, IdentityFilter}
-import com.twitter.finatra.http.tests.integration.doeverything.main.modules.{DoEverythingModule, DoEverythingStatsReceiverModule}
+import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions.{
+  BarExceptionMapper,
+  FooBarBazExceptionMapper,
+  FooExceptionMapper
+}
+import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{
+  AppendToHeaderFilter,
+  IdentityFilter
+}
+import com.twitter.finatra.http.tests.integration.doeverything.main.modules.{
+  DoEverythingModule,
+  DoEverythingStatsReceiverModule
+}
 import com.twitter.finatra.http.{Controller, HttpServer}
 import com.twitter.finatra.httpclient.modules.HttpClientModule
 
@@ -115,7 +125,6 @@ class DoEverythingServer extends HttpServer {
         IdentityFilter,
         DoNothingController
       ]
-      .add[MustacheController]
   }
 
   override protected def warmup(): Unit = {

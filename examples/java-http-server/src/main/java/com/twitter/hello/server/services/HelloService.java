@@ -2,17 +2,26 @@ package com.twitter.hello.server.services;
 
 import javax.inject.Inject;
 
+import scala.reflect.ManifestFactory;
+
 import com.twitter.finagle.http.Method;
 import com.twitter.finagle.http.Request;
 import com.twitter.finagle.http.Response;
+import com.twitter.finatra.http.marshalling.MessageBodyManager;
 import com.twitter.finatra.http.response.ResponseBuilder;
+import com.twitter.hello.server.domain.Cat;
+import com.twitter.hello.server.domain.Dog;
 
 public class HelloService {
   private final ResponseBuilder response;
+  private final MessageBodyManager messageBodyManager;
 
   @Inject
-  public HelloService(ResponseBuilder response) {
+  public HelloService(
+      ResponseBuilder response,
+      MessageBodyManager messageBodyManager) {
     this.response = response;
+    this.messageBodyManager = messageBodyManager;
   }
 
   /**
@@ -27,6 +36,18 @@ public class HelloService {
    */
   public GoodbyeResponse goodbye(Request request) {
     return new GoodbyeResponse("guest", "cya", 123);
+  }
+
+  /**
+   * turns a cat into a dog
+   */
+  public Response cat(Request request) {
+    Cat cat = messageBodyManager.read(request, ManifestFactory.classType(Cat.class));
+    Dog dog = new Dog();
+    dog.setName(cat.getName());
+    dog.setColor(cat.getColor());
+
+    return response.ok(dog);
   }
 
   /**

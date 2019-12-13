@@ -77,23 +77,3 @@ scala_library(
         "finatra/inject/inject-slf4j/src/main/scala",
     ],
 )
-
-# HEADER CONSTANTS
-scala_library(
-    name = "headers",
-    sources = [
-        "HttpHeaders.scala",
-    ],
-    compiler_option_sets = {"fatal_warnings"},
-    provides = scala_artifact(
-        org = "com.twitter",
-        name = "finatra-http-headers",
-        repo = artifactory,
-    ),
-    strict_deps = "True",
-    tags = {
-        # users should use finagle/finagle-base-http/src/main/scala/
-        # com.twitter.finagle.http.Fields.scala
-        "deprecated",
-    },
-)

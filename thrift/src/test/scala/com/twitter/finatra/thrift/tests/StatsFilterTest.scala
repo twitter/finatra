@@ -34,6 +34,10 @@ class StatsFilterTest extends Test {
     withService(service) {
       Await.ready(service("hi"), 2.seconds)
       statsReceiver.counters(List("exceptions")) should equal(1)
+      statsReceiver.counters(List("per_method_stats", "echo", "ignored")) should equal(1)
+      statsReceiver.counters(
+        List("per_method_stats", "echo", "ignored", "com.twitter.finagle.Failure")
+      ) should equal(1)
       statsReceiver.counters(List("per_method_stats", "echo", "failures")) should equal(0)
       statsReceiver.counters(List("per_method_stats", "echo", "success")) should equal(0)
       Await.ready(service("hello"), 2.seconds)
@@ -43,7 +47,6 @@ class StatsFilterTest extends Test {
       statsReceiver.stats.get(List("per_method_stats", "echo", "latency_ms")) should not be None
     }
   }
-
 
   test("successful request") {
     val statsFilter = newFilter(
@@ -59,6 +62,8 @@ class StatsFilterTest extends Test {
       Await.ready(service(request), 2.seconds)
       // top-level exceptions
       statsReceiver.counters(List("exceptions")) should equal(0)
+      // per method ignored
+      statsReceiver.counters(List("per_method_stats", "echo", "ignored")) should equal(0)
       // per method failures
       statsReceiver.counters(List("per_method_stats", "echo", "failures")) should equal(0)
       // per method success
@@ -83,9 +88,12 @@ class StatsFilterTest extends Test {
       // top-level exceptions
       statsReceiver.counters(List("exceptions")) should equal(1)
       statsReceiver.counters(List("exceptions", "java.lang.Exception")) should equal(1)
+      // per method ignored
+      statsReceiver.counters(List("per_method_stats", "echo", "ignored")) should equal(0)
       // per method failures
       statsReceiver.counters(List("per_method_stats", "echo", "failures")) should equal(1)
-      statsReceiver.counters(List("per_method_stats", "echo", "failures", "java.lang.Exception")) should equal(1)
+      statsReceiver.counters(List("per_method_stats", "echo", "failures", "java.lang.Exception")) should equal(
+        1)
       // per method success
       statsReceiver.counters(List("per_method_stats", "echo", "success")) should equal(0)
       // per method latency_ms
@@ -114,12 +122,19 @@ class StatsFilterTest extends Test {
       Await.ready(service(request), 2.seconds)
       // top-level exceptions
       statsReceiver.counters(List("exceptions")) should equal(1)
-      statsReceiver.counters(List("exceptions", "java.lang.IllegalArgumentException")) should equal(1)
+      statsReceiver.counters(List("exceptions", "java.lang.IllegalArgumentException")) should equal(
+        1)
+      // per method ignored
+      statsReceiver.counters(List("per_method_stats", "echo", "ignored")) should equal(0)
       // per method failures
       statsReceiver.counters(List("per_method_stats", "echo", "failures")) should equal(0)
       // per method success
       statsReceiver.counters(List("per_method_stats", "echo", "success")) should equal(1)
-      statsReceiver.counters(List("per_method_stats", "echo", "success", "java.lang.IllegalArgumentException")) should equal(1)
+      statsReceiver.counters(List(
+        "per_method_stats",
+        "echo",
+        "success",
+        "java.lang.IllegalArgumentException")) should equal(1)
       // per method latency_ms
       statsReceiver.stats.get(List("per_method_stats", "echo", "latency_ms")) should not be None
     }
@@ -146,6 +161,8 @@ class StatsFilterTest extends Test {
       Await.ready(service(request), 2.seconds)
       // top-level exceptions -- no exception is recorded
       statsReceiver.counters(List("exceptions")) should equal(0)
+      // per method ignored
+      statsReceiver.counters(List("per_method_stats", "echo", "ignored")) should equal(0)
       // per method failures
       statsReceiver.counters(List("per_method_stats", "echo", "failures")) should equal(1)
       // per method success

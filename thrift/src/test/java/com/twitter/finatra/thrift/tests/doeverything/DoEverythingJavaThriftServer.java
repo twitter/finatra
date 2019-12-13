@@ -1,16 +1,8 @@
 package com.twitter.finatra.thrift.tests.doeverything;
 
-import java.util.Collection;
-
-import com.google.common.collect.ImmutableList;
-import com.google.inject.Module;
-
 import com.twitter.app.Flaggable;
-import com.twitter.finagle.Filter;
-import com.twitter.finagle.Service;
 import com.twitter.finagle.ThriftMux;
 import com.twitter.finagle.tracing.NullTracer$;
-import com.twitter.finatra.annotations.DarkTrafficFilterType;
 import com.twitter.finatra.thrift.AbstractThriftServer;
 import com.twitter.finatra.thrift.filters.AccessLoggingFilter;
 import com.twitter.finatra.thrift.filters.ExceptionMappingFilter;
@@ -40,11 +32,6 @@ public class DoEverythingJavaThriftServer extends AbstractThriftServer {
     }
 
     @Override
-    public Collection<Module> javaModules() {
-        return ImmutableList.<Module>of(new DoEverythingJavaDarkTrafficFilterModule());
-    }
-
-    @Override
     public String name() {
         return this.name;
     }
@@ -54,13 +41,6 @@ public class DoEverythingJavaThriftServer extends AbstractThriftServer {
         return server
             .withMonitor(NullMonitor$.MODULE$)
             .withTracer(NullTracer$.MODULE$);
-    }
-
-    @Override
-    public Service<byte[], byte[]> configureService(Service<byte[], byte[]> service) {
-        return injector()
-            .instance(Filter.TypeAgnostic.class, DarkTrafficFilterType.class)
-            .andThen(service);
     }
 
     @Override

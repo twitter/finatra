@@ -10,6 +10,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.twitter.finagle.http.Fields;
+import com.twitter.finagle.http.MediaType;
 import com.twitter.finagle.http.Request;
 import com.twitter.finagle.http.Response;
 import com.twitter.finagle.http.Status;
@@ -44,7 +46,7 @@ public class HelloWorldServerFeatureTest extends Assert {
 
     @After
     public void printStats() throws Exception {
-        SERVER.printStats(true);
+        SERVER.printStats();
         SERVER.clearStats();
     }
 
@@ -129,6 +131,19 @@ public class HelloWorldServerFeatureTest extends Assert {
         Response response = SERVER.httpRequest(request);
         assertEquals(Status.Ok(), response.status());
         assertEquals("3.1459", response.contentString());
+    }
+
+    /** test catFancy endpoint */
+    @Test
+    public void testCatFancy() {
+        Request request = RequestBuilder.post("/catFancy");
+        request.setContentType(MediaType.JsonUtf8(), "UTF-8");
+        request.setContentString("{\"name\":\"Emperor Norton\", \"color\":\"Chartreuse\"}");
+        Response response = SERVER.httpRequest(request);
+        assertEquals(MediaType.PlainTextUtf8(), response.headerMap().apply(Fields.ContentType()));
+        assertEquals(
+            "Hello! My name is Emperor Norton the dog. I am the color of Chartreuse.",
+            response.getContentString());
     }
 
     /** test anyMethod endpoint */

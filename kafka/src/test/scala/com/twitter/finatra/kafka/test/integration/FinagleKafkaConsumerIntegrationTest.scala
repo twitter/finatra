@@ -1,10 +1,11 @@
 package com.twitter.finatra.kafka.test.integration
 
-import com.twitter.finatra.kafka.consumers.FinagleKafkaConsumerBuilder
+import com.twitter.finatra.kafka.consumers.{FinagleKafkaConsumer, FinagleKafkaConsumerBuilder}
 import com.twitter.finatra.kafka.domain.{AckMode, KafkaGroupId}
-import com.twitter.finatra.kafka.producers.FinagleKafkaProducerBuilder
+import com.twitter.finatra.kafka.producers.{FinagleKafkaProducer, FinagleKafkaProducerBuilder}
 import com.twitter.finatra.kafka.test.EmbeddedKafka
 import com.twitter.util.{Duration, Time}
+import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.common.serialization.Serdes
 import scala.collection.JavaConverters._
@@ -13,7 +14,7 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
   private val testTopic = kafkaTopic(Serdes.String, Serdes.String, "test-topic")
   private val emptyTestTopic = kafkaTopic(Serdes.String, Serdes.String, "empty-test-topic")
 
-  private def getTestConsumer() = {
+  private def buildTestConsumer(): FinagleKafkaConsumer[String, String] = {
     FinagleKafkaConsumerBuilder()
       .dest(brokers.map(_.brokerList()).mkString(","))
       .clientId("test-consumer")
@@ -24,7 +25,7 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
       .build()
   }
 
-  private def getTestProducer() = {
+  private def buildTestProducer(): FinagleKafkaProducer[String, String] = {
     FinagleKafkaProducerBuilder()
       .dest(brokers.map(_.brokerList()).mkString(","))
       .clientId("test-producer")
@@ -34,17 +35,7 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
       .build()
   }
 
-  private def getNativeTestProducer() = {
-    FinagleKafkaProducerBuilder()
-      .dest(brokers.map(_.brokerList()).mkString(","))
-      .clientId("test-producer")
-      .ackMode(AckMode.ALL)
-      .keySerializer(Serdes.String.serializer)
-      .valueSerializer(Serdes.String.serializer)
-      .buildClient()
-  }
-
-  private def getNativeTestConsumer() = {
+  private def buildNativeTestConsumer(): KafkaConsumer[String, String] = {
     FinagleKafkaConsumerBuilder()
       .dest(brokers.map(_.brokerList()).mkString(","))
       .clientId("test-consumer")
@@ -56,7 +47,7 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
   }
 
   test("endOffset returns 0 for empty topic with no events") {
-    val consumer = getTestConsumer()
+    val consumer = buildTestConsumer()
     val emptyTopicPartition = new TopicPartition(emptyTestTopic.topic, 0)
     try {
       assert(await(consumer.endOffset(emptyTopicPartition)) == 0)
@@ -66,8 +57,8 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
   }
 
   test("endOffset increases by 1 after publish with native consumer") {
-    val producer = getTestProducer()
-    val consumer = getNativeTestConsumer()
+    val producer = buildTestProducer()
+    val consumer = buildNativeTestConsumer()
     val topicPartition = new TopicPartition(testTopic.topic, 0)
     val initEndOffset = consumer.endOffsets(List(topicPartition).asJava).get(topicPartition)
 
@@ -75,14 +66,14 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
       await(producer.send(testTopic.topic, "Foo", "Bar", System.currentTimeMillis))
       val finishEndOffset = consumer.endOffsets(List(topicPartition).asJava).get(topicPartition)
       assert(finishEndOffset == initEndOffset + 1)
-     } finally {
+    } finally {
       await(producer.close())
     }
   }
 
   test("endOffset increases by 1 after publish") {
-    val producer = getTestProducer()
-    val consumer = getTestConsumer()
+    val producer = buildTestProducer()
+    val consumer = buildTestConsumer()
     val topicPartition = new TopicPartition(testTopic.topic, 0)
     val initEndOffset = await(consumer.endOffset(topicPartition))
 
@@ -96,8 +87,8 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
   }
 
   test("endOffset increases by 3 after 3 publishes") {
-    val producer = getTestProducer()
-    val consumer = getTestConsumer()
+    val producer = buildTestProducer()
+    val consumer = buildTestConsumer()
     val topicPartition = new TopicPartition(testTopic.topic, 0)
     val initEndOffset = await(consumer.endOffset(topicPartition))
 
@@ -113,7 +104,7 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
   }
 
   test("endOffsets returns empty map for empty sequence of partitions") {
-    val consumer = getTestConsumer()
+    val consumer = buildTestConsumer()
     val emptyEndOffsets = await(consumer.endOffsets(Seq.empty[TopicPartition]))
     try {
       assert(emptyEndOffsets.size == 0)
@@ -123,7 +114,7 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
   }
 
   test("endOffsets times out for non-existent topic") {
-    val consumer = getTestConsumer()
+    val consumer = buildTestConsumer()
     val notExistTopicPartition = new TopicPartition("topic-does-not-exist", 0)
     try {
       assertThrows[org.apache.kafka.common.errors.TimeoutException](
@@ -134,7 +125,7 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
   }
 
   test("endOffset times out for non-existent topic") {
-    val consumer = getTestConsumer()
+    val consumer = buildTestConsumer()
     val notExistTopicPartition = new TopicPartition("topic-does-not-exist", 0)
     try {
       assertThrows[org.apache.kafka.common.errors.TimeoutException](
@@ -145,12 +136,12 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
   }
 
   test("close with Time.Bottom deadline should not throw exception") {
-    val consumer = getTestConsumer()
+    val consumer = buildTestConsumer()
     await(consumer.close(Time.Bottom))
   }
 
   test("close with valid deadline should not throw exception") {
-    val consumer = getTestConsumer()
+    val consumer = buildTestConsumer()
     await(consumer.close(Time.now + Duration.fromSeconds(10)))
   }
 

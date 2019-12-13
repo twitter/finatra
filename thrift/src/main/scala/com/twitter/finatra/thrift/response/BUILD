@@ -10,8 +10,6 @@ scala_library(
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/net/codingwell:scala-guice",
-        "3rdparty/jvm/org/slf4j:jcl-over-slf4j",
-        "3rdparty/jvm/org/slf4j:log4j-over-slf4j",
         "finagle/finagle-core/src/main/scala",
         "finagle/finagle-thrift/src/main/scala",
         "twitter-server/server/src/main/scala",

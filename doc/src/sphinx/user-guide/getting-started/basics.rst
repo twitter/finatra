@@ -1,7 +1,7 @@
 .. _basics:
 
 Dependency Injection
---------------------
+====================
 
 The Finatra framework uses `Dependency Injection <https://en.wikipedia.org/wiki/Dependency_injection>`_ (DI) and it is important to understand the concept -- specifically how it relates to effective testing which helps to explain the motivations of the framework.
 
@@ -37,30 +37,38 @@ As mentioned, it is also possible to do this without using `Guice <https://githu
     }
 
 Dependency Injection and Testing
---------------------------------
+================================
 
 There are many resources around this topic but we recommend taking a look at `The Tao of Testing: Chapter 3 - Dependency Injection <https://jasonpolites.github.io/tao-of-testing/ch3-1.1.html>`__ as a primer for how `Dependency Injection <https://en.wikipedia.org/wiki/Dependency_injection>`_ can help to write more testable code.
 
 Dependency Injection Best Practices
------------------------------------
+===================================
 
 To aid in making code more testable here are a few best practices to consider when working with Dependency Injection. These are generally good to follow regardless of the dependency injection framework being used and some are described in detail in the Google `Guice documentation <https://github.com/google/guice/wiki>`__.
 
 Use Constructor Injection
-=========================
+-------------------------
 
 Finatra highly recommends using constructor injection to create immutable objects. Immutability allows objects to be simple, shareable and composable. For example:
 
 .. code:: scala
+
+    import javax.inject.Inject
 
     class RealPaymentService @Inject()(
       paymentQueue: PaymentQueue, 
       notifier: Notifier 
     )
 
+.. important::
+
+    While it may look odd, please note the position of the `@Inject()` on the Scala class constructor. The parens are needed as the syntax requires constructor annotations to have exactly one parameter list, possibly empty.
+
 or in Java
 
 .. code:: java
+
+    import javax.inject.Inject;
 
     public class RealPaymentService {
       private final PaymentQueue paymentQueue;
@@ -76,9 +84,94 @@ or in Java
       }
     }
 
-This clearly expresses that the `RealPaymentService` class requires a `PaymentQueue` and a `Notifier` for instantiation and allows for instantiation via injector *or* manual instantiation of the class. This way of defining injectable members for a class is preferable to `Field Injection <https://github.com/google/guice/wiki/Injections#field-injection>`__ or `Method Injection <https://github.com/google/guice/wiki/Injections#method-injection>`__. 
+This clearly expresses that the `RealPaymentService` class requires a `PaymentQueue` and a `Notifier` for instantiation and allows for instantiation via injector *or* manual instantiation of the class. This way of defining injectable members for a class is preferable to `Field Injection <https://github.com/google/guice/wiki/Injections#field-injection>`__ or `Method Injection <https://github.com/google/guice/wiki/Injections#method-injection>`__.
 
-If you want to be able to inject a type that is not a class you own, then prefer defining a `Module <./modules.html>`__ which can provide an (ideally immutable) instance to the object graph.
+.. admonition:: Do not use constructor default parameter values
+
+    Scala allows for `default parameter values <https://docs.scala-lang.org/tour/default-parameter-values.html>`_. 
+    E.g., you can define a class with a constructor like so:
+
+    .. code:: scala
+        
+        class RealPaymentService (
+          paymentQueue: PaymentQueue = new DefaultPaymentQueue,
+          notifier: Notifier = new DefaultNotifier
+        )
+
+    However, if you want to allow for the injector to be able to create this class by adding `@Inject()` to the constructor it is highly recommended that you **do not provide a default value for any constructor parameters** as this can confuse the injector. 
+
+    If you want to provide an instance with defaulted state for injection, prefer providing the instance via a defined 
+    `Module <./modules.html>`__ instead.
+
+AssistedInject
+~~~~~~~~~~~~~~
+
+There may be cases where you do not want the injector to provide all arguments of the constructor. In these cases 
+you could use `AssistedInject <https://github.com/google/guice/wiki/AssistedInject>`_.
+
+.. code:: scala
+
+  import com.google.inject.assistedinject.Assisted
+  import javax.inject.Inject
+
+  class RealPaymentService @Inject()(
+    @Assisted paymentQueue: PaymentQueue, 
+    notifier: Notifier 
+  )
+
+where "assisted" here means that injection will be *assisted* by having a user-supplied value provided for 
+the annotated field to use in constructing an instance of the object.
+
+You would typically also create a "factory" which exposes a method that accepts the `@Assisted` annotated field:
+
+.. code:: scala
+
+  trait RealPaymentServiceFactory {
+    def create(paymentQueue: PaymentQueue): RealPaymentService
+  }
+
+Then bind this as an "assisted factory" in a `TwitterModule` and include the module in your server's 
+list of modules. 
+
+.. code:: scala
+    
+    import com.twitter.inject.TwitterModule
+
+    class PaymentServiceModule extends TwitterModule {
+
+      override def configure(): Unit = {
+        bindAssistedFactory[RealPaymentServiceFactory]()
+      }
+    }
+
+To obtain an instance you would get a reference to the factory from the injector and call the 
+factory method:
+
+.. code:: scala
+
+    val factory = injector.instance[RealPaymentServiceFactory]
+    val paymentService: RealPaymentService = factory.create(new MyPaymentQueue)
+
+For Java examples please see the `Guice documentation <https://github.com/google/guice/wiki/AssistedInject>`_.
+
+Field Injection (not recommended)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you want to do field injection in a Scala class (again, not recommended), you would do so inside of the defined class on a mutable member of the class. Note that this introduces mutability into your class and is not something generally recommended.
+
+.. code:: scala
+
+    import javax.inject.Inject
+
+    class LessIdealPaymentService {
+      @Inject 
+      private var notifier: Notifier = _
+    }
+
+Injecting third-party code
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you want to be able to inject a type that is not a class you own -- meaning you cannot annotate the class or its constructor since it is not your code but you want to be able to inject an instance of the type, then prefer defining a `Module <./modules.html>`__ which can provide an (ideally immutable) instance of the class to the object graph.
 
 .. note::
 
@@ -87,7 +180,7 @@ If you want to be able to inject a type that is not a class you own, then prefer
   We leave reducing the visibility of constructors to your discretion as a matter of what makes sense for your project or team.
 
 Inject direct dependencies
-==========================
+--------------------------
 
 Avoid injecting an object simply as a way to get another object. For instance do not inject a `Customer` simply to obtain an `Account`:
 
@@ -121,7 +214,7 @@ Injecting this binding makes the code simpler:
 
 
 Avoid cyclic dependencies
-=========================
+-------------------------
 
 This is good practice in general and cycles often reflect insufficiently granular decomposition. For instance, assume you have a `Store`, a `Boss`, and a `Clerk`.
 
@@ -195,7 +288,7 @@ Use a Provider
 Note: you should ensure in this case that the `Store` is bound as a `Singleton` (otherwise the `Provider.get` will instantiate a new `Store` which ends up in the cycle).
 
 Avoid I/O with Providers
-========================
+------------------------
 
 As we saw in the above example, Providers can be a useful API but it lacks some semantics that you should be aware of:
 
@@ -204,7 +297,7 @@ As we saw in the above example, Providers can be a useful API but it lacks some 
 * There is no retry for obtaining the instance from a Provider. If `Provider.get` is unavailable, multiple calls to `get` may simply throw multiple exceptions.
 
 Avoid conditional logic in modules
-==================================
+----------------------------------
 
 It can be tempting to create `Modules <./modules.html>`__ which have conditional logic and can be configured to operate differently for different environments. We strongly recommend avoiding this pattern and the framework provides utilities (including `Flags <./flags.html>`__) to help in this regard. 
 
@@ -238,12 +331,14 @@ Please avoid doing this:
       }
     }
 
-We **strongly** recommend that *only production code ever be deployed to production* and thus configuration which should change per environment be externalized via `Flags <./flags.html>`__ and logic that should change per environment be encapsulated within `override modules <../testing/override_modules.html>`__ (that are not located with the production code -- e.g., production code in `src/main/scala` and test code in `src/test/scala`).
+.. important:: 
+
+  We **strongly** recommend that *only production code ever be deployed to production* and thus configuration which should change per environment be externalized via `Flags <./flags.html>`__ and logic that should differ per environment be encapsulated within `override modules <../testing/override_modules.html>`__ (that are not located with the production code -- e.g., production code in `src/main/scala` and test code in `src/test/scala`).
 
 For more information see the sections on `Flags <./flags.html>`__, `Modules <./modules.html>`__, and `Override Modules <../testing/override_modules.html>`__.
 
 Make use of the `TwitterModule` lifecycle
-=========================================
+-----------------------------------------
 
 Finatra adds a lifecycle to Modules which is directly tied to the `server (or application) lifecycle <./lifecycle.html>`__ in which the module is used. This allows users to overcome some of the limitations of a standard `AbstractModule`.
 

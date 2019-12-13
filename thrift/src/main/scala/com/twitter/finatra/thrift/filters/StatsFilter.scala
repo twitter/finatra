@@ -11,26 +11,32 @@ import com.twitter.util.{Future, Memoize, Throw, Try}
 import javax.inject.{Inject, Singleton}
 
 private object StatsFilter {
+
   /** INTENDED FOR INTERNAL USE ONLY */
   object ThriftMethodStats {
     def apply(stats: StatsReceiver): ThriftMethodStats =
       ThriftMethodStats(
-        latencyStat = stats.stat("latency_ms"),
-        successCounter = stats.counter("success"),
         failuresCounter = stats.counter("failures"),
         failuresScope = stats.scope("failures"),
-        successesScope = stats.scope("success")
+        ignoredCounter = stats.counter("ignored"),
+        ignoredScope = stats.scope("ignored"),
+        latencyStat = stats.stat("latency_ms"),
+        successCounter = stats.counter("success"),
+        successesScope = stats.scope("success"),
+        requestsCounter = stats.counter("requests")
       )
   }
 
   /** INTENDED FOR INTERNAL USE ONLY */
   case class ThriftMethodStats(
-    latencyStat: Stat,
-    successCounter: Counter,
     failuresCounter: Counter,
     failuresScope: StatsReceiver,
-    successesScope: StatsReceiver
-  )
+    ignoredCounter: Counter,
+    ignoredScope: StatsReceiver,
+    latencyStat: Stat,
+    successCounter: Counter,
+    successesScope: StatsReceiver,
+    requestsCounter: Counter)
 }
 
 /**
@@ -42,6 +48,8 @@ private object StatsFilter {
  *
  * {{{
  *   per_method_stats/foo/failures 0
+ *   per_method_stats/foo/ignored 0
+ *   per_method_stats/foo/requests 1
  *   per_method_stats/foo/success 1
  *   per_method_stats/foo/latency_ms 43.000000 [43.0]
  * }}}
@@ -53,16 +61,33 @@ private object StatsFilter {
  *   exceptions/java.lang.Exception 1
  *   per_method_stats/foo/failures 1
  *   per_method_stats/foo/failures/java.lang.Exception 1
+ *   per_method_stats/foo/ignored 0
+ *   per_method_stats/foo/requests 1
  *   per_method_stats/foo/success 0
  *   per_method_stats/foo/latency_ms 43.000000 [43.0]
  * }}}
  *
+ * Example stats, for a failed request to a method named `foo` with a [[ResponseClassifier]] which
+ * classifies [[java.lang.Exception]] as Ignorable:
+ *
+ * {{{
+ *   exceptions 1
+ *   exceptions/java.lang.Exception 1
+ *   per_method_stats/foo/failures 0
+ *   per_method_stats/foo/ignored 1
+ *   per_method_stats/foo/ignored/java.lang.Exception 1
+ *   per_method_stats/foo/requests 1
+ *   per_method_stats/foo/success 0
+ *   per_method_stats/foo/latency_ms 43.000000 [43.0]
+ * }}}
+ *
+ * requests == success + failures + ignored
+ * The logical success rate for a method can be calculated as `success / (success + failures)`
  *
  * @note It is expected that this Filter is inserted ABOVE the [[ExceptionMappingFilter]] in a
  *       given filter chain, e.g., `StatsFilter.andThen(ExceptionMappingFilter)`.
  *       For the response flow, [[StatsFilter]] would happen AFTER [[ExceptionMappingFilter]] and
  *       calculate mapped result.
- *
  * @param statsReceiver      the [[com.twitter.finagle.stats.StatsReceiver]] to which
  *                           to record stats.
  * @param responseClassifier a [[ThriftResponseClassifier]] used to determine when a response
@@ -71,9 +96,9 @@ private object StatsFilter {
 @Singleton
 class StatsFilter @Inject()(
   statsReceiver: StatsReceiver,
-  responseClassifier: ThriftResponseClassifier
-) extends Filter.TypeAgnostic
-  with Logging {
+  responseClassifier: ThriftResponseClassifier)
+    extends Filter.TypeAgnostic
+    with Logging {
 
   import StatsFilter._
 
@@ -106,7 +131,8 @@ class StatsFilter @Inject()(
      * is classified as a "success", we incr the exception counter(s) (in addition to the "success"
      * or "failures" counters). Conversely, if a response (non-exception) is returned which is classified
      * as a "failure", we incr the "failures" counter but we do not incr any exception counter. Finally,
-     * responses or exceptions classified as "ignorable" only increment the exception counter(s).
+     * for responses or exceptions classified as "ignorable", we incr the "ignored" counter and
+     * the exception counter(s).
      *
      * {{{
      *                   *-----------------*---------------------------*
@@ -118,18 +144,16 @@ class StatsFilter @Inject()(
      *  *----------------*-----------------*---------------------------*
      *  |    FAILED      | failed.incr()   | failed.incr(), exc.incr() |
      *  *----------------*-----------------*---------------------------*
-     *  |   IGNORABLE    | (no-op)         | exc.incr()                |
+     *  |   IGNORABLE    | (no-op)         | ignored.incr(), exc.incr()|
      *  *----------------*-----------------*---------------------------*
      * }}}
      *
      * @see [[com.twitter.finagle.service.StatsFilter]]
      * @see [[com.twitter.finagle.service.ResponseClassifier]]
      */
-    def apply(
-      request: T,
-      service: Service[T, U]
-    ): Future[U] = {
-      val stats: Option[ThriftMethodStats] = MethodMetadata.current.map(m => perMethodStats(m.methodName))
+    def apply(request: T, service: Service[T, U]): Future[U] = {
+      val stats: Option[ThriftMethodStats] =
+        MethodMetadata.current.map(m => perMethodStats(m.methodName))
 
       executeRequest(stats, request, service).respond { response =>
         handleResponse(stats, request, response)
@@ -141,7 +165,8 @@ class StatsFilter @Inject()(
     private[this] def executeRequest(
       stats: Option[ThriftMethodStats],
       request: T,
-      service: Service[T, U]): Future[U] = {
+      service: Service[T, U]
+    ): Future[U] = {
 
       stats
         .map(perMethodStats => timeFuture(perMethodStats.latencyStat)(service(request)))
@@ -151,21 +176,26 @@ class StatsFilter @Inject()(
     private[this] def handleResponse(
       stats: Option[ThriftMethodStats],
       request: T,
-      response: Try[U]): Unit = {
-      responseClassifier.applyOrElse(
+      response: Try[U]
+    ): Unit = {
+      stats.foreach(_.requestsCounter.incr())
+      val responseClass = responseClassifier.applyOrElse(
         ReqRep(request, response),
         ResponseClassifier.Default
-      ) match {
+      )
+      responseClass match {
         case ResponseClass.Ignorable =>
+          stats.foreach(_.ignoredCounter.incr())
           countExceptions(response)
+          countPerMethodStats(stats, responseClass = responseClass, response)
         case ResponseClass.Failed(_) =>
           stats.foreach(_.failuresCounter.incr())
           countExceptions(response)
-          countPerMethodStats(stats, success = false, response)
+          countPerMethodStats(stats, responseClass = responseClass, response)
         case ResponseClass.Successful(_) =>
           stats.foreach(_.successCounter.incr())
           countExceptions(response)
-          countPerMethodStats(stats, success = true, response)
+          countPerMethodStats(stats, responseClass = responseClass, response)
       }
     }
 
@@ -174,20 +204,27 @@ class StatsFilter @Inject()(
         exceptionCounter.incr()
         exceptionStatsReceiver.counter(e.getClass.getName).incr()
       case _ =>
-        // do nothing
+      // do nothing
     }
 
     private[this] def countPerMethodStats(
       stats: Option[ThriftMethodStats],
-      success: Boolean,
-      response: Try[_]): Unit = response match {
+      responseClass: ResponseClass,
+      response: Try[_]
+    ): Unit = response match {
       case Throw(e) =>
         stats.foreach { perMethodStats =>
-          if (success) perMethodStats.successesScope.counter(e.getClass.getName).incr()
-          else perMethodStats.failuresScope.counter(e.getClass.getName).incr()
+          responseClass match {
+            case ResponseClass.Successful(_) =>
+              perMethodStats.successesScope.counter(e.getClass.getName).incr()
+            case ResponseClass.Failed(_) =>
+              perMethodStats.failuresScope.counter(e.getClass.getName).incr()
+            case ResponseClass.Ignorable =>
+              perMethodStats.ignoredScope.counter(e.getClass.getName).incr()
+          }
         }
       case _ =>
-        // do nothing
+      // do nothing
     }
   }
 }

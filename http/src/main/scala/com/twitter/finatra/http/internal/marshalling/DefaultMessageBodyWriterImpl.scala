@@ -1,34 +1,72 @@
 package com.twitter.finatra.http.internal.marshalling
 
 import com.twitter.finagle.http.MediaType
-import com.twitter.finatra.http.marshalling.{DefaultMessageBodyWriter, WriterResponse}
+import com.twitter.finatra.http.marshalling.{
+  DefaultMessageBodyWriter,
+  MessageBodyFlags,
+  WriterResponse
+}
 import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.utils.{AutoClosable, FileResolver}
 import com.twitter.inject.annotations.Flag
+import com.twitter.io.{Buf, StreamIO}
+import java.io.{BufferedInputStream, File, FileInputStream, InputStream}
 import javax.inject.{Inject, Singleton}
+import scala.runtime.BoxedUnit
 
 @Singleton
 private[finatra] class DefaultMessageBodyWriterImpl @Inject()(
-  @Flag("http.response.charset.enabled") includeContentTypeCharset: Boolean,
-  mapper: FinatraObjectMapper
-) extends DefaultMessageBodyWriter {
+  @Flag(MessageBodyFlags.ResponseCharsetEnabled) includeContentTypeCharset: Boolean,
+  fileResolver: FileResolver,
+  mapper: FinatraObjectMapper)
+    extends DefaultMessageBodyWriter {
 
-  private val jsonCharset = {
+  private[this] val applicationJson =
     if (includeContentTypeCharset) MediaType.JsonUtf8
     else MediaType.Json
-  }
 
-  private val plainText = {
+  private[this] val plainText =
     if (includeContentTypeCharset) MediaType.PlainTextUtf8
     else MediaType.PlainText
-  }
+
+  private[this] val octetStream = MediaType.OctetStream
 
   /* Public */
 
   override def write(obj: Any): WriterResponse = {
-    if (isPrimitiveOrWrapper(obj.getClass))
-      WriterResponse(plainText, obj.toString)
-    else
-      WriterResponse(jsonCharset, mapper.writeValueAsBytes(obj))
+    obj match {
+      case null =>
+        WriterResponse.EmptyResponse
+      case buf: Buf =>
+        WriterResponse(octetStream, buf)
+      case bytes: Array[Byte] =>
+        WriterResponse(octetStream, bytes)
+      case "" =>
+        WriterResponse.EmptyResponse
+      case Unit =>
+        WriterResponse.EmptyResponse
+      case _: BoxedUnit =>
+        WriterResponse.EmptyResponse
+      case opt if opt == None =>
+        WriterResponse.EmptyResponse
+      case str: String =>
+        WriterResponse(plainText, str)
+      case is: InputStream =>
+        AutoClosable.tryWith(is) { closable =>
+          WriterResponse(octetStream, StreamIO.buffer(closable).toByteArray)
+        }
+      case file: File =>
+        AutoClosable.tryWith(new BufferedInputStream(new FileInputStream(file))) { closable =>
+          WriterResponse(
+            contentType = fileResolver.getContentType(file.getName),
+            StreamIO.buffer(closable).toByteArray)
+        }
+      case _ =>
+        if (isPrimitiveOrWrapper(obj.getClass))
+          WriterResponse(plainText, obj.toString)
+        else
+          WriterResponse(applicationJson, mapper.writeValueAsBytes(obj))
+    }
   }
 
   /* Private */

@@ -6,7 +6,7 @@ import com.twitter.finatra.annotations.CamelCaseMapper
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.exceptions._
 import com.twitter.finatra.http.jsonpatch.{JsonPatch, JsonPatchOperator, JsonPatchUtility}
-import com.twitter.finatra.http.marshalling.mustache.MustacheService
+import com.twitter.finatra.http.marshalling.mapper._
 import com.twitter.finatra.http.request.RequestUtils
 import com.twitter.finatra.http.response._
 import com.twitter.finatra.http.routing.HttpForward
@@ -39,9 +39,8 @@ class DoEverythingController @Inject()(
   @CamelCaseMapper camelCaseObjectMapper: FinatraObjectMapper,
   jsonPatchOperator: JsonPatchOperator,
   forward: HttpForward,
-  mustacheService: MustacheService,
-  httpClient: HttpClient
-) extends Controller {
+  httpClient: HttpClient)
+    extends Controller {
   assert(exampleService != null)
   assert(multiService != null)
 
@@ -144,7 +143,8 @@ class DoEverythingController @Inject()(
       "Accept" -> request.accept,
       "Accept-Charset" -> request.acceptCharset,
       "Accept-Charset-Again" -> request.acceptCharsetAgain,
-      "Accept-Encoding" -> request.acceptEncoding)
+      "Accept-Encoding" -> request.acceptEncoding
+    )
   }
 
   get("/forwardCaseClass") { request: CaseClassWithRequestField =>
@@ -205,41 +205,12 @@ class DoEverythingController @Inject()(
     "bar"
   }
 
-  post("/formPost") { formPost: FormPostRequest =>
+  post("/formPost/:card_id") { formPost: FormPostRequest =>
     formPost.name
-  }
-
-  post("/formPostView") { formPost: FormPostRequest =>
-    TestUserView(formPost.age, formPost.name, Seq("user1", "user2"))
-  }
-
-  get("/getView") { request: Request =>
-    TestUserView(request.params.getInt("age").get, request.params("name"), Seq("user1", "user2"))
   }
 
   post("/echo") { request: Request =>
     response.ok(request.contentString)
-  }
-
-  post("/formPostViewFromBuilderView") { formPost: FormPostRequest =>
-    response.ok
-      .view("testuser2.mustache", TestUserView(formPost.age, formPost.name, Seq("user1", "user2")))
-  }
-
-  post("/formPostViewFromBuilderHtml") { formPost: FormPostRequest =>
-    response.ok.html(TestUserView(formPost.age, formPost.name, Seq("user1", "user2")))
-  }
-
-  post("/formPostViewFromBuilderCreatedView") { formPost: FormPostRequest =>
-    response.created
-      .location("/foo/1")
-      .view("testuser2.mustache", TestUserView(formPost.age, formPost.name, Seq("user1", "user2")))
-  }
-
-  post("/formPostViewFromBuilderCreatedHtml") { formPost: FormPostRequest =>
-    response.created
-      .location("/foo/1")
-      .html(TestUserView(formPost.age, formPost.name, Seq("user1", "user2")))
   }
 
   post("/formPostMultipart") { request: Request =>
@@ -493,7 +464,7 @@ class DoEverythingController @Inject()(
   }
 
   post("/requestInjectionsNotAvailable") { request: Request =>
-    val requestWithInjections = objectMapper.parse[RequestWithInjections](request)
+    val requestWithInjections = objectMapper.parseMessageBody[RequestWithInjections](request)
     requestWithInjections.id.id +
       requestWithInjections.id2.map(_.id).getOrElse(0L) +
       requestWithInjections.id3.getOrElse(0) +
@@ -505,7 +476,7 @@ class DoEverythingController @Inject()(
   }
 
   get("/requestInjectionsNotAvailable") { request: Request =>
-    val requestWithInjections = objectMapper.parse[RequestWithInjections](request)
+    val requestWithInjections = objectMapper.parseMessageBody[RequestWithInjections](request)
     requestWithInjections.id.id +
       requestWithInjections.id2.map(_.id).getOrElse(0L) +
       requestWithInjections.id3.getOrElse(0) +
@@ -702,12 +673,14 @@ class DoEverythingController @Inject()(
     ResponseOfQueryParamSeqLong(r.foo.map(_ + 1).seq)
   }
 
-  get("/RequestWithCommaSeparatedQueryParamSeqLong") { r: RequestWithCommaSeparatedQueryParamSeqLong =>
-    ResponseOfQueryParamSeqLong(r.foo.map(_ + 1).seq)
+  get("/RequestWithCommaSeparatedQueryParamSeqLong") {
+    r: RequestWithCommaSeparatedQueryParamSeqLong =>
+      ResponseOfQueryParamSeqLong(r.foo.map(_ + 1).seq)
   }
 
-  get("/RequestWithUselessCommaSeparatedQueryParamLong") { r: RequestWithUselessCommaSeparatedQueryParamLong =>
-    ResponseOfQueryParamSeqLong(Seq(r.foo + 1))
+  get("/RequestWithUselessCommaSeparatedQueryParamLong") {
+    r: RequestWithUselessCommaSeparatedQueryParamLong =>
+      ResponseOfQueryParamSeqLong(Seq(r.foo + 1))
   }
 
   get("/FooException/:id") { r: Request =>
@@ -832,16 +805,6 @@ class DoEverythingController @Inject()(
       "ok!"
     }
 
-  get("/testClassWithHtml") { _: Request =>
-    val testUser = TestUserView(28, "Bob Smith", Seq("user1", "user2"))
-
-    TestCaseClassWithHtml(
-      address = "123 Main St. Anywhere, CA US 90210",
-      phone = "+12221234567",
-      renderedHtml = xml.Utility.escape(mustacheService.createString("testHtml.mustache", testUser))
-    )
-  }
-
   get("/non_case_class") { _: Request =>
     new NonCaseClass
   }
@@ -853,7 +816,7 @@ class DoEverythingController @Inject()(
   any("/anyMethod") { request: Request =>
     // only support GET, HEAD or TRACE here
     request.method match {
-      case _ @ (Method.Get | Method.Head | Method.Trace) =>
+      case _ @(Method.Get | Method.Head | Method.Trace) =>
         response.ok
       case _ =>
         response.methodNotAllowed

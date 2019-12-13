@@ -1,9 +1,6 @@
 scala_library(
     sources = rglobs("*.scala"),
     compiler_option_sets = {"fatal_warnings"},
-    java_sources = [
-        "finatra/jackson/src/main/java",
-    ],
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-jackson",
@@ -31,8 +28,8 @@ scala_library(
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
-        "finatra/jackson/src/main/java:pants-workaround",
-        "finatra/jackson/src/main/resources",
+        "finatra/jackson/src/main/java",
+        "finatra/validation/src/main/scala/com/twitter/finatra/validation",
         "util/util-app/src/main/scala",
         "util/util-core/src/main/scala",
         "util/util-slf4j-api/src/main/scala",
@@ -40,5 +37,7 @@ scala_library(
     exports = [
         "3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala",
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
+        "finatra/jackson/src/main/java",
+        "finatra/validation/src/main/scala/com/twitter/finatra/validation",
     ],
 )

@@ -8,9 +8,9 @@ import com.twitter.inject.Test
 import com.twitter.io.Buf
 import com.twitter.inject.conversions.buf._
 import org.scalacheck.{Gen, Shrink}
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
-class AsyncJsonParserTest extends Test with GeneratorDrivenPropertyChecks {
+class AsyncJsonParserTest extends Test with ScalaCheckDrivenPropertyChecks {
 
   test("decode") {
     val parser = new AsyncJsonParser()

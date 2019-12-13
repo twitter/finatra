@@ -4,19 +4,20 @@ import com.twitter.finagle.http.{Request, Status}
 import com.twitter.finagle.{CancelledRequestException, Failure}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.internal.exceptions._
-import com.twitter.finatra.http.modules.{MessageBodyModule, MustacheModule}
+import com.twitter.finatra.http.modules.MessageBodyModule
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.inject.{Injector, IntegrationTest}
+import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
+import com.twitter.inject.{Injector, IntegrationTest}
 
 class ThrowableExceptionMapperIntegrationTest extends IntegrationTest {
   override val injector: Injector =
     TestInjector(
-      MessageBodyModule,
+      FileResolverModule,
       FinatraJacksonModule,
-      MustacheModule,
-      InMemoryStatsReceiverModule
+      InMemoryStatsReceiverModule,
+      MessageBodyModule
     ).create
 
   test("ThrowableExceptionMapper#unwrap Failure") {

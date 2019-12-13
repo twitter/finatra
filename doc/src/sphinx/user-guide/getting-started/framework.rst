@@ -16,6 +16,12 @@ to the framework or that span both http and thrift services.
 Everything else in the Finatra codebase is in the ``com.twitter.finatra`` package namespace and has
 dependencies on the `inject` libraries as well as other libraries.
 
+.. note::
+
+    Classes in *internal* packages (e.g., `com.twitter.finatra.http.internal`) are not expected to
+    be used directly and no guarantee is given as to the stability of their interfaces. Please do
+    not use internal package namespaces directly.
+
 Inject
 ------
 

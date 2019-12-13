@@ -4,5 +4,6 @@ java_library(
     strict_deps = "True",
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
+        "finatra/http-annotations/src/main/java/com/twitter/finatra/http/annotations",
     ],
 )

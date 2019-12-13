@@ -40,7 +40,7 @@ public class CalculatorServerFeatureTest extends Assert {
 
   @After
   public void printStats() throws Exception {
-      SERVER.printStats(true);
+      SERVER.printStats();
       SERVER.clearStats();
   }
 

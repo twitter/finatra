@@ -4,7 +4,7 @@ import com.google.inject.Module
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.service.NullService
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finatra.http.modules.{MessageBodyModule, MustacheModule}
+import com.twitter.finatra.http.modules.MessageBodyModule
 import com.twitter.finatra.http.{EmbeddedHttpServer, HttpServerTrait}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.finatra.modules.FileResolverModule
@@ -20,7 +20,6 @@ class HttpServerTraitStartupIntegrationTest extends Test {
           FinatraJacksonModule,
           FileResolverModule,
           MessageBodyModule,
-          MustacheModule,
           StatsReceiverModule)
 
         /** Override with an implementation to serve an HTTP Service */
@@ -45,7 +44,6 @@ class HttpServerTraitStartupIntegrationTest extends Test {
           FinatraJacksonModule,
           FileResolverModule,
           MessageBodyModule,
-          MustacheModule,
           StatsReceiverModule)
 
         /** Override with an implementation to serve an HTTP Service */

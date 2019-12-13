@@ -13,12 +13,10 @@ java_library(
         "finatra/http/src/main/java/com/twitter/finatra/http",
         "finatra/http/src/main/java/com/twitter/finatra/http/jsonpatch",
         "finatra/http/src/main/java/com/twitter/finatra/http/request",
-        "finatra/http/src/main/java/com/twitter/finatra/http/response",
     ],
     exports = [
         "finatra/http/src/main/java/com/twitter/finatra/http",
         "finatra/http/src/main/java/com/twitter/finatra/http/jsonpatch",
         "finatra/http/src/main/java/com/twitter/finatra/http/request",
-        "finatra/http/src/main/java/com/twitter/finatra/http/response",
     ],
 )

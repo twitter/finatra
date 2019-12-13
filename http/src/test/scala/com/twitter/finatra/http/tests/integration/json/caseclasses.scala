@@ -4,6 +4,8 @@ import com.twitter.finagle.http.Request
 import com.twitter.finatra.request.{Header, QueryParam, RouteParam}
 import com.twitter.finatra.validation.{MethodValidation, Size, ValidationResult}
 
+case class CaseClassWithBoolean(foo: Boolean)
+
 case class PersonWithThingsRequest(
   id: Int,
   name: String,

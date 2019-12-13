@@ -3,6 +3,7 @@ package com.twitter.inject.server
 import com.google.inject.Module
 import com.twitter.app.Flag
 import com.twitter.conversions.DurationOps._
+import com.twitter.finagle.NullServer
 import com.twitter.finagle.client.ClientRegistry
 import com.twitter.inject.Logging
 import com.twitter.inject.annotations.Lifecycle
@@ -95,7 +96,7 @@ trait TwitterServer
   private[inject] val awaitables: ConcurrentLinkedQueue[Awaitable[_]] = new ConcurrentLinkedQueue()
 
   premain {
-    awaitables.add(adminHttpServer)
+    if (adminHttpServer != NullServer) awaitables.add(adminHttpServer)
   }
 
   /* Protected */
@@ -106,12 +107,6 @@ trait TwitterServer
    * @return library name to register in the Library registry.
    */
   override protected def libraryName: String = "finatra"
-
-  /**
-   * If true, the Twitter-Server admin server will be disabled.
-   * Note: Disabling the admin server allows services to be deployed into environments where only a single port is allowed
-   */
-  protected def disableAdminHttpServer: Boolean = false
 
   /**
    * Default [[com.twitter.inject.TwitterModule]] for providing a [[com.twitter.finagle.stats.StatsReceiver]].
@@ -298,11 +293,8 @@ trait TwitterServer
   override protected def postWarmup(): Unit = {
     super[App].postWarmup()
 
-    if (disableAdminHttpServer) {
-      info("Disabling the Admin HTTP Server since disableAdminHttpServer=true")
-      awaitables.remove(adminHttpServer)
-      adminHttpServer.close()
-    } else {
+    // we only announce if the server is enabled
+    if (adminHttpServer != NullServer) {
       for (addr <- adminAnnounceFlag.get) adminHttpServer.announce(addr)
     }
   }
@@ -324,7 +316,9 @@ trait TwitterServer
   override protected def afterPostWarmup(): Unit = {
     super[App].afterPostWarmup()
 
-    if (!disableAdminHttpServer) {
+    if (disableAdminHttpServer) {
+      info("admin http server is disabled")
+    } else {
       info("admin http server started on port " + PortUtils.getPort(adminHttpServer))
     }
     warmupComplete()

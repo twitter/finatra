@@ -2,12 +2,10 @@ package com.twitter.finatra.thrift.tests.doeverything
 
 import com.twitter.finagle.{Filter, ThriftMux}
 import com.twitter.finagle.tracing.NullTracer
-import com.twitter.finatra.annotations.DarkTrafficFilterType
 import com.twitter.finatra.thrift.filters._
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.tests.doeverything.controllers.LegacyDoEverythingThriftController
 import com.twitter.finatra.thrift.tests.doeverything.exceptions.{BarExceptionMapper, DoEverythingExceptionMapper, FooExceptionMapper}
-import com.twitter.finatra.thrift.tests.doeverything.modules.LegacyDoEverythingThriftServerDarkTrafficFilterModule
 import com.twitter.finatra.thrift.ThriftServer
 import com.twitter.util.NullMonitor
 
@@ -18,9 +16,6 @@ class LegacyDoEverythingThriftServer extends ThriftServer {
   override val name = "example-server"
 
   flag("magicNum", "26", "Magic number")
-
-  override val modules =
-    Seq(new LegacyDoEverythingThriftServerDarkTrafficFilterModule)
 
   override protected def configureThriftServer(server: ThriftMux.Server): ThriftMux.Server = {
     server
@@ -38,7 +33,6 @@ class LegacyDoEverythingThriftServer extends ThriftServer {
       .filter[StatsFilter]
       .filter[ExceptionMappingFilter]
       .filter(Filter.TypeAgnostic.Identity)
-      .filter[Filter.TypeAgnostic, DarkTrafficFilterType]
       .exceptionMapper[BarExceptionMapper]
       .exceptionMapper[FooExceptionMapper]
       .exceptionMapper[DoEverythingExceptionMapper]

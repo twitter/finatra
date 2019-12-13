@@ -7,7 +7,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.node.ValueNode
 import com.twitter.finatra.request._
 import com.twitter.finatra.response.JsonCamelCase
-import com.twitter.finatra.validation.{InvalidValidationInternal, Min, NotEmpty, Size, ValidationResult}
+import com.twitter.finatra.validation.ValidationResult
+import com.twitter.finatra.validation.{Min, NotEmpty, Size}
 import com.twitter.inject.Logging
 import com.twitter.inject.domain.WrappedValue
 import com.twitter.{util => ctu}

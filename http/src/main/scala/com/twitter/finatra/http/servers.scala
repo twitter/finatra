@@ -8,13 +8,7 @@ import com.twitter.finagle.{Http, ListeningServer, NullServer, Service}
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.service.NilService
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finatra.http.modules.{
-  AccessLogModule,
-  ExceptionManagerModule,
-  HttpResponseClassifierModule,
-  MessageBodyModule,
-  MustacheModule
-}
+import com.twitter.finatra.http.modules.{AccessLogModule, ExceptionManagerModule, HttpResponseClassifierModule, MessageBodyFlagsModule, MessageBodyModule}
 import com.twitter.finatra.http.response.HttpResponseClassifier
 import com.twitter.finatra.http.routing.{AdminHttpRouter, HttpRouter}
 import com.twitter.finatra.modules.FileResolverModule
@@ -432,8 +426,8 @@ trait HttpServer extends HttpServerTrait {
     FileResolverModule,
     ExceptionManagerModule,
     jacksonModule,
-    messageBodyModule,
-    mustacheModule
+    MessageBodyFlagsModule,
+    messageBodyModule
   )
 
   /**
@@ -482,13 +476,6 @@ trait HttpServer extends HttpServerTrait {
    * @return a [[com.twitter.inject.TwitterModule]] which provides a [[com.twitter.finagle.filter.LogFormatter]] implementation.
    */
   protected def accessLogModule: Module = AccessLogModule
-
-  /**
-   * Default [[com.twitter.inject.TwitterModule]] for providing a [[com.github.mustachejava.MustacheFactory]].
-   *
-   * @return a [[com.twitter.inject.TwitterModule]] which provides a [[com.github.mustachejava.MustacheFactory]] implementation.
-   */
-  protected def mustacheModule: Module = MustacheModule
 
   /**
    * Default [[com.twitter.inject.TwitterModule]] for providing implementations for a

@@ -1,7 +1,6 @@
 package com.twitter.finatra.http.tests.integration.messagebody.main.domain
 
-import com.twitter.finagle.http.MediaType
-import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.{MediaType, Message}
 import com.twitter.finatra.http.marshalling.{MessageBodyWriter, WriterResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
 import javax.inject.Inject
@@ -14,21 +13,21 @@ class GreetingMessageBodyWriter @Inject()(mapper: FinatraObjectMapper)
     writePlainResponse(greeting)
   }
 
-  override def write(request: Request, greetingRequest: GreetingRequest): WriterResponse = {
-    val greeting = getGreeting(greetingRequest.name, getLanguage(request))
-    if (acceptsJson(request)) {
+  override def write(message: Message, greetingRequest: GreetingRequest): WriterResponse = {
+    val greeting = getGreeting(greetingRequest.name, getLanguage(message))
+    if (acceptsJson(message)) {
       writeJsonResponse(greeting)
     } else {
       writePlainResponse(greeting)
     }
   }
 
-  private def acceptsJson(request: Request): Boolean = {
-    request.acceptMediaTypes.contains("application/json")
+  private def acceptsJson(message: Message): Boolean = {
+    message.acceptMediaTypes.contains("application/json")
   }
 
-  private def getLanguage(request: Request): String = {
-    request.headerMap.get("Accept-Language") match {
+  private def getLanguage(message: Message): String = {
+    message.headerMap.get("Accept-Language") match {
       case Some("es") => "es"
       case _ => "en"
     }

@@ -1,11 +1,11 @@
 package com.twitter.finatra.http.marshalling
 
 import com.google.inject.internal.MoreTypes.ParameterizedTypeImpl
-import com.twitter.finagle.http.Request
-import com.twitter.finatra.http.response.Mustache
-import com.twitter.inject.Injector
-import com.twitter.inject.TypeUtils.singleTypeParam
+import com.twitter.finagle.http.Message
+import com.twitter.finatra.http.annotations.{MessageBodyWriter => MessageBodyWriterAnnotation}
+import com.twitter.inject.{Injector, TypeUtils}
 import com.twitter.inject.conversions.map._
+import com.twitter.inject.utils.AnnotationUtils
 import java.lang.annotation.Annotation
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
@@ -43,99 +43,146 @@ class MessageBodyManager @Inject()(
 
   private[this] val classTypeToReader = mutable.Map[Type, MessageBodyReader[Any]]()
   private[this] val classTypeToWriter = mutable.Map[Type, MessageBodyWriter[Any]]()
-
-  private[this] val writerAnnotations: Seq[Class[_ <: Annotation]] = Seq(classOf[Mustache])
   private[this] val annotationTypeToWriter = mutable.Map[Type, MessageBodyWriter[Any]]()
 
   private[this] val readerCache =
     new ConcurrentHashMap[Manifest[_], Option[MessageBodyReader[Any]]]()
-  private[this] val writerCache = new ConcurrentHashMap[Any, MessageBodyWriter[Any]]()
+  private[this] val writerCache =
+    new ConcurrentHashMap[Any, MessageBodyWriter[Any]]()
 
-  /* Public (Config methods called during server startup) */
+  /* Public */
 
-  final def add[MBC <: MessageBodyComponent: Manifest](): Unit = {
-    val componentSupertypeClass =
-      if (classOf[MessageBodyReader[_]].isAssignableFrom(manifest[MBC].runtimeClass))
+  /**
+   * Register a [[MessageBodyReader]] or [[MessageBodyWriter]] to its parameterized type.
+   * E.g., a `MessageBodyReader[Foo]` will register the given reader for the `Foo` type.
+   * @tparam Component the [[MessageBodyComponent]] to register.
+   */
+  final def add[Component <: MessageBodyComponent: Manifest](): Unit = {
+    val componentTypeClazz: Class[_] =
+      if (isAssignableFrom[Component](classOf[MessageBodyReader[_]])) {
         classOf[MessageBodyReader[_]]
-      else
+      } else {
         classOf[MessageBodyWriter[_]]
-
-    val componentSupertypeType = typeLiteral.getSupertype(componentSupertypeClass).getType
-
-    add[MBC](singleTypeParam(componentSupertypeType))
+      }
+    add[Component](TypeUtils.singleTypeParam(typeLiteral.getSupertype(componentTypeClazz).getType))
   }
 
-  final def add[MBC <: MessageBodyComponent: Manifest](reader: MBC): Unit = {
-    val componentSupertypeType =
-      typeLiteral[MBC].getSupertype(classOf[MessageBodyReader[_]]).getType
-    addComponent(reader, singleTypeParam(componentSupertypeType))
+  /**
+   * Register a [[MessageBodyReader]] or [[MessageBodyWriter]] to an explicitly given type.
+   * E.g., given a `MessageBodyReader[Car]` and a type of `Audi` the `MessageBodyReader[Car]`
+   * will be registered to the `Audi` type. This is useful when you want to register subtypes
+   * to a reader/writer of their parent type.
+   * @tparam Component the [[MessageBodyComponent]] to register. An instance of the component
+   *                   will be obtained from the [[injector]].
+   * @tparam T the type to associate to the registered [[MessageBodyComponent]].
+   */
+  final def addExplicit[
+    Component <: MessageBodyComponent: Manifest,
+    T: Manifest](): Unit = {
+    add[Component](typeLiteral[T].getType)
   }
 
-  final def addByAnnotation[Ann <: Annotation: Manifest, T <: MessageBodyWriter[_]: Manifest](): Unit = {
-    val messageBodyWriter = injector.instance[T]
-    val annot = manifest[Ann].runtimeClass.asInstanceOf[Class[Ann]]
-    annotationTypeToWriter(annot) = messageBodyWriter.asInstanceOf[MessageBodyWriter[Any]]
+  /**
+   * Register a [[MessageBodyWriter]] to a given [[Annotation]], [[A]].
+   * @tparam A the [[Annotation]] type to register against the given [[MessageBodyWriter]] type.
+   * @tparam Writer the [[MessageBodyWriter]] type to associate to the given [[Annotation]]. An
+   *                instance of the [[MessageBodyWriter]] will be obtained from the [[injector]].
+   */
+  final def addWriterByAnnotation[
+    A <: Annotation: Manifest,
+    Writer <: MessageBodyWriter[_]: Manifest](): Unit = {
+    val messageBodyWriter = injector.instance[Writer]
+    val annotation = manifest[A].runtimeClass.asInstanceOf[Class[A]]
+    val requiredAnnotationClazz = classOf[MessageBodyWriterAnnotation]
+    assert(
+      AnnotationUtils.isAnnotationPresent[MessageBodyWriterAnnotation, A],
+      s"The annotation: ${annotation.getSimpleName} is not annotated with the required ${requiredAnnotationClazz.getName} annotation."
+    )
+    annotationTypeToWriter(annotation) = messageBodyWriter.asInstanceOf[MessageBodyWriter[Any]]
   }
 
-  final def addByComponentType[M <: MessageBodyComponent: Manifest, T <: MessageBodyWriter[_]: Manifest](): Unit = {
-    val messageBodyWriter = injector.instance[T]
-    val componentType = manifest[M].runtimeClass.asInstanceOf[Class[M]]
+  /**
+   * Register a [[MessageBodyWriter]] to a given [[MessageBodyComponent]].
+   * @tparam Component the [[MessageBodyComponent]] type to register against the given [[MessageBodyWriter]] type.
+   * @tparam Writer the [[MessageBodyWriter]] type to associate to the given [[MessageBodyComponent]].
+   *                An instance of the [[MessageBodyWriter]] will be obtained from the [[injector]]
+   */
+  final def addWriterByComponentType[
+    Component <: MessageBodyComponent: Manifest,
+    Writer <: MessageBodyWriter[_]: Manifest](): Unit = {
+    val messageBodyWriter = injector.instance[Writer]
+    val componentType = manifest[Component].runtimeClass.asInstanceOf[Class[Component]]
     writerCache.putIfAbsent(componentType, messageBodyWriter.asInstanceOf[MessageBodyWriter[Any]])
   }
 
-  final def addExplicit[MBC <: MessageBodyComponent: Manifest, TypeToReadOrWrite: Manifest](): Unit = {
-    add[MBC](typeLiteral[TypeToReadOrWrite].getType)
-  }
-
-  /* Public (Per-request read and write methods) */
-
-  final def read[T: Manifest](request: Request): T = {
-    val requestManifest = manifest[T]
-    readerCache.atomicGetOrElseUpdate(requestManifest, {
-      val objType = typeLiteral(requestManifest).getType
-      classTypeToReader.get(objType).orElse(findReaderBySuperType(objType))
-    }) match {
-      case Some(reader) =>
-        reader.parse(request).asInstanceOf[T]
+  /**
+   * Read the body of a [[com.twitter.finagle.http.Message]] into a type [[T]]. Performs a lookup
+   * of a matching [[MessageBodyReader]] for the type [[T]] and invokes the [[MessageBodyReader#parse]]
+   * method of the matching reader. Otherwise if no matching reader for the type [[T]] is found,
+   * the [[defaultMessageBodyReader#parse]] method is invoked.
+   * @param message the [[com.twitter.finagle.http.Message]] to read
+   * @tparam T the type into which to parse the message body.
+   * @return an instance of type [[T]] parsed from the Message body contents by a matching [[MessageBodyReader]].
+   */
+  final def read[T: Manifest](message: Message): T = {
+    reader[T]() match {
+      case Some(messageBodyReader) =>
+        messageBodyReader.parse(message).asInstanceOf[T]
       case _ =>
-        defaultMessageBodyReader.parse[T](request)
+        defaultMessageBodyReader.parse[T](message)
     }
   }
 
-  /* Note: writerCache is bounded on the number of unique classes returned from controller routes */
+  /* exposed for testing */
+  private[finatra] final def reader[T: Manifest](): Option[MessageBodyReader[Any]] = {
+    val readerManifest = manifest[T]
+    readerCache.atomicGetOrElseUpdate(readerManifest, readerCacheFn(readerManifest))
+  }
+
+  /**
+   * Return a [[MessageBodyWriter]] over the type of the class from the given object. If a
+   * suitable [[MessageBodyWriter]] cannot be located the [[defaultMessageBodyWriter]] will be
+   * returned.
+   * @note the writerCache is bounded on the number of unique classes returned from controller routes
+   * @param obj the [[Any]] type to use as the key for locating an appropriate [[MessageBodyWriter]].
+   * @return a suitable writer for the type represented by the given object.
+   */
   final def writer(obj: Any): MessageBodyWriter[Any] = {
-    val objClass = obj.getClass
-    writerCache.atomicGetOrElseUpdate(objClass, {
-      classTypeToWriter
-        .get(objClass)
-        .orElse(classAnnotationToWriter(objClass))
-        .getOrElse(defaultMessageBodyWriter)
-    })
+    val clazz = obj.getClass
+    writerCache.atomicGetOrElseUpdate(clazz, writerCacheFun(clazz))
   }
 
   /* Private */
 
-  private[this] def findReaderBySuperType(t: Type): Option[MessageBodyReader[Any]] = {
-    val classTypeToReaderOption: Option[(Type, MessageBodyReader[Any])] = t match {
-      case _ : ParameterizedTypeImpl =>
-        None // User registered MessageBodyComponents with parameterized types are not supported, so do not attempt to look up a reader
-      case _ =>
-        classTypeToReader
-          .find { case (tpe, _) =>
-            tpe.asInstanceOf[Class[_]]
-              .isAssignableFrom(t.asInstanceOf[Class[_]])
-          }
-    }
-    classTypeToReaderOption.map { case (_, messageBodyReader) => messageBodyReader }
+  private[this] def isAssignableFrom[T: Manifest](clazz: Class[_]): Boolean = {
+    clazz.isAssignableFrom(manifest[T].runtimeClass)
   }
 
-  private[this] def add[MessageBodyComp: Manifest](typeToReadOrWrite: Type): Unit = {
-    typeToReadOrWrite match {
-      case p: ParameterizedTypeImpl =>
-        throw new IllegalArgumentException("Adding a message body component with parameterized types, e.g. MessageBodyReader[Map[String, String]] is not supported.")
+  private[this] def readerCacheFn[T](
+    readerManifest: Manifest[T]
+  ): Option[MessageBodyReader[Any]] = {
+    val genericType = typeLiteral(readerManifest).getType
+    classTypeToReader.get(genericType)
+  }
+
+  private[this] def writerCacheFun(
+    clazz: Class[_]
+  ): MessageBodyWriter[Any] =
+    classTypeToWriter
+      .get(clazz)
+      .orElse(classAnnotationToWriter(clazz))
+      .getOrElse(defaultMessageBodyWriter)
+
+  /* The given `genericType` is the parameterized type of the
+     reader or writer, e.g., `T` for `MessageBodyWriter[T]` */
+  private[this] def add[Component: Manifest](genericType: Type): Unit = {
+    genericType match {
+      case _: ParameterizedTypeImpl =>
+        throw new IllegalArgumentException(
+          "Adding a message body component with parameterized types, e.g. Map[String, String] is not supported.")
       case _ =>
-        val messageBodyComponent = injector.instance[MessageBodyComp]
-        addComponent(messageBodyComponent, typeToReadOrWrite)
+        val messageBodyComponent = injector.instance[Component]
+        addComponent(messageBodyComponent, genericType)
     }
   }
 
@@ -148,12 +195,17 @@ class MessageBodyManager @Inject()(
     }
   }
 
+  // For lookup of a MessageBodyWriter by class
   private[this] def classAnnotationToWriter(clazz: Class[_]): Option[MessageBodyWriter[Any]] = {
     // we stop at the first supported annotation for looking up a writer
-    clazz.getAnnotations.collectFirst {
-      case annotation if writerAnnotations.contains(annotation.annotationType()) => annotation
-    }.flatMap { annotation =>
-      annotationTypeToWriter.get(annotation.annotationType)
-    }
+    clazz.getAnnotations
+      .collectFirst(isRequiredAnnotationPresent)
+      .flatMap(annotation => annotationTypeToWriter.get(annotation.annotationType))
+  }
+
+  // Partial function to pass when filtering class annotations.
+  private[this] val isRequiredAnnotationPresent: PartialFunction[Annotation, Annotation] = {
+    case annotation: Annotation if AnnotationUtils.isAnnotationPresent[MessageBodyWriterAnnotation](annotation) =>
+      annotation
   }
 }

@@ -16,6 +16,7 @@ scala_library(
         "finagle/finagle-thriftmux/src/main/scala",
         "finatra/inject/inject-app/src/main/scala",
         "finatra/inject/inject-core/src/main/scala",
+        "finatra/inject/inject-core/src/main/scala/com/twitter/inject/internal",
         "finatra/inject/inject-modules/src/main/scala",
         "finatra/inject/inject-server/src/main/scala",
         "finatra/inject/inject-slf4j/src/main/scala",
