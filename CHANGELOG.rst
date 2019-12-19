@@ -7,6 +7,11 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+
+* finatra: Upgrade logback to 1.2.3 ``PHAB_ID=D415888``
+
 19.12.0
 -------
 
