@@ -11,7 +11,7 @@ lazy val buildSettings = Seq(
   scalaVersion := "2.12.8",
   crossScalaVersions := Seq("2.11.12", "2.12.8"),
   scalaModuleInfo := scalaModuleInfo.value.map(_.withOverrideScalaVersion(true)),
-  logLevel in Test := Level.Error,
+  logLevel := Level.Error,
   fork in Test := true, // We have to fork to get the JavaOptions
   javaOptions in Test ++= travisTestJavaOptions
 )
@@ -621,7 +621,7 @@ lazy val injectUtils = (project in file("inject/inject-utils"))
  *   > jmh:run -i 10 -wi 20 -f1 -t1 .*FalseSharing.*
  * }}}
  *
- * Which means "3 iterations" "3 warm up iterations" "1 fork" "1 thread". Note that
+ * Which means "10 iterations" "20 warm up iterations" "1 fork" "1 thread". Note that
  * benchmarks should be usually executed at least in 10 iterations (as a rule of thumb),
  * but more is better.
  *

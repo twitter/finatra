@@ -1,0 +1,20 @@
+<configuration>
+  <!-- Console Appender -->
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%date %.-3level %-25logger{0} %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- Per Package Config -->
+  <logger name="com.twitter.zookeeper.client.internal" level="off"/>
+  <logger name="ClockedDrainer" level="off"/>
+  <logger name="com.twitter.finagle.toggle" level="off"/>
+  <logger name="com.twitter.util.tunable" level="off"/>
+  <logger name="com.twitter" level="${org.slf4j.simpleLogger.defaultLogLevel:-off}"/>
+
+  <!-- Root Logger -->
+  <root level="${org.slf4j.simpleLogger.defaultLogLevel:-off}">
+    <appender-ref ref="STDOUT"/>
+  </root>
+</configuration>
