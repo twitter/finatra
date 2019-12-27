@@ -235,15 +235,16 @@ lazy val baseServerSettings = baseSettings ++ buildSettings ++ publishSettings +
 
 lazy val exampleServerSettings = baseServerSettings ++ Seq(
   fork in run := true,
-  javaOptions in Test ++= Seq("-Dlog.service.output=/dev/stdout", "-Dlog.access.output=/dev/stdout", "-Dlog_level=INFO"),
-  libraryDependencies ++= Seq(
-    "com.twitter" %% "twitter-server-logback-classic" % versions.twLibVersion,
-    "ch.qos.logback" % "logback-classic" % versions.logback,
-    "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
+  javaOptions in Test ++= Seq(
+    "-Dorg.slf4j.simpleLogger.defaultLogLevel=off",
+    "-Dcom.twitter.inject.test.logging.disabled"
   ),
-  excludeDependencies in Test ++= Seq(
-    ExclusionRule(organization = "com.twitter", name = "twitter-server-logback-classic"),
-    ExclusionRule(organization = "ch.qos.logback", name = "logback-classic")
+  libraryDependencies in Runtime ++= Seq(
+    "com.twitter" %% "twitter-server-logback-classic" % versions.twLibVersion,
+    "ch.qos.logback" % "logback-classic" % versions.logback
+  ),
+  libraryDependencies in Test ++= Seq(
+    "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
   ),
   excludeDependencies ++= Seq(
     // commons-logging is replaced by jcl-over-slf4j
