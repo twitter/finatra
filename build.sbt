@@ -79,9 +79,7 @@ def travisTestJavaOptions: Seq[String] = {
       "-Xmx3G")
   } else {
     Seq(
-      "-DSKIP_FLAKY=true",
-      "-Dorg.slf4j.simpleLogger.defaultLogLevel=error",
-      "-Dcom.twitter.inject.test.logging.disabled")
+      "-DSKIP_FLAKY=true")
   }
 }
 
@@ -239,14 +237,13 @@ lazy val baseServerSettings = baseSettings ++ buildSettings ++ publishSettings +
 lazy val exampleServerSettings = baseServerSettings ++ Seq(
   fork in run := true,
   javaOptions in Test ++= Seq("-Dlog.service.output=/dev/stdout", "-Dlog.access.output=/dev/stdout", "-Dlog_level=INFO"),
-  libraryDependencies ++= Seq(
+  libraryDependencies in Run ++= Seq(
     "com.twitter" %% "twitter-server-logback-classic" % versions.twLibVersion,
     "ch.qos.logback" % "logback-classic" % versions.logback
   ),
-  excludeDependencies in Test ++= Seq(
-    ExclusionRule(organization = "com.twitter", name = "twitter-server-logback-classic"),
-    ExclusionRule(organization = "ch.qos.logback", name = "logback-classic")
-  ),
+  libraryDependencies in Test ++= Seq(
+    "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
+  )
   excludeDependencies ++= Seq(
     // commons-logging is replaced by jcl-over-slf4j
     ExclusionRule(organization = "commons-logging", name = "commons-logging")
