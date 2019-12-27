@@ -11,7 +11,6 @@ lazy val buildSettings = Seq(
   scalaVersion := "2.12.8",
   crossScalaVersions := Seq("2.11.12", "2.12.8"),
   scalaModuleInfo := scalaModuleInfo.value.map(_.withOverrideScalaVersion(true)),
-  logLevel := Level.Error,
   fork in Test := true, // We have to fork to get the JavaOptions
   javaOptions in Test ++= travisTestJavaOptions
 )
@@ -70,7 +69,7 @@ def travisTestJavaOptions: Seq[String] = {
     Seq(
       "-DSKIP_FLAKY=true",
       "-DSKIP_FLAKY_TRAVIS=true",
-      "-Dorg.slf4j.simpleLogger.defaultLogLevel=error",
+      "-Dorg.slf4j.simpleLogger.defaultLogLevel=off",
       "-Dcom.twitter.inject.test.logging.disabled",
       // Needed to avoid cryptic EOFException crashes in forked tests
       // in Travis with `sudo: false`.
