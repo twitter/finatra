@@ -373,8 +373,8 @@ lazy val injectLogback = (project in file("inject/inject-logback"))
     moduleName := "inject-logback",
     libraryDependencies ++= Seq(
       "org.slf4j" % "slf4j-api" % versions.slf4j,
-      "ch.qos.logback" % "logback-classic" % versions.logback force(),
-      "ch.qos.logback" % "logback-core" % versions.logback force(),
+      "ch.qos.logback" % "logback-classic" % versions.logback,
+      "ch.qos.logback" % "logback-core" % versions.logback,
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "com.twitter" %% "util-registry" % versions.twLibVersion,
@@ -558,7 +558,8 @@ lazy val injectThrift = (project in file("inject/inject-thrift"))
       "com.twitter" %% "finagle-mux" % versions.twLibVersion,
       "com.twitter" %% "scrooge-core" % versions.twLibVersion,
       "com.twitter" %% "util-core" % versions.twLibVersion,
-      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal")
+      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
+    )
   ).dependsOn(
     injectCore % "test->test",
     injectUtils)
@@ -577,7 +578,8 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
       "com.twitter" %% "finagle-thriftmux" % versions.twLibVersion,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "com.twitter" %% "finagle-http" % versions.twLibVersion % Test,
-      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal")
+      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
+    )
   ).dependsOn(
     injectCore,
     injectUtils,
@@ -1065,6 +1067,7 @@ lazy val kafkaStreamsPrerestore = (project in file("kafka-streams/kafka-streams-
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
+  http % "test->test",
   kafkaStreamsStaticPartitioning % "test->test;compile->compile")
 
 lazy val kafkaStreamsQueryableThrift = (project in file("kafka-streams/kafka-streams-queryable-thrift"))
