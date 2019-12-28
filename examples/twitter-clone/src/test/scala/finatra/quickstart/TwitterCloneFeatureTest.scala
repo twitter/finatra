@@ -19,7 +19,7 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito {
   firebaseClient.get("/tweets/123.json")(manifest[TweetResponse]) returns Future(None)
 
   override val server =
-    new EmbeddedHttpServer(new TwitterCloneServer)
+    new EmbeddedHttpServer(new TwitterCloneServer, disableTestLogging = true)
       .bind[FirebaseClient].toInstance(firebaseClient)
       .bind[IdService].toInstance(idService)
 

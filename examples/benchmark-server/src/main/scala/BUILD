@@ -19,10 +19,4 @@ scala_library(
         "util/util-slf4j-api/src/main/scala",
         "util/util-stats/src/main/scala",
     ],
-    excludes = [
-        exclude(
-            org = "org.slf4j",
-            name = "slf4j-jdk14",
-        ),
-    ],
 )

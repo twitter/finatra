@@ -438,7 +438,7 @@ class EmbeddedTwitterServer(
    */
   def printStats(): Unit = {
     infoBanner(name + " Stats", disableLogging)
-    inMemoryStats.print()
+    if (!disableLogging) inMemoryStats.print()
   }
 
   /**

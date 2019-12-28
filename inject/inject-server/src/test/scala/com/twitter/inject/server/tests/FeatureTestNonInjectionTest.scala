@@ -12,7 +12,7 @@ class FeatureTestNonInjectionTest extends FeatureTest {
       args = Seq("http.port=:0"),
       disableTestLogging = true)
 
-  /* Does not work since this we do not provide an InMemoryStatsReceiver but should not result in failures */
+  /* Does not work since we do not provide an InMemoryStatsReceiver but should not result in failures */
   override val printStats: Boolean = true
 
   /**

@@ -11,7 +11,8 @@ class TwitterCloneStartupTest extends FeatureTest {
     twitterServer = new TwitterCloneServer,
     flags = Map(
       "dtab.add" -> "/s/firebaseio/finatra => /$/nil"
-    )
+    ),
+    disableTestLogging = true
   )
 
   test("Server#startup") {

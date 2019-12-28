@@ -24,41 +24,47 @@ public class CalculatorServerFeatureTest extends Assert {
           ClassTag$.MODULE$.apply(Calculator.ServiceIface.class));
 
   public static EmbeddedThriftServer setup() {
-      EmbeddedThriftServer server =
-          new EmbeddedThriftServer(
-              new CalculatorServer(),
-              Collections.emptyMap(),
-              Stage.DEVELOPMENT);
-      server.bindClass(Mode.class, Mode.ReversePolarNotation);
-      return server;
+    EmbeddedThriftServer server =
+        new EmbeddedThriftServer(
+            new CalculatorServer(),
+            Collections.emptyMap(),
+            Stage.DEVELOPMENT);
+    server.bindClass(Mode.class, Mode.ReversePolarNotation);
+    return server;
   }
 
   @AfterClass
   public static void tearDown() throws Exception {
-      SERVER.close();
+    SERVER.close();
   }
 
   @After
   public void printStats() throws Exception {
-      SERVER.printStats();
-      SERVER.clearStats();
+    SERVER.printStats();
+    SERVER.clearStats();
   }
 
-  /** test increment endpoint */
+  /**
+   * test increment endpoint
+   */
   @Test
   public void testIncrementEndpoint() throws Exception {
-      assertEquals(4, Await.<Integer>result(THRIFT_CLIENT.increment(3)).intValue());
+    assertEquals(4, Await.<Integer>result(THRIFT_CLIENT.increment(3)).intValue());
   }
 
-  /** test add numbers endpoint */
+  /**
+   * test add numbers endpoint
+   */
   @Test
   public void testAddNumbersEndpoint() throws Exception {
-      assertEquals(10, Await.<Integer>result(THRIFT_CLIENT.addNumbers(3, 7)).intValue());
+    assertEquals(10, Await.<Integer>result(THRIFT_CLIENT.addNumbers(3, 7)).intValue());
   }
 
-  /** test add strings endpoint */
+  /**
+   * test add strings endpoint
+   */
   @Test
   public void testAddStringsEndpoint() throws Exception {
-      assertEquals("10", Await.result(THRIFT_CLIENT.addStrings("3", "7")));
+    assertEquals("10", Await.result(THRIFT_CLIENT.addStrings("3", "7")));
   }
 }

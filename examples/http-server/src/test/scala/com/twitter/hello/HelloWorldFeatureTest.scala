@@ -6,7 +6,7 @@ import com.twitter.inject.server.FeatureTest
 
 class HelloWorldFeatureTest extends FeatureTest {
 
-  override val server = new EmbeddedHttpServer(new HelloWorldServer)
+  override val server = new EmbeddedHttpServer(new HelloWorldServer, disableTestLogging = true)
 
   test("Server#Say hi") {
     server.httpGet(path = "/hi?name=Bob", andExpect = Ok, withBody = "Hello Bob")

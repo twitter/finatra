@@ -21,7 +21,10 @@ class StreamingServerFeatureTest extends FeatureTest {
   // in slow CI environments like Travis so we are bumping timeouts to 10 seconds.
   override protected def defaultAwaitTimeout: Duration = 10.seconds
 
-  override val server = new EmbeddedHttpServer(new StreamingServer, streamResponse = true)
+  override val server = new EmbeddedHttpServer(
+    new StreamingServer,
+    streamResponse = true,
+    disableTestLogging = true)
 
   lazy val streamingJsonHelper =
     new StreamingJsonTestHelper(server.mapper)
