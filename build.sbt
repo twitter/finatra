@@ -243,9 +243,6 @@ lazy val exampleServerSettings = baseServerSettings ++ Seq(
     "com.twitter" %% "twitter-server-logback-classic" % versions.twLibVersion,
     "ch.qos.logback" % "logback-classic" % versions.logback
   ),
-  libraryDependencies in Test ++= Seq(
-    "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
-  ),
   excludeDependencies ++= Seq(
     // commons-logging is replaced by jcl-over-slf4j
     ExclusionRule(organization = "commons-logging", name = "commons-logging")
@@ -1137,7 +1134,10 @@ lazy val exampleHttpServer = (project in file("examples/http-server"))
   .settings(noPublishSettings)
   .settings(
     name := "http-server",
-    moduleName := "http-server"
+    moduleName := "http-server",
+    libraryDependencies ++= Seq(
+      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
+    )
   ).dependsOn(
     http % "test->test;compile->compile",
     injectCore % "test->test",
@@ -1151,7 +1151,8 @@ lazy val streamingExample = (project in file("examples/streaming-example"))
     name := "streaming-example",
     moduleName := "streaming-example",
     libraryDependencies ++= Seq(
-      "com.twitter" % "joauth" % "6.0.2"
+      "com.twitter" % "joauth" % "6.0.2",
+      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
     http % "test->test;compile->compile",
@@ -1165,7 +1166,10 @@ lazy val twitterClone = (project in file("examples/twitter-clone"))
   .settings(
     name := "twitter-clone",
     moduleName := "twitter-clone",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;finatra\\.quickstart\\..*"
+    ScoverageKeys.coverageExcludedPackages := "<empty>;finatra\\.quickstart\\..*",
+    libraryDependencies ++= Seq(
+      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
+    )
   ).dependsOn(
     http % "test->test;compile->compile",
     httpclient,
@@ -1195,7 +1199,8 @@ lazy val exampleHttpJavaServer = (project in file("examples/java-http-server"))
     name := "java-http-server",
     moduleName := "java-http-server",
     libraryDependencies ++= Seq(
-      "com.novocode" % "junit-interface" % "0.11" % Test
+      "com.novocode" % "junit-interface" % "0.11" % Test,
+      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
     http % "test->test;compile->compile",
@@ -1211,7 +1216,8 @@ lazy val exampleInjectJavaServer = (project in file("examples/java-server"))
     name := "java-server",
     moduleName := "java-server",
     libraryDependencies ++= Seq(
-      "com.novocode" % "junit-interface" % "0.11" % Test
+      "com.novocode" % "junit-interface" % "0.11" % Test,
+      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
     injectServer % "test->test;compile->compile",
@@ -1237,7 +1243,10 @@ lazy val thriftExampleServer = (project in file("examples/thrift-server/thrift-e
   .settings(
     name := "thrift-example-server",
     moduleName := "thrift-example-server",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*ExceptionTranslationFilter.*"
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*ExceptionTranslationFilter.*",
+    libraryDependencies ++= Seq(
+      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
+    )
   ).dependsOn(
     thriftExampleIdl,
     thrift % "test->test;compile->compile",
@@ -1266,7 +1275,8 @@ lazy val thriftJavaExampleServer = (project in file("examples/java-thrift-server
     name := "java-thrift-example-server",
     moduleName := "java-thrift-example-server",
     libraryDependencies ++= Seq(
-      "com.novocode" % "junit-interface" % "0.11" % Test
+      "com.novocode" % "junit-interface" % "0.11" % Test,
+      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
     thriftJavaExampleIdl,
@@ -1283,7 +1293,10 @@ lazy val exampleWebDashboard = (project in file("examples/web-dashboard"))
   .settings(
     name := "web-dashboard",
     moduleName := "web-dashboard",
-    unmanagedResourceDirectories in Compile += baseDirectory.value / "src" / "main" / "webapp"
+    unmanagedResourceDirectories in Compile += baseDirectory.value / "src" / "main" / "webapp",
+    libraryDependencies ++= Seq(
+      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
+    )
   ).dependsOn(
     http % "test->test;compile->compile",
     httpMustache,
@@ -1298,7 +1311,10 @@ lazy val exampleTwitterServer = (project in file("examples/example-twitter-serve
   .settings(noPublishSettings)
   .settings(
     name := "example-twitter-server",
-    moduleName := "example-twitter-server"
+    moduleName := "example-twitter-server",
+    libraryDependencies ++= Seq(
+      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
+    )
     ).dependsOn(
       injectServer % "test->test;compile->compile",
       injectSlf4j,
