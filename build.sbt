@@ -236,6 +236,12 @@ lazy val baseServerSettings = baseSettings ++ buildSettings ++ publishSettings +
 lazy val exampleServerSettings = baseServerSettings ++ Seq(
   fork in run := true,
   javaOptions in Test ++= Seq(
+    // we are unable to guarantee that Logback will not get picked up b/c of coursier caching
+    // so we set the Logback System properties in addition to the slf4j-simple and the
+    // the Framework test logging disabled property.
+    "-Dlog.service.output=/dev/stdout",
+    "-Dlog.access.output=/dev/stdout",
+    "-Dlog_level=OFF",
     "-Dorg.slf4j.simpleLogger.defaultLogLevel=off",
     "-Dcom.twitter.inject.test.logging.disabled"
   ),
