@@ -12,6 +12,15 @@ Changed
 
 * finatra: Upgrade logback to 1.2.3 ``PHAB_ID=D415888``
 
+Fixed
+~~~~~
+
+* inject-server: Fix issue in `c.t.inject.server.EmbeddedHttpClient` where assertion of an
+  empty response body was incorrectly disallowed. This prevented asserting that a server
+  was not yet healthy as the `/health` endpoint returns an empty string, thus even a not yet
+  healthy server would report as "healthy" to the testing infrastructure as long as the `health`
+  endpoint returned a `200 - OK` response. ``PHAB_ID=D422712``
+
 19.12.0
 -------
 
