@@ -47,7 +47,7 @@ A request to ``GET /foo`` will produce a response:
 **Note:** If you change the default `MessageBodyWriter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyWriterImpl.scala>`__ implementation (used by the `MessageBodyManager <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala>`__)
 this will no longer be the default behavior, depending.
 
-You can also always use the `ResponseBuilder`_ to explicitly render a JSON response.
+You can also always use the |ResponseBuilder|_ to explicitly render a JSON response.
 
 Future Conversion
 -----------------
@@ -93,8 +93,8 @@ If you are not returning a Future from your callback and it does synchronous wor
 
 More information on blocking in Finagle can be found `here <https://finagle.github.io/blog/2016/09/01/block-party/>`__.
 
-ResponseBuilder
----------------
+|ResponseBuilder|_
+------------------
 
 All HTTP Controllers have a protected `response` field of type `c.t.finatra.http.response.ResponseBuilder <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala>`__ which can be used to build a `c.t.finagle.http.Response` in your Controller route callback functions.
 
@@ -157,9 +157,9 @@ For more examples, see the `ResponseBuilderTest <https://github.com/twitter/fina
 Wait, how do I create a `Response` from a `Future[T]`?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-As noted in the `Future Conversion`_ section, Finatra will attempt to construct a proper return type of `Future[Response]` from your callback's return type. Though, in many cases, you may find that you have a `Future[T]` and want to translate this into a `c.t.finagle.http.Response` yourself using the `ResponseBuilder`_. 
+As noted in the `Future Conversion`_ section, Finatra will attempt to construct a proper return type of `Future[Response]` from your callback's return type. Though, in many cases, you may find that you have a `Future[T]` and want to translate this into a `c.t.finagle.http.Response` yourself using the |ResponseBuilder|_. 
 
-Constructing a response is synchronous, thus the `ResponseBuilder`_ has no concept of Futures. However, the `ResponseBuilder`_
+Constructing a response is synchronous, thus the |ResponseBuilder|_ has no concept of Futures. However, the |ResponseBuilder|_
 is meant to be somewhat generic so its API for constructing a response body accepts an `Any` type which may make it *seem like* it should work to simply put in a `Future[T]` into the body. However, this is incorrect.
 
 If you have a `Future[T]` and want to return a `c.t.finagle.http.Response` you should either:
@@ -241,7 +241,7 @@ However, instead of directly returning error responses in this manner, a better 
 Setting the Response Location Header:
 -------------------------------------
 
-`ResponseBuilder`_ has a "location" method.
+|ResponseBuilder|_ has a "location" method.
 
 .. code:: scala
 
@@ -256,3 +256,7 @@ which can be used:
 -  if the URI has a valid scheme then the URI is placed in the Location header unchanged.
 -  `response.location("/users/123")` will get turned into the correct full URI by the `HttpResponseFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/HttpResponseFilter.scala>`__ (e.g. `https://host.com/users/123`) according to rules defined in the `URI specification <https://en.wikipedia.org/wiki/Uniform_Resource_Identifier#Generic_syntax>`__
 - The scheme is assumed to be `http` when rewritten unless otherwise specified in the `"x-forwarded-proto"` header in the request.
+
+.. |ResponseBuilder| replace:: `c.t.finatra.http.response.ResponseBuilder`
+.. ResponseBuilder: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala
+

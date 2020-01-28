@@ -840,7 +840,7 @@ class DashboardController extends Controller {
    * then the file will be returned. Otherwise the file at 'indexPath' (in this case 'index.html')
    * will be returned. This is useful for building "single-page" web applications.
    *
-   * Routes a are matched in the order they are defined, thus this route SHOULD be LAST as it is
+   * Routes are matched in the order they are defined, thus this route SHOULD be LAST as it is
    * a "catch-all" and routes should be defined in order of most-specific to least-specific.
    *
    * @see https://twitter.github.io/finatra/user-guide/build-new-http-server/controller.html#controllers-and-routing
