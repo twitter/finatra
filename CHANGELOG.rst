@@ -10,6 +10,9 @@ Unreleased
 Changed
 ~~~~~~~
 
+* finatra: Exposing Listening Server's bound address in Thrift and HTTP server traits
+  ``PHAB_ID=D424745``
+
 * finatra: Upgrade logback to 1.2.3 ``PHAB_ID=D415888``
 
 Fixed

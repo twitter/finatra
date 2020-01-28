@@ -251,6 +251,30 @@ trait HttpServerTrait extends TwitterServer {
    * Users must override with an implementation to serve a `Service[Request, Response]` */
   protected def httpService: Service[Request, Response]
 
+  /**
+   * The address to which the underlying Http [[ListeningServer]] is bound
+   *
+   * @note this returns [[None]] before the [[postWarmup()]] lifecycle phase is done or if the
+   *       server fails to start up.
+   */
+  protected final def httpBoundAddress: Option[InetSocketAddress] =
+    if (httpServer == NullServer)
+      None
+    else
+      Some(httpServer.boundAddress.asInstanceOf[InetSocketAddress])
+
+  /**
+   * The address to which the underlying Https [[ListeningServer]] is bound
+   *
+   * @note this returns [[None]] before the [[postWarmup()]] lifecycle phase is done or if the
+   *       server fails to start up.
+   */
+  protected final def httpsBoundAddress: Option[InetSocketAddress] =
+    if (httpsServer == NullServer)
+      None
+    else
+      Some(httpsServer.boundAddress.asInstanceOf[InetSocketAddress])
+
   /* Lifecycle */
 
   private[this] def defaultHttpServer(name: String): Http.Server = {

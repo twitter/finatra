@@ -14,6 +14,7 @@ import com.twitter.inject.internal.LibraryRegistry
 import com.twitter.inject.modules.StackTransformerModule
 import com.twitter.inject.server.{PortUtils, TwitterServer}
 import com.twitter.util.{Await, Duration}
+import java.net.InetSocketAddress
 
 private object ThriftServerTrait {
   /**
@@ -150,6 +151,19 @@ trait ThriftServerTrait extends TwitterServer {
    * Users must override with an implementation to serve a `Service[Array[Byte], Array[Byte]]`.
    */
   protected def thriftService: Service[Array[Byte], Array[Byte]]
+
+  /**
+   * The address to which the underlying [[ListeningServer]] is bound
+   *
+   * @note this returns [[None]] before the [[postWarmup()]] lifecycle phase is done or if the
+   *       server fails to start up.
+   */
+  protected final def boundAddress: Option[InetSocketAddress] =
+    if (thriftServer == NullServer)
+      None
+    else
+      Some(thriftServer.boundAddress.asInstanceOf[InetSocketAddress])
+
 
   /* Lifecycle */
 
