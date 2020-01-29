@@ -142,9 +142,9 @@ private[finatra] class JsonAwareEmbeddedHttpClient private[finatra] (
 
     val response = super.execute(request, headers, suppress, andExpect, withLocation, withBody)
 
-    if (nonEmpty(withJsonBody)) {
+    if (withJsonBody != null) {
       // expecting JSON, it is fine to expect empty JSON.
-      if (nonEmpty(withJsonBody)) {
+      if (withJsonBody.nonEmpty) {
         JsonDiff.jsonDiff(
           response.contentString,
           withJsonBody,

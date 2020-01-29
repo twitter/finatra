@@ -7,7 +7,7 @@ import com.twitter.inject.server.FeatureTest
 class ServerStartupTest extends FeatureTest {
 
   override val server =
-    new EmbeddedHttpServer(twitterServer = new Server, stage = Stage.PRODUCTION, verbose = false)
+    new EmbeddedHttpServer(twitterServer = new Server, stage = Stage.PRODUCTION, disableTestLogging = true)
 
   test("Server#startup") {
     server.assertHealthy()

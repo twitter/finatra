@@ -5,6 +5,7 @@ import com.twitter.finatra.thrift.tests.doeverything.controllers.DoNothingContro
 import com.twitter.finatra.thrift.{EmbeddedThriftServer, ThriftServer}
 import com.twitter.inject.Test
 import com.twitter.inject.server.EmbeddedTwitterServer
+import java.net.InetSocketAddress
 import scala.util.control.NonFatal
 
 class ThriftServerStartupFeatureTest extends Test {
@@ -61,6 +62,36 @@ class ThriftServerStartupFeatureTest extends Test {
     } catch {
       case NonFatal(e) =>
       // no-op: Since it's ok if we can't start on the default port since it may be already in use
+    } finally {
+      server.close()
+    }
+  }
+
+  test("Thrift Server test if ListeningServer address is bound in postWarmup") {
+    var boundAddressBeforePostWarmup: Option[InetSocketAddress] = None
+    var boundAddressPostWarmup: Option[InetSocketAddress] = None
+    val server = new EmbeddedTwitterServer(new ThriftServer {
+      override def configureThrift(router: ThriftRouter): Unit = {
+        router
+          .add[DoNothingController]
+      }
+
+      override protected def postInjectorStartup(): Unit = {
+        super.postInjectorStartup()
+        boundAddressBeforePostWarmup = boundAddress
+      }
+
+      override def postWarmup(): Unit = {
+        super.postWarmup();
+        boundAddressPostWarmup = boundAddress
+      }
+    }, disableTestLogging = true)
+
+    try {
+      server.start()
+      // Testing value of boundAddress before postWarmup and after postWarmup
+      assert(boundAddressBeforePostWarmup.isEmpty)
+      assert(boundAddressPostWarmup.isDefined)
     } finally {
       server.close()
     }

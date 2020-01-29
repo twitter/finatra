@@ -6,7 +6,7 @@ class JsonBenchmarkTest extends Test {
 
   test("json serde") {
     val benchmark = new JsonBenchmark()
-    benchmark.finatraCustomCaseClassDeserializer()
-    benchmark.jacksonScalaModuleCaseClassDeserializer()
+    benchmark.withCaseClassDeserializer()
+    benchmark.withoutCaseClassDeserializer()
   }
 }

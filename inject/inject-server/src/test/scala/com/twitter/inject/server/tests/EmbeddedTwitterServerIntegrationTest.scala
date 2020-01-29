@@ -8,7 +8,9 @@ import com.twitter.inject.server.EmbeddedTwitterServer.ReducibleFn
 import com.twitter.inject.server.{EmbeddedTwitterServer, TwitterServer}
 import com.twitter.inject.{Test, TwitterModule}
 import javax.inject.Singleton
+import org.scalatest.exceptions.TestFailedException
 import scala.collection.immutable.ListMap
+import scala.util.Random
 
 class EmbeddedTwitterServerIntegrationTest extends Test {
 
@@ -21,13 +23,11 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
     twitterServer.addFrameworkOverrideModules(new TwitterModule {})
     val embeddedServer = new EmbeddedTwitterServer(
       twitterServer = twitterServer,
-      disableTestLogging = true
+      disableTestLogging = false
     )
 
     try {
       embeddedServer.httpGetAdmin("/health", andExpect = Status.Ok, withBody = "OK\n")
-      embeddedServer.inMemoryStats.gauges.get("finagle/build/revision") should not be None
-
       embeddedServer.inMemoryStats.counters.get("no/count") should be(None) // doesn't exist
 
       embeddedServer.inMemoryStats.counters.waitFor("test/counter", 1L)
@@ -35,6 +35,38 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
         // the counter will never have this value.
         embeddedServer.inMemoryStats.counters.waitFor("test/counter", 11L)
       }
+    } finally {
+      embeddedServer.close()
+    }
+  }
+
+  test("server#assert healthy false with exception") {
+    val embeddedServer = new EmbeddedTwitterServer(
+      twitterServer = new TwitterServer {},
+      disableTestLogging = true
+    )
+    try {
+      // asserting that a server that started OK is not healthy will blow up
+      intercept[TestFailedException] {
+        embeddedServer.assertHealthy(healthy=false)
+      }
+    } finally {
+      embeddedServer.close()
+    }
+  }
+
+  test("server#assert healthy false") {
+    val embeddedServer = new EmbeddedTwitterServer(
+      twitterServer = new TwitterServer {
+        override def afterPostWarmup(): Unit = {
+          // do nothing -- we never report healthy
+        }
+      },
+      disableTestLogging = true
+    )
+    try {
+      // server never reports self as healthy
+      embeddedServer.assertHealthy(healthy=false)
     } finally {
       embeddedServer.close()
     }
@@ -62,8 +94,13 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
   }
 
   test("server#custom stats receiver") {
+    val counterName = Random.alphanumeric.take(18).mkString
     val testStatsReceiver = new TestStatsReceiver
-    val twitterServer = new TwitterServer {}
+    val twitterServer = new TwitterServer {
+      override def start(): Unit = {
+        injector.instance[StatsReceiver].counter(counterName).incr()
+      }
+    }
     val embeddedServer = new EmbeddedTwitterServer(
       twitterServer = twitterServer,
       disableTestLogging = true,
@@ -78,7 +115,7 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
       }
 
       intercept[IllegalStateException] {
-        embeddedServer.printStats()
+        embeddedServer.inMemoryStats.print()
       }
 
       intercept[IllegalStateException] {
@@ -102,7 +139,7 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
       embeddedServer.close()
     }
 
-    assert(testStatsReceiver.gauges.nonEmpty) /* we add a build revision gauge in startup of the server */
+    assert(testStatsReceiver.counters.nonEmpty) /* we add a counter in startup of the server */
   }
 
   test("server#custom stats receiver with non-injectable server") {
@@ -122,7 +159,7 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
       }
 
       intercept[IllegalStateException] {
-        embeddedServer.printStats()
+        embeddedServer.inMemoryStats.print()
       }
 
       intercept[IllegalStateException] {

@@ -340,12 +340,15 @@ class EmbeddedTwitterServer(
    * Assert that the underlying TwitterServer is "healthy". This will attempt to hit
    * the AdminHttpInterface `/health` endpoint and expects an "OK\n" response body.
    *
-   * This will throw an Exception if the health assertion fails.
+   * This will throw a [[org.scalatest.exceptions.TestFailedException]] if the health assertion fails.
    * @see [[isHealthy]] to determine the underlying TwitterServer health without an Exception.
    *
    * @param healthy what value for health to assert, e.g., to assert that the server is
-   *                "unhealthy", `assertHealthy(false)`. To assert that the server is
-   *                "healthy", `assertHealthy(true)`, Default is true.
+   *                "healthy", [[assertHealthy(healthy=true)]], Default is true.
+   * @note In almost no case is there a need to [[assertHealthy(healthy=false)]] as this
+   *       would typically equate to the underlying server failing to startup -- which would result
+   *       in a startup exception. If you want to build a wait-loop for the server to report itself
+   *       as healthy, it is better to query the admin `/health` endpoint directly using [[isHealthy]].
    */
   def assertHealthy(healthy: Boolean = true): Unit = {
     healthResponse(healthy).get()
@@ -438,7 +441,7 @@ class EmbeddedTwitterServer(
    */
   def printStats(): Unit = {
     infoBanner(name + " Stats", disableLogging)
-    inMemoryStats.print()
+    if (!disableLogging) inMemoryStats.print()
   }
 
   /**

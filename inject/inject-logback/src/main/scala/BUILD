@@ -9,6 +9,7 @@ scala_library(
         name = "inject-logback",
         repo = artifactory,
     ),
+    tags = ["logging_impl_check_whitelisted_target"],
     dependencies = [
         "3rdparty/jvm/ch/qos/logback:logback-classic",
         "3rdparty/jvm/ch/qos/logback:logback-core",

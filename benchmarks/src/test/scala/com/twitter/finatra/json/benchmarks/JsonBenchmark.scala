@@ -1,11 +1,9 @@
 package com.twitter.finatra.json.benchmarks
 
-import com.fasterxml.jackson.datatype.joda.JodaModule
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.fasterxml.jackson.module.scala.JacksonModule
 import com.twitter.finatra.StdBenchAnnotations
 import com.twitter.finatra.benchmarks.domain.{TestDemographic, TestFormat}
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.json.internal.serde.SerDeSimpleModule
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import java.io.ByteArrayInputStream
 import org.joda.time.DateTime
@@ -17,8 +15,8 @@ import org.openjdk.jmh.annotations._
 @State(Scope.Thread)
 class JsonBenchmark extends StdBenchAnnotations {
 
-  val json = """
-      {
+  private[this] val json =
+    """{
         "request_id": "00000000-1111-2222-3333-444444444444",
         "type": "impression",
         "params": {
@@ -34,35 +32,33 @@ class JsonBenchmark extends StdBenchAnnotations {
         "group_ids":["grp-1"]
       }"""
 
-  val bytes = json.getBytes("UTF-8")
+  private[this] val bytes = json.getBytes("UTF-8")
 
-  val finatraObjectMapper: FinatraObjectMapper = {
+  val mapperWithCaseClassDeserializer: FinatraObjectMapper = {
     val mapperModule = new FinatraJacksonModule()
     val scalaObjectMapper = mapperModule.provideScalaObjectMapper(injector = null)
     new FinatraObjectMapper(scalaObjectMapper)
   }
 
-  val jacksonScalaModuleObjectMapper: FinatraObjectMapper = {
-    val mapperModule = new FinatraJacksonModule() {
-
+  val mapperWithoutCaseClassDeserializer: FinatraObjectMapper = {
+    val mapperModule: FinatraJacksonModule = new FinatraJacksonModule() {
       // omit FinatraCaseClassModule
-      override def defaultJacksonModules =
-        Seq(new JodaModule, DefaultScalaModule, SerDeSimpleModule)
+      override def finatraCaseClassModule: Option[JacksonModule] = None
     }
     val scalaObjectMapper = mapperModule.provideScalaObjectMapper(injector = null)
     new FinatraObjectMapper(scalaObjectMapper)
   }
 
   @Benchmark
-  def finatraCustomCaseClassDeserializer(): TestTask = {
+  def withCaseClassDeserializer(): TestTask = {
     val is = new ByteArrayInputStream(bytes)
-    finatraObjectMapper.parse[TestTask](is)
+    mapperWithCaseClassDeserializer.parse[TestTask](is)
   }
 
   @Benchmark
-  def jacksonScalaModuleCaseClassDeserializer(): TestTask = {
+  def withoutCaseClassDeserializer(): TestTask = {
     val is = new ByteArrayInputStream(bytes)
-    jacksonScalaModuleObjectMapper.parse[TestTask](is)
+    mapperWithoutCaseClassDeserializer.parse[TestTask](is)
   }
 }
 

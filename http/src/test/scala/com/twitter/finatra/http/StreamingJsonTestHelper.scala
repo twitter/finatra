@@ -37,7 +37,6 @@ class StreamingJsonTestHelper(mapper: FinatraObjectMapper, writer: Option[Object
   }
 
   private def writeAndWait(request: Request, str: String): Unit = {
-    println("Write:\t" + str)
     Await.result(request.writer.write(Buf.Utf8(str)))
   }
 

@@ -15,7 +15,7 @@ class FeatureTestNonInjectionCustomStatsReceiverTest extends FeatureTest {
       disableTestLogging = true,
       statsReceiverOverride = Some(testStatsReceiver)
     )
-  /* Does not work since this we do not provide an InMemoryStatsReceiver but should not result in failures */
+  /* Does not work since we do not provide an InMemoryStatsReceiver but should not result in failures */
   override val printStats: Boolean = true
 
   /**

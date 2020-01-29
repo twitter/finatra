@@ -168,11 +168,11 @@ private[twitter] class EmbeddedHttpClient private[twitter] (
       assert(response.status == andExpect, receivedResponseStr(response))
     }
 
-    if (nonEmpty(withBody)) {
+    if (withBody != null) {
       assert(response.contentString == withBody, receivedResponseStr(response))
     }
 
-    if (nonEmpty(withLocation)) {
+    if (withLocation != null) {
       assert(
         response.location.get.endsWith(withLocation),
         "\nDiffering Location\n\nExpected Location is: "
