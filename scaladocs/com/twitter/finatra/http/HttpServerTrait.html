@@ -1883,6 +1883,25 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="com.twitter.finatra.http.HttpServerTrait#httpBoundAddress" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="httpBoundAddress:Option[java.net.InetSocketAddress]"></a><a id="httpBoundAddress:Option[InetSocketAddress]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#httpBoundAddress:Option[java.net.InetSocketAddress]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">httpBoundAddress</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="java.net.InetSocketAddress">InetSocketAddress</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">The address to which the underlying Http <span class="extype" name="ListeningServer">ListeningServer</span> is bound
+</p><div class="fullcomment"><div class="comment cmt"><p>The address to which the underlying Http <span class="extype" name="ListeningServer">ListeningServer</span> is bound
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Note</dt><dd><span class="cmt"><p>this returns <span class="extype" name="None">None</span> before the <span class="extype" name="postWarmup()">postWarmup()</span> lifecycle phase is done or if the
+      server fails to start up.</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.HttpServerTrait#httpExternalPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="httpExternalPort:Option[Int]"></a>
       <span class="permalink">
@@ -1918,6 +1937,25 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
       
       <p class="shortcomment cmt">Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing an <span class="extype" name="HttpResponseClassifier">HttpResponseClassifier</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing an <span class="extype" name="HttpResponseClassifier">HttpResponseClassifier</span>.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which provides an <span class="extype" name="HttpResponseClassifier">HttpResponseClassifier</span> implementation.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="com.twitter.finatra.http.HttpServerTrait#httpsBoundAddress" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="httpsBoundAddress:Option[java.net.InetSocketAddress]"></a><a id="httpsBoundAddress:Option[InetSocketAddress]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServerTrait.html#httpsBoundAddress:Option[java.net.InetSocketAddress]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">httpsBoundAddress</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="java.net.InetSocketAddress">InetSocketAddress</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">The address to which the underlying Https <span class="extype" name="ListeningServer">ListeningServer</span> is bound
+</p><div class="fullcomment"><div class="comment cmt"><p>The address to which the underlying Https <span class="extype" name="ListeningServer">ListeningServer</span> is bound
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Note</dt><dd><span class="cmt"><p>this returns <span class="extype" name="None">None</span> before the <span class="extype" name="postWarmup()">postWarmup()</span> lifecycle phase is done or if the
+      server fails to start up.</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.HttpServerTrait#httpsExternalPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="httpsExternalPort:Option[Int]"></a>
       <span class="permalink">

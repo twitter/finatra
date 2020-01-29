@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>HTTP Responses &#8212; Finatra 19.12.0 documentation</title>
+    <title>HTTP Responses &#8212; Finatra 20.1.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.12.0',
+        VERSION:     '20.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.12.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 20.1.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="HTTP Streaming" href="streaming.html" />
     <link rel="prev" title="HTTP Requests" href="requests.html" />
@@ -109,7 +109,7 @@ get(&quot;/foo&quot;) { request: Request =&gt;
 </div>
 <p><strong>Note:</strong> If you change the default <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyWriterImpl.scala">MessageBodyWriter</a> implementation (used by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala">MessageBodyManager</a>)
 this will no longer be the default behavior, depending.</p>
-<p>You can also always use the <a class="reference internal" href="#responsebuilder">ResponseBuilder</a> to explicitly render a JSON response.</p>
+<p>You can also always use the <a class="reference internal" href="#responsebuilder"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a> to explicitly render a JSON response.</p>
 </div>
 <div class="section" id="future-conversion">
 <h2>Future Conversion<a class="headerlink" href="#future-conversion" title="Permalink to this headline">¶</a></h2>
@@ -151,7 +151,7 @@ class MyController extends Controller {
 </div>
 </div>
 <div class="section" id="responsebuilder">
-<h2>ResponseBuilder<a class="headerlink" href="#responsebuilder" title="Permalink to this headline">¶</a></h2>
+<h2><a class="reference internal" href="#responsebuilder"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a><a class="headerlink" href="#responsebuilder" title="Permalink to this headline">¶</a></h2>
 <p>All HTTP Controllers have a protected <cite>response</cite> field of type <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala">c.t.finatra.http.response.ResponseBuilder</a> which can be used to build a <cite>c.t.finagle.http.Response</cite> in your Controller route callback functions.</p>
 <p>For example:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>get(&quot;/foo&quot;) { request: Request =&gt;
@@ -207,8 +207,8 @@ post(&quot;/users&quot;) { request: MyPostRequest =&gt;
 <p>For more examples, see the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/response/ResponseBuilderTest.scala">ResponseBuilderTest</a>.</p>
 <div class="section" id="wait-how-do-i-create-a-response-from-a-future-t">
 <h3>Wait, how do I create a <cite>Response</cite> from a <cite>Future[T]</cite>?<a class="headerlink" href="#wait-how-do-i-create-a-response-from-a-future-t" title="Permalink to this headline">¶</a></h3>
-<p>As noted in the <a class="reference internal" href="#future-conversion">Future Conversion</a> section, Finatra will attempt to construct a proper return type of <cite>Future[Response]</cite> from your callback&#8217;s return type. Though, in many cases, you may find that you have a <cite>Future[T]</cite> and want to translate this into a <cite>c.t.finagle.http.Response</cite> yourself using the <a class="reference internal" href="#responsebuilder">ResponseBuilder</a>.</p>
-<p>Constructing a response is synchronous, thus the <a class="reference internal" href="#responsebuilder">ResponseBuilder</a> has no concept of Futures. However, the <a class="reference internal" href="#responsebuilder">ResponseBuilder</a>
+<p>As noted in the <a class="reference internal" href="#future-conversion">Future Conversion</a> section, Finatra will attempt to construct a proper return type of <cite>Future[Response]</cite> from your callback&#8217;s return type. Though, in many cases, you may find that you have a <cite>Future[T]</cite> and want to translate this into a <cite>c.t.finagle.http.Response</cite> yourself using the <a class="reference internal" href="#responsebuilder"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a>.</p>
+<p>Constructing a response is synchronous, thus the <a class="reference internal" href="#responsebuilder"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a> has no concept of Futures. However, the <a class="reference internal" href="#responsebuilder"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a>
 is meant to be somewhat generic so its API for constructing a response body accepts an <cite>Any</cite> type which may make it <em>seem like</em> it should work to simply put in a <cite>Future[T]</cite> into the body. However, this is incorrect.</p>
 <p>If you have a <cite>Future[T]</cite> and want to return a <cite>c.t.finagle.http.Response</cite> you should either:</p>
 <ul class="simple">
@@ -278,7 +278,7 @@ get(&quot;/ServiceUnavailable&quot;) { request: Request =&gt;
 </div>
 <div class="section" id="setting-the-response-location-header">
 <h2>Setting the Response Location Header:<a class="headerlink" href="#setting-the-response-location-header" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="#responsebuilder">ResponseBuilder</a> has a &#8220;location&#8221; method.</p>
+<p><a class="reference internal" href="#responsebuilder"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a> has a &#8220;location&#8221; method.</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>post(&quot;/users&quot;) { request: Request =&gt;
   response
     .created
@@ -324,7 +324,7 @@ get(&quot;/ServiceUnavailable&quot;) { request: Request =&gt;
 <li><a class="reference internal" href="#don-t-block-no-seriously-do-not-block">Don&#8217;t Block (No, Seriously, Do Not Block)</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#responsebuilder">ResponseBuilder</a><ul>
+<li><a class="reference internal" href="#responsebuilder"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a><ul>
 <li><a class="reference internal" href="#wait-how-do-i-create-a-response-from-a-future-t">Wait, how do I create a <cite>Response</cite> from a <cite>Future[T]</cite>?</a></li>
 </ul>
 </li>
@@ -365,7 +365,7 @@ get(&quot;/ServiceUnavailable&quot;) { request: Request =&gt;
   
 
   <div class="footer">
-    &copy; Copyright 2013-2019 Twitter, Inc.
+    &copy; Copyright 2013-2020 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

@@ -767,6 +767,25 @@ registered <span class="extype" name="Awaitable">Awaitable</span> exits it will 
         </dd><dt>Note</dt><dd><span class="cmt"><p>You MUST call <code>super.beforePostWarmup()</code> in any overridden definition of this
 method. Failure to do so may cause your server to not completely startup.</p></span>, <span class="cmt"><p>It is NOT expected that you block in this method as you will prevent completion
 of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Lifecycle$$Warmup.html#prebindWarmup():Unit" class="extype" name="com.twitter.server.Lifecycle.Warmup">com.twitter.server.Lifecycle.Warmup#prebindWarmup</a></p></span><span class="cmt"><p><a href="../../inject/app/App.html#beforePostWarmup():Unit" class="extmbr" name="com.twitter.inject.app.App#beforePostWarmup">com.twitter.inject.app.App#beforePostWarmup</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.ThriftServerTrait#boundAddress" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="boundAddress:Option[java.net.InetSocketAddress]"></a><a id="boundAddress:Option[InetSocketAddress]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/thrift/AbstractThriftServer.html#boundAddress:Option[java.net.InetSocketAddress]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">boundAddress</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="java.net.InetSocketAddress">InetSocketAddress</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">The address to which the underlying <span class="extype" name="ListeningServer">ListeningServer</span> is bound
+</p><div class="fullcomment"><div class="comment cmt"><p>The address to which the underlying <span class="extype" name="ListeningServer">ListeningServer</span> is bound
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd><dt>Note</dt><dd><span class="cmt"><p>this returns <span class="extype" name="None">None</span> before the <span class="extype" name="postWarmup()">postWarmup()</span> lifecycle phase is done or if the
+      server fails to start up.</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.ThriftServerTrait#build" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="build(addr:String,server:com.twitter.finagle.ThriftMux.Server):com.twitter.finagle.ListeningServer"></a><a id="build(String,Server):ListeningServer"></a>
       <span class="permalink">

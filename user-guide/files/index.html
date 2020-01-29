@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Working With Files &#8212; Finatra 19.12.0 documentation</title>
+    <title>Working With Files &#8212; Finatra 20.1.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '19.12.0',
+        VERSION:     '20.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 19.12.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 20.1.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Scrooge and Finagle" href="../thrift/basics.html" />
     <link rel="prev" title="Mustache Integration with HTTP Routing" href="../mustache/routing.html" />
@@ -77,9 +77,11 @@
 for production apps requiring a robust high performance file serving solution.</p>
 <div class="section" id="file-locations">
 <h2>File Locations<a class="headerlink" href="#file-locations" title="Permalink to this headline">¶</a></h2>
-<p>By default, files are served from the root of the classpath. You can use the flag <cite>-doc.root</cite> to customize the classpath
-root for finding files. To serve files from the local filesystem, set the flag <cite>-local.doc.root</cite> to the location of the
-file serving directory.</p>
+<p>By default, files are served from the root of the classpath. That is, by default the framework attempts to load files
+as <a class="reference external" href="https://docs.oracle.com/javase/8/docs/technotes/guides/lang/resources.html">classpath resources</a>. As such, you
+may want to familiarize yourself with the basic workings of the Java <a class="reference external" href="https://en.wikipedia.org/wiki/Classpath_(Java)">classpath</a>.
+You can use the flag <cite>-doc.root</cite> to customize the classpath root (i.e., &#8220;namespace&#8221;) for finding files.</p>
+<p>To serve files from the local filesystem, set the flag <cite>-local.doc.root</cite> to the location of the file serving directory.</p>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
 <p class="last">It is an <strong>error</strong> to attempt to set both the <cite>-doc.root</cite> and the <cite>-local.doc.root</cite> flags.</p>
@@ -90,33 +92,57 @@ file serving directory.</p>
 <li>configure a classpath &#8220;namespace&#8221; by setting the <cite>-doc.root</cite> flag <strong>or</strong></li>
 <li>load files from the local filesystem directory location specified by the <cite>-local.doc.root</cite> flag.</li>
 </ul>
-<div class="admonition tip">
-<p class="first admonition-title">Tip</p>
-<p>Note that setting Java System Property <cite>-Denv=env</cite> is <strong>no longer required nor supported</strong>.</p>
-<p class="last">Setting the <cite>-local.doc.root</cite> flag will trigger the same <cite>localFileMode</cite> behavior from Finatra v1.x.</p>
-</div>
-<p>Additionally, it is recommend to use local filesystem serving <em>only during testing</em> and <strong>not in production</strong>. It is recommended that you include files to be served as classpath resources in production.</p>
-<p>For changes from Finatra v1.x static files behavior see the <a class="reference external" href="../v1-migration/index.html#static-files">Static Files</a> section in the <a class="reference external" href="../v1-migration/index.html">Version 1 Migration Guide</a>.</p>
+<p>Additionally, it is recommend to use local filesystem serving <em>only during testing</em> and <strong>not in production</strong>. It is recommended that you include files to be served as <a class="reference external" href="https://docs.oracle.com/javase/8/docs/technotes/guides/lang/resources.html">classpath resources</a> in production.</p>
 <p>To set a flag value, pass the flag and its value as an argument to your server:</p>
 <div class="code bash highlight-text"><div class="highlight"><pre><span></span>$ java -jar finatra-http-server-assembly-2.0.0.jar -doc.root=/namespace
 </pre></div>
 </div>
 <p>For more information on using and setting command-line flags see <a class="reference external" href="../getting-started/flags.html#passing-flag-values-as-command-line-arguments">Flags</a>.</p>
 </div>
+<div class="section" id="fileresolver">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/e9aa2dacd4ba2efd2db380135a10cf8ad10ee2b5/utils/src/main/scala/com/twitter/finatra/utils/FileResolver.scala#L21"><cite>c.t.finatra.utils.FileResolver</cite></a><a class="headerlink" href="#fileresolver" title="Permalink to this headline">¶</a></h2>
+<p>Files are loaded by the <a class="reference external" href="https://github.com/twitter/finatra/blob/e9aa2dacd4ba2efd2db380135a10cf8ad10ee2b5/utils/src/main/scala/com/twitter/finatra/utils/FileResolver.scala#L21"><cite>c.t.finatra.utils.FileResolver</cite></a>.</p>
+<p>In HTTP <a class="reference external" href="../http/server.html">servers</a>, the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/modules/FileResolverModule.scala">FileResolverModule</a> provides an instance
+of the <a class="reference external" href="https://github.com/twitter/finatra/blob/e9aa2dacd4ba2efd2db380135a10cf8ad10ee2b5/utils/src/main/scala/com/twitter/finatra/utils/FileResolver.scala#L21"><cite>c.t.finatra.utils.FileResolver</cite></a> as a <a class="reference external" href="../http/server.html#framework-modules">framework module</a> (<a class="reference external" href="https://github.com/twitter/finatra/blob/e9aa2dacd4ba2efd2db380135a10cf8ad10ee2b5/http/src/main/scala/com/twitter/finatra/http/servers.scala#L426">source</a>).</p>
+</div>
 <div class="section" id="file-serving-examples">
 <h2>File Serving Examples<a class="headerlink" href="#file-serving-examples" title="Permalink to this headline">¶</a></h2>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>get(&quot;/file&quot;) { request: Request =&gt;
-  response.ok.file(&quot;/file123.txt&quot;)
-}
+<p>File serving is most commonly done through an HTTP <a class="reference external" href="../http/server.html">server</a> to serve assets. Thus we&#8217;ll show examples assuming an HTTP controller. For utility, the framework provides methods to return the contents of a file as the body of an HTTP response through the
+<a class="reference external" href="../http/responses.html#responsebuilder">ResponseBuilder</a>.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import ExampleService
+import com.twitter.finagle.http.Request
+import com.twitter.finatra.http.Controller
+import javax.inject.Inject
 
-get(&quot;/:*&quot;) { request: Request =&gt;
-  response.ok.fileOrIndex(
-    request.params(&quot;*&quot;),
-    &quot;index.html&quot;)
+class ExampleController @Inject()(
+  exampleService: ExampleService
+) extends Controller {
+
+  get(&quot;/file&quot;) { _: Request =&gt;
+    response.ok.file(&quot;/file123.txt&quot;)
+  }
+
+  get(&quot;/:*&quot;) { request: Request =&gt;
+    response.ok.fileOrIndex(
+      request.params(&quot;*&quot;),
+      &quot;index.html&quot;)
+  }
 }
 </pre></div>
 </div>
-<p>See the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala">test class</a> for more examples.</p>
+<p>In the first route definiton, we use the <a class="reference external" href="../http/responses.html#responsebuilder">ResponseBuilder</a> of the HTTP Controller to return an HTTP <cite>200 - OK</cite> response with a body rendered from the contents of the file <cite>file123.txt</cite>. In this case, if the file cannot be found an HTTP <cite>404 - NOT FOUND</cite> response <a class="reference external" href="https://github.com/twitter/finatra/blob/e9aa2dacd4ba2efd2db380135a10cf8ad10ee2b5/http/src/main/scala/com/twitter/finatra/http/response/EnrichedResponse.scala#L638">will be returned</a>. See the methods of the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/EnrichedResponse.scala">c.t.finatra.http.response.EnrichedResponse</a> for more details on returning file responses.</p>
+<p>In the second route definition, we use the <a class="reference external" href="../http/responses.html#responsebuilder">ResponseBuilder</a> to return an HTTP <cite>200 - OK</cite> response with a body rendered from either the filename represented by the incoming wildcard path parameter (<cite>:*</cite>), or if not found the contents of the <cite>index.html</cite> file.</p>
+<p>Specifically, this means that given an incoming URI of <cite>/foo.html</cite>, this route will attempt to load the <cite>foo.html</cite> file and if it
+could not would instead load <cite>index.html</cite> and render a response with a body of the resolved file contents. Likewise, an incoming URI of <cite>/foo/bar/file.html</cite> will attempt to resolve the file at that path, <cite>foo/bar/file.html</cite> otherwise it will return the contents of the
+<cite>index.html</cite> file.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Routes are matched in the order they are defined, thus this route SHOULD be LAST as it is a &#8220;catch-all&#8221; and routes should be
+defined in order of most-specific to least-specific.</p>
+</div>
+<p>This can be useful for building &#8220;single-page&#8221; <a class="reference external" href="https://en.wikipedia.org/wiki/Single-page_application">web applications</a>. See the
+<a class="reference external" href="https://github.com/twitter/finatra/tree/develop/examples/web-dashboard">web-dashboard</a> project for a runnable example.</p>
+<p>Or see the local file system <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/fileserver/LocalFileServerFeatureTest.scala">test class</a> for more general file resolving examples.</p>
 </div>
 </div>
 
@@ -143,6 +169,7 @@ get(&quot;/:*&quot;) { request: Request =&gt;
   <ul>
 <li><a class="reference internal" href="#">Working With Files</a><ul>
 <li><a class="reference internal" href="#file-locations">File Locations</a></li>
+<li><a class="reference internal" href="#fileresolver"><cite>c.t.finatra.utils.FileResolver</cite></a></li>
 <li><a class="reference internal" href="#file-serving-examples">File Serving Examples</a></li>
 </ul>
 </li>
@@ -178,7 +205,7 @@ get(&quot;/:*&quot;) { request: Request =&gt;
   
 
   <div class="footer">
-    &copy; Copyright 2013-2019 Twitter, Inc.
+    &copy; Copyright 2013-2020 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>
