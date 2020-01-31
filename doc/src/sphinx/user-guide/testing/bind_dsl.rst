@@ -3,6 +3,10 @@
 Explicit Binding with ``#bind[T]``
 ==================================
 
+.. important::
+
+  Please see the section on including test-jar dependencies in your project: `Test Dependencies <../..#test-dependencies>`_.
+
 Embedded Server ``#bind[T]``
 ----------------------------
 

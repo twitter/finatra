@@ -3,6 +3,10 @@
 Startup Tests
 =============
 
+.. important::
+
+  Please see the section on including test-jar dependencies in your project: `Test Dependencies <../..#test-dependencies>`_.
+
 By default the Finatra embedded testing infrastructure sets the `Guice <https://github.com/google/guice>`__
 |com.google.inject.Stage|_ to `DEVELOPMENT` for the object graph of the server or application under
 test. For purposes of testing we choose the trade-off of a fast start-up time for the embedded

@@ -3,6 +3,10 @@
 Override Modules
 ================
 
+.. important::
+
+  Please see the section on including test-jar dependencies in your project: `Test Dependencies <../..#test-dependencies>`_.
+
 For basic information on Modules in Finatra, see `Modules <../getting-started/modules.html>`__.
 
 Defining a module is generally used to tell `Guice <https://github.com/google/guice>`__ *how* to

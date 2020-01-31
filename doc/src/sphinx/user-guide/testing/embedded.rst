@@ -3,6 +3,10 @@
 Embedded Servers and Apps
 =========================
 
+.. important::
+
+  Please see the section on including test-jar dependencies in your project: `Test Dependencies <../..#test-dependencies>`_.
+
 Finatra provides a way to run an embedded version of your service or app running locally on ephemeral
 ports. This allows you to run *actual* requests against an *actual* version of your server when testing.
 

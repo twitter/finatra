@@ -3,6 +3,10 @@
 Feature Tests
 =============
 
+.. important::
+
+  Please see the section on including test-jar dependencies in your project: `Test Dependencies <../..#test-dependencies>`_.
+
 .. tip::
 
     If you are calling an |c.t.util.Await|_ function on a |c.t.util.Future|_ return type in a
