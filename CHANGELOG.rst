@@ -7,6 +7,11 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+ * finatra: Add NullKafkaProducer for unit tests to avoid network connection failures in the log
+   ``PHAB_ID=D429004``.
+
 20.1.0
 ------
 
