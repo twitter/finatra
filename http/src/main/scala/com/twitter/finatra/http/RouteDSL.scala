@@ -124,7 +124,7 @@ private[http] trait RouteDSL extends RouteState { self =>
   /* GET/ */
 
   def get[RequestType: TypeTag, ResponseType: TypeTag](
-    route: String,
+    route: String = "",
     name: String = "",
     admin: Boolean = false,
     index: Option[RouteIndex] = None
@@ -171,7 +171,7 @@ private[http] trait RouteDSL extends RouteState { self =>
   /* POST/ */
 
   def post[RequestType: TypeTag, ResponseType: TypeTag](
-    route: String,
+    route: String = "",
     name: String = "",
     admin: Boolean = false,
     index: Option[RouteIndex] = None
@@ -218,7 +218,7 @@ private[http] trait RouteDSL extends RouteState { self =>
   /* PUT/ */
 
   def put[RequestType: TypeTag, ResponseType: TypeTag](
-    route: String,
+    route: String = "",
     name: String = "",
     admin: Boolean = false,
     index: Option[RouteIndex] = None
@@ -265,7 +265,7 @@ private[http] trait RouteDSL extends RouteState { self =>
   /* HEAD/ */
 
   def head[RequestType: TypeTag, ResponseType: TypeTag](
-    route: String,
+    route: String = "",
     name: String = "",
     admin: Boolean = false,
     index: Option[RouteIndex] = None
@@ -312,7 +312,7 @@ private[http] trait RouteDSL extends RouteState { self =>
   /* PATCH/ */
 
   def patch[RequestType: TypeTag, ResponseType: TypeTag](
-    route: String,
+    route: String = "",
     name: String = "",
     admin: Boolean = false,
     index: Option[RouteIndex] = None
@@ -359,7 +359,7 @@ private[http] trait RouteDSL extends RouteState { self =>
   /* DELETE/ */
 
   def delete[RequestType: TypeTag, ResponseType: TypeTag](
-    route: String,
+    route: String = "",
     name: String = "",
     admin: Boolean = false,
     index: Option[RouteIndex] = None
@@ -406,7 +406,7 @@ private[http] trait RouteDSL extends RouteState { self =>
   /* TRACE/ */
 
   def trace[RequestType: TypeTag, ResponseType: TypeTag](
-    route: String,
+    route: String = "",
     name: String = "",
     admin: Boolean = false,
     index: Option[RouteIndex] = None
@@ -453,7 +453,7 @@ private[http] trait RouteDSL extends RouteState { self =>
   /* OPTIONS/ */
 
   def options[RequestType: TypeTag, ResponseType: TypeTag](
-    route: String,
+    route: String = "",
     name: String = "",
     admin: Boolean = false,
     index: Option[RouteIndex] = None
@@ -500,7 +500,7 @@ private[http] trait RouteDSL extends RouteState { self =>
   /* ANY/ */
 
   def any[RequestType: TypeTag, ResponseType: TypeTag](
-    route: String,
+    route: String = "",
     name: String = "",
     admin: Boolean = false,
     index: Option[RouteIndex] = None
@@ -568,14 +568,15 @@ private[http] trait RouteDSL extends RouteState { self =>
     index: Option[RouteIndex],
     callback: RequestType => ResponseType
   ) = {
+    val prefixedRoute = prefixRoute(route)
     require(
-      route.startsWith("/"),
+      prefixedRoute.startsWith("/"),
       s"""Invalid route: "$route." Routes MUST begin with a forward slash (/).""")
 
     contextWrapper {
       routeBuilders += new RouteBuilder(
         method,
-        prefixRoute(route),
+        prefixedRoute,
         name,
         clazz,
         admin,
@@ -589,7 +590,7 @@ private[http] trait RouteDSL extends RouteState { self =>
 
   private def prefixRoute(route: String): String = {
     /* routes and prefixes MUST begin with a leading / */
-    contextVar().prefix match {
+    context.prefix match {
       case prefix if prefix.nonEmpty => s"$prefix$route"
       case _ => route
     }

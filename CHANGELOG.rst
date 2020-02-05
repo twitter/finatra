@@ -12,6 +12,10 @@ Added
  * finatra: Add NullKafkaProducer for unit tests to avoid network connection failures in the log
    ``PHAB_ID=D429004``.
 
+Changed
+~~~~~~~
+ * finatra-http: RouteDSL/PrefixedDSL no longer require route when a valid prefix is provided
+
 20.1.0
 ------
 

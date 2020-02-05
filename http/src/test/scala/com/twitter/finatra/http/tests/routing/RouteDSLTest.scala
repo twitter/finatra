@@ -133,4 +133,32 @@ class RouteDSLTest extends Test {
 
     response.headerMap("response") shouldEqual "true"
   }
+
+  test("PrefixedDSL should work with valid prefix and empty route") {
+    new PrefixedDSL("/foo") {
+      get() { _: Request =>"bar" }
+
+      post() { _: Request => "bar" }
+
+      put() { _: Request => "bar" }
+
+      head() { _: Request => "bar" }
+
+      patch() { _: Request => "bar" }
+
+      delete() { _: Request => "bar" }
+
+      trace() { _: Request => "bar" }
+
+      options() { _: Request => "bar" }
+    }
+  }
+
+  test("RouteDSL should fail with empty route and no prefix") {
+    intercept[IllegalArgumentException] {
+      new RouteDSL {
+        get() { _: Request => "bar" }
+      }
+    }
+  }
 }
