@@ -100,6 +100,12 @@ class DoEverythingController @Inject()(
     }
   }
 
+  prefix("/1.2/users") {
+    get() { _: Request =>
+      "ok!"
+    }
+  }
+
   filter[ForbiddenFilter].prefix("/1.1") {
     get("/forbiddenByFilterPrefilter") { _: Request =>
       "ok!"

@@ -189,6 +189,14 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     )
   }
 
+  test("/1.2/users (empty route)") {
+    server.httpGet(
+      "/1.2/users",
+      andExpect = Ok,
+      withBody = "ok!"
+    )
+  }
+
   test("GET /bytearray") {
     val response = server.httpGet("/bytearray")
 
