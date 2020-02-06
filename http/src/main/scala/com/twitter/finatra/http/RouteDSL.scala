@@ -590,7 +590,7 @@ private[http] trait RouteDSL extends RouteState { self =>
 
   private def prefixRoute(route: String): String = {
     /* routes and prefixes MUST begin with a leading / */
-    context.prefix match {
+    contextVar().prefix match {
       case prefix if prefix.nonEmpty => s"$prefix$route"
       case _ => route
     }
