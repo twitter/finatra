@@ -1,10 +1,62 @@
 package com.twitter.finatra.http.tests.integration.json
 
+import com.fasterxml.jackson.annotation.{JsonFormat, JsonIgnore, JsonProperty, JsonSubTypes, JsonTypeInfo}
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type
+import com.fasterxml.jackson.core.{JsonParser, TreeNode}
+import com.fasterxml.jackson.databind.{DeserializationContext, JsonNode}
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+import com.fasterxml.jackson.databind.node.ValueNode
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.request.{Header, QueryParam, RouteParam}
-import com.twitter.finatra.validation.{MethodValidation, Size, ValidationResult}
+import com.twitter.finatra.validation.{Max, MethodValidation, Min, NotEmpty, Size, ValidationResult}
+import com.twitter.util.Time
+import scala.math.BigDecimal.RoundingMode
+
+class MyBigDecimalDeserializer extends StdDeserializer[BigDecimal](classOf[BigDecimal]) {
+  override def deserialize(jp: JsonParser, ctxt: DeserializationContext): BigDecimal = {
+    val jsonNode: ValueNode = jp.getCodec.readTree(jp)
+    BigDecimal(jsonNode.asText).setScale(2, RoundingMode.HALF_UP)
+  }
+
+  override def getEmptyValue: BigDecimal = BigDecimal(0)
+}
+
+case class CaseClassWithQueryParamJsonPropertyField(
+  @QueryParam("q") @JsonProperty("x") query: String
+)
+
+case class CaseClassWithLongParamNameRequest(
+  @QueryParam thisShouldUseMapperNamingStrategy: String
+)
+
+case class CaseClassWithCustomDecimalFormatRequest(
+  @QueryParam @JsonDeserialize(using = classOf[MyBigDecimalDeserializer]) required: BigDecimal,
+  @QueryParam @JsonDeserialize(using = classOf[MyBigDecimalDeserializer]) optional: Option[BigDecimal])
 
 case class CaseClassWithBoolean(foo: Boolean)
+
+case class CaseClassComplexQueryParamRequest(@QueryParam("q") shouldBeAString: String)
+
+case class TimeWithFormatRequest(
+  @QueryParam("t") @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") when: Time)
+
+case class CaseClassWithLongAndDeserializerRequest(
+  @QueryParam @JsonDeserialize(contentAs = classOf[java.lang.Long]) long: Number)
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes(
+  Array(
+    new Type(value = classOf[Rectangle], name = "rectangle"),
+    new Type(value = classOf[Circle], name = "circle")
+  )
+)
+sealed trait Shape
+
+case class Rectangle(@Min(0) width: Int, @Min(0) height: Int) extends Shape
+case class Circle(@Min(0) radius: Int) extends Shape
+
+case class ShapesRequest(@NotEmpty shapes: Seq[Shape], request: Request)
 
 case class PersonWithThingsRequest(
   id: Int,
@@ -85,6 +137,7 @@ trait TestRequest {
     createErrorMessage(paramName, badValue.getOrElse("None"), errMsg)
   }
 }
+
 case class UserLookupRequest(
   @QueryParam ids: Option[String] = None,
   @QueryParam names: Option[String] = None,
@@ -139,3 +192,38 @@ case class UserLookupRequest(
   private[this] val listOfIds: Seq[Long] = ids.fold(Seq.empty[Long])(extractListOfLongIds)
   private[this] val listOfNames: Seq[String] = listOfStrings(names)
 }
+
+case class ShapelessRequest(
+  @QueryParam("q") shape: Shape
+)
+
+case class NotMyType(id: Long, name: String, description: String)
+trait NotMyTypeMixIn {
+  @QueryParam
+  def id: Long
+
+  @QueryParam("n")
+  def name: String
+
+  @QueryParam("d")
+  def description: String
+}
+
+class PointDeserializer extends StdDeserializer[Point](classOf[Point]) {
+  override def deserialize(jp: JsonParser, ctxt: DeserializationContext): Point = {
+    val jsonNode: JsonNode = jp.getCodec.readTree(jp)
+    Point(jsonNode.get("x").asInt(), jsonNode.get("y").asInt())
+  }
+
+  override def getEmptyValue: Point = Point(0, 0)
+}
+
+
+case class Point(x: Int, y: Int)
+@JsonDeserialize(using = classOf[PointDeserializer])
+trait PointMixin {
+  def x: Int
+  def y: Int
+}
+
+case class PointRequest(@QueryParam("p") point: Point)

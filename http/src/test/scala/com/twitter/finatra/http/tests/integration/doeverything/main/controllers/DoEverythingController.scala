@@ -2,7 +2,6 @@ package com.twitter.finatra.http.tests.integration.doeverything.main.controllers
 
 import com.twitter.finagle.http.{Method, Request, Status}
 import com.twitter.finagle.{ChannelClosedException, ChannelWriteException, Failure}
-import com.twitter.finatra.annotations.CamelCaseMapper
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.exceptions._
 import com.twitter.finatra.http.jsonpatch.{JsonPatch, JsonPatchOperator, JsonPatchUtility}
@@ -15,9 +14,10 @@ import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions._
 import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{AppendToHeaderFilter, ForbiddenFilter, IdentityFilter}
 import com.twitter.finatra.http.tests.integration.doeverything.main.jsonpatch._
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.{ComplexServiceFactory, DoEverythingService, MultiService}
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.TestCaseClassWithLocalDate
 import com.twitter.finatra.httpclient.{HttpClient, RequestBuilder}
+import com.twitter.finatra.json.annotations.CamelCaseMapper
 import com.twitter.finatra.request.{QueryParam, RouteParam}
 import com.twitter.inject.annotations.Flag
 import com.twitter.util.Future
@@ -35,8 +35,8 @@ class DoEverythingController @Inject()(
   exampleService: DoEverythingService,
   multiService: Set[MultiService],
   complexServiceFactory: ComplexServiceFactory,
-  objectMapper: FinatraObjectMapper,
-  @CamelCaseMapper camelCaseObjectMapper: FinatraObjectMapper,
+  objectMapper: ScalaObjectMapper,
+  @CamelCaseMapper camelCaseObjectMapper: ScalaObjectMapper,
   jsonPatchOperator: JsonPatchOperator,
   forward: HttpForward,
   httpClient: HttpClient)

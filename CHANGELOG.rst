@@ -9,8 +9,53 @@ Unreleased
 
 Added
 ~~~~~
- * finatra: Add NullKafkaProducer for unit tests to avoid network connection failures in the log
-   ``PHAB_ID=D429004``.
+
+* finatra-jackson: Added new functionality in the `CaseClassDeserializer` to support more
+  Jackson annotations during deserialization. See documentation for more information. 
+  ``PHAB_ID=D407284``
+
+* finatra: Add NullKafkaProducer for unit tests to avoid network connection failures in the log.
+  ``PHAB_ID=D429004``  
+
+Changed
+~~~~~~~
+
+* finatra-jackson: Updated Finatra Jackson integration to introduce a new `ScalaObjectMapper`
+  and module to simplify configuration and creation of the mapper. See documentation for more
+  information. ``PHAB_ID=D407284``
+
+* finatra-jackson: (BREAKING API CHANGE) Moved the java binding annotations, `CamelCaseMapper` and
+  `SnakeCaseMapper` from `c.t.finatra.annotations` in `finatra/jackson` to
+  `c.t.finatra.json.annotations` in `finatra/json-annotations`. Moved
+  `c.t.finatra.response.JsonCamelCase` to `c.t.finatra.json.annotations.JsonCamelCase` which is also
+  now deprecated. Users are encouraged to use the standard Jackson annotations or a mapper with
+  the desired property naming strategy configured.
+
+  Many exceptions for case class deserialization were meant to be internal to the framework but are
+  useful or necessary outside of the internals of JSON deserialization. As such we have cleaned up
+  and made most JSON deserialization exceptions public. As a result, all the exceptions have been moved
+  from `c.t.finatra.json.internal.caseclass.exceptions` to `c.t.finatra.jackson.caseclass.exceptions`.
+
+  `c.t.finatra.json.internal.caseclass.exceptions.CaseClassValidationException` has been renamed to
+  `c.t.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException`. `JsonInjectException`,
+  `JsonInjectionNotSupportedException`, and `RequestFieldInjectionNotSupportedException` have all been
+  deleted and replaced with `c.t.finatra.jackson.caseclass.exceptions.InjectableValuesException`
+  which represents the same error cases.
+
+  The `FinatraJsonMappingException` has been removed. Users are encouraged to instead use the general
+  Jackson `JsonMappingException` (which the `FinatraJsonMappingException` extends).
+
+  `RepeatedCommaSeparatedQueryParameterException` has been moved tom finatra/http.
+  ``PHAB_ID=D407284``
+
+Fixed
+~~~~~
+
+* finatra-jackson: Fix for enforcing "fail on unknown properties" during deserialization. Previously,
+  the `CaseClassDeserializer` was optimized to only read the fields in the case class constructor
+  from the incoming JSON and thus ignored any unknown fields during deserialization. The fix will 
+  now properly fail if the `DeserializationFeature` is set or if the `JsonProperties` is configured
+  accordingly. ``PHAB_ID=D407284``
 
 20.1.0
 ------

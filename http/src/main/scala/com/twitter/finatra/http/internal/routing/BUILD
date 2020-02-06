@@ -20,15 +20,9 @@ scala_library(
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
-        "finatra/jackson/src/main/scala",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/streaming",
         "util/util-core/src/main/scala/com/twitter/concurrent",
-        "util/util-core/src/main/scala/com/twitter/util",
-    ],
-    exports = [
-        "finagle/finagle-base-http/src/main/scala",
-        "finatra/http/src/main/scala/com/twitter/finatra/http/marshalling",
-        "finatra/http/src/main/scala/com/twitter/finatra/http/response",
-        "finatra/jackson/src/main/scala",
         "util/util-core/src/main/scala/com/twitter/util",
     ],
 )

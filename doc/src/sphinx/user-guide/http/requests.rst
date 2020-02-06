@@ -27,8 +27,8 @@ annotation to specify the JSON field name in the case class (see: `example <http
 and `test case <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/test/scala/com/twitter/finatra/json/tests/FinatraObjectMapperTest.scala#L140>`__).
 
 A `PropertyNamingStrategy <https://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html>`__
-can be configured to handle common name substitutions (e.g. snake\_case or camelCase). By default,
-snake\_case is used (defaults are set in `FinatraJacksonModule <https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala>`__).
+can be configured to handle common name substitutions (e.g. `snake\_case` or `camelCase`). By default,
+`snake\_case` is used (defaults are set in `FinatraJacksonModule <https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala>`__).
 
 For example, if we have a `POST` endpoint which expects a JSON body with a `Long` `"id"` and a
 `String` `"name"`, we could define the following case class and Controller route:
@@ -52,7 +52,7 @@ For the request: ``POST /hi``
     "name": "Bob"
   }
 
-The incoming request body will be parsed as JSON using the configured `FinatraObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala>`__
+The incoming request body will be parsed as JSON using the configured |FinatraScalaObjectMapper|_
 into the `HiRequest` case class. This route would thus return:
 
    :statuscode 200: `Hello Bob with id 1`
@@ -61,18 +61,18 @@ into the `HiRequest` case class. This route would thus return:
 More examples in the `JSON Integration with Routing <../json/routing.html#json-integration-with-routing>`__
 section.
 
-For more information on configuring the `FinatraObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala>`__
-see the `Jackson Integration <../json/index.html>`__ section.
+For more information on configuring the |FinatraScalaObjectMapper|_ see the
+`Jackson Integration <../json/index.html>`__ section.
 
 Required Fields
-^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~
 
 **Non-option fields without default values are considered required.**
 
 If a required field is missing, a `CaseClassMappingException` is thrown.
 
 Field Annotations
-^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~
 
 Field annotations give signal as to how the framework should parse a case class field member from
 the `c.t.finagle.http.Request`. Supported annotations:
@@ -81,12 +81,12 @@ the `c.t.finagle.http.Request`. Supported annotations:
 - `@QueryParam <#queryparam>`__
 - `@FormParam <#formparam>`__
 - `@Header <#header>`__
-- `@Inject <#inject>`__
+- `@Inject <#inject>`__ (allows for Jackson injection of a value from the object graph).
 
 ------------
 
 `@RouteParam <https://github.com/twitter/finatra/blob/develop/jackson/src/main/java/com/twitter/finatra/request/RouteParam.java>`__
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Denotes a field to be parsed from a named parameter in a given route, e.g.,
 
@@ -119,7 +119,7 @@ Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/sca
 ------------
 
 `@QueryParam <https://github.com/twitter/finatra/blob/develop/jackson/src/main/java/com/twitter/finatra/request/QueryParam.java>`__
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Read a value from the request query string by a parameter named for the case class field or by the
 ``@QueryParam`` annotation value.
@@ -192,7 +192,7 @@ will return a Bad Request with an appropriate error message when `commaSeparated
 ------------
 
 `@FormParam <https://github.com/twitter/finatra/blob/develop/jackson/src/main/java/com/twitter/finatra/request/FormParam.java>`__
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Read a value from a form field with the case class field's name or as the value specified in the
 ``@FormParam`` annotation from the request body.
@@ -206,7 +206,7 @@ Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/sca
 ------------
 
 `@Header <https://github.com/twitter/finatra/blob/develop/jackson/src/main/java/com/twitter/finatra/request/Header.java>`__
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Read a header value specified by the case class field name or by the ``@Header`` annotation value.
 You can use a Scala `"back-quote" literal <https://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html>`__
@@ -245,7 +245,7 @@ Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/sca
 ------------
 
 @Inject
-"""""""
+^^^^^^^
 
 Can be used to inject any `Guice <https://github.com/google/guice>`__ managed class into your case
 class.
@@ -257,7 +257,7 @@ class.
       @Inject defaultOptString: Option[String],
       @Inject foo Foo)
 
-Note, however, it is not necessary to "inject" the underlying Finagle `http` Request into your
+Note, however, it is not necessary to inject the underlying Finagle `http` Request into your
 case class. To access the underlying Finagle HTTP Request in your custom case class, simply
 include a field of type `c.t.finagle.http.Request` and the framework will properly inject the
 incoming request into your custom case class, for example:
@@ -286,7 +286,39 @@ Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/sca
     mentioned above.
 
 For more specifics on how JSON parsing integrates with routing see the
-`JSON Integration with Routing <../json/routing.html>`__ in the `JSON <../json/index.html>`__ documentation.
+`JSON Integration with Routing <../json/routing.html>`__ in the `JSON <../json/index.html>`__
+documentation.
+
+.. warning::
+
+    It is an error to specify multiple field annotations on a single case class field, and it is also an
+    error to use a field annotation in conjunction with **any** `JacksonAnnotation <https://github.com/FasterXML/jackson-annotations/blob/a991c43a74e4230eb643e380870b503997674c2d/src/main/java/com/fasterxml/jackson/annotation/JacksonAnnotation.java#L9>`_.
+
+    Both of these cases will result in error during deserialization of JSON into the case class.
+
+InjectableValues
+^^^^^^^^^^^^^^^^
+
+These annotations are implemented via a Finatra HTTP integration with Jackson `InjectableValues <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/InjectableValues.java>`_
+implemented in the `MessageInjectableValues <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageInjectableValues.scala>`_
+class.
+
+.. caution::
+
+    The `MessageInjectableValues <http:s//github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageInjectableValues.scala>`_
+    is only configured via the framework's `DefaultMessageBodyReader <./message_body.html#id2>`_
+    `DefaultMessageBodyReaderImpl <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyReaderImpl.scala>`_
+    which is bound in the `MessageBodyModule <./message_body.html#id5>`_.
+
+    Thus, attempting to use the HTTP-specific field annotations with a |FinatraScalaObjectMapper|_
+    instance **will not work**.
+
+    That is, trying to deserialize JSON into a case class that has fields annotated with
+    `@QueryParam`, `@RouteParam`, `@FormParam` or `@Header` with an instance of the
+    |FinatraScalaObjectMapper|_ will not properly inject those fields from a given HTTP message.
+
+    This injection will only happen properly through usage of the Finatra framework's
+    `DefaultMessageBodyReader#parse <./message_body.html#id2>`_.
 
 Message Body Components
 -----------------------
@@ -475,3 +507,7 @@ For more information and examples, see:
 -  `DoEverythingController <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/controllers/DoEverythingController.scala>`__
 -  `DoEverythingServerFeatureTest <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala>`__
 -  `MultiParamsTest <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/request/MultiParamsTest.scala>`__
+
+.. |FinatraScalaObjectMapper| replace:: `ScalaObjectMapper`
+.. _FinatraScalaObjectMapper: https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala
+

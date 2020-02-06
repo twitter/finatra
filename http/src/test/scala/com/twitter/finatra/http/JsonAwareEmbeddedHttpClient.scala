@@ -3,16 +3,17 @@ package com.twitter.finatra.http
 import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.http.{Request, Response, Status}
-import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
-import com.twitter.inject.server.{EmbeddedHttpClient, _}
+import com.twitter.finatra.jackson.ScalaObjectMapper
+import com.twitter.finatra.json.JsonDiff
 import com.twitter.inject.server.PortUtils.loopbackAddressForPort
+import com.twitter.inject.server.{EmbeddedHttpClient, _}
 import com.twitter.util.{Duration, Try}
 
 private[finatra] object JsonAwareEmbeddedHttpClient {
   def jsonParseWithNormalizer[T: Manifest](
     response: Response,
     normalizeParsedJsonNode: Boolean = true,
-    mapper: FinatraObjectMapper = FinatraObjectMapper.create(),
+    mapper: ScalaObjectMapper = ScalaObjectMapper(),
     normalizer: JsonNode => JsonNode = identity[JsonNode]
   ): T = {
     val jsonNode = {
@@ -44,7 +45,7 @@ private[finatra] class JsonAwareEmbeddedHttpClient private[finatra] (
   sessionAcquisitionTimeout: Duration,
   streamResponses: Boolean,
   defaultHeaders: () => Map[String, String],
-  mapper: FinatraObjectMapper,
+  mapper: ScalaObjectMapper,
   disableLogging: Boolean
 ) extends EmbeddedHttpClient(
       name,
@@ -66,7 +67,7 @@ private[finatra] class JsonAwareEmbeddedHttpClient private[finatra] (
       sessionAcquisitionTimeout = 1.second,
       streamResponses = false,
       defaultHeaders = () => Map(),
-      mapper = FinatraObjectMapper.create(),
+      mapper = ScalaObjectMapper(),
       disableLogging = false
     )
 
@@ -78,14 +79,14 @@ private[finatra] class JsonAwareEmbeddedHttpClient private[finatra] (
       sessionAcquisitionTimeout = 1.second,
       streamResponses = false,
       defaultHeaders = () => Map(),
-      mapper = FinatraObjectMapper.create(),
+      mapper = ScalaObjectMapper(),
       disableLogging = disableLogging
     )
 
   /* Mutable state */
   private[this] var _mapper = mapper
 
-  def withMapper(mapper: FinatraObjectMapper): this.type = {
+  def withMapper(mapper: ScalaObjectMapper): this.type = {
     this._mapper = mapper
     this
   }

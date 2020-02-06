@@ -7,7 +7,7 @@ import com.twitter.finagle.http.{MediaType, Method, Status, _}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.JsonAwareEmbeddedHttpClient.jsonParseWithNormalizer
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.server.{EmbeddedHttpClient, EmbeddedTwitterServer, Ports}
 import com.twitter.util.{Duration, Memoize}
@@ -18,26 +18,26 @@ import scala.collection.JavaConverters._
  * EmbeddedHttpServer allows a [[com.twitter.server.TwitterServer]] serving http endpoints to be started
  * locally (on ephemeral ports), and tested through it's http interfaces.
  *
- * @param twitterServer The [[com.twitter.server.TwitterServer]] to be started for testing.
+ * @param twitterServer                     The [[com.twitter.server.TwitterServer]] to be started for testing.
  * @param flags Command line flags (e.g. "foo"->"bar" is translated into -foo=bar). See: [[com.twitter.app.Flag]].
  * @param args Extra command line arguments.
  * @param waitForWarmup Once the server is started, wait for server warmup to be completed
- * @param stage [[com.google.inject.Stage]] used to create the server's injector. Since EmbeddedHttpServer is used for testing,
- *              we default to Stage.DEVELOPMENT. This makes it possible to only mock objects that are used in a given test,
- *              at the expense of not checking that the entire object graph is valid. As such, you should always have at
- *              least one Stage.PRODUCTION test for your service (which eagerly creates all classes at startup)
- * @param useSocksProxy Use a tunneled socks proxy for external service discovery/calls (useful for manually running external
- *                      integration tests that connect to external services).
- * @param defaultRequestHeaders Headers to always send to the embedded server.
- * @param defaultHttpSecure Default all requests to the server to be HTTPS.
- * @param mapperOverride [[com.twitter.finatra.json.FinatraObjectMapper]] to use instead of the mapper configuered by
- *                      the embedded server.
- * @param httpPortFlag Name of the flag that defines the external http port for the server.
- * @param streamResponse Toggle to not unwrap response content body to allow caller to stream response.
- * @param verbose Enable verbose logging during test runs.
- * @param disableTestLogging Disable all logging emitted from the test infrastructure.
- * @param maxStartupTimeSeconds Maximum seconds to wait for embedded server to start. If exceeded a
- *                              [[com.twitter.inject.app.StartupTimeoutException]] is thrown.
+ * @param stage                    [[com.google.inject.Stage]] used to create the server's injector. Since EmbeddedHttpServer is used for testing,
+ *                                          we default to Stage.DEVELOPMENT. This makes it possible to only mock objects that are used in a given test,
+ *                                          at the expense of not checking that the entire object graph is valid. As such, you should always have at
+ *                                          least one Stage.PRODUCTION test for your service (which eagerly creates all classes at startup)
+ * @param useSocksProxy                     Use a tunneled socks proxy for external service discovery/calls (useful for manually running external
+ *                                          integration tests that connect to external services).
+ * @param defaultRequestHeaders             Headers to always send to the embedded server.
+ * @param defaultHttpSecure                 Default all requests to the server to be HTTPS.
+ * @param mapperOverride                    [[com.twitter.finatra.jackson.ScalaObjectMapper]] to use instead of the mapper configuered by
+ *                                          the embedded server.
+ * @param httpPortFlag                      Name of the flag that defines the external http port for the server.
+ * @param streamResponse                    Toggle to not unwrap response content body to allow caller to stream response.
+ * @param verbose                           Enable verbose logging during test runs.
+ * @param disableTestLogging                Disable all logging emitted from the test infrastructure.
+ * @param maxStartupTimeSeconds          Maximum seconds to wait for embedded server to start. If exceeded a
+ *                                       [[com.twitter.inject.app.StartupTimeoutException]] is thrown.
  * @param failOnLintViolation If server startup should fail due (and thus the test) to a detected lint rule issue after startup.
  * @param closeGracePeriod An Optional grace period to use instead of the underlying server's
  *                         `defaultGracePeriod` when closing the underlying server.
@@ -47,12 +47,12 @@ import scala.collection.JavaConverters._
  *                              the startup of the [[twitterServer]]. In order to ensure insertion ordering,
  *                              you should use a [[scala.collection.immutable.ListMap]].
  * @param statsReceiverOverride An optional [[StatsReceiver]] implementation that should be bound to the
- *                              underlying server when testing with an injectable server. By default
- *                              an injectable server under test will have an [[com.twitter.finagle.stats.InMemoryStatsReceiver]]
- *                              implementation bound for the purpose of testing. In some cases, users may want to test using
- *                              a custom [[StatsReceiver]] implementation instead and can provide an instance
- *                              to use here. For non-injectable servers this can be a shared reference
- *                              used in the server under test.
+ *                                          underlying server when testing with an injectable server. By default
+ *                                          an injectable server under test will have an [[com.twitter.finagle.stats.InMemoryStatsReceiver]]
+ *                                          implementation bound for the purpose of testing. In some cases, users may want to test using
+ *                                          a custom [[StatsReceiver]] implementation instead and can provide an instance
+ *                                          to use here. For non-injectable servers this can be a shared reference
+ *                                          used in the server under test.
  */
 class EmbeddedHttpServer(
   override val twitterServer: Ports,
@@ -63,7 +63,7 @@ class EmbeddedHttpServer(
   useSocksProxy: Boolean = false,
   override val defaultRequestHeaders: Map[String, String] = Map(),
   defaultHttpSecure: Boolean = false,
-  override val mapperOverride: Option[FinatraObjectMapper] = None,
+  override val mapperOverride: Option[ScalaObjectMapper] = None,
   override val httpPortFlag: String = "http.port",
   override val streamResponse: Boolean = false,
   verbose: Boolean = false,
@@ -167,8 +167,7 @@ class EmbeddedHttpServer(
    * response#contentString into an instance of type [[ResponseType]].
    *
    * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
-   *
-   * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
+   * @see [[com.twitter.finatra.jackson.ScalaObjectMapper]]#parse[T: Manifest](string: String)
    * @param path - URI of the request
    * @param accept - add request Accept header with the given [[com.twitter.finagle.http.MediaType]]
    * @param headers - additional headers that should be passed with the request
@@ -184,6 +183,7 @@ class EmbeddedHttpServer(
    * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
    * @tparam ResponseType - parse the response#contentString into type [[ResponseType]]
+   *
    * @return instance of type [[ResponseType]] serialized from the the response#contentString.
    */
   def httpGetJson[ResponseType: Manifest](
@@ -293,8 +293,7 @@ class EmbeddedHttpServer(
    * response#contentString into an instance of type [[ResponseType]].
    *
    * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
-   *
-   * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
+   * @see [[com.twitter.finatra.jackson.ScalaObjectMapper]]#parse[T: Manifest](string: String)
    * @param path - URI of the request
    * @param postBody - body of the POST request
    * @param suppress - suppress http client logging
@@ -310,6 +309,7 @@ class EmbeddedHttpServer(
    * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
    * @tparam ResponseType - parse the response#contentString into type [[ResponseType]]
+   *
    * @return instance of type [[ResponseType]] serialized from the the response#contentString.
    */
   def httpPostJson[ResponseType: Manifest](
@@ -421,8 +421,7 @@ class EmbeddedHttpServer(
    * response#contentString into an instance of type [[ResponseType]].
    *
    * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
-   *
-   * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
+   * @see [[com.twitter.finatra.jackson.ScalaObjectMapper]]#parse[T: Manifest](string: String)
    * @param path - URI of the request
    * @param putBody - the body of the PUT request
    * @param suppress - suppress http client logging
@@ -438,6 +437,7 @@ class EmbeddedHttpServer(
    * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
    * @tparam ResponseType - parse the response#contentString into type [[ResponseType]]
+   *
    * @return instance of type [[ResponseType]] serialized from the the response#contentString.
    */
   def httpPutJson[ResponseType: Manifest](
@@ -551,8 +551,7 @@ class EmbeddedHttpServer(
    * response#contentString into an instance of type [[ResponseType]].
    *
    * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
-   *
-   * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
+   * @see [[com.twitter.finatra.jackson.ScalaObjectMapper]]#parse[T: Manifest](string: String)
    * @param path - URI of the request
    * @param deleteBody - the body of the DELETE request
    * @param suppress - suppress http client logging
@@ -568,6 +567,7 @@ class EmbeddedHttpServer(
    * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
    * @tparam ResponseType - parse the response#contentString into type [[ResponseType]]
+   *
    * @return instance of type [[ResponseType]] serialized from the the response#contentString.
    */
   def httpDeleteJson[ResponseType: Manifest](
@@ -730,8 +730,7 @@ class EmbeddedHttpServer(
    * response#contentString into an instance of type [[ResponseType]].
    *
    * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
-   *
-   * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
+   * @see [[com.twitter.finatra.jackson.ScalaObjectMapper]]#parse[T: Manifest](string: String)
    * @param path - URI of the request
    * @param patchBody - the body of the PATCH request
    * @param suppress - suppress http client logging
@@ -747,6 +746,7 @@ class EmbeddedHttpServer(
    * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
    * @tparam ResponseType - parse the response#contentString into type [[ResponseType]]
+   *
    * @return instance of type [[ResponseType]] serialized from the the response#contentString.
    */
   def httpPatchJson[ResponseType: Manifest](
@@ -990,7 +990,7 @@ class EmbeddedHttpServer(
    * Sends the given [[com.twitter.finagle.http.Request]] to the embedded server
    * serializing the normalized response#contentString into an instance of type [[ResponseType]]
    *
-   * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
+   * @see [[com.twitter.finatra.jackson.ScalaObjectMapper]]#parse[T: Manifest](string: String)
    * @param request - built [[com.twitter.finagle.http.Request]] to send to the embedded server
    * @param suppress - suppress http client logging
    * @param andExpect - expected [[com.twitter.finagle.http.Status]] value
@@ -1003,6 +1003,7 @@ class EmbeddedHttpServer(
    * @param withErrors - expected errors
    * @param routeHint - optionally force the request to the main or admin interface of the embedded server, RouteHint.None by default
    * @param secure - use the https port to address the embedded server, default = None
+   *
    * @return instance of type [[ResponseType]] serialized from the response#contentString
    */
   def httpRequestJson[ResponseType: Manifest](

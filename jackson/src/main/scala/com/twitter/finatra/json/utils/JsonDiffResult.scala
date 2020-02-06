@@ -1,11 +1,15 @@
 package com.twitter.finatra.json.utils
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 
 object JsonDiffResult {
 
-  def create(mapper: FinatraObjectMapper, expected: JsonNode, received: JsonNode): JsonDiffResult = {
+  def create(
+    mapper: ScalaObjectMapper,
+    expected: JsonNode,
+    received: JsonNode
+  ): JsonDiffResult = {
 
     JsonDiffResult(
       expected = expected,
@@ -20,15 +24,15 @@ case class JsonDiffResult(
   expected: JsonNode,
   expectedPrettyString: String,
   received: JsonNode,
-  receivedPrettyString: String
-) {
+  receivedPrettyString: String) {
 
   lazy val toMessage: String = {
     val expectedJsonSorted = JsonDiffUtil.sortedString(expected)
     val receivedJsonSorted = JsonDiffUtil.sortedString(received)
 
     val expectedHeader = "Expected: "
-    val diffStartIdx = receivedJsonSorted.zip(expectedJsonSorted).indexWhere { case (x, y) => x != y }
+    val diffStartIdx =
+      receivedJsonSorted.zip(expectedJsonSorted).indexWhere { case (x, y) => x != y }
 
     val message = new StringBuilder
     message.append(" " * (expectedHeader.length + diffStartIdx) + "*\n")

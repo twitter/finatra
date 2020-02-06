@@ -6,8 +6,8 @@ import com.twitter.finatra.http.internal.routing.CallbackConverter
 import com.twitter.finatra.http.modules.MessageBodyModule
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.http.streaming.{StreamingRequest, StreamingResponse}
-import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.json.modules.FinatraJacksonModule
+import com.twitter.finatra.jackson.ScalaObjectMapper
+import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.conversions.buf._
@@ -31,13 +31,13 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
   override val injector: Injector =
     TestInjector(
       MessageBodyModule,
-      FinatraJacksonModule,
+      ScalaObjectMapperModule,
       FileResolverModule,
       StatsReceiverModule
     ).create
 
   private val callbackConverter = injector.instance[CallbackConverter]
-  private val mapper = injector.instance[FinatraObjectMapper]
+  private val mapper = injector.instance[ScalaObjectMapper]
 
   val ford = Car("Ford")
   val okResponse = SimpleResponse(Status.Ok, "bob")

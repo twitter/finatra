@@ -7,7 +7,7 @@ import com.twitter.finatra.http.response.ResponseUtils._
 import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.Http
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.inject.Injector
 import com.twitter.inject.utils.RetryPolicyUtils._
 
@@ -38,6 +38,6 @@ object FirebaseHttpClientModule extends HttpClientModuleTrait {
   final def provideHttpClient(
     injector: Injector,
     statsReceiver: StatsReceiver,
-    mapper: FinatraObjectMapper
+    mapper: ScalaObjectMapper
   ): HttpClient = newHttpClient(injector, statsReceiver, mapper)
 }

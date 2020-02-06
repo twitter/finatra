@@ -47,7 +47,7 @@ object TypeUtils {
               ManifestFactory.classType(clazz)
             }
           } catch {
-            case e: NoClassDefFoundError => ManifestFactory.Any
+            case _: NoClassDefFoundError => ManifestFactory.Any
           }
       }
     }

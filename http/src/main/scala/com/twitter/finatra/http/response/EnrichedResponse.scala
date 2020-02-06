@@ -9,7 +9,7 @@ import com.twitter.finatra.http.marshalling.{
   MessageBodyManager,
   WriterResponse
 }
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.utils.FileResolver
 import com.twitter.inject.Logging
 import com.twitter.inject.exceptions.DetailedNonRetryableSourcedException
@@ -397,7 +397,7 @@ object EnrichedResponse {
   private[response] class Builder(
     statsReceiver: StatsReceiver,
     fileResolver: FileResolver,
-    objectMapper: FinatraObjectMapper,
+    objectMapper: ScalaObjectMapper,
     messageBodyManager: MessageBodyManager,
     responseBuilder: ResponseBuilder) {
 
@@ -426,7 +426,7 @@ object EnrichedResponse {
 private final case class EnrichedResponseImpl(
   statsReceiver: StatsReceiver,
   fileResolver: FileResolver,
-  objectMapper: FinatraObjectMapper,
+  objectMapper: ScalaObjectMapper,
   messageBodyManager: MessageBodyManager,
   responseBuilder: ResponseBuilder,
   underlying: finagle.http.Response)

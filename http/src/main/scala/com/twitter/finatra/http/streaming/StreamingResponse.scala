@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.streaming
 
 import com.twitter.finagle.http.{Response, Status, Version}
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.Future
 import java.util.concurrent.atomic.AtomicBoolean
@@ -11,7 +11,7 @@ import scala.language.higherKinds
  * StreamingResponse is an abstraction over an output Primitive Stream - Reader or AsyncStream.
  * It carries the output stream as well as some HTTP Response metadata.
  *
- * @param mapper Server's configured FinatraObjectMapper.
+ * @param mapper Server's configured ScalaObjectMapper.
  * @param stream The output stream.
  * @param status Represents an HTTP status code.
  * @param headers A Map of message headers.
@@ -21,7 +21,7 @@ import scala.language.higherKinds
  * @note Users should construct this via c.t.finatra.http.response.ResponseBuilder#streaming
  */
 final class StreamingResponse[F[_]: ToReader, A: Manifest] private[http] (
-  mapper: FinatraObjectMapper,
+  mapper: ScalaObjectMapper,
   stream: F[A],
   status: Status = Status.Ok,
   headers: Map[String, Seq[String]] = Map.empty) {

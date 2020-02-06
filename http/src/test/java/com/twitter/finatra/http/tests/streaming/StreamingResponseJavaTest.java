@@ -22,7 +22,7 @@ import com.twitter.finatra.http.marshalling.MessageBodyManager;
 import com.twitter.finatra.http.response.ResponseBuilder;
 import com.twitter.finatra.http.streaming.StreamingResponse;
 import com.twitter.finatra.http.streaming.ToReader;
-import com.twitter.finatra.json.FinatraObjectMapper;
+import com.twitter.finatra.jackson.ScalaObjectMapper;
 import com.twitter.finatra.utils.FileResolver;
 
 import com.twitter.io.Buf;
@@ -49,7 +49,7 @@ public class StreamingResponseJavaTest extends Assert {
   }
 
   private ResponseBuilder responseBuilder = new ResponseBuilder(
-    FinatraObjectMapper.create(null),
+    ScalaObjectMapper.apply(),
     new FileResolver("src/main/webapp/", ""),
     Mockito.mock(MessageBodyManager.class),
     Mockito.mock(StatsReceiver.class),

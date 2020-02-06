@@ -2,9 +2,9 @@ package com.twitter.finatra.http.internal.marshalling
 
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.inject.Injector
-import com.twitter.finagle.http.{MediaType, Message, Request}
+import com.twitter.finagle.http.{MediaType, Message}
 import com.twitter.finatra.http.marshalling.{DefaultMessageBodyReader, MessageBodyReader}
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.request.JsonIgnoreBody
 import javax.inject.{Inject, Singleton}
 
@@ -15,20 +15,14 @@ private[finatra] object DefaultMessageBodyReaderImpl {
 @Singleton
 private[finatra] class DefaultMessageBodyReaderImpl @Inject()(
   injector: Injector,
-  objectMapper: FinatraObjectMapper
-) extends DefaultMessageBodyReader {
+  objectMapper: ScalaObjectMapper)
+    extends DefaultMessageBodyReader {
 
   /* Public */
 
   override def parse[T: Manifest](message: Message): T = {
-    val objectReader = message match {
-      case request: Request =>
-        val requestInjectableValues =
-          new RequestInjectableValues(objectMapper,request, injector)
-        objectMapper.reader[T].`with`(requestInjectableValues)
-      case _ =>
-        objectMapper.reader[T]
-    }
+    val objectReader =
+      objectMapper.reader[T].`with`(new MessageInjectableValues(injector, objectMapper, message))
 
     val hasMessageBody = message.contentLength match {
       case Some(length) if length > 0 => true

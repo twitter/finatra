@@ -620,7 +620,7 @@ lazy val injectUtils = (project in file("inject/inject-utils"))
  * {{{
  *   $ ./sbt
  *   > project benchmarks
- *   > jmh:run -i 10 -wi 20 -f1 -t1 .*FalseSharing.*
+ *   > jmh:run -i 10 -wi 20 -f1 -t1 .*JsonBenchmark.*
  * }}}
  *
  * Which means "10 iterations" "20 warm up iterations" "1 fork" "1 thread". Note that
@@ -730,13 +730,14 @@ lazy val jackson = project
   .settings(
     name := "finatra-jackson",
     moduleName := "finatra-jackson",
-    ScoverageKeys.coverageExcludedPackages := ".*JacksonToGuiceTypeConverter.*;.*DurationMillisSerializer.*;.*ByteBufferUtils.*",
+    ScoverageKeys.coverageExcludedPackages := ".*DurationMillisSerializer.*;.*ByteBufferUtils.*",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jacksonDatabind,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson,
+      "com.google.inject" % "guice" % versions.guice,
       "org.json4s" %% "json4s-core" % versions.json4s,
-      "com.twitter" %% "finagle-http" % versions.twLibVersion,
+      "com.twitter" %% "finagle-http" % versions.twLibVersion % "test",
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
@@ -760,8 +761,21 @@ lazy val jackson = project
     }
   ).dependsOn(
     injectApp % "test->test",
+    injectCore,
+    injectSlf4j,
     injectUtils,
+    jsonAnnotations,
     validation % "test->test;compile->compile")
+
+lazy val jsonAnnotations = (project in file("json-annotations"))
+  .settings(projectSettings)
+  .settings(
+    name := "finatra-json-annotations",
+    moduleName := "finatra-json-annotations",
+    libraryDependencies ++= Seq(
+      "com.google.inject" % "guice" % versions.guice
+    )
+  )
 
 lazy val mustache = project
   .settings(projectSettings)

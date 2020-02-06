@@ -19,7 +19,7 @@ scala_library(
         "finatra/inject/inject-modules/src/main/scala",
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
-        "finatra/jackson/src/main/scala",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
         "util/util-core/src/main/scala",
         "util/util-slf4j-api/src/main/scala",
     ],

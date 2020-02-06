@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finagle.http.Message
 import com.twitter.finatra.http.marshalling.mapper._
 import com.twitter.finatra.http.marshalling.MessageBodyReader
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import javax.inject.Inject
 
-class DomainTestUserReader @Inject()(mapper: FinatraObjectMapper)
+class DomainTestUserReader @Inject()(mapper: ScalaObjectMapper)
     extends MessageBodyReader[DomainTestUser] {
 
   override def parse(message: Message): DomainTestUser = {

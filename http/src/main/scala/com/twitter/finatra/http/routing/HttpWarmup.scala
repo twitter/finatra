@@ -2,7 +2,7 @@ package com.twitter.finatra.http.routing
 
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.inject.Logging
 import com.twitter.util.Await
 import javax.inject.Inject
@@ -19,13 +19,12 @@ private object HttpWarmup {
  * purpose of warming up the `HttpServer`.
  *
  * @note This only provides routing to user-defined routes of the configured [[HttpRouter]].
- *
  * @param router the configured [[HttpRouter]]
- * @param mapper the configured server [[com.twitter.finatra.json.FinatraObjectMapper]]
+ * @param mapper the configured server [[com.twitter.finatra.jackson.ScalaObjectMapper]]
  *
  * @see [[HttpRouter]]
  */
-class HttpWarmup @Inject()(router: HttpRouter, mapper: FinatraObjectMapper) extends Logging {
+class HttpWarmup @Inject()(router: HttpRouter, mapper: ScalaObjectMapper) extends Logging {
   import HttpWarmup._
 
   /* Public */

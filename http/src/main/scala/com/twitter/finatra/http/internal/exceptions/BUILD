@@ -20,12 +20,7 @@ scala_library(
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",
     ],
     exports = [
-        "3rdparty/jvm/javax/inject:javax.inject",
         "3rdparty/jvm/org/apache/thrift:libthrift",
-        "finagle/finagle-base-http/src/main/scala",
-        "finagle/finagle-core/src/main/scala",
         "finatra/http/src/main/scala/com/twitter/finatra/http/exceptions",
-        "finatra/http/src/main/scala/com/twitter/finatra/http/response",
-        "finatra/inject/inject-slf4j/src/main/scala",
     ],
 )

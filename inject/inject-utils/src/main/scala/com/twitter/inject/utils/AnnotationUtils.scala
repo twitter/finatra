@@ -16,8 +16,8 @@ object AnnotationUtils {
    * @return the filtered list of matching annotations.
    */
   def filterIfAnnotationPresent[A <: Annotation: Manifest](
-    annotations: Seq[Annotation]
-  ): Seq[Annotation] = annotations.filter(isAnnotationPresent[A])
+    annotations: Array[Annotation]
+  ): Array[Annotation] = annotations.filter(isAnnotationPresent[A])
 
   /**
    * Filters a list of annotations by annotation type discriminated by the set of given annotations.
@@ -28,12 +28,9 @@ object AnnotationUtils {
    */
   def filterAnnotations(
     filterSet: Set[Class[_ <: Annotation]],
-    annotations: Seq[Annotation]
-  ): Seq[Annotation] = {
-    annotations.filter { annotation =>
-      filterSet.contains(annotation.annotationType)
-    }
-  }
+    annotations: Array[Annotation]
+  ): Array[Annotation] =
+    annotations.filter(a => filterSet.contains(a.annotationType))
 
   /**
    * Find an [[Annotation]] within a given list of annotations of the given target.
@@ -43,10 +40,20 @@ object AnnotationUtils {
    *
    * @return the matching [[Annotation]] instance if found, otherwise None.
    */
+  // optimized
   def findAnnotation(
     target: Class[_ <: Annotation],
-    annotations: Seq[Annotation]
-  ): Option[Annotation] = annotations.find(_.annotationType() == target)
+    annotations: Array[Annotation]
+  ): Option[Annotation] = {
+    var found: Option[Annotation] = None
+    var index = 0
+    while (index < annotations.length && found.isEmpty) {
+      val annotation = annotations(index)
+      if (annotation.annotationType() == target) found = Some(annotation)
+      index += 1
+    }
+    found
+  }
 
   /**
    * Find an [[Annotation]] within a given list of annotations annotated by the given type param.
@@ -55,11 +62,18 @@ object AnnotationUtils {
    *
    * @return the matching [[Annotation]] instance if found, otherwise None.
    */
-  def findAnnotation[A <: Annotation: Manifest](annotations: Seq[Annotation]): Option[A] = {
-    annotations.collectFirst {
-      case annotation if annotationEquals[A](annotation) =>
-        annotation.asInstanceOf[A]
+  // optimized
+  def findAnnotation[A <: Annotation: Manifest](annotations: Array[Annotation]): Option[A] = {
+    val size = annotations.length
+    val annotationType = manifest[A].runtimeClass.asInstanceOf[Class[A]]
+    var found: Option[A] = None
+    var index = 0
+    while (found.isEmpty && index < size) {
+      val annotation = annotations(index)
+      if (annotation.annotationType() == annotationType) found = Some(annotation.asInstanceOf[A])
+      index += 1
     }
+    found
   }
 
   /**
@@ -99,15 +113,11 @@ object AnnotationUtils {
     A <: Annotation: Manifest
   ]: Boolean = {
     val annotationToFindClazz: Class[Annotation] =
-      manifest[ToFindAnnotation]
-        .runtimeClass
+      manifest[ToFindAnnotation].runtimeClass
         .asInstanceOf[Class[Annotation]]
-    val annotationsByTypeArray: Array[Annotation] =
-      manifest[A]
-        .runtimeClass
-        .asInstanceOf[Class[A]]
-        .getAnnotationsByType(annotationToFindClazz)
-    annotationsByTypeArray != null && annotationsByTypeArray.nonEmpty
+
+    manifest[A].runtimeClass
+      .asInstanceOf[Class[A]].isAnnotationPresent(annotationToFindClazz)
   }
 
   /**
@@ -118,41 +128,33 @@ object AnnotationUtils {
    *       on constructors of the given class.
    * @param clazz the `Class` to inspect. This should represent a Scala case class.
    * @param fields the list of case class fields.
-   * @return a mapping of field name to list of annotations.
+   * @return a mapping of field name to list of annotations. Note, this only returns fields which have
+   *         annotations.
    *
    * @see [[https://docs.scala-lang.org/tour/case-classes.html Tour of Scala Case Classes]]
    */
+  // optimized
   def findAnnotations(
     clazz: Class[_],
-    fields: Seq[String]
-  ): Map[String, Seq[Annotation]] = {
+    fields: Array[String]
+  ): scala.collection.Map[String, Array[Annotation]] = {
     // for case classes, the annotations are only visible on the constructor.
     val clazzConstructorAnnotations: Array[Array[Annotation]] =
       clazz.getConstructors.head.getParameterAnnotations
 
-    // find case class field annotations
-    val clazzAnnotations: Map[String, Seq[Annotation]] = (for {
-      (field, index) <- fields.zipWithIndex
-      fieldAnnotations = clazzConstructorAnnotations(index)
-    } yield {
-      field -> fieldAnnotations.toSeq
-    }).toMap
-
-    // find inherited annotations
-    val inheritedAnnotations: Map[String, Seq[Annotation]] =
-      findDeclaredMethodAnnotations(clazz, Map.empty[String, Seq[Annotation]])
-
-    // Merge the two maps: if the same annotation for a given field occurs in both lists, we keep
-    // the clazz annotation to in effect "override" what was specified by inheritance. That is, it
-    // is not expected that annotations are ever additive (in the sense that you can configure a
-    // single field through multiple declarations of the same annotation) but rather either-or.
-    clazzAnnotations.map {
-      case (field: String, annotations: Seq[Annotation]) =>
-        val inherited: Seq[Annotation] =
-          inheritedAnnotations.getOrElse(field, Nil)
-        // want to prefer what is coming in from clazz annotations over inherited
-        field -> mergeAnnotationLists(annotations, inherited)
+    val clazzAnnotations = scala.collection.mutable.HashMap[String, Array[Annotation]]()
+    var index = 0
+    while (index < fields.length) {
+      val field = fields(index)
+      val fieldAnnotations = clazzConstructorAnnotations(index)
+      if (fieldAnnotations.nonEmpty) clazzAnnotations.put(field, fieldAnnotations)
+      index += 1
     }
+    // find inherited annotations
+    findDeclaredMethodAnnotations(
+      clazz,
+      clazzAnnotations
+    )
   }
 
   /**
@@ -177,37 +179,43 @@ object AnnotationUtils {
     } else None
   }
 
+  // optimized
   private[this] def findDeclaredMethodAnnotations(
     clazz: Class[_],
-    found: Map[String, Seq[Annotation]]
-  ): Map[String, Seq[Annotation]] = {
-    // clazz declared method annotations
-    val interfaceDeclaredAnnotations: Map[String, Seq[Annotation]] =
-      clazz.getDeclaredMethods
-        .map { method =>
-          method.getName -> method.getDeclaredAnnotations.toSeq
-        }.toMap.map {
-        case (key, values) =>
-          key -> mergeAnnotationLists(values, found.getOrElse(key, Seq.empty[Annotation]))
-      }
+    acc: scala.collection.mutable.Map[String, Array[Annotation]]
+  ): scala.collection.Map[String, Array[Annotation]] = {
 
-    // interface declared method annotations
-    clazz.getInterfaces.foldLeft(interfaceDeclaredAnnotations) {
-      (acc: Map[String, Seq[Annotation]], interface: Class[_]) =>
-        acc.map {
-          case (key, values) =>
-            key -> mergeAnnotationLists(
-              values,
-              findDeclaredMethodAnnotations(interface, acc).getOrElse(key, Seq.empty[Annotation]))
+    val methods = clazz.getDeclaredMethods
+    var i = 0
+    while (i < methods.length) {
+      val method = methods(i)
+      val methodAnnotations = method.getDeclaredAnnotations
+      if (methodAnnotations.nonEmpty) {
+        acc.get(method.getName) match {
+          case Some(existing) =>
+            acc.put(method.getName, mergeAnnotationLists(existing, methodAnnotations))
+          case _ =>
+            acc.put(method.getName, methodAnnotations)
         }
+      }
+      i += 1
     }
+
+    val interfaces = clazz.getInterfaces
+    var j = 0
+    while (j < interfaces.length) {
+      val interface = interfaces(j)
+      findDeclaredMethodAnnotations(interface, acc)
+      j += 1
+    }
+
+    acc
   }
 
   /** Prefer values in A over B */
   private[this] def mergeAnnotationLists(
-    a: Seq[Annotation],
-    b: Seq[Annotation]
-  ): Seq[Annotation] = {
+    a: Array[Annotation],
+    b: Array[Annotation]
+  ): Array[Annotation] =
     a ++ b.filterNot(bAnnotation => a.exists(_.annotationType() == bAnnotation.annotationType()))
-  }
 }

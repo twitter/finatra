@@ -5,7 +5,7 @@ import com.twitter.finagle.http.Response
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.marshalling.MessageBodyManager
 import com.twitter.finatra.http.response.ResponseBuilder
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.utils.FileResolver
 import com.twitter.inject.{Mockito, Test}
 import com.twitter.io.{Buf, BufReader, Reader, StreamTermination}
@@ -20,7 +20,7 @@ class StreamingResponseTest extends Test with Mockito {
   }
 
   private[this] lazy val responseBuilder = new ResponseBuilder(
-    objectMapper = FinatraObjectMapper.create(),
+    objectMapper = ScalaObjectMapper(),
     fileResolver = new FileResolver(localDocRoot = "src/main/webapp/", docRoot = ""),
     messageBodyManager = mock[MessageBodyManager],
     statsReceiver = mock[StatsReceiver],

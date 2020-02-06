@@ -8,8 +8,10 @@ java_library(
     ),
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
+        "finatra/json-annotations/src/main/java/com/twitter/finatra/json/annotations",
     ],
     exports = [
         "3rdparty/jvm/com/google/inject:guice",
+        "finatra/json-annotations/src/main/java/com/twitter/finatra/json/annotations",
     ],
 )

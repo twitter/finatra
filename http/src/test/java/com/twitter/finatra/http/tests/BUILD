@@ -4,7 +4,6 @@ junit_tests(
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/junit",
-        "3rdparty/jvm/org/scalatest",
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "finagle/finagle-base-http/src/main/scala",
         "finagle/finagle-core/src/main/scala",
@@ -20,6 +19,8 @@ junit_tests(
         "finatra/inject/inject-server/src/test/scala:test-deps",
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/streaming",
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",

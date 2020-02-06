@@ -5,7 +5,7 @@ import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.{Http, Resolvers, Service}
 import com.twitter.finatra.httpclient.{HttpClient, RichHttpClient}
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.inject.Injector
 import javax.inject.Singleton
 
@@ -28,7 +28,7 @@ abstract class HttpClientModule extends HttpClientModuleTrait {
   @Singleton
   @Provides
   final def provideHttpClient(
-    mapper: FinatraObjectMapper,
+    mapper: ScalaObjectMapper,
     httpService: Service[Request, Response]
   ): HttpClient = {
 

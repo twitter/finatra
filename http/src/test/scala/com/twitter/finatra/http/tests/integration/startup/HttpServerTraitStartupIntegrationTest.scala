@@ -6,7 +6,7 @@ import com.twitter.finagle.http.service.NullService
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.modules.MessageBodyModule
 import com.twitter.finatra.http.{EmbeddedHttpServer, HttpServerTrait}
-import com.twitter.finatra.json.modules.FinatraJacksonModule
+import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.inject.Test
 import com.twitter.inject.modules.StatsReceiverModule
@@ -17,7 +17,7 @@ class HttpServerTraitStartupIntegrationTest extends Test {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServerTrait {
         override val modules: Seq[Module] = Seq(
-          FinatraJacksonModule,
+          ScalaObjectMapperModule,
           FileResolverModule,
           MessageBodyModule,
           StatsReceiverModule)
@@ -41,7 +41,7 @@ class HttpServerTraitStartupIntegrationTest extends Test {
       twitterServer = new HttpServerTrait {
         override val disableAdminHttpServer = true
         override val modules: Seq[Module] = Seq(
-          FinatraJacksonModule,
+          ScalaObjectMapperModule,
           FileResolverModule,
           MessageBodyModule,
           StatsReceiverModule)

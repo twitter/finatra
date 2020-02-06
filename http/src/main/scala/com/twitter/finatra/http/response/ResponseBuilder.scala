@@ -6,7 +6,7 @@ import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http
 import com.twitter.finatra.http.marshalling.{MessageBodyFlags, MessageBodyManager}
 import com.twitter.finatra.http.streaming.ToReader
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.utils.FileResolver
 import com.twitter.inject.Logging
 import com.twitter.inject.annotations.Flag
@@ -26,7 +26,7 @@ object ResponseBuilder {
 }
 
 class ResponseBuilder @Inject()(
-  objectMapper: FinatraObjectMapper,
+  objectMapper: ScalaObjectMapper,
   fileResolver: FileResolver,
   messageBodyManager: MessageBodyManager,
   statsReceiver: StatsReceiver,

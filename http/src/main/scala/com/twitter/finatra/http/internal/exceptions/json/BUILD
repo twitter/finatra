@@ -14,15 +14,10 @@ scala_library(
         "finatra/http/src/main/scala/com/twitter/finatra/http/exceptions",
         "finatra/http/src/main/scala/com/twitter/finatra/http/response",
         "finatra/inject/inject-slf4j/src/main/scala",
-        "finatra/jackson/src/main/scala",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions",
     ],
     exports = [
-        "3rdparty/jvm/com/fasterxml/jackson/core:jackson-core",
-        "3rdparty/jvm/javax/inject:javax.inject",
-        "finagle/finagle-base-http/src/main/scala",
-        "finatra/http/src/main/scala/com/twitter/finatra/http/exceptions",
-        "finatra/http/src/main/scala/com/twitter/finatra/http/response",
-        "finatra/inject/inject-slf4j/src/main/scala",
-        "finatra/jackson/src/main/scala",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions",
     ],
 )

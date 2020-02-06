@@ -1,5 +1,6 @@
 package com.twitter.finatra.json.tests
 
+import com.twitter.finatra.jackson.tests.FooBar
 import com.twitter.finatra.json.JsonLogging
 import com.twitter.inject.Test
 
@@ -23,5 +24,3 @@ class JsonLoggingTest extends Test with JsonLogging {
     errorPretty("foo", fooBar)
   }
 }
-
-case class FooBar(name: String)

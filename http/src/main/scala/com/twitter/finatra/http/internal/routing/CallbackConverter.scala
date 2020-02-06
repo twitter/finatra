@@ -5,8 +5,8 @@ import com.twitter.finagle.http.{Fields, Request, Response, Status, Version}
 import com.twitter.finatra.http.marshalling.MessageBodyManager
 import com.twitter.finatra.http.response.{ResponseBuilder, StreamingResponse => DeprecatedStreamingResponse}
 import com.twitter.finatra.http.streaming.{FromReader, StreamingRequest, StreamingResponse}
-import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.json.internal.streaming.JsonStreamParser
+import com.twitter.finatra.jackson.ScalaObjectMapper
+import com.twitter.finatra.jackson.streaming.JsonStreamParser
 import com.twitter.inject.TypeUtils
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.{Future, FuturePool, Promise}
@@ -23,7 +23,7 @@ private object CallbackConverter {
 private[http] class CallbackConverter @Inject()(
   messageBodyManager: MessageBodyManager,
   responseBuilder: ResponseBuilder,
-  mapper: FinatraObjectMapper,
+  mapper: ScalaObjectMapper,
   jsonStreamParser: JsonStreamParser) {
 
   import CallbackConverter._

@@ -1,10 +1,11 @@
 package com.twitter.finatra.json
 
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.inject.Logging
 import javax.inject.Inject
 
 object JsonLogging {
-  private lazy val DefaultMapper = FinatraObjectMapper.create()
+  private lazy val DefaultMapper = ScalaObjectMapper()
 }
 
 /**
@@ -13,7 +14,7 @@ object JsonLogging {
 trait JsonLogging extends Logging {
 
   @Inject
-  protected var _mapper: FinatraObjectMapper = _
+  protected var _mapper: ScalaObjectMapper = _
 
   /* If JsonLogging is used w/ an Object, injection will not occur and we use the default mapper */
   private lazy val logMapper = Option(_mapper) getOrElse JsonLogging.DefaultMapper
