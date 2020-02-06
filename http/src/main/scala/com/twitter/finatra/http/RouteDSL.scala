@@ -568,12 +568,12 @@ private[http] trait RouteDSL extends RouteState { self =>
     index: Option[RouteIndex],
     callback: RequestType => ResponseType
   ) = {
-    val prefixedRoute = prefixRoute(route)
-    require(
-      prefixedRoute.startsWith("/"),
-      s"""Invalid route: "$route." Routes MUST begin with a forward slash (/).""")
-
     contextWrapper {
+      val prefixedRoute = prefixRoute(route)
+      require(
+        prefixedRoute.startsWith("/"),
+        s"""Invalid route: "$route." Routes MUST begin with a forward slash (/).""")
+
       routeBuilders += new RouteBuilder(
         method,
         prefixedRoute,

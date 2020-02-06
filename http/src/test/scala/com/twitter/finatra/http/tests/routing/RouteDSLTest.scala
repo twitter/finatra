@@ -135,24 +135,22 @@ class RouteDSLTest extends Test {
   }
 
   test("PrefixedDSL should work with valid prefix and empty route") {
-    new RouteDSL {
-      prefix("/foo") {
-        get() { _: Request =>"bar" }
+    new PrefixedDSL("/foo") {
+      get() { _: Request =>"bar" }
 
-        post() { _: Request => "bar" }
+      post() { _: Request => "bar" }
 
-        put() { _: Request => "bar" }
+      put() { _: Request => "bar" }
 
-        head() { _: Request => "bar" }
+      head() { _: Request => "bar" }
 
-        patch() { _: Request => "bar" }
+      patch() { _: Request => "bar" }
 
-        delete() { _: Request => "bar" }
+      delete() { _: Request => "bar" }
 
-        trace() { _: Request => "bar" }
+      trace() { _: Request => "bar" }
 
-        options() { _: Request => "bar" }
-      }
+      options() { _: Request => "bar" }
     }
   }
 
