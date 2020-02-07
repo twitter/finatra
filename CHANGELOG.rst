@@ -9,6 +9,9 @@ Unreleased
 
 Added
 ~~~~~
+ 
+* inject-slf4j: Add a way to retrieve the currently stored Local Context map backing the
+   MDC. ``PHAB_ID=D431148``
 
 * finatra-jackson: Added new functionality in the `CaseClassDeserializer` to support more
   Jackson annotations during deserialization. See documentation for more information. 
