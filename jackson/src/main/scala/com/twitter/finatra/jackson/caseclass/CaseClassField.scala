@@ -45,16 +45,18 @@ object CaseClassField {
     validationProvider: ValidationProvider
   ): Array[CaseClassField] = {
     /* CaseClassFields MUST be returned in constructor/method parameter invocation order */
+    // we could choose to use the size of the property definitions here, but since they are
+    // computed there is the possibility it is incorrect and thus we want to ensure we have
+    // as many definitions as there are parameters defined for the given constructor.
     val parameters = constructor.getParameters
     val fields = new Array[CaseClassField](parameters.length)
 
     var index = 0
     while (index < parameters.length) {
-      val parameter = parameters(index)
       val propertyDefinition = propertyDefinitions(index)
-      // we look up annotations by the java parameter name as that is how they are keyed
+      // we look up annotations by the field name as that is how they are keyed
       val annotations: Array[Annotation] =
-        fieldAnnotations.get(parameter.getName) match {
+        fieldAnnotations.get(propertyDefinition.beanPropertyDefinition.getName) match {
           case Some(v) => v
           case _ => Array.empty[Annotation]
         }

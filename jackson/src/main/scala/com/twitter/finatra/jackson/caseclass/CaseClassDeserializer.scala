@@ -691,7 +691,7 @@ private[jackson] class CaseClassDeserializer(
           .construct(
             config,
             annotatedParameter,
-            new PropertyName(parameter.getName)
+            new PropertyName(constructorParamDescriptor.name)
           )
       )
     }

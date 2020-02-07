@@ -54,6 +54,10 @@ Changed
 Fixed
 ~~~~~
 
+* finatra-jackson: Access to parameter names via Java reflection is not supported in Scala 2.11.
+  Added a work around for the parsing of case class structures to support JSON deserialization in
+  Scala 2.11 and forward. ``PHAB_ID=D431837``
+
 * finatra-jackson: Fix for enforcing "fail on unknown properties" during deserialization. Previously,
   the `CaseClassDeserializer` was optimized to only read the fields in the case class constructor
   from the incoming JSON and thus ignored any unknown fields during deserialization. The fix will 
