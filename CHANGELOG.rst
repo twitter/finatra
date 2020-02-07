@@ -66,6 +66,9 @@ Fixed
 Changed
 ~~~~~~~
 
+* finatra-kafka-streams: Track `c.t.f.kafkastreams.flushing.AsyncProcessor` and
+  `c.t.f.kafkastreams.flushing.AsyncTransformer` latencies with stat metrics ``PHAB_ID=D430688``
+
 * finatra: Exposing Listening Server's bound address in Thrift and HTTP server traits
   ``PHAB_ID=D424745``
 

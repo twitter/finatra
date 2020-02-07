@@ -1,6 +1,6 @@
 package com.twitter.finatra.kafkastreams.flushing
 
-import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.finagle.stats.{Stat, StatsReceiver}
 import com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging
 import com.twitter.finatra.kafkastreams.utils.MessageTimestamp
 import com.twitter.util.{Duration, Future}
@@ -27,6 +27,9 @@ import org.apache.kafka.streams.processor.{Cancellable, ProcessorContext, Punctu
  * for an eventual failure to occur at the next commit interval. We try to fail fast and a future failure
  * will result in your entire instance shutting down. This default behavior prevents data loss. If
  * you want your service to handle failed futures please use handle/transform on your returned future
+ *
+ * @param statsReceiver Receiver for AsyncTransformer metrics. Scope the receiver to differentiate
+ *                      metrics between different AsyncTransformers in the topology.
  */
 abstract class AsyncTransformer[K1, V1, K2, V2](
   override val statsReceiver: StatsReceiver,
@@ -45,6 +48,8 @@ abstract class AsyncTransformer[K1, V1, K2, V2](
   private var _context: ProcessorContext = _
 
   override protected def processorContext: ProcessorContext = _context
+
+  private[this] val latencyStat = statsReceiver.stat("transform_async_latency_ms")
 
   /* Abstract */
 
@@ -86,7 +91,11 @@ abstract class AsyncTransformer[K1, V1, K2, V2](
   }
 
   override final def transform(key: K1, value: V1): (K2, V2) = {
-    addFuture(key, value, transformAsync(key, value, _context.timestamp()))
+    addFuture(
+      key,
+      value,
+      Stat.timeFuture(latencyStat)(transformAsync(key, value, _context.timestamp()))
+    )
 
     null
   }

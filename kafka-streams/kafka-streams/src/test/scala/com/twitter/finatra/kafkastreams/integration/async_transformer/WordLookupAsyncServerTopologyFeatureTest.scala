@@ -31,5 +31,8 @@ class WordLookupAsyncServerTopologyFeatureTest extends TopologyFeatureTest {
     result.key should equal("hello")
     result.value should equal(5)
     new DateTime(result.timestamp()) should equal(messagePublishTime)
+
+    val latencyMetric = topologyTester.stats.getStat("kafka/stream/transform_async_latency_ms")
+    latencyMetric.exists(_ >= 0) should be(true)
   }
 }
