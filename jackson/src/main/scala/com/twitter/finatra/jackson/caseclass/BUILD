@@ -18,12 +18,13 @@ scala_library(
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
-        "finatra/jackson/src/main/java",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions",
         "finatra/json-annotations/src/main/java/com/twitter/finatra/json/annotations",
         "finatra/validation/src/main/scala/com/twitter/finatra/validation",
     ],
     exports = [
+        "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
+        "3rdparty/jvm/org/json4s:json4s-core",
         "finatra/inject/inject-slf4j/src/main/scala",
     ],
 )

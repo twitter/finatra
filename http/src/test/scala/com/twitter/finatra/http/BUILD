@@ -17,6 +17,7 @@ scala_library(
         "3rdparty/jvm/net/codingwell:scala-guice",
         "finagle/finagle-base-http/src/main/scala",
         "finagle/finagle-core/src/main/scala",
+        "finatra/http-annotations/src/main/java/com/twitter/finatra/http/annotations",
         "finatra/http/src/main/scala/com/twitter/finatra/http",
         "finatra/http/src/main/scala/com/twitter/finatra/http/response",
         "finatra/http/src/main/scala/com/twitter/finatra/http/routing",

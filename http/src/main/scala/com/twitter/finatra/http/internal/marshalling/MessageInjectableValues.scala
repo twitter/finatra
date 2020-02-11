@@ -29,7 +29,7 @@ import com.twitter.finatra.jackson.caseclass.{
   resolveSubType
 }
 import com.twitter.finatra.json.annotations.InjectableValue
-import com.twitter.finatra.request.{FormParam, Header, QueryParam, RouteParam}
+import com.twitter.finatra.http.annotations.{FormParam, Header, QueryParam, RouteParam}
 import com.twitter.finatra.validation.ErrorCode
 import com.twitter.finatra.validation.ValidationResult.Invalid
 import com.twitter.inject.utils.AnnotationUtils

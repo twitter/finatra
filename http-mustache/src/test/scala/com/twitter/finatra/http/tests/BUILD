@@ -3,6 +3,7 @@ junit_tests(
     dependencies = [
         "3rdparty/jvm/org/slf4j:slf4j-nop",
         "finagle/finagle-base-http/src/main/scala",
+        "finatra/http-annotations/src/main/java/com/twitter/finatra/http/annotations",
         "finatra/http-mustache/src/main/java/com/twitter/finatra/http/annotations",
         "finatra/http-mustache/src/main/scala/com/twitter/finatra/http/marshalling",
         "finatra/http-mustache/src/main/scala/com/twitter/finatra/http/modules",

@@ -4,7 +4,6 @@ target(
         "deprecated",
     },
     dependencies = [
-        "finatra/jackson/src/main/java",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions",

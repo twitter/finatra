@@ -1,4 +1,5 @@
 package com.twitter.finatra.jackson
+
 import com.fasterxml.jackson.annotation.JacksonAnnotation
 import com.fasterxml.jackson.databind.deser.impl.ValueInjector
 import com.fasterxml.jackson.databind.introspect.{

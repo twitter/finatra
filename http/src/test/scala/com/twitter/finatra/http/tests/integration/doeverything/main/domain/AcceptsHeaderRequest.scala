@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main.domain
 
-import com.twitter.finatra.request.Header
+import com.twitter.finatra.http.annotations.Header
 
 case class AcceptsHeaderRequest(
   @Header accept: String,

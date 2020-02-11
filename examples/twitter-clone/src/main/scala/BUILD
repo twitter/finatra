@@ -13,6 +13,7 @@ scala_library(
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "finagle/finagle-http/src/main/scala",
         "finatra/examples/twitter-clone/src/main/resources",
+        "finatra/http-annotations/src/main/java/com/twitter/finatra/http/annotations",
         "finatra/http/src/main/scala",
         "finatra/httpclient/src/main/scala",
         "finatra/inject/inject-app/src/main/scala",

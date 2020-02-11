@@ -4,13 +4,13 @@ import com.google.inject.{Module, Provides}
 import com.google.inject.name.{Named, Names}
 import com.twitter.app.Flag
 import com.twitter.conversions.DurationOps._
+import com.twitter.finatra.http.Prod
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.{
   ComplexServiceFactory,
   MultiService,
   OneMultiService,
   TwoMultiService
 }
-import com.twitter.finatra.test.Prod
 import com.twitter.inject.{Injector, TwitterModule}
 
 class DoEverythingModule extends TwitterModule {

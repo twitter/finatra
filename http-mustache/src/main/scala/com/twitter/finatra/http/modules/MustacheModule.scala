@@ -2,7 +2,11 @@ package com.twitter.finatra.http.modules
 
 import com.google.inject.Module
 import com.twitter.finatra.http.annotations.Mustache
-import com.twitter.finatra.http.marshalling.{MessageBodyManager, MustacheBodyComponent, MustacheMessageBodyWriter}
+import com.twitter.finatra.http.marshalling.{
+  MessageBodyManager,
+  MustacheBodyComponent,
+  MustacheMessageBodyWriter
+}
 import com.twitter.finatra.mustache.modules.MustacheFactoryModule
 import com.twitter.inject.{Injector, TwitterModule}
 

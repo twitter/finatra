@@ -5,7 +5,7 @@ import com.twitter.finatra.http.tests.integration.tweetexample.main.services.adm
   DatabaseClient,
   UserService
 }
-import com.twitter.finatra.test.{Prod, Staging}
+import com.twitter.finatra.http.{Prod, Staging}
 import com.twitter.inject.{TwitterModule, TwitterPrivateModule}
 import javax.inject.Singleton
 

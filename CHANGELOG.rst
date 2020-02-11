@@ -23,6 +23,20 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-jackson|finatra-http-annotations: Move http-releated Jackson "injectablevalues"
+  annotations from `finatra/jackson` to `finatra/http-annotations`.
+
+  Specifically the follow have changed packages,
+  `c.t.finatra.request.QueryParam`       --> `c.t.finatra.http.annotations.QueryParam`
+  `c.t.finatra.request.RouteParam`        --> `c.t.finatra.http.annotations.RouteParam`
+  `c.t.finatra.request.FormParam`         --> `c.t.finatra.http.annotations.FormParam`
+  `c.t.finatra.request.Header`                --> `c.t.finatra.http.annotations.Header`
+  `c.t.finatra.request.JsonIgnoreBody` --> `c.t.finatra.http.annotations.JsonIgnoreBody`
+
+  Users should update from `finatra/jackson/src/main/java` (`finatra-jackson_2.12`)
+  to `finatra/http-annotations/src/main/java` (`finatra-http-annotations_2.12`).
+  ``PHAB_ID=D418766``
+
 * finatra-jackson: Updated Finatra Jackson integration to introduce a new `ScalaObjectMapper`
   and module to simplify configuration and creation of the mapper. See documentation for more
   information. ``PHAB_ID=D407284``

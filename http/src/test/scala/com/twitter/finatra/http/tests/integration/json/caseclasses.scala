@@ -1,15 +1,15 @@
 package com.twitter.finatra.http.tests.integration.json
 
-import com.fasterxml.jackson.annotation.{JsonFormat, JsonIgnore, JsonProperty, JsonSubTypes, JsonTypeInfo}
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type
-import com.fasterxml.jackson.core.{JsonParser, TreeNode}
-import com.fasterxml.jackson.databind.{DeserializationContext, JsonNode}
+import com.fasterxml.jackson.annotation.{JsonFormat, JsonProperty, JsonSubTypes, JsonTypeInfo}
+import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.node.ValueNode
+import com.fasterxml.jackson.databind.{DeserializationContext, JsonNode}
 import com.twitter.finagle.http.Request
-import com.twitter.finatra.request.{Header, QueryParam, RouteParam}
-import com.twitter.finatra.validation.{Max, MethodValidation, Min, NotEmpty, Size, ValidationResult}
+import com.twitter.finatra.http.annotations.{Header, QueryParam, RouteParam}
+import com.twitter.finatra.validation.{MethodValidation, Min, NotEmpty, Size, ValidationResult}
 import com.twitter.util.Time
 import scala.math.BigDecimal.RoundingMode
 
@@ -23,16 +23,14 @@ class MyBigDecimalDeserializer extends StdDeserializer[BigDecimal](classOf[BigDe
 }
 
 case class CaseClassWithQueryParamJsonPropertyField(
-  @QueryParam("q") @JsonProperty("x") query: String
-)
+  @QueryParam("q") @JsonProperty("x") query: String)
 
-case class CaseClassWithLongParamNameRequest(
-  @QueryParam thisShouldUseMapperNamingStrategy: String
-)
+case class CaseClassWithLongParamNameRequest(@QueryParam thisShouldUseMapperNamingStrategy: String)
 
 case class CaseClassWithCustomDecimalFormatRequest(
   @QueryParam @JsonDeserialize(using = classOf[MyBigDecimalDeserializer]) required: BigDecimal,
-  @QueryParam @JsonDeserialize(using = classOf[MyBigDecimalDeserializer]) optional: Option[BigDecimal])
+  @QueryParam @JsonDeserialize(using = classOf[MyBigDecimalDeserializer]) optional: Option[
+    BigDecimal])
 
 case class CaseClassWithBoolean(foo: Boolean)
 
@@ -64,20 +62,19 @@ case class PersonWithThingsRequest(
   age: Option[Int],
   @Size(min = 1, max = 10) things: Map[String, Things])
 
-case class Things(
-  @Size(min = 1, max = 2) names: Seq[String])
+case class Things(@Size(min = 1, max = 2) names: Seq[String])
 
 case class GenericWithRequest[T](data: T, request: Request)
 
-case class WithBooleanRequest(
-  @RouteParam id: Int,
-  @QueryParam completeOnly: Boolean = false
-)
+case class WithBooleanRequest(@RouteParam id: Int, @QueryParam completeOnly: Boolean = false)
 
 trait TestRequest {
   protected[this] val ValidFormats: Seq[String] = Seq("compact", "default", "detailed")
 
-  protected[this] def validateFormat(formatValue: Option[String], formatKey: String): ValidationResult = {
+  protected[this] def validateFormat(
+    formatValue: Option[String],
+    formatKey: String
+  ): ValidationResult = {
     if (formatValue.isEmpty) {
       ValidationResult.Valid()
     } else {
@@ -95,8 +92,8 @@ trait TestRequest {
     } else {
       actualIdsString
         .split("\\,").map { anEntry =>
-        anEntry.trim.nonEmpty && anEntry.matches("\\d+")
-      }.forall(_ == true)
+          anEntry.trim.nonEmpty && anEntry.matches("\\d+")
+        }.forall(_ == true)
     }
   }
 
@@ -108,8 +105,8 @@ trait TestRequest {
       } else {
         namesTrimmed
           .split("\\,").map { anEntry =>
-          anEntry.trim.nonEmpty
-        }.forall(_ == true)
+            anEntry.trim.nonEmpty
+          }.forall(_ == true)
       }
     }
   }
@@ -145,7 +142,7 @@ case class UserLookupRequest(
   @QueryParam("user.format") userFormat: Option[String] = None,
   @QueryParam("status.format") statusFormat: Option[String] = None,
   @Header("Accept") acceptHeader: Option[String] = None)
-  extends TestRequest {
+    extends TestRequest {
 
   def validationPassesForIds: Boolean = ids.forall(validateListOfLongIds)
   def validationPassesForNames: Boolean = validateListOfUsers(names)
@@ -193,9 +190,7 @@ case class UserLookupRequest(
   private[this] val listOfNames: Seq[String] = listOfStrings(names)
 }
 
-case class ShapelessRequest(
-  @QueryParam("q") shape: Shape
-)
+case class ShapelessRequest(@QueryParam("q") shape: Shape)
 
 case class NotMyType(id: Long, name: String, description: String)
 trait NotMyTypeMixIn {
@@ -217,7 +212,6 @@ class PointDeserializer extends StdDeserializer[Point](classOf[Point]) {
 
   override def getEmptyValue: Point = Point(0, 0)
 }
-
 
 case class Point(x: Int, y: Int)
 @JsonDeserialize(using = classOf[PointDeserializer])

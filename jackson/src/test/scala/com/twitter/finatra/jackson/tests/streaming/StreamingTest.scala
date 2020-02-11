@@ -14,7 +14,7 @@ class StreamingTest extends Test {
 
   //        idx: 0123456
   val jsonStr = "[1,2,3]"
-  val expected123 = AsyncStream(1, 2, 3)
+  val expected123: AsyncStream[Int] = AsyncStream(1, 2, 3)
 
   test("bufs to json - AsyncStream") {
     assertParsed(

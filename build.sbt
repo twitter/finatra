@@ -854,6 +854,8 @@ lazy val httpAnnotations = (project in file("http-annotations"))
   .settings(
     name := "finatra-http-annotations",
     moduleName := "finatra-http-annotations"
+  ).dependsOn(
+    jsonAnnotations
   )
 
 lazy val httpMustache = (project in file("http-mustache"))

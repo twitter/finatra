@@ -3,7 +3,7 @@ package com.twitter.finatra.jackson.caseclass
 import com.fasterxml.jackson.module.scala._
 import com.twitter.finatra.validation.ValidationProvider
 
-class CaseClassJacksonModule(
+private[jackson] class CaseClassJacksonModule(
   injectableTypes: InjectableTypes,
   validationProvider: ValidationProvider)
     extends JacksonModule {

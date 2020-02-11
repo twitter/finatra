@@ -56,7 +56,7 @@ private[finatra] object DefaultInjectableValues {
     val injectionAnnotations = AnnotationUtils.filterAnnotations(InjectionAnnotations, annotations)
     // annotations that are annotated with `@InjectableValue` -- OK in combo with JacksonAnnotations,
     // though support for a given JacksonAnnotation may vary or be non-existent
-    // depending on the what `InjectableValues` implementation is configured
+    // depending on what `InjectableValues` implementation is configured
     val injectableAnnotations = injectionAnnotations ++ AnnotationUtils
       .filterIfAnnotationPresent[InjectableValue](annotations)
 

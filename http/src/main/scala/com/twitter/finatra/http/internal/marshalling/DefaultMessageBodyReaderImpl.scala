@@ -5,7 +5,7 @@ import com.google.inject.Injector
 import com.twitter.finagle.http.{MediaType, Message}
 import com.twitter.finatra.http.marshalling.{DefaultMessageBodyReader, MessageBodyReader}
 import com.twitter.finatra.jackson.ScalaObjectMapper
-import com.twitter.finatra.request.JsonIgnoreBody
+import com.twitter.finatra.http.annotations.JsonIgnoreBody
 import javax.inject.{Inject, Singleton}
 
 private[finatra] object DefaultMessageBodyReaderImpl {

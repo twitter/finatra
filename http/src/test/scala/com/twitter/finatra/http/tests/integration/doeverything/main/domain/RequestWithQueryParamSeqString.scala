@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main.domain
 
-import com.twitter.finatra.request.QueryParam
+import com.twitter.finatra.http.annotations.QueryParam
 
 case class RequestWithQueryParamSeqString(@QueryParam foo: Seq[String])
 
