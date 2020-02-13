@@ -9,6 +9,14 @@ Unreleased
 
 Added
 ~~~~~
+
+* inject-app: Add functions to `c.t.inject.app.AbstractApp` to provide better
+  ergonomics for Java users to call and use basic `App` lifecycle callbacks. 
+  ``PHAB_ID=D433874``
+
+* inject-server: Add functions to `c.t.inject.server.AbstractTwitterServer` to provide 
+  better ergonomics for Java users to call and use basic `TwitterServer` lifecycle 
+  callbacks. ``PHAB_ID=D433874``
  
 * inject-slf4j: Add a way to retrieve the currently stored Local Context map backing the
    MDC. ``PHAB_ID=D431148``
