@@ -31,6 +31,8 @@ Added
 Changed
 ~~~~~~~
 
+* finatra: Bumped version of Joda to 2.10.2 and Joda-Convert to 1.5. ``PHAB_ID=D435987``
+
 * finatra-jackson|finatra-http-annotations: Move http-releated Jackson "injectablevalues"
   annotations from `finatra/jackson` to `finatra/http-annotations`.
 
