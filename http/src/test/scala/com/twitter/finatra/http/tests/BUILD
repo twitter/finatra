@@ -1,5 +1,5 @@
 junit_tests(
-    sources = rglobs("*.scala"),
+    sources = ["**/*.scala"],
     dependencies = [
         "//:scalac",
         "//:scalap",

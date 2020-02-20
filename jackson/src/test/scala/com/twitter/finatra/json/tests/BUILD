@@ -1,5 +1,5 @@
 junit_tests(
-    sources = globs("*.scala"),
+    sources = ["*.scala"],
     dependencies = [
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
         "3rdparty/jvm/org/scalatest",
