@@ -32,11 +32,11 @@ final class StreamingResponse[F[_]: ToReader, A: Manifest] private[http] (
     case anyReader => toJsonArray(anyReader)
   }
 
-  private[this] def toJsonArray(reader: Reader[A]): Reader[Buf] = {
+  private[this] def toJsonArray(fromReader: Reader[A]): Reader[Buf] = {
     Reader.fromSeq(
       Seq(
         Reader.fromBuf(Buf.Utf8("[")),
-        reader.map { i =>
+        fromReader.map { i =>
           if (head.compareAndSet(true, false)) {
             mapper.writeValueAsBuf(i)
           } else {
@@ -63,4 +63,13 @@ final class StreamingResponse[F[_]: ToReader, A: Manifest] private[http] (
     setHeaders(response, headers)
     Future.value(response)
   }
+
+  /**
+   * Get the underlying Buf Reader.
+   * If the consumed Stream primitive is not Buf, the returned reader streams a serialized
+   * JSON array.
+   * If the consumed Stream primitive is Buf, the returned reader streams the same Buf.
+   */
+  def toBufReader: Reader[Buf] = reader
+
 }

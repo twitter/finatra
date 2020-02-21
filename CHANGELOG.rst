@@ -20,9 +20,13 @@ Added
 * inject-server: Add functions to `c.t.inject.server.AbstractTwitterServer` to provide 
   better ergonomics for Java users to call and use basic `TwitterServer` lifecycle 
   callbacks. ``PHAB_ID=D433874``
- 
+
+* finatra-http: Add `toBufReader` to get the underlying Reader of Buf from StreamingResponse.
+  If the consumed Stream primitive is not Buf, the returned reader streams a serialized
+  JSON array. ``PHAB_ID=D434448``
+
 * inject-slf4j: Add a way to retrieve the currently stored Local Context map backing the
-   MDC. ``PHAB_ID=D431148``
+  MDC. ``PHAB_ID=D431148``
 
 * finatra-jackson: Added new functionality in the `CaseClassDeserializer` to support more
   Jackson annotations during deserialization. See documentation for more information. 

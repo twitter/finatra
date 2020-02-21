@@ -1,6 +1,7 @@
 package com.twitter.finatra.http.tests.streaming;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -49,11 +50,11 @@ public class StreamingResponseJavaTest extends Assert {
   }
 
   private ResponseBuilder responseBuilder = new ResponseBuilder(
-    ScalaObjectMapper.apply(),
-    new FileResolver("src/main/webapp/", ""),
-    Mockito.mock(MessageBodyManager.class),
-    Mockito.mock(StatsReceiver.class),
-    true
+      ScalaObjectMapper.apply(),
+      new FileResolver("src/main/webapp/", ""),
+      Mockito.mock(MessageBodyManager.class),
+      Mockito.mock(StatsReceiver.class),
+      true
   );
 
   private <A> A await(Future<A> awaitable) throws Exception {
@@ -119,7 +120,7 @@ public class StreamingResponseJavaTest extends Assert {
   @SuppressWarnings("rawtypes")
   private <A> Response fromStream(AsyncStream<A> stream, Manifest<A> manifest) throws Exception {
     StreamingResponse<AsyncStream, A> streamingResponse = responseBuilder.streaming(
-      stream, ToReader.AsyncStreamToReader(), manifest);
+        stream, ToReader.AsyncStreamToReader(), manifest);
     Future<Response> fResponse = streamingResponse.toFutureResponse();
     return await(fResponse);
   }
@@ -128,11 +129,44 @@ public class StreamingResponseJavaTest extends Assert {
   public void serdeAsyncStreamOfString() throws Exception {
     List<String> stringList = Arrays.asList("first", "second", "third");
     AsyncStream<String> stream = AsyncStream.fromSeq(
-      JavaConverters.asScalaIteratorConverter(stringList.iterator()).asScala().toSeq());
+        JavaConverters.asScalaIteratorConverter(stringList.iterator()).asScala().toSeq());
     Response response = fromStream(stream, ManifestFactory.<String>classType(String.class));
     Future<Buf> fBuf = BufReaders.readAll(response.reader());
     String result = Buf.decodeString(await(fBuf), StandardCharsets.UTF_8);
     Assert.assertEquals("[\"first\",\"second\",\"third\"]", result);
+  }
+
+  @Test
+  @SuppressWarnings("rawtypes")
+  public void constructJsonStreamWithAffix() throws Exception {
+    List<String> drinks = Arrays.asList("coke", "sprite", "coffee", "tea", "fanta");
+    List<Lunch> lunches = new ArrayList<>();
+    drinks.forEach(d -> lunches.add(new Lunch(d, d.length() * 2, d.length())));
+
+    StreamingResponse<Reader, Lunch> streamingResponse1 =
+        responseBuilder.streaming(
+            Readers.fromSeq(lunches),
+            ToReader.ReaderIdentity(),
+            ManifestFactory.<Lunch>classType(Lunch.class));
+    Reader<Buf> lunchBuf = streamingResponse1.toBufReader();
+    Reader<Buf> prefix =
+        Readers.newBufReader(Bufs.utf8Buf("{\"options\":"), Integer.MAX_VALUE);
+    Reader<Buf> suffix =
+        Readers.newBufReader(Bufs.utf8Buf(",\"date\": \"02/12/2020\"}"), Integer.MAX_VALUE);
+    Response response = fromReader(
+        Readers.concat(Arrays.asList(prefix, lunchBuf, suffix)),
+        ManifestFactory.<Buf>classType(Buf.class));
+    String result =
+        Buf.decodeString(await(BufReaders.readAll(response.reader())), StandardCharsets.UTF_8);
+
+    String expectedJson = "{\"options\":["
+        + "{\"drink\":\"coke\",\"protein\":8,\"carbs\":4},"
+        + "{\"drink\":\"sprite\",\"protein\":12,\"carbs\":6},"
+        + "{\"drink\":\"coffee\",\"protein\":12,\"carbs\":6},"
+        + "{\"drink\":\"tea\",\"protein\":6,\"carbs\":3},"
+        + "{\"drink\":\"fanta\",\"protein\":10,\"carbs\":5}"
+        + "],\"date\": \"02/12/2020\"}";
+    Assert.assertEquals(expectedJson, result);
   }
 
 }

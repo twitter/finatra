@@ -57,7 +57,7 @@ class StreamingResponseTest extends Test with Mockito {
   }
 
   test("Reader: Serialize and deserialize the Reader of Float") {
-    val listFloat = Array[Float](1,2,3)
+    val listFloat = Array[Float](1, 2, 3)
     val reader: Reader[Float] = Reader.fromSeq(listFloat)
     val response: Response = fromReader(reader)
     assert(
@@ -66,14 +66,14 @@ class StreamingResponseTest extends Test with Mockito {
   }
 
   test("Reader: Serialize and deserialize the Reader of Buf") {
-    val bufSeq = Seq(Buf.ByteArray(1,2,3), Buf.ByteArray(4,5,6))
+    val bufSeq = Seq(Buf.ByteArray(1, 2, 3), Buf.ByteArray(4, 5, 6))
     val reader: Reader[Buf] = Reader.fromSeq(bufSeq)
     val response: Response = fromReader(reader)
     assert(await(BufReader.readAll(response.reader)) == bufSeq.head.concat(bufSeq.last))
   }
 
   test("Reader: Serialize and deserialize the Reader of Object") {
-    case class BarClass(v1 : Int, v2: String)
+    case class BarClass(v1: Int, v2: String)
     val ojSeq = Seq(BarClass(1, "first"), BarClass(2, "second"))
     val reader: Reader[BarClass] = Reader.fromSeq(ojSeq)
     val response = fromReader(reader)
@@ -131,7 +131,7 @@ class StreamingResponseTest extends Test with Mockito {
   }
 
   test("AsyncStream: Serialize and deserialize the AsyncStream of Buf") {
-    val bufSeq = Seq(Buf.ByteArray(1,2,3), Buf.ByteArray(4,5,6))
+    val bufSeq = Seq(Buf.ByteArray(1, 2, 3), Buf.ByteArray(4, 5, 6))
     val stream: AsyncStream[Buf] = AsyncStream.fromSeq(bufSeq)
     val response: Response = fromStream(stream)
     assert(await(BufReader.readAll(response.reader)) == bufSeq.head.concat(bufSeq.last))
@@ -157,5 +157,30 @@ class StreamingResponseTest extends Test with Mockito {
     val response = await(streamingResponse.toFutureResponse())
     assert(response.headerMap.getAll("key1") == Seq("value1", "value2", "value3"))
     assert(response.headerMap.getAll("key2") == Seq("v4", "v5", "v6"))
+  }
+
+  test("Add prefix and suffix to a JSON stream") {
+    case class Lunch(drink: String, protein: Option[Long], carbs: Int)
+    val lunches = List("coke", "sprite", "coffee", "tea", "fanta").map { drink =>
+      Lunch(drink, Some(drink.length * 2), drink.length)
+    }
+    val streamingResponse1 = responseBuilder.streaming(Reader.fromSeq(lunches))
+    val lunchBuf = streamingResponse1.toBufReader
+
+    val prefix = Reader.fromBuf(Buf.Utf8("""{"options":"""))
+    val suffix = Reader.fromBuf(Buf.Utf8(""","date": "02/12/2020"}"""))
+    val response = fromReader(Reader.concat(Seq(prefix, lunchBuf, suffix)))
+
+    val expectedJson =
+      """{"options":[
+        |{"drink":"coke","protein":8,"carbs":4},
+        |{"drink":"sprite","protein":12,"carbs":6},
+        |{"drink":"coffee","protein":12,"carbs":6},
+        |{"drink":"tea","protein":6,"carbs":3},
+        |{"drink":"fanta","protein":10,"carbs":5}
+        |],"date": "02/12/2020"}""".stripMargin.replaceAll("\n","")
+    assert(
+      Buf.decodeString(await(BufReader.readAll(response.reader)), StandardCharsets.UTF_8) == expectedJson)
+
   }
 }
