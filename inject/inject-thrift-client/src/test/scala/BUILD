@@ -1,5 +1,5 @@
 junit_tests(
-    sources = rglobs("com/twitter/inject/thrift/*.scala"),
+    sources = ["com/twitter/inject/thrift/**/*.scala"],
     compiler_option_sets = {"fatal_warnings"},
     dependencies = [
         "//:scala-reflect",
