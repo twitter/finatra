@@ -1,5 +1,5 @@
 junit_tests(
-    sources = rglobs("com/twitter/inject/tests/*.scala"),
+    sources = ["com/twitter/inject/tests/**/*.scala"],
     compiler_option_sets = {"fatal_warnings"},
     dependencies = [
         "3rdparty/jvm/joda-time",
