@@ -7,18 +7,15 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+20.2.1
+------
+
 Added
 ~~~~~
 
 * finatra-http: Add `toBufReader` to get the underlying Reader of Buf from StreamingResponse.
   If the consumed Stream primitive is not Buf, the returned reader streams a serialized
   JSON array. ``PHAB_ID=D434448``
-
-20.2.0
-------
-
-Added
-~~~~~
 
 * inject-app: Add functions to `c.t.inject.app.AbstractApp` to provide better
   ergonomics for Java users to call and use basic `App` lifecycle callbacks. 
