@@ -1,5 +1,5 @@
 junit_tests(
-    sources = rglobs("*.scala"),
+    sources = ["**/*.scala"],
     compiler_option_sets = {"fatal_warnings"},
     strict_deps = True,
     dependencies = [

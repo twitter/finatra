@@ -1,5 +1,5 @@
 junit_tests(
-    sources = rglobs("*.scala"),
+    sources = ["**/*.scala"],
     dependencies = [
         "3rdparty/jvm/org/slf4j:slf4j-nop",
         "finagle/finagle-base-http/src/main/scala",

@@ -1,6 +1,6 @@
 create_thrift_libraries(
     base_name = "greeter-thrift",
-    sources = globs("*.thrift"),
+    sources = ["*.thrift"],
     generate_languages = [
         "java",
         "scala",
