@@ -1,8 +1,6 @@
 scala_library(
     name = "exception-mapper",
-    sources = globs(
-        "ExceptionMapper.scala",
-    ),
+    sources = ["ExceptionMapper.scala"],
     compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
         org = "com.twitter",

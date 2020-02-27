@@ -1,5 +1,5 @@
 junit_tests(
-    sources = globs(
+    sources = [
         "*.scala",
         "doeverything/*.scala",
         "doeverything/controllers/*.scala",
@@ -7,8 +7,7 @@ junit_tests(
         "inheritance/*.scala",
         "inheritance/controllers/*.scala",
         "noninjection/*.scala",
-        # excludes exceptions/*.scala and doeverything/exceptions/*.scala
-    ),
+    ],
     compiler_option_sets = {"fatal_warnings"},
     strict_deps = True,
     dependencies = [

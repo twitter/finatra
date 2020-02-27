@@ -1,7 +1,5 @@
 junit_tests(
-    sources = rglobs(
-        "*.java",
-    ),
+    sources = ["**/*.java"],
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/junit",

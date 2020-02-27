@@ -1,9 +1,9 @@
 junit_tests(
-    sources = globs(
+    sources = [
         "com/twitter/finatra/kafka/consumers/*.scala",
         "com/twitter/finatra/kafka/serde/*.scala",
         "com/twitter/finatra/kafka/test/integration/*.scala",
-    ),
+    ],
     compiler_option_sets = {"fatal_warnings"},
     strict_deps = True,
     dependencies = [
@@ -20,10 +20,10 @@ junit_tests(
 
 scala_library(
     name = "test-deps",
-    sources = globs(
+    sources = [
         "com/twitter/finatra/kafka/test/*.scala",
         "com/twitter/finatra/kafka/test/utils/*.scala",
-    ),
+    ],
     compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
         org = "com.twitter",

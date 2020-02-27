@@ -1,7 +1,5 @@
 junit_tests(
-    sources = globs(
-        "com/twitter/inject/modules/tests/*.scala",
-    ),
+    sources = ["com/twitter/inject/modules/tests/*.scala"],
     compiler_option_sets = {"fatal_warnings"},
     dependencies = [
         ":test-deps",
@@ -24,9 +22,7 @@ junit_tests(
 
 scala_library(
     name = "test-deps",
-    sources = globs(
-        "com/twitter/inject/modules/*.scala",
-    ),
+    sources = ["com/twitter/inject/modules/*.scala"],
     compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
         org = "com.twitter",

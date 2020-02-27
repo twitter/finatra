@@ -12,11 +12,11 @@ jar_library(
 )
 
 scala_library(
-    sources = rglobs(
-        "com/twitter/finatra/kafkastreams/*.scala",
-        "com/twitter/finatra/streams/*.scala",
-        "org/*.scala",
-    ),
+    sources = [
+        "com/twitter/finatra/kafkastreams/**/*.scala",
+        "com/twitter/finatra/streams/**/*.scala",
+        "org/**/*.scala",
+    ],
     compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
         org = "com.twitter",

@@ -1,10 +1,10 @@
 # SERVER TRAITS
 scala_library(
-    sources = globs(
-        "servers.scala",
+    sources = [
         "ThriftFilter.scala",
         "ThriftRequest.scala",
-    ),
+        "servers.scala",
+    ],
     compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
         org = "com.twitter",

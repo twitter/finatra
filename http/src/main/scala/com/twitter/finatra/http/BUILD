@@ -1,9 +1,9 @@
 # SERVER TRAITS
 scala_library(
-    sources = globs(
-        "servers.scala",
+    sources = [
         "Tls.scala",
-    ),
+        "servers.scala",
+    ],
     compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
         org = "com.twitter",

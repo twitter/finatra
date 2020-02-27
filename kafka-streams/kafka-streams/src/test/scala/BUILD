@@ -1,9 +1,9 @@
 scala_library(
     name = "test-deps",
-    sources = globs(
+    sources = [
         "com/twitter/finatra/kafkastreams/test/*.scala",
         "com/twitter/inject/*.scala",
-    ),
+    ],
     compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
         org = "com.twitter",
@@ -48,11 +48,11 @@ scala_library(
 )
 
 junit_tests(
-    sources = rglobs(
-        "com/twitter/finatra/kafkastreams/integration/*.scala",
-        "com/twitter/finatra/kafkastreams/query/*.scala",
-        "com/twitter/finatra/kafkastreams/transformer/*.scala",
-    ),
+    sources = [
+        "com/twitter/finatra/kafkastreams/integration/**/*.scala",
+        "com/twitter/finatra/kafkastreams/query/**/*.scala",
+        "com/twitter/finatra/kafkastreams/transformer/**/*.scala",
+    ],
     compiler_option_sets = {"fatal_warnings"},
     strict_deps = True,
     dependencies = [
