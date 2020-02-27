@@ -13,6 +13,9 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-kafka-streams: Add method to `c.t.f.kafkastreams.test.TopologyTesterTopic` to write
+  Kafka messages with custom headers to topics. ``PHAB_ID=D424440``
+
 * finatra-http: Add `toBufReader` to get the underlying Reader of Buf from StreamingResponse.
   If the consumed Stream primitive is not Buf, the returned reader streams a serialized
   JSON array. ``PHAB_ID=D434448``
