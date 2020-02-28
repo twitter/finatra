@@ -165,6 +165,7 @@ lazy val baseSettings = Seq(
 
 lazy val publishSettings = Seq(
   publishMavenStyle := true,
+  publishConfiguration := publishConfiguration.value.withOverwrite(true),
   publishArtifact in Compile := true,
   publishArtifact in Test := false,
   pomIncludeRepository := { _ => false },
