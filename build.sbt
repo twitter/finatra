@@ -94,7 +94,7 @@ lazy val versions = new {
   val bijectionCore = "0.9.5"
   val commonsFileupload = "1.4"
   val fastutil = "8.1.1"
-  val guice = "4.1.0"
+  val guice = "4.2.0"
   val jackson = "2.9.10"
   val jacksonDatabind = "2.9.10.1"
   val jodaConvert = "1.5"
@@ -109,7 +109,7 @@ lazy val versions = new {
   val nscalaTime = "2.14.0"
   val rocksdbjni = "5.14.2"
   val scalaCheck = "1.14.0"
-  val scalaGuice = "4.1.0"
+  val scalaGuice = "4.2.0"
   val scalaTest = "3.0.8"
   val slf4j = "1.7.30"
   val snakeyaml = "1.24"
@@ -1108,7 +1108,7 @@ lazy val kafkaStreamsQueryableThrift = (project in file("kafka-streams/kafka-str
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
-    injectCore % "test->test;compile->compile", 
+    injectCore % "test->test;compile->compile",
     kafkaStreamsStaticPartitioning % "test->test;compile->compile")
 
 lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))

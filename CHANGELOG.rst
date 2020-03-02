@@ -41,14 +41,15 @@ Added
   MDC. ``PHAB_ID=D431148``
 
 * finatra-jackson: Added new functionality in the `CaseClassDeserializer` to support more
-  Jackson annotations during deserialization. See documentation for more information. 
+  Jackson annotations during deserialization. See documentation for more information.
   ``PHAB_ID=D407284``
 
 * finatra: Add NullKafkaProducer for unit tests to avoid network connection failures in the log.
-  ``PHAB_ID=D429004``  
+  ``PHAB_ID=D429004``
 
 Changed
 ~~~~~~~
+* finatra: Update Google Guice version to 4.2.0 ``PHAB_ID=D372886``
 
 * finatra: Bumped version of Joda to 2.10.2 and Joda-Convert to 1.5. ``PHAB_ID=D435987``
 
@@ -103,7 +104,7 @@ Fixed
 
 * finatra-jackson: Fix for enforcing "fail on unknown properties" during deserialization. Previously,
   the `CaseClassDeserializer` was optimized to only read the fields in the case class constructor
-  from the incoming JSON and thus ignored any unknown fields during deserialization. The fix will 
+  from the incoming JSON and thus ignored any unknown fields during deserialization. The fix will
   now properly fail if the `DeserializationFeature` is set or if the `JsonProperties` is configured
   accordingly. ``PHAB_ID=D407284``
 
@@ -332,12 +333,12 @@ Added
 Changed
 ~~~~~~~
 
-* finatra: Remove commons-lang as a dependency and replace it with alternatives from stdlib 
+* finatra: Remove commons-lang as a dependency and replace it with alternatives from stdlib
   when possible. ``PHAB_ID=D354013``
 
 * inject-server: Changed `c.t.inject.server.InMemoryStatsReceiverUtility` to show the expected and
   actual values as part of the error message when metric values do not match. ``PHAB_ID=D360470``
-  
+
 * finatra-kafka-streams: Improve StaticPartitioning error message ``PHAB_ID=D351368``
 
 Fixed
@@ -349,11 +350,11 @@ Fixed
 * inject-app: Update `c.t.inject.app.App` to only recurse through modules once. We currently
   call `TwitterModule#modules` more than once in reading flags and parsing the list of modules
   over which to create the injector. When `TwitterModule#modules` is a function that inlines the
-  instantiation of new modules we can end up creating multiple instances causing issues with the 
-  list of flags defined in the application. This is especially true in instances of `TwitterModule` 
-  implemented in Java as there is no way to implement the trait `TwitterModule#modules` method as a 
-  eagerly evaluated value. We also don't provide an ergonomic method for Java users to define 
-  dependent modules like we do in apps and servers via `App#javaModules`. Thus we also add a 
+  instantiation of new modules we can end up creating multiple instances causing issues with the
+  list of flags defined in the application. This is especially true in instances of `TwitterModule`
+  implemented in Java as there is no way to implement the trait `TwitterModule#modules` method as a
+  eagerly evaluated value. We also don't provide an ergonomic method for Java users to define
+  dependent modules like we do in apps and servers via `App#javaModules`. Thus we also add a
   `TwitterModule#javaModules` function which expresses a better API for Java users. ``PHAB_ID=D349587``
 
 Closed
@@ -522,7 +523,7 @@ Added
   `NullValidationFinatraJacksonModule`. ``PHAB_ID=D307795``
 
 * inject-app: Add `c.t.inject.app.DtabResolution` to help users apply supplemental Dtabs added by
-  setting the dtab.add flag. This will append the supplemental Dtabs to the 
+  setting the dtab.add flag. This will append the supplemental Dtabs to the
   Dtab.base in a premain function. ``PHAB_ID=D303813``
 
 Changed
