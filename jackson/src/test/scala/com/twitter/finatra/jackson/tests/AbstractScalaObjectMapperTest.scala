@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.{
   JsonDeserializer,
   JsonMappingException,
   JsonNode,
+  MapperFeature,
   ObjectMapperCopier,
   PropertyNamingStrategy,
   ObjectMapper => JacksonObjectMapper
@@ -97,6 +98,43 @@ abstract class AbstractScalaObjectMapperTest extends Test {
   override def beforeAll(): Unit = {
     super.beforeAll()
     mapper.registerModule(AbstractScalaObjectMapperTest.MixInAnnotationsModule)
+  }
+
+  test("Scala enums") {
+    val expectedInstance = BasicDate(Month.Feb, 29, 2020, Weekday.Sat)
+    val expectedStr = """{"month":"Feb","day":29,"year":2020,"weekday":"Sat"}"""
+    parse[BasicDate](expectedStr) should equal(expectedInstance) // deser
+    generate(expectedInstance) should equal(expectedStr) // ser
+
+    // test with default scala module
+    val defaultScalaObjectMapper = new JacksonObjectMapper with JacksonScalaObjectMapper
+    defaultScalaObjectMapper.registerModule(DefaultScalaModule)
+    defaultScalaObjectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+    deserialize[BasicDate](defaultScalaObjectMapper, expectedStr) should equal(expectedInstance)
+
+    // case insensitive mapper feature does not pertain to scala enumerations (only Java enums)
+    val caseInsensitiveEnumMapper =
+      ScalaObjectMapper.builder
+        .withAdditionalMapperConfigurationFn(
+          _.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true))
+        .objectMapper
+
+    val withErrors = Seq("month: key not found: feb", "weekday: key not found: sat")
+    val expectedCaseInsensitiveStr = """{"month":"feb","day":29,"year":2020,"weekday":"sat"}"""
+    val e = intercept[CaseClassMappingException] {
+      caseInsensitiveEnumMapper.parse[BasicDate](expectedCaseInsensitiveStr)
+    }
+    val actualMessages = e.errors.map(_.getMessage)
+    JsonDiff.jsonDiff(actualMessages, withErrors)
+
+    // non-existent values
+    val withErrors2 = Seq("month: key not found: Nnn", "weekday: key not found: Flub")
+    val expectedStr2 = """{"month":"Nnn","day":29,"year":2020,"weekday":"Flub"}"""
+    val e2 = intercept[CaseClassMappingException] {
+      parse[BasicDate](expectedStr2)
+    }
+    val actualMessages2 = e2.errors.map(_.getMessage)
+    JsonDiff.jsonDiff(actualMessages2, withErrors2)
   }
 
   // based on Jackson test to ensure compatibility:
@@ -429,6 +467,31 @@ abstract class AbstractScalaObjectMapperTest extends Test {
         "make_opt" : "ford",
         "make_seq" : ["vw", "ford"],
         "make_set" : ["ford", "vw"]
+       }"""),
+      CaseClassWithComplexEnums(
+        "Bob",
+        CarMakeEnum.vw,
+        Some(CarMakeEnum.ford),
+        Seq(CarMakeEnum.vw, CarMakeEnum.ford),
+        Set(CarMakeEnum.ford, CarMakeEnum.vw)
+      )
+    )
+  }
+
+  test("enums#complex case insensitive") {
+    val caseInsensitiveEnumMapper =
+      ScalaObjectMapper.builder
+        .withAdditionalMapperConfigurationFn(
+          _.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true))
+        .objectMapper
+
+    JsonDiff.jsonDiff(
+      caseInsensitiveEnumMapper.parse[CaseClassWithComplexEnums]("""{
+        "name" : "Bob",
+        "make" : "VW",
+        "make_opt" : "Ford",
+        "make_seq" : ["vW", "foRD"],
+        "make_set" : ["fORd", "Vw"]
        }"""),
       CaseClassWithComplexEnums(
         "Bob",
@@ -1752,7 +1815,8 @@ abstract class AbstractScalaObjectMapperTest extends Test {
   }
 
   test("serde#can serialize and deserialize optional polymorphic types") {
-    val view = OptionalView(shapes = Seq(Circle(10), Rectangle(5, 5)), optional = Some(Rectangle(10, 5)))
+    val view =
+      OptionalView(shapes = Seq(Circle(10), Rectangle(5, 5)), optional = Some(Rectangle(10, 5)))
     val result = generate(view)
     result should be(
       """{"shapes":[{"type":"circle","radius":10},{"type":"rectangle","width":5,"height":5}],"optional":{"type":"rectangle","width":10,"height":5}}""")

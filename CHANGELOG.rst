@@ -7,6 +7,15 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+
+* finatra-jackson: Better handling of Scala enumeration mapping errors. Currently, if mapping
+  of a Scala enumeration during deserialization fails a `java.util.NoSuchElementException` is
+  thrown which escapes deserialization error handling. Update to instead handle this failure case
+  in order to correctly translate into a `CaseClassFieldMappingException` which will be wrapped
+  into a `CaseClassMappingException`. ``PHAB_ID=D442575``
+
 20.2.1
 ------
 

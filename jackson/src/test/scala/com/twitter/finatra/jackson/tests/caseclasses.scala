@@ -3,11 +3,13 @@ package com.twitter.finatra.jackson.tests
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type
 import com.fasterxml.jackson.annotation._
 import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.core.`type`.TypeReference
 import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.annotation.{JsonDeserialize, JsonNaming}
 import com.fasterxml.jackson.databind.deser.std.NumberDeserializers.BigDecimalDeserializer
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.node.ValueNode
+import com.fasterxml.jackson.module.scala.JsonScalaEnumeration
 import com.twitter.finatra.jackson.{CarMake, CarMakeEnum, TestInjectableValue}
 import com.twitter.finatra.json.annotations.JsonCamelCase
 import com.twitter.finatra.validation._
@@ -20,6 +22,22 @@ import org.joda.time.DateTime
 import scala.annotation.meta.param
 import scala.math.BigDecimal.RoundingMode
 
+object Weekday extends Enumeration {
+  type Weekday = Value
+  val Mon, Tue, Wed, Thu, Fri, Sat, Sun = Value
+}
+class WeekdayType extends TypeReference[Weekday.type]
+object Month extends Enumeration {
+  type Month = Value
+  val Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec = Value
+}
+class MonthType extends TypeReference[Month.type]
+case class BasicDate(
+  @JsonScalaEnumeration(classOf[MonthType]) month: Month.Month,
+  day: Int,
+  year: Int,
+  @JsonScalaEnumeration(classOf[WeekdayType]) weekday: Weekday.Weekday)
+
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes(
   Array(
@@ -28,12 +46,9 @@ import scala.math.BigDecimal.RoundingMode
   )
 )
 sealed trait Shape
-
 case class Rectangle(@Min(0) width: Int, @Min(0) height: Int) extends Shape
 case class Circle(@Min(0) radius: Int) extends Shape
-
 case class View(shapes: Seq[Shape])
-
 case class OptionalView(shapes: Seq[Shape], optional: Option[Shape])
 
 case class TestJsonCreator(int: Int)

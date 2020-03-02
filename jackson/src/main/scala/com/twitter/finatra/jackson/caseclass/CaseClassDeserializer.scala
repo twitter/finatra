@@ -476,6 +476,21 @@ private[jackson] class CaseClassDeserializer(
             constructorValuesIdx,
             errors
           )
+        case e: java.util.NoSuchElementException if isScalaEnumerationType(field.javaType.getRawClass) =>
+          // Scala enumeration mapping issue
+          addException(
+            field,
+            CaseClassFieldMappingException(
+              CaseClassFieldMappingException.PropertyPath.leaf(field.name),
+              Invalid(
+                e.getMessage,
+                ErrorCode.Unknown
+              )
+            ),
+            constructorValues,
+            constructorValuesIdx,
+            errors
+          )
         case e: InjectableValuesException =>
           // we rethrow, to prevent leaking internal injection details in the "errors" array
           throw e
@@ -488,6 +503,9 @@ private[jackson] class CaseClassDeserializer(
 
     (constructorValues, errors)
   }
+
+  private[this] def isScalaEnumerationType(clazz: Class[_]): Boolean =
+    clazz.getName.startsWith(classOf[scala.Enumeration].getName)
 
   /** Add the given exception to the given array buffer of errors while also adding a missing value field to the given array */
   private[this] def addException(
