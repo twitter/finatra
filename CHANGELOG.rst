@@ -7,14 +7,23 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
 Changed
 ~~~~~~~
+
+* finatra-kafka-streams: (BREAKING API CHANGE) Update AsyncTransformer to preserve
+  record context. ``PHAB_ID=D436227``
 
 * finatra-jackson: Better handling of Scala enumeration mapping errors. Currently, if mapping
   of a Scala enumeration during deserialization fails a `java.util.NoSuchElementException` is
   thrown which escapes deserialization error handling. Update to instead handle this failure case
   in order to correctly translate into a `CaseClassFieldMappingException` which will be wrapped
   into a `CaseClassMappingException`. ``PHAB_ID=D442575``
+
+Fixed
+~~~~~
 
 20.2.1
 ------
@@ -150,7 +159,7 @@ Changed
 
   ``PHAB_ID=D407474``
 
-* finatra-http|jackson (BREAKING API CHANGE): Move parsing of message body contents
+* finatra-http|jackson: (BREAKING API CHANGE) Move parsing of message body contents
   from `finatra/jackson` via the `FinatraObjectMapper` `#parseMessageBody`, `#parseRequestBody`,
   and `#parseResponseBody` methods to `finatra/http` with functionality replicated via an
   implicit which enhances a given `FinatraObjectMapper`. Additionally we have updated
