@@ -27,7 +27,7 @@ import com.twitter.finatra.jackson.caseclass.exceptions.{
 import com.twitter.finatra.json.annotations.JsonCamelCase
 import com.twitter.finatra.validation.ValidationResult.Invalid
 import com.twitter.finatra.validation.{
-  ErrorCode,
+  ErrorCode => ValidationErrorCode,
   MethodValidation,
   ValidationProvider,
   ValidationResult
@@ -421,7 +421,7 @@ private[jackson] class CaseClassDeserializer(
           // don't catch just IllegalArgumentException as that hides errors from validating an incorrect type
           val ex = CaseClassFieldMappingException(
             CaseClassFieldMappingException.PropertyPath.leaf(field.name),
-            Invalid(e.getMessage, ErrorCode.Unknown)
+            Invalid(e.getMessage, ValidationErrorCode.Unknown)
           )
           addException(
             field,
@@ -484,7 +484,7 @@ private[jackson] class CaseClassDeserializer(
               CaseClassFieldMappingException.PropertyPath.leaf(field.name),
               Invalid(
                 e.getMessage,
-                ErrorCode.Unknown
+                ValidationErrorCode.Unknown
               )
             ),
             constructorValues,

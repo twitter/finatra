@@ -1,6 +1,5 @@
 package com.twitter.finatra.validation
 
-import com.fasterxml.jackson.core.JsonProcessingException
 import java.util.concurrent.TimeUnit
 import org.joda.time.DateTime
 
@@ -15,7 +14,6 @@ object ErrorCode {
   case class InvalidTimeGranularity(time: DateTime, targetGranularity: TimeUnit) extends ErrorCode
   case class InvalidUUID(uuid: String) extends ErrorCode
   case class InvalidValues(invalid: Set[String], valid: Set[String]) extends ErrorCode
-  case class JsonProcessingError(cause: JsonProcessingException) extends ErrorCode
   case object RequiredFieldMissing extends ErrorCode
   case class SizeOutOfRange(size: Number, min: Long, max: Long) extends ErrorCode
   case class TimeNotFuture(time: DateTime) extends ErrorCode

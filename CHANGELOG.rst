@@ -13,6 +13,9 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-validation|jackson: Remove Jackson dependency from finatra/validation. This
+  was for `ErrorCode` reporting but can be moved to finatra/jackson. ``PHAB_ID=D445364``
+
 * finatra-kafka-streams: (BREAKING API CHANGE) Update AsyncTransformer to preserve
   record context. ``PHAB_ID=D436227``
 

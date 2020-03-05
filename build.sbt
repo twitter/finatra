@@ -694,10 +694,9 @@ lazy val validation = project
     name := "finatra-validation",
     moduleName := "finatra-validation",
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.core" % "jackson-databind" % versions.jacksonDatabind,
       "joda-time" % "joda-time" % versions.jodaTime,
-      "org.json4s" %% "json4s-core" % versions.json4s,
       "com.twitter" %% "util-core" % versions.twLibVersion,
+      "org.json4s" %% "json4s-core" % versions.json4s % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
     // special-case to only scaladoc what's necessary as some of the tests cannot generate scaladocs
