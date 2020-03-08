@@ -133,10 +133,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra">finatra</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.json.internal" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="internal"></a><a id="internal:internal"></a>
+    </li><li name="com.twitter.finatra.json.annotations" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="annotations"></a><a id="annotations:annotations"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/json/index.html#internal" title="Permalink">
+      <a href="../../../../com/twitter/finatra/json/index.html#annotations" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -145,7 +145,7 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="" href="internal/index.html"><span class="name">internal</span></a>
+        <a title="" href="annotations/index.html"><span class="name">annotations</span></a>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="com.twitter.finatra.json">json</a></dd></dl></div>
@@ -214,12 +214,15 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">FinatraObjectMapper</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name deprecated" title="Deprecated: (Since version 2019-10-10) Use com.twitter.finatra.jackson.ScalaObjectMapper">FinatraObjectMapper</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2019-10-10)</i> Use com.twitter.finatra.jackson.ScalaObjectMapper</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -364,24 +367,6 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.json.FinatraObjectMapper#create" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="create(injector:com.google.inject.Injector):com.twitter.finatra.json.FinatraObjectMapper"></a><a id="create(Injector):FinatraObjectMapper"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/json/FinatraObjectMapper$.html#create(injector:com.google.inject.Injector):com.twitter.finatra.json.FinatraObjectMapper" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">create</span><span class="params">(<span name="injector">injector: <span class="extype" name="com.google.inject.Injector">Injector</span> = <span class="symbol">null</span></span>)</span><span class="result">: <a href="FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">FinatraObjectMapper</a></span>
-      </span>
-      
-      <p class="shortcomment cmt">When not using injection, this factory method can be used but be aware that the @JsonInject annotation will not work.</p><div class="fullcomment"><div class="comment cmt"><p>When not using injection, this factory method can be used but be aware that the @JsonInject annotation will not work.
-NOTE: The preferred way of obtaining a FinatraObjectMapper is through injection using FinatraJacksonModule.
-</p></div></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -650,7 +635,76 @@ NOTE: The preferred way of obtaining a FinatraObjectMapper is through injection 
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="com.twitter.finatra.json.FinatraObjectMapper#camelCaseObjectMapper" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="camelCaseObjectMapper(underlying:com.twitter.finatra.jackson.JacksonScalaObjectMapperType):com.twitter.finatra.json.FinatraObjectMapper"></a><a id="camelCaseObjectMapper(JacksonScalaObjectMapperType):FinatraObjectMapper"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/json/FinatraObjectMapper$.html#camelCaseObjectMapper(underlying:com.twitter.finatra.jackson.JacksonScalaObjectMapperType):com.twitter.finatra.json.FinatraObjectMapper" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2019-11-19) Use ScalaObjectMapper.camelCaseObjectMapper(underlying)">camelCaseObjectMapper</span><span class="params">(<span name="underlying">underlying: <a href="../jackson/index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></span>)</span><span class="result">: <a href="FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">FinatraObjectMapper</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2019-11-19)</i> Use ScalaObjectMapper.camelCaseObjectMapper(underlying)</p></dd></dl></div>
+    </li><li name="com.twitter.finatra.json.FinatraObjectMapper#create" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="create(injector:com.google.inject.Injector):com.twitter.finatra.json.FinatraObjectMapper"></a><a id="create(Injector):FinatraObjectMapper"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/json/FinatraObjectMapper$.html#create(injector:com.google.inject.Injector):com.twitter.finatra.json.FinatraObjectMapper" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2019-10-10) Use com.twitter.finatra.jackson.ScalaObjectMapper.apply(injector)">create</span><span class="params">(<span name="injector">injector: <span class="extype" name="com.google.inject.Injector">Injector</span> = <span class="symbol">null</span></span>)</span><span class="result">: <a href="FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">FinatraObjectMapper</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">When not using injection, this factory method can be used but be aware that only
+default <span class="extype" name="com.fasterxml.jackson.databind.InjectableValues">com.fasterxml.jackson.databind.InjectableValues</span> are supported via this
+instantiation when given a non-null <span class="extype" name="com.google.inject.Injector">com.google.inject.Injector</span>.</p><div class="fullcomment"><div class="comment cmt"><p>When not using injection, this factory method can be used but be aware that only
+default <span class="extype" name="com.fasterxml.jackson.databind.InjectableValues">com.fasterxml.jackson.databind.InjectableValues</span> are supported via this
+instantiation when given a non-null <span class="extype" name="com.google.inject.Injector">com.google.inject.Injector</span>. By default only
+<span class="extype" name="com.fasterxml.jackson.databind.InjectableValues">com.fasterxml.jackson.databind.InjectableValues</span> provided by the object graph
+is supported during deserialization (case class fields annotated with <code>@Inject</code>)
+when provided a non-null <span class="extype" name="Injector">Injector</span>.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a new <a href="FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">FinatraObjectMapper</a> instance</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2019-10-10)</i> Use com.twitter.finatra.jackson.ScalaObjectMapper.apply(injector)</p></dd><dt>Note</dt><dd><span class="cmt"><p>the preferred way of obtaining a <a href="FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">FinatraObjectMapper</a> is through injection
+      using the FinatraJacksonModule.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.fasterxml.jackson.databind.InjectableValues">com.fasterxml.jackson.databind.InjectableValues</span></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.json.FinatraObjectMapper#snakeCaseObjectMapper" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="snakeCaseObjectMapper(underlying:com.twitter.finatra.jackson.JacksonScalaObjectMapperType):com.twitter.finatra.json.FinatraObjectMapper"></a><a id="snakeCaseObjectMapper(JacksonScalaObjectMapperType):FinatraObjectMapper"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/json/FinatraObjectMapper$.html#snakeCaseObjectMapper(underlying:com.twitter.finatra.jackson.JacksonScalaObjectMapperType):com.twitter.finatra.json.FinatraObjectMapper" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2019-11-19) Use ScalaObjectMapper.snakeCaseObjectMapper(underlying)">snakeCaseObjectMapper</span><span class="params">(<span name="underlying">underlying: <a href="../jackson/index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></span>)</span><span class="result">: <a href="FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">FinatraObjectMapper</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2019-11-19)</i> Use ScalaObjectMapper.snakeCaseObjectMapper(underlying)</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

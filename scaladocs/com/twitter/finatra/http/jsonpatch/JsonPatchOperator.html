@@ -265,9 +265,9 @@ Note: users can always implement their own JsonPatchOperator on demand
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.twitter.finatra.http.jsonpatch.JsonPatchOperator#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(mapper:com.twitter.finatra.json.FinatraObjectMapper):com.twitter.finatra.http.jsonpatch.JsonPatchOperator"></a><a id="&lt;init&gt;:JsonPatchOperator"></a>
+      <a id="&lt;init&gt;(mapper:com.twitter.finatra.jackson.ScalaObjectMapper):com.twitter.finatra.http.jsonpatch.JsonPatchOperator"></a><a id="&lt;init&gt;:JsonPatchOperator"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/jsonpatch/JsonPatchOperator.html#&lt;init&gt;(mapper:com.twitter.finatra.json.FinatraObjectMapper):com.twitter.finatra.http.jsonpatch.JsonPatchOperator" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/jsonpatch/JsonPatchOperator.html#&lt;init&gt;(mapper:com.twitter.finatra.jackson.ScalaObjectMapper):com.twitter.finatra.http.jsonpatch.JsonPatchOperator" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -276,10 +276,10 @@ Note: users can always implement their own JsonPatchOperator on demand
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">JsonPatchOperator</span><span class="params">(<span name="mapper">mapper: <a href="../../json/FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">FinatraObjectMapper</a></span>)</span>
+        <span class="name">JsonPatchOperator</span><span class="params">(<span name="mapper">mapper: <a href="../../jackson/ScalaObjectMapper.html" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper">ScalaObjectMapper</a></span>)</span>
       </span>
       
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">mapper</dt><dd class="cmt"><p>default <a href="../../json/FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">com.twitter.finatra.json.FinatraObjectMapper</a> to use for writing values.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">mapper</dt><dd class="cmt"><p>default <a href="../../jackson/ScalaObjectMapper.html" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper">com.twitter.finatra.jackson.ScalaObjectMapper</a> to use for writing values.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Inject</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -358,7 +358,7 @@ Note: users can always implement their own JsonPatchOperator on demand
       
       <p class="shortcomment cmt">Apply add operation on target
 </p><div class="fullcomment"><div class="comment cmt"><p>Apply add operation on target
-</p></div><dl class="paramcmts block"><dt class="param">patch</dt><dd class="cmt"><p><a href="PatchOperation.html" class="extype" name="com.twitter.finatra.http.jsonpatch.PatchOperation">com.twitter.finatra.http.jsonpatch.PatchOperation</a></p></dd><dt class="param">target</dt><dd class="cmt"><p>an instance of JsonNode to be applied with add method</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">patch</dt><dd class="cmt"><p>a <a href="PatchOperation.html" class="extype" name="com.twitter.finatra.http.jsonpatch.PatchOperation">com.twitter.finatra.http.jsonpatch.PatchOperation</a></p></dd><dt class="param">target</dt><dd class="cmt"><p>an instance of JsonNode to be applied with add method</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
@@ -416,7 +416,7 @@ Note: users can always implement their own JsonPatchOperator on demand
       
       <p class="shortcomment cmt">Apply copy operation on target
 </p><div class="fullcomment"><div class="comment cmt"><p>Apply copy operation on target
-</p></div><dl class="paramcmts block"><dt class="param">patch</dt><dd class="cmt"><p><a href="PatchOperation.html" class="extype" name="com.twitter.finatra.http.jsonpatch.PatchOperation">com.twitter.finatra.http.jsonpatch.PatchOperation</a></p></dd><dt class="param">target</dt><dd class="cmt"><p>an instance of JsonNode to be applied with copy method</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">patch</dt><dd class="cmt"><p>a <a href="PatchOperation.html" class="extype" name="com.twitter.finatra.http.jsonpatch.PatchOperation">com.twitter.finatra.http.jsonpatch.PatchOperation</a></p></dd><dt class="param">target</dt><dd class="cmt"><p>an instance of JsonNode to be applied with copy method</p></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -542,7 +542,7 @@ Note: users can always implement their own JsonPatchOperator on demand
       
       <p class="shortcomment cmt">Apply move operation on target
 </p><div class="fullcomment"><div class="comment cmt"><p>Apply move operation on target
-</p></div><dl class="paramcmts block"><dt class="param">patch</dt><dd class="cmt"><p><a href="PatchOperation.html" class="extype" name="com.twitter.finatra.http.jsonpatch.PatchOperation">com.twitter.finatra.http.jsonpatch.PatchOperation</a></p></dd><dt class="param">target</dt><dd class="cmt"><p>an instance of JsonNode to be applied with move method</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">patch</dt><dd class="cmt"><p>a <a href="PatchOperation.html" class="extype" name="com.twitter.finatra.http.jsonpatch.PatchOperation">com.twitter.finatra.http.jsonpatch.PatchOperation</a></p></dd><dt class="param">target</dt><dd class="cmt"><p>an instance of JsonNode to be applied with move method</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -614,7 +614,7 @@ Note: users can always implement their own JsonPatchOperator on demand
       
       <p class="shortcomment cmt">Apply remove operation on target
 </p><div class="fullcomment"><div class="comment cmt"><p>Apply remove operation on target
-</p></div><dl class="paramcmts block"><dt class="param">patch</dt><dd class="cmt"><p><a href="PatchOperation.html" class="extype" name="com.twitter.finatra.http.jsonpatch.PatchOperation">com.twitter.finatra.http.jsonpatch.PatchOperation</a></p></dd><dt class="param">target</dt><dd class="cmt"><p>an instance of JsonNode to be applied with remove method</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">patch</dt><dd class="cmt"><p>a <a href="PatchOperation.html" class="extype" name="com.twitter.finatra.http.jsonpatch.PatchOperation">com.twitter.finatra.http.jsonpatch.PatchOperation</a></p></dd><dt class="param">target</dt><dd class="cmt"><p>an instance of JsonNode to be applied with remove method</p></dd></dl></div>
     </li><li name="com.twitter.finatra.http.jsonpatch.JsonPatchOperator#replace" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="replace(patch:com.twitter.finatra.http.jsonpatch.PatchOperation,target:com.fasterxml.jackson.databind.JsonNode):Unit"></a><a id="replace(PatchOperation,JsonNode):Unit"></a>
       <span class="permalink">
@@ -632,7 +632,7 @@ Note: users can always implement their own JsonPatchOperator on demand
       
       <p class="shortcomment cmt">Apply replace operation on target
 </p><div class="fullcomment"><div class="comment cmt"><p>Apply replace operation on target
-</p></div><dl class="paramcmts block"><dt class="param">patch</dt><dd class="cmt"><p><a href="PatchOperation.html" class="extype" name="com.twitter.finatra.http.jsonpatch.PatchOperation">com.twitter.finatra.http.jsonpatch.PatchOperation</a></p></dd><dt class="param">target</dt><dd class="cmt"><p>an instance of JsonNode to be applied with replace method</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">patch</dt><dd class="cmt"><p>a <a href="PatchOperation.html" class="extype" name="com.twitter.finatra.http.jsonpatch.PatchOperation">com.twitter.finatra.http.jsonpatch.PatchOperation</a></p></dd><dt class="param">target</dt><dd class="cmt"><p>an instance of JsonNode to be applied with replace method</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
@@ -666,7 +666,7 @@ Note: users can always implement their own JsonPatchOperator on demand
       
       <p class="shortcomment cmt">Apply test operation on target
 </p><div class="fullcomment"><div class="comment cmt"><p>Apply test operation on target
-</p></div><dl class="paramcmts block"><dt class="param">patch</dt><dd class="cmt"><p><a href="PatchOperation.html" class="extype" name="com.twitter.finatra.http.jsonpatch.PatchOperation">com.twitter.finatra.http.jsonpatch.PatchOperation</a></p></dd><dt class="param">target</dt><dd class="cmt"><p>an instance of JsonNode to apply test method</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">patch</dt><dd class="cmt"><p>a <a href="PatchOperation.html" class="extype" name="com.twitter.finatra.http.jsonpatch.PatchOperation">com.twitter.finatra.http.jsonpatch.PatchOperation</a></p></dd><dt class="param">target</dt><dd class="cmt"><p>an instance of JsonNode to apply test method</p></dd></dl></div>
     </li><li name="com.twitter.finatra.http.jsonpatch.JsonPatchOperator#toJsonNode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toJsonNode(original:String):com.fasterxml.jackson.databind.JsonNode"></a><a id="toJsonNode(String):JsonNode"></a>
       <span class="permalink">

@@ -133,10 +133,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.json.internal" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="internal"></a><a id="internal:internal"></a>
+    </li><li name="com.twitter.finatra.json.annotations" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="annotations"></a><a id="annotations:annotations"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/json/index.html#internal" title="Permalink">
+      <a href="../../../../com/twitter/finatra/json/index.html#annotations" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -145,7 +145,7 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="" href="../internal/index.html"><span class="name">internal</span></a>
+        <a title="" href="../annotations/index.html"><span class="name">annotations</span></a>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.json">json</a></dd></dl></div>
@@ -167,12 +167,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.json">json</a></dd></dl></div>
     </li><li class="current-entities indented5">
                         <a class="object" href="FinatraJacksonModule$.html" title=""></a>
-                        <a class="class" href="FinatraJacksonModule.html" title="Guice module to configure Jackson object mappers"></a>
-                        <a href="FinatraJacksonModule.html" title="Guice module to configure Jackson object mappers">FinatraJacksonModule</a>
-                      </li><li class="current-entities indented5">
-                        <a class="object" href="NullValidationFinatraJacksonModule$.html" title="Provides a FinatraJacksonModule that will treat all fields as acceptable during Finatra Validation of annotations."></a>
-                        <a class="class" href="NullValidationFinatraJacksonModule.html" title=""></a>
-                        <a href="NullValidationFinatraJacksonModule.html" title="">NullValidationFinatraJacksonModule</a>
+                        <a class="class" href="FinatraJacksonModule.html" title=""></a>
+                        <a href="FinatraJacksonModule.html" title="">FinatraJacksonModule</a>
                       </li><li name="com.twitter.finatra.json.utils" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="utils"></a><a id="utils:utils"></a>
       <span class="permalink">
@@ -253,9 +249,9 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="com.twitter.finatra.json.modules.FinatraJacksonModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="FinatraJacksonModuleextendsTwitterModule"></a><a id="FinatraJacksonModule:FinatraJacksonModule"></a>
+      <a id="FinatraJacksonModuleextendsScalaObjectMapperModule"></a><a id="FinatraJacksonModule:FinatraJacksonModule"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/json/modules/index.html#FinatraJacksonModuleextendsTwitterModule" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/json/modules/index.html#FinatraJacksonModuleextendsScalaObjectMapperModule" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -264,37 +260,25 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="Guice module to configure Jackson object mappers" href="FinatraJacksonModule.html"><span class="name">FinatraJacksonModule</span></a><span class="result"> extends <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></span>
+        <a title="" href="FinatraJacksonModule.html"><span class="name deprecated" title="Deprecated: (Since version 2019-11-19) Use com.twitter.finatra.jackson.modules.ScalaObjectMapperModule directly.">FinatraJacksonModule</span></a><span class="result"> extends <a href="../../jackson/modules/ScalaObjectMapperModule.html" class="extype" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule">ScalaObjectMapperModule</a></span>
       </span>
       
-      <p class="shortcomment cmt">Guice module to configure Jackson object mappers</p><div class="fullcomment"><div class="comment cmt"><p>Guice module to configure Jackson object mappers</p><p>Note: Simply extend this module to override defaults or provide
-additional configuration. See SampleApiServer for an example.
-</p></div></div>
-    </li><li name="com.twitter.finatra.json.modules.NullValidationFinatraJacksonModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NullValidationFinatraJacksonModuleextendsFinatraJacksonModule"></a><a id="NullValidationFinatraJacksonModule:NullValidationFinatraJacksonModule"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/json/modules/index.html#NullValidationFinatraJacksonModuleextendsFinatraJacksonModule" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="NullValidationFinatraJacksonModule.html"><span class="name">NullValidationFinatraJacksonModule</span></a><span class="result"> extends <a href="FinatraJacksonModule.html" class="extype" name="com.twitter.finatra.json.modules.FinatraJacksonModule">FinatraJacksonModule</a></span>
-      </span>
-      
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2019-11-19)</i> Use com.twitter.finatra.jackson.modules.ScalaObjectMapperModule directly.</p></dd></dl></div>
     </li></ol>
             </div>
 
         
 
+        
+
+        
+
         <div class="values members">
-              <h3>Value Members</h3>
-              <ol>
-                <li name="com.twitter.finatra.json.modules.FinatraJacksonModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="com.twitter.finatra.json.modules.FinatraJacksonModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="FinatraJacksonModule"></a><a id="FinatraJacksonModule:FinatraJacksonModule"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/json/modules/index.html#FinatraJacksonModule" title="Permalink">
@@ -306,34 +290,15 @@ additional configuration. See SampleApiServer for an example.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="FinatraJacksonModule$.html"><span class="name">FinatraJacksonModule</span></a><span class="result"> extends <a href="FinatraJacksonModule.html" class="extype" name="com.twitter.finatra.json.modules.FinatraJacksonModule">FinatraJacksonModule</a></span>
+        <a title="" href="FinatraJacksonModule$.html"><span class="name deprecated" title="Deprecated: (Since version 2019-11-19) Use com.twitter.finatra.jackson.modules.ScalaObjectMapperModule directly.">FinatraJacksonModule</span></a><span class="result"> extends <a href="FinatraJacksonModule.html" class="extype" name="com.twitter.finatra.json.modules.FinatraJacksonModule">FinatraJacksonModule</a></span>
       </span>
       
-      
-    </li><li name="com.twitter.finatra.json.modules.NullValidationFinatraJacksonModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NullValidationFinatraJacksonModule"></a><a id="NullValidationFinatraJacksonModule:NullValidationFinatraJacksonModule"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/json/modules/index.html#NullValidationFinatraJacksonModule" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a title="Provides a FinatraJacksonModule that will treat all fields as acceptable during Finatra Validation of annotations." href="NullValidationFinatraJacksonModule$.html"><span class="name">NullValidationFinatraJacksonModule</span></a><span class="result"> extends <a href="NullValidationFinatraJacksonModule.html" class="extype" name="com.twitter.finatra.json.modules.NullValidationFinatraJacksonModule">NullValidationFinatraJacksonModule</a></span>
-      </span>
-      
-      <p class="shortcomment cmt">Provides a FinatraJacksonModule that will treat all fields as acceptable during
-Finatra Validation of annotations.</p>
-    </li>
-              </ol>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2019-11-19)</i> Use com.twitter.finatra.jackson.modules.ScalaObjectMapperModule directly.</p></dd></dl></div>
+    </li></ol>
             </div>
-
-        
-
-        
         </div>
 
         <div id="inheritedMembers">

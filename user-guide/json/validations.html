@@ -1,33 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>JSON Validation Framework &#8212; Finatra 20.1.0 documentation</title>
-    
+    <meta charset="utf-8" />
+    <title>JSON Validation Framework &#8212; Finatra 20.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '20.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 20.1.0 documentation" href="../../index.html" />
-    <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Mustache Support" href="../mustache/index.html" />
     <link rel="prev" title="JSON Integration with HTTP Routing" href="routing.html" />
    
@@ -44,8 +31,7 @@
 
   </script>
 
-  </head>
-  <body role="document">
+  </head><body>
   
   
 
@@ -62,7 +48,7 @@
           <a href="routing.html" title="JSON Integration with HTTP Routing"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -74,32 +60,45 @@
   <div class="section" id="json-validation-framework">
 <span id="json-validations"></span><h1>JSON Validation Framework<a class="headerlink" href="#json-validation-framework" title="Permalink to this headline">¶</a></h1>
 <p>Finatra provides a simple validation framework inspired by <a class="reference external" href="https://docs.oracle.com/javaee/6/tutorial/doc/gircz.html">JSR-303</a>.</p>
-<p>The validations framework integrates Finatra&#8217;s custom <cite>case class</cite> deserializer to efficiently apply per field validations as request parsing is performed. The following validation annotations are available (and additional validations can be easily created):</p>
+<p>The validations framework integrates Finatra’s custom <cite>case class</cite> deserializer to efficiently apply per field validations as request parsing is performed. The following validation annotations are available (and additional validations can be easily created):</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">&#64;CountryCode</span></code></li>
-<li><code class="docutils literal"><span class="pre">&#64;FutureTime</span></code></li>
-<li><code class="docutils literal"><span class="pre">&#64;PastTime</span></code></li>
-<li><code class="docutils literal"><span class="pre">&#64;Pattern</span></code></li>
-<li><code class="docutils literal"><span class="pre">&#64;Max</span></code></li>
-<li><code class="docutils literal"><span class="pre">&#64;Min</span></code></li>
-<li><code class="docutils literal"><span class="pre">&#64;NotEmpty</span></code></li>
-<li><code class="docutils literal"><span class="pre">&#64;OneOf</span></code></li>
-<li><code class="docutils literal"><span class="pre">&#64;Range</span></code></li>
-<li><code class="docutils literal"><span class="pre">&#64;Size</span></code></li>
-<li><code class="docutils literal"><span class="pre">&#64;TimeGranularity</span></code></li>
-<li><code class="docutils literal"><span class="pre">&#64;UUID</span></code></li>
-<li><code class="docutils literal"><span class="pre">&#64;MethodValidation</span></code></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;CountryCode</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;FutureTime</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;PastTime</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;Pattern</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;Max</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;Min</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;NotEmpty</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;OneOf</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;Range</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;Size</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;TimeGranularity</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;UUID</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;MethodValidation</span></code></p></li>
 </ul>
+<div class="section" id="id1">
+<h2><a class="reference external" href="https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations">MixIn Annotations</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>With Jackson <a class="reference external" href="https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations">MixIn Annotations</a>
+support it is possible to specify field-level validation annotations for case classes that are not
+under your control to be annotated.</p>
+<p>For an example on how to use <a class="reference external" href="https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations">MixIn Annotations</a>
+with Finatra validations, see the documentation <a class="reference external" href="./index.html#id19">here</a>.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Note this integration will only work for field-level validation annotations since method
+validations must currently be specified <em>inside</em> of the actual class to be validated.</p>
+</div>
+</div>
 <div class="section" id="method-validations">
 <h2>Method Validations<a class="headerlink" href="#method-validations" title="Permalink to this headline">¶</a></h2>
-<p>A method validation is a case class method annotated with <code class="docutils literal"><span class="pre">&#64;MethodValidation</span></code> which is intended to be used for validating fields of the cases class during request parsing. Reasons to use a method validation include:</p>
+<p>A method validation is a case class method annotated with <code class="docutils literal notranslate"><span class="pre">&#64;MethodValidation</span></code> which is intended to be used for validating fields of the cases class during request parsing. Reasons to use a method validation include:</p>
 <ul class="simple">
-<li>For non-generic validations. <code class="docutils literal"><span class="pre">&#64;MethodValidation</span></code> can be used instead of defining a reusable annotation and validator.</li>
-<li>Cross-field validations (e.g. <cite>startDate</cite> before <cite>endDate</cite>)</li>
+<li><p>For non-generic validations. <code class="docutils literal notranslate"><span class="pre">&#64;MethodValidation</span></code> can be used instead of defining a reusable annotation and validator.</p></li>
+<li><p>Cross-field validations (e.g. <cite>startDate</cite> before <cite>endDate</cite>)</p></li>
 </ul>
 <p>For an example see the <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/test/scala/com/twitter/finatra/json/tests/internal/caseclass/validation/domain/Car.scala#L26">Car</a> test case class. Additionally, see the
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/validation/CommonMethodValidations.scala">CommonMethodValidations</a> for pre-defined commonly useful method validations.</p>
-<p>The <code class="docutils literal"><span class="pre">&#64;MethodValidation</span></code> annotation also supports specifying an optional <code class="docutils literal"><span class="pre">fields</span></code> parameter to
+<p>The <code class="docutils literal notranslate"><span class="pre">&#64;MethodValidation</span></code> annotation also supports specifying an optional <code class="docutils literal notranslate"><span class="pre">fields</span></code> parameter to
 state which fields are being evaluated in the validation. If the evaluation fails the resulting
 exception will contain details about each of the fields specified in the annotation.</p>
 </div>
@@ -107,14 +106,14 @@ exception will contain details about each of the fields specified in the annotat
 <h2>Validation Errors<a class="headerlink" href="#validation-errors" title="Permalink to this headline">¶</a></h2>
 <p>By default validation errors are returned <strong>alphabetically sorted</strong> by validation error message (for determinism when testing). See the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/exceptions/CaseClassMappingException.scala">CaseClassMappingException</a>.</p>
 <p>Eg.,</p>
-<div class="code json highlight-text"><div class="highlight"><pre><span></span>{
-  &quot;errors&quot; : [
-    &quot;location.lat: [9999.0] is not between -85 and 85&quot;,
-    &quot;location.long: field is required&quot;,
-    &quot;message: size [0] is not between 1 and 140&quot;,
-    &quot;nsfw: &#39;abc&#39; is not a valid boolean&quot;
-  ]
-}
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;errors&quot;</span> <span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;location.lat: [9999.0] is not between -85 and 85&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;location.long: field is required&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;message: size [0] is not between 1 and 140&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;nsfw: &#39;abc&#39; is not a valid boolean&quot;</span>
+  <span class="p">]</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -125,11 +124,11 @@ For example, you may want to validate a <cite>POST</cite> request on the write p
 bypass validating that same JSON for a <cite>GET</cite> request on the read path.</p>
 <p>You can create a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala">FinatraObjectMapper</a>
 that will bypass validation like this:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>def create(injector: Injector = null): FinatraObjectMapper = {
-  val jacksonModule = NullValidationFinatraJacksonModule
-  new FinatraObjectMapper(
-    jacksonModule.provideScalaObjectMapper(injector))
-}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="n">create</span><span class="o">(</span><span class="n">injector</span><span class="k">:</span> <span class="kt">Injector</span> <span class="o">=</span> <span class="kc">null</span><span class="o">)</span><span class="k">:</span> <span class="kt">FinatraObjectMapper</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">jacksonModule</span> <span class="k">=</span> <span class="nc">NullValidationFinatraJacksonModule</span>
+  <span class="k">new</span> <span class="nc">FinatraObjectMapper</span><span class="o">(</span>
+    <span class="n">jacksonModule</span><span class="o">.</span><span class="n">provideScalaObjectMapper</span><span class="o">(</span><span class="n">injector</span><span class="o">))</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 </div>
@@ -140,10 +139,7 @@ that will bypass validation like this:</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
-            </a></p><p>
+        <div class="sphinxsidebarwrapper"><p>
   <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
@@ -154,9 +150,10 @@ that will bypass validation like this:</p>
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">JSON Validation Framework</a><ul>
+<li><a class="reference internal" href="#id1">MixIn Annotations</a></li>
 <li><a class="reference internal" href="#method-validations">Method Validations</a></li>
 <li><a class="reference internal" href="#validation-errors">Validation Errors</a></li>
 <li><a class="reference internal" href="#bypassing-validation">Bypassing Validation</a></li>
@@ -166,7 +163,7 @@ that will bypass validation like this:</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">User&#8217;s Guide</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
       <li>Previous: <a href="routing.html" title="previous chapter">JSON Integration with HTTP Routing</a></li>
       <li>Next: <a href="../mustache/index.html" title="next chapter">Mustache Support</a></li>
   </ul></li>

@@ -1,33 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Startup Tests &#8212; Finatra 20.1.0 documentation</title>
-    
+    <meta charset="utf-8" />
+    <title>Startup Tests &#8212; Finatra 20.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '20.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 20.1.0 documentation" href="../../index.html" />
-    <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Test Mixins" href="mixins.html" />
     <link rel="prev" title="Integration Tests" href="integration_tests.html" />
    
@@ -44,8 +31,7 @@
 
   </script>
 
-  </head>
-  <body role="document">
+  </head><body>
   
   
 
@@ -62,7 +48,7 @@
           <a href="integration_tests.html" title="Integration Tests"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -73,6 +59,10 @@
             
   <div class="section" id="startup-tests">
 <span id="id1"></span><h1>Startup Tests<a class="headerlink" href="#startup-tests" title="Permalink to this headline">¶</a></h1>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Please see the section on including test-jar dependencies in your project: <a class="reference external" href="../..#test-dependencies">Test Dependencies</a>.</p>
+</div>
 <p>By default the Finatra embedded testing infrastructure sets the <a class="reference external" href="https://github.com/google/guice">Guice</a>
 <a class="reference external" href="https://google.github.io/guice/api-docs/4.0/javadoc/com/google/inject/Stage.html"><cite>com.google.inject.Stage</cite></a> to <cite>DEVELOPMENT</cite> for the object graph of the server or application under
 test. For purposes of testing we choose the trade-off of a fast start-up time for the embedded
@@ -82,55 +72,55 @@ test features.</p>
 a type that the injector cannot construct because it does not have a no-arg constructor nor was it
 provided by a module) you may not run into this error during testing as dependencies are satisfied
 lazily by default.</p>
-<p>As such, we recommend creating a simple test &#8211; a <cite>StartupTest</cite> to check that your service can start
+<p>As such, we recommend creating a simple test – a <cite>StartupTest</cite> to check that your service can start
 up and report itself as healthy. This checks the correctness of the object graph, catching errors
 that could otherwise cause the server to fail to start.</p>
 <div class="admonition important">
-<p class="first admonition-title">Important</p>
+<p class="admonition-title">Important</p>
 <p>A <cite>StartupTest</cite> should mimic production as closely as possible.</p>
-<ul class="last simple">
-<li>The <a class="reference external" href="https://google.github.io/guice/api-docs/4.0/javadoc/com/google/inject/Stage.html"><cite>com.google.inject.Stage</cite></a> SHOULD be set to <cite>PRODUCTION</cite> so that all singletons will be
-eagerly created at startup (<cite>Stage.DEVELOPMENT</cite> is set by default).</li>
-<li>Avoid replacing any bound types (using <a class="reference external" href="bind_dsl.html">Explicit Binding with #bind[T]</a> or
-<a class="reference external" href="override_modules.html">Override Modules</a>).</li>
-<li>Prevent any Finagle clients from making outbound connections during startup by setting all
-<a class="reference external" href="https://github.com/twitter/twitter-server/blob/15e35a3a3070c50168ff55fd83a2dff28b09795c/server/src/main/scala/com/twitter/server/FlagResolver.scala#L9&gt;"><cite>c.t.server.resolverMap</cite></a> entries to <a class="reference external" href="https://github.com/twitter/finagle/blob/f970bd5b0c1b3f968694dcde33b47b21869b9f0e/finagle-core/src/main/scala/com/twitter/finagle/Resolver.scala#L82">nil!</a>.</li>
+<ul class="simple">
+<li><p>The <a class="reference external" href="https://google.github.io/guice/api-docs/4.0/javadoc/com/google/inject/Stage.html"><cite>com.google.inject.Stage</cite></a> SHOULD be set to <cite>PRODUCTION</cite> so that all singletons will be
+eagerly created at startup (<cite>Stage.DEVELOPMENT</cite> is set by default).</p></li>
+<li><p>Avoid replacing any bound types (using <a class="reference external" href="bind_dsl.html">Explicit Binding with #bind[T]</a> or
+<a class="reference external" href="override_modules.html">Override Modules</a>).</p></li>
+<li><p>Prevent any Finagle clients from making outbound connections during startup by setting all
+<a class="reference external" href="https://github.com/twitter/twitter-server/blob/15e35a3a3070c50168ff55fd83a2dff28b09795c/server/src/main/scala/com/twitter/server/FlagResolver.scala#L9&gt;"><cite>c.t.server.resolverMap</cite></a> entries to <a class="reference external" href="https://github.com/twitter/finagle/blob/f970bd5b0c1b3f968694dcde33b47b21869b9f0e/finagle-core/src/main/scala/com/twitter/finagle/Resolver.scala#L82">nil!</a>.</p></li>
 </ul>
 </div>
 <p>For example:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Stage
-import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.inject.server.FeatureTest
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.google.inject.Stage</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.EmbeddedHttpServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.server.FeatureTest</span>
 
-class MyServiceStartupTest extends FeatureTest {
-  val server = new EmbeddedHttpServer(
-    stage = Stage.PRODUCTION,
-    twitterServer = new SampleApiServer,
-    flags = Map(
-      &quot;com.twitter.server.resolverMap&quot; -&gt; &quot;some-thrift-service=nil!&quot;
-    ))
+<span class="k">class</span> <span class="nc">MyServiceStartupTest</span> <span class="k">extends</span> <span class="nc">FeatureTest</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">server</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EmbeddedHttpServer</span><span class="o">(</span>
+    <span class="n">stage</span> <span class="k">=</span> <span class="nc">Stage</span><span class="o">.</span><span class="nc">PRODUCTION</span><span class="o">,</span>
+    <span class="n">twitterServer</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">SampleApiServer</span><span class="o">,</span>
+    <span class="n">flags</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span>
+      <span class="s">&quot;com.twitter.server.resolverMap&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;some-thrift-service=nil!&quot;</span>
+    <span class="o">))</span>
 
-  test(&quot;SampleApiServer#startup&quot;) {
-    server.assertHealthy()
-  }
-}
+  <span class="n">test</span><span class="o">(</span><span class="s">&quot;SampleApiServer#startup&quot;</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">assertHealthy</span><span class="o">()</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <div class="admonition tip">
-<p class="first admonition-title">Tip</p>
-<p class="last">This works for <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><cite>EmbeddedHttpServer</cite></a> or <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala"><cite>EmbeddedThriftServer</cite></a> as <code class="docutils literal"><span class="pre">#assertHealthy()</span></code> is defined on
+<p class="admonition-title">Tip</p>
+<p>This works for <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><cite>EmbeddedHttpServer</cite></a> or <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala"><cite>EmbeddedThriftServer</cite></a> as <code class="docutils literal notranslate"><span class="pre">#assertHealthy()</span></code> is defined on
 the <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L264"><cite>EmbeddedTwitterServer</cite></a> super class.</p>
 </div>
 <div class="section" id="more-information">
 <h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><a class="reference internal" href="index.html"><span class="doc">Testing Features</span></a></li>
-<li><a class="reference internal" href="embedded.html"><span class="doc">Embedded Servers and Apps</span></a></li>
-<li><a class="reference internal" href="feature_tests.html"><span class="doc">Feature Tests</span></a></li>
-<li><a class="reference internal" href="integration_tests.html"><span class="doc">Integration Tests</span></a></li>
-<li><a class="reference internal" href="mixins.html"><span class="doc">Test Mixins</span></a></li>
-<li><a class="reference internal" href="override_modules.html"><span class="doc">Override Modules</span></a></li>
-<li><a class="reference internal" href="bind_dsl.html"><span class="doc">Explicit Binding with #bind[T]</span></a></li>
+<li><p><a class="reference internal" href="index.html"><span class="doc">Testing Features</span></a></p></li>
+<li><p><a class="reference internal" href="embedded.html"><span class="doc">Embedded Servers and Apps</span></a></p></li>
+<li><p><a class="reference internal" href="feature_tests.html"><span class="doc">Feature Tests</span></a></p></li>
+<li><p><a class="reference internal" href="integration_tests.html"><span class="doc">Integration Tests</span></a></p></li>
+<li><p><a class="reference internal" href="mixins.html"><span class="doc">Test Mixins</span></a></p></li>
+<li><p><a class="reference internal" href="override_modules.html"><span class="doc">Override Modules</span></a></p></li>
+<li><p><a class="reference internal" href="bind_dsl.html"><span class="doc">Explicit Binding with #bind[T]</span></a></p></li>
 </ul>
 </div>
 </div>
@@ -140,10 +130,7 @@ the <a class="reference external" href="https://github.com/twitter/finatra/blob/
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
-            </a></p><p>
+        <div class="sphinxsidebarwrapper"><p>
   <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
@@ -154,7 +141,7 @@ the <a class="reference external" href="https://github.com/twitter/finatra/blob/
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Startup Tests</a><ul>
 <li><a class="reference internal" href="#more-information">More Information</a></li>
@@ -164,7 +151,7 @@ the <a class="reference external" href="https://github.com/twitter/finatra/blob/
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">User&#8217;s Guide</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
       <li>Previous: <a href="integration_tests.html" title="previous chapter">Integration Tests</a></li>
       <li>Next: <a href="mixins.html" title="next chapter">Test Mixins</a></li>
   </ul></li>

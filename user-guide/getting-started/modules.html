@@ -1,33 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Modules &#8212; Finatra 20.1.0 documentation</title>
-    
+    <meta charset="utf-8" />
+    <title>Modules &#8212; Finatra 20.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '20.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 20.1.0 documentation" href="../../index.html" />
-    <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Binding Annotations" href="binding_annotations.html" />
     <link rel="prev" title="Application and Server Lifecycle" href="lifecycle.html" />
    
@@ -44,8 +31,7 @@
 
   </script>
 
-  </head>
-  <body role="document">
+  </head><body>
   
   
 
@@ -62,7 +48,7 @@
           <a href="lifecycle.html" title="Application and Server Lifecycle"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -81,26 +67,26 @@ base class which extends the capabilities of the excellent Scala extensions for 
 <a class="reference external" href="https://github.com/google/guice">Guice</a> provided by <a class="reference external" href="https://github.com/codingwell/scala-guice">codingwell/scala-guice</a>.</p>
 <div class="section" id="defining-modules">
 <h2>Defining Modules<a class="headerlink" href="#defining-modules" title="Permalink to this headline">¶</a></h2>
-<p>Generally, modules are only required for helping the injector instantiate classes that you don&#8217;t
+<p>Generally, modules are only required for helping the injector instantiate classes that you don’t
 control. Otherwise, you would simply add the <a class="reference external" href="https://github.com/google/guice/wiki/JSR330">JSR-330</a>
-annotations (e.g., <code class="docutils literal"><span class="pre">&#64;Inject</span></code>, <code class="docutils literal"><span class="pre">&#64;Singleton</span></code>) directly to the class definition.</p>
+annotations (e.g., <code class="docutils literal notranslate"><span class="pre">&#64;Inject</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;Singleton</span></code>) directly to the class definition.</p>
 <p>For example, if we wanted to declare an HTTP <a class="reference external" href="https://twitter.github.io/finagle/guide/Clients.html">Finagle Client</a>
 of type <cite>Service[Request, Response]</cite> as a constructor-arg to a <cite>MyService</cite> class:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.Service
-import com.twitter.finagle.http.{Request, Response}
-import javax.inject.Inject
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.Service</span>
+<span class="k">import</span> <span class="nn">com.twitter.finagle.http.</span><span class="o">{</span><span class="nc">Request</span><span class="o">,</span> <span class="nc">Response</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">javax.inject.Inject</span>
 
-class MyService @Inject() (
-  httpClient: Service[Request, Response]) {
-  ???
-}
+<span class="k">class</span> <span class="nc">MyService</span> <span class="nd">@Inject</span><span class="o">()</span> <span class="o">(</span>
+  <span class="n">httpClient</span><span class="k">:</span> <span class="kt">Service</span><span class="o">[</span><span class="kt">Request</span><span class="p">,</span> <span class="kt">Response</span><span class="o">])</span> <span class="o">{</span>
+  <span class="o">???</span>
+<span class="o">}</span>
 </pre></div>
 </div>
-<p>Adding the <code class="docutils literal"><span class="pre">&#64;Inject</span></code> documents that the <cite>MyService</cite> class participates in dependency injection.
-Note that the <code class="docutils literal"><span class="pre">&#64;Inject</span></code> annotation can be considered &#8220;metadata&#8221;. Nothing prevents you from
+<p>Adding the <code class="docutils literal notranslate"><span class="pre">&#64;Inject</span></code> documents that the <cite>MyService</cite> class participates in dependency injection.
+Note that the <code class="docutils literal notranslate"><span class="pre">&#64;Inject</span></code> annotation can be considered “metadata”. Nothing prevents you from
 instantiating <cite>MyService</cite> manually and passing it a <cite>Service[Request, Response]</cite> instance.</p>
 <p>However, when an instance of <cite>MyService</cite> is requested to be provided by the injector, the injector
-will attempt to provide all constructor arguments from the object graph &#8211; instantiating classes as
+will attempt to provide all constructor arguments from the object graph – instantiating classes as
 necessary.</p>
 <p>The injector will look for public no-arg constructors. If the injector cannot find
 a no-arg constructor, it attempts to find a <cite>Provider</cite> of the instance. In this case,
@@ -109,94 +95,94 @@ satisfy the <cite>MyService</cite> constructor (for more information on construc
 <a class="reference external" href="https://github.com/google/guice/wiki/Injections#constructor-injection">documentation</a>).</p>
 <p>To help the injector, we can create a module which defines a provider of this
 type to the object graph for the injector to use.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Provides
-import com.twitter.finagle.Service
-import com.twitter.finagle.http.{Request, Response}
-import com.twitter.inject.TwitterModule
-import javax.inject.Singleton
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.google.inject.Provides</span>
+<span class="k">import</span> <span class="nn">com.twitter.finagle.Service</span>
+<span class="k">import</span> <span class="nn">com.twitter.finagle.http.</span><span class="o">{</span><span class="nc">Request</span><span class="o">,</span> <span class="nc">Response</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.TwitterModule</span>
+<span class="k">import</span> <span class="nn">javax.inject.Singleton</span>
 
-object MyModule1 extends TwitterModule {
-  val dest =
-    flag(
-      name = &quot;client.dest&quot;,
-      default = &quot;defaultDestIfNoneProvided&quot;,
-      help = &quot;The client dest to use.&quot;
-    )
-  val label =
-    flag(
-      name = &quot;client.label&quot;,
-      default = &quot;defaultLabelIfNoneProvided&quot;,
-      help = &quot;The client label to use.&quot;
-    )
+<span class="k">object</span> <span class="nc">MyModule1</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">dest</span> <span class="k">=</span>
+    <span class="n">flag</span><span class="o">(</span>
+      <span class="n">name</span> <span class="k">=</span> <span class="s">&quot;client.dest&quot;</span><span class="o">,</span>
+      <span class="n">default</span> <span class="k">=</span> <span class="s">&quot;defaultDestIfNoneProvided&quot;</span><span class="o">,</span>
+      <span class="n">help</span> <span class="k">=</span> <span class="s">&quot;The client dest to use.&quot;</span>
+    <span class="o">)</span>
+  <span class="k">val</span> <span class="n">label</span> <span class="k">=</span>
+    <span class="n">flag</span><span class="o">(</span>
+      <span class="n">name</span> <span class="k">=</span> <span class="s">&quot;client.label&quot;</span><span class="o">,</span>
+      <span class="n">default</span> <span class="k">=</span> <span class="s">&quot;defaultLabelIfNoneProvided&quot;</span><span class="o">,</span>
+      <span class="n">help</span> <span class="k">=</span> <span class="s">&quot;The client label to use.&quot;</span>
+    <span class="o">)</span>
 
-  @Singleton
-  @Provides
-  def providesHttpClient: Service[Request, Response] = {
-    Http.newClient(dest = dest(), label = label())
-  }
-}
+  <span class="nd">@Singleton</span>
+  <span class="nd">@Provides</span>
+  <span class="k">def</span> <span class="n">providesHttpClient</span><span class="k">:</span> <span class="kt">Service</span><span class="o">[</span><span class="kt">Request</span><span class="p">,</span> <span class="kt">Response</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="nc">Http</span><span class="o">.</span><span class="n">newClient</span><span class="o">(</span><span class="n">dest</span> <span class="k">=</span> <span class="n">dest</span><span class="o">(),</span> <span class="n">label</span> <span class="k">=</span> <span class="n">label</span><span class="o">())</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>or in Java:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Provides;
-import com.twitter.finagle.Service;
-import com.twitter.finagle.http.Request;
-import com.twitter.finagle.http.Response;
-import com.twitter.inject.TwitterModule;
-import javax.inject.Singleton;
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">com.google.inject.Provides</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.twitter.finagle.Service</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.twitter.finagle.http.Request</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.twitter.finagle.http.Response</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.twitter.inject.TwitterModule</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">javax.inject.Singleton</span><span class="p">;</span>
 
-public class MyModule1 extends TwitterModule {
-  private Flag&lt;String&gt; dest = createFlag(
-    /*name*/ &quot;client.dest&quot;,
-    /*default*/ &quot;defaultDestIfNoneProvided&quot;,
-    /*help*/ &quot;The client dest to use.&quot;,
-    /*flaggable*/ Flaggable.ofString());
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyModule1</span> <span class="kd">extends</span> <span class="n">TwitterModule</span> <span class="p">{</span>
+  <span class="kd">private</span> <span class="n">Flag</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">dest</span> <span class="o">=</span> <span class="n">createFlag</span><span class="p">(</span>
+    <span class="cm">/*name*/</span> <span class="s">&quot;client.dest&quot;</span><span class="p">,</span>
+    <span class="cm">/*default*/</span> <span class="s">&quot;defaultDestIfNoneProvided&quot;</span><span class="p">,</span>
+    <span class="cm">/*help*/</span> <span class="s">&quot;The client dest to use.&quot;</span><span class="p">,</span>
+    <span class="cm">/*flaggable*/</span> <span class="n">Flaggable</span><span class="p">.</span><span class="na">ofString</span><span class="p">());</span>
 
-  private Flag&lt;String&gt; label = createFlag(
-    /*name*/ &quot;client.label&quot;,
-    /*default*/ &quot;defaultLabelIfNoneProvided&quot;,
-    /*help*/ &quot;The client label to use.&quot;,
-    /*flaggable*/ Flaggable.ofString());
+  <span class="kd">private</span> <span class="n">Flag</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">label</span> <span class="o">=</span> <span class="n">createFlag</span><span class="p">(</span>
+    <span class="cm">/*name*/</span> <span class="s">&quot;client.label&quot;</span><span class="p">,</span>
+    <span class="cm">/*default*/</span> <span class="s">&quot;defaultLabelIfNoneProvided&quot;</span><span class="p">,</span>
+    <span class="cm">/*help*/</span> <span class="s">&quot;The client label to use.&quot;</span><span class="p">,</span>
+    <span class="cm">/*flaggable*/</span> <span class="n">Flaggable</span><span class="p">.</span><span class="na">ofString</span><span class="p">());</span>
 
-  @Singleton
-  @Provides
-  public Service&lt;Request, Response&gt; providesHttpClient() {
-    return Http.newClient(dest.apply(), label.apply());
-  }
-}
+  <span class="nd">@Singleton</span>
+  <span class="nd">@Provides</span>
+  <span class="kd">public</span> <span class="n">Service</span><span class="o">&lt;</span><span class="n">Request</span><span class="p">,</span> <span class="n">Response</span><span class="o">&gt;</span> <span class="nf">providesHttpClient</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">Http</span><span class="p">.</span><span class="na">newClient</span><span class="p">(</span><span class="n">dest</span><span class="p">.</span><span class="na">apply</span><span class="p">(),</span> <span class="n">label</span><span class="p">.</span><span class="na">apply</span><span class="p">());</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>Here we define a module to construct a singleton <a class="reference external" href="https://twitter.github.io/finagle/guide/Clients.html">Finagle Client</a>
 of type <cite>Service[Request, Response]</cite> which uses <a class="reference external" href="flags.html#passing-flag-values-as-command-line-arguments">flag values provided through command line arguments</a>
 to set the values of <cite>label</cite> and <cite>dest</cite>.</p>
 <div class="section" id="provides">
-<h3><code class="docutils literal"><span class="pre">&#64;Provides</span></code><a class="headerlink" href="#provides" title="Permalink to this headline">¶</a></h3>
-<p>The instance is provided by a module method annotated with <code class="docutils literal"><span class="pre">&#64;Provides</span></code>
+<h3><code class="docutils literal notranslate"><span class="pre">&#64;Provides</span></code><a class="headerlink" href="#provides" title="Permalink to this headline">¶</a></h3>
+<p>The instance is provided by a module method annotated with <code class="docutils literal notranslate"><span class="pre">&#64;Provides</span></code>
 (<a class="reference external" href="https://github.com/google/guice/blob/master/core/src/com/google/inject/Provides.java">source</a>)
 which serves as a provider of the type to the object graph.</p>
 <p>Thus for the above example, we have now provided a way for the injector to construct an instance of
 type <cite>Service[Request, Response]</cite> allowing the injector to satisfy construction of <cite>MyService</cite> when
-the <cite>MyModule1</cite> is added to the server&#8217;s list of modules.</p>
-<p>Note: if your module method annotated with <code class="docutils literal"><span class="pre">&#64;Provides</span></code> has an argument list, all arguments to the
+the <cite>MyModule1</cite> is added to the server’s list of modules.</p>
+<p>Note: if your module method annotated with <code class="docutils literal notranslate"><span class="pre">&#64;Provides</span></code> has an argument list, all arguments to the
 method are provided by the injector (since it is the injector calling the method in the first place).</p>
-<p>Much like an <code class="docutils literal"><span class="pre">&#64;Inject</span></code> annotated constructor, the injector will attempt to provide all of the method
-arguments from the object graph &#8211; instantiating classes as necessary.</p>
+<p>Much like an <code class="docutils literal notranslate"><span class="pre">&#64;Inject</span></code> annotated constructor, the injector will attempt to provide all of the method
+arguments from the object graph – instantiating classes as necessary.</p>
 <p>For example:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span> import com.google.inject.Provides
- import com.twitter.inject.TwitterModule
- import javax.inject.Singleton
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span> <span class="k">import</span> <span class="nn">com.google.inject.Provides</span>
+ <span class="k">import</span> <span class="nn">com.twitter.inject.TwitterModule</span>
+ <span class="k">import</span> <span class="nn">javax.inject.Singleton</span>
 
- object MyModule1 extends TwitterModule {
+ <span class="k">object</span> <span class="nc">MyModule1</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
 
-   @Singleton
-   @Provides
-   def providesBar(foo: Foo): Bar = {
-     new Bar(foo)
-   }
-}
+   <span class="nd">@Singleton</span>
+   <span class="nd">@Provides</span>
+   <span class="k">def</span> <span class="n">providesBar</span><span class="o">(</span><span class="n">foo</span><span class="k">:</span> <span class="kt">Foo</span><span class="o">)</span><span class="k">:</span> <span class="kt">Bar</span> <span class="o">=</span> <span class="o">{</span>
+     <span class="k">new</span> <span class="nc">Bar</span><span class="o">(</span><span class="n">foo</span><span class="o">)</span>
+   <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
-<p>The argument <cite>foo: Foo</cite> will be &#8220;injected&#8221; in the sense that the injector will attempt to provide
+<p>The argument <cite>foo: Foo</cite> will be “injected” in the sense that the injector will attempt to provide
 an instance of <cite>foo</cite> when invoking the method.</p>
 <p>See <a class="reference external" href="#module-configuration-in-servers">Module Configuration in Servers</a>.</p>
 </div>
@@ -209,55 +195,55 @@ be composed into a server via the module. See the section on <a class="reference
 <div class="section" id="best-practices">
 <h3>Best Practices<a class="headerlink" href="#best-practices" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>We recommend that you prefer using <code class="docutils literal"><span class="pre">&#64;Provides</span></code>-annotated methods over using the <cite>toInstance</cite>
-<a class="reference external" href="https://github.com/google/guice/wiki/InstanceBindings">bind DSL</a>.</li>
-<li>Modules should usually be defined as Scala <em>objects</em> as they typically contain no state and using
-an object makes usage of the module less verbose.</li>
-<li>Remember to add <code class="docutils literal"><span class="pre">&#64;Singleton</span></code> to your <code class="docutils literal"><span class="pre">&#64;Provides</span></code> method if you require only <strong>one</strong> instance
-per JVM process.</li>
+<li><p>We recommend that you prefer using <code class="docutils literal notranslate"><span class="pre">&#64;Provides</span></code>-annotated methods over using the <cite>toInstance</cite>
+<a class="reference external" href="https://github.com/google/guice/wiki/InstanceBindings">bind DSL</a>.</p></li>
+<li><p>Modules should usually be defined as Scala <em>objects</em> as they typically contain no state and using
+an object makes usage of the module less verbose.</p></li>
+<li><p>Remember to add <code class="docutils literal notranslate"><span class="pre">&#64;Singleton</span></code> to your <code class="docutils literal notranslate"><span class="pre">&#64;Provides</span></code> method if you require only <strong>one</strong> instance
+per JVM process.</p></li>
 </ul>
 </div>
 </div>
 <div class="section" id="module-configuration-in-servers">
 <h2>Module Configuration in Servers<a class="headerlink" href="#module-configuration-in-servers" title="Permalink to this headline">¶</a></h2>
 <p>A server can be configured with a list of modules:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
-import com.twitter.finatra.http.HttpServer
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.google.inject.Module</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.HttpServer</span>
 
-class Server extends HttpServer {
+<span class="k">class</span> <span class="nc">Server</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
 
-  override val modules: Seq[Module] = Seq(
-    MyModule1,
-    MyModule2,
-    ClientIdModule,
-    ClientAModule,
-    ClientBModule)
+  <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Module</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+    <span class="nc">MyModule1</span><span class="o">,</span>
+    <span class="nc">MyModule2</span><span class="o">,</span>
+    <span class="nc">ClientIdModule</span><span class="o">,</span>
+    <span class="nc">ClientAModule</span><span class="o">,</span>
+    <span class="nc">ClientBModule</span><span class="o">)</span>
 
-  ???
-}
+  <span class="o">???</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>and in Java:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.google.common.collect.ImmutableList;
-import com.google.inject.Module;
-import com.twitter.finatra.http.AbstractHttpServer;
-import java.util.Collection;
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">com.google.common.collect.ImmutableList</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.google.inject.Module</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.twitter.finatra.http.AbstractHttpServer</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Collection</span><span class="p">;</span>
 
-public class Server extends AbstractHttpServer {
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Server</span> <span class="kd">extends</span> <span class="n">AbstractHttpServer</span> <span class="p">{</span>
 
-  @Override
-  public Collection&lt;Module&gt; javaModules() {
-    return ImmutableList.&lt;Module&gt;of(
-        MyModule1$.MODULE$,
-        MyModule2$.MODULE$,
-        ClientIdModule$.MODULE$,
-        ClientAModule$.MODULE$,
-        ClientBModule$.MODULE$);
-    )
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Module</span><span class="o">&gt;</span> <span class="nf">javaModules</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">ImmutableList</span><span class="p">.</span><span class="o">&lt;</span><span class="n">Module</span><span class="o">&gt;</span><span class="n">of</span><span class="p">(</span>
+        <span class="n">MyModule1$</span><span class="p">.</span><span class="na">MODULE$</span><span class="p">,</span>
+        <span class="n">MyModule2$</span><span class="p">.</span><span class="na">MODULE$</span><span class="p">,</span>
+        <span class="n">ClientIdModule$</span><span class="p">.</span><span class="na">MODULE$</span><span class="p">,</span>
+        <span class="n">ClientAModule$</span><span class="p">.</span><span class="na">MODULE$</span><span class="p">,</span>
+        <span class="n">ClientBModule$</span><span class="p">.</span><span class="na">MODULE$</span><span class="p">);</span>
+    <span class="p">)</span>
+  <span class="p">}</span>
 
-  ...
-}
+  <span class="p">...</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>How explicit to be in listing the modules for your server is up to you. If you include a module that
@@ -267,10 +253,10 @@ your list of modules as <a class="reference external" href="https://en.wikipedia
 <p>For more information on server configuration see the <a class="reference external" href="../http/server.html">HTTP</a> or
 <a class="reference external" href="../thrift/server.html">Thrift</a> sections.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">In Java, Flag creation is implemented with two explicit methods: <a class="reference external" href="https://github.com/twitter/finatra/blob/9a1380eb6527ef9e3d7f6cc0f7ced620217cdca0/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleFlags.scala#L26">createFlag&lt;T&gt;</a>
+<p class="admonition-title">Note</p>
+<p>In Java, Flag creation is implemented with two explicit methods: <a class="reference external" href="https://github.com/twitter/finatra/blob/9a1380eb6527ef9e3d7f6cc0f7ced620217cdca0/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleFlags.scala#L26">createFlag&lt;T&gt;</a>
 and <a class="reference external" href="https://github.com/twitter/finatra/blob/9a1380eb6527ef9e3d7f6cc0f7ced620217cdca0/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleFlags.scala#L44">createMandatoryFlag&lt;T&gt;</a>.
-Where &#8220;mandatory&#8221; means a Flag defined with no default value meaning a user-supplied value is
+Where “mandatory” means a Flag defined with no default value meaning a user-supplied value is
 required, or mandatory in order to use the Flag.</p>
 </div>
 </div>
@@ -288,23 +274,23 @@ modules to hook into the server lifecycle after external ports have been bound, 
 resolved, and the server is ready to accept traffic but before the <cite>App#run</cite> or <cite>Server#start</cite>
 callbacks are invoked.</p>
 <p>E.g,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.{Injector, TwitterModule}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.inject.</span><span class="o">{</span><span class="nc">Injector</span><span class="o">,</span> <span class="nc">TwitterModule</span><span class="o">}</span>
 
-object MyModule extends TwitterModule {
+<span class="k">object</span> <span class="nc">MyModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
 
-  override def singletonStartup(injector: Injector) {
-    // initialize JVM-wide resources
-  }
+  <span class="k">override</span> <span class="k">def</span> <span class="n">singletonStartup</span><span class="o">(</span><span class="n">injector</span><span class="k">:</span> <span class="kt">Injector</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// initialize JVM-wide resources</span>
+  <span class="o">}</span>
 
-  override def singletonShutdown(injector: Injector) {
-    // shutdown JVM-wide resources
-  }
+  <span class="k">override</span> <span class="k">def</span> <span class="n">singletonShutdown</span><span class="o">(</span><span class="n">injector</span><span class="k">:</span> <span class="kt">Injector</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// shutdown JVM-wide resources</span>
+  <span class="o">}</span>
 
-  override def singletonPostWarmupComplete(injector: Injector) {
-    // perform functions that need to happen after we&#39;ve bound
-    // ports but before the server has started
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">singletonPostWarmupComplete</span><span class="o">(</span><span class="n">injector</span><span class="k">:</span> <span class="kt">Injector</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// perform functions that need to happen after we&#39;ve bound</span>
+    <span class="c1">// ports but before the server has started</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>See the <a class="reference external" href="lifecycle.html">Application and Server Lifecycle</a> section for more information on the
@@ -315,140 +301,140 @@ application and server lifecycle.</p>
 <p>There may be times where you would like to reuse types bound by one module inside another module.
 For instance, you may have a Module which provides a type <cite>Foo</cite> and need that instance when
 constructing a type <cite>Bar</cite> in another module. E.g.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Provides
-import com.twitter.inject.TwitterModule
-import javax.inject.Singleton
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.google.inject.Provides</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.TwitterModule</span>
+<span class="k">import</span> <span class="nn">javax.inject.Singleton</span>
 
-object FooModule extends TwitterModule {
+<span class="k">object</span> <span class="nc">FooModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
 
-  @Singleton
-  @Provides
-  def providesFoo: Foo = {
-    new Foo(???)
-  }
-}
+  <span class="nd">@Singleton</span>
+  <span class="nd">@Provides</span>
+  <span class="k">def</span> <span class="n">providesFoo</span><span class="k">:</span> <span class="kt">Foo</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">new</span> <span class="nc">Foo</span><span class="o">(???)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>How do you get access to the bound instance of Foo inside of another Module?</p>
 <p>Most often you are trying to inject the bound instance into a class as a class constructor-arg. E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import javax.inject.{Inject, Singleton}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">javax.inject.</span><span class="o">{</span><span class="nc">Inject</span><span class="o">,</span> <span class="nc">Singleton</span><span class="o">}</span>
 
-@Singleton
-class MyClassFoo @Inject()(foo: Foo) {
-  ???
-}
+<span class="nd">@Singleton</span>
+<span class="k">class</span> <span class="nc">MyClassFoo</span> <span class="nd">@Inject</span><span class="o">()(</span><span class="n">foo</span><span class="k">:</span> <span class="kt">Foo</span><span class="o">)</span> <span class="o">{</span>
+  <span class="o">???</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>You can do something similar in a module. However, instead of the injection point being the
-constructor annotated with <code class="docutils literal"><span class="pre">&#64;Inject</span></code>, it is the argument list of any <code class="docutils literal"><span class="pre">&#64;Provides</span></code>-annotated
+constructor annotated with <code class="docutils literal notranslate"><span class="pre">&#64;Inject</span></code>, it is the argument list of any <code class="docutils literal notranslate"><span class="pre">&#64;Provides</span></code>-annotated
 method.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.{Module, Provides}
-import com.twitter.inject.TwitterModule
-import javax.inject.Singleton
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.google.inject.</span><span class="o">{</span><span class="nc">Module</span><span class="o">,</span> <span class="nc">Provides</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.TwitterModule</span>
+<span class="k">import</span> <span class="nn">javax.inject.Singleton</span>
 
-object BarModule extends TwitterModule {
+<span class="k">object</span> <span class="nc">BarModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
 
-  override val modules: Seq[Module] = Seq(FooModule)
+  <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Module</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="nc">FooModule</span><span class="o">)</span>
 
-  @Singleton
-  @Provides
-  def providesBar(foo: Foo): Bar = {
-    new Bar(foo)
-  }
-}
+  <span class="nd">@Singleton</span>
+  <span class="nd">@Provides</span>
+  <span class="k">def</span> <span class="n">providesBar</span><span class="o">(</span><span class="n">foo</span><span class="k">:</span> <span class="kt">Foo</span><span class="o">)</span><span class="k">:</span> <span class="kt">Bar</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">new</span> <span class="nc">Bar</span><span class="o">(</span><span class="n">foo</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>in Java:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.google.common.collect.ImmutableList;
-import com.google.inject.Module;
-import com.google.inject.Provides;
-import com.twitter.inject.TwitterModule;
-import javax.inject.Singleton;
-import java.util.Collection;
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">com.google.common.collect.ImmutableList</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.google.inject.Module</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.google.inject.Provides</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.twitter.inject.TwitterModule</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">javax.inject.Singleton</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Collection</span><span class="p">;</span>
 
-public class BarModule extends TwitterModule {
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BarModule</span> <span class="kd">extends</span> <span class="n">TwitterModule</span> <span class="p">{</span>
 
-  @Override
-  public Collection&lt;Module&gt; javaModules() {
-    return ImmutableList.&lt;Module&gt;of(
-        FooModule$.MODULE$);
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Module</span><span class="o">&gt;</span> <span class="nf">javaModules</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">ImmutableList</span><span class="p">.</span><span class="o">&lt;</span><span class="n">Module</span><span class="o">&gt;</span><span class="n">of</span><span class="p">(</span>
+        <span class="n">FooModule$</span><span class="p">.</span><span class="na">MODULE$</span><span class="p">);</span>
+  <span class="p">}</span>
 
-  @Singleton
-  @Provides
-  public Bar providesBar(Foo foo) {
-    return new Bar(foo);
-  }
-}
+  <span class="nd">@Singleton</span>
+  <span class="nd">@Provides</span>
+  <span class="kd">public</span> <span class="n">Bar</span> <span class="nf">providesBar</span><span class="p">(</span><span class="n">Foo</span> <span class="n">foo</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="n">Bar</span><span class="p">(</span><span class="n">foo</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
-<p>What&#8217;s happening here?</p>
-<p>Firstly, we&#8217;ve defined a <cite>BarModule</cite> that overrides the <cite>modules</cite> val with a <cite>Seq</cite> (or the
+<p>What’s happening here?</p>
+<p>Firstly, we’ve defined a <cite>BarModule</cite> that overrides the <cite>modules</cite> val with a <cite>Seq</cite> (or the
 <cite>javaModules</cite> def with a <cite>Collection</cite> in Java) of modules that includes the <cite>FooModule</cite>. This
 guarantees that if the <cite>FooModule</cite> is not mixed into the list of modules for a server, the <cite>BarModule</cite>
-ensures it will be installed since it&#8217;s declared as a dependency and thus there will be a bound
+ensures it will be installed since it’s declared as a dependency and thus there will be a bound
 instance of <cite>Foo</cite> available for use in providing an instance of <cite>Bar</cite>.</p>
 <p>Finatra will de-duplicate all modules before installing, so it is OK if a module appears twice in the
 server configuration, though you should strive to make this the exception.</p>
-<p>Secondly, we&#8217;ve defined a method which provides a <cite>Bar</cite> instance and add an argument of type <cite>Foo</cite>
+<p>Secondly, we’ve defined a method which provides a <cite>Bar</cite> instance and add an argument of type <cite>Foo</cite>
 which will be provided by the Injector since injection is by type and the argument list to an
-<code class="docutils literal"><span class="pre">&#64;Provides</span></code> annotated method in a module is an injection point.</p>
+<code class="docutils literal notranslate"><span class="pre">&#64;Provides</span></code> annotated method in a module is an injection point.</p>
 <p>Why?</p>
 <p>Because the injector is what calls the <cite>providesBar</cite> method. When the injector needs to provide an
-instance of <cite>Bar</cite> it looks for a &#8220;provider&#8221; of <cite>Bar</cite> in the list of modules. It will thus try to
+instance of <cite>Bar</cite> it looks for a “provider” of <cite>Bar</cite> in the list of modules. It will thus try to
 supply all arguments to the function from the object graph.</p>
 <p>We could continue this through another module. For example, if we wanted to provide a <cite>Baz</cite> which
 needs both a <cite>Foo</cite> and a <cite>Bar</cite> instance we could define a <cite>BazModule</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.{Module, Provides}
-import com.twitter.inject.TwitterModule
-import javax.inject.Singleton
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.google.inject.</span><span class="o">{</span><span class="nc">Module</span><span class="o">,</span> <span class="nc">Provides</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.TwitterModule</span>
+<span class="k">import</span> <span class="nn">javax.inject.Singleton</span>
 
-object BazModule extends TwitterModule {
+<span class="k">object</span> <span class="nc">BazModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
 
-  override val modules: Seq[Module] = Seq(
-    FooModule,
-    BarModule)
+  <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Module</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+    <span class="nc">FooModule</span><span class="o">,</span>
+    <span class="nc">BarModule</span><span class="o">)</span>
 
-  @Singleton
-  @Provides
-  def providesBaz(
-    foo: Foo,
-    bar: Bar): Baz = {
-    new Baz(foo, bar)
-  }
-}
+  <span class="nd">@Singleton</span>
+  <span class="nd">@Provides</span>
+  <span class="k">def</span> <span class="n">providesBaz</span><span class="o">(</span>
+    <span class="n">foo</span><span class="k">:</span> <span class="kt">Foo</span><span class="o">,</span>
+    <span class="n">bar</span><span class="k">:</span> <span class="kt">Bar</span><span class="o">)</span><span class="k">:</span> <span class="kt">Baz</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">new</span> <span class="nc">Baz</span><span class="o">(</span><span class="n">foo</span><span class="o">,</span> <span class="n">bar</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>in Java:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.google.common.collect.ImmutableList;
-import com.google.inject.Module;
-import com.google.inject.Provides;
-import com.twitter.inject.TwitterModule;
-import javax.inject.Singleton;
-import java.util.Collection;
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">com.google.common.collect.ImmutableList</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.google.inject.Module</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.google.inject.Provides</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.twitter.inject.TwitterModule</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">javax.inject.Singleton</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Collection</span><span class="p">;</span>
 
-public class BazModule extends TwitterModule {
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BazModule</span> <span class="kd">extends</span> <span class="n">TwitterModule</span> <span class="p">{</span>
 
-  @Override
-  public Collection&lt;Module&gt; javaModules() {
-    return ImmutableList.&lt;Module&gt;of(
-        FooModule$.MODULE$,
-        BarModule$.MODULE$);
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Module</span><span class="o">&gt;</span> <span class="nf">javaModules</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">ImmutableList</span><span class="p">.</span><span class="o">&lt;</span><span class="n">Module</span><span class="o">&gt;</span><span class="n">of</span><span class="p">(</span>
+        <span class="n">FooModule$</span><span class="p">.</span><span class="na">MODULE$</span><span class="p">,</span>
+        <span class="n">BarModule$</span><span class="p">.</span><span class="na">MODULE$</span><span class="p">);</span>
+  <span class="p">}</span>
 
-  @Singleton
-  @Provides
-  public Baz providesBaz(Foo foo, Bar bar) {
-    return new Baz(foo, bar);
-  }
-}
+  <span class="nd">@Singleton</span>
+  <span class="nd">@Provides</span>
+  <span class="kd">public</span> <span class="n">Baz</span> <span class="nf">providesBaz</span><span class="p">(</span><span class="n">Foo</span> <span class="n">foo</span><span class="p">,</span> <span class="n">Bar</span> <span class="n">bar</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="n">Baz</span><span class="p">(</span><span class="n">foo</span><span class="p">,</span> <span class="n">bar</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>Notice that we choose to list both the <cite>FooModule</cite> and <cite>BarModule</cite> in the modules for the <cite>BazModule</cite>.
 Yet, since we know that the <cite>BarModule</cite> includes the <cite>FooModule</cite> we could have choosen to leave it
 out. The <cite>providesBaz</cite> method in the module above takes in both <cite>Foo</cite> and a <cite>Bar</cite> instances as
 arguments.</p>
-<p>Since it declares the two modules, we&#8217;re assured that instances of these types will be available
+<p>Since it declares the two modules, we’re assured that instances of these types will be available
 from the injector for our <cite>providesBaz</cite> method to use.</p>
 </div>
 </div>
@@ -458,10 +444,7 @@ from the injector for our <cite>providesBaz</cite> method to use.</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
-            </a></p><p>
+        <div class="sphinxsidebarwrapper"><p>
   <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
@@ -472,11 +455,11 @@ from the injector for our <cite>providesBaz</cite> method to use.</p>
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Modules</a><ul>
 <li><a class="reference internal" href="#defining-modules">Defining Modules</a><ul>
-<li><a class="reference internal" href="#provides"><code class="docutils literal"><span class="pre">&#64;Provides</span></code></a></li>
+<li><a class="reference internal" href="#provides"><code class="docutils literal notranslate"><span class="pre">&#64;Provides</span></code></a></li>
 <li><a class="reference internal" href="#using-flags-in-modules">Using Flags in Modules</a></li>
 <li><a class="reference internal" href="#best-practices">Best Practices</a></li>
 </ul>
@@ -490,7 +473,7 @@ from the injector for our <cite>providesBaz</cite> method to use.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">User&#8217;s Guide</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
       <li>Previous: <a href="lifecycle.html" title="previous chapter">Application and Server Lifecycle</a></li>
       <li>Next: <a href="binding_annotations.html" title="next chapter">Binding Annotations</a></li>
   </ul></li>

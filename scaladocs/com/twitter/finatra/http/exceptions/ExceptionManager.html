@@ -323,7 +323,7 @@ free to register their own ExceptionMapper[Throwable] which overrides the
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ExceptionManager</span><span class="params">(<span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span>
+        <span class="name">ExceptionManager</span><span class="params">(<span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="statsReceiver">statsReceiver: <span class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</span></span>)</span>
       </span>
       
       
@@ -672,13 +672,13 @@ If a mapper has already been added for the given <span class="extype" name="T">T
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toResponse</span><span class="params">(<span name="request">request: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a></span>, <span name="throwable">throwable: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.http.Response">Response</span></span>
+        <span class="name">toResponse</span><span class="params">(<span name="request">request: <span class="extype" name="com.twitter.finagle.http.Request">Request</span></span>, <span name="throwable">throwable: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.http.Response">Response</span></span>
       </span>
       
       <p class="shortcomment cmt">Returns a <span class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</span> as computed by the matching
 <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a> to the given throwable.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a <span class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</span> as computed by the matching
 <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a> to the given throwable.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>- a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a></p></dd><dt class="param">throwable</dt><dd class="cmt"><p>- <span class="extype" name="java.lang.Throwable">java.lang.Throwable</span> to match against registered ExceptionMappers.</p></dd><dt>returns</dt><dd class="cmt"><p>a <span class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</span></p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>- a <span class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</span></p></dd><dt class="param">throwable</dt><dd class="cmt"><p>- <span class="extype" name="java.lang.Throwable">java.lang.Throwable</span> to match against registered ExceptionMappers.</p></dd><dt>returns</dt><dd class="cmt"><p>a <span class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</span></p></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">

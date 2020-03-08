@@ -187,15 +187,15 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A Guice Custom Scope implemented with <a href="https://twitter.github.io/util/docs/com/twitter/util/Local.html" class="extype" name="com.twitter.util.Local">com.twitter.util.Local</a> to mimic the behavior of the
-'@RequestScoped' scope using <a href="https://twitter.github.io/util/docs/com/twitter/util/Local.html" class="extype" name="com.twitter.util.Local">com.twitter.util.Local</a> to work within the context of
-<a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html" class="extype" name="com.twitter.util.Future">com.twitter.util.Future</a>s.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A Guice Custom Scope implemented with <span class="extype" name="com.twitter.util.Local">com.twitter.util.Local</span> to mimic the behavior of the
+'@RequestScoped' scope using <span class="extype" name="com.twitter.util.Local">com.twitter.util.Local</span> to work within the context of
+<span class="extype" name="com.twitter.util.Future">com.twitter.util.Future</span>s.
 </p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>It is expected that users use this in combination with the typed <a href="FinagleRequestScopeFilter.html" class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter">FinagleRequestScopeFilter</a> or the
 type agnostic <a href="FinagleRequestScopeFilter$$TypeAgnostic.html" class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeFilter.TypeAgnostic">FinagleRequestScopeFilter.TypeAgnostic</a>.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://github.com/google/guice/wiki/Scopes#scopes" target="_blank">Guice Scopes</a></p></span><span class="cmt"><p><a href="https://github.com/google/guice/wiki/CustomScopes" target="_blank">Guice Custom Scopes</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finatra/user-guide/http/filters.html" target="_blank">HttpServer Request Scoping</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finatra/user-guide/thrift/filters.html#request-scope" target="_blank">ThriftServer Request Scoping</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">util.logging.Logging</a>, <span class="extype" name="com.google.inject.Scope">Scope</span>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <span class="extype" name="com.twitter.util.logging.Logging">util.logging.Logging</span>, <span class="extype" name="com.google.inject.Scope">Scope</span>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -431,7 +431,7 @@ type agnostic <a href="FinagleRequestScopeFilter$$TypeAgnostic.html" class="exty
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">debugFutureResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="com.twitter.inject.Logging.debugFutureResult.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="com.twitter.inject.Logging.debugFutureResult.T">T</span>]</span>
+        <span class="name">debugFutureResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.util.Future">Future</span>[<span class="extype" name="com.twitter.inject.Logging.debugFutureResult.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.twitter.util.Future">Future</span>[<span class="extype" name="com.twitter.inject.Logging.debugFutureResult.T">T</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Log an debug msg that contains the result of the passed in func.</p><div class="fullcomment"><div class="comment cmt"><p>Log an debug msg that contains the result of the passed in func.
@@ -896,8 +896,8 @@ type agnostic <a href="FinagleRequestScopeFilter$$TypeAgnostic.html" class="exty
       </span>
       
       <p class="shortcomment cmt">Initializes the value of the RequestScope to a new empty <span class="extype" name="java.util.HashMap">java.util.HashMap</span> only for the scope of the
-current <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/context/LocalContext.html" class="extype" name="com.twitter.finagle.context.LocalContext">com.twitter.finagle.context.LocalContext</a> for the given function <code>fn</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Initializes the value of the RequestScope to a new empty <span class="extype" name="java.util.HashMap">java.util.HashMap</span> only for the scope of the
-current <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/context/LocalContext.html" class="extype" name="com.twitter.finagle.context.LocalContext">com.twitter.finagle.context.LocalContext</a> for the given function <code>fn</code>.
+current <span class="extype" name="com.twitter.finagle.context.LocalContext">com.twitter.finagle.context.LocalContext</span> for the given function <code>fn</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Initializes the value of the RequestScope to a new empty <span class="extype" name="java.util.HashMap">java.util.HashMap</span> only for the scope of the
+current <span class="extype" name="com.twitter.finagle.context.LocalContext">com.twitter.finagle.context.LocalContext</span> for the given function <code>fn</code>.
 </p></div><dl class="paramcmts block"><dt class="param">fn</dt><dd class="cmt"><p>the function to execute with the given LocalContext.</p></dd><dt>returns</dt><dd class="cmt"><p>the result of executing the function <code>fn</code>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="index.html" class="extype" name="com.twitter.inject.requestscope">com.twitter.inject.requestscope</a>] </dd></dl></div>
     </li><li name="com.twitter.util.logging.Logging#logger" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="logger:com.twitter.util.logging.Logger"></a><a id="logger:Logger"></a>
@@ -911,7 +911,7 @@ current <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/cont
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">logger</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logger.html#com.twitter.util.logging.Logger" class="extype" name="com.twitter.util.logging.Logger">Logger</a></span>
+        <span class="name">logger</span><span class="result">: <span class="extype" name="com.twitter.util.logging.Logger">Logger</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
@@ -1324,7 +1324,7 @@ current <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/cont
         <div class="parent" name="com.twitter.inject.Logging">
               <h3>Inherited from <a href="../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></h3>
             </div><div class="parent" name="com.twitter.util.logging.Logging">
-              <h3>Inherited from <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">util.logging.Logging</a></h3>
+              <h3>Inherited from <span class="extype" name="com.twitter.util.logging.Logging">util.logging.Logging</span></h3>
             </div><div class="parent" name="com.google.inject.Scope">
               <h3>Inherited from <span class="extype" name="com.google.inject.Scope">Scope</span></h3>
             </div><div class="parent" name="scala.AnyRef">

@@ -1,33 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Finatra Kafka Streams &#8212; Finatra 20.1.0 documentation</title>
-    
+    <meta charset="utf-8" />
+    <title>Finatra Kafka Streams &#8212; Finatra 20.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '20.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 20.1.0 documentation" href="../../index.html" />
-    <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Examples" href="examples.html" />
     <link rel="prev" title="Communicate with a Thrift Service" href="../thrift/clients.html" />
    
@@ -44,8 +31,7 @@
 
   </script>
 
-  </head>
-  <body role="document">
+  </head><body>
   
   
 
@@ -62,7 +48,7 @@
           <a href="../thrift/clients.html" title="Communicate with a Thrift Service"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -77,28 +63,27 @@
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Intuitive <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/kafka-streams/kafka-streams/src/main/scala/com/twitter/finatra/kafkastreams/dsl">DSL</a> for topology creation, compatible with the <a class="reference external" href="https://kafka.apache.org/21/documentation/streams/developer-guide/dsl-api.html">Kafka Streams DSL</a></li>
-<li>Full Kafka Streams metric integration, exposed as <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#metrics">TwitterServer Metrics</a></li>
-<li><a class="reference external" href="#rocksdb">RocksDB integration</a></li>
-<li><a class="reference external" href="#queryable-state">Queryable State</a></li>
-<li><a class="reference external" href="testing.html">Rich testing functionality</a></li>
+<li><p>Intuitive <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/kafka-streams/kafka-streams/src/main/scala/com/twitter/finatra/kafkastreams/dsl">DSL</a> for topology creation, compatible with the <a class="reference external" href="https://kafka.apache.org/21/documentation/streams/developer-guide/dsl-api.html">Kafka Streams DSL</a></p></li>
+<li><p>Full Kafka Streams metric integration, exposed as <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#metrics">TwitterServer Metrics</a></p></li>
+<li><p><a class="reference external" href="#rocksdb">RocksDB integration</a></p></li>
+<li><p><a class="reference external" href="#queryable-state">Queryable State</a></p></li>
+<li><p><a class="reference external" href="testing.html">Rich testing functionality</a></p></li>
 </ul>
 </div>
 <div class="section" id="basics">
 <h2>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
 <p>With <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/kafka-streams/kafka-streams/src/main/scala/com/twitter/finatra/kafkastreams/KafkaStreamsTwitterServer.scala">KafkaStreamsTwitterServer</a>,
-a fully functional service can be written by simply configuring the Kafka Streams Builder via the <code class="docutils literal"><span class="pre">configureKafkaStreams()</span></code> lifecycle method. See the <a class="reference external" href="examples.html">examples</a> section.</p>
+a fully functional service can be written by simply configuring the Kafka Streams Builder via the <code class="docutils literal notranslate"><span class="pre">configureKafkaStreams()</span></code> lifecycle method. See the <a class="reference external" href="examples.html">examples</a> section.</p>
 <div class="section" id="transformers">
 <h3>Transformers<a class="headerlink" href="#transformers" title="Permalink to this headline">¶</a></h3>
 <p>Implement custom <a class="reference external" href="https://kafka.apache.org/21/javadoc/org/apache/kafka/streams/kstream/Transformer.html">transformers</a> using <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/kafka-streams/kafka-streams/src/main/scala/com/twitter/finatra/kafkastreams/transformer/FinatraTransformer.scala">FinatraTransformer</a>.</p>
 <div class="section" id="aggregations">
 <h4>Aggregations<a class="headerlink" href="#aggregations" title="Permalink to this headline">¶</a></h4>
-<dl class="docutils">
-<dt>There are several included aggregating transformers, which may be used when configuring a <code class="docutils literal"><span class="pre">StreamsBuilder</span></code></dt>
-<dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">aggregate</span></code></li>
-<li><code class="docutils literal"><span class="pre">sample</span></code></li>
-<li><code class="docutils literal"><span class="pre">sum</span></code></li>
+<dl class="simple">
+<dt>There are several included aggregating transformers, which may be used when configuring a <code class="docutils literal notranslate"><span class="pre">StreamsBuilder</span></code></dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">aggregate</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sample</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sum</span></code></p></li>
 </ul>
 </dd>
 </dl>
@@ -119,9 +104,9 @@ a fully functional service can be written by simply configuring the Kafka Stream
 <h4>Queryable Stores<a class="headerlink" href="#queryable-stores" title="Permalink to this headline">¶</a></h4>
 <blockquote>
 <div><ul class="simple">
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/kafka-streams/kafka-streams/src/main/scala/com/twitter/finatra/kafkastreams/query/QueryableFinatraKeyValueStore.scala">QueryableFinatraKeyValueStore</a></li>
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/kafka-streams/kafka-streams/src/main/scala/com/twitter/finatra/kafkastreams/query/QueryableFinatraWindowStore.scala">QueryableFinatraWindowStore</a></li>
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/kafka-streams/kafka-streams/src/main/scala/com/twitter/finatra/kafkastreams/query/QueryableFinatraCompositeWindowStore.scala">QueryableFinatraCompositeWindowStore</a></li>
+<li><p><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/kafka-streams/kafka-streams/src/main/scala/com/twitter/finatra/kafkastreams/query/QueryableFinatraKeyValueStore.scala">QueryableFinatraKeyValueStore</a></p></li>
+<li><p><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/kafka-streams/kafka-streams/src/main/scala/com/twitter/finatra/kafkastreams/query/QueryableFinatraWindowStore.scala">QueryableFinatraWindowStore</a></p></li>
+<li><p><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/kafka-streams/kafka-streams/src/main/scala/com/twitter/finatra/kafkastreams/query/QueryableFinatraCompositeWindowStore.scala">QueryableFinatraCompositeWindowStore</a></p></li>
 </ul>
 </div></blockquote>
 </div>
@@ -134,10 +119,7 @@ a fully functional service can be written by simply configuring the Kafka Stream
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
-            </a></p><p>
+        <div class="sphinxsidebarwrapper"><p>
   <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
@@ -148,7 +130,7 @@ a fully functional service can be written by simply configuring the Kafka Stream
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Finatra Kafka Streams</a><ul>
 <li><a class="reference internal" href="#features">Features</a></li>
@@ -173,7 +155,7 @@ a fully functional service can be written by simply configuring the Kafka Stream
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">User&#8217;s Guide</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
       <li>Previous: <a href="../thrift/clients.html" title="previous chapter">Communicate with a Thrift Service</a></li>
       <li>Next: <a href="examples.html" title="next chapter">Examples</a></li>
   </ul></li>

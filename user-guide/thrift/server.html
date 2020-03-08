@@ -1,33 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Thrift Server Definition &#8212; Finatra 20.1.0 documentation</title>
-    
+    <meta charset="utf-8" />
+    <title>Thrift Server Definition &#8212; Finatra 20.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '20.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 20.1.0 documentation" href="../../index.html" />
-    <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Defining Thrift Controllers" href="controllers.html" />
     <link rel="prev" title="Scrooge and Finagle" href="basics.html" />
    
@@ -44,8 +31,7 @@
 
   </script>
 
-  </head>
-  <body role="document">
+  </head><body>
   
   
 
@@ -62,7 +48,7 @@
           <a href="basics.html" title="Scrooge and Finagle"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -80,89 +66,87 @@ for an example <cite>ThriftServer</cite>.</p>
 <p>To start, add a dependency on the <a class="reference external" href="https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-thrift_2.12%22">finatra-thrift</a>
 library. We also recommend using <a class="reference external" href="https://logback.qos.ch/">Logback</a> as your
 <a class="reference external" href="https://www.slf4j.org/manual.html">SLF4J</a> implementation. E.g., with sbt:</p>
-<pre class="literal-block">
-&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % &quot;20.1.0&quot;
-&quot;ch.qos.logback&quot; % &quot;logback-classic&quot; % versions.logback,
-</pre>
+<pre class="literal-block">&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % &quot;20.3.0&quot;
+&quot;ch.qos.logback&quot; % &quot;logback-classic&quot; % versions.logback,</pre>
 <p>For more information on logging with Finatra see: <a class="reference external" href="../logging/index.html#introduction-to-logging-with-finatra">Introduction to Logging With Finatra</a>.</p>
 <p>Create a new class that extends <a class="reference external" href="https://github.com/twitter/finatra/blob/700e741f41368d9bc2ba76489e0641c4cfb8545a/thrift/src/main/scala/com/twitter/finatra/thrift/servers.scala#L143">c.t.finatra.thrift.ThriftServer</a>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.ThriftServer
-import com.twitter.finatra.thrift.routing.ThriftRouter
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.ThriftServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.routing.ThriftRouter</span>
 
-object ExampleServerMain extends ExampleServer
+<span class="k">object</span> <span class="nc">ExampleServerMain</span> <span class="k">extends</span> <span class="nc">ExampleServer</span>
 
-class ExampleServer extends ThriftServer {
+<span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">ThriftServer</span> <span class="o">{</span>
 
-  override def configureThrift(router: ThriftRouter): Unit = {
-    ???
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureThrift</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">ThriftRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="o">???</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Or in Java, extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/700e741f41368d9bc2ba76489e0641c4cfb8545a/thrift/src/main/scala/com/twitter/finatra/thrift/servers.scala#L168">c.t.finatra.thrift.AbstractThriftServer</a>:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.AbstractThriftServer;
-import com.twitter.finatra.thrift.routing.JavaThriftRouter;
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">com.twitter.finatra.thrift.AbstractThriftServer</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.twitter.finatra.thrift.routing.JavaThriftRouter</span><span class="p">;</span>
 
-public class ExampleServer extends AbstractThriftServer {
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExampleServer</span> <span class="kd">extends</span> <span class="n">AbstractThriftServer</span> <span class="p">{</span>
 
-  @Override
-  public void configureThrift(JavaThriftRouter router) {
-    ...
-  }
-}
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">configureThrift</span><span class="p">(</span><span class="n">JavaThriftRouter</span> <span class="n">router</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>A more complete example includes adding Modules, a Controller, and Filters.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
-import com.twitter.finatra.thrift.ThriftServer
-import com.twitter.finatra.thrift.filters.{LoggingMDCFilter, TraceIdMDCFilter}
-import com.twitter.finatra.thrift.routing.ThriftRouter
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.google.inject.Module</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.ThriftServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.filters.</span><span class="o">{</span><span class="nc">LoggingMDCFilter</span><span class="o">,</span> <span class="nc">TraceIdMDCFilter</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.routing.ThriftRouter</span>
 
-object ExampleServerMain extends ExampleServer
+<span class="k">object</span> <span class="nc">ExampleServerMain</span> <span class="k">extends</span> <span class="nc">ExampleServer</span>
 
-class ExampleServer extends ThriftServer {
+<span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">ThriftServer</span> <span class="o">{</span>
 
-  override val modules: Seq[Module] = Seq(
-    ExampleModule)
+  <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Module</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+    <span class="nc">ExampleModule</span><span class="o">)</span>
 
-  override def configureThrift(router: ThriftRouter): Unit = {
-    router
-      .filter[LoggingMDCFilter]
-      .filter[TraceIdMDCFilter]
-      .add[ExampleThriftController]
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureThrift</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">ThriftRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">router</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">LoggingMDCFilter</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">TraceIdMDCFilter</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">ExampleThriftController</span><span class="o">]</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>in Java:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.google.common.collect.ImmutableList;
-import com.google.inject.Module;
-import com.twitter.finatra.thrift.AbstractThriftServer;
-import com.twitter.finatra.thrift.filters.LoggingMDCFilter;
-import com.twitter.finatra.thrift.filters.TraceIdMDCFilter;
-import com.twitter.finatra.thrift.routing.JavaThriftRouter;
-import java.util.Collection;
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">com.google.common.collect.ImmutableList</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.google.inject.Module</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.twitter.finatra.thrift.AbstractThriftServer</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.twitter.finatra.thrift.filters.LoggingMDCFilter</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.twitter.finatra.thrift.filters.TraceIdMDCFilter</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.twitter.finatra.thrift.routing.JavaThriftRouter</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Collection</span><span class="p">;</span>
 
-public class ExampleServer extends AbstractThriftServer {
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExampleServer</span> <span class="kd">extends</span> <span class="n">AbstractThriftServer</span> <span class="p">{</span>
 
-  @Override
-  public Collection&lt;Module&gt; javaModules() {
-    return ImmutableList.&lt;Module&gt;of(ExampleModule$.MODULE$);
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Module</span><span class="o">&gt;</span> <span class="nf">javaModules</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">ImmutableList</span><span class="p">.</span><span class="o">&lt;</span><span class="n">Module</span><span class="o">&gt;</span><span class="n">of</span><span class="p">(</span><span class="n">ExampleModule$</span><span class="p">.</span><span class="na">MODULE$</span><span class="p">);</span>
+  <span class="p">}</span>
 
-  @Override
-  public void configureThrift(JavaThriftRouter router) {
-    router
-      .filter(LoggingMDCFilter.class)
-      .filter(TraceIdMDCFilter.class)
-      .add(ExampleThriftController.class);
-  }
-}
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">configureThrift</span><span class="p">(</span><span class="n">JavaThriftRouter</span> <span class="n">router</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">router</span>
+      <span class="p">.</span><span class="na">filter</span><span class="p">(</span><span class="n">LoggingMDCFilter</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+      <span class="p">.</span><span class="na">filter</span><span class="p">(</span><span class="n">TraceIdMDCFilter</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+      <span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">ExampleThriftController</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <div class="admonition tip">
-<p class="first admonition-title">Tip</p>
-<p class="last">Note: to add <a class="reference external" href="../getting-started/modules.html">Modules</a> to your Java server override the
+<p class="admonition-title">Tip</p>
+<p>Note: to add <a class="reference external" href="../getting-started/modules.html">Modules</a> to your Java server override the
 <cite>javaModules()</cite> method.</p>
 </div>
 <p>This should look familiar as the structure is similar to creating an <a class="reference external" href="../http/server.html">HttpServer</a>.
@@ -172,10 +156,10 @@ for providing instances to the object graph.</p>
 <div class="section" id="naming-convention">
 <h2>Naming Convention<a class="headerlink" href="#naming-convention" title="Permalink to this headline">¶</a></h2>
 <p>The Finatra convention is to create a Scala <a class="reference external" href="https://twitter.github.io/scala_school/basics2.html#object">object</a>
-with a name ending in &#8220;Main&#8221; that extends your server class. The server <em>class</em> can be used in
+with a name ending in “Main” that extends your server class. The server <em>class</em> can be used in
 testing as this allows your server to be instantiated multiple times in tests without worrying about
 static state persisting across test runs in the same JVM.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object ExampleServerMain extends ExampleServer
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">object</span> <span class="nc">ExampleServerMain</span> <span class="k">extends</span> <span class="nc">ExampleServer</span>
 </pre></div>
 </div>
 <p>The static object, e.g., <cite>ExampleServerMain</cite>, would then contain a static <cite>main()</cite> method for the server
@@ -183,16 +167,16 @@ to serve as the <a class="reference external" href="https://docs.oracle.com/java
 for running the server in all other cases.</p>
 <div class="section" id="java-naming-convention">
 <h3>Java Naming Convention<a class="headerlink" href="#java-naming-convention" title="Permalink to this headline">¶</a></h3>
-<p>In Java you would create a separate &#8220;main&#8221; class which defines a static <cite>main()</cite> method and accepts args
+<p>In Java you would create a separate “main” class which defines a static <cite>main()</cite> method and accepts args
 for flag parsing:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>public final class ExampleServerMain {
-    private ExampleServerMain() {
-    }
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">ExampleServerMain</span> <span class="p">{</span>
+    <span class="kd">private</span> <span class="nf">ExampleServerMain</span><span class="p">()</span> <span class="p">{</span>
+    <span class="p">}</span>
 
-    public static void main(String[] args) {
-        new ExampleServer().main(args);
-    }
-}
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">new</span> <span class="n">ExampleServer</span><span class="p">().</span><span class="na">main</span><span class="p">(</span><span class="n">args</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>This would be the class used as the <a class="reference external" href="https://docs.oracle.com/javase/tutorial/deployment/jar/appman.html">application entry point</a>
@@ -210,8 +194,8 @@ extend the <cite>AbstractThriftServer</cite> and configure the <cite>JavaThriftR
 <p>Most typically this is done when the server is being written in Java but is not exclusively so. This
 means:</p>
 <ul class="simple">
-<li>if you write your server in Scala you can use either generated Java or generated Scala code.</li>
-<li>if you write your server in Java you MUST use generated Java code.</li>
+<li><p>if you write your server in Scala you can use either generated Java or generated Scala code.</p></li>
+<li><p>if you write your server in Java you MUST use generated Java code.</p></li>
 </ul>
 </div>
 <div class="section" id="serving-a-finagle-service-array-byte-array-byte">
@@ -221,50 +205,50 @@ instead of creating a <a class="reference external" href="./controllers.html">Th
 a <cite>Service[Array[Byte], Array[Byte]]</cite> via the <cite>ThriftRouter</cite>.</p>
 <p>To do so, extend the <cite>ThriftServerTrait</cite> (or <cite>AbstractThriftServerTrait</cite> in Java) and implement the
 <cite>thriftService: Service[Array[Byte], Array[Byte]]</cite> method:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
-import com.twitter.finagle.Service
-import com.twitter.finatra.thrift.ThriftServerTrait
-import com.twitter.finatra.thrift.filters.{LoggingMDCFilter, TraceIdMDCFilter}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.google.inject.Module</span>
+<span class="k">import</span> <span class="nn">com.twitter.finagle.Service</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.ThriftServerTrait</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.filters.</span><span class="o">{</span><span class="nc">LoggingMDCFilter</span><span class="o">,</span> <span class="nc">TraceIdMDCFilter</span><span class="o">}</span>
 
-object ExampleServerMain extends ExampleServer
+<span class="k">object</span> <span class="nc">ExampleServerMain</span> <span class="k">extends</span> <span class="nc">ExampleServer</span>
 
-class ExampleServer extends ThriftServerTrait {
+<span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">ThriftServerTrait</span> <span class="o">{</span>
 
-  override val modules: Seq[Module] = Seq(
-    ExampleModule)
+  <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Module</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+    <span class="nc">ExampleModule</span><span class="o">)</span>
 
-  // the `Service[Array[Byte], Array[Byte]]` to serve
-  override def thriftService: Service[Array[Byte], Array[Byte]] = ???
-}
+  <span class="c1">// the `Service[Array[Byte], Array[Byte]]` to serve</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">thriftService</span><span class="k">:</span> <span class="kt">Service</span><span class="o">[</span><span class="kt">Array</span><span class="o">[</span><span class="kt">Byte</span><span class="o">]</span><span class="p">,</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">Byte</span><span class="o">]]</span> <span class="k">=</span> <span class="o">???</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>in Java:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.google.common.collect.ImmutableList;
-import com.google.inject.Module;
-import com.twitter.finagle.Service;
-import com.twitter.finatra.thrift.AbstractThriftServerTrait;
-import java.util.Collection;
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">com.google.common.collect.ImmutableList</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.google.inject.Module</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.twitter.finagle.Service</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.twitter.finatra.thrift.AbstractThriftServerTrait</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Collection</span><span class="p">;</span>
 
-public class ExampleServer extends AbstractThriftServerTrait {
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExampleServer</span> <span class="kd">extends</span> <span class="n">AbstractThriftServerTrait</span> <span class="p">{</span>
 
-  @Override
-  public Collection&lt;Module&gt; javaModules() {
-    return ImmutableList.&lt;Module&gt;of(ExampleModule$.MODULE$);
-  }
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Module</span><span class="o">&gt;</span> <span class="nf">javaModules</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">ImmutableList</span><span class="p">.</span><span class="o">&lt;</span><span class="n">Module</span><span class="o">&gt;</span><span class="n">of</span><span class="p">(</span><span class="n">ExampleModule$</span><span class="p">.</span><span class="na">MODULE$</span><span class="p">);</span>
+  <span class="p">}</span>
 
-  @Override
-  public Service&lt;byte[], byte[]&gt; thriftService() {
-    // the `Service&lt;byte[], byte[]&gt;` to serve
-    return null;
-  }
-}
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">Service</span><span class="o">&lt;</span><span class="kt">byte</span><span class="o">[]</span><span class="p">,</span> <span class="kt">byte</span><span class="o">[]&gt;</span> <span class="nf">thriftService</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// the `Service&lt;byte[], byte[]&gt;` to serve</span>
+    <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <div class="admonition important">
-<p class="first admonition-title">Important</p>
+<p class="admonition-title">Important</p>
 <p>The <cite>ThriftRouter</cite> exposes a DSL for users which the framework uses to construct a filtered
 <cite>Service[Array[Byte], Array[Byte]]</cite>.</p>
-<p class="last">Note, you must choose one or the other: either implement your service with a
+<p>Note, you must choose one or the other: either implement your service with a
 <a class="reference external" href="./controllers.html">Controller</a> added via the <cite>ThriftRouter</cite> <strong>or</strong> serve a manually
 constructed Finagle <cite>Service[Array[Byte], Array[Byte]]</cite>.</p>
 </div>
@@ -274,21 +258,21 @@ constructed Finagle <cite>Service[Array[Byte], Array[Byte]]</cite>.</p>
 <div class="section" id="flags">
 <h3>Flags<a class="headerlink" href="#flags" title="Permalink to this headline">¶</a></h3>
 <p>Some deployment environments may make it difficult to set <a class="reference external" href="../getting-started/flags.html">Flag values</a>
-with command line arguments. If this is the case, Finatra&#8217;s <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala">ThriftServer</a>&#8216;s
+with command line arguments. If this is the case, Finatra’s <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala">ThriftServer</a>’s
 core flags can be set from code.</p>
 <p>For example, instead of setting the <cite>-thrift.port</cite> flag, you can override the following method in
 your server.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.ThriftServer
-import com.twitter.finatra.thrift.routing.ThriftRouter
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.ThriftServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.routing.ThriftRouter</span>
 
-class ExampleServer extends ThriftServer {
+<span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">ThriftServer</span> <span class="o">{</span>
 
-  override val defaultThriftPort: String = &quot;:9090&quot;
+  <span class="k">override</span> <span class="k">val</span> <span class="n">defaultThriftPort</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">&quot;:9090&quot;</span>
 
-  override def configureThrift(router: ThriftRouter): Unit = {
-    ???
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureThrift</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">ThriftRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="o">???</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>For a list of what flags can be set programmatically, please see the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/servers.scala">ThriftServerTrait</a> class.</p>
@@ -300,24 +284,24 @@ class ExampleServer extends ThriftServer {
 server you can override <cite>configureThriftServer</cite> in your server to specify additional configuration
 on (or override the default configuration of) the underlying Finagle server.</p>
 <p>For example:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.ThriftMux
-import com.twitter.finatra.thrift.ThriftServer
-import com.twitter.finatra.thrift.routing.ThriftRouter
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.ThriftMux</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.ThriftServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.routing.ThriftRouter</span>
 
-class ExampleServer extends ThriftServer {
+<span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">ThriftServer</span> <span class="o">{</span>
 
-  override def configureThrift(router: ThriftRouter): Unit = {
-    ...
-  }
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureThrift</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">ThriftRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="o">...</span>
+  <span class="o">}</span>
 
-  override def configureThriftServer(server: ThriftMux.Server): ThriftMux.Server = {
-    server
-      .withMaxRequestSize(???)
-      .withAdmissionControl.concurrencyLimit(
-        maxConcurrentRequests = ???,
-        maxWaiters = ???)
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureThriftServer</span><span class="o">(</span><span class="n">server</span><span class="k">:</span> <span class="kt">ThriftMux.Server</span><span class="o">)</span><span class="k">:</span> <span class="kt">ThriftMux.Server</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">server</span>
+      <span class="o">.</span><span class="n">withMaxRequestSize</span><span class="o">(???)</span>
+      <span class="o">.</span><span class="n">withAdmissionControl</span><span class="o">.</span><span class="n">concurrencyLimit</span><span class="o">(</span>
+        <span class="n">maxConcurrentRequests</span> <span class="k">=</span> <span class="o">???,</span>
+        <span class="n">maxWaiters</span> <span class="k">=</span> <span class="o">???)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>For more information on <a class="reference external" href="https://github.com/twitter/finagle">Finagle</a> server configuration see
@@ -330,9 +314,9 @@ the server documentation <a class="reference external" href="https://twitter.git
 which classifies any deserialized Thrift Exception as a failure. To configure server-side <a class="reference external" href="https://twitter.github.io/finagle/guide/Servers.html#response-classification">Response Classification</a>
 you could choose to set the classifier directly on the underlying Finagle server by overriding the
 <cite>configureThriftServer</cite> in your server, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>override def configureThriftServer(server: ThriftMux.Server): ThriftMux.Server = {
-    server.withResponseClassifier(???)
-}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">override</span> <span class="k">def</span> <span class="n">configureThriftServer</span><span class="o">(</span><span class="n">server</span><span class="k">:</span> <span class="kt">ThriftMux.Server</span><span class="o">)</span><span class="k">:</span> <span class="kt">ThriftMux.Server</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">withResponseClassifier</span><span class="o">(???)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>However, since the server-side ResponseClassifier could affect code not just at the Finagle level,
@@ -342,14 +326,14 @@ to the object graph that is then available to be injected into things like the T
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/StatsFilter.scala">StatsFilter</a>
 for a more accurate reporting of metrics that takes into account server-side response classification.</p>
 <p>For example, in your <cite>ThriftServer</cite> you would do:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
-import com.twitter.finatra.http.HttpServer
-import com.twitter.finatra.http.routing.HttpRouter
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.google.inject.Module</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.HttpServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpRouter</span>
 
-class ExampleServer extends ThriftServer {
+<span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">ThriftServer</span> <span class="o">{</span>
 
-  override thriftResponseClassifierModule: Module = ???
-}
+  <span class="k">override</span> <span class="n">thriftResponseClassifierModule</span><span class="k">:</span> <span class="kt">Module</span> <span class="o">=</span> <span class="o">???</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>The bound value is also then set on the underlying Finagle server before serving.</p>
@@ -367,10 +351,7 @@ section.</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
-            </a></p><p>
+        <div class="sphinxsidebarwrapper"><p>
   <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
@@ -381,7 +362,7 @@ section.</p>
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Thrift Server Definition</a><ul>
 <li><a class="reference internal" href="#naming-convention">Naming Convention</a><ul>
@@ -403,7 +384,7 @@ section.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">User&#8217;s Guide</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
       <li>Previous: <a href="basics.html" title="previous chapter">Scrooge and Finagle</a></li>
       <li>Next: <a href="controllers.html" title="next chapter">Defining Thrift Controllers</a></li>
   </ul></li>

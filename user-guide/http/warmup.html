@@ -1,33 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>HTTP Server Warmup &#8212; Finatra 20.1.0 documentation</title>
-    
+    <meta charset="utf-8" />
+    <title>HTTP Server Warmup &#8212; Finatra 20.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '20.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 20.1.0 documentation" href="../../index.html" />
-    <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Jackson Integration" href="../json/index.html" />
     <link rel="prev" title="HTTP Exception Mapping" href="exceptions.html" />
    
@@ -44,8 +31,7 @@
 
   </script>
 
-  </head>
-  <body role="document">
+  </head><body>
   
   
 
@@ -62,7 +48,7 @@
           <a href="exceptions.html" title="HTTP Exception Mapping"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -78,40 +64,40 @@ server (e.g., for triggering JIT in the JVM). We can do this via server warmup.<
 <div class="section" id="warmup">
 <h2>Warmup<a class="headerlink" href="#warmup" title="Permalink to this headline">¶</a></h2>
 <p>Finatra provides a <cite>warmup</cite> lifecycle callback function which will be executed in the correct phase
-of server startup, i.e, before the server&#8217;s external HTTP port(s) are bound and thus before the
+of server startup, i.e, before the server’s external HTTP port(s) are bound and thus before the
 TwitterServer <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#lifecycle-management">Lifecycle Management</a>
 <cite>/health</cite> endpoint responds with <cite>OK</cite>.</p>
 <p>See <a class="reference external" href="../getting-started/lifecycle.html">here</a> for more information on the lifecycle of a Finatra
 server.</p>
 <p>To perform warmup, simply override this callback method and implement your logic. E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import DoEverythingModule
-import ExampleController
-import ExampleFilter
-import ExampleWarmupHandler
-import MalformedURLExceptionMapper
-import com.twitter.finatra.http.HttpServer
-import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter, TraceIdMDCFilter}
-import com.twitter.finatra.http.routing.HttpRouter
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">DoEverythingModule</span>
+<span class="k">import</span> <span class="nn">ExampleController</span>
+<span class="k">import</span> <span class="nn">ExampleFilter</span>
+<span class="k">import</span> <span class="nn">ExampleWarmupHandler</span>
+<span class="k">import</span> <span class="nn">MalformedURLExceptionMapper</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.HttpServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.filters.</span><span class="o">{</span><span class="nc">CommonFilters</span><span class="o">,</span> <span class="nc">LoggingMDCFilter</span><span class="o">,</span> <span class="nc">TraceIdMDCFilter</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpRouter</span>
 
-object ExampleServerMain extends ExampleServer
+<span class="k">object</span> <span class="nc">ExampleServerMain</span> <span class="k">extends</span> <span class="nc">ExampleServer</span>
 
-class ExampleServer extends HttpServer {
+<span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
 
-  override val modules = Seq(
-    DoEverythingModule)
+  <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+    <span class="nc">DoEverythingModule</span><span class="o">)</span>
 
-  override def configureHttp(router: HttpRouter): Unit = {
-    router
-      .filter[LoggingMDCFilter[Request, Response]]
-      .filter[TraceIdMDCFilter[Request, Response]]
-      .filter[CommonFilters]
-      .add[ExampleFilter, ExampleController]
-      .exceptionMapper[MalformedURLExceptionMapper]
-  }
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">router</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">LoggingMDCFilter</span><span class="o">[</span><span class="kt">Request</span><span class="p">,</span> <span class="kt">Response</span><span class="o">]]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">TraceIdMDCFilter</span><span class="o">[</span><span class="kt">Request</span><span class="p">,</span> <span class="kt">Response</span><span class="o">]]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">CommonFilters</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">ExampleFilter</span><span class="p">,</span> <span class="kt">ExampleController</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">exceptionMapper</span><span class="o">[</span><span class="kt">MalformedURLExceptionMapper</span><span class="o">]</span>
+  <span class="o">}</span>
 
-  override protected def warmup(): Unit = {
-    // YOUR WARMUP LOGIC HERE &lt;----------------------------------------------
-  }
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="n">warmup</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="c1">// YOUR WARMUP LOGIC HERE &lt;----------------------------------------------</span>
+  <span class="o">}</span>
 </pre></div>
 </div>
 </div>
@@ -128,72 +114,72 @@ which simply instantiates a given <a class="reference external" href="https://gi
 via the injector and invokes its <cite>#handle()</cite> function.</p>
 <p>Combining the above, if we wanted to run an initial call through our HTTP service we could create the
 following handler:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.routing.HttpWarmup
-import com.twitter.finatra.httpclient.RequestBuilder._
-import com.twitter.inject.utils.Handler
-import scala.util.control.NonFatal
-import javax.inject.Inject
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpWarmup</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.httpclient.RequestBuilder._</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.utils.Handler</span>
+<span class="k">import</span> <span class="nn">scala.util.control.NonFatal</span>
+<span class="k">import</span> <span class="nn">javax.inject.Inject</span>
 
-class ExampleWarmupHandler @Inject()(
-  warmup: HttpWarmup)
-  extends Handler {
+<span class="k">class</span> <span class="nc">ExampleWarmupHandler</span> <span class="nd">@Inject</span><span class="o">()(</span>
+  <span class="n">warmup</span><span class="k">:</span> <span class="kt">HttpWarmup</span><span class="o">)</span>
+  <span class="k">extends</span> <span class="nc">Handler</span> <span class="o">{</span>
 
-  override def handle(): Unit = {
-    try {
-      warmup.send(get(&quot;/ping&quot;))()
-    } catch {
-      case NonFatal(e) =&gt;
-        // Here we don&#39;t want a warmup failure to prevent server start-up --
-        // this is important if your service will call downstream services
-        // during warmup that could be temporarily down or unavailable.
-        // We don&#39;t want that unavailability to cause our server to fail
-        // warm-up and thus prevent the server from starting. So we simply
-        // log the error message here.
-        error(e.getMessage, e)
-    }
-    info(&quot;Warm-up done.&quot;)
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">handle</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="n">warmup</span><span class="o">.</span><span class="n">send</span><span class="o">(</span><span class="n">get</span><span class="o">(</span><span class="s">&quot;/ping&quot;</span><span class="o">))()</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">{</span>
+      <span class="k">case</span> <span class="nc">NonFatal</span><span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="k">=&gt;</span>
+        <span class="c1">// Here we don&#39;t want a warmup failure to prevent server start-up --</span>
+        <span class="c1">// this is important if your service will call downstream services</span>
+        <span class="c1">// during warmup that could be temporarily down or unavailable.</span>
+        <span class="c1">// We don&#39;t want that unavailability to cause our server to fail</span>
+        <span class="c1">// warm-up and thus prevent the server from starting. So we simply</span>
+        <span class="c1">// log the error message here.</span>
+        <span class="n">error</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">getMessage</span><span class="o">,</span> <span class="n">e</span><span class="o">)</span>
+    <span class="o">}</span>
+    <span class="n">info</span><span class="o">(</span><span class="s">&quot;Warm-up done.&quot;</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>The handler above simply tries to hit the <cite>/ping</cite> endpoint of the server.</p>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">As noted above, be careful about exceptions which occur from calling endpoints on your service
+<p class="admonition-title">Warning</p>
+<p>As noted above, be careful about exceptions which occur from calling endpoints on your service
 during warmup. Exceptions which escape the handler will potentially stop your server from
 starting and thus, you most likely <strong>do not</strong> want an exception from a warmup call to propagate out
 of the handler.</p>
 </div>
 <p>You would then run this handler in the <cite>warmup()</cite> lifecycle callback. E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import DoEverythingModule
-import ExampleController
-import ExampleFilter
-import ExampleWarmupHandler
-import MalformedURLExceptionMapper
-import com.twitter.finatra.http.HttpServer
-import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter, TraceIdMDCFilter}
-import com.twitter.finatra.http.routing.HttpRouter
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">DoEverythingModule</span>
+<span class="k">import</span> <span class="nn">ExampleController</span>
+<span class="k">import</span> <span class="nn">ExampleFilter</span>
+<span class="k">import</span> <span class="nn">ExampleWarmupHandler</span>
+<span class="k">import</span> <span class="nn">MalformedURLExceptionMapper</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.HttpServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.filters.</span><span class="o">{</span><span class="nc">CommonFilters</span><span class="o">,</span> <span class="nc">LoggingMDCFilter</span><span class="o">,</span> <span class="nc">TraceIdMDCFilter</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpRouter</span>
 
-object ExampleServerMain extends ExampleServer
+<span class="k">object</span> <span class="nc">ExampleServerMain</span> <span class="k">extends</span> <span class="nc">ExampleServer</span>
 
-class ExampleServer extends HttpServer {
+<span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
 
-  override val modules = Seq(
-    DoEverythingModule)
+  <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+    <span class="nc">DoEverythingModule</span><span class="o">)</span>
 
-  override def configureHttp(router: HttpRouter): Unit = {
-    router
-      .filter[LoggingMDCFilter[Request, Response]]
-      .filter[TraceIdMDCFilter[Request, Response]]
-      .filter[CommonFilters]
-      .add[ExampleFilter, ExampleController]
-      .exceptionMapper[MalformedURLExceptionMapper]
-  }
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">router</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">LoggingMDCFilter</span><span class="o">[</span><span class="kt">Request</span><span class="p">,</span> <span class="kt">Response</span><span class="o">]]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">TraceIdMDCFilter</span><span class="o">[</span><span class="kt">Request</span><span class="p">,</span> <span class="kt">Response</span><span class="o">]]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">CommonFilters</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">ExampleFilter</span><span class="p">,</span> <span class="kt">ExampleController</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">exceptionMapper</span><span class="o">[</span><span class="kt">MalformedURLExceptionMapper</span><span class="o">]</span>
+  <span class="o">}</span>
 
-  override protected def warmup(): Unit = {
-    handle[ExampleWarmupHandler]() &lt;----------------------------------------------
-  }
-}
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="n">warmup</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">handle</span><span class="o">[</span><span class="kt">ExampleWarmupHandler</span><span class="o">]()</span> <span class="o">&lt;----------------------------------------------</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 </div>
@@ -210,10 +196,7 @@ class ExampleServer extends HttpServer {
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
-            </a></p><p>
+        <div class="sphinxsidebarwrapper"><p>
   <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
@@ -224,7 +207,7 @@ class ExampleServer extends HttpServer {
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">HTTP Server Warmup</a><ul>
 <li><a class="reference internal" href="#warmup">Warmup</a></li>
@@ -236,7 +219,7 @@ class ExampleServer extends HttpServer {
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">User&#8217;s Guide</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
       <li>Previous: <a href="exceptions.html" title="previous chapter">HTTP Exception Mapping</a></li>
       <li>Next: <a href="../json/index.html" title="next chapter">Jackson Integration</a></li>
   </ul></li>

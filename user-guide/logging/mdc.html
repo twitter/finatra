@@ -1,33 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Mapped Diagnostic Context (MDC) Support &#8212; Finatra 20.1.0 documentation</title>
-    
+    <meta charset="utf-8" />
+    <title>Mapped Diagnostic Context (MDC) Support &#8212; Finatra 20.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '20.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 20.1.0 documentation" href="../../index.html" />
-    <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Logback" href="logback.html" />
     <link rel="prev" title="Introduction to Logging With Finatra" href="index.html" />
    
@@ -44,8 +31,7 @@
 
   </script>
 
-  </head>
-  <body role="document">
+  </head><body>
   
   
 
@@ -62,7 +48,7 @@
           <a href="index.html" title="Introduction to Logging With Finatra"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -76,8 +62,8 @@
 <p>Finatra offers an integration with the SLF4J API <a class="reference external" href="https://www.slf4j.org/manual.html#mdc">Mapped Diagnostic Context</a>
 for consistent logging of useful information.</p>
 <div class="admonition-from-the-slf4j-api-documentation-https-www-slf4j-org-manual-html-mdc admonition">
-<p class="first admonition-title">From the SLF4J API <a class="reference external" href="https://www.slf4j.org/manual.html#mdc">documentation</a></p>
-<p class="last">&#8220;Mapped Diagnostic Context&#8221; is essentially a map maintained by the logging
+<p class="admonition-title">From the SLF4J API <a class="reference external" href="https://www.slf4j.org/manual.html#mdc">documentation</a></p>
+<p>“Mapped Diagnostic Context” is essentially a map maintained by the logging
 framework where the application code provides key-value pairs which can then
 be inserted by the logging framework in log messages. MDC data can also be
 highly helpful in filtering messages or triggering certain actions.</p>
@@ -93,24 +79,24 @@ provided by Finatra. This is done by calling <cite>c.t.inject.logging.MDCInitial
 the beginning of the closure and then discard after the closure. When used in a Filter in the request
 path this means that MDC logging can be scoped per-request.</p>
 <p>For example:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.{Service, Filter}
-import com.twitter.inject.logging.MDCInitializer
-import com.twitter.util.Future
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.</span><span class="o">{</span><span class="nc">Service</span><span class="o">,</span> <span class="nc">Filter</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.logging.MDCInitializer</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.Future</span>
 
-class MDCInitializationFilter extends Filter[Request, Response, Request, Response] {
-  /* Initialize MDC adapter which overrides the standard one */
-  MDCInitializer.init()
+<span class="k">class</span> <span class="nc">MDCInitializationFilter</span> <span class="k">extends</span> <span class="nc">Filter</span><span class="o">[</span><span class="kt">Request</span><span class="p">,</span> <span class="kt">Response</span><span class="p">,</span> <span class="kt">Request</span><span class="p">,</span> <span class="kt">Response</span><span class="o">]</span> <span class="o">{</span>
+  <span class="cm">/* Initialize MDC adapter which overrides the standard one */</span>
+  <span class="nc">MDCInitializer</span><span class="o">.</span><span class="n">init</span><span class="o">()</span>
 
-  override def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
-    MDCInitializer.let {
-      service(request)
-    }
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">request</span><span class="k">:</span> <span class="kt">Request</span><span class="o">,</span> <span class="n">service</span><span class="k">:</span> <span class="kt">Service</span><span class="o">[</span><span class="kt">Request</span><span class="p">,</span> <span class="kt">Response</span><span class="o">])</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Response</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="nc">MDCInitializer</span><span class="o">.</span><span class="n">let</span> <span class="o">{</span>
+      <span class="n">service</span><span class="o">(</span><span class="n">request</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>The <cite>Service[Request, Response]</cite> executed by the Filter can then get and set MDC values which can be
-used by the chosen logging implementation&#8217;s MDC configuration.  For example, see the
+used by the chosen logging implementation’s MDC configuration.  For example, see the
 <a class="reference external" href="https://logback.qos.ch/manual/mdc.html">Logback MDC documentation</a> for more information the
 MDC functionality and configuration in Logback.</p>
 </div>
@@ -120,14 +106,14 @@ MDC functionality and configuration in Logback.</p>
 or the thrift <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/LoggingMDCFilter.scala">LoggingMDCFilter</a>
 which can then be included in your server Filter chain.</p>
 <div class="admonition important">
-<p class="first admonition-title">Important</p>
-<p class="last">Make sure the <cite>LoggingMDCFilter</cite> is placed <strong>before</strong> any other Filters or code which will add
+<p class="admonition-title">Important</p>
+<p>Make sure the <cite>LoggingMDCFilter</cite> is placed <strong>before</strong> any other Filters or code which will add
 MDC entries or which will expect MDC entries to be present.</p>
 </div>
 </div>
 <div class="section" id="example">
 <h1>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h1>
-<p>Here&#8217;s an example Logback <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/examples/hello-world/src/main/resources/logback.xml#L25">configuration</a>
+<p>Here’s an example Logback <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/examples/hello-world/src/main/resources/logback.xml#L25">configuration</a>
 which references the contextual key <cite>traceId</cite> which will be logged with every statement sent to a Logback
 <a class="reference external" href="https://logback.qos.ch/manual/appenders.html">Appender</a>. It is the responsibility of the
 application to populate the MDC with this contextual information. In this case, the <cite>traceId</cite> is
@@ -135,22 +121,22 @@ added by including the http <a class="reference external" href="https://github.c
 (there is also a thrift <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/TraceIdMDCFilter.scala">TraceIdMDCLoggingFilter</a>).</p>
 <p>In a server definition, the <cite>LoggingMDCFilter</cite> must be listed before the <cite>TraceIdMDCLoggingFilter</cite>,
 e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finatra.http.HttpServer
-import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter, TraceIdMDCFilter}
-import com.twitter.finatra.http.routing.HttpRouter
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.http.</span><span class="o">{</span><span class="nc">Request</span><span class="o">,</span> <span class="nc">Response</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.HttpServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.filters.</span><span class="o">{</span><span class="nc">CommonFilters</span><span class="o">,</span> <span class="nc">LoggingMDCFilter</span><span class="o">,</span> <span class="nc">TraceIdMDCFilter</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpRouter</span>
 
-object HelloWorldServerMain extends HelloWorldServer
+<span class="k">object</span> <span class="nc">HelloWorldServerMain</span> <span class="k">extends</span> <span class="nc">HelloWorldServer</span>
 
-class HelloWorldServer extends HttpServer {
+<span class="k">class</span> <span class="nc">HelloWorldServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
 
-  override def configureHttp(router: HttpRouter) {
-    router
-      .filter[LoggingMDCFilter[Request, Response]]
-      .filter[TraceIdMDCFilter[Request, Response]]
-      .add[HelloWorldController]
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">router</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">LoggingMDCFilter</span><span class="o">[</span><span class="kt">Request</span><span class="p">,</span> <span class="kt">Response</span><span class="o">]]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">TraceIdMDCFilter</span><span class="o">[</span><span class="kt">Request</span><span class="p">,</span> <span class="kt">Response</span><span class="o">]]</span>
+      <span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">HelloWorldController</span><span class="o">]</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 </div>
@@ -160,10 +146,7 @@ class HelloWorldServer extends HttpServer {
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
-            </a></p><p>
+        <div class="sphinxsidebarwrapper"><p>
   <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
@@ -174,7 +157,7 @@ class HelloWorldServer extends HttpServer {
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Mapped Diagnostic Context (MDC) Support</a></li>
 <li><a class="reference internal" href="#usage">Usage</a></li>
@@ -184,7 +167,7 @@ class HelloWorldServer extends HttpServer {
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">User&#8217;s Guide</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
       <li>Previous: <a href="index.html" title="previous chapter">Introduction to Logging With Finatra</a></li>
       <li>Next: <a href="logback.html" title="next chapter">Logback</a></li>
   </ul></li>

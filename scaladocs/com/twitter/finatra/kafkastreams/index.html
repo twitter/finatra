@@ -181,6 +181,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra">finatra</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.jackson" visbl="pub" class="indented4 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="jackson"></a><a id="jackson:jackson"></a>
+      <span class="permalink">
+      <a href="../../../com/twitter/finatra/index.html#jackson" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../jackson/index.html"><span class="name">jackson</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra">finatra</a></dd></dl></div>
     </li><li name="com.twitter.finatra.json" visbl="pub" class="indented4 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="json"></a><a id="json:json"></a>
       <span class="permalink">
@@ -425,38 +441,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra">finatra</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.request" visbl="pub" class="indented4 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="request"></a><a id="request:request"></a>
-      <span class="permalink">
-      <a href="../../../com/twitter/finatra/index.html#request" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">package</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="../request/index.html"><span class="name">request</span></a>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra">finatra</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.response" visbl="pub" class="indented4 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="response"></a><a id="response:response"></a>
-      <span class="permalink">
-      <a href="../../../com/twitter/finatra/index.html#response" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">package</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="../response/index.html"><span class="name">response</span></a>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra">finatra</a></dd></dl></div>
     </li><li name="com.twitter.finatra.streams" visbl="pub" class="indented4 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="streams"></a><a id="streams:streams"></a>
       <span class="permalink">
@@ -575,7 +559,7 @@
         <a title="A com.twitter.server.TwitterServer that supports configuring a KafkaStreams topology." href="KafkaStreamsTwitterServer.html"><span class="name">KafkaStreamsTwitterServer</span></a><span class="result"> extends <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> with <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils">KafkaFlagUtils</span> with <a href="utils/ScalaStreamsImplicits.html" class="extype" name="com.twitter.finatra.kafkastreams.utils.ScalaStreamsImplicits">ScalaStreamsImplicits</a></span>
       </span>
       
-      <p class="shortcomment cmt">A <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/TwitterServer.html" class="extype" name="com.twitter.server.TwitterServer">com.twitter.server.TwitterServer</a> that supports configuring a KafkaStreams topology.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/TwitterServer.html" class="extype" name="com.twitter.server.TwitterServer">com.twitter.server.TwitterServer</a> that supports configuring a KafkaStreams topology.</p><p>To use, override the <a href="KafkaStreamsTwitterServer.html#configureKafkaStreams(builder:org.apache.kafka.streams.StreamsBuilder):Unit" class="extmbr" name="com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer#configureKafkaStreams">configureKafkaStreams</a> method to setup your topology.</p><pre><span class="kw">import</span> com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
+      <p class="shortcomment cmt">A <span class="extype" name="com.twitter.server.TwitterServer">com.twitter.server.TwitterServer</span> that supports configuring a KafkaStreams topology.</p><div class="fullcomment"><div class="comment cmt"><p>A <span class="extype" name="com.twitter.server.TwitterServer">com.twitter.server.TwitterServer</span> that supports configuring a KafkaStreams topology.</p><p>To use, override the <a href="KafkaStreamsTwitterServer.html#configureKafkaStreams(builder:org.apache.kafka.streams.StreamsBuilder):Unit" class="extmbr" name="com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer#configureKafkaStreams">configureKafkaStreams</a> method to setup your topology.</p><pre><span class="kw">import</span> com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
 
 <span class="kw">object</span> MyKafkaStreamsTwitterServerMain <span class="kw">extends</span> MyKafkaStreamsTwitterServer
 

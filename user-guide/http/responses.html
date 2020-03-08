@@ -1,33 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>HTTP Responses &#8212; Finatra 20.1.0 documentation</title>
-    
+    <meta charset="utf-8" />
+    <title>HTTP Responses &#8212; Finatra 20.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '20.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 20.1.0 documentation" href="../../index.html" />
-    <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="HTTP Streaming" href="streaming.html" />
     <link rel="prev" title="HTTP Requests" href="requests.html" />
    
@@ -44,8 +31,7 @@
 
   </script>
 
-  </head>
-  <body role="document">
+  </head><body>
   
   
 
@@ -62,7 +48,7 @@
           <a href="requests.html" title="HTTP Requests"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -76,35 +62,35 @@
 <div class="section" id="json-responses">
 <h2>JSON responses<a class="headerlink" href="#json-responses" title="Permalink to this headline">¶</a></h2>
 <p>The simplest way to return a JSON response is to return a case class in your route callback. The default framework behavior is to render the case class as a JSON response E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class ExampleCaseClass(
-  id: String,
-  description: String,
-  longValue: Long,
-  boolValue: Boolean)
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span> <span class="k">class</span> <span class="nc">ExampleCaseClass</span><span class="o">(</span>
+  <span class="n">id</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
+  <span class="n">description</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
+  <span class="n">longValue</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span>
+  <span class="n">boolValue</span><span class="k">:</span> <span class="kt">Boolean</span><span class="o">)</span>
 
-get(&quot;/foo&quot;) { request: Request =&gt;
-  ExampleCaseClass(
-    id = &quot;123&quot;,
-    description = &quot;This is a JSON response body&quot;,
-    longValue = 1L,
-    boolValue = true)
-}
+<span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="nc">ExampleCaseClass</span><span class="o">(</span>
+    <span class="n">id</span> <span class="k">=</span> <span class="s">&quot;123&quot;</span><span class="o">,</span>
+    <span class="n">description</span> <span class="k">=</span> <span class="s">&quot;This is a JSON response body&quot;</span><span class="o">,</span>
+    <span class="n">longValue</span> <span class="k">=</span> <span class="mi">1L</span><span class="o">,</span>
+    <span class="n">boolValue</span> <span class="k">=</span> <span class="kc">true</span><span class="o">)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
-<p>A request to <code class="docutils literal"><span class="pre">GET</span> <span class="pre">/foo</span></code> will produce a response:</p>
-<div class="highlight-text"><div class="highlight"><pre><span></span>[Status]  Status(200)
+<p>A request to <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/foo</span></code> will produce a response:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[Status]  Status(200)
 [Header]  Content-Type -&gt; application/json; charset=utf-8
 [Header]  Server -&gt; Finatra
 [Header]  Date -&gt; Wed, 17 Aug 2015 21:54:25 GMT
 [Header]  Content-Length -&gt; 90
 </pre></div>
 </div>
-<div class="code json highlight-text"><div class="highlight"><pre><span></span>{
-  &quot;id&quot; : &quot;123&quot;,
-  &quot;description&quot; : &quot;This is a JSON response body&quot;,
-  &quot;long_value&quot; : 1,
-  &quot;bool_value&quot; : true
-}
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;id&quot;</span> <span class="p">:</span> <span class="s2">&quot;123&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;description&quot;</span> <span class="p">:</span> <span class="s2">&quot;This is a JSON response body&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;long_value&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="nt">&quot;bool_value&quot;</span> <span class="p">:</span> <span class="kc">true</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p><strong>Note:</strong> If you change the default <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyWriterImpl.scala">MessageBodyWriter</a> implementation (used by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala">MessageBodyManager</a>)
@@ -116,14 +102,14 @@ this will no longer be the default behavior, depending.</p>
 <p>For the basics of Futures in Finatra, see: <a class="reference external" href="../getting-started/futures.html">Futures</a> in the <a class="reference external" href="../index.html#getting-started">Getting Started</a> documentation.</p>
 <div class="section" id="conversion-rules">
 <h3>Conversion Rules<a class="headerlink" href="#conversion-rules" title="Permalink to this headline">¶</a></h3>
-<p>Finatra will attempt to convert your route callback&#8217;s return type into a <cite>c.t.util.Future[Response]</cite> using the following rules:</p>
+<p>Finatra will attempt to convert your route callback’s return type into a <cite>c.t.util.Future[Response]</cite> using the following rules:</p>
 <ul class="simple">
-<li>If you return a <cite>Future[Response]</cite> no conversion will be performed.</li>
-<li>If you return a <cite>Future[T]</cite> it will be mapped to wrap the <cite>T</cite> into an HTTP <cite>200 OK</cite> Response, with <cite>T</cite> as the body.</li>
-<li>If you return a <cite>scala.concurrent.Future[T]</cite> a Bijection will be attempted to convert the Scala Future into a <cite>Future[T]</cite> then the above case is performed.</li>
-<li><cite>Some[T]</cite> will be converted into a HTTP <cite>200 OK</cite>.</li>
-<li><cite>None</cite> will be converted into a HTTP <cite>404 NotFound</cite>.</li>
-<li>Non-Response classes will be converted into an HTTP <cite>200 OK</cite> with the class written as the response body.</li>
+<li><p>If you return a <cite>Future[Response]</cite> no conversion will be performed.</p></li>
+<li><p>If you return a <cite>Future[T]</cite> it will be mapped to wrap the <cite>T</cite> into an HTTP <cite>200 OK</cite> Response, with <cite>T</cite> as the body.</p></li>
+<li><p>If you return a <cite>scala.concurrent.Future[T]</cite> a Bijection will be attempted to convert the Scala Future into a <cite>Future[T]</cite> then the above case is performed.</p></li>
+<li><p><cite>Some[T]</cite> will be converted into a HTTP <cite>200 OK</cite>.</p></li>
+<li><p><cite>None</cite> will be converted into a HTTP <cite>404 NotFound</cite>.</p></li>
+<li><p>Non-Response classes will be converted into an HTTP <cite>200 OK</cite> with the class written as the response body.</p></li>
 </ul>
 </div>
 <div class="section" id="non-future-callback-return-types">
@@ -131,20 +117,20 @@ this will no longer be the default behavior, depending.</p>
 <p>Callbacks that do not return a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala">c.t.util.Future</a> will have their return values wrapped in a <a class="reference external" href="https://twitter.github.io/util/docs/index.html#com.twitter.util.ConstFuture">c.t.util.ConstFuture</a> (which does no asynchronous work) for the purpose of satisfying types only.</p>
 </div>
 <div class="section" id="don-t-block-no-seriously-do-not-block">
-<h3>Don&#8217;t Block (No, Seriously, Do Not Block)<a class="headerlink" href="#don-t-block-no-seriously-do-not-block" title="Permalink to this headline">¶</a></h3>
+<h3>Don’t Block (No, Seriously, Do Not Block)<a class="headerlink" href="#don-t-block-no-seriously-do-not-block" title="Permalink to this headline">¶</a></h3>
 <p>If you are not returning a Future from your callback and it does synchronous work or calls a blocking method, you must <a class="reference external" href="https://twitter.github.io/scala_school/finagle.html#DontBlock">avoid blocking the Finagle thread</a> by wrapping your blocking operation in a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala">FuturePool</a> e.g.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.utils.FuturePools
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.utils.FuturePools</span>
 
-class MyController extends Controller {
+<span class="k">class</span> <span class="nc">MyController</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
 
-  private val futurePool = FuturePools.unboundedPool(&quot;CallbackConverter&quot;)
+  <span class="k">private</span> <span class="k">val</span> <span class="n">futurePool</span> <span class="k">=</span> <span class="nc">FuturePools</span><span class="o">.</span><span class="n">unboundedPool</span><span class="o">(</span><span class="s">&quot;CallbackConverter&quot;</span><span class="o">)</span>
 
-  get(&quot;/&quot;) { request: Request =&gt;
-    futurePool {
-      blockingOperation()
-    }
-  }
-}
+  <span class="n">get</span><span class="o">(</span><span class="s">&quot;/&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+    <span class="n">futurePool</span> <span class="o">{</span>
+      <span class="n">blockingOperation</span><span class="o">()</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>More information on blocking in Finagle can be found <a class="reference external" href="https://finagle.github.io/blog/2016/09/01/block-party/">here</a>.</p>
@@ -154,77 +140,77 @@ class MyController extends Controller {
 <h2><a class="reference internal" href="#responsebuilder"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a><a class="headerlink" href="#responsebuilder" title="Permalink to this headline">¶</a></h2>
 <p>All HTTP Controllers have a protected <cite>response</cite> field of type <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala">c.t.finatra.http.response.ResponseBuilder</a> which can be used to build a <cite>c.t.finagle.http.Response</cite> in your Controller route callback functions.</p>
 <p>For example:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>get(&quot;/foo&quot;) { request: Request =&gt;
-  ...
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="o">...</span>
 
-  response.
-    ok.
-    header(&quot;a&quot;, &quot;b&quot;).
-    json(&quot;&quot;&quot;
-    {
-      &quot;name&quot;: &quot;Bob&quot;,
-      &quot;age&quot;: 19
-    }
-    &quot;&quot;&quot;)
-}
+  <span class="n">response</span><span class="o">.</span>
+    <span class="n">ok</span><span class="o">.</span>
+    <span class="n">header</span><span class="o">(</span><span class="s">&quot;a&quot;</span><span class="o">,</span> <span class="s">&quot;b&quot;</span><span class="o">).</span>
+    <span class="n">json</span><span class="o">(</span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">    {</span>
+<span class="s">      &quot;name&quot;: &quot;Bob&quot;,</span>
+<span class="s">      &quot;age&quot;: 19</span>
+<span class="s">    }</span>
+<span class="s">    &quot;&quot;&quot;</span><span class="o">)</span>
+<span class="o">}</span>
 
-get(&quot;/foo&quot;) { request: Request =&gt;
-  ...
+<span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="o">...</span>
 
-  response.
-    status(999).
-    body(bytes)
-}
+  <span class="n">response</span><span class="o">.</span>
+    <span class="n">status</span><span class="o">(</span><span class="mi">999</span><span class="o">).</span>
+    <span class="n">body</span><span class="o">(</span><span class="n">bytes</span><span class="o">)</span>
+<span class="o">}</span>
 
-get(&quot;/redirect&quot;) { request: Request =&gt;
-  ...
+<span class="n">get</span><span class="o">(</span><span class="s">&quot;/redirect&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="o">...</span>
 
-  response
-    .temporaryRedirect
-    .location(&quot;/foo/123&quot;)
-}
+  <span class="n">response</span>
+    <span class="o">.</span><span class="n">temporaryRedirect</span>
+    <span class="o">.</span><span class="n">location</span><span class="o">(</span><span class="s">&quot;/foo/123&quot;</span><span class="o">)</span>
+<span class="o">}</span>
 
-get(&quot;/foo/future&quot;) { request: Request =&gt;
-  ...
+<span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo/future&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="o">...</span>
 
-  val futureOpResult: Future[Bar] = ...
-  futureOpResult.map { result =&gt;
-    response
-      .ok
-      .body(result)
-  }
-}
+  <span class="k">val</span> <span class="n">futureOpResult</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Bar</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span>
+  <span class="n">futureOpResult</span><span class="o">.</span><span class="n">map</span> <span class="o">{</span> <span class="n">result</span> <span class="k">=&gt;</span>
+    <span class="n">response</span>
+      <span class="o">.</span><span class="n">ok</span>
+      <span class="o">.</span><span class="n">body</span><span class="o">(</span><span class="n">result</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 
-post(&quot;/users&quot;) { request: MyPostRequest =&gt;
-  ...
+<span class="n">post</span><span class="o">(</span><span class="s">&quot;/users&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">MyPostRequest</span> <span class="o">=&gt;</span>
+  <span class="o">...</span>
 
-  response
-    .created
-    .location(&quot;/users/123&quot;)
-}
+  <span class="n">response</span>
+    <span class="o">.</span><span class="n">created</span>
+    <span class="o">.</span><span class="n">location</span><span class="o">(</span><span class="s">&quot;/users/123&quot;</span><span class="o">)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>For more examples, see the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/response/ResponseBuilderTest.scala">ResponseBuilderTest</a>.</p>
 <div class="section" id="wait-how-do-i-create-a-response-from-a-future-t">
 <h3>Wait, how do I create a <cite>Response</cite> from a <cite>Future[T]</cite>?<a class="headerlink" href="#wait-how-do-i-create-a-response-from-a-future-t" title="Permalink to this headline">¶</a></h3>
-<p>As noted in the <a class="reference internal" href="#future-conversion">Future Conversion</a> section, Finatra will attempt to construct a proper return type of <cite>Future[Response]</cite> from your callback&#8217;s return type. Though, in many cases, you may find that you have a <cite>Future[T]</cite> and want to translate this into a <cite>c.t.finagle.http.Response</cite> yourself using the <a class="reference internal" href="#responsebuilder"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a>.</p>
+<p>As noted in the <a class="reference internal" href="#future-conversion">Future Conversion</a> section, Finatra will attempt to construct a proper return type of <cite>Future[Response]</cite> from your callback’s return type. Though, in many cases, you may find that you have a <cite>Future[T]</cite> and want to translate this into a <cite>c.t.finagle.http.Response</cite> yourself using the <a class="reference internal" href="#responsebuilder"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a>.</p>
 <p>Constructing a response is synchronous, thus the <a class="reference internal" href="#responsebuilder"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a> has no concept of Futures. However, the <a class="reference internal" href="#responsebuilder"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a>
 is meant to be somewhat generic so its API for constructing a response body accepts an <cite>Any</cite> type which may make it <em>seem like</em> it should work to simply put in a <cite>Future[T]</cite> into the body. However, this is incorrect.</p>
 <p>If you have a <cite>Future[T]</cite> and want to return a <cite>c.t.finagle.http.Response</cite> you should either:</p>
 <ul class="simple">
-<li>convert it to a <cite>Future[Response]</cite> or</li>
-<li>do nothing and let the Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala">CallbackConverter</a> convert the  <cite>Future[T]</cite> to an HTTP <cite>200 OK</cite> with <cite>T</cite> as the body (as mentioned in <a class="reference internal" href="#future-conversion">Future Conversion</a> section above).</li>
+<li><p>convert it to a <cite>Future[Response]</cite> or</p></li>
+<li><p>do nothing and let the Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala">CallbackConverter</a> convert the  <cite>Future[T]</cite> to an HTTP <cite>200 OK</cite> with <cite>T</cite> as the body (as mentioned in <a class="reference internal" href="#future-conversion">Future Conversion</a> section above).</p></li>
 </ul>
 <p>To convert a <cite>Future[T]</cite> to a <cite>Future[Response]</cite>, you would use <a class="reference external" href="https://twitter.github.io/effectivescala/#Twitter's%20standard%20libraries-Futures">Future#map</a>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>get(&quot;/foo&quot;) { request: Request =&gt;
-  val futureResult: Future[Foo] = ... // a call that returns a Future[Foo]
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="k">val</span> <span class="n">futureResult</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Foo</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span> <span class="c1">// a call that returns a Future[Foo]</span>
 
-  // map the Future[T] to create a Future[Response]
-  futureResult.map { result: Foo =&gt;
-    // construct your response here using the ResponseBuilder
-    response.ok.body(result)
-  }
-}
+  <span class="c1">// map the Future[T] to create a Future[Response]</span>
+  <span class="n">futureResult</span><span class="o">.</span><span class="n">map</span> <span class="o">{</span> <span class="n">result</span><span class="k">:</span> <span class="kt">Foo</span> <span class="o">=&gt;</span>
+    <span class="c1">// construct your response here using the ResponseBuilder</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="o">.</span><span class="n">body</span><span class="o">(</span><span class="n">result</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 </div>
@@ -232,28 +218,28 @@ is meant to be somewhat generic so its API for constructing a response body acce
 <div class="section" id="cookies">
 <h2>Cookies:<a class="headerlink" href="#cookies" title="Permalink to this headline">¶</a></h2>
 <p>Cookies, like Headers, are read from request and can set on the response via the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala">c.t.finatra.http.response.ResponseBuilder</a>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>get(&quot;/&quot;) { request =&gt;
-  val loggedIn = request.cookies.getValue(&quot;loggedIn&quot;).getOrElse(&quot;false&quot;)
-  response.ok.
-    plain(&quot;logged in?:&quot; + loggedIn)
-}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">get</span><span class="o">(</span><span class="s">&quot;/&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span> <span class="k">=&gt;</span>
+  <span class="k">val</span> <span class="n">loggedIn</span> <span class="k">=</span> <span class="n">request</span><span class="o">.</span><span class="n">cookies</span><span class="o">.</span><span class="n">getValue</span><span class="o">(</span><span class="s">&quot;loggedIn&quot;</span><span class="o">).</span><span class="n">getOrElse</span><span class="o">(</span><span class="s">&quot;false&quot;</span><span class="o">)</span>
+  <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="o">.</span>
+    <span class="n">plain</span><span class="o">(</span><span class="s">&quot;logged in?:&quot;</span> <span class="o">+</span> <span class="n">loggedIn</span><span class="o">)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>get(&quot;/&quot;) { request =&gt;
-  response.ok.
-    plain(&quot;hi&quot;).
-    cookie(&quot;loggedIn&quot;, &quot;true&quot;)
-}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">get</span><span class="o">(</span><span class="s">&quot;/&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span> <span class="k">=&gt;</span>
+  <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="o">.</span>
+    <span class="n">plain</span><span class="o">(</span><span class="s">&quot;hi&quot;</span><span class="o">).</span>
+    <span class="n">cookie</span><span class="o">(</span><span class="s">&quot;loggedIn&quot;</span><span class="o">,</span> <span class="s">&quot;true&quot;</span><span class="o">)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Advanced cookies are supported by creating and configuring <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Cookie.scala">c.t.finagle.http.Cookie</a> objects:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>get(&quot;/&quot;) { request =&gt;
-  val c = new Cookie(name = &quot;Biz&quot;, value = &quot;Baz&quot;)
-  c.setSecure(true)
-  response.ok.
-    plain(&quot;get:path&quot;).
-    cookie(c)
-}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">get</span><span class="o">(</span><span class="s">&quot;/&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span> <span class="k">=&gt;</span>
+  <span class="k">val</span> <span class="n">c</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Cookie</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">&quot;Biz&quot;</span><span class="o">,</span> <span class="n">value</span> <span class="k">=</span> <span class="s">&quot;Baz&quot;</span><span class="o">)</span>
+  <span class="n">c</span><span class="o">.</span><span class="n">setSecure</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+  <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="o">.</span>
+    <span class="n">plain</span><span class="o">(</span><span class="s">&quot;get:path&quot;</span><span class="o">).</span>
+    <span class="n">cookie</span><span class="o">(</span><span class="n">c</span><span class="o">)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 </div>
@@ -261,36 +247,36 @@ is meant to be somewhat generic so its API for constructing a response body acce
 <h2>Response Exceptions:<a class="headerlink" href="#response-exceptions" title="Permalink to this headline">¶</a></h2>
 <p>Responses can be embedded inside exceptions with <cite>.toException</cite>. You can throw the exception to terminate control flow, or wrap it inside a <cite>Future.exception</cite> to return a failed <cite>Future</cite>.
 However, instead of directly returning error responses in this manner, a better convention is to handle application-specific exceptions in an <a class="reference external" href="exceptions.html">ExceptionMapper</a>.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>get(&quot;/NotFound&quot;) { request: Request =&gt;
-  response.notFound(&quot;abc not found&quot;).toFutureException
-}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">get</span><span class="o">(</span><span class="s">&quot;/NotFound&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="n">response</span><span class="o">.</span><span class="n">notFound</span><span class="o">(</span><span class="s">&quot;abc not found&quot;</span><span class="o">).</span><span class="n">toFutureException</span>
+<span class="o">}</span>
 
-get(&quot;/ServerError&quot;) { request: Request =&gt;
-  response.internalServerError.toFutureException
-}
+<span class="n">get</span><span class="o">(</span><span class="s">&quot;/ServerError&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="n">response</span><span class="o">.</span><span class="n">internalServerError</span><span class="o">.</span><span class="n">toFutureException</span>
+<span class="o">}</span>
 
-get(&quot;/ServiceUnavailable&quot;) { request: Request =&gt;
-  // can throw a raw exception too
-  throw response.serviceUnavailable.toException
-}
+<span class="n">get</span><span class="o">(</span><span class="s">&quot;/ServiceUnavailable&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="c1">// can throw a raw exception too</span>
+  <span class="k">throw</span> <span class="n">response</span><span class="o">.</span><span class="n">serviceUnavailable</span><span class="o">.</span><span class="n">toException</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="setting-the-response-location-header">
 <h2>Setting the Response Location Header:<a class="headerlink" href="#setting-the-response-location-header" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="#responsebuilder"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a> has a &#8220;location&#8221; method.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>post(&quot;/users&quot;) { request: Request =&gt;
-  response
-    .created
-    .location(&quot;/users/123&quot;)
-}
+<p><a class="reference internal" href="#responsebuilder"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a> has a “location” method.</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">post</span><span class="o">(</span><span class="s">&quot;/users&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="n">response</span>
+    <span class="o">.</span><span class="n">created</span>
+    <span class="o">.</span><span class="n">location</span><span class="o">(</span><span class="s">&quot;/users/123&quot;</span><span class="o">)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>which can be used:</p>
 <ul class="simple">
-<li>if the URI has a valid scheme then the URI is placed in the Location header unchanged.</li>
-<li><cite>response.location(&#8220;/users/123&#8221;)</cite> will get turned into the correct full URI by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/HttpResponseFilter.scala">HttpResponseFilter</a> (e.g. <cite>https://host.com/users/123</cite>) according to rules defined in the <a class="reference external" href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier#Generic_syntax">URI specification</a></li>
-<li>The scheme is assumed to be <cite>http</cite> when rewritten unless otherwise specified in the <cite>&#8220;x-forwarded-proto&#8221;</cite> header in the request.</li>
+<li><p>if the URI has a valid scheme then the URI is placed in the Location header unchanged.</p></li>
+<li><p><cite>response.location(“/users/123”)</cite> will get turned into the correct full URI by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/HttpResponseFilter.scala">HttpResponseFilter</a> (e.g. <cite>https://host.com/users/123</cite>) according to rules defined in the <a class="reference external" href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier#Generic_syntax">URI specification</a></p></li>
+<li><p>The scheme is assumed to be <cite>http</cite> when rewritten unless otherwise specified in the <cite>“x-forwarded-proto”</cite> header in the request.</p></li>
 </ul>
 </div>
 </div>
@@ -300,10 +286,7 @@ get(&quot;/ServiceUnavailable&quot;) { request: Request =&gt;
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
-            </a></p><p>
+        <div class="sphinxsidebarwrapper"><p>
   <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
@@ -314,14 +297,14 @@ get(&quot;/ServiceUnavailable&quot;) { request: Request =&gt;
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">HTTP Responses</a><ul>
 <li><a class="reference internal" href="#json-responses">JSON responses</a></li>
 <li><a class="reference internal" href="#future-conversion">Future Conversion</a><ul>
 <li><a class="reference internal" href="#conversion-rules">Conversion Rules</a></li>
 <li><a class="reference internal" href="#non-future-callback-return-types">Non-Future Callback Return Types</a></li>
-<li><a class="reference internal" href="#don-t-block-no-seriously-do-not-block">Don&#8217;t Block (No, Seriously, Do Not Block)</a></li>
+<li><a class="reference internal" href="#don-t-block-no-seriously-do-not-block">Don’t Block (No, Seriously, Do Not Block)</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#responsebuilder"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a><ul>
@@ -337,7 +320,7 @@ get(&quot;/ServiceUnavailable&quot;) { request: Request =&gt;
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">User&#8217;s Guide</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
       <li>Previous: <a href="requests.html" title="previous chapter">HTTP Requests</a></li>
       <li>Next: <a href="streaming.html" title="next chapter">HTTP Streaming</a></li>
   </ul></li>

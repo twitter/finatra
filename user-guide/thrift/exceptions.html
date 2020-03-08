@@ -1,33 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Thrift Exception Mapping &#8212; Finatra 20.1.0 documentation</title>
-    
+    <meta charset="utf-8" />
+    <title>Thrift Exception Mapping &#8212; Finatra 20.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '20.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 20.1.0 documentation" href="../../index.html" />
-    <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Thrift Server Warmup" href="warmup.html" />
     <link rel="prev" title="Filtering Thrift Requests" href="filters.html" />
    
@@ -44,8 +31,7 @@
 
   </script>
 
-  </head>
-  <body role="document">
+  </head><body>
   
   
 
@@ -62,7 +48,7 @@
           <a href="filters.html" title="Filtering Thrift Requests"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -90,7 +76,7 @@ another action). You are encouraged to do what makes sense for your use case or 
 <cite>ThriftServer</cite> which provides a root-level <em>no-op</em> mapping for exceptions. You can register
 additional mappers or override the default altogether.</p>
 <p>Given the following Thrift IDL:</p>
-<div class="highlight-text"><div class="highlight"><pre><span></span>namespace java com.twitter.example.thriftjava
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>namespace java com.twitter.example.thriftjava
 #@namespace scala com.twitter.example.thriftscala
 namespace rb ExampleService
 
@@ -153,44 +139,44 @@ service ExampleService {
 </div>
 <p>If you wanted to map a <cite>java.lang.ClassCastException</cite> to an exception specified in the Thrift
 IDL, you could create the following <cite>ExceptionMapper</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.example.thriftscala.{ClientError, ClientErrorCause}
-import com.twitter.finatra.thrift.exceptions.ExceptionMapper
-import com.twitter.util.Future
-import java.lang.ClassCastException
-import javax.inject.Singleton
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.example.thriftscala.</span><span class="o">{</span><span class="nc">ClientError</span><span class="o">,</span> <span class="nc">ClientErrorCause</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.exceptions.ExceptionMapper</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.Future</span>
+<span class="k">import</span> <span class="nn">java.lang.ClassCastException</span>
+<span class="k">import</span> <span class="nn">javax.inject.Singleton</span>
 
-@Singleton
-class ClassCastExceptionMapper
-  extends ExceptionMapper[ClassCastException, ClientError] {
+<span class="nd">@Singleton</span>
+<span class="k">class</span> <span class="nc">ClassCastExceptionMapper</span>
+  <span class="k">extends</span> <span class="nc">ExceptionMapper</span><span class="o">[</span><span class="kt">ClassCastException</span><span class="p">,</span> <span class="kt">ClientError</span><span class="o">]</span> <span class="o">{</span>
 
-  def handleException(throwable: ClassCastException): Future[ClientError] = {
-    Future.exception(ClientError(ClientErrorCause.BadRequest, throwable.getMessage))
-  }
-}
+  <span class="k">def</span> <span class="n">handleException</span><span class="o">(</span><span class="n">throwable</span><span class="k">:</span> <span class="kt">ClassCastException</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">ClientError</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="nc">Future</span><span class="o">.</span><span class="n">exception</span><span class="o">(</span><span class="nc">ClientError</span><span class="o">(</span><span class="nc">ClientErrorCause</span><span class="o">.</span><span class="nc">BadRequest</span><span class="o">,</span> <span class="n">throwable</span><span class="o">.</span><span class="n">getMessage</span><span class="o">))</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Then register this exception mapper in your server.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.ThriftServer
-import com.twitter.finatra.thrift.filters.ExceptionMappingFilter
-import com.twitter.finatra.thrift.routing.ThriftRouter
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.ThriftServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.filters.ExceptionMappingFilter</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.routing.ThriftRouter</span>
 
-class MyThriftServer extends ThriftServer {
+<span class="k">class</span> <span class="nc">MyThriftServer</span> <span class="k">extends</span> <span class="nc">ThriftServer</span> <span class="o">{</span>
 
-  override def configureThrift(router: ThriftRouter): Unit = {
-    router
-      .filter[ExceptionMappingFilter]
-      .exceptionMapper[ClassCastExceptionMapper]
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureThrift</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">ThriftRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">router</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">ExceptionMappingFilter</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">exceptionMapper</span><span class="o">[</span><span class="kt">ClassCastExceptionMapper</span><span class="o">]</span>
 
-    ???
-  }
+    <span class="o">???</span>
+  <span class="o">}</span>
 </pre></div>
 </div>
 <p>You can see here we register the exception mapper <em>by type</em> allowing the framework to instantiate
 an instance.</p>
 <p>More examples of mapping exceptions to Thrift responses are located in the test <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/tests/doeverything/exceptions/mappers.scala">mappers</a>.</p>
 <div class="admonition tip">
-<p class="first admonition-title">Tip</p>
-<p class="last">Servers written in Java should extend the <cite>AbstractThriftServer</cite>, which assumes you are using
+<p class="admonition-title">Tip</p>
+<p>Servers written in Java should extend the <cite>AbstractThriftServer</cite>, which assumes you are using
 generated Java code and thus requires you to also use the <cite>JavaThriftRouter</cite>. See the section
 on defining <a class="reference external" href="server.html">servers</a> for more information.</p>
 </div>
@@ -198,12 +184,12 @@ on defining <a class="reference external" href="server.html">servers</a> for mor
 <div class="section" id="exceptionmappingfilter">
 <h2>ExceptionMappingFilter<a class="headerlink" href="#exceptionmappingfilter" title="Permalink to this headline">¶</a></h2>
 <p>Using exception mappers requires you to include the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/ExceptionMappingFilter.scala">c.t.finatra.thrift.filters.ExceptionMappingFilter</a>
-in your server&#8217;s Filter chain.</p>
+in your server’s Filter chain.</p>
 <p>For information on how to add a <cite>Filter</cite> to your <cite>ThriftServer</cite> see the <a class="reference external" href="filters.html">Filters</a>
 section.</p>
 <div class="admonition important">
-<p class="first admonition-title">Important</p>
-<p class="last">The <cite>ExceptionMappingFilter</cite> works by attempting to match an incoming Exception type to a registered mapper for that type
+<p class="admonition-title">Important</p>
+<p>The <cite>ExceptionMappingFilter</cite> works by attempting to match an incoming Exception type to a registered mapper for that type
 via the <cite>ExceptionManager</cite>. This means that you may need to pay attention to any generated exceptions or errors if
 you are generating code in multiple languages in your project. A generated Java Thrift Exception will be considered
 <em>different</em> from the same Exception generated in Scala.</p>
@@ -213,14 +199,14 @@ you are generating code in multiple languages in your project. A generated Java 
 <h2>Default Exception Mapper<a class="headerlink" href="#default-exception-mapper" title="Permalink to this headline">¶</a></h2>
 <p>The framework adds only the <cite>ThrowableExceptionMapper</cite> to the <cite>ExceptionManager</cite> by default which
 simply throws back any uncaught <cite>Throwable</cite>.</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="14%" />
-<col width="86%" />
+<col style="width: 14%" />
+<col style="width: 86%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><cite>Throwable</cite></td>
-<td><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/internal/exceptions/ThrowableExceptionMapper.scala">ThrowableExceptionMapper</a></td>
+<tbody>
+<tr class="row-odd"><td><p><cite>Throwable</cite></p></td>
+<td><p><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/internal/exceptions/ThrowableExceptionMapper.scala">ThrowableExceptionMapper</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -230,7 +216,7 @@ unhandled exception types since the <cite>ExceptionManager</cite> walks the exce
 at the given exception type, moving up the inheritance chain until it finds a mapper configured for
 the type.</p>
 <p>In this manner, an <cite>ExceptionMapper[Throwable]</cite> will be the last mapper invoked and acts as the
-&#8220;default&#8221;. Therefore to change the framework &#8220;default&#8221; mapper, simply add a new mapper over the
+“default”. Therefore to change the framework “default” mapper, simply add a new mapper over the
 <cite>Throwable</cite> type (i.e., <cite>ExceptionMapper[Throwable]</cite>) to the <cite>ExceptionManager</cite>.</p>
 </div>
 <div class="section" id="override-default-behavior">
@@ -248,55 +234,55 @@ previous mapper will be overwritten.</p>
 <h2>Register an Exception Mapper<a class="headerlink" href="#register-an-exception-mapper" title="Permalink to this headline">¶</a></h2>
 <p>There are several ways to add a mapper.</p>
 <p>Either directly through the <cite>ThriftRouter</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>override def configureThrift(router: ThriftRouter): Unit = {
-  router
-    .filter[ExceptionMappingFilter]
-    .exceptionMapper[MyThrowableExceptionMapper]
-    .exceptionMapper[OtherExceptionMapper]
-}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">override</span> <span class="k">def</span> <span class="n">configureThrift</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">ThriftRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="n">router</span>
+    <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">ExceptionMappingFilter</span><span class="o">]</span>
+    <span class="o">.</span><span class="n">exceptionMapper</span><span class="o">[</span><span class="kt">MyThrowableExceptionMapper</span><span class="o">]</span>
+    <span class="o">.</span><span class="n">exceptionMapper</span><span class="o">[</span><span class="kt">OtherExceptionMapper</span><span class="o">]</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>With the <cite>JavaThriftRouter</cite>:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>@Override
-public void configureThrift(router: JavaThriftRouter) {
-   router
-     .filter(ExceptionMappingFilter.class)
-     .exceptionMapper(MyThrowableExceptionMapper.class)
-     .exceptionMapper(OtherExceptionMapper.class);
- }
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">configureThrift</span><span class="p">(</span><span class="n">router</span><span class="p">:</span> <span class="n">JavaThriftRouter</span><span class="p">)</span> <span class="p">{</span>
+   <span class="n">router</span>
+     <span class="p">.</span><span class="na">filter</span><span class="p">(</span><span class="n">ExceptionMappingFilter</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+     <span class="p">.</span><span class="na">exceptionMapper</span><span class="p">(</span><span class="n">MyThrowableExceptionMapper</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+     <span class="p">.</span><span class="na">exceptionMapper</span><span class="p">(</span><span class="n">OtherExceptionMapper</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+ <span class="p">}</span>
 </pre></div>
 </div>
 <p>Or in a module which is then added to the Server, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object MyExceptionMapperModule extends TwitterModule {
-  override def singletonStartup(injector: Injector): Unit = {
-    val manager = injector.instance[ExceptionManager]
-    manager.add[MyThrowableExceptionMapper]
-    manager.add[OtherExceptionMapper]
-  }
-}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">object</span> <span class="nc">MyExceptionMapperModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">singletonStartup</span><span class="o">(</span><span class="n">injector</span><span class="k">:</span> <span class="kt">Injector</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="n">manager</span> <span class="k">=</span> <span class="n">injector</span><span class="o">.</span><span class="n">instance</span><span class="o">[</span><span class="kt">ExceptionManager</span><span class="o">]</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">MyThrowableExceptionMapper</span><span class="o">]</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">OtherExceptionMapper</span><span class="o">]</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 
-...
+<span class="o">...</span>
 
-override val modules = Seq(
-  MyExceptionMapperModule)
+<span class="k">override</span> <span class="k">val</span> <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+  <span class="nc">MyExceptionMapperModule</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>in Java:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>public class MyExceptionMapperModule extends TwitterModule {
-  @Override
-  public void singletonStartup(Injector injector) {
-    ExceptionManager manager = injector.instance(ExceptionManager.class);
-    manager.add(MyThrowableExceptionMapper.class);
-    manager.add(OtherExceptionMapper.class);
-  }
-}
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyExceptionMapperModule</span> <span class="kd">extends</span> <span class="n">TwitterModule</span> <span class="p">{</span>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">singletonStartup</span><span class="p">(</span><span class="n">Injector</span> <span class="n">injector</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">ExceptionManager</span> <span class="n">manager</span> <span class="o">=</span> <span class="n">injector</span><span class="p">.</span><span class="na">instance</span><span class="p">(</span><span class="n">ExceptionManager</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+    <span class="n">manager</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">MyThrowableExceptionMapper</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+    <span class="n">manager</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">OtherExceptionMapper</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 
-...
+<span class="p">...</span>
 
-@Override
-public Collection&lt;Module&gt; javaModules() {
-  return ImmutableList.&lt;Module&gt;of(new MyExceptionMapperModule());
-}
+<span class="nd">@Override</span>
+<span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Module</span><span class="o">&gt;</span> <span class="nf">javaModules</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">ImmutableList</span><span class="p">.</span><span class="o">&lt;</span><span class="n">Module</span><span class="o">&gt;</span><span class="n">of</span><span class="p">(</span><span class="k">new</span> <span class="n">MyExceptionMapperModule</span><span class="p">());</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -307,10 +293,7 @@ public Collection&lt;Module&gt; javaModules() {
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
-            </a></p><p>
+        <div class="sphinxsidebarwrapper"><p>
   <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
@@ -321,7 +304,7 @@ public Collection&lt;Module&gt; javaModules() {
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Thrift Exception Mapping</a><ul>
 <li><a class="reference internal" href="#why">Why?</a></li>
@@ -336,7 +319,7 @@ public Collection&lt;Module&gt; javaModules() {
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">User&#8217;s Guide</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
       <li>Previous: <a href="filters.html" title="previous chapter">Filtering Thrift Requests</a></li>
       <li>Next: <a href="warmup.html" title="next chapter">Thrift Server Warmup</a></li>
   </ul></li>

@@ -1,33 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>TwitterServer Basics &#8212; Finatra 20.1.0 documentation</title>
-    
+    <meta charset="utf-8" />
+    <title>TwitterServer Basics &#8212; Finatra 20.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '20.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 20.1.0 documentation" href="../../index.html" />
-    <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Application and Server Lifecycle" href="lifecycle.html" />
     <link rel="prev" title="Understanding the Codebase" href="framework.html" />
    
@@ -44,8 +31,7 @@
 
   </script>
 
-  </head>
-  <body role="document">
+  </head><body>
   
   
 
@@ -62,7 +48,7 @@
           <a href="framework.html" title="Understanding the Codebase"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -90,15 +76,15 @@ this will be bound to a <em>separate</em> port configurable via either the <cite
 and <a class="reference external" href="https://www.openshift.com">OpenShift</a> only allow a single port to be used when deploying an
 application.</p>
 <p>In these cases, you can programmatically disable the TwitterServer <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#http-admin-interface">HTTP Admin Interface</a>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class ExampleServer extends HttpServer {
-  override val disableAdminHttpServer: Boolean = true
-  ...
-}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">val</span> <span class="n">disableAdminHttpServer</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span>
+  <span class="o">...</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Since the <cite>-admin.port</cite> flag is currently still required to have a value by <a class="reference external" href="https://github.com/twitter/twitter-server">TwitterServer</a>
+<p class="admonition-title">Note</p>
+<p>Since the <cite>-admin.port</cite> flag is currently still required to have a value by <a class="reference external" href="https://github.com/twitter/twitter-server">TwitterServer</a>
 you should set the <cite>-admin.port</cite> flag and your external interface port e.g., <cite>-http.port</cite> flag to
 the <strong>same value</strong> when disabling the TwitterServer <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/AdminHttpServer.scala">AdminHttpServer</a>.</p>
 </div>
@@ -125,10 +111,7 @@ section.</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
-            </a></p><p>
+        <div class="sphinxsidebarwrapper"><p>
   <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
@@ -139,7 +122,7 @@ section.</p>
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">TwitterServer Basics</a><ul>
 <li><a class="reference internal" href="#http-admin-interface">HTTP Admin Interface</a></li>
@@ -151,7 +134,7 @@ section.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">User&#8217;s Guide</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
       <li>Previous: <a href="framework.html" title="previous chapter">Understanding the Codebase</a></li>
       <li>Next: <a href="lifecycle.html" title="next chapter">Application and Server Lifecycle</a></li>
   </ul></li>

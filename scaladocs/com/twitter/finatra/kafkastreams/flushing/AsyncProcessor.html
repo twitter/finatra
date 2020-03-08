@@ -159,8 +159,8 @@
                         <a href="" title="">AsyncProcessor</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="AsyncTransformer.html" title="The AsyncTransformer trait allows async futures to be used to emit records downstreams"></a>
-                        <a href="AsyncTransformer.html" title="The AsyncTransformer trait allows async futures to be used to emit records downstreams">AsyncTransformer</a>
+                        <a class="class" href="AsyncTransformer.html" title="The AsyncTransformer trait allows async futures to be used to emit records downstreams."></a>
+                        <a href="AsyncTransformer.html" title="The AsyncTransformer trait allows async futures to be used to emit records downstreams.">AsyncTransformer</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="trait" href="Flushing.html" title=""></a>
@@ -205,7 +205,7 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -255,7 +255,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="com.twitter.finatra.kafkastreams.flushing.AsyncProcessor#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="com.twitter.finatra.kafkastreams.flushing.AsyncProcessor#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(statsReceiver:com.twitter.finagle.stats.StatsReceiver,maxOutstandingFuturesPerTask:Int,commitInterval:com.twitter.util.Duration,flushTimeout:com.twitter.util.Duration):com.twitter.finatra.kafkastreams.flushing.AsyncProcessor[K,V]"></a><a id="&lt;init&gt;:AsyncProcessor[K,V]"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/kafkastreams/flushing/AsyncProcessor.html#&lt;init&gt;(statsReceiver:com.twitter.finagle.stats.StatsReceiver,maxOutstandingFuturesPerTask:Int,commitInterval:com.twitter.util.Duration,flushTimeout:com.twitter.util.Duration):com.twitter.finatra.kafkastreams.flushing.AsyncProcessor[K,V]" title="Permalink">
@@ -267,10 +267,11 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">AsyncProcessor</span><span class="params">(<span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>, <span name="maxOutstandingFuturesPerTask">maxOutstandingFuturesPerTask: <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>, <span name="commitInterval">commitInterval: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>, <span name="flushTimeout">flushTimeout: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>)</span>
+        <span class="name">AsyncProcessor</span><span class="params">(<span name="statsReceiver">statsReceiver: <span class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</span></span>, <span name="maxOutstandingFuturesPerTask">maxOutstandingFuturesPerTask: <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>, <span name="commitInterval">commitInterval: <span class="extype" name="com.twitter.util.Duration">Duration</span></span>, <span name="flushTimeout">flushTimeout: <span class="extype" name="com.twitter.util.Duration">Duration</span></span>)</span>
       </span>
       
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">statsReceiver</dt><dd class="cmt"><p>Receiver for AsyncProcessor metrics. Scope the receiver to differentiate
+                     metrics between different AsyncProcessors in the topology.</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -309,7 +310,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">processAsync</span><span class="params">(<span name="key">key: <span class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncProcessor.K">K</span></span>, <span name="value">value: <span class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncProcessor.V">V</span></span>, <span name="timestamp">timestamp: <a href="../utils/index.html#MessageTimestamp=Long" class="extmbr" name="com.twitter.finatra.kafkastreams.utils.MessageTimestamp">MessageTimestamp</a></span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
+        <span class="name">processAsync</span><span class="params">(<span name="key">key: <span class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncProcessor.K">K</span></span>, <span name="value">value: <span class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncProcessor.V">V</span></span>, <span name="timestamp">timestamp: <a href="../utils/index.html#MessageTimestamp=Long" class="extmbr" name="com.twitter.finatra.kafkastreams.utils.MessageTimestamp">MessageTimestamp</a></span>)</span><span class="result">: <span class="extype" name="com.twitter.util.Future">Future</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
@@ -368,9 +369,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.twitter.finatra.kafkastreams.flushing.AsyncFlushing#addFuture" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="addFuture(key:K1,value:V1,future:com.twitter.util.Future[Iterable[(K2,V2,com.twitter.finatra.kafkastreams.utils.MessageTimestamp)]]):Unit"></a><a id="addFuture(K,V,Future[Iterable[(Unit,Unit,MessageTimestamp)]]):Unit"></a>
+      <a id="addFuture(key:K1,value:V1,future:com.twitter.util.Future[Iterable[(K2,V2,org.apache.kafka.streams.processor.internals.ProcessorRecordContext)]]):Unit"></a><a id="addFuture(K,V,Future[Iterable[(Unit,Unit,ProcessorRecordContext)]]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/flushing/AsyncProcessor.html#addFuture(key:K1,value:V1,future:com.twitter.util.Future[Iterable[(K2,V2,com.twitter.finatra.kafkastreams.utils.MessageTimestamp)]]):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/flushing/AsyncProcessor.html#addFuture(key:K1,value:V1,future:com.twitter.util.Future[Iterable[(K2,V2,org.apache.kafka.streams.processor.internals.ProcessorRecordContext)]]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -379,7 +380,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">addFuture</span><span class="params">(<span name="key">key: <span class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncProcessor.K">K</span></span>, <span name="value">value: <span class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncProcessor.V">V</span></span>, <span name="future">future: <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="scala.Iterable">Iterable</span>[(<a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>, <a href="../utils/index.html#MessageTimestamp=Long" class="extmbr" name="com.twitter.finatra.kafkastreams.utils.MessageTimestamp">MessageTimestamp</a>)]]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">addFuture</span><span class="params">(<span name="key">key: <span class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncProcessor.K">K</span></span>, <span name="value">value: <span class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncProcessor.V">V</span></span>, <span name="future">future: <span class="extype" name="com.twitter.util.Future">Future</span>[<span class="extype" name="scala.Iterable">Iterable</span>[(<a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>, <span class="extype" name="org.apache.kafka.streams.processor.internals.ProcessorRecordContext">ProcessorRecordContext</span>)]]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="AsyncFlushing.html" class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncFlushing">AsyncFlushing</a></dd></dl></div>
@@ -451,7 +452,7 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">commitInterval</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>
+        <span class="name">commitInterval</span><span class="result">: <span class="extype" name="com.twitter.util.Duration">Duration</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncProcessor">AsyncProcessor</a> → <a href="Flushing.html" class="extype" name="com.twitter.finatra.kafkastreams.flushing.Flushing">Flushing</a></dd></dl></div>
@@ -569,7 +570,7 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">flushTimeout</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>
+        <span class="name">flushTimeout</span><span class="result">: <span class="extype" name="com.twitter.util.Duration">Duration</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncProcessor">AsyncProcessor</a> → <a href="AsyncFlushing.html" class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncFlushing">AsyncFlushing</a></dd></dl></div>
@@ -796,9 +797,9 @@ This method is typically called prior to a Kafka commit
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="AsyncFlushing.html" class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncFlushing">AsyncFlushing</a></dd></dl></div>
     </li><li name="com.twitter.finatra.kafkastreams.flushing.AsyncFlushing#onFutureSuccess" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="onFutureSuccess(key:K1,value:V1,result:Iterable[(K2,V2,com.twitter.finatra.kafkastreams.utils.MessageTimestamp)]):Unit"></a><a id="onFutureSuccess(K,V,Iterable[(Unit,Unit,MessageTimestamp)]):Unit"></a>
+      <a id="onFutureSuccess(key:K1,value:V1,result:Iterable[(K2,V2,org.apache.kafka.streams.processor.internals.ProcessorRecordContext)]):Unit"></a><a id="onFutureSuccess(K,V,Iterable[(Unit,Unit,ProcessorRecordContext)]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/flushing/AsyncProcessor.html#onFutureSuccess(key:K1,value:V1,result:Iterable[(K2,V2,com.twitter.finatra.kafkastreams.utils.MessageTimestamp)]):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/flushing/AsyncProcessor.html#onFutureSuccess(key:K1,value:V1,result:Iterable[(K2,V2,org.apache.kafka.streams.processor.internals.ProcessorRecordContext)]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -807,7 +808,7 @@ This method is typically called prior to a Kafka commit
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">onFutureSuccess</span><span class="params">(<span name="key">key: <span class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncProcessor.K">K</span></span>, <span name="value">value: <span class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncProcessor.V">V</span></span>, <span name="result">result: <span class="extype" name="scala.Iterable">Iterable</span>[(<a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>, <a href="../utils/index.html#MessageTimestamp=Long" class="extmbr" name="com.twitter.finatra.kafkastreams.utils.MessageTimestamp">MessageTimestamp</a>)]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">onFutureSuccess</span><span class="params">(<span name="key">key: <span class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncProcessor.K">K</span></span>, <span name="value">value: <span class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncProcessor.V">V</span></span>, <span name="result">result: <span class="extype" name="scala.Iterable">Iterable</span>[(<a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>, <span class="extype" name="org.apache.kafka.streams.processor.internals.ProcessorRecordContext">ProcessorRecordContext</span>)]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="AsyncFlushing.html" class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncFlushing">AsyncFlushing</a></dd></dl></div>
@@ -887,7 +888,7 @@ This method is typically called prior to a Kafka commit
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">statsReceiver</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>
+        <span class="name">statsReceiver</span><span class="result">: <span class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncProcessor">AsyncProcessor</a> → <a href="AsyncFlushing.html" class="extype" name="com.twitter.finatra.kafkastreams.flushing.AsyncFlushing">AsyncFlushing</a></dd></dl></div>

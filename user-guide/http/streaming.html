@@ -1,33 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>HTTP Streaming &#8212; Finatra 20.1.0 documentation</title>
-    
+    <meta charset="utf-8" />
+    <title>HTTP Streaming &#8212; Finatra 20.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '20.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 20.1.0 documentation" href="../../index.html" />
-    <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Message Body Components" href="message_body.html" />
     <link rel="prev" title="HTTP Responses" href="responses.html" />
    
@@ -44,8 +31,7 @@
 
   </script>
 
-  </head>
-  <body role="document">
+  </head><body>
   
   
 
@@ -62,7 +48,7 @@
           <a href="responses.html" title="HTTP Responses"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -77,90 +63,91 @@
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>The ability to program in terms of streams of domain objects instead of bytes. For example:<ul>
-<li>A <cite>StreamingRequest</cite> will deserialize a valid JSON string to a domain object using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/streaming/JsonStreamParser.scala">JsonStreamParser</a>.</li>
-<li>A <cite>StreamingResponse</cite> will convert a domain object to a JSON string using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala">ObjectMapper</a>.</li>
+<li><p>The ability to program in terms of streams of domain objects instead of bytes. For example:</p>
+<ul>
+<li><p>A <cite>StreamingRequest</cite> will deserialize a valid JSON string to a domain object using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/streaming/JsonStreamParser.scala">JsonStreamParser</a>.</p></li>
+<li><p>A <cite>StreamingResponse</cite> will convert a domain object to a JSON string using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala">ObjectMapper</a>.</p></li>
 </ul>
 </li>
-<li>The ability to bypass the <cite>ObjectMappper</cite> and <cite>JsonStreamParser</cite> by dealing with streams of <cite>Buf</cite> directly.</li>
-<li>The ability to perform resource management by using the signal from <cite>Reader#onClose</cite>.</li>
-<li>The ability to perform composable operations over streams using <cite>map</cite> and <cite>flatMap</cite>.</li>
-<li>Built-in <a class="reference external" href="https://docbird.twitter.biz/finagle/Metrics.html#streaming">streaming metrics</a> to gain more insights into a streams&#8217; health.</li>
+<li><p>The ability to bypass the <cite>ObjectMappper</cite> and <cite>JsonStreamParser</cite> by dealing with streams of <cite>Buf</cite> directly.</p></li>
+<li><p>The ability to perform resource management by using the signal from <cite>Reader#onClose</cite>.</p></li>
+<li><p>The ability to perform composable operations over streams using <cite>map</cite> and <cite>flatMap</cite>.</p></li>
+<li><p>Built-in <a class="reference external" href="https://docbird.twitter.biz/finagle/Metrics.html#streaming">streaming metrics</a> to gain more insights into a streams’ health.</p></li>
 </ul>
 </div>
 <div class="section" id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
 <p>Finatra streaming support lets controllers stream input, output, or both. By recognizing the input and output signatures of a handler as either a <cite>Reader</cite>, <cite>StreamingRequest</cite>, or <cite>StreamingResponse</cite>, Finatra will make the necessary conversions.</p>
 <p><cite>StreamingRequest</cite> and <cite>StreamingResponse</cite> are fully featured Request/Response objects and allow you control over, and access to, request parameters and headers. If instead, you only need to consume or return data without having to inspect the request or modify the response, you can deal completely in terms of our streaming primitives.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.Controller
-import com.twitter.finatra.http.streaming.StreamingRequest
-import com.twitter.io.{Buf, Reader}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.http.Controller</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.streaming.StreamingRequest</span>
+<span class="k">import</span> <span class="nn">com.twitter.io.</span><span class="o">{</span><span class="nc">Buf</span><span class="o">,</span> <span class="nc">Reader</span><span class="o">}</span>
 
-case class Tweet(text: String)
+<span class="k">case</span> <span class="k">class</span> <span class="nc">Tweet</span><span class="o">(</span><span class="n">text</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
 
-class MyTweetController extends Controller {
+<span class="k">class</span> <span class="nc">MyTweetController</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
 
-  // StreamingRequest[Reader, Tweet] =&gt; StreamingResponse[Reader, String]
-  post(&quot;/tweets/streaming/request/response&quot;) { streamingRequest: StreamingRequest[Reader, Tweet] =&gt;
-    // In this case we need to look at a specific header
-    val specialHeader: String = streamingRequest.request.headerMap(&quot;Special-Header&quot;)
-    // Grab the input stream and do some work with it
-    val responseReader: Reader[String] = streamingRequest.stream.map(_.text + specialHeader)
-    // create a `StreamingResponse` via `ResponseBuilder` with our special header
-    response.streaming(responseReader, headers = Map(&quot;Special-Header&quot; -&gt; Seq(&quot;Thank you!&quot;)))
-  }
+  <span class="c1">// StreamingRequest[Reader, Tweet] =&gt; StreamingResponse[Reader, String]</span>
+  <span class="n">post</span><span class="o">(</span><span class="s">&quot;/tweets/streaming/request/response&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">streamingRequest</span><span class="k">:</span> <span class="kt">StreamingRequest</span><span class="o">[</span><span class="kt">Reader</span><span class="p">,</span> <span class="kt">Tweet</span><span class="o">]</span> <span class="k">=&gt;</span>
+    <span class="c1">// In this case we need to look at a specific header</span>
+    <span class="k">val</span> <span class="n">specialHeader</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">streamingRequest</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">headerMap</span><span class="o">(</span><span class="s">&quot;Special-Header&quot;</span><span class="o">)</span>
+    <span class="c1">// Grab the input stream and do some work with it</span>
+    <span class="k">val</span> <span class="n">responseReader</span><span class="k">:</span> <span class="kt">Reader</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="n">streamingRequest</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">text</span> <span class="o">+</span> <span class="n">specialHeader</span><span class="o">)</span>
+    <span class="c1">// create a `StreamingResponse` via `ResponseBuilder` with our special header</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">streaming</span><span class="o">(</span><span class="n">responseReader</span><span class="o">,</span> <span class="n">headers</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">&quot;Special-Header&quot;</span> <span class="o">-&gt;</span> <span class="nc">Seq</span><span class="o">(</span><span class="s">&quot;Thank you!&quot;</span><span class="o">)))</span>
+  <span class="o">}</span>
 
-  // Reader[Tweet] =&gt; StreamingResponse[Reader, String]
-  post(&quot;/tweets/streaming/reader/response&quot;) { tweetReader: Reader[Tweet] =&gt;
-    // Grab the input stream and do some work with it
-    val responseReader: Reader[String] = tweetReader.map(_.text)
-    // create a `StreamingResponse` via `ResponseBuilder` with our special header
-    response.streaming(responseReader, headers = Map(&quot;Special-Header&quot; -&gt; Seq(&quot;Thank you!&quot;)))
-  }
+  <span class="c1">// Reader[Tweet] =&gt; StreamingResponse[Reader, String]</span>
+  <span class="n">post</span><span class="o">(</span><span class="s">&quot;/tweets/streaming/reader/response&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">tweetReader</span><span class="k">:</span> <span class="kt">Reader</span><span class="o">[</span><span class="kt">Tweet</span><span class="o">]</span> <span class="k">=&gt;</span>
+    <span class="c1">// Grab the input stream and do some work with it</span>
+    <span class="k">val</span> <span class="n">responseReader</span><span class="k">:</span> <span class="kt">Reader</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="n">tweetReader</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">text</span><span class="o">)</span>
+    <span class="c1">// create a `StreamingResponse` via `ResponseBuilder` with our special header</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">streaming</span><span class="o">(</span><span class="n">responseReader</span><span class="o">,</span> <span class="n">headers</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">&quot;Special-Header&quot;</span> <span class="o">-&gt;</span> <span class="nc">Seq</span><span class="o">(</span><span class="s">&quot;Thank you!&quot;</span><span class="o">)))</span>
+  <span class="o">}</span>
 
-  // Reader[Tweet] =&gt; Reader[String]
-  post(&quot;/tweets/streaming/reader/reader&quot;) { tweetReader: Reader[Tweet] =&gt;
-    // Grab the tweets, do some work with them and return the result
-    tweetReader.map(_.text)
-  }
+  <span class="c1">// Reader[Tweet] =&gt; Reader[String]</span>
+  <span class="n">post</span><span class="o">(</span><span class="s">&quot;/tweets/streaming/reader/reader&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">tweetReader</span><span class="k">:</span> <span class="kt">Reader</span><span class="o">[</span><span class="kt">Tweet</span><span class="o">]</span> <span class="k">=&gt;</span>
+    <span class="c1">// Grab the tweets, do some work with them and return the result</span>
+    <span class="n">tweetReader</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">text</span><span class="o">)</span>
+  <span class="o">}</span>
 
-  // Reader[Buf] =&gt; Reader[Buf]
-  post(&quot;/tweets/streaming/reader/reader/bytes&quot;) { byteReader: Reader[Buf] =&gt;
-    // Grab the raw bytes, do some work with them and return the result
-    byteReader.map(bytes =&gt; Buf.Utf8(bytes.toString + &quot;hi&quot;))
-  }
+  <span class="c1">// Reader[Buf] =&gt; Reader[Buf]</span>
+  <span class="n">post</span><span class="o">(</span><span class="s">&quot;/tweets/streaming/reader/reader/bytes&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">byteReader</span><span class="k">:</span> <span class="kt">Reader</span><span class="o">[</span><span class="kt">Buf</span><span class="o">]</span> <span class="k">=&gt;</span>
+    <span class="c1">// Grab the raw bytes, do some work with them and return the result</span>
+    <span class="n">byteReader</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">bytes</span> <span class="k">=&gt;</span> <span class="nc">Buf</span><span class="o">.</span><span class="nc">Utf8</span><span class="o">(</span><span class="n">bytes</span><span class="o">.</span><span class="n">toString</span> <span class="o">+</span> <span class="s">&quot;hi&quot;</span><span class="o">))</span>
+  <span class="o">}</span>
 
-}
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Resource management is performed by listening to <cite>Reader#onClose</cite>.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.streaming.StreamingRequest
-import com.twitter.io.Reader
-import com.twitter.util.Closable
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.http.streaming.StreamingRequest</span>
+<span class="k">import</span> <span class="nn">com.twitter.io.Reader</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.Closable</span>
 
-trait Resource extends Closable {
-  def lookup(test: String): String
-}
+<span class="k">trait</span> <span class="nc">Resource</span> <span class="k">extends</span> <span class="nc">Closable</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">lookup</span><span class="o">(</span><span class="n">test</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span>
+<span class="o">}</span>
 
-class MyOtherTweetController extends Controller {
-  def closableResource(): Resource = ???
+<span class="k">class</span> <span class="nc">MyOtherTweetController</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">closableResource</span><span class="o">()</span><span class="k">:</span> <span class="kt">Resource</span> <span class="o">=</span> <span class="o">???</span>
 
-  post(&quot;/tweets/streaming/reader_with_resource_management&quot;) {
-    streamingRequest: StreamingRequest[Reader, Tweet] =&gt;
-      val resource = closableResource()
+  <span class="n">post</span><span class="o">(</span><span class="s">&quot;/tweets/streaming/reader_with_resource_management&quot;</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">streamingRequest</span><span class="k">:</span> <span class="kt">StreamingRequest</span><span class="o">[</span><span class="kt">Reader</span><span class="p">,</span> <span class="kt">Tweet</span><span class="o">]</span> <span class="k">=&gt;</span>
+      <span class="k">val</span> <span class="n">resource</span> <span class="k">=</span> <span class="n">closableResource</span><span class="o">()</span>
 
-      // create a `Reader` with any object types to pass to the `StreamingResponse`
-      val responseReader: Reader[String] = streamingRequest.stream.map(
-        tweet =&gt; resource.lookup(tweet.text)
-      )
+      <span class="c1">// create a `Reader` with any object types to pass to the `StreamingResponse`</span>
+      <span class="k">val</span> <span class="n">responseReader</span><span class="k">:</span> <span class="kt">Reader</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="n">streamingRequest</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">map</span><span class="o">(</span>
+        <span class="n">tweet</span> <span class="k">=&gt;</span> <span class="n">resource</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="n">tweet</span><span class="o">.</span><span class="n">text</span><span class="o">)</span>
+      <span class="o">)</span>
 
-      // close the resource after `reader#onClose` is resolved
-      responseReader.onClose.ensure(resource.close())
+      <span class="c1">// close the resource after `reader#onClose` is resolved</span>
+      <span class="n">responseReader</span><span class="o">.</span><span class="n">onClose</span><span class="o">.</span><span class="n">ensure</span><span class="o">(</span><span class="n">resource</span><span class="o">.</span><span class="n">close</span><span class="o">())</span>
 
-      // create a `StreamingResponse` via `ResponseBuilder`
-      response.streaming(responseReader)
-  }
-}
+      <span class="c1">// create a `StreamingResponse` via `ResponseBuilder`</span>
+      <span class="n">response</span><span class="o">.</span><span class="n">streaming</span><span class="o">(</span><span class="n">responseReader</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>You can check out more streaming examples from <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/examples/streaming-example">Finatra examples</a>.</p>
@@ -172,10 +159,7 @@ class MyOtherTweetController extends Controller {
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
-            </a></p><p>
+        <div class="sphinxsidebarwrapper"><p>
   <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
@@ -186,7 +170,7 @@ class MyOtherTweetController extends Controller {
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">HTTP Streaming</a><ul>
 <li><a class="reference internal" href="#features">Features</a></li>
@@ -197,7 +181,7 @@ class MyOtherTweetController extends Controller {
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">User&#8217;s Guide</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
       <li>Previous: <a href="responses.html" title="previous chapter">HTTP Responses</a></li>
       <li>Next: <a href="message_body.html" title="next chapter">Message Body Components</a></li>
   </ul></li>

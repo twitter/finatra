@@ -231,8 +231,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.kafka">kafka</a></dd></dl></div>
     </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="FinagleKafkaProducer.html" title=""></a>
-                        <a href="FinagleKafkaProducer.html" title="">FinagleKafkaProducer</a>
+                        <a class="class" href="FinagleKafkaProducer.html" title="A standard implementation of KafkaProducerBase that forwards events in key/value pairs to org.apache.kafka.clients.producer.KafkaProducer"></a>
+                        <a href="FinagleKafkaProducer.html" title="A standard implementation of KafkaProducerBase that forwards events in key/value pairs to org.apache.kafka.clients.producer.KafkaProducer">FinagleKafkaProducer</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="class" href="FinagleKafkaProducerBuilder.html" title=""></a>
@@ -242,6 +242,10 @@
                         <a class="class" href="FinagleKafkaProducerConfig.html" title=""></a>
                         <a href="FinagleKafkaProducerConfig.html" title="">FinagleKafkaProducerConfig</a>
                       </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="trait" href="KafkaProducerBase.html" title="An interface for publishing events in key/value pairs to Kafka and returning a com.twitter.util.Future"></a>
+                        <a href="KafkaProducerBase.html" title="An interface for publishing events in key/value pairs to Kafka and returning a com.twitter.util.Future">KafkaProducerBase</a>
+                      </li><li class="current-entities indented5">
                         <a class="object" href="KafkaProducerConfig$.html" title=""></a>
                         <a class="class" href="KafkaProducerConfig.html" title=""></a>
                         <a href="KafkaProducerConfig.html" title="">KafkaProducerConfig</a>
@@ -249,6 +253,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="KafkaProducerConfigMethods.html" title=""></a>
                         <a href="KafkaProducerConfigMethods.html" title="">KafkaProducerConfigMethods</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="NullKafkaProducer.html" title="A no-op KafkaProducerBase."></a>
+                        <a href="NullKafkaProducer.html" title="A no-op KafkaProducerBase.">NullKafkaProducer</a>
                       </li><li name="com.twitter.finatra.kafka.serde" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="serde"></a><a id="serde:serde"></a>
       <span class="permalink">
@@ -360,10 +368,10 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.twitter.finatra.kafka.producers.FinagleKafkaProducer" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="FinagleKafkaProducer[K,V]extendsClosablewithLogging"></a><a id="FinagleKafkaProducer[K,V]:FinagleKafkaProducer[K,V]"></a>
+              <ol><li name="com.twitter.finatra.kafka.producers.FinagleKafkaProducer" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="FinagleKafkaProducer[K,V]extendsKafkaProducerBase[K,V]"></a><a id="FinagleKafkaProducer[K,V]:FinagleKafkaProducer[K,V]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/producers/index.html#FinagleKafkaProducer[K,V]extendsClosablewithLogging" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/index.html#FinagleKafkaProducer[K,V]extendsKafkaProducerBase[K,V]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -372,10 +380,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="FinagleKafkaProducer.html"><span class="name">FinagleKafkaProducer</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <a href="https://twitter.github.io/util/docs/com/twitter/util/Closable.html#com.twitter.util.Closable" class="extype" name="com.twitter.util.Closable">Closable</a> with <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+        <a title="A standard implementation of KafkaProducerBase that forwards events in key/value pairs to org.apache.kafka.clients.producer.KafkaProducer" href="FinagleKafkaProducer.html"><span class="name">FinagleKafkaProducer</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <a href="KafkaProducerBase.html" class="extype" name="com.twitter.finatra.kafka.producers.KafkaProducerBase">KafkaProducerBase</a>[<span class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducer.K">K</span>, <span class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducer.V">V</span>]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">A standard implementation of <a href="KafkaProducerBase.html" class="extype" name="com.twitter.finatra.kafka.producers.KafkaProducerBase">KafkaProducerBase</a> that forwards
+events in key/value pairs to <span class="extype" name="org.apache.kafka.clients.producer.KafkaProducer">org.apache.kafka.clients.producer.KafkaProducer</span>
+</p><div class="fullcomment"><div class="comment cmt"><p>A standard implementation of <a href="KafkaProducerBase.html" class="extype" name="com.twitter.finatra.kafka.producers.KafkaProducerBase">KafkaProducerBase</a> that forwards
+events in key/value pairs to <span class="extype" name="org.apache.kafka.clients.producer.KafkaProducer">org.apache.kafka.clients.producer.KafkaProducer</span>
+</p></div><dl class="paramcmts block"><dt class="tparam">K</dt><dd class="cmt"><p>type of the key in key/value pairs to be published to Kafka</p></dd><dt class="tparam">V</dt><dd class="cmt"><p>type of the value in key/value pairs to be published to Kafka</p></dd></dl></div>
     </li><li name="com.twitter.finatra.kafka.producers.FinagleKafkaProducerBuilder" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="FinagleKafkaProducerBuilder[K,V]extendsKafkaProducerConfigMethods[com.twitter.finatra.kafka.producers.FinagleKafkaProducerBuilder[K,V]]withProductwithSerializable"></a><a id="FinagleKafkaProducerBuilder[K,V]:FinagleKafkaProducerBuilder[K,V]"></a>
       <span class="permalink">
@@ -404,10 +416,30 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="FinagleKafkaProducerConfig.html"><span class="name">FinagleKafkaProducerConfig</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="kafkaProducerConfig">kafkaProducerConfig: <a href="KafkaProducerConfig.html" class="extype" name="com.twitter.finatra.kafka.producers.KafkaProducerConfig">KafkaProducerConfig</a> = <span class="symbol"><span class="name"><a href="KafkaProducerConfig$.html">KafkaProducerConfig()</a></span></span></span>, <span name="keySerializer">keySerializer: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="org.apache.kafka.common.serialization.Serializer">Serializer</span>[<span class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducerConfig.K">K</span>]] = <span class="symbol">None</span></span>, <span name="valueSerializer">valueSerializer: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="org.apache.kafka.common.serialization.Serializer">Serializer</span>[<span class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducerConfig.V">V</span>]] = <span class="symbol">None</span></span>, <span name="includeNodeMetrics">includeNodeMetrics: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a> = <span class="symbol"><span class="name"><a href="../../../../index.html">LoadedStatsReceiver</a></span></span></span>)</span><span class="result"> extends <a href="../config/KafkaConfig.html" class="extype" name="com.twitter.finatra.kafka.config.KafkaConfig">KafkaConfig</a> with <a href="../config/ToKafkaProperties.html" class="extype" name="com.twitter.finatra.kafka.config.ToKafkaProperties">ToKafkaProperties</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="FinagleKafkaProducerConfig.html"><span class="name">FinagleKafkaProducerConfig</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="kafkaProducerConfig">kafkaProducerConfig: <a href="KafkaProducerConfig.html" class="extype" name="com.twitter.finatra.kafka.producers.KafkaProducerConfig">KafkaProducerConfig</a> = <span class="symbol"><span class="name"><a href="KafkaProducerConfig$.html">KafkaProducerConfig()</a></span></span></span>, <span name="keySerializer">keySerializer: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="org.apache.kafka.common.serialization.Serializer">Serializer</span>[<span class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducerConfig.K">K</span>]] = <span class="symbol">None</span></span>, <span name="valueSerializer">valueSerializer: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="org.apache.kafka.common.serialization.Serializer">Serializer</span>[<span class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducerConfig.V">V</span>]] = <span class="symbol">None</span></span>, <span name="includeNodeMetrics">includeNodeMetrics: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">false</span></span>, <span name="statsReceiver">statsReceiver: <span class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</span> = <span class="symbol"><span class="name"><a href="../../../../index.html">LoadedStatsReceiver</a></span></span></span>)</span><span class="result"> extends <a href="../config/KafkaConfig.html" class="extype" name="com.twitter.finatra.kafka.config.KafkaConfig">KafkaConfig</a> with <a href="../config/ToKafkaProperties.html" class="extype" name="com.twitter.finatra.kafka.config.ToKafkaProperties">ToKafkaProperties</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
+    </li><li name="com.twitter.finatra.kafka.producers.KafkaProducerBase" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="KafkaProducerBase[K,V]extendsClosablewithLogging"></a><a id="KafkaProducerBase[K,V]:KafkaProducerBase[K,V]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/index.html#KafkaProducerBase[K,V]extendsClosablewithLogging" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="An interface for publishing events in key/value pairs to Kafka and returning a com.twitter.util.Future" href="KafkaProducerBase.html"><span class="name">KafkaProducerBase</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <span class="extype" name="com.twitter.util.Closable">Closable</span> with <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">An interface for publishing events in key/value pairs to Kafka and
+returning a <span class="extype" name="com.twitter.util.Future">com.twitter.util.Future</span>
+</p><div class="fullcomment"><div class="comment cmt"><p>An interface for publishing events in key/value pairs to Kafka and
+returning a <span class="extype" name="com.twitter.util.Future">com.twitter.util.Future</span>
+</p></div><dl class="paramcmts block"><dt class="tparam">K</dt><dd class="cmt"><p>type of the key in key/value pairs to be published to Kafka</p></dd><dt class="tparam">V</dt><dd class="cmt"><p>type of the value in key/value pairs to be published to Kafka</p></dd></dl></div>
     </li><li name="com.twitter.finatra.kafka.producers.KafkaProducerConfig" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="KafkaProducerConfigextendsKafkaProducerConfigMethods[com.twitter.finatra.kafka.producers.KafkaProducerConfig]withToKafkaPropertieswithProductwithSerializable"></a><a id="KafkaProducerConfig:KafkaProducerConfig"></a>
       <span class="permalink">
@@ -440,6 +472,25 @@
       </span>
       
       
+    </li><li name="com.twitter.finatra.kafka.producers.NullKafkaProducer" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NullKafkaProducer[K,V]extendsKafkaProducerBase[K,V]"></a><a id="NullKafkaProducer[K,V]:NullKafkaProducer[K,V]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/index.html#NullKafkaProducer[K,V]extendsKafkaProducerBase[K,V]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="A no-op KafkaProducerBase." href="NullKafkaProducer.html"><span class="name">NullKafkaProducer</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <a href="KafkaProducerBase.html" class="extype" name="com.twitter.finatra.kafka.producers.KafkaProducerBase">KafkaProducerBase</a>[<span class="extype" name="com.twitter.finatra.kafka.producers.NullKafkaProducer.K">K</span>, <span class="extype" name="com.twitter.finatra.kafka.producers.NullKafkaProducer.V">V</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">A no-op <a href="KafkaProducerBase.html" class="extype" name="com.twitter.finatra.kafka.producers.KafkaProducerBase">KafkaProducerBase</a>.</p><div class="fullcomment"><div class="comment cmt"><p>A no-op <a href="KafkaProducerBase.html" class="extype" name="com.twitter.finatra.kafka.producers.KafkaProducerBase">KafkaProducerBase</a>. No network connection is created and
+events are discarded, making this producer useful in unit tests
+and as defaults in situations where event publishing is not needed.
+</p></div><dl class="paramcmts block"><dt class="tparam">K</dt><dd class="cmt"><p>type of the key in key/value pairs to be published to Kafka</p></dd><dt class="tparam">V</dt><dd class="cmt"><p>type of the value in key/value pairs to be published to Kafka</p></dd></dl></div>
     </li></ol>
             </div>
 

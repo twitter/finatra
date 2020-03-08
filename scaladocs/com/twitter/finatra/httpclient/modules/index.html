@@ -208,12 +208,12 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Extending this trait allows for configuring an com.twitter.finagle.Http.Client and/or a com.twitter.finatra.httpclient.HttpClient." href="HttpClientModuleTrait.html"><span class="name">HttpClientModuleTrait</span></a><span class="result"> extends <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> with <a href="../../../inject/modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <span class="extype" name="com.twitter.finagle.http.Response">Response</span>, <span class="extype" name="com.twitter.finagle.Http.Client">Client</span>]</span>
+        <a title="Extending this trait allows for configuring an com.twitter.finagle.Http.Client and/or a com.twitter.finatra.httpclient.HttpClient." href="HttpClientModuleTrait.html"><span class="name">HttpClientModuleTrait</span></a><span class="result"> extends <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> with <a href="../../../inject/modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a>[<span class="extype" name="com.twitter.finagle.http.Request">Request</span>, <span class="extype" name="com.twitter.finagle.http.Response">Response</span>, <span class="extype" name="com.twitter.finagle.Http.Client">Client</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Extending this trait allows for configuring an
-<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Http$$Client.html" class="extype" name="com.twitter.finagle.Http.Client">com.twitter.finagle.Http.Client</a> and/or a <a href="../HttpClient.html" class="extype" name="com.twitter.finatra.httpclient.HttpClient">com.twitter.finatra.httpclient.HttpClient</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Extending this trait allows for configuring an
-<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Http$$Client.html" class="extype" name="com.twitter.finagle.Http.Client">com.twitter.finagle.Http.Client</a> and/or a <a href="../HttpClient.html" class="extype" name="com.twitter.finatra.httpclient.HttpClient">com.twitter.finatra.httpclient.HttpClient</a>.
+<span class="extype" name="com.twitter.finagle.Http.Client">com.twitter.finagle.Http.Client</span> and/or a <a href="../HttpClient.html" class="extype" name="com.twitter.finatra.httpclient.HttpClient">com.twitter.finatra.httpclient.HttpClient</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Extending this trait allows for configuring an
+<span class="extype" name="com.twitter.finagle.Http.Client">com.twitter.finagle.Http.Client</span> and/or a <a href="../HttpClient.html" class="extype" name="com.twitter.finatra.httpclient.HttpClient">com.twitter.finatra.httpclient.HttpClient</a>.
 </p></div><dl class="attributes block"> <div class="block">Example:
                <ol><li class="cmt"><p></p><pre><span class="kw">class</span> MyHttpClientModule
   <span class="kw">extends</span> HttpClientModuleTrait {
@@ -274,7 +274,7 @@
   <span class="cmt">// final def provideMyHttpClient(</span>
   <span class="cmt">//   injector: Injector,</span>
   <span class="cmt">//   statsReceiver: StatsReceiver,</span>
-  <span class="cmt">//   mapper: FinatraObjectMapper</span>
+  <span class="cmt">//   mapper: ScalaObjectMapper</span>
   <span class="cmt">// ): HttpClient = newHttpClient(injector, statsReceiver, mapper)</span>
 
 }</pre></li></ol>

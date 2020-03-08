@@ -432,7 +432,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="Ports.html"><span class="name">Ports</span></a><span class="result"> extends <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/TwitterServer.html#com.twitter.server.TwitterServer" class="extype" name="com.twitter.server.TwitterServer">server.TwitterServer</a></span>
+        <a title="" href="Ports.html"><span class="name">Ports</span></a><span class="result"> extends <span class="extype" name="com.twitter.server.TwitterServer">server.TwitterServer</span></span>
       </span>
       
       
@@ -448,11 +448,11 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="A com.twitter.server.TwitterServer that supports injection and com.twitter.inject.TwitterModule modules." href="TwitterServer.html"><span class="name">TwitterServer</span></a><span class="result"> extends <a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a> with <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/TwitterServer.html#com.twitter.server.TwitterServer" class="extype" name="com.twitter.server.TwitterServer">server.TwitterServer</a> with <span class="extype" name="com.twitter.inject.server.DeprecatedLogging">DeprecatedLogging</span> with <a href="Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a> with <span class="extype" name="com.twitter.server.Lifecycle.Warmup">Warmup</span> with <a href="../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+        <a title="A com.twitter.server.TwitterServer that supports injection and com.twitter.inject.TwitterModule modules." href="TwitterServer.html"><span class="name">TwitterServer</span></a><span class="result"> extends <a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a> with <span class="extype" name="com.twitter.server.TwitterServer">server.TwitterServer</span> with <span class="extype" name="com.twitter.inject.server.DeprecatedLogging">DeprecatedLogging</span> with <a href="Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a> with <span class="extype" name="com.twitter.server.Lifecycle.Warmup">Warmup</span> with <a href="../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
       </span>
       
-      <p class="shortcomment cmt">A <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/TwitterServer.html" class="extype" name="com.twitter.server.TwitterServer">com.twitter.server.TwitterServer</a> that supports injection and <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a>
-modules.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/TwitterServer.html" class="extype" name="com.twitter.server.TwitterServer">com.twitter.server.TwitterServer</a> that supports injection and <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a>
+      <p class="shortcomment cmt">A <span class="extype" name="com.twitter.server.TwitterServer">com.twitter.server.TwitterServer</span> that supports injection and <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a>
+modules.</p><div class="fullcomment"><div class="comment cmt"><p>A <span class="extype" name="com.twitter.server.TwitterServer">com.twitter.server.TwitterServer</span> that supports injection and <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a>
 modules.</p><p>To use, override the appropriate @Lifecycle and callback method(s). Make sure when overriding</p><pre>@Lifecycle</pre><p> methods to call the super implementation, otherwise critical lifecycle set-up  may not
 occur causing your server to either function improperly or outright fail.</p><p>If you are extending this trait, to implement your server, override the start() function, e.g.,</p><pre><span class="kw">import</span> com.twitter.inject.server.TwitterServer
 

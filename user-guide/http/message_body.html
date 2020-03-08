@@ -1,33 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Message Body Components &#8212; Finatra 20.1.0 documentation</title>
-    
+    <meta charset="utf-8" />
+    <title>Message Body Components &#8212; Finatra 20.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '20.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 20.1.0 documentation" href="../../index.html" />
-    <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Filtering HTTP Requests" href="filters.html" />
     <link rel="prev" title="HTTP Streaming" href="streaming.html" />
    
@@ -44,8 +31,7 @@
 
   </script>
 
-  </head>
-  <body role="document">
+  </head><body>
   
   
 
@@ -62,7 +48,7 @@
           <a href="streaming.html" title="HTTP Streaming"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -74,8 +60,8 @@
   <div class="section" id="message-body-components">
 <span id="http-message-body"></span><h1>Message Body Components<a class="headerlink" href="#message-body-components" title="Permalink to this headline">¶</a></h1>
 <p>Message body components specify how to parse an incoming <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala"><cite>c.t.finagle.http.Request</cite></a> into a model or domain
-object (&#8220;message body reader&#8221;) or how to transform a given type <cite>T</cite> into a <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Response.scala"><cite>c.t.finagle.http.Response</cite></a>
-(&#8220;message body writer&#8221;).</p>
+object (“message body reader”) or how to transform a given type <cite>T</cite> into a <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Response.scala"><cite>c.t.finagle.http.Response</cite></a>
+(“message body writer”).</p>
 <div class="section" id="id1">
 <h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyComponent.scala">MessageBodyComponent</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>A <cite>c.t.finatra.http.marshalling.MessageBodyComponent</cite> is a marker trait to indicate that a class is either a message body reader
@@ -88,37 +74,37 @@ into a <a class="reference external" href="https://github.com/twitter/finagle/bl
 <h2>Message Body Readers<a class="headerlink" href="#message-body-readers" title="Permalink to this headline">¶</a></h2>
 <p>Message body readers can be registered through the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala"><cite>c.t.finatra.http.routing.HttpRouter</cite></a> much like adding a
 <a class="reference external" href="controllers.html">Controller</a> or a <a class="reference external" href="filters.html">Filter</a>.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import DoEverythingModule
-import ExampleController
-import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.http.{Controller, HttpServer}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">DoEverythingModule</span>
+<span class="k">import</span> <span class="nn">ExampleController</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpRouter</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.</span><span class="o">{</span><span class="nc">Controller</span><span class="o">,</span> <span class="nc">HttpServer</span><span class="o">}</span>
 
-object ExampleServerMain extends ExampleServer
+<span class="k">object</span> <span class="nc">ExampleServerMain</span> <span class="k">extends</span> <span class="nc">ExampleServer</span>
 
-class ExampleServer extends HttpServer {
+<span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
 
-  override val modules = Seq(
-    DoEverythingModule)
+  <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+    <span class="nc">DoEverythingModule</span><span class="o">)</span>
 
-  override def configureHttp(router: HttpRouter): Unit = {
-    router
-      .add[ExampleController]
-      .register[MyModelObjectMessageBodyReader]
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">router</span>
+      <span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">ExampleController</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">MyModelObjectMessageBodyReader</span><span class="o">]</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Message body readers are invoked by the framework to convert an incoming <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala"><cite>c.t.finagle.http.Request</cite></a>
 into a type <cite>T</cite> when <cite>T</cite> is specified as the input type for a <a class="reference external" href="controllers.html">Controller</a> route
 callback or when <cite>T</cite> is passed as a body to a function in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a>.</p>
 <p>E.g., a controller with a route specified:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.Controller
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.http.Controller</span>
 
-class ExampleController extends Controller {
+<span class="k">class</span> <span class="nc">ExampleController</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
 
-  get(&quot;/&quot;) { model: MyModelObject =&gt;
-    ...
-  }
+  <span class="n">get</span><span class="o">(</span><span class="s">&quot;/&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">model</span><span class="k">:</span> <span class="kt">MyModelObject</span> <span class="o">=&gt;</span>
+    <span class="o">...</span>
+  <span class="o">}</span>
 </pre></div>
 </div>
 <p>will trigger the framework to search for a registered message body reader that can convert the incoming
@@ -142,27 +128,27 @@ information on how to provide a different <cite>DefaultMessageBodyReader</cite> 
 <div class="section" id="message-body-writers">
 <h2>Message Body Writers<a class="headerlink" href="#message-body-writers" title="Permalink to this headline">¶</a></h2>
 <p>Like message body readers, writers can be registered through the
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala"><cite>c.t.finatra.http.routing.HttpRouter</cite></a> &#8211; again like adding a <a class="reference external" href="controllers.html">Controller</a>
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala"><cite>c.t.finatra.http.routing.HttpRouter</cite></a> – again like adding a <a class="reference external" href="controllers.html">Controller</a>
 or a <a class="reference external" href="filters.html">Filter</a>.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import DoEverythingModule
-import ExampleController
-import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.http.{Controller, HttpServer}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">DoEverythingModule</span>
+<span class="k">import</span> <span class="nn">ExampleController</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpRouter</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.</span><span class="o">{</span><span class="nc">Controller</span><span class="o">,</span> <span class="nc">HttpServer</span><span class="o">}</span>
 
-object ExampleServerMain extends ExampleServer
+<span class="k">object</span> <span class="nc">ExampleServerMain</span> <span class="k">extends</span> <span class="nc">ExampleServer</span>
 
-class ExampleServer extends HttpServer {
+<span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
 
- override val modules = Seq(
-   DoEverythingModule)
+ <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+   <span class="nc">DoEverythingModule</span><span class="o">)</span>
 
- override def configureHttp(router: HttpRouter): Unit = {
-   router
-     .add[ExampleController]
-     .register[MyModelObjectMessageBodyReader]
-     .register[MyModelObjectMessageBodyWriter]
- }
-}
+ <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+   <span class="n">router</span>
+     <span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">ExampleController</span><span class="o">]</span>
+     <span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">MyModelObjectMessageBodyReader</span><span class="o">]</span>
+     <span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">MyModelObjectMessageBodyWriter</span><span class="o">]</span>
+ <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Message body writers are used to specify conversion from a type <cite>T</cite> to a <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Response.scala"><cite>c.t.finagle.http.Response</cite></a>.
@@ -170,18 +156,18 @@ This can be for the purpose of informing the framework how to render the return 
 callback or how to render the type <cite>T</cite> when passed as a body to a function in the
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a>.</p>
 <p>E.g., a controller with a route specified:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
-import com.twitter.finatra.http.Controller
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.http.Request</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.Controller</span>
 
-class ExampleController extends Controller {
+<span class="k">class</span> <span class="nc">ExampleController</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
 
-  get(&quot;/&quot;) { request: Request =&gt;
-    ...
-    MyRenderableObjectType(
-      id = &quot;1&quot;,
-      name = &quot;John Doe&quot;,
-      description = &quot;A renderable return&quot;)
-  }
+  <span class="n">get</span><span class="o">(</span><span class="s">&quot;/&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+    <span class="o">...</span>
+    <span class="nc">MyRenderableObjectType</span><span class="o">(</span>
+      <span class="n">id</span> <span class="k">=</span> <span class="s">&quot;1&quot;</span><span class="o">,</span>
+      <span class="n">name</span> <span class="k">=</span> <span class="s">&quot;John Doe&quot;</span><span class="o">,</span>
+      <span class="n">description</span> <span class="k">=</span> <span class="s">&quot;A renderable return&quot;</span><span class="o">)</span>
+  <span class="o">}</span>
 </pre></div>
 </div>
 <p>will trigger the framework to search for a registered message body writer that can convert the
@@ -199,7 +185,7 @@ response and a JSON representation of the type using the
 <a class="reference external" href="../json/index.html#configuration">configured</a> <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala">FinatraObjectMapper</a>
 to convert the type to JSON.</p>
 <p>For primitive and boxed types, the default writer implementation will render a <cite>plain/text</cite>
-content type response using the type&#8217;s <cite>toString</cite> value.</p>
+content type response using the type’s <cite>toString</cite> value.</p>
 <p>Again, the default behavior is overridable. See the <cite>c.t.finatra.http.modules.MessageBodyModule</cite>
 <a class="reference external" href="#c-t-finatra-http-modules-messagebodymodule">section</a> for more information on how to
 provide a different <cite>DefaultMessageBodyWriter</cite> implementation.</p>
@@ -213,44 +199,44 @@ That is, a class which is annotated with an annotation that is itself annotated 
 <p>For example. If you have <cite>MyRenderableObjectMessageBodyWriter</cite> and you want to signal to the framework
 to invoke this message body writer when trying to convert a given class to a <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Response.scala"><cite>c.t.finagle.http.Response</cite></a>,
 you can create a custom annotation and annotate the class like so:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.lang.annotation.Retention</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.Target</span><span class="p">;</span>
 
-import com.twitter.finatra.http.annotations.MessageBodyWriter;
+<span class="kn">import</span> <span class="nn">com.twitter.finatra.http.annotations.MessageBodyWriter</span><span class="p">;</span>
 
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+<span class="kn">import static</span> <span class="nn">java.lang.annotation.ElementType.PARAMETER</span><span class="p">;</span>
+<span class="kn">import static</span> <span class="nn">java.lang.annotation.RetentionPolicy.RUNTIME</span><span class="p">;</span>
 
-@Target(PARAMETER)
-@Retention(RUNTIME)
-@MessageBodyWriter
-public @interface MyRenderable {}
+<span class="nd">@Target</span><span class="p">(</span><span class="n">PARAMETER</span><span class="p">)</span>
+<span class="nd">@Retention</span><span class="p">(</span><span class="n">RUNTIME</span><span class="p">)</span>
+<span class="nd">@MessageBodyWriter</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="n">MyRenderable</span> <span class="p">{}</span>
 </pre></div>
 </div>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import MyRenderable
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">MyRenderable</span>
 
-@MyRenderable
-case class SomeValues(name: String, age: Int, address: String)
+<span class="nd">@MyRenderable</span>
+<span class="k">case</span> <span class="k">class</span> <span class="nc">SomeValues</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">address</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>You would then create a custom <a class="reference external" href="../getting-started/modules.html">Module</a> to register the
 annotation to your <cite>MyRenderableObjectMessageBodyWriter</cite>. You will need to do this registration in the
 <cite>TwitterModule#singletonStartup</cite> lifecycle method which ensures that registration will happen after the
 object graph has been created but before the server has started.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import MyRenderable
-import MyRenderableObjectMessageBodyWriter
-import MyRenderableObjectType
-import com.twitter.finatra.http.marshalling.MessageBodyManager
-import com.twitter.inject.{Injector, TwitterModule}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">MyRenderable</span>
+<span class="k">import</span> <span class="nn">MyRenderableObjectMessageBodyWriter</span>
+<span class="k">import</span> <span class="nn">MyRenderableObjectType</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.marshalling.MessageBodyManager</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.</span><span class="o">{</span><span class="nc">Injector</span><span class="o">,</span> <span class="nc">TwitterModule</span><span class="o">}</span>
 
-object MyRenderableObjectMessageBodyModule extends TwitterModule {
+<span class="k">object</span> <span class="nc">MyRenderableObjectMessageBodyModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
 
-  override def singletonStartup(injector: Injector): Unit = {
-    val manager = injector.instance[MessageBodyManager]
-    manager.addWriterByAnnotation[MyRenderable, MyRenderableObjectMessageBodyWriter]()
-    manager.addWriterByComponent[MyRenderableObjectType, MyRenderableObjectMessageBodyWriter]()
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">singletonStartup</span><span class="o">(</span><span class="n">injector</span><span class="k">:</span> <span class="kt">Injector</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="n">manager</span> <span class="k">=</span> <span class="n">injector</span><span class="o">.</span><span class="n">instance</span><span class="o">[</span><span class="kt">MessageBodyManager</span><span class="o">]</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">addWriterByAnnotation</span><span class="o">[</span><span class="kt">MyRenderable</span><span class="p">,</span> <span class="kt">MyRenderableObjectMessageBodyWriter</span><span class="o">]()</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">addWriterByComponent</span><span class="o">[</span><span class="kt">MyRenderableObjectType</span><span class="p">,</span> <span class="kt">MyRenderableObjectMessageBodyWriter</span><span class="o">]()</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>In this way, whenever an instance of <cite>SomeValues</cite> (<a class="reference external" href="https://github.com/twitter/finatra/blob/6e09e95b95b20d2599a6210dfa0ce4c82dbe636b/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala#L54"><cite>MessageBodyManager#addByAnnotation</cite></a>) or
@@ -273,24 +259,24 @@ via configuration in the <a class="reference external" href="https://github.com/
 <p>To override the framework defaults, create an instance of a <a class="reference external" href="../getting-started/modules.html">TwitterModule</a>
 which provides customized implementations for the default reader and writer. Set this module by
 overriding the <cite>protected def messageBodyModule</cite> in your server.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class ExampleServer extends HttpServer {
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
 
-  override def messageBodyModule = MyCustomMessageBodyModule
+  <span class="k">override</span> <span class="k">def</span> <span class="n">messageBodyModule</span> <span class="k">=</span> <span class="nc">MyCustomMessageBodyModule</span>
 
-  override def configureHttp(router: HttpRouter): Unit = {
-    ...
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="o">...</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>If your module is defined as a class, you would pass an instance of the
 class, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>override val messageBodyModule = new MyCustomMessageBodyModule
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">override</span> <span class="k">val</span> <span class="n">messageBodyModule</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">MyCustomMessageBodyModule</span>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="server.html#framework-modules">Framework Modules</a> for more information.</p>
 <div class="admonition caution">
-<p class="first admonition-title">Caution</p>
+<p class="admonition-title">Caution</p>
 <p>Care should be taken when replacing the framework default <cite>c.t.finatra.http.modules.MessageBodyModule</cite>.
 This module binds the framework <cite>DefaultMessageBodyReader</cite> implementation which is what provides
 the logic for marshalling HTTP request bodies as <a class="reference external" href="../json/routing.html">JSON into case classes</a>
@@ -300,19 +286,19 @@ framework <cite>DefaultMessageBodyReader</cite> implementation, you will lose th
 <p>Thus it is recommended that you choose to <em>extend</em> the <cite>c.t.finatra.http.modules.MessageBodyModule</cite>
 in order to customize your logic and remember to invoke <cite>super</cite> for overridden methods to ensure
 default behavior is retained if so desired. E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.modules.MessageBodyModule
-import com.twitter.inject.Injector
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.http.modules.MessageBodyModule</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.Injector</span>
 
-object MyCustomMessageBodyModule extends MessageBodyModule {
+<span class="k">object</span> <span class="nc">MyCustomMessageBodyModule</span> <span class="k">extends</span> <span class="nc">MessageBodyModule</span> <span class="o">{</span>
 
-  override def singletonStartup(injector: Injector): Unit = {
-    super.singletonStartup(injector)
-    ???
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">singletonStartup</span><span class="o">(</span><span class="n">injector</span><span class="k">:</span> <span class="kt">Injector</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">super</span><span class="o">.</span><span class="n">singletonStartup</span><span class="o">(</span><span class="n">injector</span><span class="o">)</span>
+    <span class="o">???</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
-<p class="last">See: <a class="reference external" href="./requests.html#custom-request-case-class">Custom Request Case class</a> documentation
+<p>See: <a class="reference external" href="./requests.html#custom-request-case-class">Custom Request Case class</a> documentation
 for more information on the JSON integration with routing.</p>
 </div>
 </div>
@@ -324,18 +310,18 @@ library.</p>
 <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Response.scala"><cite>c.t.finagle.http.Response</cite></a> using a provided Mustache template.</p>
 <p>Additionally, the library provides:</p>
 <ul class="simple">
-<li>a <cite>MustacheBodyComponent</cite> case class which is a <a class="reference external" href="https://mustache.github.io/">Mustache</a> specific <cite>MessageBodyComponent</cite>.</li>
-<li>the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/java/com/twitter/finatra/http/annotations/Mustache.java"><code class="docutils literal"><span class="pre">&#64;Mustache</span></code></a> annotation which is a <cite>MessageBodyWriter</cite> <a class="reference external" href="#messagebodywriter-annotation">annotation</a>.</li>
-<li>and a <cite>MustacheModule</cite> which registers the annotation and the component to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/writer/MustacheMessageBodyWriter.scala"><cite>c.t.finatra.mustache.writer.MustacheMessageBodyWriter</cite></a>
-for allowing the framework to automatically handle <cite>MustacheBodyComponent</cite> instances or <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/java/com/twitter/finatra/http/annotations/Mustache.java"><code class="docutils literal"><span class="pre">&#64;Mustache</span></code></a>
-annotated classes.</li>
+<li><p>a <cite>MustacheBodyComponent</cite> case class which is a <a class="reference external" href="https://mustache.github.io/">Mustache</a> specific <cite>MessageBodyComponent</cite>.</p></li>
+<li><p>the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/java/com/twitter/finatra/http/annotations/Mustache.java"><code class="docutils literal notranslate"><span class="pre">&#64;Mustache</span></code></a> annotation which is a <cite>MessageBodyWriter</cite> <a class="reference external" href="#messagebodywriter-annotation">annotation</a>.</p></li>
+<li><p>and a <cite>MustacheModule</cite> which registers the annotation and the component to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/writer/MustacheMessageBodyWriter.scala"><cite>c.t.finatra.mustache.writer.MustacheMessageBodyWriter</cite></a>
+for allowing the framework to automatically handle <cite>MustacheBodyComponent</cite> instances or <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/java/com/twitter/finatra/http/annotations/Mustache.java"><code class="docutils literal notranslate"><span class="pre">&#64;Mustache</span></code></a>
+annotated classes.</p></li>
 </ul>
 <p>The transformation is performed using a referenced <a class="reference external" href="https://mustache.github.io/">Mustache</a> template
 specified by either the <cite>MustacheBodyComponent</cite> configuration or as a parameter configured in
-the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/java/com/twitter/finatra/http/annotations/Mustache.java"><code class="docutils literal"><span class="pre">&#64;Mustache</span></code></a> annotation.</p>
-<p>You must include the <cite>MustacheModule</cite> in your server&#8217;s list of modules in order for the framework
+the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/java/com/twitter/finatra/http/annotations/Mustache.java"><code class="docutils literal notranslate"><span class="pre">&#64;Mustache</span></code></a> annotation.</p>
+<p>You must include the <cite>MustacheModule</cite> in your server’s list of modules in order for the framework
 to negotiate rendering of <a class="reference external" href="https://mustache.github.io/">Mustache</a> templates via <cite>MessageBodyComponents</cite>.</p>
-<p>For more information the Finatra&#8217;s Mustache integration with HTTP see the documentation <a class="reference external" href="../mustache/routing.html">here</a>.</p>
+<p>For more information the Finatra’s Mustache integration with HTTP see the documentation <a class="reference external" href="../mustache/routing.html">here</a>.</p>
 </div>
 </div>
 
@@ -344,10 +330,7 @@ to negotiate rendering of <a class="reference external" href="https://mustache.g
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
-            </a></p><p>
+        <div class="sphinxsidebarwrapper"><p>
   <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
@@ -358,7 +341,7 @@ to negotiate rendering of <a class="reference external" href="https://mustache.g
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Message Body Components</a><ul>
 <li><a class="reference internal" href="#id1">MessageBodyComponent</a></li>
@@ -380,7 +363,7 @@ to negotiate rendering of <a class="reference external" href="https://mustache.g
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">User&#8217;s Guide</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
       <li>Previous: <a href="streaming.html" title="previous chapter">HTTP Streaming</a></li>
       <li>Next: <a href="filters.html" title="next chapter">Filtering HTTP Requests</a></li>
   </ul></li>

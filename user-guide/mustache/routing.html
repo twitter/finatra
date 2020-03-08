@@ -1,33 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Mustache Integration with HTTP Routing &#8212; Finatra 20.1.0 documentation</title>
-    
+    <meta charset="utf-8" />
+    <title>Mustache Integration with HTTP Routing &#8212; Finatra 20.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '20.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 20.1.0 documentation" href="../../index.html" />
-    <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Working With Files" href="../files/index.html" />
     <link rel="prev" title="Mustache Support" href="index.html" />
    
@@ -44,8 +31,7 @@
 
   </script>
 
-  </head>
-  <body role="document">
+  </head><body>
   
   
 
@@ -62,7 +48,7 @@
           <a href="index.html" title="Mustache Support"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -74,19 +60,19 @@
   <div class="section" id="mustache-integration-with-http-routing">
 <span id="mustache-routing"></span><h1>Mustache Integration with HTTP Routing<a class="headerlink" href="#mustache-integration-with-http-routing" title="Permalink to this headline">¶</a></h1>
 <p><a class="reference external" href="https://mustache.github.io/">Mustache</a> support for HTTP servers is provided by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/http-mustache">finatra/http-mustache</a>
-library. This integrates Finatra&#8217;s general <a class="reference external" href="https://mustache.github.io/">Mustache</a> support with Finatra&#8217;s
+library. This integrates Finatra’s general <a class="reference external" href="https://mustache.github.io/">Mustache</a> support with Finatra’s
 HTTP <a class="reference external" href="../http/message_body.html">MessageBodyComponents</a>.</p>
-<p>You must include the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/scala/com/twitter/finatra/http/modules/MustacheModule.scala"><cite>c.t.finatra.http.modules.MustacheModule</cite></a> in your server&#8217;s list of modules in order for the framework
+<p>You must include the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/scala/com/twitter/finatra/http/modules/MustacheModule.scala"><cite>c.t.finatra.http.modules.MustacheModule</cite></a> in your server’s list of modules in order for the framework
 to negotiate rendering of <a class="reference external" href="https://mustache.github.io/">Mustache</a> templates via <cite>MessageBodyComponents</cite>.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
-import com.twitter.finatra.http.modules.MustacheModule
-import com.twitter.finatra.http.HttpServer
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.google.inject.Module</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.modules.MustacheModule</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.HttpServer</span>
 
-class MyServer extends HttpServer {
-    override val modules: Seq[Module] = Seq(MustacheModule)
+<span class="k">class</span> <span class="nc">MyServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
+    <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Module</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="nc">MustacheModule</span><span class="o">)</span>
 
-    ???
-}
+    <span class="o">???</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/scala/com/twitter/finatra/http/modules/MustacheModule.scala"><cite>c.t.finatra.http.modules.MustacheModule</cite></a> includes the general <cite>MustacheFactoryModule</cite> which is explained in the general
@@ -96,19 +82,19 @@ class MyServer extends HttpServer {
 <div class="section" id="as-a-callback-return-type">
 <h3>As a callback return type<a class="headerlink" href="#as-a-callback-return-type" title="Permalink to this headline">¶</a></h3>
 <p>To generate an HTTP response rendered from a <a class="reference external" href="https://mustache.github.io/">Mustache</a>  template you can simply
-return a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/java/com/twitter/finatra/http/annotations/Mustache.java"><code class="docutils literal"><span class="pre">&#64;Mustache</span></code></a>-annotated object or a <cite>MustacheBodyComponent</cite> as the result of your route callback.</p>
+return a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/java/com/twitter/finatra/http/annotations/Mustache.java"><code class="docutils literal notranslate"><span class="pre">&#64;Mustache</span></code></a>-annotated object or a <cite>MustacheBodyComponent</cite> as the result of your route callback.</p>
 <p>The framework will use <a class="reference external" href="https://mustache.github.io/">Mustache</a> to render callback return types that
-are annotated with the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/java/com/twitter/finatra/http/annotations/Mustache.java"><code class="docutils literal"><span class="pre">&#64;Mustache</span></code></a> annotation or are an instance of a <cite>MustacheBodyComponent</cite>. E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>@Mustache(&quot;foo&quot;)
-case class FooView(
-  name: String)
+are annotated with the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/java/com/twitter/finatra/http/annotations/Mustache.java"><code class="docutils literal notranslate"><span class="pre">&#64;Mustache</span></code></a> annotation or are an instance of a <cite>MustacheBodyComponent</cite>. E.g.,</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="nd">@Mustache</span><span class="o">(</span><span class="s">&quot;foo&quot;</span><span class="o">)</span>
+<span class="k">case</span> <span class="k">class</span> <span class="nc">FooView</span><span class="o">(</span>
+  <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
 
-get(&quot;/foo&quot;) { request: Request =&gt;
-  FooView(&quot;abc&quot;)
-}
+<span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="nc">FooView</span><span class="o">(</span><span class="s">&quot;abc&quot;</span><span class="o">)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
-<p>The value of the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/java/com/twitter/finatra/http/annotations/Mustache.java"><code class="docutils literal"><span class="pre">&#64;Mustache</span></code></a> annotation is assumed by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/writer/MustacheMessageBodyWriter.scala"><cite>c.t.finatra.mustache.writer.MustacheMessageBodyWriter</cite></a> to be the template
+<p>The value of the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/java/com/twitter/finatra/http/annotations/Mustache.java"><code class="docutils literal notranslate"><span class="pre">&#64;Mustache</span></code></a> annotation is assumed by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/writer/MustacheMessageBodyWriter.scala"><cite>c.t.finatra.mustache.writer.MustacheMessageBodyWriter</cite></a> to be the template
 filename without the suffix (which the framework <strong>always assumes</strong> to be <cite>.mustache</cite>).</p>
 <p>Thus in the example above, this attempts to locate the <cite>foo.mustache</cite> template and uses the fields of the
 <cite>FooView</cite> to populate the template then returns the result as the body of an <cite>200 - OK</cite> response.</p>
@@ -116,19 +102,19 @@ filename without the suffix (which the framework <strong>always assumes</strong>
 <div class="section" id="explicitly-created-response-body">
 <h3>Explicitly created response body<a class="headerlink" href="#explicitly-created-response-body" title="Permalink to this headline">¶</a></h3>
 <p>Or you can manually create a response via the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a> which explicitly references a template, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.marshalling.response._
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.http.marshalling.response._</span>
 
-get(&quot;/foo&quot;) { request: Request =&gt;
-  ...
-  response.notFound.view(
-    template = &quot;notFound.mustache&quot;,
-    obj = NotFound(&quot;abc&quot;))
-}
+<span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="o">...</span>
+  <span class="n">response</span><span class="o">.</span><span class="n">notFound</span><span class="o">.</span><span class="n">view</span><span class="o">(</span>
+    <span class="n">template</span> <span class="k">=</span> <span class="s">&quot;notFound.mustache&quot;</span><span class="o">,</span>
+    <span class="n">obj</span> <span class="k">=</span> <span class="nc">NotFound</span><span class="o">(</span><span class="s">&quot;abc&quot;</span><span class="o">))</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The <cite>#view</cite> methods are implicits added to the <cite>c.t.finatra.http.response.EnrichedResponse</cite> by
+<p class="admonition-title">Note</p>
+<p>The <cite>#view</cite> methods are implicits added to the <cite>c.t.finatra.http.response.EnrichedResponse</cite> by
 importing the implicit <cite>RichEnrichedResponse</cite> into scope with
 <cite>import com.twitter.finatra.http.marshalling.response._</cite>.</p>
 </div>
@@ -138,38 +124,38 @@ importing the implicit <cite>RichEnrichedResponse</cite> into scope with
 <p>Or you can programmatically render a template into a string using
 the <cite>c.t.finatra.mustache.marshalling.MustacheService#createString</cite> method. This is useful for embedding
 the resultant content inside a field in a response.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.mustache.marshalling.MustacheService
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.mustache.marshalling.MustacheService</span>
 
-case class TestUserView(
-  age: Int,
-  name: String,
-  friends: Seq[String])
+<span class="k">case</span> <span class="k">class</span> <span class="nc">TestUserView</span><span class="o">(</span>
+  <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span>
+  <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
+  <span class="n">friends</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span>
 
-case class TestCaseClassWithHtml(
-  address: String,
-  phone: String,
-  renderedHtml: String)
+<span class="k">case</span> <span class="k">class</span> <span class="nc">TestCaseClassWithHtml</span><span class="o">(</span>
+  <span class="n">address</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
+  <span class="n">phone</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
+  <span class="n">renderedHtml</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
 
-get(&quot;/testClassWithHtml&quot;) { r: Request =&gt;
-  val testUser = TestUserView(
-    28,
-    &quot;Bob Smith&quot;,
-    Seq(&quot;user1&quot;, &quot;user2&quot;))
+<span class="n">get</span><span class="o">(</span><span class="s">&quot;/testClassWithHtml&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">r</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="k">val</span> <span class="n">testUser</span> <span class="k">=</span> <span class="nc">TestUserView</span><span class="o">(</span>
+    <span class="mi">28</span><span class="o">,</span>
+    <span class="s">&quot;Bob Smith&quot;</span><span class="o">,</span>
+    <span class="nc">Seq</span><span class="o">(</span><span class="s">&quot;user1&quot;</span><span class="o">,</span> <span class="s">&quot;user2&quot;</span><span class="o">))</span>
 
-  TestCaseClassWithHtml(
-    address = &quot;123 Main St. Anywhere, CA US 90210&quot;,
-    phone = &quot;+12221234567&quot;,
-    renderedHtml = xml.Utility.escape(mustacheService.createString(&quot;testHtml.mustache&quot;, testUser)))
-}
+  <span class="nc">TestCaseClassWithHtml</span><span class="o">(</span>
+    <span class="n">address</span> <span class="k">=</span> <span class="s">&quot;123 Main St. Anywhere, CA US 90210&quot;</span><span class="o">,</span>
+    <span class="n">phone</span> <span class="k">=</span> <span class="s">&quot;+12221234567&quot;</span><span class="o">,</span>
+    <span class="n">renderedHtml</span> <span class="k">=</span> <span class="n">xml</span><span class="o">.</span><span class="nc">Utility</span><span class="o">.</span><span class="n">escape</span><span class="o">(</span><span class="n">mustacheService</span><span class="o">.</span><span class="n">createString</span><span class="o">(</span><span class="s">&quot;testHtml.mustache&quot;</span><span class="o">,</span> <span class="n">testUser</span><span class="o">)))</span>
+<span class="o">}</span>
 </pre></div>
 </div>
-<p>The <cite>MustacheService</cite> is part of the framework&#8217;s generic <a class="reference external" href="https://mustache.github.io/">Mustache</a> support.
+<p>The <cite>MustacheService</cite> is part of the framework’s generic <a class="reference external" href="https://mustache.github.io/">Mustache</a> support.
 For more information see the <a class="reference external" href="../mustache/index.html">Finatra Mustache</a> section.</p>
 </div>
 <div class="section" id="template-resolving">
 <h3>Template Resolving<a class="headerlink" href="#template-resolving" title="Permalink to this headline">¶</a></h3>
 <p>To better understand how <a class="reference external" href="https://mustache.github.io/">Mustache</a> templates are resolved via the
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/java/com/twitter/finatra/http/annotations/Mustache.java"><code class="docutils literal"><span class="pre">&#64;Mustache</span></code></a> annotation or from a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyComponent.scala"><cite>c.t.finatra.http.marshalling.MessageBodyComponent</cite></a>, please see <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/writer/MustacheTemplateLookup.scala"><cite>MustacheTemplateLookup</cite></a> and the
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/java/com/twitter/finatra/http/annotations/Mustache.java"><code class="docutils literal notranslate"><span class="pre">&#64;Mustache</span></code></a> annotation or from a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyComponent.scala"><cite>c.t.finatra.http.marshalling.MessageBodyComponent</cite></a>, please see <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/writer/MustacheTemplateLookup.scala"><cite>MustacheTemplateLookup</cite></a> and the
 corresponding <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/test/scala/com/twitter/finatra/mustache/tests/MustacheTemplateLookupTest.scala"><cite>MustacheTemplateLookupTest</cite></a>.</p>
 <p>For more information on referencing files in Finatra, see the <a class="reference external" href="../files/index.html">Working with Files</a>
 section.</p>
@@ -182,10 +168,7 @@ section.</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
-            </a></p><p>
+        <div class="sphinxsidebarwrapper"><p>
   <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
@@ -196,7 +179,7 @@ section.</p>
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Mustache Integration with HTTP Routing</a><ul>
 <li><a class="reference internal" href="#responses">Responses</a><ul>
@@ -212,7 +195,7 @@ section.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">User&#8217;s Guide</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
       <li>Previous: <a href="index.html" title="previous chapter">Mustache Support</a></li>
       <li>Next: <a href="../files/index.html" title="next chapter">Working With Files</a></li>
   </ul></li>

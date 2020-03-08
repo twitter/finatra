@@ -198,13 +198,13 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">EnrichedResponse</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/ResponseProxy.html#com.twitter.finagle.http.ResponseProxy" class="extype" name="com.twitter.finagle.http.ResponseProxy">ResponseProxy</a></span>
+        <span class="name">EnrichedResponse</span><span class="result"> extends <span class="extype" name="com.twitter.finagle.http.ResponseProxy">ResponseProxy</span></span>
       </span>
       </h4>
 
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A wrapper around a <span class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</span> which is itself a type of
-<span class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</span> (by virtue of extending <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/ResponseProxy.html" class="extype" name="com.twitter.finagle.http.ResponseProxy">com.twitter.finagle.http.ResponseProxy</a></p><p>This class exposes a builder-like API for creating an <span class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</span>.
+<span class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</span> (by virtue of extending <span class="extype" name="com.twitter.finagle.http.ResponseProxy">com.twitter.finagle.http.ResponseProxy</span></p><p>This class exposes a builder-like API for creating an <span class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</span>.
 Users are NOT expected to interact with this class directly but should instead use the methods
 in the <a href="ResponseBuilder.html" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder">com.twitter.finatra.http.response.ResponseBuilder</a> which return this specialized
 <span class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</span> type.
@@ -212,7 +212,7 @@ in the <a href="ResponseBuilder.html" class="extype" name="com.twitter.finatra.h
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/ResponseProxy.html#com.twitter.finagle.http.ResponseProxy" class="extype" name="com.twitter.finagle.http.ResponseProxy">ResponseProxy</a>, <span class="extype" name="com.twitter.finagle.http.Response.Proxy">Proxy</span>, <span class="extype" name="com.twitter.finagle.http.Response">Response</span>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Message.html#com.twitter.finagle.http.Message" class="extype" name="com.twitter.finagle.http.Message">Message</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="com.twitter.finagle.http.ResponseProxy">ResponseProxy</span>, <span class="extype" name="com.twitter.finagle.http.Response.Proxy">Proxy</span>, <span class="extype" name="com.twitter.finagle.http.Response">Response</span>, <span class="extype" name="com.twitter.finagle.http.Message">Message</span>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -293,11 +293,11 @@ in the <a href="ResponseBuilder.html" class="extype" name="com.twitter.finatra.h
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">body</span><span class="params">(<span name="buffer">buffer: <a href="https://twitter.github.io/util/docs/com/twitter/io/Buf.html#com.twitter.io.Buf" class="extype" name="com.twitter.io.Buf">Buf</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a></span>
+        <span class="name">body</span><span class="params">(<span name="buffer">buffer: <span class="extype" name="com.twitter.io.Buf">Buf</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      <p class="shortcomment cmt">Return a response with the given <a href="https://twitter.github.io/util/docs/com/twitter/io/Buf.html" class="extype" name="com.twitter.io.Buf">com.twitter.io.Buf</a> set as the response body.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with the given <a href="https://twitter.github.io/util/docs/com/twitter/io/Buf.html" class="extype" name="com.twitter.io.Buf">com.twitter.io.Buf</a> set as the response body.
-</p></div><dl class="paramcmts block"><dt class="param">buffer</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/util/docs/com/twitter/io/Buf.html" class="extype" name="com.twitter.io.Buf">com.twitter.io.Buf</a> to set as the response body.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a> with the given <a href="https://twitter.github.io/util/docs/com/twitter/io/Buf.html" class="extype" name="com.twitter.io.Buf">com.twitter.io.Buf</a> set as the response body.</p></dd></dl></div>
+      <p class="shortcomment cmt">Return a response with the given <span class="extype" name="com.twitter.io.Buf">com.twitter.io.Buf</span> set as the response body.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with the given <span class="extype" name="com.twitter.io.Buf">com.twitter.io.Buf</span> set as the response body.
+</p></div><dl class="paramcmts block"><dt class="param">buffer</dt><dd class="cmt"><p>the <span class="extype" name="com.twitter.io.Buf">com.twitter.io.Buf</span> to set as the response body.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a> with the given <span class="extype" name="com.twitter.io.Buf">com.twitter.io.Buf</span> set as the response body.</p></dd></dl></div>
     </li><li name="com.twitter.finatra.http.response.EnrichedResponse#body" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="body(inputStream:java.io.InputStream):com.twitter.finatra.http.response.EnrichedResponse"></a><a id="body(InputStream):EnrichedResponse"></a>
       <span class="permalink">
@@ -363,13 +363,13 @@ in the <a href="ResponseBuilder.html" class="extype" name="com.twitter.finatra.h
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">body</span><span class="params">(<span name="request">request: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a></span>, <span name="any">any: <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a></span>
+        <span class="name">body</span><span class="params">(<span name="request">request: <span class="extype" name="com.twitter.finagle.http.Request">Request</span></span>, <span name="any">any: <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
       <p class="shortcomment cmt">Return a response with a written body potentially based on values
-contained within the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with a written body potentially based on values
-contained within the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a>.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a> associated with this response.</p></dd><dt class="param">any</dt><dd class="cmt"><p>the body, or the information needed to render the body.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a> with the given object written as the response body.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>This version is useful when the <code>any</code> parameter requires custom
+contained within the <span class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with a written body potentially based on values
+contained within the <span class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</span>.
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>the <span class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</span> associated with this response.</p></dd><dt class="param">any</dt><dd class="cmt"><p>the body, or the information needed to render the body.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a> with the given object written as the response body.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>This version is useful when the <code>any</code> parameter requires custom
       message body rendering and values in the <code>Request</code> are required for
       decision making.</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.response.EnrichedResponse#body" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
@@ -438,11 +438,11 @@ given String.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">cookie</span><span class="params">(<span name="c">c: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html#com.twitter.finagle.http.Cookie" class="extype" name="com.twitter.finagle.http.Cookie">Cookie</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a></span>
+        <span class="name">cookie</span><span class="params">(<span name="c">c: <span class="extype" name="com.twitter.finagle.http.Cookie">Cookie</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      <p class="shortcomment cmt">Set the given <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html" class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</a> on the returned Response.</p><div class="fullcomment"><div class="comment cmt"><p>Set the given <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html" class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</a> on the returned Response.
-</p></div><dl class="paramcmts block"><dt class="param">c</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html" class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</a> to set.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a> with a created Cookie of name with value.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://en.wikipedia.org/wiki/HTTP_cookie" target="_blank">HTTP Cookie</a></p></span></dd></dl></div>
+      <p class="shortcomment cmt">Set the given <span class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</span> on the returned Response.</p><div class="fullcomment"><div class="comment cmt"><p>Set the given <span class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</span> on the returned Response.
+</p></div><dl class="paramcmts block"><dt class="param">c</dt><dd class="cmt"><p>the <span class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</span> to set.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a> with a created Cookie of name with value.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://en.wikipedia.org/wiki/HTTP_cookie" target="_blank">HTTP Cookie</a></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.response.EnrichedResponse#cookie" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="cookie(name:String,value:String):com.twitter.finatra.http.response.EnrichedResponse"></a><a id="cookie(String,String):EnrichedResponse"></a>
       <span class="permalink">
@@ -458,10 +458,10 @@ given String.
         <span class="name">cookie</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      <p class="shortcomment cmt">Set a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html" class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</a> with the given name and value on
-the returned Response.</p><div class="fullcomment"><div class="comment cmt"><p>Set a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html" class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</a> with the given name and value on
+      <p class="shortcomment cmt">Set a <span class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</span> with the given name and value on
+the returned Response.</p><div class="fullcomment"><div class="comment cmt"><p>Set a <span class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</span> with the given name and value on
 the returned Response.
-</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html" class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</a> name</p></dd><dt class="param">value</dt><dd class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html" class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</a> value</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a> with a created <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html" class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</a> of name with value.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://en.wikipedia.org/wiki/HTTP_cookie#Structure" target="_blank">HTTP Cookie Structure</a></p></span></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p><span class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</span> name</p></dd><dt class="param">value</dt><dd class="cmt"><p><span class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</span> value</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a> with a created <span class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</span> of name with value.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://en.wikipedia.org/wiki/HTTP_cookie#Structure" target="_blank">HTTP Cookie Structure</a></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.response.EnrichedResponse#failure" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="failure(request:com.twitter.finagle.http.Request,exception:com.twitter.inject.exceptions.DetailedNonRetryableSourcedException):com.twitter.finatra.http.response.EnrichedResponse"></a><a id="failure(Request,DetailedNonRetryableSourcedException):EnrichedResponse"></a>
       <span class="permalink">
@@ -474,12 +474,12 @@ the returned Response.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">failure</span><span class="params">(<span name="request">request: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a></span>, <span name="exception">exception: <a href="../../../inject/exceptions/DetailedNonRetryableSourcedException.html" class="extype" name="com.twitter.inject.exceptions.DetailedNonRetryableSourcedException">DetailedNonRetryableSourcedException</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a></span>
+        <span class="name">failure</span><span class="params">(<span name="request">request: <span class="extype" name="com.twitter.finagle.http.Request">Request</span></span>, <span name="exception">exception: <a href="../../../inject/exceptions/DetailedNonRetryableSourcedException.html" class="extype" name="com.twitter.inject.exceptions.DetailedNonRetryableSourcedException">DetailedNonRetryableSourcedException</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
       <p class="shortcomment cmt">Helper method for returning responses that are the result of a &quot;service-level&quot; failure.</p><div class="fullcomment"><div class="comment cmt"><p>Helper method for returning responses that are the result of a &quot;service-level&quot; failure. This is most commonly
 useful in an <a href="../exceptions/ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a> implementation. E.g.,
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a> that triggered the failure</p></dd><dt class="param">exception</dt><dd class="cmt"><p>the <span class="extype" name="DetailedNonRetryableSourcedException">DetailedNonRetryableSourcedException</span> exception to classify</p></dd><dt>returns</dt><dd class="cmt"><p>this <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="#failureClassifier(classifier:=&gt;Boolean,request:com.twitter.finagle.http.Request,source:String,details:Seq[Any],message:String):com.twitter.finatra.http.response.EnrichedResponse" class="extmbr" name="com.twitter.finatra.http.response.EnrichedResponse#failureClassifier">EnrichedResponse#failureClassifier</a></p></span></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>the <span class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</span> that triggered the failure</p></dd><dt class="param">exception</dt><dd class="cmt"><p>the <span class="extype" name="DetailedNonRetryableSourcedException">DetailedNonRetryableSourcedException</span> exception to classify</p></dd><dt>returns</dt><dd class="cmt"><p>this <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="#failureClassifier(classifier:=&gt;Boolean,request:com.twitter.finagle.http.Request,source:String,details:Seq[Any],message:String):com.twitter.finatra.http.response.EnrichedResponse" class="extmbr" name="com.twitter.finatra.http.response.EnrichedResponse#failureClassifier">EnrichedResponse#failureClassifier</a></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.response.EnrichedResponse#failure" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="failure(request:com.twitter.finagle.http.Request,source:String,details:Seq[Any],message:String):com.twitter.finatra.http.response.EnrichedResponse"></a><a id="failure(Request,String,Seq[Any],String):EnrichedResponse"></a>
       <span class="permalink">
@@ -492,7 +492,7 @@ useful in an <a href="../exceptions/ExceptionMapper.html" class="extype" name="c
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">failure</span><span class="params">(<span name="request">request: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a></span>, <span name="source">source: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="details">details: <span class="extype" name="scala.Seq">Seq</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a>]</span>, <span name="message">message: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a></span>
+        <span class="name">failure</span><span class="params">(<span name="request">request: <span class="extype" name="com.twitter.finagle.http.Request">Request</span></span>, <span name="source">source: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="details">details: <span class="extype" name="scala.Seq">Seq</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a>]</span>, <span name="message">message: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
       <p class="shortcomment cmt">Helper method for returning responses that are the result of a &quot;service-level&quot; failure.</p><div class="fullcomment"><div class="comment cmt"><p>Helper method for returning responses that are the result of a &quot;service-level&quot; failure. This is most commonly
@@ -513,7 +513,7 @@ useful in an <a href="../exceptions/ExceptionMapper.html" class="extype" name="c
        exception)
    .jsonError(s<span class="lit">"Your account could not be authenticated. Reason: ${exception.resultCode}"</span>)
  }
-}</pre></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a> that triggered the failure</p></dd><dt class="param">source</dt><dd class="cmt"><p>The named component responsible for causing this failure.</p></dd><dt class="param">details</dt><dd class="cmt"><p>Details about this exception suitable for stats. Each element will be converted into a string.
+}</pre></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>the <span class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</span> that triggered the failure</p></dd><dt class="param">source</dt><dd class="cmt"><p>The named component responsible for causing this failure.</p></dd><dt class="param">details</dt><dd class="cmt"><p>Details about this exception suitable for stats. Each element will be converted into a string.
                Note: Each element must have a bounded set of values (e.g. You can stat the type of a tweet
                as &quot;protected&quot; or &quot;unprotected&quot;, but you can't include the actual tweet id &quot;696081566032723968&quot;).</p></dd><dt class="param">message</dt><dd class="cmt"><p>Details about this exception to be logged when this exception occurs. Typically logDetails
                contains the unbounded details of the exception that you are not able to stat such as an
@@ -530,12 +530,12 @@ useful in an <a href="../exceptions/ExceptionMapper.html" class="extype" name="c
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">failureClassifier</span><span class="params">(<span name="classifier">classifier: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="request">request: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a></span>, <span name="source">source: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="details">details: <span class="extype" name="scala.Seq">Seq</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a>] = <span class="symbol">Seq()</span></span>, <span name="message">message: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a></span>
+        <span class="name">failureClassifier</span><span class="params">(<span name="classifier">classifier: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="request">request: <span class="extype" name="com.twitter.finagle.http.Request">Request</span></span>, <span name="source">source: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="details">details: <span class="extype" name="scala.Seq">Seq</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a>] = <span class="symbol">Seq()</span></span>, <span name="message">message: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
       <p class="shortcomment cmt">Helper method for returning responses that are the result of a &quot;service-level&quot; failure.</p><div class="fullcomment"><div class="comment cmt"><p>Helper method for returning responses that are the result of a &quot;service-level&quot; failure. This is most commonly
 useful in an <a href="../exceptions/ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a> implementation.
-</p></div><dl class="paramcmts block"><dt class="param">classifier</dt><dd class="cmt"><p>if the failure should be &quot;classified&quot;, e.g. logged and stat'd accordingly</p></dd><dt class="param">request</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a> that triggered the failure</p></dd><dt class="param">source</dt><dd class="cmt"><p>The named component responsible for causing this failure.</p></dd><dt class="param">details</dt><dd class="cmt"><p>Details about this exception suitable for stats. Each element will be converted into a string.
+</p></div><dl class="paramcmts block"><dt class="param">classifier</dt><dd class="cmt"><p>if the failure should be &quot;classified&quot;, e.g. logged and stat'd accordingly</p></dd><dt class="param">request</dt><dd class="cmt"><p>the <span class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</span> that triggered the failure</p></dd><dt class="param">source</dt><dd class="cmt"><p>The named component responsible for causing this failure.</p></dd><dt class="param">details</dt><dd class="cmt"><p>Details about this exception suitable for stats. Each element will be converted into a string.
                   Note: Each element must have a bounded set of values (e.g. You can stat the type of a tweet
                   as &quot;protected&quot; or &quot;unprotected&quot;, but you can't include the actual tweet id &quot;696081566032723968&quot;).</p></dd><dt class="param">message</dt><dd class="cmt"><p>Details about this exception to be logged when this exception occurs. Typically logDetails
                   contains the unbounded details of the exception that you are not able to stat such as an
@@ -552,12 +552,12 @@ useful in an <a href="../exceptions/ExceptionMapper.html" class="extype" name="c
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">failureClassifier</span><span class="params">(<span name="classifier">classifier: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="request">request: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a></span>, <span name="exception">exception: <a href="../../../inject/exceptions/DetailedNonRetryableSourcedException.html" class="extype" name="com.twitter.inject.exceptions.DetailedNonRetryableSourcedException">DetailedNonRetryableSourcedException</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a></span>
+        <span class="name">failureClassifier</span><span class="params">(<span name="classifier">classifier: ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="request">request: <span class="extype" name="com.twitter.finagle.http.Request">Request</span></span>, <span name="exception">exception: <a href="../../../inject/exceptions/DetailedNonRetryableSourcedException.html" class="extype" name="com.twitter.inject.exceptions.DetailedNonRetryableSourcedException">DetailedNonRetryableSourcedException</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
       <p class="shortcomment cmt">Helper method for returning responses that are the result of a &quot;service-level&quot; failure.</p><div class="fullcomment"><div class="comment cmt"><p>Helper method for returning responses that are the result of a &quot;service-level&quot; failure. This is most commonly
 useful in an <a href="../exceptions/ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a> implementation. E.g.,
-</p></div><dl class="paramcmts block"><dt class="param">classifier</dt><dd class="cmt"><p>if the failure should be &quot;classified&quot;, e.g. logged and stat'd accordingly</p></dd><dt class="param">request</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a> that triggered the failure</p></dd><dt class="param">exception</dt><dd class="cmt"><p>the <span class="extype" name="DetailedNonRetryableSourcedException">DetailedNonRetryableSourcedException</span> exception to classify</p></dd><dt>returns</dt><dd class="cmt"><p>this <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="#failureClassifier(classifier:=&gt;Boolean,request:com.twitter.finagle.http.Request,source:String,details:Seq[Any],message:String):com.twitter.finatra.http.response.EnrichedResponse" class="extmbr" name="com.twitter.finatra.http.response.EnrichedResponse#failureClassifier">EnrichedResponse#failureClassifier</a></p></span></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">classifier</dt><dd class="cmt"><p>if the failure should be &quot;classified&quot;, e.g. logged and stat'd accordingly</p></dd><dt class="param">request</dt><dd class="cmt"><p>the <span class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</span> that triggered the failure</p></dd><dt class="param">exception</dt><dd class="cmt"><p>the <span class="extype" name="DetailedNonRetryableSourcedException">DetailedNonRetryableSourcedException</span> exception to classify</p></dd><dt>returns</dt><dd class="cmt"><p>this <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="#failureClassifier(classifier:=&gt;Boolean,request:com.twitter.finagle.http.Request,source:String,details:Seq[Any],message:String):com.twitter.finatra.http.response.EnrichedResponse" class="extmbr" name="com.twitter.finatra.http.response.EnrichedResponse#failureClassifier">EnrichedResponse#failureClassifier</a></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.response.EnrichedResponse#file" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="file(file:String):com.twitter.finatra.http.response.EnrichedResponse"></a><a id="file(String):EnrichedResponse"></a>
       <span class="permalink">
@@ -762,9 +762,9 @@ defined ObjectMapper.</p><p>Sets the response &quot;Content-Type&quot; header to
       </span>
       
       <p class="shortcomment cmt">Create a JSON-formatted <a href="ErrorsResponse.html" class="extype" name="com.twitter.finatra.http.response.ErrorsResponse">ErrorsResponse</a> response body based on
-this response's current <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Status.html" class="extype" name="com.twitter.finagle.http.Status">com.twitter.finagle.http.Status</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Create a JSON-formatted <a href="ErrorsResponse.html" class="extype" name="com.twitter.finatra.http.response.ErrorsResponse">ErrorsResponse</a> response body based on
-this response's current <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Status.html" class="extype" name="com.twitter.finagle.http.Status">com.twitter.finagle.http.Status</a>.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a> with a JSON-formatted <a href="ErrorsResponse.html" class="extype" name="com.twitter.finatra.http.response.ErrorsResponse">ErrorsResponse</a> response body.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ErrorsResponse.html" class="extype" name="com.twitter.finatra.http.response.ErrorsResponse">ErrorsResponse</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Status.html" class="extype" name="com.twitter.finagle.http.Status">com.twitter.finagle.http.Status</a></p></span></dd></dl></div>
+this response's current <span class="extype" name="com.twitter.finagle.http.Status">com.twitter.finagle.http.Status</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Create a JSON-formatted <a href="ErrorsResponse.html" class="extype" name="com.twitter.finatra.http.response.ErrorsResponse">ErrorsResponse</a> response body based on
+this response's current <span class="extype" name="com.twitter.finagle.http.Status">com.twitter.finagle.http.Status</span>.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a> with a JSON-formatted <a href="ErrorsResponse.html" class="extype" name="com.twitter.finatra.http.response.ErrorsResponse">ErrorsResponse</a> response body.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ErrorsResponse.html" class="extype" name="com.twitter.finatra.http.response.ErrorsResponse">ErrorsResponse</a></p></span><span class="cmt"><p><span class="extype" name="com.twitter.finagle.http.Status">com.twitter.finagle.http.Status</span></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.response.EnrichedResponse#location" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="location(uri:String):com.twitter.finatra.http.response.EnrichedResponse"></a><a id="location(String):EnrichedResponse"></a>
       <span class="permalink">
@@ -862,10 +862,10 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toFuture</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="com.twitter.finagle.http.Response">Response</span>]</span>
+        <span class="name">toFuture</span><span class="result">: <span class="extype" name="com.twitter.util.Future">Future</span>[<span class="extype" name="com.twitter.finagle.http.Response">Response</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Returns this <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a> wrapped in a <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html" class="extype" name="com.twitter.util.Future">com.twitter.util.Future</a></p><div class="fullcomment"><div class="comment cmt"><p>Returns this <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a> wrapped in a <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html" class="extype" name="com.twitter.util.Future">com.twitter.util.Future</a></p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <code>Future[Response]]</code></p></dd></dl></div>
+      <p class="shortcomment cmt">Returns this <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a> wrapped in a <span class="extype" name="com.twitter.util.Future">com.twitter.util.Future</span></p><div class="fullcomment"><div class="comment cmt"><p>Returns this <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a> wrapped in a <span class="extype" name="com.twitter.util.Future">com.twitter.util.Future</span></p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <code>Future[Response]]</code></p></dd></dl></div>
     </li><li name="com.twitter.finatra.http.response.EnrichedResponse#toFutureException" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="toFutureException[T]:com.twitter.util.Future[T]"></a><a id="toFutureException[T]:Future[T]"></a>
       <span class="permalink">
@@ -878,7 +878,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toFutureException</span><span class="tparams">[<span name="T">T</span>]</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="com.twitter.finatra.http.response.EnrichedResponse.toFutureException.T">T</span>]</span>
+        <span class="name">toFutureException</span><span class="tparams">[<span name="T">T</span>]</span><span class="result">: <span class="extype" name="com.twitter.util.Future">Future</span>[<span class="extype" name="com.twitter.finatra.http.response.EnrichedResponse.toFutureException.T">T</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Returns a failed Future of type [T] containing the result of <a href="#toException:com.twitter.finatra.http.exceptions.HttpResponseException" class="extmbr" name="com.twitter.finatra.http.response.EnrichedResponse#toException">EnrichedResponse#toException</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a failed Future of type [T] containing the result of <a href="#toException:com.twitter.finatra.http.exceptions.HttpResponseException" class="extmbr" name="com.twitter.finatra.http.response.EnrichedResponse#toException">EnrichedResponse#toException</a>.</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>the type of the <code>Future</code></p></dd><dt>returns</dt><dd class="cmt"><p>a &quot;failed&quot; Future.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.util.Future#exception">com.twitter.util.Future#exception</span></p></span></dd></dl></div>
@@ -1012,7 +1012,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">addCookie</span><span class="params">(<span name="cookie">cookie: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html#com.twitter.finagle.http.Cookie" class="extype" name="com.twitter.finagle.http.Cookie">Cookie</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">addCookie</span><span class="params">(<span name="cookie">cookie: <span class="extype" name="com.twitter.finagle.http.Cookie">Cookie</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd></dl></div>
@@ -1044,7 +1044,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: allow_$eq" class="name">allow_=</span><span class="params">(<span name="values">values: <span class="extype" name="scala.Iterable">Iterable</span>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Method.html#com.twitter.finagle.http.Method" class="extype" name="com.twitter.finagle.http.Method">Method</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span title="gt4s: allow_$eq" class="name">allow_=</span><span class="params">(<span name="values">values: <span class="extype" name="scala.Iterable">Iterable</span>[<span class="extype" name="com.twitter.finagle.http.Method">Method</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd></dl></div>
@@ -1140,7 +1140,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: cacheControl_$eq" class="name">cacheControl_=</span><span class="params">(<span name="maxAge">maxAge: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span title="gt4s: cacheControl_$eq" class="name">cacheControl_=</span><span class="params">(<span name="maxAge">maxAge: <span class="extype" name="com.twitter.util.Duration">Duration</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd></dl></div>
@@ -1204,7 +1204,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">chunkReader</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/io/Reader.html#com.twitter.io.Reader" class="extype" name="com.twitter.io.Reader">Reader</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Chunk.html#com.twitter.finagle.http.Chunk" class="extype" name="com.twitter.finagle.http.Chunk">Chunk</a>]</span>
+        <span class="name">chunkReader</span><span class="result">: <span class="extype" name="com.twitter.io.Reader">Reader</span>[<span class="extype" name="com.twitter.finagle.http.Chunk">Chunk</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Proxy → Message</dd></dl></div>
@@ -1220,7 +1220,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">chunkWriter</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/io/Writer.html#com.twitter.io.Writer" class="extype" name="com.twitter.io.Writer">Writer</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Chunk.html#com.twitter.finagle.http.Chunk" class="extype" name="com.twitter.finagle.http.Chunk">Chunk</a>]</span>
+        <span class="name">chunkWriter</span><span class="result">: <span class="extype" name="com.twitter.io.Writer">Writer</span>[<span class="extype" name="com.twitter.finagle.http.Chunk">Chunk</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Proxy → Message</dd></dl></div>
@@ -1276,7 +1276,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">close</span><span class="params">()</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
+        <span class="name">close</span><span class="params">()</span><span class="result">: <span class="extype" name="com.twitter.util.Future">Future</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd></dl></div>
@@ -1292,7 +1292,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">content</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/io/Buf.html#com.twitter.io.Buf" class="extype" name="com.twitter.io.Buf">Buf</a></span>
+        <span class="name">content</span><span class="result">: <span class="extype" name="com.twitter.io.Buf">Buf</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Proxy → Message</dd></dl></div>
@@ -1308,7 +1308,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">content</span><span class="params">(<span name="content">content: <a href="https://twitter.github.io/util/docs/com/twitter/io/Buf.html#com.twitter.io.Buf" class="extype" name="com.twitter.io.Buf">Buf</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a>.this.type</span>
+        <span class="name">content</span><span class="params">(<span name="content">content: <span class="extype" name="com.twitter.io.Buf">Buf</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a>.this.type</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd><dt>Annotations</dt><dd>
@@ -1458,7 +1458,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: content_$eq" class="name">content_=</span><span class="params">(<span name="content">content: <a href="https://twitter.github.io/util/docs/com/twitter/io/Buf.html#com.twitter.io.Buf" class="extype" name="com.twitter.io.Buf">Buf</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span title="gt4s: content_$eq" class="name">content_=</span><span class="params">(<span name="content">content: <span class="extype" name="com.twitter.io.Buf">Buf</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Proxy → Message</dd></dl></div>
@@ -1474,7 +1474,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">lazy val</span>
       </span>
       <span class="symbol">
-        <span class="name">cookies</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/CookieMap.html#com.twitter.finagle.http.CookieMap" class="extype" name="com.twitter.finagle.http.CookieMap">CookieMap</a></span>
+        <span class="name">cookies</span><span class="result">: <span class="extype" name="com.twitter.finagle.http.CookieMap">CookieMap</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Proxy → Message</dd></dl></div>
@@ -1691,7 +1691,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getCookies</span><span class="params">()</span><span class="result">: <span class="extype" name="java.util.Iterator">Iterator</span>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html#com.twitter.finagle.http.Cookie" class="extype" name="com.twitter.finagle.http.Cookie">Cookie</a>]</span>
+        <span class="name">getCookies</span><span class="params">()</span><span class="result">: <span class="extype" name="java.util.Iterator">Iterator</span>[<span class="extype" name="com.twitter.finagle.http.Cookie">Cookie</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd></dl></div>
@@ -1774,7 +1774,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">headerMap</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/HeaderMap.html#com.twitter.finagle.http.HeaderMap" class="extype" name="com.twitter.finagle.http.HeaderMap">HeaderMap</a></span>
+        <span class="name">headerMap</span><span class="result">: <span class="extype" name="com.twitter.finagle.http.HeaderMap">HeaderMap</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Proxy → Message</dd></dl></div>
@@ -2132,7 +2132,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">lazy val</span>
       </span>
       <span class="symbol">
-        <span class="name">reader</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/io/Reader.html#com.twitter.io.Reader" class="extype" name="com.twitter.io.Reader">Reader</a>[<a href="https://twitter.github.io/util/docs/com/twitter/io/Buf.html#com.twitter.io.Buf" class="extype" name="com.twitter.io.Buf">Buf</a>]</span>
+        <span class="name">reader</span><span class="result">: <span class="extype" name="com.twitter.io.Reader">Reader</span>[<span class="extype" name="com.twitter.io.Buf">Buf</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd></dl></div>
@@ -2340,7 +2340,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">status</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Status.html#com.twitter.finagle.http.Status" class="extype" name="com.twitter.finagle.http.Status">Status</a></span>
+        <span class="name">status</span><span class="result">: <span class="extype" name="com.twitter.finagle.http.Status">Status</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Proxy → Response</dd></dl></div>
@@ -2356,7 +2356,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">status</span><span class="params">(<span name="value">value: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Status.html#com.twitter.finagle.http.Status" class="extype" name="com.twitter.finagle.http.Status">Status</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a>.this.type</span>
+        <span class="name">status</span><span class="params">(<span name="value">value: <span class="extype" name="com.twitter.finagle.http.Status">Status</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a>.this.type</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Response</dd></dl></div>
@@ -2420,7 +2420,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: status_$eq" class="name">status_=</span><span class="params">(<span name="value">value: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Status.html#com.twitter.finagle.http.Status" class="extype" name="com.twitter.finagle.http.Status">Status</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span title="gt4s: status_$eq" class="name">status_=</span><span class="params">(<span name="value">value: <span class="extype" name="com.twitter.finagle.http.Status">Status</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Proxy → Response</dd></dl></div>
@@ -2468,7 +2468,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">trailers</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/HeaderMap.html#com.twitter.finagle.http.HeaderMap" class="extype" name="com.twitter.finagle.http.HeaderMap">HeaderMap</a></span>
+        <span class="name">trailers</span><span class="result">: <span class="extype" name="com.twitter.finagle.http.HeaderMap">HeaderMap</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Proxy → Message</dd></dl></div>
@@ -2516,7 +2516,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">version</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Version.html#com.twitter.finagle.http.Version" class="extype" name="com.twitter.finagle.http.Version">Version</a></span>
+        <span class="name">version</span><span class="result">: <span class="extype" name="com.twitter.finagle.http.Version">Version</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Proxy → Message</dd></dl></div>
@@ -2532,7 +2532,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">version</span><span class="params">(<span name="version">version: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Version.html#com.twitter.finagle.http.Version" class="extype" name="com.twitter.finagle.http.Version">Version</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a>.this.type</span>
+        <span class="name">version</span><span class="params">(<span name="version">version: <span class="extype" name="com.twitter.finagle.http.Version">Version</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.EnrichedResponse">EnrichedResponse</a>.this.type</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd></dl></div>
@@ -2548,7 +2548,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: version_$eq" class="name">version_=</span><span class="params">(<span name="version">version: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Version.html#com.twitter.finagle.http.Version" class="extype" name="com.twitter.finagle.http.Version">Version</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span title="gt4s: version_$eq" class="name">version_=</span><span class="params">(<span name="version">version: <span class="extype" name="com.twitter.finagle.http.Version">Version</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Proxy → Message</dd></dl></div>
@@ -2730,7 +2730,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">write</span><span class="params">(<span name="buf">buf: <a href="https://twitter.github.io/util/docs/com/twitter/io/Buf.html#com.twitter.io.Buf" class="extype" name="com.twitter.io.Buf">Buf</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">write</span><span class="params">(<span name="buf">buf: <span class="extype" name="com.twitter.io.Buf">Buf</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd><dt>Annotations</dt><dd>
@@ -2774,7 +2774,7 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
         <span class="kind">lazy val</span>
       </span>
       <span class="symbol">
-        <span class="name">writer</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/io/Writer.html#com.twitter.io.Writer" class="extype" name="com.twitter.io.Writer">Writer</a>[<a href="https://twitter.github.io/util/docs/com/twitter/io/Buf.html#com.twitter.io.Buf" class="extype" name="com.twitter.io.Buf">Buf</a>]</span>
+        <span class="name">writer</span><span class="result">: <span class="extype" name="com.twitter.io.Writer">Writer</span>[<span class="extype" name="com.twitter.io.Buf">Buf</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd></dl></div>
@@ -2853,13 +2853,13 @@ the &quot;Content-Type&quot; header field for this <a href="" class="extype" nam
 
         <div id="inheritedMembers">
         <div class="parent" name="com.twitter.finagle.http.ResponseProxy">
-              <h3>Inherited from <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/ResponseProxy.html#com.twitter.finagle.http.ResponseProxy" class="extype" name="com.twitter.finagle.http.ResponseProxy">ResponseProxy</a></h3>
+              <h3>Inherited from <span class="extype" name="com.twitter.finagle.http.ResponseProxy">ResponseProxy</span></h3>
             </div><div class="parent" name="com.twitter.finagle.http.Response.Proxy">
               <h3>Inherited from <span class="extype" name="com.twitter.finagle.http.Response.Proxy">Proxy</span></h3>
             </div><div class="parent" name="com.twitter.finagle.http.Response">
               <h3>Inherited from <span class="extype" name="com.twitter.finagle.http.Response">Response</span></h3>
             </div><div class="parent" name="com.twitter.finagle.http.Message">
-              <h3>Inherited from <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Message.html#com.twitter.finagle.http.Message" class="extype" name="com.twitter.finagle.http.Message">Message</a></h3>
+              <h3>Inherited from <span class="extype" name="com.twitter.finagle.http.Message">Message</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

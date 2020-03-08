@@ -1,33 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Dependency Injection &#8212; Finatra 20.1.0 documentation</title>
-    
+    <meta charset="utf-8" />
+    <title>Dependency Injection &#8212; Finatra 20.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '20.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 20.1.0 documentation" href="../../index.html" />
-    <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Understanding the Codebase" href="framework.html" />
     <link rel="prev" title="User’s Guide" href="../index.html" />
    
@@ -44,8 +31,7 @@
 
   </script>
 
-  </head>
-  <body role="document">
+  </head><body>
   
   
 
@@ -62,7 +48,7 @@
           <a href="../index.html" title="User’s Guide"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -73,30 +59,30 @@
             
   <div class="section" id="dependency-injection">
 <span id="basics"></span><h1>Dependency Injection<a class="headerlink" href="#dependency-injection" title="Permalink to this headline">¶</a></h1>
-<p>The Finatra framework uses <a class="reference external" href="https://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a> (DI) and it is important to understand the concept &#8211; specifically how it relates to effective testing which helps to explain the motivations of the framework.</p>
+<p>The Finatra framework uses <a class="reference external" href="https://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a> (DI) and it is important to understand the concept – specifically how it relates to effective testing which helps to explain the motivations of the framework.</p>
 <p><a class="reference external" href="https://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a> is one way to implement the <a class="reference external" href="https://en.wikipedia.org/wiki/Inversion_of_control">Inversion of Control (IoC)</a> programming principle. More importantly <a class="reference external" href="https://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a> is a <strong>design pattern</strong> and does not refer to any specific implementation of a library.</p>
 <p>Finatra does use the Google <a class="reference external" href="https://github.com/google/guice">Guice</a> <a class="reference external" href="https://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a> library which is also available for service writers if they choose to use <a class="reference external" href="https://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a>. However, the framework was designed around the principle of <a class="reference external" href="https://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a>, not the <a class="reference external" href="https://github.com/google/guice">Guice</a> library implementation with a primary goal to build testability of code into the framework.</p>
 <p>With that, a great place to start on understanding the reasoning behind <a class="reference external" href="https://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a>  is the <a class="reference external" href="https://github.com/google/guice/wiki/Motivation">Motivation</a> section of the Google <a class="reference external" href="https://github.com/google/guice">Guice</a> framework.</p>
 <div class="admonition attention">
-<p class="first admonition-title">Attention</p>
-<p class="last">You are <strong>not required</strong> to use Google <a class="reference external" href="https://github.com/google/guice">Guice</a> <a class="reference external" href="https://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a> when using Finatra. Creating servers, wiring in controllers and applying filters can all be done without using any dependency injection. However, you will not be able to take full-advantage of Finatra&#8217;s <a class="reference external" href="../testing/index.html">testing</a> features.</p>
+<p class="admonition-title">Attention</p>
+<p>You are <strong>not required</strong> to use Google <a class="reference external" href="https://github.com/google/guice">Guice</a> <a class="reference external" href="https://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a> when using Finatra. Creating servers, wiring in controllers and applying filters can all be done without using any dependency injection. However, you will not be able to take full-advantage of Finatra’s <a class="reference external" href="../testing/index.html">testing</a> features.</p>
 </div>
-<p>A simple example of Finatra&#8217;s <a class="reference external" href="https://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a>  integration is adding controllers to Finatra&#8217;s <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">HttpRouter</a> <em>by type</em>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class Server extends HttpServer {
-  override def configureHttp(router: HttpRouter) {
-    router.add[MyController]
-  }
-}
+<p>A simple example of Finatra’s <a class="reference external" href="https://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a>  integration is adding controllers to Finatra’s <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">HttpRouter</a> <em>by type</em>:</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Server</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">router</span><span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">MyController</span><span class="o">]</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>As mentioned, it is also possible to do this without using <a class="reference external" href="https://github.com/google/guice">Guice</a>: simply instantiate your controller and add the instance to the router:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class NonDIServer extends HttpServer {
-  val myController = new MyController(...)
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">NonDIServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">myController</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">MyController</span><span class="o">(...)</span>
 
-  override def configureHttp(router: HttpRouter) {
-    router.add(myController)
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">router</span><span class="o">.</span><span class="n">add</span><span class="o">(</span><span class="n">myController</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 </div>
@@ -110,88 +96,88 @@
 <div class="section" id="use-constructor-injection">
 <h2>Use Constructor Injection<a class="headerlink" href="#use-constructor-injection" title="Permalink to this headline">¶</a></h2>
 <p>Finatra highly recommends using constructor injection to create immutable objects. Immutability allows objects to be simple, shareable and composable. For example:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import javax.inject.Inject
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">javax.inject.Inject</span>
 
-class RealPaymentService @Inject()(
-  paymentQueue: PaymentQueue,
-  notifier: Notifier
-)
+<span class="k">class</span> <span class="nc">RealPaymentService</span> <span class="nd">@Inject</span><span class="o">()(</span>
+  <span class="n">paymentQueue</span><span class="k">:</span> <span class="kt">PaymentQueue</span><span class="o">,</span>
+  <span class="n">notifier</span><span class="k">:</span> <span class="kt">Notifier</span>
+<span class="o">)</span>
 </pre></div>
 </div>
 <div class="admonition important">
-<p class="first admonition-title">Important</p>
-<p class="last">While it may look odd, please note the position of the <cite>&#64;Inject()</cite> on the Scala class constructor. The parens are needed as the syntax requires constructor annotations to have exactly one parameter list, possibly empty.</p>
+<p class="admonition-title">Important</p>
+<p>While it may look odd, please note the position of the <cite>&#64;Inject()</cite> on the Scala class constructor. The parens are needed as the syntax requires constructor annotations to have exactly one parameter list, possibly empty.</p>
 </div>
 <p>or in Java</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>import javax.inject.Inject;
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">javax.inject.Inject</span><span class="p">;</span>
 
-public class RealPaymentService {
-  private final PaymentQueue paymentQueue;
-  private final Notifier notifier;
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">RealPaymentService</span> <span class="p">{</span>
+  <span class="kd">private</span> <span class="kd">final</span> <span class="n">PaymentQueue</span> <span class="n">paymentQueue</span><span class="p">;</span>
+  <span class="kd">private</span> <span class="kd">final</span> <span class="n">Notifier</span> <span class="n">notifier</span><span class="p">;</span>
 
-  @Inject
-  public RealPaymentService(
-    PaymentQueue paymentQueue,
-    Notifier notifier
-  ) {
-    this.paymentQueue = paymentQueue;
-    this.notifier = notifier;
-  }
-}
+  <span class="nd">@Inject</span>
+  <span class="kd">public</span> <span class="nf">RealPaymentService</span><span class="p">(</span>
+    <span class="n">PaymentQueue</span> <span class="n">paymentQueue</span><span class="p">,</span>
+    <span class="n">Notifier</span> <span class="n">notifier</span>
+  <span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">paymentQueue</span> <span class="o">=</span> <span class="n">paymentQueue</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">notifier</span> <span class="o">=</span> <span class="n">notifier</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>This clearly expresses that the <cite>RealPaymentService</cite> class requires a <cite>PaymentQueue</cite> and a <cite>Notifier</cite> for instantiation and allows for instantiation via injector <em>or</em> manual instantiation of the class. This way of defining injectable members for a class is preferable to <a class="reference external" href="https://github.com/google/guice/wiki/Injections#field-injection">Field Injection</a> or <a class="reference external" href="https://github.com/google/guice/wiki/Injections#method-injection">Method Injection</a>.</p>
 <div class="admonition-do-not-use-constructor-default-parameter-values admonition">
-<p class="first admonition-title">Do not use constructor default parameter values</p>
+<p class="admonition-title">Do not use constructor default parameter values</p>
 <p>Scala allows for <a class="reference external" href="https://docs.scala-lang.org/tour/default-parameter-values.html">default parameter values</a>.
 E.g., you can define a class with a constructor like so:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class RealPaymentService (
-  paymentQueue: PaymentQueue = new DefaultPaymentQueue,
-  notifier: Notifier = new DefaultNotifier
-)
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">RealPaymentService</span> <span class="o">(</span>
+  <span class="n">paymentQueue</span><span class="k">:</span> <span class="kt">PaymentQueue</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DefaultPaymentQueue</span><span class="o">,</span>
+  <span class="n">notifier</span><span class="k">:</span> <span class="kt">Notifier</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DefaultNotifier</span>
+<span class="o">)</span>
 </pre></div>
 </div>
 <p>However, if you want to allow for the injector to be able to create this class by adding <cite>&#64;Inject()</cite> to the constructor it is highly recommended that you <strong>do not provide a default value for any constructor parameters</strong> as this can confuse the injector.</p>
-<p class="last">If you want to provide an instance with defaulted state for injection, prefer providing the instance via a defined
+<p>If you want to provide an instance with defaulted state for injection, prefer providing the instance via a defined
 <a class="reference external" href="./modules.html">Module</a> instead.</p>
 </div>
 <div class="section" id="assistedinject">
 <h3>AssistedInject<a class="headerlink" href="#assistedinject" title="Permalink to this headline">¶</a></h3>
 <p>There may be cases where you do not want the injector to provide all arguments of the constructor. In these cases
 you could use <a class="reference external" href="https://github.com/google/guice/wiki/AssistedInject">AssistedInject</a>.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.assistedinject.Assisted
-import javax.inject.Inject
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.google.inject.assistedinject.Assisted</span>
+<span class="k">import</span> <span class="nn">javax.inject.Inject</span>
 
-class RealPaymentService @Inject()(
-  @Assisted paymentQueue: PaymentQueue,
-  notifier: Notifier
-)
+<span class="k">class</span> <span class="nc">RealPaymentService</span> <span class="nd">@Inject</span><span class="o">()(</span>
+  <span class="nd">@Assisted</span> <span class="n">paymentQueue</span><span class="k">:</span> <span class="kt">PaymentQueue</span><span class="o">,</span>
+  <span class="n">notifier</span><span class="k">:</span> <span class="kt">Notifier</span>
+<span class="o">)</span>
 </pre></div>
 </div>
-<p>where &#8220;assisted&#8221; here means that injection will be <em>assisted</em> by having a user-supplied value provided for
+<p>where “assisted” here means that injection will be <em>assisted</em> by having a user-supplied value provided for
 the annotated field to use in constructing an instance of the object.</p>
-<p>You would typically also create a &#8220;factory&#8221; which exposes a method that accepts the <cite>&#64;Assisted</cite> annotated field:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>trait RealPaymentServiceFactory {
-  def create(paymentQueue: PaymentQueue): RealPaymentService
-}
+<p>You would typically also create a “factory” which exposes a method that accepts the <cite>&#64;Assisted</cite> annotated field:</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">trait</span> <span class="nc">RealPaymentServiceFactory</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">create</span><span class="o">(</span><span class="n">paymentQueue</span><span class="k">:</span> <span class="kt">PaymentQueue</span><span class="o">)</span><span class="k">:</span> <span class="kt">RealPaymentService</span>
+<span class="o">}</span>
 </pre></div>
 </div>
-<p>Then bind this as an &#8220;assisted factory&#8221; in a <cite>TwitterModule</cite> and include the module in your server&#8217;s
+<p>Then bind this as an “assisted factory” in a <cite>TwitterModule</cite> and include the module in your server’s
 list of modules.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.TwitterModule
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.inject.TwitterModule</span>
 
-class PaymentServiceModule extends TwitterModule {
+<span class="k">class</span> <span class="nc">PaymentServiceModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
 
-  override def configure(): Unit = {
-    bindAssistedFactory[RealPaymentServiceFactory]()
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configure</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">bindAssistedFactory</span><span class="o">[</span><span class="kt">RealPaymentServiceFactory</span><span class="o">]()</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>To obtain an instance you would get a reference to the factory from the injector and call the
 factory method:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>val factory = injector.instance[RealPaymentServiceFactory]
-val paymentService: RealPaymentService = factory.create(new MyPaymentQueue)
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">val</span> <span class="n">factory</span> <span class="k">=</span> <span class="n">injector</span><span class="o">.</span><span class="n">instance</span><span class="o">[</span><span class="kt">RealPaymentServiceFactory</span><span class="o">]</span>
+<span class="k">val</span> <span class="n">paymentService</span><span class="k">:</span> <span class="kt">RealPaymentService</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create</span><span class="o">(</span><span class="k">new</span> <span class="nc">MyPaymentQueue</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>For Java examples please see the <a class="reference external" href="https://github.com/google/guice/wiki/AssistedInject">Guice documentation</a>.</p>
@@ -199,96 +185,96 @@ val paymentService: RealPaymentService = factory.create(new MyPaymentQueue)
 <div class="section" id="field-injection-not-recommended">
 <h3>Field Injection (not recommended)<a class="headerlink" href="#field-injection-not-recommended" title="Permalink to this headline">¶</a></h3>
 <p>If you want to do field injection in a Scala class (again, not recommended), you would do so inside of the defined class on a mutable member of the class. Note that this introduces mutability into your class and is not something generally recommended.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import javax.inject.Inject
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">javax.inject.Inject</span>
 
-class LessIdealPaymentService {
-  @Inject
-  private var notifier: Notifier = _
-}
+<span class="k">class</span> <span class="nc">LessIdealPaymentService</span> <span class="o">{</span>
+  <span class="nd">@Inject</span>
+  <span class="k">private</span> <span class="k">var</span> <span class="n">notifier</span><span class="k">:</span> <span class="kt">Notifier</span> <span class="o">=</span> <span class="k">_</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="injecting-third-party-code">
 <h3>Injecting third-party code<a class="headerlink" href="#injecting-third-party-code" title="Permalink to this headline">¶</a></h3>
-<p>If you want to be able to inject a type that is not a class you own &#8211; meaning you cannot annotate the class or its constructor since it is not your code but you want to be able to inject an instance of the type, then prefer defining a <a class="reference external" href="./modules.html">Module</a> which can provide an (ideally immutable) instance of the class to the object graph.</p>
+<p>If you want to be able to inject a type that is not a class you own – meaning you cannot annotate the class or its constructor since it is not your code but you want to be able to inject an instance of the type, then prefer defining a <a class="reference external" href="./modules.html">Module</a> which can provide an (ideally immutable) instance of the class to the object graph.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>The Guice documentation recommends <a class="reference external" href="https://github.com/google/guice/wiki/KeepConstructorsHidden">keeping constructors hidden</a> for classes which are meant to be instantiated by the injector. If you prefer constructor injection to create immutable objects, the difference between manual instantiation and injector instantiation should only come down to scoping of the created instance, i.e., is it a Singleton (the same instance every time from the injector). Finatra takes the approach of the <cite>&#64;Inject</cite> annotation being metadata in that it signals that the class <em>can</em> be instantiated by the injector but it is not a requirement.</p>
-<p class="last">We leave reducing the visibility of constructors to your discretion as a matter of what makes sense for your project or team.</p>
+<p>We leave reducing the visibility of constructors to your discretion as a matter of what makes sense for your project or team.</p>
 </div>
 </div>
 </div>
 <div class="section" id="inject-direct-dependencies">
 <h2>Inject direct dependencies<a class="headerlink" href="#inject-direct-dependencies" title="Permalink to this headline">¶</a></h2>
 <p>Avoid injecting an object simply as a way to get another object. For instance do not inject a <cite>Customer</cite> simply to obtain an <cite>Account</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class Budget @Inject()(
-  customer: Customer
-) {
-  val account: Account = customer.purchasingAccount
-}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Budget</span> <span class="nd">@Inject</span><span class="o">()(</span>
+  <span class="n">customer</span><span class="k">:</span> <span class="kt">Customer</span>
+<span class="o">)</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">account</span><span class="k">:</span> <span class="kt">Account</span> <span class="o">=</span> <span class="n">customer</span><span class="o">.</span><span class="n">purchasingAccount</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Instead, you should prefer to inject this dependency directly since this can make testing easier because your tests do not need to know anything about the <cite>Customer</cite> object. This is where defining a <a class="reference external" href="./modules.html">Module</a> is useful. Using an <cite>&#64;Provides</cite>-annotated method you can create a binding for <cite>Account</cite> which comes from a <cite>Customer</cite> binding:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class CustomersModule extends TwitterModule {
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">CustomersModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
 
-  @Provides
-  def providePurchasingAccount(
-    customer: Customer
-  ): Account = {
-    customer.purchasingAccount
-  }
-}
+  <span class="nd">@Provides</span>
+  <span class="k">def</span> <span class="n">providePurchasingAccount</span><span class="o">(</span>
+    <span class="n">customer</span><span class="k">:</span> <span class="kt">Customer</span>
+  <span class="o">)</span><span class="k">:</span> <span class="kt">Account</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">customer</span><span class="o">.</span><span class="n">purchasingAccount</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Injecting this binding makes the code simpler:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class Budget @Inject()(account: Account)
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Budget</span> <span class="nd">@Inject</span><span class="o">()(</span><span class="n">account</span><span class="k">:</span> <span class="kt">Account</span><span class="o">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="avoid-cyclic-dependencies">
 <h2>Avoid cyclic dependencies<a class="headerlink" href="#avoid-cyclic-dependencies" title="Permalink to this headline">¶</a></h2>
 <p>This is good practice in general and cycles often reflect insufficiently granular decomposition. For instance, assume you have a <cite>Store</cite>, a <cite>Boss</cite>, and a <cite>Clerk</cite>.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class Store @Inject()(boss: Boss) {
-  def incomingCustomer(customer: Customer): Unit = ???
-  def nextCustomer: Customer = ???
-}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Store</span> <span class="nd">@Inject</span><span class="o">()(</span><span class="n">boss</span><span class="k">:</span> <span class="kt">Boss</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">incomingCustomer</span><span class="o">(</span><span class="n">customer</span><span class="k">:</span> <span class="kt">Customer</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">???</span>
+  <span class="k">def</span> <span class="n">nextCustomer</span><span class="k">:</span> <span class="kt">Customer</span> <span class="o">=</span> <span class="o">???</span>
+<span class="o">}</span>
 
-class Boss @Inject()(clerk: Clerk)
+<span class="k">class</span> <span class="nc">Boss</span> <span class="nd">@Inject</span><span class="o">()(</span><span class="n">clerk</span><span class="k">:</span> <span class="kt">Clerk</span><span class="o">)</span>
 
-class Clerk()
+<span class="k">class</span> <span class="nc">Clerk</span><span class="o">()</span>
 </pre></div>
 </div>
 <p>So far, so good. Constructing a <cite>Store</cite> constructs a new <cite>Boss</cite> which in turn constructs a new <cite>Clerk</cite>. However, to give the <cite>Clerk</cite> a <cite>Customer</cite> in order to make a sale, the <cite>Clerk</cite> needs a reference to the <cite>Store</cite> to get those customers:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class Store @Inject()(boss: Boss) {
-  def incomingCustomer(customer: Customer): Unit = ???
-  def nextCustomer: Customer = ???
-}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Store</span> <span class="nd">@Inject</span><span class="o">()(</span><span class="n">boss</span><span class="k">:</span> <span class="kt">Boss</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">incomingCustomer</span><span class="o">(</span><span class="n">customer</span><span class="k">:</span> <span class="kt">Customer</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">???</span>
+  <span class="k">def</span> <span class="n">nextCustomer</span><span class="k">:</span> <span class="kt">Customer</span> <span class="o">=</span> <span class="o">???</span>
+<span class="o">}</span>
 
-class Boss @Inject()(clerk: Clerk)
+<span class="k">class</span> <span class="nc">Boss</span> <span class="nd">@Inject</span><span class="o">()(</span><span class="n">clerk</span><span class="k">:</span> <span class="kt">Clerk</span><span class="o">)</span>
 
-class Clerk @Inject()(store: Store) {
-  def doSale(): Unit = {
-    val customer = store.nextCustomer
-    ...
-  }
-}
+<span class="k">class</span> <span class="nc">Clerk</span> <span class="nd">@Inject</span><span class="o">()(</span><span class="n">store</span><span class="k">:</span> <span class="kt">Store</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">doSale</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="n">customer</span> <span class="k">=</span> <span class="n">store</span><span class="o">.</span><span class="n">nextCustomer</span>
+    <span class="o">...</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>which now leads to a cycle, <cite>Clerk</cite> -&gt; <cite>Store</cite> -&gt; <cite>Boss</cite> -&gt; <cite>Clerk</cite>.</p>
 <div class="section" id="eliminate-the-cycle-preferred">
 <h3>Eliminate the cycle (preferred)<a class="headerlink" href="#eliminate-the-cycle-preferred" title="Permalink to this headline">¶</a></h3>
 <p>One way to eliminate such cycles is to extract the dependency case into a separate class. In the contrived example, we could introduce a way of representing a line of eager customers as a <cite>CustomerLine</cite> which can be injected into a <cite>Clerk</cite> or a <cite>Store</cite>.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class Store @Inject()(boss: Boss, customers: CustomerLine) {
-  def incomingCustomer(customer: Customer): Unit = ???
-  def nextCustomer: Customer = ???
-}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Store</span> <span class="nd">@Inject</span><span class="o">()(</span><span class="n">boss</span><span class="k">:</span> <span class="kt">Boss</span><span class="o">,</span> <span class="n">customers</span><span class="k">:</span> <span class="kt">CustomerLine</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">incomingCustomer</span><span class="o">(</span><span class="n">customer</span><span class="k">:</span> <span class="kt">Customer</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">???</span>
+  <span class="k">def</span> <span class="n">nextCustomer</span><span class="k">:</span> <span class="kt">Customer</span> <span class="o">=</span> <span class="o">???</span>
+<span class="o">}</span>
 
-class Clerk @Inject()(customers: CustomerLine) {
-  def doSale(): Unit = {
-    val customer = customers.nextCustomer
-    ...
-  }
-}
+<span class="k">class</span> <span class="nc">Clerk</span> <span class="nd">@Inject</span><span class="o">()(</span><span class="n">customers</span><span class="k">:</span> <span class="kt">CustomerLine</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">doSale</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="n">customer</span> <span class="k">=</span> <span class="n">customers</span><span class="o">.</span><span class="n">nextCustomer</span>
+    <span class="o">...</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p><cite>Store</cite> and <cite>Clerk</cite> now both depend on a <cite>CustomerLine</cite> (you should ensure that they use the same instance) and thus no longer a cycle in the graph.</p>
@@ -296,13 +282,13 @@ class Clerk @Inject()(customers: CustomerLine) {
 <div class="section" id="use-a-provider">
 <h3>Use a Provider<a class="headerlink" href="#use-a-provider" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="https://github.com/google/guice/wiki/InjectingProviders">Injecting a Provider</a> allows you to inject a seam into the dependency graph. In this case, the <cite>Clerk</cite> still depends on a <cite>Store</cite> but the <cite>Clerk</cite> does not dereference the <cite>Store</cite> until needed by asking for it from the <cite>Provider[Store]</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class Clerk @Inject()(
-  Provider[Store] storeProvider
-) {
-  def doSale(): Unit = {
-    val customer = storeProvider.get.nextCustomer
-  }
-}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Clerk</span> <span class="nd">@Inject</span><span class="o">()(</span>
+  <span class="nc">Provider</span><span class="o">[</span><span class="kt">Store</span><span class="o">]</span> <span class="n">storeProvider</span>
+<span class="o">)</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">doSale</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="n">customer</span> <span class="k">=</span> <span class="n">storeProvider</span><span class="o">.</span><span class="n">get</span><span class="o">.</span><span class="n">nextCustomer</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Note: you should ensure in this case that the <cite>Store</cite> is bound as a <cite>Singleton</cite> (otherwise the <cite>Provider.get</cite> will instantiate a new <cite>Store</cite> which ends up in the cycle).</p>
@@ -312,45 +298,45 @@ class Clerk @Inject()(customers: CustomerLine) {
 <h2>Avoid I/O with Providers<a class="headerlink" href="#avoid-i-o-with-providers" title="Permalink to this headline">¶</a></h2>
 <p>As we saw in the above example, Providers can be a useful API but it lacks some semantics that you should be aware of:</p>
 <ul class="simple">
-<li>If you need to recover from specific failures the Provider API only returns a generic <cite>ProvisionException</cite>. You can <a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/com/google/inject/ProvisionException.html#getErrorMessages()">iterate through the causes</a> but you will not be able to catch the specific type. See <a class="reference external" href="https://github.com/google/guice/wiki/ThrowingProviders">ThrowingProviders</a> for a way to declare thrown exceptions from a <cite>Provider</cite>.</li>
-<li>No support for timeout. Thus you can deadlock waiting on the <cite>Provider</cite> to be available with a call to <cite>Provider.get</cite>.</li>
-<li>There is no retry for obtaining the instance from a Provider. If <cite>Provider.get</cite> is unavailable, multiple calls to <cite>get</cite> may simply throw multiple exceptions.</li>
+<li><p>If you need to recover from specific failures the Provider API only returns a generic <cite>ProvisionException</cite>. You can <a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/com/google/inject/ProvisionException.html#getErrorMessages()">iterate through the causes</a> but you will not be able to catch the specific type. See <a class="reference external" href="https://github.com/google/guice/wiki/ThrowingProviders">ThrowingProviders</a> for a way to declare thrown exceptions from a <cite>Provider</cite>.</p></li>
+<li><p>No support for timeout. Thus you can deadlock waiting on the <cite>Provider</cite> to be available with a call to <cite>Provider.get</cite>.</p></li>
+<li><p>There is no retry for obtaining the instance from a Provider. If <cite>Provider.get</cite> is unavailable, multiple calls to <cite>get</cite> may simply throw multiple exceptions.</p></li>
 </ul>
 </div>
 <div class="section" id="avoid-conditional-logic-in-modules">
 <h2>Avoid conditional logic in modules<a class="headerlink" href="#avoid-conditional-logic-in-modules" title="Permalink to this headline">¶</a></h2>
 <p>It can be tempting to create <a class="reference external" href="./modules.html">Modules</a> which have conditional logic and can be configured to operate differently for different environments. We strongly recommend avoiding this pattern and the framework provides utilities (including <a class="reference external" href="./flags.html">Flags</a>) to help in this regard.</p>
 <p>Please avoid doing this:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>// DO NOT DO THIS
-class FooModule(fooServer: String) extends TwitterModule {
-  override protected def configure(): Unit = {
-    if (fooServer != null) {
-      bind[String](Names.named(&quot;fooServer&quot;)).toInstance(fooServer)
-      bind[FooService].to[RemoteService]
-    } else {
-      bind[FooService].to[InMemoryFooService]
-    }
-  }
-}
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="c1">// DO NOT DO THIS</span>
+<span class="k">class</span> <span class="nc">FooModule</span><span class="o">(</span><span class="n">fooServer</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="n">configure</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">fooServer</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">bind</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="nc">Names</span><span class="o">.</span><span class="n">named</span><span class="o">(</span><span class="s">&quot;fooServer&quot;</span><span class="o">)).</span><span class="n">toInstance</span><span class="o">(</span><span class="n">fooServer</span><span class="o">)</span>
+      <span class="n">bind</span><span class="o">[</span><span class="kt">FooService</span><span class="o">].</span><span class="n">to</span><span class="o">[</span><span class="kt">RemoteService</span><span class="o">]</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+      <span class="n">bind</span><span class="o">[</span><span class="kt">FooService</span><span class="o">].</span><span class="n">to</span><span class="o">[</span><span class="kt">InMemoryFooService</span><span class="o">]</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 
-// NOR THIS
-class FooModule extends TwitterModule {
-  val env = flag(&quot;env&quot;, &quot;remote&quot;, &quot;the environment&quot;)
+<span class="c1">// NOR THIS</span>
+<span class="k">class</span> <span class="nc">FooModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">env</span> <span class="k">=</span> <span class="n">flag</span><span class="o">(</span><span class="s">&quot;env&quot;</span><span class="o">,</span> <span class="s">&quot;remote&quot;</span><span class="o">,</span> <span class="s">&quot;the environment&quot;</span><span class="o">)</span>
 
-  override protected def configure(): Unit = {
-    if (env() == &quot;remote&quot;) {
-      bind[String](Names.named(&quot;fooServer&quot;)).toInstance(fooServer)
-      bind[FooService].to[RemoteService]
-    } else {
-      bind[FooService].to[InMemoryFooService]
-    }
-  }
-}
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="n">configure</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">env</span><span class="o">()</span> <span class="o">==</span> <span class="s">&quot;remote&quot;</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">bind</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="nc">Names</span><span class="o">.</span><span class="n">named</span><span class="o">(</span><span class="s">&quot;fooServer&quot;</span><span class="o">)).</span><span class="n">toInstance</span><span class="o">(</span><span class="n">fooServer</span><span class="o">)</span>
+      <span class="n">bind</span><span class="o">[</span><span class="kt">FooService</span><span class="o">].</span><span class="n">to</span><span class="o">[</span><span class="kt">RemoteService</span><span class="o">]</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+      <span class="n">bind</span><span class="o">[</span><span class="kt">FooService</span><span class="o">].</span><span class="n">to</span><span class="o">[</span><span class="kt">InMemoryFooService</span><span class="o">]</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <div class="admonition important">
-<p class="first admonition-title">Important</p>
-<p class="last">We <strong>strongly</strong> recommend that <em>only production code ever be deployed to production</em> and thus configuration which should change per environment be externalized via <a class="reference external" href="./flags.html">Flags</a> and logic that should differ per environment be encapsulated within <a class="reference external" href="../testing/override_modules.html">override modules</a> (that are not located with the production code &#8211; e.g., production code in <cite>src/main/scala</cite> and test code in <cite>src/test/scala</cite>).</p>
+<p class="admonition-title">Important</p>
+<p>We <strong>strongly</strong> recommend that <em>only production code ever be deployed to production</em> and thus configuration which should change per environment be externalized via <a class="reference external" href="./flags.html">Flags</a> and logic that should differ per environment be encapsulated within <a class="reference external" href="../testing/override_modules.html">override modules</a> (that are not located with the production code – e.g., production code in <cite>src/main/scala</cite> and test code in <cite>src/test/scala</cite>).</p>
 </div>
 <p>For more information see the sections on <a class="reference external" href="./flags.html">Flags</a>, <a class="reference external" href="./modules.html">Modules</a>, and <a class="reference external" href="../testing/override_modules.html">Override Modules</a>.</p>
 </div>
@@ -359,10 +345,10 @@ class FooModule extends TwitterModule {
 <p>Finatra adds a lifecycle to Modules which is directly tied to the <a class="reference external" href="./lifecycle.html">server (or application) lifecycle</a> in which the module is used. This allows users to overcome some of the limitations of a standard <cite>AbstractModule</cite>.</p>
 <p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/f275df9ea4e00ea3690e63e72a5445bb2c98cea7/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala#L9">c.t.inject.TwitterModuleLifecycle</a> defines several phases which allow users to setup and teardown or close <cite>Singleton</cite> scoped resources. Thus, you are able to bind closable resources with a defined way to release them.</p>
 <div class="admonition important">
-<p class="first admonition-title">Important</p>
-<p class="last">Please note that the lifecycle is for <strong>Singleton</strong>-scoped resources and users should still avoid binding unscoped resources without ways to shutdown or close them.</p>
+<p class="admonition-title">Important</p>
+<p>Please note that the lifecycle is for <strong>Singleton</strong>-scoped resources and users should still avoid binding unscoped resources without ways to shutdown or close them.</p>
 </div>
-<p>See: Guice&#8217;s documentation on <a class="reference external" href="https://github.com/google/guice/wiki/ModulesShouldBeFastAndSideEffectFree">Modules should be fast and side-effect free</a> and <a class="reference external" href="https://github.com/google/guice/wiki/Avoid-Injecting-Closable-Resources">Avoid Injecting Closable Resources</a>.</p>
+<p>See: Guice’s documentation on <a class="reference external" href="https://github.com/google/guice/wiki/ModulesShouldBeFastAndSideEffectFree">Modules should be fast and side-effect free</a> and <a class="reference external" href="https://github.com/google/guice/wiki/Avoid-Injecting-Closable-Resources">Avoid Injecting Closable Resources</a>.</p>
 <p>For more information on Finatra Modules see the documentation <a class="reference external" href="./modules.html">here</a>.</p>
 </div>
 </div>
@@ -372,10 +358,7 @@ class FooModule extends TwitterModule {
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
-            </a></p><p>
+        <div class="sphinxsidebarwrapper"><p>
   <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
@@ -386,7 +369,7 @@ class FooModule extends TwitterModule {
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Dependency Injection</a></li>
 <li><a class="reference internal" href="#dependency-injection-and-testing">Dependency Injection and Testing</a></li>
@@ -412,8 +395,8 @@ class FooModule extends TwitterModule {
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">User&#8217;s Guide</a><ul>
-      <li>Previous: <a href="../index.html" title="previous chapter">User&#8217;s Guide</a></li>
+  <li><a href="../index.html">User’s Guide</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter">User’s Guide</a></li>
       <li>Next: <a href="framework.html" title="next chapter">Understanding the Codebase</a></li>
   </ul></li>
   </ul></li>

@@ -135,6 +135,10 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra">finatra</a></dd></dl></div>
     </li><li class="current-entities indented4">
                         <span class="separator"></span>
+                        <a class="trait" href="CaseClassValidator.html" title="Trait for defining a validator that will be triggered during Case Class validation."></a>
+                        <a href="CaseClassValidator.html" title="Trait for defining a validator that will be triggered during Case Class validation.">CaseClassValidator</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
                         <a class="object" href="CommonMethodValidations$.html" title=""></a>
                         <a href="CommonMethodValidations$.html" title="">CommonMethodValidations</a>
                       </li><li class="current-entities indented4">
@@ -165,6 +169,10 @@
                         <span class="separator"></span>
                         <a class="class" href="NotEmptyInternal.html" title=""></a>
                         <a href="NotEmptyInternal.html" title="">NotEmptyInternal</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="NullCaseClassValidationProvider$.html" title="Provides a validation bypass for case class validation."></a>
+                        <a href="NullCaseClassValidationProvider$.html" title="Provides a validation bypass for case class validation.">NullCaseClassValidationProvider</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
                         <a class="class" href="OneOfInternal.html" title=""></a>
@@ -201,6 +209,10 @@
                         <span class="separator"></span>
                         <a class="class" href="ValidationMessageResolver.html" title=""></a>
                         <a href="ValidationMessageResolver.html" title="">ValidationMessageResolver</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="trait" href="ValidationProvider.html" title="Trait that defines a factory for returning a CaseClassValidator."></a>
+                        <a href="ValidationProvider.html" title="Trait that defines a factory for returning a CaseClassValidator.">ValidationProvider</a>
                       </li><li class="current-entities indented4">
                         <a class="object" href="ValidationResult$.html" title=""></a>
                         <a class="trait" href="ValidationResult.html" title=""></a>
@@ -250,7 +262,7 @@ to customize handling of specific errors.
             <span class="toggle">
               Known Subclasses
             </span>
-            <div class="subClasses hiddenContent"><a href="ErrorCode$$InvalidCountryCodes.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.InvalidCountryCodes">InvalidCountryCodes</a>, <a href="ErrorCode$$InvalidTimeGranularity.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.InvalidTimeGranularity">InvalidTimeGranularity</a>, <a href="ErrorCode$$InvalidUUID.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.InvalidUUID">InvalidUUID</a>, <a href="ErrorCode$$InvalidValues.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.InvalidValues">InvalidValues</a>, <a href="ErrorCode$$JsonProcessingError.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.JsonProcessingError">JsonProcessingError</a>, <a href="ErrorCode$$PatternNotMatched.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.PatternNotMatched">PatternNotMatched</a>, <a href="ErrorCode$$PatternSyntaxError.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.PatternSyntaxError">PatternSyntaxError</a>, <a href="ErrorCode$$RepeatedCommaSeparatedCollection$.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.RepeatedCommaSeparatedCollection">RepeatedCommaSeparatedCollection</a>, <a href="ErrorCode$$RequiredFieldMissing$.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.RequiredFieldMissing">RequiredFieldMissing</a>, <a href="ErrorCode$$SizeOutOfRange.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.SizeOutOfRange">SizeOutOfRange</a>, <a href="ErrorCode$$TimeNotFuture.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.TimeNotFuture">TimeNotFuture</a>, <a href="ErrorCode$$TimeNotPast.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.TimeNotPast">TimeNotPast</a>, <a href="ErrorCode$$Unknown$.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.Unknown">Unknown</a>, <a href="ErrorCode$$ValueCannotBeEmpty$.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.ValueCannotBeEmpty">ValueCannotBeEmpty</a>, <a href="ErrorCode$$ValueOutOfRange.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.ValueOutOfRange">ValueOutOfRange</a>, <a href="ErrorCode$$ValueTooLarge.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.ValueTooLarge">ValueTooLarge</a>, <a href="ErrorCode$$ValueTooSmall.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.ValueTooSmall">ValueTooSmall</a></div>
+            <div class="subClasses hiddenContent"><a href="../jackson/caseclass/exceptions/ErrorCode$$JsonProcessingError.html" class="extype" name="com.twitter.finatra.jackson.caseclass.exceptions.ErrorCode.JsonProcessingError">JsonProcessingError</a>, <a href="ErrorCode$$InvalidCountryCodes.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.InvalidCountryCodes">InvalidCountryCodes</a>, <a href="ErrorCode$$InvalidTimeGranularity.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.InvalidTimeGranularity">InvalidTimeGranularity</a>, <a href="ErrorCode$$InvalidUUID.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.InvalidUUID">InvalidUUID</a>, <a href="ErrorCode$$InvalidValues.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.InvalidValues">InvalidValues</a>, <a href="ErrorCode$$PatternNotMatched.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.PatternNotMatched">PatternNotMatched</a>, <a href="ErrorCode$$PatternSyntaxError.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.PatternSyntaxError">PatternSyntaxError</a>, <a href="ErrorCode$$RepeatedCommaSeparatedCollection$.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.RepeatedCommaSeparatedCollection">RepeatedCommaSeparatedCollection</a>, <a href="ErrorCode$$RequiredFieldMissing$.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.RequiredFieldMissing">RequiredFieldMissing</a>, <a href="ErrorCode$$SizeOutOfRange.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.SizeOutOfRange">SizeOutOfRange</a>, <a href="ErrorCode$$TimeNotFuture.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.TimeNotFuture">TimeNotFuture</a>, <a href="ErrorCode$$TimeNotPast.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.TimeNotPast">TimeNotPast</a>, <a href="ErrorCode$$Unknown$.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.Unknown">Unknown</a>, <a href="ErrorCode$$ValueCannotBeEmpty$.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.ValueCannotBeEmpty">ValueCannotBeEmpty</a>, <a href="ErrorCode$$ValueOutOfRange.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.ValueOutOfRange">ValueOutOfRange</a>, <a href="ErrorCode$$ValueTooLarge.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.ValueTooLarge">ValueTooLarge</a>, <a href="ErrorCode$$ValueTooSmall.html" class="extype" name="com.twitter.finatra.validation.ErrorCode.ValueTooSmall">ValueTooSmall</a></div>
           </div></div>
         
 

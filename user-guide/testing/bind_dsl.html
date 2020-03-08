@@ -1,33 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Explicit Binding with #bind[T] &#8212; Finatra 20.1.0 documentation</title>
-    
+    <meta charset="utf-8" />
+    <title>Explicit Binding with #bind[T] &#8212; Finatra 20.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '20.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 20.1.0 documentation" href="../../index.html" />
-    <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Finatra Presentations" href="../../presentations/index.html" />
     <link rel="prev" title="Override Modules" href="override_modules.html" />
    
@@ -44,8 +31,7 @@
 
   </script>
 
-  </head>
-  <body role="document">
+  </head><body>
   
   
 
@@ -62,7 +48,7 @@
           <a href="override_modules.html" title="Override Modules"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -72,70 +58,74 @@
           <div class="body" role="main">
             
   <div class="section" id="explicit-binding-with-bind-t">
-<span id="bind-dsl"></span><h1>Explicit Binding with <code class="docutils literal"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#explicit-binding-with-bind-t" title="Permalink to this headline">¶</a></h1>
+<span id="bind-dsl"></span><h1>Explicit Binding with <code class="docutils literal notranslate"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#explicit-binding-with-bind-t" title="Permalink to this headline">¶</a></h1>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Please see the section on including test-jar dependencies in your project: <a class="reference external" href="../..#test-dependencies">Test Dependencies</a>.</p>
+</div>
 <div class="section" id="embedded-server-bind-t">
-<h2>Embedded Server <code class="docutils literal"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#embedded-server-bind-t" title="Permalink to this headline">¶</a></h2>
-<p>In the cases where we&#8217;d like to easily replace a bound instance with another instance in our tests
+<h2>Embedded Server <code class="docutils literal notranslate"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#embedded-server-bind-t" title="Permalink to this headline">¶</a></h2>
+<p>In the cases where we’d like to easily replace a bound instance with another instance in our tests
 (e.g. with a mock or a simple stub implementation), we do not need to create a specific module
 for testing to compose into our server as an override module. Instead we can use the <cite>#bind[T]</cite>
 function on the embedded server.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
-import com.twitter.inject.server.FeatureTest
-import com.twitter.inject.Mockito
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.http.</span><span class="o">{</span><span class="nc">EmbeddedHttpServer</span><span class="o">,</span> <span class="nc">HttpTest</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.server.FeatureTest</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.Mockito</span>
 
-class ExampleFeatureTest
-  extends FeatureTest
-  with Mockito
-  with HttpTest {
+<span class="k">class</span> <span class="nc">ExampleFeatureTest</span>
+  <span class="k">extends</span> <span class="nc">FeatureTest</span>
+  <span class="k">with</span> <span class="nc">Mockito</span>
+  <span class="k">with</span> <span class="nc">HttpTest</span> <span class="o">{</span>
 
-  val mockDownstreamServiceClient = smartMock[DownstreamServiceClient]
-  val mockIdService = smartMock[IdService]
+  <span class="k">val</span> <span class="n">mockDownstreamServiceClient</span> <span class="k">=</span> <span class="n">smartMock</span><span class="o">[</span><span class="kt">DownstreamServiceClient</span><span class="o">]</span>
+  <span class="k">val</span> <span class="n">mockIdService</span> <span class="k">=</span> <span class="n">smartMock</span><span class="o">[</span><span class="kt">IdService</span><span class="o">]</span>
 
-  override val server =
-    new EmbeddedHttpServer(new ExampleServer)
-    .bind[DownstreamServiceClient].toInstance(mockDownstreamServiceClient)
-    .bind[IdService].toInstance(mockIdService)
+  <span class="k">override</span> <span class="k">val</span> <span class="n">server</span> <span class="k">=</span>
+    <span class="k">new</span> <span class="nc">EmbeddedHttpServer</span><span class="o">(</span><span class="k">new</span> <span class="nc">ExampleServer</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">bind</span><span class="o">[</span><span class="kt">DownstreamServiceClient</span><span class="o">].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">mockDownstreamServiceClient</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">bind</span><span class="o">[</span><span class="kt">IdService</span><span class="o">].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">mockIdService</span><span class="o">)</span>
 
-  test(&quot;service test&quot;) {
-    /* Mock GET Request performed by DownstreamServiceClient */
-    mockDownstreamServiceClient.get(&quot;/tweets/123.json&quot;)(manifest[FooResponse]) returns Future(None)
-    ...
-  }
+  <span class="n">test</span><span class="o">(</span><span class="s">&quot;service test&quot;</span><span class="o">)</span> <span class="o">{</span>
+    <span class="cm">/* Mock GET Request performed by DownstreamServiceClient */</span>
+    <span class="n">mockDownstreamServiceClient</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="s">&quot;/tweets/123.json&quot;</span><span class="o">)(</span><span class="n">manifest</span><span class="o">[</span><span class="kt">FooResponse</span><span class="o">])</span> <span class="n">returns</span> <span class="nc">Future</span><span class="o">(</span><span class="nc">None</span><span class="o">)</span>
+    <span class="o">...</span>
+  <span class="o">}</span>
 </pre></div>
 </div>
 <p>For a complete example, see the
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/examples/twitter-clone/src/test/scala/finatra/quickstart/TwitterCloneFeatureTest.scala">TwitterCloneFeatureTest</a>.</p>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">Using <code class="docutils literal"><span class="pre">&#64;Bind</span></code> (the <cite>com.google.inject.testing.fieldbinder.Bind</cite> annotation) is to be considered
+<p class="admonition-title">Warning</p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">&#64;Bind</span></code> (the <cite>com.google.inject.testing.fieldbinder.Bind</cite> annotation) is to be considered
 deprecated.</p>
 </div>
 </div>
 <div class="section" id="testinjector-bind-t">
-<h2>TestInjector <code class="docutils literal"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#testinjector-bind-t" title="Permalink to this headline">¶</a></h2>
+<h2>TestInjector <code class="docutils literal notranslate"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#testinjector-bind-t" title="Permalink to this headline">¶</a></h2>
 <p>As described in the <a class="reference external" href="#integration_tests">Integration Tests</a> section you can use the <cite>TestInjector</cite>
 to construct a minimal object graph for testing. The <cite>TestInjector</cite> also supports a <cite>bind[T]</cite> function
 to let you easily replace bound instances in the constructed object graph with another instance, like
 a mock or stub.</p>
 <p>E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.IntegrationTest
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.inject.IntegrationTest</span>
 
-class ExampleIntegrationTest extends IntegrationTest {
-  val mockIdService = smartMock[IdService]
+<span class="k">class</span> <span class="nc">ExampleIntegrationTest</span> <span class="k">extends</span> <span class="nc">IntegrationTest</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">mockIdService</span> <span class="k">=</span> <span class="n">smartMock</span><span class="o">[</span><span class="kt">IdService</span><span class="o">]</span>
 
-  override val injector =
-    TestInjector(
-      flags =
-        Map(&quot;foo.flag&quot; -&gt; &quot;meaningfulValue&quot;),
-      modules =
-        Seq(ExampleModule, IdServiceModule))
-      .bind[IdService].toInstance(mockIdService)
-      .create
+  <span class="k">override</span> <span class="k">val</span> <span class="n">injector</span> <span class="k">=</span>
+    <span class="nc">TestInjector</span><span class="o">(</span>
+      <span class="n">flags</span> <span class="k">=</span>
+        <span class="nc">Map</span><span class="o">(</span><span class="s">&quot;foo.flag&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;meaningfulValue&quot;</span><span class="o">),</span>
+      <span class="n">modules</span> <span class="k">=</span>
+        <span class="nc">Seq</span><span class="o">(</span><span class="nc">ExampleModule</span><span class="o">,</span> <span class="nc">IdServiceModule</span><span class="o">))</span>
+      <span class="o">.</span><span class="n">bind</span><span class="o">[</span><span class="kt">IdService</span><span class="o">].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">mockIdService</span><span class="o">)</span>
+      <span class="o">.</span><span class="n">create</span>
 
-  test(&quot;MyTest#perform feature&quot;) {
-    ...
-  }
-}
+  <span class="n">test</span><span class="o">(</span><span class="s">&quot;MyTest#perform feature&quot;</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">...</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>In this example, the bound <cite>IdService</cite> would be replaced with the <cite>mockIdService</cite>. For a more complete
@@ -145,91 +135,91 @@ example, see the <a class="reference external" href="https://github.com/twitter/
 <h2><a class="reference external" href="https://github.com/twitter/finatra/tree/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/BindDSL.scala"><cite>#bind[T]</cite></a> DSL<a class="headerlink" href="#bind-t-dsl" title="Permalink to this headline">¶</a></h2>
 <p>The primary DSL can be expressed as such (and is similar to the Guice <a class="reference external" href="https://github.com/google/guice/wiki/LinkedBindings">Linked</a>
 and <a class="reference external" href="https://github.com/google/guice/wiki/InstanceBindings">Instance</a> bindings):</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>bind[T].to[U &lt;: T]
-bind[T].to[Class[U &lt;: T]]
-bind[T].toInstance(T)
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">to</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]</span>
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">to</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]]</span>
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">T</span><span class="o">)</span>
 
-bind[T].annotatedWith[Ann].to[U &lt;: T]
-bind[T].annotatedWith[Ann].to[Class[U &lt;: T]]
-bind[T].annotatedWith[Ann].toInstance(T)
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">annotatedWith</span><span class="o">[</span><span class="kt">Ann</span><span class="o">].</span><span class="n">to</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]</span>
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">annotatedWith</span><span class="o">[</span><span class="kt">Ann</span><span class="o">].</span><span class="n">to</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]]</span>
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">annotatedWith</span><span class="o">[</span><span class="kt">Ann</span><span class="o">].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">T</span><span class="o">)</span>
 
-bind[T].annotatedWith[Class[Ann]].to[U &lt;: T]
-bind[T].annotatedWith[Class[Ann]].to[Class[U &lt;: T]]
-bind[T].annotatedWith[Class[Ann]].toInstance(T)
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">annotatedWith</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">Ann</span><span class="o">]].</span><span class="n">to</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]</span>
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">annotatedWith</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">Ann</span><span class="o">]].</span><span class="n">to</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]]</span>
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">annotatedWith</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">Ann</span><span class="o">]].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">T</span><span class="o">)</span>
 
-bind[T].annotatedWith(Annotation).to[U &lt;: T]
-bind[T].annotatedWith(Annotation).to[Class[U &lt;: T]]
-bind[T].annotatedWith(Annotation).toInstance(T)
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">annotatedWith</span><span class="o">(</span><span class="nc">Annotation</span><span class="o">).</span><span class="n">to</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]</span>
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">annotatedWith</span><span class="o">(</span><span class="nc">Annotation</span><span class="o">).</span><span class="n">to</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]]</span>
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">annotatedWith</span><span class="o">(</span><span class="nc">Annotation</span><span class="o">).</span><span class="n">toInstance</span><span class="o">(</span><span class="n">T</span><span class="o">)</span>
 
-bindClass(Class[T]).to[T]
-bindClass(Class[T]).to[Class[U &lt;: T]]
-bindClass(Class[T]).toInstance(T)
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">]).</span><span class="n">to</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">]).</span><span class="n">to</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]]</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">]).</span><span class="n">toInstance</span><span class="o">(</span><span class="n">T</span><span class="o">)</span>
 
-bindClass(Class[T]).annotatedWith[Class[Ann]].to[T]
-bindClass(Class[T]).annotatedWith[Class[Ann]].[Class[U &lt;: T]]
-bindClass(Class[T]).annotatedWith[Class[Ann]].toInstance(T)
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">]).</span><span class="n">annotatedWith</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">Ann</span><span class="o">]].</span><span class="n">to</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">]).</span><span class="n">annotatedWith</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">Ann</span><span class="o">]].[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]]</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">]).</span><span class="n">annotatedWith</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">Ann</span><span class="o">]].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">T</span><span class="o">)</span>
 
-bindClass(Class[T]).annotatedWith(Annotation).to[T]
-bindClass(Class[T]).annotatedWith(Annotation).[Class[U &lt;: T]]
-bindClass(Class[T]).annotatedWith(Annotation).toInstance(T)
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">]).</span><span class="n">annotatedWith</span><span class="o">(</span><span class="nc">Annotation</span><span class="o">).</span><span class="n">to</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">]).</span><span class="n">annotatedWith</span><span class="o">(</span><span class="nc">Annotation</span><span class="o">).[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]]</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">]).</span><span class="n">annotatedWith</span><span class="o">(</span><span class="nc">Annotation</span><span class="o">).</span><span class="n">toInstance</span><span class="o">(</span><span class="n">T</span><span class="o">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="usage-from-java">
 <h2>Usage from Java<a class="headerlink" href="#usage-from-java" title="Permalink to this headline">¶</a></h2>
 <p>The <cite>#bind[T]</cite> DSL also provides several Java-friendly methods for binding:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>bindClass(Class[T], T)
-bindClass(Class[T], Annotation, T)
-bindClass(Class[T], Class[Annotation], T)
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">],</span> <span class="n">T</span><span class="o">)</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">],</span> <span class="nc">Annotation</span><span class="o">,</span> <span class="n">T</span><span class="o">)</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">],</span> <span class="nc">Class</span><span class="o">[</span><span class="kt">Annotation</span><span class="o">],</span> <span class="n">T</span><span class="o">)</span>
 
-bindClass(Class[T], Class[U &lt;: T])
-bindClass(Class[T], Annotation, Class[U &lt;: T])
-bindClass(Class[T], Class[Annotation], Class[U &lt;: T])
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">],</span> <span class="nc">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">])</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">],</span> <span class="nc">Annotation</span><span class="o">,</span> <span class="nc">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">])</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">],</span> <span class="nc">Class</span><span class="o">[</span><span class="kt">Annotation</span><span class="o">],</span> <span class="nc">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">])</span>
 </pre></div>
 </div>
 <p>Example:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>import java.util.Collections;
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.util.Collections</span><span class="p">;</span>
 
-import com.google.inject.Stage;
+<span class="kn">import</span> <span class="nn">com.google.inject.Stage</span><span class="p">;</span>
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+<span class="kn">import</span> <span class="nn">org.junit.AfterClass</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.junit.Assert</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.junit.BeforeClass</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.junit.Test</span><span class="p">;</span>
 
-import com.twitter.finagle.http.Request;
-import com.twitter.finagle.http.Response;
-import com.twitter.finagle.http.Status;
-import com.twitter.finatra.http.EmbeddedHttpServer;
-import com.twitter.finatra.httpclient.RequestBuilder;
-import com.twitter.inject.annotations.Flags;
+<span class="kn">import</span> <span class="nn">com.twitter.finagle.http.Request</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.twitter.finagle.http.Response</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.twitter.finagle.http.Status</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.twitter.finatra.http.EmbeddedHttpServer</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.twitter.finatra.httpclient.RequestBuilder</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">com.twitter.inject.annotations.Flags</span><span class="p">;</span>
 
-public class HelloWorldServerFeatureTest extends Assert {
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorldServerFeatureTest</span> <span class="kd">extends</span> <span class="n">Assert</span> <span class="p">{</span>
 
-    private static final EmbeddedHttpServer SERVER = setup();
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">EmbeddedHttpServer</span> <span class="n">SERVER</span> <span class="o">=</span> <span class="n">setup</span><span class="p">();</span>
 
-    private static EmbeddedHttpServer setup() {
-        EmbeddedHttpServer server = new EmbeddedHttpServer(
-            new HelloWorldServer(),
-            Collections.emptyMap(),
-            Stage.DEVELOPMENT);
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">EmbeddedHttpServer</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">EmbeddedHttpServer</span> <span class="n">server</span> <span class="o">=</span> <span class="k">new</span> <span class="n">EmbeddedHttpServer</span><span class="p">(</span>
+            <span class="k">new</span> <span class="n">HelloWorldServer</span><span class="p">(),</span>
+            <span class="n">Collections</span><span class="p">.</span><span class="na">emptyMap</span><span class="p">(),</span>
+            <span class="n">Stage</span><span class="p">.</span><span class="na">DEVELOPMENT</span><span class="p">);</span>
 
-        server.bindClass(Integer.class, Flags.named(&quot;magic.number&quot;), 42);
-        server.bindClass(Integer.class, Flags.named(&quot;module.magic.number&quot;), 9999);
-        return server;
-    }
+        <span class="n">server</span><span class="p">.</span><span class="na">bindClass</span><span class="p">(</span><span class="n">Integer</span><span class="p">.</span><span class="na">class</span><span class="p">,</span> <span class="n">Flags</span><span class="p">.</span><span class="na">named</span><span class="p">(</span><span class="s">&quot;magic.number&quot;</span><span class="p">),</span> <span class="mi">42</span><span class="p">);</span>
+        <span class="n">server</span><span class="p">.</span><span class="na">bindClass</span><span class="p">(</span><span class="n">Integer</span><span class="p">.</span><span class="na">class</span><span class="p">,</span> <span class="n">Flags</span><span class="p">.</span><span class="na">named</span><span class="p">(</span><span class="s">&quot;module.magic.number&quot;</span><span class="p">),</span> <span class="mi">9999</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">server</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    ...
+    <span class="p">...</span>
 
-    /** test magicNum endpoint */
-    @Test
-    public void testMagicNumEndpoint() {
-        Request request = RequestBuilder.get(&quot;/magicNum&quot;);
-        Response response = SERVER.httpRequest(request);
-        assertEquals(Status.Ok(), response.status());
-        assertEquals(&quot;42&quot;, response.contentString());
-    }
-}
+    <span class="cm">/** test magicNum endpoint */</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testMagicNumEndpoint</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">Request</span> <span class="n">request</span> <span class="o">=</span> <span class="n">RequestBuilder</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">&quot;/magicNum&quot;</span><span class="p">);</span>
+        <span class="n">Response</span> <span class="n">response</span> <span class="o">=</span> <span class="n">SERVER</span><span class="p">.</span><span class="na">httpRequest</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+        <span class="n">assertEquals</span><span class="p">(</span><span class="n">Status</span><span class="p">.</span><span class="na">Ok</span><span class="p">(),</span> <span class="n">response</span><span class="p">.</span><span class="na">status</span><span class="p">());</span>
+        <span class="n">assertEquals</span><span class="p">(</span><span class="s">&quot;42&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="na">contentString</span><span class="p">());</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>See the <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/examples/java-http-server">java-http-server</a>
@@ -238,14 +228,14 @@ for a full example of using the <cite>#bind[T]</cite> DSL in test to override a 
 <div class="section" id="more-information">
 <h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><a class="reference internal" href="index.html"><span class="doc">Testing Features</span></a></li>
-<li><a class="reference internal" href="embedded.html"><span class="doc">Embedded Servers and Apps</span></a></li>
-<li><a class="reference internal" href="feature_tests.html"><span class="doc">Feature Tests</span></a></li>
-<li><a class="reference internal" href="integration_tests.html"><span class="doc">Integration Tests</span></a></li>
-<li><a class="reference internal" href="startup_tests.html"><span class="doc">Startup Tests</span></a></li>
-<li><a class="reference internal" href="mocks.html"><span class="doc">Working with Mocks</span></a></li>
-<li><a class="reference internal" href="mixins.html"><span class="doc">Test Mixins</span></a></li>
-<li><a class="reference internal" href="override_modules.html"><span class="doc">Override Modules</span></a></li>
+<li><p><a class="reference internal" href="index.html"><span class="doc">Testing Features</span></a></p></li>
+<li><p><a class="reference internal" href="embedded.html"><span class="doc">Embedded Servers and Apps</span></a></p></li>
+<li><p><a class="reference internal" href="feature_tests.html"><span class="doc">Feature Tests</span></a></p></li>
+<li><p><a class="reference internal" href="integration_tests.html"><span class="doc">Integration Tests</span></a></p></li>
+<li><p><a class="reference internal" href="startup_tests.html"><span class="doc">Startup Tests</span></a></p></li>
+<li><p><a class="reference internal" href="mocks.html"><span class="doc">Working with Mocks</span></a></p></li>
+<li><p><a class="reference internal" href="mixins.html"><span class="doc">Test Mixins</span></a></p></li>
+<li><p><a class="reference internal" href="override_modules.html"><span class="doc">Override Modules</span></a></p></li>
 </ul>
 </div>
 </div>
@@ -255,10 +245,7 @@ for a full example of using the <cite>#bind[T]</cite> DSL in test to override a 
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
-            </a></p><p>
+        <div class="sphinxsidebarwrapper"><p>
   <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
@@ -269,11 +256,11 @@ for a full example of using the <cite>#bind[T]</cite> DSL in test to override a 
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Explicit Binding with <code class="docutils literal"><span class="pre">#bind[T]</span></code></a><ul>
-<li><a class="reference internal" href="#embedded-server-bind-t">Embedded Server <code class="docutils literal"><span class="pre">#bind[T]</span></code></a></li>
-<li><a class="reference internal" href="#testinjector-bind-t">TestInjector <code class="docutils literal"><span class="pre">#bind[T]</span></code></a></li>
+<li><a class="reference internal" href="#">Explicit Binding with <code class="docutils literal notranslate"><span class="pre">#bind[T]</span></code></a><ul>
+<li><a class="reference internal" href="#embedded-server-bind-t">Embedded Server <code class="docutils literal notranslate"><span class="pre">#bind[T]</span></code></a></li>
+<li><a class="reference internal" href="#testinjector-bind-t">TestInjector <code class="docutils literal notranslate"><span class="pre">#bind[T]</span></code></a></li>
 <li><a class="reference internal" href="#bind-t-dsl"><cite>#bind[T]</cite> DSL</a></li>
 <li><a class="reference internal" href="#usage-from-java">Usage from Java</a></li>
 <li><a class="reference internal" href="#more-information">More Information</a></li>
@@ -283,7 +270,7 @@ for a full example of using the <cite>#bind[T]</cite> DSL in test to override a 
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">User&#8217;s Guide</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
       <li>Previous: <a href="override_modules.html" title="previous chapter">Override Modules</a></li>
       <li>Next: <a href="../../presentations/index.html" title="next chapter">Finatra Presentations</a></li>
   </ul></li>
