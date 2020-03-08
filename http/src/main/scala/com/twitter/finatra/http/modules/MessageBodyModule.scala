@@ -3,9 +3,11 @@ package com.twitter.finatra.http.modules
 import com.google.inject.Module
 import com.twitter.finatra.http.internal.marshalling.{
   DefaultMessageBodyReaderImpl,
-  DefaultMessageBodyWriterImpl
+  DefaultMessageBodyWriterImpl,
+  MessageInjectableTypes
 }
 import com.twitter.finatra.http.marshalling.{DefaultMessageBodyReader, DefaultMessageBodyWriter}
+import com.twitter.finatra.jackson.caseclass.InjectableTypes
 import com.twitter.inject.{InjectorModule, TwitterModule}
 
 /**
@@ -25,5 +27,7 @@ class MessageBodyModule extends TwitterModule {
   override def configure(): Unit = {
     bindSingleton[DefaultMessageBodyReader].to[DefaultMessageBodyReaderImpl]
     bindSingleton[DefaultMessageBodyWriter].to[DefaultMessageBodyWriterImpl]
+    // override the default binding of `InjectableTypes` to the more specific `RequestInjectableTypes`
+    bindOption[InjectableTypes].setBinding.toInstance(MessageInjectableTypes)
   }
 }

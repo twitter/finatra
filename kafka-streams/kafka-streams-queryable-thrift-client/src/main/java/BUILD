@@ -1,5 +1,5 @@
 java_library(
-    sources = rglobs("*.java"),
+    sources = ["**/*.java"],
     compiler_option_sets = {},
     strict_deps = True,
     dependencies = [
@@ -12,5 +12,5 @@ java_library(
 # when a fix for https://github.com/pantsbuild/pants/issues/7200 has landed.
 files(
     name = "pants-workaround",
-    sources = rglobs("*.java"),
+    sources = ["**/*.java"],
 )

@@ -1,9 +1,9 @@
 scala_library(
-    sources = globs(
+    sources = [
         "*.scala",
         "modules/*.scala",
         "response/*.scala",
-    ),
+    ],
     compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
         org = "com.twitter",
@@ -17,6 +17,7 @@ scala_library(
         "3rdparty/jvm/net/codingwell:scala-guice",
         "finagle/finagle-base-http/src/main/scala",
         "finagle/finagle-core/src/main/scala",
+        "finatra/http-annotations/src/main/java/com/twitter/finatra/http/annotations",
         "finatra/http/src/main/scala/com/twitter/finatra/http",
         "finatra/http/src/main/scala/com/twitter/finatra/http/response",
         "finatra/http/src/main/scala/com/twitter/finatra/http/routing",
@@ -26,8 +27,10 @@ scala_library(
         "finatra/inject/inject-server/src/main/scala",
         "finatra/inject/inject-server/src/test/scala:test-deps",
         "finatra/inject/inject-utils/src/main/scala",
-        "finatra/jackson/src/main/scala",
-        "finatra/jackson/src/test/scala:test-deps",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/json",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/json/modules",
+        "finatra/jackson/src/test/scala/com/twitter/finatra/json",
         "finatra/utils/src/main/scala/com/twitter/finatra/modules",
         "finatra/validation/src/main/scala/com/twitter/finatra/validation",
         "twitter-server/server/src/main/scala",
@@ -41,6 +44,7 @@ scala_library(
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
         "finatra/http/src/main/scala/com/twitter/finatra/http",
         "finatra/inject/inject-server/src/test/scala:test-deps",
-        "finatra/jackson/src/main/scala",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
+        "finatra/jackson/src/test/scala/com/twitter/finatra/json",
     ],
 )

@@ -1,5 +1,5 @@
 scala_library(
-    sources = globs("*.scala"),
+    sources = ["**/*.scala"],
     compiler_option_sets = {"fatal_warnings"},
     java_sources = [
         "finatra/validation/src/main/java/com/twitter/finatra/validation",
@@ -12,15 +12,14 @@ scala_library(
     strict_deps = True,
     dependencies = [
         "//:scala-reflect",
-        "3rdparty/jvm/com/fasterxml/jackson/core:jackson-core",
         "3rdparty/jvm/joda-time",
+        "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/validation/src/main/java/com/twitter/finatra/validation:pants-workaround",
         "finatra/validation/src/main/resources",
         "util/util-core/src/main/scala",
     ],
     exports = [
-        "3rdparty/jvm/com/fasterxml/jackson/core:jackson-core",
         "3rdparty/jvm/joda-time",
     ],
 )

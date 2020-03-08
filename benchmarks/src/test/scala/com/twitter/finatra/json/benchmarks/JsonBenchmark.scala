@@ -1,10 +1,11 @@
 package com.twitter.finatra.json.benchmarks
 
-import com.fasterxml.jackson.module.scala.JacksonModule
+import com.fasterxml.jackson.module.scala.experimental.{
+  ScalaObjectMapper => JacksonScalaObjectMapper
+}
 import com.twitter.finatra.StdBenchAnnotations
 import com.twitter.finatra.benchmarks.domain.{TestDemographic, TestFormat}
-import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.json.modules.FinatraJacksonModule
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import java.io.ByteArrayInputStream
 import org.joda.time.DateTime
 import org.openjdk.jmh.annotations._
@@ -34,19 +35,18 @@ class JsonBenchmark extends StdBenchAnnotations {
 
   private[this] val bytes = json.getBytes("UTF-8")
 
-  val mapperWithCaseClassDeserializer: FinatraObjectMapper = {
-    val mapperModule = new FinatraJacksonModule()
-    val scalaObjectMapper = mapperModule.provideScalaObjectMapper(injector = null)
-    new FinatraObjectMapper(scalaObjectMapper)
-  }
+  /** create framework scala object mapper with all defaults */
+  private[this] val mapperWithCaseClassDeserializer: ScalaObjectMapper =
+    ScalaObjectMapper.builder.objectMapper(injector = null)
 
-  val mapperWithoutCaseClassDeserializer: FinatraObjectMapper = {
-    val mapperModule: FinatraJacksonModule = new FinatraJacksonModule() {
-      // omit FinatraCaseClassModule
-      override def finatraCaseClassModule: Option[JacksonModule] = None
-    }
-    val scalaObjectMapper = mapperModule.provideScalaObjectMapper(injector = null)
-    new FinatraObjectMapper(scalaObjectMapper)
+  /** create framework scala object mapper without case class deserializer */
+  private[this] val mapperWithoutCaseClassDeserializer: ScalaObjectMapper = {
+    // configure the underlying Jackson ScalaObjectMapper with everything but the CaseClassJacksonModule
+    val underlying = ScalaObjectMapper.builder.jacksonScalaObjectMapper(
+      injector = null,
+      new com.fasterxml.jackson.databind.ObjectMapper with JacksonScalaObjectMapper,
+      ScalaObjectMapper.DefaultJacksonModules)
+    new ScalaObjectMapper(underlying) // do not use apply which will always install the default jackson modules on the underlying
   }
 
   @Benchmark

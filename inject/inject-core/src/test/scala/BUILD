@@ -1,7 +1,5 @@
 junit_tests(
-    sources = rglobs(
-        "com/twitter/inject/tests/*.scala",
-    ),
+    sources = ["com/twitter/inject/tests/**/*.scala"],
     compiler_option_sets = {"fatal_warnings"},
     dependencies = [
         ":test-deps",
@@ -26,10 +24,10 @@ junit_tests(
 
 scala_library(
     name = "test-deps",
-    sources = globs(
+    sources = [
         "com/twitter/inject/*.scala",
         "org/specs2/matcher/ScalaTestExpectations.scala",
-    ),
+    ],
     compiler_option_sets = {"fatal_warnings"},
     java_sources = [
         "finatra/inject/inject-core/src/test/java",

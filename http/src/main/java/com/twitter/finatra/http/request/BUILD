@@ -1,5 +1,5 @@
 java_library(
-    sources = globs("*.java"),
+    sources = ["*.java"],
     compiler_option_sets = {},
     provides = artifact(
         org = "com.twitter",

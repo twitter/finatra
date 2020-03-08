@@ -3,6 +3,10 @@
 Test Mixins
 ===========
 
+.. important::
+
+  Please see the section on including test-jar dependencies in your project: `Test Dependencies <../..#test-dependencies>`_.
+
 Twitter's recommended ScalaTest test style is `FunSuite <https://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite>`__.
 
 You can use this ScalaTest test style by extending either:

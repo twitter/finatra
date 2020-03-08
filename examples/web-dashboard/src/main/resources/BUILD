@@ -1,6 +1,6 @@
 resources(
-    sources = globs(
+    sources = [
         "*.xml",
         "templates/*.mustache",
-    ),
+    ],
 )

@@ -1,7 +1,7 @@
 package com.twitter.finatra.json.tests
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.json.JsonDiff._
 import com.twitter.finatra.json.utils.JsonDiffUtil
 import com.twitter.inject.Test
@@ -52,7 +52,7 @@ class JsonDiffTest extends Test {
   }
 
   test("generate sorted") {
-    val mapper = FinatraObjectMapper.create()
+    val mapper = ScalaObjectMapper()
     val before = mapper.parse[JsonNode]("""{"a":1,"c":3,"b":2}""")
     val expected = """{"a":1,"b":2,"c":3}"""
     JsonDiffUtil.sortedString(before) should equal(expected)

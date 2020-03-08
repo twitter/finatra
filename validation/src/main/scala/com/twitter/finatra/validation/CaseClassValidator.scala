@@ -5,7 +5,7 @@ import java.lang.annotation.Annotation
 /**
  * Trait for defining a validator that will be triggered during Case Class validation.
  */
-private[finatra] trait CaseClassValidator {
+trait CaseClassValidator {
 
   /**
    * Validate a field's value according to the field's validation annotations
@@ -17,7 +17,7 @@ private[finatra] trait CaseClassValidator {
    */
   private[finatra] def validateField[V](
     fieldValue: V,
-    fieldValidationAnnotations: Seq[Annotation]
+    fieldValidationAnnotations: Array[Annotation]
   ): Seq[ValidationResult]
 
   /**
@@ -29,5 +29,4 @@ private[finatra] trait CaseClassValidator {
    *         been validated and a boolean indicating if the annotation is valid
    */
   def validateMethods(obj: Any): Seq[ValidationResult]
-
 }

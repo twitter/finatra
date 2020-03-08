@@ -1,11 +1,11 @@
 package com.twitter.finatra.http.marshalling
 
 import com.twitter.finagle.http.Message
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 
 object mapper {
 
-  implicit class RichObjectMapper(val self: FinatraObjectMapper) extends AnyVal {
+  implicit class RichObjectMapper[M <: ScalaObjectMapper](val self: M) extends AnyVal {
     def parseMessageBody[T: Manifest](message: Message): T = {
       if (message.isRequest) {
         val length = message.contentLength.getOrElse(0L)

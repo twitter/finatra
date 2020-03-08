@@ -1,0 +1,30 @@
+scala_library(
+    sources = ["*.scala"],
+    compiler_option_sets = {"fatal_warnings"},
+    provides = scala_artifact(
+        org = "com.twitter",
+        name = "finatra-jackson-core",
+        repo = artifactory,
+    ),
+    strict_deps = True,
+    dependencies = [
+        "3rdparty/jvm/com/fasterxml/jackson/core:jackson-core",
+        "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
+        "3rdparty/jvm/com/fasterxml/jackson/datatype:jackson-datatype-joda",
+        "3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala",
+        "3rdparty/jvm/net/codingwell:scala-guice",
+        "finagle/finagle-base-http/src/main/scala",
+        "finatra/jackson/src/main/scala/com/fasterxml/jackson/databind",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/serde",
+        "finatra/validation/src/main/scala/com/twitter/finatra/validation",
+    ],
+    exports = [
+        "3rdparty/jvm/com/fasterxml/jackson/core:jackson-core",
+        "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
+        "3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala",
+        "3rdparty/jvm/net/codingwell:scala-guice",
+        "finatra/validation/src/main/scala/com/twitter/finatra/validation",
+    ],
+)

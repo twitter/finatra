@@ -21,12 +21,12 @@ class ValidatorTest extends Test {
   }
 
   def getValidationAnnotations(clazz: Class[_], paramName: String): Seq[Annotation] = {
-    val constructorParams: Seq[ConstructorParam] =
+    val constructorParams: Array[ConstructorParam] =
       Reflector
         .describe(classDescribable(clazz))
         .asInstanceOf[ClassDescriptor]
         .constructors.head
-        .params.map(param => ConstructorParam(param.name, param.argType))
+        .params.map(param => ConstructorParam(param.name, param.argType)).toArray
     val annotations = AnnotationUtils.findAnnotations(clazz, constructorParams.map(_.name))
 
     for {

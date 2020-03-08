@@ -1,5 +1,5 @@
 scala_library(
-    sources = globs("*.scala"),
+    sources = ["*.scala"],
     compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
         org = "com.twitter",
@@ -16,7 +16,7 @@ scala_library(
         "finatra/http-annotations/src/main/java/com/twitter/finatra/http/annotations",
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
-        "finatra/jackson/src/main/scala",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
     ],
     exports = [
         "3rdparty/jvm/com/google/inject:guice",

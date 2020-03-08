@@ -1,5 +1,5 @@
 junit_tests(
-    sources = globs(
+    sources = [
         "*.scala",
         "doeverything/*.scala",
         "doeverything/controllers/*.scala",
@@ -7,8 +7,7 @@ junit_tests(
         "inheritance/*.scala",
         "inheritance/controllers/*.scala",
         "noninjection/*.scala",
-        # excludes exceptions/*.scala and doeverything/exceptions/*.scala
-    ),
+    ],
     compiler_option_sets = {"fatal_warnings"},
     strict_deps = True,
     dependencies = [
@@ -36,7 +35,13 @@ junit_tests(
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/inject/inject-thrift-client/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
-        "finatra/thrift/src/main/scala",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift:controller",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/exceptions",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/filters",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/modules",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/response",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/routing",
         "finatra/thrift/src/test/scala/com/twitter/finatra/thrift",
         "finatra/thrift/src/test/scala/com/twitter/finatra/thrift/tests/doeverything/exceptions",
         "finatra/thrift/src/test/scala/com/twitter/finatra/thrift/tests/exceptions",

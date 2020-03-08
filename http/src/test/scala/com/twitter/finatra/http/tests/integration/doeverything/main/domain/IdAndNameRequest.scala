@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main.domain
 
 import com.twitter.finagle.http.Request
-import com.twitter.finatra.request.{JsonIgnoreBody, RouteParam}
+import com.twitter.finatra.http.annotations.{JsonIgnoreBody, RouteParam}
 
 case class IdAndNameRequest(@RouteParam id: Long, name: String)
 

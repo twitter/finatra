@@ -10,11 +10,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * HELPER ANNOTATION FOR TESTS.
- *
- * @note Not to be included in any published test:jar.
+ * <p>
+ * Note: This is not to be included in any published test:jar.
  */
 @BindingAnnotation
 @Target(PARAMETER)
 @Retention(RUNTIME)
-public @interface Prod {
-}
+public @interface Prod {}

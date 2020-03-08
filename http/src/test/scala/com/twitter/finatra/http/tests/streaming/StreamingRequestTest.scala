@@ -3,8 +3,8 @@ package com.twitter.finatra.http.tests.streaming
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Method, Request, Version}
 import com.twitter.finatra.http.streaming.StreamingRequest
-import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.json.internal.streaming.JsonStreamParser
+import com.twitter.finatra.jackson.ScalaObjectMapper
+import com.twitter.finatra.jackson.streaming.JsonStreamParser
 import com.twitter.inject.Test
 import com.twitter.io.{Buf, Reader}
 
@@ -12,7 +12,7 @@ class StreamingRequestTest extends Test {
 
   val jsonStr = """["first","second","third"]"""
 
-  private val parser = new JsonStreamParser(FinatraObjectMapper.create())
+  private val parser = new JsonStreamParser(ScalaObjectMapper())
 
   test("Request explicitly To AsyncStream of string") {
     val reader = Reader.fromSeq(Seq(

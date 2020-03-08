@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.streaming
 
 import com.twitter.finagle.http.{Response, Status, Version}
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.Future
 import java.util.concurrent.atomic.AtomicBoolean
@@ -11,7 +11,7 @@ import scala.language.higherKinds
  * StreamingResponse is an abstraction over an output Primitive Stream - Reader or AsyncStream.
  * It carries the output stream as well as some HTTP Response metadata.
  *
- * @param mapper Server's configured FinatraObjectMapper.
+ * @param mapper Server's configured ScalaObjectMapper.
  * @param stream The output stream.
  * @param status Represents an HTTP status code.
  * @param headers A Map of message headers.
@@ -21,7 +21,7 @@ import scala.language.higherKinds
  * @note Users should construct this via c.t.finatra.http.response.ResponseBuilder#streaming
  */
 final class StreamingResponse[F[_]: ToReader, A: Manifest] private[http] (
-  mapper: FinatraObjectMapper,
+  mapper: ScalaObjectMapper,
   stream: F[A],
   status: Status = Status.Ok,
   headers: Map[String, Seq[String]] = Map.empty) {
@@ -32,11 +32,11 @@ final class StreamingResponse[F[_]: ToReader, A: Manifest] private[http] (
     case anyReader => toJsonArray(anyReader)
   }
 
-  private[this] def toJsonArray(reader: Reader[A]): Reader[Buf] = {
+  private[this] def toJsonArray(fromReader: Reader[A]): Reader[Buf] = {
     Reader.fromSeq(
       Seq(
         Reader.fromBuf(Buf.Utf8("[")),
-        reader.map { i =>
+        fromReader.map { i =>
           if (head.compareAndSet(true, false)) {
             mapper.writeValueAsBuf(i)
           } else {
@@ -63,4 +63,13 @@ final class StreamingResponse[F[_]: ToReader, A: Manifest] private[http] (
     setHeaders(response, headers)
     Future.value(response)
   }
+
+  /**
+   * Get the underlying Buf Reader.
+   * If the consumed Stream primitive is not Buf, the returned reader streams a serialized
+   * JSON array.
+   * If the consumed Stream primitive is Buf, the returned reader streams the same Buf.
+   */
+  def toBufReader: Reader[Buf] = reader
+
 }

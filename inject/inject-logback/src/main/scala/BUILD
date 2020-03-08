@@ -1,8 +1,8 @@
 scala_library(
-    sources = globs(
+    sources = [
         "ch/qos/logback/core/*.scala",
         "com/twitter/inject/logback/*.scala",
-    ),
+    ],
     compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
         org = "com.twitter",

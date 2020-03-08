@@ -3,7 +3,7 @@ package com.twitter.finatra.http.internal.exceptions.json
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.exceptions.ExceptionMapper
 import com.twitter.finatra.http.response.{ResponseBuilder, ErrorsResponse}
-import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassMappingException
+import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassMappingException
 import javax.inject.{Inject, Singleton}
 
 @Singleton

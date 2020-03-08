@@ -2,7 +2,6 @@ package com.twitter.finatra.kafka.producers
 
 import com.twitter.finagle.stats.Stat
 import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter.sanitizeMetricName
-import com.twitter.inject.Logging
 import com.twitter.util._
 import java.util
 import java.util.concurrent.TimeUnit._
@@ -11,9 +10,17 @@ import org.apache.kafka.clients.producer._
 import org.apache.kafka.common.{PartitionInfo, TopicPartition}
 import scala.collection.JavaConverters._
 
+/**
+ * A standard implementation of [[KafkaProducerBase]] that forwards
+ * events in key/value pairs to [[org.apache.kafka.clients.producer.KafkaProducer]]
+ *
+ * @param config a configuration of Kafka producer, including the key
+ *               serializer and the value serializer
+ * @tparam K type of the key in key/value pairs to be published to Kafka
+ * @tparam V type of the value in key/value pairs to be published to Kafka
+ */
 class FinagleKafkaProducer[K, V](config: FinagleKafkaProducerConfig[K, V])
-    extends Closable
-    with Logging {
+  extends KafkaProducerBase[K, V] {
 
   private val keySerializer = config.keySerializer.get
   private val valueSerializer = config.valueSerializer.get
@@ -101,7 +108,7 @@ class FinagleKafkaProducer[K, V](config: FinagleKafkaProducerConfig[K, V])
     producer.partitionsFor(topic)
   }
 
-  override def close(deadline: Time): Future[Unit] = {
+  def close(deadline: Time): Future[Unit] = {
     // com.twitter.Util.Closable.close() calls com.twitter.Util.Closable.close(Duration) with
     // a duration of Time.Bottom to wait for the resource to be completely relinquished.
     // However, the underlying KafkaProducer will throw an IllegalArgumentException when

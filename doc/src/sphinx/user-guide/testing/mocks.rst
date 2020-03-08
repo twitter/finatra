@@ -3,6 +3,10 @@
 Working with Mocks
 ==================
 
+.. important::
+
+  Please see the section on including test-jar dependencies in your project: `Test Dependencies <../..#test-dependencies>`_.
+
 |c.t.inject.Mockito|_ provides `Specs2 <https://etorreborre.github.io/specs2/>`__ Mockito syntatic
 sugar for `ScalaTest <https://www.scalatest.org/>`__.
 

@@ -1,5 +1,5 @@
 junit_tests(
-    sources = rglobs("*.java"),
+    sources = ["**/*.java"],
     compiler_option_sets = {},
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
@@ -10,7 +10,13 @@ junit_tests(
         "finatra/examples/thrift-server/thrift-example-idl/src/main/thrift:thrift-java",
         "finatra/inject/inject-server/src/main/scala",
         "finatra/inject/inject-server/src/test/scala:test-deps",
-        "finatra/thrift/src/main/scala",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift:controller",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/exceptions",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/filters",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/modules",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/response",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/routing",
         "finatra/thrift/src/test/scala:test-deps",
         "twitter-server/server/src/main/scala",
     ],

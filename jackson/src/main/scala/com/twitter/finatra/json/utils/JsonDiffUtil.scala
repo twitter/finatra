@@ -2,17 +2,17 @@ package com.twitter.finatra.json.utils
 
 import com.fasterxml.jackson.databind.node.TextNode
 import com.fasterxml.jackson.databind.{JsonNode, ObjectMapperCopier, SerializationFeature}
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.{ScalaObjectMapper, JacksonScalaObjectMapperType}
 import com.twitter.inject.Logging
 import com.twitter.inject.conversions.boolean._
 import scala.util.control.NonFatal
 
 object JsonDiffUtil extends Logging {
 
-  private val finatraMapper = FinatraObjectMapper.create()
+  private val mapper = ScalaObjectMapper()
 
-  private lazy val sortingObjectMapper = {
-    val newMapper = ObjectMapperCopier.copy(finatraMapper.objectMapper)
+  private lazy val sortingObjectMapper: JacksonScalaObjectMapperType = {
+    val newMapper = ObjectMapperCopier.copy(mapper.underlying)
     newMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
     newMapper
   }
@@ -48,7 +48,7 @@ object JsonDiffUtil extends Logging {
 
     val expectedJsonNode = tryJsonNodeParse(expectedJsonStr)
     (receivedJsonNode != expectedJsonNode).option {
-      JsonDiffResult.create(finatraMapper, expectedJsonNode, receivedJsonNode)
+      JsonDiffResult.create(mapper, expectedJsonNode, receivedJsonNode)
     }
   }
 
@@ -72,7 +72,7 @@ object JsonDiffUtil extends Logging {
 
   private def tryJsonNodeParse(expectedJsonStr: String): JsonNode = {
     try {
-      finatraMapper.parse[JsonNode](expectedJsonStr)
+      mapper.parse[JsonNode](expectedJsonStr)
     } catch {
       case NonFatal(e) =>
         warn(e.getMessage)
@@ -83,7 +83,7 @@ object JsonDiffUtil extends Logging {
   private def jsonString(receivedJson: Any): String = {
     receivedJson match {
       case str: String => str
-      case _ => finatraMapper.writeValueAsString(receivedJson)
+      case _ => mapper.writeValueAsString(receivedJson)
     }
   }
 }

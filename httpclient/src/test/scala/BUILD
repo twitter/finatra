@@ -1,7 +1,5 @@
 junit_tests(
-    sources = globs(
-        "com/twitter/finatra/httpclient/*.scala",
-    ),
+    sources = ["com/twitter/finatra/httpclient/*.scala"],
     dependencies = [
         ":test-deps",
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
@@ -33,9 +31,7 @@ junit_tests(
 
 scala_library(
     name = "test-deps",
-    sources = globs(
-        "com/twitter/finatra/httpclient/test/*.scala",
-    ),
+    sources = ["com/twitter/finatra/httpclient/test/*.scala"],
     compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
         org = "com.twitter",

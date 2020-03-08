@@ -1,5 +1,5 @@
 scala_library(
-    sources = globs("*.scala"),
+    sources = ["*.scala"],
     compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
         org = "com.twitter",
@@ -19,7 +19,7 @@ scala_library(
         "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
-        "finatra/jackson/src/main/scala",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",
         "util/util-core/src/main/scala/com/twitter/concurrent",
         "util/util-core/src/main/scala/com/twitter/io",

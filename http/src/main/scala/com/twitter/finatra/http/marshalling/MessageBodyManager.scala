@@ -38,8 +38,7 @@ import scala.collection.mutable
 class MessageBodyManager @Inject()(
   injector: Injector,
   defaultMessageBodyReader: DefaultMessageBodyReader,
-  defaultMessageBodyWriter: DefaultMessageBodyWriter
-) {
+  defaultMessageBodyWriter: DefaultMessageBodyWriter) {
 
   private[this] val classTypeToReader = mutable.Map[Type, MessageBodyReader[Any]]()
   private[this] val classTypeToWriter = mutable.Map[Type, MessageBodyWriter[Any]]()
@@ -76,9 +75,7 @@ class MessageBodyManager @Inject()(
    *                   will be obtained from the [[injector]].
    * @tparam T the type to associate to the registered [[MessageBodyComponent]].
    */
-  final def addExplicit[
-    Component <: MessageBodyComponent: Manifest,
-    T: Manifest](): Unit = {
+  final def addExplicit[Component <: MessageBodyComponent: Manifest, T: Manifest](): Unit = {
     add[Component](typeLiteral[T].getType)
   }
 
@@ -90,7 +87,9 @@ class MessageBodyManager @Inject()(
    */
   final def addWriterByAnnotation[
     A <: Annotation: Manifest,
-    Writer <: MessageBodyWriter[_]: Manifest](): Unit = {
+    Writer <: MessageBodyWriter[_]: Manifest
+  ](
+  ): Unit = {
     val messageBodyWriter = injector.instance[Writer]
     val annotation = manifest[A].runtimeClass.asInstanceOf[Class[A]]
     val requiredAnnotationClazz = classOf[MessageBodyWriterAnnotation]
@@ -109,7 +108,9 @@ class MessageBodyManager @Inject()(
    */
   final def addWriterByComponentType[
     Component <: MessageBodyComponent: Manifest,
-    Writer <: MessageBodyWriter[_]: Manifest](): Unit = {
+    Writer <: MessageBodyWriter[_]: Manifest
+  ](
+  ): Unit = {
     val messageBodyWriter = injector.instance[Writer]
     val componentType = manifest[Component].runtimeClass.asInstanceOf[Class[Component]]
     writerCache.putIfAbsent(componentType, messageBodyWriter.asInstanceOf[MessageBodyWriter[Any]])
@@ -165,9 +166,7 @@ class MessageBodyManager @Inject()(
     classTypeToReader.get(genericType)
   }
 
-  private[this] def writerCacheFun(
-    clazz: Class[_]
-  ): MessageBodyWriter[Any] =
+  private[this] def writerCacheFun(clazz: Class[_]): MessageBodyWriter[Any] =
     classTypeToWriter
       .get(clazz)
       .orElse(classAnnotationToWriter(clazz))
@@ -205,7 +204,8 @@ class MessageBodyManager @Inject()(
 
   // Partial function to pass when filtering class annotations.
   private[this] val isRequiredAnnotationPresent: PartialFunction[Annotation, Annotation] = {
-    case annotation: Annotation if AnnotationUtils.isAnnotationPresent[MessageBodyWriterAnnotation](annotation) =>
+    case annotation: Annotation
+        if AnnotationUtils.isAnnotationPresent[MessageBodyWriterAnnotation](annotation) =>
       annotation
   }
 }

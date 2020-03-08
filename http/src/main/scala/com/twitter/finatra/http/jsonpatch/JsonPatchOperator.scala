@@ -3,7 +3,7 @@ package com.twitter.finatra.http.jsonpatch
 import com.fasterxml.jackson.core.JsonPointer
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.{ArrayNode, ObjectNode}
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import scala.annotation.tailrec
 import javax.inject.{Inject, Singleton}
 
@@ -11,10 +11,10 @@ import javax.inject.{Inject, Singleton}
  * A utility class for operating on a case class by converting it to a JsonNode.
  * Note: users can always implement their own JsonPatchOperator on demand
  *
- * @param mapper default [[com.twitter.finatra.json.FinatraObjectMapper]] to use for writing values.
+ * @param mapper default [[com.twitter.finatra.jackson.ScalaObjectMapper]] to use for writing values.
  */
 @Singleton
-class JsonPatchOperator @Inject()(mapper: FinatraObjectMapper) {
+class JsonPatchOperator @Inject()(mapper: ScalaObjectMapper) {
 
   /**
    * Transform type T to JsonNode
@@ -41,7 +41,7 @@ class JsonPatchOperator @Inject()(mapper: FinatraObjectMapper) {
   /**
    * Apply add operation on target
    *
-   * @param patch  [[com.twitter.finatra.http.jsonpatch.PatchOperation]]
+   * @param patch a [[com.twitter.finatra.http.jsonpatch.PatchOperation]]
    * @param target an instance of JsonNode to be applied with add method
    */
   def add(patch: PatchOperation, target: JsonNode): Unit = {
@@ -54,7 +54,7 @@ class JsonPatchOperator @Inject()(mapper: FinatraObjectMapper) {
   /**
    * Apply remove operation on target
    *
-   * @param patch  [[com.twitter.finatra.http.jsonpatch.PatchOperation]]
+   * @param patch a [[com.twitter.finatra.http.jsonpatch.PatchOperation]]
    * @param target an instance of JsonNode to be applied with remove method
    */
   def remove(patch: PatchOperation, target: JsonNode): Unit = {
@@ -64,7 +64,7 @@ class JsonPatchOperator @Inject()(mapper: FinatraObjectMapper) {
   /**
    * Apply replace operation on target
    *
-   * @param patch  [[com.twitter.finatra.http.jsonpatch.PatchOperation]]
+   * @param patch a [[com.twitter.finatra.http.jsonpatch.PatchOperation]]
    * @param target an instance of JsonNode to be applied with replace method
    */
   def replace(patch: PatchOperation, target: JsonNode): Unit = {
@@ -77,14 +77,12 @@ class JsonPatchOperator @Inject()(mapper: FinatraObjectMapper) {
   /**
    * Apply move operation on target
    *
-   * @param patch  [[com.twitter.finatra.http.jsonpatch.PatchOperation]]
+   * @param patch a [[com.twitter.finatra.http.jsonpatch.PatchOperation]]
    * @param target an instance of JsonNode to be applied with move method
    */
   def move(patch: PatchOperation, target: JsonNode): Unit = {
     patch.from match {
-      case Some(f) => {
-        if (patch.path != f) moveNode(patch.path, target, f)
-      }
+      case Some(f) => if (patch.path != f) moveNode(patch.path, target, f)
       case _ => throw new JsonPatchException("invalid from for move operation")
     }
   }
@@ -92,7 +90,7 @@ class JsonPatchOperator @Inject()(mapper: FinatraObjectMapper) {
   /**
    * Apply copy operation on target
    *
-   * @param patch  [[com.twitter.finatra.http.jsonpatch.PatchOperation]]
+   * @param patch a [[com.twitter.finatra.http.jsonpatch.PatchOperation]]
    * @param target an instance of JsonNode to be applied with copy method
    */
   def copy(patch: PatchOperation, target: JsonNode): Unit = {
@@ -105,7 +103,7 @@ class JsonPatchOperator @Inject()(mapper: FinatraObjectMapper) {
   /**
    * Apply test operation on target
    *
-   * @param patch  [[com.twitter.finatra.http.jsonpatch.PatchOperation]]
+   * @param patch a [[com.twitter.finatra.http.jsonpatch.PatchOperation]]
    * @param target an instance of JsonNode to apply test method
    */
   def test(patch: PatchOperation, target: JsonNode): Unit = {

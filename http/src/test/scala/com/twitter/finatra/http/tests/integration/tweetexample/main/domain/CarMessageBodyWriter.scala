@@ -2,10 +2,10 @@ package com.twitter.finatra.http.tests.integration.tweetexample.main.domain
 
 import com.twitter.finagle.http.MediaType
 import com.twitter.finatra.http.marshalling.{MessageBodyWriter, WriterResponse}
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import javax.inject.Inject
 
-class CarMessageBodyWriter @Inject()(mapper: FinatraObjectMapper) extends MessageBodyWriter[Car] {
+class CarMessageBodyWriter @Inject()(mapper: ScalaObjectMapper) extends MessageBodyWriter[Car] {
 
   override def write(car: Car): WriterResponse = {
     WriterResponse(MediaType.JsonUtf8, mapper.writeValueAsBytes(Map("car" -> car.name)))

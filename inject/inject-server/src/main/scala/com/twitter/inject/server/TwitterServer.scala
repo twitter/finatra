@@ -19,7 +19,38 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import scala.collection.JavaConverters._
 
 /** AbstractTwitterServer for usage from Java */
-abstract class AbstractTwitterServer extends TwitterServer
+abstract class AbstractTwitterServer extends TwitterServer {
+  /**
+   * Called prior to application initialization.
+   */
+  def onInit(): Unit = ()
+
+  /**
+   * Called before the `main` method.
+   */
+  def preMain(): Unit = ()
+
+  /**
+   * Called after the `main` method.
+   */
+  def postMain(): Unit = ()
+
+  /**
+   * Called prior to application exiting.
+   */
+  def onExit(): Unit = ()
+
+  /**
+   * Called prior to application exiting after `onExit`.
+   */
+  def onExitLast(): Unit = ()
+
+  init(onInit())
+  premain(preMain())
+  postmain(postMain())
+  onExit(onExit())
+  onExitLast(onExitLast())
+}
 
 /**
  * A [[com.twitter.server.TwitterServer]] that supports injection and [[com.twitter.inject.TwitterModule]]

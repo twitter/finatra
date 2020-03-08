@@ -1,5 +1,5 @@
 junit_tests(
-    sources = rglobs("*.scala"),
+    sources = ["**/*.scala"],
     dependencies = [
         "3rdparty/jvm/com/github/nscala_time",
         "3rdparty/jvm/joda-time",

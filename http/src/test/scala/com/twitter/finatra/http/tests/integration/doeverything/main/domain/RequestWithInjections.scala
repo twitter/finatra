@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main.domain
 
-import com.twitter.finatra.request.QueryParam
-import com.twitter.finatra.test.Prod
+import com.twitter.finatra.http.Prod
+import com.twitter.finatra.http.annotations.QueryParam
 import javax.inject.Inject
 
 case class RequestWithInjections(
@@ -12,5 +12,4 @@ case class RequestWithInjections(
   @Inject defaultString: String,
   @Prod @Inject defaultProdString: String,
   @Inject defaultOptString: Option[String],
-  @Prod @Inject defaultOptProdString: Option[String]
-)
+  @Prod @Inject defaultOptProdString: Option[String])

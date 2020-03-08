@@ -1,5 +1,5 @@
 junit_tests(
-    sources = globs("*.scala"),
+    sources = ["*.scala"],
     compiler_option_sets = {"fatal_warnings"},
     dependencies = [
         "finagle/finagle-core/src/main/scala",

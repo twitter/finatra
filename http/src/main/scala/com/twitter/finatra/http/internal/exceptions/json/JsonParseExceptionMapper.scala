@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.exceptions.ExceptionMapper
 import com.twitter.finatra.http.response.ResponseBuilder
-import com.twitter.finatra.json.internal.caseclass.jackson.JacksonUtils
+import com.twitter.finatra.jackson.caseclass.exceptions._
 import com.twitter.inject.Logging
 import javax.inject.{Inject, Singleton}
 
@@ -16,6 +16,6 @@ private[http] class JsonParseExceptionMapper @Inject()(response: ResponseBuilder
   override def toResponse(request: Request, e: JsonParseException): Response = {
     warn(e)
     response.badRequest
-      .jsonError(JacksonUtils.errorMessage(e))
+      .jsonError(e.errorMessage)
   }
 }

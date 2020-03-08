@@ -1,10 +1,12 @@
 package com.twitter.hello.app;
 
-final class HelloWorldAppMain {
-    private HelloWorldAppMain() {
-    }
+import java.util.ArrayList;
 
-    public static void main(String[] args) {
-        new HelloWorldApp().main(args);
-    }
+final class HelloWorldAppMain {
+  private HelloWorldAppMain() {
+  }
+
+  public static void main(String[] args) {
+    new HelloWorldApp(new ArrayList<>()).main(args);
+  }
 }

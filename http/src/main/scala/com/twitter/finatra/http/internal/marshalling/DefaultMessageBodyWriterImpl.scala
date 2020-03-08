@@ -6,7 +6,7 @@ import com.twitter.finatra.http.marshalling.{
   MessageBodyFlags,
   WriterResponse
 }
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.utils.{AutoClosable, FileResolver}
 import com.twitter.inject.annotations.Flag
 import com.twitter.io.{Buf, StreamIO}
@@ -18,7 +18,7 @@ import scala.runtime.BoxedUnit
 private[finatra] class DefaultMessageBodyWriterImpl @Inject()(
   @Flag(MessageBodyFlags.ResponseCharsetEnabled) includeContentTypeCharset: Boolean,
   fileResolver: FileResolver,
-  mapper: FinatraObjectMapper)
+  mapper: ScalaObjectMapper)
     extends DefaultMessageBodyWriter {
 
   private[this] val applicationJson =

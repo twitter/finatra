@@ -1,7 +1,5 @@
 junit_tests(
-    sources = rglobs(
-        "*.scala",
-    ),
+    sources = ["**/*.scala"],
     strict_deps = True,
     dependencies = [
         "3rdparty/jvm/org/joda:joda-convert",

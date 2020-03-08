@@ -1,8 +1,11 @@
 package com.twitter.finatra.http.tests.integration.tweetexample.main.modules
 
 import com.google.inject.{Exposed, Module, Provides}
-import com.twitter.finatra.http.tests.integration.tweetexample.main.services.admin.{DatabaseClient, UserService}
-import com.twitter.finatra.test.{Prod, Staging}
+import com.twitter.finatra.http.tests.integration.tweetexample.main.services.admin.{
+  DatabaseClient,
+  UserService
+}
+import com.twitter.finatra.http.{Prod, Staging}
 import com.twitter.inject.{TwitterModule, TwitterPrivateModule}
 import javax.inject.Singleton
 

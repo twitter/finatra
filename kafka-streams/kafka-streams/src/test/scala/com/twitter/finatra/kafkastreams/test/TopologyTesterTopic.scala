@@ -2,6 +2,7 @@ package com.twitter.finatra.kafkastreams.test
 
 import com.twitter.finatra.kafkastreams.utils.time._
 import org.apache.kafka.clients.producer.ProducerRecord
+import org.apache.kafka.common.header.Headers
 import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.streams.TopologyTestDriver
 import org.apache.kafka.streams.test.ConsumerRecordFactory
@@ -28,8 +29,27 @@ class TopologyTesterTopic[K, V](
   private val recordFactory =
     new ConsumerRecordFactory(name, keySerde.serializer, valSerde.serializer)
 
+  /**
+   * Write a record to the Kafka topic, specifying only the key/value and timestamp
+   *
+   * @param key the record key
+   * @param value the record value
+   * @param timestamp timestamp of the record. defaults to the current time.
+   */
   def pipeInput(key: K, value: V, timestamp: Long = DateTimeUtils.currentTimeMillis()): Unit = {
     topologyTestDriver.pipeInput(recordFactory.create(key, value, timestamp))
+  }
+
+  /**
+   * Write a record to the Kafka topic, specifying the key/value, headers, and timestamp
+   *
+   * @param key the record key
+   * @param value the record value
+   * @param headers the record headers
+   * @param timestamp timestamp of the record. defaults to the current time.
+   */
+  def pipeInputWithHeaders(key: K, value: V, headers: Headers, timestamp: Long = DateTimeUtils.currentTimeMillis()): Unit = {
+    topologyTestDriver.pipeInput(recordFactory.create(key, value, headers, timestamp))
   }
 
   def readOutput(): ProducerRecord[K, V] = {

@@ -15,8 +15,8 @@ import com.twitter.finagle.http.Request;
 import com.twitter.finagle.http.Version;
 import com.twitter.finatra.http.streaming.FromReader;
 import com.twitter.finatra.http.streaming.StreamingRequest;
-import com.twitter.finatra.json.FinatraObjectMapper;
-import com.twitter.finatra.json.internal.streaming.JsonStreamParser;
+import com.twitter.finatra.jackson.ScalaObjectMapper;
+import com.twitter.finatra.jackson.streaming.JsonStreamParser;
 import com.twitter.io.Buf;
 import com.twitter.io.Bufs;
 import com.twitter.io.Reader;
@@ -27,7 +27,7 @@ public class StreamingRequestJavaTest extends Assert {
 
   private String jsonStr = "[\"first\",\"second\",\"third\"]";
 
-  private JsonStreamParser parser = new JsonStreamParser(FinatraObjectMapper.create(null));
+  private JsonStreamParser parser = new JsonStreamParser(ScalaObjectMapper.apply());
 
   @Test
   @SuppressWarnings({"unchecked", "rawtypes"})

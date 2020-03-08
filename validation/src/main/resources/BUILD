@@ -1,3 +1,3 @@
 resources(
-    sources = rglobs("*.properties"),
+    sources = ["**/*.properties"],
 )

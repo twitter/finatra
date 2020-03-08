@@ -3,6 +3,10 @@
 Integration Tests
 =================
 
+.. important::
+
+  Please see the section on including test-jar dependencies in your project: `Test Dependencies <../..#test-dependencies>`_.
+
 .. note:: If you are calling an |c.t.util.Await|_ function on a |c.t.util.Future|_ return type in a
     test, it is generally considered good practice to ensure that your |c.t.util.Await|_ call
     includes a timeout duration, e.g., |c.t.util.Await#ready|_.

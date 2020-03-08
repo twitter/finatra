@@ -5,6 +5,7 @@ import com.twitter.app.{Flag, FlagParseException, FlagUsageError, Flags}
 import com.twitter.inject.Injector
 import com.twitter.inject.app.internal.Modules
 import java.util.concurrent.atomic.AtomicBoolean
+import scala.collection.JavaConverters._
 
 /**
  * A [[com.google.inject.Injector]] usable for testing. This injector can be used for
@@ -31,10 +32,25 @@ object TestInjector {
    * @param modules - a variable list of [[com.google.inject.Module]]
    * @return a new [[TestInjector]]
    *
+   * @note Java users should prefer `apply(java.util.Collection<Module>)`
    * @see https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests
    */
   def apply(modules: Module*): TestInjector = {
     apply(modules = modules)
+  }
+
+  /**
+   * Create a new TestInjector over the given list of [[com.google.inject.Module]]
+   *
+   * @param modules - a variable list of [[com.google.inject.Module]]
+   *
+   * @return a new [[TestInjector]]
+   *
+   * @note Scala users should prefer `apply(Seq[Module])`
+   * @see https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests
+   */
+  def apply(modules: java.util.Collection[Module]): TestInjector = {
+    apply(modules.asScala.toSeq)
   }
 
   /**

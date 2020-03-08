@@ -2,9 +2,9 @@ package com.twitter.finatra.kafkastreams.flushing
 
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.kafkastreams.transformer.lifecycle.{OnClose, OnInit}
-import com.twitter.finatra.kafkastreams.utils.MessageTimestamp
 import com.twitter.util.{Await, Duration, Future, Return, Throw}
 import java.util.concurrent.Semaphore
+import org.apache.kafka.streams.processor.internals.ProcessorRecordContext
 
 /**
  * The AsyncFlushing trait allows outstanding futures to be tracked to completion when the flush()
@@ -32,7 +32,7 @@ trait AsyncFlushing[K1, V1, K2, V2] extends Flushing with OnInit with OnClose {
   protected def addFuture(
     key: K1,
     value: V1,
-    future: Future[Iterable[(K2, V2, MessageTimestamp)]]
+    future: Future[Iterable[(K2, V2, ProcessorRecordContext)]]
   ): Unit = {
     throwIfAsyncFailure()
 
@@ -52,7 +52,7 @@ trait AsyncFlushing[K1, V1, K2, V2] extends Flushing with OnInit with OnClose {
   protected def onFutureSuccess(
     key: K1,
     value: V1,
-    result: Iterable[(K2, V2, MessageTimestamp)]
+    result: Iterable[(K2, V2, ProcessorRecordContext)]
   ): Unit = {
     debug(s"FutureSuccess $key $value $result")
   }

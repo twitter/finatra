@@ -5,8 +5,8 @@ import com.google.inject.name.Names
 import com.google.inject.{Key, TypeLiteral}
 import com.twitter.finagle.http.Method._
 import com.twitter.finagle.http.Status._
-import com.twitter.finagle.http.{MediaType, _}
 import com.twitter.finagle.http.codec.HttpCodec
+import com.twitter.finagle.http.{MediaType, _}
 import com.twitter.finagle.{Failure, FailureFlags}
 import com.twitter.finatra.http.tests.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.SomethingStreamedResponse
@@ -47,7 +47,6 @@ object DoEverythingServerFeatureTest {
 }
 
 class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
-
   val httpClient: HttpClient = smartMock[HttpClient]
 
   override val server: EmbeddedHttpServer = new EmbeddedHttpServer(
@@ -756,8 +755,8 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     server.httpPost(
       "/requestInjectionsNotAvailable",
       "{}",
-      andExpect = InternalServerError,
-      withErrors = Seq("internal server error")
+      andExpect = BadRequest,
+      withErrors = Seq("id: queryParam is required")
     )
   }
 
@@ -2382,14 +2381,16 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
       andExpect = Status.Ok
     )
 
+    val time: String = Time.now.format("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     server.httpPost(
       "/ctu-time",
       postBody = s"""
            |{
-           |  "time": "${Time.now.format("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")}"
+           |  "time": "$time"
            |}
          """.stripMargin,
-      andExpect = Status.InternalServerError
+      andExpect = Status.BadRequest,
+      withErrors = Seq(s"time: error parsing '$time'" + " into a com.twitter.util.Time$")
     )
   }
 }

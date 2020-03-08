@@ -2,10 +2,10 @@ package com.twitter.finatra.http.tests.integration.messagebody.main.domain
 
 import com.twitter.finagle.http.{MediaType, Message}
 import com.twitter.finatra.http.marshalling.{MessageBodyWriter, WriterResponse}
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import javax.inject.Inject
 
-class GreetingMessageBodyWriter @Inject()(mapper: FinatraObjectMapper)
+class GreetingMessageBodyWriter @Inject()(mapper: ScalaObjectMapper)
     extends MessageBodyWriter[GreetingRequest] {
 
   override def write(greetingRequest: GreetingRequest): WriterResponse = {

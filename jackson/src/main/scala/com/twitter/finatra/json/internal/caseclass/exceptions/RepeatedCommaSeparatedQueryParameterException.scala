@@ -1,3 +1,0 @@
-package com.twitter.finatra.json.internal.caseclass.exceptions
-
-class RepeatedCommaSeparatedQueryParameterException extends Exception

@@ -46,9 +46,7 @@ object MDCInitializer extends Logging {
    * @param fn the function to execute with the given LocalContext.
    * @return the result of executing the function `fn`.
    */
-  def let[R](fn: => R): R = {
-    let(new JHashMap[String, String]())(fn)
-  }
+  def let[R](fn: => R): R = let(new JHashMap[String, String]())(fn)
 
   /**
    * Initializes the value of the MDC to the given [[java.util.HashMap]] only for the scope of the
@@ -63,4 +61,7 @@ object MDCInitializer extends Logging {
       fn
     }
   }
+
+  /** Returns the current value of the MDC [[java.util.HashMap]] state. */
+  def current: Option[JHashMap[String, String]] = Contexts.local.get(Key)
 }

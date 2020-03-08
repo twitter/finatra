@@ -1,7 +1,7 @@
 package com.twitter.finatra.http
 
 import com.twitter.conversions.DurationOps._
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports, info}
 import com.twitter.util.Closable
 import net.codingwell.scalaguice.typeLiteral
@@ -24,7 +24,7 @@ private[twitter] trait ExternalHttpClient { self: EmbeddedTwitterServer =>
   def httpPortFlag: String = "http.port"
 
   /** Provide an override to the underlying server's mapper */
-  def mapperOverride: Option[FinatraObjectMapper]
+  def mapperOverride: Option[ScalaObjectMapper]
 
   /** Provide an override to the external HTTPS client */
   private[twitter] def httpsClientOverride: Option[JsonAwareEmbeddedHttpClient] = None
@@ -81,22 +81,22 @@ private[twitter] trait ExternalHttpClient { self: EmbeddedTwitterServer =>
   }
 
   /**
-   * The embedded [[FinatraObjectMapper]]. When the underlying embedded HttpServer is an injectable
+   * The embedded [[ScalaObjectMapper]]. When the underlying embedded HttpServer is an injectable
    * TwitterServer and has configured an object mapper, this will represent the server's configured
-   * object mapper, otherwise it is a default instantiation of the [[FinatraObjectMapper]].
+   * object mapper, otherwise it is a default instantiation of the [[ScalaObjectMapper]].
    *
-   * @see [[FinatraObjectMapper.create(injector: Injector)]]
+   * @see [[ScalaObjectMapper(injector: Injector)]]
    */
-  final lazy val mapper: FinatraObjectMapper = {
+  final lazy val mapper: ScalaObjectMapper = {
     if (isInjectable) {
       // if there is an object mapper bound, use it as the default otherwise create a new one
       val default =
-        if (injector.underlying.findBindingsByType(typeLiteral[FinatraObjectMapper]).asScala.nonEmpty)
-          injector.instance[FinatraObjectMapper]
-        else FinatraObjectMapper.create()
+        if (injector.underlying.findBindingsByType(typeLiteral[ScalaObjectMapper]).asScala.nonEmpty)
+          injector.instance[ScalaObjectMapper]
+        else ScalaObjectMapper()
       mapperOverride.getOrElse(default)
     } else {
-      FinatraObjectMapper.create()
+      ScalaObjectMapper()
     }
   }
 

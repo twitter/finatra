@@ -1,5 +1,5 @@
 scala_library(
-    sources = rglobs("*.scala"),
+    sources = ["**/*.scala"],
     compiler_option_sets = {"fatal_warnings"},
     java_sources = [
         "finatra/inject/inject-request-scope/src/main/java",

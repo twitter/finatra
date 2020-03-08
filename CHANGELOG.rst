@@ -7,11 +7,130 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+20.3.0
+------
+
+Added
+~~~~~
+
+Changed
+~~~~~~~
+
+* finatra-validation|jackson: Remove Jackson dependency from finatra/validation. This
+  was for `ErrorCode` reporting but can be moved to finatra/jackson. ``PHAB_ID=D445364``
+
+* finatra-kafka-streams: (BREAKING API CHANGE) Update AsyncTransformer to preserve
+  record context. ``PHAB_ID=D436227``
+
+* finatra-jackson: Better handling of Scala enumeration mapping errors. Currently, if mapping
+  of a Scala enumeration during deserialization fails a `java.util.NoSuchElementException` is
+  thrown which escapes deserialization error handling. Update to instead handle this failure case
+  in order to correctly translate into a `CaseClassFieldMappingException` which will be wrapped
+  into a `CaseClassMappingException`. ``PHAB_ID=D442575``
+
+Fixed
+~~~~~
+
+20.2.1
+------
+
+Added
+~~~~~
+
+* finatra-kafka-streams: Add method to `c.t.f.kafkastreams.test.TopologyTesterTopic` to write
+  Kafka messages with custom headers to topics. ``PHAB_ID=D424440``
+
+* finatra-http: Add `toBufReader` to get the underlying Reader of Buf from StreamingResponse.
+  If the consumed Stream primitive is not Buf, the returned reader streams a serialized
+  JSON array. ``PHAB_ID=D434448``
+
+* inject-app: Add functions to `c.t.inject.app.AbstractApp` to provide better
+  ergonomics for Java users to call and use basic `App` lifecycle callbacks. 
+  ``PHAB_ID=D433874``
+
+* inject-server: Add functions to `c.t.inject.server.AbstractTwitterServer` to provide 
+  better ergonomics for Java users to call and use basic `TwitterServer` lifecycle 
+  callbacks. ``PHAB_ID=D433874``
+
+* inject-slf4j: Add a way to retrieve the currently stored Local Context map backing the
+  MDC. ``PHAB_ID=D431148``
+
+* finatra-jackson: Added new functionality in the `CaseClassDeserializer` to support more
+  Jackson annotations during deserialization. See documentation for more information.
+  ``PHAB_ID=D407284``
+
+* finatra: Add NullKafkaProducer for unit tests to avoid network connection failures in the log.
+  ``PHAB_ID=D429004``
+
+Changed
+~~~~~~~
+* finatra: Update Google Guice version to 4.2.0 ``PHAB_ID=D372886``
+
+* finatra: Bumped version of Joda to 2.10.2 and Joda-Convert to 1.5. ``PHAB_ID=D435987``
+
+* finatra-jackson|finatra-http-annotations: Move http-releated Jackson "injectablevalues"
+  annotations from `finatra/jackson` to `finatra/http-annotations`.
+
+  Specifically the follow have changed packages,
+  `c.t.finatra.request.QueryParam`       --> `c.t.finatra.http.annotations.QueryParam`
+  `c.t.finatra.request.RouteParam`        --> `c.t.finatra.http.annotations.RouteParam`
+  `c.t.finatra.request.FormParam`         --> `c.t.finatra.http.annotations.FormParam`
+  `c.t.finatra.request.Header`                --> `c.t.finatra.http.annotations.Header`
+  `c.t.finatra.request.JsonIgnoreBody` --> `c.t.finatra.http.annotations.JsonIgnoreBody`
+
+  Users should update from `finatra/jackson/src/main/java` (`finatra-jackson_2.12`)
+  to `finatra/http-annotations/src/main/java` (`finatra-http-annotations_2.12`).
+  ``PHAB_ID=D418766``
+
+* finatra-jackson: Updated Finatra Jackson integration to introduce a new `ScalaObjectMapper`
+  and module to simplify configuration and creation of the mapper. See documentation for more
+  information. ``PHAB_ID=D407284``
+
+* finatra-jackson: (BREAKING API CHANGE) Moved the java binding annotations, `CamelCaseMapper` and
+  `SnakeCaseMapper` from `c.t.finatra.annotations` in `finatra/jackson` to
+  `c.t.finatra.json.annotations` in `finatra/json-annotations`. Moved
+  `c.t.finatra.response.JsonCamelCase` to `c.t.finatra.json.annotations.JsonCamelCase` which is also
+  now deprecated. Users are encouraged to use the standard Jackson annotations or a mapper with
+  the desired property naming strategy configured.
+
+  Many exceptions for case class deserialization were meant to be internal to the framework but are
+  useful or necessary outside of the internals of JSON deserialization. As such we have cleaned up
+  and made most JSON deserialization exceptions public. As a result, all the exceptions have been moved
+  from `c.t.finatra.json.internal.caseclass.exceptions` to `c.t.finatra.jackson.caseclass.exceptions`.
+
+  `c.t.finatra.json.internal.caseclass.exceptions.CaseClassValidationException` has been renamed to
+  `c.t.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException`. `JsonInjectException`,
+  `JsonInjectionNotSupportedException`, and `RequestFieldInjectionNotSupportedException` have all been
+  deleted and replaced with `c.t.finatra.jackson.caseclass.exceptions.InjectableValuesException`
+  which represents the same error cases.
+
+  The `FinatraJsonMappingException` has been removed. Users are encouraged to instead use the general
+  Jackson `JsonMappingException` (which the `FinatraJsonMappingException` extends).
+
+  `RepeatedCommaSeparatedQueryParameterException` has been moved tom finatra/http.
+  ``PHAB_ID=D407284``
+
+Fixed
+~~~~~
+
+* finatra-jackson: Access to parameter names via Java reflection is not supported in Scala 2.11.
+  Added a work around for the parsing of case class structures to support JSON deserialization in
+  Scala 2.11 and forward. ``PHAB_ID=D431837``
+
+* finatra-jackson: Fix for enforcing "fail on unknown properties" during deserialization. Previously,
+  the `CaseClassDeserializer` was optimized to only read the fields in the case class constructor
+  from the incoming JSON and thus ignored any unknown fields during deserialization. The fix will
+  now properly fail if the `DeserializationFeature` is set or if the `JsonProperties` is configured
+  accordingly. ``PHAB_ID=D407284``
+
 20.1.0
 ------
 
 Changed
 ~~~~~~~
+
+* finatra-kafka-streams: Track `c.t.f.kafkastreams.flushing.AsyncProcessor` and
+  `c.t.f.kafkastreams.flushing.AsyncTransformer` latencies with stat metrics ``PHAB_ID=D430688``
 
 * finatra: Exposing Listening Server's bound address in Thrift and HTTP server traits
   ``PHAB_ID=D424745``
@@ -46,7 +165,7 @@ Changed
 
   ``PHAB_ID=D407474``
 
-* finatra-http|jackson (BREAKING API CHANGE): Move parsing of message body contents
+* finatra-http|jackson: (BREAKING API CHANGE) Move parsing of message body contents
   from `finatra/jackson` via the `FinatraObjectMapper` `#parseMessageBody`, `#parseRequestBody`,
   and `#parseResponseBody` methods to `finatra/http` with functionality replicated via an
   implicit which enhances a given `FinatraObjectMapper`. Additionally we have updated
@@ -229,12 +348,12 @@ Added
 Changed
 ~~~~~~~
 
-* finatra: Remove commons-lang as a dependency and replace it with alternatives from stdlib 
+* finatra: Remove commons-lang as a dependency and replace it with alternatives from stdlib
   when possible. ``PHAB_ID=D354013``
 
 * inject-server: Changed `c.t.inject.server.InMemoryStatsReceiverUtility` to show the expected and
   actual values as part of the error message when metric values do not match. ``PHAB_ID=D360470``
-  
+
 * finatra-kafka-streams: Improve StaticPartitioning error message ``PHAB_ID=D351368``
 
 Fixed
@@ -246,11 +365,11 @@ Fixed
 * inject-app: Update `c.t.inject.app.App` to only recurse through modules once. We currently
   call `TwitterModule#modules` more than once in reading flags and parsing the list of modules
   over which to create the injector. When `TwitterModule#modules` is a function that inlines the
-  instantiation of new modules we can end up creating multiple instances causing issues with the 
-  list of flags defined in the application. This is especially true in instances of `TwitterModule` 
-  implemented in Java as there is no way to implement the trait `TwitterModule#modules` method as a 
-  eagerly evaluated value. We also don't provide an ergonomic method for Java users to define 
-  dependent modules like we do in apps and servers via `App#javaModules`. Thus we also add a 
+  instantiation of new modules we can end up creating multiple instances causing issues with the
+  list of flags defined in the application. This is especially true in instances of `TwitterModule`
+  implemented in Java as there is no way to implement the trait `TwitterModule#modules` method as a
+  eagerly evaluated value. We also don't provide an ergonomic method for Java users to define
+  dependent modules like we do in apps and servers via `App#javaModules`. Thus we also add a
   `TwitterModule#javaModules` function which expresses a better API for Java users. ``PHAB_ID=D349587``
 
 Closed
@@ -419,7 +538,7 @@ Added
   `NullValidationFinatraJacksonModule`. ``PHAB_ID=D307795``
 
 * inject-app: Add `c.t.inject.app.DtabResolution` to help users apply supplemental Dtabs added by
-  setting the dtab.add flag. This will append the supplemental Dtabs to the 
+  setting the dtab.add flag. This will append the supplemental Dtabs to the
   Dtab.base in a premain function. ``PHAB_ID=D303813``
 
 Changed

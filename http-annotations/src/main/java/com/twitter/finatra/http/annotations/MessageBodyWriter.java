@@ -6,12 +6,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marker annotation for [[java.lang.annotation.Annotation]] interfaces which define
+ * Marker annotation for {@link java.lang.annotation.Annotation} interfaces which define
  * a `MessageBodyWriter` annotation. A `MessageBodyWriter` annotation is a
- * [[java.lang.annotation.Annotation]] used to annotate a class which should be rendered
+ * {@link java.lang.annotation.Annotation} used to annotate a class which should be rendered
  * by a registered `MessageBodyComponent` for the annotation type.
  *
- * @see [[https://twitter.github.io/finatra/user-guide/http/message_body.html Message Body Components]]
+ * @see <a href="https://twitter.github.io/finatra/user-guide/http/message_body.html">Finatra User's Guide - HTTP Message Body Components</a>
  */
 @Target(ElementType.ANNOTATION_TYPE)
 @Retention(RetentionPolicy.RUNTIME)

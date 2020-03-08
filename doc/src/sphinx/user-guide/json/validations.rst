@@ -21,6 +21,21 @@ The validations framework integrates Finatra's custom `case class` deserializer 
 -  ``@UUID``
 -  ``@MethodValidation``
 
+`MixIn Annotations <https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations>`_
+---------------------------------------------------------------------------------------------
+
+With Jackson `MixIn Annotations <https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations>`_
+support it is possible to specify field-level validation annotations for case classes that are not
+under your control to be annotated.
+
+For an example on how to use `MixIn Annotations <https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations>`_
+with Finatra validations, see the documentation `here <./index.html#id19>`_.
+
+.. important::
+
+    Note this integration will only work for field-level validation annotations since method
+    validations must currently be specified *inside* of the actual class to be validated.
+
 Method Validations
 ------------------
 

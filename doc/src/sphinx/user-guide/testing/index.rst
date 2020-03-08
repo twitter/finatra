@@ -55,6 +55,11 @@ Resources on Writing Tests
 --------------------------
 - `The Tao of Testing: Chapter 4 - How to Write Tests <https://jasonpolites.github.io/tao-of-testing/ch4-1.1.html>`__
 
+`Test Dependencies <../..#test-dependencies>`_
+----------------------------------------------
+
+Please be sure to read `the section <../..#test-dependencies>`_ on including test-jar dependencies in your project.
+
 More Information
 ----------------
 

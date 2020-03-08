@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "20.1.0"
+val releaseVersion = "20.3.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -94,11 +94,11 @@ lazy val versions = new {
   val bijectionCore = "0.9.5"
   val commonsFileupload = "1.4"
   val fastutil = "8.1.1"
-  val guice = "4.1.0"
+  val guice = "4.2.0"
   val jackson = "2.9.10"
   val jacksonDatabind = "2.9.10.1"
-  val jodaConvert = "1.2"
-  val jodaTime = "2.5"
+  val jodaConvert = "1.5"
+  val jodaTime = "2.10.2"
   val json4s = "3.6.7"
   val junit = "4.12"
   val kafka = "2.2.0"
@@ -109,7 +109,7 @@ lazy val versions = new {
   val nscalaTime = "2.14.0"
   val rocksdbjni = "5.14.2"
   val scalaCheck = "1.14.0"
-  val scalaGuice = "4.1.0"
+  val scalaGuice = "4.2.0"
   val scalaTest = "3.0.8"
   val slf4j = "1.7.30"
   val snakeyaml = "1.24"
@@ -165,6 +165,7 @@ lazy val baseSettings = Seq(
 
 lazy val publishSettings = Seq(
   publishMavenStyle := true,
+  publishConfiguration := publishConfiguration.value.withOverwrite(true),
   publishArtifact in Compile := true,
   publishArtifact in Test := false,
   pomIncludeRepository := { _ => false },
@@ -620,7 +621,7 @@ lazy val injectUtils = (project in file("inject/inject-utils"))
  * {{{
  *   $ ./sbt
  *   > project benchmarks
- *   > jmh:run -i 10 -wi 20 -f1 -t1 .*FalseSharing.*
+ *   > jmh:run -i 10 -wi 20 -f1 -t1 .*JsonBenchmark.*
  * }}}
  *
  * Which means "10 iterations" "20 warm up iterations" "1 fork" "1 thread". Note that
@@ -693,10 +694,9 @@ lazy val validation = project
     name := "finatra-validation",
     moduleName := "finatra-validation",
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.core" % "jackson-databind" % versions.jacksonDatabind,
       "joda-time" % "joda-time" % versions.jodaTime,
-      "org.json4s" %% "json4s-core" % versions.json4s,
       "com.twitter" %% "util-core" % versions.twLibVersion,
+      "org.json4s" %% "json4s-core" % versions.json4s % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
     // special-case to only scaladoc what's necessary as some of the tests cannot generate scaladocs
@@ -730,13 +730,14 @@ lazy val jackson = project
   .settings(
     name := "finatra-jackson",
     moduleName := "finatra-jackson",
-    ScoverageKeys.coverageExcludedPackages := ".*JacksonToGuiceTypeConverter.*;.*DurationMillisSerializer.*;.*ByteBufferUtils.*",
+    ScoverageKeys.coverageExcludedPackages := ".*DurationMillisSerializer.*;.*ByteBufferUtils.*",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jacksonDatabind,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson,
+      "com.google.inject" % "guice" % versions.guice,
       "org.json4s" %% "json4s-core" % versions.json4s,
-      "com.twitter" %% "finagle-http" % versions.twLibVersion,
+      "com.twitter" %% "finagle-http" % versions.twLibVersion % "test",
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
@@ -760,8 +761,21 @@ lazy val jackson = project
     }
   ).dependsOn(
     injectApp % "test->test",
+    injectCore,
+    injectSlf4j,
     injectUtils,
+    jsonAnnotations,
     validation % "test->test;compile->compile")
+
+lazy val jsonAnnotations = (project in file("json-annotations"))
+  .settings(projectSettings)
+  .settings(
+    name := "finatra-json-annotations",
+    moduleName := "finatra-json-annotations",
+    libraryDependencies ++= Seq(
+      "com.google.inject" % "guice" % versions.guice
+    )
+  )
 
 lazy val mustache = project
   .settings(projectSettings)
@@ -840,6 +854,8 @@ lazy val httpAnnotations = (project in file("http-annotations"))
   .settings(
     name := "finatra-http-annotations",
     moduleName := "finatra-http-annotations"
+  ).dependsOn(
+    jsonAnnotations
   )
 
 lazy val httpMustache = (project in file("http-mustache"))
@@ -1091,7 +1107,7 @@ lazy val kafkaStreamsQueryableThrift = (project in file("kafka-streams/kafka-str
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
-    injectCore % "test->test;compile->compile", 
+    injectCore % "test->test;compile->compile",
     kafkaStreamsStaticPartitioning % "test->test;compile->compile")
 
 lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))

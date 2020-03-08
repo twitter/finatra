@@ -2,17 +2,17 @@ package com.twitter.finatra.http
 
 import com.google.inject.Module
 import com.twitter.app.Flag
-import com.twitter.conversions.StorageUnitOps._
 import com.twitter.conversions.DurationOps._
-import com.twitter.finagle.{Http, ListeningServer, NullServer, Service}
+import com.twitter.conversions.StorageUnitOps._
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.service.NilService
 import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.finagle.{Http, ListeningServer, NullServer, Service}
 import com.twitter.finatra.http.modules.{AccessLogModule, ExceptionManagerModule, HttpResponseClassifierModule, MessageBodyFlagsModule, MessageBodyModule}
 import com.twitter.finatra.http.response.HttpResponseClassifier
 import com.twitter.finatra.http.routing.{AdminHttpRouter, HttpRouter}
-import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.finatra.json.modules.FinatraJacksonModule
+import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.conversions.string._
 import com.twitter.inject.server.{PortUtils, TwitterServer}
@@ -513,9 +513,9 @@ trait HttpServer extends HttpServerTrait {
   protected def messageBodyModule: Module = MessageBodyModule
 
   /**
-   * Default [[com.twitter.inject.TwitterModule]] for providing a [[com.twitter.finatra.json.FinatraObjectMapper]].
+   * Default [[com.twitter.inject.TwitterModule]] for providing a [[com.twitter.finatra.jackson.ScalaObjectMapper]].
    *
-   * @return a [[com.twitter.inject.TwitterModule]] which provides a [[com.twitter.finatra.json.FinatraObjectMapper]] implementation.
+   * @return a [[com.twitter.inject.TwitterModule]] which provides a [[com.twitter.finatra.jackson.ScalaObjectMapper]] implementation.
    */
   protected def jacksonModule: Module = FinatraJacksonModule
 }

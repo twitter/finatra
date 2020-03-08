@@ -2,7 +2,7 @@ package finatra.quickstart.firebase
 
 import com.twitter.finatra.http.response.ResponseUtils
 import com.twitter.finatra.httpclient.{HttpClient, RequestBuilder}
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.inject.Logging
 import com.twitter.util.{Future, Return, Throw}
 import javax.inject.{Inject, Singleton}
@@ -12,7 +12,7 @@ case class FirebaseError(error: String)
 @Singleton
 class FirebaseClient @Inject()(
   httpClient: HttpClient,
-  mapper: FinatraObjectMapper)
+  mapper: ScalaObjectMapper)
   extends Logging {
 
   /** Writes data to path */

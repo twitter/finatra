@@ -2,14 +2,15 @@ package com.twitter.finatra.http.tests.marshalling
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finagle.http.{Fields, MediaType, Message, Request, Response}
-import com.twitter.finatra.http.TestMessageBodyWriterAnn
-import com.twitter.finatra.http.marshalling.{DefaultMessageBodyReader, DefaultMessageBodyWriter, MessageBodyComponent, MessageBodyManager, MessageBodyReader, MessageBodyWriter, WriterResponse}
+import com.twitter.finatra.http.{Prod, TestMessageBodyWriterAnn}
+import com.twitter.finatra.http.annotations.{Header, QueryParam}
+import com.twitter.finatra.http.marshalling._
 import com.twitter.finatra.http.modules.MessageBodyModule
 import com.twitter.finatra.http.tests.integration.json.CaseClassWithBoolean
-import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.json.modules.FinatraJacksonModule
+import com.twitter.finatra.jackson.ScalaObjectMapper
+import com.twitter.finatra.jackson.caseclass.exceptions.InjectableValuesException
+import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 import com.twitter.finatra.modules.FileResolverModule
-import com.twitter.finatra.test.Prod
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.{Injector, Mockito, Test}
 import javax.inject.Inject
@@ -26,6 +27,8 @@ private object MessageBodyManagerTest {
   @TestMessageBodyWriterAnn case class TestClass(name: String)
   case class NoReaderRegistered(id: Long)
   case class NoWriterRegistered(id: Long)
+  case class TestClassWithResponse(@Header `content-type`: String, response: Response)
+  case class TestClassWithResponseToo(@QueryParam q: String, response: Response)
 
   class ReallyCoolMessageBodyComponent extends MessageBodyComponent
 
@@ -42,7 +45,7 @@ private object MessageBodyManagerTest {
       Map(1 -> 0.0, 2 -> 3.14, 3 -> 0.577)
   }
 
-  class CarMessageBodyWriter @Inject()(mapper: FinatraObjectMapper) extends MessageBodyWriter[Car] {
+  class CarMessageBodyWriter @Inject()(mapper: ScalaObjectMapper) extends MessageBodyWriter[Car] {
     override def write(car: Car): WriterResponse = {
       WriterResponse(MediaType.JsonUtf8, mapper.writeValueAsBytes(Map("name" -> car.name)))
     }
@@ -66,7 +69,7 @@ class MessageBodyManagerTest extends Test with Mockito {
 
   private val message: Message = mock[Message]
   private val injector: Injector =
-    TestInjector(FileResolverModule, MessageBodyModule, FinatraJacksonModule).create
+    TestInjector(FileResolverModule, MessageBodyModule, ScalaObjectMapperModule).create
 
   private val messageBodyManager: MessageBodyManager = injector.instance[MessageBodyManager]
   messageBodyManager.add[DogMessageBodyReader]()
@@ -79,7 +82,7 @@ class MessageBodyManagerTest extends Test with Mockito {
 
   private val defaultMessageBodyReader: DefaultMessageBodyReader =
     injector.instance[DefaultMessageBodyReader]
-  private val mapper: FinatraObjectMapper = injector.instance[FinatraObjectMapper]
+  private val mapper: ScalaObjectMapper = injector.instance[ScalaObjectMapper]
 
   test("adding by writer annotation for an annotation without MessageBodyWriter annotation fails") {
     intercept[AssertionError] {
@@ -106,7 +109,7 @@ class MessageBodyManagerTest extends Test with Mockito {
     request.setContentString("""{ "foo": "true" }""")
     val result = MessageBodyReader.parseMessageBody[CaseClassWithBoolean](
       request,
-      mapper.objectMapper.readerFor[CaseClassWithBoolean]
+      mapper.underlying.readerFor[CaseClassWithBoolean]
     )
     assert(result == CaseClassWithBoolean(true))
   }
@@ -126,7 +129,7 @@ class MessageBodyManagerTest extends Test with Mockito {
     request.setContentString("""{"msg": "hi"}""")
     val jsonNode = MessageBodyReader.parseMessageBody[JsonNode](
       request,
-      mapper.objectMapper.readerFor[JsonNode]
+      mapper.underlying.readerFor[JsonNode]
     )
     jsonNode.get("msg").textValue() should equal("hi")
   }
@@ -147,7 +150,7 @@ class MessageBodyManagerTest extends Test with Mockito {
     val jsonNode = MessageBodyReader
       .parseMessageBody[JsonNode](
         response,
-        mapper.objectMapper.readerFor[JsonNode]
+        mapper.underlying.readerFor[JsonNode]
       )
     jsonNode.get("msg").textValue() should equal("hi")
   }
@@ -162,7 +165,32 @@ class MessageBodyManagerTest extends Test with Mockito {
     val jsonNode = defaultMessageBodyReader.parse[JsonNode](response)
     jsonNode.get("msg").textValue() should equal("hi")
   }
-  
+
+  test("parse response case class") {
+    val response = Response()
+    val json = """{"msg": "hi"}"""
+    response.setContentString(json)
+    response.headerMap.set(Fields.ContentLength, json.length.toString)
+    response.headerMap.set(Fields.ContentType, MediaType.Json)
+
+    val tcwr: TestClassWithResponse =
+      defaultMessageBodyReader.parse[TestClassWithResponse](response)
+    tcwr.response should not be (null)
+    tcwr.`content-type` should equal(MediaType.Json)
+  }
+
+  test("parse response case class with request annotation fails") {
+    val response = Response()
+    val json = """{"msg": "hi"}"""
+    response.setContentString(json)
+    response.headerMap.set(Fields.ContentLength, json.length.toString)
+    response.headerMap.set(Fields.ContentType, MediaType.Json)
+
+    intercept[InjectableValuesException] {
+      defaultMessageBodyReader.parse[TestClassWithResponseToo](response)
+    }
+  }
+
   test("find no reader for type") {
     val reader = messageBodyManager.reader[NoReaderRegistered]()
     reader should be(None)
@@ -171,7 +199,7 @@ class MessageBodyManagerTest extends Test with Mockito {
   test("find writer for foo car") {
     val fooCar = FooCar("foo")
     val writer = messageBodyManager.writer(fooCar)
-    writer should not be(null)
+    writer should not be (null)
     writer.isInstanceOf[CarMessageBodyWriter] should be(true)
     val writerResponse = writer.write(fooCar)
     writerResponse.contentType should equal(MediaType.JsonUtf8)
@@ -181,7 +209,7 @@ class MessageBodyManagerTest extends Test with Mockito {
   test("find writer for bar car") {
     val barCar = BarCar("bar")
     val writer = messageBodyManager.writer(barCar)
-    writer should not be(null)
+    writer should not be (null)
     writer.isInstanceOf[CarMessageBodyWriter] should be(true)
     val writerResponse = writer.write(barCar)
     writerResponse.contentType should equal(MediaType.JsonUtf8)
@@ -191,7 +219,7 @@ class MessageBodyManagerTest extends Test with Mockito {
   test("find writer for TestMessageBodyWriterAnn") {
     val testClazz = TestClass("Wilbert")
     val writer = messageBodyManager.writer(testClazz)
-    writer should not be(null)
+    writer should not be (null)
     writer.isInstanceOf[TestMessageBodyWriter] should be(true)
     val writerResponse = writer.write(testClazz)
     writerResponse.contentType should equal(MediaType.PlainTextUtf8)
@@ -201,7 +229,7 @@ class MessageBodyManagerTest extends Test with Mockito {
   test("find writer for ReallyCoolMessageBodyComponent") {
     val reallyCoolComponent = new ReallyCoolMessageBodyComponent
     val writer = messageBodyManager.writer(reallyCoolComponent)
-    writer should not be(null)
+    writer should not be (null)
     writer.isInstanceOf[ReallyCoolMessageBodyWriter] should be(true)
     val writerResponse = writer.write(reallyCoolComponent)
     writerResponse.contentType should equal(MediaType.PlainTextUtf8)
@@ -211,7 +239,7 @@ class MessageBodyManagerTest extends Test with Mockito {
   test("find default writer for instance") {
     val instance = NoWriterRegistered(1234L)
     val writer = messageBodyManager.writer(instance)
-    writer should not be(null)
+    writer should not be (null)
     writer.isInstanceOf[DefaultMessageBodyWriter] should be(true)
   }
 }

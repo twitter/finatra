@@ -9,7 +9,38 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable.ArrayBuffer
 
 /** AbstractApp for usage from Java */
-abstract class AbstractApp extends App
+abstract class AbstractApp extends App {
+  /**
+   * Called prior to application initialization.
+   */
+  def onInit(): Unit = ()
+
+  /**
+   * Called before the `main` method.
+   */
+  def preMain(): Unit = ()
+
+  /**
+   * Called after the `main` method.
+   */
+  def postMain(): Unit = ()
+
+  /**
+   * Called prior to application exiting.
+   */
+  def onExit(): Unit = ()
+
+  /**
+   * Called prior to application exiting after `onExit`.
+   */
+  def onExitLast(): Unit = ()
+
+  init(onInit())
+  premain(preMain())
+  postmain(postMain())
+  onExit(onExit())
+  onExitLast(onExitLast())
+}
 
 /**
  * A [[com.twitter.app.App]] that supports injection and [[com.twitter.inject.TwitterModule]] modules.
