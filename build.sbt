@@ -275,6 +275,7 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   injectThriftClientHttpMapper,
   injectUtils,
   jackson,
+  jsonAnnotations,
   kafka,
   kafkaStreams,
   kafkaStreamsPrerestore,
