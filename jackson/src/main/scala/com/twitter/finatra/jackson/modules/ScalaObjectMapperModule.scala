@@ -10,7 +10,7 @@ import com.google.inject.{Injector, Provides}
 import com.twitter.finatra.jackson.caseclass.{InjectableTypes, NullInjectableTypes}
 import com.twitter.finatra.jackson.{JacksonScalaObjectMapperType, ScalaObjectMapper}
 import com.twitter.finatra.json.annotations.{CamelCaseMapper, SnakeCaseMapper}
-import com.twitter.finatra.validation.ValidationProvider
+import com.twitter.finatra.validation.Validator
 import com.twitter.inject.TwitterModule
 import javax.annotation.Nullable
 import javax.inject.Singleton
@@ -55,6 +55,7 @@ class ScalaObjectMapperModule extends TwitterModule {
     // allows injection of `Option[InjectableTypes]` which will be a None by default as
     // we do not provide any binding here.
     bindOption[InjectableTypes]
+    bindOption[Validator]
   }
 
   /* Public */
@@ -157,13 +158,6 @@ class ScalaObjectMapperModule extends TwitterModule {
     ScalaObjectMapper.DefaultJacksonModules
 
   /**
-   * @see [[ScalaObjectMapper.DefaultValidationProvider]]
-   * @see [[ScalaObjectMapper.Builder.withValidationProvider]]
-   */
-  protected def validationProvider: ValidationProvider =
-    ScalaObjectMapper.DefaultValidationProvider
-
-  /**
    * @see [[ScalaObjectMapper.DefaultAdditionalJacksonModules]]
    * @see [[ScalaObjectMapper.Builder.withAdditionalJacksonModules]]
    */
@@ -177,8 +171,16 @@ class ScalaObjectMapperModule extends TwitterModule {
    */
   protected def additionalMapperConfiguration(mapper: JacksonObjectMapper): Unit = {}
 
+  /**
+   * @see [[ScalaObjectMapper.DefaultValidation]]
+   * @see [[ScalaObjectMapper.Builder.withNoValidation]]
+   */
+  protected def validation: Boolean = ScalaObjectMapper.DefaultValidation
+
   /** Convenience method for copying a [[JacksonScalaObjectMapperType]]  */
-  protected final def copy(objectMapper: JacksonScalaObjectMapperType): JacksonScalaObjectMapperType =
+  protected final def copy(
+    objectMapper: JacksonScalaObjectMapperType
+  ): JacksonScalaObjectMapperType =
     ObjectMapperCopier.copy(objectMapper)
 
   /* Private */
@@ -186,25 +188,28 @@ class ScalaObjectMapperModule extends TwitterModule {
   // allows for overriding the injectable types via the provides method for injection
   protected final def provideScalaObjectMapper(
     injector: Injector,
-    injectableTypes: Option[InjectableTypes]
+    injectableTypes: Option[InjectableTypes],
+    validator: Option[Validator]
   ): JacksonScalaObjectMapperType =
     withBuilder
+      .withValidator(validator.getOrElse(ScalaObjectMapper.DefaultValidator))
       .withInjectableTypes(injectableTypes.getOrElse(NullInjectableTypes))
       .jacksonScalaObjectMapper(injector)
 
   /* Private */
 
-  private[this] final def withBuilder: ScalaObjectMapper.Builder =
-    builder
+  private[this] final def withBuilder: ScalaObjectMapper.Builder = {
+    val base = builder
       .withPropertyNamingStrategy(this.propertyNamingStrategy)
       .withNumbersAsStrings(this.numbersAsStrings)
       .withSerializationInclude(this.serializationInclusion)
       .withSerializationConfig(this.serializationConfig)
       .withDeserializationConfig(this.deserializationConfig)
       .withDefaultJacksonModules(this.defaultJacksonModules)
-      .withValidationProvider(this.validationProvider)
       .withAdditionalJacksonModules(this.additionalJacksonModules)
       .withAdditionalMapperConfigurationFn(this.additionalMapperConfiguration)
+    if (validation) base else base.withNoValidation
+  }
 
   /* NOTE: these methods are private as they are only meant to be called by the
      injector for providing these types. */
@@ -217,24 +222,29 @@ class ScalaObjectMapperModule extends TwitterModule {
   @SnakeCaseMapper
   private final def provideSnakeCaseObjectMapper(
     injector: Injector,
-    injectableTypes: Option[InjectableTypes]
+    injectableTypes: Option[InjectableTypes],
+    validator: Option[Validator]
   ): ScalaObjectMapper =
-    ScalaObjectMapper.snakeCaseObjectMapper(provideScalaObjectMapper(injector, injectableTypes))
+    ScalaObjectMapper.snakeCaseObjectMapper(
+      provideScalaObjectMapper(injector, injectableTypes, validator))
 
   @Singleton
   @Provides
   @CamelCaseMapper
   private final def provideCamelCaseObjectMapper(
     injector: Injector,
-    injectableTypes: Option[InjectableTypes]
+    injectableTypes: Option[InjectableTypes],
+    validator: Option[Validator]
   ): ScalaObjectMapper =
-    ScalaObjectMapper.camelCaseObjectMapper(provideScalaObjectMapper(injector, injectableTypes))
+    ScalaObjectMapper.camelCaseObjectMapper(
+      provideScalaObjectMapper(injector, injectableTypes, validator))
 
   @Singleton
   @Provides
   private final def provideObjectMapper(
     injector: Injector,
-    injectableTypes: Option[InjectableTypes]
+    injectableTypes: Option[InjectableTypes],
+    validator: Option[Validator]
   ): ScalaObjectMapper =
-    new ScalaObjectMapper(provideScalaObjectMapper(injector, injectableTypes))
+    new ScalaObjectMapper(provideScalaObjectMapper(injector, injectableTypes, validator))
 }

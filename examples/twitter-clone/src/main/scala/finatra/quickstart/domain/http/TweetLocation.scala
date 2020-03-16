@@ -1,12 +1,11 @@
 package finatra.quickstart.domain.http
 
-import com.twitter.finatra.validation.Range
+import com.twitter.finatra.validation.constraints.Range
 import finatra.quickstart.domain.Location
 
 case class TweetLocation(
   @Range(min = -85, max = 85) lat: Double,
-  @Range(min = -180, max = 180) long: Double
-) {
+  @Range(min = -180, max = 180) long: Double) {
 
   def toDomain = {
     Location(lat, long)

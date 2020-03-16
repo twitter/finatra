@@ -47,6 +47,11 @@ HTTP Server
 - :doc:`http/exceptions`
 - :doc:`http/warmup`
 
+Validation
+----------
+
+- :doc:`validation/index`
+
 JSON
 ----
 
@@ -128,6 +133,7 @@ Testing
    http/filters
    http/exceptions
    http/warmup
+   validation/index
    json/index
    json/routing
    json/validations

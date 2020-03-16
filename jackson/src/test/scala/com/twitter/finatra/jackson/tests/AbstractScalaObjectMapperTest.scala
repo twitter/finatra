@@ -510,8 +510,22 @@ abstract class AbstractScalaObjectMapperTest extends Test {
         "make" : "foo"
        }""")
     }
-    e.errors map { _.getMessage } should equal(
+    e.errors.map { _.getMessage } should equal(
       Seq("""make: 'foo' is not a valid CarMakeEnum with valid values: ford, vw""")
+    )
+  }
+
+  test("enums#default validation") {
+    val e = intercept[CaseClassMappingException] {
+      parse[CaseClassWithNotEmptyValidation]("""{
+        "name" : "",
+        "make" : "foo"
+       }""")
+    }
+    e.errors.map { _.getMessage } should equal(
+      Seq(
+        """make: 'foo' is not a valid CarMakeEnum with valid values: ford, vw""",
+        "name: cannot be empty")
     )
   }
 

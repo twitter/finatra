@@ -9,7 +9,8 @@ import com.fasterxml.jackson.databind.node.ValueNode
 import com.fasterxml.jackson.databind.{DeserializationContext, JsonNode}
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.annotations.{Header, QueryParam, RouteParam}
-import com.twitter.finatra.validation.{MethodValidation, Min, NotEmpty, Size, ValidationResult}
+import com.twitter.finatra.validation.constraints.{Max, Min, NotEmpty, Pattern, Size}
+import com.twitter.finatra.validation.{MethodValidation, ValidationResult}
 import com.twitter.util.Time
 import scala.math.BigDecimal.RoundingMode
 
@@ -221,3 +222,12 @@ trait PointMixin {
 }
 
 case class PointRequest(@QueryParam("p") point: Point)
+
+case class ValidateUserRequest(
+  @NotEmpty @Pattern(regexp = "[a-z]+") userName: String,
+  @Max(value = 9999) id: Long,
+  title: String)
+
+case class UserRequestWithParam(
+  @QueryParam @Min(value = 1) userId: Long,
+  @RouteParam @NotEmpty userName: String)

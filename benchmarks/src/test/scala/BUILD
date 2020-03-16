@@ -44,6 +44,7 @@ junit_tests(
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/modules",
         "finatra/utils/src/main/scala/com/twitter/finatra/modules",
+        "finatra/validation/src/main/scala/com/twitter/finatra/validation",
         "twitter-server/server/src/main/scala",
         "util/util-core/src/main/scala",
         "util/util-slf4j-api/src/main/scala",

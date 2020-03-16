@@ -720,7 +720,9 @@ lazy val validation = project
     }
   ).dependsOn(
   injectCore % "test->test;compile->compile",
-  injectUtils)
+  injectUtils,
+  utils % "test->test;compile->compile"
+)
 
 lazy val jacksonTestJarSources =
   Seq(
@@ -766,7 +768,8 @@ lazy val jackson = project
     injectSlf4j,
     injectUtils,
     jsonAnnotations,
-    validation % "test->test;compile->compile")
+    validation % "test->test;compile->compile",
+    utils)
 
 lazy val jsonAnnotations = (project in file("json-annotations"))
   .settings(projectSettings)

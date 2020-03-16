@@ -31,26 +31,17 @@ object ValidationResult {
     isValid: Boolean,
     message: => String,
     code: ErrorCode = ErrorCode.Unknown
-  ): ValidationResult = {
-    validate(isValid, message, code)
-  }
+  ): ValidationResult = validate(isValid, message, code)
 
   def validate(
     condition: Boolean,
     message: => String,
     code: ErrorCode = ErrorCode.Unknown
-  ): ValidationResult = {
-    if (condition)
-      Valid()
-    else
-      Invalid(message, code)
-  }
+  ): ValidationResult = if (condition) Valid() else Invalid(message, code)
 
   def validateNot(
     condition: Boolean,
     message: => String,
     code: ErrorCode = ErrorCode.Unknown
-  ): ValidationResult = {
-    validate(!condition, message, code)
-  }
+  ): ValidationResult = validate(!condition, message, code)
 }

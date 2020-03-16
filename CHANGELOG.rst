@@ -7,6 +7,18 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+
+* finatra-validation|jackson: (BREAKING API CHANGE) Introduced new case class validation library
+  inspired by JSR-380 specification. The new library can be used as its own to validate field and
+  method annotations for a case class. The library is also automatically integrated with Finatra's
+  custom `CaseClassDeserializer` to efficiently apply per field and method validations as request
+  parsing is performed. However, Users can easily turn off validation during request parsing with
+  the setting `noValidation` in their server configurations. For more information, please checkout
+  `Finatra User's Guide <https://docbird.twitter.biz/finatra/user-guide/index.html>`__.
+  ``PHAB_ID=D415743``
+
 20.3.0
 ------
 

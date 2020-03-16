@@ -12,7 +12,13 @@ import com.fasterxml.jackson.databind.node.ValueNode
 import com.fasterxml.jackson.module.scala.JsonScalaEnumeration
 import com.twitter.finatra.jackson.{CarMake, CarMakeEnum, TestInjectableValue}
 import com.twitter.finatra.json.annotations.JsonCamelCase
-import com.twitter.finatra.validation._
+import com.twitter.finatra.validation.{
+  CommonMethodValidations,
+  ErrorCode,
+  MethodValidation,
+  ValidationResult
+}
+import com.twitter.finatra.validation.constraints._
 import com.twitter.inject.Logging
 import com.twitter.inject.domain.WrappedValue
 import com.twitter.util.Time
@@ -493,8 +499,11 @@ case class FooClass(id: String)
 
 case class Group3(id: String) extends Logging
 
+case class CaseClassWithNotEmptyValidation(@NotEmpty name: String, make: CarMakeEnum)
+
+// InvalidConstraint is not provided by Finatra by default
 case class CaseClassWithInvalidValidation(
-  @(InvalidValidationInternal @param) name: String,
+  @(InvalidConstraint @param) name: String,
   make: CarMakeEnum)
 
 case class NoConstructorArgs()
@@ -515,7 +524,8 @@ case class CaseClassInjectString(@Inject string: String)
 
 case class CaseClassTooManyInjectableAnnotations(@Inject @TestInjectableValue string: String)
 
-case class CaseClassWithManyAnnotationsThatShouldProbablyBeAcceptable(@JsonIgnore @Inject string: String)
+case class CaseClassWithManyAnnotationsThatShouldProbablyBeAcceptable(
+  @JsonIgnore @Inject string: String)
 
 case class CaseClassWithManyAnnotationsFail(@JsonProperty("whatever") @Inject string: String)
 
@@ -657,7 +667,10 @@ trait PointMixin {
 case class IgnoreMe(id: Long)
 
 case class ContainsAnIgnoreTypeNoDefault(ignored: IgnoreMe, name: String, description: String)
-case class ContainsAnIgnoreTypeWithDefault(ignored: IgnoreMe = IgnoreMe(42L), name: String, description: String)
+case class ContainsAnIgnoreTypeWithDefault(
+  ignored: IgnoreMe = IgnoreMe(42L),
+  name: String,
+  description: String)
 
 object Views {
   class Public
@@ -667,14 +680,12 @@ object Views {
 case class Item(
   @JsonView(Array(classOf[Views.Public])) id: Long = 1L,
   @JsonView(Array(classOf[Views.Public])) name: String = "",
-  @JsonView(Array(classOf[Views.Internal])) owner: String = ""
-)
+  @JsonView(Array(classOf[Views.Internal])) owner: String = "")
 
 case class ItemSomeViews(
   @JsonView(Array(classOf[Views.Public])) id: Long = 1L,
   @JsonView(Array(classOf[Views.Public])) name: String = "",
-  owner: String = ""
-)
+  owner: String = "")
 
 case class ItemNoDefaultForView(@JsonView(Array(classOf[Views.Public])) name: String)
 
