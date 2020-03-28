@@ -7,7 +7,6 @@ junit_tests(
         "3rdparty/jvm/com/github/nscala_time",
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
-        "3rdparty/jvm/com/google/inject/extensions:guice-multibindings",
         "3rdparty/jvm/com/google/inject/extensions:guice-testlib",
         "3rdparty/jvm/joda-time",
         "3rdparty/jvm/net/codingwell:scala-guice",

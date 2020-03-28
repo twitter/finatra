@@ -4,7 +4,6 @@ junit_tests(
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
-        "3rdparty/jvm/com/google/inject/extensions:guice-multibindings",
         "3rdparty/jvm/com/google/inject/extensions:guice-testlib",
         "3rdparty/jvm/net/codingwell:scala-guice",
         "3rdparty/jvm/org/scalatest",

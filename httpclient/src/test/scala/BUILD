@@ -7,7 +7,6 @@ junit_tests(
         "3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala",
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
-        "3rdparty/jvm/com/google/inject/extensions:guice-multibindings",
         "3rdparty/jvm/com/google/inject/extensions:guice-testlib",
         "3rdparty/jvm/junit",
         "3rdparty/jvm/net/codingwell:scala-guice",
