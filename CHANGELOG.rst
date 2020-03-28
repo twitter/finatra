@@ -6,6 +6,9 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 
 Unreleased
 ----------
+Added
+~~~~~
+* finatra-kafka: Expose timeout duration in KafkaProducerConfig dest(). ``PHAB_ID=D457356``
 
 Changed
 ~~~~~~~
