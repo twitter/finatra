@@ -8,6 +8,9 @@ Unreleased
 ----------
 Added
 ~~~~~
+
+* inject-app: Add Java-friendly `main` to `EmbeddedApp`. ``PHAB_ID=D458375``
+
 * finatra-kafka: Expose timeout duration in KafkaProducerConfig dest(). ``PHAB_ID=D457356``
 
 Changed
