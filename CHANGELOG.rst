@@ -22,6 +22,8 @@ Changed
   `Finatra User's Guide <https://docbird.twitter.biz/finatra/user-guide/index.html>`__.
   ``PHAB_ID=D415743``
 
+* finatra: guice is upgraded to 4.2.1 ``PHAB_ID=D457714``
+
 20.3.0
 ------
 
