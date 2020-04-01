@@ -3,7 +3,7 @@ scala_library(
         "ch/qos/logback/core/*.scala",
         "com/twitter/inject/logback/*.scala",
     ],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(
         org = "com.twitter",
         name = "inject-logback",

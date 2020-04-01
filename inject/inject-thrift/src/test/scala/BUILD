@@ -3,7 +3,7 @@ junit_tests(
         "com/twitter/inject/tests/exceptions/*.scala",
         "com/twitter/inject/tests/thrift/utils/*.scala",
     ],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     dependencies = [
         "3rdparty/jvm/org/scalatest",
         "3rdparty/jvm/org/slf4j:slf4j-api",

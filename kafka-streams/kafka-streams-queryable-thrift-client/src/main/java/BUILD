@@ -1,6 +1,6 @@
 java_library(
     sources = ["**/*.java"],
-    compiler_option_sets = {},
+    compiler_option_sets = [],
     strict_deps = True,
     dependencies = [
     ],

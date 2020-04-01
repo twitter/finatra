@@ -31,7 +31,7 @@ junit_tests(
 scala_library(
     name = "test-deps",
     sources = ["com/twitter/finatra/httpclient/test/*.scala"],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-httpclient-tests",

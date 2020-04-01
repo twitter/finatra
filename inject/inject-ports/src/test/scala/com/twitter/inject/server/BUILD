@@ -1,6 +1,6 @@
 junit_tests(
     sources = ["*.scala"],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     dependencies = [
         "finagle/finagle-core/src/main/scala",
         "finatra/inject/inject-core/src/test/scala:test-deps",

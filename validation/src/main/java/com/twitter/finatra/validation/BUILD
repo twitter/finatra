@@ -3,7 +3,7 @@ java_library(
         "*.java",
         "constraints/*.java",
     ],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     strict_deps = True,
     dependencies = [
         "finatra/validation/src/main/scala/com/twitter/finatra/validation",

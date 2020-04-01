@@ -1,6 +1,6 @@
 junit_tests(
     sources = ["com/twitter/inject/thrift/**/*.scala"],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     dependencies = [
         "//:scala-reflect",
         "3rdparty/jvm/com/github/nscala_time",

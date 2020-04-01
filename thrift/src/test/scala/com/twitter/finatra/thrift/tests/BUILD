@@ -8,7 +8,7 @@ junit_tests(
         "inheritance/controllers/*.scala",
         "noninjection/*.scala",
     ],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     strict_deps = True,
     dependencies = [
         "3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala",

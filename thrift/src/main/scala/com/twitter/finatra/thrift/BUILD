@@ -5,7 +5,7 @@ scala_library(
         "ThriftRequest.scala",
         "servers.scala",
     ],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-thrift-server",
@@ -52,7 +52,7 @@ scala_library(
         "Controller.scala",
         "package.scala",
     ],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-thrift-controller",

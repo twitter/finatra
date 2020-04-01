@@ -2,7 +2,7 @@ scala_library(
     sources = [
         "**/*.scala",
     ],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     java_sources = [
         "finatra/validation/src/main/java/com/twitter/finatra/validation",
     ],

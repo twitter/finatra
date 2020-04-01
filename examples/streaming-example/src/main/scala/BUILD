@@ -1,6 +1,6 @@
 scala_library(
     sources = ["**/*.scala"],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/org/slf4j:slf4j-api",

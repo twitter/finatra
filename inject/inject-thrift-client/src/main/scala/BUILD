@@ -1,6 +1,6 @@
 scala_library(
     sources = ["**/*.scala"],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     java_sources = [
         "finatra/inject/inject-thrift-client/src/main/java",
     ],

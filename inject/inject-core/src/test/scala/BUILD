@@ -1,6 +1,6 @@
 junit_tests(
     sources = ["com/twitter/inject/tests/**/*.scala"],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     dependencies = [
         ":test-deps",
         "3rdparty/jvm/com/google/inject:guice",
@@ -27,7 +27,7 @@ scala_library(
         "com/twitter/inject/*.scala",
         "org/specs2/matcher/ScalaTestExpectations.scala",
     ],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     java_sources = [
         "finatra/inject/inject-core/src/test/java",
     ],

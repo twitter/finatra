@@ -1,7 +1,7 @@
 scala_library(
     name = "exception-mapper",
     sources = ["ExceptionMapper.scala"],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-http-exception-mapper",
@@ -21,7 +21,7 @@ scala_library(
         "!ExceptionMapper.scala",
         "*.scala",
     ],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-http-exceptions",

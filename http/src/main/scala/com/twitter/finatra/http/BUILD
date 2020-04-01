@@ -4,7 +4,7 @@ scala_library(
         "Tls.scala",
         "servers.scala",
     ],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-http-server",
@@ -48,7 +48,7 @@ scala_library(
         "RouteDSL.scala",
         "package.scala",
     ],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-http-controller",

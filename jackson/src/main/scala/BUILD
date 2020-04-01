@@ -1,8 +1,8 @@
 target(
-    tags = {
+    tags = [
         # users should depend on specific finer-grained targets instead of this monolithic target
         "deprecated",
-    },
+    ],
     dependencies = [
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass",

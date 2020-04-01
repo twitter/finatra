@@ -17,7 +17,7 @@ scala_library(
         "com/twitter/finatra/streams/**/*.scala",
         "org/**/*.scala",
     ],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-streams",

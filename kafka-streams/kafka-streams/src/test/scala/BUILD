@@ -4,7 +4,7 @@ scala_library(
         "com/twitter/finatra/kafkastreams/test/*.scala",
         "com/twitter/inject/*.scala",
     ],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-streams-tests",
@@ -53,7 +53,7 @@ junit_tests(
         "com/twitter/finatra/kafkastreams/query/**/*.scala",
         "com/twitter/finatra/kafkastreams/transformer/**/*.scala",
     ],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     strict_deps = True,
     dependencies = [
         "3rdparty/jvm/org/apache/kafka:kafka-clients-test",

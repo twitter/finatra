@@ -1,6 +1,6 @@
 junit_tests(
     sources = ["**/*.scala"],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     dependencies = [
         "3rdparty/jvm/com/fasterxml/jackson/datatype:jackson-datatype-joda",
         "3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala",
