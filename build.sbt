@@ -618,7 +618,7 @@ lazy val injectMdc = (project in file("inject/inject-mdc"))
   )
 
 lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "inject-slf4j",
     moduleName := "inject-slf4j",
