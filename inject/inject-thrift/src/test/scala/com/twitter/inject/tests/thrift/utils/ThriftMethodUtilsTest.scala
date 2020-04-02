@@ -2,10 +2,10 @@ package com.twitter.inject.tests.thrift.utils
 
 import com.twitter.inject.thrift.utils.ThriftMethodUtils
 import com.twitter.inject.{Mockito, Test}
-import com.twitter.scrooge.ThriftMethod
+import com.twitter.scrooge.ThriftMethodIface
 
 class ThriftMethodUtilsTest extends Test with Mockito {
-  private val FakeThriftMethod = smartMock[ThriftMethod]
+  private val FakeThriftMethod = smartMock[ThriftMethodIface]
   FakeThriftMethod.name returns "Foo"
   FakeThriftMethod.serviceName returns "FooService"
 
