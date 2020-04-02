@@ -20,7 +20,7 @@ scala_library(
         "finatra/inject/inject-request-scope/src/main/java:pants-workaround",
         "finatra/inject/inject-slf4j/src/main/scala",
         "util/util-app/src/main/scala",
-        "util/util-core/src/main/scala",
+        "util/util-core:scala",
         "util/util-slf4j-api/src/main/scala",
     ],
     exports = [

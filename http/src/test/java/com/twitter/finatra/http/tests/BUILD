@@ -40,7 +40,7 @@ junit_tests(
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",
-        "util/util-core/src/main/scala",
+        "util/util-core:scala",
         "util/util-lint/src/main/scala",
         "util/util-logging/src/main/scala",
         "util/util-slf4j-api/src/main/scala",

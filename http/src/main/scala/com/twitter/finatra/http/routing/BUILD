@@ -18,13 +18,13 @@ scala_library(
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
         "twitter-server/server/src/main/scala",
-        "util/util-core/src/main/scala/com/twitter/util",
+        "util/util-core:util-core-util",
     ],
     exports = [
         "3rdparty/jvm/javax/inject:javax.inject",
         "finagle/finagle-base-http/src/main/scala",
         "finatra/inject/inject-slf4j/src/main/scala",
         "twitter-server/server/src/main/scala",
-        "util/util-core/src/main/scala/com/twitter/util",
+        "util/util-core:util-core-util",
     ],
 )

@@ -30,7 +30,7 @@ scala_library(
         "finatra/inject/inject-utils/src/main/scala",
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",
-        "util/util-core/src/main/scala",
+        "util/util-core:scala",
         "util/util-logging/src/main/scala",
         "util/util-slf4j-api/src/main/scala",
         "util/util-stats/src/main/scala",
@@ -41,6 +41,6 @@ scala_library(
         "finatra/inject/inject-ports/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-server/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-slf4j/src/main/scala",
-        "util/util-core/src/main/scala",
+        "util/util-core:scala",
     ],
 )

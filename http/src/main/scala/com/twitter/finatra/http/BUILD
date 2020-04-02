@@ -26,7 +26,7 @@ scala_library(
         "finatra/utils/src/main/scala/com/twitter/finatra/modules",
         "util/util-app/src/main/scala",
         "util/util-core/src/main/scala/com/twitter/conversions",
-        "util/util-core/src/main/scala/com/twitter/util",
+        "util/util-core:util-core-util",
         "util/util-stats/src/main/scala",
     ],
     exports = [
@@ -34,7 +34,7 @@ scala_library(
         "finagle/finagle-http/src/main/scala",
         "finatra/http/src/main/scala/com/twitter/finatra/http/modules",
         "finatra/http/src/main/scala/com/twitter/finatra/http/routing",
-        "util/util-core/src/main/scala/com/twitter/util",
+        "util/util-core:util-core-util",
     ],
 )
 
@@ -65,7 +65,7 @@ scala_library(
         "finatra/http/src/main/scala/com/twitter/finatra/http/response",
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-slf4j/src/main/scala",
-        "util/util-core/src/main/scala/com/twitter/util",
+        "util/util-core:util-core-util",
     ],
     exports = [
         "finagle/finagle-core/src/main/scala",

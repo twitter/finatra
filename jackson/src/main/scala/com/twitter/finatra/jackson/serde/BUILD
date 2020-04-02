@@ -17,6 +17,6 @@ scala_library(
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions",
-        "util/util-core/src/main/scala/com/twitter/util",
+        "util/util-core:util-core-util",
     ],
 )

@@ -23,7 +23,7 @@ junit_tests(
         "finatra/inject/inject-slf4j/src/main/scala",
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",
-        "util/util-core/src/main/scala",
+        "util/util-core:scala",
         "util/util-lint/src/main/scala",
         "util/util-logging/src/main/scala",
         "util/util-registry/src/main/scala",

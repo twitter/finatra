@@ -13,7 +13,7 @@ scala_library(
         "finagle/finagle-core/src/main/scala",
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-slf4j/src/main/scala",
-        "util/util-core/src/main/scala",
+        "util/util-core:scala",
         "util/util-slf4j-api/src/main/scala",
     ],
     exports = [

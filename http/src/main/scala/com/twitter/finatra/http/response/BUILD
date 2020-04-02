@@ -23,7 +23,7 @@ scala_library(
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",
         "util/util-core/src/main/scala/com/twitter/concurrent",
         "util/util-core/src/main/scala/com/twitter/io",
-        "util/util-core/src/main/scala/com/twitter/util",
+        "util/util-core:util-core-util",
         "util/util-stats/src/main/scala/com/twitter/finagle/stats",
     ],
     exports = [
@@ -35,7 +35,7 @@ scala_library(
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",
         "util/util-core/src/main/scala/com/twitter/concurrent",
         "util/util-core/src/main/scala/com/twitter/io",
-        "util/util-core/src/main/scala/com/twitter/util",
+        "util/util-core:util-core-util",
         "util/util-stats/src/main/scala/com/twitter/finagle/stats",
     ],
 )

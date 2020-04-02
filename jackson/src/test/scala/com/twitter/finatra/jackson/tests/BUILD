@@ -49,7 +49,7 @@ junit_tests(
         "finatra/validation/src/main/java/com/twitter/finatra/validation",
         "finatra/validation/src/main/scala/com/twitter/finatra/validation",
         "finatra/validation/src/test/scala/com/twitter/finatra/validation",
-        "util/util-core/src/main/scala",
+        "util/util-core:scala",
         "util/util-slf4j-api/src/main/scala",
     ],
 )

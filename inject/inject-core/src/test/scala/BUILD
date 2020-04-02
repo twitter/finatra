@@ -16,7 +16,7 @@ junit_tests(
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-slf4j/src/main/scala",
         "util/util-app/src/main/scala",
-        "util/util-core/src/main/scala",
+        "util/util-core:scala",
         "util/util-slf4j-api/src/main/scala",
     ],
 )
@@ -49,7 +49,7 @@ scala_library(
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-core/src/test/java:pants-workaround",
         "finatra/inject/inject-slf4j/src/main/scala",
-        "util/util-core/src/main/scala",
+        "util/util-core:scala",
         "util/util-slf4j-api/src/main/scala",
     ],
     exports = [
@@ -58,6 +58,6 @@ scala_library(
         "3rdparty/jvm/junit",
         "3rdparty/jvm/org/scalatest",
         "3rdparty/jvm/org/specs2:mock",
-        "util/util-core/src/main/scala",
+        "util/util-core:scala",
     ],
 )

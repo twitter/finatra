@@ -22,6 +22,6 @@ junit_tests(
         "finatra/inject/inject-modules/src/main/scala",
         "finatra/inject/inject-slf4j/src/main/scala",
         "util/util-app/src/main/scala",
-        "util/util-core/src/main/scala",
+        "util/util-core:scala",
     ],
 )

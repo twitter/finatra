@@ -15,7 +15,7 @@ junit_tests(
         "finatra/inject/inject-thrift/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
         "scrooge/scrooge-core/src/main/scala",
-        "util/util-core/src/main/scala",
+        "util/util-core:scala",
         "util/util-slf4j-api/src/main/scala",
     ],
 )

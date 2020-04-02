@@ -37,7 +37,7 @@ scala_library(
         "util/util-app/src/main/scala",
         "util/util-core/src/main/scala/com/twitter/conversions",
         "util/util-core/src/main/scala/com/twitter/io",
-        "util/util-core/src/main/scala/com/twitter/util",
+        "util/util-core:util-core-util",
         "util/util-slf4j-api/src/main/scala",
     ],
     exports = [

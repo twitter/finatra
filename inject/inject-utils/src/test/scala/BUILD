@@ -12,7 +12,7 @@ junit_tests(
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/inject/inject-utils/src/test/java/com/twitter/inject/annotations",
         "finatra/inject/inject-utils/src/test/resources",
-        "util/util-core/src/main/scala",
+        "util/util-core:scala",
         "util/util-slf4j-api/src/main/scala",
     ],
 )

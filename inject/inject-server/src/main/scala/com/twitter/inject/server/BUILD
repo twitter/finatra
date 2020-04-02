@@ -24,7 +24,7 @@ scala_library(
         "finatra/inject/inject-utils/src/main/scala",
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",
-        "util/util-core/src/main/scala/com/twitter/util",
+        "util/util-core:util-core-util",
         "util/util-lint/src/main/scala",
         # for DeprecatedLoggingFlags trait
         "util/util-logging/src/main/scala",
@@ -38,6 +38,6 @@ scala_library(
         "finatra/inject/inject-utils/src/main/scala",
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",
-        "util/util-core/src/main/scala/com/twitter/util",
+        "util/util-core:util-core-util",
     ],
 )

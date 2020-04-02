@@ -23,6 +23,6 @@ scala_library(
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/streaming",
         "util/util-core/src/main/scala/com/twitter/concurrent",
-        "util/util-core/src/main/scala/com/twitter/util",
+        "util/util-core:util-core-util",
     ],
 )
