@@ -394,7 +394,7 @@
 
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>StackTransformer allows plugins to modify Finatra filters before they are
-applied to controller routes.</p><p>Related to the Finagle <span class="extype" name="com.twitter.finagle.StackTransformer">com.twitter.finagle.StackTransformer</span>, which
+applied to controller routes.</p><p>Related to the Finagle <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/StackTransformer.html" class="extype" name="com.twitter.finagle.StackTransformer">com.twitter.finagle.StackTransformer</a>, which
 modifies Finagle server stacks, the Finatra <a href="" class="extype" name="com.twitter.inject.StackTransformer">StackTransformer</a> modifies
 Finatra controller routes.</p><p>If the goal is to share functionality between Finagle and Finatra, it's
 reasonable to want to use Finagle's StackTransformer directly on Finatra
@@ -488,7 +488,7 @@ service-level but not at the route-level (e.g. admission controllers).
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="Req">Req</span>, <span name="Rep">Rep</span>]</span><span class="params">(<span name="stack">stack: <span class="extype" name="com.twitter.finagle.Stack">Stack</span>[<span class="extype" name="com.twitter.finagle.ServiceFactory">ServiceFactory</span>[<span class="extype" name="com.twitter.finagle.Stack.Transformer.apply.Req">Req</span>, <span class="extype" name="com.twitter.finagle.Stack.Transformer.apply.Rep">Rep</span>]]</span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.Stack">Stack</span>[<span class="extype" name="com.twitter.finagle.ServiceFactory">ServiceFactory</span>[<span class="extype" name="com.twitter.finagle.Stack.Transformer.apply.Req">Req</span>, <span class="extype" name="com.twitter.finagle.Stack.Transformer.apply.Rep">Rep</span>]]</span>
+        <span class="name">apply</span><span class="tparams">[<span name="Req">Req</span>, <span name="Rep">Rep</span>]</span><span class="params">(<span name="stack">stack: <span class="extype" name="com.twitter.finagle.Stack">Stack</span>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ServiceFactory.html#com.twitter.finagle.ServiceFactory" class="extype" name="com.twitter.finagle.ServiceFactory">ServiceFactory</a>[<span class="extype" name="com.twitter.finagle.Stack.Transformer.apply.Req">Req</span>, <span class="extype" name="com.twitter.finagle.Stack.Transformer.apply.Rep">Rep</span>]]</span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.Stack">Stack</span>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ServiceFactory.html#com.twitter.finagle.ServiceFactory" class="extype" name="com.twitter.finagle.ServiceFactory">ServiceFactory</a>[<span class="extype" name="com.twitter.finagle.Stack.Transformer.apply.Req">Req</span>, <span class="extype" name="com.twitter.finagle.Stack.Transformer.apply.Rep">Rep</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Transformer</dd></dl></div>

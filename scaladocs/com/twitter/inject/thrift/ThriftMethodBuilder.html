@@ -228,7 +228,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">ThriftMethodBuilder</span><span class="tparams">[<span name="ServicePerEndpoint">ServicePerEndpoint &lt;: <span class="extype" name="com.twitter.finagle.thrift.service.Filterable">Filterable</span>[<span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.ServicePerEndpoint">ServicePerEndpoint</span>]</span>, <span name="Req">Req</span>, <span name="Rep">Rep</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">ThriftMethodBuilder</span><span class="tparams">[<span name="ServicePerEndpoint">ServicePerEndpoint &lt;: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/service/Filterable.html#com.twitter.finagle.thrift.service.Filterable" class="extype" name="com.twitter.finagle.thrift.service.Filterable">Filterable</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.ServicePerEndpoint">ServicePerEndpoint</span>]</span>, <span name="Req">Req</span>, <span name="Rep">Rep</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
 
@@ -422,10 +422,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">filtered</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="com.twitter.finagle.Filter">Filter</span>[<span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Rep">Rep</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Rep">Rep</span>]</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.filtered.T">T</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
+        <span class="name">filtered</span><span class="tparams">[<span name="T">T &lt;: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html#com.twitter.finagle.Filter" class="extype" name="com.twitter.finagle.Filter">Filter</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Rep">Rep</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Rep">Rep</span>]</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.filtered.T">T</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
       </span>
       
-      <p class="shortcomment cmt">Install a <span class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Install a <span class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</span>. This filter will be added to the end of the filter chain. That is, this
+      <p class="shortcomment cmt">Install a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html" class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Install a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html" class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</a>. This filter will be added to the end of the filter chain. That is, this
 filter will be invoked AFTER any other installed filter on a request <span class="extype" name="Req">Req</span> and thus BEFORE any other installed
 filter on a response <span class="extype" name="Rep">Rep</span>.
 </p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p><span class="extype" name="Filter">Filter</span> subtype of the filter to instantiate from the injector</p></dd><dt>returns</dt><dd class="cmt"><p><a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a></p></dd></dl></div>
@@ -441,13 +441,13 @@ filter on a response <span class="extype" name="Rep">Rep</span>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">filtered</span><span class="params">(<span name="filter">filter: <span class="extype" name="com.twitter.finagle.Filter">Filter</span>[<span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Rep">Rep</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Rep">Rep</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
+        <span class="name">filtered</span><span class="params">(<span name="filter">filter: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html#com.twitter.finagle.Filter" class="extype" name="com.twitter.finagle.Filter">Filter</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Rep">Rep</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Rep">Rep</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
       </span>
       
-      <p class="shortcomment cmt">Install a <span class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Install a <span class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</span>. This filter will be added to the end of the filter chain. That is, this
+      <p class="shortcomment cmt">Install a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html" class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Install a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html" class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</a>. This filter will be added to the end of the filter chain. That is, this
 filter will be invoked AFTER any other installed filter on a request <span class="extype" name="Req">Req</span> and thus BEFORE any other installed
 filter on a response <span class="extype" name="Rep">Rep</span>.
-</p></div><dl class="paramcmts block"><dt class="param">filter</dt><dd class="cmt"><p>the <span class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</span> to install.</p></dd><dt>returns</dt><dd class="cmt"><p><a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a></p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">filter</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html" class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</a> to install.</p></dd><dt>returns</dt><dd class="cmt"><p><a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a></p></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
@@ -520,7 +520,7 @@ filter on a response <span class="extype" name="Rep">Rep</span>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">idempotent</span><span class="params">(<span name="maxExtraLoad">maxExtraLoad: <span class="extype" name="com.twitter.util.tunable.Tunable">Tunable</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Double.html#scala.Double" class="extype" name="scala.Double">Double</a>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
+        <span class="name">idempotent</span><span class="params">(<span name="maxExtraLoad">maxExtraLoad: <a href="https://twitter.github.io/util/docs/com/twitter/util/tunable/Tunable.html#com.twitter.util.tunable.Tunable" class="extype" name="com.twitter.util.tunable.Tunable">Tunable</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Double.html#scala.Double" class="extype" name="scala.Double">Double</a>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
       </span>
       
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finagle.thriftmux.MethodBuilder.idempotent(maxExtraLoad:">Tunable[Double])</span></p></span></dd></dl></div>
@@ -587,7 +587,7 @@ filter on a response <span class="extype" name="Rep">Rep</span>.
         <span class="name">nonIdempotent</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
       </span>
       
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finagle.thriftmux.MethodBuilder.nonIdempotent">com.twitter.finagle.thriftmux.MethodBuilder.nonIdempotent</span></p></span></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thriftmux/MethodBuilder.html#nonIdempotent:com.twitter.finagle.thriftmux.MethodBuilder" class="extype" name="com.twitter.finagle.thriftmux.MethodBuilder">com.twitter.finagle.thriftmux.MethodBuilder.nonIdempotent</a></p></span></dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
@@ -778,7 +778,7 @@ use of more general filters that do not care about the <span class="extype" name
         <span class="name">withAgnosticFilter</span><span class="params">(<span name="filter">filter: <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
       </span>
       
-      <p class="shortcomment cmt">Install a <span class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</span> that is agnostic to the <span class="extype" name="ThriftMethod">ThriftMethod</span> Req/Rep types.</p><div class="fullcomment"><div class="comment cmt"><p>Install a <span class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</span> that is agnostic to the <span class="extype" name="ThriftMethod">ThriftMethod</span> Req/Rep types. This allows for
+      <p class="shortcomment cmt">Install a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html" class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</a> that is agnostic to the <span class="extype" name="ThriftMethod">ThriftMethod</span> Req/Rep types.</p><div class="fullcomment"><div class="comment cmt"><p>Install a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html" class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</a> that is agnostic to the <span class="extype" name="ThriftMethod">ThriftMethod</span> Req/Rep types. This allows for
 use of more general filters that do not care about the <span class="extype" name="ThriftMethod">ThriftMethod</span> input and output types.
 </p></div><dl class="paramcmts block"><dt class="param">filter</dt><dd class="cmt"><p>the <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">com.twitter.finagle.Filter.TypeAgnostic</span> to install.</p></dd><dt>returns</dt><dd class="cmt"><p><a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a></p></dd></dl></div>
     </li><li name="com.twitter.inject.thrift.ThriftMethodBuilder#withExceptionFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -793,10 +793,10 @@ use of more general filters that do not care about the <span class="extype" name
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">withExceptionFilter</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="com.twitter.finagle.Filter">Filter</span>[<span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Rep">Rep</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Rep">Rep</span>]</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.withExceptionFilter.T">T</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
+        <span class="name">withExceptionFilter</span><span class="tparams">[<span name="T">T &lt;: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html#com.twitter.finagle.Filter" class="extype" name="com.twitter.finagle.Filter">Filter</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Rep">Rep</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Rep">Rep</span>]</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.withExceptionFilter.T">T</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
       </span>
       
-      <p class="shortcomment cmt">Install a <span class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</span> specific to handling exceptions.</p><div class="fullcomment"><div class="comment cmt"><p>Install a <span class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</span> specific to handling exceptions. This filter will be correctly positioned
+      <p class="shortcomment cmt">Install a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html" class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</a> specific to handling exceptions.</p><div class="fullcomment"><div class="comment cmt"><p>Install a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html" class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</a> specific to handling exceptions. This filter will be correctly positioned
 in the filter chain near the top of the stack. This filter is generally used to mutate or alter the final response
 <span class="extype" name="Rep">Rep</span> based on a returned exception. E.g., to translate a transport-level exception from Finagle to an
 application-level exception.
@@ -813,14 +813,14 @@ application-level exception.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">withExceptionFilter</span><span class="params">(<span name="filter">filter: <span class="extype" name="com.twitter.finagle.Filter">Filter</span>[<span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Rep">Rep</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Rep">Rep</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
+        <span class="name">withExceptionFilter</span><span class="params">(<span name="filter">filter: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html#com.twitter.finagle.Filter" class="extype" name="com.twitter.finagle.Filter">Filter</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Rep">Rep</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.Rep">Rep</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
       </span>
       
-      <p class="shortcomment cmt">Install a <span class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</span> specific to handling exceptions.</p><div class="fullcomment"><div class="comment cmt"><p>Install a <span class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</span> specific to handling exceptions. This filter will be correctly positioned
+      <p class="shortcomment cmt">Install a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html" class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</a> specific to handling exceptions.</p><div class="fullcomment"><div class="comment cmt"><p>Install a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html" class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</a> specific to handling exceptions. This filter will be correctly positioned
 in the filter chain near the top of the stack. This filter is generally used to mutate or alter the final response
 <span class="extype" name="Rep">Rep</span> based on a returned exception. E.g., to translate a transport-level exception from Finagle to an
 application-level exception.
-</p></div><dl class="paramcmts block"><dt class="param">filter</dt><dd class="cmt"><p>the <span class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</span> to install.</p></dd><dt>returns</dt><dd class="cmt"><p><a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a></p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">filter</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html" class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</a> to install.</p></dd><dt>returns</dt><dd class="cmt"><p><a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a></p></dd></dl></div>
     </li><li name="com.twitter.inject.thrift.ThriftMethodBuilder#withRetryDisabled" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="withRetryDisabled:ThriftMethodBuilder.this.type"></a>
       <span class="permalink">
@@ -836,7 +836,7 @@ application-level exception.
         <span class="name">withRetryDisabled</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
       </span>
       
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finagle.thriftmux.MethodBuilder.withRetryDisabled">com.twitter.finagle.thriftmux.MethodBuilder.withRetryDisabled</span></p></span></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thriftmux/MethodBuilder.html#withRetryDisabled:com.twitter.finagle.thriftmux.MethodBuilder" class="extype" name="com.twitter.finagle.thriftmux.MethodBuilder">com.twitter.finagle.thriftmux.MethodBuilder.withRetryDisabled</a></p></span></dd></dl></div>
     </li><li name="com.twitter.inject.thrift.ThriftMethodBuilder#withRetryForClassifier" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="withRetryForClassifier(classifier:com.twitter.finagle.service.ResponseClassifier):ThriftMethodBuilder.this.type"></a><a id="withRetryForClassifier(ResponseClassifier):ThriftMethodBuilder.this.type"></a>
       <span class="permalink">
@@ -865,7 +865,7 @@ application-level exception.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">withTimeoutPerRequest</span><span class="params">(<span name="howLong">howLong: <span class="extype" name="com.twitter.util.tunable.Tunable">Tunable</span>[<span class="extype" name="com.twitter.util.Duration">Duration</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
+        <span class="name">withTimeoutPerRequest</span><span class="params">(<span name="howLong">howLong: <a href="https://twitter.github.io/util/docs/com/twitter/util/tunable/Tunable.html#com.twitter.util.tunable.Tunable" class="extype" name="com.twitter.util.tunable.Tunable">Tunable</a>[<a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
       </span>
       
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finagle.thriftmux.MethodBuilder.withTimeoutPerRequest(howLong:">Tunable[Duration])</span></p></span></dd></dl></div>
@@ -881,7 +881,7 @@ application-level exception.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">withTimeoutPerRequest</span><span class="params">(<span name="howLong">howLong: <span class="extype" name="com.twitter.util.Duration">Duration</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
+        <span class="name">withTimeoutPerRequest</span><span class="params">(<span name="howLong">howLong: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
       </span>
       
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finagle.thriftmux.MethodBuilder.withTimeoutPerRequest(howLong:">Duration)</span></p></span></dd></dl></div>
@@ -897,7 +897,7 @@ application-level exception.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">withTimeoutTotal</span><span class="params">(<span name="howLong">howLong: <span class="extype" name="com.twitter.util.tunable.Tunable">Tunable</span>[<span class="extype" name="com.twitter.util.Duration">Duration</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
+        <span class="name">withTimeoutTotal</span><span class="params">(<span name="howLong">howLong: <a href="https://twitter.github.io/util/docs/com/twitter/util/tunable/Tunable.html#com.twitter.util.tunable.Tunable" class="extype" name="com.twitter.util.tunable.Tunable">Tunable</a>[<a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
       </span>
       
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finagle.thriftmux.MethodBuilder.withTimeoutTotal(howLong:">Tunable[Duration])</span></p></span></dd></dl></div>
@@ -913,7 +913,7 @@ application-level exception.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">withTimeoutTotal</span><span class="params">(<span name="howLong">howLong: <span class="extype" name="com.twitter.util.Duration">Duration</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
+        <span class="name">withTimeoutTotal</span><span class="params">(<span name="howLong">howLong: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder">ThriftMethodBuilder</a>.this.type</span>
       </span>
       
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finagle.thriftmux.MethodBuilder.withTimeoutTotal(howLong:">Duration)</span></p></span></dd></dl></div>

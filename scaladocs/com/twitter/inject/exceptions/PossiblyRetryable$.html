@@ -295,7 +295,7 @@ to be retried.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">PossiblyRetryableExceptions</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/PartialFunction.html#scala.PartialFunction" class="extype" name="scala.PartialFunction">PartialFunction</a>[<span class="extype" name="com.twitter.util.Try">Try</span>[_], <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a>]</span>
+        <span class="name">PossiblyRetryableExceptions</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/PartialFunction.html#scala.PartialFunction" class="extype" name="scala.PartialFunction">PartialFunction</a>[<a href="https://twitter.github.io/util/docs/com/twitter/util/Try.html#com.twitter.util.Try" class="extype" name="com.twitter.util.Try">Try</a>[_], <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a>]</span>
       </span>
       
       <p class="shortcomment cmt">Partial function which can be used to determine if a request is possibly
@@ -319,7 +319,7 @@ not be tried and lastly is non-fatal.
         <span class="name">ResponseClassifier</span><span class="result">: <span class="extype" name="com.twitter.finagle.service.ResponseClassifier">ResponseClassifier</span></span>
       </span>
       
-      <p class="shortcomment cmt">A <span class="extype" name="com.twitter.finagle.service.ResponseClassifier">com.twitter.finagle.service.ResponseClassifier</span> which uses the
+      <p class="shortcomment cmt">A <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/index.html#ResponseClassifier=PartialFunction[com.twitter.finagle.service.ReqRep,com.twitter.finagle.service.ResponseClass]" class="extype" name="com.twitter.finagle.service">com.twitter.finagle.service.ResponseClassifier</a> which uses the
 <a href="#PossiblyRetryableExceptions:PartialFunction[com.twitter.util.Try[_],Boolean]" class="extmbr" name="com.twitter.inject.exceptions.PossiblyRetryable#PossiblyRetryableExceptions">PossiblyRetryableExceptions</a> partial function to classify responses as
 retryable.</p>
     </li><li name="com.twitter.inject.exceptions.PossiblyRetryable#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">

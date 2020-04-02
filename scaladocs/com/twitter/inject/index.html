@@ -504,14 +504,14 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Mix this trait into a class/object to get helpful logging methods." href="Logging.html"><span class="name">Logging</span></a><span class="result"> extends <span class="extype" name="com.twitter.util.logging.Logging">util.logging.Logging</span></span>
+        <a title="Mix this trait into a class/object to get helpful logging methods." href="Logging.html"><span class="name">Logging</span></a><span class="result"> extends <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">util.logging.Logging</a></span>
       </span>
       
       <p class="shortcomment cmt">Mix this trait into a class/object to get helpful logging methods.</p><div class="fullcomment"><div class="comment cmt"><p>Mix this trait into a class/object to get helpful logging methods.
 </p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@JsonIgnoreProperties</span><span class="args">()</span>
               
-        </dd><dt>Note</dt><dd><span class="cmt"><p>This trait simply adds several methods to the <span class="extype" name="com.twitter.util.logging.Logging">com.twitter.util.logging.Logging</span> trait.
+        </dd><dt>Note</dt><dd><span class="cmt"><p>This trait simply adds several methods to the <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html" class="extype" name="com.twitter.util.logging.Logging">com.twitter.util.logging.Logging</a> trait.
 The methods below are used as so:
 Before:</p><pre><span class="kw">def</span> foo = {
   <span class="kw">val</span> result = <span class="num">4</span> + <span class="num">5</span>
@@ -539,7 +539,7 @@ Before:</p><pre><span class="kw">def</span> foo = {
       
       <p class="shortcomment cmt">StackTransformer allows plugins to modify Finatra filters before they are
 applied to controller routes.</p><div class="fullcomment"><div class="comment cmt"><p>StackTransformer allows plugins to modify Finatra filters before they are
-applied to controller routes.</p><p>Related to the Finagle <span class="extype" name="com.twitter.finagle.StackTransformer">com.twitter.finagle.StackTransformer</span>, which
+applied to controller routes.</p><p>Related to the Finagle <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/StackTransformer.html" class="extype" name="com.twitter.finagle.StackTransformer">com.twitter.finagle.StackTransformer</a>, which
 modifies Finagle server stacks, the Finatra <a href="StackTransformer.html" class="extype" name="com.twitter.inject.StackTransformer">StackTransformer</a> modifies
 Finatra controller routes.</p><p>If the goal is to share functionality between Finagle and Finatra, it's
 reasonable to want to use Finagle's StackTransformer directly on Finatra
@@ -584,7 +584,7 @@ service-level but not at the route-level (e.g. admission controllers).
 implementations which exposes a DSL for binding via type parameters.</p><div class="fullcomment"><div class="comment cmt"><p>A support class for <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Module.html" target="_blank">Module</a>
 implementations which exposes a DSL for binding via type parameters. Extend this class,
 override the <code>configure</code> method and call the <code>bind</code> methods, or define custom <code>@Provides</code>
-annotated methods. This class also provides an integration with <span class="extype" name="com.twitter.app.Flag">com.twitter.app.Flag</span> types
+annotated methods. This class also provides an integration with <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html" class="extype" name="com.twitter.app.Flag">com.twitter.app.Flag</a> types
 which allows for passing external configuration to aid in the creation of bound types. Lastly, it
 is also possible to define a list of other <a href="TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> instances which this <a href="TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>
 &quot;depends&quot; on by setting the <a href="TwitterBaseModule.html#modules:Seq[com.google.inject.Module]" class="extmbr" name="com.twitter.inject.TwitterBaseModule#modules">TwitterBaseModule.modules</a> (or <a href="TwitterBaseModule.html#javaModules:java.util.Collection[com.google.inject.Module]" class="extmbr" name="com.twitter.inject.TwitterBaseModule#javaModules">TwitterBaseModule.javaModules</a>)

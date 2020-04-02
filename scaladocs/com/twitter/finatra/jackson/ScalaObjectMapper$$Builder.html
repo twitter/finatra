@@ -760,10 +760,10 @@ given (nullable) <span class="extype" name="Injector">Injector</span>.</p></div>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder#validationProvider" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="validationProvider:com.twitter.finatra.validation.ValidationProvider"></a><a id="validationProvider:ValidationProvider"></a>
+    </li><li name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder#validation" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="validation:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/jackson/ScalaObjectMapper$$Builder.html#validationProvider:com.twitter.finatra.validation.ValidationProvider" title="Permalink">
+      <a href="../../../../com/twitter/finatra/jackson/ScalaObjectMapper$$Builder.html#validation:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -772,7 +772,23 @@ given (nullable) <span class="extype" name="Injector">Injector</span>.</p></div>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">validationProvider</span><span class="result">: <a href="../validation/ValidationProvider.html" class="extype" name="com.twitter.finatra.validation.ValidationProvider">ValidationProvider</a></span>
+        <span class="name">validation</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      
+    </li><li name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder#validator" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="validator:Option[com.twitter.finatra.validation.Validator]"></a><a id="validator:Option[Validator]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/jackson/ScalaObjectMapper$$Builder.html#validator:Option[com.twitter.finatra.validation.Validator]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validator</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="../validation/Validator.html" class="extype" name="com.twitter.finatra.validation.Validator">Validator</a>]</span>
       </span>
       
       
@@ -910,6 +926,25 @@ to <code>Boolean</code> (enabled).</p></div><dl class="attributes block"> <dt>No
       </span>
       
       <p class="shortcomment cmt">Configure an <span class="extype" name="InjectableTypes">InjectableTypes</span> for this <a href="" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder">Builder</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Configure an <span class="extype" name="InjectableTypes">InjectableTypes</span> for this <a href="" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder">Builder</a>.</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>the default is a <span class="extype" name="NullInjectableTypes">NullInjectableTypes</span></p></span></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="ScalaObjectMapper.DefaultInjectableTypes">ScalaObjectMapper.DefaultInjectableTypes</span></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder#withNoValidation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withNoValidation:com.twitter.finatra.jackson.ScalaObjectMapper.Builder"></a><a id="withNoValidation:Builder"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/jackson/ScalaObjectMapper$$Builder.html#withNoValidation:com.twitter.finatra.jackson.ScalaObjectMapper.Builder" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withNoValidation</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder">Builder</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Disable case class validation during case class deserialization
+</p><div class="fullcomment"><div class="comment cmt"><p>Disable case class validation during case class deserialization
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>If you pass <code>withNoValidation</code> to the builder all case class validations will be
+      bypassed, regardless of the <code>withValidator</code> configuration.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="ScalaObjectMapper.DefaultValidation">ScalaObjectMapper.DefaultValidation</span></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder#withNumbersAsStrings" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="withNumbersAsStrings(numbersAsStrings:Boolean):com.twitter.finatra.jackson.ScalaObjectMapper.Builder"></a><a id="withNumbersAsStrings(Boolean):Builder"></a>
       <span class="permalink">
@@ -976,10 +1011,10 @@ to <code>Boolean</code> (enabled).</p></div><dl class="attributes block"> <dt>No
       </span>
       
       <p class="shortcomment cmt">Configure a <span class="extype" name="JsonInclude.Include">JsonInclude.Include</span> for serialization for this <a href="" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder">Builder</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Configure a <span class="extype" name="JsonInclude.Include">JsonInclude.Include</span> for serialization for this <a href="" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder">Builder</a>.</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>the default is <span class="extype" name="JsonInclude.Include.NON_ABSENT">JsonInclude.Include.NON_ABSENT</span></p></span></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="ScalaObjectMapper.DefaultSerializationInclude">ScalaObjectMapper.DefaultSerializationInclude</span></p></span></dd></dl></div>
-    </li><li name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder#withValidationProvider" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="withValidationProvider(validationProvider:com.twitter.finatra.validation.ValidationProvider):com.twitter.finatra.jackson.ScalaObjectMapper.Builder"></a><a id="withValidationProvider(ValidationProvider):Builder"></a>
+    </li><li name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder#withValidator" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withValidator(validator:com.twitter.finatra.validation.Validator):com.twitter.finatra.jackson.ScalaObjectMapper.Builder"></a><a id="withValidator(Validator):Builder"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/jackson/ScalaObjectMapper$$Builder.html#withValidationProvider(validationProvider:com.twitter.finatra.validation.ValidationProvider):com.twitter.finatra.jackson.ScalaObjectMapper.Builder" title="Permalink">
+      <a href="../../../../com/twitter/finatra/jackson/ScalaObjectMapper$$Builder.html#withValidator(validator:com.twitter.finatra.validation.Validator):com.twitter.finatra.jackson.ScalaObjectMapper.Builder" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -988,10 +1023,11 @@ to <code>Boolean</code> (enabled).</p></div><dl class="attributes block"> <dt>No
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">withValidationProvider</span><span class="params">(<span name="validationProvider">validationProvider: <a href="../validation/ValidationProvider.html" class="extype" name="com.twitter.finatra.validation.ValidationProvider">ValidationProvider</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder">Builder</a></span>
+        <span class="name">withValidator</span><span class="params">(<span name="validator">validator: <a href="../validation/Validator.html" class="extype" name="com.twitter.finatra.validation.Validator">Validator</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder">Builder</a></span>
       </span>
       
-      <p class="shortcomment cmt">Configure a <span class="extype" name="ValidationProvider">ValidationProvider</span> for this <a href="" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder">Builder</a></p><div class="fullcomment"><div class="comment cmt"><p>Configure a <span class="extype" name="ValidationProvider">ValidationProvider</span> for this <a href="" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder">Builder</a></p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>the default is the <span class="extype" name="CaseClassValidationProvider">CaseClassValidationProvider</span></p></span></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="ScalaObjectMapper.DefaultValidationProvider">ScalaObjectMapper.DefaultValidationProvider</span></p></span></dd></dl></div>
+      <p class="shortcomment cmt">Configure a <span class="extype" name="Validator">Validator</span> for this <a href="" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder">Builder</a></p><div class="fullcomment"><div class="comment cmt"><p>Configure a <span class="extype" name="Validator">Validator</span> for this <a href="" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder">Builder</a></p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>If you pass <code>withNoValidation</code> to the builder all case class validations will be
+      bypassed, regardless of the <code>withValidator</code> configuration.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="ScalaObjectMapper.DefaultValidator">ScalaObjectMapper.DefaultValidator</span></p></span></dd></dl></div>
     </li>
               </ol>
             </div>

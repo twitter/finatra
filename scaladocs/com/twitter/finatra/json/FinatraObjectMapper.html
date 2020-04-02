@@ -676,7 +676,7 @@ conversion of polymorphic values, or cases where Object Identity is used.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parse</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="buf">buf: <span class="extype" name="com.twitter.io.Buf">Buf</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.parse.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.parse.T">T</span></span>
+        <span class="name">parse</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="buf">buf: <a href="https://twitter.github.io/util/docs/com/twitter/io/Buf.html#com.twitter.io.Buf" class="extype" name="com.twitter.io.Buf">Buf</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.parse.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.parse.T">T</span></span>
       </span>
       
       <p class="shortcomment cmt">Read a value from a <span class="extype" name="Buf">Buf</span> into a type <span class="extype" name="T">T</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Read a value from a <span class="extype" name="Buf">Buf</span> into a type <span class="extype" name="T">T</span>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../jackson/ScalaObjectMapper.html" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper">ScalaObjectMapper</a></dd></dl></div>
@@ -882,7 +882,7 @@ example, by adding providers for custom serializers and deserializers.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">writeStringMapAsBuf</span><span class="params">(<span name="stringMap">stringMap: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="com.twitter.io.Buf">Buf</span></span>
+        <span class="name">writeStringMapAsBuf</span><span class="params">(<span name="stringMap">stringMap: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/io/Buf.html#com.twitter.io.Buf" class="extype" name="com.twitter.io.Buf">Buf</a></span>
       </span>
       
       <p class="shortcomment cmt">Convenience method for doing the multi-step process of serializing a <code>Map[String, String]</code>
@@ -923,7 +923,7 @@ depending on its settings (by default, it will try to close it when
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">writeValueAsBuf</span><span class="params">(<span name="any">any: <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <span class="extype" name="com.twitter.io.Buf">Buf</span></span>
+        <span class="name">writeValueAsBuf</span><span class="params">(<span name="any">any: <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/io/Buf.html#com.twitter.io.Buf" class="extype" name="com.twitter.io.Buf">Buf</a></span>
       </span>
       
       <p class="shortcomment cmt">Method that can be used to serialize any value as a <span class="extype" name="Buf">Buf</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Method that can be used to serialize any value as a <span class="extype" name="Buf">Buf</span>. Functionally equivalent
