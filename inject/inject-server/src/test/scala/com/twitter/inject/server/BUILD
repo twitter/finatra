@@ -23,7 +23,7 @@ scala_library(
         "finatra/inject/inject-app/src/test/scala:test-deps",
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-core/src/test/scala:test-deps",
-        "finatra/inject/inject-modules/src/test/scala:test-deps",
+        "finatra/inject/inject-modules/src/test/scala/com/twitter/inject/modules",
         "finatra/inject/inject-ports/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-server/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-slf4j/src/main/scala",

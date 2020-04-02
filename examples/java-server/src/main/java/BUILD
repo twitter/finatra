@@ -8,7 +8,7 @@ java_library(
         "finatra/examples/java-server/src/main/resources",
         "finatra/inject/inject-app/src/main/scala",
         "finatra/inject/inject-core/src/main/scala",
-        "finatra/inject/inject-modules/src/main/scala",
+        "finatra/inject/inject-modules/src/main/scala/com/twitter/inject/modules",
         "finatra/inject/inject-server/src/main/scala",
         "twitter-server/server/src/main/scala",
     ],

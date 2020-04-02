@@ -23,7 +23,7 @@ scala_library(
         "finagle/finagle-thriftmux/src/main/scala",
         "finatra/inject/inject-app/src/main/scala",
         "finatra/inject/inject-core/src/main/scala",
-        "finatra/inject/inject-modules/src/main/scala",
+        "finatra/inject/inject-modules/src/main/scala/com/twitter/inject/modules",
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/inject/inject-thrift-client/src/main/java:pants-workaround",
         "finatra/inject/inject-thrift/src/main/scala",
@@ -42,7 +42,7 @@ scala_library(
         "finagle/finagle-thrift/src/main/scala",
         "finagle/finagle-thriftmux/src/main/scala",
         "finatra/inject/inject-app/src/main/scala",
-        "finatra/inject/inject-modules/src/main/scala",
+        "finatra/inject/inject-modules/src/main/scala/com/twitter/inject/modules",
         "scrooge/scrooge-core/src/main/scala",
     ],
 )

@@ -7,6 +7,17 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
+Changed
+~~~~~~~
+
+* inject-modules: Updated BUILD files for Pants 1:1:1 layout. ``PHAB_ID=D442977``
+
+Fixed
+~~~~~
+
 20.4.0
 ------
 Added

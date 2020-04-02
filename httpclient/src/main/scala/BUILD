@@ -15,7 +15,7 @@ scala_library(
         "finagle/finagle-core/src/main/scala",
         "finagle/finagle-http/src/main/scala",
         "finatra/inject/inject-core/src/main/scala",
-        "finatra/inject/inject-modules/src/main/scala",
+        "finatra/inject/inject-modules/src/main/scala/com/twitter/inject/modules",
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
@@ -25,6 +25,6 @@ scala_library(
     exports = [
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
         "3rdparty/jvm/net/codingwell:scala-guice",
-        "finatra/inject/inject-modules/src/main/scala",
+        "finatra/inject/inject-modules/src/main/scala/com/twitter/inject/modules",
     ],
 )

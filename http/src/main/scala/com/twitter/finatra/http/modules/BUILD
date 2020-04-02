@@ -23,7 +23,7 @@ scala_library(
         "finatra/http/src/main/scala/com/twitter/finatra/http/response",
         "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",
         "finatra/inject/inject-core/src/main/scala",
-        "finatra/inject/inject-modules/src/main/scala",
+        "finatra/inject/inject-modules/src/main/scala/com/twitter/inject/modules",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/modules",
         "finatra/jackson/src/main/scala/com/twitter/finatra/json/modules",
