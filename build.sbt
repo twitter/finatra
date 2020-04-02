@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "20.3.0"
+val releaseVersion = "20.4.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -94,7 +94,7 @@ lazy val versions = new {
   val bijectionCore = "0.9.5"
   val commonsFileupload = "1.4"
   val fastutil = "8.1.1"
-  val guice = "4.2.0"
+  val guice = "4.2.1"
   val jackson = "2.9.10"
   val jacksonDatabind = "2.9.10.1"
   val jodaConvert = "1.5"
@@ -275,6 +275,7 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   injectThriftClientHttpMapper,
   injectUtils,
   jackson,
+  jsonAnnotations,
   kafka,
   kafkaStreams,
   kafkaStreamsPrerestore,
@@ -719,7 +720,9 @@ lazy val validation = project
     }
   ).dependsOn(
   injectCore % "test->test;compile->compile",
-  injectUtils)
+  injectUtils,
+  utils % "test->test;compile->compile"
+)
 
 lazy val jacksonTestJarSources =
   Seq(
@@ -765,7 +768,8 @@ lazy val jackson = project
     injectSlf4j,
     injectUtils,
     jsonAnnotations,
-    validation % "test->test;compile->compile")
+    validation % "test->test;compile->compile",
+    utils)
 
 lazy val jsonAnnotations = (project in file("json-annotations"))
   .settings(projectSettings)

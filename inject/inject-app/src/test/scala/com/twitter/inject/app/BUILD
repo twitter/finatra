@@ -11,7 +11,6 @@ scala_library(
         "//:scala-reflect",
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
-        "3rdparty/jvm/com/google/inject/extensions:guice-multibindings",
         "3rdparty/jvm/net/codingwell:scala-guice",
         "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",
         "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app",

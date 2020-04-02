@@ -15,7 +15,8 @@ import com.twitter.finatra.jackson.{
   ScalaObjectMapper,
   TestInjectableValue
 }
-import com.twitter.finatra.validation.{CaseClassValidationProvider, NotEmpty, NotEmptyInternal}
+import com.twitter.finatra.validation.Validator
+import com.twitter.finatra.validation.constraints.NotEmpty
 import com.twitter.inject.Test
 
 class CaseClassFieldTest extends Test {
@@ -214,13 +215,6 @@ class CaseClassFieldTest extends Test {
       "[array type, component type: [simple type, class long]]")
   }
 
-  test("CaseClassField should filter case class annotations correctly") {
-    val fields = deserializerFor(classOf[TestTraitImpl]).fields
-    val nameField = fields.filter(_.name == "name")
-    val fieldAnnotations = nameField.flatMap(_.validationAnnotations)
-    fieldAnnotations.head.annotationType() should be(classOf[NotEmptyInternal])
-  }
-
   private[this] def deserializerFor(clazz: Class[_]): CaseClassDeserializer = {
     val javaType: JavaType = mapper.constructType(clazz)
     new CaseClassDeserializer(
@@ -228,7 +222,7 @@ class CaseClassFieldTest extends Test {
       mapper.getDeserializationConfig,
       mapper.getDeserializationConfig.introspect(javaType),
       NullInjectableTypes,
-      CaseClassValidationProvider
+      Some(Validator())
     )
   }
 }

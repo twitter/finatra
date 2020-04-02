@@ -3,6 +3,7 @@ package com.twitter.finatra.jackson.tests.caseclass
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassMappingException
 import com.twitter.finatra.validation._
+import com.twitter.finatra.validation.constraints.{Min, NotEmpty, OneOf}
 import com.twitter.inject.Test
 import com.twitter.inject.domain.WrappedValue
 
@@ -32,7 +33,7 @@ class OptionalValidationTest extends Test {
     ScalaObjectMapper.builder.objectMapper
 
   private val nullValidationMapper =
-    ScalaObjectMapper.builder.withValidationProvider(NullCaseClassValidationProvider).objectMapper
+    ScalaObjectMapper.builder.withNoValidation.objectMapper
 
   test("default mapper will trigger NotEmpty validation") {
     val invalid = Threshold(Some(""), 1, 4, State("active"))

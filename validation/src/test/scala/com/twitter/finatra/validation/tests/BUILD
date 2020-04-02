@@ -1,5 +1,9 @@
 junit_tests(
-    sources = ["**/*.scala"],
+    sources = [
+        "*.java",
+        "*.scala",
+        "constraints/*.scala",
+    ],
     strict_deps = True,
     dependencies = [
         "3rdparty/jvm/org/joda:joda-convert",

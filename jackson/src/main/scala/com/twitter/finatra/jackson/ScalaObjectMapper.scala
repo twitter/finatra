@@ -20,7 +20,7 @@ import com.twitter.finatra.jackson.caseclass.{
   NullInjectableTypes
 }
 import com.twitter.finatra.jackson.serde.{LongKeyDeserializers, SerDeSimpleModule}
-import com.twitter.finatra.validation.{CaseClassValidationProvider, ValidationProvider}
+import com.twitter.finatra.validation.Validator
 import com.twitter.io.Buf
 import java.io.{ByteArrayOutputStream, InputStream, OutputStream}
 import java.nio.ByteBuffer
@@ -28,8 +28,8 @@ import javax.annotation.Nullable
 
 object ScalaObjectMapper {
 
-  /** The default [[ValidationProvider]] for a [[ScalaObjectMapper]] */
-  private[jackson] val DefaultValidationProvider: ValidationProvider = CaseClassValidationProvider
+  /** The default [[Validator]] for a [[ScalaObjectMapper]] */
+  private[jackson] val DefaultValidator: Validator = Validator()
 
   /** The default [[InjectableTypes]] for a [[ScalaObjectMapper]] */
   private[jackson] val DefaultInjectableTypes: InjectableTypes = NullInjectableTypes
@@ -71,6 +71,9 @@ object ScalaObjectMapper {
   /** The default for mutating the underlying [[JacksonScalaObjectMapperType]] with additional configuration */
   private[jackson] val DefaultAdditionalMapperConfigurationFn: JacksonObjectMapper => Unit =
     _ => Unit
+
+  /** The default setting to enable case class validation during case class deserialization */
+  private[jackson] val DefaultValidation: Boolean = true
 
   /**
    * When not using injection, this factory method can be used. Use of this method will
@@ -224,11 +227,12 @@ object ScalaObjectMapper {
     serializationConfig: Map[SerializationFeature, Boolean] = DefaultSerializationConfig,
     deserializationConfig: Map[DeserializationFeature, Boolean] = DefaultDeserializationConfig,
     defaultJacksonModules: Seq[Module] = DefaultJacksonModules,
-    validationProvider: ValidationProvider = DefaultValidationProvider,
+    validator: Option[Validator] = Some(DefaultValidator),
     injectableTypes: InjectableTypes = DefaultInjectableTypes,
     additionalJacksonModules: Seq[Module] = DefaultAdditionalJacksonModules,
     additionalMapperConfigurationFn: JacksonObjectMapper => Unit =
-      DefaultAdditionalMapperConfigurationFn) {
+      DefaultAdditionalMapperConfigurationFn,
+    validation: Boolean = DefaultValidation) {
 
     /* Public */
 
@@ -345,7 +349,10 @@ object ScalaObjectMapper {
     /** Order is important: default + case class module + any additional */
     private[this] def jacksonModules: Seq[Module] = {
       this.defaultJacksonModules ++
-        Seq(new CaseClassJacksonModule(this.injectableTypes, this.validationProvider)) ++
+        Seq(
+          new CaseClassJacksonModule(
+            this.injectableTypes,
+            if (this.validation) this.validator else None)) ++
         this.additionalJacksonModules
     }
 
@@ -364,10 +371,11 @@ object ScalaObjectMapper {
         this.serializationConfig,
         this.deserializationConfig,
         this.defaultJacksonModules,
-        this.validationProvider,
+        this.validator,
         this.injectableTypes,
         this.additionalJacksonModules,
-        this.additionalMapperConfigurationFn
+        this.additionalMapperConfigurationFn,
+        this.validation
       )
 
     /**
@@ -382,10 +390,11 @@ object ScalaObjectMapper {
         this.serializationConfig,
         this.deserializationConfig,
         this.defaultJacksonModules,
-        this.validationProvider,
+        this.validator,
         this.injectableTypes,
         this.additionalJacksonModules,
-        this.additionalMapperConfigurationFn
+        this.additionalMapperConfigurationFn,
+        this.validation
       )
 
     /**
@@ -401,10 +410,11 @@ object ScalaObjectMapper {
         this.serializationConfig,
         this.deserializationConfig,
         this.defaultJacksonModules,
-        this.validationProvider,
+        this.validator,
         this.injectableTypes,
         this.additionalJacksonModules,
-        this.additionalMapperConfigurationFn
+        this.additionalMapperConfigurationFn,
+        this.validation
       )
 
     /**
@@ -423,10 +433,11 @@ object ScalaObjectMapper {
         serializationConfig,
         this.deserializationConfig,
         this.defaultJacksonModules,
-        this.validationProvider,
+        this.validator,
         this.injectableTypes,
         this.additionalJacksonModules,
-        this.additionalMapperConfigurationFn
+        this.additionalMapperConfigurationFn,
+        this.validation
       )
 
     /**
@@ -446,18 +457,21 @@ object ScalaObjectMapper {
         this.serializationConfig,
         deserializationConfig,
         this.defaultJacksonModules,
-        this.validationProvider,
+        this.validator,
         this.injectableTypes,
         this.additionalJacksonModules,
-        this.additionalMapperConfigurationFn
+        this.additionalMapperConfigurationFn,
+        this.validation
       )
 
     /**
-     * Configure a [[ValidationProvider]] for this [[Builder]]
-     * @note the default is the [[CaseClassValidationProvider]]
-     * @see [[ScalaObjectMapper.DefaultValidationProvider]]
+     * Configure a [[Validator]] for this [[Builder]]
+     * @see [[ScalaObjectMapper.DefaultValidator]]
+     *
+     * @note If you pass `withNoValidation` to the builder all case class validations will be
+     *       bypassed, regardless of the `withValidator` configuration.
      */
-    final def withValidationProvider(validationProvider: ValidationProvider): Builder =
+    final def withValidator(validator: Validator): Builder =
       Builder(
         this.propertyNamingStrategy,
         this.numbersAsStrings,
@@ -465,10 +479,33 @@ object ScalaObjectMapper {
         this.serializationConfig,
         this.deserializationConfig,
         this.defaultJacksonModules,
-        validationProvider,
+        Some(validator),
         this.injectableTypes,
         this.additionalJacksonModules,
-        this.additionalMapperConfigurationFn
+        this.additionalMapperConfigurationFn,
+        this.validation
+      )
+
+    /**
+     * Disable case class validation during case class deserialization
+     *
+     * @see [[ScalaObjectMapper.DefaultValidation]]
+     * @note If you pass `withNoValidation` to the builder all case class validations will be
+     *       bypassed, regardless of the `withValidator` configuration.
+     */
+    final def withNoValidation: Builder =
+      Builder(
+        this.propertyNamingStrategy,
+        this.numbersAsStrings,
+        this.serializationInclude,
+        this.serializationConfig,
+        this.deserializationConfig,
+        this.defaultJacksonModules,
+        this.validator,
+        this.injectableTypes,
+        this.additionalJacksonModules,
+        this.additionalMapperConfigurationFn,
+        validation = false
       )
 
     /**
@@ -484,10 +521,11 @@ object ScalaObjectMapper {
         this.serializationConfig,
         this.deserializationConfig,
         this.defaultJacksonModules,
-        this.validationProvider,
+        this.validator,
         injectableTypes,
         this.additionalJacksonModules,
-        this.additionalMapperConfigurationFn
+        this.additionalMapperConfigurationFn,
+        this.validation
       )
 
     /**
@@ -502,10 +540,11 @@ object ScalaObjectMapper {
         this.serializationConfig,
         this.deserializationConfig,
         this.defaultJacksonModules,
-        this.validationProvider,
+        this.validator,
         this.injectableTypes,
         additionalJacksonModules,
-        this.additionalMapperConfigurationFn
+        this.additionalMapperConfigurationFn,
+        this.validation
       )
 
     /**
@@ -520,10 +559,11 @@ object ScalaObjectMapper {
         this.serializationConfig,
         this.deserializationConfig,
         this.defaultJacksonModules,
-        this.validationProvider,
+        this.validator,
         this.injectableTypes,
         this.additionalJacksonModules,
-        mapperFn
+        mapperFn,
+        this.validation
       )
 
     /** Private method to allow changing of the default Jackson Modules for use from the `ScalaObjectMapperModule` */
@@ -537,10 +577,11 @@ object ScalaObjectMapper {
         this.serializationConfig,
         this.deserializationConfig,
         defaultJacksonModules,
-        this.validationProvider,
+        this.validator,
         this.injectableTypes,
         this.additionalJacksonModules,
-        this.additionalMapperConfigurationFn
+        this.additionalMapperConfigurationFn,
+        this.validation
       )
   }
 }

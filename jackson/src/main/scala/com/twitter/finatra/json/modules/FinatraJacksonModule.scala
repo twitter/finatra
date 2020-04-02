@@ -6,6 +6,7 @@ import com.twitter.finatra.jackson.caseclass.InjectableTypes
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.annotations.{CamelCaseMapper, SnakeCaseMapper}
+import com.twitter.finatra.validation.Validator
 import javax.inject.Singleton
 
 @deprecated(
@@ -23,27 +24,31 @@ class FinatraJacksonModule extends ScalaObjectMapperModule {
   @SnakeCaseMapper
   private final def provideSnakeCaseFinatraObjectMapper(
     injector: Injector,
-    injectableTypes: Option[InjectableTypes]
+    injectableTypes: Option[InjectableTypes],
+    validator: Option[Validator]
   ): FinatraObjectMapper =
     FinatraObjectMapper(
       ScalaObjectMapper
-        .snakeCaseObjectMapper(provideScalaObjectMapper(injector, injectableTypes)).underlying)
+        .snakeCaseObjectMapper(provideScalaObjectMapper(injector, injectableTypes, validator)).underlying)
 
   @Singleton
   @Provides
   @CamelCaseMapper
   private final def provideCamelCaseFinatraObjectMapper(
     injector: Injector,
-    injectableTypes: Option[InjectableTypes]
+    injectableTypes: Option[InjectableTypes],
+    validator: Option[Validator]
   ): FinatraObjectMapper =
     FinatraObjectMapper(
       ScalaObjectMapper
-        .camelCaseObjectMapper(provideScalaObjectMapper(injector, injectableTypes)).underlying)
+        .camelCaseObjectMapper(provideScalaObjectMapper(injector, injectableTypes, validator)).underlying)
 
   @Singleton
   @Provides
   private final def provideFinatraObjectMapper(
     injector: Injector,
-    injectableTypes: Option[InjectableTypes]
-  ): FinatraObjectMapper = FinatraObjectMapper(provideScalaObjectMapper(injector, injectableTypes))
+    injectableTypes: Option[InjectableTypes],
+    validator: Option[Validator]
+  ): FinatraObjectMapper =
+    FinatraObjectMapper(provideScalaObjectMapper(injector, injectableTypes, validator))
 }

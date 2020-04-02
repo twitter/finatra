@@ -3,8 +3,8 @@ package com.twitter.finatra.http.tests.integration.json
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.google.inject.Module
-import com.twitter.finagle.http.Status.BadRequest
-import com.twitter.finagle.http.{Response, Status}
+import com.twitter.finagle.http.Response
+import com.twitter.finagle.http.Status.{BadRequest, Ok}
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
@@ -96,10 +96,12 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
 
             get("/complexquery") { request: CaseClassComplexQueryParamRequest =>
               // should be able to parse the string into a JsonNode
-              val jsonNode = injector.instance[ScalaObjectMapper].parse[JsonNode](request.shouldBeAString)
-              jsonNode.fieldNames().asScala.map { name =>
-                name -> jsonNode.get(name)
-              }.toMap
+              val jsonNode =
+                injector.instance[ScalaObjectMapper].parse[JsonNode](request.shouldBeAString)
+              jsonNode
+                .fieldNames().asScala.map { name =>
+                  name -> jsonNode.get(name)
+                }.toMap
             }
 
             get("/shapeless") { request: ShapelessRequest =>
@@ -117,6 +119,14 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
 
             post("/shapes") { request: ShapesRequest =>
               Map("shapes" -> request.shapes)
+            }
+
+            post("/validate_user") { _: ValidateUserRequest =>
+              "You passed!"
+            }
+
+            get("/validate_with_http_annotations/:user_name") { request: UserRequestWithParam =>
+              s"The user has valid id ${request.userId} and userName ${request.userName}"
             }
           })
       }
@@ -154,7 +164,7 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
         |  "data": 42
         |}
       """.stripMargin,
-      andExpect = Status.Ok,
+      andExpect = Ok,
       withJsonBody = """{"data": 42}"""
     )
   }
@@ -166,37 +176,37 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
   test("/POST /with/boolean") {
     server.httpGet(
       "/with/boolean/12345?complete_only=1",
-      andExpect = Status.Ok,
+      andExpect = Ok,
       withJsonBody = """{"id": 12345, "complete_only": true}"""
     )
 
     server.httpGet(
       "/with/boolean/12345?complete_only=0",
-      andExpect = Status.Ok,
+      andExpect = Ok,
       withJsonBody = """{"id": 12345, "complete_only": false}"""
     )
 
     server.httpGet(
       "/with/boolean/12345?complete_only=T",
-      andExpect = Status.Ok,
+      andExpect = Ok,
       withJsonBody = """{"id": 12345, "complete_only": true}"""
     )
 
     server.httpGet(
       "/with/boolean/12345?complete_only=F",
-      andExpect = Status.Ok,
+      andExpect = Ok,
       withJsonBody = """{"id": 12345, "complete_only": false}"""
     )
 
     server.httpGet(
       "/with/boolean/12345?complete_only=t",
-      andExpect = Status.Ok,
+      andExpect = Ok,
       withJsonBody = """{"id": 12345, "complete_only": true}"""
     )
 
     server.httpGet(
       "/with/boolean/12345?complete_only=f",
-      andExpect = Status.Ok,
+      andExpect = Ok,
       withJsonBody = """{"id": 12345, "complete_only": false}"""
     )
   }
@@ -226,7 +236,7 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
   test("/GET ambiguous directive with @QueryParam and @JsonProperty") {
     server.httpGet(
       path = "/queryproperty?q=apples",
-      andExpect = Status.Ok,
+      andExpect = Ok,
       withBody = "apples"
     )
   }
@@ -238,7 +248,7 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
   test("/GET /long/deserializer") {
     server.httpGet(
       path = "/long/deserializer?long=42",
-      andExpect = Status.Ok,
+      andExpect = Ok,
       withBody = "42"
     )
   }
@@ -250,7 +260,7 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
   test("/GET /bigdecimal") {
     server.httpGet(
       path = "/bigdecimal?required=23.1201&optional=3.145926",
-      andExpect = Status.Ok,
+      andExpect = Ok,
       withJsonBody = """{"required": 23.12, "optional": 3.15}"""
     )
   }
@@ -262,7 +272,7 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
   test("/GET /time") {
     server.httpGet(
       path = "/time?t=2018-09-14T23:20:08.000-07:00",
-      andExpect = Status.Ok,
+      andExpect = Ok,
       withJsonBody = """{"time": "2018-09-15 06:20:08 +0000"}""" // TimeStringSerializer format is 'yyyy-MM-dd HH:mm:ss Z' UTC TZ
     )
   }
@@ -274,7 +284,7 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
   test("/GET /longparametername") {
     server.httpGet(
       path = "/longparametername?this_should_use_mapper_naming_strategy=hello%2C%20world!", // default property naming strategy is snake_case
-      andExpect = Status.Ok,
+      andExpect = Ok,
       withBody = "hello, world!"
     )
   }
@@ -283,7 +293,7 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
   test("/GET /notmytype") {
     server.httpGet(
       path = "/notmytype?id=42&n=Item&d=This%20is%20an%20Item.",
-      andExpect = Status.Ok,
+      andExpect = Ok,
       withJsonBody = """{"description":"This is an Item.","id":42,"name":"Item"}"""
     )
   }
@@ -292,7 +302,7 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
   test("/GET /thepoint") {
     server.httpGet(
       path = "/thepoint?p=%7B%22x%22%3A3%2C%22y%22%3A6%7D",
-      andExpect = Status.Ok,
+      andExpect = Ok,
       withJsonBody = """{"point":{"x":3,"y":6}}"""
     )
   }
@@ -300,8 +310,9 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
   /** Test a JSON object is not parsed when the query param type is a String */
   test("/GET /complexquery") {
     server.httpGet(
-      path = "/complexquery?q=%7B%22one%22%3A1%2C%22two%22%3A2%2C%22three%22%3A3%2C%22four%22%3A4%7D",
-      andExpect = Status.Ok,
+      path =
+        "/complexquery?q=%7B%22one%22%3A1%2C%22two%22%3A2%2C%22three%22%3A3%2C%22four%22%3A4%7D",
+      andExpect = Ok,
       withJsonBody = """{"one":1,"two":2,"three":3,"four":4}"""
     )
   }
@@ -314,14 +325,14 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
     // circle
     server.httpGet(
       path = "/shapeless?q=%7B%22type%22%3A%22circle%22%2C%22radius%22%3A10%7D",
-      andExpect = Status.Ok,
+      andExpect = Ok,
       withJsonBody = """{"shape":{"type":"circle","radius":10}}"""
     )
 
     // rectangle
     server.httpGet(
       path = "/shapeless?q=%7B%22type%22%3A%22rectangle%22%2C%22width%22%3A5%2C%22height%22%3A5%7D",
-      andExpect = Status.Ok,
+      andExpect = Ok,
       withJsonBody = """{"shape":{"type":"rectangle","width":5,"height":5}}"""
     )
   }
@@ -335,10 +346,58 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
       path = "/shapes",
       postBody =
         """{"shapes":[{"type":"circle","radius":10},{"type":"rectangle","width":5,"height":5},{"type":"circle","radius":3},{"type":"rectangle","width":10,"height":5}]}""",
-      andExpect = Status.Ok,
+      andExpect = Ok,
       withJsonBody =
         """{"shapes":[{"radius":10},{"height":5,"width":5},{"radius":3},{"height":5,"width":10}]}"""
       // jsontypeinfo is not included in serialization by default
+    )
+  }
+
+  /**
+   * Deserialize Json to case class where some fields have
+   * multiple [[com.twitter.finatra.validation.Constraint]] annotations
+   *
+   * The case class to be validated:
+   * {{{
+   *   case class ValidateUserRequest(
+   *     @NotEmpty @Pattern(regexp = "[a-z]+") userName: String,
+   *     @Max(value = 9999) id: Long,
+   *     title: String
+   *   )
+   * }}}
+   *
+   */
+  test("validation in case class deserialization failed") {
+    server.httpPost(
+      "/validate_user",
+      andExpect = BadRequest,
+
+      postBody = """
+          {
+            "user_name" : "@&^",
+            "id" : "5656",
+            "title": "CEO"
+          }
+        """"
+    )
+  }
+
+  /**
+   * Deserialize Json to case class where some fields have a [[com.twitter.finatra.validation.Constraint]]
+   * annotation along with an HTTP annotation
+   *
+   * The case class to be validated:
+   * {{{
+   *   case class UserRequestWithParam(
+   *     @QueryParam @Min(value = 1) userId: Long,
+   *     @RouteParam @NotEmpty userName: String
+   *   )
+   * }}}
+   */
+  test("validation with HTTP annotations in request failed") {
+    server.httpGet(
+      "/validate_with_http_annotations/jack?user_id=0",
+      andExpect = BadRequest
     )
   }
 }

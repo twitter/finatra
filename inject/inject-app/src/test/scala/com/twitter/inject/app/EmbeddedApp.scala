@@ -1,7 +1,9 @@
 package com.twitter.inject.app
 
+import collection.JavaConverters._
 import com.google.inject.Module
 import com.twitter.inject.{Injector, Logging}
+import scala.annotation.varargs
 
 /**
  * EmbeddedApp allow's a [[com.twitter.inject.app.App]] to be integration and
@@ -39,6 +41,13 @@ class EmbeddedApp(app: com.twitter.inject.app.App) extends BindDSL with Logging 
     info("Calling main with args: " + stringArgs.mkString(" "))
     app.nonExitingMain(stringArgs.toArray)
   }
+
+  /* Java friendly */
+  @varargs def main(flags: java.util.Map[String, Any], args: String*): Unit =
+    main(flags = flags.asScala.toMap, args = args)
+
+  def main(flags: java.util.Map[String, Any]): Unit =
+    main(flags = flags.asScala.toMap)
 
   /* Protected */
 

@@ -20,6 +20,7 @@ scala_library(
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions",
         "finatra/json-annotations/src/main/java/com/twitter/finatra/json/annotations",
+        "finatra/utils/src/main/scala/com/twitter/finatra/utils",
         "finatra/validation/src/main/scala/com/twitter/finatra/validation",
     ],
     exports = [

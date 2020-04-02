@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main.domain
 
 import com.twitter.finatra.http.annotations.QueryParam
-import com.twitter.finatra.validation.NotEmpty
+import com.twitter.finatra.validation.constraints.NotEmpty
 
 case class SomethingStreamedRequest(
   @NotEmpty @QueryParam somethingId: String,

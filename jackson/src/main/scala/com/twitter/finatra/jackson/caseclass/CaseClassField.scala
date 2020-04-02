@@ -17,8 +17,8 @@ import com.fasterxml.jackson.databind.util.ClassUtil
 import com.twitter.conversions.StringOps._
 import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException
 import com.twitter.finatra.json.annotations.InjectableValue
+import com.twitter.finatra.validation.ErrorCode
 import com.twitter.finatra.validation.ValidationResult.Invalid
-import com.twitter.finatra.validation.{ErrorCode, ValidationProvider}
 import com.twitter.inject.Logging
 import com.twitter.inject.utils.AnnotationUtils
 import java.lang.annotation.Annotation
@@ -41,8 +41,7 @@ object CaseClassField {
     fieldAnnotations: scala.collection.Map[String, Array[Annotation]],
     namingStrategy: PropertyNamingStrategy,
     typeFactory: TypeFactory,
-    injectableTypes: InjectableTypes,
-    validationProvider: ValidationProvider
+    injectableTypes: InjectableTypes
   ): Array[CaseClassField] = {
     /* CaseClassFields MUST be returned in constructor/method parameter invocation order */
     // we could choose to use the size of the property definitions here, but since they are
@@ -66,18 +65,16 @@ object CaseClassField {
         annotations,
         propertyDefinition.beanPropertyDefinition.getName)
 
-      fields(index) =
-        CaseClassField(
-          name = name,
-          index = index,
-          javaType = propertyDefinition.javaType,
-          parentClass = clazz,
-          annotations = annotations,
-          beanPropertyDefinition = propertyDefinition.beanPropertyDefinition,
-          defaultFn = defaultMethod(clazzDescriptor, index),
-          injectableTypes = injectableTypes,
-          validationProvider = validationProvider
-        )
+      fields(index) = CaseClassField(
+        name = name,
+        index = index,
+        javaType = propertyDefinition.javaType,
+        parentClass = clazz,
+        annotations = annotations,
+        beanPropertyDefinition = propertyDefinition.beanPropertyDefinition,
+        defaultFn = defaultMethod(clazzDescriptor, index),
+        injectableTypes = injectableTypes
+      )
 
       index += 1
     }
@@ -113,8 +110,7 @@ private[jackson] case class CaseClassField private (
   annotations: Array[Annotation],
   beanPropertyDefinition: BeanPropertyDefinition,
   defaultFn: Option[() => Object],
-  injectableTypes: InjectableTypes,
-  validationProvider: ValidationProvider)
+  injectableTypes: InjectableTypes)
     extends Logging {
 
   lazy val missingValue: AnyRef = {
@@ -134,6 +130,7 @@ private[jackson] case class CaseClassField private (
       annotations,
       injectableTypes
     )
+
   /** Lazy as we may not have a contained type */
   private[this] lazy val firstTypeParam: JavaType = javaType.containedType(0)
 
@@ -159,12 +156,6 @@ private[jackson] case class CaseClassField private (
       .orElse(AnnotationUtils.findAnnotation[JsonDeserialize](clazzAnnotations))
 
   /* Public */
-
-  /** List of [[Annotation]] interfaces which as annotated with the [[validationProvider.validationAnnotation]] */
-  val validationAnnotations: Array[Annotation] =
-    annotations.filter(
-      _.annotationType.isAnnotationPresent(validationProvider.validationAnnotation))
-
   /**
    * Parse the field from a JsonNode representing a JSON object. NOTE: We would normally return a
    * `Try[Object]`, but instead we use exceptions to optimize the non-failure case.
@@ -325,7 +316,7 @@ private[jackson] case class CaseClassField private (
         // nor container types -- trying to contextualize on a container type leads to really bad performance
         // thus we go back to the field codec to read
         fieldCodec.readValue(jsonParser, resolvedType)
-       case _ =>
+      case _ =>
         // contextualization for all others
         context.readPropertyValue(jsonParser, forProperty, resolvedType)
     }
@@ -393,7 +384,10 @@ private[jackson] case class CaseClassField private (
   }
 
   @tailrec
-  private[this] def getFieldInfo(fieldName: String, annotations: Seq[Annotation]): (String, String) = {
+  private[this] def getFieldInfo(
+    fieldName: String,
+    annotations: Seq[Annotation]
+  ): (String, String) = {
     if (annotations.isEmpty) {
       ("field", fieldName)
     } else {

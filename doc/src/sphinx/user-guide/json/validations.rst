@@ -3,23 +3,8 @@
 JSON Validation Framework
 =========================
 
-Finatra provides a simple validation framework inspired by `JSR-303 <https://docs.oracle.com/javaee/6/tutorial/doc/gircz.html>`__.
-
-The validations framework integrates Finatra's custom `case class` deserializer to efficiently apply per field validations as request parsing is performed. The following validation annotations are available (and additional validations can be easily created):
-
--  ``@CountryCode``
--  ``@FutureTime``
--  ``@PastTime``
--  ``@Pattern``
--  ``@Max``
--  ``@Min``
--  ``@NotEmpty``
--  ``@OneOf``
--  ``@Range``
--  ``@Size``
--  ``@TimeGranularity``
--  ``@UUID``
--  ``@MethodValidation``
+Finatra provides a simple `Validation Framework <../validation/index.html>`__ to integrate with Finatra's custom `case class` deserializer
+to efficiently apply per field and method validations as request parsing is performed.
 
 `MixIn Annotations <https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations>`_
 ---------------------------------------------------------------------------------------------
@@ -35,21 +20,6 @@ with Finatra validations, see the documentation `here <./index.html#id19>`_.
 
     Note this integration will only work for field-level validation annotations since method
     validations must currently be specified *inside* of the actual class to be validated.
-
-Method Validations
-------------------
-
-A method validation is a case class method annotated with ``@MethodValidation`` which is intended to be used for validating fields of the cases class during request parsing. Reasons to use a method validation include:
-
--  For non-generic validations. ``@MethodValidation`` can be used instead of defining a reusable annotation and validator.
--  Cross-field validations (e.g. `startDate` before `endDate`)
-
-For an example see the `Car <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/test/scala/com/twitter/finatra/json/tests/internal/caseclass/validation/domain/Car.scala#L26>`__ test case class. Additionally, see the
-`CommonMethodValidations <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/validation/CommonMethodValidations.scala>`__ for pre-defined commonly useful method validations.
-
-The ``@MethodValidation`` annotation also supports specifying an optional ``fields`` parameter to
-state which fields are being evaluated in the validation. If the evaluation fails the resulting
-exception will contain details about each of the fields specified in the annotation.
 
 Validation Errors
 -----------------
@@ -76,13 +46,24 @@ You may desire to execute validation for specific case classes in certain scenar
 For example, you may want to validate a `POST` request on the write path and store the JSON results somewhere, but
 bypass validating that same JSON for a `GET` request on the read path.
 
-You can create a `FinatraObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala>`__
+You can create a `ScalaObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala>`__
 that will bypass validation like this:
 
 .. code:: scala
 
-    def create(injector: Injector = null): FinatraObjectMapper = {
-      val jacksonModule = NullValidationFinatraJacksonModule
-      new FinatraObjectMapper(
-        jacksonModule.provideScalaObjectMapper(injector))
+    ScalaObjectMapper.builder.withNoValidation.objectMapper
+
+If you desire to bypass validation in all scenarios throughout your service, you can disable validation when defining a new `ScalaObjectMapperModule <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala>`__
+and replace the default `jacksonModule` in your server definition.
+
+.. code:: scala
+
+    object NoValidationJacksonModule extends ScalaObjectMapperModule {
+      override val validation = false
+    }
+
+    class ValidationServer extends HttpServer {
+      override val name = "validation-server"
+      override def jacksonModule: Module = NoValidationJacksonModule
+      override protected def configureHttp(router: HttpRouter): Unit = ...
     }

@@ -8,7 +8,13 @@ import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.service.NilService
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.{Http, ListeningServer, NullServer, Service}
-import com.twitter.finatra.http.modules.{AccessLogModule, ExceptionManagerModule, HttpResponseClassifierModule, MessageBodyFlagsModule, MessageBodyModule}
+import com.twitter.finatra.http.modules.{
+  AccessLogModule,
+  ExceptionManagerModule,
+  HttpResponseClassifierModule,
+  MessageBodyFlagsModule,
+  MessageBodyModule
+}
 import com.twitter.finatra.http.response.HttpResponseClassifier
 import com.twitter.finatra.http.routing.{AdminHttpRouter, HttpRouter}
 import com.twitter.finatra.json.modules.FinatraJacksonModule

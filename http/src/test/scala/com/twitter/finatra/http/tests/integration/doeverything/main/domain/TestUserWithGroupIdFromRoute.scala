@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main.domain
 
 import com.twitter.finatra.http.annotations.RouteParam
-import com.twitter.finatra.validation.Size
+import com.twitter.finatra.validation.constraints.Size
 
 case class TestUserWithGroupIdFromRoute(
   @RouteParam groupId: Long,

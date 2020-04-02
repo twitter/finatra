@@ -1,13 +1,11 @@
 package com.twitter.finatra.jackson.tests.caseclass
 
-import com.twitter.finatra.jackson.caseclass.exceptions.{
-  CaseClassFieldMappingException,
-  CaseClassMappingException
-}
+import com.twitter.finatra.jackson.caseclass.exceptions.{CaseClassFieldMappingException, CaseClassMappingException}
 import com.twitter.finatra.jackson.tests.{Address, Car, Person}
 import com.twitter.finatra.jackson.{CarMake, ScalaObjectMapper}
 import com.twitter.finatra.validation.ValidationResult.Invalid
-import com.twitter.finatra.validation.{ErrorCode, MethodValidation, MinInternal, NotEmptyInternal}
+import com.twitter.finatra.validation.constraints.{Min, NotEmpty}
+import com.twitter.finatra.validation.{ErrorCode, MethodValidation}
 import com.twitter.inject.Test
 import org.joda.time.DateTime
 import org.scalatest.OptionValues._
@@ -46,7 +44,7 @@ class CaseClassValidationTest extends Test {
     error.reason.code shouldEqual ErrorCode.ValueTooSmall(2000, 1910)
     error.reason.message shouldEqual "[1910] is not greater than or equal to 2000"
     error.reason.annotation shouldBe defined
-    error.reason.annotation.value shouldBe a[MinInternal]
+    error.reason.annotation.value shouldBe a[Min]
   }
 
   test("class and field level validations#nested failed validations") {
@@ -80,7 +78,7 @@ class CaseClassValidationTest extends Test {
     errors.head.reason.code shouldEqual ErrorCode.ValueCannotBeEmpty
     errors.head.reason.message shouldEqual "cannot be empty"
     errors.head.reason.annotation shouldBe defined
-    errors.head.reason.annotation.value shouldBe a[NotEmptyInternal]
+    errors.head.reason.annotation.value shouldBe a[NotEmpty]
 
     errors(1).path shouldEqual
       CaseClassFieldMappingException.PropertyPath
@@ -88,7 +86,7 @@ class CaseClassValidationTest extends Test {
     errors(1).reason.code shouldEqual ErrorCode.ValueCannotBeEmpty
     errors(1).reason.message shouldEqual "cannot be empty"
     errors(1).reason.annotation shouldBe defined
-    errors(1).reason.annotation.value shouldBe a[NotEmptyInternal]
+    errors(1).reason.annotation.value shouldBe a[NotEmpty]
   }
 
   test("class and field level validations#nested method validations") {

@@ -5,7 +5,6 @@ junit_tests(
         ":test-deps",
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
-        "3rdparty/jvm/com/google/inject/extensions:guice-multibindings",
         "3rdparty/jvm/com/google/inject/extensions:guice-testlib",
         "3rdparty/jvm/junit",
         "3rdparty/jvm/net/codingwell:scala-guice",
@@ -32,7 +31,6 @@ scala_library(
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
-        "3rdparty/jvm/com/google/inject/extensions:guice-multibindings",
         "3rdparty/jvm/net/codingwell:scala-guice",
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "finatra/inject/inject-core/src/main/scala",

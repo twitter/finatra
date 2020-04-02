@@ -26,11 +26,17 @@ import com.twitter.finatra.jackson.caseclass.exceptions.{
 }
 import com.twitter.finatra.json.annotations.JsonCamelCase
 import com.twitter.finatra.validation.ValidationResult.Invalid
+import com.twitter.finatra.validation.internal.{
+  FieldValidator,
+  AnnotatedClass => ValidationAnnotatedClass,
+  AnnotatedField => ValidationAnnotatedField,
+  AnnotatedMethod => ValidationAnnotatedMethod
+}
 import com.twitter.finatra.validation.{
-  ErrorCode => ValidationErrorCode,
   MethodValidation,
-  ValidationProvider,
-  ValidationResult
+  ValidationResult,
+  Validator,
+  ErrorCode => ValidationErrorCode
 }
 import com.twitter.inject.Logging
 import com.twitter.inject.domain.WrappedValue
@@ -47,7 +53,7 @@ import java.lang.reflect.{
 import javax.annotation.concurrent.ThreadSafe
 import org.json4s.reflect.{ClassDescriptor, ConstructorDescriptor, Reflector, ScalaType}
 import scala.collection.JavaConverters._
-import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable
 import scala.util.control.NonFatal
 
 /* For supporting JsonCreator */
@@ -110,7 +116,7 @@ private[jackson] class CaseClassDeserializer(
   config: DeserializationConfig,
   beanDescription: BeanDescription,
   injectableTypes: InjectableTypes,
-  validationProvider: ValidationProvider)
+  validator: Option[Validator])
     extends JsonDeserializer[AnyRef]
     with Logging {
 
@@ -179,6 +185,20 @@ private[jackson] class CaseClassDeserializer(
   // use of creators for non-static inner classes,
   assert(!beanDescription.isNonStaticInnerClass, "Non-static inner case classes are not supported.")
 
+  // all class annotations
+  private[this] val allAnnotations: scala.collection.Map[String, Array[Annotation]] =
+    AnnotationUtils.findAnnotations(
+      clazz,
+      caseClazzCreator.propertyDefinitions.map(_.beanPropertyDefinition.getInternalName))
+
+  // support for reading annotations from Jackson Mix-ins
+  // see: https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations
+  private[this] val allMixinAnnotations: Map[String, Array[Annotation]] =
+    mixinClazz match {
+      case Some(clazz) => clazz.getDeclaredMethods.map(m => m.getName -> m.getAnnotations).toMap
+      case _ => Map.empty[String, Array[Annotation]]
+    }
+
   // Field name to list of parsed annotations. Jackson only tracks JacksonAnnotations
   // in the BeanPropertyDefinition AnnotatedMembers and we want to track all class annotations by field.
   // Annotations are keyed by parameter name because the logic collapses annotations from the
@@ -186,31 +206,25 @@ private[jackson] class CaseClassDeserializer(
   // optimized
   private[this] val fieldAnnotations: scala.collection.Map[String, Array[Annotation]] = {
     val fields: Array[String] =
-      caseClazzCreator
-        .propertyDefinitions.map(_.beanPropertyDefinition.getInternalName)
-
-    val fromClazz: scala.collection.Map[String, Array[Annotation]] =
-      AnnotationUtils.findAnnotations(clazz, fields)
-    // support for reading annotations from Jackson Mix-ins
-    // see: https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations
-    val fromMixinClazz: Map[String, Array[Annotation]] =
-      mixinClazz
-        .map(_.getDeclaredMethods.map(m => m.getName -> m.getAnnotations).toMap)
-        .getOrElse(Map.empty[String, Array[Annotation]])
-
-    val fieldAnnotations = scala.collection.mutable.HashMap[String, Array[Annotation]]()
+      caseClazzCreator.propertyDefinitions.map(_.beanPropertyDefinition.getInternalName)
+    val fieldAnnotations = mutable.HashMap[String, Array[Annotation]]()
     var index = 0
     while (index < fields.length) {
       val field = fields(index)
-      val annotations = fromClazz.getOrElse(field, Array.empty) ++
-        fromMixinClazz.getOrElse(field, Array.empty)
+      val annotations = allAnnotations.getOrElse(field, Array.empty) ++
+        allMixinAnnotations.getOrElse(field, Array.empty)
       if (annotations.nonEmpty) fieldAnnotations.put(field, annotations)
-
       index += 1
     }
 
     fieldAnnotations
   }
+
+  private[this] val annotatedValidationClazz: Option[ValidationAnnotatedClass] =
+    validator match {
+      case Some(v) => Some(v.createAnnotatedClass(clazz, fieldAnnotations))
+      case _ => None
+    }
 
   /* exposed for testing */
   private[jackson] val fields: Array[CaseClassField] =
@@ -222,13 +236,11 @@ private[jackson] class CaseClassDeserializer(
       fieldAnnotations,
       propertyNamingStrategy,
       config.getTypeFactory,
-      injectableTypes,
-      validationProvider
+      injectableTypes
     )
 
   private[this] lazy val numConstructorArgs = fields.length
   private[this] lazy val isWrapperClass = classOf[WrappedValue[_]].isAssignableFrom(clazz)
-  private[this] lazy val validationManager = validationProvider()
   private[this] lazy val firstFieldName = fields.head.name
 
   /* Public */
@@ -381,11 +393,11 @@ private[jackson] class CaseClassDeserializer(
     jsonParser: JsonParser,
     context: DeserializationContext,
     jsonNode: JsonNode
-  ): (Array[Object], ArrayBuffer[CaseClassFieldMappingException]) = {
+  ): (Array[Object], mutable.ArrayBuffer[CaseClassFieldMappingException]) = {
     /* Mutable Fields */
     var constructorValuesIdx = 0
     val constructorValues = new Array[Object](numConstructorArgs)
-    val errors = ArrayBuffer[CaseClassFieldMappingException]()
+    val errors = mutable.ArrayBuffer[CaseClassFieldMappingException]()
 
     while (constructorValuesIdx < numConstructorArgs) {
       val field = fields(constructorValuesIdx)
@@ -393,9 +405,11 @@ private[jackson] class CaseClassDeserializer(
         val value = field.parse(context, jsonParser.getCodec, jsonNode)
         constructorValues(constructorValuesIdx) = value //mutation
 
-        if (field.validationAnnotations.nonEmpty) {
-          val fieldValidationErrors = executeFieldValidations(value, field)
-          append(errors, fieldValidationErrors)
+        annotatedValidationClazz match {
+          case Some(annotatedClazz) if annotatedClazz.fields.nonEmpty =>
+            val fieldValidationErrors = executeFieldValidations(value, field, annotatedClazz.fields)
+            append(errors, fieldValidationErrors)
+          case _ => // do nothing
         }
       } catch {
         case e: CaseClassFieldMappingException =>
@@ -476,7 +490,8 @@ private[jackson] class CaseClassDeserializer(
             constructorValuesIdx,
             errors
           )
-        case e: java.util.NoSuchElementException if isScalaEnumerationType(field.javaType.getRawClass) =>
+        case e: java.util.NoSuchElementException
+            if isScalaEnumerationType(field.javaType.getRawClass) =>
           // Scala enumeration mapping issue
           addException(
             field,
@@ -513,7 +528,7 @@ private[jackson] class CaseClassDeserializer(
     e: CaseClassFieldMappingException,
     array: Array[Object],
     idx: Int,
-    errors: ArrayBuffer[CaseClassFieldMappingException]
+    errors: mutable.ArrayBuffer[CaseClassFieldMappingException]
   ): Unit = {
     array(idx) = field.missingValue //mutation
     errors += e //mutation
@@ -536,16 +551,16 @@ private[jackson] class CaseClassDeserializer(
       throw CaseClassMappingException(fieldErrors.toSet)
     }
 
-    val obj = create(jsonParser, context, constructorValues)
-    executeMethodValidations(fieldErrors, obj)
+    val obj = create(constructorValues)
+    annotatedValidationClazz match {
+      case Some(annotatedClazz) if annotatedClazz.methods.nonEmpty =>
+        executeMethodValidations(fieldErrors, obj, annotatedClazz.methods)
+      case _ => // do nothing
+    }
     obj
   }
 
-  private[this] def create(
-    jsonParser: JsonParser,
-    context: DeserializationContext,
-    constructorValues: Array[Object]
-  ): Object = {
+  private[this] def create(constructorValues: Array[Object]): Object = {
     try {
       caseClazzCreator.executable match {
         case method: Method =>
@@ -558,61 +573,87 @@ private[jackson] class CaseClassDeserializer(
     } catch {
       case e @ (_: InvocationTargetException | _: ExceptionInInitializerError) =>
         // propagate the underlying cause of the failed instantiation if available
-        // TODO: use context.handleInstantiationProblem which will wrap the cause in a JsonMappingException
+        // TODO: use DeserializationContext.handleInstantiationProblem which will wrap the cause in a JsonMappingException
         if (e.getCause == null) throw e else throw e.getCause
     }
   }
 
+  // Validate `Constraint` annotations for each field.
+  //
+  // fields: All field's `Constraint` annotations and their matching `ConstraintValidator`s are stored in
+  // `ValidationAnnotationField`, keyed by the field name.
   private[this] def executeFieldValidations(
     value: Any,
-    field: CaseClassField
+    field: CaseClassField,
+    fields: Map[String, ValidationAnnotatedField]
   ): Seq[CaseClassFieldMappingException] = {
-    for {
-      invalid @ Invalid(_, _, _) <- validationManager.validateField(
-        value,
-        field.validationAnnotations)
-    } yield {
-      CaseClassFieldMappingException(
-        CaseClassFieldMappingException.PropertyPath.leaf(field.name),
-        invalid)
+    validator match {
+      case Some(v) =>
+        for {
+          invalid @ Invalid(_, _, _) <- v.validateField(
+            value,
+            fields.get(field.beanPropertyDefinition.getInternalName) match {
+              case Some(annotatedField) => annotatedField.fieldValidators
+              case _ => Array.empty[FieldValidator]
+            }
+          )
+        } yield {
+          CaseClassFieldMappingException(
+            CaseClassFieldMappingException.PropertyPath.leaf(field.name),
+            invalid)
+        }
+      case _ =>
+        Seq.empty[CaseClassFieldMappingException]
     }
   }
 
+  // Validate all methods annotated with `MethodValidation` defined in the deserialized case class.
+  // This is called after the case class is created.
+  //
+  // obj: the deserialized case class
+  // methods: all methods and their annotations are stored in `ValidationAnnotatedMethod`, and is
+  //          passed in to this method as the value of `methods` parameter.
+  // fieldErrors: all failed field validations from
   private[this] def executeMethodValidations(
     fieldErrors: Seq[CaseClassFieldMappingException],
-    obj: Any
+    obj: Any,
+    methods: Array[ValidationAnnotatedMethod]
   ): Unit = {
-    def extractFieldsFromMethodValidation(annotation: Option[Annotation]): Iterable[String] = {
-      annotation match {
-        case Some(methodValidation) if methodValidation.isInstanceOf[MethodValidation] =>
-          methodValidation.asInstanceOf[MethodValidation].fields.toIterable.filter(_.nonEmpty)
-        case _ =>
-          Iterable.empty[String]
-      }
-    }
-
-    val results = validationManager.validateMethods(obj)
-    if (results.nonEmpty) {
-      val methodValidationErrors: Seq[Iterable[CaseClassFieldMappingException]] = for {
-        result <- results if !result.isValid
-        invalid = result.asInstanceOf[Invalid]
-        caseClassFields = extractFieldsFromMethodValidation(invalid.annotation)
-        propertyPaths = caseClassFields.map(CaseClassFieldMappingException.PropertyPath.leaf)
-        exceptions = propertyPaths.map(CaseClassFieldMappingException(_, invalid))
-      } yield {
-        if (exceptions.isEmpty) {
-          Seq(
-            CaseClassFieldMappingException(
-              CaseClassFieldMappingException.PropertyPath.Empty,
-              invalid))
-        } else {
-          exceptions
+    validator match {
+      case Some(v) =>
+        def extractFieldsFromMethodValidation(annotation: Option[Annotation]): Iterable[String] = {
+          annotation match {
+            case Some(methodValidation) if methodValidation.isInstanceOf[MethodValidation] =>
+              methodValidation.asInstanceOf[MethodValidation].fields.toIterable.filter(_.nonEmpty)
+            case _ =>
+              Iterable.empty[String]
+          }
         }
-      }
 
-      if (methodValidationErrors.nonEmpty) {
-        throw CaseClassMappingException(fieldErrors.toSet ++ methodValidationErrors.flatten)
-      }
+        val results = v.validateMethods(obj, methods)
+        if (results.nonEmpty) {
+          val methodValidationErrors: Seq[Iterable[CaseClassFieldMappingException]] = for {
+            result <- results if !result.isValid
+            invalid = result.asInstanceOf[Invalid]
+            caseClassFields = extractFieldsFromMethodValidation(invalid.annotation)
+            propertyPaths = caseClassFields.map(CaseClassFieldMappingException.PropertyPath.leaf)
+            exceptions = propertyPaths.map(CaseClassFieldMappingException(_, invalid))
+          } yield {
+            if (exceptions.isEmpty) {
+              Seq(
+                CaseClassFieldMappingException(
+                  CaseClassFieldMappingException.PropertyPath.Empty,
+                  invalid))
+            } else {
+              exceptions
+            }
+          }
+
+          if (methodValidationErrors.nonEmpty) {
+            throw CaseClassMappingException(fieldErrors.toSet ++ methodValidationErrors.flatten)
+          }
+        }
+      case _ => // do nothing
     }
   }
 
@@ -631,7 +672,7 @@ private[jackson] class CaseClassDeserializer(
   }
 
   // optimized
-  private[this] def append[T](buffer: ArrayBuffer[T], seqToAppend: Seq[T]): Unit =
+  private[this] def append[T](buffer: mutable.ArrayBuffer[T], seqToAppend: Seq[T]): Unit =
     if (seqToAppend.nonEmpty) buffer ++= seqToAppend
 
   private[this] def annotateConstructor(
