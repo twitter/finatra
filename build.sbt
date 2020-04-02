@@ -111,7 +111,21 @@ lazy val versions = new {
   val snakeyaml = "1.24"
   val javaxBind = "2.3.0"
   val javaxActivation = "1.1.1"
+  val scalaCollectionCompat = "2.1.2"
 }
+
+lazy val scalaCollectionCompat = "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.2"
+
+lazy val withTwoThirteen = Seq(
+  crossScalaVersions += "2.13.1",
+  libraryDependencies += scalaCollectionCompat,
+  scalacOptions := {
+    val previous = scalacOptions.value
+    if (scalaVersion.value.startsWith("2.13")) {
+      previous.filterNot(_ == "-Ywarn-unused-import") ++ Seq("-Ywarn-unused:imports")
+    } else previous
+  }
+)
 
 lazy val scalaCompilerOptions = scalacOptions ++= Seq(
   "-deprecation",
@@ -855,7 +869,7 @@ lazy val jackson = project
   )
 
 lazy val jsonAnnotations = (project in file("json-annotations"))
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "finatra-json-annotations",
     moduleName := "finatra-json-annotations",
@@ -939,7 +953,7 @@ lazy val http = project
   )
 
 lazy val httpAnnotations = (project in file("http-annotations"))
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "finatra-http-annotations",
     moduleName := "finatra-http-annotations"
