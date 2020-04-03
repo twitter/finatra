@@ -389,7 +389,7 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
      *         value for the given name.
      */
     def toSortedMap: SortedMap[String, Float] =
-      inMemoryStatsReceiver.gauges.iterator.toMap.mapKeys(keyStr).mapValues(_.apply).toSortedMap
+      inMemoryStatsReceiver.gauges.iterator.toMap.mapKeys(keyStr).map { case (k, v) => k -> v.apply }.toSortedMap
 
     /**
      * A complete sorted `Set` of all [[com.twitter.finagle.stats.Gauge]] names collected by

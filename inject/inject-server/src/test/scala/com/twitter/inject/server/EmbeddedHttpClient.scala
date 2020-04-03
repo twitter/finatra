@@ -151,7 +151,7 @@ private[twitter] class EmbeddedHttpClient private[twitter] (
     /* Pre - Execute */
 
     // Don't overwrite request.headers potentially in given request */
-    val defaults = _defaultHeaders().filterKeys(!request.headerMap.contains(_))
+    val defaults = _defaultHeaders().filter { case (key, _) => !request.headerMap.contains(key) }
     addOrRemoveHeaders(request, defaults)
     // headers added last so they can overwrite "defaults"
     addOrRemoveHeaders(request, headers)
