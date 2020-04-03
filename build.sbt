@@ -489,7 +489,7 @@ lazy val injectAppTestJarSources =
     "com/twitter/inject/app/TestInjector"
   )
 lazy val injectApp = (project in file("inject/inject-app"))
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "inject-app",
     moduleName := "inject-app",
