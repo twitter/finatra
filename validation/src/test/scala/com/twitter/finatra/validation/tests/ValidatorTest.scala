@@ -16,6 +16,7 @@ import com.twitter.finatra.validation.{
 }
 import com.twitter.inject.Test
 import java.lang.annotation.Annotation
+import scala.collection.Seq
 
 class ValidatorTest extends Test {
 
@@ -26,10 +27,6 @@ class ValidatorTest extends Test {
    */
   test(
     "withMessageResolver should return a new Validator with all validators built with the given resolver") {
-    class CustomizedMessageResolver extends MessageResolver {
-      override def resolve(clazz: Class[_ <: Annotation], values: Any*): String =
-        "Whatever you provided is wrong."
-    }
     val customizedMessageResolver = new CustomizedMessageResolver()
 
     val validator = Validator.builder
@@ -194,4 +191,9 @@ class ValidatorTest extends Test {
     val AnnotatedClass(_, fields, _) = validator.getAnnotatedClass(clazz)
     fields.get(name).map(_.fieldValidators.map(_.annotation)).getOrElse(Array.empty[Annotation])
   }
+}
+
+class CustomizedMessageResolver extends MessageResolver {
+  override def resolve(clazz: Class[_ <: Annotation], values: Any*): String =
+    "Whatever you provided is wrong."
 }

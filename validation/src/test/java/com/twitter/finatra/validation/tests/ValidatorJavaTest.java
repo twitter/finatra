@@ -37,11 +37,19 @@ public class ValidatorJavaTest extends Assert {
   @Test
   public void testWithMessageResolver() {
     class CustomizedMessageResolver extends MessageResolver {
-      @Override
-      public String resolve(Class<? extends Annotation> clazz, Seq<Object> values) {
+      // 2.12 override
+      // @Override omitted to present both overloads as examples
+      public String resolve(Class<? extends Annotation> clazz, scala.collection.Seq<Object> values) {
+        return "Whatever you provided is wrong.";
+      }
+
+      // 2.13 override
+      // @Override omitted to present both overloads as examples
+      public String resolve(Class<? extends Annotation> clazz, scala.collection.immutable.Seq<Object> values) {
         return "Whatever you provided is wrong.";
       }
     }
+
     CustomizedMessageResolver customizedMessageResolver = new CustomizedMessageResolver();
     Validator customizedValidator =
         Validator.builder().withMessageResolver(customizedMessageResolver).build();

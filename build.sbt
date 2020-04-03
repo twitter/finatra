@@ -746,7 +746,7 @@ lazy val benchmarks = project
 lazy val utilsTestJarSources =
   Seq("com/twitter/finatra/modules/", "com/twitter/finatra/test/")
 lazy val utils = project
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "finatra-utils",
     moduleName := "finatra-utils",
@@ -785,7 +785,7 @@ lazy val validationTestJarSources =
     "com/twitter/finatra/validation/ValidatorTest"
   )
 lazy val validation = project
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "finatra-validation",
     moduleName := "finatra-validation",

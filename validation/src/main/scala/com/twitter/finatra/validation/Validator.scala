@@ -3,12 +3,7 @@ package com.twitter.finatra.validation
 import com.github.benmanes.caffeine.cache.{Cache, Caffeine}
 import com.twitter.finatra.utils.ClassUtils
 import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
-import com.twitter.finatra.validation.internal.{
-  AnnotatedClass,
-  AnnotatedField,
-  AnnotatedMethod,
-  FieldValidator
-}
+import com.twitter.finatra.validation.internal.{AnnotatedClass, AnnotatedField, AnnotatedMethod, FieldValidator}
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.utils.AnnotationUtils
 import com.twitter.util.Try
@@ -137,7 +132,7 @@ class Validator private[finatra] (cacheSize: Long, messageResolver: MessageResol
   private[finatra] def validateField[T](
     fieldValue: T,
     fieldValidators: Array[FieldValidator]
-  ): Seq[ValidationResult] = {
+  ): scala.collection.Seq[ValidationResult] = {
     if (fieldValidators.nonEmpty) {
       val results = new mutable.ArrayBuffer[ValidationResult](fieldValidators.length)
       var index = 0
@@ -165,7 +160,7 @@ class Validator private[finatra] (cacheSize: Long, messageResolver: MessageResol
   private[finatra] def validateMethods(
     obj: Any,
     methods: Array[AnnotatedMethod]
-  ): Seq[ValidationResult] = {
+  ): scala.collection.Seq[ValidationResult] = {
     if (methods.nonEmpty) {
       val results = new mutable.ArrayBuffer[ValidationResult](methods.length)
       var index = 0
@@ -183,7 +178,7 @@ class Validator private[finatra] (cacheSize: Long, messageResolver: MessageResol
   @deprecated(
     "The endpoint is not supposed to be use on its own, use validate(Any) instead",
     "2020-02-12")
-  def validateMethods(obj: Any): Seq[ValidationResult] = {
+  def validateMethods(obj: Any): scala.collection.Seq[ValidationResult] = {
     val methodValidations: Array[AnnotatedMethod] = getMethodValidations(obj.getClass)
     validateMethods(obj, methodValidations)
   }
