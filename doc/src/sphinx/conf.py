@@ -39,9 +39,9 @@ html_theme_options = {
 html_logo = "../../../../finatra_logo.png"
 html_show_sphinx = False
 
-project = u'Finatra'
-description = u"""Fast, testable, Scala services built on TwitterServer and Finagle."""
-copyright = u'2013-{} Twitter, Inc'.format(datetime.datetime.now().year)
+project = 'Finatra'
+description = """Fast, testable, Scala services built on TwitterServer and Finagle."""
+copyright = '2013-{} Twitter, Inc'.format(datetime.datetime.now().year)
 version = ''
 release = ''
 htmlhelp_basename = "finatra"
@@ -63,12 +63,12 @@ pygments_style = 'sphinx'
 try:
     __import__('flask_theme_support')
 except ImportError as e:
-    print '-' * 74
-    print 'Warning: Flask themes unavailable.  Building with default theme'
-    print 'If you want the Flask themes, run this command and build again:'
-    print
-    print '  git submodule update --init'
-    print '-' * 74
+    print('-' * 74)
+    print('Warning: Flask themes unavailable.  Building with default theme')
+    print('If you want the Flask themes, run this command and build again:')
+    print()
+    print('  git submodule update --init')
+    print('-' * 74)
     
     pygments_style = 'tango'
     html_theme = 'default'
