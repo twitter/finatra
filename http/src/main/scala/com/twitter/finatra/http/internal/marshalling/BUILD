@@ -11,7 +11,7 @@ scala_library(
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/javax/inject:javax.inject",
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
         "finatra/http-annotations/src/main/java/com/twitter/finatra/http/annotations",
         "finatra/http/src/main/scala/com/twitter/finatra/http/marshalling",
         "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",

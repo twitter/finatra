@@ -3,7 +3,7 @@ java_library(
     compiler_option_sets = [],
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
         "finagle/finagle-core/src/main",
         "finatra/examples/java-http-server/src/main/resources",
         "finatra/http/src/main/java",

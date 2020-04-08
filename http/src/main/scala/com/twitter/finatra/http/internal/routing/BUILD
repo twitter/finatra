@@ -9,7 +9,7 @@ scala_library(
     strict_deps = "True",
     dependencies = [
         "3rdparty/jvm/io/netty:netty4-codec-http",
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
         "finagle/finagle-core/src/main",
         "finatra/http/src/main/scala/com/twitter/finatra/http/contexts",
         "finatra/http/src/main/scala/com/twitter/finatra/http/exceptions",

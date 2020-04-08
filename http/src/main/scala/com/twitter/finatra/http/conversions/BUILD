@@ -8,7 +8,7 @@ scala_library(
     ),
     strict_deps = "True",
     dependencies = [
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
         "finatra/http/src/main/scala/com/twitter/finatra/http/exceptions",
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",

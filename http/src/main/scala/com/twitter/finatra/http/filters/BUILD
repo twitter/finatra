@@ -9,7 +9,7 @@ scala_library(
     strict_deps = "True",
     dependencies = [
         "3rdparty/jvm/javax/inject:javax.inject",
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
         "finagle/finagle-core/src/main",
         "finatra/http/src/main/scala/com/twitter/finatra/http/contexts",
         "finatra/http/src/main/scala/com/twitter/finatra/http/exceptions",
@@ -22,7 +22,7 @@ scala_library(
     ],
     exports = [
         "3rdparty/jvm/javax/inject:javax.inject",
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
         "finagle/finagle-core/src/main",
         "finatra/http/src/main/scala/com/twitter/finatra/http/exceptions",
         "finatra/inject/inject-slf4j/src/main/scala",

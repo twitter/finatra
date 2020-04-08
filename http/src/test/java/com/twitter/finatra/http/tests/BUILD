@@ -5,7 +5,7 @@ junit_tests(
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/junit",
         "3rdparty/jvm/org/slf4j:slf4j-api",
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
         "finagle/finagle-core/src/main",
         "finagle/finagle-http/src/main/scala",
         "finatra/http/src/main/java",

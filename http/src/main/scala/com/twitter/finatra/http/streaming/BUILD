@@ -8,17 +8,17 @@ scala_library(
     ),
     strict_deps = "True",
     dependencies = [
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/streaming",
+        "util/util-core:util-core-util",
         "util/util-core/src/main/scala/com/twitter/concurrent",
         "util/util-core/src/main/scala/com/twitter/io",
-        "util/util-core:util-core-util",
     ],
     exports = [
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
+        "util/util-core:util-core-util",
         "util/util-core/src/main/scala/com/twitter/concurrent",
         "util/util-core/src/main/scala/com/twitter/io",
-        "util/util-core:util-core-util",
     ],
 )

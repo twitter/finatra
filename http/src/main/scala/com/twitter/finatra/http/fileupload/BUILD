@@ -9,10 +9,10 @@ scala_library(
     strict_deps = "True",
     dependencies = [
         "3rdparty/jvm/commons-fileupload",
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
     ],
     exports = [
         "3rdparty/jvm/commons-fileupload",
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
     ],
 )

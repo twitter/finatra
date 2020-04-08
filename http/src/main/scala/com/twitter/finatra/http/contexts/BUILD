@@ -8,6 +8,6 @@ scala_library(
     ),
     strict_deps = "True",
     dependencies = [
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
     ],
 )

@@ -9,7 +9,7 @@ scala_library(
     strict_deps = True,
     dependencies = [
         "3rdparty/jvm/javax/inject:javax.inject",
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
         "finatra/http-mustache/src/main/java/com/twitter/finatra/http/annotations",
         "finatra/http/src/main/scala/com/twitter/finatra/http/marshalling",
         "finatra/http/src/main/scala/com/twitter/finatra/http/response",
@@ -18,7 +18,7 @@ scala_library(
     ],
     exports = [
         "3rdparty/jvm/javax/inject:javax.inject",
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
         "finatra/http/src/main/scala/com/twitter/finatra/http/marshalling",
         "finatra/mustache/src/main/scala/com/twitter/finatra/mustache/marshalling",
     ],

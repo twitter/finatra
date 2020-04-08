@@ -13,7 +13,7 @@ scala_library(
     strict_deps = "True",
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
         "finagle/finagle-core/src/main",
         "finagle/finagle-http/src/main/scala",
         "finatra/http/src/main/scala/com/twitter/finatra/http/modules",
