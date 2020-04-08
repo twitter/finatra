@@ -8,7 +8,7 @@ scala_library(
     ),
     dependencies = [
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-annotations",
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "util/util-core:scala",
         "util/util-slf4j-api/src/main/scala",
     ],

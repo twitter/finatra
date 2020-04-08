@@ -8,7 +8,7 @@ scala_library(
     ),
     strict_deps = True,
     dependencies = [
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "finagle/finagle-exp/src/main/scala",
         "finagle/finagle-thrift/src/main/scala",
         "finagle/finagle-thriftmux/src/main/scala",

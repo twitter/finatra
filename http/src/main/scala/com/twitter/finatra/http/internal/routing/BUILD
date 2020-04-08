@@ -10,7 +10,7 @@ scala_library(
     dependencies = [
         "3rdparty/jvm/io/netty:netty4-codec-http",
         "finagle/finagle-base-http/src/main/scala",
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "finatra/http/src/main/scala/com/twitter/finatra/http/contexts",
         "finatra/http/src/main/scala/com/twitter/finatra/http/exceptions",
         "finatra/http/src/main/scala/com/twitter/finatra/http/marshalling",
@@ -22,7 +22,7 @@ scala_library(
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/streaming",
-        "util/util-core/src/main/scala/com/twitter/concurrent",
         "util/util-core:util-core-util",
+        "util/util-core/src/main/scala/com/twitter/concurrent",
     ],
 )

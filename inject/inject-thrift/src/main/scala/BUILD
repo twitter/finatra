@@ -7,7 +7,7 @@ scala_library(
         repo = artifactory,
     ),
     dependencies = [
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "finagle/finagle-mux/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
         "scrooge/scrooge-core/src/main/scala",

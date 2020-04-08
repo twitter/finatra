@@ -8,12 +8,12 @@ scala_library(
     ),
     strict_deps = "True",
     dependencies = [
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",
     ],
     exports = [
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "twitter-server/server/src/main/scala",
     ],
 )

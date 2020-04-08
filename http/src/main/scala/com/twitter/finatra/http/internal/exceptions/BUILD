@@ -12,7 +12,7 @@ scala_library(
         "3rdparty/jvm/net/codingwell:scala-guice",
         "3rdparty/jvm/org/apache/thrift:libthrift",
         "finagle/finagle-base-http/src/main/scala",
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "finatra/http/src/main/scala/com/twitter/finatra/http/exceptions",
         "finatra/http/src/main/scala/com/twitter/finatra/http/response",
         "finatra/inject/inject-slf4j/src/main/scala",

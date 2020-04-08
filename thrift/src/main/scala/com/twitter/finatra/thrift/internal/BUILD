@@ -8,7 +8,7 @@ scala_library(
     ),
     strict_deps = True,
     dependencies = [
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "scrooge/scrooge-core/src/main/scala",
     ],
 )

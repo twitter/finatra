@@ -4,7 +4,7 @@ java_library(
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "finagle/finagle-base-http/src/main/scala",
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "finatra/examples/java-http-server/src/main/resources",
         "finatra/http/src/main/java",
         "finatra/http/src/main/java/com/twitter/finatra/http",

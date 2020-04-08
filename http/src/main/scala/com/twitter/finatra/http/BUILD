@@ -14,7 +14,7 @@ scala_library(
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "finagle/finagle-base-http/src/main/scala",
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "finagle/finagle-http/src/main/scala",
         "finatra/http/src/main/scala/com/twitter/finatra/http/modules",
         "finatra/http/src/main/scala/com/twitter/finatra/http/response",
@@ -25,12 +25,12 @@ scala_library(
         "finatra/jackson/src/main/scala/com/twitter/finatra/json/modules",
         "finatra/utils/src/main/scala/com/twitter/finatra/modules",
         "util/util-app/src/main/scala",
-        "util/util-core/src/main/scala/com/twitter/conversions",
         "util/util-core:util-core-util",
+        "util/util-core/src/main/scala/com/twitter/conversions",
         "util/util-stats/src/main/scala",
     ],
     exports = [
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "finagle/finagle-http/src/main/scala",
         "finatra/http/src/main/scala/com/twitter/finatra/http/modules",
         "finatra/http/src/main/scala/com/twitter/finatra/http/routing",
@@ -57,7 +57,7 @@ scala_library(
     strict_deps = "True",
     dependencies = [
         "3rdparty/jvm/javax/inject:javax.inject",
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "finagle/finagle-http/src/main/scala",
         "finatra/http/src/main/java/com/twitter/finatra/http",
         "finatra/http/src/main/scala/com/twitter/finatra/http/internal/routing",
@@ -68,7 +68,7 @@ scala_library(
         "util/util-core:util-core-util",
     ],
     exports = [
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "finagle/finagle-http/src/main/scala",
         "finatra/http/src/main/java/com/twitter/finatra/http",
         "finatra/http/src/main/scala/com/twitter/finatra/http/internal/routing",

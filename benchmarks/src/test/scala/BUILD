@@ -14,7 +14,7 @@ junit_tests(
         "3rdparty/jvm/org/scalatest",
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "3rdparty/jvm/org/slf4j:slf4j-simple",
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "finagle/finagle-http/src/main/scala",
         "finagle/finagle-stats/src/main/scala",
         "finatra/benchmarks/src/main/java",

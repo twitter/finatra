@@ -11,7 +11,7 @@ scala_library(
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "3rdparty/jvm/net/codingwell:scala-guice",
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "finagle/finagle-http/src/main/scala",
         # ensure dependents have finagle-stats StatsReceiver implementation at runtime.
         "finagle/finagle-stats/src/main/scala",

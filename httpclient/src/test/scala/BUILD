@@ -14,7 +14,7 @@ junit_tests(
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "3rdparty/jvm/org/slf4j:slf4j-simple",
         "3rdparty/jvm/org/specs2:mock",
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "finagle/finagle-http/src/main/scala",
         "finatra/httpclient/src/main/scala",
         "finatra/httpclient/src/test/resources",
@@ -39,7 +39,7 @@ scala_library(
     ),
     dependencies = [
         "3rdparty/jvm/org/slf4j:slf4j-api",
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "finagle/finagle-http/src/main/scala",
         "finatra/inject/inject-app/src/test/scala:test-deps",
         "finatra/inject/inject-core/src/main/scala",

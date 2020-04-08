@@ -17,7 +17,7 @@ scala_library(
         "3rdparty/jvm/org/scalatest",
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "3rdparty/jvm/org/specs2:core",
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "finagle/finagle-http/src/main/scala",
         "finatra/inject/inject-app/src/main/scala",
         "finatra/inject/inject-app/src/test/scala:test-deps",

@@ -10,7 +10,7 @@ scala_library(
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/net/codingwell:scala-guice",
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "finagle/finagle-thrift/src/main/scala",
         "twitter-server/server/src/main/scala",
     ],
