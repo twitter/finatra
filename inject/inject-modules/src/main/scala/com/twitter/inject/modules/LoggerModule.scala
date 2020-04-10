@@ -14,4 +14,7 @@ object LoggerModule extends TwitterModule {
   override def singletonStartup(injector: Injector): Unit = {
     util.logging.Slf4jBridgeUtility.attemptSlf4jBridgeHandlerInstallation()
   }
+
+  /**  Java-friendly way to access this module as a singleton instance */
+  def apply(): this.type = this
 }

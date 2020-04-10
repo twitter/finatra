@@ -7,6 +7,7 @@ import com.twitter.inject.conversions.map._
 import com.twitter.inject.server.PortUtils._
 import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
 import com.twitter.util.Duration
+import java.lang.annotation.Annotation
 import scala.collection.JavaConverters._
 
 /**
@@ -100,4 +101,28 @@ class EmbeddedThriftServer(
   def thriftHostAndPort: String = {
     PortUtils.loopbackAddressForPort(thriftPort())
   }
+
+  // java-forwarder methods
+  override final def bindClass[T](clazz: Class[T], instance: T): this.type =
+    super.bindClass[T](clazz, instance)
+
+  // java-forwarder methods
+  override final def bindClass[T](clazz: Class[T], annotation: Annotation, instance: T): this.type =
+    super.bindClass[T](clazz, annotation, instance)
+
+  // java-forwarder methods
+  override final def bindClass[T, Ann <: Annotation](clazz: Class[T], annotationClazz: Class[Ann], instance: T): this.type =
+    super.bindClass[T, Ann](clazz, annotationClazz, instance)
+
+  // java-forwarder methods
+  override final def bindClass[T, U <: T](clazz: Class[T], instanceClazz: Class[U]): this.type =
+    super.bindClass[T, U](clazz, instanceClazz)
+
+  // java-forwarder methods
+  override final def bindClass[T, U <: T](clazz: Class[T], annotation: Annotation, instanceClazz: Class[U]): this.type =
+    super.bindClass[T, U](clazz, annotation, instanceClazz)
+
+  // java-forwarder methods
+  override final def bindClass[T, Ann <: Annotation, U <: T](clazz: Class[T], annotationClazz: Class[Ann], instanceClazz: Class[U]): this.type =
+    super.bindClass[T, Ann, U](clazz, annotationClazz, instanceClazz)
 }

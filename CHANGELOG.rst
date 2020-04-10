@@ -10,6 +10,22 @@ Unreleased
 Added
 ~~~~~
 
+* finatra: Java-friendly `bindClass` test APIs. The `bindClass` API calls from Java can be
+  now chained with the `TestInjector`, `EmbeddedApp`, `EmbeddedTwitterServer`,
+  `EmbeddedThriftServer`, and `EmbeddedHttpServer`. For example, the following is now possible:
+
+  ```
+  EmbeddedHttpServer server = new EmbeddedHttpServer(
+      new HelloWorldServer(),
+      Collections.emptyMap(),
+      Stage.DEVELOPMENT)
+      .bindClass(Integer.class, Flags.named("magic.number"), 42)
+      .bindClass(Integer.class, Flags.named("module.magic.number"), 9999);
+
+  return server;
+  ```
+  ``PHAB_ID=D463042``
+
 Changed
 ~~~~~~~
 

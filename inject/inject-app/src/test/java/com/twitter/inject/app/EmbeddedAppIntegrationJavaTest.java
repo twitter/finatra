@@ -56,4 +56,20 @@ public class EmbeddedAppIntegrationJavaTest extends Assert {
     assertEquals(sampleJavaApp.getSampleServiceResponse(), "hi mock");
     reset(mockSampleJavaAppService);
   }
+
+  @Test
+  public void testEmbeddedAppWithBindChaining() {
+    SampleJavaAppService mockSampleJavaAppService = mock(SampleJavaAppService.class);
+    when(mockSampleJavaAppService.sayHi(anyString())).thenReturn("hi mock");
+
+    SampleJavaApp sampleJavaApp = new SampleJavaApp();
+
+    EmbeddedApp app = new EmbeddedApp(sampleJavaApp)
+        .bindClass(SampleJavaAppService.class, mockSampleJavaAppService);
+
+    app.main();
+
+    assertEquals(sampleJavaApp.getSampleServiceResponse(), "hi mock");
+    reset(mockSampleJavaAppService);
+  }
 }
