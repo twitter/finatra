@@ -8,6 +8,9 @@ import com.twitter.inject.Test
 
 class MultiServerFeatureTest extends Test with HttpTest {
 
+  // topology (caller[protocol] --> receiver[protocol]):
+  // add2Server[http] --> add1Server[http]
+
   val add1Server = new EmbeddedHttpServer(new Add1Server)
 
   val add2Server =

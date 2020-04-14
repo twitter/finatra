@@ -11,6 +11,9 @@ import com.twitter.inject.Test
 
 class MultiServerFeatureTest extends Test with HttpTest with ThriftTest {
 
+  // topology (caller[protocol] --> receiver[protocol]):
+  // add2Server[http] --> add1HttpServer[http] --> add1ThriftServer[thrift]
+
   val add1ThriftServer = new EmbeddedThriftServer(new AdderThriftServer, disableTestLogging = true)
   val add1HttpServer = new EmbeddedHttpServer(
     new Add1Server,

@@ -331,6 +331,9 @@ Please avoid doing this:
       }
     }
 
+Doing this can lead to situations where bindings are not exercised and thus not tested in a
+`StartupTest <../testing/startup_tests.html>`_, defeating its utility.
+
 .. important:: 
 
   We **strongly** recommend that *only production code ever be deployed to production* and thus configuration which should change per environment be externalized via `Flags <./flags.html>`__ and logic that should differ per environment be encapsulated within `override modules <../testing/override_modules.html>`__ (that are not located with the production code -- e.g., production code in `src/main/scala` and test code in `src/test/scala`).
