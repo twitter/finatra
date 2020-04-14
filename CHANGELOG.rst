@@ -32,6 +32,8 @@ Added
 Changed
 ~~~~~~~
 
+* inject-app: Reduce visibility of internal code in `c.t.inject.app.internal`. ``PHAB_ID=D465597``
+
 * inject-modules: Updated BUILD files for Pants 1:1:1 layout. ``PHAB_ID=D442977``
 
 Fixed

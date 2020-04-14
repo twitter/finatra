@@ -6,13 +6,13 @@ import com.twitter.inject.{Injector, TwitterBaseModule}
 import com.twitter.inject.conversions.iterable._
 import scala.collection.JavaConverters._
 
-object Modules {
+private[app] object Modules {
 
   /**
    * De-duplicate a given sequence of  [[com.google.inject.Module]].
    * Exposed for testing.
    */
-  private[app] def distinctModules(
+  def distinctModules(
     modules: Seq[com.google.inject.Module]
   ): Seq[com.google.inject.Module] = {
     // De-dupe all the modules using a `java.util.IdentityHashMap` with the modules as keys
@@ -76,7 +76,7 @@ object Modules {
  * @see [[com.twitter.inject.TwitterBaseModule#javaModules]]
  * @see [[com.twitter.inject.TwitterBaseModule#frameworkModules]]
  */
-private[twitter] class Modules(required: Seq[Module], overrides: Seq[Module]) {
+private[app] class Modules(required: Seq[Module], overrides: Seq[Module]) {
   import Modules._
 
   val modules: Seq[Module] = {
