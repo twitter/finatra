@@ -10,6 +10,9 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-http: Method in tests to return an absolute path URI with the https scheme and authority
+  ``PHAB_ID=D466424``
+
 * finatra: Java-friendly `bindClass` test APIs. The `bindClass` API calls from Java can be
   now chained with the `TestInjector`, `EmbeddedApp`, `EmbeddedTwitterServer`,
   `EmbeddedThriftServer`, and `EmbeddedHttpServer`. For example, the following is now possible:

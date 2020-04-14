@@ -68,6 +68,11 @@ private[twitter] trait ExternalHttpClient { self: EmbeddedTwitterServer =>
     s"http://$externalHttpHostAndPort$path"
   }
 
+  /** Supplements an absolute path URI with the https scheme and authority */
+  def fullHttpsURI(path: String): String = {
+    s"https://$externalHttpsHostAndPort$path"
+  }
+
   /** The assigned external "http" port for the underlying embedded HttpServer */
   def httpExternalPort(): Int = {
     start()
