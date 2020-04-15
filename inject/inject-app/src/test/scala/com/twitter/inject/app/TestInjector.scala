@@ -2,7 +2,7 @@ package com.twitter.inject.app
 
 import com.google.inject.{Module, Stage}
 import com.twitter.app.{Flag, FlagParseException, FlagUsageError, Flags}
-import com.twitter.inject.Injector
+import com.twitter.inject.{Injector, InjectorModule}
 import com.twitter.inject.app.internal.Modules
 import java.lang.annotation.Annotation
 import java.util.concurrent.atomic.AtomicBoolean
@@ -164,7 +164,10 @@ class TestInjector(
 
   private[this] def start(): Unit = {
     if (_started.compareAndSet(false, true)) {
-      val injectorModules = new Modules(modules, overrides)
+      // Add the `InjectorModule` to mirror the behavior in `c.t.inject.app.App` which adds it
+      // as a framework module. This ensures the TestInjector has the same baseline of modules
+      // as a `c.t.inject.app.App`.
+      val injectorModules = new Modules(Seq(InjectorModule) ++ modules, overrides)
       injectorModules.addFlags(flag)
       parseFlags(flag, flags, injectorModules.moduleFlags)
 

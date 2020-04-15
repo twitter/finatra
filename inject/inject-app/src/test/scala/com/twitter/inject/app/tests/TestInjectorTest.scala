@@ -6,7 +6,7 @@ import com.twitter.app.GlobalFlag
 import com.twitter.finagle.Service
 import com.twitter.inject.annotations.{Annotations, Down, Flag, Flags, Up}
 import com.twitter.inject.app.TestInjector
-import com.twitter.inject.{Mockito, Test, TwitterModule, TypeUtils}
+import com.twitter.inject.{Injector, Mockito, Test, TwitterModule, TypeUtils}
 import com.twitter.util.Future
 import javax.inject.{Inject, Singleton}
 import scala.language.higherKinds
@@ -24,6 +24,12 @@ object testMapGlobalFlag
 
 class FooWithInject @Inject()(@Flag("x") x: Boolean) {
   def bar: Boolean = x
+}
+
+class WithInjector @Inject()(injector: Injector) {
+  // use with the BooleanFlagModule
+  def assertFlag(bool: Boolean): Unit =
+    assert(injector.instance[Boolean](Flags.named("x")) == bool)
 }
 
 class Bar {
@@ -346,5 +352,13 @@ class TestInjectorTest extends Test with Mockito {
     }
     injector.instance[Baz].value should equal(100)
     injector.instance[String, Up] should equal("Hello, world!")
+  }
+
+  test("assure the Injector is bound to the object graph") {
+    val injector = TestInjector(
+      modules = Seq(BooleanFlagModule),
+      flags = Map("x" -> "true")
+    ).create
+    injector.instance[WithInjector].assertFlag(true)
   }
 }

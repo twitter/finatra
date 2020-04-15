@@ -1,14 +1,10 @@
 package com.twitter.finatra.http.modules
 
 import com.google.inject.Module
-import com.twitter.finatra.http.internal.marshalling.{
-  DefaultMessageBodyReaderImpl,
-  DefaultMessageBodyWriterImpl,
-  MessageInjectableTypes
-}
+import com.twitter.finatra.http.internal.marshalling.{DefaultMessageBodyReaderImpl, DefaultMessageBodyWriterImpl, MessageInjectableTypes}
 import com.twitter.finatra.http.marshalling.{DefaultMessageBodyReader, DefaultMessageBodyWriter}
 import com.twitter.finatra.jackson.caseclass.InjectableTypes
-import com.twitter.inject.{InjectorModule, TwitterModule}
+import com.twitter.inject.TwitterModule
 
 /**
  * Provided implementations for the [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]]
@@ -22,7 +18,7 @@ object MessageBodyModule extends MessageBodyModule
 
 class MessageBodyModule extends TwitterModule {
 
-  override val modules: Seq[Module] = Seq(InjectorModule, MessageBodyFlagsModule)
+  override val modules: Seq[Module] = Seq(MessageBodyFlagsModule)
 
   override def configure(): Unit = {
     bindSingleton[DefaultMessageBodyReader].to[DefaultMessageBodyReaderImpl]
