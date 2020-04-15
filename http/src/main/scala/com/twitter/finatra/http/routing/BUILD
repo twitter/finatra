@@ -23,6 +23,7 @@ scala_library(
     exports = [
         "3rdparty/jvm/javax/inject:javax.inject",
         "finagle/finagle-base-http/src/main",
+        "finatra/http/src/main/scala/com/twitter/finatra/http:controller",
         "finatra/inject/inject-slf4j/src/main/scala",
         "twitter-server/server/src/main/scala",
         "util/util-core:util-core-util",
