@@ -377,11 +377,77 @@ E.g,
     Please note that the lifecycle is for **Singleton**-scoped resources and users should still
     avoid binding unscoped resources without ways to shutdown or close them.
 
-See Guice's documentation on `Modules should be fast and side-effect free <https://github.com/google/guice/wiki/ModulesShouldBeFastAndSideEffectFree>`__
-and `Avoid Injecting Closable Resources <https://github.com/google/guice/wiki/Avoid-Injecting-Closable-Resources>`__.
+There is also the option to inline the logic for closing your resource using the
+`TwitterModuleLifecycle#closeOnExit(f: => Unit)` function.
 
-Lastly, see the `Application and Server Lifecycle <lifecycle.html>`__ section for more information on the
+For example, assume we have a class, `SomeClient` with a `close()` method that returns a `Future[Unit]`:
+
+.. code:: scala
+
+    class SomeClient(
+      configurationParam1: Int,
+      configurationParam2: Double) {
+
+      def withAnotherParam(b: Boolean): SomeClient = ???
+      def withSomeOtherConfiguration(i: Int): SomeClient = ???
+
+      /** Closes this client, freeing any held resources */
+      def close(): Future[Unit] = {
+        ???
+      }
+    }
+
+We could then register a function to close it, which will be run upon graceful shutdown of the application
+by doing the following:
+
+.. code:: scala
+
+    import com.google.inject.Provides
+    import com.twitter.conversions.DurationOps._
+    import com.twitter.inject.{Injector, TwitterModule}
+    import com.twitter.inject.annotations.Flag
+    import com.twitter.util.Await
+    import javax.inject.Singleton
+
+    object MyModule extends TwitterModule {
+      flag[Int]("configuration.param1", 42, "This is used to configure an instance of a Wicket")
+      flag[Double]("configuration.param2", 123.45d, "This is also used to configure an instance of a Wicket")
+
+      @Provides
+      @Singleton
+      def providesSomeClient(
+        @Flag("configuration.param1") configurationParam1: Int,
+        @Flag("configuration.param2") configurationParam2: Double
+      ): SomeClient = {
+        val client =
+          new SomeClient(configurationParam1, configurationParam2)
+            .withAnotherParam(b = true)
+            .withSomeOtherConfiguration(137)
+
+        closeOnExit {
+           Await.result(client.close(), 2.seconds)
+        }
+
+        client
+      }
+    }
+
+This allows for not needing to implement the `singletonShutdown` method which would require that you
+obtain an instance of the singleton resource from the Injector to then call the `close()` function.
+
+Any logic passed to the `closeOnExit` function is added to the application's list of `onExit`
+functions to be run in the order registered upon graceful shutdown of the application.
+
+For an example, see the `c.t.inject.thrift.modules.ThriftMethodBuilderClientModule <https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftMethodBuilderClientModule.scala>`_
+where we use `closeOnExit` to ensure that any bound ThriftClient will be closed when the application
+gracefully exits.
+
+See the `Application and Server Lifecycle <lifecycle.html>`__ section for more information on the
 application and server lifecycle.
+
+Lastly, see Guice's documentation on `Modules should be fast and side-effect free <https://github.com/google/guice/wiki/ModulesShouldBeFastAndSideEffectFree>`__
+and `Avoid Injecting Closable Resources <https://github.com/google/guice/wiki/Avoid-Injecting-Closable-Resources>`__
+for more thoughts on providing resources with modules.
 
 Modules Depending on Other Modules
 ----------------------------------
