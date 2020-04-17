@@ -48,8 +48,7 @@ object BootstrapServerUtils extends Logging {
           }
         })
 
-      val socketAddress = Await.result(promise, timeout)
-      resolveResult.close()
+      val socketAddress = Await.result(promise.ensure(resolveResult.close()), timeout)
       val servers =
         socketAddress.take(5).map(a => s"${a.getAddress.getHostAddress}:${a.getPort}").mkString(",")
       info(s"Resolved $dest = " + servers)

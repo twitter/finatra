@@ -42,6 +42,8 @@ Changed
 Fixed
 ~~~~~
 
+* finatra-kafka: Close a result observer when Namer.resolve fails. ``PHAB_ID=D416044``
+
 20.4.0
 ------
 Added
