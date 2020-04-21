@@ -25,8 +25,7 @@ class StreamingJsonTestHelper(mapper: ScalaObjectMapper, writer: Option[ObjectWr
     while (index < tail.length) {
       val elem = tail(index)
       val delay = Duration.fromMilliseconds(delayMs * index)
-      // we purposely don't Await to "fire and forget" the (orphaned) futures
-      DefaultTimer.doLater(delay)(writeAndWait(request, "," + writeValueAsString(elem)))
+      Await.ready(DefaultTimer.doLater(delay)(writeAndWait(request, "," + writeValueAsString(elem))))
       index += 1
     }
     writeAndWait(request, "]")
@@ -45,6 +44,7 @@ class StreamingJsonTestHelper(mapper: ScalaObjectMapper, writer: Option[ObjectWr
   }
 
   private def writeAndWait(request: Request, str: String): Unit = {
+    println(str)
     Await.result(request.writer.write(Buf.Utf8(str)))
   }
 
