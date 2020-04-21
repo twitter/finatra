@@ -7,7 +7,7 @@ import com.twitter.finatra.http.{EmbeddedHttpServer, StreamingJsonTestHelper}
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.BufReader
-import com.twitter.util.{Duration, Future}
+import com.twitter.util./*{Duration, */Future//}
 
 object StreamingServerFeatureTest {
   val TweetMsgPrefix: String = "msg: "
