@@ -2,9 +2,10 @@ package com.twitter.finatra.http
 
 import com.fasterxml.jackson.databind.ObjectWriter
 import com.twitter.finagle.http.Request
+import com.twitter.finagle.util.DefaultTimer
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.io.Buf
-import com.twitter.util.Await
+import com.twitter.util.{Await, Duration}
 
 /**
  * Helper class to "stream" JSON to a [[com.twitter.finagle.http.Request]]. Uses the given mapper
@@ -18,9 +19,15 @@ class StreamingJsonTestHelper(mapper: ScalaObjectMapper, writer: Option[ObjectWr
   def writeJsonArray(request: Request, seq: Seq[Any], delayMs: Long): Unit = {
     writeAndWait(request, "[")
     writeAndWait(request, writeValueAsString(seq.head))
-    for (elem <- seq.tail) {
-      writeAndWait(request, "," + writeValueAsString(elem))
-      Thread.sleep(delayMs)
+
+    val tail = seq.tail
+    var index = 0
+    while (index < tail.length) {
+      val elem = tail(index)
+      val delay = Duration.fromMilliseconds(delayMs * index)
+      // we purposely don't Await to "fire and forget" the (orphaned) futures
+      DefaultTimer.doLater(delay)(writeAndWait(request, "," + writeValueAsString(elem)))
+      index += 1
     }
     writeAndWait(request, "]")
     closeAndWait(request)

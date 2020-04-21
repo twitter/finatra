@@ -1,7 +1,7 @@
 package com.twitter.streaming
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.twitter.conversions.DurationOps._
+// import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finatra.http.{EmbeddedHttpServer, StreamingJsonTestHelper}
 import com.twitter.finatra.httpclient.RequestBuilder
@@ -19,7 +19,7 @@ class StreamingServerFeatureTest extends FeatureTest {
 
   // our response stream has a delay between messages so 5 seconds might cut it close
   // in slow CI environments like Travis so we are bumping timeouts to 10 seconds.
-  override protected def defaultAwaitTimeout: Duration = 10.seconds
+  // override protected def defaultAwaitTimeout: Duration = 10.seconds
 
   override val server = new EmbeddedHttpServer(
     new StreamingServer,
