@@ -10,6 +10,18 @@ Unreleased
 Added
 ~~~~~
 
+* inject-app: Add default type conversions for `java.time.LocalTime`, `c.t.util.Time`,
+  `java.net.InetSocketAddress`, and `c.t.util.StorageUnit`. This allows the injector to convert from
+  a String representation to the given type. The type conversion for `java.net.InetSocketAddress`
+  uses the `c.t.app.Flaggable.ofInetSocketAddress` implementation and the type conversion for
+  `c.t.util.Time` uses the `c.t.app.Flaggable.ofTime` implementation for consistency with Flag parsing.
+  Because of the current state of type erasure with `c.t.app.Flag` instances, Finatra currently binds
+  a parsed `c.t.app.Flag` value as a String type, relying on registered Guice TypeConverters to convert
+  from the bound String type to the requested type. These conversions now allow for a `c.t.app.Flag`
+  defined over the type to be injected by the type as Guice now has a type conversion from the bound
+  String type rather than as a String representation which then must be manually converted.
+  ``PHAB_ID=D471545``
+
 * finatra-http: Method in tests to return an absolute path URI with the https scheme and authority
   ``PHAB_ID=D466424``
 

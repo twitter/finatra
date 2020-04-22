@@ -1,14 +1,23 @@
 package com.twitter.inject.app.tests
 
+import com.twitter.conversions.StorageUnitOps._
 import com.google.inject.ProvisionException
-import com.twitter.app.Flags
+import com.twitter.app.{Flaggable, Flags}
 import com.twitter.inject.Test
 import com.twitter.inject.annotations.{Flag, Flags => AnnotationFlags}
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.app.internal.FlagsModule
+import com.twitter.util.{Duration, StorageUnit, Time, TimeFormat}
+import java.net.InetSocketAddress
+import java.time.LocalTime
 import javax.inject.Inject
 
 class FlagsModuleTest extends Test {
+  // we should consider adding this Flaggable to c.t.app.Flaggable
+  private implicit val ofJavaLocalTime: Flaggable[LocalTime] = new Flaggable[LocalTime] {
+    override def parse(s: String): LocalTime = LocalTime.parse(s)
+  }
+
   private[this] val flag =
     new Flags("FlagsModuleTest", includeGlobal = false, failFastUntilParsed = false)
 
@@ -20,6 +29,18 @@ class FlagsModuleTest extends Test {
     "foo",
     "This flag has a default but it will be overridden by a parsed value"
   )
+
+  private[this] val defaultTimeFormat = new TimeFormat("yyyy-MM-dd HH:mm:ss Z")
+  private[this] val defaultLocalTime = LocalTime.MIN
+  private[this] val defaultTime = defaultTimeFormat.parse("2020-04-21 00:00:00 -0700")
+  private[this] val defaultDuration = Duration.fromMilliseconds(100)
+  private[this] val defaultStorageUnit = 2.gigabytes
+  private[this] val defaultInetSocketAddress: InetSocketAddress = InetSocketAddress.createUnresolved("localhost", 0)
+  flag[LocalTime]("local.time", defaultLocalTime, "A java.time.LocalTime")
+  flag[Time]("twitter.time", defaultTime, "A twitter util Time")
+  flag[Duration]("twitter.duration", defaultDuration, "A twitter util Duration")
+  flag[StorageUnit]("storage.unit", defaultStorageUnit, "Represents a storage size")
+  flag[InetSocketAddress]("some.address", defaultInetSocketAddress, "An InetSocketAddress")
 
   flag.parseArgs(Array("-my.flag.value=bar"))
 
@@ -65,6 +86,18 @@ class FlagsModuleTest extends Test {
   test("use flag with value") {
     // default value is "foo", parsed value should be "bar"
     myFlagWithValue() should equal("bar")
+  }
+
+  test("test type converters") {
+    val injector = TestInjector(flagsModule).create
+
+    injector.instance[LocalTime](AnnotationFlags.named("local.time")) should equal(defaultLocalTime)
+    injector.instance[Time](AnnotationFlags.named("twitter.time")) should equal(defaultTime)
+    injector.instance[Duration](AnnotationFlags.named("twitter.duration")) should equal(defaultDuration)
+    injector.instance[StorageUnit](AnnotationFlags.named("storage.unit")) should equal(defaultStorageUnit)
+    val inetSocketAddressFromInjector = injector.instance[InetSocketAddress](AnnotationFlags.named("some.address"))
+    inetSocketAddressFromInjector.getHostName should equal(defaultInetSocketAddress.getHostName)
+    inetSocketAddressFromInjector.getPort should equal(defaultInetSocketAddress.getPort)
   }
 }
 
