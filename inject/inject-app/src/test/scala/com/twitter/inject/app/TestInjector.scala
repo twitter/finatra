@@ -173,7 +173,7 @@ class TestInjector(
 
       underlying = injectorModules
         .install(
-          flags = flag.getAll(includeGlobal = false).toSeq,
+          flags = flag,
           stage = stage)
         .injector
     }

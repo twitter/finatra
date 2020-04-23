@@ -105,6 +105,7 @@ object SampleAppMain extends SampleApp
 /* an app that eagerly applies (reads) a defined flag, with a toggle
    to fail or not on read before parse */
 class FailfastOnFlagsNotParsedApp(fail: Boolean = true) extends App {
+  // this is not an example to follow. this value should always be 'true'.
   override protected def failfastOnFlagsNotParsed: Boolean = fail
   private val f = flag("testing", "1", "help")
   f()

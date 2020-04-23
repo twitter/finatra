@@ -6,7 +6,7 @@ import scala.util.control.NonFatal
 /**
  * [[com.twitter.inject.TwitterModule]] to com.twitter.inject.app.App lifecycle integration.
  */
-trait TwitterModuleLifecycle extends Logging {
+private[inject] trait TwitterModuleLifecycle extends Logging {
 
   /* Mutable State */
   private val closableFunctions = mutable.Buffer[() => Unit]()

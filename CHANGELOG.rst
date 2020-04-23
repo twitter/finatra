@@ -44,6 +44,11 @@ Added
 Changed
 ~~~~~~~
 
+* inject-core: Update the configuration of `c.t.app.Flag` instances created within a `c.t.inject.TwitterModule`
+  to have `failFastUntilParsed` set to 'true' by default. While this is configurable for a given
+  `c.t.inject.TwitterModule`, much like for the application itself, it is STRONGLY recommended that
+  users adopt this behavior. ``PHAB_ID=D448047``
+
 * inject-app: Update `c.t.inject.app.TestInjector` to always add the `InjectorModule`.
   ``PHAB_ID=D465943``
 

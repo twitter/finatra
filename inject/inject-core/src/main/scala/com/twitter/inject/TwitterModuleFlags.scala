@@ -3,16 +3,30 @@ package com.twitter.inject
 import com.twitter.app.{Flag, Flaggable}
 import scala.collection.mutable.ArrayBuffer
 
-/**
- * Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules
- */
-trait TwitterModuleFlags {
+/** [[com.twitter.app.Flag]] integration for a [[TwitterModule]]. */
+private[inject] trait TwitterModuleFlags {
 
   /* Mutable State */
 
   protected[inject] val flags: ArrayBuffer[Flag[_]] = ArrayBuffer[Flag[_]]()
 
   /* Protected */
+
+  /**
+   * This is akin to the `c.t.inject.app.App#failfastOnFlagsNotParsed` and serves
+   * a similar purpose but for new [[com.twitter.app.Flag]] instances created in this
+   * [[TwitterModule]]. The value is 'true' by default. This is to ensure that the value of
+   * a [[com.twitter.app.Flag]] instance created in this [[TwitterModule]] cannot be incorrectly
+   * accessed before the application has parsed any passed command line input. This mirrors the
+   * framework default for `com.twitter.inject.app.App#failfastOnFlagsNotParsed` for Flag
+   * instances created within the application container.
+   *
+   * @return a [[Boolean]] indicating if [[com.twitter.app.Flag]] instances created in
+   *         this [[TwitterModule]] should be set with [[com.twitter.app.Flag.failFastUntilParsed]]
+   *         set to 'true' or 'false'. Default: 'true'.
+   * @note This value SHOULD NOT be changed to 'false' without a very good reason.
+   */
+  protected[this] def failfastOnFlagsNotParsed: Boolean = true
 
   /**
    * A Java-friendly method for creating a named [[Flag]].
@@ -23,9 +37,14 @@ trait TwitterModuleFlags {
    * @param help the help text explaining the purpose of the [[Flag]].
    * @return the created [[Flag]].
    */
-  protected def createFlag[T](name: String, default: T, help: String, flaggable: Flaggable[T]): Flag[T] = {
+  protected def createFlag[T](
+    name: String,
+    default: T,
+    help: String,
+    flaggable: Flaggable[T]
+  ): Flag[T] = {
     implicit val implicitFlaggable: Flaggable[T] = flaggable
-    val flag = new Flag[T](name, help, default) {
+    val flag = new Flag[T](name, help, default, failFastUntilParsed = failfastOnFlagsNotParsed) {
       override protected val flaggable: Flaggable[T] = implicitFlaggable
     }
     flags += flag
@@ -41,9 +60,14 @@ trait TwitterModuleFlags {
    * @param usage a string describing the type of the [[Flag]], i.e.: Integer.
    * @return the created [[Flag]].
    */
-  def createMandatoryFlag[T](name: String, help: String, usage: String, flaggable: Flaggable[T]): Flag[T] = {
+  def createMandatoryFlag[T](
+    name: String,
+    help: String,
+    usage: String,
+    flaggable: Flaggable[T]
+  ): Flag[T] = {
     implicit val implicitFlaggable: Flaggable[T] = flaggable
-    val flag = new Flag[T](name, help, usage) {
+    val flag = new Flag[T](name, help, usage, failFastUntilParsed = failfastOnFlagsNotParsed) {
       override protected val flaggable: Flaggable[T] = implicitFlaggable
     }
     flags += flag
@@ -63,7 +87,7 @@ trait TwitterModuleFlags {
    * @return the created [[Flag]].
    */
   protected def flag[T: Flaggable](name: String, default: T, help: String): Flag[T] = {
-    val flag = new Flag[T](name, help, default)
+    val flag = new Flag[T](name, help, default, failFastUntilParsed = failfastOnFlagsNotParsed)
     flags += flag
     flag
   }
@@ -80,7 +104,8 @@ trait TwitterModuleFlags {
    * @return the created [[Flag]].
    */
   protected def flag[T: Flaggable: Manifest](name: String, help: String): Flag[T] = {
-    val flag = new Flag[T](name, help, manifest[T].runtimeClass.toString)
+    val flag =
+      new Flag[T](name, help, manifest[T].runtimeClass.toString, failFastUntilParsed = failfastOnFlagsNotParsed)
     flags += flag
     flag
   }

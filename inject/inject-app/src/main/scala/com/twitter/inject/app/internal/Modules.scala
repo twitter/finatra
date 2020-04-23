@@ -94,9 +94,12 @@ private[app] class Modules(required: Seq[Module], overrides: Seq[Module]) {
 
   def addFlags(flag: Flags): Unit = moduleFlags.foreach(flag.add)
 
-  def install(flags: Seq[Flag[_]], stage: Stage): InstalledModules = {
+  def install(
+    flags: Flags,
+    stage: Stage
+  ): InstalledModules = {
     // ensure we add the FlagsModule and the TwitterTypeConvertersModule to the list to build the injector.
-    val requiredModules = modules ++ Seq(FlagsModule.create(flags), TwitterTypeConvertersModule)
+    val requiredModules = modules ++ Seq(new FlagsModule(flags), TwitterTypeConvertersModule)
     val combinedModule = com.google.inject.util.Modules.`override`(requiredModules.asJava).`with`(overrideModules.asJava)
 
     InstalledModules(

@@ -67,12 +67,12 @@ abstract class FilteredThriftClientModule[
   /**
    * Name of client for use in metrics
    */
-  val label: String
+  def label: String
 
   /**
    * Destination of client
    */
-  val dest: String
+  def dest: String
 
   /**
    * Enable thrift mux for this connection.
