@@ -55,37 +55,75 @@ When Are Flags Parsed?
 It is important to understand *when* in the application lifecycle Flag values are parsed from command
 line input into an instance of the the Flag's defined `Flaggable[T] <https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flag.scala#L55>`__ type `T`.
 
-Flags are not parsed during class loading or initialization and thus care should be taken
-when attempting to eagerly access a Flag value to ensure it is not done until at least the
-**premain** application lifecycle phase.
+.. admonition:: Overview
 
-Flag values are parsed from command line input *in-between* the `c.t.app.App#init` application
-lifecycle phase and the `c.t.app.App#premain` lifecycle phase. Thus, you should not attempt to access
-a Flag value before it is parsed. Doing so in Finatra will cause an `IllegalStateException` because
-the framework sets the `c.t.app.Flags#failFastUntilParsed` as mentioned in the
-`TwitterServer documentation <https://twitter.github.io/twitter-server/Features.html#flags>`__ to
-`true <#failfastonflagsnotparsed>`__).
+  Flag values are parsed from command line input *after* the `c.t.app.App#init` application lifecycle
+  phase and *before* the `c.t.app.App#premain` lifecycle phase.
+
+Flags are not parsed during class loading or initialization, rather, Flag parsing happens
+*in-between* the running of all registered `init()` functions and the running of all registered
+`premain` functions. Thus care should be taken when attempting to access a Flag value to ensure it
+is not done until at least the **premain** application lifecycle phase.
 
 For more information on the application lifecycle see the documentation `here <lifecycle.html>`__.
 
-.. note::
+`c.t.app.App#failfastOnFlagsNotParsed`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  If no command line input is given for a defined Flag, accessing the Flag value should still not
-  occur until after parsing of command line input has been attempted. The `c.t.app.Flags <https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L89>`__
-  instance within your application is stateful and is only fully initialized *after parsing* of any
-  command line input and thus Flags should not be considered "ready" for accessing until this step
-  has completed.
+Note that Finatra defaults the `c.t.app.App#failfastOnFlagsNotParsed <https://github.com/twitter/util/blob/5e326a1109e2cd608515ce87badfb792bd346a3d/util-app/src/main/scala/com/twitter/app/App.scala#L57>`_
+option as mentioned in the `TwitterServer documentation <https://twitter.github.io/twitter-server/Features.html#flags>`__ to
+**'true'**. This is done in the Finatra extension `c.t.inject.app.App <https://github.com/twitter/finatra/blob/c1b49edebb0ad513f2b3439ee4f2f5e0541e2b26/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L127>`__
+which overrides the superclass implementation with **'true'**.
 
-  **Reminder**: parsing of command line input into Flag values happens between the `c.t.app.App#init`
-  and `c.t.app.App#premain` lifecycle phases.
+Having this option turned on means that if a Flag value is accessed before the Flag has been parsed
+then an `IllegalStateException` will be thrown. This "fail fast" behavior is preferable over silently
+reading a default value by mistake and not a parsed value from the command line.
+
+Modules
+^^^^^^^
+
+Flags created within a Finatra `TwitterModule` are collected and added to the application's
+`c.t.app.Flags <https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flags.scala>`_
+collection during the `init` lifecycle phase. Thus, they will not inherit the application's setting
+for "fail fast" until then.
+
+The default for the "fail fast" behavior of Flags created within a Finatra `TwitterModule` is governed
+by the value set for `c.t.inject.TwitterModuleFlags#failfastOnFlagsNotParsed` in the `TwitterModule`
+which is also defaulted to **'true'** to mirror the application container default.
+
+This means that like a Flag created with the application, any attempt to access a `TwitterModule`
+created Flag's value too eagerly will also result in an `IllegalStateException` being thrown.
+
+.. important::
+
+    We highly recommend that all applications keep `c.t.inject.app.App#failfastOnFlagsNotParsed <https://github.com/twitter/finatra/blob/c1b49edebb0ad513f2b3439ee4f2f5e0541e2b26/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L127>`_
+    and `c.t.inject.TwitterModuleFlags#failfastOnFlagsNotParsed <https://github.com/twitter/finatra/blob/8435309bd5d729537db4960e4f09d55b537fc75b/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleFlags.scala#L29>`_
+    not only set to the **same value** but also **kept to their default of 'true'**.
+
+    This should arguably be the default behavior for Flag instances but for legacy reasons is not.
+
+Flags With No Command Line Value
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If no command line input is given for a defined Flag, accessing the Flag value should still not
+occur until after parsing of command line input has been attempted. The `c.t.app.Flags <https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L89>`__
+instance within your application is stateful and is only fully initialized *after parsing* of any
+command line input and thus Flags should not be considered "ready" for accessing until this step
+has completed.
 
 If the Flag defines a default, the `default value <https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flag.scala#L186>`__ will be returned when no command line value is
 given. If the Flag is defined without a default and no command line value is given, any attempt to
-read the Flag's value via the `apply()` function will fail with an `IllegalArgumentException`. For
-more information on defining and accessing Flags without default values, see `here <#flags-without-defaults>`__.
+read the Flag's value via the `apply()` function will fail with an `IllegalArgumentException`.
+
+For more information on defining and accessing Flags without default values, see
+`here <#flags-without-defaults>`__.
 
 How To Define Flags
 -------------------
+
+Flags should be defined as part of instance creation/instantiation (i.e., via the constructor) in 
+either a `c.t.inject.TwitterModule` or an application (any extension of `c.t.app.App`) and thus 
+declared before command line input has been parsed.
 
 Within an App or a Server
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -560,42 +598,6 @@ in our `@Provides`-annotated method. If there is no supplied command-line value 
 we cannot start the server without a command-line value being supplied. This fits the contract
 of a Flag defined without a default in that the Flag is meant to be treated as **required** for the
 server.
-
-``c.t.app.Flags#failfastOnFlagsNotParsed``
-------------------------------------------
-
-Note that Finatra defaults the `c.t.app.Flags#failfastOnFlagsNotParsed` option as mentioned in the
-`TwitterServer documentation <https://twitter.github.io/twitter-server/Features.html#flags>`__ to
-`true <https://github.com/twitter/finatra/blob/c1b49edebb0ad513f2b3439ee4f2f5e0541e2b26/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L127>`__
-for you. Having this option turned on means that if a Flag is accessed in order to read its value
-before the Flag has been parsed then an `IllegalStateException` will be thrown.
-
-.. admonition:: Reminder
-
-  Flag values are parsed from command line input *after* the `c.t.app.App#init` application lifecycle
-  phase and *before* the `c.t.app.App#premain` lifecycle phase.
-
-Modules
-~~~~~~~
-
-It is important to note that the `c.t.app.Flags#failfastOnFlagsNotParsed` option **only applies to flags created within an application or a server**
--- since they are directly created from the application's
-`c.t.app.Flags <https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flags.scala>`_
-collection.
-
-Caution
-^^^^^^^
-Flags created within a Finatra `TwitterModule` are created with the default behavior for Flags which
-is 'false' for the "failFast" behavior of reading a Flag value before the Flag is parsed. Thus, is it
-extremely important to not attempt to access a `TwitterModule` created Flag's value too eagerly as
-you can end up with the Flag's default or an error (if there is no default).
-
-.. important::
-
-    **We highly recommend that all containers keep** `c.t.inject.app.App#failfastOnFlagsNotParsed <https://github.com/twitter/finatra/blob/c1b49edebb0ad513f2b3439ee4f2f5e0541e2b26/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L127>`_
-    **set to 'true'.**
-
-    This should arguably be the default behavior for Flag instances but for legacy reasons is not.
 
 Modules Depending on Other Modules - Flags Edition
 --------------------------------------------------
