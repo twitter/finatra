@@ -61,7 +61,7 @@ class StreamingServerFeatureTest extends FeatureTest {
     server.httpRequest(request, andExpect = Status.Ok)
   }
 
-  private def getFirstItem(response: Response): Future[String] = {
+  private def getFirstItem(response: Response): String = {
     val buf = await(BufReader.readAll(response.reader))
     server.mapper.parse[JsonNode](buf).get(0).asText()
   }
