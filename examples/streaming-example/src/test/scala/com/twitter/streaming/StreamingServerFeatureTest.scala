@@ -8,6 +8,7 @@ import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.BufReader
 import com.twitter.util.{Duration, Future}
+import org.scalatest.concurrent.Eventually._
 
 object StreamingServerFeatureTest {
   val TweetMsgPrefix: String = "msg: "
@@ -33,19 +34,31 @@ class StreamingServerFeatureTest extends FeatureTest {
   test("streamingRequest#post via Reader") {
     val response = verifyStreamingEndpointPost("/tweets/streaming/reader")
     val firstItem = getFirstItem(response)
-    assert(firstItem.equals(TweetMsgPrefix + "1"))
+    //assert(firstItem.equals(TweetMsgPrefix + "1"))
+    eventually {
+      val item = await(firstItem)
+      item.equals(TweetMsgPrefix + "1")
+    }
   }
 
   test("streamingRequest#post with resource management") {
     val response = verifyStreamingEndpointPost("/tweets/streaming/reader_with_resource_management")
     val firstItem = getFirstItem(response)
-    assert(firstItem.equals(TweetMsgPrefix + "1"))
+    //assert(firstItem.equals(TweetMsgPrefix + "1"))
+    eventually {
+      val item = await(firstItem)
+      item.equals(TweetMsgPrefix + "1")
+    }
   }
 
   test("streamingRequest#post via AsyncStream") {
     val response = verifyStreamingEndpointPost("/tweets/streaming/asyncstream")
     val firstItem = getFirstItem(response)
-    assert(firstItem.equals(TweetMsgPrefix + "1"))
+    //assert(firstItem.equals(TweetMsgPrefix + "1"))
+    eventually {
+      val item = await(firstItem)
+      item.equals(TweetMsgPrefix + "1")
+    }
   }
 
   test("streaming#post json") {
@@ -61,9 +74,11 @@ class StreamingServerFeatureTest extends FeatureTest {
     server.httpRequest(request, andExpect = Status.Ok)
   }
 
-  private def getFirstItem(response: Response): String = {
-    val buf = await(BufReader.readAll(response.reader))
-    server.mapper.parse[JsonNode](buf).get(0).asText()
+  private def getFirstItem(response: Response): Future[String] = {
+    //val buf = await(BufReader.readAll(response.reader))
+    BuffReader.readAll(response.reader).map { buf =>
+      server.mapper.parse[JsonNode](buf).get(0).asText()
+    }
   }
 
   private def streamTweets(request: Request): Future[Unit] = {
