@@ -1,8 +1,9 @@
 package com.twitter.inject.app
 
 import com.google.inject.{Module, Stage}
+import com.twitter.app.{Flag, Flaggable}
 import com.twitter.inject.annotations.Lifecycle
-import com.twitter.inject.app.internal.{Modules, InstalledModules}
+import com.twitter.inject.app.internal.{InstalledModules, Modules}
 import com.twitter.inject.{Injector, InjectorModule, Logging}
 import java.util.concurrent.atomic.AtomicBoolean
 import scala.collection.JavaConverters._
@@ -10,6 +11,31 @@ import scala.collection.mutable.ArrayBuffer
 
 /** AbstractApp for usage from Java */
 abstract class AbstractApp extends App {
+
+  /**
+   * A Java-friendly method for creating a named [[Flag]].
+   *
+   * @param name the name of the [[Flag]].
+   * @param default a default value for the [[Flag]] when no value is given as an application
+   *                argument.
+   * @param help the help text explaining the purpose of the [[Flag]].
+   * @return the created [[Flag]].
+   */
+  final def createFlag[T](name: String, default: T, help: String, flaggable: Flaggable[T]): Flag[T] =
+    flag.create(name, default, help, flaggable)
+
+  /**
+   * A Java-friendly way to create a "mandatory" [[Flag]]. "Mandatory" flags MUST have a value
+   * provided as an application argument (as they have no default value to be used).
+   *
+   * @param name the name of the [[Flag]].
+   * @param help the help text explaining the purpose of the [[Flag]].
+   * @param usage a string describing the type of the [[Flag]], i.e.: Integer.
+   * @return the created [[Flag]].
+   */
+  final def createMandatoryFlag[T](name: String, help: String, usage: String, flaggable: Flaggable[T]): Flag[T] =
+    flag.createMandatory(name, help, usage, flaggable)
+
   /**
    * Called prior to application initialization.
    */

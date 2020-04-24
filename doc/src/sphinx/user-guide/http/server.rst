@@ -46,7 +46,11 @@ Or in Java, extend the `c.t.finatra.http.AbstractHttpServer <https://github.com/
     public class ExampleServer extends AbstractHttpServer {
 
       public ExampleServer() {
-        flag().create("magic.number", 55, "This is a magic number.", Flaggable.ofJavaInteger());
+        createFlag(
+          /* name      = */ "magic.number",
+          /* default   = */ 55,
+          /* help      = */ "This is a magic number.",
+          /* flaggable = */ Flaggable.ofJavaInteger());
       }
 
       @Override
@@ -84,7 +88,6 @@ in Java:
 
 .. code:: java
 
-    import com.google.common.collect.ImmutableList;
     import com.google.inject.Module;
     import com.twitter.app.Flaggable;
     import com.twitter.finatra.http.AbstractHttpServer;
@@ -94,17 +97,22 @@ in Java:
     import com.twitter.finatra.http.filters.LoggingMDCFilter; 
     import com.twitter.finatra.http.filters.TraceIdMDCFilter;
     import java.util.Collection;
+    import java.util.Collections;
 
     public class ExampleServer extends AbstractHttpServer {
 
       public ExampleServer() {
-          flag().create("magic.number", 55, "This is a magic number.", Flaggable.ofJavaInteger());
+          createFlag(
+            /* name      = */ "magic.number",
+            /* default   = */ 55,
+            /* help      = */ "This is a magic number.",
+            /* flaggable = */ Flaggable.ofJavaInteger());
       }
 
       @Override
       public Collection<Module> javaModules() {
-          return ImmutableList.<Module>of(
-              ExampleModule$.MODULE$);
+          return Collections.singletonList(
+            ExampleModule$.MODULE$);
       }
 
       @Override
@@ -289,17 +297,17 @@ in Java:
 
 .. code:: java
 
-    import com.google.common.collect.ImmutableList;
     import com.google.inject.Module;
     import com.twitter.finagle.Service;
     import com.twitter.finatra.http.AbstractHttpServerTrait;
     import java.util.Collection;
+    import java.util.Collections;
 
     public class ExampleServer extends AbstractHttpServer {
 
       @Override
       public Collection<Module> javaModules() {
-        return ImmutableList.<Module>of(ExampleModule$.MODULE$);
+        return Collections.singletonList(ExampleModule$.MODULE$);
       }
 
       @Override

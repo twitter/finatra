@@ -12,7 +12,7 @@ import com.twitter.finatra.thrift.routing.{JavaThriftRouter, ThriftRouter}
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.internal.LibraryRegistry
 import com.twitter.inject.modules.StackTransformerModule
-import com.twitter.inject.server.{PortUtils, TwitterServer}
+import com.twitter.inject.server.{AbstractTwitterServer, PortUtils, TwitterServer}
 import com.twitter.util.{Await, Duration}
 import java.net.InetSocketAddress
 
@@ -239,7 +239,7 @@ trait ThriftServerTrait extends TwitterServer {
    * @param server the configured [[ThriftMux.Server]] stack.
    * @return a constructed [[ListeningServer]].
    */
-  protected[thrift] def build(addr: String, server: ThriftMux.Server): ListeningServer = {
+  private[thrift] def build(addr: String, server: ThriftMux.Server): ListeningServer = {
     server.serve(addr, this.thriftService)
   }
 }
@@ -249,7 +249,7 @@ trait ThriftServerTrait extends TwitterServer {
  *
  * @note Scala users are encouraged to use [[ThriftServerTrait]] instead.
  */
-abstract class AbstractThriftServerTrait extends ThriftServerTrait
+abstract class AbstractThriftServerTrait extends AbstractTwitterServer with ThriftServerTrait
 
 /**
  * A Finagle server which exposes an external Thrift interface implemented by a
@@ -265,10 +265,10 @@ trait ThriftServer extends ThriftServerTrait {
    * is defined by configuring the [[ThriftRouter]] and not by implementation of this method,
    * thus this method overridden to be final and set to a `NilService`.
    */
-  protected final def thriftService: Service[Array[Byte], Array[Byte]] = NilService
+  protected def thriftService: Service[Array[Byte], Array[Byte]] = NilService
 
   /** Serve the `Service[Array[Byte], Array[Byte]]` from the configured [[ThriftRouter]]. */
-  override protected[thrift] final def build(addr: String, server: ThriftMux.Server): ListeningServer = {
+  override private[thrift] def build(addr: String, server: ThriftMux.Server): ListeningServer = {
     val router = injector.instance[ThriftRouter]
     server.serveIface(addr, router.thriftService)
   }
@@ -289,7 +289,14 @@ trait ThriftServer extends ThriftServerTrait {
   @Lifecycle
   override protected def postInjectorStartup(): Unit = {
     super.postInjectorStartup()
+    configureRouter()
+  }
 
+  /**
+   * Configure the appropriate router for this server.
+   * @note Users SHOULD NOT override/replace this method.
+   */
+  private[thrift] def configureRouter(): Unit = {
     configureThrift(injector.instance[ThriftRouter])
   }
 }
@@ -301,14 +308,25 @@ trait ThriftServer extends ThriftServerTrait {
  *
  * @note Scala users are encouraged to use [[ThriftServer]] instead.
  */
-abstract class AbstractThriftServer extends AbstractThriftServerTrait {
+abstract class AbstractThriftServer extends AbstractTwitterServer with ThriftServer {
 
   /** This Server returns a [[JavaThriftRouter]] configured `Service[Array[Byte], Array[Byte]]` */
-  protected final def thriftService: Service[Array[Byte], Array[Byte]] = {
+  override protected def thriftService: Service[Array[Byte], Array[Byte]] = {
     val router = injector.instance[JavaThriftRouter]
     registerService(
       configureService(router.service))
   }
+
+  /* Overrides */
+
+  /** Serve the `Service[Array[Byte], Array[Byte]]` from the configured [[JavaThriftRouter]]. */
+  override private[thrift] final def build(addr: String, server: ThriftMux.Server): ListeningServer = {
+    server.serve(addr, this.thriftService)
+  }
+
+  /** Users are expected to use [[configureThrift(router: JavaThriftRouter)]] */
+  override protected final def configureThrift(router: ThriftRouter): Unit =
+    throw new IllegalStateException("Use 'configureThrift(router: JavaThriftRouter)'")
 
   /* Abstract */
 
@@ -342,17 +360,24 @@ abstract class AbstractThriftServer extends AbstractThriftServerTrait {
 
   /* Lifecycle */
 
-  @Lifecycle
-  override protected def postInjectorStartup(): Unit = {
-    super.postInjectorStartup()
-
+  /**
+   * Configure the appropriate router for this server.
+   * @note Users SHOULD NOT override/replace this method.
+   */
+  override private[thrift] final def configureRouter(): Unit = {
     configureThrift(injector.instance[JavaThriftRouter])
   }
 
   /* Private */
 
-  /** The service may be filtered and thus we want to fully capture in the registry the resultant service */
-  private[this] def registerService[Req, Rep](
+  /**
+   * The service may be filtered and thus we want to fully capture in the registry the
+   * resultant service.
+   *
+   * @note we register the service given here because it may not have been configured
+   *       by a router (which registers methods and applied filters).
+   */
+  private[this] final def registerService[Req, Rep](
     service: Service[Req, Rep]
   ): Service[Req, Rep] = {
     injector

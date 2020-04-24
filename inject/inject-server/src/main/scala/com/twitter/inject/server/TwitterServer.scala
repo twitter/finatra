@@ -7,7 +7,7 @@ import com.twitter.finagle.NullServer
 import com.twitter.finagle.client.ClientRegistry
 import com.twitter.inject.Logging
 import com.twitter.inject.annotations.Lifecycle
-import com.twitter.inject.app.App
+import com.twitter.inject.app.{AbstractApp, App}
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.modules.internal.LibraryModule
 import com.twitter.inject.utils.Handler
@@ -19,38 +19,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import scala.collection.JavaConverters._
 
 /** AbstractTwitterServer for usage from Java */
-abstract class AbstractTwitterServer extends TwitterServer {
-  /**
-   * Called prior to application initialization.
-   */
-  def onInit(): Unit = ()
-
-  /**
-   * Called before the `main` method.
-   */
-  def preMain(): Unit = ()
-
-  /**
-   * Called after the `main` method.
-   */
-  def postMain(): Unit = ()
-
-  /**
-   * Called prior to application exiting.
-   */
-  def onExit(): Unit = ()
-
-  /**
-   * Called prior to application exiting after `onExit`.
-   */
-  def onExitLast(): Unit = ()
-
-  init(onInit())
-  premain(preMain())
-  postmain(postMain())
-  onExit(onExit())
-  onExitLast(onExitLast())
-}
+abstract class AbstractTwitterServer extends AbstractApp with TwitterServer
 
 /**
  * A [[com.twitter.server.TwitterServer]] that supports injection and [[com.twitter.inject.TwitterModule]]
@@ -254,7 +223,7 @@ trait TwitterServer
    *
    * If you override this method to instantiate any [[com.twitter.util.Awaitable]] it is expected
    * that you add the [[com.twitter.util.Awaitable]] to the list of `Awaitables` using the
-   * [[await[T <: Awaitable[_]](awaitable: T): Unit]] function if you want the server to exit
+   * `await[T <: Awaitable[_]](awaitable: T): Unit` function if you want the server to exit
    * when the [[com.twitter.util.Awaitable]] exits.
    *
    * Any exceptions thrown in this method will result in the server exiting.
@@ -312,7 +281,7 @@ trait TwitterServer
    * If you override this method to create and bind any external interface or to
    * instantiate any awaitable it is expected that you add the Awaitable (or
    * [[com.twitter.finagle.ListeningServer]]) to the list of Awaitables using the
-   * [[await[T <: Awaitable[_]](awaitable: T): Unit]] function.
+   * `await[T <: Awaitable[_(awaitable: T): Unit` function.
    *
    * @note You MUST call `super.postWarmup()` in any overridden definition of this
    * method. Failure to do so may cause your server to not completely startup.

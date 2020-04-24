@@ -1,8 +1,8 @@
 package com.twitter.inject.thrift.integration.doeverything;
 
 import java.util.Collection;
+import java.util.Collections;
 
-import com.google.common.collect.ImmutableList;
 import com.google.inject.Module;
 
 import com.twitter.finagle.Filter;
@@ -21,55 +21,56 @@ import com.twitter.finatra.thrift.routing.JavaThriftRouter;
 import com.twitter.util.NullMonitor$;
 
 public class DoEverythingJavaThriftServer extends AbstractThriftServer {
-    private String name;
+  private String name;
 
-    public DoEverythingJavaThriftServer() {
-        this("example-java-server");
-    }
+  public DoEverythingJavaThriftServer() {
+    this("example-java-server");
+  }
 
-    public DoEverythingJavaThriftServer(String name) {
-        this.name = name;
-    }
+  public DoEverythingJavaThriftServer(String name) {
+    this.name = name;
+  }
 
-    @Override
-    public Collection<Module> javaModules() {
-        return ImmutableList.<Module>of(new DoEverythingJavaDarkTrafficFilterModule());
-    }
+  @Override
+  public Collection<Module> javaModules() {
+    return Collections.singletonList(new DoEverythingJavaDarkTrafficFilterModule());
+  }
 
-    @Override
-    public String name() {
-        return this.name;
-    }
+  @Override
+  public String name() {
+    return this.name;
+  }
 
-    @Override
-    public ThriftMux.Server configureThriftServer(ThriftMux.Server server) {
-        return server
-            .withMonitor(NullMonitor$.MODULE$)
-            .withTracer(NullTracer$.MODULE$);
-    }
+  @Override
+  public ThriftMux.Server configureThriftServer(ThriftMux.Server server) {
+    return server
+        .withMonitor(NullMonitor$.MODULE$)
+        .withTracer(NullTracer$.MODULE$);
+  }
 
-    @Override
-    public Service<byte[], byte[]> configureService(Service<byte[], byte[]> service) {
-        return injector()
-            .instance(Filter.TypeAgnostic.class, DarkTrafficFilterType.class)
-            .andThen(service);
-    }
+  // add the DarkTrafficFilter before the Service built by the JavaRouter
+  @Override
+  public Service<byte[], byte[]> configureService(Service<byte[], byte[]> service) {
+    return injector()
+        .instance(Filter.TypeAgnostic.class, DarkTrafficFilterType.class)
+        .andThen(service);
+  }
 
-    @Override
-    public void warmup() {
-        handle(DoEverythingJavaThriftWarmupHandler.class);
-    }
+  @Override
+  public void warmup() {
+    handle(DoEverythingJavaThriftWarmupHandler.class);
+  }
 
-    @Override
-    public void configureThrift(JavaThriftRouter router) {
-        router
-            .filter(LoggingMDCFilter.class)
-            .filter(TraceIdMDCFilter.class)
-            .filter(ThriftMDCFilter.class)
-            .filter(AccessLoggingFilter.class)
-            .filter(StatsFilter.class)
-            .filter(ExceptionMappingFilter.class)
-            .add(DoEverythingJavaThriftController.class);
-    }
+  @Override
+  public void configureThrift(JavaThriftRouter router) {
+    router
+        .filter(LoggingMDCFilter.class)
+        .filter(TraceIdMDCFilter.class)
+        .filter(ThriftMDCFilter.class)
+        .filter(AccessLoggingFilter.class)
+        .filter(StatsFilter.class)
+        .filter(ExceptionMappingFilter.class)
+        .add(DoEverythingJavaThriftController.class);
+  }
 
 }

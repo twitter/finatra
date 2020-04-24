@@ -3,13 +3,19 @@ package com.twitter.hello.server.modules;
 import com.twitter.app.Flaggable;
 import com.twitter.inject.TwitterModule;
 
-public class MagicNumberModule extends TwitterModule {
+public final class MagicNumberModule extends TwitterModule {
 
   public MagicNumberModule() {
-    createFlag("module.magic.number", 137,
-        "This is a magic number.", Flaggable.ofJavaInteger());
+    createFlag(
+        /* name      = */ "module.magic.number",
+        /* default   = */ 137,
+        /* help      = */ "This is a magic number.",
+        /* flaggable = */ Flaggable.ofJavaInteger());
 
-    createFlag("module.magic.float", 3.1459f,
-        "This is a magic floating point number.", Flaggable.ofJavaFloat());
+    createFlag(
+        /* name      = */ "module.magic.float",
+        /* default   = */ 3.1459f,
+        /* default   = */ "This is a magic floating point number.",
+        /* flaggable = */ Flaggable.ofJavaFloat());
   }
 }

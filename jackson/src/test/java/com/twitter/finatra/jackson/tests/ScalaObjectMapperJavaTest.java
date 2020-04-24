@@ -1,7 +1,6 @@
 package com.twitter.finatra.jackson.tests;
 
-import com.google.common.collect.ImmutableList;
-import com.google.inject.Module;
+import java.util.Collections;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,7 +18,7 @@ public class ScalaObjectMapperJavaTest extends Assert {
   /* Class under test */
   private ScalaObjectMapper mapper = ScalaObjectMapper.apply();
   /* Test Injector */
-  private Injector injector = TestInjector.apply(ImmutableList.<Module>of(mapperModule)).create();
+  private Injector injector = TestInjector.apply(Collections.singletonList(mapperModule)).create();
 
   @Test
   public void testConstructors() {

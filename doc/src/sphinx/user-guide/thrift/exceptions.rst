@@ -251,5 +251,5 @@ in Java:
 
       @Override
       public Collection<Module> javaModules() {
-        return ImmutableList.<Module>of(new MyExceptionMapperModule());
+        return Collections.singletonList(new MyExceptionMapperModule());
       }

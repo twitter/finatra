@@ -4,17 +4,23 @@ import com.twitter.app.Flag;
 import com.twitter.app.Flaggable;
 import com.twitter.inject.TwitterModule;
 
-public class TestModuleC extends TwitterModule {
+public final class TestModuleC extends TwitterModule {
+  // FOR TESTING ONLY
+  // https://twitter.github.io/finatra/user-guide/getting-started/flags.html#holding-a-reference
+  private final Flag<String> moduleCFlag;
 
-  private Flag<String> moduleCFlag = createMandatoryFlag(
-      "moduleC.flag",
-      "help text",
-      "usage text",
-      Flaggable.ofString()
-  );
+  public TestModuleC() {
+    this.moduleCFlag = createMandatoryFlag(
+        /* name      = */ "moduleC.flag",
+        /* help      = */ "help text",
+        /* usage     = */ "usage text",
+        /* flaggable = */ Flaggable.ofString()
+    );
+  }
 
   @Override
   public void configure() {
+    // `moduleCFlag` has been parsed by the time configure() is called
     assert moduleCFlag.isDefined();
     assert moduleCFlag.apply() != null;
   }

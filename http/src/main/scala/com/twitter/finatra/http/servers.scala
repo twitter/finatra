@@ -21,7 +21,7 @@ import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.conversions.string._
-import com.twitter.inject.server.{PortUtils, TwitterServer}
+import com.twitter.inject.server.{AbstractTwitterServer, PortUtils, TwitterServer}
 import com.twitter.util.{Await, Duration, StorageUnit}
 import java.net.InetSocketAddress
 
@@ -439,7 +439,7 @@ trait HttpServerTrait extends TwitterServer {
  *
  * @note Scala users are encouraged to use [[HttpServerTrait]] instead.
  */
-abstract class AbstractHttpServerTrait extends HttpServerTrait
+abstract class AbstractHttpServerTrait extends AbstractTwitterServer with HttpServerTrait
 
 /**
  * A Finagle server which exposes external HTTP or HTTPS interfaces implemented by a
@@ -533,4 +533,4 @@ trait HttpServer extends HttpServerTrait {
  *
  * @note Scala users are encouraged to use [[HttpServer]] instead.
  */
-abstract class AbstractHttpServer extends HttpServer
+abstract class AbstractHttpServer extends AbstractTwitterServer with HttpServer

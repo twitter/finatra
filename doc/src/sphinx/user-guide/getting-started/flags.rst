@@ -101,7 +101,7 @@ In this case within an `HttpServer <../http/server.html>`__,
 
     import DoEverythingModule
     import ExampleController
-    import com.twitter.finatra.http.HttpServer
+    import com.twitter.finatra.http.{Contoller, HttpServer}
     import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter, TraceIdMDCFilter}
     import com.twitter.finatra.http.routing.HttpRouter
     import com.twitter.inject.annotations.Flag
@@ -109,9 +109,9 @@ In this case within an `HttpServer <../http/server.html>`__,
 
     class ExampleController @Inject()(
       @Flag("magic.num") magicNum: String
-    ) {
+    ) extends Controller {
         get("/foo") { request: Request =>
-          ???
+          magicNum
         }
     }
 
@@ -132,10 +132,82 @@ In this case within an `HttpServer <../http/server.html>`__,
           .add[ExampleController]
     }
 
+or in Java:
+
+.. code:: java
+
+    import DoEverythingModule;
+    import ExampleController;
+    import com.google.inject.Module;
+    import com.twitter.finagle.http.Request;
+    import com.twitter.finatra.http.AbstractController;
+    import com.twitter.finatra.http.AbstractHttpServer;
+    import com.twitter.finatra.http.filters.CommonFilters;
+    import com.twitter.finatra.http.filters.LoggingMDCFilter;
+    import com.twitter.finatra.http.filters.TraceIdMDCFilter;
+    import com.twitter.finatra.http.routing.HttpRouter;
+    import com.twitter.inject.annotations.Flag
+    import java.util.Collection;
+    import java.util.Collections;
+    import javax.inject.Inject;
+    import scala.reflect.ManifestFactory;
+
+    public class ExampleController extends AbstractController {
+      private final String magicNum;
+
+      @Inject
+      public ExampleController() {
+        @Flag("magic.num") String magicNum) {
+        this.magicNum = magicNum;
+      }
+
+      public void configureRoutes() {
+        get("/foo", (Request request) -> magicNum)
+      }
+    }
+
+    ...
+
+    public final class ExampleServerMain {
+      private ExampleServerMain() {
+      }
+
+      public static void main(String[] args) {
+        new ExampleServer().main(args);
+      }
+    }
+
+    ...
+
+    public class ExampleServer extends AbstractHttpServer {
+
+      public ExampleServer() {
+        createFlag(
+          /* name      = */ "magic.num",
+          /* default   = */ 42,
+          /* help      = */ "Defines a magic number flag.",
+          /* flaggable = */ Flaggable.ofJavaInteger());
+      }
+
+      @Override
+      public Collection<Module> javaModules() {
+        return Collections.singletonList((
+            new DoEverythingModule());
+      }
+
+      @Override
+      public void configureHttp(HttpRouter router) {
+        router
+          .filter(ManifestFactory.classType(LoggingMDCFilter.class))
+          .filter(ManifestFactory.classType(TraceIdFilter.class))
+          .filter(CommonFilters.class)
+          .add(ExampleController.class)
+    }
+
 The parsed value of the Flag, `magic.num` would be available to be injected where necessary using
 the |@Flag|_ binding annotation.
 
-Or it can always be obtained directly from the Injector:
+Or it can be obtained directly from the Injector:
 
 .. code:: scala
 
@@ -147,9 +219,10 @@ Or it can always be obtained directly from the Injector:
     import com.twitter.inject.annotations.Flags
     import javax.inject.Inject
 
-    class ExampleController @Inject()(
-      @Flag("magic.num") magicNum: String
-    ) {
+    // Note: we define our Controller without the `@Inject()` annotation on the construction,
+    // thus args need to always be passed in since the injector will not be able to instantiate.
+    // Also note: this is just an example.
+    class ExampleController(magicNum: String) {
         get("/foo") { request: Request =>
           ???
         }
@@ -203,17 +276,45 @@ through `Override Modules <../testing/index.html#override-modules>`__ or by usin
       }
     }
 
-In both examples above, notice that we do not save a local reference to the created Flag and instead
+and in Java:
+
+.. code:: java
+
+    import com.google.inject.Provides;
+    import com.twitter.inject.TwitterModule;
+    import com.twitter.inject.annotations.Flag;
+    import javax.inject.Singleton;
+
+    public class MyModule extends TwitterModule {
+
+      public MyModule() {
+        createFlag(
+          /* name      = */ "key",
+          /* default   = */ "default",
+          /* help      = */ "The key to use",
+          /* flaggable = */ Flaggable.ofString());
+      }
+
+      @Provides
+      @Singleton
+      public Foo providesFoo(
+        @Flag("key") String key) {
+        return new Foo(key);
+      }
+    }
+
+In the examples above, notice that we **do not save a local reference to the created Flag** but instead
 reference its value by use of the |@Flag|_ binding annotation or by obtaining the parsed value
 directly from the Injector.
 
 |@Flag| annotation
 ^^^^^^^^^^^^^^^^^^
 
-The |@Flag|_ `binding annotation <../getting-started/binding_annotations.html>`__.
-This annotation allows parsed Flag values to be injected into classes (and provider methods).
+|@Flag|_ is a `binding annotation <../getting-started/binding_annotations.html>`__. This annotation
+allows parsed Flag values to be injected into classes (and provider methods).
 
 .. important::
+
    While `Flag <https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flag.scala>`__
    supports parsing into any |Flaggable[T]|_ type, it is currently only possible to
    *bind* to a `String type <https://github.com/twitter/finatra/blob/31efc1d46dea436fb580f4b71f9196d15bade2e3/inject/inject-app/src/main/scala/com/twitter/inject/app/internal/TwitterTypeConvertersModule.scala>`__
@@ -253,19 +354,23 @@ so.
       }
     }
 
-.. caution::
+.. warning::
 
     This is potentially dangerous. See the next sections for details.
 
 Caution
 +++++++
 
+.. important::
+
+    Flags are distinct by name only.
+
 Note that holding onto a reference of a Flag can be potentially dangerous since Flag definitions
-can currently be overridden with another definition. Flags are distinct `by name only <https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L251>`__.
+can be overridden with another definition. Flags are distinct `by name only <https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L251>`__.
 The Flag you are referencing can be replaced in the stateful `c.t.app.Flags <https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L89>`__
-instance with another instance created with the same name. The last Flag added wins and thus
-when the Flags are parsed your reference may not be updated with the parsed value, resulting in the
-reference retaining its default value or no value if it has no specified default.
+instance of your application with another instance created with the same name. The last Flag added
+wins and thus when the Flags are parsed your reference may not be updated with the parsed value,
+resulting in the reference retaining its default value or no value if it has no specified default.
 
 You should only do this if you are guaranteed that the Flag defined for which you keep a
 reference will not be redefined making your reference obsolete.
@@ -273,14 +378,17 @@ reference will not be redefined making your reference obsolete.
 Even More Caution
 +++++++++++++++++
 
+.. important::
+
+    Eagerly evaluating a Flag value before the Flag has been parsed will not always fail.
+
 Additionally, having a reference can lead to unintentionally trying to dereference the Flag value
 before the command-line value has been parsed. If the Flag has a reasonable default, your code
 may even appear to work until the passed command-line value is changed, which will have no effect on
 the Flag because the Flag is being evaluated too early in the `Application Lifecycle <./lifecycle.html#c-t-inject-app-app-lifecycle>`_.
 
-The recommendation is to not hold a reference to a created Flag and instead obtain the parsed flag
-value via injection. See the `next section <#flag-value-injection>`_ on `Flag Value Injection` for
-details.
+The recommendation is to not hold a reference to a created Flag and instead obtain the parsed Flag
+value via injection. See the `Flag Value Injection <#flag-value-injection>`_ section for details.
 
 Ok, But I Want To Live Dangerously
 ++++++++++++++++++++++++++++++++++
@@ -288,11 +396,8 @@ Ok, But I Want To Live Dangerously
 If you find you must keep a local reference to the created Flag, then you can use the `Flag#apply <https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L171>`__,
 `Flag#get <https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L205>`__
 or other methods, depending, to obtain the parsed Flag value. Again, this is not recommended and
-caution should be exercised when using flags in this manner to respect the application lifecycle
-with regards to `when flags are parsed <#when-are-flags-parsed>`_ and other concerns.
-
-Some cases for holding onto a reference of a created Flag include is when a Flag triggers
-behavior based on its presence (i.e., a toggle) and does not convey any value.
+caution should be exercised when using Flags in this manner to respect the application lifecycle
+with regards to `when Flags are parsed <#when-are-flags-parsed>`_.
 
 Flag Value Injection
 ^^^^^^^^^^^^^^^^^^^^
@@ -334,7 +439,7 @@ Flags Without Defaults
 ----------------------
 
 Flags defined without a default value are typically considered to be "mandatory" flags. That is, a
-command-line value MUST be supplied and it is not expected that the server will be able to correctly
+command line value MUST be supplied and it is not expected that the server will be able to correctly
 function without a supplied value.
 
 When creating a Flag, the returned Flag instance is parameterized to the type of the supplied default
@@ -381,7 +486,7 @@ default.
 
 .. warning::
 
-    Note: this is not a recommended way of defining or using a Flag within a TwitterModule but is
+    This is not a recommended way of defining or using a Flag within a TwitterModule but is
     included to show aspects of the Flag API. Please see the section on why `holding a reference <#holding-a-reference>`_ to a Flag in a Module is dangerous and why this is not recommended.
 
 Note that you should not call `Flag#apply <https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L171>`__
@@ -416,8 +521,37 @@ A better example of injecting a parsed value from a Flag defined without a defau
 
       @Singleton
       @Provides
-      def providesThirdPartyFoo(@Flag("key") myKey: String): ThirdPartyFoo =
+      def providesThirdPartyFoo(
+        @Flag("key") myKey: String): ThirdPartyFoo =
         new ThirdPartyFoo(myKey)
+    }
+
+and in Java:
+
+.. code:: java
+
+    import com.foo.bar.ThirdPartyFoo;
+    import com.google.inject.Provides;
+    import com.twitter.inject.TwitterModule;
+    import com.twitter.inject.annotations.Flag;
+    import javax.inject.Singleton;
+
+    public final class MyModule1 extends TwitterModule {
+
+      public MyModule1() {
+        createMandatoryFlag(
+          /* name      = */ "key",
+          /* help      = */ "The key to use",
+          /* usage     = */ "Pass -key=value",
+          /* flaggable = */ Flaggable.ofString());
+      }
+
+      @Singleton
+      @Provides
+      public ThirdPartyFoo providesThirdPartyFoo(
+        @Flag("key") String myKey) {
+        return new ThirdPartyFoo(myKey);
+      }
     }
 
 In this example, we are assured that we will have the parsed Flag value obtained from the Injector
@@ -470,7 +604,7 @@ As we saw in the `Modules section <modules.html#modules-depending-on-other-modul
 "depend" on other Modules. In that case we wanted an already bound type for use in another Module.
 
 Flags are special since they are bound to the object graph by the framework due to the fact that
-their values are parsed from the command line at a specific point in the server lifecycle.But the
+their values are parsed from the command line at a specific point in the server lifecycle. But the
 principle is the same. What if we have a Module which defines a configuration Flag that is useful
 in other contexts?
 
@@ -518,9 +652,13 @@ same Module, e.g.,
       }
     }
 
-Or you could choose to break up the client creation into separate Modules -- allowing them to be
-used and tested independently. If you do the latter, how do you get access to the parsed `client.id`
-Flag value from the `ClientIdModule` inside of another Module?
+But this starts to break down as your add more clients, especially if each client in turn requires
+specific configuration or Flags in order to be constructed. For the purposes of encapsulation, we'd
+want to collocate all the relevant Flags and logic to create a given client into it's own re-usable
+Module, thus allowing them to be used and tested independently.
+
+If we do so, then how do we get access to the parsed `client.id` Flag value from the `ClientIdModule`
+inside of another Module?
 
 Most often you are trying to inject the Flag value into a class using the |@Flag|_
 `binding annotation <binding_annotations.html>`__ on a class constructor-arg. E.g.,
@@ -532,7 +670,7 @@ Most often you are trying to inject the Flag value into a class using the |@Flag
 
     @Singleton
     class MyClassFoo @Inject() (
-      @Flag("client.id") clientId) {
+      @Flag("client.id") clientId: String) {
       ???
     }
 
@@ -544,22 +682,51 @@ E.g.,
 
 .. code:: scala
 
-    import com.google.inject.Provides
+    import ClientIdModule
+    import com.google.inject.{Module, Provides}
     import com.twitter.inject.TwitterModule
     import com.twitter.inject.annotations.Flag
     import javax.inject.Singleton
 
     object ClientAModule extends TwitterModule {
-      override val modules = Seq(ClientIdModule)
+      override val modules: Seq[Module] = Seq(ClientIdModule)
 
       @Singleton
       @Provides
       def providesClientA(
-        @Flag("client.id") clientId): ClientA = {
+        @Flag("client.id") clientId: String): ClientA = {
         new ClientA(clientId)
       }
     }
 
+of in Java:
+
+.. code:: java
+
+    import ClientIdModule$;
+    import com.google.inject.Module;
+    import com.google.inject.Provides;
+    import com.twitter.inject.TwitterModule;
+    import com.twitter.inject.annotations.Flag;
+    import java.util.Collection;
+    import java.util.Collections;
+    import javax.inject.Singleton;
+
+    public final class ClientAModule extends TwitterModule {
+
+      @Override
+      public Collection<Module> javaModules() {
+        return Collections.singletonList((
+            ClientIdModule$.MODULE$);
+      }
+
+      @Singleton
+      @Provides
+      public ClientA providesClientA(
+        @Flag("client.id") String clientId) {
+        return new ClientA(clientId);
+      }
+    }
 
 What's happening here?
 
@@ -583,6 +750,15 @@ Note that it is an `error to try to define the same Flag twice <https://github.c
 Finatra will de-dupe all Modules before installing, so it is OK if a Module appears twice in the
 server configuration, though you should strive to make this the exception.
 
+.. important::
+
+    Reminder: It is important that the framework install all `TwitterModules` such that the `lifecycle functions <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala>`_
+    are executed in the proper sequence and any `TwitterModule` defined `Flags <flags.html>`__ are
+    parsed properly.
+
+    Thus users SHOULD NOT install a `TwitterModule` within another Module via `Module#configure
+    using `Binder#install <https://google.github.io/guice/api-docs/4.2/javadoc/com/google/inject/Binder.html#install-com.google.inject.Module->`__.
+
 Secondly, we've defined a method which provides a `ClientA`. Since injection is by type (and the
 argument list to an ``@Provides`` annotated method in a Module is an injection point) and `String`
 is not specific enough we use the |@Flag|_ `binding annotation <binding_annotations.html>`__.
@@ -592,8 +768,15 @@ which needs both the `ClientId` and a `ClientA` we could define a `ClientBModule
 
 .. code:: scala
 
+    import ClientIdModule
+    import ClientAModule
+    import com.google.inject.{Module, Provides}
+    import com.twitter.inject.TwitterModule
+    import com.twitter.inject.annotations.Flag
+    import javax.inject.Singleton
+
     object ClientBModule extends TwitterModule {
-      override val modules = Seq(
+      override val modules: Seq[Module] = Seq(
         ClientIdModule,
         ClientAModule)
 
@@ -606,10 +789,42 @@ which needs both the `ClientId` and a `ClientA` we could define a `ClientBModule
       }
     }
 
+or in Java:
 
-Notice that we choose to list both the `ClientIdModule` and `ClientAModule` in the Modules for the
-`ClientBModule`. Yet, since we know that the `ClientAModule` includes the `ClientIdModule` we could
-have chosen to leave it out.
+.. code:: java
+
+    import ClientIdModule$;
+    import com.google.inject.Module;
+    import com.google.inject.Provides;
+    import com.twitter.inject.TwitterModule;
+    import com.twitter.inject.annotations.Flag;
+    import java.util.Arrays;
+    import java.util.Collection;
+    import java.util.Collections;
+    import javax.inject.Singleton;
+
+    public final class ClientBModule extends TwitterModule {
+
+      @Override
+      public Collection<Module> javaModules() {
+        return Collections.unmodifiableList(
+          Arrays.asList(
+            ClientIdModule$.MODULE$,
+            ClientAModule$.MODULE$));
+      }
+
+      @Singleton
+      @Provides
+      public ClientB providesClientB(
+        @Flag("client.id") clientId,
+        clientA: ClientA) {
+        return new ClientB(clientId, clientA);
+      }
+    }
+
+Notice that we choose to include both the `ClientIdModule` and `ClientAModule` in the list of Modules
+for the `ClientBModule`. Yet, since we know that the `ClientAModule` includes the `ClientIdModule`
+we could have chosen to leave it out.
 
 The `providesClientB` method in the Module above takes in both a `ClientId` String and a `ClientA`.
 Since it declares the two Modules, we're assured that these types will be available from the

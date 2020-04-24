@@ -47,6 +47,10 @@ Added
 Changed
 ~~~~~~~
 
+* inject-app: Introduce consistent `c.t.app.Flag` creation methods for Java. Bring HTTP and Thrift
+  server traits inline with each other to provide consistent Java support. Ensure Java examples in
+  documentation. ``PHAB_ID=D471716``
+
 * inject-core: Update the configuration of `c.t.app.Flag` instances created within a `c.t.inject.TwitterModule`
   to have `failFastUntilParsed` set to 'true' by default. While this is configurable for a given
   `c.t.inject.TwitterModule`, much like for the application itself, it is STRONGLY recommended that

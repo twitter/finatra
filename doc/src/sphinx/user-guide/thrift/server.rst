@@ -79,21 +79,22 @@ in Java:
 
 .. code:: java
 
-    import com.google.common.collect.ImmutableList;
     import com.google.inject.Module;
     import com.twitter.finatra.thrift.AbstractThriftServer;
     import com.twitter.finatra.thrift.filters.LoggingMDCFilter;
     import com.twitter.finatra.thrift.filters.TraceIdMDCFilter;
     import com.twitter.finatra.thrift.routing.JavaThriftRouter;
     import java.util.Collection;
+    import java.util.Collections;
 
     public class ExampleServer extends AbstractThriftServer {
 
       @Override
       public Collection<Module> javaModules() {
-        return ImmutableList.<Module>of(ExampleModule$.MODULE$);
+        return Collections.singletonList(ExampleModule$.MODULE$);
       }
 
+      // Note: this version uses the `JavaThriftRouter`
       @Override
       public void configureThrift(JavaThriftRouter router) {
         router
@@ -198,17 +199,17 @@ in Java:
 
 .. code:: java
 
-    import com.google.common.collect.ImmutableList;
     import com.google.inject.Module;
     import com.twitter.finagle.Service;
     import com.twitter.finatra.thrift.AbstractThriftServerTrait;
     import java.util.Collection;
+    import java.util.Collections;
 
     public class ExampleServer extends AbstractThriftServerTrait {
 
       @Override
       public Collection<Module> javaModules() {
-        return ImmutableList.<Module>of(ExampleModule$.MODULE$);
+        return Collections.singletonList(ExampleModule$.MODULE$);
       }
 
       @Override

@@ -1,10 +1,10 @@
 package com.twitter.hello.server;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import scala.reflect.ManifestFactory;
 
-import com.google.common.collect.ImmutableList;
 import com.google.inject.Module;
 
 import com.twitter.app.Flaggable;
@@ -19,18 +19,21 @@ import com.twitter.hello.server.modules.MagicNumberModule;
 public class HelloWorldServer extends AbstractHttpServer {
 
   public HelloWorldServer() {
-    flag().create("magic.number", 55, "This is a magic number.", Flaggable.ofJavaInteger());
+    createFlag(
+        /* name = */ "magic.number",
+        /* default = */ 55,
+        /* help = */ "This is a magic number.",
+        /* flaggable = */ Flaggable.ofJavaInteger());
   }
 
   @Override
   public Collection<Module> javaModules() {
-    return ImmutableList.<Module>of(
-        new MagicNumberModule());
+    return Collections.singletonList(new MagicNumberModule());
   }
 
   @Override
-  public void configureHttp(HttpRouter httpRouter) {
-    httpRouter
+  public void configureHttp(HttpRouter router) {
+    router
         .filter(CommonFilters.class)
         .filter(new AppendToHeaderFilter("foo", "1"))
         .add(HelloWorldController.class)

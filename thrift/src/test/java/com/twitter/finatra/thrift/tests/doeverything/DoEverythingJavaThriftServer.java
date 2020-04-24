@@ -16,7 +16,7 @@ import com.twitter.finatra.thrift.tests.doeverything.exceptions.FooExceptionMapp
 import com.twitter.util.NullMonitor$;
 
 public class DoEverythingJavaThriftServer extends AbstractThriftServer {
-    private String name;
+    private final String name;
 
     public DoEverythingJavaThriftServer() {
         this("example-java-server");
@@ -24,7 +24,7 @@ public class DoEverythingJavaThriftServer extends AbstractThriftServer {
 
     public DoEverythingJavaThriftServer(String name) {
         this.name = name;
-        flag().create(
+        createFlag(
             "magicNum",
             "26",
             "Magic number",

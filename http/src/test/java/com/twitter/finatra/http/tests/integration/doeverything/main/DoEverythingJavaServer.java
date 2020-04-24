@@ -1,8 +1,8 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main;
 
 import java.util.Collection;
+import java.util.Collections;
 
-import com.google.common.collect.ImmutableList;
 import com.google.inject.Module;
 
 import com.twitter.finatra.http.AbstractHttpServer;
@@ -13,8 +13,7 @@ public class DoEverythingJavaServer extends AbstractHttpServer {
 
   @Override
   public Collection<Module> javaModules() {
-    return ImmutableList.<Module>of(
-        new TestModuleB());
+    return Collections.singletonList(new TestModuleB());
   }
 
   @Override
@@ -23,8 +22,8 @@ public class DoEverythingJavaServer extends AbstractHttpServer {
   }
 
   @Override
-  public void configureHttp(HttpRouter httpRouter) {
-    httpRouter
+  public void configureHttp(HttpRouter router) {
+    router
         .filter(CommonFilters.class)
         .filter(new AppendToHeaderJavaFilter("test", "1"))
         .add(DoEverythingJavaController.class)

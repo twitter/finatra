@@ -1,8 +1,8 @@
 package com.twitter.calculator;
 
 import java.util.Collection;
+import java.util.Collections;
 
-import com.google.common.collect.ImmutableList;
 import com.google.inject.Module;
 
 import com.twitter.calculator.modules.ModeModule;
@@ -16,19 +16,19 @@ import com.twitter.finatra.thrift.routing.JavaThriftRouter;
 
 class CalculatorServer extends AbstractThriftServer {
 
-    @Override
-    public Collection<Module> javaModules() {
-        return ImmutableList.<Module>of(new ModeModule());
-    }
+  @Override
+  public Collection<Module> javaModules() {
+    return Collections.singletonList(new ModeModule());
+  }
 
-    @Override
-    public void configureThrift(JavaThriftRouter router) {
-        router
-            .filter(LoggingMDCFilter.class)
-            .filter(TraceIdMDCFilter.class)
-            .filter(ThriftMDCFilter.class)
-            .filter(AccessLoggingFilter.class)
-            .filter(StatsFilter.class)
-            .add(CalculatorController.class);
-    }
+  @Override
+  public void configureThrift(JavaThriftRouter router) {
+    router
+        .filter(LoggingMDCFilter.class)
+        .filter(TraceIdMDCFilter.class)
+        .filter(ThriftMDCFilter.class)
+        .filter(AccessLoggingFilter.class)
+        .filter(StatsFilter.class)
+        .add(CalculatorController.class);
+  }
 }
