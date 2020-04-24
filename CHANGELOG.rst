@@ -7,6 +7,17 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
+Changed
+~~~~~~~
+
+* finatra: Bump version of Joda-Time to 2.10.6. ``PHAB_ID=D473522``
+
+Fixed
+~~~~~
+
 20.4.1
 ------
 
