@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Defining HTTP Controllers &#8212; Finatra 20.4.0 documentation</title>
+    <title>Defining HTTP Controllers &#8212; Finatra 20.4.1 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -398,11 +398,22 @@ to be equivalent, append <cite>/?</cite> to your route URI, e.g.,</p>
 <h2>Admin Paths<a class="headerlink" href="#admin-paths" title="Permalink to this headline">¶</a></h2>
 <p>All <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a>-based servers have an <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface">HTTP Admin Interface</a>
 which includes a variety of tools for diagnostics, profiling, and more. This admin interface
-<strong>should not</strong> be exposed outside your data center DMZ.</p>
-<p>Any route path starting with <cite>/admin/finatra/</cite> will be included by default on the server’s admin
-interface (accessible via the server’s admin port). Other paths can be included on the server’s
+<strong>should not</strong> be exposed outside your data center DMZ. The <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface">TwitterServer HTTP Admin Interface</a>
+is a Finagle <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/server/ListeningStackServer.scala">ListeningStackServer</a>
+which binds to a port specified by the <a class="reference external" href="https://github.com/twitter/twitter-server/blob/6d3e8f0ce890c218e774336d3335e3db9b22ccf6/server/src/main/scala/com/twitter/server/AdminHttpServer.scala#L118">admin.port</a>
+flag.</p>
+<p>You can choose to only expose API endpoints on this listening server or additionally add an endpoint
+to the <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface">HTTP Admin Interface</a>
+web UI.</p>
+<div class="section" id="adding-endpoints">
+<h3>Adding Endpoints<a class="headerlink" href="#adding-endpoints" title="Permalink to this headline">¶</a></h3>
+<p>Any Controller route path starting with <cite>/admin/finatra/</cite> will be included by default on the server’s
+admin interface (accessible via the server’s admin port). Other paths can be included on the server’s
 admin interface by setting <cite>admin = true</cite> when defining the route.</p>
-<p>These routes <strong>MUST</strong> be <a class="reference internal" href="#constant-routes">constant routes</a>, e.g., routes that do not define <a class="reference external" href="#named-parameters">named parameters</a>.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Any admin route that does not start with <cite>/admin/finatra/</cite> <strong>MUST</strong> be a <cite>constant route</cite>, e.g., it does not define any <a class="reference external" href="#named-parameters">named parameters</a>.</p>
+</div>
 <div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.http.Request</span>
 
 <span class="n">get</span><span class="o">(</span><span class="s">&quot;/admin/finatra/users/&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
@@ -424,6 +435,9 @@ admin interface by setting <cite>admin = true</cite> when defining the route.</p
 <span class="o">}</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="twitterserver-admin-ui">
+<h3>TwitterServer Admin UI<a class="headerlink" href="#twitterserver-admin-ui" title="Permalink to this headline">¶</a></h3>
 <p>Some admin routes can additionally be listed in the <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a>
 <a class="reference external" href="https://twitter.github.io/twitter-server/Admin.html">HTTP Admin Interface index</a>.</p>
 <p>To expose your route in the <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a>
@@ -454,6 +468,7 @@ e.g.,</p>
 specified by the <cite>RouteIndex#group</cite> indexed by <cite>RouteIndex#alias</cite> or the route’s path.</p>
 <p>If you do not provide a <cite>RouteIndex</cite> the route will not appear in the index but is still reachable
 on the admin interface.</p>
+</div>
 <div class="section" id="admin-path-routing">
 <h3>Admin Path Routing<a class="headerlink" href="#admin-path-routing" title="Permalink to this headline">¶</a></h3>
 <p><strong>Note</strong>: only admin routes which start with <cite>/admin/finatra/</cite> will be routed to using the server’s
@@ -503,6 +518,8 @@ these routes cannot be included in the <a class="reference external" href="https
 <li><a class="reference internal" href="#route-prefixes">Route Prefixes</a></li>
 <li><a class="reference internal" href="#trailing-slashes">Trailing Slashes</a></li>
 <li><a class="reference internal" href="#admin-paths">Admin Paths</a><ul>
+<li><a class="reference internal" href="#adding-endpoints">Adding Endpoints</a></li>
+<li><a class="reference internal" href="#twitterserver-admin-ui">TwitterServer Admin UI</a></li>
 <li><a class="reference internal" href="#admin-path-routing">Admin Path Routing</a></li>
 </ul>
 </li>

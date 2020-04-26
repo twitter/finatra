@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Integration Tests &#8212; Finatra 20.4.0 documentation</title>
+    <title>Integration Tests &#8212; Finatra 20.4.1 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -69,23 +69,38 @@
 test, it is generally considered good practice to ensure that your <a class="reference external" href="https://github.com/twitter/util/blob/54f314d1f4b37d302f685e99b1ac416e48532a04/util-core/src/main/scala/com/twitter/util/Awaitable.scala#L77"><cite>c.t.util.Await</cite></a> call
 includes a timeout duration, e.g., <a class="reference external" href="https://github.com/twitter/util/blob/54f314d1f4b37d302f685e99b1ac416e48532a04/util-core/src/main/scala/com/twitter/util/Awaitable.scala#L127"><cite>c.t.util.Await#ready</cite></a>.</p>
 </div>
+<div class="section" id="id2">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/TestInjector.scala">c.t.inject.app.TestInjector</a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <p>Whereas <a class="reference external" href="feature_tests.html">Feature Tests</a> start a server or app under test (thereby loading its
 entire object graph), integration tests generally only test across a few interfaces in the system.
 In Finatra, we provide the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/TestInjector.scala">c.t.inject.app.TestInjector</a>
-which allows you to pass it a set of modules and flags to construct a minimal object graph.</p>
+which allows you to pass it a set of <cite>TwitterModules</cite> and <cite>Flags</cite> to construct a minimal object graph.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Because <a class="reference external" href="../getting-started/modules.html">TwitterModules</a> <a class="reference external" href="../getting-started/modules.html#differences-with-google-guice-modules">differ from regular</a>
+<a class="reference external" href="https://github.com/google/guice/wiki/GettingStarted#guice-modules">Guice Modules</a>, it is
+important to use the <cite>c.t.inject.app.TestInjector</cite> for creating an object graph over a set of
+<cite>TwitterModules</cite>.</p>
+<p>The <cite>TestInjector</cite> properly handles lifecycle execution and <cite>Flag</cite> parsing.</p>
+<p>Manually creating a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">c.t.inject.Injector</a>
+over a raw <a class="reference external" href="https://github.com/google/guice/wiki/GettingStarted#guice-injectors">Guice Injector</a>
+created from <cite>TwitterModules</cite> will skip both the lifecycle functions and <cite>Flag</cite> parsing of any
+<cite>Flag</cite> instances defined in the set of <cite>TwitterModules</cite>.</p>
+</div>
 <p>To write an integration test, extend the <cite>c.t.inject.IntegrationTest</cite> trait. Then override the
-<cite>injector</cite> val with your constructed instance of <cite>c.t.inject.app.TestInjector</cite>. You’ll then be able
-to access instances of necessary classes to execute tests.</p>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.inject.IntegrationTest</span>
+<cite>injector</cite> val with your constructed instance of on a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">c.t.inject.Injector</a>
+created from the <cite>c.t.inject.app.TestInjector</cite>.</p>
+<p>You’ll then be able to access instances of necessary classes to execute tests.</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.inject.Injector</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.IntegrationTest</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.app.TestInjector</span>
 
 <span class="k">class</span> <span class="nc">ExampleIntegrationTest</span> <span class="k">extends</span> <span class="nc">IntegrationTest</span> <span class="o">{</span>
-  <span class="k">override</span> <span class="k">val</span> <span class="n">injector</span> <span class="k">=</span>
+  <span class="k">override</span> <span class="k">val</span> <span class="n">injector</span><span class="k">:</span> <span class="kt">Injector</span> <span class="o">=</span>
     <span class="nc">TestInjector</span><span class="o">(</span>
-      <span class="n">flags</span> <span class="k">=</span>
-        <span class="nc">Map</span><span class="o">(</span><span class="s">&quot;foo.flag&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;meaningfulValue&quot;</span><span class="o">),</span>
-      <span class="n">modules</span> <span class="k">=</span>
-        <span class="nc">Seq</span><span class="o">(</span><span class="nc">ExampleModule</span><span class="o">))</span>
-      <span class="o">.</span><span class="n">create</span>
+      <span class="n">flags</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">&quot;foo.flag&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;meaningfulValue&quot;</span><span class="o">),</span>
+      <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="nc">ExampleModule</span><span class="o">)</span>
+    <span class="o">).</span><span class="n">create</span>
 
   <span class="n">test</span><span class="o">(</span><span class="s">&quot;MyTest#perform feature&quot;</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">val</span> <span class="n">exampleThingy</span> <span class="k">=</span> <span class="n">injector</span><span class="o">.</span><span class="n">instance</span><span class="o">[</span><span class="kt">ExampleThingy</span><span class="o">]</span>
@@ -100,6 +115,13 @@ to access instances of necessary classes to execute tests.</p>
 only want to start <strong>one instance of your injector per test file</strong> make sure to override this
 <cite>def</cite> with a <cite>val</cite>.</p>
 </div>
+</div>
+<div class="section" id="bind-t-dsl">
+<h2><cite>bind[T]</cite> DSL<a class="headerlink" href="#bind-t-dsl" title="Permalink to this headline">¶</a></h2>
+<p>Note that the <cite>c.t.inject.app.TestInjector</cite> also supports the <cite>bind[T]</cite> DSL for overriding
+bound types. See the <cite>bind[T]</cite> <a class="reference external" href="./bind_dsl.html#testinjector-bind-t">documentation</a> for more
+information.</p>
+</div>
 <div class="section" id="http-tests">
 <h2>Http Tests<a class="headerlink" href="#http-tests" title="Permalink to this headline">¶</a></h2>
 <p>If you are writing a test that has an HTTP server under test, you can also extend the
@@ -109,8 +131,8 @@ test.</p>
 </div>
 <div class="section" id="thrift-tests">
 <h2>Thrift Tests<a class="headerlink" href="#thrift-tests" title="Permalink to this headline">¶</a></h2>
-<p>As shown above, thrift servers can be tested through a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala"><cite>c.t.finatra.thrift.ThriftClient</cite></a>. The
-Finatra test framework provides an easy way get access to a real <a class="reference external" href="https://twitter.github.io/finagle/guide/Clients.html">Finagle client</a>
+<p>Thrift servers can be tested through a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala"><cite>c.t.finatra.thrift.ThriftClient</cite></a>. The Finatra test
+framework provides an easy way get access to a real <a class="reference external" href="https://twitter.github.io/finagle/guide/Clients.html">Finagle client</a>
 for making calls to your running server in a test.</p>
 <p>See the <a class="reference external" href="feature_tests.html#thrift-server">Feature Tests - Thrift Server</a> section for more
 information on creating a Finagle Thrift client.</p>
@@ -152,6 +174,8 @@ test.</p>
   <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Integration Tests</a><ul>
+<li><a class="reference internal" href="#id2">c.t.inject.app.TestInjector</a></li>
+<li><a class="reference internal" href="#bind-t-dsl"><cite>bind[T]</cite> DSL</a></li>
 <li><a class="reference internal" href="#http-tests">Http Tests</a></li>
 <li><a class="reference internal" href="#thrift-tests">Thrift Tests</a></li>
 <li><a class="reference internal" href="#more-information">More Information</a></li>

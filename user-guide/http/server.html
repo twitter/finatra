@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>HTTP Server Definition &#8212; Finatra 20.4.0 documentation</title>
+    <title>HTTP Server Definition &#8212; Finatra 20.4.1 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -63,7 +63,7 @@
 <h1>HTTP Server Definition<a class="headerlink" href="#http-server-definition" title="Permalink to this headline">¶</a></h1>
 <p>To start, add a dependency on the <a class="reference external" href="https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http_2.12%22">finatra-http</a> library. We also recommend using <a class="reference external" href="https://logback.qos.ch/">Logback</a> as your <a class="reference external" href="https://www.slf4j.org/manual.html">SLF4J</a> implementation. E.g.,</p>
 <p>with sbt:</p>
-<pre class="literal-block">&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;20.4.0&quot;,
+<pre class="literal-block">&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;20.4.1&quot;,
 &quot;ch.qos.logback&quot; % &quot;logback-classic&quot; % versions.logback,</pre>
 <p>For more information on logging with Finatra see: <a class="reference external" href="../logging/index.html#introduction-to-logging-with-finatra">Introduction to Logging With Finatra</a>.</p>
 <p>Create a new class which extends <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala">c.t.finatra.http.HttpServer</a>:</p>

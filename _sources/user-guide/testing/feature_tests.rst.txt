@@ -20,17 +20,69 @@ Feature Tests
 If you are familiar with `Gherkin <https://docs.behat.org/en/v2.5/guides/1.gherkin.html>`__ or
 `Cucumber <https://github.com/cucumber/cucumber/wiki/Feature-Introduction>`__ or other similar
 testing languages and frameworks, then `Feature Testing <https://wiki.documentfoundation.org/QA/Testing/Feature_Tests>`__
-will feel somewhat familiar. In Finatra, a FeatureTest always consists of an application or a server
-under test. See the |c.t.inject.server.FeatureTest|_ trait.
+will feel somewhat familiar. In Finatra, a `FeatureTest` always consists of a **single** configured
+server under test. See the |c.t.inject.server.FeatureTest|_ trait.
 
 .. caution::
 
     The `server` is specified as a `def` in the |c.t.inject.server.FeatureTestMixin|_ trait.
 
     If you only want to start **one instance** of your server per test file, make sure to override this
-    `def` with a `val`. See: `Sharing a Server Fixture Between Many Feature Tests <#sharing-a-server-fixture-between-many-feature-tests>`__ for information on how to properly share a server test fixture.
+    `def` with a `val`. See: `Sharing a Server Fixture Between Many Feature Tests <#sharing-a-server-fixture-between-many-feature-tests>`__
+    for information on how to properly share a server test fixture.
 
-We highly recommend writing `FeatureTests` for your services as they provide a very good signal of whether you have correctly implemented the features of your service. As always, it is important to always ask yourself, "*what are we trying to test?*" and to do what makes sense for your team but we recommend including `FeatureTests` in your test suite.
+We highly recommend writing `FeatureTests` for your services as they provide a very good signal of
+whether you have correctly implemented the features of your service. As always, it is important to
+always ask yourself, "*what are we trying to test?*" and to do what makes sense for your team but
+we recommend including `FeatureTests` in your test suite.
+
+.. admonition:: TL;DR
+
+    A test which implements the `FeatureTest` trait is for a *single configured instance of a server under test*.
+    Servers are not cheap to create and start, thus the typical pattern is to create the server once
+    before any test case runs. The `FeatureTest` trait will ensure that the instance set to the
+    `server` member is properly closed after all tests have been run.
+
+    In short, the workflow of a `FeatureTest` looks like this:
+
+    `instantiate test class --> create/start server --> run tests --> close/stop server`
+
+With the above in mind, it is possible to multiple servers in a test or test different configurations
+of a server.
+
+Testing Multiple Applications or Servers
+----------------------------------------
+
+For multiple servers, don't use the |c.t.inject.server.FeatureTest|_ trait since it is for testing a
+single server. Just extend the `c.t.inject.Test` trait to implement your test using the `embedded utilities <embedded.html>`_
+to create and start your application. Note you will need to manually ensure to close any
+created servers.
+
+Many of the basics of feature testing mentioned here will still apply so it is still useful to read
+through this documentation, just note again that you will need to ensure you manually close any created
+servers to prevent any resource leaking in your tests.
+
+Please take a look at these tests for examples of testing multiple embedded servers in a single test
+file:
+
+- `Http to Http example <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/multiserver/test/MultiServerFeatureTest.scala>`_
+- `Http to Http to Thrift example <MultiServerFeatureTest>`_
+- `Thrift to Thrift (via the DarkTrafficFilter) example <https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/test/scala/com/twitter/inject/thrift/MultiServerDarkTrafficFeatureTest.scala>`_
+- `Thrift to Thrift (via the DarkTrafficFilter) Java example <https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/test/java/com/twitter/inject/thrift/integration/MultiJavaServerDarkTrafficFeatureTest.java>`_
+
+Testing Multiple Configurations of a Server
+-------------------------------------------
+
+To test different configurations of a server, create different test files. That is, a test file should
+map to a specific server configuration under test and test all the features of the configuration set.
+
+For example if you had a server parameter that could either be 'yellow' or 'green' and wanted to
+execute a suite of test cases against both of those configurations, the recommendation would be to
+create two test files: `YellowServerFeatureTest` and `GreenServerFeatureTest`. Each test would have
+the server configured accordingly.
+
+See below for guidelines on how to `share a server fixture between feature tests <#sharing-a-server-fixture-between-many-feature-tests>`__,
+specifically the `Sharing Test Cases <#id2>`_ section.
 
 |c.t.server.TwitterServer|_
 ---------------------------
@@ -207,7 +259,7 @@ client creation work can then be done for you by the framework's testing tools, 
 `c.t.finatra.http.HttpServer`
 -----------------------------
 
-To write a FeatureTest for an `c.t.finatra.http.HttpServer`, extend the |c.t.inject.server.FeatureTest|_
+To write a `FeatureTest` for an `c.t.finatra.http.HttpServer`, extend the |c.t.inject.server.FeatureTest|_
 trait. Then override the `server` definition with an instance of your |EmbeddedHttpServer|_.
 
 .. code:: scala
@@ -267,7 +319,7 @@ to help easily construct a `c.t.finagle.http.Request`.
 `c.t.finatra.thrift.ThriftServer`
 ---------------------------------
 
-Similarly, to write a FeatureTest for a `c.t.finatra.thrift.ThriftServer` and create a `Finagle <https://twitter.github.io/finagle/>`__
+Similarly, to write a `FeatureTest` for a `c.t.finatra.thrift.ThriftServer` and create a `Finagle <https://twitter.github.io/finagle/>`__
 `client <#thrift-tests>`__ to it, extend the |c.t.inject.server.FeatureTest|_ trait, override the
 `server` definition with an instance of your |EmbeddedThriftServer|_, and then create a Thrift client
 from the |EmbeddedThriftServer|_.
@@ -392,7 +444,7 @@ Combined `c.t.finatra.http.HttpServer` & `c.t.finatra.thrift.ThriftServer`
 --------------------------------------------------------------------------
 
 If you are extending both `c.t.finatra.http.HttpServer` **and** `c.t.finatra.thrift.ThriftServer`
-then you can FeatureTest by constructing an `EmbeddedHttpServer with ThriftClient`, e.g.,
+then you can `FeatureTest` by constructing an `EmbeddedHttpServer with ThriftClient`, e.g.,
 
 .. code:: scala
 
@@ -427,22 +479,23 @@ Sharing a Server Fixture Between Many Feature Tests
 
 There may be times in testing where you want to share an embedded server configuration among
 different FeatureTests. That is, you want to be able to create and setup the embedded server in the
-same way (perhaps with minor configuration changes) across many different test files. An idea might
-be to define a "base" test trait which extends |c.t.inject.server.FeatureTest|_ that your tests
-can extend.
+same way (perhaps with minor configuration changes) across many different test files.
+
+One idea might be to define a "base" test trait which extends |c.t.inject.server.FeatureTest|_ that
+your tests can extend.
 
 Creating a "base" trait that defines shared state is a fine strategy. However, when doing so it
-is generally considered a best practice to not share an instance of an embedded server. That is,
-issues can arise when this "base" trait overrides and implements the |c.t.inject.server.FeatureTest|_
+is generally considered a best practice to **not** share an instance of an embedded server.
+That is, issues can arise when this "base" trait overrides and implements the |c.t.inject.server.FeatureTest|_
 trait ``def server``.
 
-Thus, we recommend *always* implementing the abstract ``def server`` in each actual FeatureTest
+Thus, we recommend to *always* implement the abstract ``def server`` in each *actual* `FeatureTest`
 implementation.
 
 This does not mean that you cannot share a configured embedded server fixture. To do so effectively
-and efficiently, have the "base" trait simply define a utility method which allows a FeatureTest
-to obtain an instance of an embedded server fixture which it can then set as *its* embedded server
-for testing.
+and efficiently, have the "base" trait define a utility method which allows a `FeatureTest`
+implementation to obtain an instance of an embedded server fixture which it can then set as *its*
+embedded server for testing.
 
 For example, we could define a "base" testing trait:
 
@@ -452,8 +505,8 @@ For example, we could define a "base" testing trait:
     import com.twitter.finatra.http.EmbeddedHttpServer
 
     trait BaseMyServiceFeatureTest extends FeatureTest {
-      protected val bar = new Foo()
-      protected val bazImpl = new BazImpl()
+      protected def foo: Foo
+      protected def baz: Baz
 
       // Note, this merely provides a way for extensions of this trait to
       // get a commonly configurable EmbeddedHttpServer. Or it could define
@@ -468,8 +521,8 @@ For example, we could define a "base" testing trait:
           override val overrideModules = Seq(???)
         },
         flags = flags
-      ).bind[Foo].toInstance(bar)
-       .bind[Baz].toInstance(bazImpl)
+      ).bind[Foo].toInstance(foo)
+       .bind[Baz].toInstance(baz)
     }
 
 This "base" trait defines a method for obtaining a properly configured embedded server for test
@@ -477,7 +530,12 @@ implementations to use. Then in tests we could do:
 
 .. code:: scala
 
-    class MyServiceFirstFeatureTest extends BaseMyServiceFeatureTest {
+    import com.twitter.inject.Mockito
+
+    class MyServiceFirstFeatureTest extends BaseMyServiceFeatureTest with Mockito {
+      override val foo: Foo = mock[Foo]
+      override val baz: Baz = mock[Baz]
+
       // We override and implement the c.t.inject.server.FeatureTest#server as a val in our actual test file
       override val server = buildExampleServiceTestServer(
         "firstFeatureServer",
@@ -491,6 +549,9 @@ implementations to use. Then in tests we could do:
     ...
 
     class MyServiceOtherFeatureTest extends BaseMyServiceFeatureTest {
+      override val foo: Foo = new DummyFoo()
+      override val baz: Baz = new BazStub()
+
       override val server = buildExampleServiceTestServer(
         "secondFeatureServer"
         Map("aaa.baz" -> "thirty-five"))
@@ -501,25 +562,107 @@ implementations to use. Then in tests we could do:
       }
     }
 
-The reasons behind this are several. Firstly, embedded servers close over specific configuration 
-state (flags and args) of the server under test. Additionally, many servers are composed of JVM 
-singletons (framework and potentially user-defined) which expect to be the only instance present or
-running at any given time. That is, there are no guarantees of thread-safety by default.
+Reasons
+~~~~~~~
 
-Thus, you can run into issues with inconsistent state of a shared embedded server fixture due to multiple 
-tests accessing it potentially in parallel. Semantics change depending on your build system and testing 
-framework. But it is generally a good practice to *not* share a single instance of an embedded server.
+Firstly, embedded servers close over specific configuration state (flags and other args) of the server
+under test. Additionally, many servers are composed of JVM singletons (framework and potentially
+user-defined) which expect to be the only instance present or running at any given time. That is,
+there are no guarantees of thread-safety by default.
 
-Secondly, when the server is defined as a `val` in, say, a base trait from which many tests inherit 
-the same server can end up being started multiple times -- even if you are running a single test. Some build
-systems optimize their test runs by first loading all tests before running a single test file or test case. 
-In these instances, all tests will be instantiated and thus any constructor `val` is eagerly loaded. This 
-could therefore start the embedded server `val` in each test inheriting from the "base" trait and can 
-generally lead to undesirable performance when testing.
+Thus, you can run into issues with inconsistent state of a shared embedded server fixture due to multiple
+tests accessing it potentially in parallel. Semantics change depending on your build system and testing
+framework, but it is generally a good practice to *not* share a single instance of an embedded server.
+
+Secondly, when the server is defined as a `val` in a "base" trait from which many tests inherit,
+**the same server can end up being started multiple times** -- even when you are attempting to run a
+single test. Why? Some build systems optimize their test runs by first loading all test classes before
+running a single test file or test case. When this occurs, all test classes will be instantiated and
+thus any constructor `val` eagerly loaded. This could therefore start the embedded server `val`
+in *each test* inheriting from the "base" trait and can generally lead to undesirable performance
+when testing, thus the recommendation to always override the server member of `FeatureTest`
+**in the actual test file**.
 
 .. note::
 
-   Finatra's testing utilities attempt to start servers lazily but any eager reference to the server's injector would trigger the server to start in order to create and return the injector.
+   Finatra's testing utilities attempt to start servers lazily but any eager reference to the
+   server's Injector would trigger the server to start in order to create and return the Injector.
+
+Sharing Test Cases
+~~~~~~~~~~~~~~~~~~
+
+Note that you could also extend this in the situation where you want to run the same test cases over
+**differently configured** instances of the same server. Your "base" trait would similarly provide
+a method for obtaining a properly configured embedded server for test instances to use *as well as implement test cases*.
+
+Each subclass implementation would then just cycle through different server configurations, setting
+that configuration as it's own `server` under test.
+
+For example, we could extend our defined "base" testing trait to include test cases:
+
+.. code:: scala
+
+    import com.twitter.inject.Mockito
+    import com.twitter.inject.server.FeatureTest
+    import com.twitter.finatra.http.EmbeddedHttpServer
+
+    trait BaseMyServiceFeatureTest extends FeatureTest with Mockito {
+      protected def foo: Foo = mock[Foo]
+      protected def baz: Baz = mock[Baz]
+
+      // provide a way to create a configured server under test
+      protected def buildExampleServiceTestServer(
+        name: String,
+        flags: => Map[String, String] = Map()
+      ): EmbeddedHttpServer =
+        new EmbeddedHttpServer(new ExampleHttpServer {
+          override val name = name
+          override val overrideModules = Seq(???)
+        },
+        flags = flags
+      ).bind[Foo].toInstance(foo)
+       .bind[Baz].toInstance(baz)
+
+      // we want all subclasses to run these same tests
+
+      test("Feature 1 should do it's thing") {
+        // 'server' is defined as an abstract member in `FeatureTest` thus we can reference it here
+        server.httpGet("/feature1", andExpect = Status.Ok)
+      }
+
+      test("Feature 2 should do it's thing") {
+        server.httpGet("/feature2", andExpect = Status.Ok)
+      }
+
+      test("Feature 3 should do it's thing") {
+        server.httpGet("/feature3", andExpect = Status.Ok)
+      }
+    }
+
+Then in tests we would do:
+
+.. code:: scala
+
+    class MyServiceFirstFeatureTest extends BaseMyServiceFeatureTest {
+      // We override and implement the c.t.inject.server.FeatureTest#server as a val in our actual test file
+      override val server = buildExampleServiceTestServer(
+        "firstFeatureServer",
+        Map("aaa.baz" -> "forty-two"))
+    }
+
+    ...
+
+    class MyServiceOtherFeatureTest extends BaseMyServiceFeatureTest {
+      override val server = buildExampleServiceTestServer(
+        "secondFeatureServer"
+        Map("aaa.baz" -> "thirty-five"))
+      )
+    }
+
+These subclasses would run the test cases from the superclass but each using their own server
+configuration.
+
+For more information on mocking, see the `Working with Mocks <./mocks.html>`_ documentation.
 
 Examples:
 ---------

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Flags &#8212; Finatra 20.4.0 documentation</title>
+    <title>Flags &#8212; Finatra 20.4.1 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -61,19 +61,25 @@
 <span id="id1"></span><h1>Flags<a class="headerlink" href="#flags" title="Permalink to this headline">¶</a></h1>
 <p>Finatra builds on the support of <a class="reference external" href="https://github.com/twitter/util">TwitterUtil</a> <a class="reference external" href="https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala">Flags</a>
 from <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#flags">TwitterServer</a>, adding the
-ability to inject Flag values into your classes.</p>
+ability to inject parsed Flag values into your classes.</p>
 <p>Flags by their definition represent some external configuration that is passed to the server and are
 thus an excellent way to parameterize configuration that may be environment specific, e.g., a
 database host or URL that is different per environment: <em>production</em>, <em>staging</em>, <em>development</em>, or
-<em>jills-staging</em>. This allows you to work with the same application code in different environments.</p>
+<em>jills-staging</em>. Having a strict separation of configuration from code allows for deploying the
+exact same application code across different execution environments which maximizes the portability
+of your code.</p>
 <p>This type of configuration parameterization is generally preferred over hardcoding logic by a type
 of “<em>environment</em>” string within code, e.g.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="o">(</span><span class="nv">env</span> <span class="o">==</span> <span class="s2">&quot;production&quot;</span><span class="o">)</span> <span class="o">{</span> ... <span class="o">}</span>
 </pre></div>
 </div>
-<p>It is generally good practice to make Flags <em>granular</em> controls that are  fully orthogonal to one
+<p>It is generally good practice to make Flags <em>granular</em> controls that are fully orthogonal to one
 another. They can then be independently managed for each deploy and this scales consistently as the
 number of supported  “environments” scales.</p>
+<div class="admonition-best-practices admonition">
+<p class="admonition-title">Best Practices</p>
+<p>See the <a class="reference external" href="#id4">Best Practices</a> section for general guidelines on working with Flags in Finatra.</p>
+</div>
 <div class="section" id="global-flags">
 <h2>Global Flags<a class="headerlink" href="#global-flags" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/util">TwitterUtil</a> <a class="reference external" href="https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala">Flags</a>
@@ -92,51 +98,124 @@ on using <a class="reference external" href="https://github.com/lightbend/config
 </div>
 <div class="section" id="when-are-flags-parsed">
 <h2>When Are Flags Parsed?<a class="headerlink" href="#when-are-flags-parsed" title="Permalink to this headline">¶</a></h2>
-<p>It is important to understand <em>when</em> in the application lifecycle Flag values are parsed from commmand
+<p>It is important to understand <em>when</em> in the application lifecycle Flag values are parsed from command
 line input into an instance of the the Flag’s defined <a class="reference external" href="https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flag.scala#L55">Flaggable[T]</a> type <cite>T</cite>.</p>
-<p>Flags are parsed <em>after</em> the <cite>c.t.app.App#init</cite> application lifecycle phase and <em>before</em> the <cite>c.t.app.App#premain</cite>
-lifecycle phase. Thus, you should not attempt to access a Flag value before it is parsed (doing so will cause an
-<cite>IllegalStateException</cite> with Finatra as the framework sets the <cite>c.t.app.Flags#failFastUntilParsed</cite> as mentioned
-in the <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#flags">TwitterServer documentation</a>
-to <a class="reference external" href="#failfastonflagsnotparsed">true</a>).</p>
-<p>That is, Flags are not parsed during class loading or initialization and thus care should be taken when
-attempting to eagerly access a Flag value to ensure it is not done until at least the <strong>premain</strong> application
-lifecycle phase.</p>
+<p>Flags are not parsed during class loading or initialization and thus care should be taken
+when attempting to eagerly access a Flag value to ensure it is not done until at least the
+<strong>premain</strong> application lifecycle phase.</p>
+<p>Flag values are parsed from command line input <em>in-between</em> the <cite>c.t.app.App#init</cite> application
+lifecycle phase and the <cite>c.t.app.App#premain</cite> lifecycle phase. Thus, you should not attempt to access
+a Flag value before it is parsed. Doing so in Finatra will cause an <cite>IllegalStateException</cite> because
+the framework sets the <cite>c.t.app.Flags#failFastUntilParsed</cite> as mentioned in the
+<a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#flags">TwitterServer documentation</a> to
+<a class="reference external" href="#failfastonflagsnotparsed">true</a>).</p>
 <p>For more information on the application lifecycle see the documentation <a class="reference external" href="lifecycle.html">here</a>.</p>
-<p>If you rely on the Finatra <a class="reference external" href="#flag-value-injection">integration</a> which makes Flags defined with default
-values available for injection, you should not run into any <a class="reference external" href="https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flag.scala#L190">“read before parsed”</a>
-issues.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If no command line input is given for a defined Flag, accessing the Flag value should still not
 occur until after parsing of command line input has been attempted. The <a class="reference external" href="https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L89">c.t.app.Flags</a>
-instance is stateful and is only fully initialized <em>after parsing</em> of any command line input and thus
-Flags should not be considered “ready” for accessing until this step has completed.</p>
-<p><strong>Reminder</strong>: parsing of command line input into Flag values happens between the <cite>c.t.app.App#init</cite> and
-<cite>c.t.app.App#premain</cite> lifecycle phases.</p>
+instance within your application is stateful and is only fully initialized <em>after parsing</em> of any
+command line input and thus Flags should not be considered “ready” for accessing until this step
+has completed.</p>
+<p><strong>Reminder</strong>: parsing of command line input into Flag values happens between the <cite>c.t.app.App#init</cite>
+and <cite>c.t.app.App#premain</cite> lifecycle phases.</p>
 </div>
 <p>If the Flag defines a default, the <a class="reference external" href="https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flag.scala#L186">default value</a> will be returned when no command line value is
-given. If the Flag is defined without a default and no command line value is given, any attempt to read
-the Flag’s value via the <cite>apply()</cite> function will fail with an <cite>IllegalArgumentException</cite>. For more information
-on defining and accessing Flags without default values, see <a class="reference external" href="#flags-without-defaults">here</a>.</p>
+given. If the Flag is defined without a default and no command line value is given, any attempt to
+read the Flag’s value via the <cite>apply()</cite> function will fail with an <cite>IllegalArgumentException</cite>. For
+more information on defining and accessing Flags without default values, see <a class="reference external" href="#flags-without-defaults">here</a>.</p>
 </div>
 <div class="section" id="how-to-define-flags">
 <h2>How To Define Flags<a class="headerlink" href="#how-to-define-flags" title="Permalink to this headline">¶</a></h2>
-<p>Flags can be <a class="reference external" href="https://github.com/twitter/finatra/blob/ec8d584eb914f50f92314c740dc68fb7abb47eff/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/modules/DoEverythingModule.scala#L13">defined</a>
-within a <a class="reference external" href="modules.html">Module</a> to allow for scoping of reusable external configuration (since
-Modules are meant to be re-usable). Though, you can also choose to define a Flag
-<a class="reference external" href="https://github.com/twitter/finatra/blob/ec8d584eb914f50f92314c740dc68fb7abb47eff/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/DoEverythingServer.scala#L22">directly in a server</a>.</p>
-<p>When defined within a <a class="reference external" href="modules.html">Module</a>, Flags can be used to aid in the construction of an
-instance to be <a class="reference external" href="modules.html#provides">provided to the object graph</a>, e.g., a <cite>DatabaseConnection</cite>
-instance with the database URL specified by a Flag. The module is then able to tell the injector how
-to provide an instance of this type when necessary by defining an <code class="docutils literal notranslate"><span class="pre">&#64;Provides</span></code> annotated method. More
-information on defining Modules can be found <a class="reference external" href="modules.html">here</a>.</p>
+<div class="section" id="within-an-app-or-a-server">
+<h3>Within an App or a Server<a class="headerlink" href="#within-an-app-or-a-server" title="Permalink to this headline">¶</a></h3>
+<p>While Flags are most typically <a class="reference external" href="https://github.com/twitter/finatra/blob/ec8d584eb914f50f92314c740dc68fb7abb47eff/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/modules/DoEverythingModule.scala#L13">defined</a>
+within a <a class="reference external" href="modules.html">TwitterModule</a> to allow for scoping of reusable external configuration
+(since Modules are meant to be re-usable), you can also choose to define a Flag
+<a class="reference external" href="https://github.com/twitter/finatra/blob/ec8d584eb914f50f92314c740dc68fb7abb47eff/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/DoEverythingServer.scala#L22">directly in an or a server</a>.</p>
+<p>In this case within an <a class="reference external" href="../http/server.html">HttpServer</a>,</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">DoEverythingModule</span>
+<span class="k">import</span> <span class="nn">ExampleController</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.HttpServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.filters.</span><span class="o">{</span><span class="nc">CommonFilters</span><span class="o">,</span> <span class="nc">LoggingMDCFilter</span><span class="o">,</span> <span class="nc">TraceIdMDCFilter</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpRouter</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.annotations.Flag</span>
+<span class="k">import</span> <span class="nn">javax.inject.Inject</span>
+
+<span class="k">class</span> <span class="nc">ExampleController</span> <span class="nd">@Inject</span><span class="o">()(</span>
+  <span class="nd">@Flag</span><span class="o">(</span><span class="s">&quot;magic.num&quot;</span><span class="o">)</span> <span class="n">magicNum</span><span class="k">:</span> <span class="kt">String</span>
+<span class="o">)</span> <span class="o">{</span>
+    <span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+      <span class="o">???</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="k">object</span> <span class="nc">ExampleServerMain</span> <span class="k">extends</span> <span class="nc">ExampleServer</span>
+
+<span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
+
+  <span class="n">flag</span><span class="o">(</span><span class="s">&quot;magic.num&quot;</span><span class="o">,</span> <span class="s">&quot;42&quot;</span><span class="o">,</span> <span class="s">&quot;Defines a magic number flag.&quot;</span><span class="o">)</span>
+
+  <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+    <span class="nc">DoEverythingModule</span><span class="o">)</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+    <span class="n">router</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">LoggingMDCFilter</span><span class="o">[</span><span class="kt">Request</span><span class="p">,</span> <span class="kt">Response</span><span class="o">]]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">TraceIdMDCFilter</span><span class="o">[</span><span class="kt">Request</span><span class="p">,</span> <span class="kt">Response</span><span class="o">]]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">CommonFilters</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">ExampleController</span><span class="o">]</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>The parsed value of the Flag, <cite>magic.num</cite> would be available to be injected where necessary using
+the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/java/com/twitter/inject/annotations/Flag.java"><code class="docutils literal notranslate"><span class="pre">&#64;Flag</span></code></a> binding annotation.</p>
+<p>Or it can always be obtained directly from the Injector:</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">DoEverythingModule</span>
+<span class="k">import</span> <span class="nn">ExampleController</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.HttpServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.filters.</span><span class="o">{</span><span class="nc">CommonFilters</span><span class="o">,</span> <span class="nc">LoggingMDCFilter</span><span class="o">,</span> <span class="nc">TraceIdMDCFilter</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpRouter</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.annotations.Flags</span>
+<span class="k">import</span> <span class="nn">javax.inject.Inject</span>
+
+<span class="k">class</span> <span class="nc">ExampleController</span> <span class="nd">@Inject</span><span class="o">()(</span>
+  <span class="nd">@Flag</span><span class="o">(</span><span class="s">&quot;magic.num&quot;</span><span class="o">)</span> <span class="n">magicNum</span><span class="k">:</span> <span class="kt">String</span>
+<span class="o">)</span> <span class="o">{</span>
+    <span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+      <span class="o">???</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="k">object</span> <span class="nc">ExampleServerMain</span> <span class="k">extends</span> <span class="nc">ExampleServer</span>
+
+<span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
+
+  <span class="n">flag</span><span class="o">(</span><span class="s">&quot;magic.num&quot;</span><span class="o">,</span> <span class="s">&quot;42&quot;</span><span class="o">,</span> <span class="s">&quot;Defines a magic number flag.&quot;</span><span class="o">)</span>
+
+  <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+    <span class="nc">DoEverythingModule</span><span class="o">)</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+    <span class="n">router</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">LoggingMDCFilter</span><span class="o">[</span><span class="kt">Request</span><span class="p">,</span> <span class="kt">Response</span><span class="o">]]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">TraceIdMDCFilter</span><span class="o">[</span><span class="kt">Request</span><span class="p">,</span> <span class="kt">Response</span><span class="o">]]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">CommonFilters</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">ExampleController</span><span class="o">(</span><span class="n">injector</span><span class="o">.</span><span class="n">instance</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="nc">Flags</span><span class="o">.</span><span class="n">named</span><span class="o">(</span><span class="s">&quot;magic.num&quot;</span><span class="o">))))</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="within-a-twittermodule">
+<h3>Within a <a class="reference external" href="modules.html">TwitterModule</a><a class="headerlink" href="#within-a-twittermodule" title="Permalink to this headline">¶</a></h3>
+<p>When defined within a <a class="reference external" href="modules.html">TwitterModule</a>, Flags can be used to aid in the construction
+of an instance to be <a class="reference external" href="modules.html#provides">provided to the object graph</a>, e.g., a <cite>DatabaseConnection</cite>
+instance with the database URL specified by a Flag. The module is then able to tell the Injector how
+to provide an instance of this type when necessary by defining an <code class="docutils literal notranslate"><span class="pre">&#64;Provides</span></code> annotated method.
+More information on defining Modules can be found <a class="reference external" href="modules.html">here</a>.</p>
 <p>In Finatra, we also provide a way to override bound instances in the object graph when testing
 through <a class="reference external" href="../testing/index.html#override-modules">Override Modules</a> or by using
 <a class="reference external" href="../testing/index.html##embedded-server-bind-t">Embedded Server #bind[T]</a>.</p>
-<div class="section" id="flag-definitions">
-<h3>Flag Definitions<a class="headerlink" href="#flag-definitions" title="Permalink to this headline">¶</a></h3>
-<p>Define a Flag (in this case within a <cite>TwitterModule</cite>)</p>
 <div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.google.inject.Provides</span>
 <span class="k">import</span> <span class="nn">com.twitter.inject.TwitterModule</span>
 <span class="k">import</span> <span class="nn">com.twitter.inject.annotations.Flag</span>
@@ -154,46 +233,11 @@ through <a class="reference external" href="../testing/index.html#override-modul
 <span class="o">}</span>
 </pre></div>
 </div>
-<p>In the example above, notice that we do not save a local reference to the created Flag and instead
-reference its value in the provider method by use of the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/java/com/twitter/inject/annotations/Flag.java"><code class="docutils literal notranslate"><span class="pre">&#64;Flag</span></code></a> binding annotation.</p>
-<p>As mentioned, a Flag can also be defined within a server (in this case with an <a class="reference external" href="../http/server.html">HttpServer</a>)</p>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">DoEverythingModule</span>
-<span class="k">import</span> <span class="nn">ExampleController</span>
-<span class="k">import</span> <span class="nn">com.twitter.finatra.http.HttpServer</span>
-<span class="k">import</span> <span class="nn">com.twitter.finatra.http.filters.</span><span class="o">{</span><span class="nc">CommonFilters</span><span class="o">,</span> <span class="nc">LoggingMDCFilter</span><span class="o">,</span> <span class="nc">TraceIdMDCFilter</span><span class="o">}</span>
-<span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpRouter</span>
-
-<span class="k">object</span> <span class="nc">ExampleServerMain</span> <span class="k">extends</span> <span class="nc">ExampleServer</span>
-
-<span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
-
-  <span class="n">flag</span><span class="o">(</span><span class="s">&quot;magic.num&quot;</span><span class="o">,</span> <span class="s">&quot;42&quot;</span><span class="o">,</span> <span class="s">&quot;Defines a magic number flag.&quot;</span><span class="o">)</span>
-
-  <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
-    <span class="nc">DoEverythingModule</span><span class="o">)</span>
-
-  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="n">router</span>
-      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">LoggingMDCFilter</span><span class="o">[</span><span class="kt">Request</span><span class="p">,</span> <span class="kt">Response</span><span class="o">]]</span>
-      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">TraceIdMDCFilter</span><span class="o">[</span><span class="kt">Request</span><span class="p">,</span> <span class="kt">Response</span><span class="o">]]</span>
-      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">CommonFilters</span><span class="o">]</span>
-      <span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">ExampleController</span><span class="o">]</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
-</div>
-<p>The parsed value of the Flag, <cite>magic.num</cite> would be available to be injected where necessary using
-the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/java/com/twitter/inject/annotations/Flag.java"><code class="docutils literal notranslate"><span class="pre">&#64;Flag</span></code></a> binding annotation, e.g.</p>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.inject.annotations.Flag</span>
-
-<span class="k">class</span> <span class="nc">MyClass</span><span class="o">(</span>
-  <span class="nd">@Flag</span><span class="o">(</span><span class="s">&quot;magic.num&quot;</span><span class="o">)</span> <span class="n">magicNum</span><span class="k">:</span> <span class="kt">String</span>
-<span class="o">)</span>
-</pre></div>
-</div>
-</div>
+<p>In both examples above, notice that we do not save a local reference to the created Flag and instead
+reference its value by use of the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/java/com/twitter/inject/annotations/Flag.java"><code class="docutils literal notranslate"><span class="pre">&#64;Flag</span></code></a> binding annotation or by obtaining the parsed value
+directly from the Injector.</p>
 <div class="section" id="flag-annotation">
-<h3><code class="docutils literal notranslate"><span class="pre">&#64;Flag</span></code> annotation<a class="headerlink" href="#flag-annotation" title="Permalink to this headline">¶</a></h3>
+<h4><code class="docutils literal notranslate"><span class="pre">&#64;Flag</span></code> annotation<a class="headerlink" href="#flag-annotation" title="Permalink to this headline">¶</a></h4>
 <p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/java/com/twitter/inject/annotations/Flag.java"><code class="docutils literal notranslate"><span class="pre">&#64;Flag</span></code></a> <a class="reference external" href="../getting-started/binding_annotations.html">binding annotation</a>.
 This annotation allows parsed Flag values to be injected into classes (and provider methods).</p>
 <div class="admonition important">
@@ -213,9 +257,10 @@ information to construct the correct binding key.</p>
 </div>
 </div>
 <div class="section" id="holding-a-reference">
-<h3>Holding a Reference<a class="headerlink" href="#holding-a-reference" title="Permalink to this headline">¶</a></h3>
+<h4>Holding a Reference<a class="headerlink" href="#holding-a-reference" title="Permalink to this headline">¶</a></h4>
 <p>When defining a Flag you can also dereference the Flag value directly within the Module or server
-(in lieu of using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/java/com/twitter/inject/annotations/Flag.java"><code class="docutils literal notranslate"><span class="pre">&#64;Flag</span></code></a> annotation). However, you should be <strong>extremely cautious</strong> when doing so.</p>
+(in lieu of using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/java/com/twitter/inject/annotations/Flag.java"><code class="docutils literal notranslate"><span class="pre">&#64;Flag</span></code></a> annotation). However, you should be <strong>extremely cautious</strong> when doing
+so.</p>
 <div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.google.inject.Provides</span>
 <span class="k">import</span> <span class="nn">com.twitter.inject.TwitterModule</span>
 <span class="k">import</span> <span class="nn">com.foo.bar.ThirdPartyFoo</span>
@@ -237,36 +282,42 @@ information to construct the correct binding key.</p>
 <p>This is potentially dangerous. See the next sections for details.</p>
 </div>
 <div class="section" id="caution">
-<h4>Caution<a class="headerlink" href="#caution" title="Permalink to this headline">¶</a></h4>
+<h5>Caution<a class="headerlink" href="#caution" title="Permalink to this headline">¶</a></h5>
 <p>Note that holding onto a reference of a Flag can be potentially dangerous since Flag definitions
-can currently be overridden with another definition. Flags are distinct <a class="reference external" href="https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L251">by name only</a>. The Flag you are referencing can be replaced in the stateful <a class="reference external" href="https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L89">c.t.app.Flags</a>
+can currently be overridden with another definition. Flags are distinct <a class="reference external" href="https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L251">by name only</a>.
+The Flag you are referencing can be replaced in the stateful <a class="reference external" href="https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L89">c.t.app.Flags</a>
 instance with another instance created with the same name. The last Flag added wins and thus
-when the Flags are parsed your reference may not get a parsed value, resulting in the reference
-retaining its default value or no value if it has no specified default.</p>
+when the Flags are parsed your reference may not be updated with the parsed value, resulting in the
+reference retaining its default value or no value if it has no specified default.</p>
 <p>You should only do this if you are guaranteed that the Flag defined for which you keep a
-reference will not be redefined making your reference obselete.</p>
+reference will not be redefined making your reference obsolete.</p>
 </div>
 <div class="section" id="even-more-caution">
-<h4>Even More Caution<a class="headerlink" href="#even-more-caution" title="Permalink to this headline">¶</a></h4>
+<h5>Even More Caution<a class="headerlink" href="#even-more-caution" title="Permalink to this headline">¶</a></h5>
 <p>Additionally, having a reference can lead to unintentionally trying to dereference the Flag value
 before the command-line value has been parsed. If the Flag has a reasonable default, your code
 may even appear to work until the passed command-line value is changed, which will have no effect on
 the Flag because the Flag is being evaluated too early in the <a class="reference external" href="./lifecycle.html#c-t-inject-app-app-lifecycle">Application Lifecycle</a>.</p>
-<p>The recommendation is to not hold a reference to a create Flag and instead obtain the parsed flag value via
-injection. See the <a class="reference external" href="#flag-value-injection">next section</a> on <cite>Flag Value Injection</cite> for details.</p>
+<p>The recommendation is to not hold a reference to a created Flag and instead obtain the parsed flag
+value via injection. See the <a class="reference external" href="#flag-value-injection">next section</a> on <cite>Flag Value Injection</cite> for
+details.</p>
 </div>
 <div class="section" id="ok-but-i-want-to-live-dangerously">
-<h4>Ok, But I Want To Live Dangerously<a class="headerlink" href="#ok-but-i-want-to-live-dangerously" title="Permalink to this headline">¶</a></h4>
+<h5>Ok, But I Want To Live Dangerously<a class="headerlink" href="#ok-but-i-want-to-live-dangerously" title="Permalink to this headline">¶</a></h5>
 <p>If you find you must keep a local reference to the created Flag, then you can use the <a class="reference external" href="https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L171">Flag#apply</a>,
 <a class="reference external" href="https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L205">Flag#get</a>
-or other methods, depending, to obtain the parsed Flag value. Again, this is not recommended and caution should be exercised when using flags in this manner to respect the container lifecycle
+or other methods, depending, to obtain the parsed Flag value. Again, this is not recommended and
+caution should be exercised when using flags in this manner to respect the application lifecycle
 with regards to <a class="reference external" href="#when-are-flags-parsed">when flags are parsed</a> and other concerns.</p>
+<p>Some cases for holding onto a reference of a created Flag include is when a Flag triggers
+behavior based on its presence (i.e., a toggle) and does not convey any value.</p>
 </div>
 </div>
 <div class="section" id="flag-value-injection">
-<h3>Flag Value Injection<a class="headerlink" href="#flag-value-injection" title="Permalink to this headline">¶</a></h3>
-<p>Flags with a parsed value can be injected as a constructor-arg to a class. When the class is
-obtained from the injector the correctly parsed Flag value will be injected.</p>
+<h4>Flag Value Injection<a class="headerlink" href="#flag-value-injection" title="Permalink to this headline">¶</a></h4>
+<p>The parsed value of a Flag can be injected as a constructor-arg to a class using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/java/com/twitter/inject/annotations/Flag.java"><code class="docutils literal notranslate"><span class="pre">&#64;Flag</span></code></a>
+<a class="reference external" href="./binding_annotations.html">binding annotation</a>. When the class is obtained from the Injector,
+the correctly parsed Flag value will be injected.</p>
 <div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.inject.annotations.Flag</span>
 <span class="k">import</span> <span class="nn">javax.inject.Inject</span>
 
@@ -277,6 +328,9 @@ obtained from the injector the correctly parsed Flag value will be injected.</p>
 </div>
 <p>Note, you can also always instantiate the above class manually. When doing so, you will need to pass
 all the constructor args manually including a value for the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/java/com/twitter/inject/annotations/Flag.java"><code class="docutils literal notranslate"><span class="pre">&#64;Flag</span></code></a> annotated argument.</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">val</span> <span class="n">svc</span><span class="k">:</span> <span class="kt">MyService</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MyService</span><span class="o">(</span><span class="n">key</span> <span class="k">=</span> <span class="s">&quot;foo&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
 <p>You can also ask the Injector directly for a Flag value using <cite>Flags.named</cite> (similar to Guice’s
 <a class="reference external" href="https://github.com/google/guice/blob/master/core/src/com/google/inject/name/Names.java"><cite>Names.named</cite></a>):</p>
 <div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.inject.Injector</span>
@@ -292,17 +346,22 @@ nor a user-specified value will result in a <cite>ProvisionException</cite>.</p>
 </div>
 </div>
 </div>
+</div>
 <div class="section" id="flags-without-defaults">
 <h2>Flags Without Defaults<a class="headerlink" href="#flags-without-defaults" title="Permalink to this headline">¶</a></h2>
-<p>When creating a Flag, the returned Flag is parameterized to the type of the supplied default
+<p>Flags defined without a default value are typically considered to be “mandatory” flags. That is, a
+command-line value MUST be supplied and it is not expected that the server will be able to correctly
+function without a supplied value.</p>
+<p>When creating a Flag, the returned Flag instance is parameterized to the type of the supplied default
 argument, e.g., the method signature looks like this:</p>
 <div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.app.</span><span class="o">{</span><span class="nc">Flag</span><span class="o">,</span> <span class="nc">Flaggable</span><span class="o">}</span>
 
 <span class="k">def</span> <span class="n">apply</span><span class="o">[</span><span class="kt">T:</span> <span class="kt">Flaggable</span><span class="o">](</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">default</span><span class="k">:</span> <span class="o">=&gt;</span> <span class="n">T</span><span class="o">,</span> <span class="n">help</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Flag</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span>
 </pre></div>
 </div>
-<p>Thus if you do not specify a default value, you must explicitly parameterize calling
-<cite>flag()</cite> with a defined type <cite>T</cite>, e.g,</p>
+<p>Thus when you do not specify a default value, you must <em>explicitly</em> parameterize calling <cite>flag[T](…)</cite>
+with a defined type <cite>T</cite>.</p>
+<p>E.g.,</p>
 <div class="section" id="a-bad-example">
 <h3>A Bad Example<a class="headerlink" href="#a-bad-example" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.foo.bar.ThirdPartyFoo</span>
@@ -340,11 +399,15 @@ which return an <cite>Option[T]</cite> on which you can then pattern match.</p>
 </div>
 <div class="section" id="injection">
 <h3>Injection<a class="headerlink" href="#injection" title="Permalink to this headline">¶</a></h3>
-<p>Flags without a default nor a user-supplied value will fail injection (since deferencing the value in this case results in an <cite>IllegalArgumentException</cite>). This means if you try to inject the value of a non-defaulted Flag that has not been supplied a value from the command-line using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/java/com/twitter/inject/annotations/Flag.java"><code class="docutils literal notranslate"><span class="pre">&#64;Flag</span></code></a> binding annotation, a <cite>ProvisionException</cite> will be thrown caused by the <cite>IllegalArgumentException</cite> <a class="reference external" href="https://github.com/twitter/finatra/blob/ec8d584eb914f50f92314c740dc68fb7abb47eff/inject/inject-app/src/main/scala/com/twitter/inject/app/internal/FlagsModule.scala#L34">here</a>.</p>
+<p>Flags without a default nor a user-supplied value will fail injection (since de-referencing the value
+in this case results in an <cite>IllegalArgumentException</cite>). This means if you try to inject the value of
+a non-defaulted Flag that has not been supplied a value from the command-line using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/java/com/twitter/inject/annotations/Flag.java"><code class="docutils literal notranslate"><span class="pre">&#64;Flag</span></code></a>
+binding annotation, a <cite>ProvisionException</cite> will be thrown caused by the <cite>IllegalArgumentException</cite>
+<a class="reference external" href="https://github.com/twitter/finatra/blob/ec8d584eb914f50f92314c740dc68fb7abb47eff/inject/inject-app/src/main/scala/com/twitter/inject/app/internal/FlagsModule.scala#L34">here</a>.</p>
 </div>
 <div class="section" id="a-better-example">
 <h3>A Better Example<a class="headerlink" href="#a-better-example" title="Permalink to this headline">¶</a></h3>
-<p>A better example of injecting a Flag value from a Flag defined without a default:</p>
+<p>A better example of injecting a parsed value from a Flag defined without a default:</p>
 <div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.foo.bar.ThirdPartyFoo</span>
 <span class="k">import</span> <span class="nn">com.google.inject.Provides</span>
 <span class="k">import</span> <span class="nn">com.twitter.inject.TwitterModule</span>
@@ -361,46 +424,45 @@ which return an <cite>Option[T]</cite> on which you can then pattern match.</p>
 <span class="o">}</span>
 </pre></div>
 </div>
-<p>In this example, we are assured that we will have the parsed value obtained from the injector
+<p>In this example, we are assured that we will have the parsed Flag value obtained from the Injector
 in our <cite>&#64;Provides</cite>-annotated method. If there is no supplied command-line value this will fail
-as mentioned previously at server startup with a <cite>ProvisionException</cite>.</p>
-</div>
-</div>
-<div class="section" id="passing-flag-values-as-command-line-arguments">
-<h2>Passing Flag Values as Command-Line Arguments<a class="headerlink" href="#passing-flag-values-as-command-line-arguments" title="Permalink to this headline">¶</a></h2>
-<p>Flags are set by passing them as arguments to your java application. E.g.,</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ java -jar finatra-http-server-assembly-2.0.0.jar -key<span class="o">=</span>value
-</pre></div>
-</div>
-<p>An example of this is passing the <cite>-help</cite> Flag to see usage for running a Finatra server, e.g.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ java -jar finatra-http-server-assembly-2.0.0.jar -help
-HelloWorldServer
-  -alarm_durations<span class="o">=</span><span class="s1">&#39;1.seconds,5.seconds&#39;</span>: <span class="m">2</span> alarm durations
-  -help<span class="o">=</span><span class="s1">&#39;false&#39;</span>: Show this <span class="nb">help</span>
-  -admin.port<span class="o">=</span><span class="s1">&#39;:8080&#39;</span>: Admin http server port
-  -bind<span class="o">=</span><span class="s1">&#39;:0&#39;</span>: Network interface to use
-  -log.level<span class="o">=</span><span class="s1">&#39;INFO&#39;</span>: Log level
-  -log.output<span class="o">=</span><span class="s1">&#39;/dev/stderr&#39;</span>: Output file
-  -key<span class="o">=</span><span class="s1">&#39;default&#39;</span>: The key to use
-</pre></div>
+(as mentioned previously) at server startup with a <cite>ProvisionException</cite>. Thus, this ensures that
+we cannot start the server without a command-line value being supplied. This fits the contract
+of a Flag defined without a default in that the Flag is meant to be treated as <strong>required</strong> for the
+server.</p>
 </div>
 </div>
 <div class="section" id="c-t-app-flags-failfastonflagsnotparsed">
 <h2><code class="docutils literal notranslate"><span class="pre">c.t.app.Flags#failfastOnFlagsNotParsed</span></code><a class="headerlink" href="#c-t-app-flags-failfastonflagsnotparsed" title="Permalink to this headline">¶</a></h2>
 <p>Note that Finatra defaults the <cite>c.t.app.Flags#failfastOnFlagsNotParsed</cite> option as mentioned in the
 <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#flags">TwitterServer documentation</a> to
-<a class="reference external" href="https://github.com/twitter/finatra/blob/ec8d584eb914f50f92314c740dc68fb7abb47eff/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala#L61">true</a>
-for you.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>It is important to note that this setting only applies directly to flags created within an application or a
-server – since they are directly created from the container’s <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flags.scala">c.t.app.Flags</a> collection.</p>
-<p>Flags created within a Finatra <cite>TwitterModule</cite> are added to the container’s <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flags.scala">c.t.app.Flags</a> collection in the <cite>init</cite>
-<a class="reference external" href="./lifecycle.html#c-t-inject-app-app-lifecycle">Application Lifecycle</a> phase which means that they are currently
-created with the default “failFast” behavior for Flags – which is to warn only. Once added to the container’s
-collection of Flags, they are updated with the containers value for this setting.</p>
-<p>Thus, we recommend caution when creating and <a class="reference external" href="#holding-a-reference">holding onto a reference</a> of a flag in
-a Finatra <cite>TwitterModule</cite>.</p>
+<a class="reference external" href="https://github.com/twitter/finatra/blob/c1b49edebb0ad513f2b3439ee4f2f5e0541e2b26/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L127">true</a>
+for you. Having this option turned on means that if a Flag is accessed in order to read its value
+before the Flag has been parsed then an <cite>IllegalStateException</cite> will be thrown.</p>
+<div class="admonition-reminder admonition">
+<p class="admonition-title">Reminder</p>
+<p>Flag values are parsed from command line input <em>after</em> the <cite>c.t.app.App#init</cite> application lifecycle
+phase and <em>before</em> the <cite>c.t.app.App#premain</cite> lifecycle phase.</p>
+</div>
+<div class="section" id="modules">
+<h3>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h3>
+<p>It is important to note that the <cite>c.t.app.Flags#failfastOnFlagsNotParsed</cite> option <strong>only applies to flags created within an application or a server</strong>
+– since they are directly created from the application’s
+<a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flags.scala">c.t.app.Flags</a>
+collection.</p>
+<div class="section" id="id3">
+<h4>Caution<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<p>Flags created within a Finatra <cite>TwitterModule</cite> are created with the default behavior for Flags which
+is ‘false’ for the “failFast” behavior of reading a Flag value before the Flag is parsed. Thus, is it
+extremely important to not attempt to access a <cite>TwitterModule</cite> created Flag’s value too eagerly as
+you can end up with the Flag’s default or an error (if there is no default).</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><strong>We highly recommend that all containers keep</strong> <a class="reference external" href="https://github.com/twitter/finatra/blob/c1b49edebb0ad513f2b3439ee4f2f5e0541e2b26/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L127">c.t.inject.app.App#failfastOnFlagsNotParsed</a>
+<strong>set to ‘true’.</strong></p>
+<p>This should arguably be the default behavior for Flag instances but for legacy reasons is not.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="section" id="modules-depending-on-other-modules-flags-edition">
@@ -528,7 +590,7 @@ which needs both the <cite>ClientId</cite> and a <cite>ClientA</cite> we could d
 have chosen to leave it out.</p>
 <p>The <cite>providesClientB</cite> method in the Module above takes in both a <cite>ClientId</cite> String and a <cite>ClientA</cite>.
 Since it declares the two Modules, we’re assured that these types will be available from the
-injector for our <cite>providesClientB</cite> method to use.</p>
+Injector for our <cite>providesClientB</cite> method to use.</p>
 </div>
 <div class="section" id="this-is-just-an-example">
 <h2>This is just an Example<a class="headerlink" href="#this-is-just-an-example" title="Permalink to this headline">¶</a></h2>
@@ -543,6 +605,44 @@ which is a utility for building filtered thrift clients.</p>
 for providing the bound <cite>ClientId</cite> type thus the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/FilteredThriftClientModule.scala">FilteredThriftClientModule</a>
 does <strong>not</strong> specify the <cite>ThriftClientIdModule</cite> in it’s list of Modules to allow users to bind an
 instance of the <cite>ClientId</cite> type in any manner they choose.</p>
+</div>
+<div class="section" id="passing-flag-values-as-command-line-arguments">
+<h2>Passing Flag Values as Command-Line Arguments<a class="headerlink" href="#passing-flag-values-as-command-line-arguments" title="Permalink to this headline">¶</a></h2>
+<p>Flags are set by passing them as arguments to your java application. E.g.,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ java -jar finatra-http-server-assembly-2.0.0.jar -key<span class="o">=</span>value
+</pre></div>
+</div>
+<p>An example of this is passing the <cite>-help</cite> Flag to see usage for running a Finatra server, e.g.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ java -jar finatra-http-server-assembly-2.0.0.jar -help
+HelloWorldServer
+  -alarm_durations<span class="o">=</span><span class="s1">&#39;1.seconds,5.seconds&#39;</span>: <span class="m">2</span> alarm durations
+  -help<span class="o">=</span><span class="s1">&#39;false&#39;</span>: Show this <span class="nb">help</span>
+  -admin.port<span class="o">=</span><span class="s1">&#39;:8080&#39;</span>: Admin http server port
+  -bind<span class="o">=</span><span class="s1">&#39;:0&#39;</span>: Network interface to use
+  -log.level<span class="o">=</span><span class="s1">&#39;INFO&#39;</span>: Log level
+  -log.output<span class="o">=</span><span class="s1">&#39;/dev/stderr&#39;</span>: Output file
+  -key<span class="o">=</span><span class="s1">&#39;default&#39;</span>: The key to use
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>Best Practices<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Prefer defining Flags as <em>granular</em> as possible. i.e., do not define an “environment” Flag which is
+then used to choose application functionality in code. It is considered best practice
+to keep configuration separated from code [<a class="reference external" href="https://12factor.net/config">1</a>, <a class="reference external" href="https://microservices.io/patterns/externalized-configuration.html">2</a>, <a class="reference external" href="https://dzone.com/articles/microservices-externalized-configuration">3</a>].</p></li>
+<li><p>Prefer to define all Flags which help to configure an application resource in the <cite>TwitterModule</cite>
+which provides the resource to the object graph.</p></li>
+<li><p>Do not hold a reference to a created Flag unless necessary. Prefer obtaining the parsed Flag
+value from the Injector.</p></li>
+<li><p>If you have a lot of external configuration and your deployment system does not provide ways to
+manage a large amount of application parameters, consider <a class="reference external" href="#but-i-have-a-lot-of-flags">other mechanisms</a>
+for reading and parsing external configuration. But prefer to keep the application configuration
+externalized and not moved into the code.</p></li>
+<li><p>Make use of the <a class="reference external" href="../testing/integration_tests.html#id2">TestInjector</a> for integration testing
+with <cite>TwitterModules</cite> as this will correctly handle the lifecycle and Flag parsing of
+<cite>TwitterModules</cite> to create a <cite>c.t.inject.Injector</cite>.</p></li>
+</ul>
 </div>
 </div>
 
@@ -569,7 +669,8 @@ instance of the <cite>ClientId</cite> type in any manner they choose.</p>
 <li><a class="reference internal" href="#but-i-have-a-lot-of-flags">But I have a lot of Flags</a></li>
 <li><a class="reference internal" href="#when-are-flags-parsed">When Are Flags Parsed?</a></li>
 <li><a class="reference internal" href="#how-to-define-flags">How To Define Flags</a><ul>
-<li><a class="reference internal" href="#flag-definitions">Flag Definitions</a></li>
+<li><a class="reference internal" href="#within-an-app-or-a-server">Within an App or a Server</a></li>
+<li><a class="reference internal" href="#within-a-twittermodule">Within a TwitterModule</a><ul>
 <li><a class="reference internal" href="#flag-annotation"><code class="docutils literal notranslate"><span class="pre">&#64;Flag</span></code> annotation</a></li>
 <li><a class="reference internal" href="#holding-a-reference">Holding a Reference</a><ul>
 <li><a class="reference internal" href="#caution">Caution</a></li>
@@ -580,16 +681,25 @@ instance of the <cite>ClientId</cite> type in any manner they choose.</p>
 <li><a class="reference internal" href="#flag-value-injection">Flag Value Injection</a></li>
 </ul>
 </li>
+</ul>
+</li>
 <li><a class="reference internal" href="#flags-without-defaults">Flags Without Defaults</a><ul>
 <li><a class="reference internal" href="#a-bad-example">A Bad Example</a></li>
 <li><a class="reference internal" href="#injection">Injection</a></li>
 <li><a class="reference internal" href="#a-better-example">A Better Example</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#passing-flag-values-as-command-line-arguments">Passing Flag Values as Command-Line Arguments</a></li>
-<li><a class="reference internal" href="#c-t-app-flags-failfastonflagsnotparsed"><code class="docutils literal notranslate"><span class="pre">c.t.app.Flags#failfastOnFlagsNotParsed</span></code></a></li>
+<li><a class="reference internal" href="#c-t-app-flags-failfastonflagsnotparsed"><code class="docutils literal notranslate"><span class="pre">c.t.app.Flags#failfastOnFlagsNotParsed</span></code></a><ul>
+<li><a class="reference internal" href="#modules">Modules</a><ul>
+<li><a class="reference internal" href="#id3">Caution</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a class="reference internal" href="#modules-depending-on-other-modules-flags-edition">Modules Depending on Other Modules - Flags Edition</a></li>
 <li><a class="reference internal" href="#this-is-just-an-example">This is just an Example</a></li>
+<li><a class="reference internal" href="#passing-flag-values-as-command-line-arguments">Passing Flag Values as Command-Line Arguments</a></li>
+<li><a class="reference internal" href="#id4">Best Practices</a></li>
 </ul>
 </li>
 </ul>

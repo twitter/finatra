@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>HTTP Requests &#8212; Finatra 20.4.0 documentation</title>
+    <title>HTTP Requests &#8212; Finatra 20.4.1 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -129,7 +129,7 @@ the <cite>c.t.finagle.http.Request</cite>. Supported annotations:</p>
 </ul>
 <hr class="docutils" />
 <div class="section" id="routeparam">
-<h4><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/java/com/twitter/finatra/request/RouteParam.java">&#64;RouteParam</a><a class="headerlink" href="#routeparam" title="Permalink to this headline">¶</a></h4>
+<h4><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-annotations/src/main/java/com/twitter/finatra/http/annotations/RouteParam.java">&#64;RouteParam</a><a class="headerlink" href="#routeparam" title="Permalink to this headline">¶</a></h4>
 <p>Denotes a field to be parsed from a named parameter in a given route, e.g.,</p>
 <div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span> <span class="k">class</span> <span class="nc">FromRouteRequest</span><span class="o">(</span>
   <span class="nd">@RouteParam</span><span class="o">(</span><span class="s">&quot;entity&quot;</span><span class="o">)</span> <span class="n">resource</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
@@ -160,7 +160,7 @@ value of <cite>FromRouteRequest#resource</cite> and the string “1234” into t
 </div>
 <hr class="docutils" />
 <div class="section" id="queryparam">
-<h4><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/java/com/twitter/finatra/request/QueryParam.java">&#64;QueryParam</a><a class="headerlink" href="#queryparam" title="Permalink to this headline">¶</a></h4>
+<h4><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-annotations/src/main/java/com/twitter/finatra/http/annotations/QueryParam.java">&#64;QueryParam</a><a class="headerlink" href="#queryparam" title="Permalink to this headline">¶</a></h4>
 <p>Read a value from the request query string by a parameter named for the case class field or by the
 <code class="docutils literal notranslate"><span class="pre">&#64;QueryParam</span></code> annotation value.</p>
 <p>For example, suppose you want to parse a <cite>GET</cite> request with three query params: <cite>max</cite>, <cite>startDate</cite>,
@@ -212,7 +212,7 @@ as a Boolean into the <cite>QueryParamRequest#isSkipped</cite> field.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="formparam">
-<h4><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/java/com/twitter/finatra/request/FormParam.java">&#64;FormParam</a><a class="headerlink" href="#formparam" title="Permalink to this headline">¶</a></h4>
+<h4><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-annotations/src/main/java/com/twitter/finatra/http/annotations/FormParam.java">&#64;FormParam</a><a class="headerlink" href="#formparam" title="Permalink to this headline">¶</a></h4>
 <p>Read a value from a form field with the case class field’s name or as the value specified in the
 <code class="docutils literal notranslate"><span class="pre">&#64;FormParam</span></code> annotation from the request body.</p>
 <p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/FormPostRequest.scala">example</a>.</p>
@@ -223,7 +223,7 @@ as a Boolean into the <cite>QueryParamRequest#isSkipped</cite> field.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="header">
-<h4><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/java/com/twitter/finatra/request/Header.java">&#64;Header</a><a class="headerlink" href="#header" title="Permalink to this headline">¶</a></h4>
+<h4><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-annotations/src/main/java/com/twitter/finatra/http/annotations/Header.java">&#64;Header</a><a class="headerlink" href="#header" title="Permalink to this headline">¶</a></h4>
 <p>Read a header value specified by the case class field name or by the <code class="docutils literal notranslate"><span class="pre">&#64;Header</span></code> annotation value.
 You can use a Scala <a class="reference external" href="https://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html">“back-quote” literal</a>
 for the field name when special characters are involved.</p>

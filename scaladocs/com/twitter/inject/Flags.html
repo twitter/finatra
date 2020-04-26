@@ -327,6 +327,10 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="com.twitter.inject">inject</a></dd></dl></div>
     </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="class" href="" title="Transforms a com.twitter.app.Flags collection into a map look up"></a>
+                        <a href="" title="Transforms a com.twitter.app.Flags collection into a map look up">Flags</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="class" href="Injector.html" title=""></a>
                         <a href="Injector.html" title="">Injector</a>
                       </li><li class="current-entities indented3">
@@ -343,20 +347,8 @@
                         <a href="StackTransformer.html" title="StackTransformer allows plugins to modify Finatra filters before they are applied to controller routes.">StackTransformer</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
-                        <a class="trait" href="TwitterBaseModule.html" title=""></a>
-                        <a href="TwitterBaseModule.html" title="">TwitterBaseModule</a>
-                      </li><li class="current-entities indented3">
-                        <span class="separator"></span>
                         <a class="class" href="TwitterModule.html" title="A support class for Module implementations which exposes a DSL for binding via type parameters."></a>
                         <a href="TwitterModule.html" title="A support class for Module implementations which exposes a DSL for binding via type parameters.">TwitterModule</a>
-                      </li><li class="current-entities indented3">
-                        <span class="separator"></span>
-                        <a class="trait" href="" title="Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules"></a>
-                        <a href="" title="Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules">TwitterModuleFlags</a>
-                      </li><li class="current-entities indented3">
-                        <span class="separator"></span>
-                        <a class="trait" href="TwitterModuleLifecycle.html" title="com.twitter.inject.TwitterModule to com.twitter.inject.app.App lifecycle integration."></a>
-                        <a href="TwitterModuleLifecycle.html" title="com.twitter.inject.TwitterModule to com.twitter.inject.app.App lifecycle integration.">TwitterModuleLifecycle</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="class" href="TwitterPrivateModule.html" title="A module whose configuration information is hidden from its environment by default."></a>
@@ -370,12 +362,12 @@
             </div>
           </div>
           <div id="content">
-            <body class="trait type">
+            <body class="class type">
       <div id="definition">
-        <div class="big-circle trait">t</div>
+        <div class="big-circle class">c</div>
         <p id="owner"><a href="../../index.html" class="extype" name="com">com</a>.<a href="../index.html" class="extype" name="com.twitter">twitter</a>.<a href="index.html" class="extype" name="com.twitter.inject">inject</a></p>
-        <h1>TwitterModuleFlags<span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html" title="Permalink">
+        <h1>Flags<span class="permalink">
+      <a href="../../../com/twitter/inject/Flags.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
@@ -385,26 +377,20 @@
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">TwitterModuleFlags</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">Flags</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules
-</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Transforms a <a href="https://twitter.github.io/util/docs/com/twitter/app/Flags.html" class="extype" name="com.twitter.app.Flags">com.twitter.app.Flags</a> collection into a map look up</p></div><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
-        </div><div class="toggleContainer block">
-            <span class="toggle">
-              Known Subclasses
-            </span>
-            <div class="subClasses hiddenContent"><a href="../finatra/http/modules/AccessLogModule$.html" class="extype" name="com.twitter.finatra.http.modules.AccessLogModule">AccessLogModule</a>, <a href="../finatra/http/modules/DarkTrafficFilterModule.html" class="extype" name="com.twitter.finatra.http.modules.DarkTrafficFilterModule">DarkTrafficFilterModule</a>, <a href="../finatra/http/modules/HttpResponseClassifierModule$.html" class="extype" name="com.twitter.finatra.http.modules.HttpResponseClassifierModule">HttpResponseClassifierModule</a>, <a href="../finatra/http/modules/MessageBodyFlagsModule$.html" class="extype" name="com.twitter.finatra.http.modules.MessageBodyFlagsModule">MessageBodyFlagsModule</a>, <a href="../finatra/http/modules/MessageBodyModule.html" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">MessageBodyModule</a>, <a href="../finatra/http/modules/MessageBodyModule$.html" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">MessageBodyModule</a>, <a href="../finatra/http/modules/MustacheModule$.html" class="extype" name="com.twitter.finatra.http.modules.MustacheModule">MustacheModule</a>, <a href="../finatra/httpclient/modules/HttpClientModuleTrait.html" class="extype" name="com.twitter.finatra.httpclient.modules.HttpClientModuleTrait">HttpClientModuleTrait</a>, <a href="../finatra/jackson/modules/ScalaObjectMapperModule.html" class="extype" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule">ScalaObjectMapperModule</a>, <a href="../finatra/jackson/modules/ScalaObjectMapperModule$.html" class="extype" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule">ScalaObjectMapperModule</a>, <a href="../finatra/kafka/modules/KafkaBootstrapModule$.html" class="extype" name="com.twitter.finatra.kafka.modules.KafkaBootstrapModule">KafkaBootstrapModule</a>, <a href="../finatra/modules/CredentialsModule$.html" class="extype" name="com.twitter.finatra.modules.CredentialsModule">CredentialsModule</a>, <a href="../finatra/modules/FileResolverModule$.html" class="extype" name="com.twitter.finatra.modules.FileResolverModule">FileResolverModule</a>, <a href="../finatra/mustache/modules/MustacheFactoryModule$.html" class="extype" name="com.twitter.finatra.mustache.modules.MustacheFactoryModule">MustacheFactoryModule</a>, <a href="../finatra/mustache/modules/MustacheFlagsModule$.html" class="extype" name="com.twitter.finatra.mustache.modules.MustacheFlagsModule">MustacheFlagsModule</a>, <a href="../finatra/thrift/modules/ThriftResponseClassifierModule$.html" class="extype" name="com.twitter.finatra.thrift.modules.ThriftResponseClassifierModule">ThriftResponseClassifierModule</a>, <a href="InjectorModule$.html" class="extype" name="com.twitter.inject.InjectorModule">InjectorModule</a>, <a href="TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a>, <a href="TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>, <a href="TwitterPrivateModule.html" class="extype" name="com.twitter.inject.TwitterPrivateModule">TwitterPrivateModule</a>, <a href="modules/LoggerModule$.html" class="extype" name="com.twitter.inject.modules.LoggerModule">LoggerModule</a>, <a href="modules/StackClientModuleTrait.html" class="extype" name="com.twitter.inject.modules.StackClientModuleTrait">StackClientModuleTrait</a>, <a href="modules/StackTransformerModule$.html" class="extype" name="com.twitter.inject.modules.StackTransformerModule">StackTransformerModule</a>, <a href="modules/StatsReceiverModule$.html" class="extype" name="com.twitter.inject.modules.StatsReceiverModule">StatsReceiverModule</a>, <a href="requestscope/FinagleRequestScopeModule$.html" class="extype" name="com.twitter.inject.requestscope.FinagleRequestScopeModule">FinagleRequestScopeModule</a>, <a href="requestscope/RequestScopeBinding.html" class="extype" name="com.twitter.inject.requestscope.RequestScopeBinding">RequestScopeBinding</a>, <a href="thrift/modules/AndThenServiceModule$.html" class="extype" name="com.twitter.inject.thrift.modules.AndThenServiceModule">AndThenServiceModule</a>, <a href="thrift/modules/JavaDarkTrafficFilterModule.html" class="extype" name="com.twitter.inject.thrift.modules.JavaDarkTrafficFilterModule">JavaDarkTrafficFilterModule</a>, <a href="thrift/modules/ReqRepDarkTrafficFilterModule.html" class="extype" name="com.twitter.inject.thrift.modules.ReqRepDarkTrafficFilterModule">ReqRepDarkTrafficFilterModule</a>, <a href="thrift/modules/ThriftClientIdModule.html" class="extype" name="com.twitter.inject.thrift.modules.ThriftClientIdModule">ThriftClientIdModule</a>, <a href="thrift/modules/ThriftClientIdModule$.html" class="extype" name="com.twitter.inject.thrift.modules.ThriftClientIdModule">ThriftClientIdModule</a>, <a href="thrift/modules/ThriftClientModule.html" class="extype" name="com.twitter.inject.thrift.modules.ThriftClientModule">ThriftClientModule</a>, <a href="thrift/modules/ThriftMethodBuilderClientModule.html" class="extype" name="com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule">ThriftMethodBuilderClientModule</a>, <a href="../finatra/httpclient/modules/HttpClientModule.html" class="extype" name="com.twitter.finatra.httpclient.modules.HttpClientModule">HttpClientModule</a>, <a href="../finatra/json/modules/FinatraJacksonModule.html" class="extype" name="com.twitter.finatra.json.modules.FinatraJacksonModule">FinatraJacksonModule</a>, <a href="../finatra/json/modules/FinatraJacksonModule$.html" class="extype" name="com.twitter.finatra.json.modules.FinatraJacksonModule">FinatraJacksonModule</a>, <a href="thrift/modules/DarkTrafficFilterModule.html" class="extype" name="com.twitter.inject.thrift.modules.DarkTrafficFilterModule">DarkTrafficFilterModule</a>, <a href="thrift/modules/FilteredThriftClientFlagsModule$.html" class="extype" name="com.twitter.inject.thrift.modules.FilteredThriftClientFlagsModule">FilteredThriftClientFlagsModule</a>, <a href="thrift/modules/FilteredThriftClientModule.html" class="extype" name="com.twitter.inject.thrift.modules.FilteredThriftClientModule">FilteredThriftClientModule</a></div>
-          </div></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -429,7 +415,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.inject.TwitterModuleFlags"><span>TwitterModuleFlags</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.inject.Flags"><span>Flags</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -459,7 +445,7 @@
                 <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#!=(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../com/twitter/inject/Flags.html#!=(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -475,7 +461,7 @@
     </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html###():Int" title="Permalink">
+      <a href="../../../com/twitter/inject/Flags.html###():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -491,7 +477,7 @@
     </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#==(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../com/twitter/inject/Flags.html#==(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -507,7 +493,7 @@
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#asInstanceOf[T0]:T0" title="Permalink">
+      <a href="../../../com/twitter/inject/Flags.html#asInstanceOf[T0]:T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -523,7 +509,7 @@
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#clone():Object" title="Permalink">
+      <a href="../../../com/twitter/inject/Flags.html#clone():Object" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -544,46 +530,10 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.inject.TwitterModuleFlags#createFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="createFlag[T](String,T,String,Flaggable[T]):Flag[T]"></a>
-      <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">createFlag</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="default">default: <span class="extype" name="com.twitter.inject.TwitterModuleFlags.createFlag.T">T</span></span>, <span name="help">help: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="flaggable">flaggable: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flaggable.html#com.twitter.app.Flaggable" class="extype" name="com.twitter.app.Flaggable">Flaggable</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.createFlag.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.createFlag.T">T</span>]</span>
-      </span>
-      
-      <p class="shortcomment cmt">A Java-friendly method for creating a named <span class="extype" name="Flag">Flag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>A Java-friendly method for creating a named <span class="extype" name="Flag">Flag</span>.
-</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">default</dt><dd class="cmt"><p>a default value for the <span class="extype" name="Flag">Flag</span> when no value is given as an application
-               argument.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.inject.TwitterModuleFlags#createMandatoryFlag" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="createMandatoryFlag[T](String,String,String,Flaggable[T]):Flag[T]"></a>
-      <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">createMandatoryFlag</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="help">help: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="usage">usage: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="flaggable">flaggable: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flaggable.html#com.twitter.app.Flaggable" class="extype" name="com.twitter.app.Flaggable">Flaggable</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.createMandatoryFlag.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.createMandatoryFlag.T">T</span>]</span>
-      </span>
-      
-      <p class="shortcomment cmt">A Java-friendly way to create a &quot;mandatory&quot; <span class="extype" name="Flag">Flag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>A Java-friendly way to create a &quot;mandatory&quot; <span class="extype" name="Flag">Flag</span>. &quot;Mandatory&quot; flags MUST have a value
-provided as an application argument (as they have no default value to be used).
-</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">usage</dt><dd class="cmt"><p>a string describing the type of the <span class="extype" name="Flag">Flag</span>, i.e.: Integer.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../com/twitter/inject/Flags.html#eq(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -596,26 +546,10 @@ provided as an application argument (as they have no default value to be used).
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
-      <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#equals(x$1:Any):Boolean" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#finalize():Unit" title="Permalink">
+      <a href="../../../com/twitter/inject/Flags.html#finalize():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -634,47 +568,10 @@ provided as an application argument (as they have no default value to be used).
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.inject.TwitterModuleFlags#flag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="flag[T](name:String,help:String)(implicitevidence$2:com.twitter.app.Flaggable[T],implicitevidence$3:Manifest[T]):com.twitter.app.Flag[T]"></a><a id="flag[T](String,String)(Flaggable[T],Manifest[T]):Flag[T]"></a>
+    </li><li name="com.twitter.inject.Flags#flgs" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="flgs:com.twitter.app.Flags"></a><a id="flgs:app.Flags"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#flag[T](name:String,help:String)(implicitevidence$2:com.twitter.app.Flaggable[T],implicitevidence$3:Manifest[T]):com.twitter.app.Flag[T]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">flag</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="help">help: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flaggable.html#com.twitter.app.Flaggable" class="extype" name="com.twitter.app.Flaggable">Flaggable</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.flag.T">T</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.flag.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.flag.T">T</span>]</span>
-      </span>
-      
-      <p class="shortcomment cmt">Create a &quot;mandatory&quot; flag and add it to this Module's flags list.&quot;Mandatory&quot; flags MUST have
-a value provided as an application argument (as they have no default value to be used).</p><div class="fullcomment"><div class="comment cmt"><p>Create a &quot;mandatory&quot; flag and add it to this Module's flags list.&quot;Mandatory&quot; flags MUST have
-a value provided as an application argument (as they have no default value to be used).
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>must be a <span class="extype" name="Flaggable">Flaggable</span> type.</p></dd><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Note</dt><dd><span class="cmt"><p>Java users: see the more Java-friendly <a href="#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.inject.TwitterModuleFlags#createFlag">createFlag</a> or <a href="#createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.inject.TwitterModuleFlags#createMandatoryFlag">createMandatoryFlag</a>.</p></span></dd></dl></div>
-    </li><li name="com.twitter.inject.TwitterModuleFlags#flag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="flag[T](name:String,default:T,help:String)(implicitevidence$1:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="flag[T](String,T,String)(Flaggable[T]):Flag[T]"></a>
-      <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#flag[T](name:String,default:T,help:String)(implicitevidence$1:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">flag</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="default">default: <span class="extype" name="com.twitter.inject.TwitterModuleFlags.flag.T">T</span></span>, <span name="help">help: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flaggable.html#com.twitter.app.Flaggable" class="extype" name="com.twitter.app.Flaggable">Flaggable</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.flag.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.flag.T">T</span>]</span>
-      </span>
-      
-      <p class="shortcomment cmt">Create a <span class="extype" name="Flag">Flag</span> and add it to this Module's flags list.</p><div class="fullcomment"><div class="comment cmt"><p>Create a <span class="extype" name="Flag">Flag</span> and add it to this Module's flags list.
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>must be a <span class="extype" name="Flaggable">Flaggable</span> type.</p></dd><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">default</dt><dd class="cmt"><p>a default value for the <span class="extype" name="Flag">Flag</span> when no value is given as an application
-               argument.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Note</dt><dd><span class="cmt"><p>Java users: see the more Java-friendly <a href="#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.inject.TwitterModuleFlags#createFlag">createFlag</a> or <a href="#createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.inject.TwitterModuleFlags#createMandatoryFlag">createMandatoryFlag</a>.</p></span></dd></dl></div>
-    </li><li name="com.twitter.inject.TwitterModuleFlags#flags" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="flags:scala.collection.mutable.ArrayBuffer[com.twitter.app.Flag[_]]"></a><a id="flags:ArrayBuffer[Flag[_]]"></a>
-      <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#flags:scala.collection.mutable.ArrayBuffer[com.twitter.app.Flag[_]]" title="Permalink">
+      <a href="../../../com/twitter/inject/Flags.html#flgs:com.twitter.app.Flags" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -683,14 +580,46 @@ a value provided as an application argument (as they have no default value to be
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">flags</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[_]]</span>
+        <span class="name">flgs</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flags.html#com.twitter.app.Flags" class="extype" name="com.twitter.app.Flags">app.Flags</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd></dl></div>
+      
+    </li><li name="com.twitter.inject.Flags#get" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="get(name:String):Option[com.twitter.app.Flag[_]]"></a><a id="get(String):Option[Flag[_]]"></a>
+      <span class="permalink">
+      <a href="../../../com/twitter/inject/Flags.html#get(name:String):Option[com.twitter.app.Flag[_]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">get</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[_]]</span>
+      </span>
+      
+      
+    </li><li name="com.twitter.inject.Flags#getAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getAll:Seq[com.twitter.app.Flag[_]]"></a><a id="getAll:Seq[Flag[_]]"></a>
+      <span class="permalink">
+      <a href="../../../com/twitter/inject/Flags.html#getAll:Seq[com.twitter.app.Flag[_]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getAll</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[_]]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#getClass():Class[_]" title="Permalink">
+      <a href="../../../com/twitter/inject/Flags.html#getClass():Class[_]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -706,29 +635,10 @@ a value provided as an application argument (as they have no default value to be
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hashCode():Int"></a>
-      <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#hashCode():Int" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
-                <span class="name">@native</span><span class="args">()</span>
-              
-        </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#isInstanceOf[T0]:Boolean" title="Permalink">
+      <a href="../../../com/twitter/inject/Flags.html#isInstanceOf[T0]:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -744,7 +654,7 @@ a value provided as an application argument (as they have no default value to be
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../com/twitter/inject/Flags.html#ne(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -760,7 +670,7 @@ a value provided as an application argument (as they have no default value to be
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#notify():Unit" title="Permalink">
+      <a href="../../../com/twitter/inject/Flags.html#notify():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -779,7 +689,7 @@ a value provided as an application argument (as they have no default value to be
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#notifyAll():Unit" title="Permalink">
+      <a href="../../../com/twitter/inject/Flags.html#notifyAll():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -798,7 +708,7 @@ a value provided as an application argument (as they have no default value to be
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+      <a href="../../../com/twitter/inject/Flags.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -811,26 +721,10 @@ a value provided as an application argument (as they have no default value to be
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toString():String"></a>
-      <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#toString():String" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#wait():Unit" title="Permalink">
+      <a href="../../../com/twitter/inject/Flags.html#wait():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -852,7 +746,7 @@ a value provided as an application argument (as they have no default value to be
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+      <a href="../../../com/twitter/inject/Flags.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -874,7 +768,7 @@ a value provided as an application argument (as they have no default value to be
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterModuleFlags.html#wait(x$1:Long):Unit" title="Permalink">
+      <a href="../../../com/twitter/inject/Flags.html#wait(x$1:Long):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -905,7 +799,15 @@ a value provided as an application argument (as they have no default value to be
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.Product">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a></h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>

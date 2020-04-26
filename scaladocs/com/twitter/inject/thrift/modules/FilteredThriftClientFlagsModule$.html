@@ -220,7 +220,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>, <a href="../../TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a>, <a href="../../TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a>, <a href="../../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">util.logging.Logging</a>, <a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a>, <span class="extype" name="com.google.inject.AbstractModule">AbstractModule</span>, <span class="extype" name="com.google.inject.Module">Module</span>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>, <span class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</span>, <span class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</span>, <a href="../../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">util.logging.Logging</a>, <span class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</span>, <span class="extype" name="com.google.inject.AbstractModule">AbstractModule</span>, <span class="extype" name="com.google.inject.Module">Module</span>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -1067,7 +1067,7 @@ the application <code>onExit</code> function to be executed on graceful shutdown
   <span class="kw">val</span> closable = ...
   Await.result(
     closable.close(after: Duration), timeout: Duration)
-  }</pre></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a></dd><dt>Note</dt><dd><span class="cmt"><p>It is expected that the passed function is a function over a <a href="https://twitter.github.io/util/docs/com/twitter/util/Closable.html" class="extype" name="com.twitter.util.Closable">com.twitter.util.Closable</a>.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.app.App.onExit(f:">=&gt; Unit)</span></p></span><span class="cmt"><p><a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable.html" class="extype" name="com.twitter.util.Awaitable">com.twitter.util.Awaitable</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/util/docs/com/twitter/util/Closable.html" class="extype" name="com.twitter.util.Closable">com.twitter.util.Closable</a></p></span></dd></dl></div>
+  }</pre></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>TwitterModuleLifecycle</dd><dt>Note</dt><dd><span class="cmt"><p>It is expected that the passed function is a function over a <a href="https://twitter.github.io/util/docs/com/twitter/util/Closable.html" class="extype" name="com.twitter.util.Closable">com.twitter.util.Closable</a>.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.app.App.onExit(f:">=&gt; Unit)</span></p></span><span class="cmt"><p><a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable.html" class="extype" name="com.twitter.util.Awaitable">com.twitter.util.Awaitable</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/util/docs/com/twitter/util/Closable.html" class="extype" name="com.twitter.util.Closable">com.twitter.util.Closable</a></p></span></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModule#configure" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configure():Unit"></a>
       <span class="permalink">
@@ -1138,7 +1138,7 @@ only <code>@Provides</code>-annotated methods do not need to implement an empty
       
       <p class="shortcomment cmt">A Java-friendly method for creating a named <span class="extype" name="Flag">Flag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>A Java-friendly method for creating a named <span class="extype" name="Flag">Flag</span>.
 </p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">default</dt><dd class="cmt"><p>a default value for the <span class="extype" name="Flag">Flag</span> when no value is given as an application
-               argument.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
+               argument.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>TwitterModuleFlags</dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModuleFlags#createMandatoryFlag" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="createMandatoryFlag[T](String,String,String,Flaggable[T]):Flag[T]"></a>
       <span class="permalink">
@@ -1156,7 +1156,7 @@ only <code>@Provides</code>-annotated methods do not need to implement an empty
       
       <p class="shortcomment cmt">A Java-friendly way to create a &quot;mandatory&quot; <span class="extype" name="Flag">Flag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>A Java-friendly way to create a &quot;mandatory&quot; <span class="extype" name="Flag">Flag</span>. &quot;Mandatory&quot; flags MUST have a value
 provided as an application argument (as they have no default value to be used).
-</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">usage</dt><dd class="cmt"><p>a string describing the type of the <span class="extype" name="Flag">Flag</span>, i.e.: Integer.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">usage</dt><dd class="cmt"><p>a string describing the type of the <span class="extype" name="Flag">Flag</span>, i.e.: Integer.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>TwitterModuleFlags</dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#currentStage" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="currentStage():com.google.inject.Stage"></a><a id="currentStage():Stage"></a>
       <span class="permalink">
@@ -1382,6 +1382,33 @@ provided as an application argument (as they have no default value to be used).
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="com.twitter.inject.TwitterModuleFlags#failfastOnFlagsNotParsed" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="failfastOnFlagsNotParsed:Boolean"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/inject/thrift/modules/FilteredThriftClientFlagsModule$.html#failfastOnFlagsNotParsed:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">failfastOnFlagsNotParsed</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">This is akin to the <code>c.t.inject.app.App#failfastOnFlagsNotParsed</code> and serves
+a similar purpose but for new <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html" class="extype" name="com.twitter.app.Flag">com.twitter.app.Flag</a> instances created in this
+<a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>.</p><div class="fullcomment"><div class="comment cmt"><p>This is akin to the <code>c.t.inject.app.App#failfastOnFlagsNotParsed</code> and serves
+a similar purpose but for new <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html" class="extype" name="com.twitter.app.Flag">com.twitter.app.Flag</a> instances created in this
+<a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>. The value is 'true' by default. This is to ensure that the value of
+a <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html" class="extype" name="com.twitter.app.Flag">com.twitter.app.Flag</a> instance created in this <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> cannot be incorrectly
+accessed before the application has parsed any passed command line input. This mirrors the
+framework default for <code>com.twitter.inject.app.App#failfastOnFlagsNotParsed</code> for Flag
+instances created within the application container.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <span class="extype" name="Boolean">Boolean</span> indicating if <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html" class="extype" name="com.twitter.app.Flag">com.twitter.app.Flag</a> instances created in
+        this <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> should be set with <span class="extype" name="com.twitter.app.Flag.failFastUntilParsed">com.twitter.app.Flag.failFastUntilParsed</span>
+        set to 'true' or 'false'. Default: 'true'.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>TwitterModuleFlags</dd><dt>Note</dt><dd><span class="cmt"><p>This value SHOULD NOT be changed to 'false' without a very good reason.</p></span></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
@@ -1422,7 +1449,7 @@ provided as an application argument (as they have no default value to be used).
       <p class="shortcomment cmt">Create a &quot;mandatory&quot; flag and add it to this Module's flags list.&quot;Mandatory&quot; flags MUST have
 a value provided as an application argument (as they have no default value to be used).</p><div class="fullcomment"><div class="comment cmt"><p>Create a &quot;mandatory&quot; flag and add it to this Module's flags list.&quot;Mandatory&quot; flags MUST have
 a value provided as an application argument (as they have no default value to be used).
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>must be a <span class="extype" name="Flaggable">Flaggable</span> type.</p></dd><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd><dt>Note</dt><dd><span class="cmt"><p>Java users: see the more Java-friendly <a href="../../TwitterModuleFlags.html#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.inject.TwitterModuleFlags#createFlag">createFlag</a> or <a href="../../TwitterModuleFlags.html#createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.inject.TwitterModuleFlags#createMandatoryFlag">createMandatoryFlag</a>.</p></span></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>must be a <span class="extype" name="Flaggable">Flaggable</span> type.</p></dd><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>TwitterModuleFlags</dd><dt>Note</dt><dd><span class="cmt"><p>Java users: see the more Java-friendly <a href="#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.inject.thrift.modules.FilteredThriftClientFlagsModule#createFlag">createFlag</a> or <a href="#createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.inject.thrift.modules.FilteredThriftClientFlagsModule#createMandatoryFlag">createMandatoryFlag</a>.</p></span></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModuleFlags#flag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="flag[T](name:String,default:T,help:String)(implicitevidence$1:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="flag[T](String,T,String)(Flaggable[T]):Flag[T]"></a>
       <span class="permalink">
@@ -1440,7 +1467,7 @@ a value provided as an application argument (as they have no default value to be
       
       <p class="shortcomment cmt">Create a <span class="extype" name="Flag">Flag</span> and add it to this Module's flags list.</p><div class="fullcomment"><div class="comment cmt"><p>Create a <span class="extype" name="Flag">Flag</span> and add it to this Module's flags list.
 </p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>must be a <span class="extype" name="Flaggable">Flaggable</span> type.</p></dd><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">default</dt><dd class="cmt"><p>a default value for the <span class="extype" name="Flag">Flag</span> when no value is given as an application
-               argument.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd><dt>Note</dt><dd><span class="cmt"><p>Java users: see the more Java-friendly <a href="../../TwitterModuleFlags.html#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.inject.TwitterModuleFlags#createFlag">createFlag</a> or <a href="../../TwitterModuleFlags.html#createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.inject.TwitterModuleFlags#createMandatoryFlag">createMandatoryFlag</a>.</p></span></dd></dl></div>
+               argument.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>TwitterModuleFlags</dd><dt>Note</dt><dd><span class="cmt"><p>Java users: see the more Java-friendly <a href="#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.inject.thrift.modules.FilteredThriftClientFlagsModule#createFlag">createFlag</a> or <a href="#createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.inject.thrift.modules.FilteredThriftClientFlagsModule#createMandatoryFlag">createMandatoryFlag</a>.</p></span></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModuleFlags#flags" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="flags:scala.collection.mutable.ArrayBuffer[com.twitter.app.Flag[_]]"></a><a id="flags:ArrayBuffer[Flag[_]]"></a>
       <span class="permalink">
@@ -1456,7 +1483,7 @@ a value provided as an application argument (as they have no default value to be
         <span class="name">flags</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[_]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd>TwitterModuleFlags</dd></dl></div>
     </li><li name="com.twitter.inject.TwitterBaseModule#frameworkModules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="frameworkModules:Seq[com.google.inject.Module]"></a><a id="frameworkModules:Seq[Module]"></a>
       <span class="permalink">
@@ -1472,7 +1499,7 @@ a value provided as an application argument (as they have no default value to be
         <span class="name">frameworkModules</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.google.inject.Module">Module</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Additional framework modules to be composed into this module.</p><div class="fullcomment"><div class="comment cmt"><p>Additional framework modules to be composed into this module.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
+      <p class="shortcomment cmt">Additional framework modules to be composed into this module.</p><div class="fullcomment"><div class="comment cmt"><p>Additional framework modules to be composed into this module.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd>TwitterBaseModule</dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -1729,7 +1756,7 @@ try to use it beforehand.
 to configure more bindings.</p><div class="fullcomment"><div class="comment cmt"><p>Uses the given <a href="https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Module.html" target="_blank">com.google.inject.Module</a>
 to configure more bindings. This is not supported for instances of type <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> and
 will throw an <span class="extype" name="UnsupportedOperationException">UnsupportedOperationException</span> if attempted on an instance of <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>.
-This is to properly support the <a href="../../TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a> for <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> instances.
+This is to properly support the <span class="extype" name="TwitterModuleLifecycle">TwitterModuleLifecycle</span> for <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> instances.
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> → AbstractModule</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -1929,7 +1956,7 @@ sometimes preferred due to <code>install</code> being deferred until after flag 
         <span class="name">javaModules</span><span class="result">: <span class="extype" name="java.util.Collection">Collection</span>[<span class="extype" name="com.google.inject.Module">Module</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Additional modules to be composed into this module from Java</p><div class="fullcomment"><div class="comment cmt"><p>Additional modules to be composed into this module from Java</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
+      <p class="shortcomment cmt">Additional modules to be composed into this module from Java</p><div class="fullcomment"><div class="comment cmt"><p>Additional modules to be composed into this module from Java</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd>TwitterBaseModule</dd></dl></div>
     </li><li name="com.twitter.util.logging.Logging#logger" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="logger:com.twitter.util.logging.Logger"></a><a id="logger:Logger"></a>
       <span class="permalink">
@@ -1979,9 +2006,9 @@ sometimes preferred due to <code>install</code> being deferred until after flag 
       
       <p class="shortcomment cmt">Additional modules to be composed into this module.</p><div class="fullcomment"><div class="comment cmt"><p>Additional modules to be composed into this module. This list of modules is generally used
 <i>instead</i> of the <a href="../../TwitterModule.html#install(module:com.google.inject.Module):Unit" class="extmbr" name="com.twitter.inject.TwitterModule#install">TwitterModule.install</a> method to properly support the
-<a href="../../TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a> for <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> instances.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd><dt>Note</dt><dd><span class="cmt"><p><span class="extype" name="TwitterModule.install(module:">Module)</span> can still be used for non-<a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> 1
-     instances, and is sometimes preferred due to <code>install</code> being deferred until after flag parsing occurs.</p></span>, <span class="cmt"><p>Java users should prefer <a href="../../TwitterBaseModule.html#javaModules:java.util.Collection[com.google.inject.Module]" class="extmbr" name="com.twitter.inject.TwitterBaseModule#javaModules">javaModules</a>.</p></span></dd></dl></div>
+<span class="extype" name="TwitterModuleLifecycle">TwitterModuleLifecycle</span> for <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> instances.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd>TwitterBaseModule</dd><dt>Note</dt><dd><span class="cmt"><p><span class="extype" name="TwitterModule.install(module:">Module)</span> can still be used for non-<a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> 1
+     instances, and is sometimes preferred due to <code>install</code> being deferred until after flag parsing occurs.</p></span>, <span class="cmt"><p>Java users should prefer <a href="#javaModules:java.util.Collection[com.google.inject.Module]" class="extmbr" name="com.twitter.inject.thrift.modules.FilteredThriftClientFlagsModule#javaModules">javaModules</a>.</p></span></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -2138,7 +2165,7 @@ the given classes.
       </span>
       
       <p class="shortcomment cmt">Invoke after external ports are bound and any clients are resolved</p><div class="fullcomment"><div class="comment cmt"><p>Invoke after external ports are bound and any clients are resolved</p><p>This method should only get singleton instances from the injector.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd>TwitterModuleLifecycle</dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModuleLifecycle#singletonShutdown" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="singletonShutdown(injector:com.twitter.inject.Injector):Unit"></a><a id="singletonShutdown(Injector):Unit"></a>
       <span class="permalink">
@@ -2155,7 +2182,7 @@ the given classes.
       </span>
       
       <p class="shortcomment cmt">Invoked on graceful shutdown of the application.</p><div class="fullcomment"><div class="comment cmt"><p>Invoked on graceful shutdown of the application.</p><p>This method should only get singleton instances from the injector.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd>TwitterModuleLifecycle</dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModuleLifecycle#singletonStartup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="singletonStartup(injector:com.twitter.inject.Injector):Unit"></a><a id="singletonStartup(Injector):Unit"></a>
       <span class="permalink">
@@ -2172,7 +2199,7 @@ the given classes.
       </span>
       
       <p class="shortcomment cmt">Invoked after the injector is started.</p><div class="fullcomment"><div class="comment cmt"><p>Invoked after the injector is started.</p><p>This method should only get singleton instances from the injector.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd>TwitterModuleLifecycle</dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
@@ -2484,15 +2511,15 @@ the given classes.
         <div class="parent" name="com.twitter.inject.TwitterModule">
               <h3>Inherited from <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></h3>
             </div><div class="parent" name="com.twitter.inject.TwitterBaseModule">
-              <h3>Inherited from <a href="../../TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></h3>
+              <h3>Inherited from <span class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</span></h3>
             </div><div class="parent" name="com.twitter.inject.TwitterModuleLifecycle">
-              <h3>Inherited from <a href="../../TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a></h3>
+              <h3>Inherited from <span class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</span></h3>
             </div><div class="parent" name="com.twitter.inject.Logging">
               <h3>Inherited from <a href="../../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></h3>
             </div><div class="parent" name="com.twitter.util.logging.Logging">
               <h3>Inherited from <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">util.logging.Logging</a></h3>
             </div><div class="parent" name="com.twitter.inject.TwitterModuleFlags">
-              <h3>Inherited from <a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></h3>
+              <h3>Inherited from <span class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</span></h3>
             </div><div class="parent" name="com.google.inject.AbstractModule">
               <h3>Inherited from <span class="extype" name="com.google.inject.AbstractModule">AbstractModule</span></h3>
             </div><div class="parent" name="com.google.inject.Module">
