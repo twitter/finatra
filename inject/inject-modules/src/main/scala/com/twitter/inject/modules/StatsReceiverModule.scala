@@ -7,4 +7,7 @@ object StatsReceiverModule extends TwitterModule {
   override def configure(): Unit = {
     bindSingleton[StatsReceiver].toInstance(LoadedStatsReceiver)
   }
+
+  /**  Java-friendly way to access this module as a singleton instance */
+  def apply(): this.type = this
 }

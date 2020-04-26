@@ -14,7 +14,8 @@ class TwitterModuleTest extends Test {
   private case class W[T](t: T)
   private val annotation = Names.named(Random.alphanumeric.take(12).mkString.toLowerCase())
 
-  val injector =
+  // Users should prefer the `c.t.inject.app.TestInjector` but it is not in scope here.
+  private val injector: Injector =
     Injector(Guice.createInjector(TestTwitterModule))
 
   override def beforeAll(): Unit = {

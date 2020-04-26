@@ -1,8 +1,8 @@
 target(
-    tags = {
+    tags = [
         # users should use finer-grain targets directly
         "deprecated",
-    },
+    ],
     dependencies = [
         "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",
         "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app",
@@ -12,10 +12,10 @@ target(
 
 target(
     name = "test-deps",
-    tags = {
+    tags = [
         # users should use finatra/inject/inject-app/src/test/scala/com/twitter/inject/app directly
         "deprecated",
-    },
+    ],
     dependencies = [
         "finatra/inject/inject-app/src/test/scala/com/twitter/inject/app",
     ],

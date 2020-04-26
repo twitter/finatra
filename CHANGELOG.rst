@@ -7,6 +7,63 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+20.4.1
+------
+
+Added
+~~~~~
+
+* inject-app: Add default type conversions for `java.time.LocalTime`, `c.t.util.Time`,
+  `java.net.InetSocketAddress`, and `c.t.util.StorageUnit`. This allows the injector to convert from
+  a String representation to the given type. The type conversion for `java.net.InetSocketAddress`
+  uses the `c.t.app.Flaggable.ofInetSocketAddress` implementation and the type conversion for
+  `c.t.util.Time` uses the `c.t.app.Flaggable.ofTime` implementation for consistency with Flag parsing.
+  Because of the current state of type erasure with `c.t.app.Flag` instances, Finatra currently binds
+  a parsed `c.t.app.Flag` value as a String type, relying on registered Guice TypeConverters to convert
+  from the bound String type to the requested type. These conversions now allow for a `c.t.app.Flag`
+  defined over the type to be injected by the type as Guice now has a type conversion from the bound
+  String type rather than as a String representation which then must be manually converted.
+  ``PHAB_ID=D471545``
+
+* finatra-http: Method in tests to return an absolute path URI with the https scheme and authority
+  ``PHAB_ID=D466424``
+
+* finatra: Java-friendly `bindClass` test APIs. The `bindClass` API calls from Java can be
+  now chained with the `TestInjector`, `EmbeddedApp`, `EmbeddedTwitterServer`,
+  `EmbeddedThriftServer`, and `EmbeddedHttpServer`. For example, the following is now possible:
+
+  ```
+  EmbeddedHttpServer server = new EmbeddedHttpServer(
+      new HelloWorldServer(),
+      Collections.emptyMap(),
+      Stage.DEVELOPMENT)
+      .bindClass(Integer.class, Flags.named("magic.number"), 42)
+      .bindClass(Integer.class, Flags.named("module.magic.number"), 9999);
+
+  return server;
+  ```
+  ``PHAB_ID=D463042``
+
+Changed
+~~~~~~~
+
+* inject-core: Update the configuration of `c.t.app.Flag` instances created within a `c.t.inject.TwitterModule`
+  to have `failFastUntilParsed` set to 'true' by default. While this is configurable for a given
+  `c.t.inject.TwitterModule`, much like for the application itself, it is STRONGLY recommended that
+  users adopt this behavior. ``PHAB_ID=D448047``
+
+* inject-app: Update `c.t.inject.app.TestInjector` to always add the `InjectorModule`.
+  ``PHAB_ID=D465943``
+
+* inject-app: Reduce visibility of internal code in `c.t.inject.app.internal`. ``PHAB_ID=D465597``
+
+* inject-modules: Updated BUILD files for Pants 1:1:1 layout. ``PHAB_ID=D442977``
+
+Fixed
+~~~~~
+
+* finatra-kafka: Close a result observer when Namer.resolve fails. ``PHAB_ID=D416044``
+
 20.4.0
 ------
 Added

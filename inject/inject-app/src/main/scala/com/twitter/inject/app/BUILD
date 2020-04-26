@@ -1,6 +1,26 @@
+# These are defined here and not on inject-slf4j to allow
+# for usage of the inject-slf4j library in environments
+# that don't want to bridge these impls. since the framework
+# recommendation is to use Logback for application logging
+# we add these here.
+target(
+    name = "logging-bridges",
+    scope = "runtime",
+    tags = ["logging_impl_check_whitelisted_target"],
+    dependencies = [
+        # -------- BEGIN: slf4j-api logging bridges -------------------------------
+        # Add the slf4j-api logging bridges to ensure that any dependents
+        # of the library have bridges on their classpath at runtime.
+        "3rdparty/jvm/org/slf4j:jcl-over-slf4j",
+        "3rdparty/jvm/org/slf4j:jul-to-slf4j",
+        "3rdparty/jvm/org/slf4j:log4j-over-slf4j",
+        # -------- END: slf4j-api logging bridges ---------------------------------
+    ],
+)
+
 scala_library(
     sources = ["*.scala"],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(
         org = "com.twitter",
         name = "inject-app-core",
@@ -8,37 +28,22 @@ scala_library(
     ),
     strict_deps = True,
     dependencies = [
+        ":logging-bridges",
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/org/slf4j:slf4j-api",
-        # -------- BEGIN: slf4j-api logging bridges -------------------------------
-        # Add the slf4j-api logging bridges to ensure that any dependents
-        # of the library have bridges on their classpath at runtime.
-        scoped(
-            "3rdparty/jvm/org/slf4j:jcl-over-slf4j",
-            scope = "runtime",
-        ),
-        scoped(
-            "3rdparty/jvm/org/slf4j:jul-to-slf4j",
-            scope = "runtime",
-        ),
-        scoped(
-            "3rdparty/jvm/org/slf4j:log4j-over-slf4j",
-            scope = "runtime",
-        ),
-        # -------- END: slf4j-api logging bridges ---------------------------------
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",
         "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app/internal",
-        "finatra/inject/inject-core/src/main/scala",
+        "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-slf4j/src/main/scala",
         "util/util-app/src/main/scala",
     ],
     exports = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/org/slf4j:slf4j-api",
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app/internal",
-        "finatra/inject/inject-core/src/main/scala",
+        "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-slf4j/src/main/scala",
         "util/util-app/src/main/scala",
     ],

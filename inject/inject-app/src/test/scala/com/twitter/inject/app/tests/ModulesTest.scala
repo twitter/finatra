@@ -1,6 +1,7 @@
 package com.twitter.inject.app.tests
 
 import com.google.inject.Stage
+import com.twitter.app.Flags
 import com.twitter.inject.Test
 import com.twitter.inject.app.internal.Modules
 
@@ -24,7 +25,7 @@ class ModulesTest extends Test {
       modules,
       Seq.empty
     ).install(
-      flags = Seq.empty,
+      flags = new Flags(this.getClass.getName),
       stage = Stage.PRODUCTION)
 
     // there are only 3 distinct modules, TestModuleObject, TestModuleClass(instance1), TestModuleClass(instance2)

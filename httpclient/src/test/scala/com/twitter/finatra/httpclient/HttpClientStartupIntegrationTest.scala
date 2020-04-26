@@ -8,14 +8,14 @@ import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.StatsReceiverModule
-import com.twitter.inject.{Injector, InjectorModule, Test}
+import com.twitter.inject.{Injector, Test}
 
 class HttpClientStartupIntegrationTest extends Test {
 
   test("startup non ssl with HttpClientModule") {
     val injector = TestInjector(
       modules =
-        Seq(InjectorModule, StatsReceiverModule, ScalaObjectMapperModule, new HttpClientModule {
+        Seq(StatsReceiverModule, ScalaObjectMapperModule, new HttpClientModule {
           override val dest = "flag!myservice"
         }),
       flags = Map("com.twitter.server.resolverMap" -> "myservice=nil!")
@@ -27,7 +27,7 @@ class HttpClientStartupIntegrationTest extends Test {
   test("startup ssl with HttpClientModule") {
     val injector = TestInjector(
       modules =
-        Seq(InjectorModule, StatsReceiverModule, ScalaObjectMapperModule, new HttpClientModule {
+        Seq(StatsReceiverModule, ScalaObjectMapperModule, new HttpClientModule {
           override val dest = "flag!myservice"
           override val sslHostname = Some("foo")
         }),
@@ -40,7 +40,6 @@ class HttpClientStartupIntegrationTest extends Test {
   test("startup non ssl with HttpClientModuleTrait") {
     val injector = TestInjector(
       modules = Seq(
-        InjectorModule,
         StatsReceiverModule,
         ScalaObjectMapperModule,
         new HttpClientModuleTrait {
@@ -65,7 +64,6 @@ class HttpClientStartupIntegrationTest extends Test {
   test("startup ssl with HttpClientModuleTrait") {
     val injector = TestInjector(
       modules = Seq(
-        InjectorModule,
         StatsReceiverModule,
         ScalaObjectMapperModule,
         new HttpClientModuleTrait {

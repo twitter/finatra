@@ -6,13 +6,13 @@ import com.twitter.inject.{Injector, TwitterBaseModule}
 import com.twitter.inject.conversions.iterable._
 import scala.collection.JavaConverters._
 
-object Modules {
+private[app] object Modules {
 
   /**
    * De-duplicate a given sequence of  [[com.google.inject.Module]].
    * Exposed for testing.
    */
-  private[app] def distinctModules(
+  def distinctModules(
     modules: Seq[com.google.inject.Module]
   ): Seq[com.google.inject.Module] = {
     // De-dupe all the modules using a `java.util.IdentityHashMap` with the modules as keys
@@ -76,7 +76,7 @@ object Modules {
  * @see [[com.twitter.inject.TwitterBaseModule#javaModules]]
  * @see [[com.twitter.inject.TwitterBaseModule#frameworkModules]]
  */
-private[twitter] class Modules(required: Seq[Module], overrides: Seq[Module]) {
+private[app] class Modules(required: Seq[Module], overrides: Seq[Module]) {
   import Modules._
 
   val modules: Seq[Module] = {
@@ -94,9 +94,12 @@ private[twitter] class Modules(required: Seq[Module], overrides: Seq[Module]) {
 
   def addFlags(flag: Flags): Unit = moduleFlags.foreach(flag.add)
 
-  def install(flags: Seq[Flag[_]], stage: Stage): InstalledModules = {
+  def install(
+    flags: Flags,
+    stage: Stage
+  ): InstalledModules = {
     // ensure we add the FlagsModule and the TwitterTypeConvertersModule to the list to build the injector.
-    val requiredModules = modules ++ Seq(FlagsModule.create(flags), TwitterTypeConvertersModule)
+    val requiredModules = modules ++ Seq(new FlagsModule(flags), TwitterTypeConvertersModule)
     val combinedModule = com.google.inject.util.Modules.`override`(requiredModules.asJava).`with`(overrideModules.asJava)
 
     InstalledModules(

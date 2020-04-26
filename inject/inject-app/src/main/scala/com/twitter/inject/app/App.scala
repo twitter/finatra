@@ -124,6 +124,13 @@ trait App extends com.twitter.app.App with Logging {
 
   /* Protected */
 
+  /**
+   * @inheritdoc
+   *
+   * @note It is HIGHLY recommended that this value remains 'true'. This value SHOULD NOT be
+   *       changed to 'false' without a very good reason.This method only remains overridable for
+   *       legacy reasons.
+   */
   override protected def failfastOnFlagsNotParsed: Boolean = true
 
   /**
@@ -183,7 +190,7 @@ trait App extends com.twitter.app.App with Logging {
   /** ONLY INTENDED FOR USE BY THE FRAMEWORK. */
   protected[inject] def loadModules(): InstalledModules = {
     appModules.install(
-      flags = flag.getAll(includeGlobal = false).toSeq,
+      flags = flag,
       stage = stage
     )
   }

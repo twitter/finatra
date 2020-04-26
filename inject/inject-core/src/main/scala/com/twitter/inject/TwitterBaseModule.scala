@@ -2,7 +2,7 @@ package com.twitter.inject
 
 import com.google.inject.Module
 
-trait TwitterBaseModule extends TwitterModuleFlags with TwitterModuleLifecycle {
+private[inject] trait TwitterBaseModule extends TwitterModuleFlags with TwitterModuleLifecycle {
 
   /**
    * Additional modules to be composed into this module. This list of modules is generally used

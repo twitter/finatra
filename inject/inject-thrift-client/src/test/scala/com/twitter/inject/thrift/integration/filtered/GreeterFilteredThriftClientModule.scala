@@ -15,7 +15,7 @@ object GreeterFilteredThriftClientModule
 
   override val label = "greeter-thrift-client"
   override val dest = "flag!greeter-thrift-service"
-  override val sessionAcquisitionTimeout = 1.minute
+  override val sessionAcquisitionTimeout: Duration = 1.minute
 
   override def filterServiceIface(
     serviceIface: Greeter.ServiceIface,

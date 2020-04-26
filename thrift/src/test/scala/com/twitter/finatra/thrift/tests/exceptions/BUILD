@@ -1,10 +1,10 @@
 scala_library(
     sources = ["*.scala"],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     strict_deps = True,
     dependencies = [
         "3rdparty/jvm/javax/inject:javax.inject",
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "finatra/inject/inject-app:test-deps",
         "finatra/inject/inject-core/src/test/scala:test-deps",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift",

@@ -15,7 +15,7 @@ import com.twitter.util.{Future, Try}
  *
  * @note Some servers won't handle requests properly if the Host header is not set
  * @param hostname the hostname that will be used for the Host header. Leave as default or set as "" to not set a Host header
- * @param httpService underlying `com.twitter.finagle.Service`
+ * @param httpService underlying `com.twitter.finagle.Service`. This [[HttpClient]] '''DOES NOT''' manage the lifecycle of httpService.
  * @param retryPolicy optional retry policy if the service fails to get a successful response
  * @param defaultHeaders headers to add to every request
  * @param mapper object mapper [[com.twitter.finatra.jackson.ScalaObjectMapper]]

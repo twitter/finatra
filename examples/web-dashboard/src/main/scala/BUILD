@@ -4,7 +4,7 @@ scala_library(
         "com/twitter/web/dashboard/controllers/*.scala",
         "com/twitter/web/dashboard/views/*.scala",
     ],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",

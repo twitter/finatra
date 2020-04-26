@@ -9,9 +9,11 @@ import com.twitter.inject.tests.Prod
 import com.twitter.inject.{Injector, TwitterModule}
 import javax.inject.Singleton
 import java.util.Properties
+import org.scalatest.Assertions
 import scala.util.control.NonFatal
 
-object TestTwitterModule extends TwitterModule {
+// for testing the function/API of a TwitterModule -- not for general testing
+object TestTwitterModule extends TwitterModule with Assertions {
 
   // Note: The following flag values are not used in this module, but are @Flag injected elsewhere
   flag("moduleMagicNum", "30", "Module Magic number")
@@ -53,8 +55,13 @@ object TestTwitterModule extends TwitterModule {
 
   override def singletonStartup(injector: Injector): Unit = {
     assert(!localModuleFlag.isDefined) // isDefined is only true when a value has been parsed, will be false if the flag still has the default
-    assert(localModuleFlag() == "default") // no flag parsing happens so the flag will be the default value, this emits a warning of "SEVERE: Flag moduleString read before parse."
-
+    try {
+      localModuleFlag()
+      fail()
+    } catch {
+      case NonFatal(_) =>
+        // expected: // no flag parsing happens (since we are creating the injector manually) so the flag read fails
+    }
     assert(injector.instance[String, Prod] == "prod string")
     assert(injector.instance[String, Prod] == "prod string")
 
@@ -82,7 +89,7 @@ object TestTwitterModule extends TwitterModule {
     // no binder was ever created here
     try {
       injector.instance[Option[String]](Names.named("MyString"))
-      assert(false)
+      fail()
     } catch {
       case NonFatal(e) =>
         // ensure that the DoEverythingModule is in the stack trace

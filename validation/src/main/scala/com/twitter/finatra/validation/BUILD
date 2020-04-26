@@ -2,7 +2,7 @@ scala_library(
     sources = [
         "**/*.scala",
     ],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     java_sources = [
         "finatra/validation/src/main/java/com/twitter/finatra/validation",
     ],
@@ -20,7 +20,7 @@ scala_library(
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",
         "finatra/validation/src/main/java/com/twitter/finatra/validation:pants-workaround",
         "finatra/validation/src/main/resources",
-        "util/util-core/src/main/scala",
+        "util/util-core:scala",
     ],
     exports = [
         "3rdparty/jvm/joda-time",

@@ -1,6 +1,6 @@
 scala_library(
     sources = ["*.scala"],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-http-routing",
@@ -9,7 +9,7 @@ scala_library(
     strict_deps = "True",
     dependencies = [
         "3rdparty/jvm/javax/inject:javax.inject",
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
         "finatra/http/src/main/scala/com/twitter/finatra/http:controller",
         "finatra/http/src/main/scala/com/twitter/finatra/http/exceptions",
         "finatra/http/src/main/scala/com/twitter/finatra/http/internal/routing",
@@ -18,13 +18,14 @@ scala_library(
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
         "twitter-server/server/src/main/scala",
-        "util/util-core/src/main/scala/com/twitter/util",
+        "util/util-core:util-core-util",
     ],
     exports = [
         "3rdparty/jvm/javax/inject:javax.inject",
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
+        "finatra/http/src/main/scala/com/twitter/finatra/http:controller",
         "finatra/inject/inject-slf4j/src/main/scala",
         "twitter-server/server/src/main/scala",
-        "util/util-core/src/main/scala/com/twitter/util",
+        "util/util-core:util-core-util",
     ],
 )

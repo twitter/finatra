@@ -1,6 +1,6 @@
 java_library(
     sources = ["*.java"],
-    compiler_option_sets = {},
+    compiler_option_sets = [],
     provides = artifact(
         org = "com.twitter",
         name = "finatra-http-java-request",
@@ -8,6 +8,6 @@ java_library(
     ),
     strict_deps = "True",
     dependencies = [
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
     ],
 )

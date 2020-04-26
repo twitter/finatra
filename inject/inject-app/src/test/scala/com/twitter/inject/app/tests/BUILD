@@ -1,6 +1,6 @@
 junit_tests(
     sources = ["**/*.scala"],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     strict_deps = True,
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
@@ -21,6 +21,6 @@ junit_tests(
         "finatra/inject/inject-core/src/test/scala:test-deps",
         "finatra/inject/inject-slf4j/src/main/scala",
         "util/util-app/src/main/scala",
-        "util/util-core/src/main/scala",
+        "util/util-core:scala",
     ],
 )

@@ -16,6 +16,7 @@ import net.codingwell.scalaguice.{
 }
 
 /**
+ * =Overview=
  * A support class for [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Module.html Module]]
  * implementations which exposes a DSL for binding via type parameters. Extend this class,
  * override the `configure` method and call the `bind` methods, or define custom `@Provides`
@@ -25,6 +26,10 @@ import net.codingwell.scalaguice.{
  * "depends" on by setting the [[TwitterBaseModule.modules]] (or [[TwitterBaseModule.javaModules]])
  * to a non-empty list. This will ensure that when only this [[TwitterModule]] instance is used to
  * compose an [[Injector]] the "dependent" list of modules will also be installed.
+ *
+ * =Lifecycle=
+ * A [[TwitterModule]] has a lifecycle. Executing this lifecycle is particularly important if the
+ * [[TwitterModule]] creates any [[com.twitter.app.Flag]] instances.
  *
  * @note Attempting to bind the same type multiple times with no discriminating
  *       [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/BindingAnnotation.html com.google.inject.BindingAnnotation]]

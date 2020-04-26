@@ -1,6 +1,6 @@
 scala_library(
     sources = ["*.scala"],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(
         org = "com.twitter",
         name = "inject-ports",
@@ -8,12 +8,12 @@ scala_library(
     ),
     strict_deps = "True",
     dependencies = [
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",
     ],
     exports = [
-        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-core/src/main",
         "twitter-server/server/src/main/scala",
     ],
 )

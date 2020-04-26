@@ -1,6 +1,6 @@
 scala_library(
     sources = ["*.scala"],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-http-fileupload",
@@ -9,10 +9,10 @@ scala_library(
     strict_deps = "True",
     dependencies = [
         "3rdparty/jvm/commons-fileupload",
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
     ],
     exports = [
         "3rdparty/jvm/commons-fileupload",
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
     ],
 )

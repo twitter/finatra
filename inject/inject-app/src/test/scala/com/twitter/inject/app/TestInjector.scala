@@ -2,9 +2,11 @@ package com.twitter.inject.app
 
 import com.google.inject.{Module, Stage}
 import com.twitter.app.{Flag, FlagParseException, FlagUsageError, Flags}
-import com.twitter.inject.Injector
+import com.twitter.inject.{Injector, InjectorModule}
 import com.twitter.inject.app.internal.Modules
+import java.lang.annotation.Annotation
 import java.util.concurrent.atomic.AtomicBoolean
+import scala.annotation.varargs
 import scala.collection.JavaConverters._
 
 /**
@@ -32,10 +34,9 @@ object TestInjector {
    * @param modules - a variable list of [[com.google.inject.Module]]
    * @return a new [[TestInjector]]
    *
-   * @note Java users should prefer `apply(java.util.Collection<Module>)`
    * @see https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests
    */
-  def apply(modules: Module*): TestInjector = {
+  @varargs def apply(modules: Module*): TestInjector = {
     apply(modules = modules)
   }
 
@@ -126,6 +127,30 @@ class TestInjector(
     underlying
   }
 
+  // java-forwarder methods
+  override final def bindClass[T](clazz: Class[T], instance: T): this.type =
+    super.bindClass[T](clazz, instance)
+
+  // java-forwarder methods
+  override final def bindClass[T](clazz: Class[T], annotation: Annotation, instance: T): this.type =
+    super.bindClass[T](clazz, annotation, instance)
+
+  // java-forwarder methods
+  override final def bindClass[T, Ann <: Annotation](clazz: Class[T], annotationClazz: Class[Ann], instance: T): this.type =
+    super.bindClass[T, Ann](clazz, annotationClazz, instance)
+
+  // java-forwarder methods
+  override final def bindClass[T, U <: T](clazz: Class[T], instanceClazz: Class[U]): this.type =
+    super.bindClass[T, U](clazz, instanceClazz)
+
+  // java-forwarder methods
+  override final def bindClass[T, U <: T](clazz: Class[T], annotation: Annotation, instanceClazz: Class[U]): this.type =
+    super.bindClass[T, U](clazz, annotation, instanceClazz)
+
+  // java-forwarder methods
+  override final def bindClass[T, Ann <: Annotation, U <: T](clazz: Class[T], annotationClazz: Class[Ann], instanceClazz: Class[U]): this.type =
+    super.bindClass[T, Ann, U](clazz, annotationClazz, instanceClazz)
+
   /* Protected */
 
   override final protected def addInjectionServiceModule(module: Module): Unit = {
@@ -139,13 +164,16 @@ class TestInjector(
 
   private[this] def start(): Unit = {
     if (_started.compareAndSet(false, true)) {
-      val injectorModules = new Modules(modules, overrides)
+      // Add the `InjectorModule` to mirror the behavior in `c.t.inject.app.App` which adds it
+      // as a framework module. This ensures the TestInjector has the same baseline of modules
+      // as a `c.t.inject.app.App`.
+      val injectorModules = new Modules(Seq(InjectorModule) ++ modules, overrides)
       injectorModules.addFlags(flag)
       parseFlags(flag, flags, injectorModules.moduleFlags)
 
       underlying = injectorModules
         .install(
-          flags = flag.getAll(includeGlobal = false).toSeq,
+          flags = flag,
           stage = stage)
         .injector
     }

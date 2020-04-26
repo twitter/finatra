@@ -1,6 +1,6 @@
 scala_library(
     sources = ["*.scala"],
-    compiler_option_sets = {"fatal_warnings"},
+    compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-http-contexts",
@@ -8,6 +8,6 @@ scala_library(
     ),
     strict_deps = "True",
     dependencies = [
-        "finagle/finagle-base-http/src/main/scala",
+        "finagle/finagle-base-http/src/main",
     ],
 )

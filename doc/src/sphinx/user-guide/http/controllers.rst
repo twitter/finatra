@@ -405,13 +405,25 @@ Admin Paths
 
 All `TwitterServer <https://twitter.github.io/twitter-server/>`__-based servers have an `HTTP Admin Interface <https://twitter.github.io/twitter-server/Features.html#admin-http-interface>`__
 which includes a variety of tools for diagnostics, profiling, and more. This admin interface
-**should not** be exposed outside your data center DMZ.
+**should not** be exposed outside your data center DMZ. The `TwitterServer HTTP Admin Interface <https://twitter.github.io/twitter-server/Features.html#admin-http-interface>`__
+is a Finagle `ListeningStackServer <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/server/ListeningStackServer.scala>`_
+which binds to a port specified by the `admin.port <https://github.com/twitter/twitter-server/blob/6d3e8f0ce890c218e774336d3335e3db9b22ccf6/server/src/main/scala/com/twitter/server/AdminHttpServer.scala#L118>`_
+flag.
 
-Any route path starting with `/admin/finatra/` will be included by default on the server's admin
-interface (accessible via the server's admin port). Other paths can be included on the server's
+You can choose to only expose API endpoints on this listening server or additionally add an endpoint
+to the `HTTP Admin Interface <https://twitter.github.io/twitter-server/Features.html#admin-http-interface>`__
+web UI.
+
+Adding Endpoints
+^^^^^^^^^^^^^^^^
+
+Any Controller route path starting with `/admin/finatra/` will be included by default on the server's
+admin interface (accessible via the server's admin port). Other paths can be included on the server's
 admin interface by setting `admin = true` when defining the route.
 
-These routes **MUST** be `constant routes`_, e.g., routes that do not define `named parameters <#named-parameters>`__.
+.. important::
+
+    Any admin route that does not start with `/admin/finatra/` **MUST** be a `constant route`, e.g., it does not define any `named parameters <#named-parameters>`__.
 
 .. code:: scala
 
@@ -434,6 +446,9 @@ These routes **MUST** be `constant routes`_, e.g., routes that do not define `na
     get("/admin/client/:id", admin = true) { request: Request =>
       response.ok("response body here")
     }
+
+TwitterServer Admin UI
+^^^^^^^^^^^^^^^^^^^^^^
 
 Some admin routes can additionally be listed in the `TwitterServer <https://twitter.github.io/twitter-server/>`__
 `HTTP Admin Interface index <https://twitter.github.io/twitter-server/Admin.html>`__.
