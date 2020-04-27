@@ -15,14 +15,29 @@ building Finatra and its dependencies locally in order to run the examples.
 
 Running
 -------
+
+Run all commands from the base `/finatra` directory.
+
+Java version:
 ```
-[finatra] $ cd ../../
-[finatra] $ ./sbt "project exampleHttpServer" "run -http.port=:8888 -admin.port=:9990"
+[finatra] $ ./sbt "project javaHttpServer" "run -http.port=:8888 -admin.port=:9990"
 ```
 * Then browse to: [http://localhost:8888/hi?name=foo](http://localhost:8888/hi?name=foo)
 * Or view the [twitter-server admin interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface): [http://localhost:9990/admin](http://localhost:9990/admin)
 * Or build and run a deployable jar:
 ```
-[finatra] $ ./sbt exampleHttpServer/assembly
-[finatra] $ java -jar examples/exampleHttpServer/target/scala-2.XX/hello-world-assembly-X.XX.X.jar -http.port=:8888 -admin.port=:9990
+[finatra] $ ./sbt javaHttpServer/assembly
+[finatra] $ java -jar examples/http-server/java/target/scala-2.XX/java-http-server-assembly-X.XX.X.jar -http.port=:8888 -admin.port=:9990
+``` 
+
+Scala version:
+```
+[finatra] $ ./sbt "project scalaHttpServer" "run -http.port=:8888 -admin.port=:9990"
+```
+* Then browse to: [http://localhost:8888/hi?name=foo](http://localhost:8888/hi?name=foo)
+* Or view the [twitter-server admin interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface): [http://localhost:9990/admin](http://localhost:9990/admin)
+* Or build and run a deployable jar:
+```
+[finatra] $ ./sbt scalaHttpServer/assembly
+[finatra] $ java -jar examples/http-server/scala/target/scala-2.XX/scala-http-server-assembly-X.XX.X.jar -http.port=:8888 -admin.port=:9990
 ```

@@ -1,0 +1,23 @@
+junit_tests(
+    sources = ["**/*.java"],
+    compiler_option_sets = [],
+    dependencies = [
+        "3rdparty/jvm/com/google/inject:guice",
+        "3rdparty/jvm/junit",
+        "3rdparty/jvm/org/slf4j:slf4j-simple",
+        "finagle/finagle-thrift/src/main/scala",
+        "finatra/examples/thrift-server/idl/src/main/thrift:thrift-java",
+        "finatra/examples/thrift-server/java/src/main/java/com/twitter/finatra/example",
+        "finatra/inject/inject-server/src/main/scala",
+        "finatra/inject/inject-server/src/test/scala:test-deps",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift:controller",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/exceptions",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/filters",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/modules",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/response",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/routing",
+        "finatra/thrift/src/test/scala:test-deps",
+        "twitter-server/server/src/main/scala",
+    ],
+)

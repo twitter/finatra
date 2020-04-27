@@ -1,0 +1,23 @@
+<configuration>
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+
+    <!-- JUL/JDK14 to Logback bridge -->
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+
+    <!-- Console Appender -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Per Package Config -->
+    <logger name="SampleApp" level="info"/>
+
+    <!-- Root Logger -->
+    <root level="error"> <!-- We purposely set all other logging to error to only have logging from our specific logger -->
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

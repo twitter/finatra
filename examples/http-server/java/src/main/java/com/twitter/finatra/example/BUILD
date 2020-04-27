@@ -1,0 +1,43 @@
+java_library(
+    sources = ["**/*.java"],
+    compiler_option_sets = ["fatal_warnings"],
+    dependencies = [
+        "3rdparty/jvm/com/google/inject:guice",
+        "finagle/finagle-base-http/src/main",
+        "finagle/finagle-core/src/main",
+        "finatra/http/src/main/java",
+        "finatra/http/src/main/java/com/twitter/finatra/http",
+        "finatra/http/src/main/java/com/twitter/finatra/http/jsonpatch",
+        "finatra/http/src/main/java/com/twitter/finatra/http/request",
+        "finatra/http/src/main/scala/com/twitter/finatra/http",
+        "finatra/http/src/main/scala/com/twitter/finatra/http:controller",
+        "finatra/http/src/main/scala/com/twitter/finatra/http/contexts",
+        "finatra/http/src/main/scala/com/twitter/finatra/http/conversions",
+        "finatra/http/src/main/scala/com/twitter/finatra/http/exceptions",
+        "finatra/http/src/main/scala/com/twitter/finatra/http/fileupload",
+        "finatra/http/src/main/scala/com/twitter/finatra/http/filters",
+        "finatra/http/src/main/scala/com/twitter/finatra/http/jsonpatch",
+        "finatra/http/src/main/scala/com/twitter/finatra/http/marshalling",
+        "finatra/http/src/main/scala/com/twitter/finatra/http/modules",
+        "finatra/http/src/main/scala/com/twitter/finatra/http/request",
+        "finatra/http/src/main/scala/com/twitter/finatra/http/response",
+        "finatra/http/src/main/scala/com/twitter/finatra/http/routing",
+        "finatra/http/src/main/scala/com/twitter/finatra/http/streaming",
+        "finatra/inject/inject-app/src/main/scala",
+        "finatra/inject/inject-core/src/main/scala",
+        "finatra/inject/inject-server/src/main/scala",
+        "twitter-server/server/src/main/scala",
+        "util/util-app/src/main/scala",
+    ],
+)
+
+jvm_binary(
+    name = "bin",
+    basename = "java-http-server",
+    main = "com.twitter.finatra.example.HelloWorldServerMain",
+    dependencies = [
+        ":example",
+        "finatra/examples/http-server/java/src/main/resources",
+        "twitter-server/logback-classic/src/main/scala",
+    ],
+)

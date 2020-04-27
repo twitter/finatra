@@ -10,6 +10,10 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-examples: Ensure there are Java and Scala examples for the different
+  types of applications and servers which can be built with Finatra. Update `/examples`
+  directory layout for discoverability and consistency. ``PHAB_ID=D469677``
+
 Changed
 ~~~~~~~
 
