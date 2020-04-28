@@ -433,11 +433,6 @@ private final case class EnrichedResponseImpl(
     extends EnrichedResponse
     with Logging {
 
-  // generates stats in the form: service/failure/[source]/[details]
-  private[this] val serviceFailureNamespace = Seq("service", "failure")
-  private[this] val serviceFailureScoped = statsReceiver.scope(serviceFailureNamespace: _*)
-  private[this] val serviceFailureCounter = statsReceiver.counter(serviceFailureNamespace: _*)
-
   override val response: Response = underlying
 
   /**
@@ -712,7 +707,13 @@ private final case class EnrichedResponseImpl(
     if (classifier) {
       val detailStrings = details.map(_.toString)
       warn(s"Request Failure: $source/" + detailStrings.mkString("/") + " " + message)
-      serviceFailureCounter.incr() // service/failure
+
+      // generates stats in the form: service/failure/[source]/[details]
+      val serviceFailureNamespace = Seq("service", "failure")
+      val serviceFailureScoped = statsReceiver.scope(serviceFailureNamespace: _*)
+
+      statsReceiver.counter(serviceFailureNamespace: _*).incr()
+
       serviceFailureScoped.counter(source).incr() // service/failure/AuthService
       serviceFailureScoped
         .scope(source)

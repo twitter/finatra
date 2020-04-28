@@ -17,6 +17,12 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-http: Only create `EnrichedResponse` counters when needed. Any "service/failure"
+  response counters will only be generated upon first failure and not eagerly for each
+  response generated. This change impacts users who expect a counter value of 0 when no
+  response failures have been encountered - now the counter will not exist until the first
+  failure has been recorded. ``PHAB_ID=D474918``
+
 * finatra: Bump version of Joda-Time to 2.10.6. ``PHAB_ID=D473522``
 
 Fixed
