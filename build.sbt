@@ -264,6 +264,7 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   httpclient,
   injectApp,
   injectCore,
+  injectDtab,
   injectLogback,
   injectModules,
   injectPorts,
@@ -443,6 +444,7 @@ lazy val injectApp = (project in file("inject/inject-app"))
     moduleName := "inject-app",
     libraryDependencies ++= Seq(
       "com.novocode" % "junit-interface" % "0.11" % Test,
+      "com.twitter" %% "finagle-core" % versions.twLibVersion % Test,
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "org.slf4j" % "slf4j-api" % versions.slf4j,
       // -------- BEGIN: slf4j-api logging bridges -------------------------------
@@ -472,6 +474,17 @@ lazy val injectApp = (project in file("inject/inject-app"))
     injectCore % "test->test;compile->compile",
     injectModules % Test,
     injectUtils)
+
+lazy val injectDtab = (project in file("inject/inject-dtab"))
+  .settings(projectSettings)
+  .settings(
+    name := "inject-dtab",
+    moduleName := "inject-dtab",
+    libraryDependencies ++= Seq(
+      "com.twitter" %% "finagle-core" % versions.twLibVersion
+    )
+  ).dependsOn(
+  injectApp)
 
 lazy val injectPorts = (project in file("inject/inject-ports"))
   .settings(projectSettings)
@@ -1360,6 +1373,7 @@ lazy val twitterClone = (project in file("examples/advanced/twitter-clone"))
   http % "test->test;compile->compile",
   httpclient,
   injectCore % "test->test",
+  injectDtab,
   injectSlf4j,
   injectLogback,
   validation)

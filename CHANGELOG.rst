@@ -17,6 +17,9 @@ Added
 Changed
 ~~~~~~~
 
+* inject-app: Remove finagle-core dependency. Introduce finatra/inject/inject-dtab.
+  ``PHAB_ID=D474298``
+
 * finatra: Bump version of Jackson to 2.11.0. ``PHAB_ID=D457496``
 
 * finatra-http: Only create `EnrichedResponse` counters when needed. Any "service/failure"
@@ -27,7 +30,7 @@ Changed
 
 * finatra: Bump version of Joda-Time to 2.10.6. ``PHAB_ID=D473522``
 
-  Fixed
+Fixed
 ~~~~~
 
 20.4.1

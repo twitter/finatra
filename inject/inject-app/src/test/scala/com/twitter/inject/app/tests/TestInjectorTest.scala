@@ -34,9 +34,9 @@ class WithInjector @Inject()(injector: Injector) {
 
 class Bar {
   // read global flags
-  val booleanGlobalFlag = testBooleanGlobalFlag()
-  val stringGlobalFlag = testStringGlobalFlag()
-  val mapGlobalFlag = testMapGlobalFlag()
+  val booleanGlobalFlag: Boolean = testBooleanGlobalFlag()
+  val stringGlobalFlag: String = testStringGlobalFlag()
+  val mapGlobalFlag: Map[String, String] = testMapGlobalFlag()
 }
 
 trait DoEverything[+MM[_]] {
