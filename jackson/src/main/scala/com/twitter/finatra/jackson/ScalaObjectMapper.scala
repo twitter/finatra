@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream
 import com.fasterxml.jackson.databind.{ObjectMapper => JacksonObjectMapper, _}
 import com.fasterxml.jackson.datatype.joda.JodaModule
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import com.fasterxml.jackson.module.scala.experimental.{
+import com.fasterxml.jackson.module.scala.{
   ScalaObjectMapper => JacksonScalaObjectMapper
 }
 import com.google.inject.Injector
@@ -588,11 +588,12 @@ object ScalaObjectMapper {
 
 private[jackson] object ArrayElementsOnNewLinesPrettyPrinter extends DefaultPrettyPrinter {
   _arrayIndenter = DefaultIndenter.SYSTEM_LINEFEED_INSTANCE
+  override def createInstance(): DefaultPrettyPrinter = this
 }
 
 /**
  * A thin wrapper over a [[https://github.com/FasterXML/jackson-module-scala jackson-module-scala]]
- * [[com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper]]
+ * [[com.fasterxml.jackson.module.scala.ScalaObjectMapper]]
  *
  * @note this API is inspired by the [[https://github.com/codahale/jerkson Jerkson]]
  *       [[https://github.com/codahale/jerkson/blob/master/src/main/scala/com/codahale/jerkson/Parser.scala Parser]]

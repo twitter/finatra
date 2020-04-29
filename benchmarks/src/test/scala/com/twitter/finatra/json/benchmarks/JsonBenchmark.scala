@@ -1,6 +1,6 @@
 package com.twitter.finatra.json.benchmarks
 
-import com.fasterxml.jackson.module.scala.experimental.{
+import com.fasterxml.jackson.module.scala.{
   ScalaObjectMapper => JacksonScalaObjectMapper
 }
 import com.twitter.finatra.StdBenchAnnotations

@@ -1,6 +1,6 @@
 package com.fasterxml.jackson.databind
 
-import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
+import com.fasterxml.jackson.module.scala.ScalaObjectMapper
 
 object ObjectMapperCopier {
 

@@ -51,7 +51,7 @@ with the defaults listed above:
 
     val injector: com.google.inject.Injector = ???
     val underlying: com.fasterxml.jackson.databind.ObjectMapper
-        with com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper = ???
+        with com.fasterxml.jackson.module.scala.ScalaObjectMapper = ???
 
     val objectMapper = ScalaObjectMapper()
     val objectMapper = ScalaObjectMapper(injector)

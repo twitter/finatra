@@ -17,6 +17,8 @@ Added
 Changed
 ~~~~~~~
 
+* finatra: Bump version of Jackson to 2.11.0. ``PHAB_ID=D457496``
+
 * finatra-http: Only create `EnrichedResponse` counters when needed. Any "service/failure"
   response counters will only be generated upon first failure and not eagerly for each
   response generated. This change impacts users who expect a counter value of 0 when no
@@ -25,7 +27,7 @@ Changed
 
 * finatra: Bump version of Joda-Time to 2.10.6. ``PHAB_ID=D473522``
 
-Fixed
+  Fixed
 ~~~~~
 
 20.4.1

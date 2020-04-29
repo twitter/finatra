@@ -95,8 +95,7 @@ lazy val versions = new {
   val commonsFileupload = "1.4"
   val fastutil = "8.1.1"
   val guice = "4.2.1"
-  val jackson = "2.9.10"
-  val jacksonDatabind = "2.9.10.1"
+  val jackson = "2.11.0"
   val jodaConvert = "1.5"
   val jodaTime = "2.10.6"
   val json4s = "3.6.7"
@@ -740,7 +739,7 @@ lazy val jackson = project
     moduleName := "finatra-jackson",
     ScoverageKeys.coverageExcludedPackages := ".*DurationMillisSerializer.*;.*ByteBufferUtils.*",
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.core" % "jackson-databind" % versions.jacksonDatabind,
+      "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson,
       "com.google.inject" % "guice" % versions.guice,

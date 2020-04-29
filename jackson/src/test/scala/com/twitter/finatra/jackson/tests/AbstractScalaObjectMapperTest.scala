@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.{
   ObjectMapper => JacksonObjectMapper
 }
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import com.fasterxml.jackson.module.scala.experimental.{
+import com.fasterxml.jackson.module.scala.{
   ScalaObjectMapper => JacksonScalaObjectMapper
 }
 import com.twitter.finatra.jackson.caseclass.exceptions.{
