@@ -9,6 +9,8 @@ Unreleased
 
 Added
 ~~~~~
+* finatra-http|finatra-thrift: Update TraceIdMDCFilter to log traceSampled and traceSpanId
+  ``PHAB_ID=472013``
 
 * finatra-examples: Ensure there are Java and Scala examples for the different
   types of applications and servers which can be built with Finatra. Update `/examples`

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.module.scala.ScalaObjectMapper
 import com.twitter.conversions.DurationOps._
 import com.twitter.doeverything.thriftscala.{Answer, DoEverything, Question}
 import com.twitter.finagle.http.Status
-import com.twitter.finagle.tracing.Trace
+import com.twitter.finagle.tracing.{Flags, Trace, TraceId}
 import com.twitter.finagle.{Filter, Service}
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.finatra.thrift.tests.doeverything.DoEverythingThriftServer
@@ -230,7 +230,7 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
     await(client123.ask(question)) should equal(Answer("ReqRep DoEverythingException caught"))
   }
 
-  test("MDC filtering") {
+  test("MDC filtering with trace sampling undecided") {
     val traceId = Trace.nextId
     val response = await {
       Trace.letId(traceId) {
@@ -242,7 +242,7 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
 
     val MDC = server.injector.instance[DoEverythingThriftController].getStoredMDC
     MDC should not be None
-    MDC.get.size should equal(3)
+    MDC.get.size should equal(5)
 
     MDC.get("method") should not be null
     MDC.get("method") should be("uppercase")
@@ -251,7 +251,47 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
     MDC.get("clientId") should be("client123")
 
     MDC.get("traceId") should not be null
-    MDC.get("traceId") should be(traceId.traceId.toString())
+    MDC.get("traceId") should be (traceId.traceId.toString)
+
+    MDC.get("traceSpanId") should not be null
+    // A new span Id would be created for the client call.
+    MDC.get("traceSpanId") should not be(traceId.traceId.toString)
+
+    MDC.get("traceSampled") should not be null
+    MDC.get("traceSampled") should be("false")
+  }
+
+  test("MDC filtering With sampled set to true") {
+    val tempTraceId = Trace.nextId
+    val traceId = TraceId(None, None, tempTraceId.spanId, None, Flags().setDebug, None)
+
+    val response = await {
+      Trace.letId(traceId) {
+        client123.uppercase("Hi")
+      }
+    }
+
+    response should equal("HI")
+
+    val MDC = server.injector.instance[DoEverythingThriftController].getStoredMDC
+    MDC should not be None
+    MDC.get.size should equal(5)
+
+    MDC.get("method") should not be null
+    MDC.get("method") should be("uppercase")
+
+    MDC.get("clientId") should not be null
+    MDC.get("clientId") should be("client123")
+
+    MDC.get("traceId") should not be null
+    MDC.get("traceId") should be (traceId.traceId.toString)
+
+    MDC.get("traceSpanId") should not be null
+    // A new span Id would be created for the client call.
+    MDC.get("traceSpanId") should not be(traceId.traceId.toString)
+
+    MDC.get("traceSampled") should not be null
+    MDC.get("traceSampled") should be("true")
   }
 
   test("GET /admin/registry.json") {
