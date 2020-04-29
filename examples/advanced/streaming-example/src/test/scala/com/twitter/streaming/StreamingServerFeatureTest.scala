@@ -7,7 +7,7 @@ import com.twitter.finatra.http.{EmbeddedHttpServer, StreamingJsonTestHelper}
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.BufReader
-import com.twitter.util.{Await, Duration, Future}
+import com.twitter.util.{Duration, Future}
 import org.scalatest.concurrent.Eventually
 
 object StreamingServerFeatureTest {
@@ -20,12 +20,14 @@ class StreamingServerFeatureTest extends FeatureTest with Eventually {
 
   // our response stream has a delay between messages so 5 seconds might cut it close
   // in slow CI environments like Travis so we are bumping timeouts to 10 seconds.
-  override protected def defaultAwaitTimeout: Duration = 20.seconds
+  override protected def defaultAwaitTimeout: Duration = 10.seconds
 
-  override val server = new EmbeddedHttpServer(
-    new StreamingServer,
-    streamResponse = true,
-    disableTestLogging = true)
+  override val server =
+    new EmbeddedHttpServer(
+      new StreamingServer,
+      streamResponse = true,
+      disableTestLogging = true
+    )
 
   lazy val streamingJsonHelper =
     new StreamingJsonTestHelper(server.mapper)
@@ -42,7 +44,8 @@ class StreamingServerFeatureTest extends FeatureTest with Eventually {
     }
 
     test("streamingRequest#post with resource management") {
-      val response = verifyStreamingEndpointPost("/tweets/streaming/reader_with_resource_management")
+      val response =
+        verifyStreamingEndpointPost("/tweets/streaming/reader_with_resource_management")
       val firstItem = getFirstItem(response)
       eventually {
         assert(firstItem.equals(TweetMsgPrefix + "1"))
@@ -84,7 +87,7 @@ class StreamingServerFeatureTest extends FeatureTest with Eventually {
     }
     // Write to request in separate thread
     pool {
-      Await.result(streamingJsonHelper.writeJsonArrayNoWait(request, tweets, delayMs = 25))
+      streamingJsonHelper.writeJsonArray(request, tweets, delayMs = 25)
     }
   }
 }
