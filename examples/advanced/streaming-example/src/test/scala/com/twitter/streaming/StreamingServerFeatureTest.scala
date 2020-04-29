@@ -8,18 +8,19 @@ import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.BufReader
 import com.twitter.util.{Duration, Future}
+import org.scalatest.concurrent.Eventually
 
 object StreamingServerFeatureTest {
   val TweetMsgPrefix: String = "msg: "
   val TweetLocation: String = "US"
 }
 
-class StreamingServerFeatureTest extends FeatureTest {
+class StreamingServerFeatureTest extends FeatureTest with Eventually {
   import StreamingServerFeatureTest._
 
   // our response stream has a delay between messages so 5 seconds might cut it close
   // in slow CI environments like Travis so we are bumping timeouts to 10 seconds.
-  override protected def defaultAwaitTimeout: Duration = 10.seconds
+  override protected def defaultAwaitTimeout: Duration = 20.seconds
 
   override val server = new EmbeddedHttpServer(
     new StreamingServer,
@@ -33,23 +34,31 @@ class StreamingServerFeatureTest extends FeatureTest {
   test("streamingRequest#post via Reader") {
     val response = verifyStreamingEndpointPost("/tweets/streaming/reader")
     val firstItem = getFirstItem(response)
-    assert(firstItem.equals(TweetMsgPrefix + "1"))
+    eventually{
+      assert(firstItem.equals(TweetMsgPrefix + "1"))
+    }
   }
 
   test("streamingRequest#post with resource management") {
     val response = verifyStreamingEndpointPost("/tweets/streaming/reader_with_resource_management")
     val firstItem = getFirstItem(response)
-    assert(firstItem.equals(TweetMsgPrefix + "1"))
+    eventually{
+      assert(firstItem.equals(TweetMsgPrefix + "1"))
+    }
   }
 
   test("streamingRequest#post via AsyncStream") {
     val response = verifyStreamingEndpointPost("/tweets/streaming/asyncstream")
     val firstItem = getFirstItem(response)
-    assert(firstItem.equals(TweetMsgPrefix + "1"))
+    eventually{
+      assert(firstItem.equals(TweetMsgPrefix + "1"))
+    }
   }
 
   test("streaming#post json") {
-    verifyStreamingEndpointPost("/tweets")
+    eventually{
+      verifyStreamingEndpointPost("/tweets")
+    }
   }
 
   /* -----------------------------------------------------------------------------------------------
@@ -72,7 +81,7 @@ class StreamingServerFeatureTest extends FeatureTest {
     }
     // Write to request in separate thread
     pool {
-      streamingJsonHelper.writeJsonArray(request, tweets, delayMs = 25)
+      streamingJsonHelper.writeJsonArray(request, tweets, delayMs = 2)
     }
   }
 }
