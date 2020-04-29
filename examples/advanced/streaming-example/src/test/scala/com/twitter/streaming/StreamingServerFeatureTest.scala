@@ -7,7 +7,7 @@ import com.twitter.finatra.http.{EmbeddedHttpServer, StreamingJsonTestHelper}
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.BufReader
-import com.twitter.util.{Duration, Future}
+import com.twitter.util.{Await, Duration, Future}
 import org.scalatest.concurrent.Eventually
 
 object StreamingServerFeatureTest {
@@ -81,7 +81,7 @@ class StreamingServerFeatureTest extends FeatureTest with Eventually {
     }
     // Write to request in separate thread
     pool {
-      streamingJsonHelper.writeJsonArray(request, tweets, delayMs = 2)
+      Await.result(streamingJsonHelper.writeJsonArrayNoWait(request, tweets, delayMs = 25))
     }
   }
 }
