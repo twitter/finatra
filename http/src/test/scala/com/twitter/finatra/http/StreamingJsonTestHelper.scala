@@ -16,38 +16,35 @@ import com.twitter.util.{Await, Duration, Future}
  */
 class StreamingJsonTestHelper(mapper: ScalaObjectMapper, writer: Option[ObjectWriter] = None) {
 
-  def writeJsonArray(request: Request, seq: Seq[Any], delayMs: Long): Unit = {
-    val f = for {
-      _ <- write(request, "[")
-      _ <- write(request, writeValueAsString(seq.head))
-      _ <- writeElements(request, seq, delayMs)
-      _ <- write(request, "]")
-      closed <- close(request)
-    } yield closed
-    Await.result(f)
-  }
+  def writeJsonArray(request: Request, seq: Seq[Any], delayMs: Long): Unit =
+    Await.result {
+      for {
+        _ <- write(request, "[")
+        _ <- write(request, writeValueAsString(seq.head))
+        _ <- writeElements(request, seq.tail, delayMs)
+        _ <- write(request, "]")
+        closed <- close(request)
+      } yield closed
+    }
 
   /* Private */
 
-  private def writeValueAsString(any: Any): String = {
-    writer match {
-      case Some(objectWriter) =>
-        objectWriter.writeValueAsString(any)
-      case _ =>
-        mapper.writeValueAsString(any)
-    }
+  private def writeValueAsString(any: Any): String = writer match {
+    case Some(objectWriter) =>
+      objectWriter.writeValueAsString(any)
+    case _ =>
+      mapper.writeValueAsString(any)
   }
 
-  private def writeElements(request: Request, seq: Seq[Any], delayMs: Long): Future[Unit] = {
-    Future.traverseSequentially(seq.tail) { elem =>
-      FutureUtils.scheduleFuture(Duration.fromMilliseconds(delayMs))(write(request, "," + writeValueAsString(elem)))
-    }.unit
-  }
+  private def writeElements(request: Request, seq: Seq[Any], delayMs: Long): Future[Unit] =
+    Future
+      .traverseSequentially(seq) { elem =>
+        FutureUtils.scheduleFuture(Duration.fromMilliseconds(delayMs))(
+          write(request, "," + writeValueAsString(elem)))
+      }.unit
 
-  private def write(request: Request, str: String): Future[Unit] = {
-    println(str)
+  private def write(request: Request, str: String): Future[Unit] =
     request.writer.write(Buf.Utf8(str))
-  }
 
   private def close(request: Request): Future[Unit] = request.close()
 }
