@@ -5,7 +5,7 @@ import com.twitter.finagle.http.Request
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.inject.utils.FutureUtils
 import com.twitter.io.Buf
-import com.twitter.util.{Await, Duration, Future}
+import com.twitter.util.{Duration, Future}
 
 /**
  * Helper class to "stream" JSON to a [[com.twitter.finagle.http.Request]]. Uses the given mapper
@@ -16,16 +16,14 @@ import com.twitter.util.{Await, Duration, Future}
  */
 class StreamingJsonTestHelper(mapper: ScalaObjectMapper, writer: Option[ObjectWriter] = None) {
 
-  def writeJsonArray(request: Request, seq: Seq[Any], delayMs: Long): Unit =
-    Await.result {
-      for {
-        _ <- write(request, "[")
-        _ <- write(request, writeValueAsString(seq.head))
-        _ <- writeElements(request, seq.tail, delayMs)
-        _ <- write(request, "]")
-        closed <- close(request)
-      } yield closed
-    }
+  def writeJsonArray(request: Request, seq: Seq[Any], delayMs: Long): Future[Unit] =
+    for {
+      _ <- write(request, "[")
+      _ <- write(request, writeValueAsString(seq.head))
+      _ <- writeElements(request, seq.tail, delayMs)
+      _ <- write(request, "]")
+      closed <- close(request)
+    } yield closed
 
   /* Private */
 

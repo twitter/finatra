@@ -8,14 +8,13 @@ import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.BufReader
 import com.twitter.util.{Duration, Future}
-import org.scalatest.concurrent.Eventually
 
 object StreamingServerFeatureTest {
   val TweetMsgPrefix: String = "msg: "
   val TweetLocation: String = "US"
 }
 
-class StreamingServerFeatureTest extends FeatureTest with Eventually {
+class StreamingServerFeatureTest extends FeatureTest {
   import StreamingServerFeatureTest._
 
   // our response stream has a delay between messages so 5 seconds might cut it close
@@ -26,46 +25,36 @@ class StreamingServerFeatureTest extends FeatureTest with Eventually {
     new EmbeddedHttpServer(
       new StreamingServer,
       streamResponse = true,
+      closeGracePeriod = Some(Duration.fromSeconds(5 )),
       disableTestLogging = true
     )
 
   lazy val streamingJsonHelper =
     new StreamingJsonTestHelper(server.mapper)
 
-  // if (!sys.props.contains("SKIP_FLAKY_TRAVIS")) {
+  // these streaming endpoints remove the TweetLocation from the original tweets
+  test("streamingRequest#post via Reader") {
+    val response = verifyStreamingEndpointPost("/tweets/streaming/reader")
+    val firstItem = getFirstItem(response)
+    assert(firstItem.equals(TweetMsgPrefix + "1"))
+  }
 
-    // these streaming endpoints remove the TweetLocation from the original tweets
-    test("streamingRequest#post via Reader") {
-      val response = verifyStreamingEndpointPost("/tweets/streaming/reader")
-      val firstItem = getFirstItem(response)
-      eventually {
-        assert(firstItem.equals(TweetMsgPrefix + "1"))
-      }
-    }
+  test("streamingRequest#post with resource management") {
+    val response =
+      verifyStreamingEndpointPost("/tweets/streaming/reader_with_resource_management")
+    val firstItem = getFirstItem(response)
+    assert(firstItem.equals(TweetMsgPrefix + "1"))
+  }
 
-    test("streamingRequest#post with resource management") {
-      val response =
-        verifyStreamingEndpointPost("/tweets/streaming/reader_with_resource_management")
-      val firstItem = getFirstItem(response)
-      eventually {
-        assert(firstItem.equals(TweetMsgPrefix + "1"))
-      }
-    }
+  test("streamingRequest#post via AsyncStream") {
+    val response = verifyStreamingEndpointPost("/tweets/streaming/asyncstream")
+    val firstItem = getFirstItem(response)
+    assert(firstItem.equals(TweetMsgPrefix + "1"))
+  }
 
-    test("streamingRequest#post via AsyncStream") {
-      val response = verifyStreamingEndpointPost("/tweets/streaming/asyncstream")
-      val firstItem = getFirstItem(response)
-      eventually {
-        assert(firstItem.equals(TweetMsgPrefix + "1"))
-      }
-    }
-
-    test("streaming#post json") {
-      eventually {
-        verifyStreamingEndpointPost("/tweets")
-      }
-    }
-  // }
+  test("streaming#post json") {
+    verifyStreamingEndpointPost("/tweets")
+  }
 
   /* -----------------------------------------------------------------------------------------------
    *                                              Utils
