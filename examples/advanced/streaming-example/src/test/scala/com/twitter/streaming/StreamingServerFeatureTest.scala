@@ -32,7 +32,7 @@ class StreamingServerFeatureTest extends FeatureTest with Eventually {
   lazy val streamingJsonHelper =
     new StreamingJsonTestHelper(server.mapper)
 
-  if (!sys.props.contains("SKIP_FLAKY_TRAVIS")) {
+  // if (!sys.props.contains("SKIP_FLAKY_TRAVIS")) {
 
     // these streaming endpoints remove the TweetLocation from the original tweets
     test("streamingRequest#post via Reader") {
@@ -65,7 +65,7 @@ class StreamingServerFeatureTest extends FeatureTest with Eventually {
         verifyStreamingEndpointPost("/tweets")
       }
     }
-  }
+  // }
 
   /* -----------------------------------------------------------------------------------------------
    *                                              Utils
