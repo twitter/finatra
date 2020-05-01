@@ -41,12 +41,10 @@ public @interface QueryParam {
      *   https://tools.ietf.org/html/rfc6570#section-2.4.2
      *
      * commaSeparatedList == false corresponds to the "explode modifier" style
-     *
-     *   {&list*}           &list=red&list=green&list=blue
+     * {@literal &list=red&list=green&list=blue}
      *
      * commaSeparatedList == true corresponds to the non-"explode modifier" style:
-     *
-     *   {&list}            &list=red,green,blue
+     * {@literal &list=red,green,blue}
      */
     boolean commaSeparatedList() default false;
 }

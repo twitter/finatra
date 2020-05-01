@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * a field that should be injected into a case class via Jackson
  * `com.fasterxml.jackson.databind.InjectableValues`.
  *
- * @see <a href="https://fasterxml.github.io/jackson-databind/javadoc/2.9/com/fasterxml/jackson/databind/InjectableValues.html>com.fasterxml.jackson.databind.InjectableValues</a>
+ * @see <a href="https://fasterxml.github.io/jackson-databind/javadoc/2.9/com/fasterxml/jackson/databind/InjectableValues.html">com.fasterxml.jackson.databind.InjectableValues</a>
  * @see <a href="https://twitter.github.io/finatra/user-guide/json/index.html#injectablevalues">Finatra User's Guide - JSON Injectable Values</a>
  * @see <a href="https://twitter.github.io/finatra/user-guide/http/requests.html#field-annotations">Finatra User's Guide - HTTP Request Field Annotations</a>
  */
