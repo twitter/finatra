@@ -9,7 +9,7 @@ import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
 import com.twitter.finatra.jackson.ScalaObjectMapper
-import com.twitter.finatra.json.modules.FinatraJacksonModule
+import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 import com.twitter.inject.server.FeatureTest
 import scala.collection.JavaConverters._
 
@@ -24,7 +24,7 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
     twitterServer = new HttpServer {
       override val name = "jackson-server"
 
-      override def jacksonModule: Module = new FinatraJacksonModule {
+      override def jacksonModule: Module = new ScalaObjectMapperModule {
         override val additionalJacksonModules: Seq[com.fasterxml.jackson.databind.Module] =
           Seq(MixInAnnotationsModule)
       }

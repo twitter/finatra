@@ -75,7 +75,7 @@ message body reader cannot be found to convert an incoming |c.t.finagle.http.Req
 The |DefaultMessageBodyReader|_ parses an incoming |c.t.finagle.http.Request|_
 `body <https://github.com/twitter/finagle/blob/f61b6f99c7d108b458d5adcb9891ff6ddda7f125/finagle-base-http/src/main/scala/com/twitter/finagle/http/Message.scala#L440>`__
 as JSON, marshalling it into the given callback input type using the `HttpServer <https://github.com/twitter/finatra/blob/712edf91c0361fd9907deaef06e0bd61384f6a7e/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L81>`__
-`configured <../json/index.html#configuration>`__ `FinatraObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala>`__
+`configured <../json/index.html#configuration>`__ `ScalaObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala>`__
 and is the basis of the `JSON integration with routing <../json/routing.html>`_.
 
 This default behavior is overridable. See the `MessageBodyModule` `section <#id4>`__ for more
@@ -148,7 +148,7 @@ into a |c.t.finagle.http.Response|_.
 The `DefaultMessageBodyWriter` converts any non-primitive type to an `application/json` content type
 response and a JSON representation of the type using the
 `HttpServer <https://github.com/twitter/finatra/blob/712edf91c0361fd9907deaef06e0bd61384f6a7e/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L81>`__
-`configured <../json/index.html#configuration>`__ `FinatraObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala>`__
+`configured <../json/index.html#configuration>`__ `ScalaObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala>`__
 to convert the type to JSON.
 
 For primitive and boxed types, the default writer implementation will render a `plain/text`

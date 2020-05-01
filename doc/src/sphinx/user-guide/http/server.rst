@@ -359,7 +359,7 @@ Framework Modules
 
 You can override some of the modules provided by default in `HttpServer <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/servers.scala>`__.
 
-An example use-case would be to provide a custom Jackson module implementation in place of the default `FinatraJacksonModule <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala>`__.
+An example use-case would be to provide a custom Jackson module implementation in place of the default `ScalaObjectMapperModule <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala>`__.
 
 To do so you would override the `protected def jacksonModule` in your server.
 

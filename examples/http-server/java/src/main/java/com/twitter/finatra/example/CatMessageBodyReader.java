@@ -7,14 +7,14 @@ import scala.reflect.ManifestFactory;
 import com.twitter.finagle.http.Message;
 import com.twitter.finatra.example.domain.Cat;
 import com.twitter.finatra.http.marshalling.AbstractMessageBodyReader;
-import com.twitter.finatra.json.FinatraObjectMapper;
+import com.twitter.finatra.jackson.ScalaObjectMapper;
 
 public class CatMessageBodyReader extends AbstractMessageBodyReader<Cat> {
-  private final FinatraObjectMapper mapper;
+  private final ScalaObjectMapper mapper;
 
   @Inject
   public CatMessageBodyReader(
-      FinatraObjectMapper mapper
+      ScalaObjectMapper mapper
   ) {
     this.mapper = mapper;
   }

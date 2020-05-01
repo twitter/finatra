@@ -11,7 +11,6 @@ target(
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/serde",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/streaming",
         "finatra/jackson/src/main/scala/com/twitter/finatra/json",
-        "finatra/jackson/src/main/scala/com/twitter/finatra/json/modules",
         "finatra/jackson/src/main/scala/com/twitter/finatra/json/utils",
     ],
 )

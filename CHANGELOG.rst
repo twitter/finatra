@@ -9,6 +9,7 @@ Unreleased
 
 Added
 ~~~~~
+
 * finatra-http|finatra-thrift: Update TraceIdMDCFilter to log traceSampled and traceSpanId
   ``PHAB_ID=472013``
 
@@ -18,6 +19,10 @@ Added
 
 Changed
 ~~~~~~~
+
+* jackson: Remove deprecated `FinatraObjectMapper` and `FinatraJacksonModule`. Users are encouraged
+  to switch to the equivalent `c.t.finatra.jackson.ScalaObjectMapper` and
+  `c.t.finatra.jackson.modules.ScalaObjectMapperModule`. ``PHAB_ID=D473177``
 
 * finara-http: Update `c.t.finatra.http.StreamingJsonTestHelper` to not use `Thread.sleep` for
   writing JSON elements on an artificial delay. ``PHAB_ID=D470793``

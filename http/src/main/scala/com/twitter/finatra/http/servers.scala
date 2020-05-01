@@ -17,7 +17,7 @@ import com.twitter.finatra.http.modules.{
 }
 import com.twitter.finatra.http.response.HttpResponseClassifier
 import com.twitter.finatra.http.routing.{AdminHttpRouter, HttpRouter}
-import com.twitter.finatra.json.modules.FinatraJacksonModule
+import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.conversions.string._
@@ -523,7 +523,7 @@ trait HttpServer extends HttpServerTrait {
    *
    * @return a [[com.twitter.inject.TwitterModule]] which provides a [[com.twitter.finatra.jackson.ScalaObjectMapper]] implementation.
    */
-  protected def jacksonModule: Module = FinatraJacksonModule
+  protected def jacksonModule: Module = ScalaObjectMapperModule
 }
 
 /**

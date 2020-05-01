@@ -24,11 +24,11 @@ Custom "request" case classes can be used for declarative parsing of requests wi
 
 The case class field names should match the request or header parameter name or use the `@JsonProperty <https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties>`__
 annotation to specify the JSON field name in the case class (see: `example <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/test/scala/com/twitter/finatra/json/tests/internal/ExampleCaseClasses.scala#L177>`__
-and `test case <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/test/scala/com/twitter/finatra/json/tests/FinatraObjectMapperTest.scala#L140>`__).
+and `test case <https://github.com/twitter/finatra/blob/01fdd9cfb3c877fe226085bf411f42ae08420e5d/jackson/src/test/scala/com/twitter/finatra/jackson/tests/AbstractScalaObjectMapperTest.scala#L283>`__).
 
 A `PropertyNamingStrategy <https://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html>`__
 can be configured to handle common name substitutions (e.g. `snake\_case` or `camelCase`). By default,
-`snake\_case` is used (defaults are set in `FinatraJacksonModule <https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala>`__).
+`snake\_case` is used (defaults are set by the `ScalaObjectMapper` provided by the `ScalaObjectMapperModule <https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala>`__).
 
 For example, if we have a `POST` endpoint which expects a JSON body with a `Long` `"id"` and a
 `String` `"name"`, we could define the following case class and Controller route:

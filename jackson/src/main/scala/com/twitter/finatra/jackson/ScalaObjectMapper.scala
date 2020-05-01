@@ -100,7 +100,7 @@ object ScalaObjectMapper {
    * is supported during deserialization (case class fields annotated with `@Inject`).
    *
    * @note the preferred way of obtaining a [[ScalaObjectMapper]] is through injection
-   *       using the `FinatraJacksonModule`.
+   *       using the `ScalaObjectMapperModule`.
    * @param injector a configured (nullable) [[Injector]].
    *
    * @return a new [[ScalaObjectMapper]] instance.
@@ -112,6 +112,8 @@ object ScalaObjectMapper {
 
   /**
    * Creates a new [[ScalaObjectMapper]] wrapping an underlying [[JacksonScalaObjectMapperType]].
+   *
+   * @note this mutates the underlying mapper to configure it with the [[ScalaObjectMapper]] defaults.
    *
    * @param underlying the [[JacksonScalaObjectMapperType]] to wrap.
    *
@@ -125,6 +127,7 @@ object ScalaObjectMapper {
    * wrapping an underlying [[JacksonScalaObjectMapperType]].
    *
    * @note the given [[Injector]] can be null.
+   * @note this mutates the underlying mapper to configure it with the [[ScalaObjectMapper]] defaults.
    *
    * @param injector a configured (nullable) [[Injector]].
    * @param underlying the [[JacksonScalaObjectMapperType]] to wrap.
@@ -136,6 +139,19 @@ object ScalaObjectMapper {
     underlying: JacksonScalaObjectMapperType
   ): ScalaObjectMapper =
     ScalaObjectMapper.builder.objectMapper(injector, underlying)
+
+  /**
+   * Utility to create a new [[ScalaObjectMapper]] which simply wraps the given
+   * [[JacksonScalaObjectMapperType]].
+   *
+   * @note the `underlying` mapper is not mutated to produce the new [[ScalaObjectMapper]] unlike
+   *       the [[apply(underlying: JacksonScalaObjectMapperType)]] which mutates the underlying
+   *       mapper to configure it as per the [[ScalaObjectMapper]] default.
+   */
+  final def objectMapper(underlying: JacksonScalaObjectMapperType): ScalaObjectMapper = {
+    val objectMapperCopy = ObjectMapperCopier.copy(underlying)
+    new ScalaObjectMapper(objectMapperCopy)
+  }
 
   /**
    * Utility to create a new [[ScalaObjectMapper]] explicitly configured with
@@ -600,7 +616,7 @@ private[jackson] object ArrayElementsOnNewLinesPrettyPrinter extends DefaultPret
  *
  * @param underlying a configured [[JacksonScalaObjectMapperType]]
  */
-class ScalaObjectMapper private[finatra] (val underlying: JacksonScalaObjectMapperType) {
+class ScalaObjectMapper (val underlying: JacksonScalaObjectMapperType) {
   assert(underlying != null, "Underlying ScalaObjectMapper cannot be null.")
 
   /**

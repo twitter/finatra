@@ -1,7 +1,7 @@
 package finatra.quickstart.modules
 
-import com.twitter.finatra.json.modules.FinatraJacksonModule
+import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 
-object TwitterCloneJacksonModule extends FinatraJacksonModule {
+object TwitterCloneJacksonModule extends ScalaObjectMapperModule {
   override def numbersAsStrings = true
 }

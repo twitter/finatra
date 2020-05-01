@@ -1,7 +1,11 @@
 package com.twitter.finatra.http.modules
 
 import com.google.inject.Module
-import com.twitter.finatra.http.internal.marshalling.{DefaultMessageBodyReaderImpl, DefaultMessageBodyWriterImpl, MessageInjectableTypes}
+import com.twitter.finatra.http.internal.marshalling.{
+  DefaultMessageBodyReaderImpl,
+  DefaultMessageBodyWriterImpl,
+  MessageInjectableTypes
+}
 import com.twitter.finatra.http.marshalling.{DefaultMessageBodyReader, DefaultMessageBodyWriter}
 import com.twitter.finatra.jackson.caseclass.InjectableTypes
 import com.twitter.inject.TwitterModule

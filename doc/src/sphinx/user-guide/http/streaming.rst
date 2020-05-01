@@ -11,7 +11,7 @@ Features
 - The ability to program in terms of streams of domain objects instead of bytes. For example:
 
   * A `StreamingRequest` will deserialize a valid JSON string to a domain object using the `JsonStreamParser <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/streaming/JsonStreamParser.scala>`__.
-  * A `StreamingResponse` will convert a domain object to a JSON string using the `ObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala>`__.
+  * A `StreamingResponse` will convert a domain object to a JSON string using the `ScalaObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala>`__.
 - The ability to bypass the `ObjectMappper` and `JsonStreamParser` by dealing with streams of `Buf` directly.
 - The ability to perform resource management by using the signal from `Reader#onClose`.
 - The ability to perform composable operations over streams using `map` and `flatMap`.

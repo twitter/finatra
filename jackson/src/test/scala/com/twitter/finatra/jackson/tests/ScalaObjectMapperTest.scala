@@ -1,8 +1,9 @@
 package com.twitter.finatra.jackson.tests
 
 import com.fasterxml.jackson.databind.module.SimpleModule
-import com.fasterxml.jackson.databind.{DeserializationFeature, JsonMappingException}
-import com.twitter.finatra.jackson.ScalaObjectMapper
+import com.fasterxml.jackson.databind.{DeserializationFeature, JsonMappingException, ObjectMapper, PropertyNamingStrategy}
+import com.fasterxml.jackson.module.scala.{DefaultScalaModule, ScalaObjectMapper => JacksonScalaObjectMapper}
+import com.twitter.finatra.jackson.{JacksonScalaObjectMapperType, ScalaObjectMapper}
 import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassMappingException
 import com.twitter.finatra.jackson.tests.AbstractScalaObjectMapperTest.ZeroOrOneDeserializer
 
@@ -204,6 +205,28 @@ class ScalaObjectMapperTest extends AbstractScalaObjectMapperTest {
         |}
         |""".stripMargin
     )
+  }
+
+  test("support wrapped object mapper") {
+    val person = CamelCaseSimplePersonNoAnnotation(myName = "Bob")
+
+    val jacksonScalaObjectMapper: JacksonScalaObjectMapperType = new ObjectMapper() with JacksonScalaObjectMapper
+    jacksonScalaObjectMapper.registerModule(DefaultScalaModule)
+    jacksonScalaObjectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE)
+
+    // default for ScalaObjectMapper#Builder is snake_case which should not get applied here
+    // since this method only wraps and does not mutate the underlying mapper
+    val objectMapper: ScalaObjectMapper = ScalaObjectMapper.objectMapper(jacksonScalaObjectMapper)
+
+    val serialized = """{"myName":"Bob"}"""
+    // serialization -- they should each serialize the same way
+    jacksonScalaObjectMapper.writeValueAsString(person) should equal(serialized)
+    objectMapper.writeValueAsString(person) should equal(serialized)
+    jacksonScalaObjectMapper.writeValueAsString(person) should equal(objectMapper.writeValueAsString(person))
+    // deserialization -- each should be able to deserialize the other's written representation
+    objectMapper.parse[CamelCaseSimplePersonNoAnnotation](jacksonScalaObjectMapper.writeValueAsString(person)) should equal(person)
+    jacksonScalaObjectMapper.readValue[CamelCaseSimplePersonNoAnnotation](objectMapper.writeValueAsString(person)) should equal(person)
+    objectMapper.parse[CamelCaseSimplePersonNoAnnotation](serialized) should equal(jacksonScalaObjectMapper.readValue[CamelCaseSimplePersonNoAnnotation](serialized))
   }
 
   test("support camel case mapper") {
