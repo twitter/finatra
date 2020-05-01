@@ -19,6 +19,9 @@ Added
 Changed
 ~~~~~~~
 
+* finara-http: Update `c.t.finatra.http.StreamingJsonTestHelper` to not use `Thread.sleep` for
+  writing JSON elements on an artificial delay. ``PHAB_ID=D470793``
+
 * inject-app: Remove finagle-core dependency. Introduce finatra/inject/inject-dtab.
   ``PHAB_ID=D474298``
 
