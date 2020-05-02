@@ -11,7 +11,7 @@ import com.twitter.finatra.jackson.caseclass.InjectableTypes
 import com.twitter.inject.TwitterModule
 
 /**
- * Provided implementations for the [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]]
+ * Provides implementations for the [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]]
  * and the [[com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter]].
  *
  * @see [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]]

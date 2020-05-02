@@ -149,12 +149,12 @@ For more information on creating an "injectable" App with Finatra, see the docum
 |c.t.server.TwitterServer|_ Lifecycle
 -------------------------------------
 
-|c.t.server.TwitterServer|_ is an extension of |c.t.app.App|_ and thus inherits the |c.t.app.App|_
-lifecycle, but adds the ability to include "warmup" lifecycle phases which are just a refinement of
+|c.t.server.TwitterServer|_ is an extension of |c.t.app.App|_ and thus inherits the `c.t.app.App lifecycle <#c-t-app-app-lifecycle>`_,
+but adds the ability to include "warmup" lifecycle phases which are just a refinement of
 the defined `main()` phase of the |c.t.app.App|_ lifecycle. That is, the
 |c.t.server.Lifecycle.Warmup|_ trait exposes two methods, `prebindWarmup` and `warmupComplete`.
 
-These methods are provided for the user to call when they make sense typically at points in the
+These methods are provided **for the user to call** when they make sense typically at points in the
 user defined `main()` method before awaiting on the external interface.
 
 The idea being that within your user defined `main()` method you may want to have logic to warmup
@@ -175,8 +175,8 @@ Finatra defines an "injectable" TwitterServer, |c.t.inject.server.TwitterServer|
 extension of |c.t.server.TwitterServer|_ and the Finatra "injectable" App, |c.t.inject.app.App|_.
 
 The Finatra "injectable" TwitterServer, |c.t.inject.server.TwitterServer|_ mixes in the
-|c.t.server.Lifecycle.Warmup|_ trait by default and further refines the "warmup" lifecycle as
-described in the next section.
+|c.t.server.Lifecycle.Warmup|_ trait by default to ensure that warmup is performed where most applicable
+and further refines the warmup lifecycle as described in the next section.
 
 For more information on creating an "injectable" TwitterServer with Finatra, see the documentation
 `here <../twitter-server/index.html>`__.

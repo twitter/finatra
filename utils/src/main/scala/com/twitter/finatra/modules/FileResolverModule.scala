@@ -40,7 +40,10 @@ object FileResolverFlags {
   final val LocalDocRoot = "local.doc.root"
 }
 
-/** Defines the flags necessary for configuring a [[com.twitter.finatra.utils.FileResolver]] */
+/**
+ * A [[com.twitter.inject.TwitterModule]] which provides a configured
+ * [[com.twitter.finatra.utils.FileResolver]].
+ */
 object FileResolverModule extends TwitterModule {
 
   // Only one of these flags should ever be set to a non-empty string as

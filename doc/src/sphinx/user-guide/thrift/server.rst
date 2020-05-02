@@ -260,6 +260,23 @@ For a list of what flags can be set programmatically, please see the `ThriftServ
 
 For more information on using and setting command-line flags see `Flags <../getting-started/flags.html#passing-flag-values-as-command-line-arguments>`__.
 
+Framework Modules
+~~~~~~~~~~~~~~~~~
+
+The `ThriftServer <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/servers.scala>`__
+provides some base configurations in the form of `modules <../getting-started/modules.html>`_ added
+by default to a server's object graph. This includes:
+
+- the `ExceptionManagerModule <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/modules/ExceptionManagerModule.scala>`_ (see: `Thrift Exception Mapping <./exceptions.html>`_)
+- the `StackTransformerModule <https://github.com/twitter/finatra/blob/develop/inject/inject-modules/src/main/scala/com/twitter/inject/modules/StackTransformerModule.scala>`_
+- an `overridable <https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/thrift/src/main/scala/com/twitter/finatra/thrift/servers.scala#L211>`_ default `ThriftResponseClassifierModule <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/modules/ThriftResponseClassifierModule.scala>`_ (see: `Server-side Response Classification <#id1>`_)
+
+.. caution::
+
+    Modules are de-duplicated before being installed to create the Injector. If a Framework
+    Module is also configured in the server's `list of Modules <../getting-started/modules.html#module-configuration-in-servers>`_,
+    the Framework Module will be replaced. 
+
 Finagle Server Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

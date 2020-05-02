@@ -86,7 +86,7 @@ the `c.t.finagle.http.Request`. Supported annotations:
 ------------
 
 `@RouteParam <https://github.com/twitter/finatra/blob/develop/http-annotations/src/main/java/com/twitter/finatra/http/annotations/RouteParam.java>`__
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Denotes a field to be parsed from a named parameter in a given route, e.g.,
 
@@ -119,7 +119,7 @@ Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/sca
 ------------
 
 `@QueryParam <https://github.com/twitter/finatra/blob/develop/http-annotations/src/main/java/com/twitter/finatra/http/annotations/QueryParam.java>`__
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Read a value from the request query string by a parameter named for the case class field or by the
 ``@QueryParam`` annotation value.
@@ -192,7 +192,7 @@ will return a Bad Request with an appropriate error message when `commaSeparated
 ------------
 
 `@FormParam <https://github.com/twitter/finatra/blob/develop/http-annotations/src/main/java/com/twitter/finatra/http/annotations/FormParam.java>`__
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Read a value from a form field with the case class field's name or as the value specified in the
 ``@FormParam`` annotation from the request body.
@@ -206,7 +206,7 @@ Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/sca
 ------------
 
 `@Header <https://github.com/twitter/finatra/blob/develop/http-annotations/src/main/java/com/twitter/finatra/http/annotations/Header.java>`__
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Read a header value specified by the case class field name or by the ``@Header`` annotation value.
 You can use a Scala `"back-quote" literal <https://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html>`__
@@ -305,7 +305,7 @@ class.
 
 .. caution::
 
-    The `MessageInjectableValues <http:s//github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageInjectableValues.scala>`_
+    The `MessageInjectableValues <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageInjectableValues.scala>`_
     is only configured via the framework's `DefaultMessageBodyReader <./message_body.html#id2>`_
     `DefaultMessageBodyReaderImpl <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyReaderImpl.scala>`_
     which is bound in the `MessageBodyModule <./message_body.html#id5>`_.
@@ -328,7 +328,7 @@ Finatra also provides a way to specify how to parse the request into a callback 
 classes <#custom-request-case-class>`__ (which are implemented with a framework
 `default message body reader <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyReaderImpl.scala>`__),
 these objects allow for customized parsing the full incoming `c.t.finagle.http.Request` into a
-specific type. For more information, see the `Message Body Readers <message_body.html#message-body-readers>`__
+specific type. For more information, see the `Message Body Readers <./message_body.html#message-body-readers>`__
 section.
 
 Request Forwarding

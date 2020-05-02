@@ -204,6 +204,7 @@ the `PropertyNamingStrategy` different than the default:
 
 .. code:: scala
 
+    import com.fasterxml.jackson.databind.PropertyNamingStrategy
     import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 
     object MyCustomObjectMapperModule extends ScalaObjectMapperModule = {

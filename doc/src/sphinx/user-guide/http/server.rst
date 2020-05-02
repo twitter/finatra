@@ -357,13 +357,35 @@ For a list of what flags can be set programmatically, please see the `HttpServer
 Framework Modules
 ~~~~~~~~~~~~~~~~~
 
-You can override some of the modules provided by default in `HttpServer <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/servers.scala>`__.
+The `HttpServer <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/servers.scala>`__
+provides some base configurations in the form of `modules <../getting-started/modules.html>`_ added
+by default to a server's object graph. This includes:
 
-An example use-case would be to provide a custom Jackson module implementation in place of the default `ScalaObjectMapperModule <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala>`__.
+- the `FileResolverModule <https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/modules/FileResolverModule.scala>`_ (see: `Working With Files <../files/index.html>`_)
+- the `ExceptionManagerModule <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/ExceptionManagerModule.scala>`_ (see: `HTTP Exception Mapping <./exceptions.html>`_)
+- an `overridable <https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/http/src/main/scala/com/twitter/finatra/http/servers.scala#L363>`_ default `HttpResponseClassifierModule <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/HttpResponseClassifierModule.scala>`_ (see: `Server-side Response Classification <#id2>`_)
+- an `overridable <https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/http/src/main/scala/com/twitter/finatra/http/servers.scala#L508>`_ default `AccessLogModule <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/AccessLogModule.scala>`_
+- an `overridable <https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/http/src/main/scala/com/twitter/finatra/http/servers.scala#L526>`_ default `ScalaObjectMapperModule <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala>`_ (see: `Jackson Integration <../json/index.html>`_)
+- an `overridable <https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/http/src/main/scala/com/twitter/finatra/http/servers.scala#L519>`_ default `MessageBodyManagerModule <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MessageBodyModule.scala>`_ (see: `Message Body Components <./message_body.html>`_)
 
-To do so you would override the `protected def jacksonModule` in your server.
+As expressed above, some of the `modules <../getting-started/modules.html>`_ provided in the `HttpServer <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/servers.scala>`__
+are overridable. An example use-case would be to provide a custom `ScalaObjectMapperModule`
+implementation in place of the default `ScalaObjectMapperModule <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala>`_
+
+To do so you would override the `protected def jacksonModule` in your server with your custom
+implementation.
 
 .. code:: scala
+
+    import com.fasterxml.jackson.databind.PropertyNamingStrategy
+    import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
+
+    object MyCustomJacksonModule extends ScalaObjectMapperModule {
+      override val propertyNamingStrategy: PropertyNamingStrategy =
+          new PropertyNamingStrategy.KebabCaseStrategy
+    }
+
+    ...
 
     import com.twitter.finatra.http.HttpServer
     import com.twitter.finatra.http.routing.HttpRouter
@@ -383,8 +405,33 @@ class, e.g.,
 
 .. code:: scala
 
-    override def jacksonModule = new MyCustomJacksonModule
+    import com.fasterxml.jackson.databind.PropertyNamingStrategy
+    import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 
+    class MyCustomJacksonModule extends ScalaObjectMapperModule {
+      override val propertyNamingStrategy: PropertyNamingStrategy =
+          new PropertyNamingStrategy.KebabCaseStrategy
+    }
+
+    ...
+
+    import com.twitter.finatra.http.HttpServer
+    import com.twitter.finatra.http.routing.HttpRouter
+
+    class ExampleServer extends HttpServer {
+
+      override def jacksonModule = new MyCustomJacksonModule
+
+      override def configureHttp(router: HttpRouter): Unit = {
+        ???
+      }
+    }
+
+.. caution::
+
+    Modules are de-duplicated before being installed to create the Injector. If a Framework
+    Module is also configured in the server's `list of Modules <../getting-started/modules.html#module-configuration-in-servers>`_,
+    the Framework Module will be replaced.
 
 Finagle Server Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

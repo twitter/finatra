@@ -308,8 +308,8 @@ through `Override Modules <../testing/index.html#override-modules>`__ or by usin
 
       @Provides
       @Singleton
-      def providesFoo(
-        @Flag("key") key: String) = {
+      def provideFoo(
+        @Flag("key") key: String): Foo = {
         new Foo(key)
       }
     }
@@ -335,7 +335,7 @@ and in Java:
 
       @Provides
       @Singleton
-      public Foo providesFoo(
+      public Foo provideFoo(
         @Flag("key") String key) {
         return new Foo(key);
       }
@@ -387,7 +387,7 @@ so.
 
       @Singleton
       @Provides
-      def providesThirdPartyFoo: ThirdPartyFoo = {
+      def provideThirdPartyFoo: ThirdPartyFoo = {
         new ThirdPartyFoo(key())
       }
     }
@@ -473,6 +473,85 @@ You can also ask the Injector directly for a Flag value using `Flags.named` (sim
 .. caution:: Attempting to get a Flag value from the Injector for a Flag **without** a default
     nor a user-specified value will result in a `ProvisionException`.
 
+Flag Value Injection Benefits
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A side-effect of not holding onto Flag references in a `TwitterModule` is that it increases the possibility
+of using the `@Provides`-annotated method in a non-injection context. Everything needed to construct
+the returned type can be defined as an argument to the method, essentially making the `@Provides`-annotated
+method a type of `Factory method <https://en.wikipedia.org/wiki/Factory_method_pattern>`_.
+
+When the `@Provides`-annotated method directly applies a held Flag reference it means the method
+is tied to the lifecycle of the Flag reference. The method cannot be properly called until the Flag
+reference has been parsed.
+
+Removing usage of a held Flag reference and instead allowing the Flag value to be `injected <#id3>`_
+(like `any other needed dependency <modules.html#provides>`_) means the method can be used
+independently of the Flag lifecycle or even injection.
+
+For example, if we had a class `Notifier`:
+
+.. code:: scala
+
+    import com.twitter.util.Duration
+
+    class Notifier(
+      connection: DatabaseConnection,
+      emailer: Emailer ,
+      serializer: Serializer,
+      notificationFrequency: Duration)
+
+and a module, `NotifierModule`:
+
+.. code:: scala
+
+    import com.google.inject.Provides
+    import com.twitter.conversions.DurationOps._
+    import com.twitter.inject.TwitterModule
+    import com.twitter.inject.annotations.Flag
+    import com.twitter.util.Duration
+    import javax.inject.Singleton
+
+    object NotifierModule extends TwitterModule {
+      flag(name = "frequency.interval.minutes", default = 60.minutes, help = "Interval for notifications")
+
+      @Provides
+      @Singleton
+      def provideNotifier(
+        connection: DatabaseConnection,
+        emailer: Emailer ,
+        serializer: Serializer,
+        @Flag("frequency.interval.minutes") interval: Duration): Notifier = {
+        new Notifier(
+          connection,
+          emailer,
+          serializer,
+          interval)
+      }
+    }
+
+You could use this Module in non-injection context -- like providing a test fixture, since you have
+static utility to construct a `Notifier` over its necessary parts. That is, you could do something
+along the lines of:
+
+.. code:: scala
+
+      import com.twitter.conversions.DurationOps._
+
+      val mockDatabaseConnection: DatabaseConnection = mock[DatabaseConnection]
+      val mockEmailer: Emailer = mock[Emailer]
+      val mockSerializer: Serializer = mock[Serializer]
+
+      val notifierStub: Notifier =
+        NotifierModule.provideNotifier(
+          connection = mockDatabaseConnection,
+          emailer = mockEmailer
+          serializer = mockSerializer
+          notificationFrequency = 10.seconds)
+
+See the `The Tao of Testing: Chapter 3 - Dependency Injection <https://jasonpolites.github.io/tao-of-testing/ch3-1.1.html>`__
+for more information and examples of Dependency Injection approaches to writing testable code.
+
 Flags Without Defaults
 ----------------------
 
@@ -509,7 +588,7 @@ A Bad Example
 
       @Singleton
       @Provides
-      def providesThirdPartyFoo: ThirdPartyFoo = {
+      def provideThirdPartyFoo: ThirdPartyFoo = {
         val myKey = key.get match {
           case Some(value) => value
           case _ => "DEFAULT"
@@ -559,7 +638,7 @@ A better example of injecting a parsed value from a Flag defined without a defau
 
       @Singleton
       @Provides
-      def providesThirdPartyFoo(
+      def provideThirdPartyFoo(
         @Flag("key") myKey: String): ThirdPartyFoo =
         new ThirdPartyFoo(myKey)
     }
@@ -586,7 +665,7 @@ and in Java:
 
       @Singleton
       @Provides
-      public ThirdPartyFoo providesThirdPartyFoo(
+      public ThirdPartyFoo provideThirdPartyFoo(
         @Flag("key") String myKey) {
         return new ThirdPartyFoo(myKey);
       }
@@ -637,19 +716,19 @@ same Module, e.g.,
 
       @Singleton
       @Provides
-      def providesClientA: ClientA = {
+      def provideClientA: ClientA = {
         new ClientA(clientIdFlag())
       }
 
       @Singleton
       @Provides
-      def providesClientB: ClientB = {
+      def provideClientB: ClientB = {
         new ClientB(clientIdFlag())
       }
 
       @Singleton
       @Provides
-      def providesClientC: ClientC = {
+      def provideClientC: ClientC = {
         new ClientA(clientIdFlag())
       }
     }
@@ -695,7 +774,7 @@ E.g.,
 
       @Singleton
       @Provides
-      def providesClientA(
+      def provideClientA(
         @Flag("client.id") clientId: String): ClientA = {
         new ClientA(clientId)
       }
@@ -724,7 +803,7 @@ of in Java:
 
       @Singleton
       @Provides
-      public ClientA providesClientA(
+      public ClientA provideClientA(
         @Flag("client.id") String clientId) {
         return new ClientA(clientId);
       }
@@ -784,7 +863,7 @@ which needs both the `ClientId` and a `ClientA` we could define a `ClientBModule
 
       @Singleton
       @Provides
-      def providesClientB(
+      def provideClientB(
         @Flag("client.id") clientId,
         clientA: ClientA): ClientB = {
         new ClientB(clientId, clientA)
@@ -817,7 +896,7 @@ or in Java:
 
       @Singleton
       @Provides
-      public ClientB providesClientB(
+      public ClientB provideClientB(
         @Flag("client.id") clientId,
         clientA: ClientA) {
         return new ClientB(clientId, clientA);
@@ -828,9 +907,9 @@ Notice that we choose to include both the `ClientIdModule` and `ClientAModule` i
 for the `ClientBModule`. Yet, since we know that the `ClientAModule` includes the `ClientIdModule`
 we could have chosen to leave it out.
 
-The `providesClientB` method in the Module above takes in both a `ClientId` String and a `ClientA`.
+The `provideClientB` method in the Module above takes in both a `ClientId` String and a `ClientA`.
 Since it declares the two Modules, we're assured that these types will be available from the
-Injector for our `providesClientB` method to use.
+Injector for our `provideClientB` method to use.
 
 This is just an Example
 -----------------------
