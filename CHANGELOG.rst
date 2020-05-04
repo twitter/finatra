@@ -43,6 +43,10 @@ Changed
 Fixed
 ~~~~~
 
+* inject-thrift-client: Convert non-camel case `ThriftMethod` names, e.g., "get_tweets" to
+  camelCase, e.g., "getTweets" for reflection lookup of generated `ReqRepServicePerEndpoint`
+  interface methods in `c.t.inject.thrift.filters.DarkTrafficFilter`. ``PHAB_ID=D478104``
+
 20.4.1
 ------
 

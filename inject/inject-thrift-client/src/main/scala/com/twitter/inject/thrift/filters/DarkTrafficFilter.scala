@@ -1,5 +1,6 @@
 package com.twitter.inject.thrift.filters
 
+import com.twitter.conversions.StringOps._
 import com.twitter.finagle.exp.AbstractDarkTrafficFilter
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.thrift.{MethodMetadata, ThriftClientRequest}
@@ -68,7 +69,7 @@ class DarkTrafficFilter[ServiceIface: ClassTag](
 
   private val serviceIfaceClass = implicitly[ClassTag[ServiceIface]].runtimeClass
 
-  private def getService(methodName: String) = {
+  private def getService(methodName: String): AnyRef = {
     if (lookupByMethod) {
       val field = serviceIfaceClass.getDeclaredMethod(methodName)
       field.invoke(this.darkServiceIface)
@@ -90,7 +91,7 @@ class DarkTrafficFilter[ServiceIface: ClassTag](
   protected def invokeDarkService[T, Rep](request: T): Future[Rep] = {
     MethodMetadata.current match {
       case Some(mm) =>
-        val service = getService(mm.methodName).asInstanceOf[Service[T, Rep]]
+        val service = getService(mm.methodName.toCamelCase).asInstanceOf[Service[T, Rep]] // converts a snake_case MethodMetadata.methodName to camelCase for reflection method lookup
         service(request)
       case None =>
         val t = new IllegalStateException("DarkTrafficFilter invoked without method data")
