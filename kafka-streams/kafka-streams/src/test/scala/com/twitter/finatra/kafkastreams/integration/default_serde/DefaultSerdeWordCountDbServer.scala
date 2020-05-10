@@ -14,7 +14,9 @@ class DefaultSerdeWordCountDbServer extends KafkaStreamsTwitterServer {
 
   override protected def configureKafkaStreams(builder: StreamsBuilder): Unit = {
     builder
-      .stream[Bytes, String]("TextLinesTopic") // Uses default serdes since Consumed.with not specified
+      .stream[Bytes, String](
+        "TextLinesTopic"
+      ) // Uses default serdes since Consumed.with not specified
       .asScala
       .flatMapValues(_.split(' '))
       .groupBy((_, word) => word)(Grouped.`with`(Serdes.String, Serdes.String))

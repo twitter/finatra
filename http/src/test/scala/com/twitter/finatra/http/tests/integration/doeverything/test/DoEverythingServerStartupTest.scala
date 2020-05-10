@@ -12,7 +12,8 @@ class DoEverythingServerStartupTest extends FeatureTest {
       twitterServer = new DoEverythingServer,
       flags = Map(
         "something.flag" -> "foobar",
-        "https.port" -> ":0"), // for testing `EmbeddedHttpServer.logStartup` method
+        "https.port" -> ":0"
+      ), // for testing `EmbeddedHttpServer.logStartup` method
       stage = Stage.PRODUCTION)
 
   test("DoEverythingServer#startup") {

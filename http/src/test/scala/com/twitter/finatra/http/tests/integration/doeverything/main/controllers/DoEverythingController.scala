@@ -39,7 +39,7 @@ import javax.inject.Inject
 import org.joda.time.DateTime
 import scala.collection.SortedSet
 
-class DoEverythingController @Inject()(
+class DoEverythingController @Inject() (
   @Flag("magicNum") magicNum: String,
   @Flag("moduleMagicNum") moduleMagicNum: String,
   exampleService: DoEverythingService,
@@ -367,8 +367,7 @@ class DoEverythingController @Inject()(
     ""
   }
 
-  get("/unit") { _: Request =>
-    }
+  get("/unit") { _: Request => }
 
   get("/exception") { _: Request =>
     throw new Exception("bad")

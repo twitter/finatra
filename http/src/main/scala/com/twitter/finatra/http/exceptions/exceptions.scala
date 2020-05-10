@@ -15,7 +15,7 @@ object NotFoundException {
 }
 
 case class NotFoundException(override val mediaType: String, override val errors: Seq[String])
-  extends HttpException(Status.NotFound, mediaType, errors) {
+    extends HttpException(Status.NotFound, mediaType, errors) {
 
   def this(error: String) = {
     this(MediaType.JsonUtf8, Seq(error))
@@ -33,7 +33,7 @@ object ConflictException {
 }
 
 case class ConflictException(override val mediaType: String, override val errors: Seq[String])
-  extends HttpException(Status.Conflict, mediaType, errors) {
+    extends HttpException(Status.Conflict, mediaType, errors) {
 
   def this(error: String) = {
     this(MediaType.JsonUtf8, Seq(error))
@@ -53,7 +53,7 @@ object InternalServerErrorException {
 case class InternalServerErrorException(
   override val mediaType: String,
   override val errors: Seq[String])
-  extends HttpException(Status.InternalServerError, mediaType, errors)
+    extends HttpException(Status.InternalServerError, mediaType, errors)
 
 object ServiceUnavailableException {
   def plainText(body: String): ServiceUnavailableException = {
@@ -68,7 +68,7 @@ object ServiceUnavailableException {
 case class ServiceUnavailableException(
   override val mediaType: String,
   override val errors: Seq[String])
-  extends HttpException(Status.ServiceUnavailable, mediaType, errors)
+    extends HttpException(Status.ServiceUnavailable, mediaType, errors)
 
 object BadRequestException {
   def plainText(body: String): BadRequestException = {
@@ -81,7 +81,7 @@ object BadRequestException {
 }
 
 case class BadRequestException(override val mediaType: String, override val errors: Seq[String])
-  extends HttpException(Status.BadRequest, mediaType, errors) {
+    extends HttpException(Status.BadRequest, mediaType, errors) {
 
   def this(error: String) = {
     this(MediaType.JsonUtf8, Seq(error))
@@ -99,7 +99,7 @@ object ForbiddenException {
 }
 
 case class ForbiddenException(override val mediaType: String, override val errors: Seq[String])
-  extends HttpException(Status.Forbidden, mediaType, errors)
+    extends HttpException(Status.Forbidden, mediaType, errors)
 
 object NotAcceptableException {
   def plainText(body: String): NotAcceptableException = {
@@ -114,7 +114,7 @@ object NotAcceptableException {
 case class NotAcceptableException(
   override val mediaType: String,
   override val errors: Seq[String])
-  extends HttpException(Status.NotAcceptable, mediaType, errors)
+    extends HttpException(Status.NotAcceptable, mediaType, errors)
 
 object MethodNotAllowedException {
   def plainText(body: String): MethodNotAllowedException = {
@@ -129,7 +129,7 @@ object MethodNotAllowedException {
 case class MethodNotAllowedException(
   override val mediaType: String,
   override val errors: Seq[String])
-  extends HttpException(Status.MethodNotAllowed, mediaType, errors) {
+    extends HttpException(Status.MethodNotAllowed, mediaType, errors) {
   def this(error: String) = {
     this(MediaType.JsonUtf8, Seq(error))
   }

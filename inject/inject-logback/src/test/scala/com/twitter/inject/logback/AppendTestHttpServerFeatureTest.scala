@@ -194,7 +194,8 @@ class AppendTestHttpServerFeatureTest extends Test {
     loggerCtx: LoggerContext,
     consoleAppenderQueueOpt: Option[LinkedBlockingQueue[ILoggingEvent]] = None,
     neverBlock: Boolean = false
-  )(fn: TestLogbackAsyncAppender => Unit
+  )(
+    fn: TestLogbackAsyncAppender => Unit
   ): Unit = {
 
     /* Stop the current LoggerContext */

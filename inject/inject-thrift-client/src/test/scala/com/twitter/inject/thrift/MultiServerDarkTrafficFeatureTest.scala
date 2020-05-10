@@ -8,13 +8,10 @@ import com.twitter.inject.thrift.integration.DarkTrafficThriftServer
 import com.twitter.test.thriftscala.EchoService
 import com.twitter.util.Future
 
-class MultiServerDarkTrafficFeatureTest
-  extends Test
-  with ThriftTest {
+class MultiServerDarkTrafficFeatureTest extends Test with ThriftTest {
 
-  private[this] val darkEchoThriftServer = new EmbeddedThriftServer(
-    new DarkTrafficThriftServer,
-    disableTestLogging = true)
+  private[this] val darkEchoThriftServer =
+    new EmbeddedThriftServer(new DarkTrafficThriftServer, disableTestLogging = true)
   private[this] val liveEchoThriftServer = new EmbeddedThriftServer(
     new DarkTrafficThriftServer,
     flags = Map(
@@ -56,7 +53,8 @@ class MultiServerDarkTrafficFeatureTest
 
     // "dark" service stats
     // no invocations on the doEverythingThriftServer1 as nothing is forwarded
-    darkEchoThriftServer.inMemoryStats.counters.get("per_method_stats/setTimesToEcho/success") should be(None)
+    darkEchoThriftServer.inMemoryStats.counters
+      .get("per_method_stats/setTimesToEcho/success") should be(None)
   }
 
   override protected def beforeEach(): Unit = {

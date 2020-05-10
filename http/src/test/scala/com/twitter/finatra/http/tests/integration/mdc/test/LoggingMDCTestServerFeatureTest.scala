@@ -85,7 +85,7 @@ class LoggingMDCTestServerFeatureTest extends Test {
 
         controller.getStoredMDC.get("traceSpanId") should not be null
         // A new span Id would be created for the client call.
-        controller.getStoredMDC.get("traceSpanId") should not be(traceId.traceId.toString)
+        controller.getStoredMDC.get("traceSpanId") should not be (traceId.traceId.toString)
 
         controller.getStoredMDC.get("traceSampled") should not be null
         controller.getStoredMDC.get("traceSampled") should be("false")
@@ -136,7 +136,7 @@ class LoggingMDCTestServerFeatureTest extends Test {
 
         controller.getStoredMDC.get("traceSpanId") should not be null
         // A new span Id would be created for the client call.
-        controller.getStoredMDC.get("traceSpanId") should not be(traceId.traceId.toString)
+        controller.getStoredMDC.get("traceSpanId") should not be (traceId.traceId.toString)
 
         controller.getStoredMDC.get("traceSampled") should not be null
         controller.getStoredMDC.get("traceSampled") should be("true")

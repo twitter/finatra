@@ -7,7 +7,7 @@ import com.twitter.util.Future
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class DoEverythingCombinedThriftController @Inject()(adder: AdderService)
+class DoEverythingCombinedThriftController @Inject() (adder: AdderService)
     extends Controller
     with Adder.BaseServiceIface {
 

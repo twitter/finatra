@@ -10,21 +10,25 @@ import com.twitter.inject.Test
 class LocalFileServerFeatureTest extends Test {
 
   test("local file mode") {
-    assertServer(new Controller {
-      get("/foo") { _: Request =>
-        response.ok.file("/abcd1234")
-      }
-    }, flags = Map("local.doc.root" -> "/tmp")) { server =>
+    assertServer(
+      new Controller {
+        get("/foo") { _: Request =>
+          response.ok.file("/abcd1234")
+        }
+      },
+      flags = Map("local.doc.root" -> "/tmp")) { server =>
       server.httpGet("/foo", andExpect = Status.NotFound)
     }
   }
 
   test("server file which is directory") {
-    assertServer(new Controller {
-      get("/foo") { _: Request =>
-        response.ok.file("/")
-      }
-    }, flags = Map("local.doc.root" -> "/asdfjkasdfjasdfj")) { server =>
+    assertServer(
+      new Controller {
+        get("/foo") { _: Request =>
+          response.ok.file("/")
+        }
+      },
+      flags = Map("local.doc.root" -> "/asdfjkasdfjasdfj")) { server =>
       server.httpGet("/foo", andExpect = Status.NotFound)
     }
   }
@@ -34,11 +38,13 @@ class LocalFileServerFeatureTest extends Test {
     val filename = "finatra-test-file.txt"
     val fileContent = "file content"
     writeStringToFile(createFile(s"$path/$filename"), fileContent)
-    assertServer(new Controller {
-      get("/foo") { _: Request =>
-        response.ok.fileOrIndex(filename, "index.html")
-      }
-    }, flags = Map("local.doc.root" -> path)) { server =>
+    assertServer(
+      new Controller {
+        get("/foo") { _: Request =>
+          response.ok.fileOrIndex(filename, "index.html")
+        }
+      },
+      flags = Map("local.doc.root" -> path)) { server =>
       server.httpGet("/foo", andExpect = Status.Ok, withBody = fileContent)
     }
   }
@@ -49,28 +55,33 @@ class LocalFileServerFeatureTest extends Test {
     val filename = "non-existing-file.txt"
     val indexContent = "index content"
     writeStringToFile(createFile(s"$path/$indexName"), indexContent)
-    assertServer(new Controller {
-      get("/foo") { _: Request =>
-        response.ok.fileOrIndex(filename, indexName)
-      }
-    }, flags = Map("local.doc.root" -> path)) { server =>
+    assertServer(
+      new Controller {
+        get("/foo") { _: Request =>
+          response.ok.fileOrIndex(filename, indexName)
+        }
+      },
+      flags = Map("local.doc.root" -> path)) { server =>
       server.httpGet("/foo", andExpect = Status.Ok, withBody = indexContent)
     }
   }
 
   private def assertServer(
     controller: Controller,
-    flags: Map[String, String])(
+    flags: Map[String, String]
+  )(
     asserts: EmbeddedHttpServer => Unit
   ): Unit = {
 
-    val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
-      override def configureHttp(router: HttpRouter): Unit = {
-        router
-          .filter[CommonFilters]
-          .add(controller)
-      }
-    }, flags = flags)
+    val server = new EmbeddedHttpServer(
+      twitterServer = new HttpServer {
+        override def configureHttp(router: HttpRouter): Unit = {
+          router
+            .filter[CommonFilters]
+            .add(controller)
+        }
+      },
+      flags = flags)
 
     try {
       asserts(server)

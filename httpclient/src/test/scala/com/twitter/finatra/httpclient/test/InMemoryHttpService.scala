@@ -47,7 +47,12 @@ class InMemoryHttpService extends Service[Request, Response] with Resettable wit
     mock(Post, path, andReturn, sticky, Option(withBody))
   }
 
-  def mockPut(path: String, withBody: String = null, andReturn: Response, sticky: Boolean = false): Unit = {
+  def mockPut(
+    path: String,
+    withBody: String = null,
+    andReturn: Response,
+    sticky: Boolean = false
+  ): Unit = {
     mock(Put, path, andReturn, sticky)
   }
 
@@ -117,7 +122,6 @@ class InMemoryHttpService extends Service[Request, Response] with Resettable wit
   case class ResponseWithExpectedBody(
     response: Response,
     expectedBody: Option[String],
-    sticky: Boolean
-  )
+    sticky: Boolean)
 
 }

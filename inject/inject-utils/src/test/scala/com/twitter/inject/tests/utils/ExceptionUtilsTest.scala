@@ -7,7 +7,7 @@ import com.twitter.inject.utils.ExceptionUtils
 import com.twitter.util.{Throw, Return}
 
 class ExceptionUtilsTest extends Test {
-  
+
   test("ExceptionUtils#toExceptionDetails") {
     val details = ExceptionUtils.toExceptionDetails(new FailedFastException("This happened quick"))
     println(details)
@@ -24,7 +24,8 @@ class ExceptionUtilsTest extends Test {
 
   test("ExceptionUtils#toDetailedExceptionMessage on FailedFastException") {
     val exception = new FailedFastException("This happened quick")
-    ExceptionUtils.toDetailedExceptionMessage(Throw(exception)) should be(exception.getClass.getName + " " + exception.getClass.getName)
+    ExceptionUtils.toDetailedExceptionMessage(Throw(exception)) should be(
+      exception.getClass.getName + " " + exception.getClass.getName)
   }
 
   test("ExceptionUtils#toExceptionMessage with no message") {
@@ -33,7 +34,8 @@ class ExceptionUtilsTest extends Test {
   }
 
   test("ExceptionUtils#strip new lines") {
-    ExceptionUtils.stripNewlines(new IndividualRequestTimeoutException(1.second)) should not contain "\n"
+    ExceptionUtils.stripNewlines(
+      new IndividualRequestTimeoutException(1.second)) should not contain "\n"
   }
 
 }

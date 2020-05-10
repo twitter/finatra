@@ -27,7 +27,7 @@ object classes {
     def get: T
   }
 
-  class TypeProvider[T] @Inject() ( typ:TypeLiteral[T] ) extends Provider[String] {
+  class TypeProvider[T] @Inject() (typ: TypeLiteral[T]) extends Provider[String] {
     def get = typ.toString
   }
 
@@ -53,7 +53,7 @@ object classes {
     }
   }
 
-  case class TwoStrings @Inject()(@Named("first") first: String, @Named("second") second: String)
+  case class TwoStrings @Inject() (@Named("first") first: String, @Named("second") second: String)
 
   trait D
 
@@ -63,7 +63,8 @@ object classes {
 
   case class SealedTraitContainer[T <: SealedTrait](inner: T)
 
-  class SealedTraitContainerFinalSealedTraitProvider extends javax.inject.Provider[SealedTraitContainer[FinalSealedTrait.type]] {
+  class SealedTraitContainerFinalSealedTraitProvider
+      extends javax.inject.Provider[SealedTraitContainer[FinalSealedTrait.type]] {
     def get(): SealedTraitContainer[FinalSealedTrait.type] = SealedTraitContainer(FinalSealedTrait)
   }
 }

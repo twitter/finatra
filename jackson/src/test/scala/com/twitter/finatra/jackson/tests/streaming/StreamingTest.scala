@@ -81,7 +81,8 @@ class StreamingTest extends Test {
     )
   }
 
-  test("bufs to json with some bigger objects but with json object split over multiple bufs - AsyncStream") {
+  test(
+    "bufs to json with some bigger objects but with json object split over multiple bufs - AsyncStream") {
     assertParsedSimpleObjects(
       AsyncStream(
         Buf.Utf8("""[{ "id":"John" }"""),
@@ -170,7 +171,8 @@ class StreamingTest extends Test {
     )
   }
 
-  test("bufs to json with some bigger objects but with json object split over multiple bufs - Reader") {
+  test(
+    "bufs to json with some bigger objects but with json object split over multiple bufs - Reader") {
     assertParsedSimpleObjects(
       Reader.fromSeq(
         Seq(

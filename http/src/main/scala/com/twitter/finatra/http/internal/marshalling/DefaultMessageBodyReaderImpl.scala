@@ -13,7 +13,7 @@ private[finatra] object DefaultMessageBodyReaderImpl {
 }
 
 @Singleton
-private[finatra] class DefaultMessageBodyReaderImpl @Inject()(
+private[finatra] class DefaultMessageBodyReaderImpl @Inject() (
   injector: Injector,
   objectMapper: ScalaObjectMapper)
     extends DefaultMessageBodyReader {

@@ -17,6 +17,7 @@ import com.twitter.util.{Await, Duration}
 import java.net.InetSocketAddress
 
 private object ThriftServerTrait {
+
   /**
    * Sentinel used to indicate no thrift server announcement.
    */
@@ -163,7 +164,6 @@ trait ThriftServerTrait extends TwitterServer {
       None
     else
       Some(thriftServer.boundAddress.asInstanceOf[InetSocketAddress])
-
 
   /* Lifecycle */
 
@@ -313,14 +313,16 @@ abstract class AbstractThriftServer extends AbstractTwitterServer with ThriftSer
   /** This Server returns a [[JavaThriftRouter]] configured `Service[Array[Byte], Array[Byte]]` */
   override protected def thriftService: Service[Array[Byte], Array[Byte]] = {
     val router = injector.instance[JavaThriftRouter]
-    registerService(
-      configureService(router.service))
+    registerService(configureService(router.service))
   }
 
   /* Overrides */
 
   /** Serve the `Service[Array[Byte], Array[Byte]]` from the configured [[JavaThriftRouter]]. */
-  override private[thrift] final def build(addr: String, server: ThriftMux.Server): ListeningServer = {
+  override private[thrift] final def build(
+    addr: String,
+    server: ThriftMux.Server
+  ): ListeningServer = {
     server.serve(addr, this.thriftService)
   }
 

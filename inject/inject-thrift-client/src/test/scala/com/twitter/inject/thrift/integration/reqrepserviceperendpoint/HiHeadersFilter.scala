@@ -7,13 +7,11 @@ import com.twitter.scrooge
 import com.twitter.util.Future
 
 class HiHeadersFilter(
-  requestHeaderKey: String
-) extends Filter[
-    scrooge.Request[Hi.Args],
-    scrooge.Response[Hi.SuccessType],
-    scrooge.Request[Hi.Args],
-    scrooge.Response[Hi.SuccessType]]
-  with Logging {
+  requestHeaderKey: String)
+    extends Filter[scrooge.Request[Hi.Args], scrooge.Response[Hi.SuccessType], scrooge.Request[
+      Hi.Args
+    ], scrooge.Response[Hi.SuccessType]]
+    with Logging {
   def apply(
     request: scrooge.Request[Hi.Args],
     service: Service[scrooge.Request[Hi.Args], scrooge.Response[Hi.SuccessType]]

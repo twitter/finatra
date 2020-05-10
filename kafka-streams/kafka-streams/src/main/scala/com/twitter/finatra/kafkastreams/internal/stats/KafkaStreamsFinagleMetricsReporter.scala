@@ -131,7 +131,8 @@ private[kafkastreams] class KafkaStreamsFinagleMetricsReporter extends KafkaFina
 
     if (isDebugMetric(metricName) && (recordingLevel != RecordingLevel.DEBUG)) {
       false
-    } else if (KafkaStreamsFinagleMetricsReporter.rateMetricsToIgnore(metricName.name())) { // remove any metrics that are already "rated" as these not consistent with other stats: go/jira/DINS-2187
+    } else if (KafkaStreamsFinagleMetricsReporter
+        .rateMetricsToIgnore(metricName.name())) { // remove any metrics that are already "rated" as these not consistent with other stats: go/jira/DINS-2187
       false
     } else if (isGlobalTableMetric(metricName)) {
       includeGlobalTableMetrics
@@ -191,7 +192,8 @@ private[kafkastreams] class KafkaStreamsFinagleMetricsReporter extends KafkaFina
     val partition = parsePartitionTag(allTags)
     val rocksDbStateId = Option(allTags.remove("rocksdb-state-id")).map("/" + _).getOrElse("")
     val rocksDbWindowId = Option(allTags.remove("rocksdb-window-id")).map("/" + _).getOrElse("")
-    val rocksDbWindowStateId = Option(allTags.remove("rocksdb-window-state-id")).map("/" + _).getOrElse("")
+    val rocksDbWindowStateId =
+      Option(allTags.remove("rocksdb-window-state-id")).map("/" + _).getOrElse("")
     val inMemWindowId = Option(allTags.remove("in-mem-window-id")).map("/" + _).getOrElse("")
     val inMemoryStateId = Option(allTags.remove("in-memory-state-id")).map("/" + _).getOrElse("")
     val recordCacheId = Option(allTags.remove("record-cache-id")).map("/" + _).getOrElse("")

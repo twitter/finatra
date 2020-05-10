@@ -15,7 +15,7 @@ class MDCInitializerTest extends Test {
 
   test("Test MDCInitializer") {
     MDC.get("name") should equal(null) // doesn't exist -- no map in the LocalContext, doesn't error
-    MDC.put("name", "bob")  // does nothing -- no map in LocalContext
+    MDC.put("name", "bob") // does nothing -- no map in LocalContext
     MDC.get("name") should equal(null) // still doesn't exist
 
     MDCInitializer.let {
@@ -60,7 +60,9 @@ class MDCInitializerTest extends Test {
         MDCInitializer.current.get.get("size") should equal("small")
         MDCInitializer.current.get.size() should be(2)
       }
-      MDCInitializer.current.get.size() should be(2) // back to the previous state which has two entries now
+      MDCInitializer.current.get.size() should be(
+        2
+      ) // back to the previous state which has two entries now
       MDCInitializer.current.get.get("name") should equal("bob")
       MDCInitializer.current.get.get("age") should equal("10")
 

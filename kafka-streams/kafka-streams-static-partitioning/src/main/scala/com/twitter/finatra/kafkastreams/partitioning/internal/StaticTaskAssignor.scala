@@ -2,7 +2,11 @@ package com.twitter.finatra.kafkastreams.partitioning.internal
 
 import com.twitter.finagle.stats.LoadedStatsReceiver
 import com.twitter.finatra.kafkastreams.partitioning.StaticPartitioning
-import com.twitter.finatra.streams.queryable.thrift.domain.{KafkaGroupId, KafkaPartitionId, ServiceShardId}
+import com.twitter.finatra.streams.queryable.thrift.domain.{
+  KafkaGroupId,
+  KafkaPartitionId,
+  ServiceShardId
+}
 import com.twitter.finatra.streams.queryable.thrift.partitioning.ServiceShardPartitioner
 import com.twitter.inject.Logging
 import org.apache.kafka.streams.processor.TaskId
@@ -188,7 +192,8 @@ class StaticTaskAssignor[ID](
     standbyInstance: Option[ServiceShardId]
   ): Option[ClientStateAndHostInfo[ID]] = {
     instanceToClientStateAndHostInfo
-      .get(activeInstance).orElse(standbyInstance.flatMap(instanceToClientStateAndHostInfo.get)).orElse(
+      .get(activeInstance).orElse(
+        standbyInstance.flatMap(instanceToClientStateAndHostInfo.get)).orElse(
         getNextAvailableInstance(instanceToClientStateAndHostInfo, activeInstance)
       )
   }

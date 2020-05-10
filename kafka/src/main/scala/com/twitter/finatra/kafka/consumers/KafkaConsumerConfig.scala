@@ -21,6 +21,7 @@ object KafkaConsumerConfig {
 }
 
 trait KafkaConsumerConfigMethods[Self] extends KafkaConfigMethods[Self] with Logging {
+
   /**
    * Configure the Kafka server the consumer will connect to.
    *
@@ -29,7 +30,6 @@ trait KafkaConsumerConfigMethods[Self] extends KafkaConfigMethods[Self] with Log
    */
   def dest(dest: String): This =
     bootstrapServers(BootstrapServerUtils.lookupBootstrapServers(dest))
-
 
   /**
    * Configure the Kafka server the consumer will connect to.

@@ -5,7 +5,7 @@ import com.twitter.finatra.http.exceptions.ExceptionMapper
 import com.twitter.finatra.http.response.ResponseBuilder
 import javax.inject.Inject
 
-class BarExceptionMapper @Inject()(response: ResponseBuilder)
+class BarExceptionMapper @Inject() (response: ResponseBuilder)
     extends ExceptionMapper[BarException] {
 
   override def toResponse(request: Request, exception: BarException): Response = {
@@ -13,7 +13,7 @@ class BarExceptionMapper @Inject()(response: ResponseBuilder)
   }
 }
 
-class FooExceptionMapper @Inject()(response: ResponseBuilder)
+class FooExceptionMapper @Inject() (response: ResponseBuilder)
     extends ExceptionMapper[FooException] {
 
   override def toResponse(request: Request, exception: FooException): Response = {
@@ -21,7 +21,7 @@ class FooExceptionMapper @Inject()(response: ResponseBuilder)
   }
 }
 
-class FooBarBazExceptionMapper @Inject()(response: ResponseBuilder)
+class FooBarBazExceptionMapper @Inject() (response: ResponseBuilder)
     extends ExceptionMapper[FooBarBazException] {
 
   override def toResponse(request: Request, exception: FooBarBazException): Response = {

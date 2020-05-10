@@ -8,9 +8,7 @@ class OptionsConversionsTest extends Test {
 
   test("RichOption#toFutureOrFail when Some") {
     var evaluated = false
-    assertFuture(
-      Some(1).toFutureOrFail({ evaluated = true ; TestException }),
-      Future(1))
+    assertFuture(Some(1).toFutureOrFail({ evaluated = true; TestException }), Future(1))
     assert(!evaluated)
   }
   test("RichOption#toFutureOrFail when None") {
@@ -26,9 +24,7 @@ class OptionsConversionsTest extends Test {
   }
   test("RichOption#toFutureOrElse when Some") {
     var evaluated = false
-    assertFuture(
-      Some(1).toFutureOrElse({ evaluated = true ; 2 }),
-      Future(1))
+    assertFuture(Some(1).toFutureOrElse({ evaluated = true; 2 }), Future(1))
     assert(!evaluated)
   }
   test("RichOption#toFutureOrElse when None") {
@@ -37,9 +33,7 @@ class OptionsConversionsTest extends Test {
   }
   test("RichOption#toFutureOrElse with Future when Some") {
     var evaluated = false
-    assertFuture(
-      Some(1).toFutureOrElse(Future({ evaluated = true ; 2 })),
-      Future(1))
+    assertFuture(Some(1).toFutureOrElse(Future({ evaluated = true; 2 })), Future(1))
     assert(!evaluated)
   }
   test("RichOption#toFutureOrElse with Future when None") {

@@ -1,7 +1,10 @@
 package org.apache.kafka.streams.processor.internals.assignment
 
 import com.twitter.finatra.kafkastreams.partitioning.StaticPartitioning
-import com.twitter.finatra.kafkastreams.partitioning.internal.{ClientStateAndHostInfo, StaticTaskAssignor}
+import com.twitter.finatra.kafkastreams.partitioning.internal.{
+  ClientStateAndHostInfo,
+  StaticTaskAssignor
+}
 import com.twitter.finatra.streams.queryable.thrift.partitioning.StaticServiceShardPartitioner
 import com.twitter.inject.Test
 import java.util

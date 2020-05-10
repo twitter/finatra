@@ -9,7 +9,9 @@ import javax.inject.{Inject, Singleton}
 import scala.reflect.ClassTag
 
 @Singleton
-class DoEverythingThriftWarmupHandler @Inject()(warmup: ThriftWarmup) extends Handler with Logging {
+class DoEverythingThriftWarmupHandler @Inject() (warmup: ThriftWarmup)
+    extends Handler
+    with Logging {
 
   private val clientId = ClientId("client123")
 

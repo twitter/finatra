@@ -45,7 +45,7 @@ object MyTestRequestScopeModule extends TwitterModule with RequestScopeBinding {
 
 case class TestUser(name: String)
 
-class TestUserRequestScopeFilter[Req, Rep] @Inject()(requestScope: FinagleRequestScope)
+class TestUserRequestScopeFilter[Req, Rep] @Inject() (requestScope: FinagleRequestScope)
     extends Filter[Req, Rep, Req, Rep] {
   override def apply(request: Req, service: Service[Req, Rep]): Future[Rep] = {
     requestScope.seed[TestUser](TestUser("Bob"))
@@ -53,12 +53,12 @@ class TestUserRequestScopeFilter[Req, Rep] @Inject()(requestScope: FinagleReques
   }
 }
 
-class TypeAgnosticTestUserRequestScopeFilter @Inject()(requestScope: FinagleRequestScope)
+class TypeAgnosticTestUserRequestScopeFilter @Inject() (requestScope: FinagleRequestScope)
     extends Filter.TypeAgnostic {
   def toFilter[Req, Rep]: Filter[Req, Rep, Req, Rep] = new TestUserRequestScopeFilter(requestScope)
 }
 
-class MyTestRequestScopeService @Inject()(testUserProvider: Provider[TestUser])
+class MyTestRequestScopeService @Inject() (testUserProvider: Provider[TestUser])
     extends Service[String, String] {
 
   override def apply(request: String): Future[String] = {

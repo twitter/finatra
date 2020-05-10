@@ -97,14 +97,14 @@ private[http] trait RouteDSL extends RouteState { self =>
   private[http] val annotations = getClass.getDeclaredAnnotations
   private[http] val clazz = getClass
 
-  def filter[FilterType <: HttpFilter : Manifest]: FilteredDSL[FilterType] = contextWrapper {
+  def filter[FilterType <: HttpFilter: Manifest]: FilteredDSL[FilterType] = contextWrapper {
     mkFilterDSL[FilterType]()
   }
 
   /*
     Version of filter[FilterType] that takes in a call-by-name
    */
-  def filter[FilterType <: HttpFilter : Manifest](f: => Unit): Unit = contextWrapper {
+  def filter[FilterType <: HttpFilter: Manifest](f: => Unit): Unit = contextWrapper {
     filter[FilterType].apply(f)
   }
 
@@ -128,7 +128,9 @@ private[http] trait RouteDSL extends RouteState { self =>
     name: String = "",
     admin: Boolean = false,
     index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
+  )(
+    callback: RequestType => ResponseType
+  ): Unit =
     add(Get, route, name, admin, index, callback)
 
   /* For Java compatibility */
@@ -175,7 +177,9 @@ private[http] trait RouteDSL extends RouteState { self =>
     name: String = "",
     admin: Boolean = false,
     index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
+  )(
+    callback: RequestType => ResponseType
+  ): Unit =
     add(Post, route, name, admin, index, callback)
 
   /* For Java compatibility */
@@ -222,7 +226,9 @@ private[http] trait RouteDSL extends RouteState { self =>
     name: String = "",
     admin: Boolean = false,
     index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
+  )(
+    callback: RequestType => ResponseType
+  ): Unit =
     add(Put, route, name, admin, index, callback)
 
   /* For Java compatibility */
@@ -269,7 +275,9 @@ private[http] trait RouteDSL extends RouteState { self =>
     name: String = "",
     admin: Boolean = false,
     index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
+  )(
+    callback: RequestType => ResponseType
+  ): Unit =
     add(Head, route, name, admin, index, callback)
 
   /* For Java compatibility */
@@ -316,7 +324,9 @@ private[http] trait RouteDSL extends RouteState { self =>
     name: String = "",
     admin: Boolean = false,
     index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
+  )(
+    callback: RequestType => ResponseType
+  ): Unit =
     add(Patch, route, name, admin, index, callback)
 
   /* For Java compatibility */
@@ -363,7 +373,9 @@ private[http] trait RouteDSL extends RouteState { self =>
     name: String = "",
     admin: Boolean = false,
     index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
+  )(
+    callback: RequestType => ResponseType
+  ): Unit =
     add(Delete, route, name, admin, index, callback)
 
   /* For Java compatibility */
@@ -410,7 +422,9 @@ private[http] trait RouteDSL extends RouteState { self =>
     name: String = "",
     admin: Boolean = false,
     index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
+  )(
+    callback: RequestType => ResponseType
+  ): Unit =
     add(Trace, route, name, admin, index, callback)
 
   /* For Java compatibility */
@@ -457,7 +471,9 @@ private[http] trait RouteDSL extends RouteState { self =>
     name: String = "",
     admin: Boolean = false,
     index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
+  )(
+    callback: RequestType => ResponseType
+  ): Unit =
     add(Options, route, name, admin, index, callback)
 
   /* For Java compatibility */
@@ -504,7 +520,9 @@ private[http] trait RouteDSL extends RouteState { self =>
     name: String = "",
     admin: Boolean = false,
     index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
+  )(
+    callback: RequestType => ResponseType
+  ): Unit =
     add(AnyMethod, route, name, admin, index, callback)
 
   /* For Java compatibility */
@@ -560,7 +578,7 @@ private[http] trait RouteDSL extends RouteState { self =>
     }
   }
 
-  private def add[RequestType : TypeTag, ResponseType : TypeTag](
+  private def add[RequestType: TypeTag, ResponseType: TypeTag](
     method: Method,
     route: String,
     name: String,
@@ -595,7 +613,7 @@ private[http] trait RouteDSL extends RouteState { self =>
     }
   }
 
-  private def mkFilterDSL[FilterType <: HttpFilter : Manifest](instance: Option[FilterType] = None) =
+  private def mkFilterDSL[FilterType <: HttpFilter: Manifest](instance: Option[FilterType] = None) =
     new FilteredDSL[FilterType] {
       override private[http] val routeBuilders = self.routeBuilders
       override private[http] val annotations = self.annotations

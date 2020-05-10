@@ -22,11 +22,11 @@ object testMapGlobalFlag
       "Test map global flag defaulted to Map.empty"
     )
 
-class FooWithInject @Inject()(@Flag("x") x: Boolean) {
+class FooWithInject @Inject() (@Flag("x") x: Boolean) {
   def bar: Boolean = x
 }
 
-class WithInjector @Inject()(injector: Injector) {
+class WithInjector @Inject() (injector: Injector) {
   // use with the BooleanFlagModule
   def assertFlag(bool: Boolean): Unit =
     assert(injector.instance[Boolean](Flags.named("x")) == bool)
@@ -138,11 +138,14 @@ object TestBindModule extends TwitterModule {
     bind[Baz](Names.named("five")).toInstance(new Baz(5))
     bind[Baz](Names.named("six")).toInstance(new Baz(6))
     bind[Boolean](Flags.named("bool")).toInstance(true)
-    bind[Service[Int, String]].toInstance(Service.mk { i: Int => Future.value(s"The answer is: $i") })
+    bind[Service[Int, String]].toInstance(Service.mk { i: Int =>
+      Future.value(s"The answer is: $i")
+    })
     bind[Option[Boolean]].toInstance(None)
     bind[Seq[Long]].toInstance(Seq(1L, 2L, 3L))
     // need to explicitly provide a Manifest for the higher kinded type
-    bind[DoEverything[Future]](TypeUtils.asManifest[DoEverything[Future]]).toInstance(new DoEverythingImpl42)
+    bind[DoEverything[Future]](TypeUtils.asManifest[DoEverything[Future]])
+      .toInstance(new DoEverythingImpl42)
   }
 
   @Provides
@@ -203,14 +206,15 @@ class TestInjectorTest extends Test with Mockito {
     await(svc(42)) should equal("The answer is: 42")
     // need to explicitly provide a Manifest here for the higher kinded type
     // note: this is not always necessary
-    await(injector.instance[DoEverything[Future]](TypeUtils.asManifest[DoEverything[Future]]).magicNum()) should equal("42")
+    await(
+      injector
+        .instance[DoEverything[Future]](
+          TypeUtils.asManifest[DoEverything[Future]]).magicNum()) should equal("42")
   }
 
   test("bind") {
     val testMap: Map[Number, Processor] =
-      Map(
-        new FortyTwo -> new ProcessorB,
-        new ThirtyThree -> new ProcessorA)
+      Map(new FortyTwo -> new ProcessorB, new ThirtyThree -> new ProcessorA)
 
     val mockService: Service[Int, String] = mock[Service[Int, String]]
     mockService.apply(anyInt).returns(Future.value("hello, world"))
@@ -234,15 +238,12 @@ class TestInjectorTest extends Test with Mockito {
       .bind[TestTrait].to[TestTraitImpl1]
       .bind[Processor].to(classOf[ProcessorA])
       .bind[Baz].toInstance(new Baz(100))
-
       .bind[TestTrait].annotatedWith[Up].to[TestTraitImpl2]
       .bind[Number].annotatedWith(classOf[Down]).to[FortyTwo]
       .bind[Processor].annotatedWith(Flags.named("process.impl")).to[ProcessorB]
-
       .bind[TestTrait].annotatedWith[Down].to(classOf[TestTraitImpl1])
       .bind[Processor].annotatedWith(classOf[Up]).to(classOf[ProcessorA])
       .bind[Number].annotatedWith(Flags.named("magicNumber")).to(classOf[ThirtyThree])
-
       .bind[String].annotatedWith[Down].toInstance("Goodbye, world!")
       .bind[String].annotatedWith(classOf[Up]).toInstance("Very important Up String")
       .bind[String].annotatedWith(Flags.named("cat.flag")).toInstance("Kat")
@@ -287,7 +288,10 @@ class TestInjectorTest extends Test with Mockito {
 
     // need to explicitly provide a Manifest here for the higher kinded type
     // note: this is not always necessary
-    await(injector.instance[DoEverything[Future]](TypeUtils.asManifest[DoEverything[Future]]).magicNum()) should equal("137")
+    await(
+      injector
+        .instance[DoEverything[Future]](
+          TypeUtils.asManifest[DoEverything[Future]]).magicNum()) should equal("137")
   }
 
   test("bindClass") {
@@ -307,13 +311,11 @@ class TestInjectorTest extends Test with Mockito {
       .bindClass(classOf[TestTrait]).to[TestTraitImpl2]
       .bindClass(classOf[Processor]).to(classOf[ProcessorA])
       .bindClass(classOf[Double], 3.14d)
-
       .bindClass(classOf[Processor]).annotatedWith(classOf[Up]).to[ProcessorB]
       .bindClass(classOf[Number]).annotatedWith(Flags.named("forty.two")).to[FortyTwo]
-
       .bindClass(classOf[TestTrait]).annotatedWith(classOf[Up]).to[TestTraitImpl1]
-      .bindClass(classOf[Number]).annotatedWith(Flags.named("thirty.three")).to(classOf[ThirtyThree])
-
+      .bindClass(classOf[Number]).annotatedWith(Flags.named("thirty.three")).to(
+        classOf[ThirtyThree])
       .bindClass(classOf[String]).annotatedWith(classOf[Down]).toInstance("Lorem ipsum")
       .bindClass(classOf[String]).annotatedWith(Flags.named("dog.flag")).toInstance("Fido")
       .create

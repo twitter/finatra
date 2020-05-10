@@ -7,7 +7,7 @@ import com.twitter.finatra.httpclient.{HttpClient, RequestBuilder}
 import com.twitter.util.Future
 import javax.inject.Inject
 
-class Add2Controller @Inject()(add1Client: HttpClient, responseBuilder: ResponseBuilder)
+class Add2Controller @Inject() (add1Client: HttpClient, responseBuilder: ResponseBuilder)
     extends Controller {
 
   get("/add2") { request: Request =>

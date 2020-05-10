@@ -34,7 +34,9 @@ class TweetsControllerIntegrationTest extends FeatureTest {
     val tweet =
       server.httpGetJson[Map[String, Long]]("/tweets/1", andExpect = Status.Ok)
 
-    tweet("idonly") should equal(1) //confirm response was transformed by registered TweetMessageBodyWriter
+    tweet("idonly") should equal(
+      1
+    ) //confirm response was transformed by registered TweetMessageBodyWriter
   }
 
   test("post valid tweet") {

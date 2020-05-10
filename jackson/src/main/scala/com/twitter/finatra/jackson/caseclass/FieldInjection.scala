@@ -25,11 +25,7 @@ private[caseclass] class FieldInjection(
   // TODO: have a way to register this with the mapper/caseclassdeserializer
   /** is injectable if the field has injection annotations or is of an injectable type */
   val isInjectable: Boolean =
-    DefaultInjectableValues.isInjectableField(
-        name,
-        injectableTypes,
-        javaType,
-        annotations)
+    DefaultInjectableValues.isInjectableField(name, injectableTypes, javaType, annotations)
 
   /* Public */
 

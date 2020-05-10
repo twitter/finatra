@@ -3,11 +3,7 @@ package com.twitter.finatra.validation.tests.constraints
 import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
 import com.twitter.finatra.validation.constraints.{Range, RangeConstraintValidator}
 import com.twitter.finatra.validation.tests.caseclasses._
-import com.twitter.finatra.validation.{
-  ConstraintValidatorTest,
-  ErrorCode,
-  ValidationResult
-}
+import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode, ValidationResult}
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 

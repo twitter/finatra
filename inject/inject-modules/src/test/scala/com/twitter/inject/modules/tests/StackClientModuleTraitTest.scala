@@ -45,7 +45,8 @@ class StackClientModuleTraitTest extends Test {
     assert(clnt.params[Stats].statsReceiver.isNull)
     assert(clnt.params[Monitor].monitor == com.twitter.util.RootMonitor)
     assert(clnt.params[Label].label == "test-client")
-    assert(clnt.params[Retries.Budget].retryBudget.balance == RetryBudget(1.second, 100, .3).balance)
+    assert(
+      clnt.params[Retries.Budget].retryBudget.balance == RetryBudget(1.second, 100, .3).balance)
   }
 
   test("verify client custom configuration override") {
@@ -56,7 +57,8 @@ class StackClientModuleTraitTest extends Test {
     assert(clnt.params[Stats].statsReceiver.isNull)
     assert(clnt.params[Monitor].monitor == com.twitter.util.RootMonitor)
     assert(clnt.params[Label].label == "test-client")
-    assert(clnt.params[Retries.Budget].retryBudget.balance == RetryBudget(1.second, 100, .3).balance)
+    assert(
+      clnt.params[Retries.Budget].retryBudget.balance == RetryBudget(1.second, 100, .3).balance)
   }
 
   test("verify framework client configuration override") {
@@ -67,7 +69,8 @@ class StackClientModuleTraitTest extends Test {
     assert(clnt.params[Stats].statsReceiver.isNull)
     assert(clnt.params[Monitor].monitor == com.twitter.util.RootMonitor)
     assert(clnt.params[Label].label == "test-client")
-    assert(clnt.params[Retries.Budget].retryBudget.balance == RetryBudget(1.second, 100, .3).balance)
+    assert(
+      clnt.params[Retries.Budget].retryBudget.balance == RetryBudget(1.second, 100, .3).balance)
   }
 }
 
@@ -82,11 +85,13 @@ object StackClientModuleTraitTest {
     case class Client(
       stack: Stack[ServiceFactory[Request, Response]] = StackClient.newStack,
       params: Stack.Params = StackClient.defaultParams)
-      extends EndpointerStackClient[Request, Response, Client] with Closable {
+        extends EndpointerStackClient[Request, Response, Client]
+        with Closable {
 
       override protected def endpointer: Stackable[ServiceFactory[Request, Response]] =
         new EndpointerModule[Request, Response](
-          Seq.empty, { (_: Stack.Params, _: SocketAddress) =>
+          Seq.empty,
+          { (_: Stack.Params, _: SocketAddress) =>
             new ServiceFactory[Request, Response] {
               def apply(conn: ClientConnection): Future[Service[Request, Response]] =
                 Future.value(Service.mk[Request, Response](_ => Future.value(Response())))
@@ -114,7 +119,7 @@ object StackClientModuleTraitTest {
   object DefaultTestModule extends DefaultTestModule
 
   class DefaultTestModule
-    extends TwitterModule
+      extends TwitterModule
       with StackClientModuleTrait[Request, Response, Test.Client] {
     def label: String = "test-client"
     def dest: String = "/s/service/a"
@@ -146,7 +151,10 @@ object StackClientModuleTraitTest {
 
   // A module that allows us to provide a concrete `Test.Client` for testing
   object FrameworkTestModule extends CustomizedTestModule {
-    override protected[twitter] def frameworkConfigureClient(injector: Injector, client: Test.Client): Test.Client =
+    override protected[twitter] def frameworkConfigureClient(
+      injector: Injector,
+      client: Test.Client
+    ): Test.Client =
       client.withRequestTimeout(50.milliseconds)
   }
 

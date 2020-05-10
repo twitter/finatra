@@ -9,9 +9,7 @@ import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream
 import com.fasterxml.jackson.databind.{ObjectMapper => JacksonObjectMapper, _}
 import com.fasterxml.jackson.datatype.joda.JodaModule
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import com.fasterxml.jackson.module.scala.{
-  ScalaObjectMapper => JacksonScalaObjectMapper
-}
+import com.fasterxml.jackson.module.scala.{ScalaObjectMapper => JacksonScalaObjectMapper}
 import com.google.inject.Injector
 import com.twitter.finatra.jackson.caseclass.{
   CaseClassJacksonModule,
@@ -616,7 +614,7 @@ private[jackson] object ArrayElementsOnNewLinesPrettyPrinter extends DefaultPret
  *
  * @param underlying a configured [[JacksonScalaObjectMapperType]]
  */
-class ScalaObjectMapper (val underlying: JacksonScalaObjectMapperType) {
+class ScalaObjectMapper(val underlying: JacksonScalaObjectMapperType) {
   assert(underlying != null, "Underlying ScalaObjectMapper cannot be null.")
 
   /**

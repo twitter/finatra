@@ -5,7 +5,11 @@ import com.twitter.finagle.tracing.NullTracer
 import com.twitter.finatra.thrift.filters._
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.tests.doeverything.controllers.DoEverythingThriftController
-import com.twitter.finatra.thrift.tests.doeverything.exceptions.{ReqRepBarExceptionMapper, ReqRepDoEverythingExceptionMapper, ReqRepFooExceptionMapper}
+import com.twitter.finatra.thrift.tests.doeverything.exceptions.{
+  ReqRepBarExceptionMapper,
+  ReqRepDoEverythingExceptionMapper,
+  ReqRepFooExceptionMapper
+}
 import com.twitter.finatra.thrift.ThriftServer
 import com.twitter.util.NullMonitor
 

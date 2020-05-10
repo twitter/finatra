@@ -37,7 +37,8 @@ class DurationStringDeserializerTest extends Test {
       "duration.TOP" -> Duration.Top
     ) foreach {
       case (s, d) =>
-        mapper.parse[CaseClassWithDuration](s"""{"d":"$s"}""") should equal(CaseClassWithDuration(d))
+        mapper.parse[CaseClassWithDuration](s"""{"d":"$s"}""") should equal(
+          CaseClassWithDuration(d))
     }
 
     intercept[CaseClassMappingException] {

@@ -9,7 +9,8 @@ import com.twitter.finatra.kafka.interceptors.MonitoringConsumerInterceptor
  * Note: Since this interceptor is Kafka Streams aware, it will not calculate stats when reading changelog topics to restore
  * state, since this has been shown to be a hot-spot during restoration of large amounts of state.
  */
-private[kafkastreams] class KafkaStreamsMonitoringConsumerInterceptor extends MonitoringConsumerInterceptor {
+private[kafkastreams] class KafkaStreamsMonitoringConsumerInterceptor
+    extends MonitoringConsumerInterceptor {
 
   /**
    * Determines if this interceptor should be enabled given the consumer client id

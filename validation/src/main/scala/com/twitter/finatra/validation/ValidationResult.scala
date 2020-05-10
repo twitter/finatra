@@ -10,16 +10,16 @@ sealed trait ValidationResult {
 object ValidationResult {
 
   case class Valid(
-    override val annotation: Option[Annotation] = None
-  ) extends ValidationResult {
+    override val annotation: Option[Annotation] = None)
+      extends ValidationResult {
     override val isValid: Boolean = true
   }
 
   case class Invalid(
     message: String,
     code: ErrorCode = ErrorCode.Unknown,
-    override val annotation: Option[Annotation] = None
-  ) extends ValidationResult {
+    override val annotation: Option[Annotation] = None)
+      extends ValidationResult {
     override val isValid = false
   }
 

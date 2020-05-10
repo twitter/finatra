@@ -69,12 +69,12 @@ private[app] case class InstalledModules(injector: Injector, modules: Seq[Module
    */
   private[this] def condOptModules(
     modules: Seq[Module]
-  )(fn: TwitterModuleLifecycle => Unit
+  )(
+    fn: TwitterModuleLifecycle => Unit
   ): Seq[ExitFunction] = modules.flatMap { module =>
     condOpt(module) {
       case injectModule: TwitterModuleLifecycle =>
-        () =>
-          fn(injectModule)
+        () => fn(injectModule)
     }
   }
 }

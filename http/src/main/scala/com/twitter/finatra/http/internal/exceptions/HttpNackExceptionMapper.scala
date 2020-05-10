@@ -11,8 +11,8 @@ import javax.inject.{Inject, Singleton}
  * [[HttpNackException]] types into an HTTP Response.
  */
 @Singleton
-private[http] class HttpNackExceptionMapper @Inject()(response: ResponseBuilder)
-  extends AbstractFrameworkExceptionMapper[HttpNackException](response) {
+private[http] class HttpNackExceptionMapper @Inject() (response: ResponseBuilder)
+    extends AbstractFrameworkExceptionMapper[HttpNackException](response) {
 
   override protected def handle(
     request: Request,

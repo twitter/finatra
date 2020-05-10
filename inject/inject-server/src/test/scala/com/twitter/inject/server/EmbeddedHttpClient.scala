@@ -27,9 +27,9 @@ private[twitter] class EmbeddedHttpClient private[twitter] (
   sessionAcquisitionTimeout: Duration,
   streamResponses: Boolean,
   defaultHeaders: () => Map[String, String],
-  disableLogging: Boolean
-) extends Matchers
-  with Closable {
+  disableLogging: Boolean)
+    extends Matchers
+    with Closable {
 
   /* Additional Constructors */
 

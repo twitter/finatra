@@ -94,7 +94,9 @@ case class Injector(underlying: UnderlyingInjector) {
    *
    * @see [[https://google.github.io/guice/api-docs/latest/javadoc/com/google/inject/name/Named.html com.google.inject.name.Named]]
    */
-  @deprecated("Users should prefer injector.instance[T](java.lang.annotation.Annotation", "2017-09-25")
+  @deprecated(
+    "Users should prefer injector.instance[T](java.lang.annotation.Annotation",
+    "2017-09-25")
   def instance[T: Manifest](name: String): T = {
     val namedAnnotation = Names.named(name)
     val key = Key.get(typeLiteral[T], namedAnnotation)

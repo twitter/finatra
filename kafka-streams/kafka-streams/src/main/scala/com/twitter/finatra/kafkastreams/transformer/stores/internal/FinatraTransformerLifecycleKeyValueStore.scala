@@ -40,26 +40,31 @@ case class FinatraTransformerLifecycleKeyValueStore[K, V](
     this.keyValueStore = unwrappedStateStore match {
       case cachingStore: CachingFinatraKeyValueStoreImpl[K, V] =>
         flushListener.foreach { listener =>
-          cachingStore.registerFlushListener { case (k, v) =>
-            listener(name, k, v)
+          cachingStore.registerFlushListener {
+            case (k, v) =>
+              listener(name, k, v)
           }
         }
 
         cachingStore
 
       case finatraKeyValueStore: FinatraKeyValueStore[K, V] =>
-        assert(flushListener.isEmpty, s"Store $name was not configured to enable caching but a " +
-          s"flushListener was specified when calling FinatraTransformer#getKeyValueStore. To " +
-          s"enable caching, call keyValueStoreBuilder#withCachingEnabled() when configuring your store.")
+        assert(
+          flushListener.isEmpty,
+          s"Store $name was not configured to enable caching but a " +
+            s"flushListener was specified when calling FinatraTransformer#getKeyValueStore. To " +
+            s"enable caching, call keyValueStoreBuilder#withCachingEnabled() when configuring your store."
+        )
 
         finatraKeyValueStore
 
       case store =>
-        throw new Exception(s"FinatraTransformer cannot be used with $name $store since it isn't " +
-          "a FinatraKeyValueStore. To fix this error, configure your state store with the " +
-          "FinatraStores class instead of the Stores class. " +
-          "Note: FinatraTransformer#getKeyValueStore does not currently work with global stores" +
-          s"so if $name is a global store, you must use processorContext.getStateStore instead")
+        throw new Exception(
+          s"FinatraTransformer cannot be used with $name $store since it isn't " +
+            "a FinatraKeyValueStore. To fix this error, configure your state store with the " +
+            "FinatraStores class instead of the Stores class. " +
+            "Note: FinatraTransformer#getKeyValueStore does not currently work with global stores" +
+            s"so if $name is a global store, you must use processorContext.getStateStore instead")
     }
   }
 

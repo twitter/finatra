@@ -66,7 +66,8 @@ class PossiblyRetryableTest extends Test {
 
     PossiblyRetryable.PossiblyRetryableExceptions(Throw(PossiblyRetryableException)) should be(true)
 
-    PossiblyRetryable.PossiblyRetryableExceptions(Throw(new Exception("FORCED EXCEPTION"))) should be(
+    PossiblyRetryable.PossiblyRetryableExceptions(
+      Throw(new Exception("FORCED EXCEPTION"))) should be(
       true
     )
   }

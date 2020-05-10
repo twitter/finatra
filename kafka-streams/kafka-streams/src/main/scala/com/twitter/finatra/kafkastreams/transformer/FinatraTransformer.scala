@@ -7,15 +7,35 @@ import com.twitter.finatra.kafkastreams.config.{DefaultTopicConfig, FinatraTrans
 import com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging
 import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer.{StateStoreName, TimerTime}
 import com.twitter.finatra.kafkastreams.transformer.domain.Time
-import com.twitter.finatra.kafkastreams.transformer.lifecycle.{OnClose, OnFlush, OnInit, OnWatermark}
+import com.twitter.finatra.kafkastreams.transformer.lifecycle.{
+  OnClose,
+  OnFlush,
+  OnInit,
+  OnWatermark
+}
 import com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore
-import com.twitter.finatra.kafkastreams.transformer.stores.internal.{FinatraStoresGlobalManager, FinatraTransformerLifecycleKeyValueStore, Timer}
-import com.twitter.finatra.kafkastreams.transformer.watermarks.{DefaultWatermarkAssignor, Watermark, WatermarkAssignor, WatermarkManager}
+import com.twitter.finatra.kafkastreams.transformer.stores.internal.{
+  FinatraStoresGlobalManager,
+  FinatraTransformerLifecycleKeyValueStore,
+  Timer
+}
+import com.twitter.finatra.kafkastreams.transformer.watermarks.{
+  DefaultWatermarkAssignor,
+  Watermark,
+  WatermarkAssignor,
+  WatermarkManager
+}
 import com.twitter.finatra.streams.transformer.internal.domain.TimerSerde
 import com.twitter.util.Duration
 import org.apache.kafka.common.serialization.{Serde, Serdes}
 import org.apache.kafka.streams.kstream.Transformer
-import org.apache.kafka.streams.processor.{Cancellable, ProcessorContext, PunctuationType, Punctuator, To}
+import org.apache.kafka.streams.processor.{
+  Cancellable,
+  ProcessorContext,
+  PunctuationType,
+  Punctuator,
+  To
+}
 import org.apache.kafka.streams.state.StoreBuilder
 import org.apache.kafka.streams.state.internals.FinatraStores
 import scala.collection.mutable
@@ -71,7 +91,10 @@ abstract class FinatraTransformer[InputKey, InputValue, OutputKey, OutputValue](
 
   private type StoreName = String
 
-  protected[kafkastreams] val finatraKeyValueStoresMap: mutable.Map[StoreName,FinatraKeyValueStore[_, _]] =
+  protected[kafkastreams] val finatraKeyValueStoresMap: mutable.Map[StoreName, FinatraKeyValueStore[
+    _,
+    _
+  ]] =
     scala.collection.mutable.Map[String, FinatraKeyValueStore[_, _]]()
 
   /* Private Mutable */

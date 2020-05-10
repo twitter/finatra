@@ -78,7 +78,7 @@ private[http] class Registrar(registry: LibraryRegistry) {
           value = index.alias
         )
         registry.put(
-          key =  adminIndexKey :+ "group",
+          key = adminIndexKey :+ "group",
           value = index.group
         )
         registry.put(
@@ -87,7 +87,7 @@ private[http] class Registrar(registry: LibraryRegistry) {
         )
         if (index.path.isDefined) {
           registry.put(
-            key =  adminIndexKey :+ "path",
+            key = adminIndexKey :+ "path",
             value = index.path.get
           )
         }

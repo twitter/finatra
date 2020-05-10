@@ -80,7 +80,8 @@ class MapsConversionsTest extends Test {
     orderedMap.put("d", 5)
 
     orderedMap.toOrderedMap should equal(ListMap("a" -> 3, "b" -> 2, "c" -> 1, "e" -> 4, "d" -> 5))
-    orderedMap.toOrderedMap.toSeq should equal(Seq(("a", 3), ("b", 2), ("c", 1), ("e", 4), ("d", 5)))
+    orderedMap.toOrderedMap.toSeq should equal(
+      Seq(("a", 3), ("b", 2), ("c", 1), ("e", 4), ("d", 5)))
   }
 
   test("RichConcurrentMap#atomicGetOrElseUpdate") {

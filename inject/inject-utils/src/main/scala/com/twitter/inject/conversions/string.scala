@@ -12,7 +12,7 @@ object string {
         Some(self)
     }
 
-    def getOrElse(default : => String): String = {
+    def getOrElse(default: => String): String = {
       if (self == null || self.isEmpty)
         default
       else
@@ -38,7 +38,9 @@ object string {
      *
      * will return the String `"helloWorld"`.
      */
-    @deprecated("Users are encouraged to use com.twitter.conversions.StringOps#toCamelCase", "2019-03-02")
+    @deprecated(
+      "Users are encouraged to use com.twitter.conversions.StringOps#toCamelCase",
+      "2019-03-02")
     def camelify: String = StringOps.toCamelCase(self)
 
     /**
@@ -52,7 +54,9 @@ object string {
      *
      * will return the String `"HelloWorld"`.
      */
-    @deprecated("Users are encouraged to use com.twitter.conversions.StringOps#toPascalCase", "2019-03-02")
+    @deprecated(
+      "Users are encouraged to use com.twitter.conversions.StringOps#toPascalCase",
+      "2019-03-02")
     def pascalify: String = StringOps.toPascalCase(self)
 
     /**
@@ -66,7 +70,9 @@ object string {
      *
      * will return the String `"hello_world"`.
      */
-    @deprecated("Users are encouraged to use com.twitter.conversions.StringOps#toSnakeCase", "2019-03-02")
+    @deprecated(
+      "Users are encouraged to use com.twitter.conversions.StringOps#toSnakeCase",
+      "2019-03-02")
     def snakify: String = StringOps.toSnakeCase(self)
   }
 }

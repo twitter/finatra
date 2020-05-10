@@ -7,7 +7,6 @@ import com.twitter.inject.Logging
 import com.twitter.util.{Await, Duration, Promise, Witness}
 import java.net.InetSocketAddress
 
-
 object BootstrapServerUtils extends Logging {
 
   /**
@@ -33,7 +32,8 @@ object BootstrapServerUtils extends Logging {
     } else {
       info(s"Resolving Kafka Bootstrap Servers: $dest")
       val promise = new Promise[Seq[InetSocketAddress]]()
-      val resolveResult = Namer.resolve(dest).changes
+      val resolveResult = Namer
+        .resolve(dest).changes
         .register(new Witness[Addr] {
           override def notify(note: Addr): Unit = note match {
             case Pending =>

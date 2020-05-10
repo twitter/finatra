@@ -25,7 +25,7 @@ class StreamingServerFeatureTest extends FeatureTest {
     new EmbeddedHttpServer(
       new StreamingServer,
       streamResponse = true,
-      closeGracePeriod = Some(Duration.fromSeconds(5 )),
+      closeGracePeriod = Some(Duration.fromSeconds(5)),
       disableTestLogging = true
     )
 

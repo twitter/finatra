@@ -7,6 +7,7 @@ import java.util.Properties
 import scala.collection.JavaConversions._
 
 private[kafkastreams] object KafkaStreamsPropertiesHandler {
+
   /**
    * Create a service function that extracts the key/value of kafka properties and formats it in
    * HTML.
@@ -18,9 +19,10 @@ private[kafkastreams] object KafkaStreamsPropertiesHandler {
       override def apply(request: Request): Future[Response] = {
         val response = Response(Version.Http11, Status.Ok)
         response.setContentType(MediaType.Html)
-        val sortedProperties = properties.propertyNames().map { property =>
-          s"$property=${properties.get(property)}"
-        }.toSeq.sorted.mkString("\n")
+        val sortedProperties = properties
+          .propertyNames().map { property =>
+            s"$property=${properties.get(property)}"
+          }.toSeq.sorted.mkString("\n")
         ResponseWriter(response)(_.print(s"<pre>$sortedProperties</pre>"))
       }
     }

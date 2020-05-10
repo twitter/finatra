@@ -8,7 +8,7 @@ import finatra.quickstart.firebase.FirebaseClient
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class TweetsService @Inject()(idService: IdService, firebase: FirebaseClient) {
+class TweetsService @Inject() (idService: IdService, firebase: FirebaseClient) {
 
   def save(postedTweet: TweetPostRequest): Future[Tweet] = {
     for {

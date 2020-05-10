@@ -248,11 +248,14 @@ case class KafkaTopic[K, V](
     timeout: Duration = defaultConsumeTimeout,
     exhaustedTimeoutMessage: => String = "",
     exhaustedTriesMessage: => String = ""
-  )(until: ((K, V)) => Boolean
+  )(
+    until: ((K, V)) => Boolean
   ): (K, V) = {
     try {
       PollUtils.poll(
-        func = consumeMessage(Duration.fromMinutes(999 * 60)), //Note: Set set a high duration here so that we rely on PollUtils to enforce the duration
+        func = consumeMessage(
+          Duration.fromMinutes(999 * 60)
+        ), //Note: Set set a high duration here so that we rely on PollUtils to enforce the duration
         exhaustedTriesMessage = (_: (K, V)) => exhaustedTriesMessage,
         exhaustedTimeoutMessage = exhaustedTimeoutMessage,
         timeout = timeout,

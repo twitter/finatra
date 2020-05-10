@@ -13,7 +13,7 @@ abstract class AsyncProcessor[K, V](
   override val maxOutstandingFuturesPerTask: Int,
   override val commitInterval: Duration,
   override val flushTimeout: Duration)
-  extends FlushingProcessor[K, V]
+    extends FlushingProcessor[K, V]
     with AsyncFlushing[K, V, Unit, Unit] {
 
   private[this] val latencyStat = statsReceiver.stat("process_async_latency_ms")

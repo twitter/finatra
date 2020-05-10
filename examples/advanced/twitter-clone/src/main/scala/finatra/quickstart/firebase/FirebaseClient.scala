@@ -10,10 +10,10 @@ import javax.inject.{Inject, Singleton}
 case class FirebaseError(error: String)
 
 @Singleton
-class FirebaseClient @Inject()(
+class FirebaseClient @Inject() (
   httpClient: HttpClient,
   mapper: ScalaObjectMapper)
-  extends Logging {
+    extends Logging {
 
   /** Writes data to path */
   def put[T](path: String, any: T): Future[Unit] = {

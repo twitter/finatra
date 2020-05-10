@@ -5,8 +5,9 @@ import org.apache.kafka.common.serialization.{Deserializer, Serde, Serializer}
 
 private[kafkastreams] class AvoidDefaultSerde extends Serde[Object] {
 
-  private val exceptionErrorStr = "should be avoided as they are error prone and often result in confusing error messages. " +
-    "Instead, explicitly specify your serdes. See https://kafka.apache.org/10/documentation/streams/developer-guide/datatypes.html#overriding-default-serdes"
+  private val exceptionErrorStr =
+    "should be avoided as they are error prone and often result in confusing error messages. " +
+      "Instead, explicitly specify your serdes. See https://kafka.apache.org/10/documentation/streams/developer-guide/datatypes.html#overriding-default-serdes"
 
   override def configure(configs: util.Map[String, _], isKey: Boolean): Unit = {}
 

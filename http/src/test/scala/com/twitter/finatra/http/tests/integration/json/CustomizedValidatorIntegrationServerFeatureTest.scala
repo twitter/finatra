@@ -32,10 +32,11 @@ class CustomizedValidatorIntegrationServerFeatureTest extends FeatureTest {
   }
 }
 
-class ValidationController @Inject()(validator: Validator) extends Controller {
+class ValidationController @Inject() (validator: Validator) extends Controller {
   get("/validate_things") { _: Request =>
     var errorMessage: String = ""
-    try { validator.validate(Things(Seq.empty[String])) } catch {
+    try { validator.validate(Things(Seq.empty[String])) }
+    catch {
       case e: ValidationException =>
         errorMessage = e.getMessage
     }

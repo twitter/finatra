@@ -9,7 +9,9 @@ import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.inject.Injector
 import javax.inject.Singleton
 
-@deprecated("Please use com.twitter.finatra.httpclient.modules.HttpClientModuleTrait directly.", "07-08-2019")
+@deprecated(
+  "Please use com.twitter.finatra.httpclient.modules.HttpClientModuleTrait directly.",
+  "07-08-2019")
 abstract class HttpClientModule extends HttpClientModuleTrait {
 
   // for backwards compatibility purposes, mirrors the behavior of a client w/o label specified
@@ -49,8 +51,10 @@ abstract class HttpClientModule extends HttpClientModuleTrait {
   ): Service[Request, Response] = newService(injector, statsReceiver)
 
   // retained for binary compatibility
-  @deprecated("Use provideHttpService(injector, statsReceiver). This method no longer binds " +
-    "to the Injector's object graph.", "07-09-2019")
+  @deprecated(
+    "Use provideHttpService(injector, statsReceiver). This method no longer binds " +
+      "to the Injector's object graph.",
+    "07-09-2019")
   final def provideHttpService: Service[Request, Response] = {
     sslHostname match {
       case Some(ssl) =>

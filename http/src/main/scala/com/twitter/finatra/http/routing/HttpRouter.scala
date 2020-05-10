@@ -33,7 +33,7 @@ object HttpRouter {
  * @see [[https://twitter.github.io/twitter-server/Admin.html TwitterServer HTTP Admin Interface]]
  */
 @Singleton
-class HttpRouter @Inject()(
+class HttpRouter @Inject() (
   injector: Injector,
   callbackConverter: CallbackConverter,
   messageBodyManager: MessageBodyManager,
@@ -441,7 +441,8 @@ class HttpRouter @Inject()(
 
   // non-constant routes MUST start with /admin/finatra
   private[this] def assertAdminRoutes(routes: ArrayBuffer[Route]): Unit = {
-    val message = "Error adding route: %s. Non-constant admin interface routes must start with prefix: " + HttpRouter.FinatraAdminPrefix
+    val message =
+      "Error adding route: %s. Non-constant admin interface routes must start with prefix: " + HttpRouter.FinatraAdminPrefix
 
     for (route <- routes) {
       if (!route.constantRoute) {

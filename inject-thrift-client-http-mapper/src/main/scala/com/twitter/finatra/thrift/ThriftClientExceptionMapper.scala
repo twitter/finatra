@@ -9,10 +9,10 @@ import com.twitter.inject.thrift.{ThriftClientException, ThriftClientExceptionSo
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class ThriftClientExceptionMapper @Inject()(
+class ThriftClientExceptionMapper @Inject() (
   response: ResponseBuilder,
-  source: ThriftClientExceptionSource
-) extends ExceptionMapper[ThriftClientException]
+  source: ThriftClientExceptionSource)
+    extends ExceptionMapper[ThriftClientException]
     with Logging {
 
   override def toResponse(

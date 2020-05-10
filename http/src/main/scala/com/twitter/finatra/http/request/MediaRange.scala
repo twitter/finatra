@@ -95,7 +95,7 @@ object MediaRange extends Logging {
      * These patterns are translated directly using the same naming
      */
     val ctl = acceptIf { c =>
-      (c >= 0 && c <= 0x1F) || c == 0x7F
+      (c >= 0 && c <= 0x1f) || c == 0x7f
     }(_ => "Expected a control character")
     val char = acceptIf(_ < 0x80)(_ => "Expected an ascii character")
     val text = not(ctl) ~> any
@@ -145,8 +145,8 @@ object MediaRange extends Logging {
 
     // Some clients think that '*' is a valid media range.  Spec says it isn't, but it's used widely enough that we
     // need to support it.
-    val mediaRange = (mediaType | ('*' ~> parameters.map(ps => MediaType("*", "*", ps.flatten)))) ^^ {
-      mediaType =>
+    val mediaRange =
+      (mediaType | ('*' ~> parameters.map(ps => MediaType("*", "*", ps.flatten)))) ^^ { mediaType =>
         val (params, rest) = mediaType.parameters.span(_._1 != "q")
         val (qValueStr, acceptParams) = rest match {
           case q :: ps => (q._2, ps)
@@ -168,7 +168,7 @@ object MediaRange extends Logging {
           }
         }
         new MediaRange(mediaType.mediaType, mediaType.mediaSubType, params, qValue, acceptParams)
-    }
+      }
 
     // Either it's a valid media range followed immediately by the end or a comma, or it's a bad media type
     val tolerantMediaRange = tolerant(mediaRange.<~[Any](guard(end | ',')), badMediaType)
@@ -197,8 +197,8 @@ class MediaRange(
   override val mediaSubType: String,
   parameters: Seq[(String, Option[String])],
   val qValue: Option[BigDecimal],
-  val acceptExtensions: Seq[(String, Option[String])]
-) extends MediaType(mediaType, mediaSubType, parameters) {
+  val acceptExtensions: Seq[(String, Option[String])])
+    extends MediaType(mediaType, mediaSubType, parameters) {
 
   /**
    * @return true if `mimeType` matches this media type, otherwise false
@@ -229,8 +229,7 @@ class MediaRange(
 case class MediaType(
   mediaType: String,
   mediaSubType: String,
-  parameters: Seq[(String, Option[String])]
-) {
+  parameters: Seq[(String, Option[String])]) {
   override def toString = {
     mediaType + "/" + mediaSubType + parameters
       .map { param =>

@@ -22,7 +22,11 @@ private[http] object PathPattern extends Logging {
   /* Private */
 
   private def regex(uriPattern: String): Regex = {
-    val asterisksReplaced = NamedAsteriskRegex.replaceAllIn(uriPattern, """\\E(.*)\\Q""") // The special token :* captures everything after the prefix string
+    val asterisksReplaced =
+      NamedAsteriskRegex.replaceAllIn(
+        uriPattern,
+        """\\E(.*)\\Q"""
+      ) // The special token :* captures everything after the prefix string
     val colonNameReplaced = NamedRouteParamRegex.replaceAllIn(
       asterisksReplaced,
       """\\E([^/]+)\\Q"""

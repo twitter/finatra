@@ -21,7 +21,12 @@ abstract class AbstractApp extends App {
    * @param help the help text explaining the purpose of the [[Flag]].
    * @return the created [[Flag]].
    */
-  final def createFlag[T](name: String, default: T, help: String, flaggable: Flaggable[T]): Flag[T] =
+  final def createFlag[T](
+    name: String,
+    default: T,
+    help: String,
+    flaggable: Flaggable[T]
+  ): Flag[T] =
     flag.create(name, default, help, flaggable)
 
   /**
@@ -33,7 +38,12 @@ abstract class AbstractApp extends App {
    * @param usage a string describing the type of the [[Flag]], i.e.: Integer.
    * @return the created [[Flag]].
    */
-  final def createMandatoryFlag[T](name: String, help: String, usage: String, flaggable: Flaggable[T]): Flag[T] =
+  final def createMandatoryFlag[T](
+    name: String,
+    help: String,
+    usage: String,
+    flaggable: Flaggable[T]
+  ): Flag[T] =
     flag.createMandatory(name, help, usage, flaggable)
 
   /**
@@ -91,8 +101,10 @@ trait App extends com.twitter.app.App with Logging {
    */
   private[this] lazy val appModules: Modules =
     new Modules(
-      required = frameworkModules ++ modules ++ javaModules.asScala, // user modules should replace framework
-      overrides = overrideModules ++ javaOverrideModules.asScala ++ frameworkOverrideModules // framework should replace user modules
+      required =
+        frameworkModules ++ modules ++ javaModules.asScala, // user modules should replace framework
+      overrides =
+        overrideModules ++ javaOverrideModules.asScala ++ frameworkOverrideModules // framework should replace user modules
     )
 
   /* Mutable State */

@@ -105,7 +105,11 @@ private[inject] trait TwitterModuleFlags {
    */
   protected def flag[T: Flaggable: Manifest](name: String, help: String): Flag[T] = {
     val flag =
-      new Flag[T](name, help, manifest[T].runtimeClass.toString, failFastUntilParsed = failfastOnFlagsNotParsed)
+      new Flag[T](
+        name,
+        help,
+        manifest[T].runtimeClass.toString,
+        failFastUntilParsed = failfastOnFlagsNotParsed)
     flags += flag
     flag
   }

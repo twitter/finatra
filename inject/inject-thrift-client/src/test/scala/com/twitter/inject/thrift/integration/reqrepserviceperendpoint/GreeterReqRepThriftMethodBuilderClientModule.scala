@@ -6,7 +6,10 @@ import com.twitter.finagle.service.{ReqRep, ResponseClass, ResponseClassifier}
 import com.twitter.greeter.thriftscala.{Greeter, InvalidOperation}
 import com.twitter.inject.exceptions.PossiblyRetryable
 import com.twitter.inject.thrift.ThriftMethodBuilderFactory
-import com.twitter.inject.thrift.integration.filters.{HiLoggingTypeAgnosticFilter, MethodLoggingTypeAgnosticFilter}
+import com.twitter.inject.thrift.integration.filters.{
+  HiLoggingTypeAgnosticFilter,
+  MethodLoggingTypeAgnosticFilter
+}
 import com.twitter.inject.thrift.modules.{ThriftClientIdModule, ThriftMethodBuilderClientModule}
 import com.twitter.inject.Injector
 import com.twitter.util.tunable.Tunable
@@ -15,8 +18,11 @@ import scala.util.control.NonFatal
 
 class GreeterReqRepThriftMethodBuilderClientModule(
   requestHeaderKey: String,
-  timeoutPerRequestTunable: Tunable[Duration]
-) extends ThriftMethodBuilderClientModule[Greeter.ReqRepServicePerEndpoint, Greeter.MethodPerEndpoint] {
+  timeoutPerRequestTunable: Tunable[Duration])
+    extends ThriftMethodBuilderClientModule[
+      Greeter.ReqRepServicePerEndpoint,
+      Greeter.MethodPerEndpoint
+    ] {
 
   override val modules: Seq[Module] = Seq(ThriftClientIdModule)
 

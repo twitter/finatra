@@ -20,10 +20,10 @@ import javax.inject.{Inject, Singleton}
  *      properly converted into a meaningful HTTP response.
  */
 @Singleton
-class CommonFilters @Inject()(
+class CommonFilters @Inject() (
   a: StatsFilter[Request],
   b: AccessLoggingFilter[Request],
   c: HttpResponseFilter[Request],
   d: ExceptionMappingFilter[Request],
-  e: HttpNackFilter[Request]
-) extends MergedFilter(a, b, c, d, e)
+  e: HttpNackFilter[Request])
+    extends MergedFilter(a, b, c, d, e)

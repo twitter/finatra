@@ -92,8 +92,8 @@ class StatsFilterTest extends Test {
       statsReceiver.counters(List("per_method_stats", "echo", "ignored")) should equal(0)
       // per method failures
       statsReceiver.counters(List("per_method_stats", "echo", "failures")) should equal(1)
-      statsReceiver.counters(List("per_method_stats", "echo", "failures", "java.lang.Exception")) should equal(
-        1)
+      statsReceiver.counters(
+        List("per_method_stats", "echo", "failures", "java.lang.Exception")) should equal(1)
       // per method success
       statsReceiver.counters(List("per_method_stats", "echo", "success")) should equal(0)
       // per method latency_ms
@@ -130,11 +130,12 @@ class StatsFilterTest extends Test {
       statsReceiver.counters(List("per_method_stats", "echo", "failures")) should equal(0)
       // per method success
       statsReceiver.counters(List("per_method_stats", "echo", "success")) should equal(1)
-      statsReceiver.counters(List(
-        "per_method_stats",
-        "echo",
-        "success",
-        "java.lang.IllegalArgumentException")) should equal(1)
+      statsReceiver.counters(
+        List(
+          "per_method_stats",
+          "echo",
+          "success",
+          "java.lang.IllegalArgumentException")) should equal(1)
       // per method latency_ms
       statsReceiver.stats.get(List("per_method_stats", "echo", "latency_ms")) should not be None
     }

@@ -142,7 +142,7 @@ class FinatraKeyValueStoreImpl[K, V](
 
       override def hasNext: Boolean = {
         super.hasNext &&
-          comparator.compare(iterator.key(), toBytesInclusive) <= 0 // <= 0 since to is inclusive
+        comparator.compare(iterator.key(), toBytesInclusive) <= 0 // <= 0 since to is inclusive
       }
     }
   }

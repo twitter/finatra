@@ -43,8 +43,7 @@ class KafkaStreamsAdminServerFeatureTest extends KafkaStreamsFeatureTest {
   test("admin kafka streams topology") {
     val bufBytes = getAdminResponseBytes("/admin/kafka/streams/topology")
     val result = new String(bufBytes, Charset.forName("UTF-8"))
-    result.trim() should equal(
-      """<pre>
+    result.trim() should equal("""<pre>
         |Topologies:
         |   Sub-topology: 0
         |    Source: KSTREAM-SOURCE-0000000000 (topics: [source])

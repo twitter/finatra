@@ -7,16 +7,21 @@ import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpTest}
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.inject.server.FeatureTest
 import com.twitter.inject.thrift.DoEverythingThriftClientModuleFeatureTest._
-import com.twitter.inject.thrift.integration.basic.{EchoThriftClientModule1, EchoThriftClientModule2, EchoThriftClientModule3, MyEchoService}
+import com.twitter.inject.thrift.integration.basic.{
+  EchoThriftClientModule1,
+  EchoThriftClientModule2,
+  EchoThriftClientModule3,
+  MyEchoService
+}
 import com.twitter.inject.thrift.integration.{TestHttpServer, TestThriftServer}
 import com.twitter.test.thriftscala.EchoService
 import com.twitter.util.Future
 import javax.inject.{Inject, Singleton}
 
 object DoEverythingThriftClientModuleFeatureTest {
-  @Singleton class EchoServiceFuture @Inject()(val service: EchoService[Future])
+  @Singleton class EchoServiceFuture @Inject() (val service: EchoService[Future])
 
-  class EchoHttpController1 @Inject()(echoThriftService: EchoService[Future]) extends Controller {
+  class EchoHttpController1 @Inject() (echoThriftService: EchoService[Future]) extends Controller {
     get("/echo") { request: Request =>
       val msg = request.params("msg")
       echoThriftService.echo(msg)
@@ -28,7 +33,7 @@ object DoEverythingThriftClientModuleFeatureTest {
   }
 
   /* Testing deprecated code for coverage */
-  class EchoHttpController2 @Inject()(echoThriftService: EchoService.FutureIface)
+  class EchoHttpController2 @Inject() (echoThriftService: EchoService.FutureIface)
       extends Controller {
     get("/echo") { request: Request =>
       val msg = request.params("msg")
@@ -40,7 +45,7 @@ object DoEverythingThriftClientModuleFeatureTest {
     }
   }
 
-  class EchoHttpController3 @Inject()(echoThriftService: EchoService.MethodPerEndpoint)
+  class EchoHttpController3 @Inject() (echoThriftService: EchoService.MethodPerEndpoint)
       extends Controller {
     get("/echo") { request: Request =>
       val msg = request.params("msg")
@@ -58,7 +63,9 @@ class DoEverythingThriftClientModuleFeatureTest extends FeatureTest with HttpTes
   private val clientIdString = "echo-http-service"
 
   override val server =
-    new EmbeddedThriftServer(twitterServer = new TestThriftServer(new MyEchoService), disableTestLogging = true)
+    new EmbeddedThriftServer(
+      twitterServer = new TestThriftServer(new MyEchoService),
+      disableTestLogging = true)
 
   private val httpServer1 = new EmbeddedHttpServer(
     twitterServer =

@@ -8,12 +8,8 @@ import javax.inject.Singleton
 
 @Singleton
 class HelloFilter
-  extends Filter[
-    Hello.Args,
-    Hello.SuccessType,
-    Hello.Args,
-    Hello.SuccessType]
-  with Logging {
+    extends Filter[Hello.Args, Hello.SuccessType, Hello.Args, Hello.SuccessType]
+    with Logging {
   def apply(
     request: Hello.Args,
     service: Service[Hello.Args, Hello.SuccessType]

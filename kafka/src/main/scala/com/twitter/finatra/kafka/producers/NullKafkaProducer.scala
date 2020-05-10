@@ -17,8 +17,12 @@ class NullKafkaProducer[K, V] extends KafkaProducerBase[K, V] {
 
   val DataRecord = new RecordMetadata(
     new TopicPartition("", 0),
-    0L, 0L, 0L,
-    0L, 0, 0
+    0L,
+    0L,
+    0L,
+    0L,
+    0,
+    0
   )
 
   val EmptyList = new util.ArrayList[PartitionInfo]()

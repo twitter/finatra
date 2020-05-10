@@ -9,10 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class Subscriber @Inject()(queue: Queue)
-    extends Closable
-    with Awaitable[Unit]
-    with Logging {
+class Subscriber @Inject() (queue: Queue) extends Closable with Awaitable[Unit] with Logging {
 
   val numRead: AtomicInteger = new AtomicInteger(0)
 

@@ -27,7 +27,7 @@ class FilteredThriftClientModuleNonMuxTest extends IntegrationTest {
   }
 
   object FilteredThriftClientModuleNonMux
-    extends FilteredThriftClientModule[Greeter[Future], Greeter.ServiceIface] {
+      extends FilteredThriftClientModule[Greeter[Future], Greeter.ServiceIface] {
     override val label = "greeter-thrift-client"
     override val dest = "flag!greeter-thrift-service"
     override val mux = false

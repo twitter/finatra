@@ -35,9 +35,10 @@ private[app] object Modules {
     // for the "override" behavior of Flag#add (the last Flag with the same name added, wins),
     // we need to ensure that we "reverse" our Sequence before performing a distinct operation
     // discriminated by Flag#name.
-    modules.collect {
-      case injectModule: TwitterBaseModule => injectModule.flags
-    }.flatten.reverse.distinctBy(_.name)
+    modules
+      .collect {
+        case injectModule: TwitterBaseModule => injectModule.flags
+      }.flatten.reverse.distinctBy(_.name)
   }
 
   /** Recursively find all 'composed' modules */
@@ -100,7 +101,8 @@ private[app] class Modules(required: Seq[Module], overrides: Seq[Module]) {
   ): InstalledModules = {
     // ensure we add the FlagsModule and the TwitterTypeConvertersModule to the list to build the injector.
     val requiredModules = modules ++ Seq(new FlagsModule(flags), TwitterTypeConvertersModule)
-    val combinedModule = com.google.inject.util.Modules.`override`(requiredModules.asJava).`with`(overrideModules.asJava)
+    val combinedModule = com.google.inject.util.Modules
+      .`override`(requiredModules.asJava).`with`(overrideModules.asJava)
 
     InstalledModules(
       injector = Injector(Guice.createInjector(stage, combinedModule)),

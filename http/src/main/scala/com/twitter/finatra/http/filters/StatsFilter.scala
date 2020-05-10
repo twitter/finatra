@@ -137,7 +137,7 @@ private object StatsFilter {
  */
 @Singleton
 class StatsFilter[
-  R <: Request] @Inject()(statsReceiver: StatsReceiver, responseClassifier: HttpResponseClassifier)
+  R <: Request] @Inject() (statsReceiver: StatsReceiver, responseClassifier: HttpResponseClassifier)
     extends SimpleFilter[R, Response]
     with Logging {
 

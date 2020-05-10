@@ -39,10 +39,11 @@ object option {
       case None => Future.value(orElse)
     }
 
-    def toFutureOrElse(orElse: => Future[A])(implicit dummy: DummyImplicit): Future[A] = self match {
-      case Some(returnVal) => Future.value(returnVal)
-      case None => orElse
-    }
+    def toFutureOrElse(orElse: => Future[A])(implicit dummy: DummyImplicit): Future[A] =
+      self match {
+        case Some(returnVal) => Future.value(returnVal)
+        case None => orElse
+      }
 
     /**
      * Creates a string using the passed in "format string" and the

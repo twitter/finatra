@@ -98,7 +98,7 @@ private[finatra] class AsyncJsonParser {
 
   private def endObjectArray: Boolean =
     depth == 1 && (parser.currentToken() == JsonToken.END_ARRAY ||
-        parser.currentToken() == JsonToken.END_OBJECT)
+      parser.currentToken() == JsonToken.END_OBJECT)
 
   private def updateOpenBrace(): Unit = {
     if (parser.currentToken() == JsonToken.START_ARRAY ||

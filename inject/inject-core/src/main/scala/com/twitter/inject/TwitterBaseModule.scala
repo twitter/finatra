@@ -16,7 +16,8 @@ private[inject] trait TwitterBaseModule extends TwitterModuleFlags with TwitterM
   protected[inject] def modules: Seq[Module] = Seq()
 
   /** Additional modules to be composed into this module from Java */
-  protected[inject] def javaModules: java.util.Collection[Module] = new java.util.ArrayList[Module]()
+  protected[inject] def javaModules: java.util.Collection[Module] =
+    new java.util.ArrayList[Module]()
 
   /** Additional framework modules to be composed into this module. */
   protected[inject] def frameworkModules: Seq[Module] = Seq()

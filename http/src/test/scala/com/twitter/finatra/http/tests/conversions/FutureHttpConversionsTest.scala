@@ -54,7 +54,10 @@ class FutureHttpConversionsTest extends Test {
 
   def intToFutureOptionString(num: Int): Future[Option[String]] = Future(Some(num.toString))
 
-  def assertSearchServiceFailure(searchService: SearchService, expectedException: Throwable): Unit = {
+  def assertSearchServiceFailure(
+    searchService: SearchService,
+    expectedException: Throwable
+  ): Unit = {
     val e = intercept[HttpException] {
       await(searchService.search("processed needle"))
     }

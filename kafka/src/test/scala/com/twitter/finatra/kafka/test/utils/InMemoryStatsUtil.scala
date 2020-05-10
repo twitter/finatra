@@ -85,5 +85,7 @@ class InMemoryStatsUtil(val inMemoryStatsReceiver: InMemoryStatsReceiver)
     expected: Long,
     failIfActualOverExpected: Boolean = true
   ): Unit =
-    underlying.counters.waitFor(name, 60.seconds)(_ == expected) // waits up to 60 seconds as per default from PollUtils
+    underlying.counters.waitFor(name, 60.seconds)(
+      _ == expected
+    ) // waits up to 60 seconds as per default from PollUtils
 }

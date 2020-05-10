@@ -8,8 +8,8 @@ import com.twitter.finagle.stats.{LoadedStatsReceiver, StatsReceiver}
  * underlying queue and discarded log events via the [[LoadedStatsReceiver]]
  */
 class AsyncAppender(
-  statsReceiver: StatsReceiver
-) extends LogbackAsyncAppenderBase(statsReceiver) {
+  statsReceiver: StatsReceiver)
+    extends LogbackAsyncAppenderBase(statsReceiver) {
 
   def this() = this(LoadedStatsReceiver)
 }

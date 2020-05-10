@@ -6,12 +6,13 @@ import com.twitter.serviceA.thriftscala.ServiceA
 import com.twitter.util.Future
 
 class EchoFilter
-  extends Filter[
-    ServiceA.Echo.Args,
-    ServiceA.Echo.SuccessType,
-    ServiceA.Echo.Args,
-    ServiceA.Echo.SuccessType]
-  with Logging {
+    extends Filter[
+      ServiceA.Echo.Args,
+      ServiceA.Echo.SuccessType,
+      ServiceA.Echo.Args,
+      ServiceA.Echo.SuccessType
+    ]
+    with Logging {
   def apply(
     request: ServiceA.Echo.Args,
     service: Service[ServiceA.Echo.Args, String]

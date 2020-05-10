@@ -123,7 +123,7 @@ class SampleApp extends App {
   }
 }
 
-class SampleManager @Inject()(sampleService: SampleService) extends Logging {
+class SampleManager @Inject() (sampleService: SampleService) extends Logging {
   def start(): String = {
     info("SampleManager started")
     val response = sampleService.sayHi("yo")
@@ -145,4 +145,3 @@ object FooModule extends TwitterModule {
 }
 
 case class Foo(name: String)
-

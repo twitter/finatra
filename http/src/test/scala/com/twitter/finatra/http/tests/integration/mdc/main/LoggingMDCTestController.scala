@@ -8,12 +8,12 @@ import org.slf4j.MDC
 import scala.collection.JavaConverters._
 
 @Singleton
-class LoggingMDCTestController @Inject()(
+class LoggingMDCTestController @Inject() (
   userService: UserService,
   otherService: OtherService,
   anotherService: AnotherService,
-  eventService: EventService
-) extends Controller {
+  eventService: EventService)
+    extends Controller {
 
   private[this] var storedMDC: Option[Map[String, String]] = None
 

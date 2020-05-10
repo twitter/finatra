@@ -8,7 +8,8 @@ class OverlappingTemplateRootTest extends AbstractTemplateRootTest {
   def templateRootDirectory(baseFolderName: String): String = "/templates"
 
   /* different from the specified root as the full path is relative to the webapp directory */
-  def fullTemplatePath(baseFolderName: String): String = s"${baseFolderName}src/main/webapp/templates"
+  def fullTemplatePath(baseFolderName: String): String =
+    s"${baseFolderName}src/main/webapp/templates"
 
   def setup(baseFolderName: String): Unit = {
     // create src/main/webapp directory and add files

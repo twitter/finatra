@@ -4,6 +4,7 @@ import com.github.mustachejava.{DefaultMustacheFactory, MustacheFactory, Mustach
 import com.twitter.finatra.utils.FileResolver
 
 object MustacheFactoryBuilder {
+
   /**
    * Constructs a new [[com.github.mustachejava.MustacheFactory]] based on the given inputs.
    *
@@ -40,6 +41,6 @@ object MustacheFactoryBuilder {
   private final class LocalFilesystemMustacheFactoryImpl(
     override val templatesDirectory: String,
     override val resolver: FileResolver)
-    extends DefaultMustacheFactory
+      extends DefaultMustacheFactory
       with LocalFilesystemMustacheFactory
 }

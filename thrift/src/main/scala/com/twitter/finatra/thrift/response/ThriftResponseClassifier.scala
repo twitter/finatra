@@ -12,8 +12,7 @@ object ThriftResponseClassifier {
    * @see [[com.twitter.finagle.thrift.service.ThriftResponseClassifier.ThriftExceptionsAsFailures]]
    */
   val ThriftExceptionsAsFailures =
-    ThriftResponseClassifier(
-      finagle.ThriftResponseClassifier.ThriftExceptionsAsFailures)
+    ThriftResponseClassifier(finagle.ThriftResponseClassifier.ThriftExceptionsAsFailures)
 }
 
 /**
@@ -23,7 +22,7 @@ object ThriftResponseClassifier {
  * @param underlying the [[com.twitter.finagle.service.ResponseClassifier]] to wrap.
  */
 case class ThriftResponseClassifier(underlying: ResponseClassifier)
-  extends PartialFunction[ReqRep, ResponseClass] {
+    extends PartialFunction[ReqRep, ResponseClass] {
   override def orElse[A1 <: ReqRep, B1 >: ResponseClass](
     that: PartialFunction[A1, B1]
   ): PartialFunction[A1, B1] = underlying.orElse(that)

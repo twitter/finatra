@@ -8,7 +8,9 @@ import com.twitter.inject.{Injector, Logging}
 import com.twitter.scrooge.AsClosableMethodName
 import com.twitter.util.Closable
 
-private[twitter] trait ThriftClientModuleTrait extends StackClientModuleTrait[ThriftClientRequest, Array[Byte], ThriftMux.Client] with Logging {
+private[twitter] trait ThriftClientModuleTrait
+    extends StackClientModuleTrait[ThriftClientRequest, Array[Byte], ThriftMux.Client]
+    with Logging {
 
   override protected final def baseClient: ThriftMux.Client = ThriftMux.client
 
@@ -72,21 +74,21 @@ private[twitter] trait ThriftClientModuleTrait extends StackClientModuleTrait[Th
     client: ThriftMux.Client,
     statsReceiver: StatsReceiver
   ): ThriftMux.Client =
-    super.initialClientConfiguration(injector, client, statsReceiver)
-    .withClientId(clientId(injector))
+    super
+      .initialClientConfiguration(injector, client, statsReceiver)
+      .withClientId(clientId(injector))
 
   /* Private */
 
-  override protected def asClosable(client: ThriftMux.Client): Closable = asClosableThriftService(client)
+  override protected def asClosable(client: ThriftMux.Client): Closable = asClosableThriftService(
+    client)
 
   private[modules] def asClosableThriftService(thriftService: Any): Closable = {
     thriftService match {
       case closable: Closable => closable
       case _ =>
         val asClosableMethodOpt =
-          thriftService
-            .getClass
-            .getMethods
+          thriftService.getClass.getMethods
             .find(_.getName == AsClosableMethodName)
         asClosableMethodOpt match {
           case Some(method) =>

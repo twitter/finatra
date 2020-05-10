@@ -3,7 +3,12 @@ package com.twitter.finatra.kafkastreams.integration.aggregate
 import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.kafkastreams.integration.aggregate.ZipkinAggregatorServer._
 import com.twitter.finatra.kafkastreams.test.{FinatraTopologyTester, TopologyFeatureTest}
-import com.twitter.finatra.kafkastreams.transformer.aggregation.{TimeWindowed, WindowClosed, WindowOpen, WindowedValue}
+import com.twitter.finatra.kafkastreams.transformer.aggregation.{
+  TimeWindowed,
+  WindowClosed,
+  WindowOpen,
+  WindowedValue
+}
 import com.twitter.finatra.kafkastreams.transformer.domain.Time
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.joda.time.DateTime
@@ -215,13 +220,18 @@ class ZipkinAggregatorTopologyFeatureTest extends TopologyFeatureTest {
 
     topologyTester.advanceWallClockTime(30.seconds)
 
-    val allOutputWindowOpened: Seq[ProducerRecord[TimeWindowed[TraceId], WindowedValue[SpanCollection]]] =
+    val allOutputWindowOpened: Seq[
+      ProducerRecord[TimeWindowed[TraceId], WindowedValue[SpanCollection]]
+    ] =
       zipkinTracesTopic.readAllOutput()
     allOutputWindowOpened.length should be(3)
 
-    val tracesTraceId1Output = allOutputWindowOpened.filter(p => p.key().value == tracesTraceId1Tail.head.traceId).head
-    val tracesTraceId2Output = allOutputWindowOpened.filter(p => p.key().value == tracesTraceId2Tail.head.traceId).head
-    val tracesTraceId3Output = allOutputWindowOpened.filter(p => p.key().value == tracesTraceId3Tail.head.traceId).head
+    val tracesTraceId1Output =
+      allOutputWindowOpened.filter(p => p.key().value == tracesTraceId1Tail.head.traceId).head
+    val tracesTraceId2Output =
+      allOutputWindowOpened.filter(p => p.key().value == tracesTraceId2Tail.head.traceId).head
+    val tracesTraceId3Output =
+      allOutputWindowOpened.filter(p => p.key().value == tracesTraceId3Tail.head.traceId).head
 
     tracesTraceId1Output.value().value.spans.length should be(tracesTraceId1Tail.length)
     tracesTraceId2Output.value().value.spans.length should be(tracesTraceId2Tail.length)
@@ -233,20 +243,24 @@ class ZipkinAggregatorTopologyFeatureTest extends TopologyFeatureTest {
 
     topologyTester.advanceWallClockTime(5.hour)
 
-    val allOutputAfterFiveHours: Seq[ProducerRecord[TimeWindowed[TraceId], WindowedValue[SpanCollection]]] = zipkinTracesTopic.readAllOutput()
+    val allOutputAfterFiveHours: Seq[
+      ProducerRecord[TimeWindowed[TraceId], WindowedValue[SpanCollection]]
+    ] = zipkinTracesTopic.readAllOutput()
     allOutputAfterFiveHours.length should be(3)
 
-    allOutputAfterFiveHours.count(_.value().windowResultType == WindowClosed) should be (0)
-    allOutputAfterFiveHours.count(_.value().windowResultType == WindowOpen) should be (3)
+    allOutputAfterFiveHours.count(_.value().windowResultType == WindowClosed) should be(0)
+    allOutputAfterFiveHours.count(_.value().windowResultType == WindowOpen) should be(3)
 
     zipkinIngestionTopic.pipeInput(traceTraceId4.traceId, traceTraceId4)
 
     topologyTester.advanceWallClockTime(30.seconds)
 
-    val allOutputAfterWindowClosed: Seq[ProducerRecord[TimeWindowed[TraceId], WindowedValue[SpanCollection]]] = zipkinTracesTopic.readAllOutput()
+    val allOutputAfterWindowClosed: Seq[
+      ProducerRecord[TimeWindowed[TraceId], WindowedValue[SpanCollection]]
+    ] = zipkinTracesTopic.readAllOutput()
     allOutputAfterWindowClosed.length should be(4)
 
-    allOutputAfterWindowClosed.count(_.value().windowResultType == WindowClosed) should be (3)
-    allOutputAfterWindowClosed.count(_.value().windowResultType == WindowOpen) should be (1)
+    allOutputAfterWindowClosed.count(_.value().windowResultType == WindowClosed) should be(3)
+    allOutputAfterWindowClosed.count(_.value().windowResultType == WindowOpen) should be(1)
   }
 }

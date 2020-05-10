@@ -6,7 +6,7 @@ import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.util.Future
 import javax.inject.Inject
 
-class ForbiddenFilter @Inject()(responseBuilder: ResponseBuilder)
+class ForbiddenFilter @Inject() (responseBuilder: ResponseBuilder)
     extends SimpleFilter[Request, Response] {
   def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
     Future.value(responseBuilder.forbidden)

@@ -12,8 +12,7 @@ private[thrift] object Controller {
   case class ConfiguredMethod(
     method: ThriftMethod,
     filters: Filter.TypeAgnostic,
-    impl: ScroogeServiceImpl
-  )
+    impl: ScroogeServiceImpl)
 
   sealed trait Config
 
@@ -43,14 +42,16 @@ abstract class Controller private (val config: Controller.Config) extends Loggin
 
   def this(gen: GeneratedThriftService) {
     this(new Controller.ControllerConfig(gen))
-    assert(!self.isInstanceOf[ToThriftService], "Controllers should no longer extend ToThriftSerivce")
+    assert(
+      !self.isInstanceOf[ToThriftService],
+      "Controllers should no longer extend ToThriftSerivce")
   }
 
   /**
    * The MethodDSL child class is responsible for capturing the state of the applied filter chains
    * and implementation.
    */
-  class MethodDSL[M <: ThriftMethod] (val m: M, chain: Filter.TypeAgnostic) {
+  class MethodDSL[M <: ThriftMethod](val m: M, chain: Filter.TypeAgnostic) {
 
     private[this] def nonLegacy[T](f: ControllerConfig => T): T = {
       assert(config.isInstanceOf[ControllerConfig], "Legacy controllers cannot use method DSLs")
@@ -71,8 +72,9 @@ abstract class Controller private (val config: Controller.Config) extends Loggin
      *
      * @param svc the service to use as an implementation
      */
-    def withService(svc: Service[Request[M#Args], Response[M#SuccessType]]): Unit = nonLegacy { cc =>
-      cc.methods += ConfiguredMethod(m, chain, svc.asInstanceOf[ScroogeServiceImpl])
+    def withService(svc: Service[Request[M#Args], Response[M#SuccessType]]): Unit = nonLegacy {
+      cc =>
+        cc.methods += ConfiguredMethod(m, chain, svc.asInstanceOf[ScroogeServiceImpl])
     }
 
     /**
@@ -99,7 +101,7 @@ abstract class Controller private (val config: Controller.Config) extends Loggin
      */
     @deprecated("Use Request/Response based functionality", "2018-12-20")
     def apply(f: M#Args => Future[M#SuccessType]): ThriftMethodService[M#Args, M#SuccessType] = {
-      config match  {
+      config match {
         case _: ControllerConfig =>
           withService(Service.mk { req: Request[M#Args] =>
             f(req.args).map(Response[M#SuccessType])
@@ -107,9 +109,11 @@ abstract class Controller private (val config: Controller.Config) extends Loggin
 
           // This exists to match return types with the legacy methods of creating a controller.
           // The service created here should never be invoked.
-          new ThriftMethodService[M#Args, M#SuccessType](m, Service.mk { _ =>
-            throw new RuntimeException("Legacy shim service invoked")
-          })
+          new ThriftMethodService[M#Args, M#SuccessType](
+            m,
+            Service.mk { _ =>
+              throw new RuntimeException("Legacy shim service invoked")
+            })
 
         case lc: LegacyConfig =>
           val thriftMethodService = new ThriftMethodService[M#Args, M#SuccessType](m, Service.mk(f))
@@ -132,4 +136,3 @@ abstract class Controller private (val config: Controller.Config) extends Loggin
    */
   protected def handle[M <: ThriftMethod](m: M) = new MethodDSL[M](m, Filter.TypeAgnostic.Identity)
 }
-

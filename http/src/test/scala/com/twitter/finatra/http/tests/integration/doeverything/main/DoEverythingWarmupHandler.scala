@@ -8,7 +8,7 @@ import com.twitter.inject.utils.Handler
 import javax.inject.Inject
 import scala.util.control.NonFatal
 
-class DoEverythingWarmupHandler @Inject()(warmup: HttpWarmup) extends Handler with Logging {
+class DoEverythingWarmupHandler @Inject() (warmup: HttpWarmup) extends Handler with Logging {
 
   override def handle(): Unit = {
     try {

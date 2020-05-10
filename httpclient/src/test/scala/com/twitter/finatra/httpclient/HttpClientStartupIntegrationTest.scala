@@ -14,8 +14,10 @@ class HttpClientStartupIntegrationTest extends Test {
 
   test("startup non ssl with HttpClientModule") {
     val injector = TestInjector(
-      modules =
-        Seq(StatsReceiverModule, ScalaObjectMapperModule, new HttpClientModule {
+      modules = Seq(
+        StatsReceiverModule,
+        ScalaObjectMapperModule,
+        new HttpClientModule {
           override val dest = "flag!myservice"
         }),
       flags = Map("com.twitter.server.resolverMap" -> "myservice=nil!")
@@ -26,8 +28,10 @@ class HttpClientStartupIntegrationTest extends Test {
 
   test("startup ssl with HttpClientModule") {
     val injector = TestInjector(
-      modules =
-        Seq(StatsReceiverModule, ScalaObjectMapperModule, new HttpClientModule {
+      modules = Seq(
+        StatsReceiverModule,
+        ScalaObjectMapperModule,
+        new HttpClientModule {
           override val dest = "flag!myservice"
           override val sslHostname = Some("foo")
         }),

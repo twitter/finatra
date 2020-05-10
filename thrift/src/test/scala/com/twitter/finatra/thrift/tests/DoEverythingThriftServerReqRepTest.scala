@@ -77,7 +77,10 @@ class DoEverythingThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
     val request: Request[Uppercase.Args] =
       Request(Uppercase.Args("Hi"))
         .setHeader(TestClientRequestHeaderKey, "bar")
-        .setHeader("com.twitter.finagle.Retries", "5") // set a header that finagle already broadcast to ensure that we collect and don't blow up.
+        .setHeader(
+          "com.twitter.finagle.Retries",
+          "5"
+        ) // set a header that finagle already broadcast to ensure that we collect and don't blow up.
     val f: Future[Response[Uppercase.SuccessType]] =
       filteredReqRepServicePerEndpoint.uppercase(request)
     val response = await(f)

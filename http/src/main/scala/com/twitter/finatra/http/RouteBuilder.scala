@@ -16,8 +16,7 @@ private[http] class RouteBuilder[RequestType: TypeTag, ResponseType: TypeTag](
   index: Option[RouteIndex],
   callback: RequestType => ResponseType,
   annotations: Array[Annotation],
-  routeDsl: RouteContext
-) {
+  routeDsl: RouteContext) {
 
   def build(callbackConverter: CallbackConverter, injector: Injector) =
     Route(

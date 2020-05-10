@@ -273,7 +273,8 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
     server.httpGet(
       path = "/time?t=2018-09-14T23:20:08.000-07:00",
       andExpect = Ok,
-      withJsonBody = """{"time": "2018-09-15 06:20:08 +0000"}""" // TimeStringSerializer format is 'yyyy-MM-dd HH:mm:ss Z' UTC TZ
+      withJsonBody =
+        """{"time": "2018-09-15 06:20:08 +0000"}""" // TimeStringSerializer format is 'yyyy-MM-dd HH:mm:ss Z' UTC TZ
     )
   }
 
@@ -283,7 +284,8 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
    */
   test("/GET /longparametername") {
     server.httpGet(
-      path = "/longparametername?this_should_use_mapper_naming_strategy=hello%2C%20world!", // default property naming strategy is snake_case
+      path =
+        "/longparametername?this_should_use_mapper_naming_strategy=hello%2C%20world!", // default property naming strategy is snake_case
       andExpect = Ok,
       withBody = "hello, world!"
     )
@@ -371,7 +373,6 @@ class JacksonIntegrationServerFeatureTest extends FeatureTest {
     server.httpPost(
       "/validate_user",
       andExpect = BadRequest,
-
       postBody = """
           {
             "user_name" : "@&^",

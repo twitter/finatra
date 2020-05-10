@@ -13,7 +13,7 @@ object HttpForward {
 }
 
 @Singleton
-class HttpForward @Inject()(router: HttpRouter) extends Logging {
+class HttpForward @Inject() (router: HttpRouter) extends Logging {
   import HttpForward._
 
   /**

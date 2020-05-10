@@ -48,17 +48,21 @@ class WordCountServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
 
     textLinesTopic.publish(1L -> "hello world hello")
     serverBeforeRestartStats.gauges.waitFor(
-      "kafka/thread1/consumer/TextLinesTopic/records_consumed_total", 60.seconds)(_ == 1.0f)
+      "kafka/thread1/consumer/TextLinesTopic/records_consumed_total",
+      60.seconds)(_ == 1.0f)
     wordsWithCountsTopic.consumeAsManyMessagesUntilMap(Map("world" -> 1L, "hello" -> 2L))
 
     textLinesTopic.publish(1L -> "world world")
     serverBeforeRestartStats.gauges.waitFor(
-      "kafka/thread1/consumer/TextLinesTopic/records_consumed_total", 60.seconds)(_ == 2.0f)
+      "kafka/thread1/consumer/TextLinesTopic/records_consumed_total",
+      60.seconds)(_ == 2.0f)
     wordsWithCountsTopic.consumeAsManyMessagesUntilMap(Map("world" -> 3L))
     serverBeforeRestartStats.gauges.waitFor(
-      "kafka/thread1/producer/wordcount_prod_CountsStore_changelog/record_send_total", 60.seconds)(_ >= 3.0f)
+      "kafka/thread1/producer/wordcount_prod_CountsStore_changelog/record_send_total",
+      60.seconds)(_ >= 3.0f)
     serverBeforeRestartStats.gauges.waitFor(
-      "kafka/thread1/producer/WordsWithCountsTopic/record_send_total", 60.seconds)(_ >= 3.0f)
+      "kafka/thread1/producer/WordsWithCountsTopic/record_send_total",
+      60.seconds)(_ >= 3.0f)
 
     serverBeforeRestartStats.gauges.assert("kafka/stream/state", 2.0f)
     assert(countsChangelogTopic.consumeValue() > 0)
@@ -81,7 +85,8 @@ class WordCountServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
     serverAfterRestart.start()
     val serverAfterRestartStats = serverAfterRestart.inMemoryStats
     serverAfterRestartStats.gauges.waitFor(
-      "kafka/stream/finatra_state_restore_listener/restore_time_elapsed_ms", 60.seconds)(_ >= 0.0f)
+      "kafka/stream/finatra_state_restore_listener/restore_time_elapsed_ms",
+      60.seconds)(_ >= 0.0f)
 
     textLinesTopic.publish(1L -> "world world")
     wordsWithCountsTopic.consumeAsManyMessagesUntilMap(Map("world" -> 5L))
@@ -106,7 +111,8 @@ class WordCountServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
 
     textLinesTopic.publish(1L -> "hello world hello")
     debugServerStats.gauges.waitFor(
-      "kafka/thread1/consumer/TextLinesTopic/records_consumed_total", 60.seconds)(_ == 1.0f)
+      "kafka/thread1/consumer/TextLinesTopic/records_consumed_total",
+      60.seconds)(_ == 1.0f)
     val debugServerMetricNames = debugServerStats.names
 
     debugServer.close()
@@ -118,7 +124,8 @@ class WordCountServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
 
     textLinesTopic.publish(1L -> "hello world hello")
     infoServerStats.gauges.waitFor(
-      "kafka/thread1/consumer/TextLinesTopic/records_consumed_total", 60.seconds)(_ == 1.0f)
+      "kafka/thread1/consumer/TextLinesTopic/records_consumed_total",
+      60.seconds)(_ == 1.0f)
     val infoServerMetricNames = infoServerStats.names
 
     infoServer.close()

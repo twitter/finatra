@@ -1,6 +1,15 @@
 package com.twitter.inject.server.tests
 
-import com.twitter.finagle.stats.{Counter, CounterSchema, Gauge, GaugeSchema, HistogramSchema, InMemoryStatsReceiver, Stat, StatsReceiver}
+import com.twitter.finagle.stats.{
+  Counter,
+  CounterSchema,
+  Gauge,
+  GaugeSchema,
+  HistogramSchema,
+  InMemoryStatsReceiver,
+  Stat,
+  StatsReceiver
+}
 import java.io.PrintStream
 import scala.collection.mutable
 

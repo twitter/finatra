@@ -3,7 +3,10 @@ package com.twitter.finatra.http.internal.routing
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Fields, Request, Response, Status, Version}
 import com.twitter.finatra.http.marshalling.MessageBodyManager
-import com.twitter.finatra.http.response.{ResponseBuilder, StreamingResponse => DeprecatedStreamingResponse}
+import com.twitter.finatra.http.response.{
+  ResponseBuilder,
+  StreamingResponse => DeprecatedStreamingResponse
+}
 import com.twitter.finatra.http.streaming.{FromReader, StreamingRequest, StreamingResponse}
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.streaming.JsonStreamParser
@@ -20,7 +23,7 @@ private object CallbackConverter {
     "https://twitter.github.io/finatra/user-guide/http/controllers.html#controllers-and-routing"
 }
 
-private[http] class CallbackConverter @Inject()(
+private[http] class CallbackConverter @Inject() (
   messageBodyManager: MessageBodyManager,
   responseBuilder: ResponseBuilder,
   mapper: ScalaObjectMapper,
@@ -61,9 +64,7 @@ private[http] class CallbackConverter @Inject()(
         request: Request =>
           val streamingRequest = streamIdentity match {
             case reader if runtimeClassEqs[Reader[_]](reader) =>
-              StreamingRequest(jsonStreamParser, request)(
-                FromReader.ReaderIdentity,
-                streamType)
+              StreamingRequest(jsonStreamParser, request)(FromReader.ReaderIdentity, streamType)
             case asyncStream if runtimeClassEqs[AsyncStream[_]](asyncStream) =>
               StreamingRequest.fromRequestToAsyncStream(jsonStreamParser, request)(streamType)
             case _ =>
@@ -116,8 +117,7 @@ private[http] class CallbackConverter @Inject()(
           requestCallback(request)
             .asInstanceOf[Future[Option[_]]].map(optionToHttpResponse(request))
       case response if response == manifest[Response] =>
-        request: Request =>
-          Future(requestCallback(request).asInstanceOf[Response])
+        request: Request => Future(requestCallback(request).asInstanceOf[Response])
       case future if runtimeClassEqs[Future[_]](future) =>
         request: Request =>
           requestCallback(request).asInstanceOf[Future[_]].map(createHttpResponse(request))

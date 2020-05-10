@@ -8,10 +8,7 @@ import com.twitter.util._
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class Publisher @Inject()(queue: Queue)
-    extends Closable
-    with Awaitable[Unit]
-    with Logging {
+class Publisher @Inject() (queue: Queue) extends Closable with Awaitable[Unit] with Logging {
 
   private[this] val Pool: ExecutorServiceFuturePool = FuturePools.fixedPool("PublisherPool", 1)
 

@@ -15,7 +15,7 @@ import javax.inject.{Inject, Singleton}
 import scala.runtime.BoxedUnit
 
 @Singleton
-private[finatra] class DefaultMessageBodyWriterImpl @Inject()(
+private[finatra] class DefaultMessageBodyWriterImpl @Inject() (
   @Flag(MessageBodyFlags.ResponseCharsetEnabled) includeContentTypeCharset: Boolean,
   fileResolver: FileResolver,
   mapper: ScalaObjectMapper)

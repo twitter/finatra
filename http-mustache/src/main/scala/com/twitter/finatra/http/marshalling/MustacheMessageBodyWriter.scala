@@ -4,10 +4,10 @@ import com.twitter.finatra.mustache.marshalling.MustacheService
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class MustacheMessageBodyWriter @Inject()(
+class MustacheMessageBodyWriter @Inject() (
   mustacheService: MustacheService,
-  templateLookup: MustacheTemplateLookup
-) extends MessageBodyWriter[Any] {
+  templateLookup: MustacheTemplateLookup)
+    extends MessageBodyWriter[Any] {
 
   /* Public */
 

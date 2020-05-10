@@ -41,10 +41,13 @@ import javax.inject.Singleton
  * @see [[https://twitter.github.io/finagle/guide/Clients.html Finagle Clients]]
  * @see [[https://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux What is ThriftMux?]]
  */
-abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[ServicePerEndpoint], MethodPerEndpoint](
+abstract class ThriftMethodBuilderClientModule[
+  ServicePerEndpoint <: Filterable[ServicePerEndpoint],
+  MethodPerEndpoint
+](
   implicit servicePerEndpointBuilder: ServicePerEndpointBuilder[ServicePerEndpoint],
-  methodPerEndpointBuilder: MethodPerEndpointBuilder[ServicePerEndpoint, MethodPerEndpoint]
-) extends TwitterModule
+  methodPerEndpointBuilder: MethodPerEndpointBuilder[ServicePerEndpoint, MethodPerEndpoint])
+    extends TwitterModule
     with ThriftClientModuleTrait {
 
   /**
@@ -137,7 +140,8 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
       configureServicePerEndpoint(
         injector,
         builder = new ThriftMethodBuilderFactory[ServicePerEndpoint](injector, methodBuilder),
-        servicePerEndpoint = methodBuilder.servicePerEndpoint[ServicePerEndpoint])
+        servicePerEndpoint = methodBuilder.servicePerEndpoint[ServicePerEndpoint]
+      )
 
     closeOnExit {
       val closable = asClosableThriftService(configuredServicePerEndpoint)

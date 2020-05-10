@@ -5,7 +5,12 @@ import com.twitter.finatra.kafka.serde.{AbstractSerde, ScalaSerdes}
 import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
 import com.twitter.finatra.kafkastreams.dsl.FinatraDslWindowedAggregations
 import com.twitter.finatra.kafkastreams.integration.aggregate.ZipkinAggregatorServer._
-import com.twitter.finatra.kafkastreams.transformer.aggregation.{FixedTimeWindowedSerde, TimeWindowed, WindowedValue, WindowedValueSerde}
+import com.twitter.finatra.kafkastreams.transformer.aggregation.{
+  FixedTimeWindowedSerde,
+  TimeWindowed,
+  WindowedValue,
+  WindowedValueSerde
+}
 import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.{Consumed, Produced}
@@ -54,9 +59,10 @@ object ZipkinAggregatorServer {
     }
 
     override def serialize(spanCollection: SpanCollection): Array[Byte] = {
-      val spans = spanCollection.spans.map { span =>
-        s"${span.traceId},${span.name},${span.spanId},${span.parentId.getOrElse(None)}"
-      }.mkString(":")
+      val spans = spanCollection.spans
+        .map { span =>
+          s"${span.traceId},${span.name},${span.spanId},${span.parentId.getOrElse(None)}"
+        }.mkString(":")
       s"${spanCollection.traceId}|$spans".getBytes
     }
   }
@@ -71,7 +77,8 @@ object ZipkinAggregatorServer {
   val IngestionConsumed: Consumed[TraceId, Span] = Consumed.`with`(IngestionKey, IngestionValue)
 
   val TracesTopic: String = "zipkin-traces"
-  val TracesKey: Serde[TimeWindowed[TraceId]] = FixedTimeWindowedSerde(TraceIdSerde, duration = 1.hour)
+  val TracesKey: Serde[TimeWindowed[TraceId]] =
+    FixedTimeWindowedSerde(TraceIdSerde, duration = 1.hour)
   val TracesValue: WindowedValueSerde[SpanCollection] = WindowedValueSerde(SpanCollectionSerde)
   val TracesProduced: Produced[TimeWindowed[TraceId], WindowedValue[SpanCollection]] =
     Produced.`with`(TracesKey, TracesValue)

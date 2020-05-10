@@ -7,15 +7,13 @@ import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassMappingExceptio
 import com.twitter.inject.Logging
 import javax.inject.Inject
 
-class CaseClassMappingExceptionMapper @Inject()(
-  response: ResponseBuilder
-) extends ExceptionMapper[CaseClassMappingException]
-  with Logging {
+class CaseClassMappingExceptionMapper @Inject() (
+  response: ResponseBuilder)
+    extends ExceptionMapper[CaseClassMappingException]
+    with Logging {
 
   override def toResponse(request: Request, exception: CaseClassMappingException): Response = {
-    response.badRequest(
-      ErrorsResponse(
-        toError(exception)))
+    response.badRequest(ErrorsResponse(toError(exception)))
   }
 
   private def toError(exception: CaseClassMappingException): Seq[String] = {

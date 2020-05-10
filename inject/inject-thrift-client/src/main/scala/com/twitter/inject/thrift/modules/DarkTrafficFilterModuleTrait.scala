@@ -9,8 +9,7 @@ import com.twitter.finatra.annotations.DarkTrafficFilterType
 import com.twitter.inject.Injector
 import javax.inject.Singleton
 
-private[modules] trait DarkTrafficFilterModuleTrait
-  extends ThriftClientModuleTrait {
+private[modules] trait DarkTrafficFilterModuleTrait extends ThriftClientModuleTrait {
 
   /** Name of the flag which captures the destination to which to send dark traffic. */
   protected def destFlagName: String = "thrift.dark.service.dest"
@@ -29,8 +28,8 @@ private[modules] trait DarkTrafficFilterModuleTrait
     injector: Injector,
     client: ThriftMux.Client,
     statsReceiver: StatsReceiver
-  ): ThriftMux.Client = super.initialClientConfiguration(injector, client, statsReceiver)
-    .withPerEndpointStats
+  ): ThriftMux.Client =
+    super.initialClientConfiguration(injector, client, statsReceiver).withPerEndpointStats
 
   /** Name of dark service client for use in metrics. */
   def label: String = "service"

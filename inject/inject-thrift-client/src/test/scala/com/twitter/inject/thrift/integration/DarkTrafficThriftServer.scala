@@ -3,7 +3,14 @@ package com.twitter.inject.thrift.integration
 import com.twitter.finagle.Filter
 import com.twitter.finatra.annotations.DarkTrafficFilterType
 import com.twitter.finatra.thrift.ThriftServer
-import com.twitter.finatra.thrift.filters.{AccessLoggingFilter, ExceptionMappingFilter, LoggingMDCFilter, StatsFilter, ThriftMDCFilter, TraceIdMDCFilter}
+import com.twitter.finatra.thrift.filters.{
+  AccessLoggingFilter,
+  ExceptionMappingFilter,
+  LoggingMDCFilter,
+  StatsFilter,
+  ThriftMDCFilter,
+  TraceIdMDCFilter
+}
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.inject.thrift.integration.controllers.EchoController
 import com.twitter.inject.thrift.integration.modules.DoEverythingThriftServerDarkTrafficFilterModule

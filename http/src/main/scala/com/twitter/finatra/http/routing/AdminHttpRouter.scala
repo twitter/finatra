@@ -84,7 +84,9 @@ private[http] object AdminHttpRouter extends Logging {
   /** Check if routes define a RouteIndex but are NOT eligible for TwitterServer HTTP Admin Interface index. */
   private def checkRoutesWithRouteIndex(
     routes: Seq[Route]
-  )(predicate: Route => Boolean): Seq[Issue] = {
+  )(
+    predicate: Route => Boolean
+  ): Seq[Issue] = {
     routes.filter(route => route.index.isDefined && predicate(route)).map { route =>
       Issue(s""""${route.summary}" specifies a RouteIndex but cannot be added to the index.""")
     }

@@ -28,18 +28,21 @@ private[finatra] class MustacheTemplateLookup {
 
   @throws[IllegalArgumentException]
   private def lookupViaAnnotation(obj: Any): MustacheTemplate = {
-    classToTemplateNameCache.atomicGetOrElseUpdate(obj.getClass, {
-      val mustacheAnnotation = obj.getClass.getAnnotation(classOf[Mustache])
+    classToTemplateNameCache.atomicGetOrElseUpdate(
+      obj.getClass, {
+        val mustacheAnnotation = obj.getClass.getAnnotation(classOf[Mustache])
 
-      if (mustacheAnnotation == null) {
-        throw new IllegalArgumentException(s"Object ${obj.getClass.getCanonicalName} has no Mustache annotation")
+        if (mustacheAnnotation == null) {
+          throw new IllegalArgumentException(
+            s"Object ${obj.getClass.getCanonicalName} has no Mustache annotation")
+        }
+
+        MustacheTemplate(
+          contentType = mustacheAnnotation.contentType,
+          name = mustacheAnnotation.value + ".mustache"
+        )
       }
-
-      MustacheTemplate(
-        contentType = mustacheAnnotation.contentType,
-        name = mustacheAnnotation.value + ".mustache"
-      )
-    })
+    )
   }
 
 }

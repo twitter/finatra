@@ -4,7 +4,9 @@ import com.twitter.finagle.http.Method
 import com.twitter.finatra.http.request.AnyMethod
 import scala.collection.mutable.{AnyRefMap => AMap}
 
-private[http] case class MatchedConstantRoute(routeOpt: Option[Route] = None, methodNotAllowed: Boolean = false)
+private[http] case class MatchedConstantRoute(
+  routeOpt: Option[Route] = None,
+  methodNotAllowed: Boolean = false)
 
 private[http] class ConstantRouteMap(constantRoutes: Seq[Route]) {
   // Use AnyRefMap for faster look up performance

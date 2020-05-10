@@ -5,8 +5,8 @@ import com.twitter.inject.Injector
 import com.twitter.inject.thrift.modules.ReqRepDarkTrafficFilterModule
 import com.twitter.snakeCase.thriftscala.SnakeCaseService
 
-object SnakeCaseThriftServerDarkTrafficFilterModule extends
-  ReqRepDarkTrafficFilterModule[SnakeCaseService.ReqRepServicePerEndpoint] {
+object SnakeCaseThriftServerDarkTrafficFilterModule
+    extends ReqRepDarkTrafficFilterModule[SnakeCaseService.ReqRepServicePerEndpoint] {
 
   /**
    * Function to determine if the request should be "sampled", e.g.

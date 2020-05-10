@@ -17,7 +17,7 @@ object ToReader {
     def apply[A](r: Reader[A]): Reader[A] = r
   }
 
-  implicit val AsyncStreamToReader: ToReader[AsyncStream] = new ToReader[AsyncStream]{
+  implicit val AsyncStreamToReader: ToReader[AsyncStream] = new ToReader[AsyncStream] {
     def apply[A](as: AsyncStream[A]): Reader[A] = Reader.fromAsyncStream(as)
   }
 }

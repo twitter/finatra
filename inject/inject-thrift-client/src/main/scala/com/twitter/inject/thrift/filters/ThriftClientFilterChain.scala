@@ -76,8 +76,8 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
   timeoutMultiplier: Int,
   retryMultiplier: Int,
   useHighResTimerForRetries: Boolean,
-  andThenService: AndThenService
-) extends Logging {
+  andThenService: AndThenService)
+    extends Logging {
 
   private val retryTimer = {
     if (useHighResTimerForRetries)
@@ -178,8 +178,9 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
    * @tparam T the type of the filter to instantiate from the injector
    * @return [[ThriftClientFilterChain]]
    */
-  def withExceptionFilter[T <: Filter[Req, Rep, Req, Rep]: Manifest]
-    : ThriftClientFilterChain[Req, Rep] = {
+  def withExceptionFilter[
+    T <: Filter[Req, Rep, Req, Rep]: Manifest
+  ]: ThriftClientFilterChain[Req, Rep] = {
     withExceptionFilter(injector.instance[T])
   }
 

@@ -164,7 +164,8 @@ class KafkaFinagleMetricsReporter extends MetricsReporter with Logging {
     } else if (metricName
         .name() == "assigned-partitions") { //See: https://issues.apache.org/jira/browse/KAFKA-4950 where an occasional error reading the assigned-partitions stat then leads to the instance hanging and not restarting
       false
-    } else if (metricName.group.contains("node")) { //By default we omit node level metrics which leads to lots of fine grained stats
+    } else if (metricName.group
+        .contains("node")) { //By default we omit node level metrics which leads to lots of fine grained stats
       includeNodeMetrics
     } else {
       metricName.group() != "kafka-metrics-count" &&

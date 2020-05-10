@@ -66,13 +66,10 @@ import com.twitter.util.{Await, Closable, Duration, Monitor, NullMonitor}
 trait StackClientModuleTrait[
   Req,
   Rep,
-  ClientType <: StackBasedClient[Req, Rep]
-    with Stack.Parameterized[ClientType]
-    with CommonParams[ClientType]
-    with ClientParams[ClientType]
-    with WithClientSession[ClientType]
-]
-  extends TwitterModule {
+  ClientType <: StackBasedClient[Req, Rep] with Stack.Parameterized[ClientType] with CommonParams[
+    ClientType
+  ] with ClientParams[ClientType] with WithClientSession[ClientType]]
+    extends TwitterModule {
 
   /**
    * Finagle client label.
@@ -176,8 +173,8 @@ trait StackClientModuleTrait[
     client: ClientType,
     statsReceiver: StatsReceiver
   ): ClientType = {
-    client
-      .withSession.acquisitionTimeout(sessionAcquisitionTimeout)
+    client.withSession
+      .acquisitionTimeout(sessionAcquisitionTimeout)
       .withRequestTimeout(requestTimeout)
       .withStatsReceiver(statsReceiver)
       .withMonitor(monitor)
@@ -217,7 +214,10 @@ trait StackClientModuleTrait[
    * @note Changing the default scope can have negative impacts on observability of metrics. Use
    *       caution when changing this value.
    */
-  protected def scopeStatsReceiver(injector: Injector, statsReceiver: StatsReceiver): StatsReceiver =
+  protected def scopeStatsReceiver(
+    injector: Injector,
+    statsReceiver: StatsReceiver
+  ): StatsReceiver =
     statsReceiver.scope("clnt")
 
   /**

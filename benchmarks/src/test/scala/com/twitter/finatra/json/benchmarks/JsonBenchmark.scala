@@ -1,8 +1,6 @@
 package com.twitter.finatra.json.benchmarks
 
-import com.fasterxml.jackson.module.scala.{
-  ScalaObjectMapper => JacksonScalaObjectMapper
-}
+import com.fasterxml.jackson.module.scala.{ScalaObjectMapper => JacksonScalaObjectMapper}
 import com.twitter.finatra.StdBenchAnnotations
 import com.twitter.finatra.benchmarks.domain.{TestDemographic, TestFormat}
 import com.twitter.finatra.jackson.ScalaObjectMapper
@@ -46,7 +44,9 @@ class JsonBenchmark extends StdBenchAnnotations {
       injector = null,
       new com.fasterxml.jackson.databind.ObjectMapper with JacksonScalaObjectMapper,
       ScalaObjectMapper.DefaultJacksonModules)
-    new ScalaObjectMapper(underlying) // do not use apply which will always install the default jackson modules on the underlying
+    new ScalaObjectMapper(
+      underlying
+    ) // do not use apply which will always install the default jackson modules on the underlying
   }
 
   @Benchmark
@@ -68,12 +68,10 @@ case class TestTaskParams(
   results: TaskTaskResults,
   start_time: DateTime,
   end_time: DateTime,
-  priority: String
-)
+  priority: String)
 
 case class TaskTaskResults(
   country_codes: Seq[String],
   group_by: Seq[String],
   format: Option[TestFormat],
-  demographics: Seq[TestDemographic]
-)
+  demographics: Seq[TestDemographic])

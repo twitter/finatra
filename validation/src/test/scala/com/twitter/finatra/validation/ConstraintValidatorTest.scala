@@ -16,12 +16,14 @@ abstract class ConstraintValidatorTest extends Test {
   ): ValidationResult = {
     val annotation = getValidationAnnotation[A](clazz, paramName, annotationClass)
     validator
-      .findFieldValidator[V](annotation).constraintValidator.asInstanceOf[ConstraintValidator[A, V]].isValid(annotation, value)
+      .findFieldValidator[V](annotation).constraintValidator.asInstanceOf[
+        ConstraintValidator[A, V]].isValid(annotation, value)
   }
 
   def getValidationAnnotations(clazz: Class[_], paramName: String): Array[Annotation] = {
     val AnnotatedClass(_, fields, _) = validator.getAnnotatedClass(clazz)
-    fields.get(paramName).map(_.fieldValidators.map(_.annotation)).getOrElse(Array.empty[Annotation])
+    fields
+      .get(paramName).map(_.fieldValidators.map(_.annotation)).getOrElse(Array.empty[Annotation])
   }
 
   def getValidationAnnotation[A <: Annotation](

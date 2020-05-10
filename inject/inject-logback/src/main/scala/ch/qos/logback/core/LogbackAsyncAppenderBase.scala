@@ -24,8 +24,8 @@ import scala.util.control.NonFatal
  *       [[com.twitter.inject.logback.AsyncAppender]]
  */
 abstract class LogbackAsyncAppenderBase(
-  statsReceiver: StatsReceiver
-) extends AsyncAppender {
+  statsReceiver: StatsReceiver)
+    extends AsyncAppender {
 
   def this() = this(LoadedStatsReceiver)
 

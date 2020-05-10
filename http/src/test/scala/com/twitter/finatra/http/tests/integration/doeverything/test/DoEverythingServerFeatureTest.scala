@@ -641,7 +641,8 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
       "/put_id_not_ignoring_body/42",
       putBody = "invalid JSON",
       andExpect = BadRequest,
-      withJsonBody = """
+      withJsonBody =
+        """
         {
           "errors":[
             "Unrecognized token 'invalid': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')"
@@ -1011,7 +1012,11 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   }
 
   test("HEAD") {
-    server.httpHead("/head", andExpect = Conflict, withBody = "") //HEAD responses cannot have bodies
+    server.httpHead(
+      "/head",
+      andExpect = Conflict,
+      withBody = ""
+    ) //HEAD responses cannot have bodies
   }
 
   test("PATCH") {
@@ -1027,7 +1032,8 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test("PATCH with JSON body") {
     server.httpPatch(
       "/patch",
-      patchBody = "{\"id\": \"11211\"}", // note: this is not json-patch (RFC6902), just PATCH with a JSON content-type.
+      patchBody =
+        "{\"id\": \"11211\"}", // note: this is not json-patch (RFC6902), just PATCH with a JSON content-type.
       andExpect = Ok,
       withBody = "patch"
     )

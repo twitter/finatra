@@ -5,13 +5,14 @@ import com.twitter.util.Future
 import javax.inject.Inject
 
 object FinagleRequestScopeFilter {
+
   /**
    * A [[com.twitter.finagle.Filter.TypeAgnostic]] version of the [[FinagleRequestScopeFilter]]
    * @param finagleRequestScope the custom [[com.google.inject.Scope]] to use.
    */
-  class TypeAgnostic @Inject()(
-    finagleRequestScope: FinagleRequestScope
-  ) extends Filter.TypeAgnostic {
+  class TypeAgnostic @Inject() (
+    finagleRequestScope: FinagleRequestScope)
+      extends Filter.TypeAgnostic {
     override def toFilter[Req, Rep]: Filter[Req, Rep, Req, Rep] =
       new FinagleRequestScopeFilter(finagleRequestScope)
   }
@@ -27,9 +28,9 @@ object FinagleRequestScopeFilter {
  * @note if you wish to use a [[com.twitter.finagle.Filter.TypeAgnostic]] version of this
  *       Filter, please see the [[com.twitter.inject.requestscope.FinagleRequestScopeFilter.TypeAgnostic]]
  */
-class FinagleRequestScopeFilter[Req, Rep] @Inject()(
-  finagleRequestScope: FinagleRequestScope
-) extends Filter[Req, Rep, Req, Rep] {
+class FinagleRequestScopeFilter[Req, Rep] @Inject() (
+  finagleRequestScope: FinagleRequestScope)
+    extends Filter[Req, Rep, Req, Rep] {
 
   def apply(request: Req, service: Service[Req, Rep]): Future[Rep] = {
     finagleRequestScope.let {

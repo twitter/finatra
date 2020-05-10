@@ -9,10 +9,10 @@ import com.twitter.util.Future
 import java.util.concurrent.atomic.AtomicInteger
 
 class EchoThriftService(
-  clientId: String
-) extends AbstractThriftService
-  with EchoService.ServicePerEndpoint
-  with Logging {
+  clientId: String)
+    extends AbstractThriftService
+    with EchoService.ServicePerEndpoint
+    with Logging {
 
   private val timesToEcho = new AtomicInteger(1)
 
@@ -24,10 +24,11 @@ class EchoThriftService(
     Future.value(args.msg * timesToEcho.get)
   }
 
-  def setTimesToEcho: Service[SetTimesToEcho.Args, SetTimesToEcho.SuccessType] = Service.mk { args: SetTimesToEcho.Args =>
-    info("setTimesToEcho " + args.times)
-    assertClientId(clientId)
-    timesToEcho.set(args.times) //mutation
-    Future.value(args.times)
+  def setTimesToEcho: Service[SetTimesToEcho.Args, SetTimesToEcho.SuccessType] = Service.mk {
+    args: SetTimesToEcho.Args =>
+      info("setTimesToEcho " + args.times)
+      assertClientId(clientId)
+      timesToEcho.set(args.times) //mutation
+      Future.value(args.times)
   }
 }

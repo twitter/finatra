@@ -1,7 +1,14 @@
 package com.twitter.finatra.thrift.tests
 
 import com.twitter.doeverything.thriftscala.{Answer, DoEverything}
-import com.twitter.doeverything.thriftscala.DoEverything.{Ask, Echo, Echo2, MagicNum, MoreThanTwentyTwoArgs, Uppercase}
+import com.twitter.doeverything.thriftscala.DoEverything.{
+  Ask,
+  Echo,
+  Echo2,
+  MagicNum,
+  MoreThanTwentyTwoArgs,
+  Uppercase
+}
 import com.twitter.finagle.{Filter, Service}
 import com.twitter.finatra.thrift.Controller
 import com.twitter.inject.Test
@@ -63,7 +70,8 @@ class ControllerTest extends Test {
       val echo: Service[Echo.Args, String] = handle(Echo) { args => futureExn }
       val echo2: Service[Echo2.Args, String] = handle(Echo2) { args => futureExn }
       val magicNum: Service[MagicNum.Args, String] = handle(MagicNum) { args => futureExn }
-      val moreThanTwentyTwoArgs: Service[MoreThanTwentyTwoArgs.Args, String] = handle(MoreThanTwentyTwoArgs) { args => futureExn }
+      val moreThanTwentyTwoArgs: Service[MoreThanTwentyTwoArgs.Args, String] =
+        handle(MoreThanTwentyTwoArgs) { args => futureExn }
       val ask: Service[Ask.Args, Answer] = handle(Ask) { args => futureExn }
     }
 
@@ -80,7 +88,8 @@ class ControllerTest extends Test {
       val echo: Service[Echo.Args, String] = handle(Echo) { args => futureExn }
       val echo2: Service[Echo2.Args, String] = handle(Echo2) { args => futureExn }
       val magicNum: Service[MagicNum.Args, String] = handle(MagicNum) { args => futureExn }
-      val moreThanTwentyTwoArgs: Service[MoreThanTwentyTwoArgs.Args, String] = handle(MoreThanTwentyTwoArgs) { args => futureExn }
+      val moreThanTwentyTwoArgs: Service[MoreThanTwentyTwoArgs.Args, String] =
+        handle(MoreThanTwentyTwoArgs) { args => futureExn }
       val ask: Service[Ask.Args, Answer] = handle(Ask) { args => futureExn }
 
       def check(): Boolean = {
@@ -107,4 +116,3 @@ class ControllerTest extends Test {
     assert(new TestController().check())
   }
 }
-

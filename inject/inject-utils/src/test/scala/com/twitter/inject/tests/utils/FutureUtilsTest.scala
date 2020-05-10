@@ -15,16 +15,13 @@ class FutureUtilsTest extends Test {
   }
 
   test("FutureUtils#sequentialMap") {
-    assertFuture(
-      FutureUtils.sequentialMap(Seq(1, 2, 3))(mockSvcCall),
-      Future(Seq("1", "2", "3")))
+    assertFuture(FutureUtils.sequentialMap(Seq(1, 2, 3))(mockSvcCall), Future(Seq("1", "2", "3")))
 
     ActionLog.asScala.toSeq should equal(Seq("S1", "E1", "S2", "E2", "S3", "E3"))
   }
 
   test("FutureUtils#collectMap") {
-    val result = Await.result(
-      FutureUtils.collectMap(Seq(1, 2, 3))(mockSvcCall))
+    val result = Await.result(FutureUtils.collectMap(Seq(1, 2, 3))(mockSvcCall))
     result.sorted should equal(Seq("1", "2", "3"))
 
     ActionLog.asScala.toSeq.sorted should equal(Seq("S1", "E1", "S2", "E2", "S3", "E3").sorted)

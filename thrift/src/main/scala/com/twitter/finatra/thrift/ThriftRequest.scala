@@ -19,5 +19,4 @@ case class ThriftRequest[T](
   methodName: String,
   traceId: TraceId,
   clientId: Option[ClientId],
-  args: T
-)
+  args: T)

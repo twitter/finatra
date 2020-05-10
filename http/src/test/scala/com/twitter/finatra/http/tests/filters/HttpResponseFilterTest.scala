@@ -66,7 +66,8 @@ class HttpResponseFilterTest extends Test {
     checkResponse(request, service, Some("http://www.twitter.com/non-absolute-path"))
   }
 
-  test("relative path URIs starting with http without a scheme should have http:// prepended to the location header") {
+  test(
+    "relative path URIs starting with http without a scheme should have http:// prepended to the location header") {
     val location = "http-non-absolute-path"
     val request = mkRequest
     val service = mkService(Some(location))
@@ -119,14 +120,20 @@ class HttpResponseFilterTest extends Test {
     val location = "../../../demo/jfc/SwingSet2/src/Foo.java"
     val request = mkRequest
     val service = mkService(Some(location))
-    checkResponse(request, service, Some("http://www.twitter.com/../../../demo/jfc/SwingSet2/src/Foo.java"))
+    checkResponse(
+      request,
+      service,
+      Some("http://www.twitter.com/../../../demo/jfc/SwingSet2/src/Foo.java"))
   }
 
   test("Absolute file paths without a scheme should have http:// prepended") {
     val location = "/../../../demo/jfc/SwingSet2/src/Foo.java"
     val request = mkRequest
     val service = mkService(Some(location))
-    checkResponse(request, service, Some("http://www.twitter.com/../../../demo/jfc/SwingSet2/src/Foo.java"))
+    checkResponse(
+      request,
+      service,
+      Some("http://www.twitter.com/../../../demo/jfc/SwingSet2/src/Foo.java"))
   }
 
   test("Relative file paths with a scheme should not modify the location header") {

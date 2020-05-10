@@ -45,7 +45,7 @@ private object MessageBodyManagerTest {
       Map(1 -> 0.0, 2 -> 3.14, 3 -> 0.577)
   }
 
-  class CarMessageBodyWriter @Inject()(mapper: ScalaObjectMapper) extends MessageBodyWriter[Car] {
+  class CarMessageBodyWriter @Inject() (mapper: ScalaObjectMapper) extends MessageBodyWriter[Car] {
     override def write(car: Car): WriterResponse = {
       WriterResponse(MediaType.JsonUtf8, mapper.writeValueAsBytes(Map("name" -> car.name)))
     }

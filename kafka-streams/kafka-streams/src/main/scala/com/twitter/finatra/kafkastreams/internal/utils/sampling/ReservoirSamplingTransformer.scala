@@ -19,7 +19,8 @@ class ReservoirSamplingTransformer[
   Value,
   SampleKey: ClassTag,
   SampleValue: ClassTag
-](statsReceiver: StatsReceiver,
+](
+  statsReceiver: StatsReceiver,
   toSampleKey: (Key, Value) => SampleKey,
   toSampleValue: (Key, Value) => SampleValue,
   sampleSize: Int,
@@ -60,9 +61,7 @@ class ReservoirSamplingTransformer[
     countStore.delete(key)
 
     sampleStore
-      .deleteRange(
-        IndexedSampleKey.rangeStart(key),
-        IndexedSampleKey.rangeEnd(key))
+      .deleteRange(IndexedSampleKey.rangeStart(key), IndexedSampleKey.rangeEnd(key))
 
     numExpiredCounter.incr()
   }

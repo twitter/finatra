@@ -48,7 +48,8 @@ class FlagsModuleTest extends Test {
   // Users should prefer the `c.t.inject.app.TestInjector`. Here we are testing the FlagsModule
   // with a collection of already parsed Flags. The FlagsModule is used in creation of the
   // underlying injector inside the TestInjector, thus we need to manually create an Injector.
-  private[this] val injector: Injector = Injector(Guice.createInjector(flagsModule, TwitterTypeConvertersModule))
+  private[this] val injector: Injector = Injector(
+    Guice.createInjector(flagsModule, TwitterTypeConvertersModule))
 
   test("inject flag with default") {
     injector.instance[RequiresFlagWithDefault].flagValue should equal("default value")
@@ -126,11 +127,16 @@ class FlagsModuleTest extends Test {
     }
 
     // can be asked for as Strings
-    injector.instance[String](AnnotationFlags.named("local.time")) should equal(defaultLocalTime.toString)
-    injector.instance[String](AnnotationFlags.named("twitter.time")) should equal(defaultTime.toString)
-    injector.instance[String](AnnotationFlags.named("twitter.duration")) should equal(defaultDuration.toString)
-    injector.instance[String](AnnotationFlags.named("storage.unit")) should equal(defaultStorageUnit.toString())
-    injector.instance[String](AnnotationFlags.named("some.address")) should equal(defaultInetSocketAddress.toString)
+    injector.instance[String](AnnotationFlags.named("local.time")) should equal(
+      defaultLocalTime.toString)
+    injector.instance[String](AnnotationFlags.named("twitter.time")) should equal(
+      defaultTime.toString)
+    injector.instance[String](AnnotationFlags.named("twitter.duration")) should equal(
+      defaultDuration.toString)
+    injector.instance[String](AnnotationFlags.named("storage.unit")) should equal(
+      defaultStorageUnit.toString())
+    injector.instance[String](AnnotationFlags.named("some.address")) should equal(
+      defaultInetSocketAddress.toString)
   }
 }
 

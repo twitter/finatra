@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 case class Foo(name: String)
 
-class DarkTrafficTestController @Inject()(objectMapper: ScalaObjectMapper) extends Controller {
+class DarkTrafficTestController @Inject() (objectMapper: ScalaObjectMapper) extends Controller {
   get("/plaintext") { _: Request =>
     "Hello, World!"
   }

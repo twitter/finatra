@@ -6,7 +6,7 @@ import com.twitter.inject.utils.Handler
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class TwitterCloneWarmupHandler @Inject()(httpWarmup: HttpWarmup) extends Handler {
+class TwitterCloneWarmupHandler @Inject() (httpWarmup: HttpWarmup) extends Handler {
 
   override def handle(): Unit = {
     httpWarmup.send(post("/tweet/").body("{}"), times = 5)()

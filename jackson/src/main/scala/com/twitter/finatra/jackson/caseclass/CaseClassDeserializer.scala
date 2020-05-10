@@ -737,7 +737,8 @@ private[jackson] class CaseClassDeserializer(
         newAnnotatedParameter(
           typeResolutionContext = new TypeResolutionContext.Basic(
             config.getTypeFactory,
-            javaType.getBindings), // use the TypeBindings from the top-level JavaType, not the parameter JavaType
+            javaType.getBindings
+          ), // use the TypeBindings from the top-level JavaType, not the parameter JavaType
           owner = annotatedWithParams,
           annotations = new AnnotationMap(),
           javaType = parameterJavaType,

@@ -6,6 +6,7 @@ import com.twitter.util.Future
 import org.apache.kafka.streams.Topology
 
 private[kafkastreams] object KafkaStreamsTopologyHandler {
+
   /**
    * Create a service function that prints the kafka topology and formats it in HTML.
    * @param topology Kafka Topology

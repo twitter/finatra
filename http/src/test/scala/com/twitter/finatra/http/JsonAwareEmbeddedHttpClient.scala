@@ -46,8 +46,8 @@ private[finatra] class JsonAwareEmbeddedHttpClient private[finatra] (
   streamResponses: Boolean,
   defaultHeaders: () => Map[String, String],
   mapper: ScalaObjectMapper,
-  disableLogging: Boolean
-) extends EmbeddedHttpClient(
+  disableLogging: Boolean)
+    extends EmbeddedHttpClient(
       name,
       port,
       tls,

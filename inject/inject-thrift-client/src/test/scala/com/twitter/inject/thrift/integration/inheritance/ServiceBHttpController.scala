@@ -5,7 +5,7 @@ import com.twitter.finatra.http.Controller
 import com.twitter.serviceB.thriftscala.ServiceB
 import javax.inject.Inject
 
-class ServiceBHttpController @Inject()(serviceB: ServiceB.MethodPerEndpoint) extends Controller {
+class ServiceBHttpController @Inject() (serviceB: ServiceB.MethodPerEndpoint) extends Controller {
 
   get("/echo") { request: Request =>
     serviceB.echo(request.params("msg"))

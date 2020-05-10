@@ -17,7 +17,8 @@ object RouteInfo {
 
   private[http] def sanitize(path: String): String = {
     RouteInfo.SanitizeRegexp.replaceAllIn(
-      RouteInfo.SlashRegexp.replaceAllIn(target = path.stripPrefix("/").stripSuffix("/"), replacement = "_"),
+      RouteInfo.SlashRegexp
+        .replaceAllIn(target = path.stripPrefix("/").stripSuffix("/"), replacement = "_"),
       "")
   }
 }

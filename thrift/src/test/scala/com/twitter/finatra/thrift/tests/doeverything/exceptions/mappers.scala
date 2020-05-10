@@ -21,7 +21,8 @@ class ReqRepFooExceptionMapper extends ExceptionMapper[FooException, Response[St
 }
 
 @Singleton
-class ReqRepDoEverythingExceptionMapper extends ExceptionMapper[DoEverythingException, Response[Answer]] {
+class ReqRepDoEverythingExceptionMapper
+    extends ExceptionMapper[DoEverythingException, Response[Answer]] {
   def handleException(throwable: DoEverythingException): Future[Response[Answer]] = {
     Future.value(Response(Answer("ReqRep DoEverythingException caught")))
   }
@@ -33,7 +34,6 @@ class DoEverythingExceptionMapper extends ExceptionMapper[DoEverythingException,
     Future.value(Answer("DoEverythingException caught"))
   }
 }
-
 
 @Singleton
 class BarExceptionMapper extends ExceptionMapper[BarException, String] {

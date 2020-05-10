@@ -9,8 +9,8 @@ import com.twitter.inject.thrift.modules.ThriftClientIdModule
 
 class TestHttpServer[C <: Controller: Manifest](
   serverName: String,
-  serverModules: TwitterModule*
-) extends HttpServer {
+  serverModules: TwitterModule*)
+    extends HttpServer {
   override val name = serverName
 
   override val modules: Seq[Module] =

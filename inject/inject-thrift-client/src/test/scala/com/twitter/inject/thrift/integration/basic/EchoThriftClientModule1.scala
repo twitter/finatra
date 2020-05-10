@@ -12,8 +12,9 @@ object EchoThriftClientModule1 extends ThriftClientModule[EchoService[Future]] {
   override val dest = "flag!thrift-echo-service"
 
   protected override def configureThriftMuxClient(
-    injector: Injector, 
-    client: ThriftMux.Client): ThriftMux.Client = {
+    injector: Injector,
+    client: ThriftMux.Client
+  ): ThriftMux.Client = {
     client
       .withResponseClassifier(PossiblyRetryable.ResponseClassifier)
   }

@@ -1,13 +1,19 @@
 package com.twitter.finatra.kafkastreams.query
 
 import com.twitter.conversions.DurationOps._
-import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer.{DateTimeMillis, WindowStartTime}
+import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer.{
+  DateTimeMillis,
+  WindowStartTime
+}
 import com.twitter.finatra.kafkastreams.transformer.aggregation.TimeWindowed
 import com.twitter.finatra.kafkastreams.transformer.domain.Time
 import com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraStoresGlobalManager
 import com.twitter.finatra.kafkastreams.utils.time._
 import com.twitter.finatra.streams.queryable.thrift.domain.ServiceShardId
-import com.twitter.finatra.streams.queryable.thrift.partitioning.{KafkaPartitioner, StaticServiceShardPartitioner}
+import com.twitter.finatra.streams.queryable.thrift.partitioning.{
+  KafkaPartitioner,
+  StaticServiceShardPartitioner
+}
 import com.twitter.inject.Logging
 import com.twitter.util.Duration
 import java.io.File
@@ -34,7 +40,9 @@ object QueryableFinatraWindowStore {
     queryableAfterClose: Duration
   ): Duration = {
     val windowLifetime = windowSize + allowedLateness + queryableAfterClose
-    (math.ceil(windowLifetime.inMillis.toDouble / windowSize.inMillis.toDouble).toLong * windowSize.inMillis).millis
+    (math
+      .ceil(
+        windowLifetime.inMillis.toDouble / windowSize.inMillis.toDouble).toLong * windowSize.inMillis).millis
   }
 
   /**
@@ -56,15 +64,14 @@ object QueryableFinatraWindowStore {
   ): (DateTimeMillis, DateTimeMillis) = {
     val endTime = queryParamEndTime.getOrElse(DateTimeUtils.currentTimeMillis)
 
-    val windowSnappedEndTime = TimeWindowed.windowEnd(
-        messageTime = Time(endTime),
-        size = windowSize)
+    val windowSnappedEndTime =
+      TimeWindowed.windowEnd(messageTime = Time(endTime), size = windowSize)
 
-    val startTimeMillis = queryParamStartTime.getOrElse(windowSnappedEndTime.millis - defaultQueryRange.inMillis)
+    val startTimeMillis =
+      queryParamStartTime.getOrElse(windowSnappedEndTime.millis - defaultQueryRange.inMillis)
 
-    val windowSnappedStartTime = TimeWindowed.windowStart(
-      messageTime = Time(startTimeMillis),
-      size = windowSize)
+    val windowSnappedStartTime =
+      TimeWindowed.windowStart(messageTime = Time(startTimeMillis), size = windowSize)
 
     (windowSnappedStartTime.millis, windowSnappedEndTime.millis)
   }
@@ -96,10 +103,7 @@ class QueryableFinatraWindowStore[K, V](
     numPartitions = numQueryablePartitions)
 
   private val defaultQueryRange = QueryableFinatraWindowStore
-    .defaultQueryRange(
-      windowSize,
-      allowedLateness,
-      queryableAfterClose)
+    .defaultQueryRange(windowSize, allowedLateness, queryableAfterClose)
 
   /**
    * Get the windowed values associated with this key and return them combined in a map. If the
@@ -127,7 +131,11 @@ class QueryableFinatraWindowStore[K, V](
       key,
       keySerializer)
 
-    val (startWindowRange, endWindowRange) = QueryableFinatraWindowStore.queryStartAndEndTime(windowSize, defaultQueryRange, startTime, endTime)
+    val (startWindowRange, endWindowRange) = QueryableFinatraWindowStore.queryStartAndEndTime(
+      windowSize,
+      defaultQueryRange,
+      startTime,
+      endTime)
     val windowedMap = new java.util.TreeMap[DateTimeMillis, V]
     var currentWindowStart = startWindowRange
 

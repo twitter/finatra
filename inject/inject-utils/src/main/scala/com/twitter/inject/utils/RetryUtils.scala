@@ -9,7 +9,10 @@ object RetryUtils extends Logging {
 
   /* Public */
 
-  def retryFuture[T](retryPolicy: RetryPolicy[Try[T]], suppress: Boolean = false)(
+  def retryFuture[T](
+    retryPolicy: RetryPolicy[Try[T]],
+    suppress: Boolean = false
+  )(
     func: => Future[T]
   ): Future[T] = {
     exceptionsToFailedFuture(func) transform { result =>

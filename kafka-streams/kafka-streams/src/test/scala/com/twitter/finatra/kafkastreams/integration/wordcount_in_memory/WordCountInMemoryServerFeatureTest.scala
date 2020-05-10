@@ -54,7 +54,11 @@ class WordCountInMemoryServerFeatureTest extends KafkaStreamsFeatureTest {
       2.0f
     )
 
-    assert(server.inMemoryStats.stats.get("kafka/consumer/text-lines-topic/time_since_record_timestamp_ms").isEmpty)
-    assert(server.inMemoryStats.stats.get("kafka/consumer/text_lines_topic/time_since_record_timestamp_ms").isDefined)
+    assert(
+      server.inMemoryStats.stats
+        .get("kafka/consumer/text-lines-topic/time_since_record_timestamp_ms").isEmpty)
+    assert(
+      server.inMemoryStats.stats
+        .get("kafka/consumer/text_lines_topic/time_since_record_timestamp_ms").isDefined)
   }
 }

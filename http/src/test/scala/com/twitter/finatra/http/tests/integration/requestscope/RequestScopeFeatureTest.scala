@@ -9,7 +9,11 @@ import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
 import com.twitter.finatra.utils.FuturePools
 import com.twitter.inject.TwitterModule
-import com.twitter.inject.requestscope.{FinagleRequestScope, FinagleRequestScopeFilter, RequestScopeBinding}
+import com.twitter.inject.requestscope.{
+  FinagleRequestScope,
+  FinagleRequestScopeFilter,
+  RequestScopeBinding
+}
 import com.twitter.inject.server.FeatureTest
 import com.twitter.inject.utils.RetryPolicyUtils.constantRetry
 import com.twitter.inject.utils.RetryUtils.retryFuture
@@ -47,12 +51,17 @@ class RequestScopeFeatureTest extends FeatureTest {
         "Pool2 User Sally said yo"
       ).sorted
 
-      await(retryFuture(constantRetry[Boolean](start = 1.second, numRetries = 200, shouldRetry = {
-        case Return(expectedMatches) => !expectedMatches
-      })) {
+      await(
+        retryFuture(
+          constantRetry[Boolean](
+            start = 1.second,
+            numRetries = 200,
+            shouldRetry = {
+              case Return(expectedMatches) => !expectedMatches
+            })) {
 
-        Future.value(FuturePooledController.msgLog.asScala.toSeq.sorted == expectedMsgs)
-      }) should be(true)
+          Future.value(FuturePooledController.msgLog.asScala.toSeq.sorted == expectedMsgs)
+        }) should be(true)
 
       FuturePooledController.msgLog.clear()
     }
@@ -64,7 +73,7 @@ class RequestScopeFeatureTest extends FeatureTest {
 
 /* ==================================================== */
 /* Request Scope Filter */
-class TestUserRequestScopeFilter @Inject()(requestScope: FinagleRequestScope)
+class TestUserRequestScopeFilter @Inject() (requestScope: FinagleRequestScope)
     extends SimpleFilter[Request, Response] {
 
   override def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
@@ -94,7 +103,7 @@ object FuturePooledController {
   val pool2 = FuturePools.unboundedPool("FuturePooledController 2")
 }
 
-class FuturePooledController @Inject()(testUserProvider: Provider[TestUser]) extends Controller {
+class FuturePooledController @Inject() (testUserProvider: Provider[TestUser]) extends Controller {
 
   get("/hi") { request: Request =>
     val msg = request.params("msg")

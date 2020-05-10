@@ -51,8 +51,8 @@ class MaxRequestFowardingDepthTest extends Test {
       twitterServer = new HttpServer {
         override def configureHttp(router: HttpRouter): Unit = {
           router
-           .add(new ForwarderHelperController(5, injector.instance[HttpForward]))
-           .add(new MaxForwardController(5, injector.instance[HttpForward]))
+            .add(new ForwarderHelperController(5, injector.instance[HttpForward]))
+            .add(new MaxForwardController(5, injector.instance[HttpForward]))
         }
       }
     )
@@ -146,7 +146,8 @@ class MaxRequestFowardingDepthTest extends Test {
         server.start()
       }
 
-      e.getMessage should be("requirement failed: Maximum request forwarding depth: -5, must be greater than zero.")
+      e.getMessage should be(
+        "requirement failed: Maximum request forwarding depth: -5, must be greater than zero.")
     }
   }
 
@@ -166,7 +167,8 @@ class MaxRequestFowardingDepthTest extends Test {
         server.start()
       }
 
-      e.getMessage should be("requirement failed: Maximum request forwarding depth: 0, must be greater than zero.")
+      e.getMessage should be(
+        "requirement failed: Maximum request forwarding depth: 0, must be greater than zero.")
     }
   }
 

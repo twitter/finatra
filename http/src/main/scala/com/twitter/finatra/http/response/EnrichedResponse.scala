@@ -5,10 +5,7 @@ import com.twitter.finagle.http._
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.exceptions.HttpResponseException
-import com.twitter.finatra.http.marshalling.{
-  MessageBodyManager,
-  WriterResponse
-}
+import com.twitter.finatra.http.marshalling.{MessageBodyManager, WriterResponse}
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.utils.FileResolver
 import com.twitter.inject.Logging
@@ -628,9 +625,10 @@ private final case class EnrichedResponseImpl(
   def file(file: String): EnrichedResponse = {
     val fileWithSlash = if (file.startsWith("/")) file else "/" + file
 
-    fileResolver.getInputStream(fileWithSlash).map { is =>
-      body(None, is).contentType(fileResolver.getContentType(fileWithSlash))
-    }.getOrElse(responseBuilder.notFound.plain(fileWithSlash + " not found"))
+    fileResolver
+      .getInputStream(fileWithSlash).map { is =>
+        body(None, is).contentType(fileResolver.getContentType(fileWithSlash))
+      }.getOrElse(responseBuilder.notFound.plain(fileWithSlash + " not found"))
   }
 
   /**

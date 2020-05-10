@@ -1,6 +1,13 @@
 package com.twitter.finatra.http.tests.response
 
-import com.twitter.finagle.http.{Fields, MediaType, Request, Response, Status, Cookie => FinagleCookie}
+import com.twitter.finagle.http.{
+  Fields,
+  MediaType,
+  Request,
+  Response,
+  Status,
+  Cookie => FinagleCookie
+}
 import com.twitter.finatra.http.marshalling.MessageBodyFlags
 import com.twitter.finatra.http.modules.ResponseBuilderModule
 import com.twitter.finatra.http.response.ResponseBuilder
@@ -69,7 +76,9 @@ class ResponseBuilderTest extends IntegrationTest with Mockito {
     // we should only return the charset on appropriate content types
     val bytes: Array[Byte] = Array[Byte](10, -32, 17, 22)
     var response = responseBuilder.ok(bytes)
-    response.headerMap(Fields.ContentType) should be(MediaType.OctetStream) // does not include charset
+    response.headerMap(Fields.ContentType) should be(
+      MediaType.OctetStream
+    ) // does not include charset
     response.contentLengthOrElse(0) should equal(bytes.length)
 
     response = responseBuilder.ok("""Hello, world""")

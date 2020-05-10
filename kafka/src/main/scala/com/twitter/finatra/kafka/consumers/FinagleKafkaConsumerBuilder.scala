@@ -21,6 +21,7 @@ import org.apache.kafka.common.serialization.Deserializer
  * @tparam Self The type of the concrete builder that includes these methods.
  */
 trait FinagleKafkaConsumerBuilderMethods[K, V, Self] extends KafkaConsumerConfigMethods[Self] {
+
   /**
    * The KafkaConsumerConfig config, which can be used to build KafkaConsumer
    */
@@ -81,7 +82,7 @@ trait FinagleKafkaConsumerBuilderMethods[K, V, Self] extends KafkaConsumerConfig
   /**
    * Create the native KafkaConsumer client.
    */
-  def buildClient() : KafkaConsumer[K, V] = {
+  def buildClient(): KafkaConsumer[K, V] = {
     validateConfigs(config)
     new KafkaConsumer[K, V](
       config.properties,
@@ -106,8 +107,7 @@ trait FinagleKafkaConsumerBuilderMethods[K, V, Self] extends KafkaConsumerConfig
 }
 
 case class FinagleKafkaConsumerBuilder[K, V](
-  override val config: FinagleKafkaConsumerConfig[K, V] =
-    FinagleKafkaConsumerConfig[K, V]())
+  override val config: FinagleKafkaConsumerConfig[K, V] = FinagleKafkaConsumerConfig[K, V]())
     extends FinagleKafkaConsumerBuilderMethods[K, V, FinagleKafkaConsumerBuilder[K, V]] {
   override protected def fromFinagleConsumerConfig(config: FinagleKafkaConsumerConfig[K, V]): This =
     new FinagleKafkaConsumerBuilder[K, V](config)

@@ -48,7 +48,7 @@ object map {
       self.filterKeys(!func(_))
     }
 
-    def toSortedMap(implicit ordering: Ordering[K]): SortedMap[K,V] = {
+    def toSortedMap(implicit ordering: Ordering[K]): SortedMap[K, V] = {
       SortedMap[K, V]() ++ self
     }
 
@@ -57,8 +57,8 @@ object map {
   implicit class RichJavaMap[K, V](val self: java.util.Map[K, V]) extends AnyVal {
     import scala.collection.JavaConverters._
 
-    def toOrderedMap: Map[K,V] = {
-      val entries = new ArrayBuffer[(K,V)]
+    def toOrderedMap: Map[K, V] = {
+      val entries = new ArrayBuffer[(K, V)]
       self.asScala.foreach(entries.append(_))
       immutable.ListMap(entries: _*)
     }
@@ -72,8 +72,8 @@ object map {
   }
 
   implicit class RichMapOfMaps[A, B, C](
-    val self: scala.collection.Map[A, scala.collection.Map[B, C]]
-  ) extends AnyVal {
+    val self: scala.collection.Map[A, scala.collection.Map[B, C]])
+      extends AnyVal {
 
     /**
      * Swap the keys between the inner and outer maps
@@ -116,14 +116,15 @@ object map {
     }
   }
 
-  implicit class RichConcurrentMap[A, B](val map: ConcurrentHashMap[A, B])
-      extends AnyVal {
+  implicit class RichConcurrentMap[A, B](val map: ConcurrentHashMap[A, B]) extends AnyVal {
     def atomicGetOrElseUpdate(key: A, op: => B): B = {
-      map.computeIfAbsent(key, new java.util.function.Function[A, B]() {
-        override def apply(key: A): B = {
-          op
-        }
-      })
+      map.computeIfAbsent(
+        key,
+        new java.util.function.Function[A, B]() {
+          override def apply(key: A): B = {
+            op
+          }
+        })
     }
   }
 }

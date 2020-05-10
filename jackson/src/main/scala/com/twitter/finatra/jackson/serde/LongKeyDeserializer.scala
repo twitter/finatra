@@ -39,7 +39,8 @@ private[finatra] object LongKeyDeserializers extends JacksonModule {
 
   private def isWrappedLong(clazz: Class[_]): Boolean = {
     val reflector =
-      Reflector.describe(classDescribable(clazz))
+      Reflector
+        .describe(classDescribable(clazz))
         .asInstanceOf[ClassDescriptor]
         .constructors
         .head

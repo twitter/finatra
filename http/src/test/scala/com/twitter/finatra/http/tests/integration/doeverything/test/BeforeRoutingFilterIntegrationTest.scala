@@ -25,12 +25,11 @@ class BeforeRoutingFilterIntegrationTest extends Test with Mockito {
       disableTestLogging = true)
 
     try {
-      server.httpGet(
-        "/a_route_uri",
-        andExpect = Status.InternalServerError)
+      server.httpGet("/a_route_uri", andExpect = Status.InternalServerError)
 
       server.inMemoryStats.counters.assert("route/a_route_uri/GET/status/500/mapped/Exception", 1)
-      server.inMemoryStats.counters.assert("service/failure/Internal/Unhandled/java.lang.Exception", 1)
+      server.inMemoryStats.counters
+        .assert("service/failure/Internal/Unhandled/java.lang.Exception", 1)
     } finally {
       server.close()
     }
@@ -42,19 +41,20 @@ class BeforeRoutingFilterIntegrationTest extends Test with Mockito {
         override def configureHttp(router: HttpRouter): Unit = {
           router
             .filter[ExceptionMappingFilter[Request]](beforeRouting = true)
-            .filter(new CheckRouteInfoOnResponseFilter("/failing", "failing_route"), beforeRouting = true)
+            .filter(
+              new CheckRouteInfoOnResponseFilter("/failing", "failing_route"),
+              beforeRouting = true)
             .add[FailingController]
         }
       },
       disableTestLogging = true)
 
     try {
-      server.httpGet(
-        "/failing",
-        andExpect = Status.InternalServerError)
+      server.httpGet("/failing", andExpect = Status.InternalServerError)
 
       server.inMemoryStats.counters.assert("route/failing/GET/status/500/mapped/Exception", 1)
-      server.inMemoryStats.counters.assert("service/failure/Internal/Unhandled/java.lang.Exception", 1)
+      server.inMemoryStats.counters
+        .assert("service/failure/Internal/Unhandled/java.lang.Exception", 1)
     } finally {
       server.close()
     }
@@ -74,7 +74,9 @@ class NullController extends Controller {
   }
 }
 
-class CheckRouteInfoOnResponseFilter(path: String, name: String) extends SimpleFilter[Request, Response] with Matchers {
+class CheckRouteInfoOnResponseFilter(path: String, name: String)
+    extends SimpleFilter[Request, Response]
+    with Matchers {
   def apply(request: Request, svc: Service[Request, Response]): Future[Response] = {
     svc(request).map { response =>
       val info = RouteInfo(request).get

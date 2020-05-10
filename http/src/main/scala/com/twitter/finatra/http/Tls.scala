@@ -45,8 +45,7 @@ trait Tls { self: HttpServer =>
         certificateFile = new File(certificatePathFlag()),
         keyFile = new File(keyPathFlag()))
 
-    server
-      .withTransport
+    server.withTransport
       .tls(SslServerConfiguration(keyCredentials))
   }
 }

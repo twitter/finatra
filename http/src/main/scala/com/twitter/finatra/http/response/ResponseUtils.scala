@@ -63,7 +63,10 @@ object ResponseUtils {
 
   private def expectResponseStatus(
     response: Response
-  )(expectedStatus: Status = null, withBody: String = null): Unit = {
+  )(
+    expectedStatus: Status = null,
+    withBody: String = null
+  ): Unit = {
 
     assert(
       expectedStatus == null || response.status == expectedStatus,

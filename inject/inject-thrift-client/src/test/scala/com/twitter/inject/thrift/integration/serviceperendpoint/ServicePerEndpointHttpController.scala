@@ -8,10 +8,10 @@ import com.twitter.test.thriftscala.EchoService
 import com.twitter.test.thriftscala.EchoService.{Echo, SetTimesToEcho}
 import javax.inject.Inject
 
-class ServicePerEndpointHttpController @Inject()(
+class ServicePerEndpointHttpController @Inject() (
   greeter: Greeter.ServicePerEndpoint,
   echo: EchoService.ServicePerEndpoint)
-  extends Controller {
+    extends Controller {
 
   get("/hi") { request: Request =>
     greeter.hi(Hi.Args(name = request.params("name")))
@@ -22,7 +22,8 @@ class ServicePerEndpointHttpController @Inject()(
   }
 
   get("/bye") { request: Request =>
-    greeter.bye(Bye.Args(name = request.params("name"), age = request.getIntParam("age"))).map(_.msg)
+    greeter
+      .bye(Bye.Args(name = request.params("name"), age = request.getIntParam("age"))).map(_.msg)
   }
 
   get("/echo") { request: Request =>

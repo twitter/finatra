@@ -7,7 +7,7 @@ import com.twitter.inject.Logging
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class HttpResponseExceptionMapper @Inject()(response: ResponseBuilder)
+class HttpResponseExceptionMapper @Inject() (response: ResponseBuilder)
     extends ExceptionMapper[HttpResponseException]
     with Logging {
 

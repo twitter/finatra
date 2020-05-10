@@ -13,9 +13,7 @@ import scala.reflect.classTag
  * ./sbt 'project benchmarks' 'jmh:run FinagleRequestScopeBenchmark'
  */
 @State(Scope.Thread)
-class FinagleRequestScopeBenchmark
-  extends StdBenchAnnotations
-  with HttpBenchmark {
+class FinagleRequestScopeBenchmark extends StdBenchAnnotations with HttpBenchmark {
 
   val route = Route(
     name = "groups",

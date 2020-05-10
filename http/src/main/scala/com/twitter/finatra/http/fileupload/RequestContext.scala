@@ -5,7 +5,7 @@ import com.twitter.io.BufInputStream
 import java.io.InputStream
 
 private[fileupload] class RequestContext(request: Request)
-  extends org.apache.commons.fileupload.RequestContext {
+    extends org.apache.commons.fileupload.RequestContext {
 
   override def getCharacterEncoding: String = {
     request.charset.orNull

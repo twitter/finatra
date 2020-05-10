@@ -7,9 +7,9 @@ import com.twitter.greeter.thriftscala.Greeter.{Bye, Hello, Hi}
 import com.twitter.scrooge
 import javax.inject.Inject
 
-class ReqRepServicePerEndpointHttpController @Inject()(
-  greeter: Greeter.ReqRepServicePerEndpoint
-) extends Controller {
+class ReqRepServicePerEndpointHttpController @Inject() (
+  greeter: Greeter.ReqRepServicePerEndpoint)
+    extends Controller {
 
   get("/hi") { request: Request =>
     greeter.hi(scrooge.Request(Hi.Args(name = request.params("name")))).map(_.value)

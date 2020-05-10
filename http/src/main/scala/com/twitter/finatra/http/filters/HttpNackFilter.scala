@@ -26,7 +26,7 @@ private object HttpNackFilter {
  * @see [[https://twitter.github.io/finagle/guide/Glossary.html?highlight=nack Finagle NACK]]
  */
 @Singleton
-class HttpNackFilter[R <: Request] @Inject()(statsReceiver: StatsReceiver)
+class HttpNackFilter[R <: Request] @Inject() (statsReceiver: StatsReceiver)
     extends SimpleFilter[R, Response] {
 
   def apply(request: R, service: Service[R, Response]): Future[Response] = {

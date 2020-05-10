@@ -13,8 +13,7 @@ object HttpResponseClassifier {
    * @see [[com.twitter.finagle.http.service.HttpResponseClassifier.ServerErrorsAsFailures]]
    */
   val ServerErrorsAsFailures =
-    HttpResponseClassifier(
-      finagle.HttpResponseClassifier.ServerErrorsAsFailures)
+    HttpResponseClassifier(finagle.HttpResponseClassifier.ServerErrorsAsFailures)
 }
 
 /**
@@ -24,7 +23,7 @@ object HttpResponseClassifier {
  * @param underlying the [[com.twitter.finagle.service.ResponseClassifier]] to wrap.
  */
 case class HttpResponseClassifier(underlying: ResponseClassifier)
-  extends PartialFunction[ReqRep, ResponseClass] {
+    extends PartialFunction[ReqRep, ResponseClass] {
   override def orElse[A1 <: ReqRep, B1 >: ResponseClass](
     that: PartialFunction[A1, B1]
   ): PartialFunction[A1, B1] = underlying.orElse(that)

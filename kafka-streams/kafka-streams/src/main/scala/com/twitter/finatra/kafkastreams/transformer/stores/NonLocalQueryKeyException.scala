@@ -5,7 +5,7 @@ import com.twitter.finatra.streams.queryable.thrift.domain.ServiceShardId
 case class NonLocalQueryKeyException[K](
   primaryKey: K,
   serviceShardIds: IndexedSeq[ServiceShardId])
-  extends Exception {
+    extends Exception {
 
   override def getMessage: String = {
     s"Non local key $primaryKey. Query $serviceShardIds which are responsible for this key. Note: " +

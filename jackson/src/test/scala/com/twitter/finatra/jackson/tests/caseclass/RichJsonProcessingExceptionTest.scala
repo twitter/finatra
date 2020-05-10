@@ -65,7 +65,8 @@ class RichJsonProcessingExceptionTest extends Test with Mockito {
       Collections.emptySet().asInstanceOf[util.Collection[Object]])
 
     // should be from the ignored property exception message via `getOriginalMessage`
-    e.errorMessage should equal("""Ignored field "noname" (class com.twitter.finatra.jackson.tests.CaseClassWithAllTypes$) encountered; mapper configured not to allow this""")
+    e.errorMessage should equal(
+      """Ignored field "noname" (class com.twitter.finatra.jackson.tests.CaseClassWithAllTypes$) encountered; mapper configured not to allow this""")
   }
 
   test("JsonParseException with cause") {

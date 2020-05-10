@@ -62,8 +62,10 @@ class FinagleMDCAdapterTest extends Test {
   }
 
   test("finagle MDC adapter -- no let") {
-    adapter.get("name") should equal(null) // doesn't exist -- no map in the LocalContext, doesn't error
-    adapter.put("name", "bob")  // does nothing -- no map in LocalContext
+    adapter.get("name") should equal(
+      null
+    ) // doesn't exist -- no map in the LocalContext, doesn't error
+    adapter.put("name", "bob") // does nothing -- no map in LocalContext
     adapter.get("name") should equal(null) // still doesn't exist
   }
 }

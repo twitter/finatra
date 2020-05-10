@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets
 import javax.inject.Inject
 import scala.collection.mutable
 
-class TweetsController @Inject()(
+class TweetsController @Inject() (
   tweetsRepository: TweetsRepository,
   onWriteLog: mutable.ArrayBuffer[String])
     extends Controller {

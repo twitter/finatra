@@ -26,8 +26,8 @@ class HeartBeatServerTopologyFeatureTest extends TopologyFeatureTest {
   test("Publish single value from input to output") {
     topologyTester.stats.assertCounter(transformStatName, 0)
     topologyTester.stats.assertCounter(punctuateStatName, 0)
-    inputTopic.pipeInput(1,1)
-    outputTopic.assertOutput(1,1)
+    inputTopic.pipeInput(1, 1)
+    outputTopic.assertOutput(1, 1)
     outputTopic.readAllOutput().isEmpty should be(true)
     topologyTester.stats.assertCounter(transformStatName, 1)
     topologyTester.stats.assertCounter(punctuateStatName, 0)
@@ -36,8 +36,8 @@ class HeartBeatServerTopologyFeatureTest extends TopologyFeatureTest {
   test("Publish single value and single heartbeat from input to output") {
     topologyTester.stats.assertCounter(transformStatName, 0)
     topologyTester.stats.assertCounter(punctuateStatName, 0)
-    inputTopic.pipeInput(1,1)
-    outputTopic.assertOutput(1,1)
+    inputTopic.pipeInput(1, 1)
+    outputTopic.assertOutput(1, 1)
     topologyTester.advanceWallClockTime(1.seconds)
     val punctuatedTime = startingWallClockTime.getMillis + 1.second.inMillis
     outputTopic.assertOutput(punctuatedTime, punctuatedTime)
@@ -105,22 +105,22 @@ class HeartBeatServerTopologyFeatureTest extends TopologyFeatureTest {
   test("Publish multiple values and multiple heartbeats from input to output") {
     topologyTester.stats.assertCounter(transformStatName, 0)
     topologyTester.stats.assertCounter(punctuateStatName, 0)
-    inputTopic.pipeInput(1,1)
+    inputTopic.pipeInput(1, 1)
     topologyTester.advanceWallClockTime(1.seconds)
-    inputTopic.pipeInput(2,2)
+    inputTopic.pipeInput(2, 2)
     topologyTester.advanceWallClockTime(1.seconds)
-    inputTopic.pipeInput(3,3)
+    inputTopic.pipeInput(3, 3)
     topologyTester.advanceWallClockTime(1.seconds)
 
-    outputTopic.assertOutput(1,1)
+    outputTopic.assertOutput(1, 1)
     val punctuatedTime1 = startingWallClockTime.getMillis + 1.second.inMillis
     outputTopic.assertOutput(punctuatedTime1, punctuatedTime1)
 
-    outputTopic.assertOutput(2,2)
+    outputTopic.assertOutput(2, 2)
     val punctuatedTime2 = punctuatedTime1 + 1.second.inMillis
     outputTopic.assertOutput(punctuatedTime2, punctuatedTime2)
 
-    outputTopic.assertOutput(3,3)
+    outputTopic.assertOutput(3, 3)
     val punctuatedTime3 = punctuatedTime2 + 1.second.inMillis
     outputTopic.assertOutput(punctuatedTime3, punctuatedTime3)
 

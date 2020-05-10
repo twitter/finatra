@@ -39,14 +39,17 @@ class StartupIntegrationTest extends Test {
   }
 
   test("embedded raw com.twitter.server.Twitter starts up") {
-    val server = new EmbeddedTwitterServer(twitterServer = new ExtendedBaseTwitterServer, disableTestLogging = true)
+    val server = new EmbeddedTwitterServer(
+      twitterServer = new ExtendedBaseTwitterServer,
+      disableTestLogging = true)
     run(server) {
       server.assertHealthy()
     }
   }
 
   test("TwitterServer starts up") {
-    val server = new EmbeddedTwitterServer(twitterServer = new TwitterServer {}, disableTestLogging = true)
+    val server =
+      new EmbeddedTwitterServer(twitterServer = new TwitterServer {}, disableTestLogging = true)
     run(server) {
       server.assertHealthy()
     }
@@ -62,7 +65,8 @@ class StartupIntegrationTest extends Test {
   }
 
   test("ensure startup fails when base twitter server preMain throws exception") {
-    val server = new EmbeddedTwitterServer(new PremainErrorBaseTwitterServer, disableTestLogging = true)
+    val server =
+      new EmbeddedTwitterServer(new PremainErrorBaseTwitterServer, disableTestLogging = true)
     run(server) {
       intercept[Exception] {
         server.start()
@@ -89,7 +93,8 @@ class StartupIntegrationTest extends Test {
       }
     }
 
-    val server = new EmbeddedTwitterServer(twitterServer = new WarmupServer, disableTestLogging = true)
+    val server =
+      new EmbeddedTwitterServer(twitterServer = new WarmupServer, disableTestLogging = true)
     run(server) {
       server.assertHealthy()
     }
@@ -103,7 +108,8 @@ class StartupIntegrationTest extends Test {
   }
 
   test("calling install with a TwitterModule throws exception") {
-    val server = new EmbeddedTwitterServer(new ServerWithTwitterModuleInstall, disableTestLogging = true)
+    val server =
+      new EmbeddedTwitterServer(new ServerWithTwitterModuleInstall, disableTestLogging = true)
     run(server) {
       intercept[Exception] {
         server.start()
@@ -162,19 +168,22 @@ class StartupIntegrationTest extends Test {
 
   test("fatal server errors on shutdown") {
     // FatalErrorOnExitTwitterServer throws 3 fatal errors on shutdown
-    val server = new EmbeddedTwitterServer(new FatalErrorOnExitTwitterServer, disableTestLogging = true)
+    val server =
+      new EmbeddedTwitterServer(new FatalErrorOnExitTwitterServer, disableTestLogging = true)
 
     server.assertHealthy()
 
     intercept[InterruptedException] { // the first fatal exception escapes.
       server.close()
     }
-    server.assertCleanShutdown() // only captures NonFatal exceptions as Fatals already fail closing.
+    server
+      .assertCleanShutdown() // only captures NonFatal exceptions as Fatals already fail closing.
   }
 
   test("fatal base server error on shutdown") {
     // FatalOnExitBaseTwitterServer throws 1 fatal on shutdown
-    val server = new EmbeddedTwitterServer(new FatalOnExitBaseTwitterServer, disableTestLogging = true)
+    val server =
+      new EmbeddedTwitterServer(new FatalOnExitBaseTwitterServer, disableTestLogging = true)
 
     server.assertHealthy()
     server.close()
@@ -265,17 +274,20 @@ class ExtendedBaseTwitterServer extends BaseTwitterServer {
 class ErrorOnExitTwitterServer extends TwitterServer {
   var moduleAShutdown, moduleBShutdown = false
 
-  override val modules: Seq[Module] = Seq(new TwitterModule {
-    override protected[inject] def singletonShutdown(injector: Injector): Unit = {
-      moduleAShutdown = true
-      throw new Exception("FORCED EXCEPTION in SingletonShutdown")
+  override val modules: Seq[Module] = Seq(
+    new TwitterModule {
+      override protected[inject] def singletonShutdown(injector: Injector): Unit = {
+        moduleAShutdown = true
+        throw new Exception("FORCED EXCEPTION in SingletonShutdown")
+      }
+    },
+    new TwitterModule {
+      override protected[inject] def singletonShutdown(injector: Injector): Unit = {
+        moduleBShutdown = true
+        throw new Exception("FORCED EXCEPTION in SingletonShutdown")
+      }
     }
-  }, new TwitterModule {
-    override protected[inject] def singletonShutdown(injector: Injector): Unit = {
-      moduleBShutdown = true
-      throw new Exception("FORCED EXCEPTION in SingletonShutdown")
-    }
-  })
+  )
 
   def allModulesShutdown: Boolean = moduleAShutdown && moduleBShutdown
 
@@ -294,28 +306,29 @@ class ErrorOnExitTwitterServer extends TwitterServer {
 
     closeOnExit {
       Closable.make { _ =>
-        Future.exception(
-          new Exception("FORCED Exception IN CLOSE ON EXIT"))
+        Future.exception(new Exception("FORCED Exception IN CLOSE ON EXIT"))
       }
     }
 
     closeOnExitLast {
       Closable.make { _ =>
-        Future.exception(
-          throw new Exception("FORCED thrown Exception IN CLOSE ON EXIT LAST"))
+        Future.exception(throw new Exception("FORCED thrown Exception IN CLOSE ON EXIT LAST"))
       }
     }
   }
 }
 
 class FatalErrorOnExitTwitterServer extends TwitterServer {
-  override val modules: Seq[Module] = Seq(new TwitterModule {
-    override protected[inject] def singletonShutdown(injector: Injector): Unit =
-      throw new InterruptedException("FORCED FATAL EXCEPTION in SingletonShutdown")
-  }, new TwitterModule {
-    override protected[inject] def singletonShutdown(injector: Injector): Unit =
-      throw new InterruptedException("FORCED FATAL EXCEPTION in SingletonShutdown")
-  })
+  override val modules: Seq[Module] = Seq(
+    new TwitterModule {
+      override protected[inject] def singletonShutdown(injector: Injector): Unit =
+        throw new InterruptedException("FORCED FATAL EXCEPTION in SingletonShutdown")
+    },
+    new TwitterModule {
+      override protected[inject] def singletonShutdown(injector: Injector): Unit =
+        throw new InterruptedException("FORCED FATAL EXCEPTION in SingletonShutdown")
+    }
+  )
 
   override protected def postWarmup(): Unit = {
     onExit {

@@ -15,7 +15,9 @@ import scala.collection.JavaConverters._
  * requires poll to always be called from the same thread. However, we can likely optimize the
  * conversion to avoid the need for a future pool
  */
-@deprecated("Use the FinagleKafkaConsumerBuilder.buildClient to create a native Kafka Consumer instead.", "2019-05-30")
+@deprecated(
+  "Use the FinagleKafkaConsumerBuilder.buildClient to create a native Kafka Consumer instead.",
+  "2019-05-30")
 class FinagleKafkaConsumer[K, V](config: FinagleKafkaConsumerConfig[K, V])
     extends Closable
     with Logging {

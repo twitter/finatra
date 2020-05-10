@@ -18,7 +18,9 @@ object StackTransformerModule extends TwitterModule {
 
       val name: String = StackTransformerModule.this.getClass.getName
 
-      def apply[Req, Rep](stackSvcFac: Stack[ServiceFactory[Req, Rep]]): Stack[ServiceFactory[Req, Rep]] =
+      def apply[Req, Rep](
+        stackSvcFac: Stack[ServiceFactory[Req, Rep]]
+      ): Stack[ServiceFactory[Req, Rep]] =
         transformers.foldLeft(stackSvcFac)((stack, transform) => transform(stack))
     }
 }

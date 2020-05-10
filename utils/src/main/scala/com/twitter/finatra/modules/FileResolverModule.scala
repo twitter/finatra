@@ -7,6 +7,7 @@ import com.twitter.inject.annotations.Flag
 import javax.inject.Singleton
 
 object FileResolverFlags {
+
   /**
    * Denotes the flag name representing the flag input configuring the
    * directory or namespace for classpath resources. The flag value can be
@@ -48,14 +49,8 @@ object FileResolverModule extends TwitterModule {
 
   // Only one of these flags should ever be set to a non-empty string as
   // these flags are mutually exclusive. Setting both will result in error.
-  flag(
-    FileResolverFlags.DocRoot,
-    "",
-    "File serving directory/namespace for classpath resources")
-  flag(
-    FileResolverFlags.LocalDocRoot,
-    "",
-    "File serving directory for local development")
+  flag(FileResolverFlags.DocRoot, "", "File serving directory/namespace for classpath resources")
+  flag(FileResolverFlags.LocalDocRoot, "", "File serving directory for local development")
 
   @Provides
   @Singleton

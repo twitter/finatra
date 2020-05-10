@@ -30,8 +30,8 @@ import scala.reflect.ClassTag
  * @see [[https://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux What is ThriftMux?]]
  */
 abstract class ThriftClientModule[ThriftService: ClassTag]
-  extends TwitterModule
-  with ThriftClientModuleTrait {
+    extends TwitterModule
+    with ThriftClientModuleTrait {
 
   override protected final def initialClientConfiguration(
     injector: Injector,

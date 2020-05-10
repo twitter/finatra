@@ -35,7 +35,7 @@ import scala.collection.mutable
  * @param defaultMessageBodyWriter a default message body writer implementation.
  */
 @Singleton
-class MessageBodyManager @Inject()(
+class MessageBodyManager @Inject() (
   injector: Injector,
   defaultMessageBodyReader: DefaultMessageBodyReader,
   defaultMessageBodyWriter: DefaultMessageBodyWriter) {

@@ -7,7 +7,7 @@ import com.twitter.finatra.http.marshalling.MessageBodyReader
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import javax.inject.Inject
 
-class DomainTestUserReader @Inject()(mapper: ScalaObjectMapper)
+class DomainTestUserReader @Inject() (mapper: ScalaObjectMapper)
     extends MessageBodyReader[DomainTestUser] {
 
   override def parse(message: Message): DomainTestUser = {

@@ -4,12 +4,14 @@ import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.inject.server.FeatureTest
-import com.twitter.inject.thrift.integration.filtered.{GreeterFilteredThriftClientModule, GreeterHttpController, GreeterThriftService}
+import com.twitter.inject.thrift.integration.filtered.{
+  GreeterFilteredThriftClientModule,
+  GreeterHttpController,
+  GreeterThriftService
+}
 import com.twitter.inject.thrift.integration.{TestHttpServer, TestThriftServer}
 
-class DoEverythingFilteredThriftClientModuleFeatureTest
-  extends FeatureTest
-  with HttpTest {
+class DoEverythingFilteredThriftClientModuleFeatureTest extends FeatureTest with HttpTest {
 
   private val thriftServer = new EmbeddedThriftServer(
     twitterServer = new TestThriftServer(new GreeterThriftService),
@@ -17,14 +19,12 @@ class DoEverythingFilteredThriftClientModuleFeatureTest
   )
 
   override val server = new EmbeddedHttpServer(
-    twitterServer =
-      new TestHttpServer[GreeterHttpController](
-        "greeter-server",
-        GreeterFilteredThriftClientModule),
+    twitterServer = new TestHttpServer[GreeterHttpController](
+      "greeter-server",
+      GreeterFilteredThriftClientModule),
     args = Seq(
       "-thrift.clientId=greeter-http-service",
-      resolverMap(
-        "greeter-thrift-service" -> thriftServer.thriftHostAndPort)
+      resolverMap("greeter-thrift-service" -> thriftServer.thriftHostAndPort)
     )
   )
 
@@ -49,7 +49,8 @@ class DoEverythingFilteredThriftClientModuleFeatureTest
     server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/hi/success", 2)
     server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/hi/failures", 2)
     /* assert latency stat exists */
-    server.inMemoryStats.stats.get("clnt/greeter-thrift-client/Greeter/hi/latency_ms") should not be None
+    server.inMemoryStats.stats
+      .get("clnt/greeter-thrift-client/Greeter/hi/latency_ms") should not be None
   }
 
   test("Say bye") {
@@ -66,7 +67,9 @@ class DoEverythingFilteredThriftClientModuleFeatureTest
     server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/bye/success", 1)
     server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/bye/failures", 2)
     /* assert latency stat exists */
-    server.inMemoryStats.stats.get("clnt/greeter-thrift-client/Greeter/bye/latency_ms") should not be None
-    server.inMemoryStats.stats.get("clnt/greeter-thrift-client/Greeter/bye/request_latency_ms") should not be None
+    server.inMemoryStats.stats
+      .get("clnt/greeter-thrift-client/Greeter/bye/latency_ms") should not be None
+    server.inMemoryStats.stats
+      .get("clnt/greeter-thrift-client/Greeter/bye/request_latency_ms") should not be None
   }
 }

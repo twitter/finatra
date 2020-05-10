@@ -7,6 +7,7 @@ import com.twitter.util.{Await, Try}
 import javax.inject.Inject
 
 private object ThriftWarmup {
+
   /**  Function curried as the default arg for the responseCallback: M#SuccessType => Unit parameter. */
   val unitFunction: AnyRef => Unit = _ => Unit
 }
@@ -22,9 +23,9 @@ private object ThriftWarmup {
  *
  * @see [[com.twitter.finatra.thrift.routing.ThriftRouter]]
  */
-class ThriftWarmup @Inject()(
-  router: ThriftRouter
-) extends Logging {
+class ThriftWarmup @Inject() (
+  router: ThriftRouter)
+    extends Logging {
   import ThriftWarmup._
 
   /* Public */
@@ -44,10 +45,15 @@ class ThriftWarmup @Inject()(
    *       warm-up calls in these situations in a try/catch {}.
    */
   @deprecated("Use Request/Response based functionality", "2018-12-20")
-  def send[M <: ThriftMethod](method: M, args: M#Args, times: Int = 1)(
+  def send[M <: ThriftMethod](
+    method: M,
+    args: M#Args,
+    times: Int = 1
+  )(
     responseCallback: Try[M#SuccessType] => Unit = unitFunction
   ): Unit = {
-    if (!router.isConfigured) throw new IllegalStateException("Thrift warmup requires a properly configured router")
+    if (!router.isConfigured)
+      throw new IllegalStateException("Thrift warmup requires a properly configured router")
     sendRequest(method, Request[M#Args](args), times) { response =>
       responseCallback(response.map(_.value))
     }
@@ -69,10 +75,15 @@ class ThriftWarmup @Inject()(
    *
    * @see [[http://twitter.github.io/finatra/user-guide/thrift/controllers.html]]
    */
-  def sendRequest[M <: ThriftMethod](method: M, req: Request[M#Args], times: Int = 1)(
+  def sendRequest[M <: ThriftMethod](
+    method: M,
+    req: Request[M#Args],
+    times: Int = 1
+  )(
     responseCallback: Try[Response[M#SuccessType]] => Unit = unitFunction
   ): Unit = {
-    if (!router.isConfigured) throw new IllegalStateException("Thrift warmup requires a properly configured router")
+    if (!router.isConfigured)
+      throw new IllegalStateException("Thrift warmup requires a properly configured router")
     val service = router.routeWarmup(method)
     for (_ <- 1 to times) {
       time(s"Warmup ${prettyStr(method)} completed in %sms.") {

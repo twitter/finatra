@@ -2,9 +2,23 @@ package com.twitter.finatra.thrift.tests.doeverything.controllers
 
 import com.twitter.conversions.DurationOps._
 import com.twitter.doeverything.thriftscala.{Answer, DoEverything, DoEverythingException}
-import com.twitter.doeverything.thriftscala.DoEverything.{Ask, Echo, Echo2, MagicNum, MoreThanTwentyTwoArgs, Uppercase}
+import com.twitter.doeverything.thriftscala.DoEverything.{
+  Ask,
+  Echo,
+  Echo2,
+  MagicNum,
+  MoreThanTwentyTwoArgs,
+  Uppercase
+}
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finagle.{ChannelException, Filter, RequestException, RequestTimeoutException, Service, SimpleFilter}
+import com.twitter.finagle.{
+  ChannelException,
+  Filter,
+  RequestException,
+  RequestTimeoutException,
+  Service,
+  SimpleFilter
+}
 import com.twitter.finatra.thrift.Controller
 import com.twitter.finatra.thrift.tests.doeverything.exceptions.{BarException, FooException}
 import com.twitter.inject.annotations.Flag
@@ -16,13 +30,15 @@ import scala.collection.JavaConverters._
 import scala.util.control.NoStackTrace
 
 @Singleton
-class DoEverythingThriftController @Inject()(@Flag("magicNum") magicNumValue: String, stats: StatsReceiver)
+class DoEverythingThriftController @Inject() (
+  @Flag("magicNum") magicNumValue: String,
+  stats: StatsReceiver)
     extends Controller(DoEverything) {
 
   private[this] val echos = stats.counter("echo_calls")
 
   private[this] val countEchoFilter = new Filter.TypeAgnostic {
-    def toFilter[Req, Rep]: Filter[Req, Rep, Req, Rep] = new SimpleFilter[Req, Rep]{
+    def toFilter[Req, Rep]: Filter[Req, Rep, Req, Rep] = new SimpleFilter[Req, Rep] {
       def apply(request: Req, service: Service[Req, Rep]): Future[Rep] = {
         echos.incr()
         service(request)
@@ -71,9 +87,8 @@ class DoEverythingThriftController @Inject()(@Flag("magicNum") magicNumValue: St
     Future.value(magicNumValue)
   }
 
-  handle(MoreThanTwentyTwoArgs) {
-    args: MoreThanTwentyTwoArgs.Args =>
-      Future.value("handled")
+  handle(MoreThanTwentyTwoArgs) { args: MoreThanTwentyTwoArgs.Args =>
+    Future.value("handled")
   }
 
   handle(Ask) { args: Ask.Args =>
@@ -81,8 +96,7 @@ class DoEverythingThriftController @Inject()(@Flag("magicNum") magicNumValue: St
     if (question.text.equals("fail")) {
       Future.exception(new DoEverythingException("This is a test."))
     } else {
-      Future.value(
-        Answer(s"The answer to the question: `${question.text}` is 42."))
+      Future.value(Answer(s"The answer to the question: `${question.text}` is 42."))
     }
   }
 

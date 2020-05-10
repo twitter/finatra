@@ -8,8 +8,7 @@ import java.net.URI
 /** Internal utility which represents an http client to the AdminHttpInterface of the [[EmbeddedTwitterServer]] */
 private[twitter] abstract class AdminHttpClient private[twitter] (
   twitterServer: com.twitter.server.TwitterServer,
-  verbose: Boolean = false
-) { self: EmbeddedTwitterServer =>
+  verbose: Boolean = false) { self: EmbeddedTwitterServer =>
 
   /* Public */
 

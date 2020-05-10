@@ -10,7 +10,10 @@ import com.twitter.serviceA.thriftscala.ServiceA
 import com.twitter.serviceB.thriftscala.ServiceB
 
 object ServiceBThriftMethodBuilderClientModule
-  extends ThriftMethodBuilderClientModule[ServiceB.ServicePerEndpoint, ServiceB.MethodPerEndpoint] {
+    extends ThriftMethodBuilderClientModule[
+      ServiceB.ServicePerEndpoint,
+      ServiceB.MethodPerEndpoint
+    ] {
 
   override val modules: Seq[Module] = Seq(ThriftClientIdModule)
 
@@ -24,13 +27,15 @@ object ServiceBThriftMethodBuilderClientModule
   ): ServiceB.ServicePerEndpoint = {
     servicePerEndpoint
       .withEcho(
-        builder.method[ServiceA.Echo.Args, ServiceA.Echo.SuccessType](ServiceA.Echo)
+        builder
+          .method[ServiceA.Echo.Args, ServiceA.Echo.SuccessType](ServiceA.Echo)
           .withRetryForClassifier(PossiblyRetryable.ResponseClassifier)
           .withAgnosticFilter(new MethodLoggingTypeAgnosticFilter())
           .filtered[EchoFilter]
           .service)
       .withPing(
-        builder.method(ServiceB.Ping)
+        builder
+          .method(ServiceB.Ping)
           .filtered(new PingFilter)
           .nonIdempotent
           .withRetryDisabled

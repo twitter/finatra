@@ -13,11 +13,15 @@ class HelloWorldFeatureTest extends FeatureTest {
   }
 
   test("Server#Say hi for Post") {
-    server.httpPost(path = "/hi", postBody = """
+    server.httpPost(
+      path = "/hi",
+      postBody = """
         {
           "id": 10,
           "name" : "Sally"
         }
-        """, andExpect = Ok, withBody = "Hello Sally with id 10")
+        """,
+      andExpect = Ok,
+      withBody = "Hello Sally with id 10")
   }
 }

@@ -94,26 +94,24 @@ class AnnotationUtilsTest extends Test {
     var annotations = found.flatMap { case (_, annotations) => annotations }.toArray
     annotations.length should equal(4)
 
-    found =
-      AnnotationUtils.findAnnotations(classOf[WithWidgets], Array("widget1", "widget2"))
+    found = AnnotationUtils.findAnnotations(classOf[WithWidgets], Array("widget1", "widget2"))
     found.isEmpty should be(false)
     annotations = found.flatMap { case (_, annotations) => annotations }.toArray
     annotations.length should equal(4)
 
-    found =
-      AnnotationUtils.findAnnotations(classOf[CaseClassOneTwo], Array("one", "two"))
+    found = AnnotationUtils.findAnnotations(classOf[CaseClassOneTwo], Array("one", "two"))
     found.isEmpty should be(false)
     annotations = found.flatMap { case (_, annotations) => annotations }.toArray
     annotations.length should equal(2)
 
-    found =
-      AnnotationUtils.findAnnotations(classOf[CaseClassThreeFour], Array("three", "four"))
+    found = AnnotationUtils.findAnnotations(classOf[CaseClassThreeFour], Array("three", "four"))
     found.isEmpty should be(false)
     annotations = found.flatMap { case (_, annotations) => annotations }.toArray
     annotations.length should equal(2)
 
-    found =
-      AnnotationUtils.findAnnotations(classOf[CaseClassOneTwoThreeFour], Array("one", "two", "three", "four"))
+    found = AnnotationUtils.findAnnotations(
+      classOf[CaseClassOneTwoThreeFour],
+      Array("one", "two", "three", "four"))
     found.isEmpty should be(false)
     annotations = found.flatMap { case (_, annotations) => annotations }.toArray
     annotations.length should equal(4)
@@ -132,11 +130,13 @@ class AnnotationUtilsTest extends Test {
 
     // @Annotation1 is not annotated with @MarkerAnnotation
     // @Annotation2 is annotated with @MarkerAnnotation but does not define a value() function
-    AnnotationUtils.getValueIfAnnotatedWith[MarkerAnnotation](
-      AnnotationUtils.findAnnotation[Annotation1](annotations).get
-    ).isDefined should be(false)
-    AnnotationUtils.getValueIfAnnotatedWith[MarkerAnnotation](
-      AnnotationUtils.findAnnotation[Annotation2](annotations).get
-    ).isDefined should be(false)
+    AnnotationUtils
+      .getValueIfAnnotatedWith[MarkerAnnotation](
+        AnnotationUtils.findAnnotation[Annotation1](annotations).get
+      ).isDefined should be(false)
+    AnnotationUtils
+      .getValueIfAnnotatedWith[MarkerAnnotation](
+        AnnotationUtils.findAnnotation[Annotation2](annotations).get
+      ).isDefined should be(false)
   }
 }

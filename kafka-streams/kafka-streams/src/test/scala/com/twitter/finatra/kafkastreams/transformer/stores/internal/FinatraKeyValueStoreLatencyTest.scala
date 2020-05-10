@@ -116,7 +116,9 @@ class FinatraKeyValueStoreLatencyTest extends Test {
     keyValueStore.deleteRange(1, 2)
     assertNonzeroLatency(MetricsFinatraKeyValueStore.DeleteRangeLatencyStatName)
 
-    keyValueStore.deleteRangeExperimentalWithNoChangelogUpdates(Array.emptyByteArray, Array.emptyByteArray)
+    keyValueStore.deleteRangeExperimentalWithNoChangelogUpdates(
+      Array.emptyByteArray,
+      Array.emptyByteArray)
     assertNonzeroLatency(MetricsFinatraKeyValueStore.DeleteRangeExperimentalLatencyStatName)
 
     keyValueStore.deleteWithoutGettingPriorValue(10)

@@ -31,7 +31,7 @@ import javax.inject.{Inject, Singleton}
  * @see [[com.twitter.finagle.http.filter.CommonLogFormatter]]
  */
 @Singleton
-class AccessLoggingFilter[R <: Request] @Inject()(logFormatter: LogFormatter[R, Response])
+class AccessLoggingFilter[R <: Request] @Inject() (logFormatter: LogFormatter[R, Response])
     extends SimpleFilter[R, Response]
     with Logging {
 

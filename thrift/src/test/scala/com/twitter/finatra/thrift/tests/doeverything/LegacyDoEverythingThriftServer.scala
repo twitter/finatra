@@ -5,13 +5,19 @@ import com.twitter.finagle.tracing.NullTracer
 import com.twitter.finatra.thrift.filters._
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.tests.doeverything.controllers.LegacyDoEverythingThriftController
-import com.twitter.finatra.thrift.tests.doeverything.exceptions.{BarExceptionMapper, DoEverythingExceptionMapper, FooExceptionMapper}
+import com.twitter.finatra.thrift.tests.doeverything.exceptions.{
+  BarExceptionMapper,
+  DoEverythingExceptionMapper,
+  FooExceptionMapper
+}
 import com.twitter.finatra.thrift.ThriftServer
 import com.twitter.util.NullMonitor
 
 object LegacyDoEverythingThriftServerMain extends LegacyDoEverythingThriftServer
 
-@deprecated("These tests exist to ensure legacy functionaly still operates. Do not use them for guidance", "2018-12-20")
+@deprecated(
+  "These tests exist to ensure legacy functionaly still operates. Do not use them for guidance",
+  "2018-12-20")
 class LegacyDoEverythingThriftServer extends ThriftServer {
   override val name = "example-server"
 

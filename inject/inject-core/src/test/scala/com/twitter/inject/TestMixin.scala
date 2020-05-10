@@ -1,12 +1,6 @@
 package com.twitter.inject
 
-import com.twitter.util.{
-  Await,
-  Awaitable,
-  Duration,
-  ExecutorServiceFuturePool,
-  Future
-}
+import com.twitter.util.{Await, Awaitable, Duration, ExecutorServiceFuturePool, Future}
 import java.nio.charset.{StandardCharsets => JChar}
 import java.util.TimeZone
 import com.twitter.io.StreamIO

@@ -58,21 +58,22 @@ class HttpServerTraitIntegrationTest extends Test {
 
     val httpsPortFlag = "https.port"
 
-    val server = new EmbeddedHttpServer(new HttpServerTrait {
-      override protected def httpService: Service[Request, Response] =
-        Service.const[Response](Future.value(Response()))
+    val server = new EmbeddedHttpServer(
+      new HttpServerTrait {
+        override protected def httpService: Service[Request, Response] =
+          Service.const[Response](Future.value(Response()))
 
-      override protected def postInjectorStartup(): Unit = {
-        super.postInjectorStartup()
-        httpsBoundAddressBeforePostWarmup = httpsBoundAddress
-      }
+        override protected def postInjectorStartup(): Unit = {
+          super.postInjectorStartup()
+          httpsBoundAddressBeforePostWarmup = httpsBoundAddress
+        }
 
-      override protected def postWarmup(): Unit = {
-        super.postWarmup()
-        httpsBoundAddressPostWarmup = httpsBoundAddress
-      }
-    },
-    httpPortFlag = httpsPortFlag)
+        override protected def postWarmup(): Unit = {
+          super.postWarmup()
+          httpsBoundAddressPostWarmup = httpsBoundAddress
+        }
+      },
+      httpPortFlag = httpsPortFlag)
 
     try {
       server.start()

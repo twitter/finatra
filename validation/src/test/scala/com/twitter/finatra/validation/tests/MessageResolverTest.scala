@@ -44,20 +44,22 @@ class MessageResolverTest extends Test {
 
   test("MessageResolver loads resources properly") {
     val countryCodeMsg =
-    messageResolver.resolve(classOf[CountryCode], invalidValidators.countryCode)
+      messageResolver.resolve(classOf[CountryCode], invalidValidators.countryCode)
     val expectedCountryCodeMsg = errorMessage.countryCode.format(invalidValidators.countryCode)
     countryCodeMsg should equal(expectedCountryCodeMsg)
 
     val futureTimeMsg =
-    messageResolver.resolve(classOf[FutureTime], invalidValidators.futureTime)
+      messageResolver.resolve(classOf[FutureTime], invalidValidators.futureTime)
     val expectedFutureTimeMsg = errorMessage.futureTime.format(invalidValidators.futureTime)
     futureTimeMsg should equal(expectedFutureTimeMsg)
 
-    val maxMsg = messageResolver.resolve(classOf[Max], invalidValidators.max._1, invalidValidators.max._2)
+    val maxMsg =
+      messageResolver.resolve(classOf[Max], invalidValidators.max._1, invalidValidators.max._2)
     val expectedMaxMsg = errorMessage.max.format(invalidValidators.max._1, invalidValidators.max._2)
     maxMsg should equal(expectedMaxMsg)
 
-    val minMsg = messageResolver.resolve(classOf[Min], invalidValidators.min._1, invalidValidators.min._2)
+    val minMsg =
+      messageResolver.resolve(classOf[Min], invalidValidators.min._1, invalidValidators.min._2)
     val expectedMinMsg = errorMessage.min.format(invalidValidators.min._1, invalidValidators.min._2)
     minMsg should equal(expectedMinMsg)
 
@@ -65,13 +67,16 @@ class MessageResolverTest extends Test {
     val expectedNotEmptyMsg = errorMessage.notEmpty
     notEmptyMsg should equal(expectedNotEmptyMsg)
 
-    val oneOfMsg = messageResolver.resolve(classOf[OneOf], invalidValidators.oneOf._1, invalidValidators.oneOf._2)
+    val oneOfMsg = messageResolver.resolve(
+      classOf[OneOf],
+      invalidValidators.oneOf._1,
+      invalidValidators.oneOf._2)
     val expectedOneOfMsg =
       errorMessage.oneOf.format(invalidValidators.oneOf._1, invalidValidators.oneOf._2)
     oneOfMsg should equal(expectedOneOfMsg)
 
     val pastTimeMsg =
-    messageResolver.resolve(classOf[PastTime], invalidValidators.pastTime)
+      messageResolver.resolve(classOf[PastTime], invalidValidators.pastTime)
     val expectedPastTimeMsg = errorMessage.pastTime.format(invalidValidators.pastTime)
     pastTimeMsg should equal(expectedPastTimeMsg)
 

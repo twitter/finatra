@@ -6,12 +6,8 @@ import com.twitter.serviceB.thriftscala.ServiceB.Ping
 import com.twitter.util.Future
 
 class PingFilter
-  extends Filter[
-    Ping.Args,
-    Ping.SuccessType,
-    Ping.Args,
-    Ping.SuccessType]
-  with Logging {
+    extends Filter[Ping.Args, Ping.SuccessType, Ping.Args, Ping.SuccessType]
+    with Logging {
   def apply(
     request: Ping.Args,
     service: Service[Ping.Args, String]

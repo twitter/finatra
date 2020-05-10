@@ -94,7 +94,7 @@ private object StatsFilter {
  *                           is successful or not.
  */
 @Singleton
-class StatsFilter @Inject()(
+class StatsFilter @Inject() (
   statsReceiver: StatsReceiver,
   responseClassifier: ThriftResponseClassifier)
     extends Filter.TypeAgnostic

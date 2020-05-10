@@ -8,7 +8,11 @@ import com.twitter.finatra.kafka.modules.KafkaBootstrapModule
 import com.twitter.finatra.kafka.test.utils.InMemoryStatsUtil
 import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
 import com.twitter.finatra.kafkastreams.config.FinatraTransformerFlags
-import com.twitter.finatra.kafkastreams.query.{QueryableFinatraCompositeWindowStore, QueryableFinatraKeyValueStore, QueryableFinatraWindowStore}
+import com.twitter.finatra.kafkastreams.query.{
+  QueryableFinatraCompositeWindowStore,
+  QueryableFinatraKeyValueStore,
+  QueryableFinatraWindowStore
+}
 import com.twitter.finatra.kafkastreams.transformer.aggregation.TimeWindowed
 import com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer
 import com.twitter.finatra.kafkastreams.utils.time._
@@ -364,7 +368,8 @@ case class FinatraTopologyTester private (
 
   private def createTopologyTester(): Unit = {
     DateTimeUtils.setCurrentMillisFixed(startingWallClockTime.getMillis)
-    debug(s"Creating TopologyTestDriver with wall clock ${DateTimeUtils.currentTimeMillis().iso8601Millis}")
+    debug(
+      s"Creating TopologyTestDriver with wall clock ${DateTimeUtils.currentTimeMillis().iso8601Millis}")
     _driver = new TopologyTestDriver(topology, properties, startingWallClockTime.getMillis)
   }
 }

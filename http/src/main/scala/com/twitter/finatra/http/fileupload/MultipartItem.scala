@@ -8,5 +8,4 @@ case class MultipartItem(
   isFormField: Boolean,
   contentType: Option[String],
   filename: Option[String],
-  headers: FileItemHeaders
-)
+  headers: FileItemHeaders)

@@ -13,8 +13,7 @@ import com.twitter.inject.thrift.filters.JavaDarkTrafficFilter
  *       Finagle via generated Java code. Users of generated Scala code should use the
  *       [[ReqRepDarkTrafficFilterModule]].
  */
-abstract class JavaDarkTrafficFilterModule
-  extends DarkTrafficFilterModuleTrait {
+abstract class JavaDarkTrafficFilterModule extends DarkTrafficFilterModuleTrait {
 
   /**
    * Function to determine if the request should be "sampled", e.g.

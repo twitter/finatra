@@ -9,7 +9,7 @@ import javax.inject.Inject
 /**
  * Transform an HTTP Message to [[com.twitter.finatra.http.jsonpatch JsonPatch]]
  */
-class JsonPatchMessageBodyReader @Inject()(mapper: ScalaObjectMapper)
+class JsonPatchMessageBodyReader @Inject() (mapper: ScalaObjectMapper)
     extends MessageBodyReader[JsonPatch] {
 
   override def parse(message: Message): JsonPatch = {

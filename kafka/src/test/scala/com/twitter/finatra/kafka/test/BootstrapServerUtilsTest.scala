@@ -7,7 +7,6 @@ import com.twitter.inject.Test
 import com.twitter.util.{Activity, Duration, TimeoutException, Var}
 import com.twitter.finagle.naming.{DefaultInterpreter, NameInterpreter}
 
-
 class BootstrapServerUtilsTest extends Test {
 
   override protected def afterEach(): Unit = {
@@ -15,8 +14,8 @@ class BootstrapServerUtilsTest extends Test {
   }
 
   test("lookup success") {
-    KafkaUtils.BootstrapServerUtils.lookupBootstrapServers(
-      "/$/inet/localhost/88", Duration.Top) should equal("127.0.0.1:88")
+    KafkaUtils.BootstrapServerUtils
+      .lookupBootstrapServers("/$/inet/localhost/88", Duration.Top) should equal("127.0.0.1:88")
   }
 
   test("lookup with timeout") {

@@ -20,13 +20,14 @@ class DoEverythingThriftMethodBuilderClientModuleFeatureTest extends FeatureTest
   private val httpServiceClientId = "http-service"
 
   private val greeterThriftServer = new EmbeddedThriftServer(
-    twitterServer =
-      new TestThriftServer(new GreeterThriftService(httpServiceClientId).toThriftService),
+    twitterServer = new TestThriftServer(
+      new GreeterThriftService(httpServiceClientId).toThriftService),
     disableTestLogging = true
   )
 
   private val echoThriftServer = new EmbeddedThriftServer(
-    twitterServer = new TestThriftServer(new EchoThriftService(httpServiceClientId).toThriftService),
+    twitterServer = new TestThriftServer(
+      new EchoThriftService(httpServiceClientId).toThriftService),
     disableTestLogging = true
   )
 
@@ -59,10 +60,10 @@ class DoEverythingThriftMethodBuilderClientModuleFeatureTest extends FeatureTest
 
   test("Assert client stack registry entries") {
     // should only be one per thriftmethodbuilderclientmodule
-    ClientRegistry.registrants.count(_.name == GreeterThriftMethodBuilderClientModule.label) should equal(
-      1)
-    ClientRegistry.registrants.count(_.name == EchoThriftMethodBuilderClientModule.label) should equal(
-      1)
+    ClientRegistry.registrants.count(
+      _.name == GreeterThriftMethodBuilderClientModule.label) should equal(1)
+    ClientRegistry.registrants.count(
+      _.name == EchoThriftMethodBuilderClientModule.label) should equal(1)
   }
 
   test("Greeter.ServicePerEndpoint is available from the injector") {

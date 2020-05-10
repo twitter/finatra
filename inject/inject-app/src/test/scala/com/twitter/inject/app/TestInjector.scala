@@ -90,8 +90,8 @@ class TestInjector(
   modules: Seq[Module],
   flags: Map[String, String] = Map.empty,
   overrideModules: Seq[Module] = Seq.empty,
-  stage: Stage = Stage.DEVELOPMENT
-) extends BindDSL {
+  stage: Stage = Stage.DEVELOPMENT)
+    extends BindDSL {
 
   /* Fields */
 
@@ -136,7 +136,11 @@ class TestInjector(
     super.bindClass[T](clazz, annotation, instance)
 
   // java-forwarder methods
-  override final def bindClass[T, Ann <: Annotation](clazz: Class[T], annotationClazz: Class[Ann], instance: T): this.type =
+  override final def bindClass[T, Ann <: Annotation](
+    clazz: Class[T],
+    annotationClazz: Class[Ann],
+    instance: T
+  ): this.type =
     super.bindClass[T, Ann](clazz, annotationClazz, instance)
 
   // java-forwarder methods
@@ -144,11 +148,19 @@ class TestInjector(
     super.bindClass[T, U](clazz, instanceClazz)
 
   // java-forwarder methods
-  override final def bindClass[T, U <: T](clazz: Class[T], annotation: Annotation, instanceClazz: Class[U]): this.type =
+  override final def bindClass[T, U <: T](
+    clazz: Class[T],
+    annotation: Annotation,
+    instanceClazz: Class[U]
+  ): this.type =
     super.bindClass[T, U](clazz, annotation, instanceClazz)
 
   // java-forwarder methods
-  override final def bindClass[T, Ann <: Annotation, U <: T](clazz: Class[T], annotationClazz: Class[Ann], instanceClazz: Class[U]): this.type =
+  override final def bindClass[T, Ann <: Annotation, U <: T](
+    clazz: Class[T],
+    annotationClazz: Class[Ann],
+    instanceClazz: Class[U]
+  ): this.type =
     super.bindClass[T, Ann, U](clazz, annotationClazz, instanceClazz)
 
   /* Protected */
@@ -172,9 +184,7 @@ class TestInjector(
       parseFlags(flag, flags, injectorModules.moduleFlags)
 
       underlying = injectorModules
-        .install(
-          flags = flag,
-          stage = stage)
+        .install(flags = flag, stage = stage)
         .injector
     }
   }

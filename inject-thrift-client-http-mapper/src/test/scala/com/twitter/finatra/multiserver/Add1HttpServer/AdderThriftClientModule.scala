@@ -22,7 +22,9 @@ object AdderThriftClientModule
     serviceIface.copy(
       add1 = filter
         .method(Add1)
-        .withExceptionFilter(Filter.identity[Add1.Args, Add1.SuccessType]) // Example of replacing the default exception filter
+        .withExceptionFilter(
+          Filter.identity[Add1.Args, Add1.SuccessType]
+        ) // Example of replacing the default exception filter
         .withTimeout(3.minutes)
         .withExponentialRetry(
           shouldRetryResponse = PossiblyRetryableExceptions,
@@ -52,7 +54,9 @@ object AdderThriftClientModule
           multiplier = 2,
           retries = 3
         )
-        .withRequestTimeout(1.millis) // We purposely set a very small timeout so that we can test handling IndividualRequestTimeoutException
+        .withRequestTimeout(
+          1.millis
+        ) // We purposely set a very small timeout so that we can test handling IndividualRequestTimeoutException
         .andThen(serviceIface.add1Slowly),
       add1AlwaysError = filter
         .method(Add1AlwaysError)

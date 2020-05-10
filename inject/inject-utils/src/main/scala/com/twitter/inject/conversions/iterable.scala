@@ -16,7 +16,9 @@ object iterable {
      */
     def distinctBy[HashCodeType](
       hash: Elem => HashCodeType
-    )(implicit cbf: CanBuildFrom[From[Elem], Elem, From[Elem]]): From[Elem] = {
+    )(
+      implicit cbf: CanBuildFrom[From[Elem], Elem, From[Elem]]
+    ): From[Elem] = {
       val builder = cbf()
       val seen = MutableHashSet[HashCodeType]()
 

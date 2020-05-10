@@ -30,7 +30,8 @@ class MessageResolver {
   }
 
   private def loadBaseProperties(properties: Properties): Unit = {
-    properties.load(getClass.getResourceAsStream("/com/twitter/finatra/validation/validation.properties"))
+    properties.load(
+      getClass.getResourceAsStream("/com/twitter/finatra/validation/validation.properties"))
   }
 
   private def loadPropertiesFromClasspath(properties: Properties): Unit = {

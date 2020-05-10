@@ -8,7 +8,7 @@ import com.twitter.finatra.utils.DeadlineValues
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-private[http] class CancelledRequestExceptionMapper @Inject()(response: ResponseBuilder)
+private[http] class CancelledRequestExceptionMapper @Inject() (response: ResponseBuilder)
     extends AbstractFrameworkExceptionMapper[CancelledRequestException](response) {
 
   private val CancelledRequestExceptionDetails = Seq("CancelledRequestException")

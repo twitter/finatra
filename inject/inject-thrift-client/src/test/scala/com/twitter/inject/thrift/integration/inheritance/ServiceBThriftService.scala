@@ -8,10 +8,10 @@ import com.twitter.serviceA.thriftscala.ServiceA
 import com.twitter.serviceB.thriftscala.ServiceB
 
 class ServiceBThriftService(
-  clientId: String
-) extends AbstractThriftService
-  with ServiceB.ServicePerEndpoint
-  with Logging {
+  clientId: String)
+    extends AbstractThriftService
+    with ServiceB.ServicePerEndpoint
+    with Logging {
 
   val ping: Service[ServiceB.Ping.Args, ServiceB.Ping.SuccessType] =
     Service.mk { args: ServiceB.Ping.Args =>

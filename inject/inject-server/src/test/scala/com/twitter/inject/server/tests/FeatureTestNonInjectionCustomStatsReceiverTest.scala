@@ -39,7 +39,9 @@ class FeatureTestNonInjectionCustomStatsReceiverTest extends FeatureTest {
       server.inMemoryStatsReceiver
     }
 
-    assert(testStatsReceiver.gauges.nonEmpty) /* we add a build revision gauge in startup of the server */
+    assert(
+      testStatsReceiver.gauges.nonEmpty
+    ) /* we add a build revision gauge in startup of the server */
   }
 
   test("TestServer#feature test") {

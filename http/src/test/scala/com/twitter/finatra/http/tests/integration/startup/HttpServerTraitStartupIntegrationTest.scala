@@ -16,11 +16,8 @@ class HttpServerTraitStartupIntegrationTest extends Test {
   test("HttpServerTrait startup") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServerTrait {
-        override val modules: Seq[Module] = Seq(
-          ScalaObjectMapperModule,
-          FileResolverModule,
-          MessageBodyModule,
-          StatsReceiverModule)
+        override val modules: Seq[Module] =
+          Seq(ScalaObjectMapperModule, FileResolverModule, MessageBodyModule, StatsReceiverModule)
 
         /** Override with an implementation to serve an HTTP Service */
         override protected def httpService: Service[Request, Response] = NullService
@@ -40,11 +37,8 @@ class HttpServerTraitStartupIntegrationTest extends Test {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServerTrait {
         override val disableAdminHttpServer = true
-        override val modules: Seq[Module] = Seq(
-          ScalaObjectMapperModule,
-          FileResolverModule,
-          MessageBodyModule,
-          StatsReceiverModule)
+        override val modules: Seq[Module] =
+          Seq(ScalaObjectMapperModule, FileResolverModule, MessageBodyModule, StatsReceiverModule)
 
         /** Override with an implementation to serve an HTTP Service */
         override protected def httpService: Service[Request, Response] = NullService

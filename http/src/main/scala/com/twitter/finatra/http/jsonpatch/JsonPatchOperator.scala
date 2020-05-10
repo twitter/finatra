@@ -14,7 +14,7 @@ import javax.inject.{Inject, Singleton}
  * @param mapper default [[com.twitter.finatra.jackson.ScalaObjectMapper]] to use for writing values.
  */
 @Singleton
-class JsonPatchOperator @Inject()(mapper: ScalaObjectMapper) {
+class JsonPatchOperator @Inject() (mapper: ScalaObjectMapper) {
 
   /**
    * Transform type T to JsonNode

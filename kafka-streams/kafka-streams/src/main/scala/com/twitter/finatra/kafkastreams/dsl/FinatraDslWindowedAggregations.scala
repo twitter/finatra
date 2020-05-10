@@ -238,7 +238,8 @@ trait FinatraDslWindowedAggregations
   implicit class FinatraKeyToWindowedValueStream[
     K: ClassTag,
     TimeWindowedType <: TimeWindowed[Int]
-  ](inner: KStreamS[K, TimeWindowedType])
+  ](
+    inner: KStreamS[K, TimeWindowedType])
       extends Logging {
 
     /**

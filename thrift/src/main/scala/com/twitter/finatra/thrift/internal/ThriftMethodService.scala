@@ -8,8 +8,8 @@ import com.twitter.util.Future
 
 private[thrift] class ThriftMethodService[Args, Result](
   val method: ThriftMethod,
-  val service: Service[Args, Result]
-) extends Service[Args, Result] {
+  val service: Service[Args, Result])
+    extends Service[Args, Result] {
 
   private[this] val leaf: Stack[ServiceFactory[Args, Result]] =
     Stack.leaf(finagle.stack.Endpoint, ServiceFactory.const(service))

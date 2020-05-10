@@ -24,7 +24,7 @@ private object HttpWarmup {
  *
  * @see [[HttpRouter]]
  */
-class HttpWarmup @Inject()(router: HttpRouter, mapper: ScalaObjectMapper) extends Logging {
+class HttpWarmup @Inject() (router: HttpRouter, mapper: ScalaObjectMapper) extends Logging {
   import HttpWarmup._
 
   /* Public */
@@ -47,7 +47,11 @@ class HttpWarmup @Inject()(router: HttpRouter, mapper: ScalaObjectMapper) extend
    * @see [[http://twitter.github.io/finatra/user-guide/http/controllers.html#admin-paths]]
    * @see [[https://twitter.github.io/twitter-server/Admin.html TwitterServer HTTP Admin Interface]]
    */
-  def send(request: => Request, admin: Boolean = false, times: Int = 1)(
+  def send(
+    request: => Request,
+    admin: Boolean = false,
+    times: Int = 1
+  )(
     responseCallback: Response => Unit = unitFunction
   ): Unit = {
     /* Mutation */

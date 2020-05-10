@@ -48,7 +48,7 @@ private[exceptions] object ThrowableExceptionMapper {
  * @param response - a [[com.twitter.finatra.http.response.ResponseBuilder]]
  */
 @Singleton
-private[http] class ThrowableExceptionMapper @Inject()(response: ResponseBuilder)
+private[http] class ThrowableExceptionMapper @Inject() (response: ResponseBuilder)
     extends AbstractFrameworkExceptionMapper[Throwable](response)
     with Logging {
 

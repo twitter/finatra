@@ -178,9 +178,11 @@ class StreamingResponseTest extends Test with Mockito {
         |{"drink":"coffee","protein":12,"carbs":6},
         |{"drink":"tea","protein":6,"carbs":3},
         |{"drink":"fanta","protein":10,"carbs":5}
-        |],"date": "02/12/2020"}""".stripMargin.replaceAll("\n","")
+        |],"date": "02/12/2020"}""".stripMargin.replaceAll("\n", "")
     assert(
-      Buf.decodeString(await(BufReader.readAll(response.reader)), StandardCharsets.UTF_8) == expectedJson)
+      Buf.decodeString(
+        await(BufReader.readAll(response.reader)),
+        StandardCharsets.UTF_8) == expectedJson)
 
   }
 }

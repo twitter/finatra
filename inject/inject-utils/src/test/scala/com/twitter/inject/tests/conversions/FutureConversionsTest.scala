@@ -40,14 +40,18 @@ class FutureConversionsTest extends Test {
     assertFuture(Future(Some(1)) flatMapInnerOpt intToFutureOptionString, Future(Some("1")))
   }
   test("Future[Option[T]]#flatMapIfUndefined when None") {
-    assertFuture(Future[Option[String]](None) flatMapIfUndefined { _ =>
-      Future(Some("abc"))
-    }, Future(Some("abc")))
+    assertFuture(
+      Future[Option[String]](None) flatMapIfUndefined { _ =>
+        Future(Some("abc"))
+      },
+      Future(Some("abc")))
   }
   test("Future[Option[T]]#flatMapInnerOpt when Some") {
-    assertFuture(Future(Some("xyz")) flatMapIfUndefined { _ =>
-      Future(Some("abc"))
-    }, Future(Some("xyz")))
+    assertFuture(
+      Future(Some("xyz")) flatMapIfUndefined { _ =>
+        Future(Some("abc"))
+      },
+      Future(Some("xyz")))
   }
 
   test("Future[Seq[T]]#mapInner") {
@@ -118,9 +122,11 @@ class FutureConversionsTest extends Test {
   }
 
   test("Future[T]#chainedOnFailure succeeds when Return") {
-    assertFuture(Future("asdf").chainedOnFailure { throwable =>
-      fail("should not run when Return")
-    }, Future("asdf"))
+    assertFuture(
+      Future("asdf").chainedOnFailure { throwable =>
+        fail("should not run when Return")
+      },
+      Future("asdf"))
   }
 
   test("Future[T]#chainedOnFailure succeeds when Throw") {
@@ -171,9 +177,11 @@ class FutureConversionsTest extends Test {
   }
 
   test("Future[T]#transformException returns successful future") {
-    assertFuture(Future(true).transformException { throwable =>
-      new TestException
-    }, Future(true))
+    assertFuture(
+      Future(true).transformException { throwable =>
+        new TestException
+      },
+      Future(true))
   }
 
   def chainedSuccessFunc(throwable: Throwable): Future[Unit] = {
@@ -223,15 +231,19 @@ class FutureConversionsTest extends Test {
   }
 
   test("Future[T]#chainedOnFailure when success") {
-    assertFuture(Future(1).chainedOnFailure { e =>
-      Future(2).unit
-    }, Future(1))
+    assertFuture(
+      Future(1).chainedOnFailure { e =>
+        Future(2).unit
+      },
+      Future(1))
   }
 
   test("Future[T]#chainedOnFailure when failure") {
-    assertFuture(Future(1).chainedOnFailure { e =>
-      Future.exception(new RuntimeException("failure) chained"))
-    }, Future(1))
+    assertFuture(
+      Future(1).chainedOnFailure { e =>
+        Future.exception(new RuntimeException("failure) chained"))
+      },
+      Future(1))
   }
 
   test("Future[T]#partialTransform when success matches") {
@@ -242,10 +254,12 @@ class FutureConversionsTest extends Test {
   }
 
   test("Future[T]#partialTransform when success doesn't match") {
-    assertFuture(Future(2).partialTransform {
-      case Return(r) if r == 1 =>
-        Future.exception(new RuntimeException("bad"))
-    }, Future(2))
+    assertFuture(
+      Future(2).partialTransform {
+        case Return(r) if r == 1 =>
+          Future.exception(new RuntimeException("bad"))
+      },
+      Future(2))
   }
 
   test("Future[T]#partialTransform when failed") {

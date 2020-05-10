@@ -8,10 +8,10 @@ import com.twitter.util.Future
 import java.util.concurrent.atomic.AtomicInteger
 
 class GreeterThriftService(
-  clientId: String
-) extends AbstractThriftService
-  with Greeter.ServicePerEndpoint
-  with Logging {
+  clientId: String)
+    extends AbstractThriftService
+    with Greeter.ServicePerEndpoint
+    with Logging {
 
   private val hiNumCalled = new AtomicInteger(0)
   private val helloNumCalled = new AtomicInteger(0)

@@ -2,7 +2,14 @@ package com.twitter.finatra.thrift.tests.doeverything.controllers
 
 import com.twitter.conversions.DurationOps._
 import com.twitter.doeverything.thriftscala.{Answer, DoEverything, DoEverythingException}
-import com.twitter.doeverything.thriftscala.DoEverything.{Ask, Echo, Echo2, MagicNum, MoreThanTwentyTwoArgs, Uppercase}
+import com.twitter.doeverything.thriftscala.DoEverything.{
+  Ask,
+  Echo,
+  Echo2,
+  MagicNum,
+  MoreThanTwentyTwoArgs,
+  Uppercase
+}
 import com.twitter.finagle.{ChannelException, RequestException, RequestTimeoutException}
 import com.twitter.finatra.thrift.Controller
 import com.twitter.finatra.thrift.tests.doeverything.exceptions.{BarException, FooException}
@@ -15,10 +22,12 @@ import scala.collection.JavaConverters._
 import scala.util.control.NoStackTrace
 
 @Singleton
-@deprecated("These tests exist to ensure legacy functionaly still operates. Do not use them for guidance", "2018-12-20")
-class LegacyDoEverythingThriftController @Inject()(@Flag("magicNum") magicNumValue: String)
-    extends Controller with DoEverything.BaseServiceIface
-    {
+@deprecated(
+  "These tests exist to ensure legacy functionaly still operates. Do not use them for guidance",
+  "2018-12-20")
+class LegacyDoEverythingThriftController @Inject() (@Flag("magicNum") magicNumValue: String)
+    extends Controller
+    with DoEverything.BaseServiceIface {
 
   private[this] var storedMDC: Option[Map[String, String]] = None
 
@@ -71,8 +80,7 @@ class LegacyDoEverythingThriftController @Inject()(@Flag("magicNum") magicNumVal
     if (question.text.equals("fail")) {
       Future.exception(new DoEverythingException("This is a test."))
     } else {
-      Future.value(
-        Answer(s"The answer to the question: `${question.text}` is 42."))
+      Future.value(Answer(s"The answer to the question: `${question.text}` is 42."))
     }
   }
 

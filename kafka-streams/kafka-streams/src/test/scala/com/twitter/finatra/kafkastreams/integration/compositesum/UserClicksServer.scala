@@ -4,8 +4,14 @@ import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.kafka.serde.ScalaSerdes
 import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
 import com.twitter.finatra.kafkastreams.dsl.FinatraDslWindowedAggregations
-import com.twitter.finatra.kafkastreams.integration.compositesum.UserClicksTypes.{NumClicksSerde, UserIdSerde}
-import com.twitter.finatra.kafkastreams.transformer.aggregation.{FixedTimeWindowedSerde, WindowedValueSerde}
+import com.twitter.finatra.kafkastreams.integration.compositesum.UserClicksTypes.{
+  NumClicksSerde,
+  UserIdSerde
+}
+import com.twitter.finatra.kafkastreams.transformer.aggregation.{
+  FixedTimeWindowedSerde,
+  WindowedValueSerde
+}
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.{Consumed, Produced}
 

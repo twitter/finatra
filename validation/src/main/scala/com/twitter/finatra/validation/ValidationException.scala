@@ -7,8 +7,7 @@ package com.twitter.finatra.validation
  *                       provide the ability to iterate over all invalid results from validating a
  *                       case class field or a case class method.
  */
-class ValidationException private[validation] (results: Seq[ValidationResult])
-    extends Exception {
+class ValidationException private[validation] (results: Seq[ValidationResult]) extends Exception {
 
   /** All errors encountered during case class validations of each annotation */
   val errors: Seq[ValidationResult.Invalid] =

@@ -12,8 +12,8 @@ import scala.reflect.ClassTag
 
 sealed abstract class BaseDarkTrafficFilter(
   forwardAfterService: Boolean,
-  override val statsReceiver: StatsReceiver
-) extends Filter.TypeAgnostic
+  override val statsReceiver: StatsReceiver)
+    extends Filter.TypeAgnostic
     with AbstractDarkTrafficFilter
     with Logging {
 
@@ -60,12 +60,12 @@ sealed abstract class BaseDarkTrafficFilter(
  */
 @Singleton
 class DarkTrafficFilter[ServiceIface: ClassTag](
-    darkServiceIface: ServiceIface,
-    override protected val enableSampling: Any => Boolean,
-    forwardAfterService: Boolean,
-    override val statsReceiver: StatsReceiver,
-    lookupByMethod: Boolean = false
-) extends BaseDarkTrafficFilter(forwardAfterService, statsReceiver) {
+  darkServiceIface: ServiceIface,
+  override protected val enableSampling: Any => Boolean,
+  forwardAfterService: Boolean,
+  override val statsReceiver: StatsReceiver,
+  lookupByMethod: Boolean = false)
+    extends BaseDarkTrafficFilter(forwardAfterService, statsReceiver) {
 
   private val serviceIfaceClass = implicitly[ClassTag[ServiceIface]].runtimeClass
 
@@ -91,7 +91,9 @@ class DarkTrafficFilter[ServiceIface: ClassTag](
   protected def invokeDarkService[T, Rep](request: T): Future[Rep] = {
     MethodMetadata.current match {
       case Some(mm) =>
-        val service = getService(mm.methodName.toCamelCase).asInstanceOf[Service[T, Rep]] // converts a snake_case MethodMetadata.methodName to camelCase for reflection method lookup
+        val service =
+          getService(mm.methodName.toCamelCase)
+            .asInstanceOf[Service[T, Rep]] // converts a snake_case MethodMetadata.methodName to camelCase for reflection method lookup
         service(request)
       case None =>
         val t = new IllegalStateException("DarkTrafficFilter invoked without method data")
@@ -119,22 +121,18 @@ class DarkTrafficFilter[ServiceIface: ClassTag](
  */
 @Singleton
 class JavaDarkTrafficFilter(
-    darkService: Service[ThriftClientRequest, Array[Byte]],
-    enableSamplingFn: Function[Array[Byte], Boolean],
-    forwardAfterService: Boolean,
-    override val statsReceiver: StatsReceiver
-) extends BaseDarkTrafficFilter(forwardAfterService, statsReceiver) {
+  darkService: Service[ThriftClientRequest, Array[Byte]],
+  enableSamplingFn: Function[Array[Byte], Boolean],
+  forwardAfterService: Boolean,
+  override val statsReceiver: StatsReceiver)
+    extends BaseDarkTrafficFilter(forwardAfterService, statsReceiver) {
 
   def this(
     darkService: Service[ThriftClientRequest, Array[Byte]],
     enableSamplingFn: com.twitter.util.Function[Array[Byte], Boolean],
     statsReceiver: StatsReceiver
   ) {
-    this(
-      darkService,
-      enableSamplingFn,
-      forwardAfterService = true,
-      statsReceiver)
+    this(darkService, enableSamplingFn, forwardAfterService = true, statsReceiver)
   }
 
   override protected val enableSampling: Any => Boolean = { request: Any =>

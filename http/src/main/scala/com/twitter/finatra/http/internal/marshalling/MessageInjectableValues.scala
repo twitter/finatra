@@ -165,9 +165,10 @@ private[http] class MessageInjectableValues(
         getHeader(valueId, context, forProperty, fieldName, response)
       } else if (hasAnnotation(forProperty, requestParamsAnnotations)) {
         // request annotations are not supported for parsing a response
-        val message = s"Unable to inject field '$fieldName'. ${classOf[Request].getSimpleName}-specific " +
-          s"annotations: [${requestParamsAnnotations.map(a => s"@${a.getSimpleName}").mkString(", ")}] " +
-          s"are not supported with a ${classOf[Response].getName}."
+        val message =
+          s"Unable to inject field '$fieldName'. ${classOf[Request].getSimpleName}-specific " +
+            s"annotations: [${requestParamsAnnotations.map(a => s"@${a.getSimpleName}").mkString(", ")}] " +
+            s"are not supported with a ${classOf[Response].getName}."
         throw new InjectableValuesException(message)
       } else {
         // handle if the field is annotated with an injection annotation

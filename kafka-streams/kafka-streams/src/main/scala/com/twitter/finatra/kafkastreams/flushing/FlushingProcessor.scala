@@ -5,7 +5,7 @@ import com.twitter.finatra.kafkastreams.transformer.lifecycle.OnInit
 import org.apache.kafka.streams.processor._
 
 trait FlushingProcessor[K, V]
-  extends AbstractProcessor[K, V]
+    extends AbstractProcessor[K, V]
     with OnInit
     with Flushing
     with ProcessorContextLogging {

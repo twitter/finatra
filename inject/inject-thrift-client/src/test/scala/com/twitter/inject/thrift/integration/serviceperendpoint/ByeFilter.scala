@@ -7,13 +7,7 @@ import com.twitter.util.Future
 import javax.inject.Singleton
 
 @Singleton
-class ByeFilter
-  extends Filter[
-    Bye.Args,
-    Bye.SuccessType,
-    Bye.Args,
-    Bye.SuccessType]
-  with Logging {
+class ByeFilter extends Filter[Bye.Args, Bye.SuccessType, Bye.Args, Bye.SuccessType] with Logging {
   def apply(
     request: Bye.Args,
     service: Service[Bye.Args, Bye.SuccessType]

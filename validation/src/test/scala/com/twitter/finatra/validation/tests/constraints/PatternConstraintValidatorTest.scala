@@ -18,10 +18,9 @@ class PatternConstraintValidatorTest
   test("pass validation when regex matches for array type") {
     val passValue = for {
       size <- Gen.choose(10, 50)
-    } yield
-      Array.fill(size) {
-        Gen.choose(10, 100)
-      }
+    } yield Array.fill(size) {
+      Gen.choose(10, 100)
+    }
     forAll(passValue) { value =>
       validate[NumberPatternArrayExample](value).isInstanceOf[Valid] shouldBe true
     }
@@ -48,7 +47,8 @@ class PatternConstraintValidatorTest
   }
 
   test("it should throw exception for invalid class type") {
-    the[IllegalArgumentException] thrownBy validate[NumberPatternArrayExample](new Object()) should have message
+    the[IllegalArgumentException] thrownBy validate[NumberPatternArrayExample](
+      new Object()) should have message
       "Class [class java.lang.Object}] is not supported by class com.twitter.finatra.validation.constraints.PatternConstraintValidator"
   }
 

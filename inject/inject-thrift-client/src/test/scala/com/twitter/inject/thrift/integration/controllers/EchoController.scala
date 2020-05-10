@@ -8,8 +8,7 @@ import com.twitter.util.Future
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class EchoController @Inject()(stats: StatsReceiver)
-  extends Controller(EchoService) {
+class EchoController @Inject() (stats: StatsReceiver) extends Controller(EchoService) {
 
   handle(EchoService.Echo).withFn { req =>
     Future.value(
@@ -24,4 +23,3 @@ class EchoController @Inject()(stats: StatsReceiver)
   }
 
 }
-

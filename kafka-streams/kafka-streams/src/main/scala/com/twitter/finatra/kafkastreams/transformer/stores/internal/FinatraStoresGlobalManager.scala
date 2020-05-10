@@ -2,7 +2,11 @@ package com.twitter.finatra.kafkastreams.transformer.stores.internal
 
 import com.twitter.finatra.kafkastreams.transformer.aggregation.TimeWindowed
 import com.twitter.finatra.kafkastreams.transformer.domain.CompositeKey
-import com.twitter.finatra.kafkastreams.transformer.stores.{FinatraKeyValueStore, FinatraReadOnlyKeyValueStore, NonLocalQueryKeyException}
+import com.twitter.finatra.kafkastreams.transformer.stores.{
+  FinatraKeyValueStore,
+  FinatraReadOnlyKeyValueStore,
+  NonLocalQueryKeyException
+}
 import com.twitter.finatra.streams.queryable.thrift.domain.ServiceShardId
 import com.twitter.finatra.streams.queryable.thrift.partitioning.KafkaPartitioner
 import com.twitter.inject.Logging
@@ -206,10 +210,12 @@ object FinatraStoresGlobalManager extends Logging {
         throw new InvalidStateStoreException(
           s"State store group id not found for $storeName in map " +
             s"taskStoreNameToGroupId = $taskStoreNameToGroupId and " +
-            s"taskIdToFinatraStore = $taskIdToFinatraStore"))
+            s"taskIdToFinatraStore = $taskIdToFinatraStore")
+      )
 
     val taskId = new TaskId(topicGroupId, partitionId.id)
-    debug(s"LookupTaskId with NumPartitions: $numPartitions store $storeName and key $keyBytes = $taskId \t $taskStoreNameToGroupId $taskIdToFinatraStore")
+    debug(
+      s"LookupTaskId with NumPartitions: $numPartitions store $storeName and key $keyBytes = $taskId \t $taskStoreNameToGroupId $taskIdToFinatraStore")
     StoreKey(stateDir.toString, taskId, storeName)
   }
 

@@ -48,12 +48,9 @@ case class FinagleKafkaProducerBuilder[K, V](
   /**
    * Create the native KafkaProducer client.
    */
-  def buildClient() : KafkaProducer[K, V] = {
+  def buildClient(): KafkaProducer[K, V] = {
     validateConfigs(config)
-    new KafkaProducer[K, V](
-      config.properties,
-      config.keySerializer.get,
-      config.valueSerializer.get)
+    new KafkaProducer[K, V](config.properties, config.keySerializer.get, config.valueSerializer.get)
   }
 
   private def validateConfigs(config: FinagleKafkaProducerConfig[K, V]) = {

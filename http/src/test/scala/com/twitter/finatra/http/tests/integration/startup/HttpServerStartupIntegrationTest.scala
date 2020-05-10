@@ -130,7 +130,8 @@ class HttpServerStartupIntegrationTest extends Test {
     server.close()
   }
 
-  test("Callback with input parameter of type String and response type of String fails server startup") {
+  test(
+    "Callback with input parameter of type String and response type of String fails server startup") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
         override def configureHttp(router: HttpRouter): Unit = {
@@ -150,7 +151,8 @@ class HttpServerStartupIntegrationTest extends Test {
     server.close()
   }
 
-  test("Callback with input parameter of type String and response type of Response fails server startup") {
+  test(
+    "Callback with input parameter of type String and response type of Response fails server startup") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
         override def configureHttp(router: HttpRouter): Unit = {

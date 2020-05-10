@@ -54,13 +54,15 @@ object TestTwitterModule extends TwitterModule with Assertions {
   }
 
   override def singletonStartup(injector: Injector): Unit = {
-    assert(!localModuleFlag.isDefined) // isDefined is only true when a value has been parsed, will be false if the flag still has the default
+    assert(
+      !localModuleFlag.isDefined
+    ) // isDefined is only true when a value has been parsed, will be false if the flag still has the default
     try {
       localModuleFlag()
       fail()
     } catch {
       case NonFatal(_) =>
-        // expected: // no flag parsing happens (since we are creating the injector manually) so the flag read fails
+      // expected: // no flag parsing happens (since we are creating the injector manually) so the flag read fails
     }
     assert(injector.instance[String, Prod] == "prod string")
     assert(injector.instance[String, Prod] == "prod string")

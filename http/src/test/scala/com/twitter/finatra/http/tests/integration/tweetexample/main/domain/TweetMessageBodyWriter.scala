@@ -5,7 +5,7 @@ import com.twitter.finatra.http.marshalling.{MessageBodyWriter, WriterResponse}
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import javax.inject.Inject
 
-class TweetMessageBodyWriter @Inject()(mapper: ScalaObjectMapper)
+class TweetMessageBodyWriter @Inject() (mapper: ScalaObjectMapper)
     extends MessageBodyWriter[Tweet] {
 
   override def write(tweet: Tweet): WriterResponse = {

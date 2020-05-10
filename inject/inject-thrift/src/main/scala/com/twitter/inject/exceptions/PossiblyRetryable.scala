@@ -1,7 +1,13 @@
 package com.twitter.inject.exceptions
 
 import com.twitter.finagle.mux.ClientDiscardedRequestException
-import com.twitter.finagle.{CancelledConnectionException, CancelledRequestException, Failure, FailureFlags, service => ctfs}
+import com.twitter.finagle.{
+  CancelledConnectionException,
+  CancelledRequestException,
+  Failure,
+  FailureFlags,
+  service => ctfs
+}
 import com.twitter.finagle.service.{ReqRep, ResponseClass}
 import com.twitter.util.{Return, Throw, Try}
 import scala.util.control.NonFatal
@@ -73,7 +79,7 @@ object PossiblyRetryable {
     case _ => false
   }
 
-  private[inject] def isNonRetryable(t: Throwable) : Boolean = t match {
+  private[inject] def isNonRetryable(t: Throwable): Boolean = t match {
     case _: NonRetryableException => true
     case f: FailureFlags[_] if f.isFlagged(FailureFlags.Ignorable) => true
     case f: Failure if f.cause.isDefined => isNonRetryable(f.cause.get)

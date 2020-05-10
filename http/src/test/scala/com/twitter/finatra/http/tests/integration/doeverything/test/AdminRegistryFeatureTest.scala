@@ -3,7 +3,10 @@ package com.twitter.finatra.http.tests.integration.doeverything.test
 import com.twitter.finagle.http.{Method, Request}
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{AppendToHeaderFilter, IdentityFilter}
+import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{
+  AppendToHeaderFilter,
+  IdentityFilter
+}
 import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.registry.{Entry, GlobalRegistry, SimpleRegistry}
@@ -93,15 +96,27 @@ class AdminRegistryFeatureTest extends FeatureTest {
   }
 
   test("GET /admin/registry.json") {
-    verifyEntries(filteredRegistry("/multifilterappend"), "/multifilterappend", Seq(Method.Get, Method.Put))
-    verifyEntries(filteredRegistry("/multiidentityfilterappend"), "/multiidentityfilterappend", Seq(Method.Get))
+    verifyEntries(
+      filteredRegistry("/multifilterappend"),
+      "/multifilterappend",
+      Seq(Method.Get, Method.Put))
+    verifyEntries(
+      filteredRegistry("/multiidentityfilterappend"),
+      "/multiidentityfilterappend",
+      Seq(Method.Get))
     verifyEntries(filteredRegistry("/foo"), "/foo", Seq(Method.Get, Method.Post, Method.Put))
     verifyEntries(filteredRegistry("/blah"), "/blah", Seq(Method.Get, Method.Options))
     verifyEntries(filteredRegistry("/:*"), "/:*", Seq(Method.Get, Method("ANY")), constant = false)
   }
 
-  private def verifyEntries(entries: Set[Entry], path: String, methods: Seq[Method], constant: Boolean = true): Unit = {
-    val details = entries.groupBy(_.key.drop(baseEntryKey.length).mkString("/")).mapValues(_.head.value)
+  private def verifyEntries(
+    entries: Set[Entry],
+    path: String,
+    methods: Seq[Method],
+    constant: Boolean = true
+  ): Unit = {
+    val details =
+      entries.groupBy(_.key.drop(baseEntryKey.length).mkString("/")).mapValues(_.head.value)
     methods.foreach { method =>
       val base = s"$path/${method.toString.toLowerCase}"
       details(s"$base/constant") should be(constant.toString)
@@ -115,7 +130,8 @@ class AdminRegistryFeatureTest extends FeatureTest {
 
       details(s"$base/callback/request") should be("com.twitter.finagle.http.Request")
       details.get(s"$base/callback/response") should not be None
-      details(s"$base/class") should be("com.twitter.finatra.http.tests.integration.doeverything.test.AdminRegistryTestController")
+      details(s"$base/class") should be(
+        "com.twitter.finatra.http.tests.integration.doeverything.test.AdminRegistryTestController")
     }
   }
 

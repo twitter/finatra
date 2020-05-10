@@ -32,9 +32,7 @@ class DoEverythingCombinedServerFeatureTest extends FeatureTest {
   }
 
   test("GET /admin/registry.json") {
-    val response = server.httpGetAdmin(
-      "/admin/registry.json",
-      andExpect = Status.Ok)
+    val response = server.httpGetAdmin("/admin/registry.json", andExpect = Status.Ok)
 
     val json: Map[String, Any] =
       JSON.parseFull(response.contentString).get.asInstanceOf[Map[String, Any]]

@@ -6,7 +6,7 @@ import com.twitter.finatra.http.Controller
 import com.twitter.util.Future
 import javax.inject.Inject
 
-class Add1Controller @Inject()(adder: Adder[Future]) extends Controller {
+class Add1Controller @Inject() (adder: Adder[Future]) extends Controller {
 
   get("/add1") { request: Request =>
     val num = request.getIntParam("num")

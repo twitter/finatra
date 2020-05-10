@@ -58,8 +58,8 @@ class EmbeddedThriftServer(
   failOnLintViolation: Boolean = false,
   closeGracePeriod: Option[Duration] = None,
   globalFlags: => Map[GlobalFlag[_], String] = Map(),
-  statsReceiverOverride: Option[StatsReceiver] = None
-) extends EmbeddedTwitterServer(
+  statsReceiverOverride: Option[StatsReceiver] = None)
+    extends EmbeddedTwitterServer(
       twitterServer,
       flags + (thriftPortFlag -> ephemeralLoopback),
       args,
@@ -73,21 +73,51 @@ class EmbeddedThriftServer(
       closeGracePeriod = closeGracePeriod,
       globalFlags = globalFlags,
       statsReceiverOverride = statsReceiverOverride
-    ) with ThriftClient {
+    )
+    with ThriftClient {
 
   /* Additional Constructors */
 
   def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage) =
     this(twitterServer, flags = flags.asScala.toMap, stage = stage)
 
-  def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage, disableTestLogging: Boolean) =
-    this(twitterServer, flags = flags.asScala.toMap, stage = stage, disableTestLogging = disableTestLogging)
+  def this(
+    twitterServer: Ports,
+    flags: java.util.Map[String, String],
+    stage: Stage,
+    disableTestLogging: Boolean
+  ) =
+    this(
+      twitterServer,
+      flags = flags.asScala.toMap,
+      stage = stage,
+      disableTestLogging = disableTestLogging)
 
-  def this(twitterServer: Ports, flags: java.util.Map[String, String], javaGlobalFlags: java.util.Map[GlobalFlag[_], String], stage: Stage) =
-    this(twitterServer, flags = flags.asScala.toMap, globalFlags = javaGlobalFlags.toOrderedMap, stage = stage)
+  def this(
+    twitterServer: Ports,
+    flags: java.util.Map[String, String],
+    javaGlobalFlags: java.util.Map[GlobalFlag[_], String],
+    stage: Stage
+  ) =
+    this(
+      twitterServer,
+      flags = flags.asScala.toMap,
+      globalFlags = javaGlobalFlags.toOrderedMap,
+      stage = stage)
 
-  def this(twitterServer: Ports, flags: java.util.Map[String, String], javaGlobalFlags: java.util.Map[GlobalFlag[_], String], stage: Stage, disableTestLogging: Boolean) =
-    this(twitterServer, flags = flags.asScala.toMap, globalFlags = javaGlobalFlags.toOrderedMap, stage = stage, disableTestLogging = disableTestLogging)
+  def this(
+    twitterServer: Ports,
+    flags: java.util.Map[String, String],
+    javaGlobalFlags: java.util.Map[GlobalFlag[_], String],
+    stage: Stage,
+    disableTestLogging: Boolean
+  ) =
+    this(
+      twitterServer,
+      flags = flags.asScala.toMap,
+      globalFlags = javaGlobalFlags.toOrderedMap,
+      stage = stage,
+      disableTestLogging = disableTestLogging)
 
   /* Public */
 
@@ -111,7 +141,11 @@ class EmbeddedThriftServer(
     super.bindClass[T](clazz, annotation, instance)
 
   // java-forwarder methods
-  override final def bindClass[T, Ann <: Annotation](clazz: Class[T], annotationClazz: Class[Ann], instance: T): this.type =
+  override final def bindClass[T, Ann <: Annotation](
+    clazz: Class[T],
+    annotationClazz: Class[Ann],
+    instance: T
+  ): this.type =
     super.bindClass[T, Ann](clazz, annotationClazz, instance)
 
   // java-forwarder methods
@@ -119,10 +153,18 @@ class EmbeddedThriftServer(
     super.bindClass[T, U](clazz, instanceClazz)
 
   // java-forwarder methods
-  override final def bindClass[T, U <: T](clazz: Class[T], annotation: Annotation, instanceClazz: Class[U]): this.type =
+  override final def bindClass[T, U <: T](
+    clazz: Class[T],
+    annotation: Annotation,
+    instanceClazz: Class[U]
+  ): this.type =
     super.bindClass[T, U](clazz, annotation, instanceClazz)
 
   // java-forwarder methods
-  override final def bindClass[T, Ann <: Annotation, U <: T](clazz: Class[T], annotationClazz: Class[Ann], instanceClazz: Class[U]): this.type =
+  override final def bindClass[T, Ann <: Annotation, U <: T](
+    clazz: Class[T],
+    annotationClazz: Class[Ann],
+    instanceClazz: Class[U]
+  ): this.type =
     super.bindClass[T, Ann, U](clazz, annotationClazz, instanceClazz)
 }

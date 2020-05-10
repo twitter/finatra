@@ -3,7 +3,14 @@ package com.twitter.finatra.kafkastreams.integration.compositesum
 import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.kafkastreams.integration.compositesum.UserClicksTypes._
 import com.twitter.finatra.kafkastreams.test.{FinatraTopologyTester, TopologyFeatureTest}
-import com.twitter.finatra.kafkastreams.transformer.aggregation.{FixedTimeWindowedSerde, TimeWindowed, WindowClosed, WindowOpen, WindowedValue, WindowedValueSerde}
+import com.twitter.finatra.kafkastreams.transformer.aggregation.{
+  FixedTimeWindowedSerde,
+  TimeWindowed,
+  WindowClosed,
+  WindowOpen,
+  WindowedValue,
+  WindowedValueSerde
+}
 import com.twitter.finatra.kafkastreams.transformer.domain.Time
 import org.joda.time.DateTime
 

@@ -16,9 +16,7 @@ import javax.inject.Provider
  * If the [[com.twitter.app.Flag]] instance does not have a parsed value a `Provider[Nothing]`
  * is provided which when de-referenced will throw an [[IllegalArgumentException]].
  */
-private[app] class FlagsModule(flags: com.twitter.app.Flags)
-    extends AbstractModule
-    with Logging {
+private[app] class FlagsModule(flags: com.twitter.app.Flags) extends AbstractModule with Logging {
 
   /**
    * Currently, we are unable to bind to anything other than a [[String]] type as Flags do not carry

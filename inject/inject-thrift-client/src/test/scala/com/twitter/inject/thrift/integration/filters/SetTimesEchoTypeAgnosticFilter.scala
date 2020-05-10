@@ -12,9 +12,12 @@ class SetTimesEchoTypeAgnosticFilter extends Filter.TypeAgnostic with Logging {
     def apply(request: Req, service: Service[Req, Rep]): Future[Rep] = {
       request match {
         case _: scrooge.Request[_] =>
-          info("SetTimesToEcho called with times " + request.asInstanceOf[scrooge.Request[SetTimesToEcho.Args]].args.times)
+          info(
+            "SetTimesToEcho called with times " + request
+              .asInstanceOf[scrooge.Request[SetTimesToEcho.Args]].args.times)
         case _ =>
-          info("SetTimesToEcho called with times " + request.asInstanceOf[SetTimesToEcho.Args].times)
+          info(
+            "SetTimesToEcho called with times " + request.asInstanceOf[SetTimesToEcho.Args].times)
       }
 
       service(request)

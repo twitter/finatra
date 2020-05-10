@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.JsonMappingException
 
 package object exceptions {
 
-  implicit class RichJsonProcessingException[E <: JsonProcessingException](val self: E) extends AnyVal {
+  implicit class RichJsonProcessingException[E <: JsonProcessingException](val self: E)
+      extends AnyVal {
+
     /**
      * Converts a [[JsonProcessingException]] to a informative error message that can be returned
      * to callers. The goal is to not leak internals of the underlying types.

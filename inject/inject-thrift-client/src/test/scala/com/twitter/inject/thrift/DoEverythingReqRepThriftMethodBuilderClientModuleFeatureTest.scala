@@ -7,7 +7,11 @@ import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.greeter.thriftscala.Greeter
 import com.twitter.inject.server.FeatureTest
 import com.twitter.inject.thrift.DoEverythingReqRepThriftMethodBuilderClientModuleFeatureTest._
-import com.twitter.inject.thrift.integration.reqrepserviceperendpoint.{ReqRepServicePerEndpointHttpController, GreeterReqRepThriftMethodBuilderClientModule, GreeterThriftService}
+import com.twitter.inject.thrift.integration.reqrepserviceperendpoint.{
+  ReqRepServicePerEndpointHttpController,
+  GreeterReqRepThriftMethodBuilderClientModule,
+  GreeterThriftService
+}
 import com.twitter.inject.thrift.integration.{TestHttpServer, TestThriftServer}
 import com.twitter.util.Duration
 import com.twitter.util.tunable.Tunable
@@ -18,18 +22,17 @@ object DoEverythingReqRepThriftMethodBuilderClientModuleFeatureTest {
 }
 
 class DoEverythingReqRepThriftMethodBuilderClientModuleFeatureTest
-  extends FeatureTest
-  with HttpTest {
+    extends FeatureTest
+    with HttpTest {
 
   private val requestHeaderKey = "com.twitter.greeter.test.header"
   private val httpServiceClientId = "http-service"
-  private val perRequestTimeoutTunable: Tunable[Duration] = Tunable.mutable("per-request", 50.millis)
+  private val perRequestTimeoutTunable: Tunable[Duration] =
+    Tunable.mutable("per-request", 50.millis)
 
   private val greeterThriftServer = new EmbeddedThriftServer(
     twitterServer = new TestThriftServer(
-      new GreeterThriftService(
-        httpServiceClientId,
-        requestHeaderKey).toThriftService),
+      new GreeterThriftService(httpServiceClientId, requestHeaderKey).toThriftService),
     disableTestLogging = true
   )
 
@@ -39,8 +42,7 @@ class DoEverythingReqRepThriftMethodBuilderClientModuleFeatureTest
       new GreeterReqRepThriftMethodBuilderClientModule(requestHeaderKey, perRequestTimeoutTunable)),
     args = Seq(
       s"-thrift.clientId=$httpServiceClientId",
-      resolverMap(
-        "greeter-thrift-service" -> greeterThriftServer.thriftHostAndPort)
+      resolverMap("greeter-thrift-service" -> greeterThriftServer.thriftHostAndPort)
     )
   )
 
@@ -69,7 +71,8 @@ class DoEverythingReqRepThriftMethodBuilderClientModuleFeatureTest
     server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/hi/success", 1)
     server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/hi/failures", 2)
     /* assert MethodBuilder stats exist */
-    server.inMemoryStats.stats.get("clnt/greeter-thrift-client/hi/logical/request_latency_ms") should not be None
+    server.inMemoryStats.stats
+      .get("clnt/greeter-thrift-client/hi/logical/request_latency_ms") should not be None
     server.inMemoryStats.stats.assert("clnt/greeter-thrift-client/hi/retries", Seq(2.0f))
     /* assert MethodBuilder counters */
     server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/hi/logical/requests", 1)
@@ -88,7 +91,8 @@ class DoEverythingReqRepThriftMethodBuilderClientModuleFeatureTest
     server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/hello/success", 1)
     server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/hello/failures", 2)
     /* assert MethodBuilder stats exist */
-    server.inMemoryStats.stats.get("clnt/greeter-thrift-client/hello/logical/request_latency_ms") should not be None
+    server.inMemoryStats.stats
+      .get("clnt/greeter-thrift-client/hello/logical/request_latency_ms") should not be None
     server.inMemoryStats.stats.assert("clnt/greeter-thrift-client/hello/retries", Seq(2.0f))
     /* assert MethodBuilder counters */
     server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/hello/logical/requests", 1)
@@ -108,7 +112,8 @@ class DoEverythingReqRepThriftMethodBuilderClientModuleFeatureTest
     server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/bye/success", 1)
     server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/Greeter/bye/failures", 2)
     /* assert MethodBuilder stats exist */
-    server.inMemoryStats.stats.get("clnt/greeter-thrift-client/bye/logical/request_latency_ms") should not be None
+    server.inMemoryStats.stats
+      .get("clnt/greeter-thrift-client/bye/logical/request_latency_ms") should not be None
     server.inMemoryStats.stats.assert("clnt/greeter-thrift-client/bye/retries", Seq(2.0f))
     /* assert MethodBuilder counters */
     server.inMemoryStats.counters.assert("clnt/greeter-thrift-client/bye/logical/requests", 1)

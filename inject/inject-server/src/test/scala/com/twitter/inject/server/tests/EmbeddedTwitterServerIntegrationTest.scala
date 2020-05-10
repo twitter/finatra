@@ -48,7 +48,7 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
     try {
       // asserting that a server that started OK is not healthy will blow up
       intercept[TestFailedException] {
-        embeddedServer.assertHealthy(healthy=false)
+        embeddedServer.assertHealthy(healthy = false)
       }
     } finally {
       embeddedServer.close()
@@ -66,7 +66,7 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
     )
     try {
       // server never reports self as healthy
-      embeddedServer.assertHealthy(healthy=false)
+      embeddedServer.assertHealthy(healthy = false)
     } finally {
       embeddedServer.close()
     }
@@ -183,7 +183,9 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
       embeddedServer.close()
     }
 
-    assert(testStatsReceiver.gauges.nonEmpty) /* we add a build revision gauge in startup of the server */
+    assert(
+      testStatsReceiver.gauges.nonEmpty
+    ) /* we add a build revision gauge in startup of the server */
   }
 
   test("server#in memory stats receiver with non-injectable server") {
@@ -207,7 +209,9 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
       embeddedServer.close()
     }
 
-    assert(inMemoryStatsReceiver.gauges.nonEmpty) /* we add a build revision gauge in startup of the server */
+    assert(
+      inMemoryStatsReceiver.gauges.nonEmpty
+    ) /* we add a build revision gauge in startup of the server */
   }
 
   test("server#fail if server is a singleton") {
@@ -385,18 +389,18 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
   test("server#support disabling AdminHttpServer") {
     @volatile var awaitablesContainAdmin: Boolean = true
     val server =
-        new EmbeddedTwitterServer(
-          twitterServer = new TwitterServer {
-            override val disableAdminHttpServer: Boolean = true
+      new EmbeddedTwitterServer(
+        twitterServer = new TwitterServer {
+          override val disableAdminHttpServer: Boolean = true
 
-            override def postWarmup(): Unit = {
-              // we need to verify that the admin is not started or expecting closure
-              awaitablesContainAdmin = awaitables.contains(adminHttpServer)
-              super.postWarmup()
-            }
-          },
-          disableTestLogging = true
-        ).bind[String].toInstance("helloworld")
+          override def postWarmup(): Unit = {
+            // we need to verify that the admin is not started or expecting closure
+            awaitablesContainAdmin = awaitables.contains(adminHttpServer)
+            super.postWarmup()
+          }
+        },
+        disableTestLogging = true
+      ).bind[String].toInstance("helloworld")
 
     try {
       server.start()
@@ -420,7 +424,9 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
 
     val fn = EmbeddedTwitterServer.mkGlobalFlagsFn(fns)
     fn("abc") should equal("abc") //check expected output of fn ("abc" is pass-thru)
-    sb.toString should equal("321abc") //check that ordering of execution is correct (fn is inner-most)
+    sb.toString should equal(
+      "321abc"
+    ) //check that ordering of execution is correct (fn is inner-most)
   }
 }
 

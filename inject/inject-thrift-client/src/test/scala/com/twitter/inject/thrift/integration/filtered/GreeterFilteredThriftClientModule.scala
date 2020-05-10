@@ -11,7 +11,7 @@ import com.twitter.util.{Duration, Future, Return, Throw}
 import scala.util.control.NonFatal
 
 object GreeterFilteredThriftClientModule
-  extends FilteredThriftClientModule[Greeter[Future], Greeter.ServiceIface] {
+    extends FilteredThriftClientModule[Greeter[Future], Greeter.ServiceIface] {
 
   override val label = "greeter-thrift-client"
   override val dest = "flag!greeter-thrift-service"

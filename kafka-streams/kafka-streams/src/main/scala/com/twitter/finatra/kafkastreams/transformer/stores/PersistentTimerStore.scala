@@ -65,9 +65,7 @@ class PersistentTimerStore[TimerKey](
       onTimer(time, metadata, key)
     } else {
       debug(f"${"AddTimer:"}%-20s ${metadata.getClass.getSimpleName}%-12s Key $key Timer $time")
-      timersStore.put(
-        Timer(time = time, metadata = metadata, key = key),
-        Array.emptyByteArray)
+      timersStore.put(Timer(time = time, metadata = metadata, key = key), Array.emptyByteArray)
 
       if (time.millis < nextTimerTime) {
         setNextTimerTime(time.millis)

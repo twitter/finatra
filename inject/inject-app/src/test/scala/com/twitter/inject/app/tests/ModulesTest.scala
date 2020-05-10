@@ -12,24 +12,21 @@ class ModulesTest extends Test {
 
     val module1 = new TestModuleClass("instance1", counter)
 
-    val modules = Seq(
-      module1,
-      TestModuleObject) ++ Seq(
+    val modules = Seq(module1, TestModuleObject) ++ Seq(
       new TestModuleClass("instance2", counter),
-      TestModuleObject) ++ Seq(
-      module1)
+      TestModuleObject) ++ Seq(module1)
 
     modules.size should be(5)
 
     val installedModules = new Modules(
       modules,
       Seq.empty
-    ).install(
-      flags = new Flags(this.getClass.getName),
-      stage = Stage.PRODUCTION)
+    ).install(flags = new Flags(this.getClass.getName), stage = Stage.PRODUCTION)
 
     // there are only 3 distinct modules, TestModuleObject, TestModuleClass(instance1), TestModuleClass(instance2)
-    installedModules.modules.size should be(5) // the framework adds two modules: FlagsModule and TwitterTypeConvertersModule
+    installedModules.modules.size should be(
+      5
+    ) // the framework adds two modules: FlagsModule and TwitterTypeConvertersModule
     installedModules.postInjectorStartup()
 
     module1.counter should be(1)
@@ -45,8 +42,8 @@ class ModulesTest extends Test {
       new TestModuleClass(s"instance$i", 0)
     }
 
-    val deduped = Modules.distinctModules(
-      modules.zip(modules).flatMap { case (one, two) => Seq(one, two) })
+    val deduped =
+      Modules.distinctModules(modules.zip(modules).flatMap { case (one, two) => Seq(one, two) })
     deduped should equal(modules)
   }
 }

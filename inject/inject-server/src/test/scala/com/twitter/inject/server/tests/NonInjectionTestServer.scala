@@ -8,9 +8,9 @@ import com.twitter.inject.Logging
 import com.twitter.util.{Await, Duration, Future}
 
 class NonInjectionTestServer(
-  statsReceiver: Option[StatsReceiver]
-) extends com.twitter.server.TwitterServer
-  with Logging {
+  statsReceiver: Option[StatsReceiver])
+    extends com.twitter.server.TwitterServer
+    with Logging {
 
   private[this] val portFlag = flag("http.port", ":8888", "HTTP port")
 

@@ -4,7 +4,11 @@ import com.twitter.app.Flag
 import com.twitter.conversions.DurationOps._
 import com.twitter.conversions.StorageUnitOps._
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finatra.kafka.interceptors.{InstanceMetadataProducerInterceptor, MonitoringConsumerInterceptor, PublishTimeProducerInterceptor}
+import com.twitter.finatra.kafka.interceptors.{
+  InstanceMetadataProducerInterceptor,
+  MonitoringConsumerInterceptor,
+  PublishTimeProducerInterceptor
+}
 import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter
 import com.twitter.finatra.kafkastreams.config.{FinatraRocksDBConfig, KafkaStreamsConfig}
 import com.twitter.finatra.kafkastreams.domain.ProcessingGuarantee
@@ -25,7 +29,13 @@ import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.metrics.Sensor.RecordingLevel
 import org.apache.kafka.streams.KafkaStreams.{State, StateListener}
 import org.apache.kafka.streams.processor.internals.DefaultKafkaClientSupplier
-import org.apache.kafka.streams.{KafkaClientSupplier, KafkaStreams, StreamsBuilder, StreamsConfig, Topology}
+import org.apache.kafka.streams.{
+  KafkaClientSupplier,
+  KafkaStreams,
+  StreamsBuilder,
+  StreamsConfig,
+  Topology
+}
 
 /**
  * A [[com.twitter.server.TwitterServer]] that supports configuring a KafkaStreams topology.
@@ -48,7 +58,7 @@ import org.apache.kafka.streams.{KafkaClientSupplier, KafkaStreams, StreamsBuild
  * }}}
  */
 abstract class KafkaStreamsTwitterServer
-  extends TwitterServer
+    extends TwitterServer
     with KafkaFlagUtils
     with ScalaStreamsImplicits {
 
@@ -97,7 +107,11 @@ abstract class KafkaStreamsTwitterServer
   private val producerLinger = producerFlagWithKafkaDefault[Int](ProducerConfig.LINGER_MS_CONFIG)
 
   // Configs with customized default
-  private val replicationFactor = kafkaFlag(StreamsConfig.REPLICATION_FACTOR_CONFIG, 3) // We set it to 3 for durability and reliability.
+  private val replicationFactor =
+    kafkaFlag(
+      StreamsConfig.REPLICATION_FACTOR_CONFIG,
+      3
+    ) // We set it to 3 for durability and reliability.
   protected[kafkastreams] val applicationServerConfig =
     kafkaFlag(StreamsConfig.APPLICATION_SERVER_CONFIG, s"localhost:$defaultAdminPort")
   private[finatra] val stateDir = kafkaFlag(StreamsConfig.STATE_DIR_CONFIG, "kafka-stream-state")
@@ -255,7 +269,8 @@ abstract class KafkaStreamsTwitterServer
         .consumer.metricReporter[KafkaStreamsFinagleMetricsReporter]
         .consumer.metricsRecordingLevel(RecordingLevel.forName(metricsRecordingLevel()))
         .consumer.metricsSampleWindow(60.seconds)
-        .consumer.autoOffsetReset(OffsetResetStrategy.valueOf(consumerAutoOffsetReset().toUpperCase))
+        .consumer.autoOffsetReset(OffsetResetStrategy.valueOf(
+          consumerAutoOffsetReset().toUpperCase))
         .consumer.maxPollRecords(consumerMaxPollRecords())
         .consumer.maxPollInterval(consumerMaxPollInterval().milliseconds)
         .consumer.maxPartitionFetch(consumerMaxPartitionFetch().bytes)

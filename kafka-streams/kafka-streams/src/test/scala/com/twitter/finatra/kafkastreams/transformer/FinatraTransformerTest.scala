@@ -14,7 +14,12 @@ import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.processor._
 import org.apache.kafka.streams.processor.internals.{ProcessorNode, RecordCollector, ToInternal}
 import org.apache.kafka.streams.state.internals.{FinatraStores, WrappedStateStore}
-import org.apache.kafka.test.{InternalMockProcessorContext, MockProcessorNode, NoOpRecordCollector, TestUtils}
+import org.apache.kafka.test.{
+  InternalMockProcessorContext,
+  MockProcessorNode,
+  NoOpRecordCollector,
+  TestUtils
+}
 import org.hamcrest.{BaseMatcher, Description}
 import org.mockito.{Matchers, Mockito}
 
@@ -56,7 +61,7 @@ class FinatraTransformerTest extends Test with com.twitter.inject.Mockito {
   test("watermark processing when forwarding from caching flush listener") {
     val transformer =
       new FinatraTransformer[String, String, String, String](NullStatsReceiver)
-      with CachingKeyValueStores[String, String, String, String] {
+        with CachingKeyValueStores[String, String, String, String] {
         private val cache =
           getCachingKeyValueStore[String, String]("mystore", onFlushedEntry)
 

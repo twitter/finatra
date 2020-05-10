@@ -158,7 +158,9 @@ private final class ShardIdAwareRoundRobinBalancer[Req, Rep](
       shardId <- node.shardId
       prevNode <- shardIdToNode.put(shardId, node)
     } {
-      warn(s"Multiple nodes assigned the same shardId! prevNode: $prevNode newNode: $node") //TODO: Zombie detection?
+      warn(
+        s"Multiple nodes assigned the same shardId! prevNode: $prevNode newNode: $node"
+      ) //TODO: Zombie detection?
     }
 
     private val availableShardIds = shardIdToNode.keys.map(id => ServiceShardId(id.toInt)).toSet
@@ -178,7 +180,10 @@ private final class ShardIdAwareRoundRobinBalancer[Req, Rep](
         case Some(requestedShardIds) =>
           requestedShardIds.chooseShardId(availableShardIds) match {
             case Some(chosenShardId) =>
-              val node = shardIdToNode(chosenShardId.id) //Note: chooseShardId ensures that we choose a shardId that exists in the map
+              val node =
+                shardIdToNode(
+                  chosenShardId.id
+                ) //Note: chooseShardId ensures that we choose a shardId that exists in the map
               if (node.status != Status.Open) {
                 sawDown = true
               }

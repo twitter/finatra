@@ -10,10 +10,10 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class GreeterThriftService(
   clientId: String,
-  requestHeaderKey: String
-) extends AbstractThriftService
-  with Greeter.ReqRepServicePerEndpoint
-  with Logging {
+  requestHeaderKey: String)
+    extends AbstractThriftService
+    with Greeter.ReqRepServicePerEndpoint
+    with Logging {
 
   private val hiNumCalled = new AtomicInteger(0)
   private val helloNumCalled = new AtomicInteger(0)
@@ -38,9 +38,9 @@ class GreeterThriftService(
         Future.value(scrooge.Response(s"Hi $name"))
     }
 
-  def hello: Service[
-    scrooge.Request[Greeter.Hello.Args],
-    scrooge.Response[Greeter.Hello.SuccessType]] =
+  def hello: Service[scrooge.Request[Greeter.Hello.Args], scrooge.Response[
+    Greeter.Hello.SuccessType
+  ]] =
     Service.mk { request: scrooge.Request[Greeter.Hello.Args] =>
       if (requestHeaderKey.nonEmpty) assert(request.headers.contains(requestHeaderKey))
       val numCalled = helloNumCalled.incrementAndGet()
@@ -55,7 +55,8 @@ class GreeterThriftService(
         Future.exception(new InvalidOperation(what = 123, why = "whoops"))
       else
         Future.value(
-          scrooge.Response(s"Hello $name")
+          scrooge
+            .Response(s"Hello $name")
             .setHeader("com.twitter.greeter.hello", "bar"))
     }
 

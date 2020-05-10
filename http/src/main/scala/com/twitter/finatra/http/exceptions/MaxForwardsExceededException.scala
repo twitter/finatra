@@ -8,7 +8,7 @@ package com.twitter.finatra.http.exceptions
  * @see [[com.twitter.finatra.http.HttpForward]]
  * @see [[com.twitter.finatra.http.HttpRouter#withMaxRequestForwardingDepth]]
  */
-class MaxForwardsExceededException private[finatra](maxDepth: Int) extends Exception {
+class MaxForwardsExceededException private[finatra] (maxDepth: Int) extends Exception {
   override def getMessage: String =
     s"Exceeded maximum depth of $maxDepth for nested requests"
 }

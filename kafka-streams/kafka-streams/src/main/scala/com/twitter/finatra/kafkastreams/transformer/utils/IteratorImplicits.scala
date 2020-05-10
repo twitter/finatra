@@ -64,7 +64,8 @@ trait IteratorImplicits {
           val secondaryKeyMap = getSecondaryMap()
 
           val currentPartition = primaryKey(keyValueIterator.peekNextKey())
-          while (keyValueIterator.hasNext && primaryKey(keyValueIterator.peekNextKey) == currentPartition) {
+          while (keyValueIterator.hasNext && primaryKey(
+              keyValueIterator.peekNextKey) == currentPartition) {
             val entry = keyValueIterator.next()
             val secondaryKeyToAdd = secondaryKey(entry.key)
             if (filterSecondaryKey(secondaryKeyToAdd)) {

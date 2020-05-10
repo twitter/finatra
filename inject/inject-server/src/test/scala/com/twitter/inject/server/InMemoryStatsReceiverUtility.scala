@@ -346,7 +346,8 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
     override def waitFor(
       name: String,
       timeout: Duration = 150.millis
-    )(predicate: Seq[Float] => Boolean
+    )(
+      predicate: Seq[Float] => Boolean
     ): Unit = this.assertStat(name, predicate, timeout)
 
     private def assertStat(

@@ -1,13 +1,19 @@
 package com.twitter.finatra.kafkastreams.query
 
-import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer.{DateTimeMillis, WindowStartTime}
+import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer.{
+  DateTimeMillis,
+  WindowStartTime
+}
 import com.twitter.finatra.kafkastreams.transformer.aggregation.TimeWindowed
 import com.twitter.finatra.kafkastreams.transformer.domain.{CompositeKey, Time}
 import com.twitter.finatra.kafkastreams.transformer.stores.FinatraReadOnlyKeyValueStore
 import com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraStoresGlobalManager
 import com.twitter.finatra.kafkastreams.utils.time._
 import com.twitter.finatra.streams.queryable.thrift.domain.ServiceShardId
-import com.twitter.finatra.streams.queryable.thrift.partitioning.{KafkaPartitioner, StaticServiceShardPartitioner}
+import com.twitter.finatra.streams.queryable.thrift.partitioning.{
+  KafkaPartitioner,
+  StaticServiceShardPartitioner
+}
 import com.twitter.inject.Logging
 import com.twitter.util.Duration
 import java.io.File
@@ -44,10 +50,7 @@ class QueryableFinatraCompositeWindowStore[PK, SK, V](
   )
 
   private val defaultQueryRange = QueryableFinatraWindowStore
-    .defaultQueryRange(
-      windowSize,
-      allowedLateness,
-      queryableAfterClose)
+    .defaultQueryRange(windowSize, allowedLateness, queryableAfterClose)
 
   /* Public */
 
@@ -79,7 +82,11 @@ class QueryableFinatraCompositeWindowStore[PK, SK, V](
       primaryKey,
       primaryKeySerializer)
 
-    val (startWindowRange, endWindowRange) = QueryableFinatraWindowStore.queryStartAndEndTime(windowSize, defaultQueryRange, startTime, endTime)
+    val (startWindowRange, endWindowRange) = QueryableFinatraWindowStore.queryStartAndEndTime(
+      windowSize,
+      defaultQueryRange,
+      startTime,
+      endTime)
 
     val resultMap = new java.util.TreeMap[DateTimeMillis, mutable.Map[SK, V]]().asScala
 
@@ -89,7 +96,8 @@ class QueryableFinatraCompositeWindowStore[PK, SK, V](
       numPartitions = numQueryablePartitions,
       keyBytes = primaryKeyBytes)
 
-    trace(s"Start Query $storeName ${store.taskId} $primaryKey $startCompositeKey $endCompositeKey ${startWindowRange.iso8601Millis} to ${endWindowRange.iso8601Millis} = $resultMap")
+    trace(
+      s"Start Query $storeName ${store.taskId} $primaryKey $startCompositeKey $endCompositeKey ${startWindowRange.iso8601Millis} to ${endWindowRange.iso8601Millis} = $resultMap")
 
     var windowStartTime = startWindowRange
     while (windowStartTime <= endWindowRange) {
@@ -99,12 +107,14 @@ class QueryableFinatraCompositeWindowStore[PK, SK, V](
         endCompositeKey = endCompositeKey,
         windowStartTime = windowStartTime,
         allowStaleReads = allowStaleReads,
-        windowedResultsMap = resultMap)
+        windowedResultsMap = resultMap
+      )
 
       windowStartTime = windowStartTime + windowSizeMillis
     }
 
-    info(s"Query $storeName ${store.taskId} $primaryKey $startCompositeKey $endCompositeKey ${startWindowRange.iso8601Millis} to ${endWindowRange.iso8601Millis} = $resultMap")
+    info(
+      s"Query $storeName ${store.taskId} $primaryKey $startCompositeKey $endCompositeKey ${startWindowRange.iso8601Millis} to ${endWindowRange.iso8601Millis} = $resultMap")
     resultMap.toMap
   }
 
@@ -116,7 +126,10 @@ class QueryableFinatraCompositeWindowStore[PK, SK, V](
     endCompositeKey: CompositeKey[PK, SK],
     windowStartTime: DateTimeMillis,
     allowStaleReads: Boolean,
-    windowedResultsMap: scala.collection.mutable.Map[WindowStartTime, scala.collection.mutable.Map[SK, V]]
+    windowedResultsMap: scala.collection.mutable.Map[
+      WindowStartTime,
+      scala.collection.mutable.Map[SK, V]
+    ]
   ): Unit = {
     val iterator = store.range(
       TimeWindowed.forSize(start = Time(windowStartTime), windowSize, startCompositeKey),

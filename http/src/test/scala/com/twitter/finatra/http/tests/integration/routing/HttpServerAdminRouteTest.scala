@@ -93,16 +93,14 @@ class HttpServerAdminRouteTest extends Test {
               response.ok("roger.")
             }
 
-            get("/admin/threadName", admin = true) {
-              _: Request =>
-                info("in /admin/threadName")
-                response.ok(Thread.currentThread.getName)
+            get("/admin/threadName", admin = true) { _: Request =>
+              info("in /admin/threadName")
+              response.ok(Thread.currentThread.getName)
             }
 
-            get("/admin/finatra/threadName", admin = true) {
-              _: Request =>
-                info("in /admin/finatra/threadName")
-                response.ok(Thread.currentThread.getName)
+            get("/admin/finatra/threadName", admin = true) { _: Request =>
+              info("in /admin/finatra/threadName")
+              response.ok(Thread.currentThread.getName)
             }
           })
         }
@@ -147,13 +145,20 @@ class HttpServerAdminRouteTest extends Test {
       // GET /another/admin/route should be added
       val adminAnotherRoute = server.adminHttpServerRoutes.find(_.path == "/another/admin/route")
       adminAnotherRoute.isDefined should be(true)
-      adminAnotherRoute.get.includeInIndex should be(false) // not indexable as it needs to start with /admin to be indexed
+      adminAnotherRoute.get.includeInIndex should be(
+        false
+      ) // not indexable as it needs to start with /admin to be indexed
 
       // A handler should show up on the HttpMuxer
       HttpMuxer.patterns.contains("/admin/finatra/") should be(true)
 
-      server.httpGet("/admin/threadName", andExpect = Status.Ok).getContentString() should startWith("AdminFuturePool")
-      server.httpGet("/admin/finatra/threadName", andExpect = Status.Ok).getContentString() should startWith("AdminFuturePool")
+      server
+        .httpGet("/admin/threadName", andExpect = Status.Ok).getContentString() should startWith(
+        "AdminFuturePool")
+      server
+        .httpGet(
+          "/admin/finatra/threadName",
+          andExpect = Status.Ok).getContentString() should startWith("AdminFuturePool")
     } finally {
       server.close()
     }
@@ -242,22 +247,26 @@ class HttpServerAdminRouteTest extends Test {
       server.adminHttpServerRoutes
         .map(_.path)
         .contains("/foo/bar") should be(true) // a route with the path is there
-      server.adminHttpServerRoutes.exists(
-        route => route.path == "/foo/bar" && route.method == Method.Get
-      ) should be(true) // however, we should also check the Method
-      server.adminHttpServerRoutes.exists(
-        route => route.path == "/foo/bar" && route.method == Method.Post
-      ) should be(false) // in this case, the path with a Post does not exist
+      server.adminHttpServerRoutes.exists(route =>
+        route.path == "/foo/bar" && route.method == Method.Get) should be(
+        true
+      ) // however, we should also check the Method
+      server.adminHttpServerRoutes.exists(route =>
+        route.path == "/foo/bar" && route.method == Method.Post) should be(
+        false
+      ) // in this case, the path with a Post does not exist
 
       server.adminHttpServerRoutes
         .map(_.path)
         .contains("/great/work") should be(true) // a route with the path is there
-      server.adminHttpServerRoutes.exists(
-        route => route.path == "/great/work" && route.method == Method.Post
-      ) should be(true) // however, we should also check the Method
-      server.adminHttpServerRoutes.exists(
-        route => route.path == "/great/work" && route.method == Method.Get
-      ) should be(false) // in this case, the path with a Get does not exist
+      server.adminHttpServerRoutes.exists(route =>
+        route.path == "/great/work" && route.method == Method.Post) should be(
+        true
+      ) // however, we should also check the Method
+      server.adminHttpServerRoutes.exists(route =>
+        route.path == "/great/work" && route.method == Method.Get) should be(
+        false
+      ) // in this case, the path with a Get does not exist
 
       server.httpPost("/foo/bar", "", andExpect = Status.Ok, withLocation = "baz")
 

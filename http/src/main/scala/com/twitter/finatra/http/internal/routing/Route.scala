@@ -23,7 +23,12 @@ private[http] case class Route(
   annotations: Seq[Annotation] = Seq(),
   requestClass: ClassTag[_],
   responseClass: ClassTag[_],
-  routeFilter: Filter[Request, Response, Request, Response], // specific filter chain defined for this route
+  routeFilter: Filter[
+    Request,
+    Response,
+    Request,
+    Response
+  ], // specific filter chain defined for this route
   filter: Filter[Request, Response, Request, Response]) { // global filter chain to apply to this route
   import Route._
 

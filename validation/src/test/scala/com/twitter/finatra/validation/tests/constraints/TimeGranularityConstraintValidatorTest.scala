@@ -1,7 +1,10 @@
 package com.twitter.finatra.validation.tests.constraints
 
 import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
-import com.twitter.finatra.validation.constraints.{TimeGranularity, TimeGranularityConstraintValidator}
+import com.twitter.finatra.validation.constraints.{
+  TimeGranularity,
+  TimeGranularityConstraintValidator
+}
 import com.twitter.finatra.validation.tests.caseclasses._
 import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode, ValidationResult}
 import java.util.concurrent.TimeUnit
@@ -16,9 +19,8 @@ class TimeGranularityConstraintValidatorTest
   test("pass validation for a day granularity value") {
     val dayGranularity = for {
       day <- Gen.choose[Long](1, 500)
-    } yield
-      new DateTime("2014-3-26T00:00:00Z").getMillis + java.util.concurrent.TimeUnit.DAYS
-        .toMillis(day)
+    } yield new DateTime("2014-3-26T00:00:00Z").getMillis + java.util.concurrent.TimeUnit.DAYS
+      .toMillis(day)
 
     forAll(dayGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
@@ -29,9 +31,8 @@ class TimeGranularityConstraintValidatorTest
   test("fail validation for an invalid day granularity value") {
     val dayInvalidGranularity = for {
       hour <- Gen.choose[Long](1, 1000).filter(_ % 24 != 0)
-    } yield
-      new DateTime("2014-3-26T00:00:00Z").getMillis + java.util.concurrent.TimeUnit.HOURS
-        .toMillis(hour)
+    } yield new DateTime("2014-3-26T00:00:00Z").getMillis + java.util.concurrent.TimeUnit.HOURS
+      .toMillis(hour)
 
     forAll(dayInvalidGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
@@ -47,9 +48,8 @@ class TimeGranularityConstraintValidatorTest
   test("pass validation for a hour granularity value") {
     val hourGranularity = for {
       hour <- Gen.choose[Long](1, 500)
-    } yield
-      new DateTime("2014-3-26T01:00:00Z").getMillis + java.util.concurrent.TimeUnit.HOURS
-        .toMillis(hour)
+    } yield new DateTime("2014-3-26T01:00:00Z").getMillis + java.util.concurrent.TimeUnit.HOURS
+      .toMillis(hour)
 
     forAll(hourGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
@@ -60,9 +60,8 @@ class TimeGranularityConstraintValidatorTest
   test("fail validation for an invalid hour granularity value") {
     val hourInvalidGranularity = for {
       min <- Gen.choose[Long](1, 1000).filter(_ % 60 != 0)
-    } yield
-      new DateTime("2014-3-26T02:00:00Z").getMillis + java.util.concurrent.TimeUnit.MINUTES
-        .toMillis(min)
+    } yield new DateTime("2014-3-26T02:00:00Z").getMillis + java.util.concurrent.TimeUnit.MINUTES
+      .toMillis(min)
 
     forAll(hourInvalidGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
@@ -78,9 +77,8 @@ class TimeGranularityConstraintValidatorTest
   test("pass validation for a minute granularity value") {
     val minGranularity = for {
       min <- Gen.choose[Long](1, 500)
-    } yield
-      new DateTime("2014-3-26T01:10:00Z").getMillis + java.util.concurrent.TimeUnit.MINUTES
-        .toMillis(min)
+    } yield new DateTime("2014-3-26T01:10:00Z").getMillis + java.util.concurrent.TimeUnit.MINUTES
+      .toMillis(min)
 
     forAll(minGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
@@ -91,9 +89,8 @@ class TimeGranularityConstraintValidatorTest
   test("fail validation for an invalid minute granularity value") {
     val minInvalidGranularity = for {
       second <- Gen.choose[Long](1, 1000).filter(_ % 60 != 0)
-    } yield
-      new DateTime("2014-3-26T02:20:00Z").getMillis + java.util.concurrent.TimeUnit.SECONDS
-        .toMillis(second)
+    } yield new DateTime("2014-3-26T02:20:00Z").getMillis + java.util.concurrent.TimeUnit.SECONDS
+      .toMillis(second)
 
     forAll(minInvalidGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
@@ -109,9 +106,9 @@ class TimeGranularityConstraintValidatorTest
   test("pass validation for a second granularity value") {
     val secondGranularity = for {
       second <- Gen.choose[Long](1, 500)
-    } yield
-      new DateTime("2014-3-26T01:10:10.000Z").getMillis + java.util.concurrent.TimeUnit.SECONDS
-        .toMillis(second)
+    } yield new DateTime(
+      "2014-3-26T01:10:10.000Z").getMillis + java.util.concurrent.TimeUnit.SECONDS
+      .toMillis(second)
 
     forAll(secondGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
@@ -149,9 +146,9 @@ class TimeGranularityConstraintValidatorTest
   test("pass validation for a microsecond granularity value") {
     val microGranularity = for {
       micro <- Gen.choose[Long](1, 1000)
-    } yield
-      new DateTime("2014-3-26T01:10:10.001Z").getMillis + java.util.concurrent.TimeUnit.MICROSECONDS
-        .toMillis(micro)
+    } yield new DateTime(
+      "2014-3-26T01:10:10.001Z").getMillis + java.util.concurrent.TimeUnit.MICROSECONDS
+      .toMillis(micro)
 
     forAll(microGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
@@ -162,9 +159,9 @@ class TimeGranularityConstraintValidatorTest
   test("pass validation for a nanosecond granularity value") {
     val nanoGranularity = for {
       nano <- Gen.choose[Long](1, 1000)
-    } yield
-      new DateTime("2014-3-26T01:10:10.001Z").getMillis + java.util.concurrent.TimeUnit.NANOSECONDS
-        .toMillis(nano)
+    } yield new DateTime(
+      "2014-3-26T01:10:10.001Z").getMillis + java.util.concurrent.TimeUnit.NANOSECONDS
+      .toMillis(nano)
 
     forAll(nanoGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)

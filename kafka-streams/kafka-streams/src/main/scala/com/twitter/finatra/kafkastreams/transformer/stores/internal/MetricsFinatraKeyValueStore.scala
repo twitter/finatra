@@ -60,7 +60,8 @@ case class MetricsFinatraKeyValueStore[K, V](
   private val allLatencyStat = stat(AllLatencyStatName)
   private val approximateNumEntriesLatencyStat = stat(ApproximateNumEntriesLatencyStatName)
   private val deleteRangeLatencyStat = stat(DeleteRangeLatencyStatName)
-  private val deleteWithoutGettingPriorValueLatencyStat = stat(DeleteWithoutGettingPriorValueLatencyStatName)
+  private val deleteWithoutGettingPriorValueLatencyStat = stat(
+    DeleteWithoutGettingPriorValueLatencyStatName)
   private val finatraRangeLatencyStat = stat(FinatraRangeLatencyStatName)
   private val deleteRangeExperimentalLatencyStat = stat(DeleteRangeExperimentalLatencyStatName)
 

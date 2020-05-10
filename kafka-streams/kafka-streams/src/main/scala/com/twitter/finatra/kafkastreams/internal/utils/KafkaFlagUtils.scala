@@ -38,9 +38,7 @@ private[kafkastreams] trait KafkaFlagUtils extends App {
     key: String,
     helpPrefix: String = ""
   ): Flag[T] = {
-    flag[T](
-      name = "kafka." + key,
-      help = helpPrefix + kafkaDocumentation(streamsConfigDef, key))
+    flag[T](name = "kafka." + key, help = helpPrefix + kafkaDocumentation(streamsConfigDef, key))
   }
 
   /**
@@ -69,9 +67,7 @@ private[kafkastreams] trait KafkaFlagUtils extends App {
    * @return Flag for the specified key
    */
   def flagWithKafkaDefault[T: Flaggable](key: String): Flag[T] = {
-    kafkaFlag[T](
-      key,
-      getKafkaDefault[T](streamsConfigDef, key))
+    kafkaFlag[T](key, getKafkaDefault[T](streamsConfigDef, key))
   }
 
   /**

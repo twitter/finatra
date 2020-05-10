@@ -11,5 +11,4 @@ case class PatchOperation(
   op: Operand,
   path: JsonPointer,
   value: Option[JsonNode],
-  from: Option[JsonPointer]
-)
+  from: Option[JsonPointer])

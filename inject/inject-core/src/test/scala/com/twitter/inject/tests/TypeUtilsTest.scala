@@ -28,7 +28,7 @@ class TypeUtilsTest extends Test with ScalaCheckDrivenPropertyChecks {
     assert(TypeUtils.asManifest[A with B] == manifest[Any])
   }
 
-  def manifestedTypesEquals[T : TypeTag : Manifest](a: T): Boolean = {
+  def manifestedTypesEquals[T: TypeTag: Manifest](a: T): Boolean = {
     TypeUtils.asManifest[T] == manifest[T]
   }
 

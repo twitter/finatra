@@ -12,9 +12,9 @@ import javax.inject.{Inject, Singleton}
  * @note This Filter SHOULD be as close to the start of the Filter chain as possible
  */
 @Singleton
-class ExceptionMappingFilter @Inject()(
-  exceptionManager: ExceptionManager
-) extends Filter.TypeAgnostic {
+class ExceptionMappingFilter @Inject() (
+  exceptionManager: ExceptionManager)
+    extends Filter.TypeAgnostic {
 
   def toFilter[T, U]: Filter[T, U, T, U] = new Filter[T, U, T, U] {
     def apply(

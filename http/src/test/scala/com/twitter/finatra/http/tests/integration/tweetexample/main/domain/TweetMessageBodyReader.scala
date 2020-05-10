@@ -6,7 +6,7 @@ import com.twitter.finatra.http.marshalling.MessageBodyReader
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import javax.inject.Inject
 
-class TweetMessageBodyReader @Inject()(mapper: ScalaObjectMapper)
+class TweetMessageBodyReader @Inject() (mapper: ScalaObjectMapper)
     extends MessageBodyReader[Tweet] {
 
   override def parse(message: Message): Tweet = {

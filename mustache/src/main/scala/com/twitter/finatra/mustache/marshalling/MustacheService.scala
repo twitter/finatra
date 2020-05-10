@@ -18,7 +18,7 @@ import javax.inject.{Inject, Singleton}
  * @param mustacheFactory the factory to use for compiling a given template
  */
 @Singleton
-class MustacheService @Inject()(mustacheFactory: MustacheFactory) {
+class MustacheService @Inject() (mustacheFactory: MustacheFactory) {
 
   /* Public */
 

@@ -15,7 +15,9 @@ object StringUtils {
    *
    * @return the underscored string
    */
-  @deprecated("Users are encouraged to use com.twitter.conversions.StringOps#toSnakeCase", "2019-03-02")
+  @deprecated(
+    "Users are encouraged to use com.twitter.conversions.StringOps#toSnakeCase",
+    "2019-03-02")
   def snakify(name: String): String = StringOps.toSnakeCase(name)
 
   /**
@@ -31,9 +33,10 @@ object StringUtils {
    * @param name the String to PascalCase
    * @return the PascalCased string
    */
-  @deprecated("Users are encouraged to use com.twitter.conversions.StringOps#toPascalCase", "2019-03-02")
+  @deprecated(
+    "Users are encouraged to use com.twitter.conversions.StringOps#toPascalCase",
+    "2019-03-02")
   def pascalify(name: String): String = StringOps.toPascalCase(name)
-
 
   /**
    * Turn a string of format "foo_bar" into camelCase with the first letter in lower case: "fooBar"
@@ -50,6 +53,8 @@ object StringUtils {
    * @param name the String to camelCase
    * @return the camelCased string
    */
-  @deprecated("Users are encouraged to use com.twitter.conversions.StringOps#toCamelCase", "2019-03-02")
+  @deprecated(
+    "Users are encouraged to use com.twitter.conversions.StringOps#toCamelCase",
+    "2019-03-02")
   def camelify(name: String): String = StringOps.toCamelCase(name)
 }

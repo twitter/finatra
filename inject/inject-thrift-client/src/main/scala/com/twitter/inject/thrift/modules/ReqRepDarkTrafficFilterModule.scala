@@ -20,8 +20,8 @@ import scala.reflect.ClassTag
  *       [[JavaDarkTrafficFilterModule]].
  */
 abstract class ReqRepDarkTrafficFilterModule[MethodIface <: Filterable[MethodIface]: ClassTag](
-  implicit serviceBuilder: ReqRepServicePerEndpointBuilder[MethodIface]
-) extends DarkTrafficFilterModuleTrait {
+  implicit serviceBuilder: ReqRepServicePerEndpointBuilder[MethodIface])
+    extends DarkTrafficFilterModuleTrait {
 
   /**
    * Function to determine if the request should be "sampled", e.g.

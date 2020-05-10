@@ -12,8 +12,8 @@ import com.twitter.finagle.stats.StatsReceiver
  */
 class TestLogbackAsyncAppender(
   statsReceiver: StatsReceiver,
-  stopAsyncWorkerThread: Boolean = false
-) extends LogbackAsyncAppenderBase(statsReceiver) {
+  stopAsyncWorkerThread: Boolean = false)
+    extends LogbackAsyncAppenderBase(statsReceiver) {
 
   override def start(): Unit = {
     super.start()

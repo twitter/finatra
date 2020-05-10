@@ -1,7 +1,11 @@
 package com.twitter.finatra.jackson.serde
 
 import com.fasterxml.jackson.core.{JsonParser, JsonToken}
-import com.fasterxml.jackson.databind.{DeserializationContext, JsonDeserializer, JsonMappingException}
+import com.fasterxml.jackson.databind.{
+  DeserializationContext,
+  JsonDeserializer,
+  JsonMappingException
+}
 import com.twitter.util.Duration
 import scala.util.control.NonFatal
 

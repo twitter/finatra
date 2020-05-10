@@ -25,7 +25,7 @@ object ResponseBuilder {
     )
 }
 
-class ResponseBuilder @Inject()(
+class ResponseBuilder @Inject() (
   objectMapper: ScalaObjectMapper,
   fileResolver: FileResolver,
   messageBodyManager: MessageBodyManager,

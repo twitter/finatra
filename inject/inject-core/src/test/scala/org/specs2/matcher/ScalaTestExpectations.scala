@@ -27,7 +27,11 @@ trait ScalaTestExpectations extends Expectations {
       override def check[S >: T](r: MatchResult[S]): MatchResult[S] = {
         r match {
           case f: MatchFailure[_] =>
-            throw new TestFailedException(f.message, f.exception, 0) // We throw a ScalaTest exception here
+            throw new TestFailedException(
+              f.message,
+              f.exception,
+              0
+            ) // We throw a ScalaTest exception here
           case _ =>
             ()
         }

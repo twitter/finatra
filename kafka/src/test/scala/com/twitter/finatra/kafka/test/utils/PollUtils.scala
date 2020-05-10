@@ -13,7 +13,8 @@ object PollUtils extends Logging {
     pollMessage: String = "",
     exhaustedTimeoutMessage: => String = "",
     exhaustedTriesMessage: (T => String) = (_: T) => ""
-  )(until: T => Boolean
+  )(
+    until: T => Boolean
   ): T = {
     var tries = 0
     var funcResult: T = func

@@ -16,9 +16,7 @@ import com.fasterxml.jackson.databind.{
   ObjectMapper => JacksonObjectMapper
 }
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import com.fasterxml.jackson.module.scala.{
-  ScalaObjectMapper => JacksonScalaObjectMapper
-}
+import com.fasterxml.jackson.module.scala.{ScalaObjectMapper => JacksonScalaObjectMapper}
 import com.twitter.finatra.jackson.caseclass.exceptions.{
   CaseClassFieldMappingException,
   CaseClassMappingException
@@ -421,7 +419,8 @@ abstract class AbstractScalaObjectMapperTest extends Test {
     json should equal(withNonemptyJsonProperty)
   }
 
-  test("simple tests#parse WithoutJsonPropertyAnnotation then write and see if it equals original") {
+  test(
+    "simple tests#parse WithoutJsonPropertyAnnotation then write and see if it equals original") {
     val withoutJsonPropertyAnnotation =
       """{
         |  "foo" : "abc"
@@ -866,11 +865,13 @@ abstract class AbstractScalaObjectMapperTest extends Test {
     generate(CaseClassWithOption(Some("what"))) should be("""{"value":"what"}""")
   }
 
-  test("A case class with an Option[String] member is parsable from a JSON object with that field") {
+  test(
+    "A case class with an Option[String] member is parsable from a JSON object with that field") {
     parse[CaseClassWithOption]("""{"value":"what"}""") should be(CaseClassWithOption(Some("what")))
   }
 
-  test("A case class with an Option[String] member doesn't generate a field if the member is None") {
+  test(
+    "A case class with an Option[String] member doesn't generate a field if the member is None") {
     generate(CaseClassWithOption(None)) should be("""{}""")
   }
 
@@ -1376,7 +1377,8 @@ abstract class AbstractScalaObjectMapperTest extends Test {
   test(
     "deserialization#case class in package object without constructor params and parsing a json object with extra fields"
   ) {
-    parse[SimplePersonInPackageObjectWithoutConstructorParams]("""{"name": "Steve"}""") should equal(
+    parse[SimplePersonInPackageObjectWithoutConstructorParams](
+      """{"name": "Steve"}""") should equal(
       SimplePersonInPackageObjectWithoutConstructorParams()
     )
   }

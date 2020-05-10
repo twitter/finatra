@@ -31,7 +31,8 @@ case class CaseClassWithLongParamNameRequest(@QueryParam thisShouldUseMapperNami
 case class CaseClassWithCustomDecimalFormatRequest(
   @QueryParam @JsonDeserialize(using = classOf[MyBigDecimalDeserializer]) required: BigDecimal,
   @QueryParam @JsonDeserialize(using = classOf[MyBigDecimalDeserializer]) optional: Option[
-    BigDecimal])
+    BigDecimal
+  ])
 
 case class CaseClassWithBoolean(foo: Boolean)
 

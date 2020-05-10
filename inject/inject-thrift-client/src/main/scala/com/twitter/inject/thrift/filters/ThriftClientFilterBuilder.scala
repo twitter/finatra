@@ -15,8 +15,7 @@ class ThriftClientFilterBuilder(
   label: String,
   budget: Budget,
   useHighResTimerForRetries: Boolean,
-  andThenService: AndThenService
-) {
+  andThenService: AndThenService) {
 
   def method(method: ThriftMethod): ThriftClientFilterChain[method.Args, method.SuccessType] = {
     new ThriftClientFilterChain[method.Args, method.SuccessType](

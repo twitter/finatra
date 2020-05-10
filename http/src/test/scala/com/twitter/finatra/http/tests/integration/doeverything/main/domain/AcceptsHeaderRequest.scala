@@ -6,5 +6,4 @@ case class AcceptsHeaderRequest(
   @Header accept: String,
   @Header("accept-charset") acceptCharset: String,
   @Header("Accept-Charset") acceptCharsetAgain: String,
-  @Header("Accept-Encoding") acceptEncoding: String
-)
+  @Header("Accept-Encoding") acceptEncoding: String)

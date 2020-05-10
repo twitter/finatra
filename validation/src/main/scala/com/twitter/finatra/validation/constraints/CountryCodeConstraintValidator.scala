@@ -16,9 +16,9 @@ private[validation] object CountryCodeConstraintValidator {
   private def toErrorValue(value: Any): String =
     value match {
       case arrayValue: Array[_] =>
-        arrayValue mkString(",")
+        arrayValue mkString (",")
       case traversableValue: Traversable[_] =>
-        traversableValue mkString(",")
+        traversableValue mkString (",")
       case anyValue =>
         anyValue.toString
     }

@@ -73,7 +73,9 @@ class HttpClientIntegrationTest extends IntegrationTest {
     mockResponse.setContentString("{}")
     inMemoryHttpService.mockGet("/foo", mockResponse)
 
-    Await.result(httpClient.get("/foo")) should be(mockResponse) //Purposely using deprecated method for test coverage
+    Await.result(httpClient.get("/foo")) should be(
+      mockResponse
+    ) //Purposely using deprecated method for test coverage
   }
 
   object MyHttpClientModule extends HttpClientModuleTrait {

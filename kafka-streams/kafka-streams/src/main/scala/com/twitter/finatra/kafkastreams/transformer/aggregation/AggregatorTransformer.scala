@@ -90,10 +90,8 @@ class AggregatorTransformer[K, V, Aggregate](
   }
 
   override def onMessage(time: Time, key: K, value: V): Unit = {
-    val windowedKey = TimeWindowed.forSize(
-      start = windowStart(time, key, value),
-      size = windowSize,
-      value = key)
+    val windowedKey =
+      TimeWindowed.forSize(start = windowStart(time, key, value), size = windowSize, value = key)
 
     if (windowedKey.isLate(allowedLateness, watermark)) {
       restatement(time, key, value, windowedKey)
@@ -149,7 +147,8 @@ class AggregatorTransformer[K, V, Aggregate](
     timerMetadata: TimerMetadata,
     windowStartTime: WindowStartTime
   ): Unit = {
-    debug(s"onEventTimer $time $timerMetadata WindowStartTime(${windowStartTime.iso8601Millis}) $watermark")
+    debug(
+      s"onEventTimer $time $timerMetadata WindowStartTime(${windowStartTime.iso8601Millis}) $watermark")
     val windowedEntriesIterator = stateStore.range(
       fromBytesInclusive = windowStartTimeBytes(windowStartTime),
       toBytesExclusive = windowStartTimeBytes(windowStartTime + 1))

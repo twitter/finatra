@@ -26,7 +26,9 @@ class FeatureTestNonInjectionInMemoryStatsReceiverTest extends FeatureTest {
   override def beforeAll(): Unit = {
     server.start()
 
-    assert(inMemoryStatsReceiver.gauges.nonEmpty) /* we add a build revision gauge in startup of the server */
+    assert(
+      inMemoryStatsReceiver.gauges.nonEmpty
+    ) /* we add a build revision gauge in startup of the server */
   }
 
   test("TestServer#starts up") {

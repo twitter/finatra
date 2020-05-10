@@ -143,7 +143,9 @@ class StatsFilterTest extends Test with Mockito {
       statsReceiver.counters(List("route", "foo", "GET", "requests")) should equal(1)
       statsReceiver.counters(List("route", "foo", "GET", "status", "5XX")) should equal(1)
       statsReceiver.counters(List("route", "foo", "GET", "status", "500")) should equal(1)
-      statsReceiver.counters(List("route", "foo", "GET", "failures")) should equal(1) // server errors as failures
+      statsReceiver.counters(List("route", "foo", "GET", "failures")) should equal(
+        1
+      ) // server errors as failures
       statsReceiver.counters(List("route", "foo", "GET", "success")) should equal(0)
 
       /* per-route histos */
@@ -184,7 +186,9 @@ class StatsFilterTest extends Test with Mockito {
       statsReceiver.counters(List("route", "foo", "GET", "requests")) should equal(1)
       statsReceiver.counters(List("route", "foo", "GET", "status", "5XX")) should equal(1)
       statsReceiver.counters(List("route", "foo", "GET", "status", "500")) should equal(1)
-      statsReceiver.counters(List("route", "foo", "GET", "ignored")) should equal(1) // server errors ignored
+      statsReceiver.counters(List("route", "foo", "GET", "ignored")) should equal(
+        1
+      ) // server errors ignored
       statsReceiver.counters(List("route", "foo", "GET", "failures")) should equal(0)
       statsReceiver.counters(List("route", "foo", "GET", "success")) should equal(0)
 
@@ -221,8 +225,12 @@ class StatsFilterTest extends Test with Mockito {
       statsReceiver.counters(List("route", "foo", "GET", "requests")) should equal(1)
       statsReceiver.counters(List("route", "foo", "GET", "status", "5XX")) should equal(1)
       statsReceiver.counters(List("route", "foo", "GET", "status", "500")) should equal(1)
-      statsReceiver.counters(List("route", "foo", "GET", "ignored")) should equal(0) // IllegalArgumentException classified as a success
-      statsReceiver.counters(List("route", "foo", "GET", "failures")) should equal(0) // IllegalArgumentException classified as a success
+      statsReceiver.counters(List("route", "foo", "GET", "ignored")) should equal(
+        0
+      ) // IllegalArgumentException classified as a success
+      statsReceiver.counters(List("route", "foo", "GET", "failures")) should equal(
+        0
+      ) // IllegalArgumentException classified as a success
       statsReceiver.counters(List("route", "foo", "GET", "success")) should equal(1)
     }
   }
@@ -254,7 +262,9 @@ class StatsFilterTest extends Test with Mockito {
       statsReceiver.counters(List("route", "foo", "GET", "status", "2XX")) should equal(1)
       statsReceiver.counters(List("route", "foo", "GET", "status", "200")) should equal(1)
       statsReceiver.counters(List("route", "foo", "GET", "ignored")) should equal(0)
-      statsReceiver.counters(List("route", "foo", "GET", "failures")) should equal(1) // 200 OK response but classified as a "failure"
+      statsReceiver.counters(List("route", "foo", "GET", "failures")) should equal(
+        1
+      ) // 200 OK response but classified as a "failure"
       statsReceiver.counters(List("route", "foo", "GET", "success")) should equal(0)
     }
   }
@@ -285,8 +295,12 @@ class StatsFilterTest extends Test with Mockito {
       statsReceiver.counters(List("route", "foo", "GET", "requests")) should equal(1)
       statsReceiver.counters(List("route", "foo", "GET", "status", "5XX")) should equal(1)
       statsReceiver.counters(List("route", "foo", "GET", "status", "500")) should equal(1)
-      statsReceiver.counters(List("route", "foo", "GET", "ignored")) should equal(0) // Any 5xx is a success
-      statsReceiver.counters(List("route", "foo", "GET", "failures")) should equal(0) // Any 5xx is a success
+      statsReceiver.counters(List("route", "foo", "GET", "ignored")) should equal(
+        0
+      ) // Any 5xx is a success
+      statsReceiver.counters(List("route", "foo", "GET", "failures")) should equal(
+        0
+      ) // Any 5xx is a success
       statsReceiver.counters(List("route", "foo", "GET", "success")) should equal(1)
     }
   }

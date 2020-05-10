@@ -104,7 +104,10 @@ private[routing] abstract class BaseThriftRouter[Router <: BaseThriftRouter[Rout
     result
   }
 
-  protected[this] def registerGlobalFilter(thriftFilter: Object, registry: LibraryRegistry): Unit = {
+  protected[this] def registerGlobalFilter(
+    thriftFilter: Object,
+    registry: LibraryRegistry
+  ): Unit = {
     if (thriftFilter ne Filter.TypeAgnostic.Identity) {
       registry
         .withSection("thrift")
@@ -125,12 +128,12 @@ private object ThriftRouter {
  *       are encouraged to use the [[JavaThriftRouter]].
  */
 @Singleton
-class ThriftRouter @Inject()(
+class ThriftRouter @Inject() (
   injector: Injector,
   exceptionManager: ExceptionManager,
   stackTransformer: StackTransformer,
-  @Flag("thrift.name") serverName: String
-) extends BaseThriftRouter[ThriftRouter](injector, exceptionManager) {
+  @Flag("thrift.name") serverName: String)
+    extends BaseThriftRouter[ThriftRouter](injector, exceptionManager) {
 
   private[this] var underlying: ThriftService = NullThriftService
 
@@ -254,17 +257,20 @@ class ThriftRouter @Inject()(
     controller: Controller,
     conf: Controller.ControllerConfig
   ): ThriftService = {
-    assert(conf.isValid, {
-      val expectStr = conf.gen.methods.map(_.name).mkString("{", ", ", "}")
-      val actualStr = conf.methods.map(_.method.name).mkString("{", ", ", "}")
-      s"${controller.getClass.getSimpleName} for service " +
-        s"${conf.gen.getClass.getSimpleName} is misconfigured. " +
-        s"Expected exactly one implementation for each of $expectStr but found $actualStr"
-    })
+    assert(
+      conf.isValid, {
+        val expectStr = conf.gen.methods.map(_.name).mkString("{", ", ", "}")
+        val actualStr = conf.methods.map(_.method.name).mkString("{", ", ", "}")
+        s"${controller.getClass.getSimpleName} for service " +
+          s"${conf.gen.getClass.getSimpleName} is misconfigured. " +
+          s"Expected exactly one implementation for each of $expectStr but found $actualStr"
+      }
+    )
 
     routes = conf.methods.map { cm =>
       val method: ThriftMethod = cm.method
-      val service = cm.impl.asInstanceOf[Service[Request[method.Args], Response[method.SuccessType]]]
+      val service =
+        cm.impl.asInstanceOf[Service[Request[method.Args], Response[method.SuccessType]]]
       thriftMethodRegistrar.register(controller.getClass, method, cm.filters)
       method -> {
         val endpoint = ServiceFactory.const(cm.filters.andThen(service))
@@ -331,7 +337,7 @@ class ThriftRouter @Inject()(
  * @see [[com.twitter.finatra.thrift.routing.BaseThriftRouter]]
  */
 @Singleton
-class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionManager)
+class JavaThriftRouter @Inject() (injector: Injector, exceptionManager: ExceptionManager)
     extends BaseThriftRouter[JavaThriftRouter](injector, exceptionManager) {
 
   private[this] var underlying: Service[Array[Byte], Array[Byte]] = NilService

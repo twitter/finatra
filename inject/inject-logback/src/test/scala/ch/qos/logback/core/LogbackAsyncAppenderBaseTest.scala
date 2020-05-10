@@ -6,9 +6,10 @@ import com.twitter.inject.Test
 class LogbackAsyncAppenderBaseTest extends Test {
 
   case class TestAppender(statsReceiver: StatsReceiver)
-    extends LogbackAsyncAppenderBase(statsReceiver)
+      extends LogbackAsyncAppenderBase(statsReceiver)
 
-  test("LogbackAsyncAppenderBaseTest#start should setup current_queue_size gauge properly when no appenders") {
+  test(
+    "LogbackAsyncAppenderBaseTest#start should setup current_queue_size gauge properly when no appenders") {
     val sr = new InMemoryStatsReceiver
     val appender = TestAppender(sr)
     appender.setName("test")

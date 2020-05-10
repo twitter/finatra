@@ -5,7 +5,7 @@ import com.twitter.finatra.http.Controller
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class DoEverythingCombinedController @Inject()(adder: AdderService) extends Controller {
+class DoEverythingCombinedController @Inject() (adder: AdderService) extends Controller {
 
   get("/ping") { _: Request =>
     "pong"

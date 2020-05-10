@@ -47,13 +47,15 @@ class FinagleBenchmarkServer extends TwitterServer with Ports {
         Future.value(rep)
       }
     )
-    .withHandler("/plaintext", Service.mk { req: Request =>
-      val rep = Response()
-      rep.content = helloWorld
-      rep.contentType = "text/plain"
+    .withHandler(
+      "/plaintext",
+      Service.mk { req: Request =>
+        val rep = Response()
+        rep.content = helloWorld
+        rep.contentType = "text/plain"
 
-      Future.value(rep)
-    })
+        Future.value(rep)
+      })
 
   val serverAndDate: SimpleFilter[Request, Response] = new SimpleFilter[Request, Response] {
 

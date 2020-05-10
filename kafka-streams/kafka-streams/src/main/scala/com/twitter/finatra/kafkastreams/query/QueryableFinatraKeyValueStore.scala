@@ -2,7 +2,10 @@ package com.twitter.finatra.kafkastreams.query
 
 import com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraStoresGlobalManager
 import com.twitter.finatra.streams.queryable.thrift.domain.ServiceShardId
-import com.twitter.finatra.streams.queryable.thrift.partitioning.{KafkaPartitioner, StaticServiceShardPartitioner}
+import com.twitter.finatra.streams.queryable.thrift.partitioning.{
+  KafkaPartitioner,
+  StaticServiceShardPartitioner
+}
 import com.twitter.inject.Logging
 import java.io.File
 import org.apache.kafka.common.serialization.Serde
@@ -19,7 +22,7 @@ class QueryableFinatraKeyValueStore[PK, K, V](
   numShards: Int,
   numQueryablePartitions: Int,
   currentShardId: Int)
-  extends Logging {
+    extends Logging {
   private val primaryKeySerializer = primaryKeySerde.serializer()
 
   private val currentServiceShardId = ServiceShardId(currentShardId)
@@ -43,11 +46,7 @@ class QueryableFinatraKeyValueStore[PK, K, V](
   def get(primaryKey: PK, key: K): Option[V] = {
     Option(
       FinatraStoresGlobalManager
-        .getStore[K, V](
-          stateDir,
-          storeName,
-          numQueryablePartitions,
-          getPrimaryKeyBytes(primaryKey))
+        .getStore[K, V](stateDir, storeName, numQueryablePartitions, getPrimaryKeyBytes(primaryKey))
         .get(key))
   }
 
@@ -66,11 +65,7 @@ class QueryableFinatraKeyValueStore[PK, K, V](
    */
   def range(primaryKey: PK, from: K, to: K): KeyValueIterator[K, V] = {
     FinatraStoresGlobalManager
-      .getStore[K, V](
-        stateDir,
-        storeName,
-        numQueryablePartitions,
-        getPrimaryKeyBytes(primaryKey))
+      .getStore[K, V](stateDir, storeName, numQueryablePartitions, getPrimaryKeyBytes(primaryKey))
       .range(from, to)
   }
 

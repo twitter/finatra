@@ -5,7 +5,7 @@ import com.twitter.inject.annotations.Flag
 import javax.inject.{Inject, Named}
 import com.twitter.util.Duration
 
-class ComplexService @Inject()(
+class ComplexService @Inject() (
   exampleService: DoEverythingService,
   defaultString: String,
   @Named("str1") string1: String,

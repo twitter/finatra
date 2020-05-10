@@ -12,8 +12,8 @@ class NormalTestFilter extends TestFilter("request" -> "true", "response" -> "tr
 
 class TestFilter(
   appendToRequestMap: (String, String),
-  appendToResponseMap: (String, String)
-) extends SimpleFilter[Request, Response] {
+  appendToResponseMap: (String, String))
+    extends SimpleFilter[Request, Response] {
 
   override def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
     request.headerMap.add(appendToRequestMap._1, appendToRequestMap._2)
@@ -110,14 +110,15 @@ class RouteDSLTest extends Test {
     routeDSL.context.prefix shouldEqual "/v1/api"
   }
 
-  test("PrefixedDSL should work fine with a trailing slash and chain to more prefixes with trailing slashes") {
+  test(
+    "PrefixedDSL should work fine with a trailing slash and chain to more prefixes with trailing slashes") {
     val routeDSL = new PrefixedDSL("/v1/").prefix("/api/")
 
     routeDSL.context.prefix shouldEqual "/v1/api"
   }
 
   test("PrefixedDSL should fail when chained to more prefixes without leading slashes") {
-    intercept[IllegalArgumentException  ] {
+    intercept[IllegalArgumentException] {
       new PrefixedDSL("/v1").prefix("api")
     }
   }

@@ -9,6 +9,7 @@ import java.io.File
 import javax.inject.Singleton
 
 object CredentialsFlags {
+
   /**
    * The location of the text file that represents the credentials to be loaded.
    * When no path is specified an "empty" com.twitter.finatra.utils.Credentials

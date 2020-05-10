@@ -33,18 +33,19 @@ final class StreamingResponse[F[_]: ToReader, A: Manifest] private[http] (
   }
 
   private[this] def toJsonArray(fromReader: Reader[A]): Reader[Buf] = {
-    Reader.fromSeq(
-      Seq(
-        Reader.fromBuf(Buf.Utf8("[")),
-        fromReader.map { i =>
-          if (head.compareAndSet(true, false)) {
-            mapper.writeValueAsBuf(i)
-          } else {
-            Buf.Utf8(",").concat(mapper.writeValueAsBuf(i))
-          }
-        },
-        Reader.fromBuf(Buf.Utf8("]"))
-      )).flatten
+    Reader
+      .fromSeq(
+        Seq(
+          Reader.fromBuf(Buf.Utf8("[")),
+          fromReader.map { i =>
+            if (head.compareAndSet(true, false)) {
+              mapper.writeValueAsBuf(i)
+            } else {
+              Buf.Utf8(",").concat(mapper.writeValueAsBuf(i))
+            }
+          },
+          Reader.fromBuf(Buf.Utf8("]"))
+        )).flatten
   }
 
   private[this] def setHeaders(response: Response, headerMap: Map[String, Seq[String]]): Unit = {

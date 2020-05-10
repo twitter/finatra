@@ -70,7 +70,8 @@ class MediaRangeTest extends Test {
   }
 
   test("maintain the original order of media ranges in the accept header") {
-    MediaRange.parseAndSort("foo1/bar1, foo3/bar3, foo2/bar2") should contain theSameElementsInOrderAs List(
+    MediaRange.parseAndSort(
+      "foo1/bar1, foo3/bar3, foo2/bar2") should contain theSameElementsInOrderAs List(
       new MediaRange("foo1", "bar1", Nil, None, Nil),
       new MediaRange("foo3", "bar3", Nil, None, Nil),
       new MediaRange("foo2", "bar2", Nil, None, Nil)
@@ -78,7 +79,8 @@ class MediaRangeTest extends Test {
   }
 
   test("order by q value") {
-    MediaRange.parseAndSort("foo1/bar1;q=0.25, foo3/bar3, foo2/bar2;q=0.5") should contain theSameElementsInOrderAs List(
+    MediaRange.parseAndSort(
+      "foo1/bar1;q=0.25, foo3/bar3, foo2/bar2;q=0.5") should contain theSameElementsInOrderAs List(
       new MediaRange("foo3", "bar3", Nil, None, Nil),
       new MediaRange("foo2", "bar2", Nil, Some(0.5), Nil),
       new MediaRange("foo1", "bar1", Nil, Some(0.25), Nil)
@@ -94,7 +96,8 @@ class MediaRangeTest extends Test {
   }
 
   test("order by parameters") {
-    MediaRange.parseAndSort("foo/bar, foo/bar;p1=v1;p2=v2, foo/bar;p1=v1") should contain theSameElementsInOrderAs List(
+    MediaRange.parseAndSort(
+      "foo/bar, foo/bar;p1=v1;p2=v2, foo/bar;p1=v1") should contain theSameElementsInOrderAs List(
       new MediaRange("foo", "bar", Seq("p1" -> Some("v1"), "p2" -> Some("v2")), None, Nil),
       new MediaRange("foo", "bar", Seq("p1" -> Some("v1")), None, Nil),
       new MediaRange("foo", "bar", Nil, None, Nil)
@@ -122,11 +125,19 @@ class MediaRangeTest extends Test {
 
   test("be able to be convert back to a string") {
     new MediaType("foo", "bar", Nil).toString shouldEqual "foo/bar"
-    new MediaType("foo", "bar", Seq("p1" -> Some("v1"), "p2" -> Some(""" v\"v"""), "p3" -> None)).toString shouldEqual
+    new MediaType(
+      "foo",
+      "bar",
+      Seq("p1" -> Some("v1"), "p2" -> Some(""" v\"v"""), "p3" -> None)).toString shouldEqual
       """foo/bar; p1=v1; p2=" v\\\"v"; p3"""
     new MediaRange("foo", "bar", Nil, None, Nil).toString shouldEqual "foo/bar"
     new MediaRange("foo", "bar", Nil, Some(0.25), Nil).toString shouldEqual "foo/bar; q=0.25"
-    new MediaRange("foo", "bar", Seq("p1" -> Some("v1")), Some(0.25), Seq("p2" -> Some("v2"))).toString shouldEqual
+    new MediaRange(
+      "foo",
+      "bar",
+      Seq("p1" -> Some("v1")),
+      Some(0.25),
+      Seq("p2" -> Some("v2"))).toString shouldEqual
       "foo/bar; p1=v1; q=0.25; p2=v2"
   }
 

@@ -2,7 +2,11 @@ package com.twitter.inject.thrift
 
 import com.twitter.conversions.StringOps._
 import com.twitter.finagle.service.ResponseClassifier
-import com.twitter.finagle.thrift.service.{Filterable, ReqRepServicePerEndpointBuilder, ServicePerEndpointBuilder}
+import com.twitter.finagle.thrift.service.{
+  Filterable,
+  ReqRepServicePerEndpointBuilder,
+  ServicePerEndpointBuilder
+}
 import com.twitter.finagle.thriftmux.MethodBuilder
 import com.twitter.finagle.{Filter, Service}
 import com.twitter.inject.Injector
@@ -35,8 +39,7 @@ final class ThriftMethodBuilderFactory[ServicePerEndpoint <: Filterable[ServiceP
   injector: Injector,
   methodBuilder: MethodBuilder
 )(
-  implicit builder: ServicePerEndpointBuilder[ServicePerEndpoint]
-) {
+  implicit builder: ServicePerEndpointBuilder[ServicePerEndpoint]) {
 
   def method[Req, Rep](method: ThriftMethod): ThriftMethodBuilder[ServicePerEndpoint, Req, Rep] =
     new ThriftMethodBuilder[ServicePerEndpoint, Req, Rep](
@@ -61,13 +64,16 @@ final class ThriftMethodBuilderFactory[ServicePerEndpoint <: Filterable[ServiceP
  * +-------------------------------------------------+
  * }}}
  */
-final class ThriftMethodBuilder[ServicePerEndpoint <: Filterable[ServicePerEndpoint], Req, Rep] private[thrift] (
+final class ThriftMethodBuilder[
+  ServicePerEndpoint <: Filterable[ServicePerEndpoint],
+  Req,
+  Rep
+] private[thrift] (
   injector: Injector,
   mb: MethodBuilder,
   method: ThriftMethod
 )(
-  implicit builder: ServicePerEndpointBuilder[ServicePerEndpoint]
-) {
+  implicit builder: ServicePerEndpointBuilder[ServicePerEndpoint]) {
 
   // Mutable
   private[this] var methodBuilder = mb
@@ -139,9 +145,9 @@ final class ThriftMethodBuilder[ServicePerEndpoint <: Filterable[ServicePerEndpo
     this
   }
 
- /**
-  * @see [[com.twitter.finagle.thriftmux.MethodBuilder.nonIdempotent]]
-  */
+  /**
+   * @see [[com.twitter.finagle.thriftmux.MethodBuilder.nonIdempotent]]
+   */
   def nonIdempotent: this.type = {
     methodBuilder = methodBuilder.nonIdempotent
     this
@@ -263,10 +269,10 @@ final class ThriftMethodBuilder[ServicePerEndpoint <: Filterable[ServicePerEndpo
     implementation: I
   ): Service[Req, Rep] = {
     val methodOpt =
-      implementation
-        .getClass
-        .getDeclaredMethods
-        .find(_.getName == method.name.toCamelCase) // converts a snake_case ThriftMethod.name to camelCase for reflection method lookup
+      implementation.getClass.getDeclaredMethods
+        .find(
+          _.getName == method.name.toCamelCase
+        ) // converts a snake_case ThriftMethod.name to camelCase for reflection method lookup
     methodOpt match {
       case Some(serviceMethod) =>
         serviceMethod

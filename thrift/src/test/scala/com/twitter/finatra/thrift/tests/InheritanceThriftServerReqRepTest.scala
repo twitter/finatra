@@ -48,7 +48,10 @@ class InheritanceThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
     val request: Request[Ping.Args] =
       Request(Ping.Args())
         .setHeader(TestClientRequestHeaderKey, "bar")
-        .setHeader("com.twitter.finagle.Retries", "5") // set a header that finagle already broadcast to ensure that we collect and don't blow up.
+        .setHeader(
+          "com.twitter.finagle.Retries",
+          "5"
+        ) // set a header that finagle already broadcast to ensure that we collect and don't blow up.
     val f: Future[Response[Ping.SuccessType]] =
       reqRepServicePerEndpoint.ping(request)
     val response = await(f)

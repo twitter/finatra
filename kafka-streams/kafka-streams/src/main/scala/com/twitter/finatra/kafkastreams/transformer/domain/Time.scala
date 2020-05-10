@@ -6,6 +6,7 @@ import com.twitter.util.Duration
 import org.joda.time.{DateTime, DateTimeConstants}
 
 object Time {
+
   /**
    * Construct a [[Time]] from a [[DateTime]].
    */

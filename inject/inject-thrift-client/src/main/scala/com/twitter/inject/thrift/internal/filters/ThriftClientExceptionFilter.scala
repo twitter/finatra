@@ -8,8 +8,8 @@ import com.twitter.util._
 
 private[thrift] final class ThriftClientExceptionFilter[Req, Rep](
   clientLabel: String,
-  method: ThriftMethod
-) extends SimpleFilter[Req, Rep] {
+  method: ThriftMethod)
+    extends SimpleFilter[Req, Rep] {
 
   override def apply(request: Req, service: Service[Req, Rep]): Future[Rep] = {
 

@@ -20,7 +20,9 @@ object DoEverythingThriftServerDarkTrafficFilterModule
   }
 }
 
-@deprecated("These tests exist to ensure legacy functionaly still operates. Do not use them for guidance", "2018-12-20")
+@deprecated(
+  "These tests exist to ensure legacy functionaly still operates. Do not use them for guidance",
+  "2018-12-20")
 class LegacyDoEverythingThriftServerDarkTrafficFilterModule
     extends DarkTrafficFilterModule[EchoService.ServiceIface] {
 

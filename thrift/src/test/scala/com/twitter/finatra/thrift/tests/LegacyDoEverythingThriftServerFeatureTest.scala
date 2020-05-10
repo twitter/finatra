@@ -85,22 +85,16 @@ class LegacyDoEverythingThriftServerFeatureTest extends FeatureTest {
     val service = filter.andThen(servicePerEndpoint123.uppercase)
     await(service(DoEverything.Uppercase.Args("hello"))) should equal("GOODBYE")
 
-    val filter2 = new Filter[
-      scrooge.Request[DoEverything.Uppercase.Args],
-      scrooge.Response[
-        DoEverything.Uppercase.SuccessType
-      ],
-      scrooge.Request[DoEverything.Uppercase.Args],
-      scrooge.Response[
-        DoEverything.Uppercase.SuccessType
-      ]] {
+    val filter2 = new Filter[scrooge.Request[DoEverything.Uppercase.Args], scrooge.Response[
+      DoEverything.Uppercase.SuccessType
+    ], scrooge.Request[DoEverything.Uppercase.Args], scrooge.Response[
+      DoEverything.Uppercase.SuccessType
+    ]] {
       override def apply(
         request: scrooge.Request[DoEverything.Uppercase.Args],
-        service: Service[
-          scrooge.Request[DoEverything.Uppercase.Args],
-          scrooge.Response[
-            DoEverything.Uppercase.SuccessType
-          ]]
+        service: Service[scrooge.Request[DoEverything.Uppercase.Args], scrooge.Response[
+          DoEverything.Uppercase.SuccessType
+        ]]
       ): Future[scrooge.Response[DoEverything.Uppercase.SuccessType]] = {
         val filteredRequest: scrooge.Request[DoEverything.Uppercase.Args] =
           scrooge.Request(Map("com.twitter.test.header" -> Seq(Buf.Utf8("foo"))), request.args)
@@ -254,7 +248,7 @@ class LegacyDoEverythingThriftServerFeatureTest extends FeatureTest {
 
     MDC.get("traceSpanId") should not be null
     // A new span Id would be created for the client call.
-    MDC.get("traceSpanId") should not be(traceId.traceId.toString)
+    MDC.get("traceSpanId") should not be (traceId.traceId.toString)
 
     MDC.get("traceSampled") should not be null
     MDC.get("traceSampled") should be("false")
@@ -287,7 +281,7 @@ class LegacyDoEverythingThriftServerFeatureTest extends FeatureTest {
 
     MDC.get("traceSpanId") should not be null
     // A new span Id would be created for the client call.
-    MDC.get("traceSpanId") should not be(traceId.traceId.toString)
+    MDC.get("traceSpanId") should not be (traceId.traceId.toString)
 
     MDC.get("traceSampled") should not be null
     MDC.get("traceSampled") should be("true")

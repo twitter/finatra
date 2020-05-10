@@ -11,12 +11,20 @@ object StatTestUtils extends Matchers {
     statsReceiver.gauges.clear()
   }
 
-  def assertCounter(statsReceiver: InMemoryStatsReceiver, name: String, expectedValue: Long): Unit = {
+  def assertCounter(
+    statsReceiver: InMemoryStatsReceiver,
+    name: String,
+    expectedValue: Long
+  ): Unit = {
     val actualValue = statsReceiver.counters.getOrElse(Seq(name), 0L)
     actualValue should equal(expectedValue)
   }
 
-  def assertGauge(statsReceiver: InMemoryStatsReceiver, name: String, expectedValue: Float): Unit = {
+  def assertGauge(
+    statsReceiver: InMemoryStatsReceiver,
+    name: String,
+    expectedValue: Float
+  ): Unit = {
     val actualValue = statsReceiver.gauges.getOrElse(Seq(name), () => 0f)
     if (expectedValue != actualValue()) {
       println("Failure asserting " + name)

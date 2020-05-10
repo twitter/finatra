@@ -3,6 +3,7 @@ package com.twitter.finatra.jackson.caseclass.exceptions
 import com.fasterxml.jackson.databind.JsonMappingException
 
 object CaseClassMappingException {
+
   /**
    * Create a new [[CaseClassMappingException]] with no field exceptions.
    * @return a new [[CaseClassMappingException]]
@@ -14,7 +15,9 @@ object CaseClassMappingException {
    * @param fieldMappingExceptions exceptions to enclose in returned [[CaseClassMappingException]]
    * @return a new [[CaseClassMappingException]] with the given field exceptions.
    */
-  def apply(fieldMappingExceptions: Set[CaseClassFieldMappingException]): CaseClassMappingException =
+  def apply(
+    fieldMappingExceptions: Set[CaseClassFieldMappingException]
+  ): CaseClassMappingException =
     new CaseClassMappingException(fieldMappingExceptions)
 }
 
@@ -31,7 +34,7 @@ object CaseClassMappingException {
  * @see [[CaseClassFieldMappingException]]
  * @see [[com.fasterxml.jackson.databind.JsonMappingException]]
  */
-class CaseClassMappingException private(
+class CaseClassMappingException private (
   fieldMappingExceptions: Set[CaseClassFieldMappingException] =
     Set.empty[CaseClassFieldMappingException])
     extends JsonMappingException(null, "") {

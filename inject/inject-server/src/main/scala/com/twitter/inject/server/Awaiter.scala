@@ -17,7 +17,8 @@ private[server] object Awaiter extends Logging {
     awaitables: Iterable[Awaitable[_]],
     period: Duration
   ): Future[Unit] = {
-    info(s"Awaiting ${awaitables.size} awaitables: \n${awaitables.map(_.getClass.getName).mkString("\n")}")
+    info(
+      s"Awaiting ${awaitables.size} awaitables: \n${awaitables.map(_.getClass.getName).mkString("\n")}")
     // Exit if ANY Awaitable is ready.
     val latch = new CountDownLatch(1)
     val task = DefaultTimer.schedule(period) {

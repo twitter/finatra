@@ -106,7 +106,9 @@ trait BarBaz {
   @JsonProperty("goodbye")
   def hello: String
 }
-case class FooBarBaz(hello: String) extends BarBaz with Bar // will end up with BarBaz @JsonProperty value as trait linearization is "right-to-left"
+case class FooBarBaz(hello: String)
+    extends BarBaz
+    with Bar // will end up with BarBaz @JsonProperty value as trait linearization is "right-to-left"
 
 trait Loadable {
   @JsonProperty("url")
@@ -337,7 +339,8 @@ case class Car(
   def validateYearBeforeNow: ValidationResult = {
     val thisYear = new DateTime().getYear
     val yearMoreThanOneYearInFuture: Boolean =
-      if (year > thisYear) { (year - thisYear) > 1 } else false
+      if (year > thisYear) { (year - thisYear) > 1 }
+      else false
     ValidationResult.validateNot(
       yearMoreThanOneYearInFuture,
       "Model year can be at most one year newer."
@@ -605,7 +608,8 @@ package object internal {
   case class SimplePersonInPackageObject( // not recommended but used here for testing use case
     name: String = "default-name")
 
-  case class SimplePersonInPackageObjectWithoutConstructorParams() // not recommended but used here for testing use case
+  case class SimplePersonInPackageObjectWithoutConstructorParams(
+  ) // not recommended but used here for testing use case
 }
 
 case class LimiterProfile(id: Long, name: String)

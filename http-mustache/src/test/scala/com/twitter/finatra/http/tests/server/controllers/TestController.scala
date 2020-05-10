@@ -8,7 +8,7 @@ import com.twitter.finatra.http.tests.server.views.{HTMLView, JSONView, NoAnnota
 import com.twitter.finatra.mustache.marshalling.MustacheService
 import javax.inject.Inject
 
-class TestController @Inject()(mustacheService: MustacheService) extends Controller {
+class TestController @Inject() (mustacheService: MustacheService) extends Controller {
 
   post("/formPostView") { formPost: FormPostRequest =>
     TestUserView(formPost.age, formPost.name, Seq("user1", "user2"))

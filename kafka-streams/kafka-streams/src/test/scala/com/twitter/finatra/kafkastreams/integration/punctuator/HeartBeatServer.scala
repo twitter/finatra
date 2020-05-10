@@ -33,7 +33,7 @@ class HeartBeatServer extends KafkaStreamsTwitterServer {
         transformCounter.incr()
         (k, v)
       }
-  }
+    }
 
   override protected def configureKafkaStreams(builder: StreamsBuilder): Unit = {
     builder.asScala

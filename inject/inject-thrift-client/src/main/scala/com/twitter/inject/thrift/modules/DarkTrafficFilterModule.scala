@@ -23,8 +23,8 @@ import scala.reflect.ClassTag
  */
 @deprecated("Use ReqRepDarkTrafficFilterModule", "12-03-2019")
 abstract class DarkTrafficFilterModule[ServiceIface <: Filterable[ServiceIface]: ClassTag](
-  implicit serviceBuilder: ServiceIfaceBuilder[ServiceIface]
-) extends DarkTrafficFilterModuleTrait {
+  implicit serviceBuilder: ServiceIfaceBuilder[ServiceIface])
+    extends DarkTrafficFilterModuleTrait {
 
   /**
    * Function to determine if the request should be "sampled", e.g.

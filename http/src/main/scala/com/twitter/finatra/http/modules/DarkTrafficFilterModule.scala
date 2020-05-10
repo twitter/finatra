@@ -17,6 +17,7 @@ import javax.inject.Singleton
 
 /* exposed for testing */
 private[finatra] object DarkTrafficFilterModule {
+
   /**
    * HTTP `'''Canonical-Resource'''` header field name, used in Diffy Proxy
    * @see [[https://github.com/twitter/diffy/tree/master/example Diffy Project]]

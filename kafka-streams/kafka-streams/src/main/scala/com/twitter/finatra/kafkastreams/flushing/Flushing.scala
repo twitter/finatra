@@ -26,12 +26,15 @@ trait Flushing extends OnInit with OnClose with OnFlush with ProcessorContextLog
     if (commitInterval != Duration.Top) {
       info(s"Scheduling timer to call commit every $commitInterval")
       commitPunctuatorCancellable = processorContext
-        .schedule(commitInterval.inMillis, PunctuationType.WALL_CLOCK_TIME, new Punctuator {
-          override def punctuate(timestamp: Long): Unit = {
-            onFlush()
-            processorContext.commit()
-          }
-        })
+        .schedule(
+          commitInterval.inMillis,
+          PunctuationType.WALL_CLOCK_TIME,
+          new Punctuator {
+            override def punctuate(timestamp: Long): Unit = {
+              onFlush()
+              processorContext.commit()
+            }
+          })
     }
   }
 

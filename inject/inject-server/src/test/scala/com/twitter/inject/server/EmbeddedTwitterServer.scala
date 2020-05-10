@@ -108,8 +108,7 @@ object EmbeddedTwitterServer {
   private[server] def mkGlobalFlagsFn[T](fns: Iterable[ReducibleFn[T]]): ReducibleFn[T] =
     fns.reduce[ReducibleFn[T]] {
       case (fn, collector) =>
-        input =>
-          collector(fn(input))
+        input => collector(fn(input))
     }
 }
 
@@ -294,7 +293,11 @@ class EmbeddedTwitterServer(
 
   // java-forwarder methods - DO NOT override except for creating a java-forwarder method
   // that only calls `super()`
-  override def bindClass[T, Ann <: Annotation](clazz: Class[T], annotationClazz: Class[Ann], instance: T): this.type =
+  override def bindClass[T, Ann <: Annotation](
+    clazz: Class[T],
+    annotationClazz: Class[Ann],
+    instance: T
+  ): this.type =
     super.bindClass[T, Ann](clazz, annotationClazz, instance)
 
   // java-forwarder methods - DO NOT override except for creating a java-forwarder method
@@ -304,12 +307,20 @@ class EmbeddedTwitterServer(
 
   // java-forwarder methods - DO NOT override except for creating a java-forwarder method
   // that only calls `super()`
-  override def bindClass[T, U <: T](clazz: Class[T], annotation: Annotation, instanceClazz: Class[U]): this.type =
+  override def bindClass[T, U <: T](
+    clazz: Class[T],
+    annotation: Annotation,
+    instanceClazz: Class[U]
+  ): this.type =
     super.bindClass[T, U](clazz, annotation, instanceClazz)
 
   // java-forwarder methods - DO NOT override except for creating a java-forwarder method
   // that only calls `super()`
-  override def bindClass[T, Ann <: Annotation, U <: T](clazz: Class[T], annotationClazz: Class[Ann], instanceClazz: Class[U]): this.type =
+  override def bindClass[T, Ann <: Annotation, U <: T](
+    clazz: Class[T],
+    annotationClazz: Class[Ann],
+    instanceClazz: Class[U]
+  ): this.type =
     super.bindClass[T, Ann, U](clazz, annotationClazz, instanceClazz)
 
   /**
@@ -636,7 +647,7 @@ class EmbeddedTwitterServer(
             k.letParse[Unit](v) {
               info(s"Applying GlobalFlag: ${k.name}=$v")
               func
-          }
+            }
           f
       }
 
@@ -666,7 +677,9 @@ class EmbeddedTwitterServer(
             System.exit(-1)
           case e if !NonFatal(e) =>
             println("Fatal exception in server startup.")
-            throw new Exception(e) // Need to rethrow as a NonFatal for FuturePool to "see" the exception :/
+            throw new Exception(
+              e
+            ) // Need to rethrow as a NonFatal for FuturePool to "see" the exception :/
         }
       }
     }.onFailure { e =>

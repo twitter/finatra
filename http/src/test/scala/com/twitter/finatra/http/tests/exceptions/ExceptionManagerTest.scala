@@ -2,7 +2,11 @@ package com.twitter.finatra.http.tests.exceptions
 
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finagle.stats.InMemoryStatsReceiver
-import com.twitter.finatra.http.exceptions.{ExceptionManager, ExceptionMapper, ExceptionMapperCollection}
+import com.twitter.finatra.http.exceptions.{
+  ExceptionManager,
+  ExceptionMapper,
+  ExceptionMapperCollection
+}
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.app.TestInjector

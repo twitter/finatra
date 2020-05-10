@@ -9,12 +9,10 @@ import javax.inject.Singleton
 
 @Singleton
 class HelloFilter
-  extends Filter[
-    scrooge.Request[Hello.Args],
-    scrooge.Response[Hello.SuccessType],
-    scrooge.Request[Hello.Args],
-    scrooge.Response[Hello.SuccessType]]
-  with Logging {
+    extends Filter[scrooge.Request[Hello.Args], scrooge.Response[
+      Hello.SuccessType
+    ], scrooge.Request[Hello.Args], scrooge.Response[Hello.SuccessType]]
+    with Logging {
   def apply(
     request: scrooge.Request[Hello.Args],
     service: Service[scrooge.Request[Hello.Args], scrooge.Response[Hello.SuccessType]]

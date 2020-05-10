@@ -20,7 +20,7 @@ import scala.collection.JavaConverters._
  * @tparam V type of the value in key/value pairs to be published to Kafka
  */
 class FinagleKafkaProducer[K, V](config: FinagleKafkaProducerConfig[K, V])
-  extends KafkaProducerBase[K, V] {
+    extends KafkaProducerBase[K, V] {
 
   private val keySerializer = config.keySerializer.get
   private val valueSerializer = config.valueSerializer.get

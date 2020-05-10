@@ -9,13 +9,11 @@ import javax.inject.Singleton
 
 @Singleton
 class ByeHeadersFilter(
-  requestHeaderKey: String
-) extends Filter[
-  scrooge.Request[Bye.Args],
-  scrooge.Response[Bye.SuccessType],
-  scrooge.Request[Bye.Args],
-  scrooge.Response[Bye.SuccessType]]
-  with Logging {
+  requestHeaderKey: String)
+    extends Filter[scrooge.Request[Bye.Args], scrooge.Response[Bye.SuccessType], scrooge.Request[
+      Bye.Args
+    ], scrooge.Response[Bye.SuccessType]]
+    with Logging {
   def apply(
     request: scrooge.Request[Bye.Args],
     service: Service[scrooge.Request[Bye.Args], scrooge.Response[Bye.SuccessType]]

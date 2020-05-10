@@ -48,7 +48,12 @@ class TopologyTesterTopic[K, V](
    * @param headers the record headers
    * @param timestamp timestamp of the record. defaults to the current time.
    */
-  def pipeInputWithHeaders(key: K, value: V, headers: Headers, timestamp: Long = DateTimeUtils.currentTimeMillis()): Unit = {
+  def pipeInputWithHeaders(
+    key: K,
+    value: V,
+    headers: Headers,
+    timestamp: Long = DateTimeUtils.currentTimeMillis()
+  ): Unit = {
     topologyTestDriver.pipeInput(recordFactory.create(key, value, headers, timestamp))
   }
 

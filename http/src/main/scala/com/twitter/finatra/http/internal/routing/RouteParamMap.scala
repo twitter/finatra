@@ -4,8 +4,8 @@ import com.twitter.finagle.http.ParamMap
 
 private[http] class RouteParamMap(
   paramMap: => ParamMap, //avoid constructing paramMap from Finagle request unless needed
-  params: Map[String, String]
-) extends ParamMap {
+  params: Map[String, String])
+    extends ParamMap {
 
   override def isValid: Boolean = paramMap.isValid
 

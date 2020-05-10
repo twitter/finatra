@@ -9,7 +9,7 @@ import com.twitter.{logging => ctl}
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-private[http] class FailureExceptionMapper @Inject()(response: ResponseBuilder)
+private[http] class FailureExceptionMapper @Inject() (response: ResponseBuilder)
     extends AbstractFrameworkExceptionMapper[Failure](response)
     with Logging {
 
@@ -57,7 +57,7 @@ private[http] class FailureExceptionMapper @Inject()(response: ResponseBuilder)
       case ctl.Level.DEBUG =>
         debug(message, failure)
       case _ =>
-        // do nothing
+      // do nothing
     }
   }
 }

@@ -56,7 +56,9 @@ object Types {
           javaType(typeFactory, scalaType.typeArgs.head),
           TypeBindings
             .create(
-              classOf[java.util.ArrayList[_]], // we hardcode the type to `java.util.ArrayList` to properly support Array creation
+              classOf[
+                java.util.ArrayList[_]
+              ], // we hardcode the type to `java.util.ArrayList` to properly support Array creation
               javaType(typeFactory, scalaType.typeArgs.head)
             )
         )
@@ -102,7 +104,9 @@ object Types {
           javaType(typeFactory, scalaType.typeArgs.head, typeName, typeBindings),
           TypeBindings
             .create(
-              classOf[java.util.ArrayList[_]], // we hardcode the type to `java.util.ArrayList` to properly support Array creation
+              classOf[
+                java.util.ArrayList[_]
+              ], // we hardcode the type to `java.util.ArrayList` to properly support Array creation
               typeBindings.getBoundType(0)
             )
         )

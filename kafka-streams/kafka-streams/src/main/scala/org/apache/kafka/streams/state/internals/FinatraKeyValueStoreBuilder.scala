@@ -2,7 +2,11 @@ package org.apache.kafka.streams.state.internals
 
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore
-import com.twitter.finatra.kafkastreams.transformer.stores.internal.{CachingFinatraKeyValueStoreImpl, FinatraKeyValueStoreImpl, MetricsFinatraKeyValueStore}
+import com.twitter.finatra.kafkastreams.transformer.stores.internal.{
+  CachingFinatraKeyValueStoreImpl,
+  FinatraKeyValueStoreImpl,
+  MetricsFinatraKeyValueStore
+}
 import java.util
 import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.common.utils.Bytes
@@ -24,7 +28,8 @@ class FinatraKeyValueStoreBuilder[K, V](
   override def build: FinatraKeyValueStore[K, V] = {
     val rocksDbStore = storeSupplier.get
     val maybeLoggedStore = maybeWrapLogging(rocksDbStore)
-    val finatraStore = new FinatraKeyValueStoreImpl[K, V](rocksDbStore, maybeLoggedStore, keySerde, valueSerde)
+    val finatraStore =
+      new FinatraKeyValueStoreImpl[K, V](rocksDbStore, maybeLoggedStore, keySerde, valueSerde)
     val metricsFinatraStore = new MetricsFinatraKeyValueStore[K, V](finatraStore, statsReceiver)
     maybeWrapCaching(metricsFinatraStore)
   }

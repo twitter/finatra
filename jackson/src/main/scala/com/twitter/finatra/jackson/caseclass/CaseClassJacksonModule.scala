@@ -10,7 +10,6 @@ private[jackson] class CaseClassJacksonModule(
   override def getModuleName: String = this.getClass.getName
 
   this += {
-    _.addDeserializers(
-      new CaseClassDeserializerResolver(injectableTypes, validator))
+    _.addDeserializers(new CaseClassDeserializerResolver(injectableTypes, validator))
   }
 }

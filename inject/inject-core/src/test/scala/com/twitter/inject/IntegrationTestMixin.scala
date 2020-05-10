@@ -14,9 +14,7 @@ import org.scalatest.{Suite, SuiteMixin}
  *
  * @see [[com.twitter.inject.TestMixin]]
  */
-trait IntegrationTestMixin
-  extends SuiteMixin
-  with TestMixin { this: Suite =>
+trait IntegrationTestMixin extends SuiteMixin with TestMixin { this: Suite =>
 
   /* Protected */
 
