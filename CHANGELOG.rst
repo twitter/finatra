@@ -20,6 +20,10 @@ Added
 Changed
 ~~~~~~~
 
+* inject-core: `c.t.inject.Mockito` has been marked deprecated. Users are encouraged to prefer
+  `mockito-scala <https://github.com/mockito/mockito-scala>`_ (or ScalaTest `MockitoSugar <http://doc.scalatest.org/3.1.1/#org.scalatest.mock.MockitoSugar>`_
+  which provides some basic syntax sugar for Mockito). ``PHAB_ID=D482531``
+
 * http: (BREAKING API CHANGE) Update the `c.t.finatra.http.HttpResponseFilter` to optionally fully
   qualify response 'Location' header values. A `previous change <https://github.com/twitter/finatra/commit/ff9acc9fbf4e89b532df9daf2b9cba6d90b2df96>`_
   made the filter always attempt to fully qualify any response 'Location' header value. This updates
@@ -34,7 +38,7 @@ Changed
   to switch to the equivalent `c.t.finatra.jackson.ScalaObjectMapper` and
   `c.t.finatra.jackson.modules.ScalaObjectMapperModule`. ``PHAB_ID=D473177``
 
-* finara-http: Update `c.t.finatra.http.StreamingJsonTestHelper` to not use `Thread.sleep` for
+* finatra-http: Update `c.t.finatra.http.StreamingJsonTestHelper` to not use `Thread.sleep` for
   writing JSON elements on an artificial delay. ``PHAB_ID=D470793``
 
 * inject-app: Remove finagle-core dependency. Introduce finatra/inject/inject-dtab.

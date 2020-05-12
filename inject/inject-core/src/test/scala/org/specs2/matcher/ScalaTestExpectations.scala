@@ -21,6 +21,7 @@ import org.scalatest.exceptions.TestFailedException
  * However, this causes a compile error when org.scalatest.Suite is mixed in; we avoid
  * this by directly extending Expectations.
  */
+@deprecated("Users are encouraged to use mockito-scala.", "2020-05-11")
 trait ScalaTestExpectations extends Expectations {
   override def createExpectable[T](t: => T, alias: Option[String => String]): Expectable[T] = {
     new Expectable(() => t) {
