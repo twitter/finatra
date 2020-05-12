@@ -20,6 +20,16 @@ Added
 Changed
 ~~~~~~~
 
+* http: (BREAKING API CHANGE) Update the `c.t.finatra.http.HttpResponseFilter` to optionally fully
+  qualify response 'Location' header values. A `previous change <https://github.com/twitter/finatra/commit/ff9acc9fbf4e89b532df9daf2b9cba6d90b2df96>`_
+  made the filter always attempt to fully qualify any response 'Location' header value. This updates
+  the logic to be opt-in for the more strict returning of fully qualified 'Location' header values with
+  the default being to allow relative values per the `RFC7231 <https://tools.ietf.org/html/rfc7231#section-7.1.2>`_
+  which replaces the obsolete `RFC2616 <https://tools.ietf.org/html/rfc2616#section-14.30>`_. This is
+  thus a breaking API change as the default is now to allow relative values. To enable the previous
+  strict behavior, users should instantiate the filter with the constructor arg `fullyQualifyLocationHeader`
+  set to 'true'. This addresses issue #524. ``PHAB_ID=D467909``
+
 * jackson: Remove deprecated `FinatraObjectMapper` and `FinatraJacksonModule`. Users are encouraged
   to switch to the equivalent `c.t.finatra.jackson.ScalaObjectMapper` and
   `c.t.finatra.jackson.modules.ScalaObjectMapperModule`. ``PHAB_ID=D473177``

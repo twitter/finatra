@@ -48,7 +48,7 @@ class MustacheModuleFeatureTest extends FeatureTest {
       withBody = "age2:18\nname2:bob\nuser1\nuser2\n"
     )
 
-    response.location should equal(Some(server.fullHttpURI("/foo/1")))
+    response.location should equal(Some("/foo/1"))
   }
 
   test("POST /formPostViewFromBuilderCreatedHtml") {
@@ -59,7 +59,7 @@ class MustacheModuleFeatureTest extends FeatureTest {
       withBody = "age:18\nname:bob\nuser1\nuser2\n"
     )
 
-    response.location should equal(Some(server.fullHttpURI("/foo/1")))
+    response.location should equal(Some("/foo/1"))
   }
 
   test("GET /getView") {

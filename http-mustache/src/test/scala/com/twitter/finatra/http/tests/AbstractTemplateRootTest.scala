@@ -59,7 +59,7 @@ abstract class AbstractTemplateRootTest extends Test with FileUtility with TempF
             params = Map("name" -> "bob", "age" -> "18"),
             andExpect = Created,
             withBody = "age2:18\nname2:bob\nuser1\nuser2\n"
-          ).location should equal(Some(server.fullHttpURI("/foo/1")))
+          ).location should equal(Some("/foo/1"))
 
         server
           .httpFormPost(
@@ -67,7 +67,7 @@ abstract class AbstractTemplateRootTest extends Test with FileUtility with TempF
             params = Map("name" -> "bob", "age" -> "18"),
             andExpect = Created,
             withBody = "age:18\nname:bob\nuser1\nuser2\n"
-          ).location should equal(Some(server.fullHttpURI("/foo/1")))
+          ).location should equal(Some("/foo/1"))
 
         server.httpGet(
           "/testClassWithHtml",

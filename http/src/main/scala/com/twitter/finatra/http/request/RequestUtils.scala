@@ -17,37 +17,56 @@ object RequestUtils {
     scheme + "://" + hostHeader + pathWithTrailingSlash
   }
 
-  def normalizedURIWithoutScheme(uri: URI, request: Request): String = {
-    val normalizedURI = uri.normalize()
-    s"${getScheme(request)}:" +
-      s"//${getAuthority(request, normalizedURI)}" +
-      getPath(request, normalizedURI.getPath) +
-      getQuery(normalizedURI) +
-      getFragment(normalizedURI)
+  /** Multipart parsed params */
+  def multiParams(request: Request): Map[String, MultipartItem] = {
+    new FinagleRequestFileUpload().parseMultipartItems(request)
   }
 
-  private def getScheme(request: Request): String = {
+  /**
+   * Content Negotiation
+   * Example Accept Header format :
+   * Accept: text/plain; q=0.5, text/html,
+   * text/html; q=0.8, application/json
+   */
+  def respondTo[T](request: Request)(callback: PartialFunction[ContentType, T]): T = {
+    val acceptHeader = request.headerMap.getOrElse(Fields.Accept, "*/*")
+    val mediaRanges = MediaRange.parseAndSort(acceptHeader)
+
+    mediaRanges
+      .map(range => ContentType.fromString(range.contentType))
+      .collectFirst(callback)
+      .getOrElse(
+        throw new NotAcceptableException(
+          com.twitter.finagle.http.MediaType.PlainTextUtf8,
+          Seq("Not Acceptable Media Type")
+        )
+      )
+  }
+
+  // Private
+
+  private[http] def getScheme(request: Request): String = {
     request.headerMap.get("x-forwarded-proto") match {
       case Some(protocol) => protocol
       case _ => "http"
     }
   }
 
-  private def getAuthority(request: Request, uri: URI): String = {
+  private[http] def getAuthority(request: Request, uri: URI): String = {
     uri.getAuthority.toOption match {
       case Some(authority) => authority
       case _ => getHost(request)
     }
   }
 
-  private def getHost(request: Request): String = {
+  private[http] def getHost(request: Request): String = {
     request.host match {
       case Some(host) => host
       case _ => throw new BadRequestException("Host header not set")
     }
   }
 
-  private def getPath(request: Request, requestPath: String): String = {
+  private[http] def getPath(request: Request, requestPath: String): String = {
     requestPath.toOption match {
       case Some(path) =>
         if (!path.startsWith("/")) {
@@ -65,45 +84,17 @@ object RequestUtils {
     }
   }
 
-  private def getQuery(uri: URI): String = {
+  private[http] def getQuery(uri: URI): String = {
     uri.getQuery.toOption match {
       case Some(query) => s"?$query"
       case _ => ""
     }
   }
 
-  private def getFragment(uri: URI): String = {
+  private[http] def getFragment(uri: URI): String = {
     uri.getFragment.toOption match {
       case Some(fragment) => s"#$fragment"
       case _ => ""
     }
-  }
-
-  /** Multipart parsed params */
-  def multiParams(request: Request): Map[String, MultipartItem] = {
-    new FinagleRequestFileUpload().parseMultipartItems(request)
-  }
-
-  /**
-   * Content Negotiation
-   * Example Accept Header format :
-   * Accept: text/plain; q=0.5, text/html,
-   * text/html; q=0.8, application/json
-   */
-  def respondTo[T](request: Request)(callback: PartialFunction[ContentType, T]): T = {
-    val acceptHeader = request.headerMap.getOrElse(Fields.Accept, "*/*")
-    val mediaRanges = MediaRange.parseAndSort(acceptHeader)
-
-    val contentTypes = mediaRanges map { mediaRange =>
-      ContentType.fromString(mediaRange.contentType)
-    }
-    contentTypes
-      .collectFirst(callback)
-      .getOrElse(
-        throw new NotAcceptableException(
-          com.twitter.finagle.http.MediaType.PlainTextUtf8,
-          Seq("Not Acceptable Media Type")
-        )
-      )
   }
 }
