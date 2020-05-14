@@ -37,7 +37,7 @@ private[inject] trait TwitterModuleFlags {
    * @param help the help text explaining the purpose of the [[Flag]].
    * @return the created [[Flag]].
    */
-  protected def createFlag[T](
+  final def createFlag[T](
     name: String,
     default: T,
     help: String,
@@ -60,7 +60,7 @@ private[inject] trait TwitterModuleFlags {
    * @param usage a string describing the type of the [[Flag]], i.e.: Integer.
    * @return the created [[Flag]].
    */
-  def createMandatoryFlag[T](
+  final def createMandatoryFlag[T](
     name: String,
     help: String,
     usage: String,
@@ -86,7 +86,7 @@ private[inject] trait TwitterModuleFlags {
    * @tparam T must be a [[Flaggable]] type.
    * @return the created [[Flag]].
    */
-  protected def flag[T: Flaggable](name: String, default: T, help: String): Flag[T] = {
+  final def flag[T: Flaggable](name: String, default: T, help: String): Flag[T] = {
     val flag = new Flag[T](name, help, default, failFastUntilParsed = failfastOnFlagsNotParsed)
     flags += flag
     flag
@@ -103,7 +103,7 @@ private[inject] trait TwitterModuleFlags {
    * @tparam T must be a [[Flaggable]] type.
    * @return the created [[Flag]].
    */
-  protected def flag[T: Flaggable: Manifest](name: String, help: String): Flag[T] = {
+  final def flag[T: Flaggable: Manifest](name: String, help: String): Flag[T] = {
     val flag =
       new Flag[T](
         name,

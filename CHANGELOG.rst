@@ -20,6 +20,8 @@ Added
 Changed
 ~~~~~~~
 
+* inject-core: Make flag methods in `c.t.inject.TwitterModule` public an final. ``PHAB_ID=D484168``
+
 * inject-core: `c.t.inject.Mockito` has been marked deprecated. Users are encouraged to prefer
   `mockito-scala <https://github.com/mockito/mockito-scala>`_ (or ScalaTest `MockitoSugar <http://doc.scalatest.org/3.1.1/#org.scalatest.mock.MockitoSugar>`_
   which provides some basic syntax sugar for Mockito). ``PHAB_ID=D482531``
