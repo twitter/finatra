@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.tests.filters
 
 import com.twitter.finagle.Service
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.http.{Fields, Request, Response}
 import com.twitter.finatra.http.filters.HttpResponseFilter
 import com.twitter.inject.Test
 import com.twitter.util.Future
@@ -90,17 +90,33 @@ abstract class AbstractHttpResponseFilterTest extends Test {
     checkResponse(request, service, Some("file:///~/calendar"))
   }
 
-  test("HttpResponseFilter#will not inject CRLF into response headers") {
+  test("HttpResponseFilter#will not change invalid header 1") {
+    val encodedCRLF = URLEncoder.encode("\r\ninvalid: header", "UTF-8")
+    val location = s"foo.com/next?what=${encodedCRLF}"
     val svc = httpResponseFilter.andThen(Service.mk { _: Request =>
       val resp = Response()
-      val encodedCRLF = URLEncoder.encode("\r\ninvalid: header", "UTF-8")
-      resp.location = s"foo.com/next?what=${encodedCRLF}"
+      resp.location = location
       Future.value(resp)
     })
 
-    intercept[IllegalArgumentException] {
-      await(svc(mkRequest))
-    }
+    val request = mkRequest
+    // logs a warning
+    checkResponse(request, svc, Some(location))
+  }
+
+  test("HttpResponseFilter#will not change invalid header 2") {
+    // en dash
+    val encoded = URLEncoder.encode("mobile\u2013app#link", "UTF-8")
+    val location = s"next?what=${encoded}"
+    val svc = httpResponseFilter.andThen(Service.mk { _: Request =>
+      val resp = Response()
+      resp.location = location
+      Future.value(resp)
+    })
+
+    val request = mkRequest
+    // logs a warning
+    checkResponse(request, svc, Some(location))
   }
 
   test("HttpResponseFilter#uses the scheme defined in the request if given") {
@@ -125,8 +141,10 @@ abstract class AbstractHttpResponseFilterTest extends Test {
   protected def mkService(location: Option[String] = None): Service[Request, Response] = {
     Service.mk[Request, Response] { _ =>
       val response = Response().statusCode(200)
-      response.setContentString("test header")
-      location.foreach(response.location_=)
+      response.setContentString(this.getClass.getSimpleName)
+      // for testing we set the location header unsafely to allow for
+      // testing unsafe values with the HttpResponseFilter
+      location.foreach(value => response.headerMap.setUnsafe(Fields.Location, value))
       Future(response)
     }
   }
@@ -134,9 +152,10 @@ abstract class AbstractHttpResponseFilterTest extends Test {
   private[this] def assertLocation(
     request: Request,
     service: Service[Request, Response],
-    expectedLocation: Option[String]
+    expected: Option[String]
   ): Assertion = {
-    await(httpResponseFilter.apply(request, service)).location should be(expectedLocation)
+    val actual = await(httpResponseFilter.apply(request, service)).location
+    actual should equal(expected)
   }
 
   protected def checkResponse(

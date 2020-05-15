@@ -20,6 +20,11 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-http: Allow extensions of the `c.t.finatra.http.filters.HttpResponseFilter`
+  to specify how to set the Location Header value into a Response. Additionally, don't
+  allow exceptions resulting from the inability to set a non-compliant 'Location' response
+  header escape the filter. ``PHAB_ID=D483793``
+
 * inject-core: Make flag methods in `c.t.inject.TwitterModule` public an final. ``PHAB_ID=D484168``
 
 * inject-core: `c.t.inject.Mockito` has been marked deprecated. Users are encouraged to prefer
