@@ -12,7 +12,7 @@ scala_library(
     strict_deps = True,
     dependencies = [
         "finagle/finagle-serversets",
-        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-thrift-client/src/main/scala",
     ],
     exports = [

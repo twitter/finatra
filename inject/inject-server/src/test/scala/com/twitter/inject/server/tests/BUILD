@@ -20,7 +20,7 @@ junit_tests(
         "finatra/inject/inject-server/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-server/src/main/scala/com/twitter/server/internal",
         "finatra/inject/inject-server/src/test/scala/com/twitter/inject/server",
-        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",
         "util/util-core:scala",

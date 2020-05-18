@@ -31,7 +31,7 @@ scala_library(
         "finatra/http/src/main/scala/com/twitter/finatra/http/routing",
         "finatra/http/src/main/scala/com/twitter/finatra/http/streaming",
         "finatra/inject/inject-core/src/main/scala",
-        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-thrift-client/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
         "scrooge/scrooge-core/src/main/scala",

@@ -273,6 +273,7 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   injectCore,
   injectDtab,
   injectLogback,
+  injectMdc,
   injectModules,
   injectPorts,
   injectRequestScope,
@@ -372,6 +373,7 @@ lazy val injectCore = (project in file("inject/inject-core"))
       "com.google.inject" % "guice" % versions.guice,
       "com.google.inject.extensions" % "guice-assistedinject" % versions.guice,
       "com.google.inject.extensions" % "guice-multibindings" % versions.guice,
+      "com.twitter" %% "finagle-core" % versions.twLibVersion, // for StackTransformer -- todo: move
       "com.twitter" %% "util-app" % versions.twLibVersion,
       "javax.inject" % "javax.inject" % "1",
       "joda-time" % "joda-time" % versions.jodaTime,
@@ -560,6 +562,23 @@ lazy val injectServer = (project in file("inject/inject-server"))
     injectSlf4j,
     injectUtils)
 
+lazy val injectMdc = (project in file("inject/inject-mdc"))
+  .settings(projectSettings)
+  .settings(
+    name := "inject-mdc",
+    moduleName := "inject-mdc",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;",
+    libraryDependencies ++= Seq(
+      "com.twitter" %% "finagle-core" % versions.twLibVersion,
+      "com.twitter" %% "util-core" % versions.twLibVersion,
+      "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
+      "org.slf4j" % "slf4j-api" % versions.slf4j
+    )
+  ).dependsOn(
+    injectSlf4j,
+    injectCore % "test->test"
+  )
+
 lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
   .settings(projectSettings)
   .settings(
@@ -568,7 +587,7 @@ lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
     ScoverageKeys.coverageExcludedPackages := "<empty>;",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
-      "com.twitter" %% "finagle-core" % versions.twLibVersion,
+      "com.twitter" %% "util-core" % versions.twLibVersion,
       "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
       "org.slf4j" % "slf4j-api" % versions.slf4j
     )
@@ -876,6 +895,7 @@ lazy val http = project
     httpclient % "test->test",
     injectRequestScope % Test,
     injectPorts % "test->test",
+    injectMdc,
     injectSlf4j,
     injectServer % "test->test;compile->compile",
     jackson % "test->test;compile->compile",
@@ -989,6 +1009,7 @@ lazy val thrift = project
   ).dependsOn(
     injectPorts % "test->test",
     injectServer % "test->test;compile->compile",
+    injectMdc,
     injectSlf4j,
     injectThrift)
 

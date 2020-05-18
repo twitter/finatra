@@ -10,7 +10,7 @@ scala_library(
     dependencies = [
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
         "3rdparty/jvm/com/google/inject:guice",
-        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/jackson/src/main/scala/com/fasterxml/jackson/databind",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
     ],

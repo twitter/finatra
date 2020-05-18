@@ -1,7 +1,6 @@
-package com.twitter.inject.tests.logging
+package com.twitter.inject.logging
 
 import com.twitter.inject.Test
-import com.twitter.inject.logging.{FinagleMDCAdapter, MDCInitializer}
 import java.util.{HashMap => JHashMap}
 
 class FinagleMDCAdapterTest extends Test {

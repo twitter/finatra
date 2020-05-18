@@ -12,7 +12,7 @@ scala_library(
         "finatra/inject/inject-app/src/main/scala",
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-server/src/main/scala",
-        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift:controller",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/exceptions",

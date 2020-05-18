@@ -16,7 +16,7 @@ scala_library(
         "finagle/finagle-http/src/main/scala",
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-modules/src/main/scala/com/twitter/inject/modules",
-        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
         "util/util-core:scala",

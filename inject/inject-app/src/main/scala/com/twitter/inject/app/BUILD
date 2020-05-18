@@ -34,7 +34,7 @@ scala_library(
         "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",
         "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app/internal",
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
-        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "util/util-app/src/main/scala",
     ],
     exports = [
@@ -42,7 +42,7 @@ scala_library(
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app/internal",
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
-        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "util/util-app/src/main/scala",
     ],
 )

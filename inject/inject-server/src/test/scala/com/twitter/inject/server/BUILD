@@ -26,7 +26,7 @@ scala_library(
         "finatra/inject/inject-modules/src/test/scala/com/twitter/inject/modules",
         "finatra/inject/inject-ports/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-server/src/main/scala/com/twitter/inject/server",
-        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",
@@ -40,7 +40,7 @@ scala_library(
         "finatra/inject/inject-core/src/test/scala:test-deps",
         "finatra/inject/inject-ports/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-server/src/main/scala/com/twitter/inject/server",
-        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "util/util-core:scala",
     ],
 )

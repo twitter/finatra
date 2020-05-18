@@ -16,13 +16,13 @@ scala_library(
         "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app",
         "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app/internal",
         "finatra/inject/inject-core/src/main/scala",
-        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "util/util-app/src/main/scala",
     ],
     exports = [
         "3rdparty/jvm/com/google/inject:guice",
         "finatra/inject/inject-core/src/main/scala",
-        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "util/util-app/src/main/scala",
     ],
 )

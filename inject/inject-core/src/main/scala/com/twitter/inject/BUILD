@@ -15,14 +15,14 @@ scala_library(
         "3rdparty/jvm/net/codingwell:scala-guice",
         "3rdparty/jvm/org/joda:joda-convert",
         "finagle/finagle-core/src/main",
-        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "util/util-app/src/main/scala",
     ],
     exports = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
         "3rdparty/jvm/net/codingwell:scala-guice",
-        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "util/util-app/src/main/scala",
     ],
 )

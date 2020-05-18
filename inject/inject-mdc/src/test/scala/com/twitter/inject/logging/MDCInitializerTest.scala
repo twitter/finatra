@@ -1,7 +1,6 @@
-package com.twitter.inject.tests.logging
+package com.twitter.inject.logging
 
 import com.twitter.inject.Test
-import com.twitter.inject.logging.MDCInitializer
 import java.util.{HashMap => JHashMap}
 import org.slf4j.MDC
 

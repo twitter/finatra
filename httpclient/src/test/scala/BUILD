@@ -44,7 +44,7 @@ scala_library(
         "finatra/inject/inject-app/src/test/scala:test-deps",
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-core/src/test/scala:test-deps",
-        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "util/util-core:scala",
         "util/util-slf4j-api/src/main/scala",
     ],

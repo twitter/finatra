@@ -14,7 +14,7 @@ junit_tests(
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-core/src/test/java/com/twitter/inject/tests",
         "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
-        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "util/util-app/src/main/scala",
         "util/util-core:scala",
         "util/util-slf4j-api/src/main/scala",

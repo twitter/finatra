@@ -1,0 +1,21 @@
+junit_tests(
+    sources = ["*.scala"],
+    compiler_option_sets = ["fatal_warnings"],
+    dependencies = [
+        "3rdparty/jvm/com/google/inject:guice",
+        "3rdparty/jvm/com/google/inject/extensions:guice-testlib",
+        "3rdparty/jvm/javax/inject:javax.inject",
+        "3rdparty/jvm/junit",
+        "3rdparty/jvm/net/codingwell:scala-guice",
+        "3rdparty/jvm/org/scalatest",
+        "3rdparty/jvm/org/slf4j:slf4j-api",
+        "3rdparty/jvm/org/slf4j:slf4j-simple",
+        "finagle/finagle-core/src/main",
+        "finatra/inject/inject-core/src/test/java/com/twitter/inject/tests",
+        "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
+        "finatra/inject/inject-mdc/src/main/scala",
+        "util/util-app/src/main/scala",
+        "util/util-core:scala",
+        "util/util-slf4j-api/src/main/scala",
+    ],
+)

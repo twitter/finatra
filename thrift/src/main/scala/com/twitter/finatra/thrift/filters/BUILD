@@ -10,7 +10,8 @@ scala_library(
     dependencies = [
         "3rdparty/jvm/javax/inject:javax.inject",
         "finagle/finagle-thrift/src/main/scala",
-        "finatra/inject/inject-slf4j/src/main/scala",
+        "finatra/inject/inject-mdc/src/main/scala",
+        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/exceptions",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/response",
     ],

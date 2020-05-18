@@ -10,6 +10,9 @@ Unreleased
 Added
 ~~~~~
 
+* inject-mdc: Move MDC integration from `inject/inject-slf4j` to `inject/inject-mdc`.
+  ``PHAB_ID=D485870``
+
 * finatra-http|finatra-thrift: Update TraceIdMDCFilter to log traceSampled and traceSpanId
   ``PHAB_ID=472013``
 
@@ -19,6 +22,9 @@ Added
 
 Changed
 ~~~~~~~
+
+* inject-slf4j: Move MDC integration from `inject/inject-slf4j` to `inject/inject-mdc`.
+  ``PHAB_ID=D485870``
 
 * finatra-http: Allow extensions of the `c.t.finatra.http.filters.HttpResponseFilter`
   to specify how to set the Location Header value into a Response. Additionally, don't
