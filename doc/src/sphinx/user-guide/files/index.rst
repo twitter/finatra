@@ -87,7 +87,7 @@ could not would instead load `index.html` and render a response with a body of t
     defined in order of most-specific to least-specific.
 
 This can be useful for building "single-page" `web applications <https://en.wikipedia.org/wiki/Single-page_application>`_. See the 
-`web-dashboard <https://github.com/twitter/finatra/tree/develop/examples/web-dashboard>`_ project for a runnable example.
+`web-dashboard <https://github.com/twitter/finatra/tree/develop/examples/advanced/web-dashboard>`_ project for a runnable example.
 
 Or see the local file system `test class <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/fileserver/LocalFileServerFeatureTest.scala>`__ for more general file resolving examples.
 

@@ -40,7 +40,7 @@ in Finatra revolves around the following definitions:
   way.
 
 `ScalaTest <https://www.scalatest.org/>`__
------------------------------------------
+------------------------------------------
 
 The Finatra testing framework uses the Twitter recommended ScalaTest `testing style <https://www.scalatest.org/user_guide/selecting_a_style>`__ `FunSuite <https://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite>`__ for framework testing and to 
 facilitate the types of testing outlined above we have several testing traits to aid in creating simple 

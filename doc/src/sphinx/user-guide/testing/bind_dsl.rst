@@ -41,7 +41,7 @@ function on the embedded server.
       }
 
 For a complete example, see the
-`TwitterCloneFeatureTest <https://github.com/twitter/finatra/blob/develop/examples/twitter-clone/src/test/scala/finatra/quickstart/TwitterCloneFeatureTest.scala>`__.
+`TwitterCloneFeatureTest <https://github.com/twitter/finatra/blob/develop/examples/advanced/twitter-clone/src/test/scala/finatra/quickstart/TwitterCloneFeatureTest.scala>`__.
 
 .. warning::
     Using ``@Bind`` (the `com.google.inject.testing.fieldbinder.Bind` annotation) is to be considered
@@ -179,7 +179,7 @@ Example:
         }
     }
 
-See the `java-http-server <https://github.com/twitter/finatra/tree/develop/examples/java-http-server>`__
+See the `java-http-server <https://github.com/twitter/finatra/tree/develop/examples/http-server/java/src/main/java>`__
 for a full example of using the `#bind[T]` DSL in test to override a binding in a server.
 
 More Information

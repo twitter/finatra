@@ -98,4 +98,4 @@ Resource management is performed by listening to `Reader#onClose`.
     }
   }
 
-You can check out more streaming examples from `Finatra examples <https://github.com/twitter/finatra/tree/develop/examples/streaming-example>`__.
+You can check out more streaming examples from `Finatra examples <https://github.com/twitter/finatra/tree/develop/examples/advanced/streaming-example>`__.

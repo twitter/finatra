@@ -3,7 +3,7 @@
 Note: the most up-to-date examples are located in the `finatra/examples <https://github.com/twitter/finatra/tree/master/examples>`__
 project.
 
-See `examples/thrift-server <https://github.com/twitter/finatra/tree/master/examples/thrift-server>`__
+See `examples/thrift-server <https://github.com/twitter/finatra/tree/develop/examples/thrift-server>`__
 for an example `ThriftServer`.
 
 Thrift Server Definition
