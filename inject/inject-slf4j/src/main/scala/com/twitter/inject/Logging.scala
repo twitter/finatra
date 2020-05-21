@@ -1,6 +1,5 @@
 package com.twitter.inject
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.twitter.util.{Future, Return, Stopwatch, Throw}
 import scala.util.control.NonFatal
 
@@ -29,16 +28,6 @@ import scala.util.control.NonFatal
  *  }
  * }}}
  */
-@JsonIgnoreProperties(
-  Array(
-    "logger_name",
-    "trace_enabled",
-    "debug_enabled",
-    "error_enabled",
-    "info_enabled",
-    "warn_enabled"
-  )
-)
 trait Logging extends com.twitter.util.logging.Logging {
 
   /**

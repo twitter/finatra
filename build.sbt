@@ -586,7 +586,6 @@ lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
     moduleName := "inject-slf4j",
     ScoverageKeys.coverageExcludedPackages := "<empty>;",
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
       "org.slf4j" % "slf4j-api" % versions.slf4j

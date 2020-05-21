@@ -7,6 +7,19 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
+Changed
+~~~~~~~
+
+* inject-slf4j: Remove Jackson dependency. Case classes which wish to use the slf4j Logging
+  functionality should use the finatra/jackson `c.t.finatra.jackson.caseclass.SerdeLogging`
+  trait which provides a `@JsonIgnoreProperties` to ignore logging fields. ``PHAB_ID=D487948``
+
+Fixed
+~~~~~
+
 20.5.0
 ------
 
@@ -140,6 +153,7 @@ Fixed
 
 20.4.0
 ------
+
 Added
 ~~~~~
 

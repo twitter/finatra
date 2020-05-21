@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.node.ValueNode
 import com.fasterxml.jackson.module.scala.JsonScalaEnumeration
 import com.twitter.finatra.jackson.{CarMake, CarMakeEnum, TestInjectableValue}
+import com.twitter.finatra.jackson.caseclass.SerdeLogging
 import com.twitter.finatra.json.annotations.JsonCamelCase
 import com.twitter.finatra.validation.{
   CommonMethodValidations,
@@ -19,7 +20,6 @@ import com.twitter.finatra.validation.{
   ValidationResult
 }
 import com.twitter.finatra.validation.constraints._
-import com.twitter.inject.Logging
 import com.twitter.inject.domain.WrappedValue
 import com.twitter.util.Time
 import com.twitter.{util => ctu}
@@ -374,7 +374,7 @@ case class PersonWithLogging(
   age: Option[Int],
   age_with_default: Option[Int] = None,
   nickname: String = "unknown")
-    extends Logging
+    extends SerdeLogging
 
 case class PersonWithDottedName(id: Int, @JsonProperty("name.last") lastName: String)
 
@@ -500,7 +500,7 @@ case class WrappedValueStringMapObject(map: Map[WrappedValueString, String])
 
 case class FooClass(id: String)
 
-case class Group3(id: String) extends Logging
+case class Group3(id: String) extends SerdeLogging
 
 case class CaseClassWithNotEmptyValidation(@NotEmpty name: String, make: CarMakeEnum)
 

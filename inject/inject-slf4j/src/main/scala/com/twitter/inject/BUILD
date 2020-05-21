@@ -7,12 +7,10 @@ scala_library(
         repo = artifactory,
     ),
     dependencies = [
-        "3rdparty/jvm/com/fasterxml/jackson/core:jackson-annotations",
         "util/util-core:scala",
         "util/util-slf4j-api/src/main/scala",
     ],
     exports = [
-        "3rdparty/jvm/com/fasterxml/jackson/core:jackson-annotations",
         "util/util-core:scala",
         "util/util-slf4j-api/src/main/scala",
     ],
