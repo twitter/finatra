@@ -38,9 +38,20 @@ private[twitter] abstract class AdminHttpClient private[twitter] (
     withBody: String = null
   ): Response = {
 
-    val request = createApiRequest(path, Method.Get)
-    httpAdminClient
-      .apply(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody)
+    httpAdmin(path, accept, headers, suppress, andExpect, withLocation, withBody, Method.Get)
+  }
+
+  def httpPostAdmin(
+    path: String,
+    accept: String = null,
+    headers: Map[String, String] = Map(),
+    suppress: Boolean = false,
+    andExpect: Status = Status.Ok,
+    withLocation: String = null,
+    withBody: String = null
+  ): Response = {
+
+    httpAdmin(path, accept, headers, suppress, andExpect, withLocation, withBody, Method.Post)
   }
 
   def healthResponse(expectedHealthy: Boolean = true): Try[Response] = {
@@ -53,6 +64,29 @@ private[twitter] abstract class AdminHttpClient private[twitter] (
 
   def adminHttpServerRoutes: Seq[AdminHttpServer.Route] = {
     twitterServer.routes
+  }
+
+  /* Private */
+
+  private def httpAdmin(
+    path: String,
+    accept: String = null,
+    headers: Map[String, String] = Map(),
+    suppress: Boolean = false,
+    andExpect: Status = Status.Ok,
+    withLocation: String = null,
+    withBody: String = null,
+    method: Method
+  ): Response = {
+
+    val request = createApiRequest(path)
+    httpAdminClient(
+      request,
+      addAcceptHeader(accept, headers),
+      suppress,
+      andExpect,
+      withLocation,
+      withBody)
   }
 
   /* Protected */
