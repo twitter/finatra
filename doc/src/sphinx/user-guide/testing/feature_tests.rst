@@ -39,9 +39,9 @@ we recommend including `FeatureTests` in your test suite.
 .. admonition:: TL;DR
 
     A test which implements the `FeatureTest` trait is for a *single configured instance of a server under test*.
-    Servers are not cheap to create and start, thus the typical pattern is to create the server once
-    before any test case runs. The `FeatureTest` trait will ensure that the instance set to the
-    `server` member is properly closed after all tests have been run.
+    Servers are not cheap to create and start, thus the typical pattern is to create (and usually start)
+    the server once *before* any test case runs. The `FeatureTest` trait will ensure that the instance
+    set to the `server` member is properly closed after all tests have been run.
 
     In short, the workflow of a `FeatureTest` looks like this:
 
@@ -113,12 +113,11 @@ Given a simple |c.t.server.TwitterServer|_:
     import com.twitter.util.{Await, Future}
      
     class MyTwitterServer extends TwitterServer {
-      val defaultHttpPortValue: String = ":8888"
-      private val httpPortFlag =
-        flag("http.port", defaultHttpPortValue, "External HTTP server port")
+      private[this] val httpPortFlag =
+        flag(name = "http.port", default = ":8888", help = "External HTTP server port")
      
-      private def responseString: String = "Hello, world!"
-      private val service = Service.mk[Request, Response] { request =>
+      private[this] def responseString: String = "Hello, world!"
+      private[this] val service = Service.mk[Request, Response] { request =>
         val response =
           Response(request.version, Status.Ok)
         response.contentString = responseString
@@ -126,7 +125,8 @@ Given a simple |c.t.server.TwitterServer|_:
       }
 
       /** Simple way to expose the bound port once the external listening server is started */
-      @volatile var httpExternalPort: Option[Int] = None
+      @volatile private[this] var _httpExternalPort: Option[Int] = None
+      def httpExternalPort: Option[Int] = this._httpExternalPort
      
       def main(): Unit = {
         val server: ListeningServer = Http.server
@@ -137,7 +137,7 @@ Given a simple |c.t.server.TwitterServer|_:
         onExit {
           Await.result(server.close())
         }
-        httpExternalPort = Some(server.boundAddress.asInstanceOf[InetSocketAddress].getPort)
+        this._httpExternalPort = Some(server.boundAddress.asInstanceOf[InetSocketAddress].getPort)
         Await.ready(server)
       }
     }
@@ -151,12 +151,20 @@ under test.
 
 .. code:: scala
 
-    import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest}
+    import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest, PortUtils}
+    import scala.collection.immutable.ListMap
     
     class MyTwitterServerFeatureTest extends FeatureTest {
       
       override protected val server =
-        new EmbeddedTwitterServer(new MyTwitterServer)
+        new EmbeddedTwitterServer(
+          twitterServer = new MyTwitterServer,
+          globalFlags = ListMap(com.some.globalFlag.disable -> "true"),
+          flags = Map(
+            "http.port" -> PortUtils.ephemeralLoopback,
+            "dtab.add" -> "/$/inet=>/$/nil;/zk=>/$/nil"
+          )
+        )
       
       test("MyTwitterServer#starts") {
         server.isHealthy should be(true)
@@ -165,42 +173,11 @@ under test.
 
 For an "injectable" TwitterServer, |c.t.inject.server.TwitterServer|_ the test would look exactly the same.
 
-.. important::
+Testing With `Global Flags`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    It is important to note that for a "non-injectable" TwitterServer, i.e., a direct extension of
-    `c.t.server.TwitterServer` the above testing assumes that many of your service startup issues
-    can be determined at class construction, or in the `init` or `premain`
-    `lifecycle <../getting-started/lifecycle.html#c-t-server-twitterserver-lifecycle>`_ phases.
-
-    **Why?**
-
-    By default, the `EmbeddedTwitterServer` will start the underlying server in an different thread,
-    then `wait <https://github.com/twitter/finatra/blob/416cb3467c88e26704d695c1d6b8176172afa9c4/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L692>`_
-    for the server to `start <https://github.com/twitter/finatra/blob/416cb3467c88e26704d695c1d6b8176172afa9c4/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L684>`_
-    before allowing a test to proceed. However, this differs when the underlying server is a
-    `c.t.server.TwitterServer` vs. when it is a `c.t.inject.server.TwitterServer`.
-
-    For a `c.t.server.TwitterServer` the `EmbeddedTwitterServer` has no hook to determine if a server
-    has fully started, so relies solely on the `HTTP Admin Interface <../getting-started/twitter_server.html#http-admin-interface>`_
-    reporting itself as healthy.
-
-    For a `c.t.inject.server.TwitterServer` the `EmbeddedTwitterServer` is able to wait for the server
-    to report itself as "started" in the `c.t.inject.app.App#main <https://github.com/twitter/finatra/blob/416cb3467c88e26704d695c1d6b8176172afa9c4/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L135>`_.
-
-    Thus, testing your server is healthy for a `c.t.server.TwitterServer` is merely a check against
-    the `HTTP Admin Interface <../getting-started/twitter_server.html#http-admin-interface>`_
-    which is started in the `premain` phase.
-
-    If all of your `c.t.server.TwitterServer` logic is contained in the `main` of your server (like
-    Finagle client creation, external ListeningServer creation, etc), it is very possible when the
-    server under test is started in a separate thread, the `HTTP Admin Interface` will start and
-    report that it is healthy, then the test process will exit before the server under test in the
-    other thread has gotten to executing its `main` method and thus exiting before exercising any logic.
-
-    In cases like this, you should ensure to attempt to test logic of your server and not just assert
-    it is reported as healthy.
-
-    Again, see the documentation on the `Application and Server Lifecycle <../getting-started/lifecycle.html>`_ for more information.
+See the section covering this topic in the `Embedded Servers and Apps <embedded.html#testing-with-global-flags>`__
+documentation.
 
 Disabling Clients using `Dtabs`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -213,14 +190,16 @@ to your server under test.
 .. code:: scala
 
     import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest}
+    import scala.collection.immutable.ListMap
  
     class MyTwitterServerFeatureTest extends FeatureTest {
      
       override protected val server =
         new EmbeddedTwitterServer(
           twitterServer = new MyTwitterServer,
+          globalFlags = ListMap(com.some.globalFlag.disable -> "true"),
           flags = Map(
-            "dtab.add" -> "/$/inet=>/$/nil;/zk=>/$/nil"
+            "dtab.add" -> "/$/inet=>/$/nil;/zk=>/$/nil")
         )
      
       test("MyTwitterServer#starts") {
@@ -250,6 +229,7 @@ a client:
     import com.twitter.finatra.httpclient.RequestBuilder
     import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest}
     import java.net.InetAddress
+    import scala.collection.immutable.ListMap
      
     class MyTwitterServerFeatureTest extends FeatureTest {
 
@@ -258,8 +238,9 @@ a client:
       override protected val server =
         new EmbeddedTwitterServer(
           twitterServer = testServer,
+          globalFlags = ListMap(com.some.globalFlag.disable -> "true"),
           flags = Map(
-            "dtab.add" -> "/$/inet=>/$/nil;/zk=>/$/nil"
+            "dtab.add" -> "/$/inet=>/$/nil;/zk=>/$/nil")
         )
      
       private lazy val httpClient =
@@ -303,9 +284,15 @@ trait. Then override the `server` definition with an instance of your |EmbeddedH
     import com.twitter.finagle.http.Status
     import com.twitter.finatra.http.EmbeddedHttpServer
     import com.twitter.inject.server.FeatureTest
+    import scala.collection.immutable.ListMap
 
     class ExampleServerFeatureTest extends FeatureTest {
-      override val server = new EmbeddedHttpServer(new ExampleServer)
+      override val server = new EmbeddedHttpServer(
+        twitterServer = new ExampleServer,
+        globalFlags = ListMap(com.some.globalFlag.disable -> "true"),
+        flags = Map(
+          "dtab.add" -> "/$/inet=>/$/nil;/zk=>/$/nil")
+      )
 
       test("ExampleServer#perform feature") {
         server.httpGet(
@@ -334,9 +321,15 @@ to help easily construct a `c.t.finagle.http.Request`.
     import com.twitter.finatra.http.EmbeddedHttpServer
     import com.twitter.finatra.httpclient.RequestBuilder
     import com.twitter.inject.server.FeatureTest
+    import scala.collection.immutable.ListMap
 
     class ExampleServerFeatureTest extends FeatureTest {
-      override val server = new EmbeddedHttpServer(new ExampleServer)
+      override val server = new EmbeddedHttpServer(
+        twitterServer = new ExampleServer,
+        globalFlags = ListMap(com.some.globalFlag.disable -> "true"),
+        flags = Map(
+          "dtab.add" -> "/$/inet=>/$/nil;/zk=>/$/nil")
+      )
 
       test("ExampleServer#perform feature") {
         server.httpGet(
@@ -367,9 +360,15 @@ from the |EmbeddedThriftServer|_.
     import com.twitter.finatra.thrift.EmbeddedThriftServer
     import com.twitter.inject.server.FeatureTest
     import com.twitter.util.Await
+    import scala.collection.immutable.ListMap
 
     class ExampleThriftServerFeatureTest extends FeatureTest {
-      override val server = new EmbeddedThriftServer(new ExampleThriftServer)
+      override val server = new EmbeddedThriftServer(
+        twitterServer = new ExampleThriftServer,
+        globalFlags = ListMap(com.some.globalFlag.disable -> "true"),
+        flags = Map(
+          "dtab.add" -> "/$/inet=>/$/nil;/zk=>/$/nil")
+      )
 
       lazy val client: ExampleThrift[Future] =
         server.thriftClient[ExampleThrift[Future]](clientId = "client123")
@@ -456,11 +455,17 @@ could close the client in the ScalaTest `afterAll` lifecycle block. E.g.,
     import com.twitter.finatra.thrift.EmbeddedThriftServer
     import com.twitter.inject.server.FeatureTest
     import com.twitter.util.{Await, Duration}
+    import scala.collection.immutable.ListMap
 
     class ExampleThriftServerFeatureTest extends FeatureTest {
       override val defaultAwaitTimeout: Duration = 2.seconds
 
-      override val server = new EmbeddedThriftServer(new ExampleThriftServer)
+      override val server = new EmbeddedThriftServer(
+        twitterServer = new ExampleThriftServer,
+        globalFlags = ListMap(com.some.globalFlag.disable -> "true"),
+        flags = Map(
+          "dtab.add" -> "/$/inet=>/$/nil;/zk=>/$/nil")
+      )
 
       lazy val client: ExampleThrift.ServicePerEndpoint =
         server.servicePerEndpoint[ExampleThrift.ServicePerEndpoint](clientId = "client123")
@@ -489,10 +494,16 @@ then you can `FeatureTest` by constructing an `EmbeddedHttpServer with ThriftCli
     import com.twitter.finatra.http.EmbeddedHttpServer
     import com.twitter.finatra.thrift.ThriftClient
     import com.twitter.inject.server.FeatureTest
+    import scala.collection.immutable.ListMap
 
     class ExampleCombinedServerFeatureTest extends FeatureTest {
       override val server =
-        new EmbeddedHttpServer(new ExampleCombinedServer) with ThriftClient
+        new EmbeddedHttpServer(
+          twitterServer = new ExampleCombinedServer,
+          globalFlags = ListMap(com.some.globalFlag.disable -> "true"),
+          flags = Map(
+            "dtab.add" -> "/$/inet=>/$/nil;/zk=>/$/nil")
+        ) with ThriftClient
 
       lazy val client: ExampleThrift[Future] =
         server.thriftClient[ExampleThrift[Future]](clientId = "client123")
@@ -539,6 +550,7 @@ For example, we could define a "base" testing trait:
 
     import com.twitter.inject.server.FeatureTest
     import com.twitter.finatra.http.EmbeddedHttpServer
+    import scala.collection.immutable.ListMap
 
     trait BaseMyServiceFeatureTest extends FeatureTest {
       protected def foo: Foo
@@ -556,6 +568,7 @@ For example, we could define a "base" testing trait:
           override val name = name
           override val overrideModules = Seq(???)
         },
+        globalFlags = ListMap(com.some.globalFlag.disable -> "true"),
         flags = flags
       ).bind[Foo].toInstance(foo)
        .bind[Baz].toInstance(baz)
@@ -641,6 +654,7 @@ For example, we could extend our defined "base" testing trait to include test ca
     import com.twitter.inject.Mockito
     import com.twitter.inject.server.FeatureTest
     import com.twitter.finatra.http.EmbeddedHttpServer
+    import scala.collection.immutable.ListMap
 
     trait BaseMyServiceFeatureTest extends FeatureTest with Mockito {
       protected def foo: Foo = mock[Foo]
@@ -655,6 +669,7 @@ For example, we could extend our defined "base" testing trait to include test ca
           override val name = name
           override val overrideModules = Seq(???)
         },
+        globalFlags = ListMap(com.some.globalFlag.disable -> "true"),
         flags = flags
       ).bind[Foo].toInstance(foo)
        .bind[Baz].toInstance(baz)

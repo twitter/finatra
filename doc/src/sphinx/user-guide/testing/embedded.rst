@@ -36,15 +36,20 @@ and |c.t.finatra.thrift.ThriftServer|_ extend from |c.t.server.TwitterServer|_ w
 Testing With `Global Flags`
 ---------------------------
 
-The embedded servers and the embedded app allow for passing `TwitterUtil <https://github.com/twitter/util>`__ `Flags <https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala>`__
+The embedded servers and the embedded app allow for passing `Twitter Util <https://github.com/twitter/util>`__ 
+`Flags <https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala>`__
 to the server under test via the `flags <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L130>`__
 constructor argument (a map of flag name to flag value) which is meant to mimic setting flag values
 via the command line.
 
-However it is **not recommended** that users set any |GlobalFlag|_ value in this manner. In normal
-usage, the value of a |GlobalFlag|_ is **only read once during the initialization of the JVM process**.
+However it is **not recommended** that users set any |GlobalFlag|_ value in this manner when testing. In 
+normal usage, the value of a |GlobalFlag|_ is **only read once during the initialization of the JVM process**.
+Which means that setting the value of a |GlobalFlag|_ as a normal flag on a server will set it for the JVM 
+process started by the test harness and the value will not be able to be reset during the lifetime of the process. 
+This also means that the value of the |GlobalFlag|_ would be wholly dependent on which test server is started 
+first in the test suite, increasing the likelihood of non-deterministic effects.
 
-A |GlobalFlag|_ can now be scoped for the execution of an embedded server by passing in a value via the
+A |GlobalFlag|_ can be scoped for the execution of an embedded server by passing in a value via the
 `globalFlags <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L142>`__
 arg of an embedded server. For example,
 
@@ -53,6 +58,7 @@ arg of an embedded server. For example,
     import com.twitter.finatra.http.EmbeddedHttpServer
     import com.twitter.finagle.http.Status
     import com.twitter.inject.server.FeatureTest
+    import scala.collection.immutable.ListMap
 
     class ExampleServerFeatureTest extends FeatureTest {
       override val server = new EmbeddedHttpServer(
@@ -70,6 +76,12 @@ arg of an embedded server. For example,
       }
     }
 
+.. important::
+
+    Global Flags are applied in insertion order with the first entry being applied "closest" to
+    the startup of the underlying `TwitterServer`. Thus to maintain insertion order of passed
+    flags, it is recommended that users use a `scala.collection.immutable.ListMap` or equivalent.
+
 If you wish to test with toggled values of a |GlobalFlag|_ for an embedded app or server, you can
 still use |FlagLet|_ or |FlagLetClear|_ in tests. Note that if an embedded server takes
 `globalFlags <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L142>`__
@@ -83,6 +95,7 @@ For example,
     import com.twitter.finatra.http.EmbeddedHttpServer
     import com.twitter.finagle.http.Status
     import com.twitter.inject.server.FeatureTest
+    import scala.collection.immutable.ListMap
 
     class ExampleServerFeatureTest extends FeatureTest {
       override val server = new EmbeddedHttpServer(
