@@ -8,16 +8,16 @@ import com.twitter.inject.TwitterModule;
 import com.twitter.inject.annotations.Flag;
 
 /**
- * [[http://twitter.github.io/finatra/user-guide/getting-started/modules.html Modules]] are generally
- * useful for defining how to configure and instantiate classes which are not your own, e.g. a 3rd
- * party library's `DatabaseConnection` class.
+ * <a href="https://twitter.github.io/finatra/user-guide/getting-started/modules.html">Modules</a> are
+ * generally useful for defining how to configure and instantiate classes which are not your own,
+ * e.g. a 3rd party library's `DatabaseConnection` class.
  *
  * In this case, we're simply creating a Module that gives us a configured [[Queue]], which is
  * actually not necessary as we could simply annotate the [[Queue]] constructor and have the injector
- * provide a "just-in-time" [[https://github.com/google/guice/wiki/JustInTimeBindings binding]].
+ * provide a "just-in-time" <a href="https://github.com/google/guice/wiki/JustInTimeBindings">binding</a>.
  *
  * For more information on modules see the link below.
- * @see [[http://go/docbird//finatra/user-guide/getting-started/modules.html#defining-modules Defining Modules]].
+ * @see <a href="https://twitter.github.io/finatra/user-guide/getting-started/modules.html#defining-modules>Defining Modules</a>
  */
 public final class QueueModule extends TwitterModule {
 
