@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Feature Tests &#8212; Finatra 20.4.1 documentation</title>
+    <title>Feature Tests &#8212; Finatra 20.5.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -76,7 +76,7 @@ with a test-defined <a class="reference external" href="https://github.com/twitt
 <a class="reference external" href="https://github.com/cucumber/cucumber/wiki/Feature-Introduction">Cucumber</a> or other similar
 testing languages and frameworks, then <a class="reference external" href="https://wiki.documentfoundation.org/QA/Testing/Feature_Tests">Feature Testing</a>
 will feel somewhat familiar. In Finatra, a <cite>FeatureTest</cite> always consists of a <strong>single</strong> configured
-server under test. See the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala&gt;"><cite>c.t.inject.server.FeatureTest</cite></a> trait.</p>
+server under test. See the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala"><cite>c.t.inject.server.FeatureTest</cite></a> trait.</p>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <p>The <cite>server</cite> is specified as a <cite>def</cite> in the <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTestMixin.scala#L24"><cite>c.t.inject.server.FeatureTestMixin</cite></a> trait.</p>
@@ -101,7 +101,7 @@ before any test case runs. The <cite>FeatureTest</cite> trait will ensure that t
 of a server.</p>
 <div class="section" id="testing-multiple-applications-or-servers">
 <h2>Testing Multiple Applications or Servers<a class="headerlink" href="#testing-multiple-applications-or-servers" title="Permalink to this headline">¶</a></h2>
-<p>For multiple servers, don’t use the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala&gt;"><cite>c.t.inject.server.FeatureTest</cite></a> trait since it is for testing a
+<p>For multiple servers, don’t use the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala"><cite>c.t.inject.server.FeatureTest</cite></a> trait since it is for testing a
 single server. Just extend the <cite>c.t.inject.Test</cite> trait to implement your test using the <a class="reference external" href="embedded.html">embedded utilities</a>
 to create and start your application. Note you will need to manually ensure to close any
 created servers.</p>
@@ -112,7 +112,7 @@ servers to prevent any resource leaking in your tests.</p>
 file:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/multiserver/test/MultiServerFeatureTest.scala">Http to Http example</a></p></li>
-<li><p><a class="reference external" href="MultiServerFeatureTest">Http to Http to Thrift example</a></p></li>
+<li><p><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject-thrift-client-http-mapper/src/test/scala/com/twitter/finatra/multiserver/test/MultiServerFeatureTest.scala">Http to Http to Thrift example</a></p></li>
 <li><p><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/test/scala/com/twitter/inject/thrift/MultiServerDarkTrafficFeatureTest.scala">Thrift to Thrift (via the DarkTrafficFilter) example</a></p></li>
 <li><p><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/test/java/com/twitter/inject/thrift/integration/MultiJavaServerDarkTrafficFeatureTest.java">Thrift to Thrift (via the DarkTrafficFilter) Java example</a></p></li>
 </ul>
@@ -130,7 +130,7 @@ specifically the <a class="reference external" href="#id2">Sharing Test Cases</a
 </div>
 <div class="section" id="c-t-server-twitterserver">
 <h2><a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a><a class="headerlink" href="#c-t-server-twitterserver" title="Permalink to this headline">¶</a></h2>
-<p>Finatra’s <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala&gt;"><cite>c.t.inject.server.FeatureTest</cite></a> utility can be used for testing any extension of <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a>.
+<p>Finatra’s <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala"><cite>c.t.inject.server.FeatureTest</cite></a> utility can be used for testing any extension of <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a>.
 That is, you can start a locally running server and write tests that issue requests to it as long as the
 server extends from <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a> – the server under test does not specifically have to
 be a server written using the Finatra framework.</p>
@@ -182,7 +182,7 @@ to start the server and test it in a controlled environment.</p>
 </div>
 <div class="section" id="writing-the-featuretest">
 <h3>Writing the FeatureTest<a class="headerlink" href="#writing-the-featuretest" title="Permalink to this headline">¶</a></h3>
-<p>First, extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala&gt;"><cite>c.t.inject.server.FeatureTest</cite></a> trait. Then override the <cite>server</cite> definition
+<p>First, extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala"><cite>c.t.inject.server.FeatureTest</cite></a> trait. Then override the <cite>server</cite> definition
 with an instance of your <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala"><cite>EmbeddedTwitterServer</cite></a> which wraps your <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a>
 under test.</p>
 <div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.inject.server.</span><span class="o">{</span><span class="nc">EmbeddedTwitterServer</span><span class="o">,</span> <span class="nc">FeatureTest</span><span class="o">}</span>
@@ -199,6 +199,35 @@ under test.</p>
 </pre></div>
 </div>
 <p>For an “injectable” TwitterServer, <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala"><cite>c.t.inject.server.TwitterServer</cite></a> the test would look exactly the same.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>It is important to note that for a “non-injectable” TwitterServer, i.e., a direct extension of
+<cite>c.t.server.TwitterServer</cite> the above testing assumes that many of your service startup issues
+can be determined at class construction, or in the <cite>init</cite> or <cite>premain</cite>
+<a class="reference external" href="../getting-started/lifecycle.html#c-t-server-twitterserver-lifecycle">lifecycle</a> phases.</p>
+<p><strong>Why?</strong></p>
+<p>By default, the <cite>EmbeddedTwitterServer</cite> will start the underlying server in an different thread,
+then <a class="reference external" href="https://github.com/twitter/finatra/blob/416cb3467c88e26704d695c1d6b8176172afa9c4/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L692">wait</a>
+for the server to <a class="reference external" href="https://github.com/twitter/finatra/blob/416cb3467c88e26704d695c1d6b8176172afa9c4/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L684">start</a>
+before allowing a test to proceed. However, this differs when the underlying server is a
+<cite>c.t.server.TwitterServer</cite> vs. when it is a <cite>c.t.inject.server.TwitterServer</cite>.</p>
+<p>For a <cite>c.t.server.TwitterServer</cite> the <cite>EmbeddedTwitterServer</cite> has no hook to determine if a server
+has fully started, so relies solely on the <a class="reference external" href="../getting-started/twitter_server.html#http-admin-interface">HTTP Admin Interface</a>
+reporting itself as healthy.</p>
+<p>For a <cite>c.t.inject.server.TwitterServer</cite> the <cite>EmbeddedTwitterServer</cite> is able to wait for the server
+to report itself as “started” in the <a class="reference external" href="https://github.com/twitter/finatra/blob/416cb3467c88e26704d695c1d6b8176172afa9c4/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L135">c.t.inject.app.App#main</a>.</p>
+<p>Thus, testing your server is healthy for a <cite>c.t.server.TwitterServer</cite> is merely a check against
+the <a class="reference external" href="../getting-started/twitter_server.html#http-admin-interface">HTTP Admin Interface</a>
+which is started in the <cite>premain</cite> phase.</p>
+<p>If all of your <cite>c.t.server.TwitterServer</cite> logic is contained in the <cite>main</cite> of your server (like
+Finagle client creation, external ListeningServer creation, etc), it is very possible when the
+server under test is started in a separate thread, the <cite>HTTP Admin Interface</cite> will start and
+report that it is healthy, then the test process will exit before the server under test in the
+other thread has gotten to executing its <cite>main</cite> method and thus exiting before exercising any logic.</p>
+<p>In cases like this, you should ensure to attempt to test logic of your server and not just assert
+it is reported as healthy.</p>
+<p>Again, see the documentation on the <a class="reference external" href="../getting-started/lifecycle.html">Application and Server Lifecycle</a> for more information.</p>
+</div>
 </div>
 <div class="section" id="disabling-clients-using-dtabs">
 <h3>Disabling Clients using <cite>Dtabs</cite><a class="headerlink" href="#disabling-clients-using-dtabs" title="Permalink to this headline">¶</a></h3>
@@ -286,7 +315,7 @@ client creation work can then be done for you by the framework’s testing tools
 </div>
 <div class="section" id="c-t-finatra-http-httpserver">
 <h2><cite>c.t.finatra.http.HttpServer</cite><a class="headerlink" href="#c-t-finatra-http-httpserver" title="Permalink to this headline">¶</a></h2>
-<p>To write a <cite>FeatureTest</cite> for an <cite>c.t.finatra.http.HttpServer</cite>, extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala&gt;"><cite>c.t.inject.server.FeatureTest</cite></a>
+<p>To write a <cite>FeatureTest</cite> for an <cite>c.t.finatra.http.HttpServer</cite>, extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala"><cite>c.t.inject.server.FeatureTest</cite></a>
 trait. Then override the <cite>server</cite> definition with an instance of your <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><cite>EmbeddedHttpServer</cite></a>.</p>
 <div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.http.Status</span>
 <span class="k">import</span> <span class="nn">com.twitter.finatra.http.EmbeddedHttpServer</span>
@@ -342,7 +371,7 @@ to help easily construct a <cite>c.t.finagle.http.Request</cite>.</p>
 <div class="section" id="c-t-finatra-thrift-thriftserver">
 <h2><cite>c.t.finatra.thrift.ThriftServer</cite><a class="headerlink" href="#c-t-finatra-thrift-thriftserver" title="Permalink to this headline">¶</a></h2>
 <p>Similarly, to write a <cite>FeatureTest</cite> for a <cite>c.t.finatra.thrift.ThriftServer</cite> and create a <a class="reference external" href="https://twitter.github.io/finagle/">Finagle</a>
-<a class="reference external" href="#thrift-tests">client</a> to it, extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala&gt;"><cite>c.t.inject.server.FeatureTest</cite></a> trait, override the
+<a class="reference external" href="#thrift-tests">client</a> to it, extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala"><cite>c.t.inject.server.FeatureTest</cite></a> trait, override the
 <cite>server</cite> definition with an instance of your <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala"><cite>EmbeddedThriftServer</cite></a>, and then create a Thrift client
 from the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala"><cite>EmbeddedThriftServer</cite></a>.</p>
 <div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.example.thriftscala.ExampleThrift</span>
@@ -483,11 +512,11 @@ then you can <cite>FeatureTest</cite> by constructing an <cite>EmbeddedHttpServe
 <p>There may be times in testing where you want to share an embedded server configuration among
 different FeatureTests. That is, you want to be able to create and setup the embedded server in the
 same way (perhaps with minor configuration changes) across many different test files.</p>
-<p>One idea might be to define a “base” test trait which extends <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala&gt;"><cite>c.t.inject.server.FeatureTest</cite></a> that
+<p>One idea might be to define a “base” test trait which extends <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala"><cite>c.t.inject.server.FeatureTest</cite></a> that
 your tests can extend.</p>
 <p>Creating a “base” trait that defines shared state is a fine strategy. However, when doing so it
 is generally considered a best practice to <strong>not</strong> share an instance of an embedded server.
-That is, issues can arise when this “base” trait overrides and implements the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala&gt;"><cite>c.t.inject.server.FeatureTest</cite></a>
+That is, issues can arise when this “base” trait overrides and implements the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala"><cite>c.t.inject.server.FeatureTest</cite></a>
 trait <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">server</span></code>.</p>
 <p>Thus, we recommend to <em>always</em> implement the abstract <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">server</span></code> in each <em>actual</em> <cite>FeatureTest</cite>
 implementation.</p>
@@ -579,8 +608,8 @@ when testing, thus the recommendation to always override the server member of <c
 server’s Injector would trigger the server to start in order to create and return the Injector.</p>
 </div>
 </div>
-<div class="section" id="id2">
-<h3>Sharing Test Cases<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id3">
+<h3>Sharing Test Cases<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p>Note that you could also extend this in the situation where you want to run the same test cases over
 <strong>differently configured</strong> instances of the same server. Your “base” trait would similarly provide
 a method for obtaining a properly configured embedded server for test instances to use <em>as well as implement test cases</em>.</p>
@@ -713,7 +742,7 @@ for “combined” HTTP and Thrift server.</p></li>
 <li><a class="reference internal" href="#combined-c-t-finatra-http-httpserver-c-t-finatra-thrift-thriftserver">Combined <cite>c.t.finatra.http.HttpServer</cite> &amp; <cite>c.t.finatra.thrift.ThriftServer</cite></a></li>
 <li><a class="reference internal" href="#sharing-a-server-fixture-between-many-feature-tests">Sharing a Server Fixture Between Many Feature Tests</a><ul>
 <li><a class="reference internal" href="#reasons">Reasons</a></li>
-<li><a class="reference internal" href="#id2">Sharing Test Cases</a></li>
+<li><a class="reference internal" href="#id3">Sharing Test Cases</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#examples">Examples:</a></li>

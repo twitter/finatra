@@ -3,7 +3,7 @@
 Note: the most up-to-date examples are located in the `finatra/examples <https://github.com/twitter/finatra/tree/master/examples>`__
 project.
 
-See `examples/thrift-server <https://github.com/twitter/finatra/tree/master/examples/thrift-server>`__
+See `examples/thrift-server <https://github.com/twitter/finatra/tree/develop/examples/thrift-server>`__
 for an example `ThriftServer`.
 
 Thrift Server Definition
@@ -79,21 +79,22 @@ in Java:
 
 .. code:: java
 
-    import com.google.common.collect.ImmutableList;
     import com.google.inject.Module;
     import com.twitter.finatra.thrift.AbstractThriftServer;
     import com.twitter.finatra.thrift.filters.LoggingMDCFilter;
     import com.twitter.finatra.thrift.filters.TraceIdMDCFilter;
     import com.twitter.finatra.thrift.routing.JavaThriftRouter;
     import java.util.Collection;
+    import java.util.Collections;
 
     public class ExampleServer extends AbstractThriftServer {
 
       @Override
       public Collection<Module> javaModules() {
-        return ImmutableList.<Module>of(ExampleModule$.MODULE$);
+        return Collections.singletonList(ExampleModule$.MODULE$);
       }
 
+      // Note: this version uses the `JavaThriftRouter`
       @Override
       public void configureThrift(JavaThriftRouter router) {
         router
@@ -198,17 +199,17 @@ in Java:
 
 .. code:: java
 
-    import com.google.common.collect.ImmutableList;
     import com.google.inject.Module;
     import com.twitter.finagle.Service;
     import com.twitter.finatra.thrift.AbstractThriftServerTrait;
     import java.util.Collection;
+    import java.util.Collections;
 
     public class ExampleServer extends AbstractThriftServerTrait {
 
       @Override
       public Collection<Module> javaModules() {
-        return ImmutableList.<Module>of(ExampleModule$.MODULE$);
+        return Collections.singletonList(ExampleModule$.MODULE$);
       }
 
       @Override
@@ -258,6 +259,23 @@ your server.
 For a list of what flags can be set programmatically, please see the `ThriftServerTrait <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/servers.scala>`__ class.
 
 For more information on using and setting command-line flags see `Flags <../getting-started/flags.html#passing-flag-values-as-command-line-arguments>`__.
+
+Framework Modules
+~~~~~~~~~~~~~~~~~
+
+The `ThriftServer <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/servers.scala>`__
+provides some base configurations in the form of `modules <../getting-started/modules.html>`_ added
+by default to a server's object graph. This includes:
+
+- the `ExceptionManagerModule <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/modules/ExceptionManagerModule.scala>`_ (see: `Thrift Exception Mapping <./exceptions.html>`_)
+- the `StackTransformerModule <https://github.com/twitter/finatra/blob/develop/inject/inject-modules/src/main/scala/com/twitter/inject/modules/StackTransformerModule.scala>`_
+- an `overridable <https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/thrift/src/main/scala/com/twitter/finatra/thrift/servers.scala#L211>`_ default `ThriftResponseClassifierModule <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/modules/ThriftResponseClassifierModule.scala>`_ (see: `Server-side Response Classification <#id1>`_)
+
+.. caution::
+
+    Modules are de-duplicated before being installed to create the Injector. If a Framework
+    Module is also configured in the server's `list of Modules <../getting-started/modules.html#module-configuration-in-servers>`_,
+    the Framework Module will be replaced. 
 
 Finagle Server Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

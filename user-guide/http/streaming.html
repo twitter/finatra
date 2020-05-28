@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>HTTP Streaming &#8212; Finatra 20.4.1 documentation</title>
+    <title>HTTP Streaming &#8212; Finatra 20.5.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -66,7 +66,7 @@
 <li><p>The ability to program in terms of streams of domain objects instead of bytes. For example:</p>
 <ul>
 <li><p>A <cite>StreamingRequest</cite> will deserialize a valid JSON string to a domain object using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/streaming/JsonStreamParser.scala">JsonStreamParser</a>.</p></li>
-<li><p>A <cite>StreamingResponse</cite> will convert a domain object to a JSON string using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala">ObjectMapper</a>.</p></li>
+<li><p>A <cite>StreamingResponse</cite> will convert a domain object to a JSON string using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala">ScalaObjectMapper</a>.</p></li>
 </ul>
 </li>
 <li><p>The ability to bypass the <cite>ObjectMappper</cite> and <cite>JsonStreamParser</cite> by dealing with streams of <cite>Buf</cite> directly.</p></li>
@@ -150,7 +150,7 @@
 <span class="o">}</span>
 </pre></div>
 </div>
-<p>You can check out more streaming examples from <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/examples/streaming-example">Finatra examples</a>.</p>
+<p>You can check out more streaming examples from <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/examples/advanced/streaming-example">Finatra examples</a>.</p>
 </div>
 </div>
 

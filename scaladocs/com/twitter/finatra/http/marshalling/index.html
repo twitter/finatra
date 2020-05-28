@@ -540,7 +540,7 @@ overriding <a href="../HttpServer.html#messageBodyModule:com.google.inject.Modul
    ...
    <span class="kw">override</span> <span class="kw">val</span> messageBodyModule = MyCustomMessageBodyModule
 }</pre><p>The framework default <a href="MessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyReader">com.twitter.finatra.http.marshalling.MessageBodyReader</a> will attempt to
-convert the incoming request body using the server's configured <a href="../../json/FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">com.twitter.finatra.json.FinatraObjectMapper</a>
+convert the incoming request body using the server's configured <a href="../../jackson/ScalaObjectMapper.html" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper">com.twitter.finatra.jackson.ScalaObjectMapper</a>
 and is the basis for the framework's <a href="https://twitter.github.io/finatra/user-guide/json/routing.html#requests" target="_blank">JSON Integration with Routing</a>.</p><p>The <a href="DefaultMessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyReader">com.twitter.finatra.http.marshalling.DefaultMessageBodyReader</a> trait differs from the
 <a href="MessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyReader">com.twitter.finatra.http.marshalling.MessageBodyReader</a> trait in that the
 default is not parameterized to a specific type but instead defines a generic <code>parse[T]</code> function
@@ -576,7 +576,7 @@ overriding <a href="../HttpServer.html#messageBodyModule:com.google.inject.Modul
    ...
    <span class="kw">override</span> <span class="kw">val</span> messageBodyModule = MyCustomMessageBodyModule
 }</pre><p>The framework default will attempt to convert the outgoing type <code>T</code> to a JSON response using the
-server's configured <a href="../../json/FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">com.twitter.finatra.json.FinatraObjectMapper</a>.</p><p>The <a href="DefaultMessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter">com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter</a> trait differs from the
+server's configured <a href="../../jackson/ScalaObjectMapper.html" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper">com.twitter.finatra.jackson.ScalaObjectMapper</a>.</p><p>The <a href="DefaultMessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter">com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter</a> trait differs from the
 <a href="MessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyWriter">com.twitter.finatra.http.marshalling.MessageBodyWriter</a> trait in that the
 default is not parameterized to a specific type but instead defines a generic <code>write[T]</code> function
 which can generate a response from a given type <code>T</code>.

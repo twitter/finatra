@@ -55,37 +55,75 @@ When Are Flags Parsed?
 It is important to understand *when* in the application lifecycle Flag values are parsed from command
 line input into an instance of the the Flag's defined `Flaggable[T] <https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flag.scala#L55>`__ type `T`.
 
-Flags are not parsed during class loading or initialization and thus care should be taken
-when attempting to eagerly access a Flag value to ensure it is not done until at least the
-**premain** application lifecycle phase.
+.. admonition:: Overview
 
-Flag values are parsed from command line input *in-between* the `c.t.app.App#init` application
-lifecycle phase and the `c.t.app.App#premain` lifecycle phase. Thus, you should not attempt to access
-a Flag value before it is parsed. Doing so in Finatra will cause an `IllegalStateException` because
-the framework sets the `c.t.app.Flags#failFastUntilParsed` as mentioned in the
-`TwitterServer documentation <https://twitter.github.io/twitter-server/Features.html#flags>`__ to
-`true <#failfastonflagsnotparsed>`__).
+  Flag values are parsed from command line input *after* the `c.t.app.App#init` application lifecycle
+  phase and *before* the `c.t.app.App#premain` lifecycle phase.
+
+Flags are not parsed during class loading or initialization, rather, Flag parsing happens
+*in-between* the running of all registered `init()` functions and the running of all registered
+`premain` functions. Thus care should be taken when attempting to access a Flag value to ensure it
+is not done until at least the **premain** application lifecycle phase.
 
 For more information on the application lifecycle see the documentation `here <lifecycle.html>`__.
 
-.. note::
+`c.t.app.App#failfastOnFlagsNotParsed`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  If no command line input is given for a defined Flag, accessing the Flag value should still not
-  occur until after parsing of command line input has been attempted. The `c.t.app.Flags <https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L89>`__
-  instance within your application is stateful and is only fully initialized *after parsing* of any
-  command line input and thus Flags should not be considered "ready" for accessing until this step
-  has completed.
+Note that Finatra defaults the `c.t.app.App#failfastOnFlagsNotParsed <https://github.com/twitter/util/blob/5e326a1109e2cd608515ce87badfb792bd346a3d/util-app/src/main/scala/com/twitter/app/App.scala#L57>`_
+option as mentioned in the `TwitterServer documentation <https://twitter.github.io/twitter-server/Features.html#flags>`__ to
+**'true'**. This is done in the Finatra extension `c.t.inject.app.App <https://github.com/twitter/finatra/blob/c1b49edebb0ad513f2b3439ee4f2f5e0541e2b26/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L127>`__
+which overrides the superclass implementation with **'true'**.
 
-  **Reminder**: parsing of command line input into Flag values happens between the `c.t.app.App#init`
-  and `c.t.app.App#premain` lifecycle phases.
+Having this option turned on means that if a Flag value is accessed before the Flag has been parsed
+then an `IllegalStateException` will be thrown. This "fail fast" behavior is preferable over silently
+reading a default value by mistake and not a parsed value from the command line.
+
+Modules
+^^^^^^^
+
+Flags created within a Finatra `TwitterModule` are collected and added to the application's
+`c.t.app.Flags <https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flags.scala>`_
+collection during the `init` lifecycle phase. Thus, they will not inherit the application's setting
+for "fail fast" until then.
+
+The default for the "fail fast" behavior of Flags created within a Finatra `TwitterModule` is governed
+by the value set for `c.t.inject.TwitterModuleFlags#failfastOnFlagsNotParsed` in the `TwitterModule`
+which is also defaulted to **'true'** to mirror the application container default.
+
+This means that like a Flag created with the application, any attempt to access a `TwitterModule`
+created Flag's value too eagerly will also result in an `IllegalStateException` being thrown.
+
+.. important::
+
+    We highly recommend that all applications keep `c.t.inject.app.App#failfastOnFlagsNotParsed <https://github.com/twitter/finatra/blob/c1b49edebb0ad513f2b3439ee4f2f5e0541e2b26/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L127>`_
+    and `c.t.inject.TwitterModuleFlags#failfastOnFlagsNotParsed <https://github.com/twitter/finatra/blob/8435309bd5d729537db4960e4f09d55b537fc75b/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleFlags.scala#L29>`_
+    not only set to the **same value** but also **kept to their default of 'true'**.
+
+    This should arguably be the default behavior for Flag instances but for legacy reasons is not.
+
+Flags With No Command Line Value
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If no command line input is given for a defined Flag, accessing the Flag value should still not
+occur until after parsing of command line input has been attempted. The `c.t.app.Flags <https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L89>`__
+instance within your application is stateful and is only fully initialized *after parsing* of any
+command line input and thus Flags should not be considered "ready" for accessing until this step
+has completed.
 
 If the Flag defines a default, the `default value <https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flag.scala#L186>`__ will be returned when no command line value is
 given. If the Flag is defined without a default and no command line value is given, any attempt to
-read the Flag's value via the `apply()` function will fail with an `IllegalArgumentException`. For
-more information on defining and accessing Flags without default values, see `here <#flags-without-defaults>`__.
+read the Flag's value via the `apply()` function will fail with an `IllegalArgumentException`.
+
+For more information on defining and accessing Flags without default values, see
+`here <#flags-without-defaults>`__.
 
 How To Define Flags
 -------------------
+
+Flags should be defined as part of instance creation/instantiation (i.e., via the constructor) in 
+either a `c.t.inject.TwitterModule` or an application (any extension of `c.t.app.App`) and thus 
+declared before command line input has been parsed.
 
 Within an App or a Server
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -101,7 +139,7 @@ In this case within an `HttpServer <../http/server.html>`__,
 
     import DoEverythingModule
     import ExampleController
-    import com.twitter.finatra.http.HttpServer
+    import com.twitter.finatra.http.{Contoller, HttpServer}
     import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter, TraceIdMDCFilter}
     import com.twitter.finatra.http.routing.HttpRouter
     import com.twitter.inject.annotations.Flag
@@ -109,9 +147,9 @@ In this case within an `HttpServer <../http/server.html>`__,
 
     class ExampleController @Inject()(
       @Flag("magic.num") magicNum: String
-    ) {
+    ) extends Controller {
         get("/foo") { request: Request =>
-          ???
+          magicNum
         }
     }
 
@@ -132,10 +170,82 @@ In this case within an `HttpServer <../http/server.html>`__,
           .add[ExampleController]
     }
 
+or in Java:
+
+.. code:: java
+
+    import DoEverythingModule;
+    import ExampleController;
+    import com.google.inject.Module;
+    import com.twitter.finagle.http.Request;
+    import com.twitter.finatra.http.AbstractController;
+    import com.twitter.finatra.http.AbstractHttpServer;
+    import com.twitter.finatra.http.filters.CommonFilters;
+    import com.twitter.finatra.http.filters.LoggingMDCFilter;
+    import com.twitter.finatra.http.filters.TraceIdMDCFilter;
+    import com.twitter.finatra.http.routing.HttpRouter;
+    import com.twitter.inject.annotations.Flag
+    import java.util.Collection;
+    import java.util.Collections;
+    import javax.inject.Inject;
+    import scala.reflect.ManifestFactory;
+
+    public class ExampleController extends AbstractController {
+      private final String magicNum;
+
+      @Inject
+      public ExampleController() {
+        @Flag("magic.num") String magicNum) {
+        this.magicNum = magicNum;
+      }
+
+      public void configureRoutes() {
+        get("/foo", (Request request) -> magicNum)
+      }
+    }
+
+    ...
+
+    public final class ExampleServerMain {
+      private ExampleServerMain() {
+      }
+
+      public static void main(String[] args) {
+        new ExampleServer().main(args);
+      }
+    }
+
+    ...
+
+    public class ExampleServer extends AbstractHttpServer {
+
+      public ExampleServer() {
+        createFlag(
+          /* name      = */ "magic.num",
+          /* default   = */ 42,
+          /* help      = */ "Defines a magic number flag.",
+          /* flaggable = */ Flaggable.ofJavaInteger());
+      }
+
+      @Override
+      public Collection<Module> javaModules() {
+        return Collections.singletonList((
+            new DoEverythingModule());
+      }
+
+      @Override
+      public void configureHttp(HttpRouter router) {
+        router
+          .filter(ManifestFactory.classType(LoggingMDCFilter.class))
+          .filter(ManifestFactory.classType(TraceIdFilter.class))
+          .filter(CommonFilters.class)
+          .add(ExampleController.class)
+    }
+
 The parsed value of the Flag, `magic.num` would be available to be injected where necessary using
 the |@Flag|_ binding annotation.
 
-Or it can always be obtained directly from the Injector:
+Or it can be obtained directly from the Injector:
 
 .. code:: scala
 
@@ -147,9 +257,10 @@ Or it can always be obtained directly from the Injector:
     import com.twitter.inject.annotations.Flags
     import javax.inject.Inject
 
-    class ExampleController @Inject()(
-      @Flag("magic.num") magicNum: String
-    ) {
+    // Note: we define our Controller without the `@Inject()` annotation on the construction,
+    // thus args need to always be passed in since the injector will not be able to instantiate.
+    // Also note: this is just an example.
+    class ExampleController(magicNum: String) {
         get("/foo") { request: Request =>
           ???
         }
@@ -197,23 +308,51 @@ through `Override Modules <../testing/index.html#override-modules>`__ or by usin
 
       @Provides
       @Singleton
-      def providesFoo(
-        @Flag("key") key: String) = {
+      def provideFoo(
+        @Flag("key") key: String): Foo = {
         new Foo(key)
       }
     }
 
-In both examples above, notice that we do not save a local reference to the created Flag and instead
+and in Java:
+
+.. code:: java
+
+    import com.google.inject.Provides;
+    import com.twitter.inject.TwitterModule;
+    import com.twitter.inject.annotations.Flag;
+    import javax.inject.Singleton;
+
+    public class MyModule extends TwitterModule {
+
+      public MyModule() {
+        createFlag(
+          /* name      = */ "key",
+          /* default   = */ "default",
+          /* help      = */ "The key to use",
+          /* flaggable = */ Flaggable.ofString());
+      }
+
+      @Provides
+      @Singleton
+      public Foo provideFoo(
+        @Flag("key") String key) {
+        return new Foo(key);
+      }
+    }
+
+In the examples above, notice that we **do not save a local reference to the created Flag** but instead
 reference its value by use of the |@Flag|_ binding annotation or by obtaining the parsed value
 directly from the Injector.
 
 |@Flag| annotation
 ^^^^^^^^^^^^^^^^^^
 
-The |@Flag|_ `binding annotation <../getting-started/binding_annotations.html>`__.
-This annotation allows parsed Flag values to be injected into classes (and provider methods).
+|@Flag|_ is a `binding annotation <../getting-started/binding_annotations.html>`__. This annotation
+allows parsed Flag values to be injected into classes (and provider methods).
 
 .. important::
+
    While `Flag <https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flag.scala>`__
    supports parsing into any |Flaggable[T]|_ type, it is currently only possible to
    *bind* to a `String type <https://github.com/twitter/finatra/blob/31efc1d46dea436fb580f4b71f9196d15bade2e3/inject/inject-app/src/main/scala/com/twitter/inject/app/internal/TwitterTypeConvertersModule.scala>`__
@@ -248,24 +387,28 @@ so.
 
       @Singleton
       @Provides
-      def providesThirdPartyFoo: ThirdPartyFoo = {
+      def provideThirdPartyFoo: ThirdPartyFoo = {
         new ThirdPartyFoo(key())
       }
     }
 
-.. caution::
+.. warning::
 
     This is potentially dangerous. See the next sections for details.
 
 Caution
 +++++++
 
+.. important::
+
+    Flags are distinct by name only.
+
 Note that holding onto a reference of a Flag can be potentially dangerous since Flag definitions
-can currently be overridden with another definition. Flags are distinct `by name only <https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L251>`__.
+can be overridden with another definition. Flags are distinct `by name only <https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L251>`__.
 The Flag you are referencing can be replaced in the stateful `c.t.app.Flags <https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flags.scala#L89>`__
-instance with another instance created with the same name. The last Flag added wins and thus
-when the Flags are parsed your reference may not be updated with the parsed value, resulting in the
-reference retaining its default value or no value if it has no specified default.
+instance of your application with another instance created with the same name. The last Flag added
+wins and thus when the Flags are parsed your reference may not be updated with the parsed value,
+resulting in the reference retaining its default value or no value if it has no specified default.
 
 You should only do this if you are guaranteed that the Flag defined for which you keep a
 reference will not be redefined making your reference obsolete.
@@ -273,14 +416,17 @@ reference will not be redefined making your reference obsolete.
 Even More Caution
 +++++++++++++++++
 
+.. important::
+
+    Eagerly evaluating a Flag value before the Flag has been parsed will not always fail.
+
 Additionally, having a reference can lead to unintentionally trying to dereference the Flag value
 before the command-line value has been parsed. If the Flag has a reasonable default, your code
 may even appear to work until the passed command-line value is changed, which will have no effect on
 the Flag because the Flag is being evaluated too early in the `Application Lifecycle <./lifecycle.html#c-t-inject-app-app-lifecycle>`_.
 
-The recommendation is to not hold a reference to a created Flag and instead obtain the parsed flag
-value via injection. See the `next section <#flag-value-injection>`_ on `Flag Value Injection` for
-details.
+The recommendation is to not hold a reference to a created Flag and instead obtain the parsed Flag
+value via injection. See the `Flag Value Injection <#flag-value-injection>`_ section for details.
 
 Ok, But I Want To Live Dangerously
 ++++++++++++++++++++++++++++++++++
@@ -288,11 +434,8 @@ Ok, But I Want To Live Dangerously
 If you find you must keep a local reference to the created Flag, then you can use the `Flag#apply <https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L171>`__,
 `Flag#get <https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L205>`__
 or other methods, depending, to obtain the parsed Flag value. Again, this is not recommended and
-caution should be exercised when using flags in this manner to respect the application lifecycle
-with regards to `when flags are parsed <#when-are-flags-parsed>`_ and other concerns.
-
-Some cases for holding onto a reference of a created Flag include is when a Flag triggers
-behavior based on its presence (i.e., a toggle) and does not convey any value.
+caution should be exercised when using Flags in this manner to respect the application lifecycle
+with regards to `when Flags are parsed <#when-are-flags-parsed>`_.
 
 Flag Value Injection
 ^^^^^^^^^^^^^^^^^^^^
@@ -330,11 +473,90 @@ You can also ask the Injector directly for a Flag value using `Flags.named` (sim
 .. caution:: Attempting to get a Flag value from the Injector for a Flag **without** a default
     nor a user-specified value will result in a `ProvisionException`.
 
+Flag Value Injection Benefits
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A side-effect of not holding onto Flag references in a `TwitterModule` is that it increases the possibility
+of using the `@Provides`-annotated method in a non-injection context. Everything needed to construct
+the returned type can be defined as an argument to the method, essentially making the `@Provides`-annotated
+method a type of `Factory method <https://en.wikipedia.org/wiki/Factory_method_pattern>`_.
+
+When the `@Provides`-annotated method directly applies a held Flag reference it means the method
+is tied to the lifecycle of the Flag reference. The method cannot be properly called until the Flag
+reference has been parsed.
+
+Removing usage of a held Flag reference and instead allowing the Flag value to be `injected <#id3>`_
+(like `any other needed dependency <modules.html#provides>`_) means the method can be used
+independently of the Flag lifecycle or even injection.
+
+For example, if we had a class `Notifier`:
+
+.. code:: scala
+
+    import com.twitter.util.Duration
+
+    class Notifier(
+      connection: DatabaseConnection,
+      emailer: Emailer ,
+      serializer: Serializer,
+      notificationFrequency: Duration)
+
+and a module, `NotifierModule`:
+
+.. code:: scala
+
+    import com.google.inject.Provides
+    import com.twitter.conversions.DurationOps._
+    import com.twitter.inject.TwitterModule
+    import com.twitter.inject.annotations.Flag
+    import com.twitter.util.Duration
+    import javax.inject.Singleton
+
+    object NotifierModule extends TwitterModule {
+      flag(name = "frequency.interval.minutes", default = 60.minutes, help = "Interval for notifications")
+
+      @Provides
+      @Singleton
+      def provideNotifier(
+        connection: DatabaseConnection,
+        emailer: Emailer ,
+        serializer: Serializer,
+        @Flag("frequency.interval.minutes") interval: Duration): Notifier = {
+        new Notifier(
+          connection,
+          emailer,
+          serializer,
+          interval)
+      }
+    }
+
+You could use this Module in non-injection context -- like providing a test fixture, since you have
+static utility to construct a `Notifier` over its necessary parts. That is, you could do something
+along the lines of:
+
+.. code:: scala
+
+      import com.twitter.conversions.DurationOps._
+
+      val mockDatabaseConnection: DatabaseConnection = mock[DatabaseConnection]
+      val mockEmailer: Emailer = mock[Emailer]
+      val mockSerializer: Serializer = mock[Serializer]
+
+      val notifierStub: Notifier =
+        NotifierModule.provideNotifier(
+          connection = mockDatabaseConnection,
+          emailer = mockEmailer
+          serializer = mockSerializer
+          notificationFrequency = 10.seconds)
+
+See the `The Tao of Testing: Chapter 3 - Dependency Injection <https://jasonpolites.github.io/tao-of-testing/ch3-1.1.html>`__
+for more information and examples of Dependency Injection approaches to writing testable code.
+
 Flags Without Defaults
 ----------------------
 
 Flags defined without a default value are typically considered to be "mandatory" flags. That is, a
-command-line value MUST be supplied and it is not expected that the server will be able to correctly
+command line value MUST be supplied and it is not expected that the server will be able to correctly
 function without a supplied value.
 
 When creating a Flag, the returned Flag instance is parameterized to the type of the supplied default
@@ -366,7 +588,7 @@ A Bad Example
 
       @Singleton
       @Provides
-      def providesThirdPartyFoo: ThirdPartyFoo = {
+      def provideThirdPartyFoo: ThirdPartyFoo = {
         val myKey = key.get match {
           case Some(value) => value
           case _ => "DEFAULT"
@@ -381,7 +603,7 @@ default.
 
 .. warning::
 
-    Note: this is not a recommended way of defining or using a Flag within a TwitterModule but is
+    This is not a recommended way of defining or using a Flag within a TwitterModule but is
     included to show aspects of the Flag API. Please see the section on why `holding a reference <#holding-a-reference>`_ to a Flag in a Module is dangerous and why this is not recommended.
 
 Note that you should not call `Flag#apply <https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L171>`__
@@ -416,8 +638,37 @@ A better example of injecting a parsed value from a Flag defined without a defau
 
       @Singleton
       @Provides
-      def providesThirdPartyFoo(@Flag("key") myKey: String): ThirdPartyFoo =
+      def provideThirdPartyFoo(
+        @Flag("key") myKey: String): ThirdPartyFoo =
         new ThirdPartyFoo(myKey)
+    }
+
+and in Java:
+
+.. code:: java
+
+    import com.foo.bar.ThirdPartyFoo;
+    import com.google.inject.Provides;
+    import com.twitter.inject.TwitterModule;
+    import com.twitter.inject.annotations.Flag;
+    import javax.inject.Singleton;
+
+    public final class MyModule1 extends TwitterModule {
+
+      public MyModule1() {
+        createMandatoryFlag(
+          /* name      = */ "key",
+          /* help      = */ "The key to use",
+          /* usage     = */ "Pass -key=value",
+          /* flaggable = */ Flaggable.ofString());
+      }
+
+      @Singleton
+      @Provides
+      public ThirdPartyFoo provideThirdPartyFoo(
+        @Flag("key") String myKey) {
+        return new ThirdPartyFoo(myKey);
+      }
     }
 
 In this example, we are assured that we will have the parsed Flag value obtained from the Injector
@@ -427,42 +678,6 @@ we cannot start the server without a command-line value being supplied. This fit
 of a Flag defined without a default in that the Flag is meant to be treated as **required** for the
 server.
 
-``c.t.app.Flags#failfastOnFlagsNotParsed``
-------------------------------------------
-
-Note that Finatra defaults the `c.t.app.Flags#failfastOnFlagsNotParsed` option as mentioned in the
-`TwitterServer documentation <https://twitter.github.io/twitter-server/Features.html#flags>`__ to
-`true <https://github.com/twitter/finatra/blob/c1b49edebb0ad513f2b3439ee4f2f5e0541e2b26/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L127>`__
-for you. Having this option turned on means that if a Flag is accessed in order to read its value
-before the Flag has been parsed then an `IllegalStateException` will be thrown.
-
-.. admonition:: Reminder
-
-  Flag values are parsed from command line input *after* the `c.t.app.App#init` application lifecycle
-  phase and *before* the `c.t.app.App#premain` lifecycle phase.
-
-Modules
-~~~~~~~
-
-It is important to note that the `c.t.app.Flags#failfastOnFlagsNotParsed` option **only applies to flags created within an application or a server**
--- since they are directly created from the application's
-`c.t.app.Flags <https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flags.scala>`_
-collection.
-
-Caution
-^^^^^^^
-Flags created within a Finatra `TwitterModule` are created with the default behavior for Flags which
-is 'false' for the "failFast" behavior of reading a Flag value before the Flag is parsed. Thus, is it
-extremely important to not attempt to access a `TwitterModule` created Flag's value too eagerly as
-you can end up with the Flag's default or an error (if there is no default).
-
-.. important::
-
-    **We highly recommend that all containers keep** `c.t.inject.app.App#failfastOnFlagsNotParsed <https://github.com/twitter/finatra/blob/c1b49edebb0ad513f2b3439ee4f2f5e0541e2b26/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L127>`_
-    **set to 'true'.**
-
-    This should arguably be the default behavior for Flag instances but for legacy reasons is not.
-
 Modules Depending on Other Modules - Flags Edition
 --------------------------------------------------
 
@@ -470,7 +685,7 @@ As we saw in the `Modules section <modules.html#modules-depending-on-other-modul
 "depend" on other Modules. In that case we wanted an already bound type for use in another Module.
 
 Flags are special since they are bound to the object graph by the framework due to the fact that
-their values are parsed from the command line at a specific point in the server lifecycle.But the
+their values are parsed from the command line at a specific point in the server lifecycle. But the
 principle is the same. What if we have a Module which defines a configuration Flag that is useful
 in other contexts?
 
@@ -501,26 +716,30 @@ same Module, e.g.,
 
       @Singleton
       @Provides
-      def providesClientA: ClientA = {
+      def provideClientA: ClientA = {
         new ClientA(clientIdFlag())
       }
 
       @Singleton
       @Provides
-      def providesClientB: ClientB = {
+      def provideClientB: ClientB = {
         new ClientB(clientIdFlag())
       }
 
       @Singleton
       @Provides
-      def providesClientC: ClientC = {
+      def provideClientC: ClientC = {
         new ClientA(clientIdFlag())
       }
     }
 
-Or you could choose to break up the client creation into separate Modules -- allowing them to be
-used and tested independently. If you do the latter, how do you get access to the parsed `client.id`
-Flag value from the `ClientIdModule` inside of another Module?
+But this starts to break down as your add more clients, especially if each client in turn requires
+specific configuration or Flags in order to be constructed. For the purposes of encapsulation, we'd
+want to collocate all the relevant Flags and logic to create a given client into it's own re-usable
+Module, thus allowing them to be used and tested independently.
+
+If we do so, then how do we get access to the parsed `client.id` Flag value from the `ClientIdModule`
+inside of another Module?
 
 Most often you are trying to inject the Flag value into a class using the |@Flag|_
 `binding annotation <binding_annotations.html>`__ on a class constructor-arg. E.g.,
@@ -532,7 +751,7 @@ Most often you are trying to inject the Flag value into a class using the |@Flag
 
     @Singleton
     class MyClassFoo @Inject() (
-      @Flag("client.id") clientId) {
+      @Flag("client.id") clientId: String) {
       ???
     }
 
@@ -544,22 +763,51 @@ E.g.,
 
 .. code:: scala
 
-    import com.google.inject.Provides
+    import ClientIdModule
+    import com.google.inject.{Module, Provides}
     import com.twitter.inject.TwitterModule
     import com.twitter.inject.annotations.Flag
     import javax.inject.Singleton
 
     object ClientAModule extends TwitterModule {
-      override val modules = Seq(ClientIdModule)
+      override val modules: Seq[Module] = Seq(ClientIdModule)
 
       @Singleton
       @Provides
-      def providesClientA(
-        @Flag("client.id") clientId): ClientA = {
+      def provideClientA(
+        @Flag("client.id") clientId: String): ClientA = {
         new ClientA(clientId)
       }
     }
 
+of in Java:
+
+.. code:: java
+
+    import ClientIdModule$;
+    import com.google.inject.Module;
+    import com.google.inject.Provides;
+    import com.twitter.inject.TwitterModule;
+    import com.twitter.inject.annotations.Flag;
+    import java.util.Collection;
+    import java.util.Collections;
+    import javax.inject.Singleton;
+
+    public final class ClientAModule extends TwitterModule {
+
+      @Override
+      public Collection<Module> javaModules() {
+        return Collections.singletonList((
+            ClientIdModule$.MODULE$);
+      }
+
+      @Singleton
+      @Provides
+      public ClientA provideClientA(
+        @Flag("client.id") String clientId) {
+        return new ClientA(clientId);
+      }
+    }
 
 What's happening here?
 
@@ -583,6 +831,15 @@ Note that it is an `error to try to define the same Flag twice <https://github.c
 Finatra will de-dupe all Modules before installing, so it is OK if a Module appears twice in the
 server configuration, though you should strive to make this the exception.
 
+.. important::
+
+    Reminder: It is important that the framework install all `TwitterModules` such that the `lifecycle functions <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala>`_
+    are executed in the proper sequence and any `TwitterModule` defined `Flags <flags.html>`__ are
+    parsed properly.
+
+    Thus users SHOULD NOT install a `TwitterModule` within another Module via `Module#configure
+    using `Binder#install <https://google.github.io/guice/api-docs/4.2/javadoc/com/google/inject/Binder.html#install-com.google.inject.Module->`__.
+
 Secondly, we've defined a method which provides a `ClientA`. Since injection is by type (and the
 argument list to an ``@Provides`` annotated method in a Module is an injection point) and `String`
 is not specific enough we use the |@Flag|_ `binding annotation <binding_annotations.html>`__.
@@ -592,28 +849,67 @@ which needs both the `ClientId` and a `ClientA` we could define a `ClientBModule
 
 .. code:: scala
 
+    import ClientIdModule
+    import ClientAModule
+    import com.google.inject.{Module, Provides}
+    import com.twitter.inject.TwitterModule
+    import com.twitter.inject.annotations.Flag
+    import javax.inject.Singleton
+
     object ClientBModule extends TwitterModule {
-      override val modules = Seq(
+      override val modules: Seq[Module] = Seq(
         ClientIdModule,
         ClientAModule)
 
       @Singleton
       @Provides
-      def providesClientB(
+      def provideClientB(
         @Flag("client.id") clientId,
         clientA: ClientA): ClientB = {
         new ClientB(clientId, clientA)
       }
     }
 
+or in Java:
 
-Notice that we choose to list both the `ClientIdModule` and `ClientAModule` in the Modules for the
-`ClientBModule`. Yet, since we know that the `ClientAModule` includes the `ClientIdModule` we could
-have chosen to leave it out.
+.. code:: java
 
-The `providesClientB` method in the Module above takes in both a `ClientId` String and a `ClientA`.
+    import ClientIdModule$;
+    import com.google.inject.Module;
+    import com.google.inject.Provides;
+    import com.twitter.inject.TwitterModule;
+    import com.twitter.inject.annotations.Flag;
+    import java.util.Arrays;
+    import java.util.Collection;
+    import java.util.Collections;
+    import javax.inject.Singleton;
+
+    public final class ClientBModule extends TwitterModule {
+
+      @Override
+      public Collection<Module> javaModules() {
+        return Collections.unmodifiableList(
+          Arrays.asList(
+            ClientIdModule$.MODULE$,
+            ClientAModule$.MODULE$));
+      }
+
+      @Singleton
+      @Provides
+      public ClientB provideClientB(
+        @Flag("client.id") clientId,
+        clientA: ClientA) {
+        return new ClientB(clientId, clientA);
+      }
+    }
+
+Notice that we choose to include both the `ClientIdModule` and `ClientAModule` in the list of Modules
+for the `ClientBModule`. Yet, since we know that the `ClientAModule` includes the `ClientIdModule`
+we could have chosen to leave it out.
+
+The `provideClientB` method in the Module above takes in both a `ClientId` String and a `ClientA`.
 Since it declares the two Modules, we're assured that these types will be available from the
-Injector for our `providesClientB` method to use.
+Injector for our `provideClientB` method to use.
 
 This is just an Example
 -----------------------

@@ -151,8 +151,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.http">http</a></dd></dl></div>
     </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="object" href="" title=""></a>
-                        <a href="" title="">AccessLogModule</a>
+                        <a class="object" href="" title="A com.twitter.inject.TwitterModule which provides a com.twitter.finagle.filter.LogFormatter implementation."></a>
+                        <a href="" title="A com.twitter.inject.TwitterModule which provides a com.twitter.finagle.filter.LogFormatter implementation.">AccessLogModule</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="class" href="DarkTrafficFilterModule.html" title=""></a>
@@ -170,7 +170,7 @@
                         <a class="object" href="MessageBodyFlagsModule$.html" title=""></a>
                         <a href="MessageBodyFlagsModule$.html" title="">MessageBodyFlagsModule</a>
                       </li><li class="current-entities indented5">
-                        <a class="object" href="MessageBodyModule$.html" title="Provided implementations for the com.twitter.finatra.http.marshalling.DefaultMessageBodyReader and the com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter."></a>
+                        <a class="object" href="MessageBodyModule$.html" title="Provides implementations for the com.twitter.finatra.http.marshalling.DefaultMessageBodyReader and the com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter."></a>
                         <a class="class" href="MessageBodyModule.html" title=""></a>
                         <a href="MessageBodyModule.html" title="">MessageBodyModule</a>
                       </li><li class="current-entities indented5">
@@ -205,7 +205,9 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which provides a
+<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/filter/LogFormatter.html" class="extype" name="com.twitter.finagle.filter.LogFormatter">com.twitter.finagle.filter.LogFormatter</a> implementation.
+</p></div><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -1110,7 +1112,7 @@ only <code>@Provides</code>-annotated methods do not need to implement an empty
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../google/inject/index.html" class="extype" name="com.google.inject">com.google.inject</a>] </dd><dt>Definition Classes</dt><dd>AbstractModule</dd></dl></div>
-    </li><li name="com.twitter.inject.TwitterModuleFlags#createFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.inject.TwitterModuleFlags#createFlag" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="createFlag[T](String,T,String,Flaggable[T]):Flag[T]"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/modules/AccessLogModule$.html#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink">
@@ -1118,7 +1120,7 @@ only <code>@Provides</code>-annotated methods do not need to implement an empty
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -1127,7 +1129,7 @@ only <code>@Provides</code>-annotated methods do not need to implement an empty
       
       <p class="shortcomment cmt">A Java-friendly method for creating a named <span class="extype" name="Flag">Flag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>A Java-friendly method for creating a named <span class="extype" name="Flag">Flag</span>.
 </p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">default</dt><dd class="cmt"><p>a default value for the <span class="extype" name="Flag">Flag</span> when no value is given as an application
-               argument.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>TwitterModuleFlags</dd></dl></div>
+               argument.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>TwitterModuleFlags</dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModuleFlags#createMandatoryFlag" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="createMandatoryFlag[T](String,String,String,Flaggable[T]):Flag[T]"></a>
       <span class="permalink">
@@ -1136,7 +1138,7 @@ only <code>@Provides</code>-annotated methods do not need to implement an empty
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -1420,7 +1422,7 @@ instances created within the application container.
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.inject.TwitterModuleFlags#flag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.inject.TwitterModuleFlags#flag" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="flag[T](name:String,help:String)(implicitevidence$2:com.twitter.app.Flaggable[T],implicitevidence$3:Manifest[T]):com.twitter.app.Flag[T]"></a><a id="flag[T](String,String)(Flaggable[T],Manifest[T]):Flag[T]"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/modules/AccessLogModule$.html#flag[T](name:String,help:String)(implicitevidence$2:com.twitter.app.Flaggable[T],implicitevidence$3:Manifest[T]):com.twitter.app.Flag[T]" title="Permalink">
@@ -1428,7 +1430,7 @@ instances created within the application container.
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -1438,8 +1440,8 @@ instances created within the application container.
       <p class="shortcomment cmt">Create a &quot;mandatory&quot; flag and add it to this Module's flags list.&quot;Mandatory&quot; flags MUST have
 a value provided as an application argument (as they have no default value to be used).</p><div class="fullcomment"><div class="comment cmt"><p>Create a &quot;mandatory&quot; flag and add it to this Module's flags list.&quot;Mandatory&quot; flags MUST have
 a value provided as an application argument (as they have no default value to be used).
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>must be a <span class="extype" name="Flaggable">Flaggable</span> type.</p></dd><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>TwitterModuleFlags</dd><dt>Note</dt><dd><span class="cmt"><p>Java users: see the more Java-friendly <a href="#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.finatra.http.modules.AccessLogModule#createFlag">createFlag</a> or <a href="#createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.finatra.http.modules.AccessLogModule#createMandatoryFlag">createMandatoryFlag</a>.</p></span></dd></dl></div>
-    </li><li name="com.twitter.inject.TwitterModuleFlags#flag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>must be a <span class="extype" name="Flaggable">Flaggable</span> type.</p></dd><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>TwitterModuleFlags</dd><dt>Note</dt><dd><span class="cmt"><p>Java users: see the more Java-friendly <a href="#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.finatra.http.modules.AccessLogModule#createFlag">createFlag</a> or <a href="#createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.finatra.http.modules.AccessLogModule#createMandatoryFlag">createMandatoryFlag</a>.</p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.TwitterModuleFlags#flag" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="flag[T](name:String,default:T,help:String)(implicitevidence$1:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="flag[T](String,T,String)(Flaggable[T]):Flag[T]"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/modules/AccessLogModule$.html#flag[T](name:String,default:T,help:String)(implicitevidence$1:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink">
@@ -1447,7 +1449,7 @@ a value provided as an application argument (as they have no default value to be
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -1456,7 +1458,7 @@ a value provided as an application argument (as they have no default value to be
       
       <p class="shortcomment cmt">Create a <span class="extype" name="Flag">Flag</span> and add it to this Module's flags list.</p><div class="fullcomment"><div class="comment cmt"><p>Create a <span class="extype" name="Flag">Flag</span> and add it to this Module's flags list.
 </p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>must be a <span class="extype" name="Flaggable">Flaggable</span> type.</p></dd><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">default</dt><dd class="cmt"><p>a default value for the <span class="extype" name="Flag">Flag</span> when no value is given as an application
-               argument.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>TwitterModuleFlags</dd><dt>Note</dt><dd><span class="cmt"><p>Java users: see the more Java-friendly <a href="#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.finatra.http.modules.AccessLogModule#createFlag">createFlag</a> or <a href="#createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.finatra.http.modules.AccessLogModule#createMandatoryFlag">createMandatoryFlag</a>.</p></span></dd></dl></div>
+               argument.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>TwitterModuleFlags</dd><dt>Note</dt><dd><span class="cmt"><p>Java users: see the more Java-friendly <a href="#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.finatra.http.modules.AccessLogModule#createFlag">createFlag</a> or <a href="#createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.finatra.http.modules.AccessLogModule#createMandatoryFlag">createMandatoryFlag</a>.</p></span></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModuleFlags#flags" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="flags:scala.collection.mutable.ArrayBuffer[com.twitter.app.Flag[_]]"></a><a id="flags:ArrayBuffer[Flag[_]]"></a>
       <span class="permalink">

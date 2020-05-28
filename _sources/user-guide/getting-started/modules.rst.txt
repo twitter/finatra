@@ -187,17 +187,17 @@ or in Java:
 
       public MyModule1() {
         createFlag(
-          /*name*/ "client.dest",
-          /*default*/ "defaultDestIfNoneProvided",
-          /*help*/ "The client dest to use.",
-          /*flaggable*/ Flaggable.ofString()
+          /* name      = */ "client.dest",
+          /* default   = */ "defaultDestIfNoneProvided",
+          /* help      = */ "The client dest to use.",
+          /* flaggable = */ Flaggable.ofString()
         );
 
         createFlag(
-          /*name*/ "client.label",
-          /*default*/ "defaultLabelIfNoneProvided",
-          /*help*/ "The client label to use.",
-          /*flaggable*/ Flaggable.ofString()
+          /* name      = */ "client.label",
+          /* default   = */ "defaultLabelIfNoneProvided",
+          /* help      = */ "The client label to use.",
+          /* flaggable = */ Flaggable.ofString()
         );
       }
 
@@ -205,8 +205,7 @@ or in Java:
       @Provides
       public Service<Request, Response> providesHttpClient(
         @Flag("client.dest") String dest,
-        @Flag("client.label") String label
-      ) {
+        @Flag("client.label") String label) {
         return Http.newClient(dest, label);
       }
     }
@@ -250,6 +249,23 @@ For example:
       @Provides
       def providesBar(foo: Foo): Bar = {
         new Bar(foo)
+      }
+   }
+
+or in Java:
+
+.. code:: java
+
+    import com.google.inject.Provides;
+    import com.twitter.inject.TwitterModule;
+    import javax.inject.Singleton;
+
+    public final class MyModule1 extends TwitterModule {
+
+      @Singleton
+      @Provides
+      public Bar providesBar(Foo foo) {
+        return new Bar(foo);
       }
    }
 
@@ -299,22 +315,23 @@ and in Java:
 
 .. code:: java
 
-    import com.google.common.collect.ImmutableList;
     import com.google.inject.Module;
     import com.twitter.finatra.http.AbstractHttpServer;
+    import java.util.Arrays;
     import java.util.Collection;
+    import java.util.Collections;
 
     public class Server extends AbstractHttpServer {
 
       @Override
       public Collection<Module> javaModules() {
-        return ImmutableList.<Module>of(
-            MyModule1$.MODULE$,
-            MyModule2$.MODULE$,
-            ClientIdModule$.MODULE$,
-            ClientAModule$.MODULE$,
-            ClientBModule$.MODULE$);
-        )
+        return Collections.unmodifiableList(
+            Arrays.asList(
+              MyModule1$.MODULE$,
+              MyModule2$.MODULE$,
+              ClientIdModule$.MODULE$,
+              ClientAModule$.MODULE$,
+              ClientBModule$.MODULE$));
       }
 
       ...
@@ -432,6 +449,51 @@ by doing the following:
       }
     }
 
+or in Java:
+
+.. code:: java
+
+    import com.google.inject.Provides;
+    import com.twitter.inject.Injector;
+    import com.twitter.inject.TwitterModule;
+    import com.twitter.inject.annotations.Flag;
+    import com.twitter.util.Await;
+    import com.twitter.util.Duration;
+    import com.twitter.util.Function0;
+    import javax.inject.Singleton;
+
+    public final class MyModule extends TwitterModule {
+
+      public MyModule() {
+        createFlag(
+          /* name      = */ "configuration.param1",
+          /* default   = */ 42,
+          /* help      = */ "This is used to configure an instance of a Wicket",
+          /* flaggable = */ Flaggable.ofJavaInteger());
+
+        createFlag(
+          /* name      = */ "configuration.param2",
+          /* default   = */ 123.45d,
+          /* help      = */ "This is also used to configure an instance of a Wicket",
+          /* flaggable = */ Flaggable.ofJavaDouble());
+      }
+
+      @Provides
+      @Singleton
+      public SomeClient providesSomeClient(
+        @Flag("configuration.param1") int configurationParam1,
+        @Flag("configuration.param2") double configurationParam2) {
+        SomeClient client =
+          new SomeClient(configurationParam1, configurationParam2)
+            .withAnotherParam(true)
+            .withSomeOtherConfiguration(137)
+
+        closeOnExit(() -> Await.result(client.close(), Duration.fromSeconds(2)));;
+
+        return client;
+      }
+    }
+
 This allows for not needing to implement the `singletonShutdown` method which would require that you
 obtain an instance of the singleton resource from the Injector to then call the `close()` function.
 
@@ -452,9 +514,14 @@ for more thoughts on providing resources with modules.
 Modules Depending on Other Modules
 ----------------------------------
 
-There may be times where you would like to reuse types bound by one Module inside another Module.
-For instance, you may have a Module which provides a type `Foo` and need that instance when
-constructing a type `Bar` in another Module. E.g.
+As noted in the `Differences with Google Guice Modules <#differences-with-google-guice-modules>`_
+section, a `c.t.inject.TwitterModule` has an associated lifecycle and thus you should prefer to
+**not** install an instance of a `c.t.inject.TwitterModule` using `Binder#install <https://google.github.io/guice/api-docs/4.2/javadoc/com/google/inject/Binder.html#install-com.google.inject.Module->`__
+inside of `Module#configure()`.
+
+However, we recognize that there may be times where you would like to reuse types bound by one Module
+inside another Module. For instance, you may have a Module which provides a type `Foo` and need that
+instance when constructing a type `Bar` in another Module. E.g.
 
 .. code:: scala
 
@@ -486,7 +553,7 @@ Most often you are trying to inject the bound instance into a class as a class c
 
 You can do something similar in a Module. However, instead of the injection point being the
 constructor annotated with ``@Inject``, it is the argument list of any ``@Provides``-annotated
-method.
+method. So to get an instance of a provided `Foo` inside of our `BarModule` we can do:
 
 .. code:: scala
 
@@ -509,18 +576,18 @@ in Java:
 
 .. code:: java
 
-    import com.google.common.collect.ImmutableList;
     import com.google.inject.Module;
     import com.google.inject.Provides;
     import com.twitter.inject.TwitterModule;
     import javax.inject.Singleton;
     import java.util.Collection;
+    import java.util.Collections;
 
     public class BarModule extends TwitterModule {
 
       @Override
       public Collection<Module> javaModules() {
-        return ImmutableList.<Module>of(
+        return Collections.singletonList(
             FooModule$.MODULE$);
       }
 
@@ -541,6 +608,12 @@ instance of `Foo` available for use in providing an instance of `Bar`.
 
 Finatra will de-duplicate all Modules before installing, so it is OK if a Module appears twice in the
 server configuration, though you should strive to make this the exception.
+
+.. important::
+
+    Reminder: It is important that the framework install all `TwitterModules` such that the `lifecycle functions <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala>`_
+    are executed in the proper sequence and any `TwitterModule` defined `Flags <flags.html>`__ are
+    parsed properly.
 
 Secondly, we've defined a method which provides a `Bar` instance and add an argument of type `Foo`
 which will be provided by the Injector since injection is by type and the argument list to an
@@ -580,20 +653,22 @@ in Java:
 
 .. code:: java
 
-    import com.google.common.collect.ImmutableList;
     import com.google.inject.Module;
     import com.google.inject.Provides;
     import com.twitter.inject.TwitterModule;
     import javax.inject.Singleton;
+    import java.util.Arrays;
     import java.util.Collection;
+    import java.util.Collections;
 
     public class BazModule extends TwitterModule {
 
       @Override
       public Collection<Module> javaModules() {
-        return ImmutableList.<Module>of(
-            FooModule$.MODULE$,
-            BarModule$.MODULE$);
+        return Collections.unmodifiableList(
+            Arrays.asList(
+              FooModule$.MODULE$,
+              BarModule$.MODULE$));
       }
 
       @Singleton
@@ -603,13 +678,20 @@ in Java:
       }
     }
 
-Notice that we choose to list both the `FooModule` and `BarModule` in the Modules for the `BazModule`.
-Yet, since we know that the `BarModule` includes the `FooModule` we could have choosen to leave it
-out. The `providesBaz` method in the Module above takes in both `Foo` and a `Bar` instances as
-arguments.
+Notice that we have chosen to list both the `FooModule` and `BarModule` in the Modules for the
+`BazModule`. Yet, since we know that the `BarModule` includes the `FooModule` we could have chosen
+to leave it out. The `providesBaz` method in the Module above takes in both `Foo` and a `Bar`
+instances as arguments.
 
 Since it declares the two Modules, we're assured that instances of these types will be available
 from the Injector for our `providesBaz` method to use.
+
+.. note::
+
+    Users should prefer this method of depending on the bindings provided by another Module
+    over using `Binder#install <https://google.github.io/guice/api-docs/4.2/javadoc/com/google/inject/Binder.html#install-com.google.inject.Module->`__
+    as this will ensure that the lifecycle of a `c.t.inject.TwitterModule` is properly exercised when
+    the Module is installed.
 
 Best Practices
 --------------

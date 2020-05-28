@@ -538,9 +538,9 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="com.twitter.finatra.thrift.AbstractThriftServer" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="AbstractThriftServerextendsAbstractThriftServerTrait"></a><a id="AbstractThriftServer:AbstractThriftServer"></a>
+      <a id="AbstractThriftServerextendsAbstractTwitterServerwithThriftServer"></a><a id="AbstractThriftServer:AbstractThriftServer"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/index.html#AbstractThriftServerextendsAbstractThriftServerTrait" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/index.html#AbstractThriftServerextendsAbstractTwitterServerwithThriftServer" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -549,7 +549,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="A Finagle server which exposes an external Thrift interface implemented by a Service[Array[Byte], Array[Byte]] configured via a JavaThriftRouter." href="AbstractThriftServer.html"><span class="name">AbstractThriftServer</span></a><span class="result"> extends <a href="AbstractThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.AbstractThriftServerTrait">AbstractThriftServerTrait</a></span>
+        <a title="A Finagle server which exposes an external Thrift interface implemented by a Service[Array[Byte], Array[Byte]] configured via a JavaThriftRouter." href="AbstractThriftServer.html"><span class="name">AbstractThriftServer</span></a><span class="result"> extends <a href="../../inject/server/AbstractTwitterServer.html" class="extype" name="com.twitter.inject.server.AbstractTwitterServer">AbstractTwitterServer</a> with <a href="ThriftServer.html" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a></span>
       </span>
       
       <p class="shortcomment cmt">A Finagle server which exposes an external Thrift interface implemented by a
@@ -558,9 +558,9 @@
 intended for use from Java or with generated Java code.
 </p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>Scala users are encouraged to use <a href="ThriftServer.html" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a> instead.</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.AbstractThriftServerTrait" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="AbstractThriftServerTraitextendsThriftServerTrait"></a><a id="AbstractThriftServerTrait:AbstractThriftServerTrait"></a>
+      <a id="AbstractThriftServerTraitextendsAbstractTwitterServerwithThriftServerTrait"></a><a id="AbstractThriftServerTrait:AbstractThriftServerTrait"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/index.html#AbstractThriftServerTraitextendsThriftServerTrait" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/index.html#AbstractThriftServerTraitextendsAbstractTwitterServerwithThriftServerTrait" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -569,7 +569,7 @@ intended for use from Java or with generated Java code.
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="A basic ThriftServer implemented by a" href="AbstractThriftServerTrait.html"><span class="name">AbstractThriftServerTrait</span></a><span class="result"> extends <a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></span>
+        <a title="A basic ThriftServer implemented by a" href="AbstractThriftServerTrait.html"><span class="name">AbstractThriftServerTrait</span></a><span class="result"> extends <a href="../../inject/server/AbstractTwitterServer.html" class="extype" name="com.twitter.inject.server.AbstractTwitterServer">AbstractTwitterServer</a> with <a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></span>
       </span>
       
       <p class="shortcomment cmt">A basic ThriftServer implemented by a </p><div class="fullcomment"><div class="comment cmt"><p>A basic ThriftServer implemented by a </p><pre>com.twitter.finagle.Service&lt;byte[], byte[]&gt;</pre><p>.</p><p>com.twitter.finagle.Service&lt;byte[], byte[]&gt;

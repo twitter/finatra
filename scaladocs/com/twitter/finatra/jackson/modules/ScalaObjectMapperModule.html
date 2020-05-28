@@ -212,7 +212,7 @@ or provide additional configuration to the bound <a href="../ScalaObjectMapper.h
             <span class="toggle">
               Known Subclasses
             </span>
-            <div class="subClasses hiddenContent"><a href="ScalaObjectMapperModule$.html" class="extype" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule">ScalaObjectMapperModule</a>, <a href="../../json/modules/FinatraJacksonModule.html" class="extype" name="com.twitter.finatra.json.modules.FinatraJacksonModule">FinatraJacksonModule</a>, <a href="../../json/modules/FinatraJacksonModule$.html" class="extype" name="com.twitter.finatra.json.modules.FinatraJacksonModule">FinatraJacksonModule</a></div>
+            <div class="subClasses hiddenContent"><a href="ScalaObjectMapperModule$.html" class="extype" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule">ScalaObjectMapperModule</a></div>
           </div></div>
         
 
@@ -1193,11 +1193,11 @@ only <code>@Provides</code>-annotated methods do not need to implement an empty
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">copy</span><span class="params">(<span name="objectMapper">objectMapper: <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></span>)</span><span class="result">: <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></span>
+        <span class="name">copy</span><span class="params">(<span name="objectMapper">objectMapper: <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></span>)</span><span class="result">: <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></span>
       </span>
       
-      <p class="shortcomment cmt">Convenience method for copying a <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></p><div class="fullcomment"><div class="comment cmt"><p>Convenience method for copying a <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.twitter.inject.TwitterModuleFlags#createFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt">Convenience method for copying a <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></p><div class="fullcomment"><div class="comment cmt"><p>Convenience method for copying a <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="com.twitter.inject.TwitterModuleFlags#createFlag" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="createFlag[T](String,T,String,Flaggable[T]):Flag[T]"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.html#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink">
@@ -1205,7 +1205,7 @@ only <code>@Provides</code>-annotated methods do not need to implement an empty
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -1214,7 +1214,7 @@ only <code>@Provides</code>-annotated methods do not need to implement an empty
       
       <p class="shortcomment cmt">A Java-friendly method for creating a named <span class="extype" name="Flag">Flag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>A Java-friendly method for creating a named <span class="extype" name="Flag">Flag</span>.
 </p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">default</dt><dd class="cmt"><p>a default value for the <span class="extype" name="Flag">Flag</span> when no value is given as an application
-               argument.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>TwitterModuleFlags</dd></dl></div>
+               argument.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>TwitterModuleFlags</dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModuleFlags#createMandatoryFlag" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="createMandatoryFlag[T](String,String,String,Flaggable[T]):Flag[T]"></a>
       <span class="permalink">
@@ -1223,7 +1223,7 @@ only <code>@Provides</code>-annotated methods do not need to implement an empty
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -1539,7 +1539,7 @@ instances created within the application container.
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.inject.TwitterModuleFlags#flag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.inject.TwitterModuleFlags#flag" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="flag[T](name:String,help:String)(implicitevidence$2:com.twitter.app.Flaggable[T],implicitevidence$3:Manifest[T]):com.twitter.app.Flag[T]"></a><a id="flag[T](String,String)(Flaggable[T],Manifest[T]):Flag[T]"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.html#flag[T](name:String,help:String)(implicitevidence$2:com.twitter.app.Flaggable[T],implicitevidence$3:Manifest[T]):com.twitter.app.Flag[T]" title="Permalink">
@@ -1547,7 +1547,7 @@ instances created within the application container.
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -1557,8 +1557,8 @@ instances created within the application container.
       <p class="shortcomment cmt">Create a &quot;mandatory&quot; flag and add it to this Module's flags list.&quot;Mandatory&quot; flags MUST have
 a value provided as an application argument (as they have no default value to be used).</p><div class="fullcomment"><div class="comment cmt"><p>Create a &quot;mandatory&quot; flag and add it to this Module's flags list.&quot;Mandatory&quot; flags MUST have
 a value provided as an application argument (as they have no default value to be used).
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>must be a <span class="extype" name="Flaggable">Flaggable</span> type.</p></dd><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>TwitterModuleFlags</dd><dt>Note</dt><dd><span class="cmt"><p>Java users: see the more Java-friendly <a href="#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule#createFlag">createFlag</a> or <a href="#createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule#createMandatoryFlag">createMandatoryFlag</a>.</p></span></dd></dl></div>
-    </li><li name="com.twitter.inject.TwitterModuleFlags#flag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>must be a <span class="extype" name="Flaggable">Flaggable</span> type.</p></dd><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>TwitterModuleFlags</dd><dt>Note</dt><dd><span class="cmt"><p>Java users: see the more Java-friendly <a href="#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule#createFlag">createFlag</a> or <a href="#createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule#createMandatoryFlag">createMandatoryFlag</a>.</p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.TwitterModuleFlags#flag" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="flag[T](name:String,default:T,help:String)(implicitevidence$1:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="flag[T](String,T,String)(Flaggable[T]):Flag[T]"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.html#flag[T](name:String,default:T,help:String)(implicitevidence$1:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink">
@@ -1566,7 +1566,7 @@ a value provided as an application argument (as they have no default value to be
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -1575,7 +1575,7 @@ a value provided as an application argument (as they have no default value to be
       
       <p class="shortcomment cmt">Create a <span class="extype" name="Flag">Flag</span> and add it to this Module's flags list.</p><div class="fullcomment"><div class="comment cmt"><p>Create a <span class="extype" name="Flag">Flag</span> and add it to this Module's flags list.
 </p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>must be a <span class="extype" name="Flaggable">Flaggable</span> type.</p></dd><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">default</dt><dd class="cmt"><p>a default value for the <span class="extype" name="Flag">Flag</span> when no value is given as an application
-               argument.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>TwitterModuleFlags</dd><dt>Note</dt><dd><span class="cmt"><p>Java users: see the more Java-friendly <a href="#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule#createFlag">createFlag</a> or <a href="#createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule#createMandatoryFlag">createMandatoryFlag</a>.</p></span></dd></dl></div>
+               argument.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>TwitterModuleFlags</dd><dt>Note</dt><dd><span class="cmt"><p>Java users: see the more Java-friendly <a href="#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule#createFlag">createFlag</a> or <a href="#createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule#createMandatoryFlag">createMandatoryFlag</a>.</p></span></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModuleFlags#flags" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="flags:scala.collection.mutable.ArrayBuffer[com.twitter.app.Flag[_]]"></a><a id="flags:ArrayBuffer[Flag[_]]"></a>
       <span class="permalink">
@@ -2061,13 +2061,13 @@ sometimes preferred due to <code>install</code> being deferred until after flag 
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">jacksonScalaObjectMapper</span><span class="params">(<span name="injector">injector: <span class="extype" name="com.google.inject.Injector">Injector</span></span>, <span name="underlying">underlying: <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></span>)</span><span class="result">: <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></span>
+        <span class="name">jacksonScalaObjectMapper</span><span class="params">(<span name="injector">injector: <span class="extype" name="com.google.inject.Injector">Injector</span></span>, <span name="underlying">underlying: <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></span>)</span><span class="result">: <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></span>
       </span>
       
-      <p class="shortcomment cmt">Return the given <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a> configured with the properties
-set from this <a href="" class="extype" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule">ScalaObjectMapperModule</a> and the given (nullable) <span class="extype" name="Injector">Injector</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Return the given <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a> configured with the properties
+      <p class="shortcomment cmt">Return the given <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a> configured with the properties
+set from this <a href="" class="extype" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule">ScalaObjectMapperModule</a> and the given (nullable) <span class="extype" name="Injector">Injector</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Return the given <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a> configured with the properties
 set from this <a href="" class="extype" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule">ScalaObjectMapperModule</a> and the given (nullable) <span class="extype" name="Injector">Injector</span>.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the updated <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a>.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>caution: this mutates the given <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a>.</p></span></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the updated <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a>.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>caution: this mutates the given <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a>.</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule#jacksonScalaObjectMapper" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="jacksonScalaObjectMapper(injector:com.google.inject.Injector):com.twitter.finatra.jackson.JacksonScalaObjectMapperType"></a><a id="jacksonScalaObjectMapper(Injector):JacksonScalaObjectMapperType"></a>
       <span class="permalink">
@@ -2080,11 +2080,11 @@ set from this <a href="" class="extype" name="com.twitter.finatra.jackson.module
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">jacksonScalaObjectMapper</span><span class="params">(<span name="injector">injector: <span class="extype" name="com.google.inject.Injector">Injector</span></span>)</span><span class="result">: <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></span>
+        <span class="name">jacksonScalaObjectMapper</span><span class="params">(<span name="injector">injector: <span class="extype" name="com.google.inject.Injector">Injector</span></span>)</span><span class="result">: <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></span>
       </span>
       
-      <p class="shortcomment cmt">Return a <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a> configured from this <a href="" class="extype" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule">ScalaObjectMapperModule</a>
-using the given (nullable) <span class="extype" name="Injector">Injector</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Return a <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a> configured from this <a href="" class="extype" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule">ScalaObjectMapperModule</a>
+      <p class="shortcomment cmt">Return a <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a> configured from this <a href="" class="extype" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule">ScalaObjectMapperModule</a>
+using the given (nullable) <span class="extype" name="Injector">Injector</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Return a <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a> configured from this <a href="" class="extype" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule">ScalaObjectMapperModule</a>
 using the given (nullable) <span class="extype" name="Injector">Injector</span>.
 </p></div><dl class="paramcmts block"><dt class="param">injector</dt><dd class="cmt"><p>a configured (nullable) <span class="extype" name="Injector">Injector</span>.</p></dd></dl></div>
     </li><li name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule#jacksonScalaObjectMapper" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
@@ -2099,10 +2099,10 @@ using the given (nullable) <span class="extype" name="Injector">Injector</span>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">jacksonScalaObjectMapper</span><span class="result">: <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></span>
+        <span class="name">jacksonScalaObjectMapper</span><span class="result">: <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></span>
       </span>
       
-      <p class="shortcomment cmt">Return a <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a> configured from this <a href="" class="extype" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule">ScalaObjectMapperModule</a>.</p>
+      <p class="shortcomment cmt">Return a <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a> configured from this <a href="" class="extype" name="com.twitter.finatra.jackson.modules.ScalaObjectMapperModule">ScalaObjectMapperModule</a>.</p>
     </li><li name="com.twitter.inject.TwitterBaseModule#javaModules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="javaModules:java.util.Collection[com.google.inject.Module]"></a><a id="javaModules:Collection[Module]"></a>
       <span class="permalink">
@@ -2304,7 +2304,7 @@ using the given (nullable) <span class="extype" name="Injector">Injector</span>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">provideScalaObjectMapper</span><span class="params">(<span name="injector">injector: <span class="extype" name="com.google.inject.Injector">Injector</span></span>, <span name="injectableTypes">injectableTypes: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="com.twitter.finatra.jackson.caseclass.InjectableTypes">InjectableTypes</span>]</span>, <span name="validator">validator: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="../../validation/Validator.html" class="extype" name="com.twitter.finatra.validation.Validator">Validator</a>]</span>)</span><span class="result">: <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></span>
+        <span class="name">provideScalaObjectMapper</span><span class="params">(<span name="injector">injector: <span class="extype" name="com.google.inject.Injector">Injector</span></span>, <span name="injectableTypes">injectableTypes: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="com.twitter.finatra.jackson.caseclass.InjectableTypes">InjectableTypes</span>]</span>, <span name="validator">validator: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="../../validation/Validator.html" class="extype" name="com.twitter.finatra.validation.Validator">Validator</a>]</span>)</span><span class="result">: <a href="../index.html#JacksonScalaObjectMapperType=com.fasterxml.jackson.databind.ObjectMapperwithcom.fasterxml.jackson.module.scala.ScalaObjectMapper" class="extmbr" name="com.twitter.finatra.jackson.JacksonScalaObjectMapperType">JacksonScalaObjectMapperType</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>

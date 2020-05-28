@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Jackson Integration &#8212; Finatra 20.4.1 documentation</title>
+    <title>Jackson Integration &#8212; Finatra 20.5.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -101,13 +101,23 @@ However, the Finatra <a class="reference external" href="https://github.com/twit
 with the defaults listed above:</p>
 <div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">val</span> <span class="n">injector</span><span class="k">:</span> <span class="kt">com.google.inject.Injector</span> <span class="o">=</span> <span class="o">???</span>
 <span class="k">val</span> <span class="n">underlying</span><span class="k">:</span> <span class="kt">com.fasterxml.jackson.databind.ObjectMapper</span>
-    <span class="k">with</span> <span class="n">com</span><span class="o">.</span><span class="n">fasterxml</span><span class="o">.</span><span class="n">jackson</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">scala</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="nc">ScalaObjectMapper</span> <span class="k">=</span> <span class="o">???</span>
+    <span class="k">with</span> <span class="n">com</span><span class="o">.</span><span class="n">fasterxml</span><span class="o">.</span><span class="n">jackson</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">scala</span><span class="o">.</span><span class="nc">ScalaObjectMapper</span> <span class="k">=</span> <span class="o">???</span>
 
 <span class="k">val</span> <span class="n">objectMapper</span> <span class="k">=</span> <span class="nc">ScalaObjectMapper</span><span class="o">()</span>
 <span class="k">val</span> <span class="n">objectMapper</span> <span class="k">=</span> <span class="nc">ScalaObjectMapper</span><span class="o">(</span><span class="n">injector</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">objectMapper</span> <span class="k">=</span> <span class="nc">ScalaObjectMapper</span><span class="o">(</span><span class="n">underlying</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">objectMapper</span> <span class="k">=</span> <span class="nc">ScalaObjectMapper</span><span class="o">(</span><span class="n">injector</span><span class="o">,</span> <span class="n">underlying</span><span class="o">)</span>
 </pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>All of the above <cite>apply</cite> methods which take an underlying Jackson <cite>ObjectMapper</cite> will always
+<strong>mutate the configuration</strong> of the underlying Jackson <cite>ObjectMapper</cite> to apply the current
+configuration of the <cite>ScalaObjectMapper#Builder</cite> to the provided Jackson <cite>ObjectMapper</cite>. That is,
+they should be considered builder functions to help produce a configured <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a>.</p>
+<p>However, there may be times where you would like to only wrap an already configured Jackson <cite>ObjectMapper</cite>.
+To do, use <cite>ScalaObjectMapper.objectMapper(underlying)</cite> to create a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a>
+which wraps but does not mutate the configuration of the given underlying Jackson <cite>ObjectMapper</cite>.</p>
 </div>
 <p>To apply more custom configuration to create a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a>, there is a builder for
 constructing a customized mapper.</p>
@@ -150,29 +160,55 @@ constructing a customized mapper.</p>
 <p>Or, if you already have an instance of an object mapper and want a copy that is configured to
 either a <cite>camelCase</cite> or <cite>snake_case</cite> property naming strategy, you can pass it to the appropriate
 <cite>ScalaObjectMapper</cite> utility method:</p>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="c1">// our default object mapper</span>
-<span class="k">val</span> <span class="n">objectMapper</span><span class="k">:</span> <span class="kt">ScalaObjectMapper</span> <span class="o">=</span>
-  <span class="nc">ScalaObjectMapper</span><span class="o">.</span><span class="n">builder</span>
-    <span class="o">.</span><span class="n">withPropertyNamingStrategy</span><span class="o">(</span><span class="nc">PropertyNamingStrategy</span><span class="o">.</span><span class="nc">KebabCaseStrategy</span><span class="o">)</span>
-    <span class="o">.</span><span class="n">withAdditionalJacksonModules</span><span class="o">(</span><span class="nc">Seq</span><span class="o">(</span><span class="nc">MySimpleJacksonModule</span><span class="o">))</span>
-    <span class="o">.</span><span class="n">withAdditionalMapperConfigurationFn</span><span class="o">(</span>
-      <span class="k">_</span><span class="o">.</span><span class="n">configure</span><span class="o">(</span><span class="nc">DeserializationFeature</span><span class="o">.</span><span class="nc">FAIL_ON_UNKNOWN_PROPERTIES</span><span class="o">,</span> <span class="kc">true</span><span class="o">)</span>
-    <span class="o">)</span>
-    <span class="o">.</span><span class="n">objectMapper</span>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.fasterxml.jackson.databind.ObjectMapper</span>
+<span class="k">import</span> <span class="nn">com.fasterxml.jackson.module.scala.experimental.</span><span class="o">{</span><span class="nc">ScalaObjectMapper</span> <span class="k">=&gt;</span> <span class="nc">JacksonScalaObjectMapper</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.jackson.ScalaObjectMapper</span>
+
+<span class="c1">// our default Jackson object mapper</span>
+<span class="k">val</span> <span class="n">jacksonObjectMapper</span><span class="k">:</span> <span class="kt">ObjectMapper</span> <span class="kt">with</span> <span class="kt">JacksonScalaObjectMapper</span> <span class="o">=</span> <span class="o">???</span>
 
 <span class="c1">// a &#39;camelCase&#39; copy</span>
 <span class="k">val</span> <span class="n">camelCaseObjectMapper</span><span class="k">:</span> <span class="kt">ScalaObjectMapper</span> <span class="o">=</span>
-  <span class="nc">ScalaObjectMapper</span><span class="o">.</span><span class="n">camelCaseObjectMapper</span><span class="o">(</span><span class="n">objectMapper</span><span class="o">.</span><span class="n">underlying</span><span class="o">)</span>
+  <span class="nc">ScalaObjectMapper</span><span class="o">.</span><span class="n">camelCaseObjectMapper</span><span class="o">(</span><span class="n">jacksonObjectMapper</span><span class="o">)</span>
 
 <span class="c1">// a &#39;snake_case&#39; copy</span>
 <span class="k">val</span> <span class="n">snakeCaseObjectMapper</span><span class="k">:</span> <span class="kt">ScalaObjectMapper</span> <span class="o">=</span>
-  <span class="nc">ScalaObjectMapper</span><span class="o">.</span><span class="n">snakeCaseObjectMapper</span><span class="o">(</span><span class="n">objectMapper</span><span class="o">.</span><span class="n">underlying</span><span class="o">)</span>
+  <span class="nc">ScalaObjectMapper</span><span class="o">.</span><span class="n">snakeCaseObjectMapper</span><span class="o">(</span><span class="n">jacksonObjectMapper</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>Note that these methods will <em>copy</em> the underlying Jackson mapper (not mutate it) to produce a new
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> configured with the desired property naming strategy. That is, a new
 underlying mapper will be created which copies the original configuration and only the property
 naming strategy changed.</p>
+<p>As mentioned above, you also wrap an already configured object mapper with the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a>:</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.fasterxml.jackson.databind.ObjectMapper</span>
+<span class="k">import</span> <span class="nn">com.fasterxml.jackson.module.scala.experimental.</span><span class="o">{</span><span class="nc">ScalaObjectMapper</span> <span class="k">=&gt;</span> <span class="nc">JacksonScalaObjectMapper</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.jackson.ScalaObjectMapper</span>
+
+<span class="c1">// our default Jackson object mapper</span>
+<span class="k">val</span> <span class="n">jacksonObjectMapper</span><span class="k">:</span> <span class="kt">ObjectMapper</span> <span class="kt">with</span> <span class="kt">JacksonScalaObjectMapper</span> <span class="o">=</span> <span class="o">???</span>
+
+<span class="c1">// a Finatra &#39;ScalaObjectMapper&#39; copy</span>
+<span class="k">val</span> <span class="n">objectMapper</span><span class="k">:</span> <span class="kt">ScalaObjectMapper</span> <span class="o">=</span> <span class="nc">ScalaObjectMapper</span><span class="o">.</span><span class="n">objectMapper</span><span class="o">(</span><span class="n">jacksonObjectMapper</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>This will <em>copy</em> the underlying Jackson mapper (not mutate it) to produce a new
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> configured the same as the given Jackson object mapper.</p>
+</div>
+<div class="section" id="access-to-the-underlying-jackson-object-mapper">
+<h3>Access to the underlying Jackson Object Mapper<a class="headerlink" href="#access-to-the-underlying-jackson-object-mapper" title="Permalink to this headline">¶</a></h3>
+<p>As previously stated, the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> is a thin wrapper around a configured Jackson <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala"><cite>jackson-module-scala</cite></a>
+<a class="reference external" href="https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/scala/com/fasterxml/jackson/module/scala/ScalaObjectMapper.scala">ScalaObjectMapper</a>.</p>
+<p>You can always access the underlying Jackson object mapper by calling <cite>underlying</cite>:</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.fasterxml.jackson.databind.ObjectMapper</span>
+<span class="k">import</span> <span class="nn">com.fasterxml.jackson.module.scala.experimental.</span><span class="o">{</span><span class="nc">ScalaObjectMapper</span> <span class="k">=&gt;</span> <span class="nc">JacksonScalaObjectMapper</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.jackson.ScalaObjectMapper</span>
+
+<span class="k">val</span> <span class="n">objectMapper</span><span class="k">:</span> <span class="kt">ScalaObjectMapper</span> <span class="o">=</span> <span class="o">???</span>
+
+<span class="k">val</span> <span class="n">jacksonObjectMapper</span><span class="k">:</span> <span class="kt">ObjectMapper</span> <span class="kt">with</span> <span class="kt">JacksonScalaObjectMapper</span> <span class="o">=</span> <span class="n">objectMapper</span><span class="o">.</span><span class="n">underlying</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="c-t-finatra-jackson-modules-scalaobjectmappermodule">
 <h3>c.t.finatra.jackson.modules.ScalaObjectMapperModule<a class="headerlink" href="#c-t-finatra-jackson-modules-scalaobjectmappermodule" title="Permalink to this headline">¶</a></h3>
@@ -190,14 +226,15 @@ but uses Finatra’s <a class="reference external" href="../getting-started/modu
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>Generally, you are encouraged to obtain a reference to the <cite>Singleton</cite> instance provided by the
-object graph over instantiating a new Mapper. This is to ensure usage of a consistently configured
+object graph over instantiating a new mapper. This is to ensure usage of a consistently configured
 mapper across your application.</p>
 </div>
 <p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala"><cite>ScalaObjectMapperModule</cite></a> provides overridable methods which mirror the
 <cite>ScalaObjectMapper#Builder</cite> for configuring the bound mappers.</p>
 <p>For example, to create a <a class="reference external" href="../getting-started/modules.html">c.t.inject.TwitterModule</a>  which sets
 the <cite>PropertyNamingStrategy</cite> different than the default:</p>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.jackson.modules.ScalaObjectMapperModule</span>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.fasterxml.jackson.databind.PropertyNamingStrategy</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.jackson.modules.ScalaObjectMapperModule</span>
 
 <span class="k">object</span> <span class="nc">MyCustomObjectMapperModule</span> <span class="k">extends</span> <span class="nc">ScalaObjectMapperModule</span> <span class="k">=</span> <span class="o">{</span>
 
@@ -555,8 +592,8 @@ injecting values into a case class which are obtained from different parts of an
 <p>See the <a class="reference external" href="../http/requests.html#field-annotations">HTTP Requests - Field Annotations</a> documentation
 for more details on HTTP Message “injectable values”.</p>
 </div>
-<div class="section" id="id18">
-<h2><a class="reference external" href="https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations">Mix-in Annotations</a><a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id19">
+<h2><a class="reference external" href="https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations">Mix-in Annotations</a><a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h2>
 <p>The Jackson <a class="reference external" href="https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations">Mix-in Annotations</a>
 provides a way to associate annotations to classes without needing to modify the target classes
 themselves. It is intended to help support 3rd party datatypes where the user cannot modify the
@@ -693,6 +730,7 @@ useful when working with Enums:</p>
 <li><a class="reference internal" href="#c-t-finatra-jackson-scalaobjectmapper">c.t.finatra.jackson.ScalaObjectMapper</a><ul>
 <li><a class="reference internal" href="#defaults">Defaults</a></li>
 <li><a class="reference internal" href="#instantiation-configuration">Instantiation &amp; Configuration</a></li>
+<li><a class="reference internal" href="#access-to-the-underlying-jackson-object-mapper">Access to the underlying Jackson Object Mapper</a></li>
 <li><a class="reference internal" href="#c-t-finatra-jackson-modules-scalaobjectmappermodule">c.t.finatra.jackson.modules.ScalaObjectMapperModule</a></li>
 </ul>
 </li>
@@ -705,7 +743,7 @@ useful when working with Enums:</p>
 <li><a class="reference internal" href="#jsoncreator-support"><cite>&#64;JsonCreator</cite> Support</a></li>
 <li><a class="reference internal" href="#jsonformat-support"><cite>&#64;JsonFormat</cite> Support</a></li>
 <li><a class="reference internal" href="#jackson-injectablevalues-support">Jackson InjectableValues Support</a></li>
-<li><a class="reference internal" href="#id18">Mix-in Annotations</a><ul>
+<li><a class="reference internal" href="#id19">Mix-in Annotations</a><ul>
 <li><a class="reference internal" href="#implement-via-a-custom-scalaobjectmappermodule-recommended">Implement via a Custom <cite>ScalaObjectMapperModule</cite> (recommended)</a></li>
 <li><a class="reference internal" href="#implement-via-adding-a-module-to-a-finatrascalaobjectmapper-instance">Implement via Adding a Module to a <cite>ScalaObjectMapper</cite> instance</a></li>
 </ul>

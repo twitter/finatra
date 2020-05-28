@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Application and Server Lifecycle &#8212; Finatra 20.4.1 documentation</title>
+    <title>Application and Server Lifecycle &#8212; Finatra 20.5.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -186,11 +186,11 @@ App#nonExitingMain<span class="o">()</span> --&gt;
 </div>
 <div class="section" id="c-t-server-twitterserver-lifecycle">
 <h2><a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a> Lifecycle<a class="headerlink" href="#c-t-server-twitterserver-lifecycle" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a> is an extension of <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a> and thus inherits the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a>
-lifecycle, but adds the ability to include “warmup” lifecycle phases which are just a refinement of
+<p><a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a> is an extension of <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a> and thus inherits the <a class="reference external" href="#c-t-app-app-lifecycle">c.t.app.App lifecycle</a>,
+but adds the ability to include “warmup” lifecycle phases which are just a refinement of
 the defined <cite>main()</cite> phase of the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a> lifecycle. That is, the
 <a class="reference external" href="https://github.com/twitter/twitter-server/blob/7d59c1bd46b2d96e4d0056f7860ca0344fe69247/server/src/main/scala/com/twitter/server/Lifecycle.scala#L85"><cite>c.t.server.Lifecycle.Warmup</cite></a> trait exposes two methods, <cite>prebindWarmup</cite> and <cite>warmupComplete</cite>.</p>
-<p>These methods are provided for the user to call when they make sense typically at points in the
+<p>These methods are provided <strong>for the user to call</strong> when they make sense typically at points in the
 user defined <cite>main()</cite> method before awaiting on the external interface.</p>
 <p>The idea being that within your user defined <cite>main()</cite> method you may want to have logic to warmup
 the server before accepting traffic on any defined external interface. By default the <cite>prebindWarmup</cite>
@@ -206,8 +206,8 @@ accepting traffic. This is done by calling <cite>warmupComplete()</cite>.</p>
 <p>Finatra defines an “injectable” TwitterServer, <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala"><cite>c.t.inject.server.TwitterServer</cite></a> which itself is an
 extension of <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a> and the Finatra “injectable” App, <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><cite>c.t.inject.app.App</cite></a>.</p>
 <p>The Finatra “injectable” TwitterServer, <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala"><cite>c.t.inject.server.TwitterServer</cite></a> mixes in the
-<a class="reference external" href="https://github.com/twitter/twitter-server/blob/7d59c1bd46b2d96e4d0056f7860ca0344fe69247/server/src/main/scala/com/twitter/server/Lifecycle.scala#L85"><cite>c.t.server.Lifecycle.Warmup</cite></a> trait by default and further refines the “warmup” lifecycle as
-described in the next section.</p>
+<a class="reference external" href="https://github.com/twitter/twitter-server/blob/7d59c1bd46b2d96e4d0056f7860ca0344fe69247/server/src/main/scala/com/twitter/server/Lifecycle.scala#L85"><cite>c.t.server.Lifecycle.Warmup</cite></a> trait by default to ensure that warmup is performed where most applicable
+and further refines the warmup lifecycle as described in the next section.</p>
 <p>For more information on creating an “injectable” TwitterServer with Finatra, see the documentation
 <a class="reference external" href="../twitter-server/index.html">here</a>.</p>
 <div class="section" id="server-startup-lifecycle">

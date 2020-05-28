@@ -51,12 +51,23 @@ with the defaults listed above:
 
     val injector: com.google.inject.Injector = ???
     val underlying: com.fasterxml.jackson.databind.ObjectMapper
-        with com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper = ???
+        with com.fasterxml.jackson.module.scala.ScalaObjectMapper = ???
 
     val objectMapper = ScalaObjectMapper()
     val objectMapper = ScalaObjectMapper(injector)
     val objectMapper = ScalaObjectMapper(underlying)
     val objectMapper = ScalaObjectMapper(injector, underlying)
+
+.. important::
+
+    All of the above `apply` methods which take an underlying Jackson `ObjectMapper` will always
+    **mutate the configuration** of the underlying Jackson `ObjectMapper` to apply the current
+    configuration of the `ScalaObjectMapper#Builder` to the provided Jackson `ObjectMapper`. That is,
+    they should be considered builder functions to help produce a configured |FinatraScalaObjectMapper|_.
+
+    However, there may be times where you would like to only wrap an already configured Jackson `ObjectMapper`.
+    To do, use `ScalaObjectMapper.objectMapper(underlying)` to create a |FinatraScalaObjectMapper|_
+    which wraps but does not mutate the configuration of the given underlying Jackson `ObjectMapper`.
 
 To apply more custom configuration to create a |FinatraScalaObjectMapper|_, there is a builder for
 constructing a customized mapper.
@@ -109,28 +120,60 @@ either a `camelCase` or `snake_case` property naming strategy, you can pass it t
 
 .. code:: scala
 
-    // our default object mapper
-    val objectMapper: ScalaObjectMapper =
-      ScalaObjectMapper.builder
-        .withPropertyNamingStrategy(PropertyNamingStrategy.KebabCaseStrategy)
-        .withAdditionalJacksonModules(Seq(MySimpleJacksonModule))
-        .withAdditionalMapperConfigurationFn(
-          _.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true)
-        )
-        .objectMapper
+    import com.fasterxml.jackson.databind.ObjectMapper
+    import com.fasterxml.jackson.module.scala.experimental.{ScalaObjectMapper => JacksonScalaObjectMapper}
+    import com.twitter.finatra.jackson.ScalaObjectMapper
+
+    // our default Jackson object mapper
+    val jacksonObjectMapper: ObjectMapper with JacksonScalaObjectMapper = ???
 
     // a 'camelCase' copy
     val camelCaseObjectMapper: ScalaObjectMapper =
-      ScalaObjectMapper.camelCaseObjectMapper(objectMapper.underlying)
+      ScalaObjectMapper.camelCaseObjectMapper(jacksonObjectMapper)
 
     // a 'snake_case' copy
     val snakeCaseObjectMapper: ScalaObjectMapper =
-      ScalaObjectMapper.snakeCaseObjectMapper(objectMapper.underlying)
+      ScalaObjectMapper.snakeCaseObjectMapper(jacksonObjectMapper)
 
 Note that these methods will *copy* the underlying Jackson mapper (not mutate it) to produce a new
 |FinatraScalaObjectMapper|_ configured with the desired property naming strategy. That is, a new
 underlying mapper will be created which copies the original configuration and only the property
 naming strategy changed.
+
+As mentioned above, you also wrap an already configured object mapper with the |FinatraScalaObjectMapper|_:
+
+.. code:: scala
+
+    import com.fasterxml.jackson.databind.ObjectMapper
+    import com.fasterxml.jackson.module.scala.experimental.{ScalaObjectMapper => JacksonScalaObjectMapper}
+    import com.twitter.finatra.jackson.ScalaObjectMapper
+
+    // our default Jackson object mapper
+    val jacksonObjectMapper: ObjectMapper with JacksonScalaObjectMapper = ???
+
+    // a Finatra 'ScalaObjectMapper' copy
+    val objectMapper: ScalaObjectMapper = ScalaObjectMapper.objectMapper(jacksonObjectMapper)
+
+This will *copy* the underlying Jackson mapper (not mutate it) to produce a new
+|FinatraScalaObjectMapper|_ configured the same as the given Jackson object mapper.
+
+Access to the underlying Jackson Object Mapper
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+As previously stated, the |FinatraScalaObjectMapper|_ is a thin wrapper around a configured Jackson |jackson-module-scala|_
+`ScalaObjectMapper <https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/scala/com/fasterxml/jackson/module/scala/ScalaObjectMapper.scala>`_.
+
+You can always access the underlying Jackson object mapper by calling `underlying`:
+
+.. code:: scala
+
+    import com.fasterxml.jackson.databind.ObjectMapper
+    import com.fasterxml.jackson.module.scala.experimental.{ScalaObjectMapper => JacksonScalaObjectMapper}
+    import com.twitter.finatra.jackson.ScalaObjectMapper
+
+    val objectMapper: ScalaObjectMapper = ???
+
+    val jacksonObjectMapper: ObjectMapper with JacksonScalaObjectMapper = objectMapper.underlying
 
 c.t.finatra.jackson.modules.ScalaObjectMapperModule
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -150,7 +193,7 @@ The |ScalaObjectMapperModule|_ provides bound instances of:
 .. tip::
 
     Generally, you are encouraged to obtain a reference to the `Singleton` instance provided by the
-    object graph over instantiating a new Mapper. This is to ensure usage of a consistently configured
+    object graph over instantiating a new mapper. This is to ensure usage of a consistently configured
     mapper across your application.
 
 The |ScalaObjectMapperModule|_ provides overridable methods which mirror the
@@ -161,6 +204,7 @@ the `PropertyNamingStrategy` different than the default:
 
 .. code:: scala
 
+    import com.fasterxml.jackson.databind.PropertyNamingStrategy
     import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 
     object MyCustomObjectMapperModule extends ScalaObjectMapperModule = {

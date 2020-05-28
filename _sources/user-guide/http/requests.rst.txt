@@ -24,11 +24,11 @@ Custom "request" case classes can be used for declarative parsing of requests wi
 
 The case class field names should match the request or header parameter name or use the `@JsonProperty <https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties>`__
 annotation to specify the JSON field name in the case class (see: `example <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/test/scala/com/twitter/finatra/json/tests/internal/ExampleCaseClasses.scala#L177>`__
-and `test case <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/test/scala/com/twitter/finatra/json/tests/FinatraObjectMapperTest.scala#L140>`__).
+and `test case <https://github.com/twitter/finatra/blob/01fdd9cfb3c877fe226085bf411f42ae08420e5d/jackson/src/test/scala/com/twitter/finatra/jackson/tests/AbstractScalaObjectMapperTest.scala#L283>`__).
 
 A `PropertyNamingStrategy <https://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html>`__
 can be configured to handle common name substitutions (e.g. `snake\_case` or `camelCase`). By default,
-`snake\_case` is used (defaults are set in `FinatraJacksonModule <https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala>`__).
+`snake\_case` is used (defaults are set by the `ScalaObjectMapper` provided by the `ScalaObjectMapperModule <https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala>`__).
 
 For example, if we have a `POST` endpoint which expects a JSON body with a `Long` `"id"` and a
 `String` `"name"`, we could define the following case class and Controller route:
@@ -86,7 +86,7 @@ the `c.t.finagle.http.Request`. Supported annotations:
 ------------
 
 `@RouteParam <https://github.com/twitter/finatra/blob/develop/http-annotations/src/main/java/com/twitter/finatra/http/annotations/RouteParam.java>`__
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Denotes a field to be parsed from a named parameter in a given route, e.g.,
 
@@ -119,7 +119,7 @@ Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/sca
 ------------
 
 `@QueryParam <https://github.com/twitter/finatra/blob/develop/http-annotations/src/main/java/com/twitter/finatra/http/annotations/QueryParam.java>`__
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Read a value from the request query string by a parameter named for the case class field or by the
 ``@QueryParam`` annotation value.
@@ -192,7 +192,7 @@ will return a Bad Request with an appropriate error message when `commaSeparated
 ------------
 
 `@FormParam <https://github.com/twitter/finatra/blob/develop/http-annotations/src/main/java/com/twitter/finatra/http/annotations/FormParam.java>`__
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Read a value from a form field with the case class field's name or as the value specified in the
 ``@FormParam`` annotation from the request body.
@@ -206,7 +206,7 @@ Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/sca
 ------------
 
 `@Header <https://github.com/twitter/finatra/blob/develop/http-annotations/src/main/java/com/twitter/finatra/http/annotations/Header.java>`__
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Read a header value specified by the case class field name or by the ``@Header`` annotation value.
 You can use a Scala `"back-quote" literal <https://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html>`__
@@ -305,7 +305,7 @@ class.
 
 .. caution::
 
-    The `MessageInjectableValues <http:s//github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageInjectableValues.scala>`_
+    The `MessageInjectableValues <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageInjectableValues.scala>`_
     is only configured via the framework's `DefaultMessageBodyReader <./message_body.html#id2>`_
     `DefaultMessageBodyReaderImpl <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyReaderImpl.scala>`_
     which is bound in the `MessageBodyModule <./message_body.html#id5>`_.
@@ -328,7 +328,7 @@ Finatra also provides a way to specify how to parse the request into a callback 
 classes <#custom-request-case-class>`__ (which are implemented with a framework
 `default message body reader <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyReaderImpl.scala>`__),
 these objects allow for customized parsing the full incoming `c.t.finagle.http.Request` into a
-specific type. For more information, see the `Message Body Readers <message_body.html#message-body-readers>`__
+specific type. For more information, see the `Message Body Readers <./message_body.html#message-body-readers>`__
 section.
 
 Request Forwarding

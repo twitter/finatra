@@ -187,8 +187,8 @@
                         <a href="ThriftMDCFilter.html" title="Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter to ensure that diagnostic context is properly managed.">ThriftMDCFilter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="TraceIdMDCFilter.html" title="Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter to ensure that diagnostic context is properly managed."></a>
-                        <a href="TraceIdMDCFilter.html" title="Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter to ensure that diagnostic context is properly managed.">TraceIdMDCFilter</a>
+                        <a class="class" href="TraceIdMDCFilter.html" title="Filter to log tracing data into MDC bag of attributes."></a>
+                        <a href="TraceIdMDCFilter.html" title="Filter to log tracing data into MDC bag of attributes.">TraceIdMDCFilter</a>
                       </li><li name="com.twitter.finatra.thrift.modules" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="modules"></a><a id="modules:modules"></a>
       <span class="permalink">
@@ -439,11 +439,13 @@ to ensure that diagnostic context is properly managed.
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter to ensure that diagnostic context is properly managed." href="TraceIdMDCFilter.html"><span class="name">TraceIdMDCFilter</span></a><span class="result"> extends <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span></span>
+        <a title="Filter to log tracing data into MDC bag of attributes." href="TraceIdMDCFilter.html"><span class="name">TraceIdMDCFilter</span></a><span class="result"> extends <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span></span>
       </span>
       
-      <p class="shortcomment cmt">Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter
-to ensure that diagnostic context is properly managed.</p><div class="fullcomment"><div class="comment cmt"><p>Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter
+      <p class="shortcomment cmt">Filter to log tracing data into MDC bag of attributes.</p><div class="fullcomment"><div class="comment cmt"><p>Filter to log tracing data into MDC bag of attributes.
+Includes traceSampled flag that indicates if the trace
+is available via tracers
+Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter
 to ensure that diagnostic context is properly managed.
 </p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Singleton</span><span class="args">()</span>

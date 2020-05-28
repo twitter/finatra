@@ -2161,10 +2161,10 @@ of the server lifecycle.</p></span></dd></dl></div>
       <p class="shortcomment cmt">If you override this method to create and bind any external interface or to
 instantiate any awaitable it is expected that you add the Awaitable (or
 <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ListeningServer.html" class="extype" name="com.twitter.finagle.ListeningServer">com.twitter.finagle.ListeningServer</a>) to the list of Awaitables using the
-<span class="extype" name="await[T">&lt;: Awaitable[_</span>(awaitable: T): Unit]] function.</p><div class="fullcomment"><div class="comment cmt"><p>If you override this method to create and bind any external interface or to
+<code>await[T &lt;: Awaitable[_(awaitable: T): Unit</code> function.</p><div class="fullcomment"><div class="comment cmt"><p>If you override this method to create and bind any external interface or to
 instantiate any awaitable it is expected that you add the Awaitable (or
 <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ListeningServer.html" class="extype" name="com.twitter.finagle.ListeningServer">com.twitter.finagle.ListeningServer</a>) to the list of Awaitables using the
-<span class="extype" name="await[T">&lt;: Awaitable[_</span>(awaitable: T): Unit]] function.
+<code>await[T &lt;: Awaitable[_(awaitable: T): Unit</code> function.
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@<a href="../../../inject/annotations/Lifecycle.html" class="extype" name="com.twitter.inject.annotations.Lifecycle">Lifecycle</a></span><span class="args">()</span>
               
@@ -2834,7 +2834,7 @@ complete startup.</p><p>This method can be used to start long-lived processes th
 separate threads from the main() thread. It is expected that you manage
 these threads manually, e.g., by using a <a href="https://twitter.github.io/util/docs/com/twitter/util/FuturePool.html" class="extype" name="com.twitter.util.FuturePool">com.twitter.util.FuturePool</a>.</p><p>If you override this method to instantiate any <a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable.html" class="extype" name="com.twitter.util.Awaitable">com.twitter.util.Awaitable</a> it is expected
 that you add the <a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable.html" class="extype" name="com.twitter.util.Awaitable">com.twitter.util.Awaitable</a> to the list of <code>Awaitables</code> using the
-<span class="extype" name="await[T">&lt;: Awaitable[_</span>(awaitable: T): Unit]] function if you want the server to exit
+<code>await[T &lt;: Awaitable[_]](awaitable: T): Unit</code> function if you want the server to exit
 when the <a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable.html" class="extype" name="com.twitter.util.Awaitable">com.twitter.util.Awaitable</a> exits.</p><p>Any exceptions thrown in this method will result in the server exiting.
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a></dd></dl></div>
     </li><li name="com.twitter.server.TwitterServer#shutdownTimer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">

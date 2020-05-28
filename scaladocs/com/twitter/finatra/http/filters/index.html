@@ -259,8 +259,8 @@
                         <a href="StatsFilter.html" title="A drop-in replacement for com.twitter.finagle.http.filter.StatsFilter with per-route stats scoped under route/&lt;name&gt;/&lt;method&gt;.">StatsFilter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="TraceIdMDCFilter.html" title="Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter to ensure that diagnostic context is properly managed."></a>
-                        <a href="TraceIdMDCFilter.html" title="Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter to ensure that diagnostic context is properly managed.">TraceIdMDCFilter</a>
+                        <a class="class" href="TraceIdMDCFilter.html" title="Filter to log tracing data into MDC bag of attributes."></a>
+                        <a href="TraceIdMDCFilter.html" title="Filter to log tracing data into MDC bag of attributes.">TraceIdMDCFilter</a>
                       </li><li name="com.twitter.finatra.http.internal" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="internal"></a><a id="internal:internal"></a>
       <span class="permalink">
@@ -541,11 +541,18 @@ Responding with a nack is one way a service may exert back pressure.
         <a title="HttpResponseFilter does the following:" href="HttpResponseFilter.html"><span class="name">HttpResponseFilter</span></a><span class="tparams">[<span name="R">R &lt;: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a></span>]</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/SimpleFilter.html#com.twitter.finagle.SimpleFilter" class="extype" name="com.twitter.finagle.SimpleFilter">SimpleFilter</a>[<span class="extype" name="com.twitter.finatra.http.filters.HttpResponseFilter.R">R</span>, <span class="extype" name="com.twitter.finagle.http.Response">Response</span>] with <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
       </span>
       
-      <p class="shortcomment cmt">HttpResponseFilter does the following:</p><div class="fullcomment"><div class="comment cmt"><p>HttpResponseFilter does the following:</p><ul><li>sets the 'Server' and 'Date' response headers</li><li>turns a 'partial' Location header into a full URL
-</li></ul></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">HttpResponseFilter does the following:</p><div class="fullcomment"><div class="comment cmt"><p>HttpResponseFilter does the following:</p><ul><li>Sets the 'Server' and 'Date' response header values.</li><li>Optionally turns a relative 'Location' header value into a full URL. See <span class="extype" name="fullyQualifyLocationHeader">fullyQualifyLocationHeader</span>.</li></ul><p>By default this filter allows for returning relative references as 'Location' header values. In
+order to always attempt to fully specify a relative reference, this class should be instantiated
+with the constructor arg <span class="extype" name="fullyQualifyLocationHeader">fullyQualifyLocationHeader</span> set to 'true'.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Singleton</span><span class="args">()</span>
               
-        </dd></dl></div>
+        </dd><dt>Note</dt><dd><span class="cmt"><p>This filter does NOT throw exceptions when it is unable to set a location
+      header value because of non RFC 7230 compliant values. Generally this filter is
+      installed &quot;above&quot; the <code>ExceptionMappingFilter</code> and therefore translation of an exception
+      into an appropriate HTTP response is not available thus the filter logs a warning message.
+      This means that if there is a non-compliant 'Location' header value in the outgoing
+      Response this filter will not fully qualify, nor replace, nor remove it.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://en.wikipedia.org/wiki/HTTP_location" target="_blank">HTTP location</a></p></span><span class="cmt"><p><a href="https://tools.ietf.org/html/rfc7231" target="_blank">Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content</a></p></span><span class="cmt"><p><a href="https://tools.ietf.org/html/rfc3986#section-4.2" target="_blank">Relative Reference</a></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.filters.LoggingMDCFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="LoggingMDCFilter[Req,Rep]extendsSimpleFilter[Req,Rep]"></a><a id="LoggingMDCFilter[Req,Rep]:LoggingMDCFilter[Req,Rep]"></a>
       <span class="permalink">
@@ -640,11 +647,13 @@ The logical success rate for a method can be calculated as <code>success / (succ
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter to ensure that diagnostic context is properly managed." href="TraceIdMDCFilter.html"><span class="name">TraceIdMDCFilter</span></a><span class="tparams">[<span name="Req">Req</span>, <span name="Rep">Rep</span>]</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/SimpleFilter.html#com.twitter.finagle.SimpleFilter" class="extype" name="com.twitter.finagle.SimpleFilter">SimpleFilter</a>[<span class="extype" name="com.twitter.finatra.http.filters.TraceIdMDCFilter.Req">Req</span>, <span class="extype" name="com.twitter.finatra.http.filters.TraceIdMDCFilter.Rep">Rep</span>]</span>
+        <a title="Filter to log tracing data into MDC bag of attributes." href="TraceIdMDCFilter.html"><span class="name">TraceIdMDCFilter</span></a><span class="tparams">[<span name="Req">Req</span>, <span name="Rep">Rep</span>]</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/SimpleFilter.html#com.twitter.finagle.SimpleFilter" class="extype" name="com.twitter.finagle.SimpleFilter">SimpleFilter</a>[<span class="extype" name="com.twitter.finatra.http.filters.TraceIdMDCFilter.Req">Req</span>, <span class="extype" name="com.twitter.finatra.http.filters.TraceIdMDCFilter.Rep">Rep</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter
-to ensure that diagnostic context is properly managed.</p><div class="fullcomment"><div class="comment cmt"><p>Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter
+      <p class="shortcomment cmt">Filter to log tracing data into MDC bag of attributes.</p><div class="fullcomment"><div class="comment cmt"><p>Filter to log tracing data into MDC bag of attributes.
+Includes traceSampled flag that indicates if the trace
+is available via tracers
+Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter
 to ensure that diagnostic context is properly managed.
 </p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Singleton</span><span class="args">()</span>

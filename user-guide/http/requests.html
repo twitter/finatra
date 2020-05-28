@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>HTTP Requests &#8212; Finatra 20.4.1 documentation</title>
+    <title>HTTP Requests &#8212; Finatra 20.5.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -76,10 +76,10 @@ which contains common HTTP attributes.</p>
 <cite>application/json</cite> with support for type conversions, default values, and <a class="reference external" href="../json/validations.html">validations</a>.</p>
 <p>The case class field names should match the request or header parameter name or use the <a class="reference external" href="https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties">&#64;JsonProperty</a>
 annotation to specify the JSON field name in the case class (see: <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/test/scala/com/twitter/finatra/json/tests/internal/ExampleCaseClasses.scala#L177">example</a>
-and <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/test/scala/com/twitter/finatra/json/tests/FinatraObjectMapperTest.scala#L140">test case</a>).</p>
+and <a class="reference external" href="https://github.com/twitter/finatra/blob/01fdd9cfb3c877fe226085bf411f42ae08420e5d/jackson/src/test/scala/com/twitter/finatra/jackson/tests/AbstractScalaObjectMapperTest.scala#L283">test case</a>).</p>
 <p>A <a class="reference external" href="https://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html">PropertyNamingStrategy</a>
 can be configured to handle common name substitutions (e.g. <cite>snake_case</cite> or <cite>camelCase</cite>). By default,
-<cite>snake_case</cite> is used (defaults are set in <a class="reference external" href="https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala">FinatraJacksonModule</a>).</p>
+<cite>snake_case</cite> is used (defaults are set by the <cite>ScalaObjectMapper</cite> provided by the <a class="reference external" href="https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala">ScalaObjectMapperModule</a>).</p>
 <p>For example, if we have a <cite>POST</cite> endpoint which expects a JSON body with a <cite>Long</cite> <cite>“id”</cite> and a
 <cite>String</cite> <cite>“name”</cite>, we could define the following case class and Controller route:</p>
 <div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span> <span class="k">class</span> <span class="nc">HiRequest</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
@@ -301,7 +301,7 @@ implemented in the <a class="reference external" href="https://github.com/twitte
 class.</p>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
-<p>The <a class="reference external" href="http:s//github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageInjectableValues.scala">MessageInjectableValues</a>
+<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageInjectableValues.scala">MessageInjectableValues</a>
 is only configured via the framework’s <a class="reference external" href="./message_body.html#id2">DefaultMessageBodyReader</a>
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyReaderImpl.scala">DefaultMessageBodyReaderImpl</a>
 which is bound in the <a class="reference external" href="./message_body.html#id5">MessageBodyModule</a>.</p>
@@ -323,7 +323,7 @@ instance <strong>will not work</strong>.</p>
 classes</a> (which are implemented with a framework
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyReaderImpl.scala">default message body reader</a>),
 these objects allow for customized parsing the full incoming <cite>c.t.finagle.http.Request</cite> into a
-specific type. For more information, see the <a class="reference external" href="message_body.html#message-body-readers">Message Body Readers</a>
+specific type. For more information, see the <a class="reference external" href="./message_body.html#message-body-readers">Message Body Readers</a>
 section.</p>
 </div>
 <div class="section" id="request-forwarding">

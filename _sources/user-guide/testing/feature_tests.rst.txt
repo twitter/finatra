@@ -66,7 +66,7 @@ Please take a look at these tests for examples of testing multiple embedded serv
 file:
 
 - `Http to Http example <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/multiserver/test/MultiServerFeatureTest.scala>`_
-- `Http to Http to Thrift example <MultiServerFeatureTest>`_
+- `Http to Http to Thrift example <https://github.com/twitter/finatra/blob/develop/inject-thrift-client-http-mapper/src/test/scala/com/twitter/finatra/multiserver/test/MultiServerFeatureTest.scala>`_
 - `Thrift to Thrift (via the DarkTrafficFilter) example <https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/test/scala/com/twitter/inject/thrift/MultiServerDarkTrafficFeatureTest.scala>`_
 - `Thrift to Thrift (via the DarkTrafficFilter) Java example <https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/test/java/com/twitter/inject/thrift/integration/MultiJavaServerDarkTrafficFeatureTest.java>`_
 
@@ -165,6 +165,42 @@ under test.
 
 For an "injectable" TwitterServer, |c.t.inject.server.TwitterServer|_ the test would look exactly the same.
 
+.. important::
+
+    It is important to note that for a "non-injectable" TwitterServer, i.e., a direct extension of
+    `c.t.server.TwitterServer` the above testing assumes that many of your service startup issues
+    can be determined at class construction, or in the `init` or `premain`
+    `lifecycle <../getting-started/lifecycle.html#c-t-server-twitterserver-lifecycle>`_ phases.
+
+    **Why?**
+
+    By default, the `EmbeddedTwitterServer` will start the underlying server in an different thread,
+    then `wait <https://github.com/twitter/finatra/blob/416cb3467c88e26704d695c1d6b8176172afa9c4/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L692>`_
+    for the server to `start <https://github.com/twitter/finatra/blob/416cb3467c88e26704d695c1d6b8176172afa9c4/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L684>`_
+    before allowing a test to proceed. However, this differs when the underlying server is a
+    `c.t.server.TwitterServer` vs. when it is a `c.t.inject.server.TwitterServer`.
+
+    For a `c.t.server.TwitterServer` the `EmbeddedTwitterServer` has no hook to determine if a server
+    has fully started, so relies solely on the `HTTP Admin Interface <../getting-started/twitter_server.html#http-admin-interface>`_
+    reporting itself as healthy.
+
+    For a `c.t.inject.server.TwitterServer` the `EmbeddedTwitterServer` is able to wait for the server
+    to report itself as "started" in the `c.t.inject.app.App#main <https://github.com/twitter/finatra/blob/416cb3467c88e26704d695c1d6b8176172afa9c4/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L135>`_.
+
+    Thus, testing your server is healthy for a `c.t.server.TwitterServer` is merely a check against
+    the `HTTP Admin Interface <../getting-started/twitter_server.html#http-admin-interface>`_
+    which is started in the `premain` phase.
+
+    If all of your `c.t.server.TwitterServer` logic is contained in the `main` of your server (like
+    Finagle client creation, external ListeningServer creation, etc), it is very possible when the
+    server under test is started in a separate thread, the `HTTP Admin Interface` will start and
+    report that it is healthy, then the test process will exit before the server under test in the
+    other thread has gotten to executing its `main` method and thus exiting before exercising any logic.
+
+    In cases like this, you should ensure to attempt to test logic of your server and not just assert
+    it is reported as healthy.
+
+    Again, see the documentation on the `Application and Server Lifecycle <../getting-started/lifecycle.html>`_ for more information.
 
 Disabling Clients using `Dtabs`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -690,7 +726,7 @@ More Information
 - :doc:`bind_dsl`
 
 .. |c.t.inject.server.FeatureTest| replace:: `c.t.inject.server.FeatureTest`
-.. _c.t.inject.server.FeatureTest: https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala>
+.. _c.t.inject.server.FeatureTest: https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala
 
 .. |c.t.inject.server.FeatureTestMixin| replace:: `c.t.inject.server.FeatureTestMixin`
 .. _c.t.inject.server.FeatureTestMixin: https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTestMixin.scala#L24

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>HTTP Server Definition &#8212; Finatra 20.4.1 documentation</title>
+    <title>HTTP Server Definition &#8212; Finatra 20.5.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -63,7 +63,7 @@
 <h1>HTTP Server Definition<a class="headerlink" href="#http-server-definition" title="Permalink to this headline">¶</a></h1>
 <p>To start, add a dependency on the <a class="reference external" href="https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http_2.12%22">finatra-http</a> library. We also recommend using <a class="reference external" href="https://logback.qos.ch/">Logback</a> as your <a class="reference external" href="https://www.slf4j.org/manual.html">SLF4J</a> implementation. E.g.,</p>
 <p>with sbt:</p>
-<pre class="literal-block">&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;20.4.1&quot;,
+<pre class="literal-block">&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;20.5.0&quot;,
 &quot;ch.qos.logback&quot; % &quot;logback-classic&quot; % versions.logback,</pre>
 <p>For more information on logging with Finatra see: <a class="reference external" href="../logging/index.html#introduction-to-logging-with-finatra">Introduction to Logging With Finatra</a>.</p>
 <p>Create a new class which extends <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala">c.t.finatra.http.HttpServer</a>:</p>
@@ -88,7 +88,11 @@
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExampleServer</span> <span class="kd">extends</span> <span class="n">AbstractHttpServer</span> <span class="p">{</span>
 
   <span class="kd">public</span> <span class="nf">ExampleServer</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">flag</span><span class="p">().</span><span class="na">create</span><span class="p">(</span><span class="s">&quot;magic.number&quot;</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="s">&quot;This is a magic number.&quot;</span><span class="p">,</span> <span class="n">Flaggable</span><span class="p">.</span><span class="na">ofJavaInteger</span><span class="p">());</span>
+    <span class="n">createFlag</span><span class="p">(</span>
+      <span class="cm">/* name      = */</span> <span class="s">&quot;magic.number&quot;</span><span class="p">,</span>
+      <span class="cm">/* default   = */</span> <span class="mi">55</span><span class="p">,</span>
+      <span class="cm">/* help      = */</span> <span class="s">&quot;This is a magic number.&quot;</span><span class="p">,</span>
+      <span class="cm">/* flaggable = */</span> <span class="n">Flaggable</span><span class="p">.</span><span class="na">ofJavaInteger</span><span class="p">());</span>
   <span class="p">}</span>
 
   <span class="nd">@Override</span>
@@ -122,8 +126,7 @@
 </pre></div>
 </div>
 <p>in Java:</p>
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">com.google.common.collect.ImmutableList</span><span class="p">;</span>
-<span class="kn">import</span> <span class="nn">com.google.inject.Module</span><span class="p">;</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">com.google.inject.Module</span><span class="p">;</span>
 <span class="kn">import</span> <span class="nn">com.twitter.app.Flaggable</span><span class="p">;</span>
 <span class="kn">import</span> <span class="nn">com.twitter.finatra.http.AbstractHttpServer</span><span class="p">;</span>
 <span class="kn">import</span> <span class="nn">com.twitter.finatra.http.filters.CommonFilters</span><span class="p">;</span>
@@ -132,17 +135,22 @@
 <span class="kn">import</span> <span class="nn">com.twitter.finatra.http.filters.LoggingMDCFilter</span><span class="p">;</span>
 <span class="kn">import</span> <span class="nn">com.twitter.finatra.http.filters.TraceIdMDCFilter</span><span class="p">;</span>
 <span class="kn">import</span> <span class="nn">java.util.Collection</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Collections</span><span class="p">;</span>
 
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExampleServer</span> <span class="kd">extends</span> <span class="n">AbstractHttpServer</span> <span class="p">{</span>
 
   <span class="kd">public</span> <span class="nf">ExampleServer</span><span class="p">()</span> <span class="p">{</span>
-      <span class="n">flag</span><span class="p">().</span><span class="na">create</span><span class="p">(</span><span class="s">&quot;magic.number&quot;</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="s">&quot;This is a magic number.&quot;</span><span class="p">,</span> <span class="n">Flaggable</span><span class="p">.</span><span class="na">ofJavaInteger</span><span class="p">());</span>
+      <span class="n">createFlag</span><span class="p">(</span>
+        <span class="cm">/* name      = */</span> <span class="s">&quot;magic.number&quot;</span><span class="p">,</span>
+        <span class="cm">/* default   = */</span> <span class="mi">55</span><span class="p">,</span>
+        <span class="cm">/* help      = */</span> <span class="s">&quot;This is a magic number.&quot;</span><span class="p">,</span>
+        <span class="cm">/* flaggable = */</span> <span class="n">Flaggable</span><span class="p">.</span><span class="na">ofJavaInteger</span><span class="p">());</span>
   <span class="p">}</span>
 
   <span class="nd">@Override</span>
   <span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Module</span><span class="o">&gt;</span> <span class="nf">javaModules</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="n">ImmutableList</span><span class="p">.</span><span class="o">&lt;</span><span class="n">Module</span><span class="o">&gt;</span><span class="n">of</span><span class="p">(</span>
-          <span class="n">ExampleModule$</span><span class="p">.</span><span class="na">MODULE$</span><span class="p">);</span>
+      <span class="k">return</span> <span class="n">Collections</span><span class="p">.</span><span class="na">singletonList</span><span class="p">(</span>
+        <span class="n">ExampleModule$</span><span class="p">.</span><span class="na">MODULE$</span><span class="p">);</span>
   <span class="p">}</span>
 
   <span class="nd">@Override</span>
@@ -307,17 +315,17 @@ creating an <a class="reference external" href="./controllers.html">HTTP Control
 </pre></div>
 </div>
 <p>in Java:</p>
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">com.google.common.collect.ImmutableList</span><span class="p">;</span>
-<span class="kn">import</span> <span class="nn">com.google.inject.Module</span><span class="p">;</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">com.google.inject.Module</span><span class="p">;</span>
 <span class="kn">import</span> <span class="nn">com.twitter.finagle.Service</span><span class="p">;</span>
 <span class="kn">import</span> <span class="nn">com.twitter.finatra.http.AbstractHttpServerTrait</span><span class="p">;</span>
 <span class="kn">import</span> <span class="nn">java.util.Collection</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Collections</span><span class="p">;</span>
 
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExampleServer</span> <span class="kd">extends</span> <span class="n">AbstractHttpServer</span> <span class="p">{</span>
 
   <span class="nd">@Override</span>
   <span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Module</span><span class="o">&gt;</span> <span class="nf">javaModules</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="n">ImmutableList</span><span class="p">.</span><span class="o">&lt;</span><span class="n">Module</span><span class="o">&gt;</span><span class="n">of</span><span class="p">(</span><span class="n">ExampleModule$</span><span class="p">.</span><span class="na">MODULE$</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">Collections</span><span class="p">.</span><span class="na">singletonList</span><span class="p">(</span><span class="n">ExampleModule$</span><span class="p">.</span><span class="na">MODULE$</span><span class="p">);</span>
   <span class="p">}</span>
 
   <span class="nd">@Override</span>
@@ -361,10 +369,33 @@ core flags can be set from code.</p>
 </div>
 <div class="section" id="framework-modules">
 <h3>Framework Modules<a class="headerlink" href="#framework-modules" title="Permalink to this headline">¶</a></h3>
-<p>You can override some of the modules provided by default in <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/servers.scala">HttpServer</a>.</p>
-<p>An example use-case would be to provide a custom Jackson module implementation in place of the default <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala">FinatraJacksonModule</a>.</p>
-<p>To do so you would override the <cite>protected def jacksonModule</cite> in your server.</p>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.http.HttpServer</span>
+<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/servers.scala">HttpServer</a>
+provides some base configurations in the form of <a class="reference external" href="../getting-started/modules.html">modules</a> added
+by default to a server’s object graph. This includes:</p>
+<ul class="simple">
+<li><p>the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/modules/FileResolverModule.scala">FileResolverModule</a> (see: <a class="reference external" href="../files/index.html">Working With Files</a>)</p></li>
+<li><p>the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/ExceptionManagerModule.scala">ExceptionManagerModule</a> (see: <a class="reference external" href="./exceptions.html">HTTP Exception Mapping</a>)</p></li>
+<li><p>an <a class="reference external" href="https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/http/src/main/scala/com/twitter/finatra/http/servers.scala#L363">overridable</a> default <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/HttpResponseClassifierModule.scala">HttpResponseClassifierModule</a> (see: <a class="reference external" href="#id2">Server-side Response Classification</a>)</p></li>
+<li><p>an <a class="reference external" href="https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/http/src/main/scala/com/twitter/finatra/http/servers.scala#L508">overridable</a> default <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/AccessLogModule.scala">AccessLogModule</a></p></li>
+<li><p>an <a class="reference external" href="https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/http/src/main/scala/com/twitter/finatra/http/servers.scala#L526">overridable</a> default <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala">ScalaObjectMapperModule</a> (see: <a class="reference external" href="../json/index.html">Jackson Integration</a>)</p></li>
+<li><p>an <a class="reference external" href="https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/http/src/main/scala/com/twitter/finatra/http/servers.scala#L519">overridable</a> default <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MessageBodyModule.scala">MessageBodyManagerModule</a> (see: <a class="reference external" href="./message_body.html">Message Body Components</a>)</p></li>
+</ul>
+<p>As expressed above, some of the <a class="reference external" href="../getting-started/modules.html">modules</a> provided in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/servers.scala">HttpServer</a>
+are overridable. An example use-case would be to provide a custom <cite>ScalaObjectMapperModule</cite>
+implementation in place of the default <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala">ScalaObjectMapperModule</a></p>
+<p>To do so you would override the <cite>protected def jacksonModule</cite> in your server with your custom
+implementation.</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.fasterxml.jackson.databind.PropertyNamingStrategy</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.jackson.modules.ScalaObjectMapperModule</span>
+
+<span class="k">object</span> <span class="nc">MyCustomJacksonModule</span> <span class="k">extends</span> <span class="nc">ScalaObjectMapperModule</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">val</span> <span class="n">propertyNamingStrategy</span><span class="k">:</span> <span class="kt">PropertyNamingStrategy</span> <span class="o">=</span>
+      <span class="k">new</span> <span class="nc">PropertyNamingStrategy</span><span class="o">.</span><span class="nc">KebabCaseStrategy</span>
+<span class="o">}</span>
+
+<span class="o">...</span>
+
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.HttpServer</span>
 <span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpRouter</span>
 
 <span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
@@ -379,8 +410,34 @@ core flags can be set from code.</p>
 </div>
 <p>If your module is defined as a class, you would pass an instance of the
 class, e.g.,</p>
-<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">override</span> <span class="k">def</span> <span class="n">jacksonModule</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">MyCustomJacksonModule</span>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.fasterxml.jackson.databind.PropertyNamingStrategy</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.jackson.modules.ScalaObjectMapperModule</span>
+
+<span class="k">class</span> <span class="nc">MyCustomJacksonModule</span> <span class="k">extends</span> <span class="nc">ScalaObjectMapperModule</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">val</span> <span class="n">propertyNamingStrategy</span><span class="k">:</span> <span class="kt">PropertyNamingStrategy</span> <span class="o">=</span>
+      <span class="k">new</span> <span class="nc">PropertyNamingStrategy</span><span class="o">.</span><span class="nc">KebabCaseStrategy</span>
+<span class="o">}</span>
+
+<span class="o">...</span>
+
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.HttpServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpRouter</span>
+
+<span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="n">jacksonModule</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">MyCustomJacksonModule</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="o">???</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
+</div>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>Modules are de-duplicated before being installed to create the Injector. If a Framework
+Module is also configured in the server’s <a class="reference external" href="../getting-started/modules.html#module-configuration-in-servers">list of Modules</a>,
+the Framework Module will be replaced.</p>
 </div>
 </div>
 <div class="section" id="finagle-server-configuration">
@@ -411,8 +468,8 @@ in your server to specify additional configuration on (or override the default c
 <p>For more information on <a class="reference external" href="https://github.com/twitter/finagle">Finagle</a> server configuration see the documentation <a class="reference external" href="https://twitter.github.io/finagle/guide/Configuration.html">here</a>;
 specifically the server documentation <a class="reference external" href="https://twitter.github.io/finagle/guide/Servers.html">here</a>.</p>
 </div>
-<div class="section" id="server-side-response-classification">
-<h3>Server-side Response Classification<a class="headerlink" href="#server-side-response-classification" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id6">
+<h3>Server-side Response Classification<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <p>The default Response Classifier for HTTP servers is <a class="reference external" href="https://github.com/twitter/finatra/blob/8b448065f5f74c1eedd744bd15618cbf932ea1bc/http/src/main/scala/com/twitter/finatra/http/response/HttpResponseClassifier.scala#L15">HttpResponseClassifier.ServerErrorsAsFailures</a>,
 which classifies any HTTP 5xx response code as a failure. To configure server-side <a class="reference external" href="https://twitter.github.io/finagle/guide/Servers.html#response-classification">Response Classification</a> you could choose to
 set the classifier directly on the underlying Finagle server by overriding the <cite>configureHttpServer</cite> (or <cite>configureHttpsServer</cite>) in your server, e.g.,</p>
@@ -477,7 +534,7 @@ for a more accurate reporting of metrics that takes into account server-side res
 <li><a class="reference internal" href="#flags">Flags</a></li>
 <li><a class="reference internal" href="#framework-modules">Framework Modules</a></li>
 <li><a class="reference internal" href="#finagle-server-configuration">Finagle Server Configuration</a></li>
-<li><a class="reference internal" href="#server-side-response-classification">Server-side Response Classification</a></li>
+<li><a class="reference internal" href="#id6">Server-side Response Classification</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#testing">Testing</a></li>
