@@ -16,11 +16,7 @@ lazy val buildSettings = Seq(
 )
 
 lazy val noPublishSettings = Seq(
-  publish := {},
-  publishLocal := {},
-  publishArtifact := false,
-  // sbt-pgp's publishSigned task needs this defined even though it is not publishing.
-  publishTo := Some(Resolver.file("Unused transient repository", file("target/unusedrepo")))
+  skip in publish := true
 )
 
 def gcJavaOptions: Seq[String] = {
@@ -171,6 +167,7 @@ lazy val baseSettings = Seq(
 lazy val publishSettings = Seq(
   publishMavenStyle := true,
   publishConfiguration := publishConfiguration.value.withOverwrite(true),
+  publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(true),
   publishArtifact in Compile := true,
   publishArtifact in Test := false,
   pomIncludeRepository := { _ => false },
