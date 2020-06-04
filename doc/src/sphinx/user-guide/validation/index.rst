@@ -74,7 +74,7 @@ Instantiate a `Validator`
 There are 2 ways to obtain a `Validator` instance:
 
 - Through dependency injection. Finatra HttpServer injects a default `Validator <https://github.com/twitter/finatra/blob/develop/validation/src/main/scala/com/twitter/finatra/validation/Validator.scala>`__, you can override it by providing a customized `Validator` in a `TwitterModule`, and add that module to your server definition. Please checkout `Injecting a customized Validator  <#injecting-a-customized-validator>`__ for instructions.
-- Create a `Validator` instance in the air when you need it. You can call `Validator()` to obtain a validator instance with default `MessageResolver <https://github.com/twitter/finatra/blob/develop/validation/src/main/scala/com/twitter/finatra/validation/MessageResolver.scala>`__ and default `cache size <https://github.com/twitter/finatra/blob/develop/validation/src/main/scala/com/twitter/finatra/validation/Validator.scala#L22>`__, or create a validator instance with customized `messageResolver` by calling `Validator(messageResolver)`. You can also leverage `Validator.Builder` to customize more attributes of the `Validator` including `cacheSize`. Please see the `example <#injecting-a-customized-validator>`__ on how to use `Builder`.
+- Create a `Validator` instance in the air when you need it. You can call `Validator()` to obtain a validator instance with default `MessageResolver <https://github.com/twitter/finatra/blob/develop/validation/src/main/scala/com/twitter/finatra/validation/MessageResolver.scala>`__ and default `cache size <https://github.com/twitter/finatra/blob/f51aa1ff0ff40a7444ca38100a7623c6bfccdd2c/validation/src/main/scala/com/twitter/finatra/validation/Validator.scala#L23>`__, or create a validator instance with customized `messageResolver` by calling `Validator(messageResolver)`. You can also leverage `Validator.Builder` to customize more attributes of the `Validator` including `cacheSize`. Please see the `example <#injecting-a-customized-validator>`__ on how to use `Builder`.
 
 .. note::
 
@@ -204,7 +204,7 @@ A method validation is a case class method annotated with ``@MethodValidation`` 
 -  For non-generic validations. ``@MethodValidation`` can be used instead of defining a reusable annotation and validator.
 -  Cross-field validations (e.g. `startDate` before `endDate`)
 
-For an example see the `User <https://github.com/twitter/finatra/blob/develop/validation/src/test/scala/com/twitter/finatra/validation/tests/caseclasses.scala#L104>`__ test case class.
+For an example see the `User <https://github.com/twitter/finatra/blob/d874b1a92cd2cc257bf0d170cfb46a486df3fb5d/validation/src/test/scala/com/twitter/finatra/validation/tests/caseclasses.scala#L104>`__ test case class.
 
 The ``@MethodValidation`` annotation also supports specifying an optional ``fields`` parameter to
 state which fields are being evaluated in the validation. If the evaluation fails the resulting
