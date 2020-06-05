@@ -1,10 +1,9 @@
 package com.twitter.inject.requestscope
 
-import com.twitter.inject.requestscope.FinagleRequestScope._
-
 import com.google.inject.{Key, OutOfScopeException, Provider, Scope, Scopes}
 import com.twitter.finagle.context.Contexts
 import com.twitter.inject.Logging
+import com.twitter.inject.requestscope.FinagleRequestScope._
 import java.util.{HashMap => JHashMap}
 import net.codingwell.scalaguice.typeLiteral
 

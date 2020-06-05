@@ -14,7 +14,6 @@ scala_library(
         "3rdparty/jvm/javax/inject:javax.inject",
         "3rdparty/jvm/net/codingwell:scala-guice",
         "3rdparty/jvm/org/joda:joda-convert",
-        "finagle/finagle-core/src/main",
         "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "util/util-app/src/main/scala",
     ],

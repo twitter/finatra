@@ -10,6 +10,9 @@ Unreleased
 Added
 ~~~~~
 
+* inject-stack: Move `StackTransformer` from `inject/inject-core` to `inject/inject-stack` to
+  remove the finagle-core dependency from `inject/inject-core`. ``PHAB_ID=D489604``
+
 * inject-server: adding httpPostAdmin test method. ``PHAB_ID=D482624``
 
 Changed
