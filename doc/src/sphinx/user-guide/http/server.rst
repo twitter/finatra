@@ -221,6 +221,7 @@ configuration for an HTTPS server. Thus you can also do:
 
     import com.twitter.finagle.Http
     import com.twitter.finatra.http.HttpServer
+    import com.twitter.finatra.http.Tls
     import com.twitter.finatra.http.routing.HttpRouter
 
     object ExampleHttpsServerMain extends ExampleHttpsServer
@@ -248,6 +249,7 @@ pass a value for the `-http.port` flag), e.g.,
 
     import com.twitter.finagle.Http
     import com.twitter.finatra.http.HttpServer
+    import com.twitter.finatra.http.Tls
     import com.twitter.finatra.http.routing.HttpRouter
 
     object ExampleHttpsServerMain extends ExampleHttpsServer
@@ -299,9 +301,11 @@ in Java:
 
     import com.google.inject.Module;
     import com.twitter.finagle.Service;
-    import com.twitter.finatra.http.AbstractHttpServerTrait;
-    import java.util.Collection;
+    import com.twitter.finagle.Request;
+    import com.twitter.finagle.Response;
+    import com.twitter.finatra.http.AbstractHttpServer;
     import java.util.Collections;
+    import java.util.Collection;
 
     public class ExampleServer extends AbstractHttpServer {
 
