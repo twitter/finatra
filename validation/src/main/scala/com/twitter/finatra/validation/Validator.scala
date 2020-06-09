@@ -132,14 +132,16 @@ class Validator private[finatra] (cacheSize: Long, messageResolver: MessageResol
    *
    * @return A list of all the failed [[ValidationResult]].
    */
-  // optimized
+  // note: Prefer while loop over Scala for loop for better performance. The scala for loop
+  // performance is optimized in 2.13.0 if we enable scalac: https://github.com/scala/bug/issues/1338
   private[finatra] def validateField[T](
     fieldValue: T,
     fieldValidators: Array[FieldValidator]
   ): Seq[ValidationResult] = {
     if (fieldValidators.nonEmpty) {
       val results = new mutable.ArrayBuffer[ValidationResult](fieldValidators.length)
-      for (index <- 0 until fieldValidators.length) {
+      var index = 0
+      while (index < fieldValidators.length) {
         val FieldValidator(constraintValidator, annotation) = fieldValidators(index)
         val result = isValid(
           fieldValue,
@@ -147,6 +149,7 @@ class Validator private[finatra] (cacheSize: Long, messageResolver: MessageResol
           constraintValidator.asInstanceOf[ConstraintValidator[Annotation, T]])
         val resultWithAnnotation = parseResult(result, annotation)
         if (!resultWithAnnotation.isValid) results.append(resultWithAnnotation)
+        index += 1
       }
       results
     } else Seq.empty[ValidationResult]
@@ -157,19 +160,21 @@ class Validator private[finatra] (cacheSize: Long, messageResolver: MessageResol
    *
    * @return A list of all the failed [[ValidationResult]].
    */
-  // optimized
+  // note: Prefer while loop over Scala for loop for better performance. The scala for loop
+  // performance is optimized in 2.13.0 if we enable scalac: https://github.com/scala/bug/issues/1338
   private[finatra] def validateMethods(
     obj: Any,
     methods: Array[AnnotatedMethod]
   ): Seq[ValidationResult] = {
     if (methods.nonEmpty) {
       val results = new mutable.ArrayBuffer[ValidationResult](methods.length)
-      for (index <- 0 until methods.length) {
+      var index = 0
+      while (index < methods.length) {
         val AnnotatedMethod(method, annotation) = methods(index)
         val result = method.invoke(obj).asInstanceOf[ValidationResult]
         val resultWithAnnotation = parseResult(result, annotation)
         if (!resultWithAnnotation.isValid) results.append(resultWithAnnotation)
-
+        index += 1
       }
       results
     } else Seq.empty[ValidationResult]

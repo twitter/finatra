@@ -203,7 +203,8 @@ private[jackson] class CaseClassDeserializer(
   // in the BeanPropertyDefinition AnnotatedMembers and we want to track all class annotations by field.
   // Annotations are keyed by parameter name because the logic collapses annotations from the
   // inheritance hierarchy where the discriminator is member name.
-  // optimized
+  // note: Prefer while loop over Scala for loop for better performance. The scala for loop
+  // performance is optimized in 2.13.0 if we enable scalac: https://github.com/scala/bug/issues/1338
   private[this] val fieldAnnotations: scala.collection.Map[String, Array[Annotation]] = {
     val fields: Array[String] =
       caseClazzCreator.propertyDefinitions.map(_.beanPropertyDefinition.getInternalName)
@@ -388,7 +389,8 @@ private[jackson] class CaseClassDeserializer(
     }
   }
 
-  // optimized
+  // note: Prefer while loop over Scala for loop for better performance. The scala for loop
+  // performance is optimized in 2.13.0 if we enable scalac: https://github.com/scala/bug/issues/1338
   private[this] def parseConstructorValues(
     jsonParser: JsonParser,
     context: DeserializationContext,
@@ -757,7 +759,8 @@ private[jackson] class CaseClassDeserializer(
     }
   }
 
-  // optimized
+  // note: Prefer while loop over Scala for loop for better performance. The scala for loop
+  // performance is optimized in 2.13.0 if we enable scalac: https://github.com/scala/bug/issues/1338
   private[this] def findConstructorDescriptor(
     parameters: Array[Parameter]
   ): Option[ConstructorDescriptor] = {
