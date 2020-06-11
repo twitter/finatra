@@ -1,53 +1,42 @@
 package com.twitter.finatra.thrift.filters
 
-import com.twitter.finagle.thrift.{ClientId, MethodMetadata}
+import com.twitter.finagle.filter.LogFormatter
 import com.twitter.finagle.{Filter, Service}
 import com.twitter.inject.Logging
-import com.twitter.util.{Future, Return, Throw, Time, TwitterDateFormat}
-import java.text.SimpleDateFormat
-import java.util.{Locale, TimeZone}
+import com.twitter.util.{Future, Return, Stopwatch, Throw}
 import javax.inject.Singleton
 
 /**
- * AccessLoggingFilter attempts to follow the Common Log Format as closely as
- * possible.
- * @see https://en.wikipedia.org/wiki/Common_Log_Format
+ * Provides a standard "Access Log" -- a list of all requests through this Filter. The Filter uses an
+ * implementation of the [[com.twitter.finagle.filter.LogFormatter]], [[ThriftCommonLogFormatter]],
+ * which attempts to follow the [[https://en.wikipedia.org/wiki/Common_Log_Format Common Log Format]]
+ * as closely as possible.
+ *
+ * =Usage=
+ * To use, configure a logger (with your preferred logging implementation) over this class
+ * which writes to a specific file (typically named, `access.log`).
+ *
+ * @note This Filter '''should''' occur as early in the Filter chain as possible such that it is
+ *       "above" the [[com.twitter.finatra.thrift.filters.ExceptionMappingFilter]].
+ *
+ * @see [[https://en.wikipedia.org/wiki/Common_Log_Format Common Log Format]]
+ * @see [[com.twitter.finatra.thrift.filters.ExceptionMappingFilter]]
+ * @see [[com.twitter.finagle.filter.LogFormatter]]
  */
 @Singleton
 class AccessLoggingFilter extends Filter.TypeAgnostic with Logging {
-  import AccessLoggingFilter._
+
+  private[this] val formatter: LogFormatter[Any, Any] = new ThriftCommonLogFormatter
 
   def toFilter[T, U]: Filter[T, U, T, U] = new Filter[T, U, T, U] {
-    def apply(
-      request: T,
-      service: Service[T, U]
-    ): Future[U] = {
-      val start = Time.now
+    def apply(request: T, service: Service[T, U]): Future[U] = {
+      val elapsed = Stopwatch.start()
       service(request).respond {
-        case Return(_) =>
-          info(prelog(start, request))
-        case Throw(t) =>
-          warn(prelog(start, request) + " failure " + t.getClass.getSimpleName)
+        case Return(response) =>
+          info(formatter.format(request, response, elapsed()))
+        case Throw(e) =>
+          warn(formatter.formatException(request, e, elapsed()))
       }
-    }
-
-    /* Private */
-    private[this] def prelog(start: Time, request: T): String = {
-      val elapsed = start.untilNow.inMilliseconds
-      val startStr = DateFormat.get().format(start.toDate)
-      val clientIdStr = ClientId.current.map(_.name).getOrElse("-")
-      val methodStr = MethodMetadata.current.map(_.methodName).getOrElse("-")
-      s"$clientIdStr $startStr '$methodStr' $elapsed"
-    }
-  }
-}
-
-object AccessLoggingFilter {
-  private val DateFormat = new ThreadLocal[SimpleDateFormat] {
-    override protected def initialValue(): SimpleDateFormat = {
-      val f = TwitterDateFormat("dd/MMM/yyyy:HH:mm:ss Z", Locale.ENGLISH)
-      f.setTimeZone(TimeZone.getTimeZone("GMT"))
-      f
     }
   }
 }

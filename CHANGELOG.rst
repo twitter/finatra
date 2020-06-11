@@ -18,6 +18,11 @@ Added
 Changed
 ~~~~~~~
 
+* thrift/http: Introduce a `Common Log Format <https://en.wikipedia.org/wiki/Common_Log_Format>`__ 
+  type of formatting for Thrift access logging to replace the current `prelog` text. Ensure 
+  the HTTP and Thrift access logging filters are aligned in functionality and behavior. 
+  ``PHAB_ID=D497596``
+
 * inject-slf4j: Remove Jackson dependency. Case classes which wish to use the slf4j Logging
   functionality should use the finatra/jackson `c.t.finatra.jackson.caseclass.SerdeLogging`
   trait which provides a `@JsonIgnoreProperties` to ignore logging fields. ``PHAB_ID=D487948``
