@@ -56,7 +56,7 @@ private[thrift] final class ThriftCommonLogFormatter extends LogFormatter[Any, A
     val builder = new StringBuilder(256)
     builder.append(remoteAddr)
     builder.append(" - - [")
-    builder.append(getCurrentDateValue)
+    builder.append(currentDateValue)
     builder.append("] \"")
     builder.append(clientId)
     builder.append(' ')
