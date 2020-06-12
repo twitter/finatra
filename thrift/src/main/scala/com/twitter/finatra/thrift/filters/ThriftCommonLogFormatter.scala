@@ -1,10 +1,9 @@
 package com.twitter.finatra.thrift.filters
 
-import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.context.{Contexts, RemoteInfo}
 import com.twitter.finagle.filter.LogFormatter
 import com.twitter.finagle.thrift.{ClientId, MethodMetadata}
-import com.twitter.util.{Duration, ScheduledThreadPoolTimer}
+import com.twitter.util.Duration
 import java.time.format.DateTimeFormatter
 import java.time.{ZoneId, ZonedDateTime}
 import java.util.Locale
@@ -26,14 +25,7 @@ private object ThriftCommonLogFormatter {
 private[thrift] final class ThriftCommonLogFormatter extends LogFormatter[Any, Any] {
   import ThriftCommonLogFormatter._
 
-  // optimized
-  @volatile private var currentDateValue: String = getCurrentDateValue
-  new ScheduledThreadPoolTimer(poolSize = 1, name = "ThriftDateUpdater", makeDaemons = true)
-    .schedule(1.second) {
-      currentDateValue = getCurrentDateValue
-    }
-
-  private[this] def getCurrentDateValue: String = ZonedDateTime.now.format(DateFormat)
+  private[this] def formattedDate: String = ZonedDateTime.now.format(DateFormat)
 
   def format(request: Any, response: Any, responseTime: Duration): String = {
     val remoteAddr =
@@ -56,7 +48,7 @@ private[thrift] final class ThriftCommonLogFormatter extends LogFormatter[Any, A
     val builder = new StringBuilder(256)
     builder.append(remoteAddr)
     builder.append(" - - [")
-    builder.append(currentDateValue)
+    builder.append(formattedDate)
     builder.append("] \"")
     builder.append(clientId)
     builder.append(' ')
