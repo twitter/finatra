@@ -28,12 +28,10 @@ private[app] class FlagsModule(flags: com.twitter.app.Flags) extends AbstractMod
    * In the interim, we install the Guice default type conversions along with the [[TwitterTypeConvertersModule]]
    * to provide a limited set of conversions by the injector from [[String]] to another type. Thus
    * you can inject a [[com.twitter.app.Flag]] of some non-[[String]] types. But this is not all of
-   * the same types supported by [[com.twitter.app.Flaggable]] and [[com.twitter.app.Flag]] as it
-   * only includes [[String]] to other primitives, e.g, Byte, Short, Int, Long, Boolean, Double,
-   * Float, Char, Enum or any other registered TypeConverter conversion. In effect this means that
-   * automatic conversion of [[String]] to a collection type is not supported. The recommendation is
-   * to inject the [[String]] representation then parse the collection using the appropriate
-   * [[com.twitter.app.Flaggable]] type
+   * the same types supported by [[com.twitter.app.Flaggable]] and [[com.twitter.app.Flag]]. Some
+   * mismatch in the functionality is expected as the integration is done manually. That said,
+   * defining a custom `Flaggable` instance for type X doesn't guarantee it can be injected without
+   * registering a flag converter.
    *
    * @see [[TwitterTypeConvertersModule]]
    * @see [[https://github.com/google/guice/blob/master/core/src/com/google/inject/internal/TypeConverterBindingProcessor.java Guice Default Type Conversions]]
@@ -45,14 +43,15 @@ private[app] class FlagsModule(flags: com.twitter.app.Flags) extends AbstractMod
     // bind every parsed (non-global) flag that has a value keyed by flag name
     val asList = flags.getAll(includeGlobal = false).toSeq
     val flagsMap = (for (flag <- asList) yield {
-      flag.name -> flag.getWithDefault
+      flag.name -> flag.getWithDefaultUnparsed
     }).toMap
+
     for ((flagName, valueOpt) <- flagsMap) {
       val key: Key[String] = Flags.key(flagName)
       valueOpt match {
         case Some(value) =>
           debug("Binding flag: " + flagName + " = " + value)
-          binder.bind(key).toInstance(value.toString)
+          binder.bind(key).toInstance(value)
         case None =>
           binder
             .bind(key)

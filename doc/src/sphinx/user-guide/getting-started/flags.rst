@@ -351,22 +351,56 @@ directly from the Injector.
 |@Flag|_ is a `binding annotation <../getting-started/binding_annotations.html>`__. This annotation
 allows parsed Flag values to be injected into classes (and provider methods).
 
-.. important::
+Understanding Flag Binding
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-   While `Flag <https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flag.scala>`__
-   supports parsing into any |Flaggable[T]|_ type, it is currently only possible to
-   *bind* to a `String type <https://github.com/twitter/finatra/blob/31efc1d46dea436fb580f4b71f9196d15bade2e3/inject/inject-app/src/main/scala/com/twitter/inject/app/internal/TwitterTypeConvertersModule.scala>`__
-   or a type easily convertible from `String`.
+The key component of Flag binding is |Flaggable[T]|_, a type-class that defines how a Flag of
+type `T` can be parsed from a given string. In Finatra, you can bind / inject any Flag value as
+long as you register its corresponding `Flaggable` instance within a framework middleware (e.g.,
+a module). The most common `Flaggable` instances are already registered so primitive types as well as
+comma-separated lists (either as `scala.Seq` or `java.util.List` of primitive types will work off
+the shelf.
 
-   Finatra provides `type conversions for <https://github.com/twitter/finatra/blob/31efc1d46dea436fb580f4b71f9196d15bade2e3/inject/inject-app/src/main/scala/com/twitter/inject/app/internal/TwitterTypeConvertersModule.scala>`__
-   `c.t.util.Duration` and  `org.joda.time.Duration` as well as default conversions provided by
-   `Guice <https://github.com/google/guice>`__ for
-   `Numbers, Booleans, and Chars <https://github.com/google/guice/blob/55bb902701f6e0277fbfaedd735f4315213957bf/core/src/com/google/inject/internal/TypeConverterBindingProcessor.java#L43>`__.
+These additional `Flag` types are also registered (as both primitive and comma-separated):
 
-   The reason for this limitation is that when creating the binding key for the Flag value we are
-   not able to obtain enough type information to properly bind to any paramaterized type like
-   `Seq[T]` or `Map[K, V]` as the |Flaggable[T]|_ trait does not currently carry enough type
-   information to construct the correct binding key.
+ - `java.net.InetSocketAddress`
+ - `java.time.LocalTime`
+ - `com.twitter.util.Duration`
+ - `com.twitter.util.Time`
+ - `com.twitter.util.StorageUnit`
+
+For anything that falls outside of these types (and their `scala.Seq[_]` and `java.util.List[_]`)
+you'd need to register a `Flaggable[T]` to be able to inject a Flag of type `T`.
+
+.. code:: scala
+
+    import com.twitter.inject.TwitterModule
+
+    class MyModule extends TwitterModule {
+       def configure(): Unit = {
+         addFlagConverter[List[(Int, Int)]]
+       }
+    }
+
+And in Java:
+
+.. code:: java
+
+    import com.twitter.inject.TwitterModule;
+    import java.util.List;
+    import com.google.inject.TypeLiteral;
+    import com.twitter.app.Flaggable;
+
+    public class MyModule extends TwitterModule {
+
+      @Override
+      public void configure() {
+        addFlagConverter(
+          new TypeLiteral<List<scala.Tuple2<Integer, Integer>>>() {},
+          Flaggable.ofJavaList(Flaggable.ofTuple(Flaggable.ofJavaInteger, Flaggable.ofJavaInteger)
+        );
+      }
+    }
 
 Holding a Reference
 ^^^^^^^^^^^^^^^^^^^

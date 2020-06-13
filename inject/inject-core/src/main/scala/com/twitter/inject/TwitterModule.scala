@@ -2,16 +2,17 @@ package com.twitter.inject
 
 import com.google.inject.assistedinject.FactoryModuleBuilder
 import com.google.inject.binder.AnnotatedBindingBuilder
-import com.google.inject.matcher.Matchers
+import com.google.inject.matcher.{Matcher, Matchers}
 import com.google.inject.spi.TypeConverter
 import com.google.inject.{Module, _}
+import com.twitter.app.Flaggable
 import java.lang.annotation.Annotation
 import net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder
 import net.codingwell.scalaguice.{
-  cls,
   ScalaModule,
   ScalaMultibinder,
   ScalaOptionBinder,
+  cls,
   typeLiteral
 }
 
@@ -262,6 +263,57 @@ abstract class TwitterModule extends AbstractModule with TwitterBaseModule with 
    */
   protected def addTypeConverter[T: Manifest](converter: TypeConverter): Unit = {
     convertToTypes(Matchers.only(typeLiteral[T]), converter)
+  }
+
+  /**
+   * Binds a type converter derived from a [[Flaggable]], making it possible to inject flags of all
+   * kinds. The injector will use a provided `Flaggable` to perform type conversion during an
+   * injection.
+   *
+   * For example (in Scala):
+   *
+   * {{{
+   *   addFlagConverter[List[(Int, Int)]] // support injecting flags of type List[(Int, Int)]
+   * }}}
+   *
+   * @see [[addFlagConverter(Matcher,Flaggable)]] for variant that's more suitable for Java.
+   */
+  protected def addFlagConverter[T <: AnyRef: Manifest](implicit F: Flaggable[T]): Unit = {
+    addTypeConverter[T](new TypeConverter {
+      def convert(s: String, typeLiteral: TypeLiteral[_]): AnyRef = F.parse(s)
+    })
+  }
+
+  /**
+   * Binds a type converter derived from a [[Flaggable]], making it possible to inject flags of all
+   * kinds. The injector will use a provided `Flaggable` to perform type conversion during an
+   * injection.
+   *
+   * For example (in Java):
+   *
+   * {{{
+   *   import java.util.List;
+   *   import com.google.inject.TypeLiteral;
+   *   import com.twitter.app.Flaggable;
+   *
+   *   addFlagConverter(
+   *     new TypeLiteral<List<scala.Tuple2<Integer, Integer>>>() {},
+   *     Flaggable.ofJavaList(Flaggable.ofTuple(Flaggable.ofJavaInteger, Flaggable.ofJavaInteger)
+   *   );
+   * }}}
+   *
+   * @see [[addFlagConverter(Manifest,Flaggable]] for a variant that's more suitable for Scala.
+   */
+  protected def addFlagConverter[T <: AnyRef](
+    typeMatcher: Matcher[_ >: TypeLiteral[_]],
+    F: Flaggable[T]
+  ): Unit = {
+    convertToTypes(
+      typeMatcher,
+      new TypeConverter {
+        def convert(s: String, typeLiteral: TypeLiteral[_]): AnyRef = F.parse(s)
+      }
+    )
   }
 
   /**

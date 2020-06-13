@@ -10,6 +10,11 @@ Unreleased
 Added
 ~~~~~
 
+* inject-app: You can now inject Flag values of any type (not just primitive types). Most of the
+  common Flag types are already supported out of the box (e.g., `Seq[InetSocketAddress]`), but it's
+  also possible to register your own converters derived from any Flaggable instance.
+  ``PHAB_ID=D498210``
+
 * inject-stack: Move `StackTransformer` from `inject/inject-core` to `inject/inject-stack` to
   remove the finagle-core dependency from `inject/inject-core`. ``PHAB_ID=D489604``
 
