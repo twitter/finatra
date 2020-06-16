@@ -370,8 +370,8 @@ from the |EmbeddedThriftServer|_.
           "dtab.add" -> "/$/inet=>/$/nil;/zk=>/$/nil")
       )
 
-      lazy val client: ExampleThrift[Future] =
-        server.thriftClient[ExampleThrift[Future]](clientId = "client123")
+      lazy val client: ExampleThrift.MethodPerEndpoint =
+        server.thriftClient[ExampleThrift.MethodPerEndpoint](clientId = "client123")
 
       test("ExampleThriftServer#return data accordingly") {
         await(client.doExample("input")) should equal("output")
@@ -505,8 +505,8 @@ then you can `FeatureTest` by constructing an `EmbeddedHttpServer with ThriftCli
             "dtab.add" -> "/$/inet=>/$/nil;/zk=>/$/nil")
         ) with ThriftClient
 
-      lazy val client: ExampleThrift[Future] =
-        server.thriftClient[ExampleThrift[Future]](clientId = "client123")
+      lazy val client: ExampleThrift.MethodPerEndpoint =
+        server.thriftClient[ExampleThrift.MethodPerEndpoint](clientId = "client123")
 
       "ExampleCombinedServer#perform feature") {
           server.httpGet(

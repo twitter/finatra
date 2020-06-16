@@ -300,7 +300,7 @@ interface for `MyService`:
 .. code:: scala
 
     object MyServiceModule
-      extends ThriftClientModule[MyService[Future]] {
+      extends ThriftClientModule[MyService.MethodPerEndpoint] {
       ...
 
 At a minimum, to use the |c.t.inject.thrift.modules.ThriftClientModule|_, a
@@ -351,7 +351,7 @@ ThriftClientModule Bindings
 When included in a server's `module <../getting-started/modules.html>`__ list, an implementation
 of the |ThriftClientModule|_ will provide a binding of the specified type param to the object graph.
 Either `MyService.MethodPerEndpoint <https://twitter.github.io/scrooge/Finagle.html#id1>`__ or
-`MyService[Future]`.
+`MyService.MethodPerEndpoint`.
 
 For example, given the following |ThriftClientModule|_ implementation:
 

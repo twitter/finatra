@@ -5,7 +5,7 @@ import com.twitter.noninjection.thriftscala.NonInjectionService
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.finatra.thrift.tests.noninjection.NonInjectionThriftServer
 import com.twitter.inject.server.FeatureTest
-import com.twitter.util.{Await, Future}
+import com.twitter.util.Await
 
 /** Tests that we can successfully bring up and query a service without injection. */
 class NonInjectionThriftServerFeatureTest extends FeatureTest {
@@ -13,7 +13,7 @@ class NonInjectionThriftServerFeatureTest extends FeatureTest {
     twitterServer = new NonInjectionThriftServer(),
     disableTestLogging = true)
 
-  val client = server.thriftClient[NonInjectionService[Future]](clientId = "client")
+  val client = server.thriftClient[NonInjectionService.MethodPerEndpoint](clientId = "client")
 
   override def afterAll(): Unit = {
     Await.result(client.asClosable.close(), 2.seconds)
