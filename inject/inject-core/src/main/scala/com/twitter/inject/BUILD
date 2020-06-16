@@ -9,6 +9,7 @@ scala_library(
     strict_deps = True,
     dependencies = [
         "//:scala-reflect",
+        "3rdparty/jvm/aopalliance",
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
         "3rdparty/jvm/javax/inject:javax.inject",
