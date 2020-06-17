@@ -124,9 +124,9 @@ class DoEverythingThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
     decodeBuf(buf) should equal("response")
   }
 
-  test("magicNum.MethodPerEndpoint") {
+  test("magicNum[Future]") {
     // use ServicePerEndpoint which has the 'muxCtxtsFilter' ThriftMux client filter
-    val reqRepMethodPerEndpoint: DoEverything.MethodPerEndpoint =
+    val reqRepMethodPerEndpoint: DoEverything[Future] =
       ThriftMux.Client
         .methodPerEndpoint(reqRepServicePerEndpoint)
 

@@ -117,9 +117,9 @@ class InheritanceThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
     decodeBuf(buf) should equal("response")
   }
 
-  test("echo.MethodPerEndpoint") {
+  test("echo[Future]") {
     // use ServicePerEndpoint which has the 'muxCtxtsFilter' ThriftMux client filter
-    val reqRepMethodPerEndpoint: ServiceB.MethodPerEndpoint =
+    val reqRepMethodPerEndpoint: ServiceB[Future] =
       ThriftMux.Client
         .methodPerEndpoint(reqRepServicePerEndpoint)
 

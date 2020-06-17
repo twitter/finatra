@@ -3,6 +3,7 @@ package com.twitter.finatra.example
 import com.twitter.calculator.thriftscala.Calculator
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.inject.server.FeatureTest
+import com.twitter.util.Future
 
 class CalculatorServerFeatureTest extends FeatureTest {
 
@@ -11,7 +12,7 @@ class CalculatorServerFeatureTest extends FeatureTest {
     disableTestLogging = true
   )
 
-  val client = server.thriftClient[Calculator.MethodPerEndpoint](clientId = "client123")
+  val client = server.thriftClient[Calculator[Future]](clientId = "client123")
 
   test("client test") {
     await(client.increment(1)) should equal(2)
