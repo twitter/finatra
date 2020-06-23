@@ -34,6 +34,11 @@ Injectable TwitterServer
 
 - :doc:`twitter-server/index`
 
+StatsReceiver
+-------------
+
+- :doc:`twitter-server/stats_receiver`
+
 HTTP Server
 -----------
 
@@ -124,6 +129,7 @@ Testing
    logging/asyncappender
    app/index
    twitter-server/index
+   twitter-server/stats_receiver
    http/server
    http/controllers
    http/requests
