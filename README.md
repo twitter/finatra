@@ -69,13 +69,13 @@ A Thrift controller and server:
 
 ```scala
 import com.twitter.finatra.thrift._
+import com.twitter.scrooge.{Request, Response}
 
 @Singleton
 class ExampleThriftController 
-  extends Controller
-  with MyThriftService.BaseServiceIface {
+  extends Controller(MyThriftService) {
   
-  override val myFunction = handle(MyFunction) { args: MyFunction.Args =>
+  handle(MyFunction).withFn { request: Request[MyFunction.Args] =>
     ...
   }
 }
@@ -132,7 +132,7 @@ Follow [@finatra](https://twitter.com/finatra) on Twitter for updates.
 
 ## License
 
-Copyright 2013-2019 Twitter, Inc.
+Copyright 2013-2020 Twitter, Inc.
 
 Licensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0
 
