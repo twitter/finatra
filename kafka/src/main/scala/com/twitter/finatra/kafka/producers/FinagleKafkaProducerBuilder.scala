@@ -40,13 +40,16 @@ case class FinagleKafkaProducerBuilder[K, V](
   def statsReceiver(statsReceiver: StatsReceiver): This =
     withConfig(config.copy(statsReceiver = statsReceiver))
 
+  /**
+   * Create the FinagleKafkaProducer client, it might blocks when performing metadata updates.
+   */
   def build(): FinagleKafkaProducer[K, V] = {
     validateConfigs(config)
     new FinagleKafkaProducer[K, V](config)
   }
 
   /**
-   * Create the native KafkaProducer client.
+   * Create the native KafkaProducer client, it might blocks when performing metadata updates.
    */
   def buildClient(): KafkaProducer[K, V] = {
     validateConfigs(config)

@@ -23,13 +23,22 @@ object KafkaProducerConfig {
 }
 
 trait KafkaProducerConfigMethods[Self] extends KafkaConfigMethods[Self] with Logging {
+
+  /**
+   * Configure the Kafka server the consumer will connect to. This will resolve the dest to the Kafka server name.
+   * The call will block indefinitely until it successfully succeed or failed to resolve the server
+   *
+   * @param dest the Kafka server address
+   * @return the [[KafkaProducerConfigMethods]] instance.
+   */
   def dest(dest: String): This = bootstrapServers(BootstrapServerUtils.lookupBootstrapServers(dest))
 
   /**
-   * Configure the Kafka server the consumer will connect to.
+   * Configure the Kafka server the consumer will connect to. This will resolve the dest to the Kafka server name.
+   * This will block for up to 'timeout' when attempting to resolve the dest to a kafka server name
    *
    * @param dest the Kafka server address
-   * @param timeout the timeout duration when trying to resolve the [[dest]] server.
+   * @param timeout the amount of time this may block when trying to resolve the [[dest]] server
    * @return the [[KafkaProducerConfigMethods]] instance.
    */
   def dest(dest: String, timeout: Duration): This =
