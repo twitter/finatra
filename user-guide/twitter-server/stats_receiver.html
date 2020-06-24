@@ -1,0 +1,231 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>How to properly configure the server StatsReceiver &#8212; Finatra 20.6.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '20.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="HTTP Server Definition" href="../http/server.html" />
+    <link rel="prev" title="Creating an injectable TwitterServer" href="index.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../http/server.html" title="HTTP Server Definition"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Creating an injectable TwitterServer"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="how-to-properly-configure-the-server-statsreceiver">
+<span id="twitterserver-stats-receiver"></span><h1>How to properly configure the server <cite>StatsReceiver</cite><a class="headerlink" href="#how-to-properly-configure-the-server-statsreceiver" title="Permalink to this headline">¶</a></h1>
+<p>The Finatra framework builds upon <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>TwitterServer</cite></a> and for the most part functions as a direct
+extension of <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>TwitterServer</cite></a> features and functionality. There is, however, one important divergence
+which is important to highlight when using the Finatra framework with <a class="reference external" href="https://github.com/google/guice">Guice</a>
+<a class="reference external" href="https://en.wikipedia.org/wiki/Dependency_injection">dependency injection</a>.</p>
+<div class="section" id="c-t-server-stats-statsreceiver">
+<h2><cite>c.t.server.Stats#statsReceiver</cite><a class="headerlink" href="#c-t-server-stats-statsreceiver" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Do not set or access the <cite>com.twitter.finagle.stats.StatsReceiver</cite> via the <cite>c.t.server.Stats#statsReceiver</cite>
+trait when using the Finatra framework with <a class="reference external" href="https://github.com/google/guice">Guice</a>
+<a class="reference external" href="https://en.wikipedia.org/wiki/Dependency_injection">dependency injection</a>.</p>
+</div>
+<p>The <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>TwitterServer</cite></a>
+<a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/Stats.scala">c.t.server.Stats</a>
+trait provides access for implementations to override the defined <cite>statsReceiver</cite> which returns a
+<cite>com.twitter.finagle.stats.StatsReceiver</cite>. This trait is mixed into the main <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala#L39">TwitterServer</a>
+trait and thus this definition is available for use in the server.</p>
+<p>However, Finatra users using the framework with <a class="reference external" href="https://github.com/google/guice">Guice</a>
+<a class="reference external" href="https://en.wikipedia.org/wiki/Dependency_injection">dependency injection</a> <strong>should not</strong> configure
+or access the server <cite>com.twitter.finagle.stats.StatsReceiver</cite> in this manner. Doing so will prevent
+the framework from properly <a class="reference external" href="../testing/embedded.html#inmemorystatsreceiver">replacing</a> the <cite>StatsReceiver</cite> in testing.</p>
+</div>
+<div class="section" id="use-a-statsreceivermodule">
+<h2>Use a <cite>StatsReceiverModule</cite><a class="headerlink" href="#use-a-statsreceivermodule" title="Permalink to this headline">¶</a></h2>
+<p>Instead, users should prefer to always interact with the <cite>StatsReceiver</cite> via the object graph.</p>
+<p>The framework provides a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-modules/src/main/scala/com/twitter/inject/modules/StatsReceiverModule.scala">StatsReceiverModule</a>
+which by default binds the <cite>StatsReceiver</cite> type to the <cite>LoadedStatsReceiver</cite> instance and is added as
+<a class="reference external" href="https://github.com/twitter/finatra/blob/bfc557786087e7acddc8dec9434cba440a4987b8/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala#L86">a framework Module in the c.t.inject.server.Twitter</a>.</p>
+<p>To configure a specialized <cite>StatsReceiver</cite>, override the
+<a class="reference external" href="https://github.com/twitter/finatra/blob/bfc557786087e7acddc8dec9434cba440a4987b8/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala#L116">c.t.inject.server.Twitter#statsReceiverModule</a>
+with your customized implementation which will bind the <cite>StatsReceiver</cite> instance to the
+object graph.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
+import com.twitter.finagle.stats.{StatsReceiver, LoadedStatsReceiver}
+import com.twitter.inject.server.TwitterServer
+import com.twitter.inject.TwitterModule
+
+object MyCustomStatsReceiverModule extends TwitterModule {
+
+  override def configure(): Unit = {
+    bind[StatsReceiver].toInstance(LoadedStatsReceiver.scope(&quot;oursvr&quot;))
+  }
+}
+
+class MyServer extends TwitterServer {
+
+  override val statsReceiverModule: Module = MyCustomStatsReceiverModule
+
+  override protected def start(): Unit = {
+    // It is important to remember to NOT BLOCK this method.
+    val sr = injector.instance[StatsReceiver]
+    ???
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="access-the-statsreceiver-from-the-object-graph">
+<h2>Access the <cite>StatsReceiver</cite> from the Object Graph<a class="headerlink" href="#access-the-statsreceiver-from-the-object-graph" title="Permalink to this headline">¶</a></h2>
+<p>Finatra users should also not refer directly to the <cite>c.t.server.Stats#statsReceiver</cite> as this again
+will prevent proper testing of the server. Users should instead obtain the server <cite>StatsReceiver</cite>
+instance from the object graph, e.g.:</p>
+<p>Directly from the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">Injector</a>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.stats.StatsReceiver
+
+val sr = injector.instance[StatsReceiver]
+</pre></div>
+</div>
+<p>Or as an injected constructor argument to a class:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.stats.StatsReceiver
+import javax.inject.Inject
+
+class Foo @Inject() (statsReceiver: StatsReceiver) {
+  ???
+}
+</pre></div>
+</div>
+<p>Or in an <cite>&#64;Provides</cite>-annotated method in a <cite>TwitterModule</cite></p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Provides
+import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.inject.TwitterModule
+import javax.inject.Singleton
+
+object MyModule extends TwitterModule {
+  @Provides
+  @Singleton
+  def providesBar(
+    statsReceiver: StatsReceiver): Bar = {
+    ???
+  }
+}
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
+</ul>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">How to properly configure the server <cite>StatsReceiver</cite></a><ul>
+<li><a class="reference internal" href="#c-t-server-stats-statsreceiver"><cite>c.t.server.Stats#statsReceiver</cite></a></li>
+<li><a class="reference internal" href="#use-a-statsreceivermodule">Use a <cite>StatsReceiverModule</cite></a></li>
+<li><a class="reference internal" href="#access-the-statsreceiver-from-the-object-graph">Access the <cite>StatsReceiver</cite> from the Object Graph</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Creating an injectable <cite>TwitterServer</cite></a></li>
+      <li>Next: <a href="../http/server.html" title="next chapter">HTTP Server Definition</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2020 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </body>
+</html>

@@ -1,0 +1,367 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Thrift Exception Mapping &#8212; Finatra 20.6.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '20.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Thrift Server Warmup" href="warmup.html" />
+    <link rel="prev" title="Filtering Thrift Requests" href="filters.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="warmup.html" title="Thrift Server Warmup"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="filters.html" title="Filtering Thrift Requests"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="thrift-exception-mapping">
+<span id="thrift-exceptions"></span><h1>Thrift Exception Mapping<a class="headerlink" href="#thrift-exception-mapping" title="Permalink to this headline">¶</a></h1>
+<p>It is recommended in Finatra that you generally prefer to use exceptions for flow control in your
+controller and services and rely on the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/exceptions/ExceptionMapper.scala">c.t.finatra.thrift.exceptions.ExceptionMapper</a>
+to convert exceptions into Thrift IDL defined exceptions or responses.</p>
+<div class="section" id="why">
+<h2>Why?<a class="headerlink" href="#why" title="Permalink to this headline">¶</a></h2>
+<p>Exception mapping is meant to provide a server-wide mechanism for handling an exception in a
+standard manner.</p>
+<p>The framework is not proscriptive about this, however. Sometimes it may make sense to catch and
+handle <cite>FooException</cite> directly in your controller (e.g., convert it to a Thrift response or perform
+another action). You are encouraged to do what makes sense for your use case or team.</p>
+</div>
+<div class="section" id="how">
+<h2>How?<a class="headerlink" href="#how" title="Permalink to this headline">¶</a></h2>
+<p>The Finatra framework adds a <a class="reference external" href="#default-exception-mapper">default</a> <cite>ExceptionMapper</cite> to your
+<cite>ThriftServer</cite> which provides a root-level <em>no-op</em> mapping for exceptions. You can register
+additional mappers or override the default altogether.</p>
+<p>Given the following Thrift IDL:</p>
+<div class="highlight-text"><div class="highlight"><pre><span></span>namespace java com.twitter.example.thriftjava
+#@namespace scala com.twitter.example.thriftscala
+namespace rb ExampleService
+
+exception UnknownClientIdError {
+  1: string message
+}
+
+exception NoClientIdError {
+  1: string message
+}
+
+enum ClientErrorCause {
+  /** Improperly-formatted request can&#39;t be fulfilled. */
+  BAD_REQUEST     = 0,
+
+  /** Required request authorization failed. */
+  UNAUTHORIZED    = 1,
+
+  /** Server timed out while fulfilling the request. */
+  REQUEST_TIMEOUT = 2,
+
+  /** Initiating client has exceeded its maximum rate. */
+  RATE_LIMITED    = 3
+}
+
+exception ClientError {
+  1: ClientErrorCause errorCause
+  2: string message
+}
+
+enum ServerErrorCause {
+  /** Generic server error. */
+  INTERNAL_SERVER_ERROR = 0,
+
+  /** Server lacks the ability to fulfill the request. */
+  NOT_IMPLEMENTED       = 1,
+
+  /** Request cannot be fulfilled due to error from dependent service. */
+  DEPENDENCY_ERROR      = 2,
+
+  /** Server is currently unavailable. */
+  SERVICE_UNAVAILABLE   = 3
+}
+
+exception ServerError {
+  1: ServerErrorCause errorCause
+  2: string message
+}
+
+service ExampleService {
+  i32 add1(
+    1: i32 num
+  ) throws (
+    1: ServerError serverError,
+    2: UnknownClientIdError unknownClientIdError
+    3: NoClientIdError kClientError
+  )
+}
+</pre></div>
+</div>
+<p>If you wanted to map a <cite>java.lang.ClassCastException</cite> to an exception specified in the Thrift
+IDL, you could create the following <cite>ExceptionMapper</cite>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.example.thriftscala.{ClientError, ClientErrorCause}
+import com.twitter.finatra.thrift.exceptions.ExceptionMapper
+import com.twitter.util.Future
+import java.lang.ClassCastException
+import javax.inject.Singleton
+
+@Singleton
+class ClassCastExceptionMapper
+  extends ExceptionMapper[ClassCastException, ClientError] {
+
+  def handleException(throwable: ClassCastException): Future[ClientError] = {
+    Future.exception(ClientError(ClientErrorCause.BadRequest, throwable.getMessage))
+  }
+}
+</pre></div>
+</div>
+<p>Then register this exception mapper in your server.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.ThriftServer
+import com.twitter.finatra.thrift.filters.ExceptionMappingFilter
+import com.twitter.finatra.thrift.routing.ThriftRouter
+
+class MyThriftServer extends ThriftServer {
+
+  override def configureThrift(router: ThriftRouter): Unit = {
+    router
+      .filter[ExceptionMappingFilter]
+      .exceptionMapper[ClassCastExceptionMapper]
+
+    ???
+  }
+</pre></div>
+</div>
+<p>You can see here we register the exception mapper <em>by type</em> allowing the framework to instantiate
+an instance.</p>
+<p>More examples of mapping exceptions to Thrift responses are located in the test <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/tests/doeverything/exceptions/mappers.scala">mappers</a>.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Servers written in Java should extend the <cite>AbstractThriftServer</cite>, which assumes you are using
+generated Java code and thus requires you to also use the <cite>JavaThriftRouter</cite>. See the section
+on defining <a class="reference external" href="server.html">servers</a> for more information.</p>
+</div>
+</div>
+<div class="section" id="exceptionmappingfilter">
+<h2>ExceptionMappingFilter<a class="headerlink" href="#exceptionmappingfilter" title="Permalink to this headline">¶</a></h2>
+<p>Using exception mappers requires you to include the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/ExceptionMappingFilter.scala">c.t.finatra.thrift.filters.ExceptionMappingFilter</a>
+in your server’s Filter chain.</p>
+<p>For information on how to add a <cite>Filter</cite> to your <cite>ThriftServer</cite> see the <a class="reference external" href="filters.html">Filters</a>
+section.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">The <cite>ExceptionMappingFilter</cite> works by attempting to match an incoming Exception type to a registered mapper for that type
+via the <cite>ExceptionManager</cite>. This means that you may need to pay attention to any generated exceptions or errors if
+you are generating code in multiple languages in your project. A generated Java Thrift Exception will be considered
+<em>different</em> from the same Exception generated in Scala.</p>
+</div>
+</div>
+<div class="section" id="default-exception-mapper">
+<h2>Default Exception Mapper<a class="headerlink" href="#default-exception-mapper" title="Permalink to this headline">¶</a></h2>
+<p>The framework adds only the <cite>ThrowableExceptionMapper</cite> to the <cite>ExceptionManager</cite> by default which
+simply throws back any uncaught <cite>Throwable</cite>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="86%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><cite>Throwable</cite></td>
+<td><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/internal/exceptions/ThrowableExceptionMapper.scala">ThrowableExceptionMapper</a></td>
+</tr>
+</tbody>
+</table>
+<p>This default <cite>ExceptionMapper</cite> is a <em>no-op</em> because the framework does not have a way to turn an
+exception into a meaningful Thrift IDL defined response. It is meant only to provide a backstop for
+unhandled exception types since the <cite>ExceptionManager</cite> walks the exception type hierarchy starting
+at the given exception type, moving up the inheritance chain until it finds a mapper configured for
+the type.</p>
+<p>In this manner, an <cite>ExceptionMapper[Throwable]</cite> will be the last mapper invoked and acts as the
+“default”. Therefore to change the framework “default” mapper, simply add a new mapper over the
+<cite>Throwable</cite> type (i.e., <cite>ExceptionMapper[Throwable]</cite>) to the <cite>ExceptionManager</cite>.</p>
+</div>
+<div class="section" id="override-default-behavior">
+<h2>Override Default Behavior<a class="headerlink" href="#override-default-behavior" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/exceptions/ExceptionManager.scala">ExceptionManager</a>
+is the class that handles registration of exception mappers. In the example above, the <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/thrift/src/main/scala/com/twitter/finatra/thrift/routing/ThriftRouter.scala#L46">ThriftRouter#exceptionMapper</a>
+method is simply registering the given mapper with the <cite>ExceptionManager</cite>.</p>
+<p>The <cite>ExceptionManager</cite> is configured by the inclusion of the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/modules/ExceptionManagerModule.scala">ExceptionManagerModule</a>
+as a framework module in every <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala#L23">ThriftServer</a>.</p>
+<p>If a new mapper is added over an exception type already registered in the <cite>ExceptionManager</cite>, the
+previous mapper will be overwritten.</p>
+<p>Thus, the last registered mapper for an exception type wins.</p>
+</div>
+<div class="section" id="register-an-exception-mapper">
+<h2>Register an Exception Mapper<a class="headerlink" href="#register-an-exception-mapper" title="Permalink to this headline">¶</a></h2>
+<p>There are several ways to add a mapper.</p>
+<p>Either directly through the <cite>ThriftRouter</cite>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>override def configureThrift(router: ThriftRouter): Unit = {
+  router
+    .filter[ExceptionMappingFilter]
+    .exceptionMapper[MyThrowableExceptionMapper]
+    .exceptionMapper[OtherExceptionMapper]
+}
+</pre></div>
+</div>
+<p>With the <cite>JavaThriftRouter</cite>:</p>
+<div class="code java highlight-text"><div class="highlight"><pre><span></span>@Override
+public void configureThrift(router: JavaThriftRouter) {
+   router
+     .filter(ExceptionMappingFilter.class)
+     .exceptionMapper(MyThrowableExceptionMapper.class)
+     .exceptionMapper(OtherExceptionMapper.class);
+ }
+</pre></div>
+</div>
+<p>Or in a module which is then added to the Server, e.g.,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object MyExceptionMapperModule extends TwitterModule {
+  override def singletonStartup(injector: Injector): Unit = {
+    val manager = injector.instance[ExceptionManager]
+    manager.add[MyThrowableExceptionMapper]
+    manager.add[OtherExceptionMapper]
+  }
+}
+
+...
+
+override val modules = Seq(
+  MyExceptionMapperModule)
+</pre></div>
+</div>
+<p>in Java:</p>
+<div class="code java highlight-text"><div class="highlight"><pre><span></span>public class MyExceptionMapperModule extends TwitterModule {
+  @Override
+  public void singletonStartup(Injector injector) {
+    ExceptionManager manager = injector.instance(ExceptionManager.class);
+    manager.add(MyThrowableExceptionMapper.class);
+    manager.add(OtherExceptionMapper.class);
+  }
+}
+
+...
+
+@Override
+public Collection&lt;Module&gt; javaModules() {
+  return Collections.singletonList(new MyExceptionMapperModule());
+}
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
+</ul>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Thrift Exception Mapping</a><ul>
+<li><a class="reference internal" href="#why">Why?</a></li>
+<li><a class="reference internal" href="#how">How?</a></li>
+<li><a class="reference internal" href="#exceptionmappingfilter">ExceptionMappingFilter</a></li>
+<li><a class="reference internal" href="#default-exception-mapper">Default Exception Mapper</a></li>
+<li><a class="reference internal" href="#override-default-behavior">Override Default Behavior</a></li>
+<li><a class="reference internal" href="#register-an-exception-mapper">Register an Exception Mapper</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
+      <li>Previous: <a href="filters.html" title="previous chapter">Filtering Thrift Requests</a></li>
+      <li>Next: <a href="warmup.html" title="next chapter">Thrift Server Warmup</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2020 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </body>
+</html>

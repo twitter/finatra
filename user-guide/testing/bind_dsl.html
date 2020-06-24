@@ -1,0 +1,318 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Explicit Binding with #bind[T] &#8212; Finatra 20.6.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '20.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Finatra Presentations" href="../../presentations/index.html" />
+    <link rel="prev" title="Override Modules" href="override_modules.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../presentations/index.html" title="Finatra Presentations"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="override_modules.html" title="Override Modules"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="explicit-binding-with-bind-t">
+<span id="bind-dsl"></span><h1>Explicit Binding with <code class="docutils literal"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#explicit-binding-with-bind-t" title="Permalink to this headline">¶</a></h1>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Please see the section on including test-jar dependencies in your project: <a class="reference external" href="../..#test-dependencies">Test Dependencies</a>.</p>
+</div>
+<div class="section" id="embedded-server-bind-t">
+<h2>Embedded Server <code class="docutils literal"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#embedded-server-bind-t" title="Permalink to this headline">¶</a></h2>
+<p>In the cases where we’d like to easily replace a bound instance with another instance in our tests
+(e.g. with a mock or a simple stub implementation), we do not need to create a specific module
+for testing to compose into our server as an override module. Instead we can use the <cite>#bind[T]</cite>
+function on the embedded server.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
+import com.twitter.inject.server.FeatureTest
+import com.twitter.inject.Mockito
+
+class ExampleFeatureTest
+  extends FeatureTest
+  with Mockito
+  with HttpTest {
+
+  val mockDownstreamServiceClient = smartMock[DownstreamServiceClient]
+  val mockIdService = smartMock[IdService]
+
+  override val server =
+    new EmbeddedHttpServer(new ExampleServer)
+    .bind[DownstreamServiceClient].toInstance(mockDownstreamServiceClient)
+    .bind[IdService].toInstance(mockIdService)
+
+  test(&quot;service test&quot;) {
+    /* Mock GET Request performed by DownstreamServiceClient */
+    mockDownstreamServiceClient.get(&quot;/tweets/123.json&quot;)(manifest[FooResponse]) returns Future(None)
+    ...
+  }
+</pre></div>
+</div>
+<p>For a complete example, see the
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/examples/advanced/twitter-clone/src/test/scala/finatra/quickstart/TwitterCloneFeatureTest.scala">TwitterCloneFeatureTest</a>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Using <code class="docutils literal"><span class="pre">&#64;Bind</span></code> (the <cite>com.google.inject.testing.fieldbinder.Bind</cite> annotation) is to be considered
+deprecated.</p>
+</div>
+</div>
+<div class="section" id="testinjector-bind-t">
+<h2>TestInjector <code class="docutils literal"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#testinjector-bind-t" title="Permalink to this headline">¶</a></h2>
+<p>As described in the <a class="reference external" href="#integration_tests">Integration Tests</a> section you can use the <cite>TestInjector</cite>
+to construct a minimal object graph for testing. The <cite>TestInjector</cite> also supports a <cite>bind[T]</cite> function
+to let you easily replace bound instances in the constructed object graph with another instance, like
+a mock or stub.</p>
+<p>E.g.,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.IntegrationTest
+
+class ExampleIntegrationTest extends IntegrationTest {
+  val mockIdService = smartMock[IdService]
+
+  override val injector =
+    TestInjector(
+      flags =
+        Map(&quot;foo.flag&quot; -&gt; &quot;meaningfulValue&quot;),
+      modules =
+        Seq(ExampleModule, IdServiceModule))
+      .bind[IdService].toInstance(mockIdService)
+      .create
+
+  test(&quot;MyTest#perform feature&quot;) {
+    ...
+  }
+}
+</pre></div>
+</div>
+<p>In this example, the bound <cite>IdService</cite> would be replaced with the <cite>mockIdService</cite>. For a more complete
+example, see the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/darktraffic/test/DarkTrafficCanonicalResourceHeaderTest.scala">DarkTrafficCanonicalResourceHeaderTest</a>.</p>
+</div>
+<div class="section" id="bind-t-dsl">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/tree/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/BindDSL.scala"><cite>#bind[T]</cite></a> DSL<a class="headerlink" href="#bind-t-dsl" title="Permalink to this headline">¶</a></h2>
+<p>The primary DSL can be expressed as such (and is similar to the Guice <a class="reference external" href="https://github.com/google/guice/wiki/LinkedBindings">Linked</a>
+and <a class="reference external" href="https://github.com/google/guice/wiki/InstanceBindings">Instance</a> bindings):</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>bind[T].to[U &lt;: T]
+bind[T].to[Class[U &lt;: T]]
+bind[T].toInstance(T)
+
+bind[T].annotatedWith[Ann].to[U &lt;: T]
+bind[T].annotatedWith[Ann].to[Class[U &lt;: T]]
+bind[T].annotatedWith[Ann].toInstance(T)
+
+bind[T].annotatedWith[Class[Ann]].to[U &lt;: T]
+bind[T].annotatedWith[Class[Ann]].to[Class[U &lt;: T]]
+bind[T].annotatedWith[Class[Ann]].toInstance(T)
+
+bind[T].annotatedWith(Annotation).to[U &lt;: T]
+bind[T].annotatedWith(Annotation).to[Class[U &lt;: T]]
+bind[T].annotatedWith(Annotation).toInstance(T)
+
+bindClass(Class[T]).to[T]
+bindClass(Class[T]).to[Class[U &lt;: T]]
+bindClass(Class[T]).toInstance(T)
+
+bindClass(Class[T]).annotatedWith[Class[Ann]].to[T]
+bindClass(Class[T]).annotatedWith[Class[Ann]].[Class[U &lt;: T]]
+bindClass(Class[T]).annotatedWith[Class[Ann]].toInstance(T)
+
+bindClass(Class[T]).annotatedWith(Annotation).to[T]
+bindClass(Class[T]).annotatedWith(Annotation).[Class[U &lt;: T]]
+bindClass(Class[T]).annotatedWith(Annotation).toInstance(T)
+</pre></div>
+</div>
+</div>
+<div class="section" id="usage-from-java">
+<h2>Usage from Java<a class="headerlink" href="#usage-from-java" title="Permalink to this headline">¶</a></h2>
+<p>The <cite>#bind[T]</cite> DSL also provides several Java-friendly methods for binding:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>bindClass(Class[T], T)
+bindClass(Class[T], Annotation, T)
+bindClass(Class[T], Class[Annotation], T)
+
+bindClass(Class[T], Class[U &lt;: T])
+bindClass(Class[T], Annotation, Class[U &lt;: T])
+bindClass(Class[T], Class[Annotation], Class[U &lt;: T])
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="code java highlight-text"><div class="highlight"><pre><span></span>import java.util.Collections;
+
+import com.google.inject.Stage;
+
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import com.twitter.finagle.http.Request;
+import com.twitter.finagle.http.Response;
+import com.twitter.finagle.http.Status;
+import com.twitter.finatra.http.EmbeddedHttpServer;
+import com.twitter.finatra.httpclient.RequestBuilder;
+import com.twitter.inject.annotations.Flags;
+
+public class HelloWorldServerFeatureTest extends Assert {
+
+    private static final EmbeddedHttpServer SERVER = setup();
+
+    private static EmbeddedHttpServer setup() {
+        EmbeddedHttpServer server = new EmbeddedHttpServer(
+            new HelloWorldServer(),
+            Collections.emptyMap(),
+            Stage.DEVELOPMENT);
+
+        server.bindClass(Integer.class, Flags.named(&quot;magic.number&quot;), 42);
+        server.bindClass(Integer.class, Flags.named(&quot;module.magic.number&quot;), 9999);
+        return server;
+    }
+
+    ...
+
+    /** test magicNum endpoint */
+    @Test
+    public void testMagicNumEndpoint() {
+        Request request = RequestBuilder.get(&quot;/magicNum&quot;);
+        Response response = SERVER.httpRequest(request);
+        assertEquals(Status.Ok(), response.status());
+        assertEquals(&quot;42&quot;, response.contentString());
+    }
+}
+</pre></div>
+</div>
+<p>See the <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/examples/http-server/java/src/main/java">java-http-server</a>
+for a full example of using the <cite>#bind[T]</cite> DSL in test to override a binding in a server.</p>
+</div>
+<div class="section" id="more-information">
+<h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="index.html"><span class="doc">Testing Features</span></a></li>
+<li><a class="reference internal" href="embedded.html"><span class="doc">Embedded Servers and Apps</span></a></li>
+<li><a class="reference internal" href="feature_tests.html"><span class="doc">Feature Tests</span></a></li>
+<li><a class="reference internal" href="integration_tests.html"><span class="doc">Integration Tests</span></a></li>
+<li><a class="reference internal" href="startup_tests.html"><span class="doc">Startup Tests</span></a></li>
+<li><a class="reference internal" href="mocks.html"><span class="doc">Working with Mocks</span></a></li>
+<li><a class="reference internal" href="mixins.html"><span class="doc">Test Mixins</span></a></li>
+<li><a class="reference internal" href="override_modules.html"><span class="doc">Override Modules</span></a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
+</ul>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Explicit Binding with <code class="docutils literal"><span class="pre">#bind[T]</span></code></a><ul>
+<li><a class="reference internal" href="#embedded-server-bind-t">Embedded Server <code class="docutils literal"><span class="pre">#bind[T]</span></code></a></li>
+<li><a class="reference internal" href="#testinjector-bind-t">TestInjector <code class="docutils literal"><span class="pre">#bind[T]</span></code></a></li>
+<li><a class="reference internal" href="#bind-t-dsl"><cite>#bind[T]</cite> DSL</a></li>
+<li><a class="reference internal" href="#usage-from-java">Usage from Java</a></li>
+<li><a class="reference internal" href="#more-information">More Information</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
+      <li>Previous: <a href="override_modules.html" title="previous chapter">Override Modules</a></li>
+      <li>Next: <a href="../../presentations/index.html" title="next chapter">Finatra Presentations</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2020 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </body>
+</html>

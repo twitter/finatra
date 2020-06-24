@@ -1,0 +1,210 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Testing Features &#8212; Finatra 20.6.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '20.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Embedded Servers and Apps" href="embedded.html" />
+    <link rel="prev" title="Testing" href="../kafka-streams/testing.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="embedded.html" title="Embedded Servers and Apps"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../kafka-streams/testing.html" title="Testing"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="figure" id="id2">
+<span id="testing"></span><img alt="Source: https://xkcd.com" src="https://imgs.xkcd.com/comics/exploits_of_a_mom.png" />
+<p class="caption"><span class="caption-text">Source: <a class="reference external" href="https://xkcd.com">https://xkcd.com</a></span></p>
+</div>
+<div class="section" id="testing-features">
+<h1>Testing Features<a class="headerlink" href="#testing-features" title="Permalink to this headline">¶</a></h1>
+<p>Finatra provides the following testing features:</p>
+<ul class="simple">
+<li>the ability to start a locally running server, issue requests, and assert responses.</li>
+<li>the ability to easily replace class instances throughout the object graph.</li>
+<li>the ability to retrieve instances in the object graph to perform assertions on them.</li>
+<li>the ability to write powerful tests without deploying test code to production.</li>
+</ul>
+<div class="section" id="types-of-tests">
+<h2>Types of Tests<a class="headerlink" href="#types-of-tests" title="Permalink to this headline">¶</a></h2>
+<p>What are we talking about when we talk about <em>testing</em>? At a high-level the philosophy of testing
+in Finatra revolves around the following definitions:</p>
+<ul>
+<li><p class="first"><a class="reference external" href="feature_tests.html">Feature Tests</a> - the most powerful tests enabled by Finatra. These tests
+allow for verification of the feature requirements of the service by exercising its external
+interface. Finatra supports both <a class="reference external" href="https://en.wikipedia.org/wiki/Black-box_testing">black-box testing</a>
+and <a class="reference external" href="https://en.wikipedia.org/wiki/White-box_testing">white-box testing</a> against a locally
+running version of a server. Classes can be selectively swapped out with dummy implementations or
+mocks inserted, and internal state asserted. See an example feature test <a class="reference external" href="https://github.com/twitter/finatra/blob/a79f56347acd2194e415975ab125e2509c8e91e5/examples/http-server/src/test/scala/com/twitter/hello/HelloWorldFeatureTest.scala">here</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is worth noting that versions of these <a class="reference external" href="feature_tests.html">Feature Tests</a> could be re-used
+for regression testing as part of larger <a class="reference external" href="https://en.wikipedia.org/wiki/System_testing">system tests</a>
+which could be run post-deploy for deploy verification and certification.</p>
+</div>
+</li>
+<li><p class="first"><a class="reference external" href="integration_tests">Integration Tests</a> - similar to <a class="reference external" href="feature_tests.html">Feature Tests</a>, but
+the entire service is not started. Instead, a list of <a class="reference external" href="../getting-started/modules.html">modules</a> are loaded with method calls and
+assertions are performed at the class-level. You can see an example integration test <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/marshalling/CallbackConverterIntegrationTest.scala">here</a>.</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://en.wikipedia.org/wiki/Unit_testing">Unit Tests</a> - these are tests generally of a single
+class and since constructor injection is used throughout the framework, Finatra stays out of your
+way.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="scalatest">
+<h2><a class="reference external" href="https://www.scalatest.org/">ScalaTest</a><a class="headerlink" href="#scalatest" title="Permalink to this headline">¶</a></h2>
+<p>The Finatra testing framework uses the Twitter recommended ScalaTest <a class="reference external" href="https://www.scalatest.org/user_guide/selecting_a_style">testing style</a> <a class="reference external" href="https://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite">FunSuite</a> for framework testing and to
+facilitate the types of testing outlined above we have several testing traits to aid in creating simple
+and powerful tests.</p>
+<p>For more information on <a class="reference external" href="https://www.scalatest.org/">ScalaTest</a>, see the <a class="reference external" href="https://www.scalatest.org/user_guide">ScalaTest User Guide</a>.</p>
+<p>To make use of another ScalaTest testing style, such as <a class="reference external" href="https://doc.scalatest.org/3.0.0/#org.scalatest.FunSpec">FunSpec</a>
+or others, see <a class="reference external" href="mixins.html">Test Mixins</a>.</p>
+</div>
+<div class="section" id="resources-on-writing-tests">
+<h2>Resources on Writing Tests<a class="headerlink" href="#resources-on-writing-tests" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://jasonpolites.github.io/tao-of-testing/ch4-1.1.html">The Tao of Testing: Chapter 4 - How to Write Tests</a></li>
+</ul>
+</div>
+<div class="section" id="id1">
+<h2><a class="reference external" href="../..#test-dependencies">Test Dependencies</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Please be sure to read <a class="reference external" href="../..#test-dependencies">the section</a> on including test-jar dependencies in your project.</p>
+</div>
+<div class="section" id="more-information">
+<h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="embedded.html"><span class="doc">Embedded Servers and Apps</span></a></li>
+<li><a class="reference internal" href="feature_tests.html"><span class="doc">Feature Tests</span></a></li>
+<li><a class="reference internal" href="integration_tests.html"><span class="doc">Integration Tests</span></a></li>
+<li><a class="reference internal" href="startup_tests.html"><span class="doc">Startup Tests</span></a></li>
+<li><a class="reference internal" href="mixins.html"><span class="doc">Test Mixins</span></a></li>
+<li><a class="reference internal" href="mocks.html"><span class="doc">Working with Mocks</span></a></li>
+<li><a class="reference internal" href="override_modules.html"><span class="doc">Override Modules</span></a></li>
+<li><a class="reference internal" href="bind_dsl.html"><span class="doc">Explicit Binding with #bind[T]</span></a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
+</ul>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Testing Features</a><ul>
+<li><a class="reference internal" href="#types-of-tests">Types of Tests</a></li>
+<li><a class="reference internal" href="#scalatest">ScalaTest</a></li>
+<li><a class="reference internal" href="#resources-on-writing-tests">Resources on Writing Tests</a></li>
+<li><a class="reference internal" href="#id1">Test Dependencies</a></li>
+<li><a class="reference internal" href="#more-information">More Information</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
+      <li>Previous: <a href="../kafka-streams/testing.html" title="previous chapter">Testing</a></li>
+      <li>Next: <a href="embedded.html" title="next chapter">Embedded Servers and Apps</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2020 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </body>
+</html>

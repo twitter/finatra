@@ -1,0 +1,577 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Defining HTTP Controllers &#8212; Finatra 20.6.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '20.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="HTTP Requests" href="requests.html" />
+    <link rel="prev" title="HTTP Server Definition" href="server.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="requests.html" title="HTTP Requests"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="server.html" title="HTTP Server Definition"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="defining-http-controllers">
+<span id="http-controllers"></span><h1>Defining HTTP Controllers<a class="headerlink" href="#defining-http-controllers" title="Permalink to this headline">¶</a></h1>
+<p>We now want to add the following controller to the <a class="reference external" href="server.html">server definition</a>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import ExampleService
+import com.twitter.finagle.http.Request
+import com.twitter.finatra.http.Controller
+import javax.inject.Inject
+
+class ExampleController @Inject()(
+  exampleService: ExampleService
+) extends Controller {
+
+  get(&quot;/ping&quot;) { request: Request =&gt;
+    &quot;pong&quot;
+  }
+
+  get(&quot;/name&quot;) { request: Request =&gt;
+    response.ok.body(&quot;Bob&quot;)
+  }
+
+  post(&quot;/foo&quot;) { request: Request =&gt;
+    exampleService.do(request)
+    &quot;bar&quot;
+  }
+}
+</pre></div>
+</div>
+<p>The server can now be defined with the controller as follows:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import DoEverythingModule
+import ExampleController
+import com.twitter.finatra.http.routing.HttpRouter
+import com.twitter.finatra.http.{Controller, HttpServer}
+
+object ExampleServerMain extends ExampleServer
+
+class ExampleServer extends HttpServer {
+
+  override val modules = Seq(
+    DoEverythingModule)
+
+  override def configureHttp(router: HttpRouter): Unit = {
+    router.
+      add[ExampleController]
+  }
+}
+</pre></div>
+</div>
+<p>Here we are adding <em>by type</em> allowing the framework to handle class instantiation.</p>
+<div class="section" id="controllers-and-routing">
+<span id="route"></span><h2>Controllers and Routing<a class="headerlink" href="#controllers-and-routing" title="Permalink to this headline">¶</a></h2>
+<p>Routes are defined in a <a class="reference external" href="https://www.sinatrarb.com/">Sinatra</a>-style syntax which consists of an
+HTTP method (or <cite>any</cite>), a URL matching pattern and an associated callback function. The callback
+function can accept a <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala">c.t.finagle.http.Request</a>,
+a <a class="reference external" href="requests.html#custom-request-case-class">custom request case class</a> (which declaratively
+represents the parsed request body as JSON), or a type parsed by a registered <a class="reference external" href="message_body.html#message-body-readers">Message Body Reader</a>. See <a class="reference external" href="requests.html">HTTP Requests</a> for more
+information.</p>
+<p>If you use <cite>any</cite> instead of specifying an HTTP method, that means that it will match on all HTTP
+methods, provided the pattern matches to the URL. <cite>any</cite> has special <a class="reference internal" href="#ordering">ordering</a> rules, so that
+it has lower precedence than routes where the HTTP method is specified. This ensures that you
+can’t accidentally clobber a more specific route by registering them in the wrong order.</p>
+<p>The callback can return any type that can be converted into a <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Response.scala">c.t.finagle.http.Response</a>.
+See <a class="reference external" href="responses.html">HTTP Responses</a> for more information.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>Controller route callback functions <strong>MUST</strong> specify an input type of either a
+<a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala">c.t.finagle.http.Request</a>,
+a <a class="reference external" href="requests.html#custom-request-case-class">custom request case class</a> or a type parsed by a
+registered <a class="reference external" href="message_body.html#message-body-readers">Message Body Reader</a>.</p>
+<p class="last">Failure to specify a correct input type in the callback function will prevent your server from
+starting properly. See the <a class="reference external" href="requests.html">Http Requests</a> section for more information.</p>
+</div>
+<div class="section" id="route-ordering">
+<span id="ordering"></span><h3>Route Ordering<a class="headerlink" href="#route-ordering" title="Permalink to this headline">¶</a></h3>
+<p>When Finatra receives an HTTP request, it will first check whether there is a constant route which
+matches the path exactly. If there is, it will dispatch the request to that route. If there isn’t,
+it will scan all registered controllers <strong>in the order they are added</strong> and dispatch the request to
+the <strong>first matching</strong> route starting from the top of each controller then invoking the matching
+route’s associated callback function.</p>
+<p>That is, routes are matched in the order they are added to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">c.t.finatra.http.routing.HttpRouter</a>.
+Thus if you are creating routes with overlapping URIs it is recommended to list the routes in order
+starting with the “most specific” to the least specific. Although you don’t need to do this for
+constant routes, we encourage you to do it anyway to make it easier to reason about.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">The one exception to this case is controllers that are registered with an <cite>any</cite> <a class="reference internal" href="#route">route</a>, which
+will be applied only if there is no other matching route with that HTTP method. This is true
+even if they are registered later. Constant routes for <cite>any</cite> work the same way, where they will
+be applied only after all routes with that HTTP method are checked.</p>
+</div>
+<p>In general, however, it is recommended to that you follow <a class="reference external" href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST</a>
+conventions if possible, i.e., when deciding which routes to group into a particular controller,
+group routes related to a single resource into one controller.</p>
+</div>
+<div class="section" id="per-route-stats">
+<h3>Per-Route Stats<a class="headerlink" href="#per-route-stats" title="Permalink to this headline">¶</a></h3>
+<p>The per-route stats recording provided by Finatra in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala">c.t.finatra.http.filters.StatsFilter</a>
+works best when the above convention is followed.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+import com.twitter.finatra.http.Controller
+
+class GroupsController extends Controller {
+  get(&quot;/groups/:id&quot;) { request: Request =&gt;
+    ???
+  }
+
+  post(&quot;/groups&quot;) { request: Request =&gt;
+    ???
+  }
+
+  delete(&quot;/groups/:id&quot;) { request: Request =&gt;
+    ???
+  }
+}
+</pre></div>
+</div>
+<p>yields the following stats:</p>
+<div class="highlight-text"><div class="highlight"><pre><span></span>route/groups_id/GET/...
+route/groups/POST/...
+route/groups_id/DELETE/...
+</pre></div>
+</div>
+<p>Alternatively, each route can be assigned a name which will then be used to create stat names.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+import com.twitter.finatra.http.Controller
+
+class GroupsController extends Controller {
+  get(&quot;/groups/:id&quot;, name = &quot;group_by_id&quot;) { request: Request =&gt;
+    ???
+  }
+
+  post(&quot;/groups&quot;, name = &quot;create_group&quot;) { request: Request =&gt;
+    ???
+  }
+
+  delete(&quot;/groups/:id&quot;, name = &quot;delete_group&quot;) { request: Request =&gt;
+    ???
+  }
+}
+</pre></div>
+</div>
+<p>yields:</p>
+<div class="highlight-text"><div class="highlight"><pre><span></span>route/group_by_id/GET/...
+route/create_group/POST/...
+route/delete_group/DELETE/...
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="route-matching-patterns">
+<h2>Route Matching Patterns:<a class="headerlink" href="#route-matching-patterns" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="named-parameters">
+<h3>Named Parameters<a class="headerlink" href="#named-parameters" title="Permalink to this headline">¶</a></h3>
+<p>Route patterns may include named parameters. E.g., a defined variable in the route path:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+
+get(&quot;/users/:id&quot;) { request: Request =&gt;
+  &quot;You looked up &quot; + request.params(&quot;id&quot;)
+}
+</pre></div>
+</div>
+<p>In the above example, <cite>:id</cite> is considered a “named parameter” of the route and will capture the
+value in its position in the incoming request URI.</p>
+<p>As shown, the incoming value from the request can be obtained from the request parameters map, e.g.
+<cite>request.params(“id”)</cite>.</p>
+<p>For example, both of the following requests will match the above defined route:</p>
+<div class="highlight-text"><div class="highlight"><pre><span></span>GET /users/1234
+GET /users/5678
+</pre></div>
+</div>
+<p>Which would produce responses like the following:</p>
+<div class="highlight-text"><div class="highlight"><pre><span></span>===========================================================================
+HTTP GET /users/1234
+[Header]    Host -&gt; 127.0.0.1:57866
+===========================================================================
+[Status]    Status(200)
+[Header]    Content-Type -&gt; text/plain; charset=utf-8
+[Header]    Server -&gt; Finatra
+[Header]    Date -&gt; Tue, 31 Jan 2017 00:00:00 GMT
+[Header]    Content-Length -&gt; 18
+You looked up 1234
+
+===========================================================================
+HTTP GET /users/5678
+[Header]    Host -&gt; 127.0.0.1:57866
+[Status]    Status(200)
+[Header]    Content-Type -&gt; text/plain; charset=utf-8
+[Header]    Server -&gt; Finatra
+[Header]    Date -&gt; Tue, 31 Jan 2017 00:00:00 GMT
+[Header]    Content-Length -&gt; 18
+You looked up 5678
+</pre></div>
+</div>
+<p>As <cite>request.params(“id”)</cite> would capture <cite>1234</cite> in the first request and <cite>5678</cite> in the second.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p><strong>Both query params and route params are stored in the parameters map of the request.</strong> If
+a <em>route</em> parameter and a <em>query</em> parameter have the same name, <strong>the route parameter always wins</strong>.</p>
+<p class="last">Therefore, you should ensure your route parameter names do not collide with any query parameter
+names that you plan to read from the request.</p>
+</div>
+</div>
+<div class="section" id="constant-routes">
+<h3>Constant Routes<a class="headerlink" href="#constant-routes" title="Permalink to this headline">¶</a></h3>
+<p>A “constant route” is any defined route which <em>does not</em> specify a <a class="reference external" href="#named-parameters">named parameter</a>
+in its route path. Routing is optimized to do a simple lookup against a “constant route” map whereas
+<a class="reference external" href="#named-parameters">named parameter</a> routes are tried in their defined order for a route which
+will handle the request.</p>
+</div>
+<div class="section" id="wildcard-parameter">
+<h3>Wildcard Parameter<a class="headerlink" href="#wildcard-parameter" title="Permalink to this headline">¶</a></h3>
+<p>Routes can also contain the wildcard pattern as a <a class="reference external" href="#named-parameters">named parameter</a>, <cite>:*</cite>. The
+wildcard can only appear once at the end of a pattern and it will capture <em>all text in its place</em>.</p>
+<p>For example,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+
+get(&quot;/files/:*&quot;) { request: Request =&gt;
+  request.params(&quot;*&quot;)
+}
+</pre></div>
+</div>
+<p>Given a request:</p>
+<div class="highlight-text"><div class="highlight"><pre><span></span>GET  /files/abc/123/foo.txt
+</pre></div>
+</div>
+<p>would produce a response:</p>
+<div class="highlight-text"><div class="highlight"><pre><span></span>===========================================================================
+HTTP GET /files/abc/123/foo.txt
+[Header]    Host -&gt; 127.0.0.1:58540
+===========================================================================
+[Status]    Status(200)
+[Header]    Content-Type -&gt; text/plain; charset=utf-8
+[Header]    Server -&gt; Finatra
+[Header]    Date -&gt; Tue, 31 Jan 2017 00:00:00 GMT
+[Header]    Content-Length -&gt; 15
+abc/123/foo.txt
+</pre></div>
+</div>
+<p>The wildcard named parameter matches everything in its position. In this case: <cite>abc/123/foo.txt</cite>.</p>
+</div>
+<div class="section" id="regular-expressions">
+<h3>Regular Expressions<a class="headerlink" href="#regular-expressions" title="Permalink to this headline">¶</a></h3>
+<p>Regular expressions are no longer allowed in string defined paths (since v2).</p>
+</div>
+</div>
+<div class="section" id="route-prefixes">
+<h2>Route Prefixes<a class="headerlink" href="#route-prefixes" title="Permalink to this headline">¶</a></h2>
+<p>Finatra provides a simple DSL for adding a common prefix to a set of routes within a Controller. For
+instance, if you have a group of routes within a controller that should all have a common prefix
+you can define them by making use of the <cite>c.t.finatra.http.RouteDSL#prefix</cite> function available in
+any subclass of <cite>c.t.finatra.http.Controller</cite>, e.g.,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+import com.twitter.finatra.http.Controller
+
+class MyController extends Controller {
+
+  // regular route
+  get(&quot;/foo&quot;) { request: Request =&gt;
+    &quot;Hello, world!&quot;
+  }
+
+  // set of prefixed routes
+  prefix(&quot;/2&quot;) {
+    get(&quot;/foo&quot;) { request: Request =&gt;
+      &quot;Hello, world!&quot;
+    }
+
+    post(&quot;/bar&quot;) { request: Request =&gt;
+      response.ok
+    }
+  }
+}
+</pre></div>
+</div>
+<p>This definition would produce the following routes:</p>
+<div class="highlight-text"><div class="highlight"><pre><span></span>GET     /foo
+GET     /2/foo
+POST    /2/bar
+</pre></div>
+</div>
+<p>The input to the <cite>c.t.finatra.http.RouteDSL#prefix</cite> function is a String and how you determine the
+value of that String is entirely up to you. You could choose to hard code the value like in the
+above example, or inject it as a parameter to the Controller, e.g., by using a <a class="reference external" href="../getting-started/flags.html">flag</a>
+or a <a class="reference external" href="../getting-started/binding_annotations.html">Binding Annotation</a> that looks for a bound
+String type in the object graph which would allow you provide it in any manner appropriate for your
+use case.</p>
+<p>For example,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+import com.twitter.finatra.http.Controller
+import com.twitter.inject.annotations
+
+class MyController @Inject()(
+  @Flag(&quot;api.version.prefix&quot;) apiVersionPrefix: String, // value from a &quot;api.version.prefix&quot; flag
+  @VersionPrefix otherVersionPrefix otherApiVersionPrefix: String // value from a String bound with annotation: @VersionPrefix
+) extends Controller {
+  ...
+
+  prefix(apiVersionPrefix) {
+    get(&quot;/foo&quot;) { request: Request =&gt;
+      ???
+    }
+  }
+
+  prefix(otherVersionPrefix) {
+    get(&quot;/bar&quot;) { request: Request =&gt;
+      ???
+    }
+  }
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<ul class="last simple">
+<li>Routes and Prefixes <strong>MUST</strong> begin with a forward slash (/).</li>
+<li>Routes are always added to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">c.t.finatra.http.routing.HttpRouter</a>
+<strong>in the order defined</strong> in the <a class="reference external" href="../http/controllers.html#controllers-and-routing">Controller</a>
+and are thus matched in this order as well. This remains true even when defined within a <cite>prefix</cite>
+block. I.e., the <cite>prefix</cite> is merely a convenience for adding a common prefix to a set of routes.
+You should still be aware of the total order in which your routes are defined in a Controller.</li>
+<li>You can use the <cite>c.t.finatra.http.RouteDSL#prefix</cite> function multiple times in a Controller with
+the same or different values.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="trailing-slashes">
+<h2>Trailing Slashes<a class="headerlink" href="#trailing-slashes" title="Permalink to this headline">¶</a></h2>
+<p>If you want to ignore trailing slashes on routes such that <cite>/groups/1</cite> and <cite>groups/1/</cite> are treated
+to be equivalent, append <cite>/?</cite> to your route URI, e.g.,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+
+get(&quot;/groups/:id/?&quot;) { request: Request =&gt;
+  response.ok(&quot;response body here&quot;)
+}
+</pre></div>
+</div>
+<p>Otherwise, the route as specified is an <strong>exact match</strong>. E.g., if you define <cite>/groups/1</cite> we will
+<strong>only</strong> match requests to <cite>/groups/1</cite> and <strong>not</strong> requests to <cite>/groups/1/</cite> and vice-versa.</p>
+</div>
+<div class="section" id="admin-paths">
+<h2>Admin Paths<a class="headerlink" href="#admin-paths" title="Permalink to this headline">¶</a></h2>
+<p>All <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a>-based servers have an <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface">HTTP Admin Interface</a>
+which includes a variety of tools for diagnostics, profiling, and more. This admin interface
+<strong>should not</strong> be exposed outside your data center DMZ. The <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface">TwitterServer HTTP Admin Interface</a>
+is a Finagle <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/server/ListeningStackServer.scala">ListeningStackServer</a>
+which binds to a port specified by the <a class="reference external" href="https://github.com/twitter/twitter-server/blob/6d3e8f0ce890c218e774336d3335e3db9b22ccf6/server/src/main/scala/com/twitter/server/AdminHttpServer.scala#L118">admin.port</a>
+flag.</p>
+<p>You can choose to only expose API endpoints on this listening server or additionally add an endpoint
+to the <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface">HTTP Admin Interface</a>
+web UI.</p>
+<div class="section" id="adding-endpoints">
+<h3>Adding Endpoints<a class="headerlink" href="#adding-endpoints" title="Permalink to this headline">¶</a></h3>
+<p>Any Controller route path starting with <cite>/admin/finatra/</cite> will be included by default on the server’s
+admin interface (accessible via the server’s admin port). Other paths can be included on the server’s
+admin interface by setting <cite>admin = true</cite> when defining the route.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Any admin route that does not start with <cite>/admin/finatra/</cite> <strong>MUST</strong> be a <cite>constant route</cite>, e.g., it does not define any <a class="reference external" href="#named-parameters">named parameters</a>.</p>
+</div>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+
+get(&quot;/admin/finatra/users/&quot;) { request: Request =&gt;
+  userDatabase.getAllUsers(
+    request.params(&quot;cursor&quot;))
+}
+
+get(&quot;/admin/display/&quot;, admin = true) { request: Request =&gt;
+  response.ok(&quot;response body here&quot;)
+}
+
+post(&quot;/special/route/&quot;, admin = true) { request: Request =&gt;
+  ???
+}
+
+// cannot be added to admin index as it uses a named parameter (:id) in the route path
+get(&quot;/admin/client/:id&quot;, admin = true) { request: Request =&gt;
+  response.ok(&quot;response body here&quot;)
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="twitterserver-admin-ui">
+<h3>TwitterServer Admin UI<a class="headerlink" href="#twitterserver-admin-ui" title="Permalink to this headline">¶</a></h3>
+<p>Some admin routes can additionally be listed in the <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a>
+<a class="reference external" href="https://twitter.github.io/twitter-server/Admin.html">HTTP Admin Interface index</a>.</p>
+<p>To expose your route in the <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a>
+<a class="reference external" href="https://twitter.github.io/twitter-server/Admin.html">HTTP Admin Interface index</a>, the route path:</p>
+<ul class="simple">
+<li><strong>MUST</strong> be a <a class="reference external" href="#constant-routes">constant path</a>.</li>
+<li><strong>MUST</strong> start with <cite>/admin/</cite>.</li>
+<li><strong>MUST NOT</strong> start with <cite>/admin/finatra/</cite>.</li>
+<li><strong>MUST</strong> be an HTTP method <cite>GET</cite> or <cite>POST</cite> route.</li>
+</ul>
+<p>When defining the route in a Controller, in addition to setting <cite>admin = true</cite> you must also provide
+a <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Route.scala">RouteIndex</a>,
+e.g.,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+
+get(&quot;/admin/client_id.json&quot;,
+  admin = true,
+  index = Some(
+    RouteIndex(
+      alias = &quot;Thrift Client Id&quot;,
+      group = &quot;Process Info&quot;))) { request: Request =&gt;
+  Map(&quot;client_id&quot; -&gt; &quot;clientId.1234&quot;))
+}
+</pre></div>
+</div>
+<p>The route will appear in the left-rail of the <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a>
+<a class="reference external" href="https://twitter.github.io/twitter-server/Admin.html">HTTP Admin Interface</a> under the heading
+specified by the <cite>RouteIndex#group</cite> indexed by <cite>RouteIndex#alias</cite> or the route’s path.</p>
+<p>If you do not provide a <cite>RouteIndex</cite> the route will not appear in the index but is still reachable
+on the admin interface.</p>
+</div>
+<div class="section" id="admin-path-routing">
+<h3>Admin Path Routing<a class="headerlink" href="#admin-path-routing" title="Permalink to this headline">¶</a></h3>
+<p><strong>Note</strong>: only admin routes which start with <cite>/admin/finatra/</cite> will be routed to using the server’s
+configured <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">HttpRouter</a>.
+All other admin routes will be routed to by TwitterServer’s <a class="reference external" href="https://github.com/twitter/twitter-server/blob/15e35a3a3070c50168ff55fd83a2dff28b09795c/server/src/main/scala/com/twitter/server/AdminHttpServer.scala#L140">AdminHttpServer</a>
+which only supports <strong>exact path matching</strong> and thus why only constant routes are allowed.</p>
+<p>Therefore any configuration defined on your server’s <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">HttpRouter</a>
+will thus only apply to admin routes starting with <cite>/admin/finatra</cite>. And because these routes will
+use the Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/routing/RoutingService.scala">RoutingService</a>
+these routes cannot be included in the <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a>
+<a class="reference external" href="https://twitter.github.io/twitter-server/Admin.html">HTTP Admin Interface</a> index.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
+</ul>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Defining HTTP Controllers</a><ul>
+<li><a class="reference internal" href="#controllers-and-routing">Controllers and Routing</a><ul>
+<li><a class="reference internal" href="#route-ordering">Route Ordering</a></li>
+<li><a class="reference internal" href="#per-route-stats">Per-Route Stats</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#route-matching-patterns">Route Matching Patterns:</a><ul>
+<li><a class="reference internal" href="#named-parameters">Named Parameters</a></li>
+<li><a class="reference internal" href="#constant-routes">Constant Routes</a></li>
+<li><a class="reference internal" href="#wildcard-parameter">Wildcard Parameter</a></li>
+<li><a class="reference internal" href="#regular-expressions">Regular Expressions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#route-prefixes">Route Prefixes</a></li>
+<li><a class="reference internal" href="#trailing-slashes">Trailing Slashes</a></li>
+<li><a class="reference internal" href="#admin-paths">Admin Paths</a><ul>
+<li><a class="reference internal" href="#adding-endpoints">Adding Endpoints</a></li>
+<li><a class="reference internal" href="#twitterserver-admin-ui">TwitterServer Admin UI</a></li>
+<li><a class="reference internal" href="#admin-path-routing">Admin Path Routing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
+      <li>Previous: <a href="server.html" title="previous chapter">HTTP Server Definition</a></li>
+      <li>Next: <a href="requests.html" title="next chapter">HTTP Requests</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2020 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </body>
+</html>

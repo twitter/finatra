@@ -1,0 +1,215 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Mapped Diagnostic Context (MDC) Support &#8212; Finatra 20.6.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '20.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Logback" href="logback.html" />
+    <link rel="prev" title="Introduction to Logging With Finatra" href="index.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="logback.html" title="Logback"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Introduction to Logging With Finatra"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="mapped-diagnostic-context-mdc-support">
+<span id="mdc"></span><h1>Mapped Diagnostic Context (MDC) Support<a class="headerlink" href="#mapped-diagnostic-context-mdc-support" title="Permalink to this headline">¶</a></h1>
+<p>Finatra offers an integration with the SLF4J API <a class="reference external" href="https://www.slf4j.org/manual.html#mdc">Mapped Diagnostic Context</a>
+for consistent logging of useful information.</p>
+<div class="admonition-from-the-slf4j-api-documentation-https-www-slf4j-org-manual-html-mdc admonition">
+<p class="first admonition-title">From the SLF4J API <a class="reference external" href="https://www.slf4j.org/manual.html#mdc">documentation</a></p>
+<p class="last">“Mapped Diagnostic Context” is essentially a map maintained by the logging
+framework where the application code provides key-value pairs which can then
+be inserted by the logging framework in log messages. MDC data can also be
+highly helpful in filtering messages or triggering certain actions.</p>
+</div>
+</div>
+<div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<p>In order to use the Mapped Diagnostic Context (MDC), an application must first initialize the
+framework MDC <a class="reference external" href="https://twitter.github.io/finagle/">Finagle</a> adapter,
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-slf4j/src/main/scala/com/twitter/inject/logging/FinagleMDCAdapter.scala">FinagleMDCAdapter</a>
+provided by Finatra. This is done by calling <cite>c.t.inject.logging.MDCInitializer.init()</cite>.</p>
+<p>The MDC can be closed over the execution of a function, meaning an empty MDC map will be created at
+the beginning of the closure and then discard after the closure. When used in a Filter in the request
+path this means that MDC logging can be scoped per-request.</p>
+<p>For example:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.{Service, Filter}
+import com.twitter.inject.logging.MDCInitializer
+import com.twitter.util.Future
+
+class MDCInitializationFilter extends Filter[Request, Response, Request, Response] {
+  /* Initialize MDC adapter which overrides the standard one */
+  MDCInitializer.init()
+
+  override def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
+    MDCInitializer.let {
+      service(request)
+    }
+  }
+}
+</pre></div>
+</div>
+<p>The <cite>Service[Request, Response]</cite> executed by the Filter can then get and set MDC values which can be
+used by the chosen logging implementation’s MDC configuration.  For example, see the
+<a class="reference external" href="https://logback.qos.ch/manual/mdc.html">Logback MDC documentation</a> for more information the
+MDC functionality and configuration in Logback.</p>
+</div>
+<div class="section" id="loggingmdcfilter">
+<h1><cite>LoggingMDCFilter</cite><a class="headerlink" href="#loggingmdcfilter" title="Permalink to this headline">¶</a></h1>
+<p>This MDC Filter initialization integration is already provided by either the http <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/LoggingMDCFilter.scala">LoggingMDCFilter</a>
+or the thrift <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/LoggingMDCFilter.scala">LoggingMDCFilter</a>
+which can then be included in your server Filter chain.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Make sure the <cite>LoggingMDCFilter</cite> is placed <strong>before</strong> any other Filters or code which will add
+MDC entries or which will expect MDC entries to be present.</p>
+</div>
+</div>
+<div class="section" id="example">
+<h1>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h1>
+<p>Here’s an example Logback <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/examples/hello-world/src/main/resources/logback.xml#L25">configuration</a>
+which references the contextual key <cite>traceId</cite> which will be logged with every statement sent to a Logback
+<a class="reference external" href="https://logback.qos.ch/manual/appenders.html">Appender</a>. It is the responsibility of the
+application to populate the MDC with this contextual information. In this case, the <cite>traceId</cite> is
+added by including the http <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/TraceIdMDCFilter.scala">TraceIdMDCLoggingFilter</a>
+(there is also a thrift <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/TraceIdMDCFilter.scala">TraceIdMDCLoggingFilter</a>).</p>
+<p>In a server definition, the <cite>LoggingMDCFilter</cite> must be listed before the <cite>TraceIdMDCLoggingFilter</cite>,
+e.g.,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finatra.http.HttpServer
+import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter, TraceIdMDCFilter}
+import com.twitter.finatra.http.routing.HttpRouter
+
+object HelloWorldServerMain extends HelloWorldServer
+
+class HelloWorldServer extends HttpServer {
+
+  override def configureHttp(router: HttpRouter) {
+    router
+      .filter[LoggingMDCFilter[Request, Response]]
+      .filter[TraceIdMDCFilter[Request, Response]]
+      .add[HelloWorldController]
+  }
+}
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
+</ul>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Mapped Diagnostic Context (MDC) Support</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#loggingmdcfilter"><cite>LoggingMDCFilter</cite></a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Introduction to Logging With Finatra</a></li>
+      <li>Next: <a href="logback.html" title="next chapter">Logback</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2020 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </body>
+</html>

@@ -1,0 +1,806 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Jackson Integration &#8212; Finatra 20.6.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '20.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="JSON Integration with HTTP Routing" href="routing.html" />
+    <link rel="prev" title="Validation Framework" href="../validation/index.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="routing.html" title="JSON Integration with HTTP Routing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../validation/index.html" title="Validation Framework"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="jackson-integration">
+<span id="json"></span><h1>Jackson Integration<a class="headerlink" href="#jackson-integration" title="Permalink to this headline">¶</a></h1>
+<p>Finatra builds upon the excellent <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala"><cite>jackson-module-scala</cite></a> for <a class="reference external" href="https://www.json.org/json-en.html">JSON</a>
+support. One of the biggest features Finatra provides is an improved <cite>case class</cite>
+<a class="reference external" href="#improved-case-class-deserializer">deserializer</a> which accumulates deserialization errors while
+parsing JSON into a <cite>case class</cite> instead of failing-fast, such that all errors can be reported at
+once.</p>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Usable outside of the Finatra framework as a limited replacement for the <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala"><cite>jackson-module-scala</cite></a> or <a class="reference external" href="https://github.com/codahale/jerkson">Jerkson</a>.</li>
+<li>A <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala">c.t.finatra.jackson.ScalaObjectMapper</a> which provides additional Scala friendly methods not found in the <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala"><cite>jackson-module-scala</cite></a> <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/scala/com/fasterxml/jackson/module/scala/ScalaObjectMapper.scala">ScalaObjectMapper</a>.</li>
+<li>Custom <cite>case class</cite> <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/CaseClassDeserializer.scala">deserializer</a> which overcomes some of the limitations in <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala"><cite>jackson-module-scala</cite></a>.</li>
+<li>Integration with Finatra’s <a class="reference external" href="https://beanvalidation.org/1.0/spec/">JSR-303 style</a> validations during JSON deserialization.</li>
+<li>A Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala">c.t.inject.TwitterModule</a> for injecting the Finatra <cite>ScalaObjectMapper</cite> with support for customization.</li>
+<li>Integration with Finatra <a class="reference external" href="routing.html">HTTP routing</a> to support binding and validation of query, route, form params, and headers.</li>
+<li>Utilities for comparing JSON strings.</li>
+</ul>
+</div>
+<div class="section" id="c-t-finatra-jackson-scalaobjectmapper">
+<h2>c.t.finatra.jackson.ScalaObjectMapper<a class="headerlink" href="#c-t-finatra-jackson-scalaobjectmapper" title="Permalink to this headline">¶</a></h2>
+<p>The Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> is a thin wrapper around a configured <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala"><cite>jackson-module-scala</cite></a>
+<a class="reference external" href="https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/scala/com/fasterxml/jackson/module/scala/ScalaObjectMapper.scala">ScalaObjectMapper</a>.
+However, the Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> comes configured with several defaults when instantiated.</p>
+<div class="section" id="defaults">
+<h3>Defaults<a class="headerlink" href="#defaults" title="Permalink to this headline">¶</a></h3>
+<p>The following integrations are provided by default when using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a>:</p>
+<ul class="simple">
+<li>The Jackson <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/scala/com/fasterxml/jackson/module/scala/DefaultScalaModule.scala">DefaultScalaModule</a>.</li>
+<li>The Jackson <a class="reference external" href="https://github.com/FasterXML/jackson-datatype-joda/blob/master/src/main/java/com/fasterxml/jackson/datatype/joda/JodaModule.java">JodaModule</a>.</li>
+<li>A <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/internal/serde/LongKeyDeserializer.scala">LongKeyDeserializer</a>: allows for deserializing maps with long keys.</li>
+<li>A <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/internal/caseclass/wrapped/WrappedValueSerializer.scala">WrappedValueSerializer</a>: more information on “WrappedValues” <a class="reference external" href="https://docs.scala-lang.org/overviews/core/value-classes.html">here</a>.</li>
+<li>A <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/internal/serde/JodaDurationMillisSerializer.scala">JodaDurationMillisSerializer</a>.</li>
+<li>An improved <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/internal/serde/JodaDatetimeDeserializer.scala">JodaDateTimeDeserializer</a>.</li>
+<li>Twitter <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Time.scala">c.t.util.Time</a> and <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Duration.scala">c.t.util.Duration</a> serializers [<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/serde/TimeStringSerializer.scala">1</a>, <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/serde/DurationStringSerializer.scala">2</a>] and deserializers [<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/serde/TimeStringDeserializer.scala">1</a>, <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/serde/DurationStringDeserializer.scala">2</a>].</li>
+<li>An improved <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/internal/caseclass/jackson/CaseClassDeserializer.scala">CaseClassDeserializer</a>: see details <a class="reference external" href="#improved-case-class-deserializer">below</a>.</li>
+</ul>
+</div>
+<div class="section" id="instantiation-configuration">
+<h3>Instantiation &amp; Configuration<a class="headerlink" href="#instantiation-configuration" title="Permalink to this headline">¶</a></h3>
+<p>There are <cite>apply</cite> functions available for creation of a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> configured
+with the defaults listed above:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>val injector: com.google.inject.Injector = ???
+val underlying: com.fasterxml.jackson.databind.ObjectMapper
+    with com.fasterxml.jackson.module.scala.ScalaObjectMapper = ???
+
+val objectMapper = ScalaObjectMapper()
+val objectMapper = ScalaObjectMapper(injector)
+val objectMapper = ScalaObjectMapper(underlying)
+val objectMapper = ScalaObjectMapper(injector, underlying)
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>All of the above <cite>apply</cite> methods which take an underlying Jackson <cite>ObjectMapper</cite> will always
+<strong>mutate the configuration</strong> of the underlying Jackson <cite>ObjectMapper</cite> to apply the current
+configuration of the <cite>ScalaObjectMapper#Builder</cite> to the provided Jackson <cite>ObjectMapper</cite>. That is,
+they should be considered builder functions to help produce a configured <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a>.</p>
+<p class="last">However, there may be times where you would like to only wrap an already configured Jackson <cite>ObjectMapper</cite>.
+To do, use <cite>ScalaObjectMapper.objectMapper(underlying)</cite> to create a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a>
+which wraps but does not mutate the configuration of the given underlying Jackson <cite>ObjectMapper</cite>.</p>
+</div>
+<p>To apply more custom configuration to create a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a>, there is a builder for
+constructing a customized mapper.</p>
+<p>E.g., to set a <cite>PropertyNamingStrategy</cite> different than the default:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>val objectMapper: ScalaObjectMapper =
+  ScalaObjectMapper.builder
+    .withPropertyNamingStrategy(PropertyNamingStrategy.KebabCaseStrategy)
+    .objectMapper
+</pre></div>
+</div>
+<p>Or to set additional modules or configuration:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>val objectMapper: ScalaObjectMapper =
+  ScalaObjectMapper.builder
+    .withPropertyNamingStrategy(PropertyNamingStrategy.KebabCaseStrategy)
+    .withAdditionalJacksonModules(Seq(MySimpleJacksonModule))
+    .withAdditionalMapperConfigurationFn(
+      _.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true)
+    )
+    .objectMapper
+</pre></div>
+</div>
+<p>You can also get a <cite>camelCase</cite> or <cite>snake_case</cite> specifically configured mapper.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>val camelCaseObjectMapper: ScalaObjectMapper =
+  ScalaObjectMapper.builder
+    .withAdditionalJacksonModules(Seq(MySimpleJacksonModule))
+    .withAdditionalMapperConfigurationFn(
+      _.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true)
+    )
+    .camelCaseObjectMapper
+
+val snakeCaseObjectMapper: ScalaObjectMapper =
+  ScalaObjectMapper.builder
+    .withAdditionalJacksonModules(Seq(MySimpleJacksonModule))
+    .withAdditionalMapperConfigurationFn(
+      _.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true)
+    )
+    .snakeCaseObjectMapper
+</pre></div>
+</div>
+<p>Or, if you already have an instance of an object mapper and want a copy that is configured to
+either a <cite>camelCase</cite> or <cite>snake_case</cite> property naming strategy, you can pass it to the appropriate
+<cite>ScalaObjectMapper</cite> utility method:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.scala.experimental.{ScalaObjectMapper =&gt; JacksonScalaObjectMapper}
+import com.twitter.finatra.jackson.ScalaObjectMapper
+
+// our default Jackson object mapper
+val jacksonObjectMapper: ObjectMapper with JacksonScalaObjectMapper = ???
+
+// a &#39;camelCase&#39; copy
+val camelCaseObjectMapper: ScalaObjectMapper =
+  ScalaObjectMapper.camelCaseObjectMapper(jacksonObjectMapper)
+
+// a &#39;snake_case&#39; copy
+val snakeCaseObjectMapper: ScalaObjectMapper =
+  ScalaObjectMapper.snakeCaseObjectMapper(jacksonObjectMapper)
+</pre></div>
+</div>
+<p>Note that these methods will <em>copy</em> the underlying Jackson mapper (not mutate it) to produce a new
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> configured with the desired property naming strategy. That is, a new
+underlying mapper will be created which copies the original configuration and only the property
+naming strategy changed.</p>
+<p>As mentioned above, you also wrap an already configured object mapper with the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.scala.experimental.{ScalaObjectMapper =&gt; JacksonScalaObjectMapper}
+import com.twitter.finatra.jackson.ScalaObjectMapper
+
+// our default Jackson object mapper
+val jacksonObjectMapper: ObjectMapper with JacksonScalaObjectMapper = ???
+
+// a Finatra &#39;ScalaObjectMapper&#39; copy
+val objectMapper: ScalaObjectMapper = ScalaObjectMapper.objectMapper(jacksonObjectMapper)
+</pre></div>
+</div>
+<p>This will <em>copy</em> the underlying Jackson mapper (not mutate it) to produce a new
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> configured the same as the given Jackson object mapper.</p>
+</div>
+<div class="section" id="access-to-the-underlying-jackson-object-mapper">
+<h3>Access to the underlying Jackson Object Mapper<a class="headerlink" href="#access-to-the-underlying-jackson-object-mapper" title="Permalink to this headline">¶</a></h3>
+<p>As previously stated, the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> is a thin wrapper around a configured Jackson <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala"><cite>jackson-module-scala</cite></a>
+<a class="reference external" href="https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/scala/com/fasterxml/jackson/module/scala/ScalaObjectMapper.scala">ScalaObjectMapper</a>.</p>
+<p>You can always access the underlying Jackson object mapper by calling <cite>underlying</cite>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.scala.experimental.{ScalaObjectMapper =&gt; JacksonScalaObjectMapper}
+import com.twitter.finatra.jackson.ScalaObjectMapper
+
+val objectMapper: ScalaObjectMapper = ???
+
+val jacksonObjectMapper: ObjectMapper with JacksonScalaObjectMapper = objectMapper.underlying
+</pre></div>
+</div>
+</div>
+<div class="section" id="c-t-finatra-jackson-modules-scalaobjectmappermodule">
+<h3>c.t.finatra.jackson.modules.ScalaObjectMapperModule<a class="headerlink" href="#c-t-finatra-jackson-modules-scalaobjectmappermodule" title="Permalink to this headline">¶</a></h3>
+<p>The framework also provides a <a class="reference external" href="../getting-started/modules.html">c.t.inject.TwitterModule</a> which
+can be used to bind a configured <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> to the object graph. This is similar
+to the <a class="reference external" href="https://github.com/FasterXML/jackson-modules-base/tree/master/guice">jackson-module-guice</a>
+<a class="reference external" href="https://github.com/FasterXML/jackson-modules-base/blob/master/guice/src/main/java/com/fasterxml/jackson/module/guice/ObjectMapperModule.java">ObjectMapperModule</a>
+but uses Finatra’s <a class="reference external" href="../getting-started/modules.html">TwitterModule</a>.</p>
+<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala"><cite>ScalaObjectMapperModule</cite></a> provides bound instances of:</p>
+<ul class="simple">
+<li>a configured <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> as a <cite>Singleton</cite>.</li>
+<li>a <cite>camelCase</cite> configured <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> as a <cite>Singleton</cite>.</li>
+<li>a <cite>snake_case</cite> configured <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> as a <cite>Singleton</cite>.</li>
+</ul>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Generally, you are encouraged to obtain a reference to the <cite>Singleton</cite> instance provided by the
+object graph over instantiating a new mapper. This is to ensure usage of a consistently configured
+mapper across your application.</p>
+</div>
+<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala"><cite>ScalaObjectMapperModule</cite></a> provides overridable methods which mirror the
+<cite>ScalaObjectMapper#Builder</cite> for configuring the bound mappers.</p>
+<p>For example, to create a <a class="reference external" href="../getting-started/modules.html">c.t.inject.TwitterModule</a>  which sets
+the <cite>PropertyNamingStrategy</cite> different than the default:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
+
+object MyCustomObjectMapperModule extends ScalaObjectMapperModule = {
+
+    override val propertyNamingStrategy: PropertyNamingStrategy =
+      new PropertyNamingStrategy.KebabCaseStrategy
+}
+</pre></div>
+</div>
+<p>Or to set additional modules or configuration:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.fasterxml.jackson.databind.{
+  DeserializationFeature,
+  Module,
+  ObjectMapper,
+  PropertyNamingStrategy
+}
+import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
+
+object MyCustomObjectMapperModule extends ScalaObjectMapperModule = {
+
+    override val propertyNamingStrategy: PropertyNamingStrategy =
+      new PropertyNamingStrategy.KebabCaseStrategy
+
+    override val additionalJacksonModules: Seq[Module] =
+      Seq(MySimpleJacksonModule)
+
+    override def additionalMapperConfiguration(mapper: ObjectMapper): Unit = {
+      mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true)
+    }
+}
+</pre></div>
+</div>
+<p>See the <a class="reference external" href="../getting-started/modules.html#module-configuration-in-servers">Modules Configuration in Servers</a>
+or the HTTP Server <a class="reference external" href="../http/server.html#framework-modules">Framework Modules</a> for more information
+on how to make use of any custom <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala"><cite>ScalaObjectMapperModule</cite></a>.</p>
+</div>
+</div>
+<div class="section" id="adding-a-custom-serializer-or-deserializer">
+<h2>Adding a Custom Serializer or Deserializer<a class="headerlink" href="#adding-a-custom-serializer-or-deserializer" title="Permalink to this headline">¶</a></h2>
+<p>To register a custom serializer or deserializer, you have a couple of options depending on if you
+are using injection to bind an instance of a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> to the object graph. When using
+injection, you should prefer to configure any custom serializer or deserializer via the methods
+provided by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala"><cite>ScalaObjectMapperModule</cite></a>, otherwise you can directly configure the <cite>underlying</cite>
+Jackson mapper of a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> instance.</p>
+<div class="section" id="via-a-custom-scalaobjectmappermodule-recommended">
+<h3>Via a Custom <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala"><cite>ScalaObjectMapperModule</cite></a> (recommended)<a class="headerlink" href="#via-a-custom-scalaobjectmappermodule-recommended" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">Create a new Jackson <a class="reference external" href="https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/Module.java">com.fasterxml.jackson.databind.Module</a> implementation.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p>To implement a new Jackson <a class="reference external" href="https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/Module.java">Module</a> for adding a basic custom serializer or deserializer, you can
+use the <a class="reference external" href="https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/module/SimpleModule.java">com.fasterxml.jackson.databind.module.SimpleModule</a>.</p>
+<p>Note, that if you want to register a <cite>JsonSerializer</cite> or <cite>JsonDeserializer</cite> over a parameterized
+type, such as a <cite>Collection[T]</cite> or <cite>Map[T, U]</cite>, that you should instead implement
+<a class="reference external" href="https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/deser/Deserializers.java">com.fasterxml.jackson.databind.deser.Deserializers</a>
+or <a class="reference external" href="https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/ser/Serializers.java">com.fasterxml.jackson.databind.ser.Serializers</a>
+which provide callbacks to match the full signatures of the class to deserialize into via a
+Jackson <cite>JavaType</cite>.</p>
+<p class="last">Also note that with this usage it is generally recommended to add your <cite>Serializers</cite> or
+<cite>Deserializers</cite> implementation via a <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala"><cite>jackson-module-scala</cite></a> <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/scala/com/fasterxml/jackson/module/scala/JacksonModule.scala">JacksonModule</a>.
+(which is an extension of <a class="reference external" href="https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/Module.java">com.fasterxml.jackson.databind.Module</a>
+and can thus be used in place). See example below.</p>
+</div>
+</li>
+<li><p class="first">Add your serializer or deserializer using the <cite>SimpleModule#addSerializer</cite> or <cite>SimpleModule#addDeserializer</cite> methods in your module.</p>
+</li>
+<li><p class="first">In your custom <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala"><cite>ScalaObjectMapperModule</cite></a> extension, add the Jackson <a class="reference external" href="https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/Module.java">Module</a> implementation to list of additional Jackson modules by overriding and implementing the <cite>ScalaObjectMapperModule#additionalJacksonModules</cite>.</p>
+</li>
+</ul>
+<p>For example:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.fasterxml.jackson.databind.JsonDeserializer
+import com.fasterxml.jackson.databind.deser.Deserializers
+import com.fasterxml.jackson.databind.module.SimpleModule
+import com.fasterxml.jackson.module.scala.JacksonModule
+import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
+
+// custom deserializer
+class FooDeserializer extends JsonDeserializer[Foo] {
+  override def deserialize(...)
+}
+
+// custom parameterized deserializer
+class MapIntIntDeserializer extends JsonDeserializer[Map[Int, Int]] {
+  override def deserialize(...)
+}
+
+// custom parameterized deserializer resolver
+class MapIntIntDeserializerResolver extends Deserializers.Base {
+  override def findBeanDeserializer(
+    javaType: JavaType,
+    config: DeserializationConfig,
+    beanDesc: BeanDescription
+  ): MapIntIntDeserializer = {
+    if (javaType.isMapLikeType &amp;&amp; javaType.hasGenericTypes &amp;&amp; hasIntTypes(javaType)) {
+      new MapIntIntDeserializer
+    } else null
+  }
+
+  private[this] def hasIntTypes(javaType: JavaType): Boolean = {
+    val k = javaType.containedType(0)
+    val v = javaType.containedType(1)
+    k.isPrimitive &amp;&amp; k.getRawClass == classOf[Integer] &amp;&amp;
+      v.isPrimitive &amp;&amp; v.getRawClass == classOf[Integer]
+  }
+}
+
+// Jackson SimpleModule for custom deserializer
+class FooDeserializerModule extends SimpleModule {
+  addDeserializer(FooDeserializer)
+}
+
+// Jackson Module Scala JacksonModule for custom deserializer
+class MapIntIntDeserializerModule extends JacksonModule {
+  override def getModuleName: String = this.getClass.getName
+
+  this += {
+    _.addDeserializers(new MapIntIntDeserializerResolver)
+  }
+}
+
+object MyCustomObjectMapperModule extends ScalaObjectMapperModule {
+  override val additionalJacksonModules = Seq(
+    // added via a new anonymous SimpleModule
+    new SimpleModule {
+      addSerializer(LocalDateParser)
+    },
+    // added via a re-usable SimpleModule
+    new FooDeserializerModule,
+    // added via a re-usable JacksonModule
+    new MapIntIntDeserializerModule)
+}
+</pre></div>
+</div>
+<p>For more information see the Jackson documentation for
+<a class="reference external" href="https://github.com/FasterXML/jackson-docs/wiki/JacksonHowToCustomSerializers">Custom Serializers</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is also important to note that <a class="reference external" href="https://github.com/FasterXML/jackson-databind">Jackson</a>
+Modules are <strong>not</strong> Google <a class="reference external" href="https://github.com/google/guice">Guice</a> Modules but are instead
+interfaces for extensions that can be registered with a Jackson <cite>ObjectMapper</cite> in order to
+provide a well-defined set of extensions to default functionality. In this way, they are similar
+to Google <a class="reference external" href="https://github.com/google/guice">Guice</a> Modules, but for configuring an
+<cite>ObjectMapper</cite> instead of an <cite>Injector</cite>.</p>
+</div>
+</div>
+<div class="section" id="via-adding-a-module-to-a-finatrascalaobjectmapper-instance">
+<h3>Via Adding a Module to a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> instance<a class="headerlink" href="#via-adding-a-module-to-a-finatrascalaobjectmapper-instance" title="Permalink to this headline">¶</a></h3>
+<p>Follow the steps to create a Jackson Module for the custom serializer or deserializer then register
+the module to the underlying Jackson mapper from the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> instance:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.fasterxml.jackson.databind.JsonDeserializer
+import com.fasterxml.jackson.databind.module.SimpleModule
+import com.twitter.finatra.jackson.ScalaObjectMapper
+
+// custom deserializer
+class FooDeserializer extends JsonDeserializer[Foo] {
+  override def deserialize(...)
+}
+
+// Jackson SimpleModule for custom deserializer
+class FooDeserializerModule extends SimpleModule {
+  addDeserializer(FooDeserializer)
+}
+
+...
+
+val scalaObjectMapper: ScalaObjectMapper = ???
+scalaObjectMapper.registerModule(new FooDeserializerModule)
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Please note that this will mutate the underlying Jackson <cite>ObjectMapper</cite> and thus care should be
+taken with this approach. It is highly recommended to prefer setting configuration via a
+custom <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala"><cite>ScalaObjectMapperModule</cite></a> implementation.</p>
+</div>
+</div>
+</div>
+<div class="section" id="improved-case-class-deserializer">
+<h2>Improved <cite>case class</cite> deserializer<a class="headerlink" href="#improved-case-class-deserializer" title="Permalink to this headline">¶</a></h2>
+<p>Finatra provides a custom <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/CaseClassDeserializer.scala">case class deserializer</a>
+which overcomes some limitations in <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala"><cite>jackson-module-scala</cite></a>:</p>
+<ul class="simple">
+<li>Throws a <cite>JsonMappingException</cite> when required fields are missing from the parsed JSON.</li>
+<li>Uses specified default values when fields are missing in the incoming JSON.</li>
+<li>Properly deserializes a <cite>Seq[Long]</cite> (see: <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala/issues/62">https://github.com/FasterXML/jackson-module-scala/issues/62</a>).</li>
+<li>Supports <a class="reference external" href="https://docs.scala-lang.org/overviews/core/value-classes.html">“wrapped values”</a> using <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-utils/src/main/scala/com/twitter/inject/domain/WrappedValue.scala">c.t.inject.domain.WrappedValue</a>.</li>
+<li>Support for field and method level validations via integration with Finatra’s <a class="reference external" href="https://beanvalidation.org/1.0/spec/">JSR-303 style</a> validations.</li>
+<li>Accumulates all JSON deserialization errors (instead of failing fast) in a returned sub-class of <cite>JsonMappingException</cite> (see: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions/CaseClassMappingException.scala">CaseClassMappingException</a>).</li>
+</ul>
+<p>The <cite>case class</cite> deserializer is added by default when constructing a new <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a>.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p>Note: with the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/CaseClassDeserializer.scala"><cite>Finatra case class deserializer</cite></a>, non-option fields without default values are
+<strong>considered required</strong>.</p>
+<p class="last">If a required field is missing, a <cite>CaseClassMappingException</cite> is thrown.</p>
+</div>
+</div>
+<div class="section" id="jsoncreator-support">
+<h2><cite>&#64;JsonCreator</cite> Support<a class="headerlink" href="#jsoncreator-support" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/CaseClassDeserializer.scala"><cite>Finatra case class deserializer</cite></a> supports specification of a constructor or static factory
+method annotated with the Jackson Annotation, <a class="reference external" href="https://github.com/FasterXML/jackson-annotations/wiki/Jackson-Annotations#deserialization-details">&#64;JsonCreator</a>
+(an annotation for indicating a specific constructor or static factory method to use for
+instantiation of the case class during deserialization).</p>
+<p>For example, you can annotate a method on the companion object for the case class as a static
+factory for instantiation. Any static factory method to use for instantiation <strong>MUST</strong> be specified
+on the companion object for case class:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class MySimpleCaseClass(int: Int)
+
+object MySimpleCaseClass {
+  @JsonCreator
+  def apply(s: String): MySimpleCaseClass = MySimpleCaseClass(s.toInt)
+}
+</pre></div>
+</div>
+<p>Or to specify a secondary constructor to use for case class instantiation:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class MyCaseClassWithMultipleConstructors(number1: Long, number2: Long, number3: Long) {
+  @JsonCreator
+  def this(numberAsString1: String, numberAsString2: String, numberAsString3: String) {
+    this(numberAsString1.toLong, numberAsString2.toLong, numberAsString3.toLong)
+  }
+}
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>If you define multiple constructors on a case class, it is <strong>required</strong> to annotate one of the
+constructors with <cite>&#64;JsonCreator</cite>.</p>
+<p>To annotate the primary constructor (as the syntax can seem non-intuitive because the <cite>()</cite> is
+required):</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class MyCaseClassWithMultipleConstructors @JsonCreator()(number1: Long, number2: Long, number3: Long) {
+  def this(numberAsString1: String, numberAsString2: String, numberAsString3: String) {
+    this(numberAsString1.toLong, numberAsString2.toLong, numberAsString3.toLong)
+  }
+}
+</pre></div>
+</div>
+<p>The parens are needed because the Scala class constructor syntax requires constructor
+annotations to have exactly one parameter list, possibly empty.</p>
+<p class="last">If you define multiple case class constructors with no visible <cite>&#64;JsonCreator</cite> constructor or
+static factory method via a companion, deserialization will error.</p>
+</div>
+</div>
+<div class="section" id="jsonformat-support">
+<h2><cite>&#64;JsonFormat</cite> Support<a class="headerlink" href="#jsonformat-support" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/CaseClassDeserializer.scala"><cite>Finatra case class deserializer</cite></a> supports <cite>&#64;JsonFormat</cite>-annotated case class fields to properly
+contextualize deserialization based on the values in the annotation.</p>
+<p>A common use case is to be able to support deserializing a JSON string into a “time” representation
+class based on a specific pattern independent of the time format configured on the <cite>ObjectMapper</cite> or
+even the default format for a given deserializer for the type.</p>
+<p>For instance, Finatra provides a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/serde/TimeStringDeserializer.scala">deserializer</a>
+for the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Time.scala">com.twitter.util.Time</a>
+class. This deserializer is a Jackson <a class="reference external" href="https://fasterxml.github.io/jackson-databind/javadoc/2.9/com/fasterxml/jackson/databind/deser/ContextualDeserializer.html">ContextualDeserializer</a>
+and will properly take into account a <cite>&#64;JsonFormat</cite>-annotated field. However, the
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/CaseClassDeserializer.scala"><cite>Finatra case class deserializer</cite></a> is invoked first and acts as a proxy for deserializing the time
+value. The case class deserializer properly contextualizes the field for correct deserialization by
+the <cite>TimeStringDeserializer</cite>.</p>
+<p>Thus if you had a case class defined:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.fasterxml.jackson.annotation.JsonFormat
+import com.twitter.util.Time
+
+case class Event(
+  id: Long,
+  description: String,
+  @JsonFormat(pattern = &quot;yyyy-MM-dd&#39;T&#39;HH:mm:ss.SSSXXX&quot;) when: Time
+)
+</pre></div>
+</div>
+<p>The following JSON:</p>
+<div class="code json highlight-text"><div class="highlight"><pre><span></span>{
+  &quot;id&quot;: 42,
+  &quot;description&quot;: &quot;Something happened.&quot;,
+  &quot;when&quot;: &quot;2018-09-14T23:20:08.000-07:00&quot;
+}
+</pre></div>
+</div>
+<p>Will always deserialize properly into the case class regardless of the pattern configured on the
+<cite>ObjectMapper</cite> or as the default of a contextualized deserializer:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>val scalaObjectMapper: ScalaObjectMapper = ???
+val event: Event = scalaObjectMapper.parse[Event](json)
+</pre></div>
+</div>
+</div>
+<div class="section" id="jackson-injectablevalues-support">
+<h2>Jackson InjectableValues Support<a class="headerlink" href="#jackson-injectablevalues-support" title="Permalink to this headline">¶</a></h2>
+<p>By default, the framework provides a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> configured to resolve Jackson
+<a class="reference external" href="https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/InjectableValues.java">InjectableValues</a>
+via a given Google <a class="reference external" href="https://github.com/google/guice">Guice</a> <a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/Injector.html">Injector</a>.</p>
+<p>The default is very similar to the <a class="reference external" href="https://github.com/FasterXML/jackson-modules-base/tree/master/guice">jackson-module-guice</a>:
+<a class="reference external" href="https://github.com/FasterXML/jackson-modules-base/blob/master/guice/src/main/java/com/fasterxml/jackson/module/guice/GuiceInjectableValues.java">GuiceInjectableValues</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Jackson “InjectableValues” is not related to <a class="reference external" href="../getting-started/basics.html#dependency-injection">Dependency Injection</a>
+or Google <a class="reference external" href="https://github.com/google/guice">Guice</a>. It is meant to convey the filling in of a
+value in a deserialized object from somewhere other than the incoming JSON. In Jackson parlance,
+this is “injection” of a value.</p>
+</div>
+<p>The Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/DefaultInjectableValues.scala">c.t.finatra.jackson.caseclass.DefaultInjectableValues</a>
+allows users to denote fields in the case class to fill with values that come from a configured
+Google <a class="reference external" href="https://github.com/google/guice">Guice</a> <a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/Injector.html">Injector</a>
+such that you can do this:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import javax.inject.Inject
+
+case class Foo(name: String, description: String, @Inject bar: Bar)
+</pre></div>
+</div>
+<p>That is, annotate the field to inject with either:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://docs.oracle.com/javaee/7/api/index.html?javax/inject/Inject.html">javax.inject.Inject</a>,</li>
+<li><a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/Inject.html">com.google.inject.Inject</a>, or</li>
+<li><a class="reference external" href="https://fasterxml.github.io/jackson-annotations/javadoc/2.9/index.html?com/fasterxml/jackson/annotation/JacksonInject.html">com.fasterxml.jackson.annotation.JacksonInject</a></li>
+</ul>
+<p>and the framework will attempt to get an instance of the field type from the Injector with which
+the mapper was configured. In this case, the framework would attempt to obtain an instance of <cite>Bar</cite>
+from the object graph.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The framework also provides an <cite>&#64;InjectableValue</cite> annotation which is used to mark other
+<cite>java.lang.annotation.Annotation</cite> interfaces as annotations that support case class field
+injection via Jackson <cite>InjectableValues</cite>.</p>
+<p>Finatra’s HTTP integration defines such annotations to support injecting case class fields
+obtained from parts of an HTTP message.</p>
+<p class="last">See the <a class="reference external" href="../http/requests.html#field-annotations">HTTP Requests - Field Annotations</a>
+documentation for more details.</p>
+</div>
+<p>Using the case class above, you could then parse incoming JSON with the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.jackson.ScalaObjectMapper
+import com.twitter.inject.Injector
+import com.twitter.inject.app.TestInjector
+import javax.inject.Inject
+
+case class Foo(name: String, description: String, @Inject bar: Bar)
+
+val json: String =
+  &quot;&quot;&quot;
+    |{
+    |  “name”: “FooItem”,
+    |  “description”: “This is the description for FooItem”
+    |}
+  &quot;&quot;&quot;.stripMargin
+
+val injector: Injector = TestInjector(???).create
+val mapper = ScalaObjectMapper.objectMapper(injector.underlying)
+val foo = mapper.parse[Foo](json)
+</pre></div>
+</div>
+<p>When deserializing the JSON string into an instance of Foo, the mapper will attempt to locate an
+instance of type <cite>Bar</cite> from the given injector and use it in place of the <cite>bar</cite> field in the <cite>Foo</cite>
+case class.</p>
+<div class="admonition caution">
+<p class="first admonition-title">Caution</p>
+<p>It is an error to specify multiple field injection annotations on a field, and it is also an
+error to use a field injection annotation in conjunction with <strong>any</strong> <a class="reference external" href="https://github.com/FasterXML/jackson-annotations/blob/a991c43a74e4230eb643e380870b503997674c2d/src/main/java/com/fasterxml/jackson/annotation/JacksonAnnotation.java#L9">JacksonAnnotation</a>.</p>
+<p class="last">Both of these cases will result in error during deserialization of JSON into the case class when
+using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/CaseClassDeserializer.scala"><cite>Finatra case class deserializer</cite></a>.</p>
+</div>
+<p>As mentioned, the Finatra HTTP integration provides further Jackson <cite>InjectableValues</cite> support specifically for
+injecting values into a case class which are obtained from different parts of an HTTP message.</p>
+<p>See the <a class="reference external" href="../http/requests.html#field-annotations">HTTP Requests - Field Annotations</a> documentation
+for more details on HTTP Message “injectable values”.</p>
+</div>
+<div class="section" id="id19">
+<h2><a class="reference external" href="https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations">Mix-in Annotations</a><a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h2>
+<p>The Jackson <a class="reference external" href="https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations">Mix-in Annotations</a>
+provides a way to associate annotations to classes without needing to modify the target classes
+themselves. It is intended to help support 3rd party datatypes where the user cannot modify the
+sources to add annotations.</p>
+<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/CaseClassDeserializer.scala"><cite>Finatra case class deserializer</cite></a> supports Jackson <a class="reference external" href="https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations">Mix-in Annotations</a>
+for specifying field annotations during deserialization with the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/CaseClassDeserializer.scala">case class deserializer</a>.</p>
+<p>For example, to deserialize JSON into the following classes that are not yours to annotate:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class Point(x: Int, y: Int) {
+  def area: Int = x * y
+}
+
+case class Points(points: Seq[Point])
+</pre></div>
+</div>
+<p>However, you want to enforce field constraints with Finatra <a class="reference external" href="./validations.html">validations</a>
+during deserialization. You can define a <cite>Mix-in</cite>,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>trait PointMixIn {
+  @Min(0) @Max(100) def x: Int
+  @Min(0) @Max(100) def y: Int
+  @JsonIgnore def area: Int
+}
+</pre></div>
+</div>
+<p>Then register this <cite>Mix-in</cite> for the <cite>Point</cite> class type. There are several ways to do this. Generally,
+it is recommended to always prefer applying configuration in a custom <cite>ScalaObjectMapperModule</cite> to
+ensure usage of a consistently configured mapper across your application.</p>
+<div class="section" id="implement-via-a-custom-scalaobjectmappermodule-recommended">
+<h3>Implement via a Custom <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala"><cite>ScalaObjectMapperModule</cite></a> (recommended)<a class="headerlink" href="#implement-via-a-custom-scalaobjectmappermodule-recommended" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>First, create a new Jackson <a class="reference external" href="https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/Module.java">com.fasterxml.jackson.databind.Module</a> implementation. You can use the <a class="reference external" href="https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/module/SimpleModule.java">com.fasterxml.jackson.databind.module.SimpleModule</a>.</li>
+<li>Add your <cite>Mix-in</cite> using the <cite>SimpleModule#setMixInAnnotation</cite> method in your module.</li>
+<li>In your custom <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala"><cite>ScalaObjectMapperModule</cite></a> extension, add the Jackson <a class="reference external" href="https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/Module.java">Module</a>.</li>
+</ul>
+<p>For example, create a new Jackson <a class="reference external" href="https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/Module.java">Module</a>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.fasterxml.jackson.databind.module.SimpleModule
+
+object PointMixInModule extends SimpleModule {
+    setMixInAnnotation(classOf[Point], classOf[PointMixIn]);
+}
+</pre></div>
+</div>
+<p>Then add the module to the list of additional Jackson modules in your custom <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala"><cite>ScalaObjectMapperModule</cite></a>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
+
+object MyCustomObjectMapperModule extends ScalaObjectMapperModule {
+  override val additionalJacksonModules = Seq(PointMixInModule)
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="implement-via-adding-a-module-to-a-finatrascalaobjectmapper-instance">
+<h3>Implement via Adding a Module to a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> instance<a class="headerlink" href="#implement-via-adding-a-module-to-a-finatrascalaobjectmapper-instance" title="Permalink to this headline">¶</a></h3>
+<p>Follow the steps to create a Jackson Module for the <cite>Mix-in</cite> then register the module to the
+underlying Jackson mapper from the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> instance:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.fasterxml.jackson.databind.module.SimpleModule
+import com.twitter.finatra.jackson.ScalaObjectMapper
+
+object PointMixInModule extends SimpleModule {
+    setMixInAnnotation(classOf[Point], classOf[PointMixIn]);
+}
+
+...
+
+val scalaObjectMapper: ScalaObjectMapper = ???
+scalaObjectMapper.registerModule(PointMixInModule)
+</pre></div>
+</div>
+<p>Or register the <cite>Mix-in</cite> for the class type directly on the mapper (without a Jackson Module):</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>val objectMapper: ScalaObjectMapper = ???
+objectMapper.underlying.addMixin[Point, PointMixIn]
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Please note that this will mutate the underlying Jackson <cite>ObjectMapper</cite> and thus care should be
+taken with this approach. It is highly recommended to prefer setting configuration via a
+custom <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala"><cite>ScalaObjectMapperModule</cite></a> implementation to ensure consistency of the mapper
+configuration across your application.</p>
+</div>
+<p>Deserializing this JSON would then error with failed validations:</p>
+<div class="code json highlight-text"><div class="highlight"><pre><span></span>{
+  &quot;points&quot;: [
+    {&quot;x&quot;: -1, &quot;y&quot;: 120},
+    {&quot;x&quot;: 4, &quot;y&quot;: 99}
+  ]
+}
+</pre></div>
+</div>
+<p>As the first <cite>Point</cite> instance has an x-value less than the minimum of 0 and a y-value greater than
+the maximum of 100.</p>
+</div>
+</div>
+<div class="section" id="known-caseclassdeserializer-limitations">
+<h2>Known <cite>CaseClassDeserializer</cite> Limitations<a class="headerlink" href="#known-caseclassdeserializer-limitations" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/CaseClassDeserializer.scala"><cite>Finatra case class deserializer</cite></a> provides a fair amount of utility but can not and does not
+support all Jackson Annotations. In a lot of cases the behavior of supporting a Jackson Annotation
+can at times be ambiguous (or even nonsensical), especially when it comes to combining Jackson
+Annotations and injectable field annotations.</p>
+</div>
+<div class="section" id="java-enums">
+<h2>Java Enums<a class="headerlink" href="#java-enums" title="Permalink to this headline">¶</a></h2>
+<p>We recommend the use of <a class="reference external" href="https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html">Java Enums</a>
+for representing enumerations since they integrate well with Jackson’s ObjectMapper and have
+exhaustiveness checking as of Scala 2.10.</p>
+<p>The following <a class="reference external" href="https://github.com/FasterXML/jackson-annotations">Jackson annotations</a> may be
+useful when working with Enums:</p>
+<ul class="simple">
+<li><cite>&#64;JsonValue</cite>: can be used for an overridden <cite>toString</cite> method.</li>
+<li><cite>&#64;JsonEnumDefaultValue</cite>: can be used for defining a default value when deserializing unknown Enum values. Note that this requires <a class="reference external" href="https://github.com/FasterXML/jackson-databind/wiki/Deserialization-Features#value-conversions-coercion">READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE</a> feature to be enabled.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
+</ul>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Jackson Integration</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#c-t-finatra-jackson-scalaobjectmapper">c.t.finatra.jackson.ScalaObjectMapper</a><ul>
+<li><a class="reference internal" href="#defaults">Defaults</a></li>
+<li><a class="reference internal" href="#instantiation-configuration">Instantiation &amp; Configuration</a></li>
+<li><a class="reference internal" href="#access-to-the-underlying-jackson-object-mapper">Access to the underlying Jackson Object Mapper</a></li>
+<li><a class="reference internal" href="#c-t-finatra-jackson-modules-scalaobjectmappermodule">c.t.finatra.jackson.modules.ScalaObjectMapperModule</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#adding-a-custom-serializer-or-deserializer">Adding a Custom Serializer or Deserializer</a><ul>
+<li><a class="reference internal" href="#via-a-custom-scalaobjectmappermodule-recommended">Via a Custom <cite>ScalaObjectMapperModule</cite> (recommended)</a></li>
+<li><a class="reference internal" href="#via-adding-a-module-to-a-finatrascalaobjectmapper-instance">Via Adding a Module to a <cite>ScalaObjectMapper</cite> instance</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#improved-case-class-deserializer">Improved <cite>case class</cite> deserializer</a></li>
+<li><a class="reference internal" href="#jsoncreator-support"><cite>&#64;JsonCreator</cite> Support</a></li>
+<li><a class="reference internal" href="#jsonformat-support"><cite>&#64;JsonFormat</cite> Support</a></li>
+<li><a class="reference internal" href="#jackson-injectablevalues-support">Jackson InjectableValues Support</a></li>
+<li><a class="reference internal" href="#id19">Mix-in Annotations</a><ul>
+<li><a class="reference internal" href="#implement-via-a-custom-scalaobjectmappermodule-recommended">Implement via a Custom <cite>ScalaObjectMapperModule</cite> (recommended)</a></li>
+<li><a class="reference internal" href="#implement-via-adding-a-module-to-a-finatrascalaobjectmapper-instance">Implement via Adding a Module to a <cite>ScalaObjectMapper</cite> instance</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#known-caseclassdeserializer-limitations">Known <cite>CaseClassDeserializer</cite> Limitations</a></li>
+<li><a class="reference internal" href="#java-enums">Java Enums</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
+      <li>Previous: <a href="../validation/index.html" title="previous chapter">Validation Framework</a></li>
+      <li>Next: <a href="routing.html" title="next chapter">JSON Integration with HTTP Routing</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2020 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </body>
+</html>

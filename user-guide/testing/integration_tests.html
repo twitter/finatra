@@ -1,0 +1,233 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Integration Tests &#8212; Finatra 20.6.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '20.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Startup Tests" href="startup_tests.html" />
+    <link rel="prev" title="Feature Tests" href="feature_tests.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="startup_tests.html" title="Startup Tests"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="feature_tests.html" title="Feature Tests"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="integration-tests">
+<span id="id1"></span><h1>Integration Tests<a class="headerlink" href="#integration-tests" title="Permalink to this headline">¶</a></h1>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Please see the section on including test-jar dependencies in your project: <a class="reference external" href="../..#test-dependencies">Test Dependencies</a>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you are calling an <a class="reference external" href="https://github.com/twitter/util/blob/54f314d1f4b37d302f685e99b1ac416e48532a04/util-core/src/main/scala/com/twitter/util/Awaitable.scala#L77"><cite>c.t.util.Await</cite></a> function on a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala"><cite>c.t.util.Future</cite></a> return type in a
+test, it is generally considered good practice to ensure that your <a class="reference external" href="https://github.com/twitter/util/blob/54f314d1f4b37d302f685e99b1ac416e48532a04/util-core/src/main/scala/com/twitter/util/Awaitable.scala#L77"><cite>c.t.util.Await</cite></a> call
+includes a timeout duration, e.g., <a class="reference external" href="https://github.com/twitter/util/blob/54f314d1f4b37d302f685e99b1ac416e48532a04/util-core/src/main/scala/com/twitter/util/Awaitable.scala#L127"><cite>c.t.util.Await#ready</cite></a>.</p>
+</div>
+<div class="section" id="id2">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/TestInjector.scala">c.t.inject.app.TestInjector</a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>Whereas <a class="reference external" href="feature_tests.html">Feature Tests</a> start a server or app under test (thereby loading its
+entire object graph), integration tests generally only test across a few interfaces in the system.
+In Finatra, we provide the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/TestInjector.scala">c.t.inject.app.TestInjector</a>
+which allows you to pass it a set of <cite>TwitterModules</cite> and <cite>Flags</cite> to construct a minimal object graph.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>Because <a class="reference external" href="../getting-started/modules.html">TwitterModules</a> <a class="reference external" href="../getting-started/modules.html#differences-with-google-guice-modules">differ from regular</a>
+<a class="reference external" href="https://github.com/google/guice/wiki/GettingStarted#guice-modules">Guice Modules</a>, it is
+important to use the <cite>c.t.inject.app.TestInjector</cite> for creating an object graph over a set of
+<cite>TwitterModules</cite>.</p>
+<p>The <cite>TestInjector</cite> properly handles lifecycle execution and <cite>Flag</cite> parsing.</p>
+<p class="last">Manually creating a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">c.t.inject.Injector</a>
+over a raw <a class="reference external" href="https://github.com/google/guice/wiki/GettingStarted#guice-injectors">Guice Injector</a>
+created from <cite>TwitterModules</cite> will skip both the lifecycle functions and <cite>Flag</cite> parsing of any
+<cite>Flag</cite> instances defined in the set of <cite>TwitterModules</cite>.</p>
+</div>
+<p>To write an integration test, extend the <cite>c.t.inject.IntegrationTest</cite> trait. Then override the
+<cite>injector</cite> val with your constructed instance of on a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">c.t.inject.Injector</a>
+created from the <cite>c.t.inject.app.TestInjector</cite>.</p>
+<p>You’ll then be able to access instances of necessary classes to execute tests.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.Injector
+import com.twitter.inject.IntegrationTest
+import com.twitter.inject.app.TestInjector
+
+class ExampleIntegrationTest extends IntegrationTest {
+  override val injector: Injector =
+    TestInjector(
+      flags = Map(&quot;foo.flag&quot; -&gt; &quot;meaningfulValue&quot;),
+      modules = Seq(ExampleModule)
+    ).create
+
+  test(&quot;MyTest#perform feature&quot;) {
+    val exampleThingy = injector.instance[ExampleThingy]
+    ...
+  }
+}
+</pre></div>
+</div>
+<div class="admonition caution">
+<p class="first admonition-title">Caution</p>
+<p class="last">The <cite>injector</cite> is specified as a <cite>def</cite> the in <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-core/src/test/scala/com/twitter/inject/IntegrationTestMixin.scala#L27"><cite>c.t.inject.IntegrationTestMixin</cite></a> trait. If you
+only want to start <strong>one instance of your injector per test file</strong> make sure to override this
+<cite>def</cite> with a <cite>val</cite>.</p>
+</div>
+</div>
+<div class="section" id="bind-t-dsl">
+<h2><cite>bind[T]</cite> DSL<a class="headerlink" href="#bind-t-dsl" title="Permalink to this headline">¶</a></h2>
+<p>Note that the <cite>c.t.inject.app.TestInjector</cite> also supports the <cite>bind[T]</cite> DSL for overriding
+bound types. See the <cite>bind[T]</cite> <a class="reference external" href="./bind_dsl.html#testinjector-bind-t">documentation</a> for more
+information.</p>
+</div>
+<div class="section" id="http-tests">
+<h2>Http Tests<a class="headerlink" href="#http-tests" title="Permalink to this headline">¶</a></h2>
+<p>If you are writing a test that has an HTTP server under test, you can also extend the
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/HttpTest.scala"><cite>c.t.finatra.http.HttpTest</cite></a> trait. This trait provides some common utilities for HTTP testing,
+specifically utilities for constructing a <a class="reference external" href="https://github.com/twitter/twitter-server/blob/15e35a3a3070c50168ff55fd83a2dff28b09795c/server/src/main/scala/com/twitter/server/FlagResolver.scala#L9&gt;"><cite>resolverMap</cite></a> flag value for setting on your server under
+test.</p>
+</div>
+<div class="section" id="thrift-tests">
+<h2>Thrift Tests<a class="headerlink" href="#thrift-tests" title="Permalink to this headline">¶</a></h2>
+<p>Thrift servers can be tested through a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala"><cite>c.t.finatra.thrift.ThriftClient</cite></a>. The Finatra test
+framework provides an easy way get access to a real <a class="reference external" href="https://twitter.github.io/finagle/guide/Clients.html">Finagle client</a>
+for making calls to your running server in a test.</p>
+<p>See the <a class="reference external" href="feature_tests.html#thrift-server">Feature Tests - Thrift Server</a> section for more
+information on creating a Finagle Thrift client.</p>
+<p>Additionally, your test can also extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftTest.scala"><cite>c.t.finatra.thrift.ThriftTest</cite></a> trait which provides a
+utility specifically for constructing a <a class="reference external" href="https://github.com/twitter/twitter-server/blob/15e35a3a3070c50168ff55fd83a2dff28b09795c/server/src/main/scala/com/twitter/server/FlagResolver.scala#L9&gt;"><cite>resolverMap</cite></a> flag value for setting on your server under
+test.</p>
+</div>
+<div class="section" id="more-information">
+<h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="index.html"><span class="doc">Testing Features</span></a></li>
+<li><a class="reference internal" href="embedded.html"><span class="doc">Embedded Servers and Apps</span></a></li>
+<li><a class="reference internal" href="feature_tests.html"><span class="doc">Feature Tests</span></a></li>
+<li><a class="reference internal" href="startup_tests.html"><span class="doc">Startup Tests</span></a></li>
+<li><a class="reference internal" href="mixins.html"><span class="doc">Test Mixins</span></a></li>
+<li><a class="reference internal" href="mocks.html"><span class="doc">Working with Mocks</span></a></li>
+<li><a class="reference internal" href="override_modules.html"><span class="doc">Override Modules</span></a></li>
+<li><a class="reference internal" href="bind_dsl.html"><span class="doc">Explicit Binding with #bind[T]</span></a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
+</ul>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Integration Tests</a><ul>
+<li><a class="reference internal" href="#id2">c.t.inject.app.TestInjector</a></li>
+<li><a class="reference internal" href="#bind-t-dsl"><cite>bind[T]</cite> DSL</a></li>
+<li><a class="reference internal" href="#http-tests">Http Tests</a></li>
+<li><a class="reference internal" href="#thrift-tests">Thrift Tests</a></li>
+<li><a class="reference internal" href="#more-information">More Information</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
+      <li>Previous: <a href="feature_tests.html" title="previous chapter">Feature Tests</a></li>
+      <li>Next: <a href="startup_tests.html" title="next chapter">Startup Tests</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2020 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </body>
+</html>

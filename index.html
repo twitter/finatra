@@ -1,0 +1,354 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Finatra &#8212; Finatra 20.6.0 documentation</title>
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '20.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="User’s Guide" href="user-guide/index.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body>
+  
+  
+  <div class=indexwrapper>
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="user-guide/index.html" title="User’s Guide"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">Finatra</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="finatra">
+<h1>Finatra<a class="headerlink" href="#finatra" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://travis-ci.org/twitter/finatra?branch=develop"><img alt="Build Status" src="https://secure.travis-ci.org/twitter/finatra.png?branch=develop" /></a> <a class="reference external" href="https://codecov.io/github/twitter/finatra?branch=develop"><img alt="Test Coverage" src="https://codecov.io/github/twitter/finatra/coverage.svg?branch=develop" /></a> <a class="reference external" href="https://github.com/twitter/finatra#status"><img alt="Project status" src="https://img.shields.io/badge/status-active-brightgreen.svg" /></a> <img alt="Maven Central" src="https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.12/badge.svg" /> <a class="reference external" href="https://gitter.im/twitter/finatra"><img alt="Gitter" src="https://badges.gitter.im/Join%20Chat.svg" /></a></p>
+<p>Finatra builds on <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a> and uses <a class="reference external" href="https://twitter.github.io/finagle/guide/">Finagle</a>, therefore it is <em>highly recommended</em> that you familiarize yourself with those frameworks before getting started.</p>
+<p>The version of Finatra documented here is <strong>version 2.x</strong>. Version 2.x is a <strong>complete rewrite</strong> over v1.x and as such many things are different.</p>
+<p>For high-level information about the changes from v1.x see the blog post <a class="reference external" href="https://blog.twitter.com/2015/finatra-20-the-fast-testable-scala-services-framework-that-powers-twitter">here</a>.</p>
+<p>Finatra at its core is agnostic to the type of service or application being created. It can be used to build anything based on <a class="reference external" href="https://github.com/twitter/util">TwitterUtil</a>: <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala">c.t.app.App</a>.</p>
+<p>For servers, Finatra builds on top of the <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html">features</a> of <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a> (and <a class="reference external" href="https://twitter.github.io/finagle">Finagle</a>) by allowing you to easily define a <a class="reference external" href="https://twitter.github.io/finagle/guide/Servers.html">Server</a> and controllers (a <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#services">Service</a>-like abstraction) which define and handle endpoints of the Server. You can also compose <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters">Filters</a> either per controller, per route in a controller, or across all controllers.</p>
+<div class="section" id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p>To get started, add a dependency on either <a class="reference external" href="https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http_2.12%22">finatra-http</a> or <a class="reference external" href="https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-thrift_2.12%22">finatra-thrift</a> depending if you are building an HTTP or Thrift server.</p>
+<p>E.g., with <a class="reference external" href="https://www.scala-sbt.org/">sbt</a>:</p>
+<pre class="literal-block">
+&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;20.6.0&quot;
+</pre>
+<p>or</p>
+<pre class="literal-block">
+&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % &quot;20.6.0&quot;
+</pre>
+<p>Or similarily with <a class="reference external" href="https://maven.apache.org/">Maven</a>:</p>
+<pre class="literal-block">
+&lt;dependency&gt;
+  &lt;groupId&gt;com.twitter&lt;/groupId&gt;
+  &lt;artifactId&gt;finatra-http_2.12&lt;/artifactId&gt;
+  &lt;version&gt;20.6.0&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+<p>or</p>
+<pre class="literal-block">
+&lt;dependency&gt;
+  &lt;groupId&gt;com.twitter&lt;/groupId&gt;
+  &lt;artifactId&gt;finatra-thrift_2.12&lt;/artifactId&gt;
+  &lt;version&gt;20.6.0&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+<p>Note: with Maven, you <strong>must</strong> append the appropriate scala version to the artifact name (e.g., <cite>_2.12</cite>).</p>
+<p>See the Finatra <a class="reference external" href="https://github.com/twitter/finatra/tree/finatra-2.2.0/examples/hello-world">hello-world</a> example for a more in-depth example.</p>
+</div>
+<div class="section" id="test-dependencies">
+<h2>Test Dependencies<a class="headerlink" href="#test-dependencies" title="Permalink to this headline">¶</a></h2>
+<p>Finatra publishes <a class="reference external" href="https://maven.apache.org/guides/mini/guide-attached-tests.html">test-jars</a> for most modules. The test-jars include re-usable utilities for use in testing (e.g., the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala">EmbeddedTwitterServer</a>).</p>
+<p>To add a test-jar dependency, depend on the appropriate module with the <cite>tests</cite> classifier. Additionally, these dependencies are typically <strong>only needed</strong> in the <code class="docutils literal"><span class="pre">test</span></code> scope for your project. E.g., with <a class="reference external" href="https://www.scala-sbt.org/">sbt</a>:</p>
+<pre class="literal-block">
+&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;20.6.0&quot; % &quot;test&quot; classifier &quot;tests&quot;
+</pre>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">See the <a class="reference external" href="https://www.scala-sbt.org/">sbt</a> documentation for more information on using <a class="reference external" href="https://www.scala-sbt.org/1.x/docs/Library-Management.html">ivy configurations and classifiers</a>.</p>
+</div>
+<p>And with <a class="reference external" href="https://maven.apache.org/">Maven</a>:</p>
+<pre class="literal-block">
+&lt;dependency&gt;
+  &lt;groupId&gt;com.twitter&lt;/groupId&gt;
+  &lt;artifactId&gt;finatra-http_2.12&lt;/artifactId&gt;
+  &lt;scope&gt;test&lt;/scope&gt;
+  &lt;type&gt;test-jar&lt;/type&gt;
+  &lt;version&gt;20.6.0&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+<p>Since <a class="reference external" href="https://maven.apache.org/plugins/maven-jar-plugin/examples/create-test-jar.html">transitive test-scoped dependencies are not resolved</a> using this approach with neither Maven nor sbt, you will need to specify all other required test-scoped dependencies manually.</p>
+<p>E.g.,</p>
+<pre class="literal-block">
+libraryDependencies ++= Seq(
+    &quot;com.twitter&quot; %% &quot;finatra-jackson&quot; % &quot;20.6.0&quot; % &quot;test&quot; classifier &quot;tests&quot;,
+    &quot;com.twitter&quot; %% &quot;inject-server&quot; % &quot;20.6.0&quot; % &quot;test&quot; classifier &quot;tests&quot;,
+    &quot;com.twitter&quot; %% &quot;inject-app&quot; % &quot;20.6.0&quot; % &quot;test&quot; classifier &quot;tests&quot;,
+    &quot;com.twitter&quot; %% &quot;inject-core&quot; % &quot;20.6.0&quot; % &quot;test&quot; classifier &quot;tests&quot;,
+    &quot;com.twitter&quot; %% &quot;inject-modules&quot; % &quot;20.6.0&quot; % &quot;test&quot; classifier &quot;tests&quot;
+)
+</pre>
+<p>For example, the <cite>finatra-http</cite> test-jar depends on the <cite>inject-app</cite> test-jar (among others). Therefore, you will have to <strong>manually add</strong> a dependency on the <cite>inject-app</cite> test-jar when using the <cite>finatra-http</cite> test-jar since the <cite>inject-app</cite> test-jar will not be resolved transitively.</p>
+<p>Using the <a class="reference external" href="https://github.com/jrudolph/sbt-dependency-graph">sbt-dependency-graph</a> plugin, you can list the dependencies of the <cite>finatra-http</cite> test configuration for the <cite>packageBin</cite> task to help in understanding the dependencies to add:</p>
+<div class="code bash highlight-text"><div class="highlight"><pre><span></span>$ ./sbt -Dsbt.log.noformat=true http/test:packageBin::dependencyList 2&gt;&amp;1 | grep &#39;com\.twitter:finatra\|com\.twitter:inject&#39;
+[info] com.twitter:finatra-http_2.12:...
+[info] com.twitter:finatra-httpclient_2.12:...
+[info] com.twitter:finatra-jackson_2.12:...
+[info] com.twitter:finatra-slf4j_2.12:...
+[info] com.twitter:finatra-utils_2.12:...
+[info] com.twitter:inject-app_2.12:...
+[info] com.twitter:inject-core_2.12:...
+[info] com.twitter:inject-modules_2.12:...
+[info] com.twitter:inject-request-scope_2.12:...
+[info] com.twitter:inject-server_2.12:...
+[info] com.twitter:inject-slf4j_2.12:...
+[info] com.twitter:inject-utils_2.12:...
+</pre></div>
+</div>
+<p>In this case, when executing the <cite>packageBin</cite> task for <cite>finatra-http</cite> in the test configuration these dependencies are necessary. Unfortunately, this listing does not explicity state if it’s the compile-time or the test-jar version of the dependency that is necessary. However, it is safe to assume that if you want a dependency on the <cite>finatra-http</cite> test-jar you will also need to add dependencies on any test-jar from the listed dependencies as well.</p>
+<p>To continue getting started, please see the <a class="reference external" href="user-guide/index.html">Finatra User’s Guide</a>.</p>
+</div>
+<div class="section" id="useful-links">
+<h2>Useful Links<a class="headerlink" href="#useful-links" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/index.html">User’s Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#logging">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#injectable-app">Injectable App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#injectable-twitterserver">Injectable TwitterServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#statsreceiver">StatsReceiver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#http-server">HTTP Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#validation">Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#json">JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#mustache">Mustache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#files">Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#thrift-server">Thrift Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#clients">Clients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#kafka-streams">Kafka Streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://twitter.github.io/finatra/scaladocs/index.html">Scaladocs</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://finagle.github.io/blog/">Finagle Blog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="presentations/index.html">Finatra Presentations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="presentations/index.html#october-2015">October 2015</a></li>
+<li class="toctree-l2"><a class="reference internal" href="presentations/index.html#august-2015">August 2015</a></li>
+<li class="toctree-l2"><a class="reference internal" href="presentations/index.html#april-2015">April 2015</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://groups.google.com/forum/#!forum/finatra-users">Forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id1">20.6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">20.5.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id6">20.4.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id12">20.4.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id15">20.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id19">20.2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id23">20.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id26">19.12.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id30">19.11.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id34">19.10.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id37">19.9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id41">19.8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id44">19.7.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id55">19.6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id59">19.5.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id61">19.5.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id66">19.4.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id70">19.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id75">19.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id86">19.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id91">18.12.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id96">18.11.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id101">18.10.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id106">18.9.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id111">18.9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id116">18.8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id121">18.7.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id126">18.6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id131">18.5.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id136">18.4.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id141">18.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id146">18.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id151">18.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id156">17.12.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id161">17.11.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id166">17.10.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id171">2.13.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id176">2.12.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id181">2.11.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id186">2.10.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id191">2.9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id196">2.8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id201">2.7.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id206">2.6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id211">2.5.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id216">2.4.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id221">2.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id226">2.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id231">2.1.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-1-5-2016-03-15">v2.1.5 (2016-03-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-1-4-2016-02-25">v2.1.4 (2016-02-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-1-3-2016-02-05">v2.1.3 (2016-02-05)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-1-2-2015-12-09">v2.1.2 (2015-12-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-1-1-2015-10-29">v2.1.1 (2015-10-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-1-0-2015-10-01">v2.1.0 (2015-10-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-1-2015-09-21">v2.0.1 (2015-09-21)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-0-2015-09-09">v2.0.0 (2015-09-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-0-m2-2015-06-12">v2.0.0.M2 (2015-06-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-0-m1-2015-04-30">v2.0.0.M1 (2015-04-30)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id249">1.6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id251">1.5.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id253">1.5.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id255">1.5.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id257">1.5.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#a">1.5.0a</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id260">1.5.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id262">1.4.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id264">1.4.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id266">1.4.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id267">1.3.9</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id268">1.3.9</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id269">1.3.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id270">1.3.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id272">1.3.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id273">1.3.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id274">1.3.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id276">1.3.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id277">1.3.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id278">1.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id280">1.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id281">1.2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id283">1.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id284">1.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id286">1.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id288">1.0.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id289">1.0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id291">1.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id293">1.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id295">0.3.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id297">0.3.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id298">0.3.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id300">0.2.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id301">0.2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id302">0.2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id303">0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id305">0.1.10</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id306">0.1.9</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id307">0.1.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id309">0.1.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id310">0.1.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id312">0.1.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id314">0.1.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id315">0.1.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id317">0.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id318">0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id319">0.0.1</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>
+<p>Finatra is an open source project that welcomes contributions from the greater community. We’re thankful for the many people who have already contributed and if you’re interested, please read the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/CONTRIBUTING.md">contributing</a> guidelines.</p>
+<p>For support feel free to follow and/or tweet at the <a class="reference external" href="https://twitter.com/finatra">&#64;finatra</a> Twitter account, post questions to the <a class="reference external" href="https://gitter.im/twitter/finatra">Gitter chat room</a>, or email the finatra-users Google group: <a class="reference external" href="mailto:finatra-users&#37;&#52;&#48;googlegroups&#46;com">finatra-users<span>&#64;</span>googlegroups<span>&#46;</span>com</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="#">
+              <img class="logo" src="_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2020 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </div>
+  
+  </body>
+</html>

@@ -1,0 +1,208 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Working With Files &#8212; Finatra 20.6.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '20.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Scrooge and Finagle" href="../thrift/basics.html" />
+    <link rel="prev" title="Mustache Integration with HTTP Routing" href="../mustache/routing.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../thrift/basics.html" title="Scrooge and Finagle"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../mustache/routing.html" title="Mustache Integration with HTTP Routing"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="working-with-files">
+<span id="files"></span><h1>Working With Files<a class="headerlink" href="#working-with-files" title="Permalink to this headline">¶</a></h1>
+<p>Finatra provides basic file server support which is not meant for high traffic file serving. Do not use the file server
+for production apps requiring a robust high performance file serving solution.</p>
+<div class="section" id="file-locations">
+<h2>File Locations<a class="headerlink" href="#file-locations" title="Permalink to this headline">¶</a></h2>
+<p>By default, files are served from the root of the classpath. That is, by default the framework attempts to load files
+as <a class="reference external" href="https://docs.oracle.com/javase/8/docs/technotes/guides/lang/resources.html">classpath resources</a>. As such, you
+may want to familiarize yourself with the basic workings of the Java <a class="reference external" href="https://en.wikipedia.org/wiki/Classpath_(Java)">classpath</a>.
+You can use the flag <cite>-doc.root</cite> to customize the classpath root (i.e., “namespace”) for finding files.</p>
+<p>To serve files from the local filesystem, set the flag <cite>-local.doc.root</cite> to the location of the file serving directory.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">It is an <strong>error</strong> to attempt to set both the <cite>-doc.root</cite> and the <cite>-local.doc.root</cite> flags.</p>
+</div>
+<p>Either:</p>
+<ul class="simple">
+<li>do nothing to load resources from the classpath root <strong>or</strong></li>
+<li>configure a classpath “namespace” by setting the <cite>-doc.root</cite> flag <strong>or</strong></li>
+<li>load files from the local filesystem directory location specified by the <cite>-local.doc.root</cite> flag.</li>
+</ul>
+<p>Additionally, it is recommend to use local filesystem serving <em>only during testing</em> and <strong>not in production</strong>. It is recommended that you include files to be served as <a class="reference external" href="https://docs.oracle.com/javase/8/docs/technotes/guides/lang/resources.html">classpath resources</a> in production.</p>
+<p>To set a flag value, pass the flag and its value as an argument to your server:</p>
+<div class="code bash highlight-text"><div class="highlight"><pre><span></span>$ java -jar finatra-http-server-assembly-2.0.0.jar -doc.root=/namespace
+</pre></div>
+</div>
+<p>For more information on using and setting command-line flags see <a class="reference external" href="../getting-started/flags.html#passing-flag-values-as-command-line-arguments">Flags</a>.</p>
+</div>
+<div class="section" id="fileresolver">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/e9aa2dacd4ba2efd2db380135a10cf8ad10ee2b5/utils/src/main/scala/com/twitter/finatra/utils/FileResolver.scala#L21"><cite>c.t.finatra.utils.FileResolver</cite></a><a class="headerlink" href="#fileresolver" title="Permalink to this headline">¶</a></h2>
+<p>Files are loaded by the <a class="reference external" href="https://github.com/twitter/finatra/blob/e9aa2dacd4ba2efd2db380135a10cf8ad10ee2b5/utils/src/main/scala/com/twitter/finatra/utils/FileResolver.scala#L21"><cite>c.t.finatra.utils.FileResolver</cite></a>.</p>
+<p>In HTTP <a class="reference external" href="../http/server.html">servers</a>, the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/modules/FileResolverModule.scala">FileResolverModule</a> provides an instance
+of the <a class="reference external" href="https://github.com/twitter/finatra/blob/e9aa2dacd4ba2efd2db380135a10cf8ad10ee2b5/utils/src/main/scala/com/twitter/finatra/utils/FileResolver.scala#L21"><cite>c.t.finatra.utils.FileResolver</cite></a> as a <a class="reference external" href="../http/server.html#framework-modules">framework module</a> (<a class="reference external" href="https://github.com/twitter/finatra/blob/e9aa2dacd4ba2efd2db380135a10cf8ad10ee2b5/http/src/main/scala/com/twitter/finatra/http/servers.scala#L426">source</a>).</p>
+</div>
+<div class="section" id="file-serving-examples">
+<h2>File Serving Examples<a class="headerlink" href="#file-serving-examples" title="Permalink to this headline">¶</a></h2>
+<p>File serving is most commonly done through an HTTP <a class="reference external" href="../http/server.html">server</a> to serve assets. Thus we’ll show examples assuming an HTTP controller. For utility, the framework provides methods to return the contents of a file as the body of an HTTP response through the
+<a class="reference external" href="../http/responses.html#responsebuilder">ResponseBuilder</a>.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import ExampleService
+import com.twitter.finagle.http.Request
+import com.twitter.finatra.http.Controller
+import javax.inject.Inject
+
+class ExampleController @Inject()(
+  exampleService: ExampleService
+) extends Controller {
+
+  get(&quot;/file&quot;) { _: Request =&gt;
+    response.ok.file(&quot;/file123.txt&quot;)
+  }
+
+  get(&quot;/:*&quot;) { request: Request =&gt;
+    response.ok.fileOrIndex(
+      request.params(&quot;*&quot;),
+      &quot;index.html&quot;)
+  }
+}
+</pre></div>
+</div>
+<p>In the first route definiton, we use the <a class="reference external" href="../http/responses.html#responsebuilder">ResponseBuilder</a> of the HTTP Controller to return an HTTP <cite>200 - OK</cite> response with a body rendered from the contents of the file <cite>file123.txt</cite>. In this case, if the file cannot be found an HTTP <cite>404 - NOT FOUND</cite> response <a class="reference external" href="https://github.com/twitter/finatra/blob/e9aa2dacd4ba2efd2db380135a10cf8ad10ee2b5/http/src/main/scala/com/twitter/finatra/http/response/EnrichedResponse.scala#L638">will be returned</a>. See the methods of the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/EnrichedResponse.scala">c.t.finatra.http.response.EnrichedResponse</a> for more details on returning file responses.</p>
+<p>In the second route definition, we use the <a class="reference external" href="../http/responses.html#responsebuilder">ResponseBuilder</a> to return an HTTP <cite>200 - OK</cite> response with a body rendered from either the filename represented by the incoming wildcard path parameter (<cite>:*</cite>), or if not found the contents of the <cite>index.html</cite> file.</p>
+<p>Specifically, this means that given an incoming URI of <cite>/foo.html</cite>, this route will attempt to load the <cite>foo.html</cite> file and if it
+could not would instead load <cite>index.html</cite> and render a response with a body of the resolved file contents. Likewise, an incoming URI of <cite>/foo/bar/file.html</cite> will attempt to resolve the file at that path, <cite>foo/bar/file.html</cite> otherwise it will return the contents of the
+<cite>index.html</cite> file.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Routes are matched in the order they are defined, thus this route SHOULD be LAST as it is a “catch-all” and routes should be
+defined in order of most-specific to least-specific.</p>
+</div>
+<p>This can be useful for building “single-page” <a class="reference external" href="https://en.wikipedia.org/wiki/Single-page_application">web applications</a>. See the
+<a class="reference external" href="https://github.com/twitter/finatra/tree/develop/examples/advanced/web-dashboard">web-dashboard</a> project for a runnable example.</p>
+<p>Or see the local file system <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/fileserver/LocalFileServerFeatureTest.scala">test class</a> for more general file resolving examples.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
+</ul>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Working With Files</a><ul>
+<li><a class="reference internal" href="#file-locations">File Locations</a></li>
+<li><a class="reference internal" href="#fileresolver"><cite>c.t.finatra.utils.FileResolver</cite></a></li>
+<li><a class="reference internal" href="#file-serving-examples">File Serving Examples</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
+      <li>Previous: <a href="../mustache/routing.html" title="previous chapter">Mustache Integration with HTTP Routing</a></li>
+      <li>Next: <a href="../thrift/basics.html" title="next chapter">Scrooge and Finagle</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2020 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </body>
+</html>

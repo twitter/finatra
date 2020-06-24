@@ -1,0 +1,315 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Creating an injectable util-app App &#8212; Finatra 20.6.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '20.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Creating an injectable TwitterServer" href="../twitter-server/index.html" />
+    <link rel="prev" title="Custom Logback AsyncAppender" href="../logging/asyncappender.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../twitter-server/index.html" title="Creating an injectable TwitterServer"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../logging/asyncappender.html" title="Custom Logback AsyncAppender"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="creating-an-injectable-c-t-app-app">
+<span id="app"></span><h1>Creating an injectable <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>util-app App</cite></a><a class="headerlink" href="#creating-an-injectable-c-t-app-app" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="lifecycle">
+<h2>Lifecycle<a class="headerlink" href="#lifecycle" title="Permalink to this headline">¶</a></h2>
+<p>If you haven’t already, take a look at the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>util-app App</cite></a>
+<a class="reference external" href="../getting-started/lifecycle.html#c-t-app-app-lifecycle">lifecycle documentation</a>.</p>
+</div>
+<div class="section" id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p>To create an injectable <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>util-app App</cite></a>, first depend on the <cite>inject-app</cite> library. Then use the
+<a class="reference external" href="../getting-started/framework.html#inject">inject framework</a> to create an injectable App. Finatra
+provides an injectable version of the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>util-app App</cite></a> trait: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><code class="docutils literal"><span class="pre">c.t.inject.app.App</span></code></a>.</p>
+<p>Extending the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><code class="docutils literal"><span class="pre">c.t.inject.app.App</span></code></a> trait creates an injectable <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>util-app App</cite></a>.</p>
+<p>This allows for the use of <a class="reference external" href="../getting-started/basics.html#dependency-injection">dependency injection</a>
+in a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>util-app App</cite></a> with support for <a class="reference external" href="../getting-started/modules.html">modules</a> which allows for
+<a class="reference external" href="../testing/index.html#types-of-tests">powerful feature testing</a> of the application.</p>
+</div>
+<div class="section" id="scala-example">
+<h2>Scala Example<a class="headerlink" href="#scala-example" title="Permalink to this headline">¶</a></h2>
+<p>Given a <a class="reference external" href="../getting-started/modules.html">module</a> definition:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.TwitterModule
+
+object MyModule1 extends TwitterModule {
+
+  @Singleton
+  @Provides
+  def providesFooService: FooService = ???
+}
+</pre></div>
+</div>
+<p>You could define an <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><code class="docutils literal"><span class="pre">c.t.inject.app.App</span></code></a>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
+import com.twitter.inject.Logging
+import com.twitter.inject.app.App
+import com.twitter.inject.modules.LoggingModule
+
+object MyAppMain extends MyApp
+
+class MyApp extends App with Logging  {
+
+  override val modules: Seq[Module] = Seq(
+    LoggingModule,
+    MyModule1)
+
+  override protected def run(): Unit = {
+    // Core app logic goes here.
+    val fooService = injector.instance[FooService]
+    ???
+  }
+}
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">We include the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-modules/src/main/scala/com/twitter/inject/modules/LoggerModule.scala">c.t.inject.modules.LoggingModule</a> to attempt installation of the
+<a class="reference external" href="https://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html">SLF4JBridgeHandler</a> here as an example of
+how to <a class="reference external" href="https://www.slf4j.org/legacy.html">bridge legacy APIs</a>.</p>
+</div>
+<p>Then to test:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.Test
+import com.twitter.inject.app.EmbeddedApp
+
+class MyAppTest extends Test {
+
+  private val app = new EmbeddedApp(new MyApp)
+
+  test(&quot;MyApp#runs&quot;) {
+    app.main(&quot;some.flag1&quot; -&gt; &quot;value1&quot;, &quot;some.flag2&quot; -&gt; &quot;value2&quot;)
+  }
+}
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Note: every call to <cite>EmbeddedApp#main</cite> will run the application with the given flags. If your application is stateful,
+you may want to ensure that a new instance of your application under test is created per test run.</p>
+</div>
+</div>
+<div class="section" id="java-example">
+<h2>Java Example<a class="headerlink" href="#java-example" title="Permalink to this headline">¶</a></h2>
+<div class="code java highlight-text"><div class="highlight"><pre><span></span>import java.util.Collection;
+import java.util.Collections;
+
+import com.google.inject.Module;
+
+import com.twitter.inject.app.AbstractApp;
+import com.twitter.inject.modules.LoggerModule$;
+
+public class MyApp extends AbstractApp {
+
+    @Override
+    public Collection&lt;Module&gt; javaModules() {
+        return Collections.&lt;Module&gt;singletonList(
+                LoggerModule$.MODULE$,
+                MyModule1$.MODULE$);
+    }
+
+    @Override
+    public void run() {
+        // Core app logic goes here.
+        FooService fooService =
+          injector().instance(FooService.class);
+    }
+}
+</pre></div>
+</div>
+<p>Then create a “main” class:</p>
+<div class="code java highlight-text"><div class="highlight"><pre><span></span>final class MyAppMain {
+    private MyAppMain() {
+    }
+
+    public static void main(String[] args) {
+        new MyApp().main(args);
+    }
+}
+</pre></div>
+</div>
+<p>See the Finatra <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/examples">examples</a> for detailed examples with tests.</p>
+</div>
+<div class="section" id="app-run">
+<h2><cite>App#run</cite><a class="headerlink" href="#app-run" title="Permalink to this headline">¶</a></h2>
+<p>The single point of entry to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><code class="docutils literal"><span class="pre">c.t.inject.app.App</span></code></a> is the <code class="docutils literal"><span class="pre">#run</span></code> method.</p>
+<p>The Finatra <a class="reference external" href="../getting-started/lifecycle.html#startup">Startup Lifecycle</a> ensures that the injector
+will be properly configured before access and provides the <code class="docutils literal"><span class="pre">#run</span></code> method as the function for implementing
+the app.</p>
+</div>
+<div class="section" id="using-injection">
+<h2>Using Injection<a class="headerlink" href="#using-injection" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><code class="docutils literal"><span class="pre">c.t.inject.app.App</span></code></a> exposes access to the configured <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">c.t.inject.Injector</a> which can be used to obtain instances from
+the object graph.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You should take care to only access the injector in the <cite>App#run</cite> function as this is the correct place in the
+<a class="reference external" href="../getting-started/lifecycle.html#c-t-app-app-lifecycle">lifecycle</a> where you are ensured to have a fully
+configured <cite>c.t.inject.Injector</cite>. Accessing the <cite>c.t.inject.Injector</cite> too early in the lifecycle (before it is
+configured) will result in an Exception being thrown.</p>
+</div>
+</div>
+<div class="section" id="an-example-of-handling-signals">
+<h2>An Example of Handling Signals<a class="headerlink" href="#an-example-of-handling-signals" title="Permalink to this headline">¶</a></h2>
+<p>There may be cases where you want your application to handle an
+<a class="reference external" href="https://en.wikipedia.org/wiki/Signal_(IPC)">IPC signal</a> instead of closing normally
+once the code execution is done, e.g., handling an <cite>INT</cite> (Ctrl-C) or <cite>TSTP</cite> (Ctrl-Z) signal.</p>
+<p>You can use the
+<a class="reference external" href="https://github.com/twitter/util/blob/aaa3d6e2bf37a3bd565a8c51187fd9b6db8a0b25/util-core/src/main/scala/com/twitter/util/Signal.scala#L75">com.twitter.util.HandleSignal</a> utility to apply a callback to run on receiving
+the signal.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Please consult the scaladocs for <a class="reference external" href="https://github.com/twitter/util/blob/aaa3d6e2bf37a3bd565a8c51187fd9b6db8a0b25/util-core/src/main/scala/com/twitter/util/Signal.scala#L75">com.twitter.util.HandleSignal</a>
+to make sure you are aware of the limitations of the code in handling signals.</p>
+</div>
+<p>For example, to exit the application upon receiving an <cite>INT</cite> signal:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
+import com.twitter.inject.app.App
+import com.twitter.inject.Logging
+
+object MyAppMain extends MyApp
+
+class MyApp extends App with Logging  {
+
+  override val modules: Seq[Module] = Seq(
+    MyModule1)
+
+  HandleSignal(&quot;INT&quot;) { signal =&gt;
+    exitOnError(s&quot;Process is being terminated with signal $signal.&quot;)
+  }
+
+  override protected def run(): Unit = {
+    // Core app logic goes here.
+    val fooService = injector.instance[FooService]
+    ???
+  }
+}
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
+</ul>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Creating an injectable <cite>util-app App</cite></a><ul>
+<li><a class="reference internal" href="#lifecycle">Lifecycle</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#scala-example">Scala Example</a></li>
+<li><a class="reference internal" href="#java-example">Java Example</a></li>
+<li><a class="reference internal" href="#app-run"><cite>App#run</cite></a></li>
+<li><a class="reference internal" href="#using-injection">Using Injection</a></li>
+<li><a class="reference internal" href="#an-example-of-handling-signals">An Example of Handling Signals</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
+      <li>Previous: <a href="../logging/asyncappender.html" title="previous chapter">Custom Logback AsyncAppender</a></li>
+      <li>Next: <a href="../twitter-server/index.html" title="next chapter">Creating an injectable <cite>TwitterServer</cite></a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2020 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </body>
+</html>

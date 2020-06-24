@@ -1,0 +1,435 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Filtering Thrift Requests &#8212; Finatra 20.6.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '20.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Thrift Exception Mapping" href="exceptions.html" />
+    <link rel="prev" title="Defining Thrift Controllers" href="controllers.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="exceptions.html" title="Thrift Exception Mapping"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="controllers.html" title="Defining Thrift Controllers"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User’s Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="filtering-thrift-requests">
+<span id="thrift-filters"></span><h1>Filtering Thrift Requests<a class="headerlink" href="#filtering-thrift-requests" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="c-t-finatra-thrift-filters-accessloggingfilter-rarrow">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/AccessLoggingFilter.scala">c.t.finatra.thrift.filters.AccessLoggingFilter</a> →<a class="headerlink" href="#c-t-finatra-thrift-filters-accessloggingfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>provides for psuedo “Common Log Format” style logging for Thrift requests and responses.</li>
+</ul>
+</div>
+<div class="section" id="c-t-inject-thrift-filters-darktrafficfilter-rarrow">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/filters/DarkTrafficFilter.scala">c.t.inject.thrift.filters.DarkTrafficFilter</a> →<a class="headerlink" href="#c-t-inject-thrift-filters-darktrafficfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>An implementation of <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-exp/src/main/scala/com/twitter/finagle/exp/AbstractDarkTrafficFilter.scala">com.twitter.finagle.exp.AbstractDarkTrafficFilter</a> which extends <a class="reference external" href="https://github.com/twitter/finagle/blob/afb191ab8eda132197dd2679cd614fc968767fc4/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala#L295">com.twitter.finagle.Filter.TypeAgnostic</a> and thus works in a Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/routing/routers.scala#L128Z">ThriftRouter</a> Filter chain.</li>
+</ul>
+</div>
+<div class="section" id="c-t-finatra-thrift-filters-exceptionmappingfilter-rarrow">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/ExceptionMappingFilter.scala">c.t.finatra.thrift.filters.ExceptionMappingFilter</a> →<a class="headerlink" href="#c-t-finatra-thrift-filters-exceptionmappingfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Filter for use in mapping exceptions to Thrift responses. See <a class="reference external" href="exceptions.html#exceptionmappingfilter">ExceptionMappingFilter</a> for more information.</li>
+</ul>
+</div>
+<div class="section" id="c-t-finatra-thrift-filters-loggingmdcfilter-rarrow">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/LoggingMDCFilter.scala">c.t.finatra.thrift.filters.LoggingMDCFilter</a> →<a class="headerlink" href="#c-t-finatra-thrift-filters-loggingmdcfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>properly initializes the framework’s <a class="reference external" href="https://www.slf4j.org/manual.html#mdc">Mapped Diagnostic Context (MDC)</a> adapter for logging.</li>
+</ul>
+</div>
+<div class="section" id="c-t-finatra-thrift-filters-statsfilter-rarrow">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/StatsFilter.scala">c.t.finatra.thrift.filters.StatsFilter</a> →<a class="headerlink" href="#c-t-finatra-thrift-filters-statsfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Tracks <a class="reference external" href="controllers.html#per-method-stats">per-method stats</a> scoped under <cite>per_method_stats/&lt;method&gt;</cite> including success/failure (with exceptions) counters, and a latency (in millis) histogram.</li>
+</ul>
+</div>
+<div class="section" id="c-t-finatra-http-filters-thriftmdcfilter-rarrow">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/ThriftMDCFilter.scala">c.t.finatra.http.filters.ThriftMDCFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-thriftmdcfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>places the current Finagle <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-thrift/src/main/scala/com/twitter/finagle/thrift/MethodMetadata.scala">MethodMetadata</a> and <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/thrift/ClientId.scala">ClientId</a> locals into the <a class="reference external" href="https://www.slf4j.org/manual.html#mdc">Mapped Diagnostic Context (MDC)</a>.</li>
+</ul>
+</div>
+<div class="section" id="c-t-finatra-http-filters-traceidmdcfilter-rarrow">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/TraceIdMDCFilter.scala">c.t.finatra.http.filters.TraceIdMDCFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-traceidmdcfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>places the current Finagle <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/tracing/TraceId.scala">TraceId</a> local into the <a class="reference external" href="https://www.slf4j.org/manual.html#mdc">Mapped Diagnostic Context (MDC)</a>.</li>
+</ul>
+<div class="section" id="global-filters">
+<h3>Global Filters<a class="headerlink" href="#global-filters" title="Permalink to this headline">¶</a></h3>
+<p>The <cite>ThriftRouter</cite> allows you to build a global Filter chain which will trigger on the request path
+when executing an RPC call to methods implemented by the added <a class="reference external" href="controllers.html">Thrift Controller</a>.</p>
+<p>Filters must be a subclass of the <a class="reference external" href="https://github.com/twitter/finagle/blob/ee9cb4ec2c17b810354b36ff97816fc97efb6394/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala#L295">c.t.finagle.Filter.TypeAgnostic</a> which is a</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>c.t.finagle.Filter[T, Rep, T, Rep]
+</pre></div>
+</div>
+<p>that is polymorphic in <cite>T</cite>.</p>
+<p>If you want to apply a Filter or Filters to <strong>all</strong> methods of your Thrift Controller, call the
+<cite>ThriftRouter#filter</cite> method, to register a <cite>Filter.TypeAgnostic</cite>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import DoEverythingModule
+import com.twitter.finatra.thrift.ThriftServer
+import com.twitter.finatra.thrift.routing.ThriftRouter
+import com.twitter.finatra.thrift.filters._
+
+object ExampleServerMain extends ExampleServer
+
+class ExampleServer extends ThriftServer {
+
+  override val modules = Seq(
+    DoEverythingModule)
+
+  override def configureThrift(router: ThriftRouter): Unit = {
+    router
+      .filter[LoggingMDCFilter]
+      .filter[TraceIdMDCFilter]
+      .filter[ThriftMDCFilter]
+      .filter[AccessLoggingFilter]
+      .filter[StatsFilter]
+      .add[ExampleThriftController]
+  }
+}
+</pre></div>
+</div>
+<p>Note, like <a class="reference external" href="../http/filters.html">HTTP</a>, Filters are applied <strong>in the order</strong> they are defined on
+all methods. Filters can be added to the <cite>ThriftRouter</cite> by type (as in the example above) or by instance.</p>
+<p>For more information see the <a class="reference external" href="https://twitter.github.io/finagle/guide/index.html">Finagle User’s Guide</a>
+section on <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters">Filters</a>.</p>
+</div>
+<div class="section" id="per-method-filtering">
+<h3>Per-method Filtering<a class="headerlink" href="#per-method-filtering" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="typeagnostic-filters">
+<h4><cite>TypeAgnostic</cite> Filters<a class="headerlink" href="#typeagnostic-filters" title="Permalink to this headline">¶</a></h4>
+<p>You can filter by a <a class="reference external" href="https://github.com/twitter/finagle/blob/ee9cb4ec2c17b810354b36ff97816fc97efb6394/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala#L295">TypeAgnostic Filter</a>
+per-method implemented in a Controller, by calling the <cite>handle(ThriftMethod)#filtered</cite> Function e.g.:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.{Filter, Service, SimpleFilter}
+import com.twitter.util.Future
+
+val countEchoFilter = new Filter.TypeAgnostic {
+  private[this] val echos = stats.counter(&quot;echo_calls&quot;)
+  def toFilter[Req, Rep]: Filter[Req, Rep, Req, Rep] = new SimpleFilter[Req, Rep]{
+    def apply(request: Req, service: Service[Req, Rep]): Future[Rep] = {
+      echos.incr()
+      service(request)
+    }
+  }
+}
+
+...
+
+import com.foo.bar.thriftscala.EchoService.Echo
+import com.twitter.finatra.thrift.Controller
+import com.twitter.util.Future
+import scala.util.control.NoStackTrace
+
+class ExampleController extends Controller {
+
+  handle(Echo).filtered(countEchoFilter) { args: Echo.Args =&gt;
+    if (args.msg == &quot;clientError&quot;) {
+      Future.exception(new Exception(&quot;client error&quot;) with NoStackTrace)
+    } else {
+      Future.value(args.msg)
+    }
+  }
+}
+</pre></div>
+</div>
+<p>Note that you can chain <cite>handle(ThriftMethod)#filtered</cite> calls arbitrarily deep.</p>
+</div>
+<div class="section" id="typed-filters">
+<h4>Typed Filters<a class="headerlink" href="#typed-filters" title="Permalink to this headline">¶</a></h4>
+<p>If you’d like to specify a typed Filter, use the <cite>handle(ThriftMethod)#withService</cite> Function and apply
+your typed <cite>Filter[-ReqIn, +RepOut, +ReqOut, -RepIn]</cite> to your <cite>Service[-ReqOut, +RepIn]</cite> implementation.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.foo.bar.thriftscala.EchoService.Echo
+import com.twitter.finagle.{Filter, Service, SimpleFilter}
+import com.twitter.inject.Logging
+import com.twitter.util.Future
+
+val echoLoggingFilter = new Filter[Echo.Args, String, Echo.Args, String] with Logging {
+  def apply(request: Echo.Args, service: Service[Echo.Args, String]): Future[String] = {
+    info(s&quot;Received request message: ${request.msg}&quot;)
+    service(request)
+  }
+}
+
+...
+
+import com.foo.bar.thriftscala.EchoService.Echo
+import com.twitter.finatra.thrift.Controller
+import com.twitter.util.Future
+import scala.util.control.NoStackTrace
+
+class ExampleController extends Controller {
+
+  val svc: Service[Echo.Args, String] = Service.mk { args: Echo.Args =&gt;
+    if (args.msg == &quot;clientError&quot;) {
+      Future.exception(new Exception(&quot;client error&quot;) with NoStackTrace)
+    } else {
+      Future.value(args.msg)
+    }
+  }
+
+  handle(Echo).withService(new echoLoggingFilter.andThen(svc))
+}
+</pre></div>
+</div>
+<p>For more information on the <cite>handle(ThriftMethod)</cite> DSL of the Controller, see the documentation on <a class="reference external" href="controllers.html#implementing-methods-with-handle-thriftmethod">Thrift
+Controllers</a>.</p>
+</div>
+</div>
+<div class="section" id="request-scope">
+<h3>Request Scope<a class="headerlink" href="#request-scope" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://github.com/google/guice">Guice</a> supports <a class="reference external" href="https://github.com/google/guice/wiki/CustomScopes">custom scopes</a> in addition
+to the defined <code class="docutils literal"><span class="pre">&#64;Singleton</span></code>, <code class="docutils literal"><span class="pre">&#64;SessionScoped</span></code>, and <code class="docutils literal"><span class="pre">&#64;RequestScoped</span></code>
+<a class="reference external" href="https://github.com/google/guice/wiki/Scopes">scopes</a>. <code class="docutils literal"><span class="pre">&#64;RequestScoped</span></code> is often used to allow
+injection of instances which can change depending on the incoming request (e.g. the currently
+authenticated User).</p>
+<p>Finatra provides a custom implementation of the default <a class="reference external" href="https://github.com/google/guice">Guice</a> <code class="docutils literal"><span class="pre">&#64;RequestScoped</span></code> functionality
+which works across Finagle non-blocking threads. The default <a class="reference external" href="https://github.com/google/guice">Guice</a>
+<a class="reference external" href="https://github.com/google/guice/wiki/Scopes#scopes">&#64;RequestScoped</a> implementation uses
+<a class="reference external" href="https://docs.oracle.com/javase/7/docs/api/java/lang/ThreadLocal.html">ThreadLocals</a> which will
+not work within the context of a Twitter <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala">c.t.util.Future</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Fields added to the Custom Request Scope will remain present in threads launched from a
+<a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala">FuturePool</a>.</p>
+</div>
+</div>
+<div class="section" id="adding-classes-into-the-custom-request-scope">
+<h3>Adding Classes into the Custom Request Scope<a class="headerlink" href="#adding-classes-into-the-custom-request-scope" title="Permalink to this headline">¶</a></h3>
+<p>First add a dependency on <cite>com.twitter:inject-request-scope</cite> (<cite>finatra/inject/inject-request-scope</cite>).</p>
+<p>Then define a module which mixes in the <cite>c.t.inject.requestscope.RequestScopeBinding</cite> trait.
+This trait defines <cite>#bindRequestScope[T]</cite> which will bind the given type to an “unseeded”
+<cite>Provider[T]</cite> of the type <em>in</em> the custom “FinagleRequestScope”. E.g.,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.TwitterModule
+import com.twitter.inject.requestscope.RequestScopeBinding
+
+object UserModule extends TwitterModule with RequestScopeBinding {
+
+  override def configure(): Unit = {
+    bindRequestScope[User]
+  }
+}
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Remember to include this Module in your <a class="reference external" href="../thrift/server.html#thrift-server-definition">server’s list of Modules</a>.</p>
+</div>
+<p>You must then “seed” this <cite>Provider[T]</cite> by obtaining an instance of the <cite>FinagleRequestScope</cite>
+and calling <cite>#seed[T](instance)</cite>. For request scoping, you would generally do this in a
+<a class="reference external" href="https://github.com/twitter/finagle/blob/ee9cb4ec2c17b810354b36ff97816fc97efb6394/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala#L295">TypeAgnostic Filter</a>
+executed on the request path.</p>
+<p>For example, to define a <a class="reference external" href="https://github.com/twitter/finagle/blob/ee9cb4ec2c17b810354b36ff97816fc97efb6394/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala#L295">TypeAgnostic Filter</a>
+which seeds a <cite>User</cite> into the “FinagleRequestScope”:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.{Filter, Service}
+import com.twitter.inject.requestscope.FinagleRequestScope
+import com.twitter.util.Future
+import javax.inject.{Inject, Singleton}
+
+@Singleton
+class UserFilter @Inject()(
+  finagleRequestScope: FinagleRequestScope
+) extends Filter.TypeAgnostic {
+
+  def toFilter[Req, Rep]: Filter[Req, Rep, Req, Rep] =
+    new Filter[Req, Rep, Req, Rep] {
+      def apply[Req, Rep](request: Req, service: Service[Req, Rep]): Future[Rep] = {
+        val userId = parseUserId(request) // User-defined method to parse a &quot;user id&quot; from the request
+        val user = User(userId)
+        finagleRequestScope.seed[User](user)
+        service(request)
+      }
+    }
+}
+</pre></div>
+</div>
+<p>Next, add the <a class="reference external" href="https://github.com/twitter/finatra/tree/master/inject/inject-request-scope/src/main/scala/com/twitter/inject/requestscope/FinagleRequestScopeFilter.scala">FinagleRequestScopeFilter.TypeAgnostic</a>
+to your server _above_ the defined <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala">Filter</a> which seeds the provided instance.</p>
+<p>E.g., for the <cite>UserFilter</cite> defined above (shown with commonly recommended Filters in the recommended
+order):</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
+import com.twitter.finatra.thrift.exceptions.FinatraThriftExceptionMapper
+import com.twitter.finatra.thrift.ThriftServer
+import com.twitter.finatra.thrift.routing.ThriftRouter
+import com.twitter.finatra.thrift.filters._
+import com.twitter.finatra.thrift.modules.ClientIdAcceptlistModule
+
+class Server extends ThriftServer {
+  override def modules: Seq[Module] = Seq(ClientIdAcceptlistModule)
+
+  override def configureThrift(router: ThriftRouter): Unit = {
+    router
+      .filter[LoggingMDCFilter]
+      .filter[TraceIdMDCFilter]
+      .filter[ThriftMDCFilter]
+      .filter[AccessLoggingFilter]
+      .filter[StatsFilter]
+      .filter[ExceptionMappingFilter]
+      .filter[ClientIdAcceptlistFilter]
+      .filter[FinagleRequestScopeFilter.TypeAgnostic]
+      .filter[UserFilter]
+      .exceptionMapper[FinatraThriftExceptionMapper]
+      .add[MyController]
+    }
+}
+</pre></div>
+</div>
+<p>Lastly, wherever you need to access the Request scoped <cite>User</cite> inject a <cite>User</cite> or a <cite>Provider[User]</cite>
+type.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.Service
+import com.twitter.finatra.thrift.Controller
+import javax.inject.{Inject, Provider, Singleton}
+
+@Singleton
+class MyController @Inject()(
+  dao: GroupsDAO,
+  user: Provider[User])
+  extends Controller with MyService.BaseServiceIface {
+
+  val getUser: Service[GetUser.Args, GetUser.SuccessType] = handle(GetUser) { args: GetUser.Args =&gt;
+    &quot;The incoming user has id &quot; + user.get.id
+  }
+}
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <cite>Provider[User]</cite> type must be used when injecting into a Singleton class.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
+</ul>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Filtering Thrift Requests</a><ul>
+<li><a class="reference internal" href="#c-t-finatra-thrift-filters-accessloggingfilter-rarrow">c.t.finatra.thrift.filters.AccessLoggingFilter →</a></li>
+<li><a class="reference internal" href="#c-t-inject-thrift-filters-darktrafficfilter-rarrow">c.t.inject.thrift.filters.DarkTrafficFilter →</a></li>
+<li><a class="reference internal" href="#c-t-finatra-thrift-filters-exceptionmappingfilter-rarrow">c.t.finatra.thrift.filters.ExceptionMappingFilter →</a></li>
+<li><a class="reference internal" href="#c-t-finatra-thrift-filters-loggingmdcfilter-rarrow">c.t.finatra.thrift.filters.LoggingMDCFilter →</a></li>
+<li><a class="reference internal" href="#c-t-finatra-thrift-filters-statsfilter-rarrow">c.t.finatra.thrift.filters.StatsFilter →</a></li>
+<li><a class="reference internal" href="#c-t-finatra-http-filters-thriftmdcfilter-rarrow">c.t.finatra.http.filters.ThriftMDCFilter →</a></li>
+<li><a class="reference internal" href="#c-t-finatra-http-filters-traceidmdcfilter-rarrow">c.t.finatra.http.filters.TraceIdMDCFilter →</a><ul>
+<li><a class="reference internal" href="#global-filters">Global Filters</a></li>
+<li><a class="reference internal" href="#per-method-filtering">Per-method Filtering</a><ul>
+<li><a class="reference internal" href="#typeagnostic-filters"><cite>TypeAgnostic</cite> Filters</a></li>
+<li><a class="reference internal" href="#typed-filters">Typed Filters</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#request-scope">Request Scope</a></li>
+<li><a class="reference internal" href="#adding-classes-into-the-custom-request-scope">Adding Classes into the Custom Request Scope</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">User’s Guide</a><ul>
+      <li>Previous: <a href="controllers.html" title="previous chapter">Defining Thrift Controllers</a></li>
+      <li>Next: <a href="exceptions.html" title="next chapter">Thrift Exception Mapping</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2020 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </body>
+</html>
