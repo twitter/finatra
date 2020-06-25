@@ -38,6 +38,11 @@ Changed
 Fixed
 ~~~~~
 
+* finatra-validation: Added a `c.t.finatra.validation.ValidatorModule` to provide a default
+  Validator. The new module is added to the default Finatra HttpServer modules, users can override
+  it with a customized `ValidatorModule` by overriding the `validatorModule` field.
+  ``PHAB_ID=D503417``
+
 20.5.0
 ------
 

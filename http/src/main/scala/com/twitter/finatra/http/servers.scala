@@ -19,6 +19,7 @@ import com.twitter.finatra.http.response.HttpResponseClassifier
 import com.twitter.finatra.http.routing.{AdminHttpRouter, HttpRouter}
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 import com.twitter.finatra.modules.FileResolverModule
+import com.twitter.finatra.validation.ValidatorModule
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.conversions.string._
 import com.twitter.inject.server.{AbstractTwitterServer, PortUtils, TwitterServer}
@@ -457,7 +458,8 @@ trait HttpServer extends HttpServerTrait {
     ExceptionManagerModule,
     jacksonModule,
     MessageBodyFlagsModule,
-    messageBodyModule
+    messageBodyModule,
+    validatorModule
   )
 
   /**
@@ -524,6 +526,17 @@ trait HttpServer extends HttpServerTrait {
    * @return a [[com.twitter.inject.TwitterModule]] which provides a [[com.twitter.finatra.jackson.ScalaObjectMapper]] implementation.
    */
   protected def jacksonModule: Module = ScalaObjectMapperModule
+
+  /**
+   * Default [[com.twitter.inject.TwitterModule]] for providing a [[com.twitter.finatra.validation.Validator]].
+   *
+   * @return a [[com.twitter.inject.TwitterModule]] which provides a [[com.twitter.finatra.validation.Validator]] implementation.
+   *
+   * @note This can be overriden to provide a different Validator. The new Validator will replace
+   *       the default Validator in [[jacksonModule]], and be used to apply the validation logic in
+   *       [[com.fasterxml.jackson.module.scala.ScalaObjectMapper]] and during HTTP request parsing.
+   */
+  protected def validatorModule: Module = ValidatorModule
 }
 
 /**

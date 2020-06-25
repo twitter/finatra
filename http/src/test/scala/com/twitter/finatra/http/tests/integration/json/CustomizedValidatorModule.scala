@@ -1,17 +1,18 @@
 package com.twitter.finatra.http.tests.integration.json
 
-import com.google.inject.Provides
-import com.twitter.finatra.validation.{MessageResolver, Validator}
-import com.twitter.inject.{Injector, TwitterModule}
+import com.twitter.finatra.validation.{MessageResolver, Validator, ValidatorModule}
+import com.twitter.inject.Injector
 import java.lang.annotation.Annotation
-import javax.inject.Singleton
 
-object CustomizedValidatorModule extends TwitterModule {
+object CustomizedValidatorModule extends ValidatorModule {
 
-  @Provides
-  @Singleton
-  private final def providesValidator(injector: Injector): Validator =
-    Validator.builder.withMessageResolver(new CustomizedMessageResolver()).build()
+  override def configureValidator(
+    injector: Injector,
+    builder: Validator.Builder
+  ): Validator.Builder =
+    builder
+      .withCacheSize(512)
+      .withMessageResolver(new CustomizedMessageResolver())
 }
 
 class CustomizedMessageResolver extends MessageResolver {

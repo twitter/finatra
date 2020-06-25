@@ -130,32 +130,23 @@ Provide a customized Validator in a `TwitterModule`:
 
 .. code:: scala
 
-    import com.google.inject.Provides
-    import com.twitter.finatra.validation.{MessageResolver, Validator}
-    import com.twitter.finatra.validation.tests.CustomizedMessageResolver
-    import com.twitter.inject.{Injector, TwitterModule}
-    import java.lang.annotation.Annotation
-    import javax.inject.Singleton
+    import com.twitter.finatra.validation.{Validator, ValidatorModule}
+    import com.twitter.inject.Injector
 
-    object CustomizedValidatorModule extends TwitterModule {
-
-      @Provides
-      @Singleton
-      private final def providesValidator(injector: Injector): Validator =
-        Validator
-          .builder
+    object CustomizedValidatorModule extends ValidatorModule {
+      override def configureValidator(injector: Injector, builder: Validator.Builder): Validator.Builder =
+        builder
           .withCacheSize(512)
           .withMessageResolver(new CustomizedMessageResolver())
-          .build()
     }
 
-Override `modules` in your server definition:
+Override `validatorModule` in your server definition:
 
 .. code:: scala
 
     ValidationServer extends HttpServer {
       override val name: String = "validation-server"
-      override def modules: Seq[Module] = Seq(CustomizedValidatorModule)
+      override def validatorModule: TwitterModule = CustomizedValidatorModule
 
       override protected def configureHttp(router: HttpRouter): Unit = {
         router
@@ -164,6 +155,16 @@ Override `modules` in your server definition:
           ...
       }
     }
+
+.. note::
+
+    By overriding the default `validatorModule`, you are also replacing the default Validator in
+    `jacksonModule https://github.com/twitter/finatra/blob/ef7197324cba8dfe6274ffb4570dea6c34b9fc33/http/src/main/scala/com/twitter/finatra/http/servers.scala#L526`__,
+    the new `Validator` will be used to apply the validation logic in
+    `ScalaObjectMapper https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala`__
+    and during HTTP request parsing. Checkout
+    `Integrate with Finatra Jackson framework  <#integrate-with-finatra-jackson-framework>`__ For
+    more information about how validations works in Finatra Jackson Framework.
 
 Integrate with Finatra Jackson framework
 ----------------------------------------
