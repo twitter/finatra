@@ -8,10 +8,10 @@ scala_library(
     ),
     dependencies = [
         "3rdparty/jvm/org/scalatest",
-        "3rdparty/jvm/org/specs2:mock",
+        "3rdparty/jvm/org/specs2:matcher",
     ],
     exports = [
         "3rdparty/jvm/org/scalatest",
-        "3rdparty/jvm/org/specs2:mock",
+        "3rdparty/jvm/org/specs2:matcher",
     ],
 )
