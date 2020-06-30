@@ -40,6 +40,10 @@ class FlagsModuleTest extends Test {
   flag[InetSocketAddress]("some.address", defaultInetSocketAddress, "An InetSocketAddress")
 
   flag[Seq[String]]("seq.string", Seq.empty, "A Seq of String")
+  flag[Seq[Int]]("seq.int", Seq(123), "A Seq of Int")
+  flag[Seq[Long]]("seq.long", Seq(123.toLong), "A Seq of Long")
+  flag[Seq[Double]]("seq.double", Seq(123.0), "A Seq of Double")
+  flag[Seq[Float]]("seq.float", Seq(123.0f), "A Seq of Float")
   flag[Seq[LocalTime]]("seq.local.time", Seq(defaultLocalTime), "A Seq java.time.LocalTime")
   flag[Seq[Time]]("seq.twitter.time", Seq(defaultTime), "A Seq of twitter util Time")
   flag[Seq[Duration]](
@@ -53,6 +57,22 @@ class FlagsModuleTest extends Test {
     "A Seq of InetSocketAddress")
 
   flag[java.util.List[String]]("list.string", Arrays.asList[String](), "A List of String")
+  flag[java.util.List[java.lang.Integer]](
+    "list.int",
+    Arrays.asList[java.lang.Integer](123),
+    "A List of Int")
+  flag[java.util.List[java.lang.Long]](
+    "list.long",
+    Arrays.asList[java.lang.Long](123l),
+    "A List of Long")
+  flag[java.util.List[java.lang.Double]](
+    "list.double",
+    Arrays.asList[java.lang.Double](123.0),
+    "A List of Double")
+  flag[java.util.List[java.lang.Float]](
+    "list.float",
+    Arrays.asList[java.lang.Float](123.0f),
+    "A List of Float")
   flag[java.util.List[LocalTime]](
     "list.local.time",
     Arrays.asList(defaultLocalTime),
@@ -143,6 +163,10 @@ class FlagsModuleTest extends Test {
   test("test comma-separated type converters (Seq)") {
     injector.instance[Seq[String]](AnnotationFlags.named("seq.string")) should equal(
       Seq("foo", "bar"))
+    injector.instance[Seq[Int]](AnnotationFlags.named("seq.int")) should equal(Seq(123))
+    injector.instance[Seq[Long]](AnnotationFlags.named("seq.long")) should equal(Seq(123))
+    injector.instance[Seq[Double]](AnnotationFlags.named("seq.double")) should equal(Seq(123.0))
+    injector.instance[Seq[Float]](AnnotationFlags.named("seq.float")) should equal(Seq(123.0f))
     injector.instance[Seq[LocalTime]](AnnotationFlags.named("seq.local.time")) should equal(
       Seq(defaultLocalTime))
     injector.instance[Seq[Time]](AnnotationFlags.named("seq.twitter.time")) should equal(
@@ -160,6 +184,14 @@ class FlagsModuleTest extends Test {
   test("test comma-separated type converters (java.util.List)") {
     injector.instance[java.util.List[String]](AnnotationFlags.named("list.string")) should equal(
       Arrays.asList("baz", "qux"))
+    injector.instance[java.util.List[java.lang.Integer]](
+      AnnotationFlags.named("list.int")) should equal(Arrays.asList[java.lang.Integer](123))
+    injector.instance[java.util.List[java.lang.Long]](
+      AnnotationFlags.named("list.long")) should equal(Arrays.asList[java.lang.Long](123l))
+    injector.instance[java.util.List[java.lang.Double]](
+      AnnotationFlags.named("list.double")) should equal(Arrays.asList(123.0))
+    injector.instance[java.util.List[java.lang.Float]](
+      AnnotationFlags.named("list.float")) should equal(Arrays.asList[java.lang.Float](123.0f))
     injector.instance[java.util.List[LocalTime]](
       AnnotationFlags.named("list.local.time")) should equal(Arrays.asList(defaultLocalTime))
     injector.instance[java.util.List[Time]](

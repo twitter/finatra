@@ -7,6 +7,13 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Fixed
+~~~~~
+
+* inject-app: Having two sets of flag converters for primitive types (both Java and Scala) confuses
+  the DI runtime, preventing the injection. We now have only a single set of converters, based off
+  Scala primitive types.  ``PHAB_ID=D509192``
+
 20.6.0
 ------
 
