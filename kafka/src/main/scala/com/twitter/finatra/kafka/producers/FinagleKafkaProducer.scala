@@ -2,7 +2,6 @@ package com.twitter.finatra.kafka.producers
 
 import com.twitter.finagle.stats.Stat
 import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter.sanitizeMetricName
-import com.twitter.finatra.kafka.utils.FuturePoolsHelper
 import com.twitter.util._
 import java.util
 import java.util.concurrent.TimeUnit._
@@ -35,19 +34,9 @@ class FinagleKafkaProducer[K, V](config: FinagleKafkaProducerConfig[K, V])
   private val timestampOnSuccessLag = scopedStatsReceiver.stat("record_timestamp_on_success_lag")
   private val timestampOnFailureLag = scopedStatsReceiver.stat("record_timestamp_on_failure_lag")
 
-  private[this] val kafkaPool =
-    FuturePoolsHelper.unboundedFixedThreadPool(s"kafka-producer-$clientId", 1)
-
-  private[this] val qGauge = scopedStatsReceiver.addGauge("work_queue_size") {
-    kafkaPool.getQueueSize()
-  }
-
   /* Public */
 
-  /**
-   * Returns a future. The future completes when the event is successfully published
-   * Note: Default partitionIdx should be set to null, see: https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=69406838
-   */
+  //Note: Default partitionIdx should be set to null, see: https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=69406838
   //TODO: producer.send will throw exceptions in the transactional API which are not recoverable. As such, we may want to continue to allow these exceptions
   //to be thrown by this method, but this may be unexpected as most Future returning methods will return failed futures rather than throwing
   //exceptions. To be discussed...
@@ -68,31 +57,24 @@ class FinagleKafkaProducer[K, V](config: FinagleKafkaProducerConfig[K, V])
     send(producerRecord)
   }
 
-  /**
-   * Returns a future. The future completes when the event is successfully published
-   */
   def send(producerRecord: ProducerRecord[K, V]): Future[RecordMetadata] = {
-    // kafka producer.send might block if metadata is not present or wait for producer memory
-    kafkaPool
-      .pool({
-        val resultPromise = Promise[RecordMetadata]()
-        calcTimestampLag(timestampOnSendLag, producerRecord.timestamp)
-        producer.send(
-          producerRecord,
-          new Callback {
-            override def onCompletion(metadata: RecordMetadata, exception: Exception): Unit = {
-              if (exception != null) {
-                calcTimestampLag(timestampOnFailureLag, producerRecord.timestamp)
-                resultPromise.setException(exception)
-              } else {
-                calcTimestampLag(timestampOnSuccessLag, producerRecord.timestamp)
-                resultPromise.setValue(metadata)
-              }
-            }
+    val resultPromise = Promise[RecordMetadata]()
+    calcTimestampLag(timestampOnSendLag, producerRecord.timestamp)
+    producer.send(
+      producerRecord,
+      new Callback {
+        override def onCompletion(metadata: RecordMetadata, exception: Exception): Unit = {
+          if (exception != null) {
+            calcTimestampLag(timestampOnFailureLag, producerRecord.timestamp)
+            resultPromise.setException(exception)
+          } else {
+            calcTimestampLag(timestampOnSuccessLag, producerRecord.timestamp)
+            resultPromise.setValue(metadata)
           }
-        )
-        resultPromise
-      }).flatten
+        }
+      }
+    )
+    resultPromise
   }
 
   def initTransactions(): Unit = {
@@ -132,9 +114,9 @@ class FinagleKafkaProducer[K, V](config: FinagleKafkaProducerConfig[K, V])
     // However, the underlying KafkaProducer will throw an IllegalArgumentException when
     // KafkaProducer.close(Duration) is called with a negative timeout.
     if (deadline == Time.Bottom) {
-      kafkaPool.pool(producer.close(Long.MaxValue, MILLISECONDS))
+      Future(producer.close(Long.MaxValue, MILLISECONDS))
     } else {
-      kafkaPool.pool(producer.close(deadline.inSeconds, SECONDS))
+      Future(producer.close(deadline.inSeconds, SECONDS))
     }
   }
 

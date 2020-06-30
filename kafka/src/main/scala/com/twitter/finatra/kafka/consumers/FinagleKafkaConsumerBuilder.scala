@@ -80,7 +80,7 @@ trait FinagleKafkaConsumerBuilderMethods[K, V, Self] extends KafkaConsumerConfig
   }
 
   /**
-   * Create the native KafkaConsumer client, it blocks on metadata update.
+   * Create the native KafkaConsumer client.
    */
   def buildClient(): KafkaConsumer[K, V] = {
     validateConfigs(config)
