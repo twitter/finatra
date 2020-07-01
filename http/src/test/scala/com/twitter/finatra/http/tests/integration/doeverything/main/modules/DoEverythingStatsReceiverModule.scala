@@ -5,6 +5,6 @@ import com.twitter.inject.TwitterModule
 
 object DoEverythingStatsReceiverModule extends TwitterModule {
   override def configure(): Unit = {
-    bindSingleton[StatsReceiver].toInstance(LoadedStatsReceiver.scope("do_everything"))
+    bind[StatsReceiver].toInstance(LoadedStatsReceiver.scope("do_everything"))
   }
 }

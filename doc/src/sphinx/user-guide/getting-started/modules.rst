@@ -60,7 +60,7 @@ inside of `Module#configure()`.
 
     object MyModule2 extends TwitterModule {
       override def configure(): Unit = {
-        bindSingleton[Bar].toInstance(new Bar())
+        bind[Bar].toInstance(new Bar())
         install(MyModule1) // DO NOT DO THIS
       }
     }

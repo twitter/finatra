@@ -10,7 +10,7 @@ import com.twitter.inject.{StackTransformer, TwitterModule}
  */
 object StackTransformerModule extends TwitterModule {
   override protected def configure(): Unit =
-    bindSingleton[StackTransformer].toInstance(loadStackTransformer)
+    bind[StackTransformer].toInstance(loadStackTransformer)
 
   private[this] def loadStackTransformer: StackTransformer =
     new StackTransformer {

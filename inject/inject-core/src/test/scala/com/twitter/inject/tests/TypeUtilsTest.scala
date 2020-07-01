@@ -28,8 +28,19 @@ class TypeUtilsTest extends Test with ScalaCheckDrivenPropertyChecks {
     assert(TypeUtils.asManifest[A with B] == manifest[Any])
   }
 
+  test("asTypeTag handles classes") {
+    typeTagEquals(classOf[String], TypeUtils.asTypeTag(classOf[String]))
+    typeTagEquals(classOf[AnyVal], TypeUtils.asTypeTag(classOf[AnyVal]))
+    typeTagEquals(classOf[Any], TypeUtils.asTypeTag(classOf[Any]))
+    typeTagEquals(classOf[Null], TypeUtils.asTypeTag(classOf[Null]))
+    typeTagEquals(classOf[Nothing], TypeUtils.asTypeTag(classOf[Nothing]))
+  }
+
   def manifestedTypesEquals[T: TypeTag: Manifest](a: T): Boolean = {
     TypeUtils.asManifest[T] == manifest[T]
   }
 
+  def typeTagEquals[T](clazz: Class[T], typeTag: TypeTag[T]): Boolean = {
+    clazz.isAssignableFrom(typeTag.mirror.runtimeClass(typeTag.tpe.typeSymbol.asClass))
+  }
 }

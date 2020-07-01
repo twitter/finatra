@@ -3,15 +3,17 @@ package com.twitter.finatra.http.marshalling
 import com.google.inject.internal.MoreTypes.ParameterizedTypeImpl
 import com.twitter.finagle.http.Message
 import com.twitter.finatra.http.annotations.{MessageBodyWriter => MessageBodyWriterAnnotation}
-import com.twitter.inject.{Injector, TypeUtils}
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.utils.AnnotationUtils
+import com.twitter.inject.{Injector, TypeUtils}
 import java.lang.annotation.Annotation
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.{Inject, Singleton}
 import net.codingwell.scalaguice._
 import scala.collection.mutable
+import scala.reflect.ClassTag
+import scala.reflect.runtime.universe._
 
 /**
  * Manages registration of message body components. I.e., components that specify how to parse
@@ -45,7 +47,7 @@ class MessageBodyManager @Inject() (
   private[this] val annotationTypeToWriter = mutable.Map[Type, MessageBodyWriter[Any]]()
 
   private[this] val readerCache =
-    new ConcurrentHashMap[Manifest[_], Option[MessageBodyReader[Any]]]()
+    new ConcurrentHashMap[Type, Option[MessageBodyReader[Any]]]()
   private[this] val writerCache =
     new ConcurrentHashMap[Any, MessageBodyWriter[Any]]()
 
@@ -56,14 +58,18 @@ class MessageBodyManager @Inject() (
    * E.g., a `MessageBodyReader[Foo]` will register the given reader for the `Foo` type.
    * @tparam Component the [[MessageBodyComponent]] to register.
    */
-  final def add[Component <: MessageBodyComponent: Manifest](): Unit = {
+  final def add[Component <: MessageBodyComponent: ClassTag](
+  )(
+    implicit tt: TypeTag[Component]
+  ): Unit = {
     val componentTypeClazz: Class[_] =
       if (isAssignableFrom[Component](classOf[MessageBodyReader[_]])) {
         classOf[MessageBodyReader[_]]
       } else {
         classOf[MessageBodyWriter[_]]
       }
-    add[Component](TypeUtils.singleTypeParam(typeLiteral.getSupertype(componentTypeClazz).getType))
+    add[Component](
+      TypeUtils.singleTypeParam(typeLiteral[Component].getSupertype(componentTypeClazz).getType))
   }
 
   /**
@@ -75,8 +81,8 @@ class MessageBodyManager @Inject() (
    *                   will be obtained from the [[injector]].
    * @tparam T the type to associate to the registered [[MessageBodyComponent]].
    */
-  final def addExplicit[Component <: MessageBodyComponent: Manifest, T: Manifest](): Unit = {
-    add[Component](typeLiteral[T].getType)
+  final def addExplicit[Component <: MessageBodyComponent: TypeTag, T: TypeTag](): Unit = {
+    add[Component](typeLiteral[T].getType)(TypeUtils.asManifest[Component])
   }
 
   /**
@@ -121,23 +127,32 @@ class MessageBodyManager @Inject() (
    * of a matching [[MessageBodyReader]] for the type [[T]] and invokes the [[MessageBodyReader#parse]]
    * method of the matching reader. Otherwise if no matching reader for the type [[T]] is found,
    * the [[defaultMessageBodyReader#parse]] method is invoked.
+   *
+   * @note Java users should prefer [[read(message: Message, clazz: Class]].
+   *
    * @param message the [[com.twitter.finagle.http.Message]] to read
    * @tparam T the type into which to parse the message body.
    * @return an instance of type [[T]] parsed from the Message body contents by a matching [[MessageBodyReader]].
    */
-  final def read[T: Manifest](message: Message): T = {
-    reader[T]() match {
+  final def read[T](message: Message)(implicit tt: TypeTag[T]): T = {
+    reader[T] match {
       case Some(messageBodyReader) =>
         messageBodyReader.parse(message).asInstanceOf[T]
       case _ =>
-        defaultMessageBodyReader.parse[T](message)
+        defaultMessageBodyReader.parse(message)(TypeUtils.asManifest[T])
     }
   }
 
+  /** For use from Java */
+  final def read[T](message: Message, clazz: Class[T]): T = {
+    val typeTag = TypeUtils.asTypeTag(clazz)
+    read[T](message)(typeTag)
+  }
+
   /* exposed for testing */
-  private[finatra] final def reader[T: Manifest](): Option[MessageBodyReader[Any]] = {
-    val readerManifest = manifest[T]
-    readerCache.atomicGetOrElseUpdate(readerManifest, readerCacheFn(readerManifest))
+  private[finatra] final def reader[T](implicit tt: TypeTag[T]): Option[MessageBodyReader[Any]] = {
+    val genericType = typeLiteral[T].getType
+    readerCache.atomicGetOrElseUpdate(genericType, readerCacheFn(genericType))
   }
 
   /**
@@ -155,14 +170,11 @@ class MessageBodyManager @Inject() (
 
   /* Private */
 
-  private[this] def isAssignableFrom[T: Manifest](clazz: Class[_]): Boolean = {
-    clazz.isAssignableFrom(manifest[T].runtimeClass)
+  private[this] def isAssignableFrom[T](clazz: Class[_])(implicit tt: TypeTag[T]): Boolean = {
+    clazz.isAssignableFrom(tt.mirror.runtimeClass(tt.tpe.typeSymbol.asClass))
   }
 
-  private[this] def readerCacheFn[T](
-    readerManifest: Manifest[T]
-  ): Option[MessageBodyReader[Any]] = {
-    val genericType = typeLiteral(readerManifest).getType
+  private[this] def readerCacheFn[T](genericType: Type): Option[MessageBodyReader[Any]] = {
     classTypeToReader.get(genericType)
   }
 

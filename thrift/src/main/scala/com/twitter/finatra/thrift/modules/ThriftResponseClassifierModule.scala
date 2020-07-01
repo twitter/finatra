@@ -6,8 +6,6 @@ import com.twitter.inject.TwitterModule
 object ThriftResponseClassifierModule extends TwitterModule {
 
   override def configure(): Unit = {
-    bindSingleton[ThriftResponseClassifier].toInstance(
-      ThriftResponseClassifier.ThriftExceptionsAsFailures
-    )
+    bind[ThriftResponseClassifier].toInstance(ThriftResponseClassifier.ThriftExceptionsAsFailures)
   }
 }

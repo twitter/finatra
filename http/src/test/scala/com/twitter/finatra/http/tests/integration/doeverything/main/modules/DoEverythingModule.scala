@@ -26,10 +26,10 @@ class DoEverythingModule extends TwitterModule {
     Seq(new DoSomethingElseModule)
 
   override protected def configure(): Unit = {
-    bindSingleton[String](Names.named("str1")).toInstance("string1")
-    bind[String](Names.named("str2")).toInstance("string2")
+    bind[String].annotatedWith(Names.named("str1")).toInstance("string1")
+    bind[String].annotatedWith(Names.named("str2")).toInstance("string2")
 
-    bindSingleton[Int].toInstance(11)
+    bind[Int].toInstance(11)
     bind[String].toInstance("default string")
     bind[Option[String]].toInstance(Some("default option string"))
     bind[String].annotatedWith[Prod].toInstance("prod string")

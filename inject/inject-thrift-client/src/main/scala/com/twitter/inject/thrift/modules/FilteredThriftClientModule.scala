@@ -12,9 +12,8 @@ import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
 import com.twitter.inject.thrift.modules.FilteredThriftClientModule.MaxDuration
 import com.twitter.inject.thrift.{AndThenService, NonFiltered}
 import com.twitter.inject.{Injector, TwitterModule}
-import com.twitter.util.{Monitor, NullMonitor, Try, Duration}
+import com.twitter.util.{Duration, Monitor, NullMonitor, Try}
 import javax.inject.Singleton
-import scala.reflect.ClassTag
 
 object FilteredThriftClientModule {
   val MaxDuration = Duration.Top
@@ -57,8 +56,8 @@ object FilteredThriftClientModule {
   "Use the com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule",
   "2018-01-08")
 abstract class FilteredThriftClientModule[
-  FutureIface <: ThriftService: ClassTag,
-  ServiceIface <: Filterable[ServiceIface]: ClassTag
+  FutureIface <: ThriftService,
+  ServiceIface <: Filterable[ServiceIface]
 ](
   implicit serviceBuilder: ServiceIfaceBuilder[ServiceIface],
   methodBuilder: MethodIfaceBuilder[ServiceIface, FutureIface])

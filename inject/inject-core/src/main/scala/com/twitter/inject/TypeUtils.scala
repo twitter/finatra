@@ -2,6 +2,7 @@ package com.twitter.inject
 
 import com.google.inject.TypeLiteral
 import com.google.inject.internal.MoreTypes.ParameterizedTypeImpl
+import scala.reflect.api.TypeCreator
 import scala.reflect.{ClassTag, ManifestFactory}
 import scala.reflect.runtime.universe._
 
@@ -52,5 +53,24 @@ object TypeUtils {
       }
     }
     manifestFromType(t.tpe).asInstanceOf[Manifest[T]]
+  }
+
+  /**
+   * Convert from the given Class[T] to a TypeTag[T]
+   * @param clazz the class for which to build the resultant TypeTag
+   * @return a TypeTag[T] representing the given Class[T]
+   */
+  def asTypeTag[T](clazz: Class[_ <: T]): TypeTag[T] = {
+    val clazzMirror = runtimeMirror(clazz.getClassLoader)
+    val tpe = clazzMirror.classSymbol(clazz).toType
+    val typeCreator = new TypeCreator() {
+      def apply[U <: scala.reflect.api.Universe with scala.Singleton](
+        m: scala.reflect.api.Mirror[U]
+      ): U#Type = {
+        if (clazzMirror != m) throw new RuntimeException("wrong mirror")
+        else tpe.asInstanceOf[U#Type]
+      }
+    }
+    TypeTag[T](clazzMirror, typeCreator)
   }
 }

@@ -6,7 +6,7 @@ import com.twitter.inject.TwitterModule
 object HttpResponseClassifierModule extends TwitterModule {
 
   override def configure(): Unit = {
-    bindSingleton[HttpResponseClassifier].toInstance(
+    bind[HttpResponseClassifier].toInstance(
       HttpResponseClassifier.ServerErrorsAsFailures
     )
   }

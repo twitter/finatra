@@ -1,10 +1,12 @@
 package com.twitter.inject
 
 import com.google.inject.name.Names
-import com.google.inject.{Injector => UnderlyingInjector, Key}
+import com.google.inject.{Key, Injector => UnderlyingInjector}
 import java.lang.annotation.Annotation
 import net.codingwell.scalaguice.KeyExtensions._
-import net.codingwell.scalaguice._
+import net.codingwell.scalaguice.typeLiteral
+import scala.reflect.ClassTag
+import scala.reflect.runtime.universe._
 
 case class Injector(underlying: UnderlyingInjector) {
 
@@ -20,7 +22,8 @@ case class Injector(underlying: UnderlyingInjector) {
    *
    * @return bound instance of type [[T]].
    */
-  def instance[T: Manifest]: T = underlying.getInstance(typeLiteral[T].toKey)
+  def instance[T: TypeTag]: T =
+    underlying.getInstance(typeLiteral[T].toKey)
 
   /**
    * Returns the appropriate instance for the given key constructed from the
@@ -35,11 +38,8 @@ case class Injector(underlying: UnderlyingInjector) {
    *
    * @return bound instance of type [[T]] annotated with annotation type [[Ann]].
    */
-  def instance[T: Manifest, Ann <: Annotation: Manifest]: T = {
-    val annotationType = manifest[Ann].runtimeClass.asInstanceOf[Class[Ann]]
-    val key = Key.get(typeLiteral[T], annotationType)
-    underlying.getInstance(key)
-  }
+  def instance[T: TypeTag, Ann <: Annotation: ClassTag]: T =
+    underlying.getInstance(typeLiteral[T].annotatedWith[Ann])
 
   /**
    * Returns the appropriate instance for the given key constructed from the
@@ -55,10 +55,8 @@ case class Injector(underlying: UnderlyingInjector) {
    *
    * @return bound instance of type [[T]] annotated with annotation.
    */
-  def instance[T: Manifest](annotation: Annotation): T = {
-    val key = Key.get(typeLiteral[T], annotation)
-    underlying.getInstance(key)
-  }
+  def instance[T: TypeTag](annotation: Annotation): T =
+    underlying.getInstance(typeLiteral[T].annotatedWith(annotation))
 
   /**
    * Returns the appropriate instance for the given key constructed from the
@@ -73,10 +71,8 @@ case class Injector(underlying: UnderlyingInjector) {
    * @tparam T type of the bound instance to return from the object graph.
    * @return bound instance of type [[T]] annotated with annotation class.
    */
-  def instance[T: Manifest](annotationClazz: Class[_ <: Annotation]): T = {
-    val key = Key.get(typeLiteral[T], annotationClazz)
-    underlying.getInstance(key)
-  }
+  def instance[T: TypeTag](annotationClazz: Class[_ <: Annotation]): T =
+    underlying.getInstance(typeLiteral[T].annotatedWith(annotationClazz))
 
   /**
    * Returns the appropriate instance for the given key constructed from the
@@ -97,11 +93,8 @@ case class Injector(underlying: UnderlyingInjector) {
   @deprecated(
     "Users should prefer injector.instance[T](java.lang.annotation.Annotation",
     "2017-09-25")
-  def instance[T: Manifest](name: String): T = {
-    val namedAnnotation = Names.named(name)
-    val key = Key.get(typeLiteral[T], namedAnnotation)
-    underlying.getInstance(key)
-  }
+  def instance[T: TypeTag](name: String): T =
+    underlying.getInstance(typeLiteral[T].annotatedWith(Names.named(name)))
 
   /**
    * Returns the appropriate instance for the given injection type.
@@ -134,10 +127,8 @@ case class Injector(underlying: UnderlyingInjector) {
    *
    * @return bound instance of type [[T]].
    */
-  def instance[T](clazz: Class[T], annotation: Annotation): T = {
-    val key = Key.get(clazz, annotation)
-    underlying.getInstance(key)
-  }
+  def instance[T](clazz: Class[T], annotation: Annotation): T =
+    underlying.getInstance(Key.get(clazz, annotation))
 
   /**
    * Returns the appropriate instance for the given key constructed from the
@@ -152,10 +143,8 @@ case class Injector(underlying: UnderlyingInjector) {
    *
    * @return bound instance of type [[T]].
    */
-  def instance[T, Ann <: Annotation](clazz: Class[T], annotationClazz: Class[Ann]): T = {
-    val key = Key.get(clazz, annotationClazz)
-    underlying.getInstance(key)
-  }
+  def instance[T, Ann <: Annotation](clazz: Class[T], annotationClazz: Class[Ann]): T =
+    underlying.getInstance(Key.get(clazz, annotationClazz))
 
   /**
    * Returns the appropriate instance for the given injection key.

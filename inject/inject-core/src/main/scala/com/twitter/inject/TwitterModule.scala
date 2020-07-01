@@ -1,20 +1,12 @@
 package com.twitter.inject
 
 import com.google.inject.assistedinject.FactoryModuleBuilder
-import com.google.inject.binder.AnnotatedBindingBuilder
 import com.google.inject.matcher.{Matcher, Matchers}
 import com.google.inject.spi.TypeConverter
 import com.google.inject.{Module, _}
 import com.twitter.app.Flaggable
 import java.lang.annotation.Annotation
-import net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder
-import net.codingwell.scalaguice.{
-  ScalaModule,
-  ScalaMultibinder,
-  ScalaOptionBinder,
-  cls,
-  typeLiteral
-}
+import net.codingwell.scalaguice.{ScalaModule, ScalaMultibinder, ScalaOptionBinder, typeLiteral}
 
 /**
  * =Overview=
@@ -198,22 +190,11 @@ import net.codingwell.scalaguice.{
  *
  * would generate an error, because both the framework and the user are trying to bind `@LookupUrl` String.
  */
-abstract class TwitterModule extends AbstractModule with TwitterBaseModule with Logging {
-
-  private[this] def binderAccess: Binder =
-    super.binder.withSource(ScalaModule.filterTrace((new Throwable).getStackTrace))
-
-  /* Overrides */
-
-  /**
-   * Configures a [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html com.google.inject.Binder]]
-   * via the exposed methods. A default implementation is provided such that extensions using
-   * only `@Provides`-annotated methods do not need to implement an empty
-   * [[TwitterModule.configure()]] method.
-   *
-   * @see [[https://static.javadoc.io/com.google.inject/guice/4.1.0/com/google/inject/AbstractModule.html#configure-- com.google.inject.AbstractModule#configure()]]
-   */
-  override protected def configure(): Unit = {}
+abstract class TwitterModule
+    extends AbstractModule
+    with TwitterBaseModule
+    with ScalaModule
+    with Logging {
 
   /**
    * Uses the given [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Module.html com.google.inject.Module]]
@@ -317,98 +298,6 @@ abstract class TwitterModule extends AbstractModule with TwitterBaseModule with 
   }
 
   /**
-   * Returns a new [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html com.google.inject.Binder]]
-   * of type [[T]] singleton-scoped that is bound with no binding annotation.
-   *
-   * @see [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scopes.html#SINGLETON Singleton Scope]]
-   */
-  protected def bindSingleton[T: Manifest]: ScalaAnnotatedBindingBuilder[T] = {
-    new ScalaAnnotatedBindingBuilder[T] {
-      val builder: AnnotatedBindingBuilder[T] = createBuilder[T]()
-      override val self = builder
-    }
-  }
-
-  /**
-   * Returns a new [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html com.google.inject.Binder]]
-   * of type [[T]] singleton-scoped that is bound with a binding annotation [[A]].
-   *
-   * @see [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scopes.html#SINGLETON Singleton Scope]]
-   */
-  protected def bindSingleton[
-    T: Manifest,
-    A <: Annotation: Manifest
-  ]: ScalaAnnotatedBindingBuilder[T] = {
-    new ScalaAnnotatedBindingBuilder[T] {
-      val builder: AnnotatedBindingBuilder[T] = createBuilderWithAnnotation[T, A]()
-      override val self = builder
-    }
-  }
-
-  /**
-   * Returns a new [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html com.google.inject.Binder]]
-   * of type [[T]] singleton-scoped that is bound with a binding annotation.
-   *
-   * @see [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scopes.html#SINGLETON Singleton Scope]]
-   */
-  protected def bindSingleton[T: Manifest](
-    annotation: Annotation
-  ): ScalaAnnotatedBindingBuilder[T] = {
-    new ScalaAnnotatedBindingBuilder[T] {
-      val builder: AnnotatedBindingBuilder[T] = createBuilder[T](annotationOpt = Some(annotation))
-      override val self = builder
-    }
-  }
-
-  /**
-   * Returns a new [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html com.google.inject.Binder]]
-   * of type [[T]] with no [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scope.html com.google.inject.Scope]]
-   * that is bound with no binding annotation.
-   *
-   * @see [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scopes.html#NO_SCOPE No Scope]]
-   */
-  protected def bind[T: Manifest]: ScalaAnnotatedBindingBuilder[T] = {
-    new ScalaAnnotatedBindingBuilder[T] {
-      val builder: AnnotatedBindingBuilder[T] = createBuilder[T](singleton = false)
-      override val self = builder
-    }
-  }
-
-  /**
-   * Returns a new [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html com.google.inject.Binder]]
-   * of type [[T]] with no [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scope.html com.google.inject.Scope]]
-   * that is bound with a binding annotation [[A]].
-   *
-   * @see [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scopes.html#NO_SCOPE No Scope]]
-   */
-  protected def bind[T: Manifest, A <: Annotation: Manifest]: ScalaAnnotatedBindingBuilder[T] = {
-    new ScalaAnnotatedBindingBuilder[T] {
-      val builder: AnnotatedBindingBuilder[T] = createBuilderWithAnnotation[T, A](singleton = false)
-      override val self = builder
-    }
-  }
-
-  /**
-   * Returns a new [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Binder.html com.google.inject.Binder]]
-   * of type [[T]] with no [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scope.html com.google.inject.Scope]]
-   * that is bound with a binding annotation.
-   *
-   * @see [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scopes.html#NO_SCOPE No Scope]]
-   */
-  protected def bind[T: Manifest](annotation: Annotation): ScalaAnnotatedBindingBuilder[T] = {
-    new ScalaAnnotatedBindingBuilder[T] {
-      val builder: AnnotatedBindingBuilder[T] =
-        createBuilder[T](annotationOpt = Some(annotation), singleton = false)
-      override val self = builder
-    }
-  }
-
-  @deprecated("Use bindMultiple[T]", "2019-10-16")
-  protected def createMultiBinder[MultiBindType: Manifest]: ScalaMultibinder[MultiBindType] = {
-    ScalaMultibinder.newSetBinder[MultiBindType](binderAccess)
-  }
-
-  /**
    * Returns a new [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/multibindings/Multibinder.html com.google.inject.multibindings.Multibinder]]
    * that collects instances of type [[T]] in a [[scala.collection.immutable.Set]] that is itself
    * bound with no binding annotation.
@@ -478,89 +367,4 @@ abstract class TwitterModule extends AbstractModule with TwitterBaseModule with 
    */
   protected def bindOption[T: Manifest](annotation: Annotation): ScalaOptionBinder[T] =
     ScalaOptionBinder.newOptionBinder[T](binderAccess, annotation)
-
-  /** Binds a [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Scope.html com.google.inject.Scope]] to an annotation. */
-  protected[this] def bindScope[T <: Annotation: Manifest](scope: Scope): Unit =
-    binderAccess.bindScope(cls[T], scope)
-
-  /**
-   * Upon successful creation, the [[Injector]] will inject static fields and methods in
-   * the given classes.
-   *
-   * @tparam T type for which static members will be injected
-   */
-  protected[this] def requestStaticInjection[T: Manifest](): Unit =
-    binderAccess.requestStaticInjection(cls[T])
-
-  /**
-   * Returns the provider used to obtain instances for the given injection type [[T]].
-   * The returned provider will not be valid until the [[Injector]] has been
-   * created. The provider will throw an [[IllegalStateException]] if you
-   * try to use it beforehand.
-   *
-   * @tparam T the type for the provider to find.
-   * @return the [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Provider.html com.google.inject.Provider]]
-   *         of type [[T]]
-   */
-  @throws[IllegalStateException]
-  protected[this] def getProvider[T: Manifest]: Provider[T] = binderAccess.getProvider(cls[T])
-
-  /**
-   * Returns the members injector used to inject dependencies into methods and fields on instances
-   * of the given type [[T]]. The returned members injector will not be valid until the main
-   * [[Injector]] has been created. The members injector will throw an
-   * [[IllegalStateException]] if you try to use it beforehand.
-   *
-   * @tparam T type to get members injector for
-   * @return a [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/MembersInjector.html com.google.inject.MembersInjector]]
-   *         of type [[T]]
-   */
-  @throws[IllegalStateException]
-  protected[this] def getMembersInjector[T: Manifest]: MembersInjector[T] =
-    binderAccess.getMembersInjector(typeLiteral[T])
-
-  /* Private */
-
-  private[this] def createBuilder[T: Manifest](
-    annotationOpt: Option[Annotation] = None,
-    singleton: Boolean = true
-  ): AnnotatedBindingBuilder[T] = {
-    // ensure we get a useful stacktace and then bind the typeLiteral
-    val builder =
-      binderAccess
-        .withSource((new Throwable).getStackTrace()(3))
-        .bind(typeLiteral[T])
-
-    /* Set as singleton */
-    if (singleton) {
-      builder.in(Scopes.SINGLETON)
-    }
-
-    /* Set annotation if specified */
-    for (annotation <- annotationOpt) {
-      builder.annotatedWith(annotation)
-    }
-
-    builder
-  }
-
-  private[this] def createBuilderWithAnnotation[T: Manifest, A <: Annotation: Manifest](
-    singleton: Boolean = true
-  ): AnnotatedBindingBuilder[T] = {
-    // ensure we get a useful stacktace and then bind the typeLiteral
-    val builder =
-      binderAccess
-        .withSource((new Throwable).getStackTrace()(3))
-        .bind(typeLiteral[T])
-
-    /* Set as singleton */
-    if (singleton) {
-      builder.in(Scopes.SINGLETON)
-    }
-
-    /* Set annotation */
-    builder.annotatedWith(manifest[A].runtimeClass.asInstanceOf[Class[_ <: Annotation]])
-
-    builder
-  }
 }

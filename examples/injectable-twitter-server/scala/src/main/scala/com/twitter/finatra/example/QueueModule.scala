@@ -5,6 +5,6 @@ import com.twitter.inject.TwitterModule
 object QueueModule extends TwitterModule {
 
   override def configure(): Unit = {
-    bindSingleton[Queue].toInstance(new Queue())
+    bind[Queue].toInstance(new Queue())
   }
 }

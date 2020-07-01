@@ -192,7 +192,7 @@ class MessageBodyManagerTest extends Test with Mockito {
   }
 
   test("find no reader for type") {
-    val reader = messageBodyManager.reader[NoReaderRegistered]()
+    val reader = messageBodyManager.reader[NoReaderRegistered]
     reader should be(None)
   }
 

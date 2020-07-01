@@ -22,10 +22,10 @@ object TestTwitterModule extends TwitterModule with Assertions {
   val localModuleFlag: Flag[String] = flag("moduleString", "default", "A passed string")
 
   override protected def configure(): Unit = {
-    bindSingleton[String](Names.named("str1")).toInstance("string1")
+    bind[String].annotatedWith(Names.named("str1")).toInstance("string1")
     bind[String].annotatedWith(Names.named("str2")).toInstance("string2")
 
-    bindSingleton[Int].toInstance(11)
+    bind[Int].toInstance(11)
     bind[String].toInstance("default string")
     bind[String].annotatedWith[Prod].toInstance("prod string")
 

@@ -90,7 +90,7 @@ lazy val versions = new {
   val bijectionCore = "0.9.5"
   val commonsFileupload = "1.4"
   val fastutil = "8.1.1"
-  val guice = "4.2.1"
+  val guice = "4.2.3"
   val jackson = "2.11.0"
   val jodaConvert = "1.5"
   val jodaTime = "2.10.6"
@@ -104,7 +104,7 @@ lazy val versions = new {
   val nscalaTime = "2.14.0"
   val rocksdbjni = "5.14.2"
   val scalaCheck = "1.14.0"
-  val scalaGuice = "4.2.0"
+  val scalaGuice = "4.2.10"
   val scalaTest = "3.0.8"
   val slf4j = "1.7.30"
   val snakeyaml = "1.24"
@@ -459,7 +459,7 @@ lazy val injectModules = (project in file("inject/inject-modules"))
       previous.filter(mappingContainsAnyPath(_, injectModulesTestJarSources))
     }
   ).dependsOn(
-    injectCore % "test->test;compile->compile", 
+    injectCore % "test->test;compile->compile",
     injectStack
   )
 
@@ -507,8 +507,8 @@ lazy val injectApp = (project in file("inject/inject-app"))
       previous.filter(mappingContainsAnyPath(_, injectAppTestJarSources))
     }
   ).dependsOn(
-    injectCore % "test->test;compile->compile", 
-    injectModules % Test, 
+    injectCore % "test->test;compile->compile",
+    injectModules % Test,
     injectUtils
   )
 
@@ -624,7 +624,7 @@ lazy val injectRequestScope = (project in file("inject/inject-request-scope"))
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
-    injectCore % "test->test;compile->compile", 
+    injectCore % "test->test;compile->compile",
     injectApp % "test->test"
   )
 
@@ -643,7 +643,7 @@ lazy val injectThrift = (project in file("inject/inject-thrift"))
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
-    injectCore % "test->test", 
+    injectCore % "test->test",
     injectUtils
   )
 
@@ -1131,48 +1131,50 @@ lazy val kafka = (project in file("kafka"))
     utils % "test->test;compile->compile"
   )
 
-lazy val kafkaStreamsQueryableThriftClient = (project in file("kafka-streams/kafka-streams-queryable-thrift-client"))
-  .settings(projectSettings)
-  .settings(
-    name := "finatra-kafka-streams-queryable-thrift-client",
-    moduleName := "finatra-kafka-streams-queryable-thrift-client",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
-    libraryDependencies ++= Seq(
-      "com.twitter" %% "finagle-serversets" % versions.twLibVersion,
-      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
-    ),
-    excludeDependencies in Test ++= kafkaStreamsExclusionRules,
-    excludeDependencies ++= kafkaStreamsExclusionRules,
-    excludeFilter in unmanagedResources := "BUILD"
-  ).dependsOn(
-    injectCore % "test->test;compile->compile",
-    injectSlf4j % "test->test;compile->compile",
-    injectUtils % "test->test;compile->compile",
-    thrift % "test->test;compile->compile",
-    utils % "test->test;compile->compile"
-  )
-
-lazy val kafkaStreamsStaticPartitioning = (project in file("kafka-streams/kafka-streams-static-partitioning"))
-  .settings(projectSettings)
-  .settings(
-    name := "finatra-kafka-streams-static-partitioning",
-    moduleName := "finatra-kafka-streams-static-partitioning",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
-    excludeDependencies in Test ++= kafkaStreamsExclusionRules,
-    excludeDependencies ++= kafkaStreamsExclusionRules,
-    excludeFilter in unmanagedResources := "BUILD",
-    libraryDependencies ++= Seq(
-      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
+lazy val kafkaStreamsQueryableThriftClient =
+  (project in file("kafka-streams/kafka-streams-queryable-thrift-client"))
+    .settings(projectSettings)
+    .settings(
+      name := "finatra-kafka-streams-queryable-thrift-client",
+      moduleName := "finatra-kafka-streams-queryable-thrift-client",
+      ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
+      libraryDependencies ++= Seq(
+        "com.twitter" %% "finagle-serversets" % versions.twLibVersion,
+        "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
+      ),
+      excludeDependencies in Test ++= kafkaStreamsExclusionRules,
+      excludeDependencies ++= kafkaStreamsExclusionRules,
+      excludeFilter in unmanagedResources := "BUILD"
+    ).dependsOn(
+      injectCore % "test->test;compile->compile",
+      injectSlf4j % "test->test;compile->compile",
+      injectUtils % "test->test;compile->compile",
+      thrift % "test->test;compile->compile",
+      utils % "test->test;compile->compile"
     )
-  ).dependsOn(
-    injectCore % "test->test;compile->compile",
-    injectSlf4j % "test->test;compile->compile",
-    injectUtils % "test->test;compile->compile",
-    kafkaStreams % "test->test;compile->compile",
-    kafkaStreamsQueryableThriftClient % "test->test;compile->compile",
-    thrift % "test->test;compile->compile",
-    utils % "test->test;compile->compile"
-  )
+
+lazy val kafkaStreamsStaticPartitioning =
+  (project in file("kafka-streams/kafka-streams-static-partitioning"))
+    .settings(projectSettings)
+    .settings(
+      name := "finatra-kafka-streams-static-partitioning",
+      moduleName := "finatra-kafka-streams-static-partitioning",
+      ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
+      excludeDependencies in Test ++= kafkaStreamsExclusionRules,
+      excludeDependencies ++= kafkaStreamsExclusionRules,
+      excludeFilter in unmanagedResources := "BUILD",
+      libraryDependencies ++= Seq(
+        "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
+      )
+    ).dependsOn(
+      injectCore % "test->test;compile->compile",
+      injectSlf4j % "test->test;compile->compile",
+      injectUtils % "test->test;compile->compile",
+      kafkaStreams % "test->test;compile->compile",
+      kafkaStreamsQueryableThriftClient % "test->test;compile->compile",
+      thrift % "test->test;compile->compile",
+      utils % "test->test;compile->compile"
+    )
 
 lazy val kafkaStreamsPrerestore = (project in file("kafka-streams/kafka-streams-prerestore"))
   .settings(projectSettings)
@@ -1187,29 +1189,30 @@ lazy val kafkaStreamsPrerestore = (project in file("kafka-streams/kafka-streams-
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
-    http % "test->test", 
+    http % "test->test",
     kafkaStreamsStaticPartitioning % "test->test;compile->compile"
   )
 
-lazy val kafkaStreamsQueryableThrift = (project in file("kafka-streams/kafka-streams-queryable-thrift"))
-  .settings(projectSettings)
-  .settings(
-    name := "finatra-kafka-streams-queryable-thrift",
-    moduleName := "finatra-kafka-streams-queryable-thrift",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
-    excludeDependencies in Test ++= kafkaStreamsExclusionRules,
-    excludeDependencies ++= kafkaStreamsExclusionRules,
-    scroogeThriftIncludeFolders in Compile := Seq(file("src/test/thrift")),
-    scroogeLanguages in Compile := Seq("java", "scala"),
-    scroogeLanguages in Test := Seq("java", "scala"),
-    excludeFilter in unmanagedResources := "BUILD",
-    libraryDependencies ++= Seq(
-      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
+lazy val kafkaStreamsQueryableThrift =
+  (project in file("kafka-streams/kafka-streams-queryable-thrift"))
+    .settings(projectSettings)
+    .settings(
+      name := "finatra-kafka-streams-queryable-thrift",
+      moduleName := "finatra-kafka-streams-queryable-thrift",
+      ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
+      excludeDependencies in Test ++= kafkaStreamsExclusionRules,
+      excludeDependencies ++= kafkaStreamsExclusionRules,
+      scroogeThriftIncludeFolders in Compile := Seq(file("src/test/thrift")),
+      scroogeLanguages in Compile := Seq("java", "scala"),
+      scroogeLanguages in Test := Seq("java", "scala"),
+      excludeFilter in unmanagedResources := "BUILD",
+      libraryDependencies ++= Seq(
+        "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
+      )
+    ).dependsOn(
+      injectCore % "test->test;compile->compile",
+      kafkaStreamsStaticPartitioning % "test->test;compile->compile"
     )
-  ).dependsOn(
-    injectCore % "test->test;compile->compile",
-    kafkaStreamsStaticPartitioning % "test->test;compile->compile"
-  )
 
 lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))
   .settings(projectSettings)
@@ -1265,7 +1268,7 @@ lazy val benchmark = (project in file("examples/benchmark"))
       "org.slf4j" % "slf4j-nop" % versions.slf4j
     )
   ).dependsOn(
-    http % "test->test;compile->compile", 
+    http % "test->test;compile->compile",
     injectCore % "test->test"
   )
 
@@ -1282,9 +1285,9 @@ lazy val javaInjectableApp = (project in file("examples/injectable-app/java"))
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
-    injectApp % "test->test;compile->compile", 
-    injectLogback, 
-    injectModules, 
+    injectApp % "test->test;compile->compile",
+    injectLogback,
+    injectModules,
     injectSlf4j
   )
 
@@ -1298,9 +1301,9 @@ lazy val scalaInjectableApp = (project in file("examples/injectable-app/scala"))
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
-    injectApp % "test->test;compile->compile", 
-    injectLogback, 
-    injectModules, 
+    injectApp % "test->test;compile->compile",
+    injectLogback,
+    injectModules,
     injectSlf4j
   )
 
@@ -1325,20 +1328,21 @@ lazy val javaInjectableTwitterServer = (project in file("examples/injectable-twi
     utils
   )
 
-lazy val scalaInjectableTwitterServer = (project in file("examples/injectable-twitter-server/scala"))
-  .settings(exampleServerSettings)
-  .settings(noPublishSettings)
-  .settings(
-    name := "scala-twitter-server",
-    moduleName := "scala-twitter-server",
-    libraryDependencies ++= Seq(
-      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal",
+lazy val scalaInjectableTwitterServer =
+  (project in file("examples/injectable-twitter-server/scala"))
+    .settings(exampleServerSettings)
+    .settings(noPublishSettings)
+    .settings(
+      name := "scala-twitter-server",
+      moduleName := "scala-twitter-server",
+      libraryDependencies ++= Seq(
+        "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal",
+      )
+    ).dependsOn(
+      injectServer % "test->test;compile->compile",
+      injectSlf4j,
+      utils
     )
-  ).dependsOn(
-    injectServer % "test->test;compile->compile", 
-    injectSlf4j, 
-    utils
-  )
 
 // http server
 

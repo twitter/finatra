@@ -7,6 +7,6 @@ import com.twitter.inject.thrift.internal.DefaultAndThenServiceImpl
 object AndThenServiceModule extends TwitterModule {
 
   override def configure: Unit = {
-    bindSingleton[AndThenService].to[DefaultAndThenServiceImpl]
+    bind[AndThenService].to[DefaultAndThenServiceImpl]
   }
 }

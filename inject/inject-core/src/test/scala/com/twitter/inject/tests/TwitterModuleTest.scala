@@ -1,22 +1,58 @@
 package com.twitter.inject.tests
 
 import com.google.inject.name.Names
-import com.google.inject.{CreationException, Guice, Key, Module}
+import com.google.inject.{
+  AbstractModule,
+  CreationException,
+  Guice,
+  Key,
+  Module,
+  Provides,
+  ProvisionException,
+  Stage
+}
 import com.twitter.inject.tests.module.classes._
 import com.twitter.inject.tests.module.{ClassToConvert, ComplexServiceFactory, TestTwitterModule}
 import com.twitter.inject.{Injector, Test, TwitterModule}
 import java.lang.annotation.Annotation
-import javax.inject.{Named, Provider, Singleton}
+import javax.inject.{Inject, Named, Provider, Singleton}
+import net.codingwell.scalaguice.ScalaModule
 import scala.collection.immutable
 import scala.util.Random
 
+object SeqAbstractModule extends AbstractModule with ScalaModule {
+  @Singleton
+  @Provides
+  def provideSeq: Seq[Array[Byte]] =
+    Seq.empty[Array[Byte]]
+}
+
+class SomeClient {
+  protected val underlying: String = "Hello, Alice."
+  def get: String = underlying
+}
+
+trait Augmentation { self: SomeClient =>
+  override def get: String = s"${self.underlying} Welcome to Wonderland."
+  def onlyHere: String = "Only on augmented classes."
+}
+
+class Baz @Inject() (client: SomeClient with Augmentation) {
+  client.onlyHere
+}
+
+object TwitterModuleTest {
+  type AugmentedSomeClient = SomeClient with Augmentation
+}
+
 class TwitterModuleTest extends Test {
+  import TwitterModuleTest._
+
   private case class W[T](t: T)
   private val annotation = Names.named(Random.alphanumeric.take(12).mkString.toLowerCase())
 
   // Users should prefer the `c.t.inject.app.TestInjector` but it is not in scope here.
-  private val injector: Injector =
-    Injector(Guice.createInjector(TestTwitterModule))
+  private val injector: Injector = Injector(Guice.createInjector(TestTwitterModule))
 
   override def beforeAll(): Unit = {
     super.beforeAll()
@@ -26,6 +62,72 @@ class TwitterModuleTest extends Test {
   override def afterAll(): Unit = {
     TestTwitterModule.singletonShutdown(injector)
     super.afterAll()
+  }
+
+  test("byte array generics") {
+    import net.codingwell.scalaguice.InjectorExtensions._
+    val i = Guice.createInjector(SeqAbstractModule)
+
+    i.instance[Seq[Array[Byte]]] should equal(Seq.empty[Array[Byte]])
+  }
+
+  test("can't bind class with trait and class") {
+    intercept[CreationException] {
+      Guice.createInjector(
+        new AbstractModule with ScalaModule {
+          @Provides
+          @Singleton
+          def provideSomeClient: SomeClient with Augmentation = {
+            new SomeClient with Augmentation
+          }
+        },
+        new AbstractModule with ScalaModule {
+          @Provides
+          @Singleton
+          def provideSomeClient: SomeClient = {
+            new SomeClient
+          }
+        }
+      )
+    }
+  }
+
+  test("class with trait type") {
+    import net.codingwell.scalaguice.InjectorExtensions._
+    val i = Guice.createInjector(
+      Stage.PRODUCTION,
+      new AbstractModule with ScalaModule {
+        @Provides
+        @Singleton
+        def provideSomeClient: SomeClient with Augmentation = {
+          new SomeClient with Augmentation
+        }
+      })
+
+    val r1 = i.instance[SomeClient with Augmentation]
+    r1.get should equal("Hello, Alice. Welcome to Wonderland.")
+
+    val r2 = i.instance[AugmentedSomeClient]
+    r2.get should equal("Hello, Alice. Welcome to Wonderland.")
+  }
+
+  test("class only type") {
+    import net.codingwell.scalaguice.InjectorExtensions._
+    val i = Guice.createInjector(
+      Stage.PRODUCTION,
+      new AbstractModule with ScalaModule {
+        @Provides
+        @Singleton
+        def provideSomeClient: SomeClient = {
+          new SomeClient
+        }
+      })
+
+    // fails since only SomeClient is bound
+    val e = intercept[ProvisionException] {
+      i.instance[Baz]
+    }
+    e.getCause.isInstanceOf[ClassCastException] should be(true)
   }
 
   test("get assisted factory instance from injector") {

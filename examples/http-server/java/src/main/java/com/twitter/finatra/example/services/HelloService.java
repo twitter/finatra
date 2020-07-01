@@ -2,8 +2,6 @@ package com.twitter.finatra.example.services;
 
 import javax.inject.Inject;
 
-import scala.reflect.ManifestFactory;
-
 import com.twitter.finagle.http.Method;
 import com.twitter.finagle.http.Request;
 import com.twitter.finagle.http.Response;
@@ -42,7 +40,7 @@ public class HelloService {
    * turns a cat into a dog
    */
   public Response cat(Request request) {
-    Cat cat = messageBodyManager.read(request, ManifestFactory.classType(Cat.class));
+    Cat cat = messageBodyManager.read(request, Cat.class);
     Dog dog = new Dog();
     dog.setName(cat.getName());
     dog.setColor(cat.getColor());

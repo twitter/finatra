@@ -4,6 +4,7 @@ import com.twitter.finagle.filter.LogFormatter
 import com.twitter.finagle.http.filter.CommonLogFormatter
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.inject.TwitterModule
+import javax.inject.Singleton
 
 /**
  * A [[com.twitter.inject.TwitterModule]] which provides a
@@ -12,6 +13,6 @@ import com.twitter.inject.TwitterModule
 object AccessLogModule extends TwitterModule {
 
   override def configure(): Unit = {
-    bindSingleton[LogFormatter[Request, Response]].to[CommonLogFormatter]
+    bind[LogFormatter[Request, Response]].to[CommonLogFormatter].in[Singleton]
   }
 }

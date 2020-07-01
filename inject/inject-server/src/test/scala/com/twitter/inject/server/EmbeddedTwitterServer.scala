@@ -208,7 +208,7 @@ class EmbeddedTwitterServer(
       case Some(receiver) =>
         injectableServer.addFrameworkOverrideModules(new TwitterModule {
           override def configure(): Unit = {
-            bindSingleton[StatsReceiver].toInstance(receiver)
+            bind[StatsReceiver].toInstance(receiver)
           }
         })
       case _ =>

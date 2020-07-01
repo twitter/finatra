@@ -1,16 +1,15 @@
 package com.twitter.inject.app.tests
 
-import com.google.inject.Provides
 import com.google.inject.name.Names
+import com.google.inject.{Provides, Scopes}
 import com.twitter.app.GlobalFlag
 import com.twitter.finagle.Service
 import com.twitter.inject.annotations.{Annotations, Down, Flag, Flags, Up}
 import com.twitter.inject.app.TestInjector
-import com.twitter.inject.{Injector, Mockito, Test, TwitterModule, TypeUtils}
+import com.twitter.inject.{Injector, Mockito, Test, TwitterModule}
 import com.twitter.util.Future
 import javax.inject.{Inject, Singleton}
 import scala.language.higherKinds
-import scala.reflect.runtime.universe._
 
 object testBooleanGlobalFlag
     extends GlobalFlag[Boolean](false, "Test boolean global flag defaulted to false")
@@ -59,6 +58,17 @@ class TestTraitImpl2 extends TestTrait {
   def foobar(): String = {
     this.getClass.getSimpleName
   }
+}
+
+class FineStructureConstant extends Number {
+  private[this] val constant: Float = 1 / 137
+  override def intValue(): Int = constant.toInt
+
+  override def longValue(): Long = constant.toLong
+
+  override def floatValue(): Float = constant
+
+  override def doubleValue(): Double = constant.toDouble
 }
 
 class FortyTwo extends Number {
@@ -129,23 +139,37 @@ object BooleanFlagModule extends TwitterModule {
   flag[Boolean]("x", false, "default to false")
 }
 
+trait Incr {
+  def getValue: Int
+}
+
 object TestBindModule extends TwitterModule {
+  private[this] var counter: Int = 0
+
+  class IncrImpl extends Incr {
+    counter += 1
+    def getValue: Int = counter
+  }
+
   flag[Boolean]("bool", false, "default is false")
 
   override protected def configure(): Unit = {
-    bind[String, Up].toInstance("Hello, world!")
+    bind[Incr].annotatedWith(Names.named("singleton")).to[IncrImpl].in[Singleton]
+    bind[Incr]
+      .annotatedWith(Names.named("nonsingleton")).to[IncrImpl] // creates a new instance every time
+    bind[Incr].to(classOf[IncrImpl]) // not annotated and not scoped, creates a new instance
+    bind[String].annotatedWith[Up].toInstance("Hello, world!")
     bind[Baz].toInstance(new Baz(10))
-    bind[Baz](Names.named("five")).toInstance(new Baz(5))
-    bind[Baz](Names.named("six")).toInstance(new Baz(6))
-    bind[Boolean](Flags.named("bool")).toInstance(true)
+    bind[Baz].annotatedWith(Names.named("five")).toInstance(new Baz(5))
+    bind[Baz].annotatedWith(Names.named("six")).toInstance(new Baz(6))
+    bind[Boolean].annotatedWith(Flags.named("bool")).toInstance(true)
     bind[Service[Int, String]].toInstance(Service.mk { i: Int =>
       Future.value(s"The answer is: $i")
     })
     bind[Option[Boolean]].toInstance(None)
     bind[Seq[Long]].toInstance(Seq(1L, 2L, 3L))
-    // need to explicitly provide a Manifest for the higher kinded type
-    bind[DoEverything[Future]](TypeUtils.asManifest[DoEverything[Future]])
-      .toInstance(new DoEverythingImpl42)
+    bind[DoEverything[Future]].toInstance(new DoEverythingImpl42)
+    bind[Number].annotatedWith(Names.named("alpha")).to[FineStructureConstant].in(Scopes.SINGLETON)
   }
 
   @Provides
@@ -204,12 +228,29 @@ class TestInjectorTest extends Test with Mockito {
     injector.instance[Seq[Long]] should equal(Seq(1L, 2L, 3L))
     val svc = injector.instance[Service[Int, String]]
     await(svc(42)) should equal("The answer is: 42")
-    // need to explicitly provide a Manifest here for the higher kinded type
-    // note: this is not always necessary
-    await(
-      injector
-        .instance[DoEverything[Future]](
-          TypeUtils.asManifest[DoEverything[Future]]).magicNum()) should equal("42")
+    await(injector.instance[DoEverything[Future]].magicNum()) should equal("42")
+
+    // the singleton version should get initialized to 1 and remain 1
+    injector.instance[Incr](Names.named("singleton")).getValue should equal(1)
+    injector.instance[Incr](Names.named("singleton")).getValue should equal(1)
+    injector.instance[Incr](Names.named("singleton")).getValue should equal(1)
+
+    // the non singleton version should get initialized to 2 and incr everytime requested since it is a new instance
+    injector.instance[Incr](Names.named("nonsingleton")).getValue should equal(2)
+    injector.instance[Incr](Names.named("nonsingleton")).getValue should equal(3)
+    injector.instance[Incr](Names.named("nonsingleton")).getValue should equal(4)
+
+    // non singleton version, not annotated and bound by classOf, should be initialized to 5 and incr everytime
+    injector.instance[Incr].getValue should equal(5)
+    injector.instance[Incr].getValue should equal(6)
+    injector.instance[Incr].getValue should equal(7)
+
+    // singleton shouldn't change
+    injector.instance[Number](Names.named("alpha")).floatValue() should equal(1 / 137)
+    injector.instance[Number](Names.named("alpha")).doubleValue() should equal((1 / 137).toDouble)
+    injector.instance[Number](Names.named("alpha")).longValue() should equal((1 / 137).toLong)
+    injector.instance[Number](Names.named("alpha")).intValue() should equal((1 / 137).toInt)
+
   }
 
   test("bind") {
@@ -253,9 +294,7 @@ class TestInjectorTest extends Test with Mockito {
       .bind[Option[Long]].toInstance(None)
       .bind[Option[Service[String, String]]].toInstance(None)
       .bind[Seq[Long]].toInstance(Seq(33L, 34L))
-      // need to explicitly provide a TypeTag here for the higher kinded type
-      // note: this is not always necessary
-      .bind[DoEverything[Future]](typeTag[DoEverything[Future]]).toInstance(new DoEverythingImpl137)
+      .bind[DoEverything[Future]].toInstance(new DoEverythingImpl137)
       .create
 
     injector.instance[TestTrait].foobar() should be("TestTraitImpl1")
@@ -286,12 +325,7 @@ class TestInjectorTest extends Test with Mockito {
 
     injector.instance[Option[Service[String, String]]] shouldBe None
 
-    // need to explicitly provide a Manifest here for the higher kinded type
-    // note: this is not always necessary
-    await(
-      injector
-        .instance[DoEverything[Future]](
-          TypeUtils.asManifest[DoEverything[Future]]).magicNum()) should equal("137")
+    await(injector.instance[DoEverything[Future]].magicNum()) should equal("137")
   }
 
   test("bindClass") {

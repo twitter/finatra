@@ -94,7 +94,7 @@ private[http] class CallbackConverter @Inject() (
         )
       case _ =>
         request: Request =>
-          val callbackInput = messageBodyManager.read(request)(manifestRequestType)
+          val callbackInput = messageBodyManager.read[RequestType](request)
           callback(callbackInput)
     }
   }

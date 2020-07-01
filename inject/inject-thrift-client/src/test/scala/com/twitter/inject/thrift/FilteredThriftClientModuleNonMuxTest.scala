@@ -5,7 +5,7 @@ import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
 import com.twitter.inject.thrift.modules.{FilteredThriftClientModule, ThriftClientIdModule}
-import com.twitter.inject.{Injector, IntegrationTest, TypeUtils}
+import com.twitter.inject.{Injector, IntegrationTest}
 import com.twitter.util.Future
 
 class FilteredThriftClientModuleNonMuxTest extends IntegrationTest {
@@ -19,8 +19,7 @@ class FilteredThriftClientModuleNonMuxTest extends IntegrationTest {
     flags = Map("com.twitter.server.resolverMap" -> "greeter-thrift-service=nil!")
   ).create
 
-  lazy val greeter: Greeter[Future] =
-    injector.instance[Greeter[Future]](TypeUtils.asManifest[Greeter[Future]])
+  lazy val greeter: Greeter[Future] = injector.instance[Greeter[Future]]
 
   test("bind expected type properly") {
     assert(greeter != null)
