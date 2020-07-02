@@ -46,8 +46,8 @@ throughout the framework to provide users the choice of using the object graph o
 Why Use The Object Graph?
 -------------------------
 
-A primary focus of the Finatra framework is making it easy to test services and applications. We think using
-the design pattern of `Dependency Injection <https://en.wikipedia.org/wiki/Dependency_injection>`__ can lead to more 
+A primary focus of the Finatra framework is to make it easy to test services and applications. We think using
+the `Dependency Injection <https://en.wikipedia.org/wiki/Dependency_injection>`__ design pattern can lead to more 
 testable code (more on this topic in the next section) because an outcome of using the pattern is that dependencies 
 of the code under test can be replaced when testing.
 
@@ -372,3 +372,51 @@ The `c.t.inject.TwitterModuleLifecycle <https://github.com/twitter/finatra/blob/
 See: Guice's documentation on `Modules should be fast and side-effect free <https://github.com/google/guice/wiki/ModulesShouldBeFastAndSideEffectFree>`__ and `Avoid Injecting Closable Resources <https://github.com/google/guice/wiki/Avoid-Injecting-Closable-Resources>`__.
 
 For more information on Finatra Modules see the documentation `here <./modules.html>`__.
+
+Scala to Java Type conversions
+------------------------------
+
+Both the `c.t.inject.TwitterModule` and `c.t.inject.Injector` are Scala classes which support creation of a Guice `TypeLiteral <https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/TypeLiteral.html>`__ based on the given Type `T` parameter. A `TypeLiteral <https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/TypeLiteral.html>`__ is used to construct the binding `Key <https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/Key.html>`__ for storing the bound instance in the object graph. The framework uses the `codingwell/scala-guice <https://github.com/codingwell/scala-guice/>`__ library for producing a `TypeLiteral <https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/TypeLiteral.html>`__ from a `T`.
+
+.. warning::
+
+    Binding or injector lookup by type `T` can produce different Guice `Key <https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/Key.html>`__ values as the constructed `TypeLiteral <https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/TypeLiteral.html>`__ may carry more type information than Guice would normally be able to obtain in Java.
+
+Because of the use of the Scala `Types.TypeApi <https://www.scala-lang.org/api/current/scala-reflect/scala/reflect/api/Types$TypeApi.html>`__, it is possible that a generated `TypeLiteral <https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/TypeLiteral.html>`__ from a parameterized type, e.g., `F[T]`, will be different than what Guice itself would produce since Guice is a Java library and can suffer from `type erasure <https://docs.oracle.com/javase/tutorial/java/generics/erasure.html>`__ when using reflection to convert a Scala type to a Java type. 
+
+Thus, if you manually bind a parameterized type in a `c.t.inject.TwitterModule` using `bind[T]` in the `configure()` method, you may not be able to `@Inject` the type into another class since the Guice Java library may not be able to construct the same `TypeLiteral <https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/TypeLiteral.html>`__ in order to build the `Key <https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/Key.html>`__ to locate the binding in the Injector. 
+
+However, you will be able to locate the type manually from the `c.t.inject.Injector` via `inject.instance[T]` which will generate the same `TypeLiteral <https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/TypeLiteral.html>`__ and thus the same `Key <https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/Key.html>`__ as created when manually calling `bind[T]` in a `c.t.inject.TwitterModule`.
+
+For example, if you provide an `Option[String]` in an `@Provides`-annotated method in a Module, Guice will create a Key over a TypeLiteral of just `scala.Option`:
+
+.. code:: scala
+
+    scala> val module = new AbstractModule {
+     |   override def configure(): Unit = {
+     |     bind(classOf[Option[String]]).toInstance(Some("hello"))
+     |   }
+     | }
+    module: com.google.inject.AbstractModule = $anon$1@2f3a3fec
+
+    scala> val injector = Guice.createInjector(module)
+    injector: com.google.inject.Injector = Injector{bindings=[InstanceBinding{key=Key[type=scala.Option, annotation=[none]], source=$anon$1.configure(<console>:21), instance=Some(hello)}]}
+
+However, using the `c.t.inject.TwitterModule` binding DSL would produce a `Key <https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/Key.html>`__ with a fully specified `TypeLiteral <https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/TypeLiteral.html>`__:
+
+.. code:: scala
+
+    scala> val module = new AbstractModule with ScalaModule {
+     |   override def configure(): Unit = {
+     |     bind[Option[String]].toInstance(Some("hello"))
+     |   }
+     | }
+    module: com.google.inject.AbstractModule with net.codingwell.scalaguice.ScalaModule = $anon$1@6ebbc06
+
+    scala> val injector = Guice.createInjector(module)
+    injector: com.google.inject.Injector = Injector{bindings=[InstanceBinding{key=Key[type=scala.Option<java.lang.String>, annotation=[none]], source=$anon$1.configure(<console>:17), instance=Some(hello)}]}
+
+This can also affect `@Inject`-ing an instance of the type versus manually obtaining an instance from the injector.
+
+A workaround for consistency is to introduce an unparameterized wrapper type over the parameterized type or 
+consistently use the Java methods for binding and lookup, e.g., `@Provides`-annotated methods in Modules, and the `Class[_]`-based methods for binding and injector instance retrieval.

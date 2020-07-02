@@ -144,43 +144,6 @@ to stdout after each test by default.
 See: `c.t.finatra.multiserver.test.MultiServerFeatureTest <https://github.com/twitter/finatra/blob/develop/inject-thrift-client-http-mapper/src/test/scala/com/twitter/finatra/multiserver/test/MultiServerFeatureTest.scala>`__
 for an example usage.
 
-Testing a |c.t.inject.app.App|_
--------------------------------
-
-Finatra supports creating an *injectable* `c.t.app.App` (documentation `here <../app/index.html>`_) with |c.t.inject.app.App|_. To test, simply wrap your |c.t.inject.app.App|_ with an `c.t.inject.app.EmbeddedApp <https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala>`__.
-
-For example,
-
-.. code:: scala
-
-    import com.twitter.inject.Test
-    import com.twitter.inject.app.EmbeddedApp
-
-    class MyAppTest extends Test {
-
-      // build an EmbeddedApp
-      def newApp: EmbeddedApp = 
-        new EmbeddedApp(new MyApp).bind[Foo].toInstance(new Foo(2))
-
-      test("MyApp#run") {
-        newApp.main("username" -> "jack")
-      }
-
-      test("MyApp#works as expected") {
-        val localTestInstanceApp = newApp
-        localTestInstanceApp.main("username" -> "jill")
-
-        // expect behavior against instances from the `localTestInstanceApp` injector
-        localTestInstanceApp.injector.instance[Foo].value should be(Foo(2))
-      }
-    }
-
-.. important::
-
-    Note: every call to `EmbeddedApp#main` will run the application with the given flags. If your application is stateful, 
-    you may want to ensure that a new instance of your application under test (like written above) is created per
-    test run.
-
 More Information
 ----------------
 
