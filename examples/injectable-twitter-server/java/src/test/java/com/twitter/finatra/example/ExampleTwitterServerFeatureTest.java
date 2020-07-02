@@ -1,6 +1,7 @@
 package com.twitter.finatra.example;
 
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 import com.google.inject.Stage;
 
@@ -21,8 +22,12 @@ public class ExampleTwitterServerFeatureTest extends Assert {
   ).bindClass(Queue.class, TEST_QUEUE);
 
   @BeforeClass
-  public static void setup() {
+  public static void setup() throws InterruptedException {
     SERVER.start();
+
+    // The server can be marked as started before the TestQueue is written to, resulting
+    // in flaky test execution. We wait for the first execution before allowing tests to continue.
+    TEST_QUEUE.firstWriteLatch.await(1, TimeUnit.SECONDS);
   }
 
   @AfterClass

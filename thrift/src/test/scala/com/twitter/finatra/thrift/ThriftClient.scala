@@ -9,7 +9,8 @@ import com.twitter.finagle.thrift.service.{
   ServicePerEndpointBuilder,
   ThriftServiceBuilder
 }
-import com.twitter.inject.server.{EmbeddedTwitterServer, info, PortUtils, Ports}
+import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports, info}
+import com.twitter.util.{Await, Duration, Promise}
 import scala.reflect.ClassTag
 
 trait ThriftClient { self: EmbeddedTwitterServer =>
@@ -74,12 +75,22 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
    */
   lazy val externalThriftHostAndPort: String = PortUtils.loopbackAddressForPort(thriftExternalPort)
 
+  /*
+   * We need to wait on the external ports to be bound, which can happen after a server
+   * is started and marked as healthy.
+   */
+  private[this] val ready: Promise[Unit] = EmbeddedTwitterServer.isPortReady(
+    twitterServer,
+    twitterServer.thriftPort.isDefined && twitterServer.thriftPort.get != 0)
+
   /**
    * Bound external Thrift port for the Embedded TwitterServer.
    * @return the bound external port on which the Embedded TwitterServer is serving the Thrift service.
    */
   def thriftExternalPort: Int = {
     self.start()
+    // need to wait until we know the ports are bound
+    Await.ready(ready, Duration.fromSeconds(5))
     twitterServer.thriftPort.get
   }
 

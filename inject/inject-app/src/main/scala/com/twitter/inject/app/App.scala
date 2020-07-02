@@ -1,11 +1,17 @@
 package com.twitter.inject.app
 
 import com.google.inject.{Module, Stage}
+import com.twitter.app.lifecycle.Event.{
+  AfterPostWarmup,
+  BeforePostWarmup,
+  PostInjectorStartup,
+  PostWarmup,
+  Warmup
+}
 import com.twitter.app.{Flag, Flaggable}
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.app.internal.{InstalledModules, Modules}
 import com.twitter.inject.{Injector, InjectorModule, Logging}
-import java.util.concurrent.atomic.AtomicBoolean
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ArrayBuffer
 
@@ -112,9 +118,6 @@ trait App extends com.twitter.app.App with Logging {
   private val frameworkModules: ArrayBuffer[Module] = ArrayBuffer(InjectorModule)
   private val frameworkOverrideModules: ArrayBuffer[Module] = ArrayBuffer()
 
-  private[this] val _started: AtomicBoolean = new AtomicBoolean(false)
-  private[inject] def started: Boolean = _started.get
-
   private[inject] var stage: Stage = Stage.PRODUCTION
   private[this] var installedModules: InstalledModules = _
 
@@ -129,24 +132,33 @@ trait App extends com.twitter.app.App with Logging {
 
   /** DO NOT BLOCK */
   def main(): Unit = {
-    installedModules = loadModules()
+    observe(PostInjectorStartup) {
+      installedModules = loadModules()
+      installedModules.postInjectorStartup()
+      postInjectorStartup()
+    }
 
-    installedModules.postInjectorStartup()
-    postInjectorStartup()
+    observe(Warmup) {
+      info("Warming up.")
+      warmup()
+    }
 
-    info("Warming up.")
-    warmup()
-    beforePostWarmup()
-    postWarmup()
-    afterPostWarmup()
-    installedModules.postWarmupComplete()
+    observe(BeforePostWarmup) {
+      beforePostWarmup()
+    }
+    observe(PostWarmup) {
+      postWarmup()
+    }
+    observe(AfterPostWarmup) {
+      afterPostWarmup()
+      installedModules.postWarmupComplete()
+    }
 
     /* Register close and shutdown of InstalledModules */
     registerInstalledModulesExits()
 
-    /* Lifecycle is complete, mark the server as started. */
-    _started.set(true)
     info(s"$name started.")
+
     /* Execute callback for further configuration or to start long-running background processes */
     startApplication()
   }

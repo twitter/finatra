@@ -3,9 +3,10 @@ package com.twitter.inject.server.tests
 import com.twitter.finagle.http.Status
 import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest}
+import org.scalatest.concurrent.Eventually
 
 /** Test a non-inject TwitterServer using an InMemoryStatsReceiver implementation with the [[FeatureTest]] trait */
-class FeatureTestNonInjectionInMemoryStatsReceiverTest extends FeatureTest {
+class FeatureTestNonInjectionInMemoryStatsReceiverTest extends FeatureTest with Eventually {
 
   private[this] val inMemoryStatsReceiver: InMemoryStatsReceiver = new InMemoryStatsReceiver
 
@@ -26,9 +27,13 @@ class FeatureTestNonInjectionInMemoryStatsReceiverTest extends FeatureTest {
   override def beforeAll(): Unit = {
     server.start()
 
-    assert(
-      inMemoryStatsReceiver.gauges.nonEmpty
-    ) /* we add a build revision gauge in startup of the server */
+    // the server starts and is marked as healthy as soon as the admin starts
+    // we need a little time for the exposed server to start and setup stats
+    eventually {
+      assert(
+        inMemoryStatsReceiver.gauges.nonEmpty
+      ) /* we add a build revision gauge in startup of the server */
+    }
   }
 
   test("TestServer#starts up") {

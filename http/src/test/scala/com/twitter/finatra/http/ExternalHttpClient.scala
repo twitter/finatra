@@ -3,7 +3,7 @@ package com.twitter.finatra.http
 import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports, info}
-import com.twitter.util.Closable
+import com.twitter.util.{Await, Closable, Promise}
 import net.codingwell.scalaguice.typeLiteral
 import scala.collection.JavaConverters._
 
@@ -73,15 +73,29 @@ private[twitter] trait ExternalHttpClient { self: EmbeddedTwitterServer =>
     s"https://$externalHttpsHostAndPort$path"
   }
 
+  /* Promise that signals that the underlying twitterServer's httpPort has been bound */
+  private[this] val httpPortReady: Promise[Unit] = EmbeddedTwitterServer.isPortReady(
+    twitterServer,
+    twitterServer.httpExternalPort.isDefined && twitterServer.httpExternalPort.get != 0
+  )
+
+  /* Promise that signals that the underlying twitterServer's httpsPort has been bound */
+  private[this] val httpsPortReady: Promise[Unit] = EmbeddedTwitterServer.isPortReady(
+    twitterServer,
+    twitterServer.httpsExternalPort.isDefined && twitterServer.httpsExternalPort.get != 0
+  )
+
   /** The assigned external "http" port for the underlying embedded HttpServer */
   def httpExternalPort(): Int = {
     start()
+    Await.ready(httpPortReady, 5.seconds)
     twitterServer.httpExternalPort.get
   }
 
   /** The assigned external "https" port for the underlying embedded HttpServer */
   def httpsExternalPort(): Int = {
     start()
+    Await.ready(httpsPortReady, 5.seconds)
     twitterServer.httpsExternalPort.get
   }
 

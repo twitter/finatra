@@ -2,21 +2,24 @@ package com.twitter.inject.server
 
 import com.google.inject.Stage
 import com.twitter.app.GlobalFlag
+import com.twitter.app.lifecycle.Event.{Close, PreMain}
+import com.twitter.app.lifecycle.{Event, Observer}
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
-import com.twitter.inject.{Injector, PoolUtils, TwitterModule}
+import com.twitter.finagle.util.DefaultTimer
 import com.twitter.inject.app.{BindDSL, StartupTimeoutException}
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.inject.server.PortUtils.getPort
+import com.twitter.inject.{Injector, PoolUtils, TwitterModule}
 import com.twitter.util.lint.{GlobalRules, Rule}
-import com.twitter.util.{Await, Closable, Duration, ExecutorServiceFuturePool, Future}
+import com.twitter.util.{Await, Closable, Duration, ExecutorServiceFuturePool, Future, Promise}
 import java.lang.annotation.Annotation
-import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.ConcurrentLinkedQueue
 import org.scalatest.Matchers
 import scala.collection.JavaConverters._
 import scala.collection.SortedMap
-import scala.util.control.Breaks._
 import scala.util.control.NonFatal
 
 object EmbeddedTwitterServer {
@@ -110,6 +113,70 @@ object EmbeddedTwitterServer {
       case (fn, collector) =>
         input => collector(fn(input))
     }
+
+  /**
+   * Generate a [[Promise]] that will be fulfilled when the server has bound and exposed a specific
+   * port that is ready for traffic. The resulting [[Promise]] can be [[Await awaited]] upon to
+   * gate execution of a client against an [[EmbeddedTwitterServer]], as the server may be considered
+   * started and ready for testing before ports are bound for a specific client.
+   *
+   * @param twitterServer The [[com.twitter.server.TwitterServer]] to observe
+   * @param portBound The logic to exercise that will determine if the specific port is ready
+   *                  and bound within the underlying [[twitterServer]].
+   * @return A [[Promise]] that will be fulfilled when the port is bound to the [[twitterServer]]
+   *
+   * @note The [[portBound]] logic will never exercised if the [[twitterServer]] is an
+   *       [[TwitterServer inject TwitterServer]], as the lifecycle information notifies us when the
+   *       ports are bound and ready.
+   * @note This method should be called before attempting to start the underlying [[twitterServer]].
+   */
+  private[twitter] def isPortReady(
+    twitterServer: com.twitter.server.TwitterServer,
+    portBound: => Boolean
+  ): Promise[Unit] = {
+    val promise = Promise[Unit]()
+
+    val warmupObserver: Observer = new Observer {
+
+      private[this] val (readyEvent, readyAction) = twitterServer match {
+        case t: com.twitter.inject.server.TwitterServer =>
+          (t.startupCompletionEvent, () => promise.setDone())
+        case _ =>
+          // this is a special case where cannot observe the lifecycle to know when ports are bound
+          // and need to poll until the port is assigned
+          (PreMain, () => waitForPorts())
+      }
+
+      // sleep loop for case where we cannot observe the lifecycle for a maximum of 5 seconds
+      private[this] def waitForPorts(remaining: Int = 100): Future[Unit] =
+        if (portBound) {
+          promise.setDone()
+          promise
+        } else if (remaining == 0) {
+          promise.setException(new StartupTimeoutException("Port was not exposed"))
+          promise
+        } else {
+          Future.sleep(50.millis)(DefaultTimer).before(waitForPorts(remaining - 1))
+        }
+
+      override def onSuccess(event: Event): Unit = event match {
+        case e if e == readyEvent =>
+          readyAction()
+        case Close =>
+          promise.setDone()
+        case _ =>
+          () // do nothing
+      }
+
+      override def onFailure(
+        stage: Event,
+        throwable: Throwable
+      ): Unit = promise.setDone()
+    }
+
+    twitterServer.withObserver(warmupObserver)
+    promise
+  }
 }
 
 /**
@@ -231,6 +298,32 @@ class EmbeddedTwitterServer(
   private[this] val started: AtomicBoolean = new AtomicBoolean(false)
   private[this] val _closed: AtomicBoolean = new AtomicBoolean(false)
   protected[inject] def closed: Boolean = _closed.get
+
+  // this latch ticks down when the server is ready to take requests or has failed to start
+  private[this] val ready: Promise[Unit] = Promise[Unit]()
+
+  // observer of the underlying `twitterServer`'s lifecycle events, so that we can accurately
+  // tick down the `countdownLatch` based on the `twitterServer`'s marked startup completion event.
+  private[this] val lifecycleObserver = new Observer {
+
+    override def onSuccess(event: Event): Unit =
+      if (!isStarted && event == twitterServer.startupCompletionEvent) {
+        ready.setDone()
+      }
+
+    override def onFailure(
+      stage: Event,
+      throwable: Throwable
+    ): Unit = {
+      if (stage == Close) {
+        shutdownFailure = Some(throwable)
+      } else {
+        startupFailedThrowable = Some(throwable)
+      }
+      ready.setDone()
+    }
+  }
+  twitterServer.withObserver(lifecycleObserver)
 
   /* Mutable state */
 
@@ -375,7 +468,7 @@ class EmbeddedTwitterServer(
   def assertStarted(started: Boolean = true): Unit = {
     assert(isInjectable)
     start()
-    injectableServer.started should be(started)
+    isStarted should be(true)
   }
 
   /**
@@ -589,8 +682,6 @@ class EmbeddedTwitterServer(
       .contains("com.twitter.inject.test.logging.disabled")
   }
 
-  protected def nonInjectableServerStarted(): Boolean = isHealthy
-
   /** Log that the underlying embedded TwitterServer has started and the location of the AdminHttpInterface */
   protected[twitter] def logStartup(): Unit = {
     infoBanner("Server Started: " + name, disableLogging)
@@ -694,40 +785,29 @@ class EmbeddedTwitterServer(
     throw startupFailedThrowable.get
   }
 
-  private[this] def serverStarted: Boolean = {
-    if (isInjectable) {
-      injectableServer.started
-    } else {
-      nonInjectableServerStarted()
-    }
-  }
-
   private def waitForServerStarted(): Unit = {
-    breakable {
-      for (_ <- 1 to maxStartupTimeSeconds) {
-        info("Waiting for warmup phases to complete...", disableLogging)
+    info("Waiting for warmup phases to complete...", disableLogging)
 
-        throwIfStartupFailed()
-
-        if (serverStarted) {
-          /* TODO: RUN AND WARN ALWAYS
-          For now only run if failOnValidation = true until
-          we allow for a better way to isolate the server startup
-          in feature tests */
-          if (failOnLintViolation) {
-            checkStartupLintIssues()
-          }
-
-          started.set(true)
-          break
-        }
-
-        Thread.sleep(1000)
-      }
-      throw new StartupTimeoutException(
-        s"Embedded server: $name failed to startup within $maxStartupTimeSeconds seconds."
-      )
+    try {
+      Await.ready(ready, maxStartupTimeSeconds.seconds)
+    } catch {
+      case _: InterruptedException =>
+        throw new StartupTimeoutException(
+          s"Embedded server: $name failed to startup within $maxStartupTimeSeconds seconds."
+        )
     }
+
+    throwIfStartupFailed()
+
+    /* TODO: RUN AND WARN ALWAYS
+        For now only run if failOnValidation = true until
+        we allow for a better way to isolate the server startup
+        in feature tests */
+    if (failOnLintViolation) {
+      checkStartupLintIssues()
+    }
+
+    started.set(true)
   }
 
   private def checkStartupLintIssues(): Unit = {

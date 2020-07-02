@@ -1,6 +1,8 @@
 package com.twitter.inject.server
 
 import com.google.inject.Module
+import com.twitter.app.lifecycle.Event
+import com.twitter.app.lifecycle.Event.AfterPostWarmup
 import com.twitter.app.Flag
 import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.NullServer
@@ -166,11 +168,14 @@ trait TwitterServer
 
   override final def main(): Unit = {
     super[App].main() // Call inject.App.main() to create Injector
-
     info("Startup complete, server awaiting.")
     Awaiter.any(awaitables.asScala, period = 1.second)
     info("Awaited awaitables have exited, server done.")
   }
+
+  // An inject.TwitterServer is not ready to accept requests until Post Warmup completes
+  override final protected[twitter] def startupCompletionEvent: Event =
+    AfterPostWarmup
 
   /**
    * After creation of the Injector. Before any other lifecycle methods.

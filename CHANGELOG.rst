@@ -13,6 +13,24 @@ Added
 Changed
 ~~~~~~~
 
+* inject-server: Improve startup time of `EmbeddedTwitterServer` by observing lifecycle events to
+  determine startup, where previously we were doing 1 second polls. The `nonInjectableServerStarted`
+  property is removed and `isStarted` should be referenced regardless of the type of underlying
+  `twitterServer` type. The end result should see a faster test execution feedback loop. Our Finatra
+  test targets range from a roughly 2x to 10x reduction in execution times.
+
+  You may experience new test failures in cases where an exception is thrown as part of
+  `c.t.inject.TwitterServer.start()` or `c.t.server.TwitterServer.main()` and the test would have
+  expected a failure as part of startup. As the error takes place after the startup lifecycle,
+  you may now need to `Await.result` the `EmbeddedTwitterServer.mainResult()` to assert the error.
+
+  You may also experience some new non-deterministic behavior when testing against PubSub style
+  logic. As the server may be started earlier, your tests may be relying on assumptions that
+  an event would have occurred within the previous 1 second startup poll, which is no longer
+  guaranteed. You may need to adjust your test logic to account for this behavior.
+
+  ``PHAB_ID=D499999``
+
 * finatra: Update `com.google.inject.guice` dependency to 4.2.3 and `net.codingwell.scala-guice`
   to version 4.2.10. The `net.codingwell.scala-guice` library has switched from Manifests to TypeTags 
   for transparent binding and injector key creation. The `c.t.inject.TwitterModule` has moved from its 
