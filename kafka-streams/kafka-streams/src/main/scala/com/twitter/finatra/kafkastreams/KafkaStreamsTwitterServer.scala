@@ -28,7 +28,6 @@ import org.apache.kafka.clients.consumer.{ConsumerConfig, OffsetResetStrategy}
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.metrics.Sensor.RecordingLevel
 import org.apache.kafka.streams.KafkaStreams.{State, StateListener}
-import org.apache.kafka.streams.processor.internals.DefaultKafkaClientSupplier
 import org.apache.kafka.streams.{
   KafkaClientSupplier,
   KafkaStreams,
@@ -192,7 +191,7 @@ abstract class KafkaStreamsTwitterServer
   }
 
   protected def kafkaStreamsClientSupplier: KafkaClientSupplier = {
-    new DefaultKafkaClientSupplier
+    new TracingKafkaClientSupplier
   }
 
   protected def onStateChange(newState: State, oldState: State): Unit = {}

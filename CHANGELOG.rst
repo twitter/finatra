@@ -10,6 +10,10 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-kafka-streams: Added `TracingKafkaClientSupplier` to provide `TracingKafkaProducer` and
+  `TracingKafkaConsumer` to enable Zipkin tracing. Tracing can be enabled with the toggle
+  `com.twitter.finatra.kafka.TracingEnabled`.  ``PHAB_ID=D502911``
+
 * finatra-kafka: Added `TracingKafkaProducer` and `TracingKafkaConsumer` to enable Zipkin tracing
   for Kafka. `FinagleKafkaProducerBuilder.build()` and `FinagleKafkaConsumerBuilder.buildClient()`
   now return instances of `TracingKafkaProducer` and `TracingKafkaConsumer` respectively with

@@ -74,6 +74,7 @@ junit_tests(
         "finatra/kafka-streams/kafka-streams/src/main/scala",
         "finatra/kafka-streams/kafka-streams/src/test/resources",
         "finatra/kafka-streams/kafka-streams/src/test/scala:test-deps",
+        "finatra/kafka/src/main/java",
         "finatra/kafka/src/test/scala:test-deps",
         "finatra/thrift/src/test/scala:test-deps",
     ],

@@ -47,7 +47,7 @@ object TracingKafkaProducer {
   /**
    * A local context [[Contexts.local.Key key]] for setting a [[TraceId]] for testing.
    */
-  protected[kafka] val TestTraceIdKey: Contexts.local.Key[TraceId] =
+  private[finatra] val TestTraceIdKey: Contexts.local.Key[TraceId] =
     Contexts.local.newKey[TraceId]()
 
   /**
