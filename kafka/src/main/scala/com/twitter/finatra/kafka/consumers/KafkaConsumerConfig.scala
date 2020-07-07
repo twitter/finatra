@@ -1,17 +1,20 @@
 package com.twitter.finatra.kafka.consumers
 
+import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.kafka.config.{KafkaConfigMethods, ToKafkaProperties}
 import com.twitter.finatra.kafka.domain.{IsolationLevel, KafkaGroupId}
+import com.twitter.finatra.kafka.interceptors.MonitoringConsumerInterceptor
 import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter
 import com.twitter.finatra.kafka.utils.BootstrapServerUtils
+import com.twitter.inject.Logging
 import com.twitter.util.{Duration, StorageUnit}
 import org.apache.kafka.clients.consumer.{ConsumerConfig, OffsetResetStrategy}
+import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.metrics.Sensor.RecordingLevel
-import com.twitter.conversions.DurationOps._
-import com.twitter.finatra.kafka.interceptors.MonitoringConsumerInterceptor
-import com.twitter.inject.Logging
 
 object KafkaConsumerConfig {
+  val FinagleDestKey: String = "finagle.dest"
+
   def apply(): KafkaConsumerConfig =
     new KafkaConsumerConfig()
       .metricReporter[KafkaFinagleMetricsReporter]
@@ -21,6 +24,7 @@ object KafkaConsumerConfig {
 }
 
 trait KafkaConsumerConfigMethods[Self] extends KafkaConfigMethods[Self] with Logging {
+  import KafkaConsumerConfig.FinagleDestKey
 
   /**
    * Configure the Kafka server the consumer will connect to.
@@ -28,8 +32,14 @@ trait KafkaConsumerConfigMethods[Self] extends KafkaConfigMethods[Self] with Log
    * @param dest the Kafka server address
    * @return the [[KafkaConsumerConfigMethods]] instance.
    */
-  def dest(dest: String): This =
-    bootstrapServers(BootstrapServerUtils.lookupBootstrapServers(dest))
+  def dest(dest: String): This = {
+    val servers = BootstrapServerUtils.lookupBootstrapServers(dest)
+    withConfig(
+      Map(
+        FinagleDestKey -> dest,
+        ProducerConfig.BOOTSTRAP_SERVERS_CONFIG -> servers
+      ))
+  }
 
   /**
    * Configure the Kafka server the consumer will connect to.
@@ -38,8 +48,14 @@ trait KafkaConsumerConfigMethods[Self] extends KafkaConfigMethods[Self] with Log
    * @param timeout the timeout duration when trying to resolve the [[dest]] server.
    * @return the [[KafkaConsumerConfigMethods]] instance.
    */
-  def dest(dest: String, timeout: Duration): This =
-    bootstrapServers(BootstrapServerUtils.lookupBootstrapServers(dest, timeout))
+  def dest(dest: String, timeout: Duration): This = {
+    val servers = BootstrapServerUtils.lookupBootstrapServers(dest, timeout)
+    withConfig(
+      Map(
+        FinagleDestKey -> dest,
+        ProducerConfig.BOOTSTRAP_SERVERS_CONFIG -> servers
+      ))
+  }
 
   def autoCommitInterval(duration: Duration): This =
     withConfig(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, duration)
@@ -97,7 +113,7 @@ trait KafkaConsumerConfigMethods[Self] extends KafkaConfigMethods[Self] with Log
   def isolationLevel(isolationLevel: IsolationLevel): This =
     withConfig(ConsumerConfig.ISOLATION_LEVEL_CONFIG, isolationLevel.toString)
 
-  def maxPartitionFetch(storageUnit: StorageUnit) =
+  def maxPartitionFetch(storageUnit: StorageUnit): This =
     withConfig(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG, storageUnit)
 
   def maxPollInterval(duration: Duration): This =

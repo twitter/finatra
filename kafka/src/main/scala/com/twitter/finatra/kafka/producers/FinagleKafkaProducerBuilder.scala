@@ -4,8 +4,7 @@ import com.twitter.finagle.stats.{LoadedStatsReceiver, StatsReceiver}
 import com.twitter.finatra.kafka.config.{KafkaConfig, ToKafkaProperties}
 import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter
 import java.util.Properties
-import org.apache.kafka.clients.producer.ProducerConfig
-import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig}
 import org.apache.kafka.common.serialization.Serializer
 
 case class FinagleKafkaProducerBuilder[K, V](
@@ -50,10 +49,13 @@ case class FinagleKafkaProducerBuilder[K, V](
    */
   def buildClient(): KafkaProducer[K, V] = {
     validateConfigs(config)
-    new KafkaProducer[K, V](config.properties, config.keySerializer.get, config.valueSerializer.get)
+    TracingKafkaProducer[K, V](
+      config.properties,
+      config.keySerializer.get,
+      config.valueSerializer.get)
   }
 
-  private def validateConfigs(config: FinagleKafkaProducerConfig[K, V]) = {
+  private def validateConfigs(config: FinagleKafkaProducerConfig[K, V]): Unit = {
     require(
       configMap.get(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG).isDefined,
       "FinagleKafkaProducerBuilder: dest must be configured"

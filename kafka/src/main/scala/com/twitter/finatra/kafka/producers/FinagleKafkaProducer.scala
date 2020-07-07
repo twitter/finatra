@@ -123,7 +123,7 @@ class FinagleKafkaProducer[K, V](config: FinagleKafkaProducerConfig[K, V])
   /* Private */
 
   private def createProducer(): KafkaProducer[K, V] = {
-    new KafkaProducer[K, V](config.properties, keySerializer, valueSerializer)
+    TracingKafkaProducer[K, V](config.properties, keySerializer, valueSerializer)
   }
 
   private def calcTimestampLag(stat: Stat, timestamp: Long): Unit = {

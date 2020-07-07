@@ -14,6 +14,7 @@ scala_library(
         "finatra/inject/inject-slf4j",
         "finatra/inject/inject-utils",
         "finatra/kafka/src/main/java",
+        "finatra/kafka/src/main/resources",
         "finatra/utils/src/main/scala",
         "scrooge/scrooge-serializer/src/main/scala",
         "util/util-codec/src/main/scala/com/twitter/util",

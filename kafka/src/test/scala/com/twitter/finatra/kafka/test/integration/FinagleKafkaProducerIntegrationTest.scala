@@ -1,21 +1,40 @@
 package com.twitter.finatra.kafka.test.integration
 
+import com.twitter.finagle.Init
+import com.twitter.finagle.context.Contexts
+import com.twitter.finagle.filter.PayloadSizeFilter.ClientReqTraceKey
 import com.twitter.finagle.stats.{NullStatsReceiver, StatsReceiver}
+import com.twitter.finagle.toggle.flag
+import com.twitter.finagle.tracing.Annotation.BinaryAnnotation
+import com.twitter.finagle.tracing.{Annotation, NullTracer, Record, Trace, TraceId}
 import com.twitter.finatra.kafka.domain.AckMode
-import com.twitter.finatra.kafka.producers.FinagleKafkaProducerBuilder
+import com.twitter.finatra.kafka.producers.TracingKafkaProducer.{
+  ClientIdAnnotation,
+  ProducerSendAnnotation,
+  ProducerTopicAnnotation,
+  TraceIdHeader
+}
+import com.twitter.finatra.kafka.producers.{FinagleKafkaProducerBuilder, TracingKafkaProducer}
 import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter
 import com.twitter.finatra.kafka.test.EmbeddedKafka
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.inject.server.InMemoryStatsReceiverUtility
 import com.twitter.util.{Await, Duration, Time}
+import java.util.concurrent.TimeUnit
+import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.Serdes
+import org.mockito.ArgumentCaptor
+import org.mockito.Matchers._
+import org.mockito.Mockito._
+import org.scalatest.OptionValues._
+import scala.collection.JavaConverters._
 
 class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
 
   private val testTopic = kafkaTopic(Serdes.String, Serdes.String, "test-topic")
 
-  private def getTestProducer(statsReceiver: StatsReceiver) = {
+  private def getTestProducerBuilder(statsReceiver: StatsReceiver) = {
     FinagleKafkaProducerBuilder()
       .dest(brokers.map(_.brokerList()).mkString(","))
       .statsReceiver(statsReceiver)
@@ -23,7 +42,14 @@ class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
       .ackMode(AckMode.ALL)
       .keySerializer(Serdes.String.serializer)
       .valueSerializer(Serdes.String.serializer)
-      .build()
+  }
+
+  private def getTestProducer(statsReceiver: StatsReceiver) = {
+    getTestProducerBuilder(statsReceiver).build()
+  }
+
+  private def getNativeTestProducer(statsReceiver: StatsReceiver) = {
+    getTestProducerBuilder(statsReceiver).buildClient()
   }
 
   // TODO: fix
@@ -73,4 +99,222 @@ class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
     await(producer.close(Time.now + Duration.fromSeconds(10)))
   }
 
+  test("native producer should record topic in the trace when actively tracing") {
+    val producerRecord = new ProducerRecord[String, String](
+      testTopic.topic,
+      null,
+      System.currentTimeMillis,
+      "Foo",
+      "Bar")
+    val recordsCaptor = ArgumentCaptor.forClass(classOf[Record])
+    val nullTracer = spy(new NullTracer())
+    when(nullTracer.isActivelyTracing(any[TraceId])).thenReturn(true)
+    val testTraceId = Trace.nextId.copy(_sampled = Some(true))
+
+    flag.overrides.let(com.twitter.finatra.kafka.TracingEnabledToggleId, 1.0) {
+      Trace.letTracer(nullTracer) {
+        Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, testTraceId) {
+          val producer = getNativeTestProducer(NullStatsReceiver)
+          try {
+            val resultFuture = producer.send(producerRecord)
+            resultFuture.get(5, TimeUnit.SECONDS)
+          } finally {
+            producer.close(java.time.Duration.ofSeconds(5))
+          }
+        }
+      }
+    }
+
+    val traceIdHeader = producerRecord.headers.asScala.find(_.key() == TraceIdHeader)
+    traceIdHeader shouldBe defined
+    traceIdHeader.value.value() shouldEqual TraceId.serialize(testTraceId)
+
+    verify(nullTracer, times(13)).record(recordsCaptor.capture())
+    val records = recordsCaptor.getAllValues.asScala
+    val expectedAnnotations = Seq(
+      BinaryAnnotation("clnt/finagle.label", "kafka.producer"),
+      BinaryAnnotation("clnt/finagle.version", Init.finagleVersion),
+      BinaryAnnotation("clnt/namer.path", brokers.map(_.brokerList()).mkString(",")),
+      BinaryAnnotation(ClientReqTraceKey, 6),
+      BinaryAnnotation(ProducerTopicAnnotation, testTopic.topic),
+      BinaryAnnotation(ClientIdAnnotation, "test-producer"),
+      Annotation.ServiceName("kafka.producer"),
+      Annotation.Message(ProducerSendAnnotation),
+      Annotation.ClientSend,
+      Annotation.WireSend,
+      Annotation.ClientRecv,
+      Annotation.WireRecv,
+      Annotation.Rpc("send")
+    )
+    records.map(_.annotation) should contain theSameElementsAs expectedAnnotations
+  }
+
+  test("native producer should not record topic in the trace when not actively tracing") {
+    val producerRecord = new ProducerRecord[String, String](
+      testTopic.topic,
+      null,
+      System.currentTimeMillis,
+      "Foo",
+      "Bar")
+    val nullTracer = spy(new NullTracer())
+    when(nullTracer.isActivelyTracing(any[TraceId])).thenReturn(false)
+    val testTraceId = Trace.nextId
+
+    flag.overrides.let(com.twitter.finatra.kafka.TracingEnabledToggleId, 1.0) {
+      Trace.letTracer(nullTracer) {
+        Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, testTraceId) {
+          val producer = getNativeTestProducer(NullStatsReceiver)
+          try {
+            val resultFuture = producer.send(producerRecord)
+            resultFuture.get(5, TimeUnit.SECONDS)
+          } finally {
+            producer.close(java.time.Duration.ofSeconds(5))
+          }
+        }
+      }
+    }
+
+    val traceIdHeader = producerRecord.headers.asScala.find(_.key() == TraceIdHeader)
+    traceIdHeader should not be defined
+
+    verify(nullTracer, times(0)).record(any[Record])
+  }
+
+  test("native producer should not record topic in the trace when tracingEnabledToggle is 0.0") {
+    val producerRecord = new ProducerRecord[String, String](
+      testTopic.topic,
+      null,
+      System.currentTimeMillis,
+      "Foo",
+      "Bar")
+    val nullTracer = spy(new NullTracer())
+    when(nullTracer.isActivelyTracing(any[TraceId])).thenReturn(true)
+    val testTraceId = Trace.nextId
+
+    flag.overrides.let(com.twitter.finatra.kafka.TracingEnabledToggleId, 0.0) {
+      Trace.letTracer(nullTracer) {
+        Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, testTraceId) {
+          val producer = getNativeTestProducer(NullStatsReceiver)
+          try {
+            val resultFuture = producer.send(producerRecord)
+            resultFuture.get(5, TimeUnit.SECONDS)
+          } finally {
+            producer.close(java.time.Duration.ofSeconds(5))
+          }
+        }
+      }
+    }
+
+    val traceIdHeader = producerRecord.headers.asScala.find(_.key() == TraceIdHeader)
+    traceIdHeader should not be defined
+
+    verify(nullTracer, times(0)).record(any[Record])
+  }
+
+  test("producer should record topic in the trace when actively tracing") {
+    val producerRecord = new ProducerRecord[String, String](
+      testTopic.topic,
+      null,
+      System.currentTimeMillis,
+      "Foo",
+      "Bar")
+    val recordsCaptor = ArgumentCaptor.forClass(classOf[Record])
+    val nullTracer = spy(new NullTracer())
+    when(nullTracer.isActivelyTracing(any[TraceId])).thenReturn(true)
+    val testTraceId = Trace.nextId.copy(_sampled = Some(true))
+
+    flag.overrides.let(com.twitter.finatra.kafka.TracingEnabledToggleId, 1.0) {
+      Trace.letTracer(nullTracer) {
+        Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, testTraceId) {
+          val producer = getTestProducer(NullStatsReceiver)
+          try {
+            await(producer.send(producerRecord))
+          } finally {
+            await(producer.close())
+          }
+        }
+      }
+    }
+
+    val traceIdHeader = producerRecord.headers.asScala.find(_.key() == TraceIdHeader)
+    traceIdHeader shouldBe defined
+    traceIdHeader.value.value() shouldEqual TraceId.serialize(testTraceId)
+
+    verify(nullTracer, times(13)).record(recordsCaptor.capture())
+    val records = recordsCaptor.getAllValues.asScala
+    val expectedAnnotations = Seq(
+      BinaryAnnotation("clnt/finagle.label", "kafka.producer"),
+      BinaryAnnotation("clnt/finagle.version", Init.finagleVersion),
+      BinaryAnnotation("clnt/namer.path", brokers.map(_.brokerList()).mkString(",")),
+      BinaryAnnotation(ClientReqTraceKey, 6),
+      BinaryAnnotation(ProducerTopicAnnotation, testTopic.topic),
+      BinaryAnnotation(ClientIdAnnotation, "test-producer"),
+      Annotation.ServiceName("kafka.producer"),
+      Annotation.Message(ProducerSendAnnotation),
+      Annotation.ClientSend,
+      Annotation.WireSend,
+      Annotation.ClientRecv,
+      Annotation.WireRecv,
+      Annotation.Rpc("send")
+    )
+    records.map(_.annotation) should contain theSameElementsAs expectedAnnotations
+  }
+
+  test("producer should not record topic in the trace when not actively tracing") {
+    val producerRecord = new ProducerRecord[String, String](
+      testTopic.topic,
+      null,
+      System.currentTimeMillis,
+      "Foo",
+      "Bar")
+    val nullTracer = spy(new NullTracer())
+    when(nullTracer.isActivelyTracing(any[TraceId])).thenReturn(false)
+    val testTraceId = Trace.nextId
+
+    Trace.letTracer(nullTracer) {
+      Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, testTraceId) {
+        val producer = getTestProducer(NullStatsReceiver)
+        try {
+          await(producer.send(producerRecord))
+        } finally {
+          await(producer.close())
+        }
+      }
+    }
+
+    val traceIdHeader = producerRecord.headers.asScala.find(_.key() == TraceIdHeader)
+    traceIdHeader should not be defined
+
+    verify(nullTracer, times(0)).record(any[Record])
+  }
+
+  test("producer should not record topic in the trace when tracingEnabledToggle is 0.0") {
+    val producerRecord = new ProducerRecord[String, String](
+      testTopic.topic,
+      null,
+      System.currentTimeMillis,
+      "Foo",
+      "Bar")
+    val nullTracer = spy(new NullTracer())
+    when(nullTracer.isActivelyTracing(any[TraceId])).thenReturn(false)
+    val testTraceId = Trace.nextId
+
+    flag.overrides.let(com.twitter.finatra.kafka.TracingEnabledToggleId, 0.0) {
+      Trace.letTracer(nullTracer) {
+        Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, testTraceId) {
+          val producer = getTestProducer(NullStatsReceiver)
+          try {
+            await(producer.send(producerRecord))
+          } finally {
+            await(producer.close())
+          }
+        }
+      }
+    }
+
+    val traceIdHeader = producerRecord.headers.asScala.find(_.key() == TraceIdHeader)
+    traceIdHeader should not be defined
+
+    verify(nullTracer, times(0)).record(any[Record])
+  }
 }

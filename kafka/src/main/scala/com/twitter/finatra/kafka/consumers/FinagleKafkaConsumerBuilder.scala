@@ -84,13 +84,13 @@ trait FinagleKafkaConsumerBuilderMethods[K, V, Self] extends KafkaConsumerConfig
    */
   def buildClient(): KafkaConsumer[K, V] = {
     validateConfigs(config)
-    new KafkaConsumer[K, V](
+    TracingKafkaConsumer[K, V](
       config.properties,
       config.keyDeserializer.get,
       config.valueDeserializer.get)
   }
 
-  protected def validateConfigs(config: FinagleKafkaConsumerConfig[K, V]) = {
+  protected def validateConfigs(config: FinagleKafkaConsumerConfig[K, V]): Unit = {
     require(
       configMap.get(ConsumerConfig.GROUP_ID_CONFIG).isDefined,
       "FinagleKafkaConsumerBuilder: groupId must be configured"

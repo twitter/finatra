@@ -1,0 +1,9 @@
+{
+  "toggles": [
+    {
+      "id": "com.twitter.finatra.kafka.TracingEnabled",
+      "fraction": 0.0,
+      "description": "Enable/Disable tracing for Kafka producers and consumers"
+    }
+  ]
+}

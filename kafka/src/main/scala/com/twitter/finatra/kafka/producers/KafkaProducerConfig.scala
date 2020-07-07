@@ -1,18 +1,20 @@
 package com.twitter.finatra.kafka.producers
 
-import com.twitter.finatra.kafka.domain.AckMode
-import com.twitter.finatra.kafka.config.{KafkaConfigMethods, ToKafkaProperties}
-import com.twitter.util.{Duration, StorageUnit}
-import org.apache.kafka.clients.producer.ProducerConfig
-import org.apache.kafka.common.metrics.Sensor.RecordingLevel
-import org.apache.kafka.common.record.CompressionType
 import com.twitter.conversions.DurationOps._
+import com.twitter.finatra.kafka.config.{KafkaConfigMethods, ToKafkaProperties}
+import com.twitter.finatra.kafka.domain.AckMode
 import com.twitter.finatra.kafka.interceptors.PublishTimeProducerInterceptor
 import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter
 import com.twitter.finatra.kafka.utils.BootstrapServerUtils
 import com.twitter.inject.Logging
+import com.twitter.util.{Duration, StorageUnit}
+import org.apache.kafka.clients.producer.ProducerConfig
+import org.apache.kafka.common.metrics.Sensor.RecordingLevel
+import org.apache.kafka.common.record.CompressionType
 
 object KafkaProducerConfig {
+  val FinagleDestKey: String = "finagle.dest"
+
   def apply(): KafkaProducerConfig =
     new KafkaProducerConfig()
       .ackMode(AckMode.ALL) // kafka default is AckMode.ONE
@@ -23,17 +25,40 @@ object KafkaProducerConfig {
 }
 
 trait KafkaProducerConfigMethods[Self] extends KafkaConfigMethods[Self] with Logging {
-  def dest(dest: String): This = bootstrapServers(BootstrapServerUtils.lookupBootstrapServers(dest))
+  import KafkaProducerConfig.FinagleDestKey
+
+  /**
+   * Configure the Kafka server the consumer will connect to. This will resolve the dest to the Kafka server name.
+   * The call will block indefinitely until it successfully succeed or failed to resolve the server
+   *
+   * @param dest the Kafka server address
+   * @return the [[KafkaProducerConfigMethods]] instance.
+   */
+  def dest(dest: String): This = {
+    val servers = BootstrapServerUtils.lookupBootstrapServers(dest)
+    withConfig(
+      Map(
+        FinagleDestKey -> dest,
+        ProducerConfig.BOOTSTRAP_SERVERS_CONFIG -> servers
+      ))
+  }
 
   /**
    * Configure the Kafka server the consumer will connect to.
+   * This will block for up to 'timeout' when attempting to resolve the dest to a kafka server name
    *
    * @param dest the Kafka server address
    * @param timeout the timeout duration when trying to resolve the [[dest]] server.
    * @return the [[KafkaProducerConfigMethods]] instance.
    */
-  def dest(dest: String, timeout: Duration): This =
-    bootstrapServers(BootstrapServerUtils.lookupBootstrapServers(dest, timeout))
+  def dest(dest: String, timeout: Duration): This = {
+    val servers = BootstrapServerUtils.lookupBootstrapServers(dest, timeout)
+    withConfig(
+      Map(
+        FinagleDestKey -> dest,
+        ProducerConfig.BOOTSTRAP_SERVERS_CONFIG -> servers
+      ))
+  }
 
   def ackMode(ackMode: AckMode): This =
     withConfig(ProducerConfig.ACKS_CONFIG, ackMode.toString)
