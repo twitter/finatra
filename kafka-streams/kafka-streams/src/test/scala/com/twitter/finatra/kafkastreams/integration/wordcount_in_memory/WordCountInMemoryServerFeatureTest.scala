@@ -1,5 +1,6 @@
 package com.twitter.finatra.kafkastreams.integration.wordcount_in_memory
 
+import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.kafka.serde.ScalaSerdes
 import com.twitter.finatra.kafkastreams.test.KafkaStreamsFeatureTest
 import com.twitter.inject.server.EmbeddedTwitterServer
@@ -20,7 +21,8 @@ class WordCountInMemoryServerFeatureTest extends KafkaStreamsFeatureTest {
     server.start()
 
     textLinesTopic.publish(1L -> "hello world hello")
-    waitForKafkaMetric("kafka/thread1/consumer/text_lines_topic/records_consumed_total", 1)
+    server.inMemoryStats.gauges
+      .waitFor("kafka/thread1/consumer/text_lines_topic/records_consumed_total", 500.millis)(_ == 1)
     wordsWithCountsTopic.consumeMessages(numMessages = 3) should contain theSameElementsAs Seq(
       "world" -> 1,
       "hello" -> 1,
