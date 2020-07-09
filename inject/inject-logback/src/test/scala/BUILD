@@ -1,7 +1,6 @@
 junit_tests(
     sources = ["**/*.scala"],
     compiler_option_sets = ["fatal_warnings"],
-    tags = ["known-to-fail-jira:CSL-9943"],
     dependencies = [
         "3rdparty/jvm/ch/qos/logback:logback-core",
         "3rdparty/jvm/org/slf4j:slf4j-api",

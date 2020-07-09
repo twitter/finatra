@@ -121,8 +121,13 @@ class AppendTestHttpServerFeatureTest extends Test {
 
       server.inMemoryStats.counters
         .assert(s"logback/appender/$appenderStatName/events/discarded/debug", 5)
-      server.inMemoryStats.counters
-        .assert(s"logback/appender/$appenderStatName/events/discarded/info", 5)
+
+      val infoCount = server.inMemoryStats.counters
+        .toSortedMap(s"logback/appender/$appenderStatName/events/discarded/info")
+
+      // this is sometimes 5 and sometimes 6 because startup sometimes logs a message that
+      // gets discarded in this test. however, it's non-deterministic.
+      assert(infoCount == 5 || infoCount == 6)
       server.inMemoryStats.counters
         .assert(s"logback/appender/$appenderStatName/events/discarded/trace", 5)
       server.inMemoryStats.counters
@@ -169,8 +174,12 @@ class AppendTestHttpServerFeatureTest extends Test {
         .assert(s"logback/appender/$appenderStatName/events/discarded/warn", 5)
       server.inMemoryStats.counters
         .assert(s"logback/appender/$appenderStatName/events/discarded/debug", 5)
-      server.inMemoryStats.counters
-        .assert(s"logback/appender/$appenderStatName/events/discarded/info", 5)
+      val infoCount = server.inMemoryStats.counters
+        .toSortedMap(s"logback/appender/$appenderStatName/events/discarded/info")
+
+      // this is sometimes 5 and sometimes 6 because startup sometimes logs a message that
+      // gets discarded in this test. however, it's non-deterministic.
+      assert(infoCount == 5 || infoCount == 6)
       server.inMemoryStats.counters
         .assert(s"logback/appender/$appenderStatName/events/discarded/trace", 5)
 
