@@ -23,6 +23,9 @@ Added
 Changed
 ~~~~~~~
 
+* inject-thrift-client: Remove unused ClientId property from
+  `ThriftMethodBuilderClientModule#provideServicePerEndpoint` method. ``PHAB_ID=D513491``
+
 * inject-server: Improve startup time of `EmbeddedTwitterServer` by observing lifecycle events to
   determine startup, where previously we were doing 1 second polls. The `nonInjectableServerStarted`
   property is removed and `isStarted` should be referenced regardless of the type of underlying

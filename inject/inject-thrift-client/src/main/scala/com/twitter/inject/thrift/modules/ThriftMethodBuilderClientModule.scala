@@ -2,7 +2,6 @@ package com.twitter.inject.thrift.modules
 
 import com.google.inject.Provides
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finagle.thrift.ClientId
 import com.twitter.finagle.thrift.service.{
   Filterable,
   MethodPerEndpointBuilder,
@@ -128,7 +127,6 @@ abstract class ThriftMethodBuilderClientModule[
   @Singleton
   final def providesServicePerEndpoint(
     injector: Injector,
-    clientId: ClientId,
     statsReceiver: StatsReceiver
   ): ServicePerEndpoint = {
     val thriftMuxClient = newClient(injector, statsReceiver)
