@@ -45,14 +45,14 @@ Changed
   ``PHAB_ID=D499999``
 
 * finatra: Update `com.google.inject.guice` dependency to 4.2.3 and `net.codingwell.scala-guice`
-  to version 4.2.10. The `net.codingwell.scala-guice` library has switched from Manifests to TypeTags 
+  to version 4.2.11. The `net.codingwell.scala-guice` library has switched from Manifests to TypeTags 
   for transparent binding and injector key creation. The `c.t.inject.TwitterModule` has moved from its 
   custom bind DSL to the `scalaguice.ScalaModule` which brings the `TwitterModule` inline with both the 
   `TwitterPrivateModule` and the `bind[T]` test DSL to now have the same consistent binding DSL across 
   all three. Thus, there is no more confusing `bindSingleton` function in the `TwitterModule` bind API.
 
   Upgrading scalaguice helps move a necessary dependency of Finatra to a version which is Scala 2.13 
-  compatible moving Finatra closer to Scala 2.13 support. ``PHAB_ID=D504559``
+  compatible moving Finatra closer to Scala 2.13 support. ``PHAB_ID=D504559`` ``PHAB_ID=D515857``
 
 Fixed
 ~~~~~
