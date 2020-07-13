@@ -386,17 +386,18 @@ And in Java:
 
 .. code:: java
 
-    import com.twitter.inject.TwitterModule;
     import java.util.List;
     import com.google.inject.TypeLiteral;
+    import com.google.inject.matcher.Matchers;
     import com.twitter.app.Flaggable;
+    import com.twitter.inject.TwitterModule;
 
     public class MyModule extends TwitterModule {
 
       @Override
       public void configure() {
         addFlagConverter(
-          new TypeLiteral<List<scala.Tuple2<Integer, Integer>>>() {},
+          Matchers.only(new TypeLiteral<List<scala.Tuple2<Integer, Integer>>>() {}),
           Flaggable.ofJavaList(Flaggable.ofTuple(Flaggable.ofJavaInteger, Flaggable.ofJavaInteger)
         );
       }

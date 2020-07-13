@@ -275,11 +275,12 @@ abstract class TwitterModule
    * {{{
    *   import java.util.List;
    *   import com.google.inject.TypeLiteral;
+   *   import com.google.inject.matcher.Matchers;
    *   import com.twitter.app.Flaggable;
    *
    *   addFlagConverter(
-   *     new TypeLiteral<List<scala.Tuple2<Integer, Integer>>>() {},
-   *     Flaggable.ofJavaList(Flaggable.ofTuple(Flaggable.ofJavaInteger, Flaggable.ofJavaInteger)
+   *     Matchers.only(new TypeLiteral<List<scala.Tuple2<Integer, Integer>>>() {}),
+   *     Flaggable.ofJavaList(Flaggable.ofTuple(Flaggable.ofJavaInteger(), Flaggable.ofJavaInteger())
    *   );
    * }}}
    *
