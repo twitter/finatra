@@ -7,6 +7,7 @@ import com.twitter.inject.annotations.{Flag, Flags => AnnotationFlags}
 import com.twitter.inject.app.internal.{FlagsModule, TwitterTypeConvertersModule}
 import com.twitter.inject.{Injector, Test}
 import com.twitter.util.{Duration, StorageUnit, Time, TimeFormat}
+import java.io.File
 import java.net.InetSocketAddress
 import java.time.LocalTime
 import java.util.Arrays
@@ -32,12 +33,14 @@ class FlagsModuleTest extends Test {
   private[this] val defaultStorageUnit = 2.gigabytes
   private[this] val defaultInetSocketAddress: InetSocketAddress =
     InetSocketAddress.createUnresolved("localhost", 0)
+  private[this] val defaultFile: File = new File("/tmp/foo/bar")
 
   flag[LocalTime]("local.time", defaultLocalTime, "A java.time.LocalTime")
   flag[Time]("twitter.time", defaultTime, "A twitter util Time")
   flag[Duration]("twitter.duration", defaultDuration, "A twitter util Duration")
   flag[StorageUnit]("storage.unit", defaultStorageUnit, "Represents a storage size")
   flag[InetSocketAddress]("some.address", defaultInetSocketAddress, "An InetSocketAddress")
+  flag[File]("file", defaultFile, "A File")
 
   flag[Seq[String]]("seq.string", Seq.empty, "A Seq of String")
   flag[Seq[Int]]("seq.int", Seq(123), "A Seq of Int")
@@ -55,6 +58,7 @@ class FlagsModuleTest extends Test {
     "seq.some.address",
     Seq(defaultInetSocketAddress),
     "A Seq of InetSocketAddress")
+  flag[Seq[File]]("seq.file", Seq(defaultFile), "A Seq of File")
 
   flag[java.util.List[String]]("list.string", Arrays.asList[String](), "A List of String")
   flag[java.util.List[java.lang.Integer]](
@@ -93,6 +97,11 @@ class FlagsModuleTest extends Test {
     "list.some.address",
     Arrays.asList(defaultInetSocketAddress),
     "A List of InetSocketAddress")
+  flag[java.util.List[File]](
+    "list.file",
+    Arrays.asList(defaultFile),
+    "A List of Flag"
+  )
 
   flag.parseArgs(Array("-my.flag.value=bar", "-seq.string=foo,bar", "-list.string=baz,qux"))
 
@@ -158,6 +167,7 @@ class FlagsModuleTest extends Test {
       injector.instance[InetSocketAddress](AnnotationFlags.named("some.address"))
     inetSocketAddressFromInjector.getHostName should equal(defaultInetSocketAddress.getHostName)
     inetSocketAddressFromInjector.getPort should equal(defaultInetSocketAddress.getPort)
+    injector.instance[File](AnnotationFlags.named("file")) should equal(defaultFile)
   }
 
   test("test comma-separated type converters (Seq)") {
@@ -179,6 +189,7 @@ class FlagsModuleTest extends Test {
       injector.instance[Seq[InetSocketAddress]](AnnotationFlags.named("seq.some.address")).head
     inetSocketAddressFromInjector.getHostName should equal(defaultInetSocketAddress.getHostName)
     inetSocketAddressFromInjector.getPort should equal(defaultInetSocketAddress.getPort)
+    injector.instance[Seq[File]](AnnotationFlags.named("seq.file")) should equal(Seq(defaultFile))
   }
 
   test("test comma-separated type converters (java.util.List)") {
@@ -206,6 +217,8 @@ class FlagsModuleTest extends Test {
           AnnotationFlags.named("list.some.address")).get(0)
     inetSocketAddressFromInjector.getHostName should equal(defaultInetSocketAddress.getHostName)
     inetSocketAddressFromInjector.getPort should equal(defaultInetSocketAddress.getPort)
+    injector.instance[java.util.List[File]](AnnotationFlags.named("list.file")) should equal(
+      Arrays.asList(defaultFile))
   }
 
   test("injector without TwitterTypeConvertersModule module fails to inject flag by type") {

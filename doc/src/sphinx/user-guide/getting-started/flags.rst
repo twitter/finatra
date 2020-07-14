@@ -368,9 +368,10 @@ These additional `Flag` types are also registered (as both primitive and comma-s
  - `com.twitter.util.Duration`
  - `com.twitter.util.Time`
  - `com.twitter.util.StorageUnit`
+ - `java.io.File`
 
-For anything that falls outside of these types (and their `scala.Seq[_]` and `java.util.List[_]`)
-you'd need to register a `Flaggable[T]` to be able to inject a Flag of type `T`.
+For anything that falls outside of these types (and their `scala.Seq[_]` and `java.util.List[_]`
+variants) you'd need to register a `Flaggable[T]` to be able to inject a Flag of type `T`.
 
 .. code:: scala
 

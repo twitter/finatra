@@ -4,6 +4,7 @@ import com.twitter.inject.TwitterModule
 import com.twitter.util.{Duration, StorageUnit, Time}
 import java.net.InetSocketAddress
 import java.time.LocalTime
+import java.io.File
 import org.joda.{time => joda}
 
 private[app] object TwitterTypeConvertersModule extends TwitterModule {
@@ -16,6 +17,7 @@ private[app] object TwitterTypeConvertersModule extends TwitterModule {
     addFlagConverter[Duration]
     addFlagConverter[StorageUnit]
     addFlagConverter[InetSocketAddress]
+    addFlagConverter[File]
 
     // Multi-value type converters (comma-separated) for scala.Seq
     addFlagConverter[Seq[String]]
@@ -28,6 +30,7 @@ private[app] object TwitterTypeConvertersModule extends TwitterModule {
     addFlagConverter[Seq[Duration]]
     addFlagConverter[Seq[StorageUnit]]
     addFlagConverter[Seq[InetSocketAddress]]
+    addFlagConverter[Seq[File]]
 
     // Multi-value type converters (comma-separated) for java.util.List
     addFlagConverter[java.util.List[String]]
@@ -40,5 +43,6 @@ private[app] object TwitterTypeConvertersModule extends TwitterModule {
     addFlagConverter[java.util.List[Duration]]
     addFlagConverter[java.util.List[StorageUnit]]
     addFlagConverter[java.util.List[InetSocketAddress]]
+    addFlagConverter[java.util.List[File]]
   }
 }

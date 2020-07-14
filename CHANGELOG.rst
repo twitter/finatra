@@ -10,6 +10,9 @@ Unreleased
 Added
 ~~~~~
 
+* inject-app: Adding flag converters for `java.io.File` (including comma-separated variants).
+  ``PHAB_ID=D516020``
+
 * finatra-kafka-streams: Added `TracingKafkaClientSupplier` to provide `TracingKafkaProducer` and
   `TracingKafkaConsumer` to enable Zipkin tracing. Tracing can be enabled with the toggle
   `com.twitter.finatra.kafka.TracingEnabled`.  ``PHAB_ID=D502911``
