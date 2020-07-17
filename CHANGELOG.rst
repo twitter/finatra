@@ -26,6 +26,9 @@ Added
 Changed
 ~~~~~~~
 
+* finatra: Update `org.scalatest` dependency to 3.1.2 and introduce finer-grained dependencies on
+  `org.scalatestplus` artifacts. ``PHAB_ID=D518553`` ``PHAB_ID=D518794``
+
 * inject-thrift-client: Remove unused ClientId property from
   `ThriftMethodBuilderClientModule#provideServicePerEndpoint` method. ``PHAB_ID=D513491``
 
