@@ -4,6 +4,7 @@ junit_tests(
         "3rdparty/jvm/com/github/nscala_time",
         "3rdparty/jvm/joda-time",
         "3rdparty/jvm/org/scalatest",
+        "3rdparty/jvm/org/scalatestplus:junit",
         "3rdparty/jvm/org/slf4j:slf4j-nop",
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",
         "finatra/utils/src/test/resources",

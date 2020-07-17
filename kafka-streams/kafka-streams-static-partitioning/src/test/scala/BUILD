@@ -7,6 +7,7 @@ junit_tests(
         "3rdparty/jvm/org/apache/kafka:kafka-clients-test",
         "3rdparty/jvm/org/apache/kafka:kafka-streams-test",
         "3rdparty/jvm/org/apache/kafka:kafka-test",
+        "3rdparty/jvm/org/scalatestplus:junit",
         "finatra/kafka-streams/kafka-streams-queryable-thrift-client/src/main/scala",
         "finatra/kafka-streams/kafka-streams-static-partitioning/src/main/scala",
         "finatra/kafka/src/test/scala:test-deps",

@@ -10,6 +10,7 @@ junit_tests(
         "3rdparty/jvm/com/google/inject/extensions:guice-testlib",
         "3rdparty/jvm/net/codingwell:scala-guice",
         "3rdparty/jvm/org/scalatest",
+        "3rdparty/jvm/org/scalatestplus:junit",
         "3rdparty/jvm/org/slf4j:slf4j-simple",
         "3rdparty/jvm/org/specs2:mock",
         "finatra/examples/advanced/twitter-clone/src/main/scala",

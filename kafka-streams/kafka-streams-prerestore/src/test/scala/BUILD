@@ -10,6 +10,7 @@ junit_tests(
         "3rdparty/jvm/org/apache/kafka:kafka-test",
         "3rdparty/jvm/org/apache/zookeeper:zookeeper-client",
         "3rdparty/jvm/org/apache/zookeeper:zookeeper-server",
+        "3rdparty/jvm/org/scalatestplus:junit",
         "finatra/http/src/test/scala/com/twitter/finatra/http",
         "finatra/inject/inject-core/src/test/scala:test-deps",
         "finatra/inject/inject-server/src/test/scala:test-deps",

@@ -131,7 +131,7 @@ Changed
 * inject-core: Make flag methods in `c.t.inject.TwitterModule` public an final. ``PHAB_ID=D484168``
 
 * inject-core: `c.t.inject.Mockito` has been marked deprecated. Users are encouraged to prefer
-  `mockito-scala <https://github.com/mockito/mockito-scala>`_ (or ScalaTest `MockitoSugar <http://doc.scalatest.org/3.1.1/#org.scalatest.mock.MockitoSugar>`_
+  `mockito-scala <https://github.com/mockito/mockito-scala>`_ (or ScalaTest `MockitoSugar <http://doc.scalatest.org/3.1.1/#org.scalatestplus.mockito.MockitoSugar>`_
   which provides some basic syntax sugar for Mockito). ``PHAB_ID=D482531``
 
 * http: (BREAKING API CHANGE) Update the `c.t.finatra.http.HttpResponseFilter` to optionally fully

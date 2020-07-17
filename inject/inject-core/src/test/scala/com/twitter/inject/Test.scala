@@ -2,7 +2,7 @@ package com.twitter.inject
 
 import org.junit.runner.RunWith
 import org.scalatest.FunSuite
-import org.scalatest.junit.JUnitRunner
+import org.scalatestplus.junit.JUnitRunner
 
 /**
  * Extensible abstract test class which extends [[org.scalatest.FunSuite]] and

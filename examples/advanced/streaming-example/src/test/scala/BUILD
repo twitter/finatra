@@ -3,6 +3,7 @@ junit_tests(
     compiler_option_sets = ["fatal_warnings"],
     dependencies = [
         "3rdparty/jvm/org/scalatest",
+        "3rdparty/jvm/org/scalatestplus:junit",
         "3rdparty/jvm/org/slf4j:slf4j-simple",
         "finatra/examples/advanced/streaming-example/src/main/scala",
         "finatra/http/src/test/scala/com/twitter/finatra/http",

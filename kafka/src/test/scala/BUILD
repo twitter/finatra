@@ -9,6 +9,7 @@ junit_tests(
     dependencies = [
         ":test-deps",
         "3rdparty/jvm/org/apache/zookeeper:zookeeper-server",
+        "3rdparty/jvm/org/scalatestplus:junit",
         "3rdparty/jvm/org/slf4j:slf4j-simple",
         "finatra/inject/inject-modules/src/test/scala/com/twitter/inject/modules",
         "finatra/jackson/src/test/scala:test-deps",

@@ -7,6 +7,7 @@ junit_tests(
         "3rdparty/jvm/com/google/inject/extensions:guice-testlib",
         "3rdparty/jvm/net/codingwell:scala-guice",
         "3rdparty/jvm/org/scalatest",
+        "3rdparty/jvm/org/scalatestplus:junit",
         "3rdparty/jvm/org/slf4j:slf4j-simple",
         "finatra/examples/thrift-server/idl/src/main/thrift:thrift-scala",
         "finatra/examples/thrift-server/scala/src/main/scala/com/twitter/finatra/example",

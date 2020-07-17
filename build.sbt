@@ -103,9 +103,12 @@ lazy val versions = new {
   val mustache = "0.8.18"
   val nscalaTime = "2.14.0"
   val rocksdbjni = "5.14.2"
-  val scalaCheck = "1.14.0"
+  val scalaCheck = "1.14.3"
   val scalaGuice = "4.2.11"
-  val scalaTest = "3.0.8"
+  val scalaTest = "3.1.1"
+  val scalaTestPlusJunit = "3.1.2.0"
+  val scalaTestPlusMockito = "3.1.1.0"
+  val scalaTestPlusScalaCheck = "3.1.2.0"
   val slf4j = "1.7.30"
   val snakeyaml = "1.24"
   val specs2 = "2.4.17"
@@ -133,6 +136,9 @@ lazy val baseSettings = Seq(
     "org.mockito" % "mockito-core" % versions.mockito % Test,
     "org.scalacheck" %% "scalacheck" % versions.scalaCheck % Test,
     "org.scalatest" %% "scalatest" % versions.scalaTest % Test,
+    "org.scalatestplus" %% "junit-4-12" % versions.scalaTestPlusJunit % Test,
+    "org.scalatestplus" %% "mockito-1-10" % versions.scalaTestPlusMockito % Test,
+    "org.scalatestplus" %% "scalacheck-1-14" % versions.scalaTestPlusScalaCheck % Test,
     "org.specs2" %% "specs2-core" % versions.specs2 % Test,
     "org.specs2" %% "specs2-junit" % versions.specs2 % Test,
     "org.specs2" %% "specs2-mock" % versions.specs2 % Test

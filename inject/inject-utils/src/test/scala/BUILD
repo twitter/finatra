@@ -4,6 +4,7 @@ junit_tests(
     dependencies = [
         "3rdparty/jvm/joda-time",
         "3rdparty/jvm/org/scalatest",
+        "3rdparty/jvm/org/scalatestplus:junit",
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "3rdparty/jvm/org/slf4j:slf4j-simple",
         "finagle/finagle-core/src/main",

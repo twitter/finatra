@@ -12,6 +12,7 @@ junit_tests(
         "3rdparty/jvm/net/codingwell:scala-guice",
         "3rdparty/jvm/org/openjdk/jmh:jmh-core",
         "3rdparty/jvm/org/scalatest",
+        "3rdparty/jvm/org/scalatestplus:junit",
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "3rdparty/jvm/org/slf4j:slf4j-simple",
         "finagle/finagle-core/src/main",

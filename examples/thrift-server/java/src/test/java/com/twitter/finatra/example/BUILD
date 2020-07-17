@@ -4,6 +4,7 @@ junit_tests(
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/junit",
+        "3rdparty/jvm/org/scalatestplus:junit",
         "3rdparty/jvm/org/slf4j:slf4j-simple",
         "finagle/finagle-thrift/src/main/scala",
         "finatra/examples/thrift-server/idl/src/main/thrift:thrift-java",

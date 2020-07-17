@@ -9,6 +9,8 @@ junit_tests(
         "3rdparty/jvm/org/joda:joda-convert",
         "3rdparty/jvm/org/scalacheck",
         "3rdparty/jvm/org/scalatest",
+        "3rdparty/jvm/org/scalatestplus:junit",
+        "3rdparty/jvm/org/scalatestplus:scalacheck",
         "finatra/inject/inject-core/src/test/scala:test-deps",
         "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/validation/src/main/java/com/twitter/finatra/validation",

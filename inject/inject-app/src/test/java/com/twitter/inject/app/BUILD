@@ -10,6 +10,7 @@ junit_tests(
         "3rdparty/jvm/junit",
         "3rdparty/jvm/net/codingwell:scala-guice",
         "3rdparty/jvm/org/scalatest",
+        "3rdparty/jvm/org/scalatestplus:junit",
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "3rdparty/jvm/org/slf4j:slf4j-simple",
         "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",

@@ -9,6 +9,7 @@ junit_tests(
         "3rdparty/jvm/org/apache/thrift:libthrift",
         "3rdparty/jvm/org/scala-lang/modules:scala-parser-combinators",
         "3rdparty/jvm/org/scalatest",
+        "3rdparty/jvm/org/scalatestplus:junit",
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "3rdparty/jvm/org/slf4j:slf4j-simple",
         "3rdparty/jvm/org/specs2:mock",

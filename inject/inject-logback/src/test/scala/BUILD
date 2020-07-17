@@ -3,6 +3,7 @@ junit_tests(
     compiler_option_sets = ["fatal_warnings"],
     dependencies = [
         "3rdparty/jvm/ch/qos/logback:logback-core",
+        "3rdparty/jvm/org/scalatestplus:junit",
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "finatra/http/src/main/java/com/twitter/finatra/http",
         "finatra/http/src/main/java/com/twitter/finatra/http/jsonpatch",

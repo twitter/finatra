@@ -17,7 +17,7 @@ test failures**.
 .. warning::
 
     |c.t.inject.Mockito|_ is now deprecated and users are encouraged to prefer `mockito-scala <https://github.com/mockito/mockito-scala>`_
-    (or ScalaTest `MockitoSugar <http://doc.scalatest.org/3.1.1/#org.scalatest.mock.MockitoSugar>`_
+    (or ScalaTest `MockitoSugar <http://doc.scalatest.org/3.1.1/#org.scalatestplus.mockito.MockitoSugar>`_
     which provides some basic syntax sugar for `Mockito <https://site.mockito.org/>`_).
 
 See the `Override Modules <override_modules.html>`__ or `Explicit Binding with #bind[T] <bind_dsl.html>`__
