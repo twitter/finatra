@@ -238,6 +238,9 @@ case class CaseClassWithOverloadedField(id: Long) {
   def id(prefix: String): String = prefix + id
 }
 
+@JsonIgnoreProperties(ignoreUnknown = false)
+case class StrictCaseClassWithOption(value: Option[String] = None)
+
 case class CaseClassWithOption(value: Option[String] = None)
 
 case class CaseClassWithJsonNode(value: JsonNode)

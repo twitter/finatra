@@ -321,25 +321,23 @@ private[jackson] class CaseClassDeserializer(
     caseClassFieldNames: Seq[String]
   ): Seq[String] = {
     // if there is a JsonIgnoreProperties annotation on the class, it should prevail
-    val nonIgnoredFields: Seq[String] =
+    val nonIgnoredFieldsOpt: Option[Seq[String]] =
       AnnotationUtils.findAnnotation[JsonIgnoreProperties](clazzAnnotations) match {
         case Some(annotation) if !annotation.ignoreUnknown() =>
           // has a JsonIgnoreProperties annotation and is configured to NOT ignore unknown properties
           val annotationIgnoredFields: Seq[String] = annotation.value()
           // only non-ignored json fields should be considered
-          jsonFieldNames.diff(annotationIgnoredFields)
+          Some(jsonFieldNames.diff(annotationIgnoredFields))
         case None if context.isEnabled(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES) =>
           // no annotation but feature is configured, thus all json fields should be considered
-          jsonFieldNames
+          Some(jsonFieldNames)
         case _ =>
-          Seq.empty[String] // every field is ignorable
+          None // every field is ignorable
       }
 
-    // if we have more non ignored fields than case class properties, return the difference
-    if (nonIgnoredFields.size > caseClassFieldNames.size)
-      nonIgnoredFields.diff(caseClassFieldNames)
-    else
-      Seq.empty[String]
+    nonIgnoredFieldsOpt
+      .map(nonIgnoredFields => nonIgnoredFields.diff(caseClassFieldNames))
+      .getOrElse(Seq.empty[String])
   }
 
   /** Return the list of [[CaseClassFieldMappingException]] per unknown field */

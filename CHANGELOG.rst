@@ -78,6 +78,11 @@ Changed
 Fixed
 ~~~~~
 
+* finatra-jackson: (BREAKING API CHANGE) Fix "fail on unknown properties" during JSON deserialization.
+  Previously, the `CaseClassDeserializer` was only catching unknown fields when there were more fields
+  in the incomming JSON than in the case class. This fix may break some integrations where a client
+  sends a JSON including unknown fields. In such situation a `JsonMappingException` will be thrown.
+
 * inject-app: Having two sets of flag converters for primitive types (both Java and Scala) confuses
   the DI runtime, preventing the injection. We now have only a single set of converters, based off
   Scala primitive types.  ``PHAB_ID=D509192``
