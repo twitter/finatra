@@ -133,10 +133,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.kafka.utils" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="utils"></a><a id="utils:utils"></a>
+    </li><li name="com.twitter.finatra.kafka.producers" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="producers"></a><a id="producers:producers"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/kafka/index.html#utils" title="Permalink">
+      <a href="../../../../com/twitter/finatra/kafka/index.html#producers" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -145,26 +145,42 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="" href="index.html"><span class="name">utils</span></a>
+        <a title="" href="index.html"><span class="name">producers</span></a>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.kafka">kafka</a></dd></dl></div>
     </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="object" href="BootstrapServerUtils$.html" title=""></a>
-                        <a href="BootstrapServerUtils$.html" title="">BootstrapServerUtils</a>
+                        <a class="class" href="FinagleKafkaProducer.html" title="A standard implementation of KafkaProducerBase that forwards events in key/value pairs to org.apache.kafka.clients.producer.KafkaProducer"></a>
+                        <a href="FinagleKafkaProducer.html" title="A standard implementation of KafkaProducerBase that forwards events in key/value pairs to org.apache.kafka.clients.producer.KafkaProducer">FinagleKafkaProducer</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="object" href="ConfigUtils$.html" title=""></a>
-                        <a href="ConfigUtils$.html" title="">ConfigUtils</a>
+                        <a class="class" href="FinagleKafkaProducerBuilder.html" title=""></a>
+                        <a href="FinagleKafkaProducerBuilder.html" title="">FinagleKafkaProducerBuilder</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
+                        <a class="class" href="FinagleKafkaProducerConfig.html" title=""></a>
+                        <a href="FinagleKafkaProducerConfig.html" title="">FinagleKafkaProducerConfig</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="trait" href="KafkaProducerBase.html" title="An interface for publishing events in key/value pairs to Kafka and returning a com.twitter.util.Future"></a>
+                        <a href="KafkaProducerBase.html" title="An interface for publishing events in key/value pairs to Kafka and returning a com.twitter.util.Future">KafkaProducerBase</a>
+                      </li><li class="current-entities indented5">
+                        <a class="object" href="KafkaProducerConfig$.html" title=""></a>
+                        <a class="class" href="KafkaProducerConfig.html" title=""></a>
+                        <a href="KafkaProducerConfig.html" title="">KafkaProducerConfig</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="trait" href="KafkaProducerConfigMethods.html" title=""></a>
+                        <a href="KafkaProducerConfigMethods.html" title="">KafkaProducerConfigMethods</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="NullKafkaProducer.html" title="A no-op KafkaProducerBase."></a>
+                        <a href="NullKafkaProducer.html" title="A no-op KafkaProducerBase.">NullKafkaProducer</a>
+                      </li><li class="current-entities indented5">
                         <a class="object" href="" title=""></a>
-                        <a href="" title="">FuturePoolsHelper</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
-                        <a class="class" href="KafkaFuturePool.html" title=""></a>
-                        <a href="KafkaFuturePool.html" title="">KafkaFuturePool</a>
+                        <a class="class" href="TracingKafkaProducer.html" title="An extension of KafkaProducer with Zipkin tracing to trace the records sent to Kafka."></a>
+                        <a href="TracingKafkaProducer.html" title="An extension of KafkaProducer with Zipkin tracing to trace the records sent to Kafka.">TracingKafkaProducer</a>
                       </li>
               </ul>
             </div>
@@ -172,14 +188,16 @@
           <div id="content">
             <body class="object value">
       <div id="definition">
-        <div class="big-circle object">o</div>
-        <p id="owner"><a href="../../../../index.html" class="extype" name="com">com</a>.<a href="../../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../index.html" class="extype" name="com.twitter.finatra.kafka">kafka</a>.<a href="index.html" class="extype" name="com.twitter.finatra.kafka.utils">utils</a></p>
-        <h1>FuturePoolsHelper<span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html" title="Permalink">
+        <a href="TracingKafkaProducer.html" title="See companion class"><div class="big-circle object-companion-class">o</div></a>
+        <p id="owner"><a href="../../../../index.html" class="extype" name="com">com</a>.<a href="../../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../index.html" class="extype" name="com.twitter.finatra.kafka">kafka</a>.<a href="index.html" class="extype" name="com.twitter.finatra.kafka.producers">producers</a></p>
+        <h1><a href="TracingKafkaProducer.html" title="See companion class">TracingKafkaProducer</a><span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
-        <h3><span class="morelinks"></span></h3>
+        <h3><span class="morelinks"><div>
+            Companion <a href="TracingKafkaProducer.html" title="See companion class">class TracingKafkaProducer</a>
+          </div></span></h3>
       </div>
 
       <h4 id="signature" class="signature">
@@ -188,7 +206,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">FuturePoolsHelper</span>
+        <span class="name">TracingKafkaProducer</span>
       </span>
       </h4>
 
@@ -223,7 +241,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.kafka.utils.FuturePoolsHelper"><span>FuturePoolsHelper</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.kafka.producers.TracingKafkaProducer"><span>TracingKafkaProducer</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -253,7 +271,7 @@
                 <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#!=(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#!=(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -269,7 +287,7 @@
     </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html###():Int" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html###():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -285,7 +303,7 @@
     </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#==(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#==(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -298,10 +316,105 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.twitter.finatra.kafka.producers.TracingKafkaProducer#ClientIdAnnotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ClientIdAnnotation:String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#ClientIdAnnotation:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ClientIdAnnotation</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Trace annotation for the client id defined inside <span class="extype" name="ProducerConfig.CLIENT_ID_CONFIG">CLIENT_ID_CONFIG</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Trace annotation for the client id defined inside <span class="extype" name="ProducerConfig.CLIENT_ID_CONFIG">CLIENT_ID_CONFIG</span>.
+This is present as a <span class="extype" name="com.twitter.finagle.tracing.Annotation.BinaryAnnotation">BinaryAnnotation</span>
+in the trace.
+</p></div></div>
+    </li><li name="com.twitter.finatra.kafka.producers.TracingKafkaProducer#ProducerSendAnnotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ProducerSendAnnotation:String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#ProducerSendAnnotation:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ProducerSendAnnotation</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Trace annotation to record the send event.</p>
+    </li><li name="com.twitter.finatra.kafka.producers.TracingKafkaProducer#ProducerTopicAnnotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ProducerTopicAnnotation:String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#ProducerTopicAnnotation:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ProducerTopicAnnotation</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Trace annotation for the topic being used by the publisher.</p><div class="fullcomment"><div class="comment cmt"><p>Trace annotation for the topic being used by the publisher. This is present as a
+<span class="extype" name="com.twitter.finagle.tracing.Annotation.BinaryAnnotation">BinaryAnnotation</span> in the trace.
+</p></div></div>
+    </li><li name="com.twitter.finatra.kafka.producers.TracingKafkaProducer#TraceIdHeader" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TraceIdHeader:String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#TraceIdHeader:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">TraceIdHeader</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">A Kafka Header to make the traceId of the producer visible to the consumer.</p>
+    </li><li name="com.twitter.finatra.kafka.producers.TracingKafkaProducer#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[K,V](configs:java.util.Properties,keySerializer:org.apache.kafka.common.serialization.Serializer[K],valueSerializer:org.apache.kafka.common.serialization.Serializer[V]):com.twitter.finatra.kafka.producers.TracingKafkaProducer[K,V]"></a><a id="apply[K,V](Properties,Serializer[K],Serializer[V]):TracingKafkaProducer[K,V]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#apply[K,V](configs:java.util.Properties,keySerializer:org.apache.kafka.common.serialization.Serializer[K],valueSerializer:org.apache.kafka.common.serialization.Serializer[V]):com.twitter.finatra.kafka.producers.TracingKafkaProducer[K,V]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="configs">configs: <span class="extype" name="java.util.Properties">Properties</span></span>, <span name="keySerializer">keySerializer: <span class="extype" name="org.apache.kafka.common.serialization.Serializer">Serializer</span>[<span class="extype" name="com.twitter.finatra.kafka.producers.TracingKafkaProducer.apply.K">K</span>]</span>, <span name="valueSerializer">valueSerializer: <span class="extype" name="org.apache.kafka.common.serialization.Serializer">Serializer</span>[<span class="extype" name="com.twitter.finatra.kafka.producers.TracingKafkaProducer.apply.V">V</span>]</span>)</span><span class="result">: <a href="TracingKafkaProducer.html" class="extype" name="com.twitter.finatra.kafka.producers.TracingKafkaProducer">TracingKafkaProducer</a>[<span class="extype" name="com.twitter.finatra.kafka.producers.TracingKafkaProducer.apply.K">K</span>, <span class="extype" name="com.twitter.finatra.kafka.producers.TracingKafkaProducer.apply.V">V</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Helper constructor which accepts <span class="extype" name="Properties">Properties</span> for constructing the <a href="TracingKafkaProducer.html" class="extype" name="com.twitter.finatra.kafka.producers.TracingKafkaProducer">TracingKafkaProducer</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Helper constructor which accepts <span class="extype" name="Properties">Properties</span> for constructing the <a href="TracingKafkaProducer.html" class="extype" name="com.twitter.finatra.kafka.producers.TracingKafkaProducer">TracingKafkaProducer</a>.
+</p></div><dl class="paramcmts block"><dt class="tparam">K</dt><dd class="cmt"><p>type of Key</p></dd><dt class="tparam">V</dt><dd class="cmt"><p>type of value</p></dd><dt class="param">configs</dt><dd class="cmt"><p>The producer configs</p></dd><dt class="param">keySerializer</dt><dd class="cmt"><p>The serializer for key that implements <span class="extype" name="Serializer">Serializer</span>. The 
+<pre>
+configure()
+</pre>
+                     method won't be called in the producer when the serializer is passed
+                     directly.</p></dd><dt class="param">valueSerializer</dt><dd class="cmt"><p>The serializer for value that implements <span class="extype" name="Serializer">Serializer</span>. The
+<pre>
+configure()
+</pre>
+                       serializer is passed in directly.</p></dd><dt>returns</dt><dd class="cmt"><p>an instance of <a href="TracingKafkaProducer.html" class="extype" name="com.twitter.finatra.kafka.producers.TracingKafkaProducer">TracingKafkaProducer</a></p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#asInstanceOf[T0]:T0" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#asInstanceOf[T0]:T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -314,26 +427,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.twitter.finatra.kafka.utils.FuturePoolsHelper#boundedFixedThreadPool" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="boundedFixedThreadPool[T](name:String,maxThreads:Int,maxWorkQueueSize:Int):com.twitter.finatra.kafka.utils.KafkaFuturePool"></a><a id="boundedFixedThreadPool[T](String,Int,Int):KafkaFuturePool"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#boundedFixedThreadPool[T](name:String,maxThreads:Int,maxWorkQueueSize:Int):com.twitter.finatra.kafka.utils.KafkaFuturePool" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">boundedFixedThreadPool</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="maxThreads">maxThreads: <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>, <span name="maxWorkQueueSize">maxWorkQueueSize: <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="KafkaFuturePool.html" class="extype" name="com.twitter.finatra.kafka.utils.KafkaFuturePool">KafkaFuturePool</a></span>
-      </span>
-      
-      
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#clone():Object" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#clone():Object" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -357,7 +454,7 @@
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#eq(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -373,7 +470,7 @@
     </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#equals(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#equals(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -389,7 +486,7 @@
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#finalize():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#finalize():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -411,7 +508,7 @@
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#getClass():Class[_]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#getClass():Class[_]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -430,7 +527,7 @@
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#hashCode():Int" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#hashCode():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -449,7 +546,7 @@
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#isInstanceOf[T0]:Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#isInstanceOf[T0]:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -465,7 +562,7 @@
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#ne(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -481,7 +578,7 @@
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#notify():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#notify():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -500,7 +597,7 @@
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#notifyAll():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#notifyAll():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -519,7 +616,7 @@
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -535,7 +632,7 @@
     </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#toString():String" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#toString():String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -548,26 +645,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.twitter.finatra.kafka.utils.FuturePoolsHelper#unboundedFixedThreadPool" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="unboundedFixedThreadPool[T](name:String,maxThreads:Int):com.twitter.finatra.kafka.utils.KafkaFuturePool"></a><a id="unboundedFixedThreadPool[T](String,Int):KafkaFuturePool"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#unboundedFixedThreadPool[T](name:String,maxThreads:Int):com.twitter.finatra.kafka.utils.KafkaFuturePool" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">unboundedFixedThreadPool</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="maxThreads">maxThreads: <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="KafkaFuturePool.html" class="extype" name="com.twitter.finatra.kafka.utils.KafkaFuturePool">KafkaFuturePool</a></span>
-      </span>
-      
-      
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#wait():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#wait():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -589,7 +670,7 @@
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -611,7 +692,7 @@
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/FuturePoolsHelper$.html#wait(x$1:Long):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/TracingKafkaProducer$.html#wait(x$1:Long):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>

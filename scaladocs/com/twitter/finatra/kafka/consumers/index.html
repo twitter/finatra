@@ -205,6 +205,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="KafkaConsumerConfigMethods.html" title=""></a>
                         <a href="KafkaConsumerConfigMethods.html" title="">KafkaConsumerConfigMethods</a>
+                      </li><li class="current-entities indented5">
+                        <a class="object" href="TracingKafkaConsumer$.html" title=""></a>
+                        <a class="class" href="TracingKafkaConsumer.html" title="An extension of KafkaConsumer with Zipkin tracing to trace the records received from Kafka."></a>
+                        <a href="TracingKafkaConsumer.html" title="An extension of KafkaConsumer with Zipkin tracing to trace the records received from Kafka.">TracingKafkaConsumer</a>
                       </li><li name="com.twitter.finatra.kafka.domain" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="domain"></a><a id="domain:domain"></a>
       <span class="permalink">
@@ -513,6 +517,26 @@ FinagleKafkaConsumer (pollTimeout and seekStrategy).
       </span>
       
       
+    </li><li name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="TracingKafkaConsumer[K,V]extendsKafkaConsumer[K,V]withLogging"></a><a id="TracingKafkaConsumer[K,V]:TracingKafkaConsumer[K,V]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/index.html#TracingKafkaConsumer[K,V]extendsKafkaConsumer[K,V]withLogging" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="An extension of KafkaConsumer with Zipkin tracing to trace the records received from Kafka." href="TracingKafkaConsumer.html"><span class="name">TracingKafkaConsumer</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <span class="extype" name="org.apache.kafka.clients.consumer.KafkaConsumer">KafkaConsumer</span>[<span class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.K">K</span>, <span class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.V">V</span>] with <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">An extension of <span class="extype" name="KafkaConsumer">KafkaConsumer</span> with Zipkin tracing to trace the records received
+from Kafka.</p><div class="fullcomment"><div class="comment cmt"><p>An extension of <span class="extype" name="KafkaConsumer">KafkaConsumer</span> with Zipkin tracing to trace the records received
+from Kafka. This is inspired by openzipkin's <a href="https://github.com/openzipkin/brave">brave</a>
+instrumentation.
+</p></div><dl class="paramcmts block"><dt class="tparam">K</dt><dd class="cmt"><p>type of Key.</p></dd><dt class="tparam">V</dt><dd class="cmt"><p>type of value.</p></dd></dl></div>
     </li><li name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumer" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="FinagleKafkaConsumer[K,V]extendsClosablewithLogging"></a><a id="FinagleKafkaConsumer[K,V]:FinagleKafkaConsumer[K,V]"></a>
       <span class="permalink">
@@ -569,6 +593,22 @@ FinagleKafkaConsumer (pollTimeout and seekStrategy).
       </span>
       <span class="symbol">
         <a title="" href="KafkaConsumerConfig$.html"><span class="name">KafkaConsumerConfig</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      
+    </li><li name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TracingKafkaConsumer"></a><a id="TracingKafkaConsumer:TracingKafkaConsumer"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/index.html#TracingKafkaConsumer" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="TracingKafkaConsumer$.html"><span class="name">TracingKafkaConsumer</span></a>
       </span>
       
       

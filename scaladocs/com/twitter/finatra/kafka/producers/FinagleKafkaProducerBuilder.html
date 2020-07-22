@@ -177,6 +177,10 @@
                         <span class="separator"></span>
                         <a class="class" href="NullKafkaProducer.html" title="A no-op KafkaProducerBase."></a>
                         <a href="NullKafkaProducer.html" title="A no-op KafkaProducerBase.">NullKafkaProducer</a>
+                      </li><li class="current-entities indented5">
+                        <a class="object" href="TracingKafkaProducer$.html" title=""></a>
+                        <a class="class" href="TracingKafkaProducer.html" title="An extension of KafkaProducer with Zipkin tracing to trace the records sent to Kafka."></a>
+                        <a href="TracingKafkaProducer.html" title="An extension of KafkaProducer with Zipkin tracing to trace the records sent to Kafka.">TracingKafkaProducer</a>
                       </li>
               </ul>
             </div>
@@ -443,7 +447,7 @@
         <span class="name">build</span><span class="params">()</span><span class="result">: <a href="FinagleKafkaProducer.html" class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducer">FinagleKafkaProducer</a>[<span class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducerBuilder.K">K</span>, <span class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducerBuilder.V">V</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Create the FinagleKafkaProducer client, it might blocks when performing metadata updates.</p>
+      
     </li><li name="com.twitter.finatra.kafka.producers.FinagleKafkaProducerBuilder#buildClient" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="buildClient():org.apache.kafka.clients.producer.KafkaProducer[K,V]"></a><a id="buildClient():KafkaProducer[K,V]"></a>
       <span class="permalink">
@@ -459,7 +463,7 @@
         <span class="name">buildClient</span><span class="params">()</span><span class="result">: <span class="extype" name="org.apache.kafka.clients.producer.KafkaProducer">KafkaProducer</span>[<span class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducerBuilder.K">K</span>, <span class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducerBuilder.V">V</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Create the native KafkaProducer client, it might blocks when performing metadata updates.</p>
+      <p class="shortcomment cmt">Create the native KafkaProducer client.</p>
     </li><li name="com.twitter.finatra.kafka.producers.KafkaProducerConfigMethods#clientId" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clientId(clientId:String):KafkaProducerConfigMethods.this.This"></a><a id="clientId(String):This"></a>
       <span class="permalink">
@@ -676,9 +680,9 @@
         <span class="name">dest</span><span class="params">(<span name="dest">dest: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="timeout">timeout: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>)</span><span class="result">: <a href="#This=Self" class="extmbr" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducerBuilder.This">This</a></span>
       </span>
       
-      <p class="shortcomment cmt">Configure the Kafka server the consumer will connect to.</p><div class="fullcomment"><div class="comment cmt"><p>Configure the Kafka server the consumer will connect to. This will resolve the dest to the Kafka server name.
+      <p class="shortcomment cmt">Configure the Kafka server the consumer will connect to.</p><div class="fullcomment"><div class="comment cmt"><p>Configure the Kafka server the consumer will connect to.
 This will block for up to 'timeout' when attempting to resolve the dest to a kafka server name
-</p></div><dl class="paramcmts block"><dt class="param">dest</dt><dd class="cmt"><p>the Kafka server address</p></dd><dt class="param">timeout</dt><dd class="cmt"><p>the amount of time this may block when trying to resolve the <a href="KafkaProducerConfigMethods.html#dest(dest:String,timeout:com.twitter.util.Duration):KafkaProducerConfigMethods.this.This" class="extmbr" name="com.twitter.finatra.kafka.producers.KafkaProducerConfigMethods#dest">dest</a> server</p></dd><dt>returns</dt><dd class="cmt"><p>the <a href="KafkaProducerConfigMethods.html" class="extype" name="com.twitter.finatra.kafka.producers.KafkaProducerConfigMethods">KafkaProducerConfigMethods</a> instance.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="KafkaProducerConfigMethods.html" class="extype" name="com.twitter.finatra.kafka.producers.KafkaProducerConfigMethods">KafkaProducerConfigMethods</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">dest</dt><dd class="cmt"><p>the Kafka server address</p></dd><dt class="param">timeout</dt><dd class="cmt"><p>the timeout duration when trying to resolve the <a href="KafkaProducerConfigMethods.html#dest(dest:String,timeout:com.twitter.util.Duration):KafkaProducerConfigMethods.this.This" class="extmbr" name="com.twitter.finatra.kafka.producers.KafkaProducerConfigMethods#dest">dest</a> server.</p></dd><dt>returns</dt><dd class="cmt"><p>the <a href="KafkaProducerConfigMethods.html" class="extype" name="com.twitter.finatra.kafka.producers.KafkaProducerConfigMethods">KafkaProducerConfigMethods</a> instance.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="KafkaProducerConfigMethods.html" class="extype" name="com.twitter.finatra.kafka.producers.KafkaProducerConfigMethods">KafkaProducerConfigMethods</a></dd></dl></div>
     </li><li name="com.twitter.finatra.kafka.producers.KafkaProducerConfigMethods#dest" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="dest(dest:String):KafkaProducerConfigMethods.this.This"></a><a id="dest(String):This"></a>
       <span class="permalink">

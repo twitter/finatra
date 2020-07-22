@@ -7,13 +7,16 @@ Explicit Binding with ``#bind[T]``
 
   Please see the section on including test-jar dependencies in your project: `Test Dependencies <../..#test-dependencies>`_.
 
-Embedded Server ``#bind[T]``
+Embedded ``#bind[T]``
 ----------------------------
 
 In the cases where we'd like to easily replace a bound instance with another instance in our tests
 (e.g. with a mock or a simple stub implementation), we do not need to create a specific module
 for testing to compose into our server as an override module. Instead we can use the `#bind[T]`
 function on the embedded server.
+
+This is especially useful if you want to replace a bound instance with a mock under control of the
+test. 
 
 .. code:: scala
 
@@ -26,8 +29,8 @@ function on the embedded server.
       with Mockito
       with HttpTest {
 
-      val mockDownstreamServiceClient = smartMock[DownstreamServiceClient]
-      val mockIdService = smartMock[IdService]
+      private val mockDownstreamServiceClient = smartMock[DownstreamServiceClient]
+      private val mockIdService = smartMock[IdService]
 
       override val server =
         new EmbeddedHttpServer(new ExampleServer)
@@ -43,9 +46,33 @@ function on the embedded server.
 For a complete example, see the
 `TwitterCloneFeatureTest <https://github.com/twitter/finatra/blob/develop/examples/advanced/twitter-clone/src/test/scala/finatra/quickstart/TwitterCloneFeatureTest.scala>`__.
 
-.. warning::
-    Using ``@Bind`` (the `com.google.inject.testing.fieldbinder.Bind` annotation) is to be considered
-    deprecated.
+Note this is also available for `EmbeddedApp <https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala>`__ as well:
+
+.. code:: scala
+
+    import com.twitter.finagle.stats.InMemoryStatsReceiver
+    import com.twitter.inject.{Mockito, Test}
+    import com.twitter.inject.app.EmbeddedApp
+
+    class MyAppTest extends Test with Mockito {
+      private val inMemoryStatsReceiver: InMemoryStatsReceiver = new InMemoryStatsReceiver
+      private val mockIdService = smartMock[IdService]
+
+      // build an EmbeddedApp
+      def app(): EmbeddedApp = app(new MyApp)
+      def app(underlying: MyApp): EmbeddedApp = 
+        new EmbeddedApp(underlying)
+          .bind[IdService].toInstance(mockIdService)
+          .bind[StatsReceiver].toInstance(inMemoryStatsReceiver)
+
+      test("assert count") {
+        val undertest = app()
+        undertest.main("username" -> "jack")
+
+        val statsReceiver = undertest.injector.instance[StatsReceiver].asInstanceOf[InMemoryStatsReceiver]
+        statsReceiver.counter("my_counter")() shouldEqual 1
+      }
+    }
 
 TestInjector ``#bind[T]``
 -------------------------
@@ -181,6 +208,28 @@ Example:
 
 See the `java-http-server <https://github.com/twitter/finatra/tree/develop/examples/http-server/java/src/main/java>`__
 for a full example of using the `#bind[T]` DSL in test to override a binding in a server.
+
+Injecting Members of a Test
+---------------------------
+
+.. warning::
+
+    Do not inject members of a test class into the server or application under test.
+
+We strongly discourage injecting members of a test into your server or application. This includes using `@Inject` or 
+`@Bind` (the com.google.inject.testing.fieldbinder.Bind annotation) on a test member field then using the server or 
+application's `c.t.inject.Injector <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala>`__ to do `injector.underlying.injectMembers(this)`.
+
+Why?
+~~~~
+
+The server or application under test has a different lifecycle than the test class. Mixing them in this manner is first,
+hard to reason about and second, can lead to possibly non-deterministic tests. You will also make it hard to test 
+`multiple servers or applications <./feature_tests.html#testing-multiple-applications-or-servers>`__ in a single test file.
+
+Lastly, but perhaps most importantly, the `Injector` of a server or application under test is meant to be encapsulated to that server or application. Any mutation of its object graph should happen within the constraints of its lifecycle and thus you should not mutate its object graph after it has started. The framework thus provides ways to do this safely taking into account the server
+or application's lifecyle: either provide an `override module <./override_modules.html>`__ or use the `#bind[T]` DSL here
+to replace a binding **when instantiating** the server or application under test.
 
 More Information
 ----------------

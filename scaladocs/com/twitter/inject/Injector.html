@@ -691,9 +691,9 @@ with <code>@Inject</code>.
 </p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the bound instance to return from the object graph.</p></dd><dt class="param">clazz</dt><dd class="cmt"><p>the class of type <span class="extype" name="T">T</span> of the bound instance to return
              from the object graph.</p></dd><dt>returns</dt><dd class="cmt"><p>bound instance of type <span class="extype" name="T">T</span>.</p></dd></dl></div>
     </li><li name="com.twitter.inject.Injector#instance" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="instance[T](annotationClazz:Class[_&lt;:java.lang.annotation.Annotation])(implicitevidence$5:Manifest[T]):T"></a><a id="instance[T](Class[_&lt;:Annotation])(Manifest[T]):T"></a>
+      <a id="instance[T](annotationClazz:Class[_&lt;:java.lang.annotation.Annotation])(implicitevidence$5:reflect.runtime.universe.TypeTag[T]):T"></a><a id="instance[T](Class[_&lt;:Annotation])(scala.reflect.api.JavaUniverse.TypeTag[T]):T"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/Injector.html#instance[T](annotationClazz:Class[_&lt;:java.lang.annotation.Annotation])(implicitevidence$5:Manifest[T]):T" title="Permalink">
+      <a href="../../../com/twitter/inject/Injector.html#instance[T](annotationClazz:Class[_&lt;:java.lang.annotation.Annotation])(implicitevidence$5:reflect.runtime.universe.TypeTag[T]):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -702,7 +702,7 @@ with <code>@Inject</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">instance</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="annotationClazz">annotationClazz: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.Injector.instance.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Injector.instance.T">T</span></span>
+        <span class="name">instance</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="annotationClazz">annotationClazz: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.inject.Injector.instance.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Injector.instance.T">T</span></span>
       </span>
       
       <p class="shortcomment cmt">Returns the appropriate instance for the given key constructed from the
@@ -713,9 +713,9 @@ with <code>@Inject</code>.
 </p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the bound instance to return from the object graph.</p></dd><dt class="param">annotationClazz</dt><dd class="cmt"><p>class of <span class="extype" name="java.lang.annotation.Annotation">java.lang.annotation.Annotation</span> used
                        to disambiguate the bound type <span class="extype" name="T">T</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>bound instance of type <span class="extype" name="T">T</span> annotated with annotation class.</p></dd></dl></div>
     </li><li name="com.twitter.inject.Injector#instance" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="instance[T](annotation:java.lang.annotation.Annotation)(implicitevidence$4:Manifest[T]):T"></a><a id="instance[T](Annotation)(Manifest[T]):T"></a>
+      <a id="instance[T](annotation:java.lang.annotation.Annotation)(implicitevidence$4:reflect.runtime.universe.TypeTag[T]):T"></a><a id="instance[T](Annotation)(scala.reflect.api.JavaUniverse.TypeTag[T]):T"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/Injector.html#instance[T](annotation:java.lang.annotation.Annotation)(implicitevidence$4:Manifest[T]):T" title="Permalink">
+      <a href="../../../com/twitter/inject/Injector.html#instance[T](annotation:java.lang.annotation.Annotation)(implicitevidence$4:reflect.runtime.universe.TypeTag[T]):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -724,7 +724,7 @@ with <code>@Inject</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">instance</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="annotation">annotation: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.Injector.instance.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Injector.instance.T">T</span></span>
+        <span class="name">instance</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="annotation">annotation: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.inject.Injector.instance.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Injector.instance.T">T</span></span>
       </span>
       
       <p class="shortcomment cmt">Returns the appropriate instance for the given key constructed from the
@@ -735,9 +735,9 @@ with <code>@Inject</code>.
 </p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the bound instance to return from the object graph.</p></dd><dt class="param">annotation</dt><dd class="cmt"><p><span class="extype" name="java.lang.annotation.Annotation">java.lang.annotation.Annotation</span> instance used to
                    disambiguate the bound type <span class="extype" name="T">T</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>bound instance of type <span class="extype" name="T">T</span> annotated with annotation.</p></dd></dl></div>
     </li><li name="com.twitter.inject.Injector#instance" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="instance[T,Ann&lt;:java.lang.annotation.Annotation](implicitevidence$2:Manifest[T],implicitevidence$3:Manifest[Ann]):T"></a><a id="instance[T,Ann&lt;:Annotation](Manifest[T],Manifest[Ann]):T"></a>
+      <a id="instance[T,Ann&lt;:java.lang.annotation.Annotation](implicitevidence$2:reflect.runtime.universe.TypeTag[T],implicitevidence$3:scala.reflect.ClassTag[Ann]):T"></a><a id="instance[T,Ann&lt;:Annotation](scala.reflect.api.JavaUniverse.TypeTag[T],ClassTag[Ann]):T"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/Injector.html#instance[T,Ann&lt;:java.lang.annotation.Annotation](implicitevidence$2:Manifest[T],implicitevidence$3:Manifest[Ann]):T" title="Permalink">
+      <a href="../../../com/twitter/inject/Injector.html#instance[T,Ann&lt;:java.lang.annotation.Annotation](implicitevidence$2:reflect.runtime.universe.TypeTag[T],implicitevidence$3:scala.reflect.ClassTag[Ann]):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -746,7 +746,7 @@ with <code>@Inject</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">instance</span><span class="tparams">[<span name="T">T</span>, <span name="Ann">Ann &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.Injector.instance.T">T</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.Injector.instance.Ann">Ann</span>]</span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Injector.instance.T">T</span></span>
+        <span class="name">instance</span><span class="tparams">[<span name="T">T</span>, <span name="Ann">Ann &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.inject.Injector.instance.T">T</span>]</span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.12.8/scala/reflect/ClassTag.html#scala.reflect.ClassTag" class="extype" name="scala.reflect.ClassTag">ClassTag</a>[<span class="extype" name="com.twitter.inject.Injector.instance.Ann">Ann</span>]</span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Injector.instance.T">T</span></span>
       </span>
       
       <p class="shortcomment cmt">Returns the appropriate instance for the given key constructed from the
@@ -756,9 +756,9 @@ inject your dependencies ahead of time via annotating your constructor
 with <code>@Inject</code>.
 </p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the bound instance to return from the object graph.</p></dd><dt class="tparam">Ann</dt><dd class="cmt"><p>type of the annotation used to disambiguate the bound type <span class="extype" name="T">T</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>bound instance of type <span class="extype" name="T">T</span> annotated with annotation type <span class="extype" name="Ann">Ann</span>.</p></dd></dl></div>
     </li><li name="com.twitter.inject.Injector#instance" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="instance[T](implicitevidence$1:Manifest[T]):T"></a><a id="instance[T](Manifest[T]):T"></a>
+      <a id="instance[T](implicitevidence$1:reflect.runtime.universe.TypeTag[T]):T"></a><a id="instance[T](scala.reflect.api.JavaUniverse.TypeTag[T]):T"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/Injector.html#instance[T](implicitevidence$1:Manifest[T]):T" title="Permalink">
+      <a href="../../../com/twitter/inject/Injector.html#instance[T](implicitevidence$1:reflect.runtime.universe.TypeTag[T]):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -767,7 +767,7 @@ with <code>@Inject</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">instance</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.Injector.instance.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Injector.instance.T">T</span></span>
+        <span class="name">instance</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.inject.Injector.instance.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Injector.instance.T">T</span></span>
       </span>
       
       <p class="shortcomment cmt">Returns the appropriate instance for the given key constructed from the
@@ -955,9 +955,9 @@ with <code>@Inject</code>.
         <div class="values members">
               <h3>Deprecated Value Members</h3>
               <ol><li name="com.twitter.inject.Injector#instance" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="instance[T](name:String)(implicitevidence$6:Manifest[T]):T"></a><a id="instance[T](String)(Manifest[T]):T"></a>
+      <a id="instance[T](name:String)(implicitevidence$6:reflect.runtime.universe.TypeTag[T]):T"></a><a id="instance[T](String)(scala.reflect.api.JavaUniverse.TypeTag[T]):T"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/Injector.html#instance[T](name:String)(implicitevidence$6:Manifest[T]):T" title="Permalink">
+      <a href="../../../com/twitter/inject/Injector.html#instance[T](name:String)(implicitevidence$6:reflect.runtime.universe.TypeTag[T]):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -966,7 +966,7 @@ with <code>@Inject</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 2017-09-25) Users should prefer injector.instance[T](java.lang.annotation.Annotation">instance</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.Injector.instance.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Injector.instance.T">T</span></span>
+        <span class="name deprecated" title="Deprecated: (Since version 2017-09-25) Users should prefer injector.instance[T](java.lang.annotation.Annotation">instance</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.inject.Injector.instance.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Injector.instance.T">T</span></span>
       </span>
       
       <p class="shortcomment cmt">Returns the appropriate instance for the given key constructed from the

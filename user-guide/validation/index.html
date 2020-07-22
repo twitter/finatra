@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Validation Framework &#8212; Finatra 20.6.0 documentation</title>
+    <title>Validation Framework &#8212; Finatra 20.7.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '20.6.0',
+        VERSION:     '20.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -180,30 +180,21 @@ defined in its matching <cite>StateConstraintValidator</cite> automatically at r
 <h3>Injecting a customized Validator<a class="headerlink" href="#injecting-a-customized-validator" title="Permalink to this headline">¶</a></h3>
 <p>You can switch to use another <cite>MessageResolver</cite> or change the <cite>cacheSize</cite> of the default <cite>Validator</cite>.</p>
 <p>Provide a customized Validator in a <cite>TwitterModule</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Provides
-import com.twitter.finatra.validation.{MessageResolver, Validator}
-import com.twitter.finatra.validation.tests.CustomizedMessageResolver
-import com.twitter.inject.{Injector, TwitterModule}
-import java.lang.annotation.Annotation
-import javax.inject.Singleton
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.validation.{Validator, ValidatorModule}
+import com.twitter.inject.Injector
 
-object CustomizedValidatorModule extends TwitterModule {
-
-  @Provides
-  @Singleton
-  private final def providesValidator(injector: Injector): Validator =
-    Validator
-      .builder
+object CustomizedValidatorModule extends ValidatorModule {
+  override def configureValidator(injector: Injector, builder: Validator.Builder): Validator.Builder =
+    builder
       .withCacheSize(512)
       .withMessageResolver(new CustomizedMessageResolver())
-      .build()
 }
 </pre></div>
 </div>
-<p>Override <cite>modules</cite> in your server definition:</p>
+<p>Override <cite>validatorModule</cite> in your server definition:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>ValidationServer extends HttpServer {
   override val name: String = &quot;validation-server&quot;
-  override def modules: Seq[Module] = Seq(CustomizedValidatorModule)
+  override def validatorModule: TwitterModule = CustomizedValidatorModule
 
   override protected def configureHttp(router: HttpRouter): Unit = {
     router
@@ -213,6 +204,16 @@ object CustomizedValidatorModule extends TwitterModule {
   }
 }
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">By overriding the default <cite>validatorModule</cite>, you are also replacing the default Validator in
+<a href="#id1"><span class="problematic" id="id2">`jacksonModule https://github.com/twitter/finatra/blob/ef7197324cba8dfe6274ffb4570dea6c34b9fc33/http/src/main/scala/com/twitter/finatra/http/servers.scala#L526`__</span></a>,
+the new <cite>Validator</cite> will be used to apply the validation logic in
+<a href="#id1"><span class="problematic" id="id3">`ScalaObjectMapper https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala`__</span></a>
+and during HTTP request parsing. Checkout
+<a class="reference external" href="#integrate-with-finatra-jackson-framework">Integrate with Finatra Jackson framework</a> For
+more information about how validations works in Finatra Jackson Framework.</p>
 </div>
 </div>
 </div>

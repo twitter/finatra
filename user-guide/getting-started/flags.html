@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Flags &#8212; Finatra 20.6.0 documentation</title>
+    <title>Flags &#8212; Finatra 20.7.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '20.6.0',
+        VERSION:     '20.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -394,10 +394,11 @@ the shelf.</p>
 <li><cite>com.twitter.util.Duration</cite></li>
 <li><cite>com.twitter.util.Time</cite></li>
 <li><cite>com.twitter.util.StorageUnit</cite></li>
+<li><cite>java.io.File</cite></li>
 </ul>
 </div></blockquote>
-<p>For anything that falls outside of these types (and their <cite>scala.Seq[_]</cite> and <cite>java.util.List[_]</cite>)
-you’d need to register a <cite>Flaggable[T]</cite> to be able to inject a Flag of type <cite>T</cite>.</p>
+<p>For anything that falls outside of these types (and their <cite>scala.Seq[_]</cite> and <cite>java.util.List[_]</cite>
+variants) you’d need to register a <cite>Flaggable[T]</cite> to be able to inject a Flag of type <cite>T</cite>.</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.TwitterModule
 
 class MyModule extends TwitterModule {
@@ -408,17 +409,18 @@ class MyModule extends TwitterModule {
 </pre></div>
 </div>
 <p>And in Java:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.TwitterModule;
-import java.util.List;
+<div class="code java highlight-text"><div class="highlight"><pre><span></span>import java.util.List;
 import com.google.inject.TypeLiteral;
+import com.google.inject.matcher.Matchers;
 import com.twitter.app.Flaggable;
+import com.twitter.inject.TwitterModule;
 
 public class MyModule extends TwitterModule {
 
   @Override
   public void configure() {
     addFlagConverter(
-      new TypeLiteral&lt;List&lt;scala.Tuple2&lt;Integer, Integer&gt;&gt;&gt;() {},
+      Matchers.only(new TypeLiteral&lt;List&lt;scala.Tuple2&lt;Integer, Integer&gt;&gt;&gt;() {}),
       Flaggable.ofJavaList(Flaggable.ofTuple(Flaggable.ofJavaInteger, Flaggable.ofJavaInteger)
     );
   }

@@ -68,27 +68,6 @@ You could define an |c.t.inject.app.App|_:
   `SLF4JBridgeHandler <https://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html>`__ here as an example of
   how to `bridge legacy APIs <https://www.slf4j.org/legacy.html>`__.
 
-Then to test:
-
-.. code:: scala
-
-  import com.twitter.inject.Test
-  import com.twitter.inject.app.EmbeddedApp
-
-  class MyAppTest extends Test {
-
-    private val app = new EmbeddedApp(new MyApp)
-
-    test("MyApp#runs") {
-      app.main("some.flag1" -> "value1", "some.flag2" -> "value2")
-    }
-  }
-
-.. important::
-
-    Note: every call to `EmbeddedApp#main` will run the application with the given flags. If your application is stateful, 
-    you may want to ensure that a new instance of your application under test is created per test run.
-
 Java Example
 ------------
 
@@ -198,8 +177,173 @@ For example, to exit the application upon receiving an `INT` signal:
     }
   }
 
+Testing
+-------
+
+First extend the |c.t.inject.Test|_ trait. Then to test, wrap your |c.t.inject.app.App|_ with an `c.t.inject.app.EmbeddedApp <https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala>`__.
+
+For example,
+
+.. code:: scala
+
+    import com.twitter.inject.Test
+    import com.twitter.inject.app.EmbeddedApp
+
+    class MyAppTest extends Test {
+
+      // build an EmbeddedApp
+      def app(): EmbeddedApp = app(new MyApp)
+      def app(underlying: MyApp): EmbeddedApp = 
+        new EmbeddedApp(underlying).bind[Foo].toInstance(new Foo(2))
+
+      test("MyApp#run") {
+        app().main("username" -> "jack")
+      }
+
+      test("MyApp#works as expected") {
+        // create a version of the app local to this test
+        // here we could change the configuration of the app under test
+        val localTestInstanceApp = app(new MyApp)
+        localTestInstanceApp.main("username" -> "jill")
+
+        // expect behavior against instances from the `localTestInstanceApp` injector
+        localTestInstanceApp.injector.instance[Foo].value should be(Foo(2))
+      }
+    }
+
+and in Java:
+
+.. code:: java
+
+    import java.util.*;
+
+    import org.junit.Assert;
+    import org.junit.Test;
+
+    import com.twitter.inject.app.EmbeddedApp;
+
+    public class MyAppTest extends Assert {
+        private EmbeddedApp app() {
+            return this.app(new MyApp());
+        }
+        private EmbeddedApp app(MyApp underlying) {
+            return new EmbeddedApp(underlying).bindClass(Foo.class, Foo.apply(2));
+        }
+
+        @Test
+        public void testRun() {
+          Map<String, Object> flags = new HashMap<String, Object>();
+          flags.put("username", "jack");
+
+          app().main(flags);
+        }
+
+        @Test
+        public void testWorksAsExpected() {
+          Map<String, Object> flags = new HashMap<String, Object>();
+          flags.put("username", "jill");
+
+          // create a version of the app local to this test
+          // here we could change the configuration of the app under test
+          MyApp localTestInstanceApp = app(new MyApp());
+          app(localTestInstanceApp).main(flags);
+
+          // expect behavior against instances from the `localTestInstanceApp` injector
+          Foo foo = localTestInstanceApp.injector().instance(Foo.class);
+          assertEquals(/* expected */ Foo.apply(2), /* actual */ foo);
+        }
+    }
+
+.. important::
+
+    Note: every call to `EmbeddedApp#main` will run the application with the given flags. If your application is stateful, 
+    you may want to ensure that a new instance of your application under test is created per test run, like written above.
+
+There may be cases where you want to assert some metrics are written by your application for the purpose of testing functionality, even though your application may not export them for collection.
+
+InMemoryStatsReceiver
+---------------------
+
+Finatra prodives a `StatsReceiverModule <https://github.com/twitter/finatra/blob/develop/inject/inject-modules/src/main/scala/com/twitter/inject/modules/StatsReceiverModule.scala>`__ which will bind the `LoadedStatsReceiver <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/stats/LoadedStatsReceiver.scala>`__ to the object graph.
+
+.. note::
+
+    Finagle uses service-loading to allow for users to pick their `com.twitter.finagle.stats.StatsReceiver` implementation. We recommend
+    using Twitter's `util-stats <https://twitter.github.io/util/guide/util-stats/index.html>`__ implementation
+    which will be service-loaded as the implementation of `LoadedStatsReceiver` if the dependency is on your 
+    classpath.
+
+Finagle provides an `com.twitter.finagle.stats.InMemoryStatsReceiver <https://github.com/twitter/util/blob/develop/util-stats/src/main/scala/com/twitter/finagle/stats/InMemoryStatsReceiver.scala>`__
+which stores metrics in an in-memory Map to make it simple to query and assert their values. You can bind an instance of the `InMemoryStatsReceiver` to the underlying app's object graph as the implementation of the app's `StatsReceiver` when testing to be able to assert metrics emitted by the application.
+
+Assuming you have an App:
+
+.. code:: scala
+
+    import com.google.inject.Module
+    import com.twitter.finagle.stats.StatsReceiver
+    import com.twitter.inject.Logging
+    import com.twitter.inject.app.App
+    import com.twitter.inject.modules.LoggingModule
+    import com.twitter.inject.modules.StatsReceiverModule
+
+    object MyAppMain extends MyApp
+
+    class MyApp extends App with Logging  {
+
+    override val modules: Seq[Module] = Seq(
+      StatsReceiverModule
+      LoggingModule,
+      MyModule1)
+
+    override protected def run(): Unit = {
+      // Core app logic goes here.
+      val statsReceiver = injector.instance[StatsReceiver]
+      statsReceiver.counter("my_counter").incr()
+      val fooService = injector.instance[FooService]
+      ???
+    }
+  }
+
+You could then test emitted metrics like so:
+
+.. code:: scala
+
+    import com.twitter.finagle.stats.InMemoryStatsReceiver
+    import com.twitter.inject.Test
+    import com.twitter.inject.app.EmbeddedApp
+
+    class MyAppTest extends Test {
+      private val inMemoryStatsReceiver: InMemoryStatsReceiver = new InMemoryStatsReceiver
+
+      // build an EmbeddedApp
+      def app(): EmbeddedApp = app(new MyApp)
+      def app(underlying: MyApp): EmbeddedApp = 
+        new EmbeddedApp(underlying)
+          .bind[Foo].toInstance(new Foo(2))
+          .bind[StatsReceiver].toInstance(inMemoryStatsReceiver)
+
+      test("assert count") {
+        val undertest = app()
+        undertest.main("username" -> "jack")
+
+        val statsReceiver = undertest.injector.instance[StatsReceiver].asInstanceOf[InMemoryStatsReceiver]
+        statsReceiver.counter("my_counter")() shouldEqual 1
+      }
+    }
+
+For more information on the Embedded testing utilities, including on testing with `GlobalFlags <../testing/embedded.html#testing-with-global-flags>`__ see the documentation `here <../testing/embedded.html>`_. Also see the documentation for more information on the `#bind[T] DSL <../testing/bind_dsl.html>`__ used above.
+
+And lastly, for the complete testing guide, see the Testing `table of contents <../#testing>`__.
+
 .. |c.t.app.App| replace:: `util-app App`
 .. _c.t.app.App: https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala
 
 .. |c.t.inject.app.App| replace:: ``c.t.inject.app.App``
+.. _c.t.inject.app.App: https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala
+
+.. |c.t.inject.Test| replace:: `c.t.inject.Test`
+.. _c.t.inject.Test: https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/Test.scala
+
+.. |c.t.inject.app.App| replace:: `c.t.inject.app.App`
 .. _c.t.inject.app.App: https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala

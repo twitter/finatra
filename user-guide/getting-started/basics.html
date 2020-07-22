@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Dependency Injection &#8212; Finatra 20.6.0 documentation</title>
+    <title>Dependency Injection &#8212; Finatra 20.7.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '20.6.0',
+        VERSION:     '20.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -94,6 +94,21 @@
   }
 }
 </pre></div>
+</div>
+<div class="section" id="what-is-this-doing">
+<h2>What Is This Doing?<a class="headerlink" href="#what-is-this-doing" title="Permalink to this headline">¶</a></h2>
+<p>When doing <cite>router.add[T]</cite>, you are instructing the framework to retrieve an instance of <cite>T</cite> from the object graph of
+the server or application. Whereas <cite>router.add(instance)</cite> accepts the instance directly. This pattern is repeated
+throughout the framework to provide users the choice of using the object graph or not.</p>
+</div>
+<div class="section" id="why-use-the-object-graph">
+<h2>Why Use The Object Graph?<a class="headerlink" href="#why-use-the-object-graph" title="Permalink to this headline">¶</a></h2>
+<p>A primary focus of the Finatra framework is to make it easy to test services and applications. We think using
+the <a class="reference external" href="https://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a> design pattern can lead to more
+testable code (more on this topic in the next section) because an outcome of using the pattern is that dependencies
+of the code under test can be replaced when testing.</p>
+<p>Choosing to let the framework obtain an instance of <cite>T</cite> from the object graph means that the framework testing utilities
+can provide ways for users to replace the instance of <cite>T</cite> returned in tests. When you provide the instance directly, it is thus up to you to build in any hooks in production code to replace instances and test code to set replacements if necessary when testing.</p>
 </div>
 </div>
 <div class="section" id="dependency-injection-and-testing">
@@ -363,6 +378,44 @@ class FooModule extends TwitterModule {
 <p>See: Guice’s documentation on <a class="reference external" href="https://github.com/google/guice/wiki/ModulesShouldBeFastAndSideEffectFree">Modules should be fast and side-effect free</a> and <a class="reference external" href="https://github.com/google/guice/wiki/Avoid-Injecting-Closable-Resources">Avoid Injecting Closable Resources</a>.</p>
 <p>For more information on Finatra Modules see the documentation <a class="reference external" href="./modules.html">here</a>.</p>
 </div>
+<div class="section" id="scala-to-java-type-conversions">
+<h2>Scala to Java Type conversions<a class="headerlink" href="#scala-to-java-type-conversions" title="Permalink to this headline">¶</a></h2>
+<p>Both the <cite>c.t.inject.TwitterModule</cite> and <cite>c.t.inject.Injector</cite> are Scala classes which support creation of a Guice <a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/TypeLiteral.html">TypeLiteral</a> based on the given Type <cite>T</cite> parameter. A <a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/TypeLiteral.html">TypeLiteral</a> is used to construct the binding <a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/Key.html">Key</a> for storing the bound instance in the object graph. The framework uses the <a class="reference external" href="https://github.com/codingwell/scala-guice/">codingwell/scala-guice</a> library for producing a <a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/TypeLiteral.html">TypeLiteral</a> from a <cite>T</cite>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Binding or injector lookup by type <cite>T</cite> can produce different Guice <a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/Key.html">Key</a> values as the constructed <a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/TypeLiteral.html">TypeLiteral</a> may carry more type information than Guice would normally be able to obtain in Java.</p>
+</div>
+<p>Because of the use of the Scala <a class="reference external" href="https://www.scala-lang.org/api/current/scala-reflect/scala/reflect/api/Types$TypeApi.html">Types.TypeApi</a>, it is possible that a generated <a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/TypeLiteral.html">TypeLiteral</a> from a parameterized type, e.g., <cite>F[T]</cite>, will be different than what Guice itself would produce since Guice is a Java library and can suffer from <a class="reference external" href="https://docs.oracle.com/javase/tutorial/java/generics/erasure.html">type erasure</a> when using reflection to convert a Scala type to a Java type.</p>
+<p>Thus, if you manually bind a parameterized type in a <cite>c.t.inject.TwitterModule</cite> using <cite>bind[T]</cite> in the <cite>configure()</cite> method, you may not be able to <cite>&#64;Inject</cite> the type into another class since the Guice Java library may not be able to construct the same <a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/TypeLiteral.html">TypeLiteral</a> in order to build the <a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/Key.html">Key</a> to locate the binding in the Injector.</p>
+<p>However, you will be able to locate the type manually from the <cite>c.t.inject.Injector</cite> via <cite>inject.instance[T]</cite> which will generate the same <a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/TypeLiteral.html">TypeLiteral</a> and thus the same <a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/Key.html">Key</a> as created when manually calling <cite>bind[T]</cite> in a <cite>c.t.inject.TwitterModule</cite>.</p>
+<p>For example, if you provide an <cite>Option[String]</cite> in an <cite>&#64;Provides</cite>-annotated method in a Module, Guice will create a Key over a TypeLiteral of just <cite>scala.Option</cite>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>scala&gt; val module = new AbstractModule {
+ |   override def configure(): Unit = {
+ |     bind(classOf[Option[String]]).toInstance(Some(&quot;hello&quot;))
+ |   }
+ | }
+module: com.google.inject.AbstractModule = $anon$1@2f3a3fec
+
+scala&gt; val injector = Guice.createInjector(module)
+injector: com.google.inject.Injector = Injector{bindings=[InstanceBinding{key=Key[type=scala.Option, annotation=[none]], source=$anon$1.configure(&lt;console&gt;:21), instance=Some(hello)}]}
+</pre></div>
+</div>
+<p>However, using the <cite>c.t.inject.TwitterModule</cite> binding DSL would produce a <a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/Key.html">Key</a> with a fully specified <a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/TypeLiteral.html">TypeLiteral</a>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>scala&gt; val module = new AbstractModule with ScalaModule {
+ |   override def configure(): Unit = {
+ |     bind[Option[String]].toInstance(Some(&quot;hello&quot;))
+ |   }
+ | }
+module: com.google.inject.AbstractModule with net.codingwell.scalaguice.ScalaModule = $anon$1@6ebbc06
+
+scala&gt; val injector = Guice.createInjector(module)
+injector: com.google.inject.Injector = Injector{bindings=[InstanceBinding{key=Key[type=scala.Option&lt;java.lang.String&gt;, annotation=[none]], source=$anon$1.configure(&lt;console&gt;:17), instance=Some(hello)}]}
+</pre></div>
+</div>
+<p>This can also affect <cite>&#64;Inject</cite>-ing an instance of the type versus manually obtaining an instance from the injector.</p>
+<p>A workaround for consistency is to introduce an unparameterized wrapper type over the parameterized type or
+consistently use the Java methods for binding and lookup, e.g., <cite>&#64;Provides</cite>-annotated methods in Modules, and the <cite>Class[_]</cite>-based methods for binding and injector instance retrieval.</p>
+</div>
 </div>
 
 
@@ -386,7 +439,11 @@ class FooModule extends TwitterModule {
 </ul>
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Dependency Injection</a></li>
+<li><a class="reference internal" href="#">Dependency Injection</a><ul>
+<li><a class="reference internal" href="#what-is-this-doing">What Is This Doing?</a></li>
+<li><a class="reference internal" href="#why-use-the-object-graph">Why Use The Object Graph?</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#dependency-injection-and-testing">Dependency Injection and Testing</a></li>
 <li><a class="reference internal" href="#dependency-injection-best-practices">Dependency Injection Best Practices</a><ul>
 <li><a class="reference internal" href="#use-constructor-injection">Use Constructor Injection</a><ul>
@@ -404,6 +461,7 @@ class FooModule extends TwitterModule {
 <li><a class="reference internal" href="#avoid-i-o-with-providers">Avoid I/O with Providers</a></li>
 <li><a class="reference internal" href="#avoid-conditional-logic-in-modules">Avoid conditional logic in modules</a></li>
 <li><a class="reference internal" href="#make-use-of-the-twittermodule-lifecycle">Make use of the <cite>TwitterModule</cite> lifecycle</a></li>
+<li><a class="reference internal" href="#scala-to-java-type-conversions">Scala to Java Type conversions</a></li>
 </ul>
 </li>
 </ul>

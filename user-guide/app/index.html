@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Creating an injectable util-app App &#8212; Finatra 20.6.0 documentation</title>
+    <title>Creating an injectable util-app App &#8212; Finatra 20.7.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '20.6.0',
+        VERSION:     '20.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -78,8 +78,8 @@
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
 <p>To create an injectable <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>util-app App</cite></a>, first depend on the <cite>inject-app</cite> library. Then use the
 <a class="reference external" href="../getting-started/framework.html#inject">inject framework</a> to create an injectable App. Finatra
-provides an injectable version of the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>util-app App</cite></a> trait: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><code class="docutils literal"><span class="pre">c.t.inject.app.App</span></code></a>.</p>
-<p>Extending the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><code class="docutils literal"><span class="pre">c.t.inject.app.App</span></code></a> trait creates an injectable <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>util-app App</cite></a>.</p>
+provides an injectable version of the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>util-app App</cite></a> trait: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><cite>c.t.inject.app.App</cite></a>.</p>
+<p>Extending the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><cite>c.t.inject.app.App</cite></a> trait creates an injectable <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>util-app App</cite></a>.</p>
 <p>This allows for the use of <a class="reference external" href="../getting-started/basics.html#dependency-injection">dependency injection</a>
 in a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>util-app App</cite></a> with support for <a class="reference external" href="../getting-started/modules.html">modules</a> which allows for
 <a class="reference external" href="../testing/index.html#types-of-tests">powerful feature testing</a> of the application.</p>
@@ -97,7 +97,7 @@ object MyModule1 extends TwitterModule {
 }
 </pre></div>
 </div>
-<p>You could define an <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><code class="docutils literal"><span class="pre">c.t.inject.app.App</span></code></a>:</p>
+<p>You could define an <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><cite>c.t.inject.app.App</cite></a>:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
 import com.twitter.inject.Logging
 import com.twitter.inject.app.App
@@ -124,25 +124,6 @@ class MyApp extends App with Logging  {
 <p class="last">We include the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-modules/src/main/scala/com/twitter/inject/modules/LoggerModule.scala">c.t.inject.modules.LoggingModule</a> to attempt installation of the
 <a class="reference external" href="https://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html">SLF4JBridgeHandler</a> here as an example of
 how to <a class="reference external" href="https://www.slf4j.org/legacy.html">bridge legacy APIs</a>.</p>
-</div>
-<p>Then to test:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.Test
-import com.twitter.inject.app.EmbeddedApp
-
-class MyAppTest extends Test {
-
-  private val app = new EmbeddedApp(new MyApp)
-
-  test(&quot;MyApp#runs&quot;) {
-    app.main(&quot;some.flag1&quot; -&gt; &quot;value1&quot;, &quot;some.flag2&quot; -&gt; &quot;value2&quot;)
-  }
-}
-</pre></div>
-</div>
-<div class="admonition important">
-<p class="first admonition-title">Important</p>
-<p class="last">Note: every call to <cite>EmbeddedApp#main</cite> will run the application with the given flags. If your application is stateful,
-you may want to ensure that a new instance of your application under test is created per test run.</p>
 </div>
 </div>
 <div class="section" id="java-example">
@@ -188,14 +169,14 @@ public class MyApp extends AbstractApp {
 </div>
 <div class="section" id="app-run">
 <h2><cite>App#run</cite><a class="headerlink" href="#app-run" title="Permalink to this headline">¶</a></h2>
-<p>The single point of entry to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><code class="docutils literal"><span class="pre">c.t.inject.app.App</span></code></a> is the <code class="docutils literal"><span class="pre">#run</span></code> method.</p>
+<p>The single point of entry to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><cite>c.t.inject.app.App</cite></a> is the <code class="docutils literal"><span class="pre">#run</span></code> method.</p>
 <p>The Finatra <a class="reference external" href="../getting-started/lifecycle.html#startup">Startup Lifecycle</a> ensures that the injector
 will be properly configured before access and provides the <code class="docutils literal"><span class="pre">#run</span></code> method as the function for implementing
 the app.</p>
 </div>
 <div class="section" id="using-injection">
 <h2>Using Injection<a class="headerlink" href="#using-injection" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><code class="docutils literal"><span class="pre">c.t.inject.app.App</span></code></a> exposes access to the configured <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">c.t.inject.Injector</a> which can be used to obtain instances from
+<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><cite>c.t.inject.app.App</cite></a> exposes access to the configured <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">c.t.inject.Injector</a> which can be used to obtain instances from
 the object graph.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -243,6 +224,151 @@ class MyApp extends App with Logging  {
 </pre></div>
 </div>
 </div>
+<div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p>First extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/Test.scala"><cite>c.t.inject.Test</cite></a> trait. Then to test, wrap your <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><cite>c.t.inject.app.App</cite></a> with an <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala">c.t.inject.app.EmbeddedApp</a>.</p>
+<p>For example,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.Test
+import com.twitter.inject.app.EmbeddedApp
+
+class MyAppTest extends Test {
+
+  // build an EmbeddedApp
+  def app(): EmbeddedApp = app(new MyApp)
+  def app(underlying: MyApp): EmbeddedApp =
+    new EmbeddedApp(underlying).bind[Foo].toInstance(new Foo(2))
+
+  test(&quot;MyApp#run&quot;) {
+    app().main(&quot;username&quot; -&gt; &quot;jack&quot;)
+  }
+
+  test(&quot;MyApp#works as expected&quot;) {
+    // create a version of the app local to this test
+    // here we could change the configuration of the app under test
+    val localTestInstanceApp = app(new MyApp)
+    localTestInstanceApp.main(&quot;username&quot; -&gt; &quot;jill&quot;)
+
+    // expect behavior against instances from the `localTestInstanceApp` injector
+    localTestInstanceApp.injector.instance[Foo].value should be(Foo(2))
+  }
+}
+</pre></div>
+</div>
+<p>and in Java:</p>
+<div class="code java highlight-text"><div class="highlight"><pre><span></span>import java.util.*;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import com.twitter.inject.app.EmbeddedApp;
+
+public class MyAppTest extends Assert {
+    private EmbeddedApp app() {
+        return this.app(new MyApp());
+    }
+    private EmbeddedApp app(MyApp underlying) {
+        return new EmbeddedApp(underlying).bindClass(Foo.class, Foo.apply(2));
+    }
+
+    @Test
+    public void testRun() {
+      Map&lt;String, Object&gt; flags = new HashMap&lt;String, Object&gt;();
+      flags.put(&quot;username&quot;, &quot;jack&quot;);
+
+      app().main(flags);
+    }
+
+    @Test
+    public void testWorksAsExpected() {
+      Map&lt;String, Object&gt; flags = new HashMap&lt;String, Object&gt;();
+      flags.put(&quot;username&quot;, &quot;jill&quot;);
+
+      // create a version of the app local to this test
+      // here we could change the configuration of the app under test
+      MyApp localTestInstanceApp = app(new MyApp());
+      app(localTestInstanceApp).main(flags);
+
+      // expect behavior against instances from the `localTestInstanceApp` injector
+      Foo foo = localTestInstanceApp.injector().instance(Foo.class);
+      assertEquals(/* expected */ Foo.apply(2), /* actual */ foo);
+    }
+}
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Note: every call to <cite>EmbeddedApp#main</cite> will run the application with the given flags. If your application is stateful,
+you may want to ensure that a new instance of your application under test is created per test run, like written above.</p>
+</div>
+<p>There may be cases where you want to assert some metrics are written by your application for the purpose of testing functionality, even though your application may not export them for collection.</p>
+</div>
+<div class="section" id="inmemorystatsreceiver">
+<h2>InMemoryStatsReceiver<a class="headerlink" href="#inmemorystatsreceiver" title="Permalink to this headline">¶</a></h2>
+<p>Finatra prodives a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-modules/src/main/scala/com/twitter/inject/modules/StatsReceiverModule.scala">StatsReceiverModule</a> which will bind the <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/stats/LoadedStatsReceiver.scala">LoadedStatsReceiver</a> to the object graph.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Finagle uses service-loading to allow for users to pick their <cite>com.twitter.finagle.stats.StatsReceiver</cite> implementation. We recommend
+using Twitter’s <a class="reference external" href="https://twitter.github.io/util/guide/util-stats/index.html">util-stats</a> implementation
+which will be service-loaded as the implementation of <cite>LoadedStatsReceiver</cite> if the dependency is on your
+classpath.</p>
+</div>
+<p>Finagle provides an <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-stats/src/main/scala/com/twitter/finagle/stats/InMemoryStatsReceiver.scala">com.twitter.finagle.stats.InMemoryStatsReceiver</a>
+which stores metrics in an in-memory Map to make it simple to query and assert their values. You can bind an instance of the <cite>InMemoryStatsReceiver</cite> to the underlying app’s object graph as the implementation of the app’s <cite>StatsReceiver</cite> when testing to be able to assert metrics emitted by the application.</p>
+<p>Assuming you have an App:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>  import com.google.inject.Module
+  import com.twitter.finagle.stats.StatsReceiver
+  import com.twitter.inject.Logging
+  import com.twitter.inject.app.App
+  import com.twitter.inject.modules.LoggingModule
+  import com.twitter.inject.modules.StatsReceiverModule
+
+  object MyAppMain extends MyApp
+
+  class MyApp extends App with Logging  {
+
+  override val modules: Seq[Module] = Seq(
+    StatsReceiverModule
+    LoggingModule,
+    MyModule1)
+
+  override protected def run(): Unit = {
+    // Core app logic goes here.
+    val statsReceiver = injector.instance[StatsReceiver]
+    statsReceiver.counter(&quot;my_counter&quot;).incr()
+    val fooService = injector.instance[FooService]
+    ???
+  }
+}
+</pre></div>
+</div>
+<p>You could then test emitted metrics like so:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.stats.InMemoryStatsReceiver
+import com.twitter.inject.Test
+import com.twitter.inject.app.EmbeddedApp
+
+class MyAppTest extends Test {
+  private val inMemoryStatsReceiver: InMemoryStatsReceiver = new InMemoryStatsReceiver
+
+  // build an EmbeddedApp
+  def app(): EmbeddedApp = app(new MyApp)
+  def app(underlying: MyApp): EmbeddedApp =
+    new EmbeddedApp(underlying)
+      .bind[Foo].toInstance(new Foo(2))
+      .bind[StatsReceiver].toInstance(inMemoryStatsReceiver)
+
+  test(&quot;assert count&quot;) {
+    val undertest = app()
+    undertest.main(&quot;username&quot; -&gt; &quot;jack&quot;)
+
+    val statsReceiver = undertest.injector.instance[StatsReceiver].asInstanceOf[InMemoryStatsReceiver]
+    statsReceiver.counter(&quot;my_counter&quot;)() shouldEqual 1
+  }
+}
+</pre></div>
+</div>
+<p>For more information on the Embedded testing utilities, including on testing with <a class="reference external" href="../testing/embedded.html#testing-with-global-flags">GlobalFlags</a> see the documentation <a class="reference external" href="../testing/embedded.html">here</a>. Also see the documentation for more information on the <a class="reference external" href="../testing/bind_dsl.html">#bind[T] DSL</a> used above.</p>
+<p>And lastly, for the complete testing guide, see the Testing <a class="reference external" href="../#testing">table of contents</a>.</p>
+</div>
 </div>
 
 
@@ -274,6 +400,8 @@ class MyApp extends App with Logging  {
 <li><a class="reference internal" href="#app-run"><cite>App#run</cite></a></li>
 <li><a class="reference internal" href="#using-injection">Using Injection</a></li>
 <li><a class="reference internal" href="#an-example-of-handling-signals">An Example of Handling Signals</a></li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
+<li><a class="reference internal" href="#inmemorystatsreceiver">InMemoryStatsReceiver</a></li>
 </ul>
 </li>
 </ul>

@@ -133,10 +133,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.kafka.utils" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="utils"></a><a id="utils:utils"></a>
+    </li><li name="com.twitter.finatra.kafka.consumers" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="consumers"></a><a id="consumers:consumers"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/kafka/index.html#utils" title="Permalink">
+      <a href="../../../../com/twitter/finatra/kafka/index.html#consumers" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -145,50 +145,80 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="" href="index.html"><span class="name">utils</span></a>
+        <a title="" href="index.html"><span class="name">consumers</span></a>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.kafka">kafka</a></dd></dl></div>
     </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="object" href="BootstrapServerUtils$.html" title=""></a>
-                        <a href="BootstrapServerUtils$.html" title="">BootstrapServerUtils</a>
+                        <a class="class" href="AsyncStreamKafkaConsumerBuilder.html" title=""></a>
+                        <a href="AsyncStreamKafkaConsumerBuilder.html" title="">AsyncStreamKafkaConsumerBuilder</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="object" href="ConfigUtils$.html" title=""></a>
-                        <a href="ConfigUtils$.html" title="">ConfigUtils</a>
+                        <a class="class" href="AsyncStreamKafkaConsumerConfig.html" title=""></a>
+                        <a href="AsyncStreamKafkaConsumerConfig.html" title="">AsyncStreamKafkaConsumerConfig</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="object" href="FuturePoolsHelper$.html" title=""></a>
-                        <a href="FuturePoolsHelper$.html" title="">FuturePoolsHelper</a>
+                        <a class="trait" href="ClosableAsyncStream.html" title=""></a>
+                        <a href="ClosableAsyncStream.html" title="">ClosableAsyncStream</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="" title=""></a>
-                        <a href="" title="">KafkaFuturePool</a>
+                        <a class="class" href="FinagleKafkaConsumer.html" title=""></a>
+                        <a href="FinagleKafkaConsumer.html" title="">FinagleKafkaConsumer</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="FinagleKafkaConsumerBuilder.html" title=""></a>
+                        <a href="FinagleKafkaConsumerBuilder.html" title="">FinagleKafkaConsumerBuilder</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="trait" href="FinagleKafkaConsumerBuilderMethods.html" title="Trait defining methods for configuring a FinagleKafkaConsumer."></a>
+                        <a href="FinagleKafkaConsumerBuilderMethods.html" title="Trait defining methods for configuring a FinagleKafkaConsumer.">FinagleKafkaConsumerBuilderMethods</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="FinagleKafkaConsumerConfig.html" title=""></a>
+                        <a href="FinagleKafkaConsumerConfig.html" title="">FinagleKafkaConsumerConfig</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="object" href="Flaggables$.html" title="Contains implicit Flaggable implementations for various kafka configuration types."></a>
+                        <a href="Flaggables$.html" title="Contains implicit Flaggable implementations for various kafka configuration types.">Flaggables</a>
+                      </li><li class="current-entities indented5">
+                        <a class="object" href="KafkaConsumerConfig$.html" title=""></a>
+                        <a class="class" href="KafkaConsumerConfig.html" title=""></a>
+                        <a href="KafkaConsumerConfig.html" title="">KafkaConsumerConfig</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="trait" href="KafkaConsumerConfigMethods.html" title=""></a>
+                        <a href="KafkaConsumerConfigMethods.html" title="">KafkaConsumerConfigMethods</a>
+                      </li><li class="current-entities indented5">
+                        <a class="object" href="" title=""></a>
+                        <a class="class" href="TracingKafkaConsumer.html" title="An extension of KafkaConsumer with Zipkin tracing to trace the records received from Kafka."></a>
+                        <a href="TracingKafkaConsumer.html" title="An extension of KafkaConsumer with Zipkin tracing to trace the records received from Kafka.">TracingKafkaConsumer</a>
                       </li>
               </ul>
             </div>
           </div>
           <div id="content">
-            <body class="class type">
+            <body class="object value">
       <div id="definition">
-        <div class="big-circle class">c</div>
-        <p id="owner"><a href="../../../../index.html" class="extype" name="com">com</a>.<a href="../../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../index.html" class="extype" name="com.twitter.finatra.kafka">kafka</a>.<a href="index.html" class="extype" name="com.twitter.finatra.kafka.utils">utils</a></p>
-        <h1>KafkaFuturePool<span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html" title="Permalink">
+        <a href="TracingKafkaConsumer.html" title="See companion class"><div class="big-circle object-companion-class">o</div></a>
+        <p id="owner"><a href="../../../../index.html" class="extype" name="com">com</a>.<a href="../../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../index.html" class="extype" name="com.twitter.finatra.kafka">kafka</a>.<a href="index.html" class="extype" name="com.twitter.finatra.kafka.consumers">consumers</a></p>
+        <h1><a href="TracingKafkaConsumer.html" title="See companion class">TracingKafkaConsumer</a><span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
-        <h3><span class="morelinks"></span></h3>
+        <h3><span class="morelinks"><div>
+            Companion <a href="TracingKafkaConsumer.html" title="See companion class">class TracingKafkaConsumer</a>
+          </div></span></h3>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">case class</span>
+        <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">KafkaFuturePool</span><span class="params">(<span name="pool">pool: <a href="https://twitter.github.io/util/docs/com/twitter/util/FuturePool.html#com.twitter.util.FuturePool" class="extype" name="com.twitter.util.FuturePool">FuturePool</a></span>, <span name="getQueueSize">getQueueSize: () ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">TracingKafkaConsumer</span>
       </span>
       </h4>
 
@@ -197,7 +227,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -223,7 +253,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.kafka.utils.KafkaFuturePool"><span>KafkaFuturePool</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer"><span>TracingKafkaConsumer</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -241,26 +271,7 @@
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="com.twitter.finatra.kafka.utils.KafkaFuturePool#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(pool:com.twitter.util.FuturePool,getQueueSize:()=&gt;Int):com.twitter.finatra.kafka.utils.KafkaFuturePool"></a><a id="&lt;init&gt;:KafkaFuturePool"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html#&lt;init&gt;(pool:com.twitter.util.FuturePool,getQueueSize:()=&gt;Int):com.twitter.finatra.kafka.utils.KafkaFuturePool" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">KafkaFuturePool</span><span class="params">(<span name="pool">pool: <a href="https://twitter.github.io/util/docs/com/twitter/util/FuturePool.html#com.twitter.util.FuturePool" class="extype" name="com.twitter.util.FuturePool">FuturePool</a></span>, <span name="getQueueSize">getQueueSize: () ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span>
-      </span>
-      
-      
-    </li></ol>
-            </div>
+        
 
         
 
@@ -272,7 +283,7 @@
                 <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html#!=(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#!=(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -288,7 +299,7 @@
     </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html###():Int" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html###():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -304,7 +315,7 @@
     </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html#==(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#==(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -317,10 +328,126 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer#ClientIdAnnotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ClientIdAnnotation:String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#ClientIdAnnotation:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ClientIdAnnotation</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Trace annotation for the client id defined inside <span class="extype" name="ConsumerConfig.CLIENT_ID_CONFIG">CLIENT_ID_CONFIG</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Trace annotation for the client id defined inside <span class="extype" name="ConsumerConfig.CLIENT_ID_CONFIG">CLIENT_ID_CONFIG</span>.
+This is present as a <span class="extype" name="com.twitter.finagle.tracing.Annotation.BinaryAnnotation">BinaryAnnotation</span>
+in the trace.
+</p></div></div>
+    </li><li name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer#ConsumerGroupIdAnnotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ConsumerGroupIdAnnotation:String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#ConsumerGroupIdAnnotation:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ConsumerGroupIdAnnotation</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Trace annotation for the group id defined inside <span class="extype" name="ConsumerConfig.GROUP_ID_CONFIG">GROUP_ID_CONFIG</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Trace annotation for the group id defined inside <span class="extype" name="ConsumerConfig.GROUP_ID_CONFIG">GROUP_ID_CONFIG</span>.
+This is present as a <span class="extype" name="com.twitter.finagle.tracing.Annotation.BinaryAnnotation">BinaryAnnotation</span>
+in the trace.
+</p></div></div>
+    </li><li name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer#ConsumerPollAnnotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ConsumerPollAnnotation:String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#ConsumerPollAnnotation:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ConsumerPollAnnotation</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Trace annotation to record the poll event.</p>
+    </li><li name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer#ConsumerTopicAnnotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ConsumerTopicAnnotation:String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#ConsumerTopicAnnotation:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ConsumerTopicAnnotation</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Trace annotation for the topic(s) subscribed by the consumer subscribes.</p><div class="fullcomment"><div class="comment cmt"><p>Trace annotation for the topic(s) subscribed by the consumer subscribes. This is present as a
+<span class="extype" name="com.twitter.finagle.tracing.Annotation.BinaryAnnotation">BinaryAnnotation</span> in a trace.
+</p></div></div>
+    </li><li name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer#ProducerTraceIdAnnotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ProducerTraceIdAnnotation:String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#ProducerTraceIdAnnotation:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ProducerTraceIdAnnotation</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Trace annotation for the traceId of the publisher that published the record.</p><div class="fullcomment"><div class="comment cmt"><p>Trace annotation for the traceId of the publisher that published the record. This is present as
+a <span class="extype" name="com.twitter.finagle.tracing.Annotation.BinaryAnnotation">BinaryAnnotation</span> in a trace.
+</p></div></div>
+    </li><li name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[K,V](configs:java.util.Properties,keyDeserializer:org.apache.kafka.common.serialization.Deserializer[K],valueDeserializer:org.apache.kafka.common.serialization.Deserializer[V]):com.twitter.finatra.kafka.consumers.TracingKafkaConsumer[K,V]"></a><a id="apply[K,V](Properties,Deserializer[K],Deserializer[V]):TracingKafkaConsumer[K,V]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#apply[K,V](configs:java.util.Properties,keyDeserializer:org.apache.kafka.common.serialization.Deserializer[K],valueDeserializer:org.apache.kafka.common.serialization.Deserializer[V]):com.twitter.finatra.kafka.consumers.TracingKafkaConsumer[K,V]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="configs">configs: <span class="extype" name="java.util.Properties">Properties</span></span>, <span name="keyDeserializer">keyDeserializer: <span class="extype" name="org.apache.kafka.common.serialization.Deserializer">Deserializer</span>[<span class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.apply.K">K</span>]</span>, <span name="valueDeserializer">valueDeserializer: <span class="extype" name="org.apache.kafka.common.serialization.Deserializer">Deserializer</span>[<span class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.apply.V">V</span>]</span>)</span><span class="result">: <a href="TracingKafkaConsumer.html" class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer">TracingKafkaConsumer</a>[<span class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.apply.K">K</span>, <span class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.apply.V">V</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Helper constructor which accepts <span class="extype" name="Properties">Properties</span> for constructing the <a href="TracingKafkaConsumer.html" class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer">TracingKafkaConsumer</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Helper constructor which accepts <span class="extype" name="Properties">Properties</span> for constructing the <a href="TracingKafkaConsumer.html" class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer">TracingKafkaConsumer</a>.
+</p></div><dl class="paramcmts block"><dt class="tparam">K</dt><dd class="cmt"><p>type of Key.</p></dd><dt class="tparam">V</dt><dd class="cmt"><p>type of value.</p></dd><dt class="param">configs</dt><dd class="cmt"><p>The consumer configs.</p></dd><dt class="param">keyDeserializer</dt><dd class="cmt"><p>The serializer for key that implements <span class="extype" name="Deserializer">Deserializer</span>. The 
+<pre>
+configure()
+</pre>
+                       method won't be called in the consumer when the deserializer is passed in
+                       directly.</p></dd><dt class="param">valueDeserializer</dt><dd class="cmt"><p>The serializer for value that implements <span class="extype" name="Deserializer">Deserializer</span>. The
+<pre>
+configure()
+</pre>
+                         deserializer is passed in directly.</p></dd><dt>returns</dt><dd class="cmt"><p>an instance of <a href="TracingKafkaConsumer.html" class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer">TracingKafkaConsumer</a>.</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html#asInstanceOf[T0]:T0" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#asInstanceOf[T0]:T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -336,7 +463,7 @@
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html#clone():Object" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#clone():Object" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -360,7 +487,7 @@
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#eq(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -373,10 +500,26 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#equals(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html#finalize():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#finalize():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -398,7 +541,7 @@
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html#getClass():Class[_]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#getClass():Class[_]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -414,26 +557,29 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.kafka.utils.KafkaFuturePool#getQueueSize" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="getQueueSize:()=&gt;Int"></a><a id="getQueueSize:()⇒Int"></a>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html#getQueueSize:()=&gt;Int" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#hashCode():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getQueueSize</span><span class="result">: () ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html#isInstanceOf[T0]:Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#isInstanceOf[T0]:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -449,7 +595,7 @@
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#ne(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -465,7 +611,7 @@
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html#notify():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#notify():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -484,7 +630,7 @@
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html#notifyAll():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#notifyAll():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -500,26 +646,10 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.kafka.utils.KafkaFuturePool#pool" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="pool:com.twitter.util.FuturePool"></a><a id="pool:FuturePool"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html#pool:com.twitter.util.FuturePool" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">pool</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/FuturePool.html#com.twitter.util.FuturePool" class="extype" name="com.twitter.util.FuturePool">FuturePool</a></span>
-      </span>
-      
-      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -532,10 +662,26 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#toString():String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html#wait():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#wait():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -557,7 +703,7 @@
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -579,7 +725,7 @@
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/utils/KafkaFuturePool.html#wait(x$1:Long):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#wait(x$1:Long):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -610,15 +756,7 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
-            </div><div class="parent" name="java.io.Serializable">
-              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="scala.Product">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a></h3>
-            </div><div class="parent" name="scala.Equals">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a></h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>

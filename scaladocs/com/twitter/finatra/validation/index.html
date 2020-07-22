@@ -397,6 +397,10 @@
                         <a class="object" href="Validator$.html" title=""></a>
                         <a class="class" href="Validator.html" title=""></a>
                         <a href="Validator.html" title="">Validator</a>
+                      </li><li class="current-entities indented4">
+                        <a class="object" href="ValidatorModule$.html" title=""></a>
+                        <a class="class" href="ValidatorModule.html" title="A TwitterModule to provide a Validator with with default MessageResolver and default com.twitter.finatra.validation.ConstraintValidators."></a>
+                        <a href="ValidatorModule.html" title="A TwitterModule to provide a Validator with with default MessageResolver and default com.twitter.finatra.validation.ConstraintValidators.">ValidatorModule</a>
                       </li>
               </ul>
             </div>
@@ -628,6 +632,32 @@ to customize handling of specific failures.</p><p>Can be overridden to customize
       </span>
       
       
+    </li><li name="com.twitter.finatra.validation.ValidatorModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ValidatorModuleextendsTwitterModule"></a><a id="ValidatorModule:ValidatorModule"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/validation/index.html#ValidatorModuleextendsTwitterModule" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="A TwitterModule to provide a Validator with with default MessageResolver and default com.twitter.finatra.validation.ConstraintValidators." href="ValidatorModule.html"><span class="name">ValidatorModule</span></a><span class="result"> extends <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A <span class="extype" name="TwitterModule">TwitterModule</span> to provide a <a href="Validator.html" class="extype" name="com.twitter.finatra.validation.Validator">Validator</a> with with default <a href="MessageResolver.html" class="extype" name="com.twitter.finatra.validation.MessageResolver">MessageResolver</a> and
+default <a href="ConstraintValidator.html" class="extype" name="com.twitter.finatra.validation.ConstraintValidator">com.twitter.finatra.validation.ConstraintValidator</a>s.</p><div class="fullcomment"><div class="comment cmt"><p>A <span class="extype" name="TwitterModule">TwitterModule</span> to provide a <a href="Validator.html" class="extype" name="com.twitter.finatra.validation.Validator">Validator</a> with with default <a href="MessageResolver.html" class="extype" name="com.twitter.finatra.validation.MessageResolver">MessageResolver</a> and
+default <a href="ConstraintValidator.html" class="extype" name="com.twitter.finatra.validation.ConstraintValidator">com.twitter.finatra.validation.ConstraintValidator</a>s.</p><p>Extend this module to override defaults of the bound <a href="Validator.html" class="extype" name="com.twitter.finatra.validation.Validator">Validator</a> instance.</p><p>Example:</p><pre>   <span class="kw">import</span> com.twitter.finatra.validation.{Validator, ValidatorModule}
+   <span class="kw">import</span> com.twitter.inject.Injector
+
+   <span class="kw">object</span> CustomizedValidatorModule <span class="kw">extends</span> ValidatorModule {
+     <span class="kw">override</span> <span class="kw">def</span> configureValidator(injector: Injector, builder: Validator.Builder): Validator.Builder =
+       builder
+         .withCacheSize(<span class="num">512</span>)
+         .withMessageResolver(<span class="kw">new</span> CustomizedMessageResolver())
+}</pre></div></div>
     </li><li name="com.twitter.finatra.validation.CountryCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="CountryCode=com.twitter.finatra.validation.constraints.CountryCode@scala.annotation.meta.param"></a><a id="CountryCode:CountryCode"></a>
       <span class="permalink">
@@ -925,6 +955,22 @@ to customize handling of specific failures.</p><p>Can be overridden to customize
       </span>
       <span class="symbol">
         <a title="" href="Validator$.html"><span class="name">Validator</span></a>
+      </span>
+      
+      
+    </li><li name="com.twitter.finatra.validation.ValidatorModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ValidatorModule"></a><a id="ValidatorModule:ValidatorModule"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/validation/index.html#ValidatorModule" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="ValidatorModule$.html"><span class="name">ValidatorModule</span></a><span class="result"> extends <a href="ValidatorModule.html" class="extype" name="com.twitter.finatra.validation.ValidatorModule">ValidatorModule</a></span>
       </span>
       
       

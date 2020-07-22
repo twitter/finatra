@@ -257,6 +257,10 @@
                         <span class="separator"></span>
                         <a class="class" href="NullKafkaProducer.html" title="A no-op KafkaProducerBase."></a>
                         <a href="NullKafkaProducer.html" title="A no-op KafkaProducerBase.">NullKafkaProducer</a>
+                      </li><li class="current-entities indented5">
+                        <a class="object" href="TracingKafkaProducer$.html" title=""></a>
+                        <a class="class" href="TracingKafkaProducer.html" title="An extension of KafkaProducer with Zipkin tracing to trace the records sent to Kafka."></a>
+                        <a href="TracingKafkaProducer.html" title="An extension of KafkaProducer with Zipkin tracing to trace the records sent to Kafka.">TracingKafkaProducer</a>
                       </li><li name="com.twitter.finatra.kafka.serde" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="serde"></a><a id="serde:serde"></a>
       <span class="permalink">
@@ -491,6 +495,30 @@ returning a <a href="https://twitter.github.io/util/docs/com/twitter/util/Future
 events are discarded, making this producer useful in unit tests
 and as defaults in situations where event publishing is not needed.
 </p></div><dl class="paramcmts block"><dt class="tparam">K</dt><dd class="cmt"><p>type of the key in key/value pairs to be published to Kafka</p></dd><dt class="tparam">V</dt><dd class="cmt"><p>type of the value in key/value pairs to be published to Kafka</p></dd></dl></div>
+    </li><li name="com.twitter.finatra.kafka.producers.TracingKafkaProducer" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="TracingKafkaProducer[K,V]extendsKafkaProducer[K,V]withLogging"></a><a id="TracingKafkaProducer[K,V]:TracingKafkaProducer[K,V]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/index.html#TracingKafkaProducer[K,V]extendsKafkaProducer[K,V]withLogging" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="An extension of KafkaProducer with Zipkin tracing to trace the records sent to Kafka." href="TracingKafkaProducer.html"><span class="name">TracingKafkaProducer</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <span class="extype" name="org.apache.kafka.clients.producer.KafkaProducer">KafkaProducer</span>[<span class="extype" name="com.twitter.finatra.kafka.producers.TracingKafkaProducer.K">K</span>, <span class="extype" name="com.twitter.finatra.kafka.producers.TracingKafkaProducer.V">V</span>] with <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">An extension of <span class="extype" name="KafkaProducer">KafkaProducer</span> with Zipkin tracing to trace the records sent to
+Kafka.</p><div class="fullcomment"><div class="comment cmt"><p>An extension of <span class="extype" name="KafkaProducer">KafkaProducer</span> with Zipkin tracing to trace the records sent to
+Kafka. This is inspired by openzipkin's <a href="https://github.com/openzipkin/brave">brave</a>
+instrumentation. We need a custom implementation and not a
+<span class="extype" name="org.apache.kafka.clients.producer.ProducerInterceptor">ProducerInterceptor</span> because to enable
+end-to-end tracing of the records sent to Kafka, we need the same <span class="extype" name="TraceId">trace id</span> in the
+<span class="extype" name="Callback">callback</span> which is not possible in the interceptor because it's called in a
+background thread which is not Finagle controlled.
+</p></div><dl class="paramcmts block"><dt class="tparam">K</dt><dd class="cmt"><p>type of Key</p></dd><dt class="tparam">V</dt><dd class="cmt"><p>type of value</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -512,6 +540,22 @@ and as defaults in situations where event publishing is not needed.
       </span>
       <span class="symbol">
         <a title="" href="KafkaProducerConfig$.html"><span class="name">KafkaProducerConfig</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      
+    </li><li name="com.twitter.finatra.kafka.producers.TracingKafkaProducer" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TracingKafkaProducer"></a><a id="TracingKafkaProducer:TracingKafkaProducer"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/index.html#TracingKafkaProducer" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="TracingKafkaProducer$.html"><span class="name">TracingKafkaProducer</span></a>
       </span>
       
       

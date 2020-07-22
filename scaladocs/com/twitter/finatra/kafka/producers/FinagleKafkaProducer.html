@@ -177,6 +177,10 @@
                         <span class="separator"></span>
                         <a class="class" href="NullKafkaProducer.html" title="A no-op KafkaProducerBase."></a>
                         <a href="NullKafkaProducer.html" title="A no-op KafkaProducerBase.">NullKafkaProducer</a>
+                      </li><li class="current-entities indented5">
+                        <a class="object" href="TracingKafkaProducer$.html" title=""></a>
+                        <a class="class" href="TracingKafkaProducer.html" title="An extension of KafkaProducer with Zipkin tracing to trace the records sent to Kafka."></a>
+                        <a href="TracingKafkaProducer.html" title="An extension of KafkaProducer with Zipkin tracing to trace the records sent to Kafka.">TracingKafkaProducer</a>
                       </li>
               </ul>
             </div>
@@ -1142,8 +1146,7 @@ events in key/value pairs to <span class="extype" name="org.apache.kafka.clients
         <span class="name">send</span><span class="params">(<span name="producerRecord">producerRecord: <span class="extype" name="org.apache.kafka.clients.producer.ProducerRecord">ProducerRecord</span>[<span class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducer.K">K</span>, <span class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducer.V">V</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="org.apache.kafka.clients.producer.RecordMetadata">RecordMetadata</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Returns a future.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a future. The future completes when the event is successfully published
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducer">FinagleKafkaProducer</a> → <a href="KafkaProducerBase.html" class="extype" name="com.twitter.finatra.kafka.producers.KafkaProducerBase">KafkaProducerBase</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducer">FinagleKafkaProducer</a> → <a href="KafkaProducerBase.html" class="extype" name="com.twitter.finatra.kafka.producers.KafkaProducerBase">KafkaProducerBase</a></dd></dl></div>
     </li><li name="com.twitter.finatra.kafka.producers.FinagleKafkaProducer#send" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="send(topic:String,key:K,value:V,timestamp:Long,partitionIdx:Option[Integer]):com.twitter.util.Future[org.apache.kafka.clients.producer.RecordMetadata]"></a><a id="send(String,K,V,Long,Option[Integer]):Future[RecordMetadata]"></a>
       <span class="permalink">
@@ -1159,9 +1162,7 @@ events in key/value pairs to <span class="extype" name="org.apache.kafka.clients
         <span class="name">send</span><span class="params">(<span name="topic">topic: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="key">key: <span class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducer.K">K</span></span>, <span name="value">value: <span class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducer.V">V</span></span>, <span name="timestamp">timestamp: <a href="http://www.scala-lang.org/api/2.12.8/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="partitionIdx">partitionIdx: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="java.lang.Integer">Integer</span>] = <span class="symbol">None</span></span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="org.apache.kafka.clients.producer.RecordMetadata">RecordMetadata</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Returns a future.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a future. The future completes when the event is successfully published
-Note: Default partitionIdx should be set to null, see: https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=69406838
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducer">FinagleKafkaProducer</a> → <a href="KafkaProducerBase.html" class="extype" name="com.twitter.finatra.kafka.producers.KafkaProducerBase">KafkaProducerBase</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducer">FinagleKafkaProducer</a> → <a href="KafkaProducerBase.html" class="extype" name="com.twitter.finatra.kafka.producers.KafkaProducerBase">KafkaProducerBase</a></dd></dl></div>
     </li><li name="com.twitter.finatra.kafka.producers.FinagleKafkaProducer#sendOffsetsToTransaction" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="sendOffsetsToTransaction(offsets:Map[org.apache.kafka.common.TopicPartition,org.apache.kafka.clients.consumer.OffsetAndMetadata],consumerGroupId:String):Unit"></a><a id="sendOffsetsToTransaction(Map[TopicPartition,OffsetAndMetadata],String):Unit"></a>
       <span class="permalink">

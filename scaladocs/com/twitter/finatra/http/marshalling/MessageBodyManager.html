@@ -373,9 +373,9 @@ the reader and writer will be provided accordingly (along with the configured se
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.twitter.finatra.http.marshalling.MessageBodyManager#add" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="add[Component&lt;:com.twitter.finatra.http.marshalling.MessageBodyComponent]()(implicitevidence$1:Manifest[Component]):Unit"></a><a id="add[Component&lt;:MessageBodyComponent]()(Manifest[Component]):Unit"></a>
+      <a id="add[Component&lt;:com.twitter.finatra.http.marshalling.MessageBodyComponent]()(implicitevidence$1:scala.reflect.ClassTag[Component],implicittt:reflect.runtime.universe.TypeTag[Component]):Unit"></a><a id="add[Component&lt;:MessageBodyComponent]()(ClassTag[Component],scala.reflect.api.JavaUniverse.TypeTag[Component]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/marshalling/MessageBodyManager.html#add[Component&lt;:com.twitter.finatra.http.marshalling.MessageBodyComponent]()(implicitevidence$1:Manifest[Component]):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/marshalling/MessageBodyManager.html#add[Component&lt;:com.twitter.finatra.http.marshalling.MessageBodyComponent]()(implicitevidence$1:scala.reflect.ClassTag[Component],implicittt:reflect.runtime.universe.TypeTag[Component]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -384,15 +384,15 @@ the reader and writer will be provided accordingly (along with the configured se
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">add</span><span class="tparams">[<span name="Component">Component &lt;: <a href="MessageBodyComponent.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyComponent">MessageBodyComponent</a></span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyManager.add.Component">Component</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">add</span><span class="tparams">[<span name="Component">Component &lt;: <a href="MessageBodyComponent.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyComponent">MessageBodyComponent</a></span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/reflect/ClassTag.html#scala.reflect.ClassTag" class="extype" name="scala.reflect.ClassTag">ClassTag</a>[<span class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyManager.add.Component">Component</span>]</span>, <span name="tt">tt: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyManager.add.Component">Component</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <p class="shortcomment cmt">Register a <a href="MessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyReader">MessageBodyReader</a> or <a href="MessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyWriter">MessageBodyWriter</a> to its parameterized type.</p><div class="fullcomment"><div class="comment cmt"><p>Register a <a href="MessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyReader">MessageBodyReader</a> or <a href="MessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyWriter">MessageBodyWriter</a> to its parameterized type.
 E.g., a <code>MessageBodyReader[Foo]</code> will register the given reader for the <code>Foo</code> type.</p></div><dl class="paramcmts block"><dt class="tparam">Component</dt><dd class="cmt"><p>the <a href="MessageBodyComponent.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyComponent">MessageBodyComponent</a> to register.</p></dd></dl></div>
     </li><li name="com.twitter.finatra.http.marshalling.MessageBodyManager#addExplicit" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="addExplicit[Component&lt;:com.twitter.finatra.http.marshalling.MessageBodyComponent,T]()(implicitevidence$2:Manifest[Component],implicitevidence$3:Manifest[T]):Unit"></a><a id="addExplicit[Component&lt;:MessageBodyComponent,T]()(Manifest[Component],Manifest[T]):Unit"></a>
+      <a id="addExplicit[Component&lt;:com.twitter.finatra.http.marshalling.MessageBodyComponent,T]()(implicitevidence$2:reflect.runtime.universe.TypeTag[Component],implicitevidence$3:reflect.runtime.universe.TypeTag[T]):Unit"></a><a id="addExplicit[Component&lt;:MessageBodyComponent,T]()(scala.reflect.api.JavaUniverse.TypeTag[Component],scala.reflect.api.JavaUniverse.TypeTag[T]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/marshalling/MessageBodyManager.html#addExplicit[Component&lt;:com.twitter.finatra.http.marshalling.MessageBodyComponent,T]()(implicitevidence$2:Manifest[Component],implicitevidence$3:Manifest[T]):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/marshalling/MessageBodyManager.html#addExplicit[Component&lt;:com.twitter.finatra.http.marshalling.MessageBodyComponent,T]()(implicitevidence$2:reflect.runtime.universe.TypeTag[Component],implicitevidence$3:reflect.runtime.universe.TypeTag[T]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -401,7 +401,7 @@ E.g., a <code>MessageBodyReader[Foo]</code> will register the given reader for t
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">addExplicit</span><span class="tparams">[<span name="Component">Component &lt;: <a href="MessageBodyComponent.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyComponent">MessageBodyComponent</a></span>, <span name="T">T</span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyManager.addExplicit.Component">Component</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyManager.addExplicit.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">addExplicit</span><span class="tparams">[<span name="Component">Component &lt;: <a href="MessageBodyComponent.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyComponent">MessageBodyComponent</a></span>, <span name="T">T</span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyManager.addExplicit.Component">Component</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyManager.addExplicit.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <p class="shortcomment cmt">Register a <a href="MessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyReader">MessageBodyReader</a> or <a href="MessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyWriter">MessageBodyWriter</a> to an explicitly given type.</p><div class="fullcomment"><div class="comment cmt"><p>Register a <a href="MessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyReader">MessageBodyReader</a> or <a href="MessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyWriter">MessageBodyWriter</a> to an explicitly given type.
@@ -645,10 +645,10 @@ to a reader/writer of their parent type.</p></div><dl class="paramcmts block"><d
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.marshalling.MessageBodyManager#read" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="read[T](message:com.twitter.finagle.http.Message)(implicitevidence$8:Manifest[T]):T"></a><a id="read[T](Message)(Manifest[T]):T"></a>
+    </li><li name="com.twitter.finatra.http.marshalling.MessageBodyManager#read" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="read[T](message:com.twitter.finagle.http.Message,clazz:Class[T]):T"></a><a id="read[T](Message,Class[T]):T"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/marshalling/MessageBodyManager.html#read[T](message:com.twitter.finagle.http.Message)(implicitevidence$8:Manifest[T]):T" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/marshalling/MessageBodyManager.html#read[T](message:com.twitter.finagle.http.Message,clazz:Class[T]):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -657,13 +657,30 @@ to a reader/writer of their parent type.</p></div><dl class="paramcmts block"><d
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">read</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="message">message: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Message.html#com.twitter.finagle.http.Message" class="extype" name="com.twitter.finagle.http.Message">Message</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyManager.read.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyManager.read.T">T</span></span>
+        <span class="name">read</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="message">message: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Message.html#com.twitter.finagle.http.Message" class="extype" name="com.twitter.finagle.http.Message">Message</a></span>, <span name="clazz">clazz: <span class="extype" name="scala.Predef.Class">Class</span>[<span class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyManager.read.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyManager.read.T">T</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">For use from Java</p>
+    </li><li name="com.twitter.finatra.http.marshalling.MessageBodyManager#read" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="read[T](message:com.twitter.finagle.http.Message)(implicittt:reflect.runtime.universe.TypeTag[T]):T"></a><a id="read[T](Message)(scala.reflect.api.JavaUniverse.TypeTag[T]):T"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/marshalling/MessageBodyManager.html#read[T](message:com.twitter.finagle.http.Message)(implicittt:reflect.runtime.universe.TypeTag[T]):T" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">read</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="message">message: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Message.html#com.twitter.finagle.http.Message" class="extype" name="com.twitter.finagle.http.Message">Message</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tt">tt: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyManager.read.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyManager.read.T">T</span></span>
       </span>
       
       <p class="shortcomment cmt">Read the body of a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Message.html" class="extype" name="com.twitter.finagle.http.Message">com.twitter.finagle.http.Message</a> into a type <span class="extype" name="T">T</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Read the body of a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Message.html" class="extype" name="com.twitter.finagle.http.Message">com.twitter.finagle.http.Message</a> into a type <span class="extype" name="T">T</span>. Performs a lookup
 of a matching <a href="MessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyReader">MessageBodyReader</a> for the type <span class="extype" name="T">T</span> and invokes the <a href="MessageBodyReader.html#parse(message:com.twitter.finagle.http.Message):T" class="extmbr" name="com.twitter.finatra.http.marshalling.MessageBodyReader#parse">MessageBodyReader#parse</a>
 method of the matching reader. Otherwise if no matching reader for the type <span class="extype" name="T">T</span> is found,
-the <span class="extype" name="defaultMessageBodyReader#parse">defaultMessageBodyReader#parse</span> method is invoked.</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>the type into which to parse the message body.</p></dd><dt class="param">message</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Message.html" class="extype" name="com.twitter.finagle.http.Message">com.twitter.finagle.http.Message</a> to read</p></dd><dt>returns</dt><dd class="cmt"><p>an instance of type <span class="extype" name="T">T</span> parsed from the Message body contents by a matching <a href="MessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyReader">MessageBodyReader</a>.</p></dd></dl></div>
+the <span class="extype" name="defaultMessageBodyReader#parse">defaultMessageBodyReader#parse</span> method is invoked.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>the type into which to parse the message body.</p></dd><dt class="param">message</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Message.html" class="extype" name="com.twitter.finagle.http.Message">com.twitter.finagle.http.Message</a> to read</p></dd><dt>returns</dt><dd class="cmt"><p>an instance of type <span class="extype" name="T">T</span> parsed from the Message body contents by a matching <a href="MessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyReader">MessageBodyReader</a>.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>Java users should prefer <span class="extype" name="read(message:">Message, clazz: Class</span>.</p></span></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">

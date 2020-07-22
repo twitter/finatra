@@ -177,6 +177,10 @@
                         <span class="separator"></span>
                         <a class="class" href="NullKafkaProducer.html" title="A no-op KafkaProducerBase."></a>
                         <a href="NullKafkaProducer.html" title="A no-op KafkaProducerBase.">NullKafkaProducer</a>
+                      </li><li class="current-entities indented5">
+                        <a class="object" href="TracingKafkaProducer$.html" title=""></a>
+                        <a class="class" href="TracingKafkaProducer.html" title="An extension of KafkaProducer with Zipkin tracing to trace the records sent to Kafka."></a>
+                        <a href="TracingKafkaProducer.html" title="An extension of KafkaProducer with Zipkin tracing to trace the records sent to Kafka.">TracingKafkaProducer</a>
                       </li>
               </ul>
             </div>
@@ -636,9 +640,9 @@
         <span class="name">dest</span><span class="params">(<span name="dest">dest: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="timeout">timeout: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>)</span><span class="result">: <a href="#This=Self" class="extmbr" name="com.twitter.finatra.kafka.producers.KafkaProducerConfigMethods.This">This</a></span>
       </span>
       
-      <p class="shortcomment cmt">Configure the Kafka server the consumer will connect to.</p><div class="fullcomment"><div class="comment cmt"><p>Configure the Kafka server the consumer will connect to. This will resolve the dest to the Kafka server name.
+      <p class="shortcomment cmt">Configure the Kafka server the consumer will connect to.</p><div class="fullcomment"><div class="comment cmt"><p>Configure the Kafka server the consumer will connect to.
 This will block for up to 'timeout' when attempting to resolve the dest to a kafka server name
-</p></div><dl class="paramcmts block"><dt class="param">dest</dt><dd class="cmt"><p>the Kafka server address</p></dd><dt class="param">timeout</dt><dd class="cmt"><p>the amount of time this may block when trying to resolve the <a href="#dest(dest:String,timeout:com.twitter.util.Duration):KafkaProducerConfigMethods.this.This" class="extmbr" name="com.twitter.finatra.kafka.producers.KafkaProducerConfigMethods#dest">dest</a> server</p></dd><dt>returns</dt><dd class="cmt"><p>the <a href="" class="extype" name="com.twitter.finatra.kafka.producers.KafkaProducerConfigMethods">KafkaProducerConfigMethods</a> instance.</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">dest</dt><dd class="cmt"><p>the Kafka server address</p></dd><dt class="param">timeout</dt><dd class="cmt"><p>the timeout duration when trying to resolve the <a href="#dest(dest:String,timeout:com.twitter.util.Duration):KafkaProducerConfigMethods.this.This" class="extmbr" name="com.twitter.finatra.kafka.producers.KafkaProducerConfigMethods#dest">dest</a> server.</p></dd><dt>returns</dt><dd class="cmt"><p>the <a href="" class="extype" name="com.twitter.finatra.kafka.producers.KafkaProducerConfigMethods">KafkaProducerConfigMethods</a> instance.</p></dd></dl></div>
     </li><li name="com.twitter.finatra.kafka.producers.KafkaProducerConfigMethods#dest" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="dest(dest:String):KafkaProducerConfigMethods.this.This"></a><a id="dest(String):This"></a>
       <span class="permalink">

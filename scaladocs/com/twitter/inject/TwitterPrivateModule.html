@@ -601,9 +601,9 @@ This module may expose the bindings it creates and the bindings of the modules i
               
         </dd></dl></div>
     </li><li name="net.codingwell.scalaguice.InternalModule#annotatedWith" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="annotatedWith[A&lt;:java.lang.annotation.Annotation](implicitevidence$4:Manifest[A]):com.google.inject.matcher.Matcher[java.lang.reflect.AnnotatedElement]"></a><a id="annotatedWith[A&lt;:Annotation](Manifest[A]):Matcher[AnnotatedElement]"></a>
+      <a id="annotatedWith[A&lt;:java.lang.annotation.Annotation](implicitevidence$4:scala.reflect.ClassTag[A]):com.google.inject.matcher.Matcher[java.lang.reflect.AnnotatedElement]"></a><a id="annotatedWith[A&lt;:Annotation](ClassTag[A]):Matcher[AnnotatedElement]"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterPrivateModule.html#annotatedWith[A&lt;:java.lang.annotation.Annotation](implicitevidence$4:Manifest[A]):com.google.inject.matcher.Matcher[java.lang.reflect.AnnotatedElement]" title="Permalink">
+      <a href="../../../com/twitter/inject/TwitterPrivateModule.html#annotatedWith[A&lt;:java.lang.annotation.Annotation](implicitevidence$4:scala.reflect.ClassTag[A]):com.google.inject.matcher.Matcher[java.lang.reflect.AnnotatedElement]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -612,7 +612,7 @@ This module may expose the bindings it creates and the bindings of the modules i
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">annotatedWith</span><span class="tparams">[<span name="A">A &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.annotatedWith.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.matcher.Matcher">Matcher</span>[<span class="extype" name="java.lang.reflect.AnnotatedElement">AnnotatedElement</span>]</span>
+        <span class="name">annotatedWith</span><span class="tparams">[<span name="A">A &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/reflect/ClassTag.html#scala.reflect.ClassTag" class="extype" name="scala.reflect.ClassTag">ClassTag</a>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.annotatedWith.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.matcher.Matcher">Matcher</span>[<span class="extype" name="java.lang.reflect.AnnotatedElement">AnnotatedElement</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>InternalModule</dd></dl></div>
@@ -633,9 +633,9 @@ This module may expose the bindings it creates and the bindings of the modules i
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="net.codingwell.scalaguice.InternalModule#bind" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="bind[T](implicitevidence$2:Manifest[T]):InternalModule.this.BindingBuilder[T]"></a><a id="bind[T](Manifest[T]):BindingBuilder[T]"></a>
+      <a id="bind[T](implicitevidence$2:reflect.runtime.universe.TypeTag[T]):InternalModule.this.BindingBuilder[T]"></a><a id="bind[T](scala.reflect.api.JavaUniverse.TypeTag[T]):BindingBuilder[T]"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterPrivateModule.html#bind[T](implicitevidence$2:Manifest[T]):InternalModule.this.BindingBuilder[T]" title="Permalink">
+      <a href="../../../com/twitter/inject/TwitterPrivateModule.html#bind[T](implicitevidence$2:reflect.runtime.universe.TypeTag[T]):InternalModule.this.BindingBuilder[T]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -644,7 +644,7 @@ This module may expose the bindings it creates and the bindings of the modules i
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bind</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.bind.T">T</span>]</span>)</span><span class="result">: <a href="#BindingBuilder[T]extendsScalaModule.ScalaAnnotatedBindingBuilder[T]" class="extmbr" name="com.twitter.inject.TwitterPrivateModule.BindingBuilder">BindingBuilder</a>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.bind.T">T</span>]</span>
+        <span class="name">bind</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.bind.T">T</span>]</span>)</span><span class="result">: <a href="#BindingBuilder[T]extendsScalaModule.ScalaAnnotatedBindingBuilder[T]" class="extmbr" name="com.twitter.inject.TwitterPrivateModule.BindingBuilder">BindingBuilder</a>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.bind.T">T</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>InternalModule</dd></dl></div>
@@ -713,9 +713,9 @@ This module may expose the bindings it creates and the bindings of the modules i
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../google/inject/index.html" class="extype" name="com.google.inject">com.google.inject</a>] </dd><dt>Definition Classes</dt><dd>PrivateModule</dd></dl></div>
     </li><li name="net.codingwell.scalaguice.InternalModule#bindInterceptor" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="bindInterceptor[I&lt;:org.aopalliance.intercept.MethodInterceptor](classMatcher:com.google.inject.matcher.Matcher[_&gt;:Class[_]],methodMatcher:com.google.inject.matcher.Matcher[_&gt;:java.lang.reflect.AnnotatedElement])(implicitevidence$3:Manifest[I]):Unit"></a><a id="bindInterceptor[I&lt;:MethodInterceptor](Matcher[_&gt;:Class[_]],Matcher[_&gt;:AnnotatedElement])(Manifest[I]):Unit"></a>
+      <a id="bindInterceptor[I&lt;:org.aopalliance.intercept.MethodInterceptor](classMatcher:com.google.inject.matcher.Matcher[_&gt;:Class[_]],methodMatcher:com.google.inject.matcher.Matcher[_&gt;:java.lang.reflect.AnnotatedElement])(implicitevidence$3:scala.reflect.ClassTag[I]):Unit"></a><a id="bindInterceptor[I&lt;:MethodInterceptor](Matcher[_&gt;:Class[_]],Matcher[_&gt;:AnnotatedElement])(ClassTag[I]):Unit"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterPrivateModule.html#bindInterceptor[I&lt;:org.aopalliance.intercept.MethodInterceptor](classMatcher:com.google.inject.matcher.Matcher[_&gt;:Class[_]],methodMatcher:com.google.inject.matcher.Matcher[_&gt;:java.lang.reflect.AnnotatedElement])(implicitevidence$3:Manifest[I]):Unit" title="Permalink">
+      <a href="../../../com/twitter/inject/TwitterPrivateModule.html#bindInterceptor[I&lt;:org.aopalliance.intercept.MethodInterceptor](classMatcher:com.google.inject.matcher.Matcher[_&gt;:Class[_]],methodMatcher:com.google.inject.matcher.Matcher[_&gt;:java.lang.reflect.AnnotatedElement])(implicitevidence$3:scala.reflect.ClassTag[I]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -724,7 +724,7 @@ This module may expose the bindings it creates and the bindings of the modules i
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bindInterceptor</span><span class="tparams">[<span name="I">I &lt;: <span class="extype" name="org.aopalliance.intercept.MethodInterceptor">MethodInterceptor</span></span>]</span><span class="params">(<span name="classMatcher">classMatcher: <span class="extype" name="com.google.inject.matcher.Matcher">Matcher</span>[_ &gt;: <span class="extype" name="scala.Predef.Class">Class</span>[_]]</span>, <span name="methodMatcher">methodMatcher: <span class="extype" name="com.google.inject.matcher.Matcher">Matcher</span>[_ &gt;: <span class="extype" name="java.lang.reflect.AnnotatedElement">AnnotatedElement</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.bindInterceptor.I">I</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">bindInterceptor</span><span class="tparams">[<span name="I">I &lt;: <span class="extype" name="org.aopalliance.intercept.MethodInterceptor">MethodInterceptor</span></span>]</span><span class="params">(<span name="classMatcher">classMatcher: <span class="extype" name="com.google.inject.matcher.Matcher">Matcher</span>[_ &gt;: <span class="extype" name="scala.Predef.Class">Class</span>[_]]</span>, <span name="methodMatcher">methodMatcher: <span class="extype" name="com.google.inject.matcher.Matcher">Matcher</span>[_ &gt;: <span class="extype" name="java.lang.reflect.AnnotatedElement">AnnotatedElement</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/reflect/ClassTag.html#scala.reflect.ClassTag" class="extype" name="scala.reflect.ClassTag">ClassTag</a>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.bindInterceptor.I">I</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>InternalModule</dd></dl></div>
@@ -783,9 +783,9 @@ This module may expose the bindings it creates and the bindings of the modules i
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../google/inject/index.html" class="extype" name="com.google.inject">com.google.inject</a>] </dd><dt>Definition Classes</dt><dd>PrivateModule</dd></dl></div>
     </li><li name="net.codingwell.scalaguice.InternalModule#bindScope" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="bindScope[T&lt;:java.lang.annotation.Annotation](scope:com.google.inject.Scope)(implicitevidence$5:Manifest[T]):Unit"></a><a id="bindScope[T&lt;:Annotation](Scope)(Manifest[T]):Unit"></a>
+      <a id="bindScope[T&lt;:java.lang.annotation.Annotation](scope:com.google.inject.Scope)(implicitevidence$5:scala.reflect.ClassTag[T]):Unit"></a><a id="bindScope[T&lt;:Annotation](Scope)(ClassTag[T]):Unit"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterPrivateModule.html#bindScope[T&lt;:java.lang.annotation.Annotation](scope:com.google.inject.Scope)(implicitevidence$5:Manifest[T]):Unit" title="Permalink">
+      <a href="../../../com/twitter/inject/TwitterPrivateModule.html#bindScope[T&lt;:java.lang.annotation.Annotation](scope:com.google.inject.Scope)(implicitevidence$5:scala.reflect.ClassTag[T]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -794,7 +794,7 @@ This module may expose the bindings it creates and the bindings of the modules i
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bindScope</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>]</span><span class="params">(<span name="scope">scope: <span class="extype" name="com.google.inject.Scope">Scope</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.bindScope.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">bindScope</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>]</span><span class="params">(<span name="scope">scope: <span class="extype" name="com.google.inject.Scope">Scope</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/reflect/ClassTag.html#scala.reflect.ClassTag" class="extype" name="scala.reflect.ClassTag">ClassTag</a>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.bindScope.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>InternalModule</dd></dl></div>
@@ -1209,9 +1209,9 @@ provided as an application argument (as they have no default value to be used).
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
     </li><li name="net.codingwell.scalaguice.ScalaPrivateModule#expose" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="expose[T](implicitevidence$10:Manifest[T]):ScalaPrivateModule.this.ElementBuilder[T]"></a><a id="expose[T](Manifest[T]):ElementBuilder[T]"></a>
+      <a id="expose[T](implicitevidence$10:reflect.runtime.universe.TypeTag[T]):ScalaPrivateModule.this.ElementBuilder[T]"></a><a id="expose[T](scala.reflect.api.JavaUniverse.TypeTag[T]):ElementBuilder[T]"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterPrivateModule.html#expose[T](implicitevidence$10:Manifest[T]):ScalaPrivateModule.this.ElementBuilder[T]" title="Permalink">
+      <a href="../../../com/twitter/inject/TwitterPrivateModule.html#expose[T](implicitevidence$10:reflect.runtime.universe.TypeTag[T]):ScalaPrivateModule.this.ElementBuilder[T]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1220,7 +1220,7 @@ provided as an application argument (as they have no default value to be used).
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">expose</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="net.codingwell.scalaguice.ScalaPrivateModule.expose.T">T</span>]</span>)</span><span class="result">: <a href="#ElementBuilder[T]extendsScalaModule.ScalaAnnotatedElementBuilder[T]" class="extmbr" name="com.twitter.inject.TwitterPrivateModule.ElementBuilder">ElementBuilder</a>[<span class="extype" name="net.codingwell.scalaguice.ScalaPrivateModule.expose.T">T</span>]</span>
+        <span class="name">expose</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="net.codingwell.scalaguice.ScalaPrivateModule.expose.T">T</span>]</span>)</span><span class="result">: <a href="#ElementBuilder[T]extendsScalaModule.ScalaAnnotatedElementBuilder[T]" class="extmbr" name="com.twitter.inject.TwitterPrivateModule.ElementBuilder">ElementBuilder</a>[<span class="extype" name="net.codingwell.scalaguice.ScalaPrivateModule.expose.T">T</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>ScalaPrivateModule</dd></dl></div>
@@ -1410,9 +1410,9 @@ a value provided as an application argument (as they have no default value to be
               
         </dd></dl></div>
     </li><li name="net.codingwell.scalaguice.InternalModule#getMembersInjector" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getMembersInjector[T](implicitevidence$8:Manifest[T]):com.google.inject.MembersInjector[T]"></a><a id="getMembersInjector[T](Manifest[T]):MembersInjector[T]"></a>
+      <a id="getMembersInjector[T](implicitevidence$8:reflect.runtime.universe.TypeTag[T]):com.google.inject.MembersInjector[T]"></a><a id="getMembersInjector[T](scala.reflect.api.JavaUniverse.TypeTag[T]):MembersInjector[T]"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterPrivateModule.html#getMembersInjector[T](implicitevidence$8:Manifest[T]):com.google.inject.MembersInjector[T]" title="Permalink">
+      <a href="../../../com/twitter/inject/TwitterPrivateModule.html#getMembersInjector[T](implicitevidence$8:reflect.runtime.universe.TypeTag[T]):com.google.inject.MembersInjector[T]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1421,7 +1421,7 @@ a value provided as an application argument (as they have no default value to be
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getMembersInjector</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.getMembersInjector.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.MembersInjector">MembersInjector</span>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.getMembersInjector.T">T</span>]</span>
+        <span class="name">getMembersInjector</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.getMembersInjector.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.MembersInjector">MembersInjector</span>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.getMembersInjector.T">T</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>InternalModule</dd></dl></div>
@@ -1458,9 +1458,9 @@ a value provided as an application argument (as they have no default value to be
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../google/inject/index.html" class="extype" name="com.google.inject">com.google.inject</a>] </dd><dt>Definition Classes</dt><dd>PrivateModule</dd></dl></div>
     </li><li name="net.codingwell.scalaguice.InternalModule#getProvider" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getProvider[T](implicitevidence$7:Manifest[T]):com.google.inject.Provider[T]"></a><a id="getProvider[T](Manifest[T]):Provider[T]"></a>
+      <a id="getProvider[T](implicitevidence$7:scala.reflect.ClassTag[T]):com.google.inject.Provider[T]"></a><a id="getProvider[T](ClassTag[T]):Provider[T]"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterPrivateModule.html#getProvider[T](implicitevidence$7:Manifest[T]):com.google.inject.Provider[T]" title="Permalink">
+      <a href="../../../com/twitter/inject/TwitterPrivateModule.html#getProvider[T](implicitevidence$7:scala.reflect.ClassTag[T]):com.google.inject.Provider[T]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1469,7 +1469,7 @@ a value provided as an application argument (as they have no default value to be
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getProvider</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.getProvider.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.Provider">Provider</span>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.getProvider.T">T</span>]</span>
+        <span class="name">getProvider</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/reflect/ClassTag.html#scala.reflect.ClassTag" class="extype" name="scala.reflect.ClassTag">ClassTag</a>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.getProvider.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.Provider">Provider</span>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.getProvider.T">T</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>InternalModule</dd></dl></div>
@@ -1935,9 +1935,9 @@ a value provided as an application argument (as they have no default value to be
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../google/inject/index.html" class="extype" name="com.google.inject">com.google.inject</a>] </dd><dt>Definition Classes</dt><dd>PrivateModule</dd></dl></div>
     </li><li name="net.codingwell.scalaguice.InternalModule#requestStaticInjection" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="requestStaticInjection[T]()(implicitevidence$6:Manifest[T]):Unit"></a><a id="requestStaticInjection[T]()(Manifest[T]):Unit"></a>
+      <a id="requestStaticInjection[T]()(implicitevidence$6:scala.reflect.ClassTag[T]):Unit"></a><a id="requestStaticInjection[T]()(ClassTag[T]):Unit"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/TwitterPrivateModule.html#requestStaticInjection[T]()(implicitevidence$6:Manifest[T]):Unit" title="Permalink">
+      <a href="../../../com/twitter/inject/TwitterPrivateModule.html#requestStaticInjection[T]()(implicitevidence$6:scala.reflect.ClassTag[T]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1946,7 +1946,7 @@ a value provided as an application argument (as they have no default value to be
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">requestStaticInjection</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.requestStaticInjection.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">requestStaticInjection</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/reflect/ClassTag.html#scala.reflect.ClassTag" class="extype" name="scala.reflect.ClassTag">ClassTag</a>[<span class="extype" name="net.codingwell.scalaguice.InternalModule.requestStaticInjection.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>InternalModule</dd></dl></div>

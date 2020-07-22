@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Explicit Binding with #bind[T] &#8212; Finatra 20.6.0 documentation</title>
+    <title>Explicit Binding with #bind[T] &#8212; Finatra 20.7.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '20.6.0',
+        VERSION:     '20.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -73,12 +73,14 @@
 <p class="first admonition-title">Important</p>
 <p class="last">Please see the section on including test-jar dependencies in your project: <a class="reference external" href="../..#test-dependencies">Test Dependencies</a>.</p>
 </div>
-<div class="section" id="embedded-server-bind-t">
-<h2>Embedded Server <code class="docutils literal"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#embedded-server-bind-t" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="embedded-bind-t">
+<h2>Embedded <code class="docutils literal"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#embedded-bind-t" title="Permalink to this headline">¶</a></h2>
 <p>In the cases where we’d like to easily replace a bound instance with another instance in our tests
 (e.g. with a mock or a simple stub implementation), we do not need to create a specific module
 for testing to compose into our server as an override module. Instead we can use the <cite>#bind[T]</cite>
 function on the embedded server.</p>
+<p>This is especially useful if you want to replace a bound instance with a mock under control of the
+test.</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
 import com.twitter.inject.server.FeatureTest
 import com.twitter.inject.Mockito
@@ -88,8 +90,8 @@ class ExampleFeatureTest
   with Mockito
   with HttpTest {
 
-  val mockDownstreamServiceClient = smartMock[DownstreamServiceClient]
-  val mockIdService = smartMock[IdService]
+  private val mockDownstreamServiceClient = smartMock[DownstreamServiceClient]
+  private val mockIdService = smartMock[IdService]
 
   override val server =
     new EmbeddedHttpServer(new ExampleServer)
@@ -105,10 +107,31 @@ class ExampleFeatureTest
 </div>
 <p>For a complete example, see the
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/examples/advanced/twitter-clone/src/test/scala/finatra/quickstart/TwitterCloneFeatureTest.scala">TwitterCloneFeatureTest</a>.</p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">Using <code class="docutils literal"><span class="pre">&#64;Bind</span></code> (the <cite>com.google.inject.testing.fieldbinder.Bind</cite> annotation) is to be considered
-deprecated.</p>
+<p>Note this is also available for <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala">EmbeddedApp</a> as well:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.stats.InMemoryStatsReceiver
+import com.twitter.inject.{Mockito, Test}
+import com.twitter.inject.app.EmbeddedApp
+
+class MyAppTest extends Test with Mockito {
+  private val inMemoryStatsReceiver: InMemoryStatsReceiver = new InMemoryStatsReceiver
+  private val mockIdService = smartMock[IdService]
+
+  // build an EmbeddedApp
+  def app(): EmbeddedApp = app(new MyApp)
+  def app(underlying: MyApp): EmbeddedApp =
+    new EmbeddedApp(underlying)
+      .bind[IdService].toInstance(mockIdService)
+      .bind[StatsReceiver].toInstance(inMemoryStatsReceiver)
+
+  test(&quot;assert count&quot;) {
+    val undertest = app()
+    undertest.main(&quot;username&quot; -&gt; &quot;jack&quot;)
+
+    val statsReceiver = undertest.injector.instance[StatsReceiver].asInstanceOf[InMemoryStatsReceiver]
+    statsReceiver.counter(&quot;my_counter&quot;)() shouldEqual 1
+  }
+}
+</pre></div>
 </div>
 </div>
 <div class="section" id="testinjector-bind-t">
@@ -235,6 +258,25 @@ public class HelloWorldServerFeatureTest extends Assert {
 <p>See the <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/examples/http-server/java/src/main/java">java-http-server</a>
 for a full example of using the <cite>#bind[T]</cite> DSL in test to override a binding in a server.</p>
 </div>
+<div class="section" id="injecting-members-of-a-test">
+<h2>Injecting Members of a Test<a class="headerlink" href="#injecting-members-of-a-test" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Do not inject members of a test class into the server or application under test.</p>
+</div>
+<p>We strongly discourage injecting members of a test into your server or application. This includes using <cite>&#64;Inject</cite> or
+<cite>&#64;Bind</cite> (the com.google.inject.testing.fieldbinder.Bind annotation) on a test member field then using the server or
+application’s <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">c.t.inject.Injector</a> to do <cite>injector.underlying.injectMembers(this)</cite>.</p>
+<div class="section" id="why">
+<h3>Why?<a class="headerlink" href="#why" title="Permalink to this headline">¶</a></h3>
+<p>The server or application under test has a different lifecycle than the test class. Mixing them in this manner is first,
+hard to reason about and second, can lead to possibly non-deterministic tests. You will also make it hard to test
+<a class="reference external" href="./feature_tests.html#testing-multiple-applications-or-servers">multiple servers or applications</a> in a single test file.</p>
+<p>Lastly, but perhaps most importantly, the <cite>Injector</cite> of a server or application under test is meant to be encapsulated to that server or application. Any mutation of its object graph should happen within the constraints of its lifecycle and thus you should not mutate its object graph after it has started. The framework thus provides ways to do this safely taking into account the server
+or application’s lifecyle: either provide an <a class="reference external" href="./override_modules.html">override module</a> or use the <cite>#bind[T]</cite> DSL here
+to replace a binding <strong>when instantiating</strong> the server or application under test.</p>
+</div>
+</div>
 <div class="section" id="more-information">
 <h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -272,10 +314,14 @@ for a full example of using the <cite>#bind[T]</cite> DSL in test to override a 
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Explicit Binding with <code class="docutils literal"><span class="pre">#bind[T]</span></code></a><ul>
-<li><a class="reference internal" href="#embedded-server-bind-t">Embedded Server <code class="docutils literal"><span class="pre">#bind[T]</span></code></a></li>
+<li><a class="reference internal" href="#embedded-bind-t">Embedded <code class="docutils literal"><span class="pre">#bind[T]</span></code></a></li>
 <li><a class="reference internal" href="#testinjector-bind-t">TestInjector <code class="docutils literal"><span class="pre">#bind[T]</span></code></a></li>
 <li><a class="reference internal" href="#bind-t-dsl"><cite>#bind[T]</cite> DSL</a></li>
 <li><a class="reference internal" href="#usage-from-java">Usage from Java</a></li>
+<li><a class="reference internal" href="#injecting-members-of-a-test">Injecting Members of a Test</a><ul>
+<li><a class="reference internal" href="#why">Why?</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#more-information">More Information</a></li>
 </ul>
 </li>
