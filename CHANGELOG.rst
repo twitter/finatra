@@ -7,6 +7,18 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
+Changed
+~~~~~~~
+
+Fixed
+~~~~~
+
+* inject-server: Fix EmbeddedTwitterServer to return `StartupTimeoutException` when server under
+  test fails to start within max startup time. ``PHAB_ID=D519318``
+
 20.7.0
 ------
 

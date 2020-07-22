@@ -4,9 +4,11 @@ import com.google.inject.name.Names
 import com.google.inject.{Module, Provides, Stage}
 import com.twitter.finagle.http.Status
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
+import com.twitter.inject.app.StartupTimeoutException
 import com.twitter.inject.server.EmbeddedTwitterServer.ReducibleFn
 import com.twitter.inject.server.{EmbeddedTwitterServer, TwitterServer}
 import com.twitter.inject.{Test, TwitterModule}
+import com.twitter.util.{Await, Future, TimeoutException}
 import javax.inject.Singleton
 import org.scalatest.exceptions.TestFailedException
 import scala.collection.immutable.ListMap
@@ -23,7 +25,7 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
     twitterServer.addFrameworkOverrideModules(new TwitterModule {})
     val embeddedServer = new EmbeddedTwitterServer(
       twitterServer = twitterServer,
-      disableTestLogging = false
+      disableTestLogging = true
     )
 
     try {
@@ -38,6 +40,29 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
     } finally {
       embeddedServer.close()
     }
+  }
+
+  test("server#startup timeout") {
+    // hangs indefinitely in premain
+    val twitterServer = new TwitterServer {
+      premain {
+        Await.result(Future.never)
+      }
+    }
+
+    val timeoutSeconds = 2
+    val embeddedServer = new EmbeddedTwitterServer(
+      twitterServer = twitterServer,
+      disableTestLogging = true,
+      maxStartupTimeSeconds = timeoutSeconds
+    )
+
+    val e = intercept[StartupTimeoutException] {
+      embeddedServer.start()
+    }
+    e.getMessage.contains(s"failed to startup within $timeoutSeconds seconds.") should be(true)
+    e.getCause should not be null
+    e.getCause.getClass.isAssignableFrom(classOf[TimeoutException]) should be(true)
   }
 
   test("server#assert healthy false with exception") {

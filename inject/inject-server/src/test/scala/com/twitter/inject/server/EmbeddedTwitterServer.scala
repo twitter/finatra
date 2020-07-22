@@ -13,7 +13,15 @@ import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.inject.server.PortUtils.getPort
 import com.twitter.inject.{Injector, PoolUtils, TwitterModule}
 import com.twitter.util.lint.{GlobalRules, Rule}
-import com.twitter.util.{Await, Closable, Duration, ExecutorServiceFuturePool, Future, Promise}
+import com.twitter.util.{
+  Await,
+  Closable,
+  Duration,
+  ExecutorServiceFuturePool,
+  Future,
+  Promise,
+  TimeoutException
+}
 import java.lang.annotation.Annotation
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -791,10 +799,10 @@ class EmbeddedTwitterServer(
     try {
       Await.ready(ready, maxStartupTimeSeconds.seconds)
     } catch {
-      case _: InterruptedException =>
+      case e: TimeoutException =>
         throw new StartupTimeoutException(
-          s"Embedded server: $name failed to startup within $maxStartupTimeSeconds seconds."
-        )
+          s"Embedded server: $name failed to startup within $maxStartupTimeSeconds seconds.",
+          e)
     }
 
     throwIfStartupFailed()
