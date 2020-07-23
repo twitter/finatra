@@ -13,6 +13,9 @@ Added
 Changed
 ~~~~~~~
 
+* inject-core: Deprecate `c.t.inject.Resettable` (no replacement) and `c.t.inject.TestTwitterModule`.
+  Users should prefer the `#bind[T]` DSL over usage of the `TestTwitterModule`. ``PHAB_ID=D520889``
+
 Fixed
 ~~~~~
 

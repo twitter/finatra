@@ -4,32 +4,30 @@ import com.twitter.finagle.Service
 import com.twitter.finagle.http.Method._
 import com.twitter.finagle.http.{Method, Request, Response}
 import com.twitter.inject.app.Banner
-import com.twitter.inject.{Injector, Logging, Resettable}
+import com.twitter.inject.{Injector, Logging}
 import com.twitter.util.Future
-import java.lang.annotation.{Annotation => JavaAnnotation}
+import java.lang.annotation.Annotation
 import scala.collection._
 import scala.collection.mutable.ArrayBuffer
 
 object InMemoryHttpService {
-  def fromInjector[Ann <: JavaAnnotation: Manifest](injector: Injector): InMemoryHttpService = {
+  def fromInjector[Ann <: Annotation: Manifest](injector: Injector): InMemoryHttpService = {
     injector.instance[Service[Request, Response], Ann].asInstanceOf[InMemoryHttpService]
   }
 }
 
-class InMemoryHttpService extends Service[Request, Response] with Resettable with Logging {
+class InMemoryHttpService extends Service[Request, Response] with Logging {
 
-  private val responseMap =
+  private[this] val responseMap =
     mutable.Map[RequestKey, ArrayBuffer[ResponseWithExpectedBody]]().withDefaultValue(ArrayBuffer())
-  val recordedRequests = ArrayBuffer[Request]()
+  val recordedRequests: ArrayBuffer[Request] = ArrayBuffer[Request]()
   var overrideResponse: Option[Response] = None
 
   /* Service Apply */
 
   def apply(request: Request): Future[Response] = synchronized {
     recordedRequests += request
-    Future {
-      overrideResponse getOrElse lookupResponse(request)
-    }
+    Future(overrideResponse.getOrElse(lookupResponse(request)))
   }
 
   /* Mock Support */
@@ -53,7 +51,7 @@ class InMemoryHttpService extends Service[Request, Response] with Resettable wit
     andReturn: Response,
     sticky: Boolean = false
   ): Unit = {
-    mock(Put, path, andReturn, sticky)
+    mock(Put, path, andReturn, sticky, Option(withBody))
   }
 
   def mock(
@@ -68,7 +66,10 @@ class InMemoryHttpService extends Service[Request, Response] with Resettable wit
     responseMap(RequestKey(method, path)) = existing :+ newEntry
   }
 
-  override def reset(): Unit = {
+  @deprecated("Use clear()", "2020-07-22")
+  def reset(): Unit = clear()
+
+  def clear(): Unit = {
     responseMap.clear()
     recordedRequests.clear()
     overrideResponse = None
@@ -99,14 +100,14 @@ class InMemoryHttpService extends Service[Request, Response] with Resettable wit
   }
 
   private def hasExpectedBodies(existing: ArrayBuffer[ResponseWithExpectedBody]): Boolean = {
-    existing exists { _.expectedBody.isDefined }
+    existing.exists(_.expectedBody.isDefined)
   }
 
   private def lookupPostResponseWithBody(
     request: Request,
     existing: ArrayBuffer[ResponseWithExpectedBody]
   ): Response = {
-    val found = existing find { _.expectedBody == Some(request.contentString) } getOrElse {
+    val found = existing.find(_.expectedBody.contains(request.contentString)).getOrElse {
       throw new PostRequestWithIncorrectBodyException(request + " with expected body not mocked")
     }
 
