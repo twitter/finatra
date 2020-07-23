@@ -72,9 +72,9 @@ import com.twitter.finatra.thrift._
 import com.twitter.scrooge.{Request, Response}
 
 @Singleton
-class ExampleThriftController 
+class ExampleThriftController
   extends Controller(MyThriftService) {
-  
+
   handle(MyFunction).withFn { request: Request[MyFunction.Args] =>
     ...
   }
@@ -100,7 +100,7 @@ Please take a look through the [examples](/examples) for more detailed informati
 
 ## Latest version
 
-The [master branch](https://github.com/twitter/finatra/tree/master) in Github tracks the latest stable [release](https://github.com/twitter/finatra/releases), which is currently:
+The [release branch](https://github.com/twitter/finatra/tree/release) in Github tracks the latest stable [release](https://github.com/twitter/finatra/releases), which is currently:
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.12/badge.svg)][maven-central]
 
@@ -113,7 +113,7 @@ breaks and changes in runtime behavior.
 
 ## Development version
 
-The [develop branch](https://github.com/twitter/finatra/tree/develop) in Github tracks the latest code which is updated every week. If you want to contribute a patch or fix, please use this branch as the basis of your [Pull Request](https://help.github.com/articles/creating-a-pull-request/). 
+The [develop branch](https://github.com/twitter/finatra/tree/develop) in Github tracks the latest code which is updated every week. If you want to contribute a patch or fix, please use this branch as the basis of your [Pull Request](https://help.github.com/articles/creating-a-pull-request/).
 
 For more information on providing contributions, please see our [CONTRIBUTING.md](/CONTRIBUTING.md) documentation.
 
@@ -138,12 +138,12 @@ Licensed under the Apache License, Version 2.0: https://www.apache.org/licenses/
 
 [twitter-server]: https://github.com/twitter/twitter-server
 [finagle]: https://github.com/twitter/finagle
-[util-app]: https://github.com/twitter/util/tree/master/util-app
+[util-app]: https://github.com/twitter/util/tree/release/util-app
 [guice]: https://github.com/google/guice
 [jackson]: https://github.com/FasterXML/jackson
 [logback]: https://logback.qos.ch/
 [slf4j]: https://www.slf4j.org/manual.html
-[local]: https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Local.scala
+[local]: https://github.com/twitter/util/blob/release/util-core/src/main/scala/com/twitter/util/Local.scala
 [mdc]: https://logback.qos.ch/manual/mdc.html
 [maven]: https://maven.apache.org/
 [maven-central]: https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20%28a%3A%22finatra-http_2.12%22%20OR%20a%3A%22finatra-thrift_2.12%22%29
