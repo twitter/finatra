@@ -4,7 +4,10 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 
+import com.google.inject.Stage;
 import com.google.inject.name.Names;
 
 import org.junit.Assert;
@@ -13,10 +16,38 @@ import org.junit.Test;
 import com.twitter.inject.Injector;
 import com.twitter.inject.annotations.Down;
 import com.twitter.inject.annotations.Flags;
+import com.twitter.inject.modules.InMemoryStatsReceiverModule;
 import com.twitter.inject.modules.LoggerModule;
 import com.twitter.inject.modules.StatsReceiverModule;
 
 public class TestInjectorJavaTest extends Assert {
+
+  @Test
+  public void testJavaConstructors() {
+    HashMap<String, String> flags = new HashMap<>();
+    flags.put("foo", "bar");
+    flags.put("baz", "bus");
+
+    TestInjector testInjector = TestInjector$.MODULE$.apply();
+    testInjector = TestInjector.apply();
+    testInjector = TestInjector.apply(LoggerModule.apply(), StatsReceiverModule.apply());
+    testInjector = TestInjector.apply(
+            /* modules = */ Arrays.asList(LoggerModule.apply(), StatsReceiverModule.apply()));
+    testInjector = TestInjector.apply(
+            /* modules = */ Arrays.asList(LoggerModule.apply(), StatsReceiverModule.apply()),
+            /* flags = */ flags);
+    testInjector = TestInjector.apply(
+            /* modules = */ Arrays.asList(LoggerModule.apply(), StatsReceiverModule.apply()),
+            /* flags = */ flags,
+            /* overrideModules = */ Collections.singletonList(InMemoryStatsReceiverModule.get())
+    );
+    testInjector = TestInjector.apply(
+            /* modules = */ Arrays.asList(LoggerModule.apply(), StatsReceiverModule.apply()),
+            /* flags = */ flags,
+            /* overrideModules = */ Collections.singletonList(InMemoryStatsReceiverModule.get()),
+            /* stage */ Stage.PRODUCTION
+    );
+  }
 
   @Test
   public void testTestInjector() {

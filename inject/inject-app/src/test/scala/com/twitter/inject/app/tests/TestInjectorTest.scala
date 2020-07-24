@@ -1,11 +1,12 @@
 package com.twitter.inject.app.tests
 
 import com.google.inject.name.Names
-import com.google.inject.{Provides, Scopes}
+import com.google.inject.{Provides, Scopes, Stage}
 import com.twitter.app.GlobalFlag
 import com.twitter.finagle.Service
 import com.twitter.inject.annotations.{Annotations, Down, Flag, Flags, Up}
 import com.twitter.inject.app.TestInjector
+import com.twitter.inject.modules.{InMemoryStatsReceiverModule, LoggerModule, StatsReceiverModule}
 import com.twitter.inject.{Injector, Mockito, Test, TwitterModule}
 import com.twitter.util.Future
 import javax.inject.{Inject, Singleton}
@@ -188,6 +189,42 @@ class TestInjectorTest extends Test with Mockito {
     testMapGlobalFlag.reset()
 
     super.afterEach()
+  }
+
+  test("test constructors") {
+    val flags: Map[String, String] = Map("foo" -> "bar", "baz" -> "bus")
+
+    TestInjector()
+    TestInjector(LoggerModule, StatsReceiverModule)
+    TestInjector(Seq(LoggerModule, StatsReceiverModule))
+    TestInjector(modules = Seq(LoggerModule, StatsReceiverModule))
+    TestInjector(Seq(LoggerModule, StatsReceiverModule), flags)
+    TestInjector(modules = Seq(LoggerModule, StatsReceiverModule), flags = flags)
+    TestInjector(Seq(LoggerModule, StatsReceiverModule), flags, Seq(InMemoryStatsReceiverModule))
+    TestInjector(
+      modules = Seq(LoggerModule, StatsReceiverModule),
+      flags = flags,
+      overrideModules = Seq(InMemoryStatsReceiverModule))
+    TestInjector(
+      Seq(LoggerModule, StatsReceiverModule),
+      flags,
+      Seq(InMemoryStatsReceiverModule),
+      Stage.PRODUCTION)
+    TestInjector(
+      modules = Seq(LoggerModule, StatsReceiverModule),
+      flags = flags,
+      overrideModules = Seq(InMemoryStatsReceiverModule),
+      stage = Stage.PRODUCTION)
+    new TestInjector(
+      Seq(LoggerModule, StatsReceiverModule),
+      flags,
+      Seq(InMemoryStatsReceiverModule),
+      Stage.PRODUCTION)
+    new TestInjector(
+      modules = Seq(LoggerModule, StatsReceiverModule),
+      flags = flags,
+      overrideModules = Seq(InMemoryStatsReceiverModule),
+      stage = Stage.PRODUCTION)
   }
 
   test("default boolean flags properly") {

@@ -26,12 +26,13 @@ object TestInjector {
   /* Public */
 
   /** Create a new TestInjector */
-  def apply: TestInjector = apply(modules = Seq())
+  def apply: TestInjector = apply(modules = Seq.empty[Module])
 
   /**
-   * Create a new TestInjector over the given list of [[com.google.inject.Module]]
+   * Create a new TestInjector over the given list of [[com.google.inject.Module]].
    *
-   * @param modules - a variable list of [[com.google.inject.Module]]
+   * @param modules a variable list of [[com.google.inject.Module]].
+   *
    * @return a new [[TestInjector]]
    *
    * @see https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests
@@ -41,34 +42,101 @@ object TestInjector {
   }
 
   /**
-   * Create a new TestInjector over the given list of [[com.google.inject.Module]]
+   * Create a new TestInjector over the given list of [[com.google.inject.Module]]. This is meant
+   * to be used from Java.
    *
-   * @param modules - a variable list of [[com.google.inject.Module]]
-   *
-   * @return a new [[TestInjector]]
+   * @param javaModules a list of [[com.google.inject.Module]].
    *
    * @note Scala users should prefer `apply(Seq[Module])`
+   * @return a new [[TestInjector]]
+   *
    * @see https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests
    */
-  def apply(modules: java.util.Collection[Module]): TestInjector = {
-    apply(modules.asScala.toSeq)
+  def apply(javaModules: java.util.Collection[Module]): TestInjector = {
+    apply(javaModules.asScala.toSeq)
   }
 
   /**
-   * Create a new TestInjector with the specified params.
+   * Create a new TestInjector over the given list of [[com.google.inject.Module]] and map of flag
+   * String key/values. This is meant to be used from Java.
    *
-   * @param modules - a list of [[com.google.inject.Module]]
-   * @param flags - a String Map of flag arguments to set on the injector, default is empty.
-   * @param overrideModules - a list of [[com.google.inject.Module]] to use as overrides, default is empty.
-   * @param stage - the [[com.google.inject.Stage]] to use, default is DEVELOPMENT.
+   * @param javaModules a list of [[com.google.inject.Module]].
+   * @param javaFlags a String Map of flag arguments to set on the injector.
+   *
+   * @note Scala users should prefer the version which accepts Scala collections.
+   * @return a new [[TestInjector]]
+   *
+   * @see https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests
+   */
+  def apply(
+    javaModules: java.util.Collection[Module],
+    javaFlags: java.util.Map[String, String]
+  ): TestInjector =
+    apply(javaModules.asScala.toSeq, javaFlags.asScala.toMap)
+
+  /**
+   * Create a new TestInjector over the given list of [[com.google.inject.Module]], a map of flag
+   * String key/values, and a list of override [[com.google.inject.Module]]. This is meant to be
+   * used from Java.
+   *
+   * @param javaModules a list of [[com.google.inject.Module]].
+   * @param javaFlags a String Map of flag arguments to set on the injector.
+   * @param javaOverrideModules a list of [[com.google.inject.Module]] to use as overrides.
+   *
+   * @note Scala users should prefer the version which accepts Scala collections.
+   * @return a new [[TestInjector]]
+   *
+   * @see https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests
+   */
+  def apply(
+    javaModules: java.util.Collection[Module],
+    javaFlags: java.util.Map[String, String],
+    javaOverrideModules: java.util.Collection[Module]
+  ): TestInjector =
+    apply(javaModules.asScala.toSeq, javaFlags.asScala.toMap, javaOverrideModules.asScala.toSeq)
+
+  /**
+   * Create a new TestInjector with the specified params. This is meant to be used from Java.
+   *
+   * @param javaModules a list of [[com.google.inject.Module]].
+   * @param javaFlags a String Map of flag arguments to set on the injector.
+   * @param javaOverrideModules a list of [[com.google.inject.Module]] to use as overrides.
+   * @param stage the [[com.google.inject.Stage]] to use.
+   *
+   * @note Scala users should prefer the version which accepts Scala collections.
+   * @return a new [[TestInjector]]
+   *
+   * @see https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests
+   */
+  def apply(
+    javaModules: java.util.Collection[Module],
+    javaFlags: java.util.Map[String, String],
+    javaOverrideModules: java.util.Collection[Module],
+    stage: Stage
+  ): TestInjector =
+    apply(
+      javaModules.asScala.toSeq,
+      javaFlags.asScala.toMap,
+      javaOverrideModules.asScala.toSeq,
+      stage)
+
+  /**
+   * Create a new TestInjector with the specified params. This is meant to be used from Scala.
+   *
+   * @param modules a list of [[com.google.inject.Module]]
+   * @param flags a String Map of flag arguments to set on the injector, default is empty.
+   * @param overrideModules a list of [[com.google.inject.Module]] to use as overrides, default is empty.
+   * @param stage the [[com.google.inject.Stage]] to use, default is DEVELOPMENT.
+   *
+   * @note Java users should prefer the version which accepts Java collections.
    * @return a new [[TestInjector]]
    *
    * @see https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests
    */
   def apply(
     modules: Seq[Module],
-    flags: Map[String, String] = Map.empty,
-    overrideModules: Seq[Module] = Seq.empty,
+    flags: Map[String, String] = Map.empty[String, String],
+    overrideModules: Seq[Module] = Seq.empty[Module],
     stage: Stage = Stage.DEVELOPMENT
   ): TestInjector = {
     new TestInjector(modules, flags, overrideModules, stage)
@@ -88,8 +156,8 @@ object TestInjector {
  */
 class TestInjector(
   modules: Seq[Module],
-  flags: Map[String, String] = Map.empty,
-  overrideModules: Seq[Module] = Seq.empty,
+  flags: Map[String, String] = Map.empty[String, String],
+  overrideModules: Seq[Module] = Seq.empty[Module],
   stage: Stage = Stage.DEVELOPMENT)
     extends BindDSL {
 

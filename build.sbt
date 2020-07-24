@@ -514,7 +514,7 @@ lazy val injectApp = (project in file("inject/inject-app"))
     }
   ).dependsOn(
     injectCore % "test->test;compile->compile",
-    injectModules % Test,
+    injectModules % "test->test",
     injectUtils
   )
 
