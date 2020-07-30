@@ -10,6 +10,8 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-kafka:  Expose delivery timeout duration in KafkaProducerConfig
+
 * inject-app: Add more Java-friendly constructors for the TestInjector. ``PHAB_ID=D520900``
 
 Changed
