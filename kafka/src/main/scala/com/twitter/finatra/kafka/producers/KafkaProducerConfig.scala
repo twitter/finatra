@@ -80,6 +80,9 @@ trait KafkaProducerConfigMethods[Self] extends KafkaConfigMethods[Self] with Log
 
   def connectionsMaxIdle(duration: Duration): This =
     withConfig(ProducerConfig.CONNECTIONS_MAX_IDLE_MS_CONFIG, duration)
+  
+  def deliveryTimeout(duration: Duration): This =
+    withConfig(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, duration)
 
   def enableIdempotence(boolean: Boolean): This =
     withConfig(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, boolean.toString)
@@ -140,9 +143,6 @@ trait KafkaProducerConfigMethods[Self] extends KafkaConfigMethods[Self] with Log
 
   def requestTimeout(duration: Duration): This =
     withConfig(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, duration)
-
-  def deliveryTimeout(duration: Duration): This =
-    withConfig(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, duration)
 
   def retries(retries: Int): This =
     withConfig(ProducerConfig.RETRIES_CONFIG, retries.toString)
