@@ -23,8 +23,9 @@ object MDCInitializer extends Logging {
   private[logging] val Key = new Contexts.local.Key[JHashMap[String, String]]()
 
   /** Ensures initialization of the FinagleMDCInitializer occurs only once */
-  private val initialize = Once {
+  private val initialize: () => Unit = Once {
     FinagleMDCInitializer.init()
+    info("Initialized MDC.")
   }
 
   /**
@@ -34,10 +35,7 @@ object MDCInitializer extends Logging {
    *
    * @see [[org.slf4j.FinagleMDCInitializer.init()]]
    */
-  def init(): Unit = {
-    info("Initialized MDC.")
-    initialize()
-  }
+  def init(): Unit = initialize()
 
   /**
    * Initializes the value of the MDC to a new empty [[java.util.HashMap]] only for the scope of the
