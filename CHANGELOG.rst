@@ -15,6 +15,11 @@ Added
 Changed
 ~~~~~~~
 
+* inject-modules: Improve Java usability: rename `apply` to `get` for
+  StatsReceiverModule and LoggerModule. 
+  Add `get` methods for other TwitterModule singleton objects. 
+  (BREAKING API CHANGE) ``PHAB_IB=D525696``
+
 * inject-core: Deprecate `c.t.inject.Resettable` (no replacement) and `c.t.inject.TestTwitterModule`.
   Users should prefer the `#bind[T]` DSL over usage of the `TestTwitterModule`. ``PHAB_ID=D520889``
 

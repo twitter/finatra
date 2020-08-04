@@ -108,6 +108,13 @@ We take a variety of approaches to minimize this.
    a non-symbolic method name or by adding a class that does forwarding.
 1. Prefer `abstract` classes over `traits` as they are easier for Java
    developers to extend.
+1. For Java-friendly access to object singletons, we add a Java accessor method called `get`, e.g.:
+
+```scala
+object Foo {
+  def get(): this.type = this
+}
+```
 
 ## Style
 

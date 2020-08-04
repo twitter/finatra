@@ -30,19 +30,19 @@ public class TestInjectorJavaTest extends Assert {
 
     TestInjector testInjector = TestInjector$.MODULE$.apply();
     testInjector = TestInjector.apply();
-    testInjector = TestInjector.apply(LoggerModule.apply(), StatsReceiverModule.apply());
+    testInjector = TestInjector.apply(LoggerModule.get(), StatsReceiverModule.get());
     testInjector = TestInjector.apply(
-            /* modules = */ Arrays.asList(LoggerModule.apply(), StatsReceiverModule.apply()));
+            /* modules = */ Arrays.asList(LoggerModule.get(), StatsReceiverModule.get()));
     testInjector = TestInjector.apply(
-            /* modules = */ Arrays.asList(LoggerModule.apply(), StatsReceiverModule.apply()),
+            /* modules = */ Arrays.asList(LoggerModule.get(), StatsReceiverModule.get()),
             /* flags = */ flags);
     testInjector = TestInjector.apply(
-            /* modules = */ Arrays.asList(LoggerModule.apply(), StatsReceiverModule.apply()),
+            /* modules = */ Arrays.asList(LoggerModule.get(), StatsReceiverModule.get()),
             /* flags = */ flags,
             /* overrideModules = */ Collections.singletonList(InMemoryStatsReceiverModule.get())
     );
     testInjector = TestInjector.apply(
-            /* modules = */ Arrays.asList(LoggerModule.apply(), StatsReceiverModule.apply()),
+            /* modules = */ Arrays.asList(LoggerModule.get(), StatsReceiverModule.get()),
             /* flags = */ flags,
             /* overrideModules = */ Collections.singletonList(InMemoryStatsReceiverModule.get()),
             /* stage */ Stage.PRODUCTION
@@ -81,8 +81,8 @@ public class TestInjectorJavaTest extends Assert {
     BigDecimal payment = new BigDecimal(12.34, MathContext.DECIMAL32);
 
     TestInjector testInjector = TestInjector.apply(
-        LoggerModule.apply(),
-        StatsReceiverModule.apply());
+        LoggerModule.get(),
+        StatsReceiverModule.get());
 
     Injector injector = testInjector
         .bindClass(String.class, "Hello, world")
@@ -110,7 +110,7 @@ public class TestInjectorJavaTest extends Assert {
     BigDecimal payment = new BigDecimal(12.34, MathContext.DECIMAL32);
 
     TestInjector testInjector = TestInjector.apply(
-        Arrays.asList(LoggerModule.apply(), StatsReceiverModule.apply()));
+        Arrays.asList(LoggerModule.get(), StatsReceiverModule.get()));
 
     Injector injector = testInjector
         .bindClass(String.class, "Hello, world")

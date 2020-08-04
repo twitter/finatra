@@ -35,8 +35,8 @@ public class HelloWorldApp extends AbstractApp {
   public Collection<Module> javaModules() {
     return Collections.unmodifiableList(
         Arrays.asList(
-          LoggerModule.apply(),
-          StatsReceiverModule.apply()));
+          LoggerModule.get(),
+          StatsReceiverModule.get()));
   }
 
   @Override

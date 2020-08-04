@@ -35,4 +35,7 @@ object CredentialsModule extends TwitterModule {
       }
     Credentials(credentialsMap)
   }
+
+  /**  Java-friendly way to access this module as a singleton instance */
+  def get(): this.type = this
 }

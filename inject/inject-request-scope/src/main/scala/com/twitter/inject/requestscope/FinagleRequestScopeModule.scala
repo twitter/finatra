@@ -9,4 +9,7 @@ object FinagleRequestScopeModule extends TwitterModule {
     bindScope(classOf[FinagleRequestScoped], finagleRequestScope)
     bind[FinagleRequestScope].toInstance(finagleRequestScope)
   }
+
+  /**  Java-friendly way to access this module as a singleton instance */
+  def get(): this.type = this
 }

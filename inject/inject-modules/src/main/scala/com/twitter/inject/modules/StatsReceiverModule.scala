@@ -9,5 +9,5 @@ object StatsReceiverModule extends TwitterModule {
   }
 
   /**  Java-friendly way to access this module as a singleton instance */
-  def apply(): this.type = this
+  def get(): this.type = this
 }

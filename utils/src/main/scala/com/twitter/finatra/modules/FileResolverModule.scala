@@ -58,4 +58,7 @@ object FileResolverModule extends TwitterModule {
     @Flag(FileResolverFlags.DocRoot) documentRoot: String,
     @Flag(FileResolverFlags.LocalDocRoot) localDocumentRoot: String
   ): FileResolver = new FileResolver(localDocumentRoot, documentRoot)
+
+  /**  Java-friendly way to access this module as a singleton instance */
+  def get(): this.type = this
 }
