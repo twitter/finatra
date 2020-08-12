@@ -7,6 +7,13 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Fixed
+~~~~~
+
+* finatra-jackson: Fix a bug preventing JSON parsing of generic case classes, which in turn, contain
+  fields with generic case classes. Reported (with a thorough reproducer and an analysis) on Github
+  by @aatasiei (https://github.com/twitter/finatra/issues/548). ``PHAB_ID=D531452``
+
 20.8.0
 ------
 

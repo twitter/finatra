@@ -190,6 +190,8 @@ case class GenericTestCaseClass[T](data: T)
 
 case class Page[T](data: List[T], pageSize: Int, next: Option[Long], previous: Option[Long])
 
+case class CaseClassWithGeneric[T](inside: GenericTestCaseClass[T])
+
 case class CaseClassWithOptionalGeneric[T](inside: Option[GenericTestCaseClass[T]])
 
 case class CaseClassWithTypes[T, U](first: T, second: U)

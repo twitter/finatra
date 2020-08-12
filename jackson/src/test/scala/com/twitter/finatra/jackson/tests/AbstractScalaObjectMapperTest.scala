@@ -139,6 +139,12 @@ abstract class AbstractScalaObjectMapperTest extends Test {
   // https://github.com/FasterXML/jackson-module-scala/blob/fa7cf702e0f61467d726384af88de9ea1f798b97/src/test/scala/com/fasterxml/jackson/module/scala/deser/CaseClassDeserializerTest.scala#L78-L81
   test("deserialization#generic types") {
     parse[GenericTestCaseClass[Int]]("""{"data" : 3}""") should equal(GenericTestCaseClass(3))
+    parse[GenericTestCaseClass[CaseClass]]("""{"data" : {"id" : 123, "name" : "foo"}}""") should
+      equal(GenericTestCaseClass(CaseClass(123, "foo")))
+    parse[CaseClassWithGeneric[CaseClass]](
+      """{"inside" : { "data" : {"id" : 123, "name" : "foo"}}}""") should
+      equal(CaseClassWithGeneric(GenericTestCaseClass(CaseClass(123, "foo"))))
+
     parse[GenericTestCaseClass[String]]("""{"data" : "Hello, World"}""") should equal(
       GenericTestCaseClass("Hello, World"))
     parse[GenericTestCaseClass[Double]]("""{"data" : 3.14}""") should equal(

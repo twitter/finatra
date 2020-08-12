@@ -118,7 +118,7 @@ object Types {
       }
     } else {
       val types: Seq[JavaType] =
-        for (idx <- 0 to typeBindings.size()) yield typeBindings.getBoundType(idx)
+        for (idx <- 0 until typeBindings.size()) yield typeBindings.getBoundType(idx)
       typeFactory.constructParametricType(scalaType.erasure, types: _*)
     }
   }
