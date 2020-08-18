@@ -7,6 +7,12 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
+* thrift: `JavaThriftRouter` now allows mounting controllers by value (as opposed to via DI).
+  ``PHAB_ID=D528659``
+
 Fixed
 ~~~~~
 

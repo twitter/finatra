@@ -2,7 +2,7 @@ package com.twitter.finatra.thrift.routing
 
 import com.twitter.finagle
 import com.twitter.finagle.service.NilService
-import com.twitter.finagle.thrift.{RichServerParam, ThriftService, ToThriftService}
+import com.twitter.finagle.thrift.{AbstractThriftService, RichServerParam, ThriftService, ToThriftService}
 import com.twitter.finagle._
 import com.twitter.finatra.thrift.Controller
 import com.twitter.finatra.thrift.ScroogeServiceImpl
@@ -409,7 +409,7 @@ class JavaThriftRouter @Inject() (injector: Injector, exceptionManager: Exceptio
    *
    * @see the [[https://twitter.github.io/finatra/user-guide/thrift/controllers.html user guide]]
    */
-  def add(controller: Class[_]): JavaThriftRouter = {
+  def add(controller: Class[_ <: AbstractThriftService]): JavaThriftRouter = {
     add(controller, ThriftMux.server.params.apply[Thrift.param.ProtocolFactory].protocolFactory)
   }
 
@@ -422,16 +422,44 @@ class JavaThriftRouter @Inject() (injector: Injector, exceptionManager: Exceptio
    *
    * @see the [[https://twitter.github.io/finatra/user-guide/thrift/controllers.html user guide]]
    */
-  def add(controller: Class[_], protocolFactory: TProtocolFactory): JavaThriftRouter = {
+  def add(
+    controller: Class[_ <: AbstractThriftService],
+    protocolFactory: TProtocolFactory
+  ): JavaThriftRouter = {
+    add(injector.instance(controller), protocolFactory)
+  }
+
+  /**
+   * Add controller used for all requests for usage from Java. The [[ThriftRouter]] only supports
+   * a single controller, so `add` may only be called once.
+   *
+   * @see the [[https://twitter.github.io/finatra/user-guide/thrift/controllers.html user guide]]
+   */
+  def add(controller: AbstractThriftService): JavaThriftRouter = {
+    add(controller, ThriftMux.server.params.apply[Thrift.param.ProtocolFactory].protocolFactory)
+  }
+
+  /**
+   * Add controller used for all requests for usage from Java. The [[ThriftRouter]] only supports a
+   * single controller, so `add` may only be called once.
+   *
+   * @note We do not apply filters per-method but instead all filters are applied across the service.
+   *       thus "per-method" metrics will be scoped to the controller name (Class#getSimpleName).
+   *
+   * @see the [[https://twitter.github.io/finatra/user-guide/thrift/controllers.html user guide]]
+   */
+  def add(
+    controller: AbstractThriftService,
+    protocolFactory: TProtocolFactory
+  ): JavaThriftRouter = {
     def deriveServiceName(clazz: Class[_]): String = {
       val base = clazz.getName.stripSuffix("$" + "Service")
       base.substring(base.lastIndexOf(".") + 1)
     }
 
     assertController {
-      val controllerInstance = injector.instance(controller)
-      val serviceIfaceClazz: Class[_] =
-        controllerInstance.getClass.getInterfaces.head // MyService$ServiceIface
+      val controllerClazz = controller.getClass
+      val serviceIfaceClazz: Class[_] = controllerClazz.getInterfaces.head // MyService$ServiceIface
       val serviceClazz: Class[_] = // MyService$Service
         // note, the $ gets concat-ed strangely to avoid a false positive scalac warning
         // for "possible missing interpolator".
@@ -449,20 +477,20 @@ class JavaThriftRouter @Inject() (injector: Injector, exceptionManager: Exceptio
       val serviceInstance: Service[Array[Byte], Array[Byte]] =
         serviceConstructor
           .newInstance(
-            controllerInstance.asInstanceOf[Object],
+            controller.asInstanceOf[Object],
             filters,
             new RichServerParam(protocolFactory)
           )
           .asInstanceOf[Service[Array[Byte], Array[Byte]]]
 
-      val declaredMethods: Array[JMethod] = controller.getDeclaredMethods
+      val declaredMethods: Array[JMethod] = controllerClazz.getDeclaredMethods
       info(
         "Adding methods\n" +
           declaredMethods.map(method => s"$serviceName.${method.getName}").mkString("\n")
       )
 
       registerGlobalFilter(filters, libraryRegistry)
-      registerMethods(serviceName, controller, declaredMethods.toSeq)
+      registerMethods(serviceName, controllerClazz, declaredMethods.toSeq)
       underlying = serviceInstance
     }
     this
