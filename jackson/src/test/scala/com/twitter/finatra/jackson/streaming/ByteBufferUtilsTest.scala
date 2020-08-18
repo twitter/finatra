@@ -1,4 +1,4 @@
-package com.twitter.finatra.jackson.tests.streaming
+package com.twitter.finatra.jackson.streaming
 
 import com.twitter.finatra.jackson.streaming.ByteBufferUtils
 import com.twitter.inject.conversions.bytebuffer._

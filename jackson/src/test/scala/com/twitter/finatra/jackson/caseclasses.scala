@@ -1,4 +1,4 @@
-package com.twitter.finatra.jackson.tests
+package com.twitter.finatra.jackson
 
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type
 import com.fasterxml.jackson.annotation._
@@ -6,20 +6,22 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.`type`.TypeReference
 import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.annotation.{JsonDeserialize, JsonNaming}
-import com.fasterxml.jackson.databind.deser.std.NumberDeserializers.BigDecimalDeserializer
+import com.fasterxml.jackson.databind.deser.std.NumberDeserializers.{
+  BigDecimalDeserializer,
+  NumberDeserializer
+}
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.node.ValueNode
 import com.fasterxml.jackson.module.scala.JsonScalaEnumeration
-import com.twitter.finatra.jackson.{CarMake, CarMakeEnum, TestInjectableValue}
 import com.twitter.finatra.jackson.caseclass.SerdeLogging
 import com.twitter.finatra.json.annotations.JsonCamelCase
+import com.twitter.finatra.validation.constraints._
 import com.twitter.finatra.validation.{
   CommonMethodValidations,
   ErrorCode,
   MethodValidation,
   ValidationResult
 }
-import com.twitter.finatra.validation.constraints._
 import com.twitter.inject.domain.WrappedValue
 import com.twitter.util.Time
 import com.twitter.{util => ctu}
@@ -27,6 +29,35 @@ import javax.inject.Inject
 import org.joda.time.DateTime
 import scala.annotation.meta.param
 import scala.math.BigDecimal.RoundingMode
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes(
+  Array(
+    new Type(value = classOf[BoundaryA], name = "a"),
+    new Type(value = classOf[BoundaryB], name = "b"),
+    new Type(value = classOf[BoundaryC], name = "c")
+  )
+)
+trait Boundary {
+  def value: String
+}
+case class BoundaryA(value: String) extends Boundary
+case class BoundaryB(value: String) extends Boundary
+case class BoundaryC(value: String) extends Boundary
+
+case class GG[T, U, V, X, Y, Z](t: T, u: U, v: V, x: X, y: Y, z: Z)
+case class B(value: String)
+case class D(value: Int)
+case class AGeneric[T](b: Option[T])
+case class AAGeneric[T, U](b: Option[T], c: Option[U])
+case class C(a: AGeneric[B])
+case class E[T, U, V](a: AAGeneric[T, U], b: Option[V])
+case class F[T, U, V, X, Y, Z](a: Option[T], b: Seq[U], c: Option[V], d: X, e: Either[Y, Z])
+case class WithTypeBounds[A <: Boundary](a: Option[A])
+case class G[T, U, V, X, Y, Z](gg: GG[T, U, V, X, Y, Z])
+
+case class SomeNumberType[N <: Number](
+  @JsonDeserialize(contentAs = classOf[Number], using = classOf[NumberDeserializer]) n: Option[N])
 
 object Weekday extends Enumeration {
   type Weekday = Value

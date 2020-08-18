@@ -1,4 +1,4 @@
-package com.twitter.finatra.jackson.tests.caseclass
+package com.twitter.finatra.jackson.caseclass
 
 import com.fasterxml.jackson.core.{JsonGenerator, JsonParseException, JsonParser}
 import com.fasterxml.jackson.databind.JsonMappingException
@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.exc.{
   MismatchedInputException
 }
 import com.twitter.finatra.jackson.caseclass.exceptions._
-import com.twitter.finatra.jackson.tests.CaseClassWithAllTypes
+import com.twitter.finatra.jackson.CaseClassWithAllTypes
 import com.twitter.inject.Test
 import com.twitter.mock.Mockito
 import java.util
@@ -67,7 +67,7 @@ class RichJsonProcessingExceptionTest extends Test with Mockito {
 
     // should be from the ignored property exception message via `getOriginalMessage`
     e.errorMessage should equal(
-      """Ignored field "noname" (class com.twitter.finatra.jackson.tests.CaseClassWithAllTypes$) encountered; mapper configured not to allow this""")
+      """Ignored field "noname" (class com.twitter.finatra.jackson.CaseClassWithAllTypes$) encountered; mapper configured not to allow this""")
   }
 
   test("JsonParseException with cause") {

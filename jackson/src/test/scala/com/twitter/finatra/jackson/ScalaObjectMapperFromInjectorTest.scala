@@ -1,10 +1,10 @@
-package com.twitter.finatra.jackson.tests
+package com.twitter.finatra.jackson
 
 import com.fasterxml.jackson.databind.JsonMappingException
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.caseclass.exceptions.InjectableValuesException
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
-import com.twitter.finatra.jackson.tests.AbstractScalaObjectMapperTest.failOnUnknownPropertiesModule
+import com.twitter.finatra.jackson.AbstractScalaObjectMapperTest.failOnUnknownPropertiesModule
 import com.twitter.finatra.json.annotations.{CamelCaseMapper, SnakeCaseMapper}
 import com.twitter.inject.Injector
 import com.twitter.inject.app.TestInjector

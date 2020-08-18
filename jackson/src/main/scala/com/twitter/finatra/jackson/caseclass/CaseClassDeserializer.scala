@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.util.SimpleBeanPropertyDefinition
 import com.twitter.finatra.jackson.caseclass.exceptions.{
   CaseClassFieldMappingException,
   CaseClassMappingException,
+  ErrorCode,
   InjectableValuesException,
   _
 }
@@ -48,7 +49,9 @@ import java.lang.reflect.{
   InvocationTargetException,
   Method,
   Parameter,
-  Type
+  ParameterizedType,
+  Type,
+  TypeVariable
 }
 import javax.annotation.concurrent.ThreadSafe
 import org.json4s.reflect.{ClassDescriptor, ConstructorDescriptor, Reflector, ScalaType}
@@ -67,7 +70,7 @@ private case class PropertyDefinition(
   beanPropertyDefinition: BeanPropertyDefinition)
 
 /* Holder of constructor arg to ScalaType */
-private case class ConstructorParam(name: String, scalaType: org.json4s.reflect.ScalaType)
+private case class ConstructorParam(name: String, scalaType: ScalaType)
 
 private object CaseClassDeserializer {
   // For reporting an InvalidDefinitionException
@@ -145,7 +148,6 @@ private[jackson] class CaseClassDeserializer(
         CaseClassCreator(
           jsonCreatorAnnotatedMethod.getAnnotated,
           getBeanPropertyDefinitions(
-            jsonCreatorAnnotatedMethod.getAnnotated,
             jsonCreatorAnnotatedMethod.getAnnotated.getParameters,
             jsonCreatorAnnotatedMethod,
             fromCompanion = true)
@@ -156,7 +158,6 @@ private[jackson] class CaseClassDeserializer(
             CaseClassCreator(
               jsonCreatorAnnotatedConstructor.getAnnotated,
               getBeanPropertyDefinitions(
-                jsonCreatorAnnotatedConstructor.getAnnotated,
                 jsonCreatorAnnotatedConstructor.getAnnotated.getParameters,
                 jsonCreatorAnnotatedConstructor)
             )
@@ -173,10 +174,7 @@ private[jackson] class CaseClassDeserializer(
             }
             CaseClassCreator(
               constructor.getAnnotated,
-              getBeanPropertyDefinitions(
-                constructor.getAnnotated,
-                constructor.getAnnotated.getParameters,
-                constructor)
+              getBeanPropertyDefinitions(constructor.getAnnotated.getParameters, constructor)
             )
         }
     }
@@ -311,7 +309,7 @@ private[jackson] class CaseClassDeserializer(
       parseConstructorValues(jsonParser, context, jsonNode)
     }
 
-    createAndValidate(jsonParser, context, values, errors)
+    createAndValidate(values, errors)
   }
 
   /** Return all "unknown" properties sent in the incoming JSON */
@@ -544,8 +542,6 @@ private[jackson] class CaseClassDeserializer(
   }
 
   private[this] def createAndValidate(
-    jsonParser: JsonParser,
-    context: DeserializationContext,
     constructorValues: Array[Object],
     fieldErrors: Seq[CaseClassFieldMappingException]
   ): Object = {
@@ -701,7 +697,6 @@ private[jackson] class CaseClassDeserializer(
 
   /* in order to deal with parameterized types we create a JavaType here and carry it */
   private[this] def getBeanPropertyDefinitions(
-    executable: Executable,
     parameters: Array[Parameter],
     annotatedWithParams: AnnotatedWithParams,
     fromCompanion: Boolean = false
@@ -725,12 +720,16 @@ private[jackson] class CaseClassDeserializer(
       val parameterJavaType =
         if (!javaType.getBindings.isEmpty &&
           shouldFullyDefineParameterizedType(scalaType, parameter)) {
+          // what types are bound to the generic case class parameters
+          val boundTypeParameters: Array[JavaType] =
+            parameterizedTypeNames(parameter.getParameterizedType)
+              .map(javaType.getBindings.findBoundType)
           Types
             .javaType(
               config.getTypeFactory,
               scalaType,
-              parameter.getParameterizedType.getTypeName,
-              javaType.getBindings)
+              boundTypeParameters
+            )
         } else {
           Types.javaType(config.getTypeFactory, scalaType)
         }
@@ -783,7 +782,17 @@ private[jackson] class CaseClassDeserializer(
     None
   }
 
-  /* if we need to attempt to fully specify the JavaType because it is generic */
+  // for use in mapping the case class type parameters to the current type binding
+  private[this] def parameterizedTypeNames(`type`: Type): Array[String] = `type` match {
+    case pt: ParameterizedType =>
+      pt.getActualTypeArguments.map(_.getTypeName)
+    case tv: TypeVariable[_] =>
+      Array(tv.getTypeName)
+    case _ =>
+      Array.empty
+  }
+
+  // if we need to attempt to fully specify the JavaType because it is generically types
   private[this] def shouldFullyDefineParameterizedType(
     scalaType: ScalaType,
     parameter: Parameter
@@ -791,15 +800,16 @@ private[jackson] class CaseClassDeserializer(
     // only need to fully specify if the type is parameterized and it has more than one type arg
     // or its typeArg is also parameterized.
     def isParameterized(reflectionType: Type): Boolean = reflectionType match {
-      case _: sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl |
-          _: sun.reflect.generics.reflectiveObjects.TypeVariableImpl[_] =>
+      case _: ParameterizedType | _: TypeVariable[_] =>
         true
-      case _ => false
+      case _ =>
+        false
     }
 
     val parameterizedType = parameter.getParameterizedType
     !scalaType.isPrimitive &&
-    !scalaType.isOption &&
+    (scalaType.typeArgs.isEmpty ||
+    scalaType.typeArgs.head.erasure.isAssignableFrom(classOf[Object])) &&
     parameterizedType != parameter.getType &&
     isParameterized(parameterizedType)
   }

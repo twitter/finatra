@@ -22,9 +22,13 @@ Changed
 Fixed
 ~~~~~
 
+* finatra-jackson: Fix bugs around generic case class deserialization involving other generic
+  types. Reported (with reproduction and pointers) on GitHub by @aatasiei
+  (https://github.com/twitter/finatra/issues/547). Fixes #547. ``PHAB_ID=D532768``
+
 * finatra-jackson: Fix a bug preventing JSON parsing of generic case classes, which in turn, contain
-  fields with generic case classes. Reported (with a thorough reproducer and an analysis) on Github
-  by @aatasiei (https://github.com/twitter/finatra/issues/548). ``PHAB_ID=D531452``
+  fields with generic case classes. Reported (with a thorough reproducer and an analysis) on GitHub
+  by @aatasiei (https://github.com/twitter/finatra/issues/548). Fixes #548. ``PHAB_ID=D531452``
 
 20.8.0
 ------

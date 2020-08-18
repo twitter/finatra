@@ -1,4 +1,4 @@
-package com.twitter.finatra.jackson.tests.serde
+package com.twitter.finatra.jackson.serde
 
 import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.jackson.ScalaObjectMapper

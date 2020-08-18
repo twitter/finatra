@@ -1,4 +1,4 @@
-package com.twitter.finatra.jackson.tests
+package com.twitter.finatra.jackson
 
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.{
@@ -13,7 +13,7 @@ import com.fasterxml.jackson.module.scala.{
 }
 import com.twitter.finatra.jackson.{JacksonScalaObjectMapperType, ScalaObjectMapper}
 import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassMappingException
-import com.twitter.finatra.jackson.tests.AbstractScalaObjectMapperTest.ZeroOrOneDeserializer
+import com.twitter.finatra.jackson.AbstractScalaObjectMapperTest.ZeroOrOneDeserializer
 
 class ScalaObjectMapperTest extends AbstractScalaObjectMapperTest {
   /* Class under test */

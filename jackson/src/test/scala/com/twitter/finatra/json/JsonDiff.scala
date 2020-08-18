@@ -20,7 +20,10 @@ object JsonDiff {
 
   /* Private */
 
-  private def assertJsonNodesSame(jsonDiffResultOpt: Option[JsonDiffResult], verbose: Boolean) = {
+  private def assertJsonNodesSame(
+    jsonDiffResultOpt: Option[JsonDiffResult],
+    verbose: Boolean
+  ): Unit = {
 
     jsonDiffResultOpt map { result =>
       println("JSON DIFF FAILED!")
@@ -30,7 +33,9 @@ object JsonDiff {
       }
 
       println(result.toMessage)
-      throw new TestFailedException(s"Json diff failed: \n${result.toMessage}", 1)
+      throw new TestFailedException(
+        s"Json diff failed: \n${result.toMessage}",
+        failedCodeStackDepth = 1)
     }
   }
 }

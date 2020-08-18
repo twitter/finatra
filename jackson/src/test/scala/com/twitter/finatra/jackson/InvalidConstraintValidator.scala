@@ -1,4 +1,4 @@
-package com.twitter.finatra.jackson.tests
+package com.twitter.finatra.jackson
 
 import com.twitter.finatra.validation.{ConstraintValidator, MessageResolver, ValidationResult}
 import scala.util.control.NoStackTrace

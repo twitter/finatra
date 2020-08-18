@@ -1,10 +1,10 @@
-package com.twitter.finatra.jackson.tests.caseclass
+package com.twitter.finatra.jackson.caseclass
 
 import com.twitter.finatra.jackson.caseclass.exceptions.{
   CaseClassFieldMappingException,
   CaseClassMappingException
 }
-import com.twitter.finatra.jackson.tests.{Address, Car, Person}
+import com.twitter.finatra.jackson.{Address, Car, Person}
 import com.twitter.finatra.jackson.{CarMake, ScalaObjectMapper}
 import com.twitter.finatra.validation.ValidationResult.Invalid
 import com.twitter.finatra.validation.constraints.{Min, NotEmpty}

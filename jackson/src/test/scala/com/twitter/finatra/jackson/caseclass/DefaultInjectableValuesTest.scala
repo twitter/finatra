@@ -1,10 +1,10 @@
-package com.twitter.finatra.jackson.tests.caseclass
+package com.twitter.finatra.jackson.caseclass
 
 import com.google.inject.spi.Message
 import com.google.inject.{ConfigurationException, Injector, Key}
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.caseclass.exceptions.InjectableValuesException
-import com.twitter.finatra.jackson.tests.{
+import com.twitter.finatra.jackson.{
   CaseClassInjectOptionString,
   CaseClassInjectString,
   CaseClassInjectStringWithDefault,

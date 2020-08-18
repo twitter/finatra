@@ -1,5 +1,5 @@
-package com.twitter.finatra.jackson.tests.caseclass
-import com.twitter.finatra.jackson.caseclass.Types
+package com.twitter.finatra.jackson.caseclass
+
 import com.twitter.inject.Test
 
 class TypesTest extends Test {

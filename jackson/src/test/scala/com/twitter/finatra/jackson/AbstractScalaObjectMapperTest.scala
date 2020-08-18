@@ -1,4 +1,4 @@
-package com.twitter.finatra.jackson.tests
+package com.twitter.finatra.jackson
 
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.`type`.TypeReference
@@ -22,12 +22,12 @@ import com.twitter.finatra.jackson.caseclass.exceptions.{
   CaseClassMappingException
 }
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
-import com.twitter.finatra.jackson.tests.Obj.{
+import com.twitter.finatra.jackson.Obj.{
   NestedCaseClassInObject,
   NestedCaseClassInObjectWithNestedCaseClassInObjectParam
 }
-import com.twitter.finatra.jackson.tests.TypeAndCompanion.NestedCaseClassInCompanion
-import com.twitter.finatra.jackson.tests.internal.{
+import com.twitter.finatra.jackson.TypeAndCompanion.NestedCaseClassInCompanion
+import com.twitter.finatra.jackson.internal.{
   SimplePersonInPackageObject,
   SimplePersonInPackageObjectWithoutConstructorParams
 }
@@ -193,6 +193,101 @@ abstract class AbstractScalaObjectMapperTest extends Test {
 
     // test with ScalaObjectMapper
     deserialize[Page[Person]](mapper.underlying, input) should equal(result)
+  }
+
+  // tests for GH #547
+  test("deserialization#generic types 2") {
+    val aGeneric = mapper.parse[AGeneric[B]]("""{"b":{"value":"string"}}""")
+    aGeneric.b.map(_.value) should equal(Some("string"))
+
+    val c = mapper.parse[C]("""{"a":{"b":{"value":"string"}}}""")
+    c.a.b.map(_.value) should equal(Some("string"))
+
+    val aaGeneric = mapper.parse[AAGeneric[B, Int]]("""{"b":{"value":"string"},"c":42}""")
+    aaGeneric.b.map(_.value) should equal(Some("string"))
+    aaGeneric.c.get should equal(42)
+
+    val aaGeneric2 = mapper.parse[AAGeneric[B, D]]("""{"b":{"value":"string"},"c":{"value":42}}""")
+    aaGeneric2.b.map(_.value) should equal(Some("string"))
+    aaGeneric2.c.map(_.value) should equal(Some(42))
+
+    val eGeneric =
+      mapper.parse[E[B, D, Int]]("""{"a": {"b":{"value":"string"},"c":{"value":42}}, "b":42}""")
+    eGeneric.a.b.map(_.value) should equal(Some("string"))
+    eGeneric.a.c.map(_.value) should equal(Some(42))
+    eGeneric.b should equal(Some(42))
+
+    val fGeneric =
+      mapper.parse[F[B, Int, D, AGeneric[B], Int, String]]("""
+          |{
+          |  "a":{"value":"string"},
+          |  "b":[1,2,3],
+          |  "c":{"value":42},
+          |  "d":{"b":{"value":"string"}},
+          |  "e":{"r":"forty-two"}
+          |}
+          |""".stripMargin)
+    fGeneric.a.map(_.value) should equal(Some("string"))
+    fGeneric.b should equal(Seq(1, 2, 3))
+    fGeneric.c.map(_.value) should equal(Some(42))
+    fGeneric.d.b.map(_.value) should equal(Some("string"))
+    fGeneric.e should equal(Right("forty-two"))
+
+    val fGeneric2 =
+      mapper.parse[F[B, Int, D, AGeneric[B], Int, String]]("""
+         |{
+         |  "a":{"value":"string"},
+         |  "b":[1,2,3],
+         |  "c":{"value":42},
+         |  "d":{"b":{"value":"string"}},
+         |  "e":{"l":42}
+         |}
+         |""".stripMargin)
+    fGeneric2.a.map(_.value) should equal(Some("string"))
+    fGeneric2.b should equal(Seq(1, 2, 3))
+    fGeneric2.c.map(_.value) should equal(Some(42))
+    fGeneric2.d.b.map(_.value) should equal(Some("string"))
+    fGeneric2.e should equal(Left(42))
+
+    // requires polymorphic handling with @JsonTypeInfo
+    val withTypeBounds =
+      mapper.parse[WithTypeBounds[BoundaryA]]("""
+        |{
+        |  "a": {"type":"a", "value":"Guineafowl"}
+        |}
+        |""".stripMargin)
+    withTypeBounds.a.map(_.value) should equal(Some("Guineafowl"))
+
+    // uses a specific json deserializer
+    val someNumberType = mapper.parse[SomeNumberType[java.lang.Integer]](
+      """
+        |{
+        |  "n": 42
+        |}
+        |""".stripMargin
+    )
+    someNumberType.n should equal(Some(42))
+
+    // multi-parameter non-collection type
+    val gGeneric =
+      mapper.parse[G[B, Int, D, AGeneric[B], Int, String]]("""
+          |{
+          |  "gg": {
+          |    "t":{"value":"string"},
+          |    "u":42,
+          |    "v":{"value":42},
+          |    "x":{"b":{"value":"string"}},
+          |    "y":137,
+          |    "z":"string"
+          |  }
+          |}
+          |""".stripMargin)
+    gGeneric.gg.t.value should be("string")
+    gGeneric.gg.u should equal(42)
+    gGeneric.gg.v.value should equal(42)
+    gGeneric.gg.x.b.map(_.value) should equal(Some("string"))
+    gGeneric.gg.y should equal(137)
+    gGeneric.gg.z should be("string")
   }
 
   test("JsonProperty#annotation inheritance") {

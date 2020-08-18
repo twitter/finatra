@@ -1,4 +1,4 @@
-package com.twitter.finatra.jackson.tests.caseclass
+package com.twitter.finatra.jackson.caseclass
 
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassMappingException

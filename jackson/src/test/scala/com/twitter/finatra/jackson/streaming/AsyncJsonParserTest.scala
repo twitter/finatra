@@ -1,4 +1,4 @@
-package com.twitter.finatra.jackson.tests.streaming
+package com.twitter.finatra.jackson.streaming
 
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.JsonNode

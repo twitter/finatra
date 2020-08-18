@@ -1,4 +1,4 @@
-package com.twitter.finatra.jackson.tests;
+package com.twitter.finatra.jackson;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

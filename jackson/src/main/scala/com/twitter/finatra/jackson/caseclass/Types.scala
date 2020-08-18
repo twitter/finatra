@@ -2,6 +2,7 @@ package com.twitter.finatra.jackson.caseclass
 
 import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.`type`.{ArrayType, TypeBindings, TypeFactory}
+import org.json4s.reflect.ScalaType
 
 object Types {
 
@@ -29,14 +30,14 @@ object Types {
   }
 
   /**
-   * Convert a `org.json4s.reflect.ScalaType` to a `com.fasterxml.jackson.databind.JavaType`.
+   * Convert a [[org.json4s.reflect.ScalaType]] to a [[com.fasterxml.jackson.databind.JavaType]].
    * This is used when defining the structure of a case class used in parsing JSON.
    *
    * @note order matters since Maps can be treated as collections of tuples
    */
   private[jackson] def javaType(
     typeFactory: TypeFactory,
-    scalaType: org.json4s.reflect.ScalaType
+    scalaType: ScalaType
   ): JavaType = {
     // for backwards compatibility we box primitive types
     val erasedClazzType = toScalaBoxedType(scalaType.erasure)
@@ -77,7 +78,7 @@ object Types {
   }
 
   /**
-   * Convert a `org.json4s.reflect.ScalaType` to a `com.fasterxml.jackson.databind.JavaType`
+   * Convert a [[org.json4s.reflect.ScalaType]] to a [[com.fasterxml.jackson.databind.JavaType]]
    * taking into account any parameterized types and type bindings. This is used when parsing
    * JSON into a type.
    *
@@ -85,41 +86,34 @@ object Types {
    */
   private[jackson] def javaType(
     typeFactory: TypeFactory,
-    scalaType: org.json4s.reflect.ScalaType,
-    typeName: String,
-    typeBindings: TypeBindings
+    scalaType: ScalaType,
+    typeParameters: Array[JavaType]
   ): JavaType = {
+
     if (scalaType.typeArgs.isEmpty || scalaType.erasure.isEnum) {
-      typeBindings.findBoundType(typeName) // use type name
+      typeParameters.head
     } else if (scalaType.isCollection) {
       if (scalaType.isMap) {
         typeFactory.constructMapLikeType(
           scalaType.erasure,
-          typeBindings.getBoundType(0),
-          typeBindings.getBoundType(typeBindings.size() - 1)
+          typeParameters.head,
+          typeParameters.last
         )
       } else if (scalaType.isArray) {
         // need to special-case array creation
+        // we hardcode the type to `java.util.ArrayList` to properly support Array creation
         ArrayType.construct(
-          javaType(typeFactory, scalaType.typeArgs.head, typeName, typeBindings),
-          TypeBindings
-            .create(
-              classOf[
-                java.util.ArrayList[_]
-              ], // we hardcode the type to `java.util.ArrayList` to properly support Array creation
-              typeBindings.getBoundType(0)
-            )
+          javaType(typeFactory, scalaType.typeArgs.head, typeParameters),
+          TypeBindings.create(classOf[java.util.ArrayList[_]], typeParameters.head)
         )
       } else {
         typeFactory.constructCollectionLikeType(
           scalaType.erasure,
-          typeBindings.getBoundType(0)
+          typeParameters.head
         )
       }
     } else {
-      val types: Seq[JavaType] =
-        for (idx <- 0 until typeBindings.size()) yield typeBindings.getBoundType(idx)
-      typeFactory.constructParametricType(scalaType.erasure, types: _*)
+      typeFactory.constructParametricType(scalaType.erasure, typeParameters: _*)
     }
   }
 
@@ -141,7 +135,7 @@ object Types {
   /* Create a Seq of JavaTypes from the given ScalaTypes */
   private[this] def javaTypes(
     typeFactory: TypeFactory,
-    scalaTypes: Seq[org.json4s.reflect.ScalaType]
+    scalaTypes: Seq[ScalaType]
   ): Seq[JavaType] = {
     for (scalaType <- scalaTypes) yield {
       javaType(typeFactory, scalaType)

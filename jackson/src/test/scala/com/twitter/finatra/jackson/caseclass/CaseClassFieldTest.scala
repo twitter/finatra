@@ -1,4 +1,4 @@
-package com.twitter.finatra.jackson.tests.caseclass
+package com.twitter.finatra.jackson.caseclass
 
 import com.fasterxml.jackson.annotation.{JsonIgnore, JsonProperty}
 import com.fasterxml.jackson.databind.JavaType
@@ -9,7 +9,7 @@ import com.twitter.finatra.jackson.caseclass.{
   CaseClassField,
   NullInjectableTypes
 }
-import com.twitter.finatra.jackson.tests._
+import com.twitter.finatra.jackson._
 import com.twitter.finatra.jackson.{
   JacksonScalaObjectMapperType,
   ScalaObjectMapper,

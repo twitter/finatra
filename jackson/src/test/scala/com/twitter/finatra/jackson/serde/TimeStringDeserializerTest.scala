@@ -1,4 +1,4 @@
-package com.twitter.finatra.jackson.tests.serde
+package com.twitter.finatra.jackson.serde
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.databind.ObjectMapper
