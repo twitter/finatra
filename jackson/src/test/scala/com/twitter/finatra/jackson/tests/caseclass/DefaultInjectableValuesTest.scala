@@ -12,7 +12,8 @@ import com.twitter.finatra.jackson.tests.{
   CaseClassWithManyAnnotationsFail,
   CaseClassWithManyAnnotationsThatShouldProbablyBeAcceptable
 }
-import com.twitter.inject.{Mockito, Test}
+import com.twitter.inject.Test
+import com.twitter.mock.Mockito
 import net.codingwell.scalaguice.typeLiteral
 
 class DefaultInjectableValuesTest extends Test with Mockito {

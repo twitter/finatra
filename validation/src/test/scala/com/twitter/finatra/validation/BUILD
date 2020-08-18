@@ -8,12 +8,12 @@ scala_library(
     ),
     strict_deps = True,
     dependencies = [
-        "finatra/inject/inject-core/src/test/scala:test-deps",
+        "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
         "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/validation/src/main/scala/com/twitter/finatra/validation",
     ],
     exports = [
-        "finatra/inject/inject-core/src/test/scala:test-deps",
+        "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
         "finatra/validation/src/main/scala/com/twitter/finatra/validation",
     ],
 )

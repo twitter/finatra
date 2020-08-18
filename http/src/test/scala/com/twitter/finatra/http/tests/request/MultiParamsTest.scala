@@ -5,8 +5,9 @@ import com.twitter.finagle.{http => finagle}
 import com.twitter.finagle.http.codec.HttpCodec
 import com.twitter.finatra.http.fileupload.MultipartItem
 import com.twitter.finatra.http.request.RequestUtils
-import com.twitter.inject.{Mockito, Test}
+import com.twitter.inject.Test
 import com.twitter.io.StreamIO
+import com.twitter.mock.Mockito
 import org.apache.commons.fileupload.util.FileItemHeadersImpl
 import scala.collection.JavaConverters._
 

@@ -312,7 +312,7 @@ class ErrorOnExitTwitterServer extends TwitterServer {
 
     closeOnExitLast {
       Closable.make { _ =>
-        Future.exception(throw new Exception("FORCED thrown Exception IN CLOSE ON EXIT LAST"))
+        Future.exception(new Exception("FORCED thrown Exception IN CLOSE ON EXIT LAST"))
       }
     }
   }

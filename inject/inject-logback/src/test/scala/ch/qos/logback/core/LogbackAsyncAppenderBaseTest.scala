@@ -1,5 +1,6 @@
 package ch.qos.logback.core
 
+import ch.qos.logback.classic.LoggerContext
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
 import com.twitter.inject.Test
 
@@ -13,6 +14,7 @@ class LogbackAsyncAppenderBaseTest extends Test {
     val sr = new InMemoryStatsReceiver
     val appender = TestAppender(sr)
     appender.setName("test")
+    appender.setContext(new LoggerContext())
 
     // Calling 'start' registers gauges in the stats receiver. One of these
     // gauges gets a value from the underlying 'blockingQueue'. The
@@ -23,7 +25,7 @@ class LogbackAsyncAppenderBaseTest extends Test {
     // null.
 
     assert(appender.blockingQueue == null)
-    assert(sr.gauges.size == 0)
+    assert(sr.gauges.isEmpty)
 
     appender.start()
 

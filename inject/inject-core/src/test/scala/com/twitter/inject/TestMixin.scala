@@ -5,17 +5,18 @@ import java.nio.charset.{StandardCharsets => JChar}
 import java.util.TimeZone
 import com.twitter.io.StreamIO
 import org.joda.time.DateTimeZone
-import org.scalatest._
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Suite, SuiteMixin}
+import org.scalatest.matchers.should.Matchers
 
 /**
  * Testing trait which provides the following stackable modification traits:
  *  - [[org.scalatest.BeforeAndAfterAll]]
  *  - [[org.scalatest.BeforeAndAfterEach]]
- *  - [[org.scalatest.Matchers]]
+ *  - [[org.scalatest.matchers.should.Matchers]]
  *  - [[com.twitter.inject.Logging]]
  *
  * This trait is expected to be mixed with a class that extends a core Suite trait,
- * e.g., [[org.scalatest.FunSuite]].
+ * e.g., [[org.scalatest.funsuite.AnyFunSuite]].
  *
  * While you can use this mixin directly, it is recommended that users extend
  * the [[com.twitter.inject.Test]] abstract class.
@@ -99,12 +100,12 @@ trait TestMixin
 
   /**
    * Asserts the resultant value of two [[Future]] executions are equivalent
-   * using [[org.scalatest.Matchers]].
+   * using [[org.scalatest.matchers.should.Matchers]].
    *
    * @param result the actual [[Future]]
    * @param expected the expected [[Future]]
    *
-   * @see [[org.scalatest.Matchers]]
+   * @see [[org.scalatest.matchers.should.Matchers]]
    * @see [[com.twitter.inject.TestMixin.await]]
    * @see [[com.twitter.inject.TestMixin.defaultAwaitTimeout]]
    */
@@ -114,7 +115,7 @@ trait TestMixin
 
   /**
    * Asserts the resultant value of the given [[Future]] is equivalent to the give
-   * expected value using [[org.scalatest.Matchers]].
+   * expected value using [[org.scalatest.matchers.should.Matchers]].
    *
    * @param result the actual [[Future]]
    * @param expected the expected value

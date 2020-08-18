@@ -111,40 +111,44 @@ class AppendTestHttpServerFeatureTest extends Test {
       disableTestLogging = true
     )
 
-    val inMemoryStatsReceiver: InMemoryStatsReceiver = server.inMemoryStatsReceiver
-    val loggerCtx: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
-    testWithAppender(inMemoryStatsReceiver, loggerCtx) { appender: TestLogbackAsyncAppender =>
-      val appenderStatName = appender.getName.toLowerCase
+    try {
+      val inMemoryStatsReceiver: InMemoryStatsReceiver = server.inMemoryStatsReceiver
+      val loggerCtx: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
+      testWithAppender(inMemoryStatsReceiver, loggerCtx) { appender: TestLogbackAsyncAppender =>
+        val appenderStatName = appender.getName.toLowerCase
 
-      server.assertHealthy()
-      server.httpGet("/log_events")
+        server.assertHealthy()
 
-      server.inMemoryStats.counters
-        .assert(s"logback/appender/$appenderStatName/events/discarded/debug", 5)
+        server.inMemoryStats.gauges.assert(
+          s"logback/appender/$appenderStatName/discard/threshold",
+          appender.getDiscardingThreshold)
+        server.inMemoryStats.gauges
+          .assert(s"logback/appender/$appenderStatName/max_flush_time", appender.getMaxFlushTime)
+        server.inMemoryStats.gauges
+          .assert(s"logback/appender/$appenderStatName/queue_size", appender.getQueueSize)
 
-      val infoCount = server.inMemoryStats.counters
-        .toSortedMap(s"logback/appender/$appenderStatName/events/discarded/info")
+        server.inMemoryStatsReceiver.clear()
+        server.httpGet("/log_events")
 
-      // this is sometimes 5 and sometimes 6 because startup sometimes logs a message that
-      // gets discarded in this test. however, it's non-deterministic.
-      assert(infoCount == 5 || infoCount == 6)
-      server.inMemoryStats.counters
-        .assert(s"logback/appender/$appenderStatName/events/discarded/trace", 5)
-      server.inMemoryStats.counters
-        .get(s"logback/appender/$appenderStatName/events/discarded/warn") should be(None)
-      server.inMemoryStats.counters
-        .get(s"logback/appender/$appenderStatName/events/discarded/error") should be(None)
+        server.inMemoryStats.counters
+          .assert(s"logback/appender/$appenderStatName/events/discarded/debug", 5)
 
-      server.inMemoryStats.gauges.assert(
-        s"logback/appender/$appenderStatName/discard/threshold",
-        appender.getDiscardingThreshold)
-      server.inMemoryStats.gauges
-        .assert(s"logback/appender/$appenderStatName/max_flush_time", appender.getMaxFlushTime)
-      server.inMemoryStats.gauges
-        .assert(s"logback/appender/$appenderStatName/queue_size", appender.getQueueSize)
+        val infoCount = server.inMemoryStats.counters
+          .toSortedMap(s"logback/appender/$appenderStatName/events/discarded/info")
+
+        // this is sometimes 5 and sometimes 6 because startup sometimes logs a message that
+        // gets discarded in this test. however, it's non-deterministic.
+        assert(infoCount == 5 || infoCount == 6)
+        server.inMemoryStats.counters
+          .assert(s"logback/appender/$appenderStatName/events/discarded/trace", 5)
+        server.inMemoryStats.counters
+          .get(s"logback/appender/$appenderStatName/events/discarded/warn") should be(None)
+        server.inMemoryStats.counters
+          .get(s"logback/appender/$appenderStatName/events/discarded/error") should be(None)
+      }
+    } finally {
+      server.close()
     }
-
-    server.close()
   }
 
   test("Assert ERROR AND WARN events are discarded when neverBlock is true") {
@@ -153,49 +157,66 @@ class AppendTestHttpServerFeatureTest extends Test {
       disableTestLogging = true
     )
 
-    val inMemoryStatsReceiver: InMemoryStatsReceiver = server.inMemoryStatsReceiver
-    val loggerCtx: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
-    val consoleAppenderQueue = new java.util.concurrent.LinkedBlockingQueue[ILoggingEvent](1)
+    try {
+      val inMemoryStatsReceiver: InMemoryStatsReceiver = server.inMemoryStatsReceiver
+      val loggerCtx: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
+      val consoleAppenderQueue = new java.util.concurrent.LinkedBlockingQueue[ILoggingEvent](1)
 
-    testWithAppender(
-      inMemoryStatsReceiver,
-      loggerCtx,
-      Some(consoleAppenderQueue),
-      neverBlock = true
-    ) { appender: TestLogbackAsyncAppender =>
-      val appenderStatName = appender.getName.toLowerCase
+      testWithAppender(
+        inMemoryStatsReceiver,
+        loggerCtx,
+        Some(consoleAppenderQueue),
+        neverBlock = true
+      ) { appender: TestLogbackAsyncAppender =>
+        val appenderStatName = appender.getName.toLowerCase
 
-      server.assertHealthy()
-      server.httpGet("/log_events")
+        server.assertHealthy()
 
-      server.inMemoryStats.counters
-        .assert(s"logback/appender/$appenderStatName/events/discarded/error", 5)
-      server.inMemoryStats.counters
-        .assert(s"logback/appender/$appenderStatName/events/discarded/warn", 5)
-      server.inMemoryStats.counters
-        .assert(s"logback/appender/$appenderStatName/events/discarded/debug", 5)
-      val infoCount = server.inMemoryStats.counters
-        .toSortedMap(s"logback/appender/$appenderStatName/events/discarded/info")
+        server.inMemoryStats.gauges.assert(
+          s"logback/appender/$appenderStatName/discard/threshold",
+          appender.getDiscardingThreshold)
+        server.inMemoryStats.gauges
+          .assert(s"logback/appender/$appenderStatName/max_flush_time", appender.getMaxFlushTime)
+        server.inMemoryStats.gauges
+          .assert(s"logback/appender/$appenderStatName/queue_size", appender.getQueueSize)
 
-      // this is sometimes 5 and sometimes 6 because startup sometimes logs a message that
-      // gets discarded in this test. however, it's non-deterministic.
-      assert(infoCount == 5 || infoCount == 6)
-      server.inMemoryStats.counters
-        .assert(s"logback/appender/$appenderStatName/events/discarded/trace", 5)
+        server.inMemoryStatsReceiver.clear()
+        server.httpGet("/log_events")
 
-      server.inMemoryStats.gauges.assert(
-        s"logback/appender/$appenderStatName/discard/threshold",
-        appender.getDiscardingThreshold)
-      server.inMemoryStats.gauges
-        .assert(s"logback/appender/$appenderStatName/max_flush_time", appender.getMaxFlushTime)
-      server.inMemoryStats.gauges
-        .assert(s"logback/appender/$appenderStatName/queue_size", appender.getQueueSize)
+        server.inMemoryStats.counters
+          .assert(s"logback/appender/$appenderStatName/events/discarded/trace", 5)
 
-      // no events make it to the unit test console appender
-      consoleAppenderQueue.size() should equal(0)
+        val errorCount = server.inMemoryStats.counters
+          .toSortedMap(s"logback/appender/$appenderStatName/events/discarded/error")
+        // this is sometimes 5 and sometimes 6 because startup sometimes logs a message that
+        // gets discarded in this test. however, it's non-deterministic.
+        assert(errorCount == 5 || errorCount == 6)
+
+        val warnCount =
+          server.inMemoryStats.counters
+            .toSortedMap(s"logback/appender/$appenderStatName/events/discarded/warn")
+        // this is sometimes 5 and sometimes 6 because startup sometimes logs a message that
+        // gets discarded in this test. however, it's non-deterministic.
+        assert(warnCount == 5 || warnCount == 6)
+
+        val debugCount = server.inMemoryStats.counters
+          .toSortedMap(s"logback/appender/$appenderStatName/events/discarded/debug")
+        // this is sometimes 5 and sometimes 6 because startup sometimes logs a message that
+        // gets discarded in this test. however, it's non-deterministic.
+        assert(debugCount == 5 || debugCount == 6)
+
+        val infoCount = server.inMemoryStats.counters
+          .toSortedMap(s"logback/appender/$appenderStatName/events/discarded/info")
+        // this is sometimes 5 and sometimes 6 because startup sometimes logs a message that
+        // gets discarded in this test. however, it's non-deterministic.
+        assert(infoCount == 5 || infoCount == 6)
+
+        // no events make it to the unit test console appender
+        consoleAppenderQueue.size() should equal(0)
+      }
+    } finally {
+      server.close()
     }
-
-    server.close()
   }
 
   protected def testWithAppender(

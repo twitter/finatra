@@ -7,11 +7,12 @@ import com.twitter.inject.conversions.map._
 import com.twitter.util.Duration
 import java.io.{ByteArrayOutputStream, PrintStream}
 import java.nio.charset.StandardCharsets
-import org.scalatest.{Assertion, Matchers}
+import org.scalatest.Assertion
 import org.scalatest.concurrent.{Eventually, PatienceConfiguration}
 import org.scalatest.time.{Millis, Span}
 import scala.collection.{SortedMap, SortedSet}
 import scala.collection.JavaConverters._
+import org.scalatest.matchers.should.Matchers
 
 object InMemoryStatsReceiverUtility {
   def apply(injector: Injector): InMemoryStatsReceiverUtility = {

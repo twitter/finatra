@@ -7,7 +7,7 @@ import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.streams.TopologyTestDriver
 import org.apache.kafka.streams.test.ConsumerRecordFactory
 import org.joda.time.{DateTime, DateTimeUtils}
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 
 /**
  * Used to read/write from Kafka topics in the topology tester.

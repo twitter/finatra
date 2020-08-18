@@ -8,7 +8,8 @@ import com.twitter.finagle.{Failure, Service}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.filters.StatsFilter
 import com.twitter.finatra.http.response.{DefaultResponseBuilder, HttpResponseClassifier}
-import com.twitter.inject.{Mockito, Test}
+import com.twitter.inject.Test
+import com.twitter.mock.Mockito
 import com.twitter.util.{Await, Future, Return, Throw}
 
 class StatsFilterTest extends Test with Mockito {

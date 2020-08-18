@@ -3,8 +3,8 @@ package com.twitter.finatra.http.tests.request
 import com.twitter.finagle.http.{Fields, HeaderMap, Request}
 import com.twitter.finatra.http.exceptions.{BadRequestException, NotAcceptableException}
 import com.twitter.finatra.http.request.{ContentType, RequestUtils}
-import com.twitter.inject.{Mockito, Test}
-import java.net.URI
+import com.twitter.inject.Test
+import com.twitter.mock.Mockito
 
 class RequestUtilsTest extends Test with Mockito {
   val host = "www.twitter.com"
@@ -22,7 +22,7 @@ class RequestUtilsTest extends Test with Mockito {
   }
 
   test("throw BadRequestException when missing host header for pathUrl") {
-    val request = smartMock[Request]
+    val request = mock[Request]
     request.headerMap returns HeaderMap()
     request.host returns None
 
@@ -32,7 +32,7 @@ class RequestUtilsTest extends Test with Mockito {
   }
 
   test("pathUrl with slash") {
-    val request = smartMock[Request]
+    val request = mock[Request]
     request.headerMap returns HeaderMap()
     request.host returns Some("www.foo.com")
     request.path returns "/part/next/end/"
@@ -42,7 +42,7 @@ class RequestUtilsTest extends Test with Mockito {
   }
 
   test("respondTo */* content type in request when no accept header is sent") {
-    val request = smartMock[Request]
+    val request = mock[Request]
     request.headerMap returns HeaderMap()
 
     val response = RequestUtils.respondTo(request) {
@@ -53,7 +53,7 @@ class RequestUtilsTest extends Test with Mockito {
   }
 
   test("respondTo text/html content-type in request") {
-    val request = smartMock[Request]
+    val request = mock[Request]
     request.headerMap returns HeaderMap(Fields.Accept -> ContentType.HTML.toString)
 
     val response = RequestUtils.respondTo(request) {
@@ -65,7 +65,7 @@ class RequestUtilsTest extends Test with Mockito {
   }
 
   test("respondTo application/json content-type in request") {
-    val request = smartMock[Request]
+    val request = mock[Request]
     request.headerMap returns HeaderMap(Fields.Accept -> ContentType.JSON.toString)
 
     val response = RequestUtils.respondTo(request) {
@@ -77,7 +77,7 @@ class RequestUtilsTest extends Test with Mockito {
   }
 
   test("return NotAcceptableException for request") {
-    val request = smartMock[Request]
+    val request = mock[Request]
     // accept application/json
     request.headerMap returns HeaderMap(Fields.Accept -> ContentType.JSON.toString)
 

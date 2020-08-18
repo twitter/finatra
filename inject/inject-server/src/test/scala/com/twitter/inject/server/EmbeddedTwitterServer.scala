@@ -25,10 +25,10 @@ import com.twitter.util.{
 import java.lang.annotation.Annotation
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.ConcurrentLinkedQueue
-import org.scalatest.Matchers
 import scala.collection.JavaConverters._
 import scala.collection.SortedMap
 import scala.util.control.NonFatal
+import org.scalatest.matchers.should.Matchers
 
 object EmbeddedTwitterServer {
   private def resolveFlags(useSocksProxy: Boolean, flags: Map[String, String]) = {

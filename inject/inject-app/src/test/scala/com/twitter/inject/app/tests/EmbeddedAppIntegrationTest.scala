@@ -1,8 +1,9 @@
 package com.twitter.inject.app.tests
 
 import com.google.inject.Module
-import com.twitter.inject.{Logging, Mockito, Test, TwitterModule}
+import com.twitter.inject.{Logging, Test, TwitterModule}
 import com.twitter.inject.app.{App, EmbeddedApp}
+import com.twitter.mock.Mockito
 import javax.inject.Inject
 
 class EmbeddedAppIntegrationTest extends Test with Mockito {

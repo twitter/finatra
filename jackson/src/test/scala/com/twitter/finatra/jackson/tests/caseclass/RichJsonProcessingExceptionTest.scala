@@ -10,7 +10,8 @@ import com.fasterxml.jackson.databind.exc.{
 }
 import com.twitter.finatra.jackson.caseclass.exceptions._
 import com.twitter.finatra.jackson.tests.CaseClassWithAllTypes
-import com.twitter.inject.{Mockito, Test}
+import com.twitter.inject.Test
+import com.twitter.mock.Mockito
 import java.util
 import java.util.Collections
 

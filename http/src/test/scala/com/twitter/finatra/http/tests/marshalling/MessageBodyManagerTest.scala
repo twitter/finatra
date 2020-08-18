@@ -12,7 +12,8 @@ import com.twitter.finatra.jackson.caseclass.exceptions.InjectableValuesExceptio
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.inject.app.TestInjector
-import com.twitter.inject.{Injector, Mockito, Test}
+import com.twitter.inject.{Injector, Test}
+import com.twitter.mock.Mockito
 import javax.inject.Inject
 
 private object MessageBodyManagerTest {

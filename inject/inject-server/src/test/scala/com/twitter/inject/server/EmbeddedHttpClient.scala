@@ -8,7 +8,7 @@ import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.inject.server.PortUtils.loopbackAddressForPort
 import com.twitter.util.{Await, Closable, Duration, Future, Stopwatch, Time}
 import java.util.concurrent.TimeUnit.MILLISECONDS
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 
 private[twitter] object EmbeddedHttpClient {
   def normalizeURL(path: String): String = {

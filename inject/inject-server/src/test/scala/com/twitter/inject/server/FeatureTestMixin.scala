@@ -10,7 +10,7 @@ import scala.util.control.NonFatal
  * with a test-defined [[com.twitter.inject.server.EmbeddedTwitterServer]] or subclass thereof.
  *
  * This trait is expected to be mixed with a class that extends a core Suite trait,
- * e.g., [[org.scalatest.FunSuite]].
+ * e.g., [[org.scalatest.funsuite.AnyFunSuite]].
  *
  * While you can use this mixin directly, it is recommended that users extend
  * the [[com.twitter.inject.server.FeatureTest]] abstract class.

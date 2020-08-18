@@ -7,7 +7,7 @@ import org.scalatest.{Suite, SuiteMixin}
  * utilities for Integration testing with a test-defined [[com.twitter.inject.Injector]].
  *
  * This trait is expected to be mixed with a class that extends a core Suite trait,
- * e.g., [[org.scalatest.FunSuite]].
+ * e.g., [[org.scalatest.funsuite.AnyFunSuite]].
  *
  * While you can use this mixin directly, it is recommended that users extend
  * the [[com.twitter.inject.IntegrationTest]] abstract class.

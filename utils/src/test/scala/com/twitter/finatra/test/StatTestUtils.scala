@@ -1,7 +1,7 @@
 package com.twitter.finatra.test
 
 import com.twitter.finagle.stats.InMemoryStatsReceiver
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 
 object StatTestUtils extends Matchers {
 

@@ -20,10 +20,9 @@ import org.apache.kafka.test.{
   NoOpRecordCollector,
   TestUtils
 }
-import org.hamcrest.{BaseMatcher, Description}
-import org.mockito.{Matchers, Mockito}
+import org.mockito.{ArgumentMatcher, ArgumentMatchers, Mockito}
 
-class FinatraTransformerTest extends Test with com.twitter.inject.Mockito {
+class FinatraTransformerTest extends Test with com.twitter.mock.Mockito {
   val firstMessageTimestamp = 100000
   val firstKey = "key1"
   val firstValue = "value1"
@@ -40,7 +39,7 @@ class FinatraTransformerTest extends Test with com.twitter.inject.Mockito {
         }
       }
 
-    val context = smartMock[ProcessorContext]
+    val context = mock[ProcessorContext]
     context.taskId() returns new TaskId(0, 0)
     context.timestamp returns firstMessageTimestamp
 
@@ -103,19 +102,15 @@ class FinatraTransformerTest extends Test with com.twitter.inject.Mockito {
   ): Unit = {
     org.mockito.Mockito
       .verify(context)
-      .forward(meq(firstKey), meq(firstValue), matchTo(firstMessageTimestamp - 1))
+      .forward(eqTo(firstKey), eqTo(firstValue), matchTo(firstMessageTimestamp - 1))
   }
 
   private def matchTo(expectedTimestamp: Int): To = {
-    Matchers.argThat(new BaseMatcher[To] {
-      override def matches(to: scala.Any): Boolean = {
+    ArgumentMatchers.argThat(new ArgumentMatcher[To] {
+      override def matches(to: To): Boolean = {
         val toInternal = new ToInternal
-        toInternal.update(to.asInstanceOf[To])
+        toInternal.update(to)
         toInternal.timestamp() == expectedTimestamp
-      }
-
-      override def describeTo(description: Description): Unit = {
-        description.appendText(s"To(timestamp = $expectedTimestamp)")
       }
     })
   }

@@ -4,7 +4,7 @@ import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
 import com.twitter.inject.server.InMemoryStatsReceiverUtility
 import com.twitter.inject.{Injector, Logging}
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 
 @deprecated("Use com.twitter.inject.server.InMemoryStatsReceiverUtility", "2019-05-17")
 object InMemoryStatsUtil {

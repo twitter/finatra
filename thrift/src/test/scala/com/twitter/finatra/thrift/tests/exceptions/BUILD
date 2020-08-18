@@ -5,8 +5,8 @@ scala_library(
     dependencies = [
         "3rdparty/jvm/javax/inject:javax.inject",
         "finagle/finagle-core/src/main",
-        "finatra/inject/inject-app:test-deps",
-        "finatra/inject/inject-core/src/test/scala:test-deps",
+        "finatra/inject/inject-app/src/test/scala/com/twitter/inject/app",
+        "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift:controller",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/exceptions",

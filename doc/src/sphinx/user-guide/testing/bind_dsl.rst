@@ -22,15 +22,15 @@ test.
 
     import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
     import com.twitter.inject.server.FeatureTest
-    import com.twitter.inject.Mockito
+    import com.twitter.mock.Mockito
 
     class ExampleFeatureTest
       extends FeatureTest
       with Mockito
       with HttpTest {
 
-      private val mockDownstreamServiceClient = smartMock[DownstreamServiceClient]
-      private val mockIdService = smartMock[IdService]
+      private val mockDownstreamServiceClient = mock[DownstreamServiceClient]
+      private val mockIdService = mock[IdService]
 
       override val server =
         new EmbeddedHttpServer(new ExampleServer)
@@ -51,12 +51,13 @@ Note this is also available for `EmbeddedApp <https://github.com/twitter/finatra
 .. code:: scala
 
     import com.twitter.finagle.stats.InMemoryStatsReceiver
-    import com.twitter.inject.{Mockito, Test}
+    import com.twitter.inject.Test
     import com.twitter.inject.app.EmbeddedApp
+    import com.twitter.mock.Mockito
 
     class MyAppTest extends Test with Mockito {
       private val inMemoryStatsReceiver: InMemoryStatsReceiver = new InMemoryStatsReceiver
-      private val mockIdService = smartMock[IdService]
+      private val mockIdService = mock[IdService]
 
       // build an EmbeddedApp
       def app(): EmbeddedApp = app(new MyApp)
@@ -89,7 +90,7 @@ E.g.,
     import com.twitter.inject.IntegrationTest
 
     class ExampleIntegrationTest extends IntegrationTest {
-      val mockIdService = smartMock[IdService]
+      val mockIdService = mock[IdService]
 
       override val injector =
         TestInjector(

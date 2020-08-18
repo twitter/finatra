@@ -12,8 +12,9 @@ import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.conversions.buf._
 import com.twitter.inject.modules.StatsReceiverModule
-import com.twitter.inject.{Injector, IntegrationTest, Mockito}
+import com.twitter.inject.{Injector, IntegrationTest}
 import com.twitter.io.{Buf, BufReader, Reader}
+import com.twitter.mock.Mockito
 import com.twitter.util.Future
 import scala.concurrent.{Future => ScalaFuture}
 

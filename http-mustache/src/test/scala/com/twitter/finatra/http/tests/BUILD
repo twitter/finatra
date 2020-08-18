@@ -15,7 +15,7 @@ junit_tests(
         "finatra/http/src/main/scala/com/twitter/finatra/http/marshalling",
         "finatra/http/src/test/scala/com/twitter/finatra/http",
         "finatra/httpclient/src/main/scala",
-        "finatra/inject/inject-core/src/test/scala:test-deps",
+        "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
         "finatra/mustache/src/main/scala/com/twitter/finatra/mustache/marshalling",
         "finatra/mustache/src/main/scala/com/twitter/finatra/mustache/modules",
         "finatra/utils/src/main/scala/com/twitter/finatra/modules",

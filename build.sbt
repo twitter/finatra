@@ -87,7 +87,6 @@ lazy val versions = new {
   val twLibVersion = releaseVersion
 
   val agrona = "0.9.22"
-  val bijectionCore = "0.9.5"
   val commonsFileupload = "1.4"
   val fastutil = "8.1.1"
   val guice = "4.2.3"
@@ -99,7 +98,7 @@ lazy val versions = new {
   val kafka = "2.2.0"
   val libThrift = "0.10.0"
   val logback = "1.2.3"
-  val mockito = "1.9.5"
+  val mockitoScala = "1.14.8"
   val mustache = "0.8.18"
   val nscalaTime = "2.14.0"
   val rocksdbjni = "5.14.2"
@@ -107,11 +106,9 @@ lazy val versions = new {
   val scalaGuice = "4.2.11"
   val scalaTest = "3.1.2"
   val scalaTestPlusJunit = "3.1.2.0"
-  val scalaTestPlusMockito = "3.1.0.0"
   val scalaTestPlusScalaCheck = "3.1.2.0"
   val slf4j = "1.7.30"
   val snakeyaml = "1.24"
-  val specs2 = "2.4.17"
   val javaxBind = "2.3.0"
   val javaxActivation = "1.1.1"
 }
@@ -131,18 +128,17 @@ lazy val scalaCompilerOptions = scalacOptions ++= Seq(
   "-Ywarn-unused-import"
 )
 
-lazy val baseSettings = Seq(
+lazy val testDependenciesSettings = Seq(
   libraryDependencies ++= Seq(
-    "org.mockito" % "mockito-core" % versions.mockito % Test,
+    "junit" % "junit" % versions.junit, // used by Java tests & org.junit.runner.RunWith annotation on c.t.inject.Test
     "org.scalacheck" %% "scalacheck" % versions.scalaCheck % Test,
     "org.scalatest" %% "scalatest" % versions.scalaTest % Test,
     "org.scalatestplus" %% "junit-4-12" % versions.scalaTestPlusJunit % Test,
-    "org.scalatestplus" %% "mockito-1-10" % versions.scalaTestPlusMockito % Test,
-    "org.scalatestplus" %% "scalacheck-1-14" % versions.scalaTestPlusScalaCheck % Test,
-    "org.specs2" %% "specs2-core" % versions.specs2 % Test,
-    "org.specs2" %% "specs2-junit" % versions.specs2 % Test,
-    "org.specs2" %% "specs2-mock" % versions.specs2 % Test
-  ),
+    "org.scalatestplus" %% "scalacheck-1-14" % versions.scalaTestPlusScalaCheck % Test
+  )
+)
+
+lazy val baseSettings = Seq(
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
     Resolver.sonatypeRepo("snapshots")
@@ -227,9 +223,11 @@ lazy val publishSettings = Seq(
   }.taskValue
 )
 
-lazy val projectSettings = baseSettings ++ buildSettings ++ publishSettings ++ Seq(
+lazy val projectSettingNoTestDependencies = baseSettings ++ buildSettings ++ publishSettings ++ Seq(
   organization := "com.twitter"
 )
+
+lazy val projectSettings = projectSettingNoTestDependencies ++ testDependenciesSettings
 
 lazy val baseServerSettings = baseSettings ++ buildSettings ++ publishSettings ++ Seq(
   organization := "com.twitter",
@@ -360,13 +358,9 @@ lazy val injectCoreTestJarSources =
   Seq(
     "com/twitter/inject/IntegrationTest",
     "com/twitter/inject/IntegrationTestMixin",
-    "com/twitter/inject/Mockito",
     "com/twitter/inject/PoolUtils",
-    "com/twitter/inject/Resettable",
     "com/twitter/inject/Test",
-    "com/twitter/inject/TestMixin",
-    "com/twitter/inject/TwitterTestModule",
-    "org/specs2/matcher/ScalaTestExpectations"
+    "com/twitter/inject/TestMixin"
   )
 lazy val injectCore = (project in file("inject/inject-core"))
   .settings(projectSettings)
@@ -487,6 +481,7 @@ lazy val injectApp = (project in file("inject/inject-app"))
     libraryDependencies ++= Seq(
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "com.twitter" %% "finagle-core" % versions.twLibVersion % Test,
+      "com.twitter" %% "util-mock" % versions.twLibVersion % Test,
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "org.slf4j" % "slf4j-api" % versions.slf4j,
       // -------- BEGIN: slf4j-api logging bridges -------------------------------
@@ -646,6 +641,7 @@ lazy val injectThrift = (project in file("inject/inject-thrift"))
       "com.twitter" %% "finagle-mux" % versions.twLibVersion,
       "com.twitter" %% "scrooge-core" % versions.twLibVersion,
       "com.twitter" %% "util-core" % versions.twLibVersion,
+      "com.twitter" %% "util-mock" % versions.twLibVersion % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
@@ -1342,7 +1338,8 @@ lazy val scalaInjectableTwitterServer =
       name := "scala-twitter-server",
       moduleName := "scala-twitter-server",
       libraryDependencies ++= Seq(
-        "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal",
+        "com.twitter" %% "util-mock" % versions.twLibVersion % Test,
+        "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
       )
     ).dependsOn(
       injectServer % "test->test;compile->compile",
@@ -1467,6 +1464,7 @@ lazy val twitterClone = (project in file("examples/advanced/twitter-clone"))
     moduleName := "twitter-clone",
     ScoverageKeys.coverageExcludedPackages := "<empty>;finatra\\.quickstart\\..*",
     libraryDependencies ++= Seq(
+      "com.twitter" %% "util-mock" % versions.twLibVersion % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(

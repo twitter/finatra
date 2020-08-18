@@ -6,7 +6,8 @@ junit_tests(
         "3rdparty/jvm/org/scalatestplus:junit",
         "3rdparty/jvm/org/slf4j:slf4j-simple",
         "finatra/examples/injectable-twitter-server/scala/src/main/scala/com/twitter/finatra/example",
-        "finatra/inject/inject-core/src/test/scala:test-deps",
+        "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
         "finatra/inject/inject-server/src/test/scala/com/twitter/inject/server",
+        "util/util-mock/src/main/scala/com/twitter/mock",
     ],
 )

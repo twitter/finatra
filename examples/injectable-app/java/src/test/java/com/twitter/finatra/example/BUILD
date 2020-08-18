@@ -9,7 +9,7 @@ junit_tests(
         "finatra/examples/injectable-app/java/src/main/java/com/twitter/finatra/example",
         "finatra/inject/inject-app/src/main/scala",
         "finatra/inject/inject-app/src/test/scala/com/twitter/inject/app",
-        "finatra/inject/inject-server/src/main/scala",
+        "finatra/inject/inject-server/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-server/src/test/scala/com/twitter/inject/server",
         "twitter-server/server/src/main/scala",
     ],

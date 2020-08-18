@@ -7,7 +7,7 @@ junit_tests(
         "3rdparty/jvm/org/slf4j:slf4j-nop",
         "finatra/examples/benchmark/src/main/scala",
         "finatra/http/src/test/scala/com/twitter/finatra/http",
-        "finatra/inject/inject-core/src/test/scala:test-deps",
-        "finatra/inject/inject-server/src/main/scala",
+        "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
+        "finatra/inject/inject-server/src/main/scala/com/twitter/inject/server",
     ],
 )

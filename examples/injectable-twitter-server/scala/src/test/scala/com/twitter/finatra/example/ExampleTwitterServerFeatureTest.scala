@@ -1,6 +1,6 @@
 package com.twitter.finatra.example
 
-import com.twitter.inject.Mockito
+import com.twitter.mock.Mockito
 import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest}
 import org.scalatest.concurrent.Eventually
 

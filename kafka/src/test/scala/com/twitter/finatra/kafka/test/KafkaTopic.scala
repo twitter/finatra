@@ -13,10 +13,10 @@ import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig, Produce
 import org.apache.kafka.common.header.Header
 import org.apache.kafka.common.serialization.{ByteArrayDeserializer, ByteArraySerializer, Serde}
 import org.apache.kafka.streams.integration.utils.EmbeddedKafkaCluster
-import org.scalatest.Matchers
 import org.slf4j.event.Level
 import scala.collection.JavaConverters._
 import scala.util.control.NonFatal
+import org.scalatest.matchers.should.Matchers
 
 /**
  * Used to read/write from Kafka topics created on local brokers during testing.

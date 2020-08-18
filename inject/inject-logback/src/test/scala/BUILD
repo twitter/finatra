@@ -23,7 +23,7 @@ junit_tests(
         "finatra/http/src/main/scala/com/twitter/finatra/http/routing",
         "finatra/http/src/main/scala/com/twitter/finatra/http/streaming",
         "finatra/http/src/test/scala/com/twitter/finatra/http",
-        "finatra/inject/inject-core/src/test/scala:test-deps",
+        "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
         "finatra/inject/inject-logback/src/main/scala",
         "util/util-stats/src/main/scala",
     ],

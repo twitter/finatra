@@ -14,7 +14,7 @@ import com.twitter.finatra.http.tests.integration.doeverything.main.services.DoE
 import com.twitter.finatra.http.{EmbeddedHttpServer, RouteHint}
 import com.twitter.finatra.httpclient.{HttpClient, RequestBuilder}
 import com.twitter.finatra.json.JsonDiff._
-import com.twitter.inject.Mockito
+import com.twitter.mock.Mockito
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.{Buf, StreamIO}
 import com.twitter.util.{Future, Time}
@@ -47,7 +47,7 @@ object DoEverythingServerFeatureTest {
 }
 
 class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
-  val httpClient: HttpClient = smartMock[HttpClient]
+  val httpClient: HttpClient = mock[HttpClient]
 
   override val server: EmbeddedHttpServer = new EmbeddedHttpServer(
     args = Array("-magicNum=1", "-moduleMagicNum=2", "-moduleString=nondefault"),

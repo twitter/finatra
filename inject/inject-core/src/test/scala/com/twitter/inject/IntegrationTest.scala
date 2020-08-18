@@ -1,7 +1,7 @@
 package com.twitter.inject
 
 /**
- * Extensible abstract test class which uses the [[org.scalatest.FunSuite]] ScalaTest
+ * Extensible abstract test class which uses the [[org.scalatest.funsuite.AnyFunSuite]] ScalaTest
  * style and mixes in the [[com.twitter.inject.IntegrationTestMixin]] trait.
  *
  * Example usage:
@@ -24,7 +24,7 @@ package com.twitter.inject
  *   }
  * }}}
  *
- * @see [[org.scalatest.FunSuite FunSuite]]
+ * @see [[org.scalatest.funsuite.AnyFunSuite AnyFunSuite]]
  * @see [[com.twitter.inject.Test Finatra Test Class]]
  * @see [[com.twitter.inject.IntegrationTestMixin Finatra IntegrationTestMixin]]
  */

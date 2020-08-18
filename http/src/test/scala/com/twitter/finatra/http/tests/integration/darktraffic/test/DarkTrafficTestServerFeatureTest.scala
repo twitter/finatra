@@ -3,7 +3,7 @@ package com.twitter.finatra.http.tests.integration.darktraffic.test
 import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.tests.integration.darktraffic.main.DarkTrafficTestServer
-import com.twitter.inject.Mockito
+import com.twitter.mock.Mockito
 import com.twitter.inject.server.{FeatureTest, PortUtils}
 import org.scalatest.concurrent.Eventually._
 

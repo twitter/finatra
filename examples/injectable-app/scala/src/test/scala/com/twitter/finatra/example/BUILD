@@ -7,6 +7,6 @@ junit_tests(
         "3rdparty/jvm/org/slf4j:slf4j-nop",
         "finatra/examples/injectable-app/scala/src/main/scala/com/twitter/finatra/example",
         "finatra/inject/inject-app/src/test/scala/com/twitter/inject/app",
-        "finatra/inject/inject-core/src/test/scala:test-deps",
+        "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
     ],
 )

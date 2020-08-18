@@ -6,9 +6,10 @@ import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.filters.ExceptionMappingFilter
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
-import com.twitter.inject.{Mockito, Test}
+import com.twitter.inject.Test
+import com.twitter.mock.Mockito
 import com.twitter.util.Future
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 
 class BeforeRoutingFilterIntegrationTest extends Test with Mockito {
 

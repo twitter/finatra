@@ -17,7 +17,7 @@ scala_library(
         "finagle/finagle-thriftmux/src/main/scala",
         "finatra/inject/inject-ports/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-server/src/main/scala/com/twitter/inject/server",
-        "finatra/inject/inject-server/src/test/scala:test-deps",
+        "finatra/inject/inject-server/src/test/scala/com/twitter/inject/server",
         "twitter-server/server/src/main/scala",
         "util/util-stats/src/main/scala",
     ],

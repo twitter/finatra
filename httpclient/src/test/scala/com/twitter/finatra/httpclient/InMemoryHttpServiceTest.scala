@@ -5,7 +5,8 @@ import com.twitter.finatra.httpclient.test.{
   InMemoryHttpService,
   PostRequestWithIncorrectBodyException
 }
-import com.twitter.inject.{Mockito, Test}
+import com.twitter.inject.Test
+import com.twitter.mock.Mockito
 import com.twitter.util.Await
 
 class InMemoryHttpServiceTest extends Test with Mockito {
