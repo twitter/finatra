@@ -360,7 +360,8 @@ lazy val injectCoreTestJarSources =
     "com/twitter/inject/IntegrationTestMixin",
     "com/twitter/inject/PoolUtils",
     "com/twitter/inject/Test",
-    "com/twitter/inject/TestMixin"
+    "com/twitter/inject/TestMixin",
+    "com/twitter/inject/WhenReadyMixin"
   )
 lazy val injectCore = (project in file("inject/inject-core"))
   .settings(projectSettings)
