@@ -7,11 +7,11 @@ import com.twitter.inject.Test
 
 class BenchmarkFeatureTest extends Test {
 
-  val finatraServer = new EmbeddedHttpServer(
+  private[this] val finatraServer = new EmbeddedHttpServer(
     new FinatraBenchmarkServer,
     flags = Map("http.response.charset.enabled" -> "false")
   )
-  val finagleServer = new EmbeddedHttpServer(new FinagleBenchmarkServer)
+  private[this] val finagleServer = new EmbeddedHttpServer(new FinagleBenchmarkServer)
 
   test("Benchmark#Servers") {
     assertServers(
@@ -34,7 +34,7 @@ class BenchmarkFeatureTest extends Test {
     withContentType: String,
     withBody: String,
     withContentLength: Int
-  ) = {
+  ): Unit = {
 
     assertHeaders(
       withContentType,
@@ -56,7 +56,7 @@ class BenchmarkFeatureTest extends Test {
     server: String,
     contentLength: Int,
     response: Response
-  ) = {
+  ): Unit = {
     response.headerMap.size should equal(4)
     response.headerMap.contains("Date")
     response.headerMap("Server") should equal(server)
@@ -64,7 +64,7 @@ class BenchmarkFeatureTest extends Test {
     response.headerMap("Content-Length") should equal(contentLength.toString)
   }
 
-  override protected def afterAll() = {
+  override protected def afterAll(): Unit = {
     super.afterAll()
     finagleServer.close()
     finatraServer.close()
