@@ -22,6 +22,9 @@ Changed
 Fixed
 ~~~~~
 
+* inject-server: Ensure `Awaiter.any` does not try to block on an empty list of Awaitables. Add
+  tests. ``PHAB_ID=D537727``
+
 * finatra-jackson: Fix bugs around generic case class deserialization involving other generic
   types. Reported (with reproduction and pointers) on GitHub by @aatasiei
   (https://github.com/twitter/finatra/issues/547). Fixes #547. ``PHAB_ID=D532768``
