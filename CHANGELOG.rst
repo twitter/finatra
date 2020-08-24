@@ -13,6 +13,8 @@ Added
 * thrift: `JavaThriftRouter` now allows mounting controllers by value (as opposed to via DI).
   ``PHAB_ID=D528659``
 
+* finatra-kafka: Expose delivery timeout duration in KafkaProducerConfig. ``PHAB_ID=D535761``
+
 Changed
 ~~~~~~~
 
