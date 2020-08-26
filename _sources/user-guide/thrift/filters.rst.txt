@@ -9,7 +9,7 @@ Filtering Thrift Requests
 - provides for psuedo "Common Log Format" style logging for Thrift requests and responses.
 
 `c.t.inject.thrift.filters.DarkTrafficFilter <https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/filters/DarkTrafficFilter.scala>`__ |rarrow|
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - An implementation of `com.twitter.finagle.exp.AbstractDarkTrafficFilter <https://github.com/twitter/finagle/blob/develop/finagle-exp/src/main/scala/com/twitter/finagle/exp/AbstractDarkTrafficFilter.scala>`__ which extends `com.twitter.finagle.Filter.TypeAgnostic <https://github.com/twitter/finagle/blob/afb191ab8eda132197dd2679cd614fc968767fc4/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala#L295>`__ and thus works in a Finatra `ThriftRouter <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/routing/routers.scala#L128Z>`__ Filter chain.
 

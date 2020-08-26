@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Explicit Binding with #bind[T] &#8212; Finatra 20.8.0 documentation</title>
+    <title>Explicit Binding with #bind[T] &#8212; Finatra 20.8.1 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '20.8.0',
+        VERSION:     '20.8.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -83,15 +83,15 @@ function on the embedded server.</p>
 test.</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
 import com.twitter.inject.server.FeatureTest
-import com.twitter.inject.Mockito
+import com.twitter.mock.Mockito
 
 class ExampleFeatureTest
   extends FeatureTest
   with Mockito
   with HttpTest {
 
-  private val mockDownstreamServiceClient = smartMock[DownstreamServiceClient]
-  private val mockIdService = smartMock[IdService]
+  private val mockDownstreamServiceClient = mock[DownstreamServiceClient]
+  private val mockIdService = mock[IdService]
 
   override val server =
     new EmbeddedHttpServer(new ExampleServer)
@@ -109,12 +109,13 @@ class ExampleFeatureTest
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/examples/advanced/twitter-clone/src/test/scala/finatra/quickstart/TwitterCloneFeatureTest.scala">TwitterCloneFeatureTest</a>.</p>
 <p>Note this is also available for <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala">EmbeddedApp</a> as well:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.stats.InMemoryStatsReceiver
-import com.twitter.inject.{Mockito, Test}
+import com.twitter.inject.Test
 import com.twitter.inject.app.EmbeddedApp
+import com.twitter.mock.Mockito
 
 class MyAppTest extends Test with Mockito {
   private val inMemoryStatsReceiver: InMemoryStatsReceiver = new InMemoryStatsReceiver
-  private val mockIdService = smartMock[IdService]
+  private val mockIdService = mock[IdService]
 
   // build an EmbeddedApp
   def app(): EmbeddedApp = app(new MyApp)
@@ -144,7 +145,7 @@ a mock or stub.</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.IntegrationTest
 
 class ExampleIntegrationTest extends IntegrationTest {
-  val mockIdService = smartMock[IdService]
+  val mockIdService = mock[IdService]
 
   override val injector =
     TestInjector(

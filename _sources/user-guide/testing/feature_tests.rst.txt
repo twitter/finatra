@@ -579,7 +579,7 @@ implementations to use. Then in tests we could do:
 
 .. code:: scala
 
-    import com.twitter.inject.Mockito
+    import com.twitter.mock.Mockito
 
     class MyServiceFirstFeatureTest extends BaseMyServiceFeatureTest with Mockito {
       override val foo: Foo = mock[Foo]
@@ -651,7 +651,7 @@ For example, we could extend our defined "base" testing trait to include test ca
 
 .. code:: scala
 
-    import com.twitter.inject.Mockito
+    import com.twitter.mock.Mockito
     import com.twitter.inject.server.FeatureTest
     import com.twitter.finatra.http.EmbeddedHttpServer
     import scala.collection.immutable.ListMap
