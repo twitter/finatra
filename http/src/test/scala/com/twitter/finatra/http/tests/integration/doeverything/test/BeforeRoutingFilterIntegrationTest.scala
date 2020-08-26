@@ -1,14 +1,14 @@
 package com.twitter.finatra.http.tests.integration.doeverything.test
 
-import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finagle.http.{Request, Response, Status}
+import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.filters.ExceptionMappingFilter
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
 import com.twitter.inject.Test
-import com.twitter.mock.Mockito
 import com.twitter.util.Future
+import com.twitter.util.mock.Mockito
 import org.scalatest.matchers.should.Matchers
 
 class BeforeRoutingFilterIntegrationTest extends Test with Mockito {

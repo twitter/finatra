@@ -8,8 +8,8 @@ import com.twitter.inject.annotations.{Annotations, Down, Flag, Flags, Up}
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.{InMemoryStatsReceiverModule, LoggerModule, StatsReceiverModule}
 import com.twitter.inject.{Injector, Test, TwitterModule}
-import com.twitter.mock.Mockito
 import com.twitter.util.Future
+import com.twitter.util.mock.Mockito
 import javax.inject.{Inject, Singleton}
 import scala.language.higherKinds
 

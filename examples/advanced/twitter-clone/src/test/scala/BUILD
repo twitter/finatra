@@ -17,6 +17,6 @@ junit_tests(
         "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
         "finatra/inject/inject-server/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-server/src/test/scala/com/twitter/inject/server",
-        "util/util-mock/src/main/scala/com/twitter/mock",
+        "util/util-mock/src/main/scala/com/twitter/util/mock",
     ],
 )

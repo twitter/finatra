@@ -2,11 +2,11 @@ package com.twitter.finatra.http.tests.integration.multiserver.test
 
 import com.twitter.finagle.http.{Request, Status}
 import com.twitter.finatra.http.tests.integration.multiserver.add2server.Add2Server
-import com.twitter.finatra.http.{HttpMockResponses, EmbeddedHttpServer}
+import com.twitter.finatra.http.{EmbeddedHttpServer, HttpMockResponses}
 import com.twitter.finatra.httpclient.HttpClient
-import com.twitter.mock.Mockito
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.Future
+import com.twitter.util.mock.Mockito
 
 class Add2ServerFeatureTest extends FeatureTest with Mockito with HttpMockResponses {
 

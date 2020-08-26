@@ -68,7 +68,7 @@ junit_tests(
         "util/util-app/src/main/scala",
         "util/util-lint/src/main/scala",
         "util/util-logging/src/main/scala",
-        "util/util-mock/src/main/scala/com/twitter/mock",
+        "util/util-mock/src/main/scala/com/twitter/util/mock",
         "util/util-stats/src/main/scala",
     ],
 )

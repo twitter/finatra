@@ -2,18 +2,18 @@ package com.twitter.finatra.http.tests.marshalling
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finagle.http.{Fields, MediaType, Message, Request, Response}
-import com.twitter.finatra.http.{Prod, TestMessageBodyWriterAnn}
 import com.twitter.finatra.http.annotations.{Header, QueryParam}
 import com.twitter.finatra.http.marshalling._
 import com.twitter.finatra.http.modules.MessageBodyModule
 import com.twitter.finatra.http.tests.integration.json.CaseClassWithBoolean
+import com.twitter.finatra.http.{Prod, TestMessageBodyWriterAnn}
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.caseclass.exceptions.InjectableValuesException
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.{Injector, Test}
-import com.twitter.mock.Mockito
+import com.twitter.util.mock.Mockito
 import javax.inject.Inject
 
 private object MessageBodyManagerTest {

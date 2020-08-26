@@ -80,6 +80,6 @@ junit_tests(
         "finatra/kafka/src/main/java",
         "finatra/kafka/src/test/scala:test-deps",
         "finatra/thrift/src/test/scala/com/twitter/finatra/thrift",
-        "util/util-mock/src/main/scala/com/twitter/mock",
+        "util/util-mock/src/main/scala/com/twitter/util/mock",
     ],
 )

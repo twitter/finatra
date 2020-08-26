@@ -4,7 +4,7 @@ import com.twitter.finagle.http.{Fields, HeaderMap, Request}
 import com.twitter.finatra.http.exceptions.{BadRequestException, NotAcceptableException}
 import com.twitter.finatra.http.request.{ContentType, RequestUtils}
 import com.twitter.inject.Test
-import com.twitter.mock.Mockito
+import com.twitter.util.mock.Mockito
 
 class RequestUtilsTest extends Test with Mockito {
   val host = "www.twitter.com"

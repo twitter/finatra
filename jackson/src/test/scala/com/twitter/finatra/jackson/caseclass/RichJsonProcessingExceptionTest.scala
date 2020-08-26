@@ -8,10 +8,10 @@ import com.fasterxml.jackson.databind.exc.{
   InvalidDefinitionException,
   MismatchedInputException
 }
-import com.twitter.finatra.jackson.caseclass.exceptions._
 import com.twitter.finatra.jackson.CaseClassWithAllTypes
+import com.twitter.finatra.jackson.caseclass.exceptions._
 import com.twitter.inject.Test
-import com.twitter.mock.Mockito
+import com.twitter.util.mock.Mockito
 import java.util
 import java.util.Collections
 

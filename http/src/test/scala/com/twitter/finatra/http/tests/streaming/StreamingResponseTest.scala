@@ -8,9 +8,9 @@ import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.utils.FileResolver
 import com.twitter.inject.Test
-import com.twitter.mock.Mockito
 import com.twitter.io.{Buf, BufReader, Reader, StreamTermination}
 import com.twitter.util.Future
+import com.twitter.util.mock.Mockito
 import java.nio.charset.StandardCharsets
 
 class StreamingResponseTest extends Test with Mockito {

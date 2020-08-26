@@ -1,7 +1,7 @@
 package com.twitter.finatra.example
 
-import com.twitter.mock.Mockito
 import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest}
+import com.twitter.util.mock.Mockito
 import org.scalatest.concurrent.Eventually
 
 // c.t.inject.server.FeatureTest will close the server

@@ -22,7 +22,7 @@ Changed
 ~~~~~~~
 
 * inject-core: Remove deprecated `com.twitter.inject.Mockito` trait. Users are encouraged to
-  switch to the `com.twitter.mock.Mockito` trait from util/util-mock. ``PHAB_ID=D529174``
+  switch to the `com.twitter.util.mock.Mockito` trait from util/util-mock. ``PHAB_ID=D529174``
 
 Fixed
 ~~~~~

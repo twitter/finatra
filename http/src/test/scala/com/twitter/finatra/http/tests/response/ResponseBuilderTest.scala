@@ -14,7 +14,7 @@ import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.finatra.modules.FileResolverFlags
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.{Injector, IntegrationTest}
-import com.twitter.mock.Mockito
+import com.twitter.util.mock.Mockito
 import java.io.{File, FileWriter}
 
 class ResponseBuilderTest extends IntegrationTest with Mockito {

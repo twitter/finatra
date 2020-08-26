@@ -2,18 +2,10 @@ package com.twitter.finatra.jackson.caseclass
 
 import com.google.inject.spi.Message
 import com.google.inject.{ConfigurationException, Injector, Key}
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.caseclass.exceptions.InjectableValuesException
-import com.twitter.finatra.jackson.{
-  CaseClassInjectOptionString,
-  CaseClassInjectString,
-  CaseClassInjectStringWithDefault,
-  CaseClassTooManyInjectableAnnotations,
-  CaseClassWithManyAnnotationsFail,
-  CaseClassWithManyAnnotationsThatShouldProbablyBeAcceptable
-}
+import com.twitter.finatra.jackson._
 import com.twitter.inject.Test
-import com.twitter.mock.Mockito
+import com.twitter.util.mock.Mockito
 import net.codingwell.scalaguice.typeLiteral
 
 class DefaultInjectableValuesTest extends Test with Mockito {

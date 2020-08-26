@@ -4,9 +4,9 @@ import com.twitter.adder.thriftscala.Adder
 import com.twitter.finagle.http.Status
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.multiserver.Add1HttpServer.Add1Server
-import com.twitter.mock.Mockito
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.Future
+import com.twitter.util.mock.Mockito
 
 class Add1ServerFeatureTest extends FeatureTest with Mockito {
 

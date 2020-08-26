@@ -2,9 +2,9 @@ package finatra.quickstart
 
 import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.mock.Mockito
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.Future
+import com.twitter.util.mock.Mockito
 import finatra.quickstart.domain.TweetId
 import finatra.quickstart.domain.http.{TweetLocation, TweetResponse}
 import finatra.quickstart.firebase.FirebaseClient

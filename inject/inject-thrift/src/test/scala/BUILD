@@ -17,7 +17,7 @@ junit_tests(
         "finatra/inject/inject-utils/src/main/scala",
         "scrooge/scrooge-core/src/main/scala",
         "util/util-core:scala",
-        "util/util-mock/src/main/scala/com/twitter/mock",
+        "util/util-mock/src/main/scala/com/twitter/util/mock",
         "util/util-slf4j-api/src/main/scala",
     ],
 )

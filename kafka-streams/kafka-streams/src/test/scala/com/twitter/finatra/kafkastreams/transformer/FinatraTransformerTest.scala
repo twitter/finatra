@@ -22,7 +22,7 @@ import org.apache.kafka.test.{
 }
 import org.mockito.{ArgumentMatcher, ArgumentMatchers, Mockito}
 
-class FinatraTransformerTest extends Test with com.twitter.mock.Mockito {
+class FinatraTransformerTest extends Test with com.twitter.util.mock.Mockito {
   val firstMessageTimestamp = 100000
   val firstKey = "key1"
   val firstValue = "value1"

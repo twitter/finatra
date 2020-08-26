@@ -14,8 +14,8 @@ import com.twitter.inject.conversions.buf._
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.{Injector, IntegrationTest}
 import com.twitter.io.{Buf, BufReader, Reader}
-import com.twitter.mock.Mockito
 import com.twitter.util.Future
+import com.twitter.util.mock.Mockito
 import scala.concurrent.{Future => ScalaFuture}
 
 object CallbackConverterIntegrationTest {
