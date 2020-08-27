@@ -27,7 +27,7 @@ The most common way to obtain the |MustacheService|_ is from the injector.
 `MustacheFactoryModule`
 -----------------------
 
-To do so you will need to include the |MustacheFactoryModule|_ in the list of 
+To do so, you will need to include the |MustacheFactoryModule|_ in the list of 
 modules passed to create the injector. This module provides a correctly configured 
 `MustacheFactory` which the |MustacheService|_ uses. E.g.,
 
@@ -46,8 +46,12 @@ modules passed to create the injector. This module provides a correctly configur
 `Mustache <https://mustache.github.io/>`__ templates are resolved by Finatra's
 |FileResolver|_.
 
-By default, files are loaded from the classpath root. To configure a classpath "namespace" for loading mustache templates, 
-set the `-mustache.templates.dir` flag which is defined by the |MustacheFactoryModule|_.
+By default, files are loaded from the classpath root. To configure a classpath "namespace" for loading mustache templates, set the `-mustache.templates.dir` flag which is defined by the |MustacheFactoryModule|_.
+
+.. admonition:: Mustache templates are loaded from `/templates` by default.
+
+    The framework default "namespace" for Mustache templates is `/templates`, meaning the framework will try to resolve file `file.mustache` as `/templates/file.mustache`. To change this, set the `-mustache.templates.dir` flag to a different value. See: the Flag documentation `here <../getting-started/flags.html#passing-flag-values-as-command-line-arguments>`__ for information on setting flag values.
+
 
 Local filesystem
 ----------------
@@ -59,15 +63,20 @@ the |MustacheFactoryModule|_ will load templates from the local filesystem and t
 Note, that the interplay between the `mustache.temaplates.dir` and the `local.doc.root` flags is as follows:
 
 -  in "local file mode" (e.g., when the `-local.doc.root` flag is set to a **non-empty** value) the framework will 
-   try to load a template first from the absolute path under `mustache.templates.dir`
+   try to load a template first from the absolute path under `mustache.templates.dir`, e.g.,
+
+   .. code:: bash 
+
+      /${mustache.templates.dir}/template.mustache
+
 -  if the template is not found, it will then be loaded from a location of `mustache.templates.dir` relative to 
-   the specified `-local.doc.root`, value e.g,
+   the specified `-local.doc.root`, value e.g.,
 
    .. code:: bash 
 
       /${local.doc.root}/${mustache.templates.dir}/template.mustache
 
-.. important::
+.. warning::
 
     It is **not recommended** that you set the `-local.doc.root` in a production environment, but
     rather load templates as classpath resources.
