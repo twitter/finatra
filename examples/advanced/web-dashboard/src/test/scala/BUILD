@@ -8,7 +8,10 @@ junit_tests(
         "3rdparty/jvm/net/codingwell:scala-guice",
         "3rdparty/jvm/org/scalatest",
         "3rdparty/jvm/org/scalatestplus:junit",
-        "3rdparty/jvm/org/slf4j:slf4j-simple",
+        scoped(
+            "3rdparty/jvm/org/slf4j:slf4j-simple",
+            scope = "runtime",
+        ),
         "finatra/examples/advanced/web-dashboard/src/main/scala",
         "finatra/http/src/test/scala/com/twitter/finatra/http",
         "finatra/inject/inject-server/src/main/scala/com/twitter/inject/server",

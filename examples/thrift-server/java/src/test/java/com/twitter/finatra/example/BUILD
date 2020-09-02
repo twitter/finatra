@@ -5,7 +5,10 @@ junit_tests(
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/junit",
         "3rdparty/jvm/org/scalatestplus:junit",
-        "3rdparty/jvm/org/slf4j:slf4j-simple",
+        scoped(
+            "3rdparty/jvm/org/slf4j:slf4j-simple",
+            scope = "runtime",
+        ),
         "finagle/finagle-thrift/src/main/scala",
         "finatra/examples/thrift-server/idl/src/main/thrift:thrift-java",
         "finatra/examples/thrift-server/java/src/main/java/com/twitter/finatra/example",

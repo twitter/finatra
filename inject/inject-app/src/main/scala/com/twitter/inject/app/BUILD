@@ -11,9 +11,15 @@ target(
         # -------- BEGIN: slf4j-api logging bridges -------------------------------
         # Add the slf4j-api logging bridges to ensure that any dependents
         # of the library have bridges on their classpath at runtime.
-        "3rdparty/jvm/org/slf4j:jcl-over-slf4j",
+        scoped(
+            "3rdparty/jvm/org/slf4j:jcl-over-slf4j",
+            scope = "runtime",
+        ),
         "3rdparty/jvm/org/slf4j:jul-to-slf4j",
-        "3rdparty/jvm/org/slf4j:log4j-over-slf4j",
+        scoped(
+            "3rdparty/jvm/org/slf4j:log4j-over-slf4j",
+            scope = "runtime",
+        ),
         # -------- END: slf4j-api logging bridges ---------------------------------
     ],
 )
@@ -28,7 +34,10 @@ scala_library(
     ),
     strict_deps = True,
     dependencies = [
-        ":logging-bridges",
+        scoped(
+            ":logging-bridges",
+            scope = "runtime",
+        ),
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",

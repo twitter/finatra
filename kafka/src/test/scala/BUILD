@@ -11,7 +11,10 @@ junit_tests(
         "3rdparty/jvm/org/apache/zookeeper:zookeeper-server",
         "3rdparty/jvm/org/mockito:mockito-core",
         "3rdparty/jvm/org/scalatestplus:junit",
-        "3rdparty/jvm/org/slf4j:slf4j-simple",
+        scoped(
+            "3rdparty/jvm/org/slf4j:slf4j-simple",
+            scope = "runtime",
+        ),
         "finatra/inject/inject-modules/src/test/scala/com/twitter/inject/modules",
         "finatra/jackson/src/test/scala/com/twitter/finatra/json",
         "finatra/kafka/src/main/java",

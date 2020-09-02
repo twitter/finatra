@@ -2,7 +2,10 @@ junit_tests(
     sources = ["**/*.scala"],
     dependencies = [
         "3rdparty/jvm/org/scalatestplus:junit",
-        "3rdparty/jvm/org/slf4j:slf4j-nop",
+        scoped(
+            "3rdparty/jvm/org/slf4j:slf4j-nop",
+            scope = "runtime",
+        ),
         "finagle/finagle-base-http/src/main",
         "finatra/http-annotations/src/main/java/com/twitter/finatra/http/annotations",
         "finatra/http-mustache/src/main/java/com/twitter/finatra/http/annotations",

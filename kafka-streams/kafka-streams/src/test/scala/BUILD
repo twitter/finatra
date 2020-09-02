@@ -66,7 +66,10 @@ junit_tests(
         "3rdparty/jvm/org/mockito:mockito-core",
         "3rdparty/jvm/org/scalatestplus:junit",
         "3rdparty/jvm/org/scalatestplus:scalacheck",
-        "3rdparty/jvm/org/slf4j:slf4j-simple",
+        scoped(
+            "3rdparty/jvm/org/slf4j:slf4j-simple",
+            scope = "runtime",
+        ),
         "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app",
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-core/src/test/scala/com/twitter/inject",

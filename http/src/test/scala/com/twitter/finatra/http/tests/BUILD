@@ -18,7 +18,10 @@ junit_tests(
         "3rdparty/jvm/org/scala-lang/modules:scala-xml",
         "3rdparty/jvm/org/scalatest",
         "3rdparty/jvm/org/scalatestplus:junit",
-        "3rdparty/jvm/org/slf4j:slf4j-simple",
+        scoped(
+            "3rdparty/jvm/org/slf4j:slf4j-simple",
+            scope = "runtime",
+        ),
         "finagle/finagle-http/src/main/scala",
         "finatra/http/src/main/java/com/twitter/finatra/http",
         "finatra/http/src/main/java/com/twitter/finatra/http/jsonpatch",

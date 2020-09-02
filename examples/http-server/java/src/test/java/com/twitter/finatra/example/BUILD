@@ -5,7 +5,10 @@ junit_tests(
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/junit",
         "3rdparty/jvm/org/scalatestplus:junit",
-        "3rdparty/jvm/org/slf4j:slf4j-simple",
+        scoped(
+            "3rdparty/jvm/org/slf4j:slf4j-simple",
+            scope = "runtime",
+        ),
         "finagle/finagle-base-http/src/main",
         "finatra/examples/http-server/java/src/main/java/com/twitter/finatra/example",
         "finatra/http/src/test/scala/com/twitter/finatra/http",

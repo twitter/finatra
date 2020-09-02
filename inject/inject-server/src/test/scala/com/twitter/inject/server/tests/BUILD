@@ -11,7 +11,10 @@ junit_tests(
         "3rdparty/jvm/org/scalatest",
         "3rdparty/jvm/org/scalatestplus:junit",
         "3rdparty/jvm/org/slf4j:slf4j-api",
-        "3rdparty/jvm/org/slf4j:slf4j-simple",
+        scoped(
+            "3rdparty/jvm/org/slf4j:slf4j-simple",
+            scope = "runtime",
+        ),
         "finagle/finagle-core/src/main",
         "finagle/finagle-http/src/main/scala",
         "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app",
