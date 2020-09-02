@@ -2,10 +2,8 @@ package com.twitter.finatra.kafka.producers
 
 import com.twitter.finagle.context.Contexts
 import com.twitter.finagle.filter.PayloadSizeFilter.ClientReqTraceKey
-import com.twitter.finagle.server.ServerInfo
 import com.twitter.finagle.tracing._
 import com.twitter.finagle.{Dtab, Init}
-import com.twitter.finatra.kafka
 import com.twitter.inject.Logging
 import java.util.Properties
 import java.util.concurrent.Future
@@ -18,6 +16,7 @@ import org.apache.kafka.clients.producer.{
 }
 import org.apache.kafka.common.serialization.Serializer
 import scala.collection.JavaConverters._
+import com.twitter.finatra.kafka.tracingEnabled
 
 object TracingKafkaProducer {
 
@@ -71,8 +70,6 @@ object TracingKafkaProducer {
   ): TracingKafkaProducer[K, V] = {
     new TracingKafkaProducer(configs.asScala.toMap, keySerializer, valueSerializer)
   }
-
-  private val TracingEnabledToggle = kafka.Toggles(kafka.TracingEnabledToggleId)
 }
 
 /**
@@ -104,9 +101,9 @@ class TracingKafkaProducer[K, V](
   import TracingKafkaProducer._
 
   override def send(record: ProducerRecord[K, V], callback: Callback): Future[RecordMetadata] = {
+    val shouldTrace = tracingEnabled()
     withTracing { trace =>
-      val tracingEnabled = TracingEnabledToggle(ServerInfo().id.hashCode())
-      if (trace.isActivelyTracing && tracingEnabled) {
+      if (trace.isActivelyTracing && shouldTrace) {
         info(s"Tracing producer record with trace id: ${trace.id}")
         addSendTraceAnnotations(trace, record)
         try {
@@ -122,7 +119,7 @@ class TracingKafkaProducer[K, V](
         record,
         new Callback { // kept for sbt compatibility
           override def onCompletion(metadata: RecordMetadata, exception: Exception): Unit = {
-            if (trace.isActivelyTracing && tracingEnabled) {
+            if (trace.isActivelyTracing && shouldTrace) {
               addReceiveTraceAnnotations(trace, metadata, exception)
             }
             if (callback != null) {

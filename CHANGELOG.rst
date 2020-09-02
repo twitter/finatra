@@ -10,6 +10,9 @@ Unreleased
 Changed
 ~~~~~~~
 
+* kafka: Replaced the `com.twitter.finatra.kafka.TracingEnabled` toggle with a GlobalFlag enabling
+  Zipkin tracing for Kafka clients. ``PHAB_ID=D525274``
+
 * finatra: Bump version of Jackson to 2.11.2. ``PHAB_ID=D538440``
 
   20.8.1

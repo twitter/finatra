@@ -5,7 +5,6 @@ import com.twitter.finagle.Init
 import com.twitter.finagle.context.Contexts
 import com.twitter.finagle.filter.PayloadSizeFilter.ClientReqTraceKey
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finagle.toggle.flag
 import com.twitter.finagle.tracing.Annotation.BinaryAnnotation
 import com.twitter.finagle.tracing.{Annotation, Record, Trace, TraceId, Tracer}
 import com.twitter.finatra.kafka.domain.AckMode
@@ -17,6 +16,7 @@ import com.twitter.finatra.kafka.producers.TracingKafkaProducer.{
 }
 import com.twitter.finatra.kafka.producers.{FinagleKafkaProducerBuilder, TracingKafkaProducer}
 import com.twitter.finatra.kafka.serde.ScalaSerdes
+import com.twitter.finatra.kafka.tracingEnabled
 import com.twitter.finatra.kafkastreams.test.KafkaStreamsMultiServerFeatureTest
 import com.twitter.inject.server.EmbeddedTwitterServer
 import java.util.concurrent.TimeUnit
@@ -61,7 +61,7 @@ class TracingServerTest extends KafkaStreamsMultiServerFeatureTest {
     val tracer = new RecordingTracer(true, Some(true))
     val producerTraceId = Trace.nextId.copy(_sampled = Some(true))
 
-    flag.overrides.let("com.twitter.finatra.kafka.TracingEnabled", 1.0) {
+    tracingEnabled.let(true) {
       Trace.letTracer(tracer) {
         val server = createServer
         server.start()

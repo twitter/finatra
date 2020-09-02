@@ -1,11 +1,10 @@
 package com.twitter.finatra.kafka.consumers
 
 import com.twitter.finagle.filter.PayloadSizeFilter.ClientRepTraceKey
-import com.twitter.finagle.server.ServerInfo
 import com.twitter.finagle.tracing._
 import com.twitter.finagle.{Dtab, Init}
-import com.twitter.finatra.kafka
 import com.twitter.finatra.kafka.producers.TracingKafkaProducer.TraceIdHeader
+import com.twitter.finatra.kafka.tracingEnabled
 import com.twitter.inject.Logging
 import com.twitter.util.{Return, Throw}
 import java.time.Duration
@@ -74,8 +73,6 @@ object TracingKafkaConsumer {
   ): TracingKafkaConsumer[K, V] =
     new TracingKafkaConsumer(configs.asScala.toMap, keyDeserializer, valueDeserializer)
 
-  private val TracingEnabledToggle = kafka.Toggles(kafka.TracingEnabledToggleId)
-
   private val TraceIdSampled = Some(true)
 
   private val TraceIdIsDebug = (traceId: TraceId) => traceId.flags.isDebug
@@ -107,7 +104,7 @@ class TracingKafkaConsumer[K, V](
 
   override def poll(timeout: Duration): ConsumerRecords[K, V] = {
     val records = super.poll(timeout)
-    if (!records.isEmpty && TracingEnabledToggle(ServerInfo().id.hashCode)) {
+    if (!records.isEmpty && tracingEnabled()) {
       val scalaRecords: Iterable[ConsumerRecord[K, V]] = records.asScala
       // Will only trace if the producer trace id is sampled or has debug flag set to true
       val sampledTraceIds = extractSampledTraceIds(scalaRecords)

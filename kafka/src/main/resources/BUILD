@@ -1,6 +1,0 @@
-resources(
-    sources = [
-        "!BUILD*",
-        "**/*",
-    ],
-)

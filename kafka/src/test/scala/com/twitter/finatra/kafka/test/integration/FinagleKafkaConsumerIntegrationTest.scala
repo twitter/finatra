@@ -3,7 +3,6 @@ package com.twitter.finatra.kafka.test.integration
 import com.twitter.finagle.Init
 import com.twitter.finagle.context.Contexts
 import com.twitter.finagle.filter.PayloadSizeFilter.{ClientRepTraceKey, ClientReqTraceKey}
-import com.twitter.finagle.toggle.flag
 import com.twitter.finagle.tracing.Annotation.BinaryAnnotation
 import com.twitter.finagle.tracing.{Annotation, Flags, NullTracer, Record, Trace, TraceId}
 import com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.{
@@ -26,6 +25,7 @@ import com.twitter.finatra.kafka.producers.{
   TracingKafkaProducer
 }
 import com.twitter.finatra.kafka.test.EmbeddedKafka
+import com.twitter.finatra.kafka.tracingEnabled
 import com.twitter.util.{Duration, Time}
 import java.util.concurrent.TimeUnit
 import org.apache.kafka.clients.consumer.{KafkaConsumer, OffsetResetStrategy}
@@ -244,7 +244,7 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
     val producerTraceId = Trace.nextId
     val nullTracer = spy(new NullTracer())
 
-    flag.overrides.let(com.twitter.finatra.kafka.TracingEnabledToggleId, 1.0) {
+    tracingEnabled.let(true) {
       Trace.letTracer(nullTracer) {
         val producer = buildNativeTestProducer()
         val consumer = buildNativeTestConsumer(OffsetResetStrategy.EARLIEST)
@@ -276,7 +276,7 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
     val nullTracer = spy(new NullTracer())
     when(nullTracer.isActivelyTracing(any[TraceId])).thenReturn(true)
 
-    flag.overrides.let(com.twitter.finatra.kafka.TracingEnabledToggleId, 0.0) {
+    tracingEnabled.let(false) {
       Trace.letTracer(nullTracer) {
         val producer = buildNativeTestProducer()
         val consumer = buildNativeTestConsumer(OffsetResetStrategy.EARLIEST)
@@ -303,10 +303,10 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
   }
 
   private def testConsumerTracing(producerTraceId: TraceId): Unit = {
-    val traceRecordsCaptor = ArgumentCaptor.forClass(classOf[Record])
+    val traceRecordsCaptor: ArgumentCaptor[Record] = ArgumentCaptor.forClass(classOf[Record])
     val nullTracer = spy(new NullTracer())
 
-    flag.overrides.let(com.twitter.finatra.kafka.TracingEnabledToggleId, 1.0) {
+    tracingEnabled.let(true) {
       Trace.letTracer(nullTracer) {
         val producer = buildNativeTestProducer()
         val consumer = buildNativeTestConsumer(OffsetResetStrategy.EARLIEST)
