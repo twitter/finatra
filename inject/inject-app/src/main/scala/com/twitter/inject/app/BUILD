@@ -5,21 +5,14 @@
 # we add these here.
 target(
     name = "logging-bridges",
-    scope = "runtime",
     tags = ["logging_impl_check_whitelisted_target"],
     dependencies = [
         # -------- BEGIN: slf4j-api logging bridges -------------------------------
         # Add the slf4j-api logging bridges to ensure that any dependents
         # of the library have bridges on their classpath at runtime.
-        scoped(
-            "3rdparty/jvm/org/slf4j:jcl-over-slf4j",
-            scope = "runtime",
-        ),
+        "3rdparty/jvm/org/slf4j:jcl-over-slf4j",
         "3rdparty/jvm/org/slf4j:jul-to-slf4j",
-        scoped(
-            "3rdparty/jvm/org/slf4j:log4j-over-slf4j",
-            scope = "runtime",
-        ),
+        "3rdparty/jvm/org/slf4j:log4j-over-slf4j",
         # -------- END: slf4j-api logging bridges ---------------------------------
     ],
 )
