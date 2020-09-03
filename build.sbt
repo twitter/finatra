@@ -100,7 +100,7 @@ lazy val versions = new {
   val logback = "1.2.3"
   val mockitoScala = "1.14.8"
   val mustache = "0.8.18"
-  val nscalaTime = "2.14.0"
+  val nscalaTime = "2.22.0"
   val rocksdbjni = "5.14.2"
   val scalaCheck = "1.14.3"
   val scalaGuice = "4.2.11"
@@ -378,7 +378,7 @@ lazy val injectCoreTestJarSources =
     "com/twitter/inject/WhenReadyMixin"
   )
 lazy val injectCore = (project in file("inject/inject-core"))
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "inject-core",
     moduleName := "inject-core",
