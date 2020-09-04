@@ -26,6 +26,14 @@ before_cache:
 scala:
   - 2.11.12
   - 2.12.8
+  - 2.13.1
+  
+matrix:
+  # Does not allow for assigning a build result if the non-'allow_failures' targets are complete
+  # because of https://travis-ci.community/t/receiving-too-many-emails/4888
+  fast_finish: false
+  allow_failures:
+    - scala: 2.13.1
 
 jdk:
   - openjdk8
