@@ -415,7 +415,7 @@ lazy val injectCore = (project in file("inject/inject-core"))
   )
 
 lazy val injectStack = (project in file("inject/inject-stack"))
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "inject-stack",
     moduleName := "inject-stack",
@@ -450,7 +450,7 @@ lazy val injectLogback = (project in file("inject/inject-logback"))
 lazy val injectModulesTestJarSources =
   Seq("com/twitter/inject/modules/InMemoryStatsReceiverModule")
 lazy val injectModules = (project in file("inject/inject-modules"))
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "inject-modules",
     moduleName := "inject-modules",
