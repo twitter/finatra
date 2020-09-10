@@ -72,7 +72,8 @@ object option {
   implicit class RichOptionMap[A, B](val self: Option[Map[A, B]]) extends AnyVal {
     def mapInnerValues[C](func: B => C): Option[Map[A, C]] = {
       for (map <- self) yield {
-        map.mapValues(func)
+        // use map instead of mapValues(deprecated since 2.13.0) for cross-building.
+        map.map { case (k, v) => k -> func(v) }
       }
     }
   }

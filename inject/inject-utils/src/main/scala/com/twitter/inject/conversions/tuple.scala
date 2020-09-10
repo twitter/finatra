@@ -41,8 +41,10 @@ object tuple {
     }
 
     def groupByKeyAndReduce(reduceFunc: (B, B) => B): Map[A, B] = {
-      groupByKey mapValues { values =>
-        values.reduce(reduceFunc)
+      // use map instead of mapValues(deprecated since 2.13.0) for cross-building.
+      groupByKey.map {
+        case (k, values) =>
+          k -> values.reduce(reduceFunc)
       }
     }
 

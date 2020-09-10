@@ -12,7 +12,7 @@ class AnnotationUtilsTest extends Test {
     val annotationMap: Map[String, Array[Annotation]] =
       AnnotationUtils.findAnnotations(classOf[CaseClassOneTwo], Array("one", "two"))
     annotationMap.isEmpty should be(false)
-    val annotations = annotationMap.flatMap { case (_, annotations) => annotations }.toArray
+    val annotations = annotationMap.flatMap { case (_, annotations) => annotations.toList }.toArray
 
     val found = AnnotationUtils.filterIfAnnotationPresent[MarkerAnnotation](annotations)
     found.length should be(1)
@@ -23,7 +23,7 @@ class AnnotationUtilsTest extends Test {
     val annotationMap: Map[String, Array[Annotation]] =
       AnnotationUtils.findAnnotations(classOf[CaseClassThreeFour], Array("three", "four"))
     annotationMap.isEmpty should be(false)
-    val annotations = annotationMap.flatMap { case (_, annotations) => annotations }.toArray
+    val annotations = annotationMap.flatMap { case (_, annotations) => annotations.toList }.toArray
     val filterSet: Set[Class[_ <: Annotation]] = Set(classOf[Annotation4])
     val found = AnnotationUtils.filterAnnotations(filterSet, annotations)
     found.length should be(1)
@@ -34,7 +34,7 @@ class AnnotationUtilsTest extends Test {
     val annotationMap: Map[String, Array[Annotation]] =
       AnnotationUtils.findAnnotations(classOf[CaseClassThreeFour], Array("three", "four"))
     annotationMap.isEmpty should be(false)
-    val annotations = annotationMap.flatMap { case (_, annotations) => annotations }.toArray
+    val annotations = annotationMap.flatMap { case (_, annotations) => annotations.toList }.toArray
     AnnotationUtils.findAnnotation(classOf[Annotation1], annotations) should be(None) // not found
     val found = AnnotationUtils.findAnnotation(classOf[Annotation3], annotations)
     found.isDefined should be(true)
@@ -47,7 +47,7 @@ class AnnotationUtilsTest extends Test {
         classOf[CaseClassOneTwoThreeFour],
         Array("one", "two", "three", "four"))
     annotationMap.isEmpty should be(false)
-    val annotations = annotationMap.flatMap { case (_, annotations) => annotations }.toArray
+    val annotations = annotationMap.flatMap { case (_, annotations) => annotations.toList }.toArray
     AnnotationUtils.findAnnotation[MarkerAnnotation](annotations) should be(None) // not found
     AnnotationUtils.findAnnotation[Annotation1](annotations).isDefined should be(true)
     AnnotationUtils.findAnnotation[Annotation2](annotations).isDefined should be(true)
@@ -61,7 +61,7 @@ class AnnotationUtilsTest extends Test {
         classOf[CaseClassOneTwoThreeFour],
         Array("one", "two", "three", "four"))
     annotationMap.isEmpty should be(false)
-    val annotations = annotationMap.flatMap { case (_, annotations) => annotations }.toArray
+    val annotations = annotationMap.flatMap { case (_, annotations) => annotations.toList }.toArray
     val found = AnnotationUtils.findAnnotation[Annotation1](annotations)
     found.isDefined should be(true)
 
@@ -75,7 +75,7 @@ class AnnotationUtilsTest extends Test {
         classOf[CaseClassOneTwoThreeFour],
         Array("one", "two", "three", "four"))
     annotationMap.isEmpty should be(false)
-    val annotations = annotationMap.flatMap { case (_, annotations) => annotations }.toArray
+    val annotations = annotationMap.flatMap { case (_, annotations) => annotations.toList }.toArray
     val annotation1 = AnnotationUtils.findAnnotation[Annotation1](annotations).get
     val annotation2 = AnnotationUtils.findAnnotation[Annotation2](annotations).get
     val annotation3 = AnnotationUtils.findAnnotation[Annotation3](annotations).get
@@ -91,29 +91,29 @@ class AnnotationUtilsTest extends Test {
     var found: Map[String, Array[Annotation]] =
       AnnotationUtils.findAnnotations(classOf[WithThings], Array("thing1", "thing2"))
     found.isEmpty should be(false)
-    var annotations = found.flatMap { case (_, annotations) => annotations }.toArray
+    var annotations = found.flatMap { case (_, annotations) => annotations.toList }.toArray
     annotations.length should equal(4)
 
     found = AnnotationUtils.findAnnotations(classOf[WithWidgets], Array("widget1", "widget2"))
     found.isEmpty should be(false)
-    annotations = found.flatMap { case (_, annotations) => annotations }.toArray
+    annotations = found.flatMap { case (_, annotations) => annotations.toList }.toArray
     annotations.length should equal(4)
 
     found = AnnotationUtils.findAnnotations(classOf[CaseClassOneTwo], Array("one", "two"))
     found.isEmpty should be(false)
-    annotations = found.flatMap { case (_, annotations) => annotations }.toArray
+    annotations = found.flatMap { case (_, annotations) => annotations.toList }.toArray
     annotations.length should equal(2)
 
     found = AnnotationUtils.findAnnotations(classOf[CaseClassThreeFour], Array("three", "four"))
     found.isEmpty should be(false)
-    annotations = found.flatMap { case (_, annotations) => annotations }.toArray
+    annotations = found.flatMap { case (_, annotations) => annotations.toList }.toArray
     annotations.length should equal(2)
 
     found = AnnotationUtils.findAnnotations(
       classOf[CaseClassOneTwoThreeFour],
       Array("one", "two", "three", "four"))
     found.isEmpty should be(false)
-    annotations = found.flatMap { case (_, annotations) => annotations }.toArray
+    annotations = found.flatMap { case (_, annotations) => annotations.toList }.toArray
     annotations.length should equal(4)
   }
 
@@ -121,7 +121,7 @@ class AnnotationUtilsTest extends Test {
     val found: Map[String, Array[Annotation]] =
       AnnotationUtils.findAnnotations(classOf[WithThings], Array("thing1", "thing2"))
     found.isEmpty should be(false)
-    val annotations = found.flatMap { case (_, annotations) => annotations }.toArray
+    val annotations = found.flatMap { case (_, annotations) => annotations.toList }.toArray
 
     val things = AnnotationUtils.filterAnnotations(Set(classOf[Thing]), annotations)
     things.foreach { thing =>

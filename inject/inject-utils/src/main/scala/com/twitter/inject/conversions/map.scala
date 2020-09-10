@@ -2,7 +2,7 @@ package com.twitter.inject.conversions
 
 import com.twitter.inject.conversions.tuple._
 import java.util.concurrent.ConcurrentHashMap
-import scala.collection.mutable.ArrayBuffer
+import scala.collection.compat.immutable.ArraySeq
 import scala.collection.{SortedMap, immutable, mutable}
 
 object map {
@@ -45,11 +45,12 @@ object map {
     }
 
     def filterNotKeys(func: K => Boolean): Map[K, V] = {
-      self.filterKeys(!func(_))
+      // use filter instead of filterKeys(deprecated since 2.13.0) for cross-building.
+      self.filter { case (key, _) => !func(key) }
     }
 
     def toSortedMap(implicit ordering: Ordering[K]): SortedMap[K, V] = {
-      SortedMap[K, V]() ++ self
+      SortedMap[K, V](self.toSeq: _*)
     }
 
   }
@@ -58,9 +59,9 @@ object map {
     import scala.collection.JavaConverters._
 
     def toOrderedMap: Map[K, V] = {
-      val entries = new ArrayBuffer[(K, V)]
-      self.asScala.foreach(entries.append(_))
-      immutable.ListMap(entries: _*)
+      val entries = ArraySeq.newBuilder[(K, V)]
+      self.asScala.foreach(entries += _)
+      immutable.ListMap(entries.result(): _*)
     }
   }
 
@@ -86,7 +87,8 @@ object map {
         (b, c) <- bc
       } yield b -> (a -> c)
 
-      entries.groupByKey mapValues { _.toMap }
+      // use map instead of mapValues(deprecated since 2.13.0) for cross-building.
+      entries.groupByKey.map { case (key, value) => key -> value.toMap }
     }
   }
 
@@ -104,7 +106,8 @@ object map {
       self
         .asInstanceOf[scala.collection.Map[A, scala.collection.Map[B, C]]]
         .swapKeys
-        .toSortedMap mapValues { _.toSortedMap }
+        // use map instead of mapValues(deprecated since 2.13.0) for cross-building.
+        .toSortedMap.map { case (key, value) => key -> value.toSortedMap }
     }
   }
 

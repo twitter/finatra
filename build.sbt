@@ -692,7 +692,7 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
   )
 
 lazy val injectUtils = (project in file("inject/inject-utils"))
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "inject-utils",
     moduleName := "inject-utils",

@@ -1,6 +1,6 @@
 package com.twitter.inject.conversions
 
-import scala.collection.generic.CanBuildFrom
+import scala.collection.compat.BuildFrom
 import scala.collection.mutable.{HashSet => MutableHashSet}
 import scala.language.higherKinds
 
@@ -17,9 +17,9 @@ object iterable {
     def distinctBy[HashCodeType](
       hash: Elem => HashCodeType
     )(
-      implicit cbf: CanBuildFrom[From[Elem], Elem, From[Elem]]
+      implicit cbf: BuildFrom[From[Elem], Elem, From[Elem]]
     ): From[Elem] = {
-      val builder = cbf()
+      val builder = cbf.newBuilder(self)
       val seen = MutableHashSet[HashCodeType]()
 
       for (elem <- self) {

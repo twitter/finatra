@@ -1,24 +1,21 @@
 package com.twitter.inject.conversions
 
 import scala.annotation.tailrec
-import scala.collection.breakOut
 
 object seq {
 
   implicit class RichSeq[A](val self: Seq[A]) extends AnyVal {
 
     def createMap[K, V](keys: A => K, values: A => V): Map[K, V] = {
-
-      self.map { elem =>
+      self.iterator.map { elem =>
         keys(elem) -> values(elem)
-      }(breakOut)
+      }.toMap
     }
 
     def createMap[K, V](values: A => V): Map[A, V] = {
-
-      self.map { elem =>
+      self.iterator.map { elem =>
         elem -> values(elem)
-      }(breakOut)
+      }.toMap
     }
 
     def foreachPartial(pf: PartialFunction[A, Unit]): Unit = {
