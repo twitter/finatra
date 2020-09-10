@@ -2,25 +2,27 @@
 
 We'd love to get patches from you!
 
+## Nightly Snapshots
+
+Snapshots are published nightly for the current version in development and are
+available in the [Sonatype](https://oss.sonatype.org/) open source snapshot
+repository: [https://oss.sonatype.org/content/repositories/snapshots/](https://oss.sonatype.org/content/repositories/snapshots/). 
+
 ## Building dependencies
 
-We are not currently publishing snapshots for Finatra's Twitter OSS
-dependencies, which means that it may be necessary to build and publish the
-`develop` branches of those dependencies locally in order to work on Finatra's
-[`develop`][develop-branch] branch.
+If you want to manually build and publish the `develop` branches of Finatra's 
+dependencies locally, you can use our build tool, [dodo](https://github.com/twitter/dodo).
 
-To do this you can run the same command used in the
-[`.travis.yml`](/.travis.yml#L35) script which will clone all the necessary
-repositories and publish their artifacts locally. I.e.,
-
-```sh
+``` bash
 curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test finatra
 ```
 
-Finatra's [`master`][master-branch] branch is built against released versions of
-Twitter OSS dependencies and is itself frozen to the last released version of
-Finatra; thus you will not need to build any of the Twitter OSS dependencies
-locally if you are in master or a release branch.
+This will clone, build, and publish locally the current `-SNAPSHOT` version 
+from the `develop` branch of Finatra's other Twitter open source dependencies.
+
+It is your choice to use the published nightly snapshot versions or to build 
+the snapshots locally from their respective `develop` branches via the
+[dodo](https://github.com/twitter/dodo) build tool.
 
 ## Building Finatra
 
@@ -30,9 +32,8 @@ provides a thin wrapper over [sbt][sbt] and correctly sets memory and other
 settings.
 
 If you have any questions or run into any problems, please create an issue here,
-tweet at us [@finatra](https://twitter.com/finatra), or email the
-[finatra-users](https://groups.google.com/forum/#!forum/finatra-users) mailing
-list.
+chat with us in [gitter](https://gitter.im/twitter/finatra), or email
+the Finatra Users [mailing list](https://groups.google.com/forum/#!forum/finatra-users).
 
 ## Workflow
 
