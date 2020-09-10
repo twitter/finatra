@@ -601,7 +601,7 @@ lazy val injectServer = (project in file("inject/inject-server"))
   )
 
 lazy val injectMdc = (project in file("inject/inject-mdc"))
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "inject-mdc",
     moduleName := "inject-mdc",
