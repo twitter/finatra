@@ -541,7 +541,7 @@ lazy val injectDtab = (project in file("inject/inject-dtab"))
   )
 
 lazy val injectPorts = (project in file("inject/inject-ports"))
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "inject-ports",
     moduleName := "inject-ports",
