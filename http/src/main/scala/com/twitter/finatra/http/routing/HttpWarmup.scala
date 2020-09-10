@@ -54,22 +54,28 @@ class HttpWarmup @Inject() (router: HttpRouter, mapper: ScalaObjectMapper) exten
   )(
     responseCallback: Response => Unit = unitFunction
   ): Unit = {
-    /* Mutation */
-    request.headerMap.set("Host", "127.0.0.1")
-    request.headerMap.set("User-Agent", userAgent)
-
-    val service: Service[Request, Response] =
-      if (request.uri.startsWith(HttpRouter.FinatraAdminPrefix) || admin) {
-        router.services.adminService
-      } else {
-        router.services.externalService
-      }
 
     for (_ <- 1 to times) {
+
+      // Because this method is call-by-name for "request", if "request" is called more than once, a
+      // new object could be created each time. Resolve it up-front to prevent this.
+      val createdRequest = request
+
+      /* Mutation */
+      createdRequest.headerMap.set("Host", "127.0.0.1")
+      createdRequest.headerMap.set("User-Agent", userAgent)
+
+      val service: Service[Request, Response] =
+        if (createdRequest.uri.startsWith(HttpRouter.FinatraAdminPrefix) || admin) {
+          router.services.adminService
+        } else {
+          router.services.externalService
+        }
+
       infoResult("%s") {
-        val response = Await.result(service(request))
+        val response = Await.result(service(createdRequest))
         responseCallback(response)
-        s"Warmup $request completed with ${response.status}"
+        s"Warmup $createdRequest completed with ${response.status}"
       }
     }
   }

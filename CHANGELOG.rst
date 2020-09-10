@@ -10,6 +10,9 @@ Unreleased
 Changed
 ~~~~~~~
 
+* finatra-http: Ensure HttpWarmer creates the request exactly the number of times requested and
+  mutates the correct objects. ``PHAB_ID=D547310``
+
 * kafka: Replaced the `com.twitter.finatra.kafka.TracingEnabled` toggle with a GlobalFlag enabling
   Zipkin tracing for Kafka clients. ``PHAB_ID=D525274``
 
