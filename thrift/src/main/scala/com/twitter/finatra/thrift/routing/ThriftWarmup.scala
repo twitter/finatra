@@ -9,7 +9,7 @@ import javax.inject.Inject
 private object ThriftWarmup {
 
   /**  Function curried as the default arg for the responseCallback: M#SuccessType => Unit parameter. */
-  val unitFunction: AnyRef => Unit = _ => Unit
+  val unitFunction: AnyRef => Unit = _ => ()
 }
 
 /**

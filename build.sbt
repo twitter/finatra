@@ -1025,7 +1025,7 @@ lazy val thriftTestJarSources =
     "com/twitter/finatra/thrift/ThriftClient",
     "com/twitter/finatra/thrift/ThriftTest")
 lazy val thrift = project
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "finatra-thrift",
     moduleName := "finatra-thrift",
