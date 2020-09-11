@@ -987,7 +987,7 @@ lazy val httpMustache = (project in file("http-mustache"))
 lazy val httpclientTestJarSources =
   Seq("com/twitter/finatra/httpclient/test/")
 lazy val httpclient = project
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "finatra-httpclient",
     moduleName := "finatra-httpclient",
