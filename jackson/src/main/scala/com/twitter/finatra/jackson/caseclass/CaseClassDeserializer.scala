@@ -424,7 +424,7 @@ private[jackson] class CaseClassDeserializer(
     jsonParser: JsonParser,
     context: DeserializationContext,
     jsonNode: JsonNode
-  ): (Array[Object], mutable.ArrayBuffer[CaseClassFieldMappingException]) = {
+  ): (Array[Object], Seq[CaseClassFieldMappingException]) = {
     /* Mutable Fields */
     var constructorValuesIdx = 0
     val constructorValues = new Array[Object](numConstructorArgs)
@@ -547,7 +547,7 @@ private[jackson] class CaseClassDeserializer(
       constructorValuesIdx += 1
     }
 
-    (constructorValues, errors)
+    (constructorValues, errors.toSeq)
   }
 
   private[this] def isScalaEnumerationType(clazz: Class[_]): Boolean =
@@ -625,7 +625,7 @@ private[jackson] class CaseClassDeserializer(
               case Some(annotatedField) => annotatedField.fieldValidators
               case _ => Array.empty[FieldValidator]
             }
-          )
+          ).toSeq
         } yield {
           CaseClassFieldMappingException(
             CaseClassFieldMappingException.PropertyPath.leaf(field.name),
@@ -659,7 +659,7 @@ private[jackson] class CaseClassDeserializer(
           }
         }
 
-        val results = v.validateMethods(obj, methods)
+        val results = v.validateMethods(obj, methods).toSeq
         if (results.nonEmpty) {
           val methodValidationErrors: Seq[Iterable[CaseClassFieldMappingException]] = for {
             result <- results if !result.isValid

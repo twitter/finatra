@@ -68,7 +68,7 @@ object ScalaObjectMapper {
 
   /** The default for mutating the underlying [[JacksonScalaObjectMapperType]] with additional configuration */
   private[jackson] val DefaultAdditionalMapperConfigurationFn: JacksonObjectMapper => Unit =
-    _ => Unit
+    _ => ()
 
   /** The default setting to enable case class validation during case class deserialization */
   private[jackson] val DefaultValidation: Boolean = true

@@ -825,7 +825,7 @@ lazy val jacksonTestJarSources =
     "com/twitter/finatra/json/JsonDiff"
   )
 lazy val jackson = project
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "finatra-jackson",
     moduleName := "finatra-jackson",
