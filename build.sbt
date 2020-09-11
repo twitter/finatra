@@ -117,6 +117,7 @@ lazy val versions = new {
 lazy val scalaCollectionCompat = "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.2"
 
 lazy val withTwoThirteen = Seq(
+  scalaVersion := "2.13.1",
   crossScalaVersions += "2.13.1",
   libraryDependencies += scalaCollectionCompat,
   scalacOptions := {
@@ -910,7 +911,7 @@ lazy val httpTestJarSources =
     "com/twitter/finatra/http/response/DefaultResponseBuilder"
   )
 lazy val http = project
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "finatra-http",
     moduleName := "finatra-http",
@@ -919,6 +920,7 @@ lazy val http = project
       "com.twitter" %% "finagle-exp" % versions.twLibVersion,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
+      "javax.servlet" % "servlet-api" % "2.4" % Provided,
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal",
       "com.twitter" %% "util-security-test-certs" % versions.twLibVersion % Test

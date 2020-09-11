@@ -62,17 +62,21 @@ private[http] class CallbackConverter @Inject() (
         val streamIdentity = streamingRequest.typeArguments.head
         val streamType = streamingRequest.typeArguments.last
         request: Request =>
-          val streamingRequest = streamIdentity match {
+          // Cannot assign StreamingRequest result to a value because 2.13 treats these abstractions over HKTs as errors
+          streamIdentity match {
             case reader if runtimeClassEqs[Reader[_]](reader) =>
-              StreamingRequest(jsonStreamParser, request)(FromReader.ReaderIdentity, streamType)
+              callback(
+                StreamingRequest(jsonStreamParser, request)(FromReader.ReaderIdentity, streamType)
+                  .asInstanceOf[RequestType])
             case asyncStream if runtimeClassEqs[AsyncStream[_]](asyncStream) =>
-              StreamingRequest.fromRequestToAsyncStream(jsonStreamParser, request)(streamType)
+              callback(
+                StreamingRequest.fromRequestToAsyncStream(jsonStreamParser, request)(streamType)
+                  .asInstanceOf[RequestType])
             case _ =>
               throw new Exception(
                 s"Unsupported StreamingRequest type detected as $streamIdentity"
               )
           }
-          callback(streamingRequest.asInstanceOf[RequestType])
       case asyncStream if runtimeClassEqs[AsyncStream[_]](asyncStream) =>
         val asyncStreamTypeParam = asyncStream.typeArguments.head
         request: Request =>

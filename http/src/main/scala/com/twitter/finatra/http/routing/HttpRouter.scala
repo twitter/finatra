@@ -399,14 +399,14 @@ class HttpRouter @Inject() (
     controller: Controller,
     filter: Option[HttpFilter] = None
   ): Seq[Route] = {
-    val routes = filter match {
+    val routes = (filter match {
       case Some(controllerFilter) =>
         controller.routeBuilders.map(
           _.build(callbackConverter, injector).withFilter(controllerFilter)
         )
       case _ =>
         controller.routeBuilders.map(_.build(callbackConverter, injector))
-    }
+    }).toSeq
 
     registerRoutes(routes)
     registerGlobalFilter(globalFilter)
@@ -436,7 +436,7 @@ class HttpRouter @Inject() (
       route.path.startsWith(FinatraAdminPrefix) || route.admin
     }
     assertAdminRoutes(adminRoutes)
-    RoutesByType(external = externalRoutes, admin = adminRoutes)
+    RoutesByType(external = externalRoutes.toSeq, admin = adminRoutes.toSeq)
   }
 
   // non-constant routes MUST start with /admin/finatra

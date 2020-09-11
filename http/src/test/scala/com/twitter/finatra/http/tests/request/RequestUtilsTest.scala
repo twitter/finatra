@@ -22,9 +22,7 @@ class RequestUtilsTest extends Test with Mockito {
   }
 
   test("throw BadRequestException when missing host header for pathUrl") {
-    val request = mock[Request]
-    request.headerMap returns HeaderMap()
-    request.host returns None
+    val request = Request()
 
     intercept[BadRequestException] {
       RequestUtils.pathUrl(request)
@@ -32,18 +30,15 @@ class RequestUtilsTest extends Test with Mockito {
   }
 
   test("pathUrl with slash") {
-    val request = mock[Request]
-    request.headerMap returns HeaderMap()
-    request.host returns Some("www.foo.com")
-    request.path returns "/part/next/end/"
+    val request = Request("/part/next/end/")
+    request.host = "www.foo.com"
 
     val result = RequestUtils.pathUrl(request)
     result should equal("http://www.foo.com/part/next/end/")
   }
 
   test("respondTo */* content type in request when no accept header is sent") {
-    val request = mock[Request]
-    request.headerMap returns HeaderMap()
+    val request = Request()
 
     val response = RequestUtils.respondTo(request) {
       case _ => true
@@ -53,8 +48,8 @@ class RequestUtilsTest extends Test with Mockito {
   }
 
   test("respondTo text/html content-type in request") {
-    val request = mock[Request]
-    request.headerMap returns HeaderMap(Fields.Accept -> ContentType.HTML.toString)
+    val request = Request()
+    request.headerMap.add(Fields.Accept, ContentType.HTML.toString)
 
     val response = RequestUtils.respondTo(request) {
       case ContentType.HTML => true
@@ -65,8 +60,8 @@ class RequestUtilsTest extends Test with Mockito {
   }
 
   test("respondTo application/json content-type in request") {
-    val request = mock[Request]
-    request.headerMap returns HeaderMap(Fields.Accept -> ContentType.JSON.toString)
+    val request = Request()
+    request.headerMap.add(Fields.Accept, ContentType.JSON.toString)
 
     val response = RequestUtils.respondTo(request) {
       case ContentType.JSON => true
@@ -77,9 +72,9 @@ class RequestUtilsTest extends Test with Mockito {
   }
 
   test("return NotAcceptableException for request") {
-    val request = mock[Request]
+    val request = Request()
     // accept application/json
-    request.headerMap returns HeaderMap(Fields.Accept -> ContentType.JSON.toString)
+    request.headerMap.add(Fields.Accept, ContentType.JSON.toString)
 
     intercept[NotAcceptableException] {
       // only handle text/html

@@ -43,7 +43,7 @@ private[finatra] class DefaultMessageBodyWriterImpl @Inject() (
         WriterResponse(octetStream, bytes)
       case "" =>
         WriterResponse.EmptyResponse
-      case Unit =>
+      case () =>
         WriterResponse.EmptyResponse
       case _: BoxedUnit =>
         WriterResponse.EmptyResponse
