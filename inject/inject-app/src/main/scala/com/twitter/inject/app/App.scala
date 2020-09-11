@@ -108,7 +108,7 @@ trait App extends com.twitter.app.App with Logging {
   private[this] lazy val appModules: Modules =
     new Modules(
       required =
-        frameworkModules ++ modules ++ javaModules.asScala, // user modules should replace framework
+        (frameworkModules ++ modules ++ javaModules.asScala).toSeq, // user modules should replace framework
       overrides =
         overrideModules ++ javaOverrideModules.asScala ++ frameworkOverrideModules // framework should replace user modules
     )

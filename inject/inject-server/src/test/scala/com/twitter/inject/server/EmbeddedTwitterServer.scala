@@ -615,7 +615,7 @@ class EmbeddedTwitterServer(
   /** @throws IllegalStateException when a non [[InMemoryStatsReceiver]] is provided as a [[statsReceiverOverride]]. */
   @deprecated("Use the inMemoryStatsReceiverUtility#gaugeMap directly", "2019-05-17")
   def gaugeMap: SortedMap[String, () => Float] =
-    inMemoryStats.gauges.toSortedMap.mapValues(() => _)
+    inMemoryStats.gauges.toSortedMap.map { case (k, v) => k -> (() => v) }
 
   /**
    * Prints stats from the bound [[InMemoryStatsReceiver]] when applicable. If access to this method
