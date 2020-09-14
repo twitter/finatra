@@ -10,6 +10,9 @@ Unreleased
 Changed
 ~~~~~~~
 
+* inject-core: `c.t.inject.Injector` is now an abstract class. Use `Injector.apply` to create
+  a new instance (versus the `new Injector(...)` before). ``PHAB_ID=D543297``
+
 * finatra-http: Ensure HttpWarmer creates the request exactly the number of times requested and
   mutates the correct objects. ``PHAB_ID=D547310``
 
@@ -18,7 +21,7 @@ Changed
 
 * finatra: Bump version of Jackson to 2.11.2. ``PHAB_ID=D538440``
 
-  20.8.1
+20.8.1
 ------
 
 Added

@@ -1,14 +1,26 @@
 package com.twitter.inject
 
-import com.google.inject.name.Names
 import com.google.inject.{Key, Injector => UnderlyingInjector}
 import java.lang.annotation.Annotation
-import net.codingwell.scalaguice.KeyExtensions._
-import net.codingwell.scalaguice.typeLiteral
 import scala.reflect.ClassTag
 import scala.reflect.runtime.universe._
 
-case class Injector(underlying: UnderlyingInjector) {
+/**
+ * An injector used within Finatra.
+ *
+ * This is abstract class to allow for two implementations:
+ *
+ * - production injector, created via `Injector.apply` and
+ * - test injector, created via `TestInjector.apply`
+ *
+ * DO NOT EXTEND this class on your own.
+ */
+abstract class Injector protected[inject] {
+
+  /**
+   * Returns the underlying Guice injector.
+   */
+  def underlying: UnderlyingInjector
 
   /**
    * Returns the appropriate instance for the given key constructed from the
@@ -22,8 +34,7 @@ case class Injector(underlying: UnderlyingInjector) {
    *
    * @return bound instance of type [[T]].
    */
-  def instance[T: TypeTag]: T =
-    underlying.getInstance(typeLiteral[T].toKey)
+  def instance[T: TypeTag]: T
 
   /**
    * Returns the appropriate instance for the given key constructed from the
@@ -38,8 +49,7 @@ case class Injector(underlying: UnderlyingInjector) {
    *
    * @return bound instance of type [[T]] annotated with annotation type [[Ann]].
    */
-  def instance[T: TypeTag, Ann <: Annotation: ClassTag]: T =
-    underlying.getInstance(typeLiteral[T].annotatedWith[Ann])
+  def instance[T: TypeTag, Ann <: Annotation: ClassTag]: T
 
   /**
    * Returns the appropriate instance for the given key constructed from the
@@ -55,8 +65,7 @@ case class Injector(underlying: UnderlyingInjector) {
    *
    * @return bound instance of type [[T]] annotated with annotation.
    */
-  def instance[T: TypeTag](annotation: Annotation): T =
-    underlying.getInstance(typeLiteral[T].annotatedWith(annotation))
+  def instance[T: TypeTag](annotation: Annotation): T
 
   /**
    * Returns the appropriate instance for the given key constructed from the
@@ -71,8 +80,7 @@ case class Injector(underlying: UnderlyingInjector) {
    * @tparam T type of the bound instance to return from the object graph.
    * @return bound instance of type [[T]] annotated with annotation class.
    */
-  def instance[T: TypeTag](annotationClazz: Class[_ <: Annotation]): T =
-    underlying.getInstance(typeLiteral[T].annotatedWith(annotationClazz))
+  def instance[T: TypeTag](annotationClazz: Class[_ <: Annotation]): T
 
   /**
    * Returns the appropriate instance for the given key constructed from the
@@ -93,8 +101,7 @@ case class Injector(underlying: UnderlyingInjector) {
   @deprecated(
     "Users should prefer injector.instance[T](java.lang.annotation.Annotation",
     "2017-09-25")
-  def instance[T: TypeTag](name: String): T =
-    underlying.getInstance(typeLiteral[T].annotatedWith(Names.named(name)))
+  def instance[T: TypeTag](name: String): T
 
   /**
    * Returns the appropriate instance for the given injection type.
@@ -109,7 +116,7 @@ case class Injector(underlying: UnderlyingInjector) {
    *
    * @return bound instance of type [[T]].
    */
-  def instance[T](clazz: Class[T]): T = underlying.getInstance(clazz)
+  def instance[T](clazz: Class[T]): T
 
   /**
    * Returns the appropriate instance for the given key constructed from the
@@ -127,8 +134,7 @@ case class Injector(underlying: UnderlyingInjector) {
    *
    * @return bound instance of type [[T]].
    */
-  def instance[T](clazz: Class[T], annotation: Annotation): T =
-    underlying.getInstance(Key.get(clazz, annotation))
+  def instance[T](clazz: Class[T], annotation: Annotation): T
 
   /**
    * Returns the appropriate instance for the given key constructed from the
@@ -143,8 +149,7 @@ case class Injector(underlying: UnderlyingInjector) {
    *
    * @return bound instance of type [[T]].
    */
-  def instance[T, Ann <: Annotation](clazz: Class[T], annotationClazz: Class[Ann]): T =
-    underlying.getInstance(Key.get(clazz, annotationClazz))
+  def instance[T, Ann <: Annotation](clazz: Class[T], annotationClazz: Class[Ann]): T
 
   /**
    * Returns the appropriate instance for the given injection key.
@@ -161,5 +166,10 @@ case class Injector(underlying: UnderlyingInjector) {
    *
    * @see [[https://google.github.io/guice/api-docs/latest/javadoc/com/google/inject/Key.html com.google.inject.Key]]
    */
-  def instance[T](key: Key[T]): T = underlying.getInstance(key)
+  def instance[T](key: Key[T]): T
+}
+
+object Injector {
+  def apply(underlying: UnderlyingInjector): Injector =
+    new TwitterInjector(underlying)
 }
