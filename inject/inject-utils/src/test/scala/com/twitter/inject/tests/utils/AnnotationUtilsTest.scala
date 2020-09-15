@@ -115,6 +115,27 @@ class AnnotationUtilsTest extends Test {
     found.isEmpty should be(false)
     annotations = found.flatMap { case (_, annotations) => annotations.toList }.toArray
     annotations.length should equal(4)
+
+    found = AnnotationUtils.findAnnotations(classOf[CaseClassOneTwoWithFields], Array("one", "two"))
+    found.isEmpty should be(false)
+    annotations = found.flatMap { case (_, annotations) => annotations.toList }.toArray
+    annotations.length should equal(2)
+
+    found = AnnotationUtils.findAnnotations(
+      classOf[CaseClassOneTwoWithAnnotatedField],
+      Array("one", "two"))
+    found.isEmpty should be(false)
+    annotations = found.flatMap { case (_, annotations) => annotations.toList }.toArray
+    annotations.length should equal(2)
+  }
+
+  test("AnnotationUtils.findAnnotations error") {
+    // does not work if all fields are passed -- only constructor fields should be passed
+    intercept[ArrayIndexOutOfBoundsException] {
+      AnnotationUtils.findAnnotations(
+        classOf[CaseClassOneTwoWithFields],
+        classOf[CaseClassOneTwoWithFields].getDeclaredFields.map(_.getName))
+    }
   }
 
   test("AnnotationUtils#getValueIfAnnotatedWith") {

@@ -3,6 +3,14 @@ package com.twitter.inject.tests.utils
 import com.twitter.inject.annotations._
 
 case class CaseClassOneTwo(@Annotation1 one: String, @Annotation2 two: String)
+case class CaseClassOneTwoWithFields(@Annotation1 one: String, @Annotation2 two: String) {
+  val city: String = "San Francisco"
+  val state: String = "California"
+}
+case class CaseClassOneTwoWithAnnotatedField(@Annotation1 one: String, @Annotation2 two: String) {
+  @Annotation3 val three: String =
+    "three" // will not be returned AnnotationUtils.findAnnotations which only finds constructor annotations
+}
 case class CaseClassThreeFour(@Annotation3 three: String, @Annotation4 four: String)
 case class CaseClassOneTwoThreeFour(
   @Annotation1 one: String,
