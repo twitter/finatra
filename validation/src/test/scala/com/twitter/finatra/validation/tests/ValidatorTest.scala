@@ -4,6 +4,7 @@ import com.twitter.finatra.validation.ValidationResult.Invalid
 import com.twitter.finatra.validation.internal.AnnotatedClass
 import com.twitter.finatra.validation.tests.caseclasses.{
   MinIntExample,
+  Person,
   StateValidationExample,
   User
 }
@@ -66,6 +67,11 @@ class ValidatorTest extends Test {
   test("validate returns valid result") {
     val testUser: User = User(id = "9999", name = "April", gender = "F")
     validator.validate(testUser) should be(())
+  }
+
+  test("validate returns valid result even when case class has other fields") {
+    val testPerson: Person = Person(id = "9999", name = "April")
+    validator.validate(testPerson) should be(())
   }
 
   test("validate returns invalid result") {

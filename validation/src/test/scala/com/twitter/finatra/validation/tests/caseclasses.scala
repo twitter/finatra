@@ -107,6 +107,13 @@ object caseclasses {
       ValidationResult.validate(name.length > 0, "name cannot be empty")
     }
   }
+  // Other fields not in constructor
+  case class Person(@NotEmpty id: String, name: String) {
+    val company: String = "Twitter"
+    val city: String = "San Francisco"
+    val state: String = "California"
+  }
+
   // Customer defined validations
   case class StateValidationExample(@StateConstraint state: String)
   // Integration test

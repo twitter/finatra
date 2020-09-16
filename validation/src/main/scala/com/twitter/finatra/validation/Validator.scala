@@ -225,10 +225,15 @@ class Validator private[finatra] (cacheSize: Long, messageResolver: MessageResol
     reflectionCache.get(
       clazz,
       new Function[Class[_], AnnotatedClass] {
-        def apply(v1: Class[_]): AnnotatedClass =
-          createAnnotatedClass(
-            clazz,
-            AnnotationUtils.findAnnotations(clazz, clazz.getDeclaredFields.map(_.getName)))
+        def apply(v1: Class[_]): AnnotatedClass = {
+          // We must use the constructor parameters here (and not getDeclaredFields),
+          // because getDeclaredFields will return other non-constructor fields within
+          // the case class. We use `head` here, because if this case class doesn't have a
+          // constructor at all, we have larger issues.
+          val constructor = clazz.getConstructors.head
+          val parameters: Array[String] = constructor.getParameters.map(_.getName)
+          createAnnotatedClass(clazz, AnnotationUtils.findAnnotations(clazz, parameters))
+        }
       }
     )
   }

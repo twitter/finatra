@@ -21,6 +21,13 @@ Changed
 
 * finatra: Bump version of Jackson to 2.11.2. ``PHAB_ID=D538440``
 
+Fixed
+~~~~~
+
+* finatra-validation: `c.t.f.validation.Validator` would throw an `IndexOutOfBoundsException` when
+  trying to validate a case class which contained additional fields that are not included in the
+  constructor parameters. ``PHAB_ID=D549253``
+
 20.8.1
 ------
 
