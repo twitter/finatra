@@ -15,6 +15,7 @@ scala_library(
     dependencies = [
         "3rdparty/jvm/com/github/ben-manes/caffeine",
         "3rdparty/jvm/joda-time",
+        "3rdparty/jvm/org/json4s:json4s-core",
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",

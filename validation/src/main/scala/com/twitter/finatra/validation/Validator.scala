@@ -15,6 +15,7 @@ import com.twitter.util.Try
 import java.lang.annotation.Annotation
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.Function
+import org.json4s.reflect.{ClassDescriptor, ConstructorDescriptor, Reflector}
 import scala.collection.{Map, mutable}
 
 object Validator {
@@ -226,12 +227,17 @@ class Validator private[finatra] (cacheSize: Long, messageResolver: MessageResol
       clazz,
       new Function[Class[_], AnnotatedClass] {
         def apply(v1: Class[_]): AnnotatedClass = {
+          val clazzDescriptor: ClassDescriptor =
+            Reflector.describe(clazz).asInstanceOf[ClassDescriptor]
           // We must use the constructor parameters here (and not getDeclaredFields),
           // because getDeclaredFields will return other non-constructor fields within
           // the case class. We use `head` here, because if this case class doesn't have a
           // constructor at all, we have larger issues.
-          val constructor = clazz.getConstructors.head
-          val parameters: Array[String] = constructor.getParameters.map(_.getName)
+          // Note: we do not use clazz.constructors.head.getParameters because access to parameter
+          // names via Java reflection is not supported in Scala 2.11
+          // see: https://github.com/scala/bug/issues/9437
+          val constructor: ConstructorDescriptor = clazzDescriptor.constructors.head
+          val parameters: Array[String] = constructor.params.map(_.name).toArray
           createAnnotatedClass(clazz, AnnotationUtils.findAnnotations(clazz, parameters))
         }
       }
@@ -258,7 +264,7 @@ class Validator private[finatra] (cacheSize: Long, messageResolver: MessageResol
     val fieldsMap = new mutable.HashMap[String, AnnotatedField]()
     // get AnnotatedField
     for ((name, annotations) <- annotationsMap) yield {
-      for (i <- 0 until annotations.length) {
+      for (i <- annotations.indices) {
         val annotation = annotations(i)
         if (isConstraintAnnotation(annotation)) {
           val fieldValidators = fieldsMap.get(name) match {
