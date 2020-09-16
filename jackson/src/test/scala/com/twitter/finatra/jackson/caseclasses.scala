@@ -204,11 +204,17 @@ object Two extends ZeroOrOne
 case class CaseClassWithZeroOrOne(id: ZeroOrOne)
 
 case class CaseClass(id: Long, name: String)
+case class CaseClassIdAndOption(id: Long, name: Option[String])
+@JsonIgnoreProperties(ignoreUnknown = false)
+case class StrictCaseClassIdAndOption(id: Long, name: Option[String])
 
 case class SimpleClassWithInjection(@TestInjectableValue(value = "accept") hello: String)
 
 @JsonIgnoreProperties(ignoreUnknown = false)
 case class StrictCaseClass(id: Long, name: String)
+
+@JsonIgnoreProperties(ignoreUnknown = false)
+case class StrictCaseClassWithOption(value: Option[String] = None)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 case class LooseCaseClass(id: Long, name: String)

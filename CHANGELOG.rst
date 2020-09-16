@@ -7,13 +7,16 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
 Changed
 ~~~~~~~
 
 * inject-core: `c.t.inject.Injector` is now an abstract class. Use `Injector.apply` to create
   a new instance (versus the `new Injector(...)` before). ``PHAB_ID=D543297``
 
-* finatra-http: Ensure HttpWarmer creates the request exactly the number of times requested and
+* http: Ensure HttpWarmer creates the request exactly the number of times requested and
   mutates the correct objects. ``PHAB_ID=D547310``
 
 * kafka: Replaced the `com.twitter.finatra.kafka.TracingEnabled` toggle with a GlobalFlag enabling
@@ -24,7 +27,14 @@ Changed
 Fixed
 ~~~~~
 
-* finatra-validation: `c.t.f.validation.Validator` would throw an `IndexOutOfBoundsException` when
+* jackson: Fix issue in the handling of unknown properties. The `CaseClassDeserializer` only
+  considered the case where the incoming JSON contained more fields than the case class and
+  not the case where the incoming JSON contained less fields than specified in the case class.
+  This has been fixed to ensure that when the fields of the JSON do not line up to the
+  non-ignored case class fields the handling of unknown properties is properly invoked.
+  ``PHAB_ID=D549353``
+
+* validation: `c.t.f.validation.Validator` would throw an `IndexOutOfBoundsException` when
   trying to validate a case class which contained additional fields that are not included in the
   constructor parameters. ``PHAB_ID=D549253``
 

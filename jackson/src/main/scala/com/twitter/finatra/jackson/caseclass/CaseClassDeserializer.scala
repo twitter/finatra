@@ -333,11 +333,10 @@ private[jackson] class CaseClassDeserializer(
           Seq.empty[String] // every field is ignorable
       }
 
-    // if we have more non ignored fields than case class properties, return the difference
-    if (nonIgnoredFields.size > caseClassFieldNames.size)
+    // if we have any non ignored field, return the difference
+    if (nonIgnoredFields.nonEmpty) {
       nonIgnoredFields.diff(caseClassFieldNames)
-    else
-      Seq.empty[String]
+    } else Seq.empty[String]
   }
 
   /** Return the list of [[CaseClassFieldMappingException]] per unknown field */

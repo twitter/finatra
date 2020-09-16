@@ -99,7 +99,7 @@ class ScalaObjectMapperTest extends AbstractScalaObjectMapperTest {
     result.fooClass should equal(FooClass("12345"))
   }
 
-  test("regular mapper handles unknown properties") {
+  test("regular mapper handles unknown properties when json provides MORE fields than case class") {
     // regular mapper -- doesn't fail
     mapper.parse[CaseClass](
       """
@@ -119,6 +119,54 @@ class ScalaObjectMapperTest extends AbstractScalaObjectMapperTest {
           |  "id": 12345,
           |  "name": "gadget",
           |  "extra": "fail"
+          |}
+          |""".stripMargin
+      )
+    }
+  }
+
+  test("regular mapper handles unknown properties when json provides LESS fields than case class") {
+    // regular mapper -- doesn't fail
+    mapper.parse[CaseClassWithOption](
+      """
+        |{
+        |  "value": 12345,
+        |  "extra": "fail"
+        |}
+        |""".stripMargin
+    )
+
+    // mapper = loose, case class = annotated strict --> Fail
+    intercept[JsonMappingException] {
+      mapper.parse[StrictCaseClassWithOption](
+        """
+          |{
+          |  "value": 12345,
+          |  "extra": "fail"
+          |}
+          |""".stripMargin
+      )
+    }
+  }
+
+  test("regular mapper handles unknown properties") {
+    // regular mapper -- doesn't fail (no field named 'flame')
+    mapper.parse[CaseClassIdAndOption](
+      """
+        |{
+        |  "id": 12345,
+        |  "flame": "gadget"
+        |}
+        |""".stripMargin
+    )
+
+    // mapper = loose, case class = annotated strict --> Fail (no field named 'flame')
+    intercept[JsonMappingException] {
+      mapper.parse[StrictCaseClassIdAndOption](
+        """
+          |{
+          |  "id": 12345,
+          |  "flame": "gadget"
           |}
           |""".stripMargin
       )
