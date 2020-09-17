@@ -645,7 +645,7 @@ lazy val injectRequestScope = (project in file("inject/inject-request-scope"))
   )
 
 lazy val injectThrift = (project in file("inject/inject-thrift"))
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "inject-thrift",
     moduleName := "inject-thrift",
