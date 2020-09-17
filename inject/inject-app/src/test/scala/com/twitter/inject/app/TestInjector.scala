@@ -1,32 +1,137 @@
 package com.twitter.inject.app
 
-import com.google.inject.{Module, Stage}
-import com.twitter.app.{Flag, FlagParseException, FlagUsageError, Flags}
+import com.google.inject.{Injector => UnderlyingInjector}
+import com.google.inject.{Key, Module, Stage}
+import com.twitter.app.{FlagParseException, FlagUsageError, Flags}
 import com.twitter.inject.{Injector, InjectorModule}
-import com.twitter.inject.app.internal.Modules
+import com.twitter.inject.app.internal.{InstalledModules, Modules}
 import java.lang.annotation.Annotation
 import java.util.concurrent.atomic.AtomicBoolean
 import scala.annotation.varargs
 import scala.collection.JavaConverters._
+import scala.reflect.ClassTag
+import scala.reflect.runtime.universe._
 
 /**
- * A [[com.google.inject.Injector]] usable for testing. This injector can be used for
- * constructing a minimal object graph for use in integration tests. The TestInjector
- * supports modules, flags, override modules and a `bind[T]` DSL (for easily replacing
- * bound instances without using an override module).
+ * An [[Injector]] usable for testing. This injector can be used for constructing a minimal object
+ * graph for use in integration tests. The TestInjector supports modules, flags, override modules
+ * and a `bind[T]` DSL (for easily replacing bound instances without using an override module).
  *
  * Usage is typically through extension of the com.twitter.inject.IntegrationTest
- * (or com.twitter.inject.IntegrationTestMixin) which expects a defined
- * [[com.google.inject.Injector]] which can be created by [[TestInjector#create]].
+ * (or com.twitter.inject.IntegrationTestMixin) which expects a defined [[Injector]] which can be
+ * created by [[TestInjector#create]].
  *
  * @see https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests
  */
 object TestInjector {
 
+  final class Builder(
+    modules: Seq[Module],
+    flags: Map[String, String] = Map.empty[String, String],
+    overrideModules: Seq[Module] = Seq.empty[Module],
+    stage: Stage = Stage.DEVELOPMENT)
+      extends BindDSL {
+
+    /* Mutable state */
+
+    private[this] var overrides: Seq[Module] = overrideModules
+
+    /* Public */
+
+    /**
+     * Creates a new [[TestInjector]] from this builder.
+     *
+     *
+     * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests
+     *     Integration Tests]]
+     */
+    def create(): TestInjector = {
+      // Add the `InjectorModule` to mirror the behavior in `c.t.inject.app.App` which adds it
+      // as a framework module. This ensures the TestInjector has the same baseline of modules
+      // as a `c.t.inject.app.App`.
+
+      val flag: Flags =
+        new Flags(this.getClass.getSimpleName, includeGlobal = true, failFastUntilParsed = true)
+
+      val injectorModules = new Modules(Seq(InjectorModule) ++ modules, overrides)
+      injectorModules.addFlags(flag)
+      parseFlags(flag, flags)
+
+      new TestInjector(injectorModules.install(flags = flag, stage = stage))
+    }
+
+    /** For Java compatibility */
+    def newInstance(): TestInjector = create()
+
+    // java-forwarder methods
+    override final def bindClass[T](clazz: Class[T], instance: T): this.type =
+      super.bindClass[T](clazz, instance)
+
+    // java-forwarder methods
+    override final def bindClass[T](
+      clazz: Class[T],
+      annotation: Annotation,
+      instance: T
+    ): this.type =
+      super.bindClass[T](clazz, annotation, instance)
+
+    // java-forwarder methods
+    override final def bindClass[T, Ann <: Annotation](
+      clazz: Class[T],
+      annotationClazz: Class[Ann],
+      instance: T
+    ): this.type =
+      super.bindClass[T, Ann](clazz, annotationClazz, instance)
+
+    // java-forwarder methods
+    override final def bindClass[T, U <: T](clazz: Class[T], instanceClazz: Class[U]): this.type =
+      super.bindClass[T, U](clazz, instanceClazz)
+
+    // java-forwarder methods
+    override final def bindClass[T, U <: T](
+      clazz: Class[T],
+      annotation: Annotation,
+      instanceClazz: Class[U]
+    ): this.type =
+      super.bindClass[T, U](clazz, annotation, instanceClazz)
+
+    // java-forwarder methods
+    override final def bindClass[T, Ann <: Annotation, U <: T](
+      clazz: Class[T],
+      annotationClazz: Class[Ann],
+      instanceClazz: Class[U]
+    ): this.type =
+      super.bindClass[T, Ann, U](clazz, annotationClazz, instanceClazz)
+
+    /* Protected */
+
+    final protected def addInjectionServiceModule(module: Module): Unit = {
+      overrides = overrides :+ module
+    }
+
+    /* Private */
+
+    private[this] def parseFlags(
+      flag: Flags,
+      flags: Map[String, String]
+    ): Unit = {
+      /* Parse all flags with incoming supplied flag values */
+      val args = flags.map { case (k, v) => s"-$k=$v" }.toArray
+
+      flag.parseArgs(args) match {
+        case Flags.Help(usage) =>
+          throw FlagUsageError(usage)
+        case Flags.Error(reason) =>
+          throw FlagParseException(reason)
+        case _ => // nothing
+      }
+    }
+  }
+
   /* Public */
 
   /** Create a new TestInjector */
-  def apply: TestInjector = apply(modules = Seq.empty[Module])
+  def apply: Builder = apply(modules = Seq.empty[Module])
 
   /**
    * Create a new TestInjector over the given list of [[com.google.inject.Module]].
@@ -37,7 +142,7 @@ object TestInjector {
    *
    * @see https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests
    */
-  @varargs def apply(modules: Module*): TestInjector = {
+  @varargs def apply(modules: Module*): Builder = {
     apply(modules = modules)
   }
 
@@ -52,7 +157,7 @@ object TestInjector {
    *
    * @see https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests
    */
-  def apply(javaModules: java.util.Collection[Module]): TestInjector = {
+  def apply(javaModules: java.util.Collection[Module]): Builder = {
     apply(javaModules.asScala.toSeq)
   }
 
@@ -71,7 +176,7 @@ object TestInjector {
   def apply(
     javaModules: java.util.Collection[Module],
     javaFlags: java.util.Map[String, String]
-  ): TestInjector =
+  ): Builder =
     apply(javaModules.asScala.toSeq, javaFlags.asScala.toMap)
 
   /**
@@ -92,7 +197,7 @@ object TestInjector {
     javaModules: java.util.Collection[Module],
     javaFlags: java.util.Map[String, String],
     javaOverrideModules: java.util.Collection[Module]
-  ): TestInjector =
+  ): Builder =
     apply(javaModules.asScala.toSeq, javaFlags.asScala.toMap, javaOverrideModules.asScala.toSeq)
 
   /**
@@ -113,7 +218,7 @@ object TestInjector {
     javaFlags: java.util.Map[String, String],
     javaOverrideModules: java.util.Collection[Module],
     stage: Stage
-  ): TestInjector =
+  ): Builder =
     apply(
       javaModules.asScala.toSeq,
       javaFlags.asScala.toMap,
@@ -138,139 +243,88 @@ object TestInjector {
     flags: Map[String, String] = Map.empty[String, String],
     overrideModules: Seq[Module] = Seq.empty[Module],
     stage: Stage = Stage.DEVELOPMENT
-  ): TestInjector = {
-    new TestInjector(modules, flags, overrideModules, stage)
-  }
+  ): Builder =
+    new Builder(modules, flags, overrideModules, stage)
 }
 
 /**
- * A [[com.google.inject.Injector]] usable for testing. Note, it is expected that construction
- * of the TestInjector happens within a single thread as private state is mutated on creation.
+ * An instance of a [[TestInjector]] that can extend [[Injector]] with a couple of bonus methods
+ * allowing for manual execution of lifecycle hooks:
  *
- * @param modules - a list of [[com.google.inject.Module]]
- * @param flags - a String Map of flag arguments to set on the injector, default is empty.
- * @param overrideModules - a list of [[com.google.inject.Module]] to use as overrides, default is empty.
- * @param stage - the [[com.google.inject.Stage]] to use, default is DEVELOPMENT.
+ * - `start()`: executes `singletonStartup` and `singletonPostWarmupComplete` callbacks
+ * - `close()`: executes `singletonShutdown` and `closeOnExit` callbacks
  *
- * @see https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests
+ * This injector can NOT be used after it's closed. But this injector CAN be used before it's
+ * started.
  */
-class TestInjector(
-  modules: Seq[Module],
-  flags: Map[String, String] = Map.empty[String, String],
-  overrideModules: Seq[Module] = Seq.empty[Module],
-  stage: Stage = Stage.DEVELOPMENT)
-    extends BindDSL {
+final class TestInjector private (modules: InstalledModules) extends Injector {
 
-  /* Fields */
+  private val closed = new AtomicBoolean(false)
+  private val started = new AtomicBoolean(false)
 
-  private[this] val flag: Flags =
-    new Flags(this.getClass.getSimpleName, includeGlobal = true, failFastUntilParsed = true)
-
-  private[this] val _started: AtomicBoolean = new AtomicBoolean(false)
-  private[inject] def started: Boolean = _started.get
-
-  /* Mutable state */
-
-  private[this] var overrides: Seq[Module] = overrideModules
-  private[this] var underlying: Injector = _
-
-  /* Public */
+  private def injector(): Injector =
+    if (closed.get()) throw new IllegalStateException("Can not use already CLOSED TestInjector")
+    else modules.injector
 
   /**
-   * Creates a new [[com.google.inject.Injector]] from this TestInjector.
-   * @return a new [[com.google.inject.Injector]].
+   * Start this injector. This executes `singletonStartup` and `singletonPostWarmupComplete`
+   * callbacks in the caller threads.
    *
-   * @note Java users: see the more Java-friendly [[TestInjector.newInstance()]] method.
-   *
-   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests Integration Tests]]
+   * @note An injector can still be used even if it's not started yet. It's your responsibility to
+   *       `start` it before using if that insures proper initialization order for provided
+   *       bindings.
    */
-  def create: Injector = {
-    start()
-    underlying
-  }
-
-  /** For Java compatibility */
-  def newInstance(): Injector = {
-    start()
-    underlying
-  }
-
-  // java-forwarder methods
-  override final def bindClass[T](clazz: Class[T], instance: T): this.type =
-    super.bindClass[T](clazz, instance)
-
-  // java-forwarder methods
-  override final def bindClass[T](clazz: Class[T], annotation: Annotation, instance: T): this.type =
-    super.bindClass[T](clazz, annotation, instance)
-
-  // java-forwarder methods
-  override final def bindClass[T, Ann <: Annotation](
-    clazz: Class[T],
-    annotationClazz: Class[Ann],
-    instance: T
-  ): this.type =
-    super.bindClass[T, Ann](clazz, annotationClazz, instance)
-
-  // java-forwarder methods
-  override final def bindClass[T, U <: T](clazz: Class[T], instanceClazz: Class[U]): this.type =
-    super.bindClass[T, U](clazz, instanceClazz)
-
-  // java-forwarder methods
-  override final def bindClass[T, U <: T](
-    clazz: Class[T],
-    annotation: Annotation,
-    instanceClazz: Class[U]
-  ): this.type =
-    super.bindClass[T, U](clazz, annotation, instanceClazz)
-
-  // java-forwarder methods
-  override final def bindClass[T, Ann <: Annotation, U <: T](
-    clazz: Class[T],
-    annotationClazz: Class[Ann],
-    instanceClazz: Class[U]
-  ): this.type =
-    super.bindClass[T, Ann, U](clazz, annotationClazz, instanceClazz)
-
-  /* Protected */
-
-  override final protected def addInjectionServiceModule(module: Module): Unit = {
-    if (started) {
-      throw new IllegalStateException("Cannot call bind() on a started TestInjector.")
+  def start(): Unit =
+    if (started.compareAndSet(false, true)) {
+      modules.postInjectorStartup()
+      modules.postWarmupComplete()
+    } else {
+      throw new IllegalStateException("Can not start already STARTED TestInjector")
     }
-    overrides = overrides :+ module
-  }
 
-  /* Private */
-
-  private[this] def start(): Unit = {
-    if (_started.compareAndSet(false, true)) {
-      // Add the `InjectorModule` to mirror the behavior in `c.t.inject.app.App` which adds it
-      // as a framework module. This ensures the TestInjector has the same baseline of modules
-      // as a `c.t.inject.app.App`.
-      val injectorModules = new Modules(Seq(InjectorModule) ++ modules, overrides)
-      injectorModules.addFlags(flag)
-      parseFlags(flag, flags, injectorModules.moduleFlags)
-
-      underlying = injectorModules
-        .install(flags = flag, stage = stage)
-        .injector
+  /**
+   * Close this injector. This executes `singletonShutdown` and `closeOnExit` callbacks in the
+   * caller thread.
+   *
+   * @note An injector can't be used after it's closed.
+   */
+  def close(): Unit =
+    if (closed.compareAndSet(false, true)) {
+      modules.shutdown().foreach(_.apply())
+      modules.close().foreach(_.apply())
+    } else {
+      throw new IllegalStateException("Can not close already CLOSED TestInjector")
     }
-  }
 
-  private[this] def parseFlags(
-    flag: Flags,
-    flags: Map[String, String],
-    moduleFlags: Seq[Flag[_]]
-  ): Unit = {
-    /* Parse all flags with incoming supplied flag values */
-    val args = flags.map { case (k, v) => s"-$k=$v" }.toArray
+  def underlying: UnderlyingInjector = modules.injector.underlying
 
-    flag.parseArgs(args) match {
-      case Flags.Help(usage) =>
-        throw FlagUsageError(usage)
-      case Flags.Error(reason) =>
-        throw FlagParseException(reason)
-      case _ => // nothing
-    }
-  }
+  def instance[T: TypeTag]: T =
+    injector().instance[T]
+
+  def instance[T: TypeTag, Ann <: Annotation: ClassTag]: T =
+    injector().instance[T, Ann]
+
+  def instance[T: TypeTag](annotation: Annotation): T =
+    injector().instance[T](annotation)
+
+  def instance[T: TypeTag](annotationClazz: Class[_ <: Annotation]): T =
+    injector().instance[T](annotationClazz)
+
+  @deprecated(
+    "Users should prefer injector.instance[T](java.lang.annotation.Annotation",
+    "2017-09-25")
+  def instance[T: TypeTag](name: String): T =
+    injector().instance[T](name)
+
+  def instance[T](clazz: Class[T]): T =
+    injector().instance[T](clazz)
+
+  def instance[T](clazz: Class[T], annotation: Annotation): T =
+    injector().instance[T](clazz, annotation)
+
+  def instance[T, Ann <: Annotation](clazz: Class[T], annotationClazz: Class[Ann]): T =
+    injector().instance[T, Ann](clazz, annotationClazz)
+
+  def instance[T](key: Key[T]): T =
+    injector().instance[T](key)
 }

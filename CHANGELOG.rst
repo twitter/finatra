@@ -10,6 +10,11 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-inject: `TestInjector` has been reworked to allow users executing modules' lifecycle
+  callbacks. Specifically, the `TestInjector` builder API has been moved under `TestInjector.Builder`
+  to allow `TestInjector` extends `Injector` with two new methods: `start()` and `close()`.
+  ``PHAB_ID=D537056``
+
 Changed
 ~~~~~~~
 

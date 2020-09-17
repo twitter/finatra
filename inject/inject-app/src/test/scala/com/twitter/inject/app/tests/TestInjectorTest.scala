@@ -181,6 +181,28 @@ object TestBindModule extends TwitterModule {
   }
 }
 
+class TestLifecycleHooksModule extends TwitterModule {
+
+  var started: Boolean = false
+  var warmedUp: Boolean = false
+  var shutDown: Boolean = false
+  var closed: Boolean = false
+
+  closeOnExit { closed = true }
+
+  override def singletonStartup(injector: Injector): Unit = {
+    started = true
+  }
+
+  override def singletonPostWarmupComplete(injector: Injector): Unit = {
+    warmedUp = true
+  }
+
+  override def singletonShutdown(injector: Injector): Unit = {
+    shutDown = true
+  }
+}
+
 class TestInjectorTest extends Test with Mockito {
 
   override protected def afterEach(): Unit = {
@@ -216,16 +238,44 @@ class TestInjectorTest extends Test with Mockito {
       flags = flags,
       overrideModules = Seq(InMemoryStatsReceiverModule),
       stage = Stage.PRODUCTION)
-    new TestInjector(
-      Seq(LoggerModule, StatsReceiverModule),
-      flags,
-      Seq(InMemoryStatsReceiverModule),
-      Stage.PRODUCTION)
-    new TestInjector(
-      modules = Seq(LoggerModule, StatsReceiverModule),
-      flags = flags,
-      overrideModules = Seq(InMemoryStatsReceiverModule),
-      stage = Stage.PRODUCTION)
+  }
+
+  test("lifecycle hooks") {
+    val m = new TestLifecycleHooksModule
+    val injector = TestInjector(m).create()
+
+    m.started should be(false)
+    m.warmedUp should be(false)
+
+    injector.start()
+
+    m.started should be(true)
+    m.warmedUp should be(true)
+    m.shutDown should be(false)
+    m.closed should be(false)
+
+    injector.close()
+
+    m.shutDown should be(true)
+    m.closed should be(true)
+  }
+
+  test("can not be started twice") {
+    val injector = TestInjector().create()
+    injector.start()
+    intercept[IllegalStateException](injector.start())
+  }
+
+  test("can not be closed twice") {
+    val injector = TestInjector().create()
+    injector.close()
+    intercept[IllegalStateException](injector.close())
+  }
+
+  test("can not be used after closed") {
+    val injector = TestInjector().create()
+    injector.close()
+    intercept[IllegalStateException](injector.instance[Baz])
   }
 
   test("default boolean flags properly") {
@@ -413,19 +463,6 @@ class TestInjectorTest extends Test with Mockito {
     injector.instance(classOf[String], Annotations.down()) should be("Lorem ipsum")
     injector.instance[String](Flags.named("dog.flag")) should be("Fido")
     injector.instance(classOf[String], Flags.named("dog.flag")) should be("Fido")
-  }
-
-  test("bind fails after injector is called") {
-    val testInjector =
-      TestInjector(modules = Seq(TestBindModule))
-        .bind[Baz].toInstance(new Baz(100))
-    val injector = testInjector.create
-
-    intercept[IllegalStateException] {
-      testInjector.bind[String].annotatedWith[Up].toInstance("Goodbye, world!")
-    }
-    injector.instance[Baz].value should equal(100)
-    injector.instance[String, Up] should equal("Hello, world!")
   }
 
   test("assure the Injector is bound to the object graph") {

@@ -28,7 +28,7 @@ public class TestInjectorJavaTest extends Assert {
     flags.put("foo", "bar");
     flags.put("baz", "bus");
 
-    TestInjector testInjector = TestInjector$.MODULE$.apply();
+    TestInjector.Builder testInjector = TestInjector$.MODULE$.apply();
     testInjector = TestInjector.apply();
     testInjector = TestInjector.apply(LoggerModule.get(), StatsReceiverModule.get());
     testInjector = TestInjector.apply(
@@ -53,7 +53,7 @@ public class TestInjectorJavaTest extends Assert {
   public void testTestInjector() {
     BigDecimal payment = new BigDecimal(12.34, MathContext.DECIMAL32);
 
-    TestInjector testInjector = TestInjector$.MODULE$.apply();
+    TestInjector.Builder testInjector = TestInjector$.MODULE$.apply();
 
     testInjector.bindClass(String.class, "Hello, world");
     testInjector.bindClass(Float.class, Flags.named("float.flag"), 42f);
@@ -80,7 +80,7 @@ public class TestInjectorJavaTest extends Assert {
   public void testTestInjectorChaining() {
     BigDecimal payment = new BigDecimal(12.34, MathContext.DECIMAL32);
 
-    TestInjector testInjector = TestInjector.apply(
+    TestInjector.Builder testInjector = TestInjector.apply(
         LoggerModule.get(),
         StatsReceiverModule.get());
 
@@ -109,7 +109,7 @@ public class TestInjectorJavaTest extends Assert {
   public void testTestInjectorCollections() {
     BigDecimal payment = new BigDecimal(12.34, MathContext.DECIMAL32);
 
-    TestInjector testInjector = TestInjector.apply(
+    TestInjector.Builder testInjector = TestInjector.apply(
         Arrays.asList(LoggerModule.get(), StatsReceiverModule.get()));
 
     Injector injector = testInjector

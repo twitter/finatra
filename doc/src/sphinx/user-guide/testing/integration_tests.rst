@@ -41,16 +41,15 @@ You'll then be able to access instances of necessary classes to execute tests.
 
 .. code:: scala
 
-    import com.twitter.inject.Injector
     import com.twitter.inject.IntegrationTest
     import com.twitter.inject.app.TestInjector
 
     class ExampleIntegrationTest extends IntegrationTest {
-      override val injector: Injector =
+      override val injector: TestInjector =
         TestInjector(
           flags = Map("foo.flag" -> "meaningfulValue"),
           modules = Seq(ExampleModule)
-        ).create
+        ).create()
 
       test("MyTest#perform feature") {
         val exampleThingy = injector.instance[ExampleThingy]
@@ -64,6 +63,38 @@ You'll then be able to access instances of necessary classes to execute tests.
   The `injector` is specified as a `def` the in |c.t.inject.IntegrationTestMixin|_ trait. If you
   only want to start **one instance of your injector per test file** make sure to override this
   `def` with a `val`.
+
+The `TestInjector` also allows you to test modules' lifecycle logic via its `start()`
+and `close()` methods. Note that the `TestInjector` doesn't take ownership of modules' lifecycle
+and, instead, leaves this exercise to the users. Put this way, you're responsible for calling
+`start()` and `close()` in your test if you want to execute the lifecycle hooks in modules.
+
+.. code:: scala
+
+    import com.twitter.inject.IntegrationTest
+    import com.twitter.inject.app.TestInjector
+
+    class ExampleLifecycleTest extends IntegrationTest {
+      override val injector: TestInjector = TestInjector(
+        flags = Map("foo.flag" -> "meaningfulValue"),
+        modules = Seq(ExampleModule)
+      ).create()
+
+      override def beforeAll(): Unit = {
+        // NOTE: This may throw an exception if any of your startup callbacks throw.
+        injector.start()
+      }
+
+      override def afterAll(): Unit = {
+        // NOTE: This may throw an exception if any of your shutdown callbacks throw.
+        injector.close()
+      }
+
+      test("MyTest#perform feature") {
+        val exampleThingy = injector.instance[ExampleThingy]
+        ...
+      }
+    }
 
 `bind[T]` DSL
 -------------
