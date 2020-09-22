@@ -7,6 +7,19 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
+Changed
+~~~~~~~
+
+Fixed
+~~~~~
+
+* inject-thrift-client: When using `RepRepServicePerEndpoint`, Finatra's `DarkTrafficFilter` would
+  throw a `NoSuchMethodException` when trying to lookup an inherited Thrift endpoint.
+  ``PHAB_ID=D553361``
+
 20.9.0
 ------
 

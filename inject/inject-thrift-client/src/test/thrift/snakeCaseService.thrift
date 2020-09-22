@@ -29,3 +29,7 @@ service SnakeCaseService {
 
     bool dequeue_event(1: EnqueueEventRequest request)
 }
+
+service ExtendedSnakeCaseService extends SnakeCaseService {
+    bool additional_event(1: EnqueueEventRequest request)
+}

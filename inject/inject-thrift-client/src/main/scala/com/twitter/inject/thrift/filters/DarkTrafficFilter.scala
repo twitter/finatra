@@ -71,7 +71,7 @@ class DarkTrafficFilter[ServiceIface: ClassTag](
 
   private def getService(methodName: String): AnyRef = {
     if (lookupByMethod) {
-      val field = serviceIfaceClass.getDeclaredMethod(methodName)
+      val field = serviceIfaceClass.getMethod(methodName)
       field.invoke(this.darkServiceIface)
     } else {
       val field = serviceIfaceClass.getDeclaredField(methodName)
