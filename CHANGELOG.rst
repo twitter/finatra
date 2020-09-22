@@ -16,6 +16,9 @@ Changed
 Fixed
 ~~~~~
 
+* inject-thrift-client: The `Singleton` annotation has been removed from the `DarkTrafficFilter` and
+  the `JavaDarkTrafficFilter`. It was there in error. `PHAB_ID=D553539`
+
 * inject-thrift-client: When using `RepRepServicePerEndpoint`, Finatra's `DarkTrafficFilter` would
   throw a `NoSuchMethodException` when trying to lookup an inherited Thrift endpoint.
   ``PHAB_ID=D553361``

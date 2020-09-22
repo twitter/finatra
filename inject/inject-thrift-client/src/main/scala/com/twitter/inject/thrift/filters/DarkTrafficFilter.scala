@@ -7,7 +7,6 @@ import com.twitter.finagle.thrift.{MethodMetadata, ThriftClientRequest}
 import com.twitter.finagle.{Filter, Service}
 import com.twitter.inject.Logging
 import com.twitter.util.Future
-import javax.inject.Singleton
 import scala.reflect.ClassTag
 
 sealed abstract class BaseDarkTrafficFilter(
@@ -58,7 +57,6 @@ sealed abstract class BaseDarkTrafficFilter(
  *
  * @see [[com.twitter.finagle.exp.AbstractDarkTrafficFilter]]
  */
-@Singleton
 class DarkTrafficFilter[ServiceIface: ClassTag](
   darkServiceIface: ServiceIface,
   override protected val enableSampling: Any => Boolean,
@@ -119,7 +117,6 @@ class DarkTrafficFilter[ServiceIface: ClassTag](
  * @see [[com.twitter.finagle.ThriftMux.newService]]
  * @see [[com.twitter.finagle.exp.AbstractDarkTrafficFilter]]
  */
-@Singleton
 class JavaDarkTrafficFilter(
   darkService: Service[ThriftClientRequest, Array[Byte]],
   enableSamplingFn: Function[Array[Byte], Boolean],
