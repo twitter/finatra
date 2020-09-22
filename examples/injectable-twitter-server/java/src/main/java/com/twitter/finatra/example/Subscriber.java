@@ -2,67 +2,81 @@ package com.twitter.finatra.example;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import scala.runtime.BoxedUnit;
 
-import com.twitter.finagle.util.DefaultTimer;
-import com.twitter.finatra.utils.FuturePools;
-import com.twitter.util.Awaitable;
-import com.twitter.util.Closable;
+import com.twitter.inject.annotations.Flag;
+import com.twitter.util.AbstractCloseAwaitably;
 import com.twitter.util.Duration;
-import com.twitter.util.ExecutorServiceFuturePool;
 import com.twitter.util.Function0;
 import com.twitter.util.Future;
+import com.twitter.util.NullTimerTask$;
+import com.twitter.util.ScheduledThreadPoolTimer;
 import com.twitter.util.Time;
-import com.twitter.util.TimeoutException;
+import com.twitter.util.TimerTask;
 import com.twitter.util.logging.Logger;
 
 @Singleton
-public class Subscriber implements Closable, Awaitable<Void> {
-
+public class Subscriber extends AbstractCloseAwaitably {
   private final Logger logger = Logger.apply(Subscriber.class);
 
   private final Queue queue;
+  private final int maxRead;
   private final AtomicInteger numRead;
-  private final ExecutorServiceFuturePool pool;
+  private final ScheduledThreadPoolTimer timer;
+  private final AtomicReference<TimerTask> task;
 
   @Inject
-  public Subscriber(Queue queue) {
+  public Subscriber(
+      Queue queue,
+      @Flag("subscriber.max.read") int maxRead) {
     this.queue = queue;
+    this.maxRead = maxRead;
     this.numRead = new AtomicInteger();
-    this.pool = FuturePools.fixedPool("SubscriberPool", 1);
+    this.timer = new ScheduledThreadPoolTimer(1, "SubscriberPool", false);
+    this.task = new AtomicReference<>(NullTimerTask$.MODULE$);
   }
 
   @Override
-  public Future<BoxedUnit> close(Time deadline) {
-    logger.info("Subscriber has stopped reading from queue.");
-    return Future.apply(new Function0<BoxedUnit>() {
-      @Override
-      public BoxedUnit apply() {
-        pool.executor().shutdown();
-        return BoxedUnit.UNIT;
-      }
-    });
+  public Future<BoxedUnit> onClose(Time deadline) {
+    TimerTask currentTask = task.get();
+    if (!NullTimerTask$.MODULE$.equals(currentTask)) {
+      logger.info("Subscriber has stopped reading from queue.");
+      return currentTask.close(deadline);
+    } else {
+      logger.info("Subscriber closed.");
+      return Future.Done();
+    }
+  }
+
+  public int readCount() {
+    return numRead.get();
   }
 
   /**
    * Begin the scheduled task of reading items from the queue.
    */
   public void start() {
-    DefaultTimer.schedule(
-        Time.now().plus(Duration.fromSeconds(10)),
-        Duration.fromSeconds(30),
-        new Function0<BoxedUnit>() {
+    logger.info("Starting Subscriber");
+    task.compareAndSet(
+        NullTimerTask$.MODULE$,
+        timer.schedule(
+          Time.now().plus(Duration.fromSeconds(2)),
+          Duration.fromSeconds(1),
+          new Function0<BoxedUnit>() {
           @Override
           public BoxedUnit apply() {
             return read();
           }
-        });
+        })
+    );
   }
 
   private BoxedUnit read() {
+    logger.info("Subscriber#read()");
     Optional<String> str = queue.poll();
     str.ifPresent(s -> {
       numRead.incrementAndGet();
@@ -71,30 +85,8 @@ public class Subscriber implements Closable, Awaitable<Void> {
     return BoxedUnit.UNIT;
   }
 
-  // Implements Awaitable interface, but isReady always returns false
-  // to prevent the Subscriber from exiting once awaited on by the server
-  @Override
-  public Awaitable<Void> ready(Duration timeout, CanAwait permit) throws TimeoutException {
-    throw new TimeoutException(timeout.toString());
-  }
-
-  @Override
-  public Void result(Duration timeout, CanAwait permit) throws Exception {
-    throw new TimeoutException(timeout.toString());
-  }
-
   @Override
   public boolean isReady(CanAwait permit) {
-    return false;
-  }
-
-  @Override
-  public Future<BoxedUnit> close() {
-    return this.close(Time.now());
-  }
-
-  @Override
-  public Future<BoxedUnit> close(Duration after) {
-    return this.close(Time.now().plus(after));
+    return numRead.get() >= this.maxRead;
   }
 }

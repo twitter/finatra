@@ -5,9 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Singleton;
 
 @Singleton
-public
-class TestQueue extends Queue {
-
+public class TestQueue extends Queue {
   public final AtomicInteger addCounter;
   public final CountDownLatch firstWriteLatch;
 

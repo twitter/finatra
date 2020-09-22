@@ -5,9 +5,18 @@ import java.util.Collection;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Module;
 
+import com.twitter.app.Flaggable;
 import com.twitter.inject.server.AbstractTwitterServer;
 
 public class ExampleTwitterServer extends AbstractTwitterServer {
+
+  public ExampleTwitterServer() {
+    createFlag(
+        /* name = */ "subscriber.max.read",
+        /* default = */ 5,
+        /* help = */ "Subscriber Max read",
+        /* flaggable = */ Flaggable.ofJavaInteger());
+  }
 
   @Override
   public Collection<Module> javaModules() {

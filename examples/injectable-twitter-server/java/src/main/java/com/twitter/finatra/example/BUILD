@@ -10,6 +10,7 @@ java_library(
         "finatra/inject/inject-server/src/main/scala/com/twitter/inject/server",
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",
         "twitter-server/server/src/main/scala",
+        "util/util-core/src/main/java/com/twitter/util",
     ],
 )
 

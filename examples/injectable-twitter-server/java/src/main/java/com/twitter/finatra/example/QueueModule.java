@@ -28,10 +28,10 @@ public final class QueueModule extends TwitterModule {
 
   private QueueModule() {
     createFlag(
-        "max.queue.size",
-        6144,
-        "Maximum queue size",
-        Flaggable.ofJavaInteger());
+        /* name = */ "max.queue.size",
+        /* default = */ 6144,
+        /* help = */ "Maximum queue size",
+        /* flaggable = */ Flaggable.ofJavaInteger());
   }
 
 
@@ -40,5 +40,4 @@ public final class QueueModule extends TwitterModule {
   public Queue provideQueue(@Flag("max.queue.size") int maxQueueSize) {
     return new Queue(maxQueueSize);
   }
-
 }

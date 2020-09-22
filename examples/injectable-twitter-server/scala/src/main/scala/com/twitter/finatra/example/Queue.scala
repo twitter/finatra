@@ -8,21 +8,20 @@ import scala.collection.JavaConverters._
  * A specific concurrent queue implementation.
  */
 @Singleton
-class Queue extends Iterable[String] {
+class Queue(max: Int) extends Iterable[String] {
+  private[this] val underlying: ConcurrentLinkedQueue[String] =
+    new ConcurrentLinkedQueue[String]()
 
-  private[this] val underlying: ConcurrentLinkedQueue[String] = new ConcurrentLinkedQueue[String]()
-
-  def poll: Option[String] = {
-    Option(underlying.poll())
-  }
+  def poll: Option[String] = Option(underlying.poll())
 
   def add(value: String): Boolean = {
-    underlying.add(value)
+    if (size == max) {
+      throw new IllegalArgumentException("Queue will overflow max size.")
+    } else {
+      underlying.add(value)
+    }
   }
 
-  override def size: Int = {
-    underlying.size()
-  }
-
+  override def size: Int = underlying.size()
   override def iterator: Iterator[String] = underlying.iterator().asScala
 }

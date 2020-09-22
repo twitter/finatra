@@ -7,6 +7,7 @@ import com.twitter.inject.server.TwitterServer
 object ExampleTwitterServerMain extends ExampleTwitterServer
 
 class ExampleTwitterServer extends TwitterServer with Logging {
+  flag[Int]("subscriber.max.read", 5, "Subscriber Max read")
 
   override val modules: Seq[Module] = Seq(QueueModule)
 
