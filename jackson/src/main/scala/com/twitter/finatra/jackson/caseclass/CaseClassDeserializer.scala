@@ -67,6 +67,7 @@ private case class CaseClassCreator(
 /* Holder for a fully specified JavaType with generics and a Jackson BeanPropertyDefinition */
 private case class PropertyDefinition(
   javaType: JavaType,
+  scalaType: ScalaType,
   beanPropertyDefinition: BeanPropertyDefinition)
 
 /* Holder of constructor arg to ScalaType */
@@ -130,12 +131,13 @@ private[jackson] class CaseClassDeserializer(
       .flatMap(m => if (m.isPrimitive) None else Some(m))
   private[this] val clazzDescriptor: ClassDescriptor =
     Reflector.describe(clazz).asInstanceOf[ClassDescriptor]
-  private[this] val clazzAnnotations: Array[Annotation] = mixinClazz.map(_.getAnnotations) match {
-    case Some(mixinAnnotations) =>
-      clazz.getAnnotations ++ mixinAnnotations
-    case _ =>
-      clazz.getAnnotations
-  }
+  private[this] val clazzAnnotations: Array[Annotation] =
+    mixinClazz.map(_.getAnnotations) match {
+      case Some(mixinAnnotations) =>
+        clazz.getAnnotations ++ mixinAnnotations
+      case _ =>
+        clazz.getAnnotations
+    }
 
   private[this] val caseClazzCreator: CaseClassCreator = {
     val fromCompanion: Option[AnnotatedMethod] =
@@ -183,19 +185,37 @@ private[jackson] class CaseClassDeserializer(
   // use of creators for non-static inner classes,
   assert(!beanDescription.isNonStaticInnerClass, "Non-static inner case classes are not supported.")
 
-  // all class annotations
-  private[this] val allAnnotations: scala.collection.Map[String, Array[Annotation]] =
+  // all class annotations -- including inherited annotations for fields
+  private[this] val allAnnotations: scala.collection.Map[String, Array[Annotation]] = {
+    // use the carried scalaType in order to find the appropriate constructor by the
+    // unresolved scalaTypes -- e.g., before we resolve generic types to their bound type
     AnnotationUtils.findAnnotations(
       clazz,
-      caseClazzCreator.propertyDefinitions.map(_.beanPropertyDefinition.getInternalName))
+      caseClazzCreator.propertyDefinitions
+        .map(_.scalaType.erasure),
+      caseClazzCreator.propertyDefinitions
+        .map(_.beanPropertyDefinition.getInternalName)
+    )
+  }
 
   // support for reading annotations from Jackson Mix-ins
   // see: https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations
-  private[this] val allMixinAnnotations: Map[String, Array[Annotation]] =
+  private[this] val allMixinAnnotations: scala.collection.Map[String, Array[Annotation]] =
     mixinClazz match {
-      case Some(clazz) => clazz.getDeclaredMethods.map(m => m.getName -> m.getAnnotations).toMap
-      case _ => Map.empty[String, Array[Annotation]]
+      case Some(clazz) =>
+        clazz.getDeclaredMethods.map(m => m.getName -> m.getAnnotations).toMap
+      case _ =>
+        scala.collection.Map.empty[String, Array[Annotation]]
     }
+
+  // optimized lookup of bean property definition annotations
+  private[this] def getBeanPropertyDefinitionAnnotations(
+    beanPropertyDefinition: BeanPropertyDefinition
+  ): Array[Annotation] = {
+    if (beanPropertyDefinition.getPrimaryMember.getAllAnnotations.size() > 0) {
+      beanPropertyDefinition.getPrimaryMember.getAllAnnotations.annotations().asScala.toArray
+    } else Array.empty[Annotation]
+  }
 
   // Field name to list of parsed annotations. Jackson only tracks JacksonAnnotations
   // in the BeanPropertyDefinition AnnotatedMembers and we want to track all class annotations by field.
@@ -204,25 +224,37 @@ private[jackson] class CaseClassDeserializer(
   // note: Prefer while loop over Scala for loop for better performance. The scala for loop
   // performance is optimized in 2.13.0 if we enable scalac: https://github.com/scala/bug/issues/1338
   private[this] val fieldAnnotations: scala.collection.Map[String, Array[Annotation]] = {
-    val fields: Array[String] =
-      caseClazzCreator.propertyDefinitions.map(_.beanPropertyDefinition.getInternalName)
-    val fieldAnnotations = mutable.HashMap[String, Array[Annotation]]()
+    val fieldBeanPropertyDefinitions: Array[BeanPropertyDefinition] =
+      caseClazzCreator.propertyDefinitions.map(_.beanPropertyDefinition)
+    val collectedFieldAnnotations = mutable.HashMap[String, Array[Annotation]]()
     var index = 0
-    while (index < fields.length) {
-      val field = fields(index)
-      val annotations = allAnnotations.getOrElse(field, Array.empty) ++
-        allMixinAnnotations.getOrElse(field, Array.empty)
-      if (annotations.nonEmpty) fieldAnnotations.put(field, annotations)
+    while (index < fieldBeanPropertyDefinitions.length) {
+      val fieldBeanPropertyDefinition = fieldBeanPropertyDefinitions(index)
+      val fieldName = fieldBeanPropertyDefinition.getInternalName
+      // in many cases we will have the field annotations in the `allAnnotations` Map which
+      // scans for annotations from the class definition being deserialized, however in some cases
+      // we are dealing with an annotated field from a static or secondary constructor
+      // and thus the annotations may not exist in the `allAnnotations` Map so we default to
+      // any carried bean property definition annotations which includes annotation information
+      // for any static or secondary constructor.
+      val annotations =
+        allAnnotations.getOrElse(
+          fieldName,
+          getBeanPropertyDefinitionAnnotations(fieldBeanPropertyDefinition)
+        ) ++ allMixinAnnotations.getOrElse(fieldName, Array.empty)
+      if (annotations.nonEmpty) collectedFieldAnnotations.put(fieldName, annotations)
       index += 1
     }
 
-    fieldAnnotations
+    collectedFieldAnnotations
   }
 
   private[this] val annotatedValidationClazz: Option[ValidationAnnotatedClass] =
     validator match {
-      case Some(v) => Some(v.createAnnotatedClass(clazz, fieldAnnotations))
-      case _ => None
+      case Some(v) =>
+        Some(v.createAnnotatedClass(clazz, fieldAnnotations))
+      case _ =>
+        None
     }
 
   /* exposed for testing */
@@ -740,13 +772,14 @@ private[jackson] class CaseClassDeserializer(
             javaType.getBindings
           ), // use the TypeBindings from the top-level JavaType, not the parameter JavaType
           owner = annotatedWithParams,
-          annotations = new AnnotationMap(),
+          annotations = annotatedWithParams.getParameterAnnotations(index),
           javaType = parameterJavaType,
           index = index
         )
 
       PropertyDefinition(
         parameterJavaType,
+        scalaType,
         SimpleBeanPropertyDefinition
           .construct(
             config,

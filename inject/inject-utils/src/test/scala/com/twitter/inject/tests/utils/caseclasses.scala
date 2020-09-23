@@ -24,3 +24,30 @@ case class WithThings(
 case class WithWidgets(
   @Annotation3 @Widget("widget1") widget1: String,
   @Annotation4 @Widget("widget2") widget2: String)
+
+case class WithSecondaryConstructor(
+  @Annotation1 one: Int,
+  @Annotation2 two: Int) {
+  def this(@Annotation3 three: String, @Annotation4 four: String) {
+    this(three.toInt, four.toInt)
+  }
+}
+
+object StaticSecondaryConstructor {
+  def apply(@Annotation3 three: String, @Annotation4 four: String): StaticSecondaryConstructor =
+    StaticSecondaryConstructor(three.toInt, four.toInt)
+}
+case class StaticSecondaryConstructor(@Annotation1 one: Int, @Annotation2 two: Int)
+
+object StaticSecondaryConstructorWithMethodAnnotation {
+  def apply(@Annotation3 three: String, @Annotation4 four: String): StaticSecondaryConstructor =
+    StaticSecondaryConstructor(three.toInt, four.toInt)
+}
+case class StaticSecondaryConstructorWithMethodAnnotation(
+  @Annotation1 one: Int,
+  @Annotation2 two: Int) {
+  @Widget("widget1") def widget1: String = "this is widget 1 method"
+}
+
+case class GenericTestCaseClass[T](@Annotation1 one: T)
+case class GenericTestCaseClassWithMultipleArgs[T](@Annotation1 one: T, @Annotation2 two: Int)

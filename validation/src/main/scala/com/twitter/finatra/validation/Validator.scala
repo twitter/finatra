@@ -116,15 +116,14 @@ class Validator private[finatra] (cacheSize: Long, messageResolver: MessageResol
     val AnnotatedClass(_, fields, methods) = getAnnotatedClass(clazz)
 
     // validate field
-    val fieldValidations: Seq[ValidationResult] =
+    val fieldValidations: Iterable[ValidationResult] =
       fields.flatMap {
-        case (_, AnnotatedField(field, fieldValidators)) =>
+        case (_, AnnotatedField(Some(field), fieldValidators)) =>
           field.setAccessible(true)
           validateField(field.get(obj), fieldValidators)
-      }.toSeq
+      }
 
-    val invalidResult = fieldValidations ++ validateMethods(obj, methods) // validate methods
-
+    val invalidResult = fieldValidations.toSeq ++ validateMethods(obj, methods) // validate methods
     if (invalidResult.nonEmpty) throw new ValidationException(invalidResult)
   }
 
@@ -237,8 +236,12 @@ class Validator private[finatra] (cacheSize: Long, messageResolver: MessageResol
           // names via Java reflection is not supported in Scala 2.11
           // see: https://github.com/scala/bug/issues/9437
           val constructor: ConstructorDescriptor = clazzDescriptor.constructors.head
-          val parameters: Array[String] = constructor.params.map(_.name).toArray
-          createAnnotatedClass(clazz, AnnotationUtils.findAnnotations(clazz, parameters))
+          createAnnotatedClass(
+            clazz,
+            AnnotationUtils.findAnnotations(
+              clazz,
+              constructor.params.map(_.argType.erasure),
+              constructor.params.map(_.name).toArray))
         }
       }
     )
@@ -268,10 +271,19 @@ class Validator private[finatra] (cacheSize: Long, messageResolver: MessageResol
         val annotation = annotations(i)
         if (isConstraintAnnotation(annotation)) {
           val fieldValidators = fieldsMap.get(name) match {
-            case Some(validators) => validators.fieldValidators :+ findFieldValidator(annotation)
-            case _ => Array(findFieldValidator(annotation))
+            case Some(validators) =>
+              validators.fieldValidators :+ findFieldValidator(annotation)
+            case _ =>
+              Array(findFieldValidator(annotation))
           }
-          fieldsMap.put(name, AnnotatedField(clazz.getDeclaredField(name), fieldValidators))
+          fieldsMap.put(
+            name,
+            AnnotatedField(
+              // the annotation may be from a static or secondary constructor for which we have no field information
+              Try(clazz.getDeclaredField(name)).toOption,
+              fieldValidators
+            )
+          )
         }
       }
     }

@@ -10,6 +10,9 @@ Unreleased
 Added
 ~~~~~
 
+* jackson: Add support for validating `@JsonCreator` annotated static (e.g., companion
+  object defined apply methods) or secondary case class constructors. ``PHAB_ID=D552921``
+
 * inject-app: Allow injecting flags without default values as both `scala.Option` and
   `java.util.Optional`. ``PHAB_ID=D526226``
 

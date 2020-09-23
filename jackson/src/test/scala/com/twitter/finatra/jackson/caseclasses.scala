@@ -88,18 +88,31 @@ case class Circle(@Min(0) radius: Int) extends Shape
 case class View(shapes: Seq[Shape])
 case class OptionalView(shapes: Seq[Shape], optional: Option[Shape])
 
-case class TestJsonCreator(int: Int)
-case class TestJsonCreator2(ints: Seq[Int], default: String = "Hello, World")
-
 object TestJsonCreator {
   @JsonCreator
   def apply(s: String): TestJsonCreator = TestJsonCreator(s.toInt)
 }
+case class TestJsonCreator(int: Int)
 
 object TestJsonCreator2 {
   @JsonCreator
   def apply(strings: Seq[String]): TestJsonCreator2 = TestJsonCreator2(strings.map(_.toInt))
 }
+case class TestJsonCreator2(ints: Seq[Int], default: String = "Hello, World")
+
+object TestJsonCreatorWithValidation {
+  @JsonCreator
+  def apply(@NotEmpty s: String): TestJsonCreatorWithValidation =
+    TestJsonCreatorWithValidation(s.toInt)
+}
+case class TestJsonCreatorWithValidation(int: Int)
+
+object TestJsonCreatorWithValidations {
+  @JsonCreator
+  def apply(@NotEmpty @OneOf(Array("42", "137")) s: String): TestJsonCreatorWithValidations =
+    TestJsonCreatorWithValidations(s.toInt)
+}
+case class TestJsonCreatorWithValidations(int: Int)
 
 case class CaseClassWithMultipleConstructors(number1: Long, number2: Long, number3: Long) {
   def this(numberAsString1: String, numberAsString2: String, numberAsString3: String) {
@@ -111,6 +124,20 @@ case class CaseClassWithMultipleConstructorsAnnotated(number1: Long, number2: Lo
   @JsonCreator
   def this(numberAsString1: String, numberAsString2: String, numberAsString3: String) {
     this(numberAsString1.toLong, numberAsString2.toLong, numberAsString3.toLong)
+  }
+}
+
+case class CaseClassWithMultipleConstructorsAnnotatedAndValidations(
+  number1: Long,
+  number2: Long,
+  uuid: String) {
+  @JsonCreator
+  def this(
+    @NotEmpty numberAsString1: String,
+    @OneOf(Array("10001", "20002", "30003")) numberAsString2: String,
+    @UUID thirdArgument: String
+  ) {
+    this(numberAsString1.toLong, numberAsString2.toLong, thirdArgument)
   }
 }
 
@@ -224,6 +251,10 @@ case class CaseClassWithLazyVal(id: Long) {
 }
 
 case class GenericTestCaseClass[T](data: T)
+case class GenericTestCaseClassWithValidation[T](@NotEmpty data: T)
+case class GenericTestCaseClassWithValidationAndMultipleArgs[T](
+  @NotEmpty data: T,
+  @Min(5) number: Int)
 
 case class Page[T](data: List[T], pageSize: Int, next: Option[Long], previous: Option[Long])
 

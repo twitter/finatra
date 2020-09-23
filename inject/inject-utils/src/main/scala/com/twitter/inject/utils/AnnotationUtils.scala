@@ -1,6 +1,6 @@
 package com.twitter.inject.utils
 
-import com.twitter.util.Try
+import com.twitter.util.{Return, Try}
 import java.lang.annotation.Annotation
 
 /** Utility methods for dealing with [[java.lang.annotation.Annotation]] */
@@ -134,22 +134,62 @@ object AnnotationUtils {
    * @see [[https://docs.scala-lang.org/tour/case-classes.html Tour of Scala Case Classes]]
    */
   // optimized
+  @deprecated("No public replacement", "2020-09-22")
   def findAnnotations(
     clazz: Class[_],
     fields: Array[String]
-  ): scala.collection.Map[String, Array[Annotation]] = {
-    // for case classes, the annotations are only visible on the constructor.
-    val clazzConstructorAnnotations: Array[Array[Annotation]] =
-      clazz.getConstructors.head.getParameterAnnotations
+  ): scala.collection.Map[String, Array[Annotation]] =
+    findAnnotations(clazz, clazz.getConstructors.head.getParameterTypes, fields)
 
+  /**
+   * NOTE: THIS IS AN INTERNAL FRAMEWORK API AND NOT INTENDED FOR PUBLIC USAGE.
+   *
+   * Attempts to find annotations per `case class` field and declared methods returning a mapping of field name to list
+   * of any found annotations. For Scala case classes, annotations are only visible on the constructor,
+   * thus this code needs to know which constructor of the given class to inspect for annotations.
+   * If a suitable constructor cannot be located given the passed `parameterTypes` this function
+   * will not error but instead skips field. This is intended to
+   * not fail if the parameter types represent a static constructor or factory method defined in a
+   * different class and instead continues onto the method annotation scanning.
+   *
+   * @note IMPORTANT: this is only intended for Scala case classes as it only tries to find annotations
+   *       on constructors of the given class.
+   * @param clazz the `Class` to inspect. This should represent a Scala case class.
+   * @param parameterTypes the list of parameter class types in order to locate the appropriate
+   *                       case class constructor for use in annotation scanning. If a suitable
+   *                       constructor cannot be located, field annotation scanning is effectively
+   *                       skipped (since annotations are carried only on constructors in Scala).
+   * @param fields the list of case class fields.
+   * @return a mapping of field name to list of annotations. Note, this only returns fields which have
+   *         annotations.
+   *
+   * @see [[https://docs.scala-lang.org/tour/case-classes.html Tour of Scala Case Classes]]
+   */
+  private[twitter] def findAnnotations(
+    clazz: Class[_],
+    parameterTypes: Seq[Class[_]],
+    fields: Array[String]
+  ): scala.collection.Map[String, Array[Annotation]] = {
     val clazzAnnotations = scala.collection.mutable.HashMap[String, Array[Annotation]]()
-    var index = 0
-    while (index < fields.length) {
-      val field = fields(index)
-      val fieldAnnotations = clazzConstructorAnnotations(index)
-      if (fieldAnnotations.nonEmpty) clazzAnnotations.put(field, fieldAnnotations)
-      index += 1
+    // for case classes, the annotations are only visible on the constructor.
+    // can blow up if we are passed incorrect parameter types or parameter types for a static
+    // constructor not defined on this class. we move on if we cannot locate a constructor
+    // by the given parameter types.
+    val constructor = Try(clazz.getConstructor(parameterTypes: _*))
+    constructor match {
+      case Return(cons) =>
+        val clazzConstructorAnnotations: Array[Array[Annotation]] =
+          cons.getParameterAnnotations
+        var index = 0
+        while (index < fields.length) {
+          val field = fields(index)
+          val fieldAnnotations = clazzConstructorAnnotations(index)
+          if (fieldAnnotations.nonEmpty) clazzAnnotations.put(field, fieldAnnotations)
+          index += 1
+        }
+      case _ => // do nothing
     }
+
     // find inherited annotations
     findDeclaredMethodAnnotations(
       clazz,

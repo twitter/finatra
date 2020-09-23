@@ -31,12 +31,6 @@ import com.twitter.finatra.jackson.internal.{
   SimplePersonInPackageObject,
   SimplePersonInPackageObjectWithoutConstructorParams
 }
-import com.twitter.finatra.jackson.{
-  CarMake,
-  CarMakeEnum,
-  JacksonScalaObjectMapperType,
-  ScalaObjectMapper
-}
 import com.twitter.finatra.json.JsonDiff
 import com.twitter.inject.Test
 import com.twitter.inject.conversions.time._
@@ -44,7 +38,7 @@ import com.twitter.io.Buf
 import com.twitter.util.Duration
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 import java.lang.reflect.{ParameterizedType, Type}
-import java.util.TimeZone
+import java.util.{TimeZone, UUID}
 import java.util.concurrent.TimeUnit
 import org.joda.time.{DateTime, DateTimeZone}
 import scala.util.Random
@@ -149,6 +143,28 @@ abstract class AbstractScalaObjectMapperTest extends Test {
       GenericTestCaseClass("Hello, World"))
     parse[GenericTestCaseClass[Double]]("""{"data" : 3.14}""") should equal(
       GenericTestCaseClass(3.14d))
+
+    val e = intercept[CaseClassMappingException] {
+      parse[GenericTestCaseClassWithValidation[String]]("""{"data" : ""}""")
+    }
+    e.errors.size should equal(1)
+    // passes validation
+    parse[GenericTestCaseClassWithValidation[String]]("""{"data" : "widget"}""") should equal(
+      GenericTestCaseClassWithValidation("widget"))
+
+    val e1 = intercept[CaseClassMappingException] {
+      parse[GenericTestCaseClassWithValidationAndMultipleArgs[String]](
+        """{"data" : "", "number" : 3}""")
+    }
+    e1.errors.size should equal(2)
+    val e2 = intercept[CaseClassMappingException] {
+      parse[GenericTestCaseClassWithValidationAndMultipleArgs[String]](
+        """{"data" : "widget", "number" : 3}""")
+    }
+    e2.errors.size should equal(1)
+    // passes validation
+    parse[GenericTestCaseClassWithValidationAndMultipleArgs[String]](
+      """{"data" : "widget", "number" : 5}""")
 
     parse[CaseClassWithOptionalGeneric[Int]]("""{"inside": {"data": 3}}""") should equal(
       CaseClassWithOptionalGeneric[Int](Some(GenericTestCaseClass[Int](3))))
@@ -1525,6 +1541,107 @@ abstract class AbstractScalaObjectMapperTest extends Test {
         |""".stripMargin
     ) should equal(
       CaseClassWithMultipleConstructorsAnnotated(12345L, 65789L, 99999L)
+    )
+  }
+
+  test("deserialization#JsonCreator with Validation") {
+    val e = intercept[CaseClassMappingException] {
+      // fails validation
+      parse[TestJsonCreatorWithValidation]("""{ "s": "" }""")
+    }
+    e.errors.size should equal(1)
+    e.errors.head.getMessage should be("s: cannot be empty")
+  }
+
+  test("deserialization#JsonCreator with Validation 1") {
+    // works with multiple validations
+    var e = intercept[CaseClassMappingException] {
+      // fails validation
+      parse[TestJsonCreatorWithValidations]("""{ "s": "" }""")
+    }
+    e.errors.size should equal(2)
+    // errors are alpha-sorted by message to be stable for testing
+    e.errors.head.getMessage should be("s: [] is not one of [42,137]")
+    e.errors.last.getMessage should be("s: cannot be empty")
+
+    e = intercept[CaseClassMappingException] {
+      // fails validation
+      parse[TestJsonCreatorWithValidations]("""{ "s": "99" }""")
+    }
+    e.errors.size should equal(1)
+    e.errors.head.getMessage should be("s: [99] is not one of [42,137]")
+
+    parse[TestJsonCreatorWithValidations]("""{ "s": "42" }""") should equal(
+      TestJsonCreatorWithValidations("42"))
+
+    parse[TestJsonCreatorWithValidations]("""{ "s": "137" }""") should equal(
+      TestJsonCreatorWithValidations(137))
+  }
+
+  test("deserialization#JsonCreator with Validation 2") {
+    val uuid = UUID.randomUUID().toString
+
+    var e = intercept[CaseClassMappingException] {
+      // fails validation
+      parse[CaseClassWithMultipleConstructorsAnnotatedAndValidations](
+        s"""
+           |{
+           |  "number_as_string1" : "",
+           |  "number_as_string2" : "20002",
+           |  "third_argument" : "$uuid"
+           |}
+           |""".stripMargin
+      )
+    }
+    e.errors.size should equal(1)
+    e.errors.head.getMessage should be("number_as_string1: cannot be empty")
+
+    e = intercept[CaseClassMappingException] {
+      // fails validation
+      parse[CaseClassWithMultipleConstructorsAnnotatedAndValidations](
+        s"""
+           |{
+           |  "number_as_string1" : "",
+           |  "number_as_string2" : "65789",
+           |  "third_argument" : "$uuid"
+           |}
+           |""".stripMargin
+      )
+    }
+    e.errors.size should equal(2)
+    // errors are alpha-sorted by message to be stable for testing
+    e.errors.head.getMessage should be("number_as_string1: cannot be empty")
+    e.errors.last.getMessage should be(
+      "number_as_string2: [65789] is not one of [10001,20002,30003]")
+
+    e = intercept[CaseClassMappingException] {
+      // fails validation
+      parse[CaseClassWithMultipleConstructorsAnnotatedAndValidations](
+        s"""
+           |{
+           |  "number_as_string1" : "",
+           |  "number_as_string2" : "65789",
+           |  "third_argument" : "foobar"
+           |}
+           |""".stripMargin
+      )
+    }
+    e.errors.size should equal(3)
+    // errors are alpha-sorted by message to be stable for testing
+    e.errors.head.getMessage should be("number_as_string1: cannot be empty")
+    e.errors(1).getMessage should be("number_as_string2: [65789] is not one of [10001,20002,30003]")
+    e.errors(2).getMessage should be("third_argument: [foobar] is not a valid UUID")
+
+    parse[CaseClassWithMultipleConstructorsAnnotatedAndValidations](
+      s"""
+        |{
+        |  "number_as_string1" : "12345",
+        |  "number_as_string2" : "20002",
+        |  "third_argument" : "$uuid"
+        |}
+        |""".stripMargin
+    ) should equal(
+      CaseClassWithMultipleConstructorsAnnotatedAndValidations(12345L, 20002L, uuid)
     )
   }
 

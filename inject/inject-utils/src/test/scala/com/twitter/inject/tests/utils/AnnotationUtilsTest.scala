@@ -160,4 +160,129 @@ class AnnotationUtilsTest extends Test {
         AnnotationUtils.findAnnotation[Annotation2](annotations).get
       ).isDefined should be(false)
   }
+
+  test("AnnotationUtils#secondaryConstructor") {
+    val annotationMap: Map[String, Array[Annotation]] =
+      AnnotationUtils.findAnnotations(
+        classOf[WithSecondaryConstructor],
+        Seq(classOf[String], classOf[String]),
+        Array("three", "four"))
+
+    annotationMap.isEmpty should be(false)
+    val annotations = annotationMap.flatMap { case (_, annotations) => annotations.toList }.toArray
+    AnnotationUtils.findAnnotation[MarkerAnnotation](annotations) should be(None) // not found
+    AnnotationUtils.findAnnotation[Annotation1](annotations) should be(None) // not found
+    AnnotationUtils.findAnnotation[Annotation2](annotations) should be(None) // not found
+    AnnotationUtils.findAnnotation[Annotation3](annotations).isDefined should be(true)
+    AnnotationUtils.findAnnotation[Annotation4](annotations).isDefined should be(true)
+  }
+
+  test("AnnotationUtils#secondaryConstructor 1") {
+    val annotationMap: Map[String, Array[Annotation]] =
+      AnnotationUtils.findAnnotations(
+        classOf[WithSecondaryConstructor],
+        Seq(classOf[Int], classOf[Int]),
+        Array("one", "two"))
+
+    annotationMap.isEmpty should be(false)
+    val annotations = annotationMap.flatMap { case (_, annotations) => annotations.toList }.toArray
+    AnnotationUtils.findAnnotation[MarkerAnnotation](annotations) should be(None) // not found
+    AnnotationUtils.findAnnotation[Annotation1](annotations).isDefined should be(true)
+    AnnotationUtils.findAnnotation[Annotation2](annotations).isDefined should be(true)
+    AnnotationUtils.findAnnotation[Annotation3](annotations) should be(None) // not found
+    AnnotationUtils.findAnnotation[Annotation4](annotations) should be(None) // not found
+  }
+
+  test("AnnotationUtils#secondaryConstructor 2") {
+    val annotationMap: Map[String, Array[Annotation]] =
+      AnnotationUtils.findAnnotations(
+        classOf[StaticSecondaryConstructor],
+        Seq(classOf[String], classOf[String]),
+        Array("three", "four"))
+
+    annotationMap.isEmpty should be(true) // static constructor will not be scanned, should not fail
+  }
+
+  test("AnnotationUtils#secondaryConstructor 3") {
+    val annotationMap: Map[String, Array[Annotation]] =
+      AnnotationUtils.findAnnotations(
+        classOf[StaticSecondaryConstructor],
+        Seq(classOf[Int], classOf[Int]),
+        Array("one", "two"))
+
+    annotationMap.isEmpty should be(false)
+    val annotations = annotationMap.flatMap { case (_, annotations) => annotations.toList }.toArray
+    AnnotationUtils.findAnnotation[MarkerAnnotation](annotations) should be(None) // not found
+    AnnotationUtils.findAnnotation[Annotation1](annotations).isDefined should be(true)
+    AnnotationUtils.findAnnotation[Annotation2](annotations).isDefined should be(true)
+    AnnotationUtils.findAnnotation[Annotation3](annotations) should be(None) // not found
+    AnnotationUtils.findAnnotation[Annotation4](annotations) should be(None) // not found
+  }
+
+  test("AnnotationUtils#secondaryConstructor 4") {
+    val annotationMap: Map[String, Array[Annotation]] =
+      AnnotationUtils.findAnnotations(
+        classOf[StaticSecondaryConstructorWithMethodAnnotation],
+        Seq(classOf[String], classOf[String]),
+        Array("three", "four"))
+
+    annotationMap.isEmpty should be(
+      false
+    ) // static constructor will not be scanned, should not fail
+    val annotations = annotationMap.flatMap { case (_, annotations) => annotations.toList }.toArray
+    AnnotationUtils.findAnnotation[MarkerAnnotation](annotations) should be(None) // not found
+    AnnotationUtils.findAnnotation[Annotation1](annotations) should be(None) // not found
+    AnnotationUtils.findAnnotation[Annotation2](annotations) should be(None) // not found
+    AnnotationUtils.findAnnotation[Annotation3](annotations) should be(None) // not found
+    AnnotationUtils.findAnnotation[Annotation4](annotations) should be(None) // not found
+    val widgetAnnotationOpt = AnnotationUtils.findAnnotation[Widget](annotations)
+    widgetAnnotationOpt.isDefined should be(true)
+    widgetAnnotationOpt.get.value() should equal("widget1")
+  }
+
+  test("AnnotationUtils#secondaryConstructor 5") {
+    val annotationMap: Map[String, Array[Annotation]] =
+      AnnotationUtils.findAnnotations(
+        classOf[StaticSecondaryConstructorWithMethodAnnotation],
+        Seq(classOf[Int], classOf[Int]),
+        Array("one", "two"))
+
+    annotationMap.isEmpty should be(false)
+    val annotations = annotationMap.flatMap { case (_, annotations) => annotations.toList }.toArray
+    AnnotationUtils.findAnnotation[MarkerAnnotation](annotations) should be(None) // not found
+    AnnotationUtils.findAnnotation[Annotation1](annotations).isDefined should be(true)
+    AnnotationUtils.findAnnotation[Annotation2](annotations).isDefined should be(true)
+    AnnotationUtils.findAnnotation[Annotation3](annotations) should be(None) // not found
+    AnnotationUtils.findAnnotation[Annotation4](annotations) should be(None) // not found
+    val widgetAnnotationOpt = AnnotationUtils.findAnnotation[Widget](annotations)
+    widgetAnnotationOpt.isDefined should be(true)
+    widgetAnnotationOpt.get.value() should equal("widget1")
+  }
+
+  test("AnnotationUtils#generic types") {
+    val annotationMap: Map[String, Array[Annotation]] =
+      AnnotationUtils.findAnnotations(
+        classOf[GenericTestCaseClass[Int]],
+        Seq(classOf[Object]), // generic types resolve to Object
+        Array("one"))
+
+    annotationMap.isEmpty should be(false)
+    val annotations = annotationMap.flatMap { case (_, annotations) => annotations.toList }.toArray
+    AnnotationUtils.findAnnotation[MarkerAnnotation](annotations) should be(None) // not found
+    AnnotationUtils.findAnnotation[Annotation1](annotations).isDefined should be(true)
+  }
+
+  test("AnnotationUtils#generic types 1") {
+    val annotationMap: Map[String, Array[Annotation]] =
+      AnnotationUtils.findAnnotations(
+        classOf[GenericTestCaseClassWithMultipleArgs[Int]],
+        Seq(classOf[Object], classOf[Int]), // generic types resolve to Object
+        Array("one", "two"))
+
+    annotationMap.isEmpty should be(false)
+    val annotations = annotationMap.flatMap { case (_, annotations) => annotations.toList }.toArray
+    AnnotationUtils.findAnnotation[MarkerAnnotation](annotations) should be(None) // not found
+    AnnotationUtils.findAnnotation[Annotation1](annotations).isDefined should be(true)
+    AnnotationUtils.findAnnotation[Annotation2](annotations).isDefined should be(true)
+  }
 }
