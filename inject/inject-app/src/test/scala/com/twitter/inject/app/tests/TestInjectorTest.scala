@@ -164,7 +164,6 @@ object TestBindModule extends TwitterModule {
     bind[Baz].toInstance(new Baz(10))
     bind[Baz].annotatedWith(Names.named("five")).toInstance(new Baz(5))
     bind[Baz].annotatedWith(Names.named("six")).toInstance(new Baz(6))
-    bind[Boolean].annotatedWith(Flags.named("bool")).toInstance(true)
     bind[Service[Int, String]].toInstance(Service.mk { i: Int =>
       Future.value(s"The answer is: $i")
     })

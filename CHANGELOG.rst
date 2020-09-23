@@ -10,6 +10,9 @@ Unreleased
 Added
 ~~~~~
 
+* inject-app: Allow injecting flags without default values as both `scala.Option` and
+  `java.util.Optional`. ``PHAB_ID=D526226``
+
 Changed
 ~~~~~~~
 

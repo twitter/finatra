@@ -1,7 +1,7 @@
 package com.twitter.inject.app.tests
 
 import com.google.inject.{ConfigurationException, Guice, ProvisionException}
-import com.twitter.app.Flags
+import com.twitter.app.{Flaggable, Flags}
 import com.twitter.conversions.StorageUnitOps._
 import com.twitter.inject.annotations.{Flag, Flags => AnnotationFlags}
 import com.twitter.inject.app.internal.{FlagsModule, TwitterTypeConvertersModule}
@@ -10,7 +10,7 @@ import com.twitter.util.{Duration, StorageUnit, Time, TimeFormat}
 import java.io.File
 import java.net.InetSocketAddress
 import java.time.LocalTime
-import java.util.Arrays
+import java.util.{Arrays, Optional}
 import javax.inject.Inject
 
 class FlagsModuleTest extends Test {
@@ -103,7 +103,18 @@ class FlagsModuleTest extends Test {
     "A List of Flag"
   )
 
-  flag.parseArgs(Array("-my.flag.value=bar", "-seq.string=foo,bar", "-list.string=baz,qux"))
+  flag[Int]("int", "int value")
+  flag[Seq[Int]]("list.int.no.default", "int list")
+  flag[Qux]("qux", Qux(), "could have been a foo or bar or baz")
+  flag[Seq[Qux]]("quxs", Seq.empty[Qux], "could have been a foos or bars or bazs")
+
+  flag.parseArgs(
+    Array(
+      "-my.flag.value=bar",
+      "-seq.string=foo,bar",
+      "-list.string=baz,qux",
+      "-int=10",
+      "-list.int.no.default=1,2,3"))
 
   private[this] val flagsModule = new FlagsModule(flag)
   // Users should prefer the `c.t.inject.app.TestInjector`. Here we are testing the FlagsModule
@@ -117,6 +128,80 @@ class FlagsModuleTest extends Test {
     injector.instance[String](AnnotationFlags.named("my.flag.with.default")) should equal(
       "default value"
     )
+  }
+
+  test("not double-inject string flags") {
+    injector.instance[String](AnnotationFlags.named("my.flag.value")) should equal("bar")
+  }
+
+  test("not bind raw strings (w/o @Flag annotation)") {
+    val x = injector.instance[String]
+    Console.out.println(injector.instance[String])
+    //intercept[ConfigurationException](injector.instance[String])
+  }
+
+  test("also inject each flag as string") {
+    injector.instance[String](AnnotationFlags.named("int")) should equal("10")
+
+    injector.instance[String](AnnotationFlags.named("local.time")) should equal(
+      defaultLocalTime.toString)
+    injector.instance[String](AnnotationFlags.named("twitter.time")) should equal(
+      defaultTime.toString)
+    injector.instance[String](AnnotationFlags.named("twitter.duration")) should equal(
+      defaultDuration.toString)
+    injector.instance[String](AnnotationFlags.named("storage.unit")) should equal(
+      defaultStorageUnit.toString())
+    injector.instance[String](AnnotationFlags.named("some.address")) should equal(
+      defaultInetSocketAddress.toString)
+  }
+
+  test("inject flags as (typed) options") {
+    val o = injector.instance[OptionalScalaFlag]
+    o.flagValue should equal(Some(10))
+    o.flagsValue should equal(Some(Seq(1, 2, 3)))
+
+    val r = injector.instance[RequiredScalaFlag]
+    r.flagValue should equal(10)
+    r.flagsValue should equal(Seq(1, 2, 3))
+
+    val oj = injector.instance[OptionalJavaFlag]
+    oj.flagValue should equal(Optional.of(10))
+    oj.flagsValue should equal(Optional.of(Seq(1, 2, 3)))
+
+    injector.instance[Option[Int]](AnnotationFlags.named("int")) should equal(Some(10))
+    injector.instance[Option[Seq[Int]]](AnnotationFlags.named("list.int.no.default")) should equal(
+      Some(Seq(1, 2, 3)))
+
+    injector.instance[Optional[Int]](AnnotationFlags.named("int")) should equal(Optional.of(10))
+    injector.instance[Optional[Seq[Int]]](
+      AnnotationFlags.named("list.int.no.default")) should equal(Optional.of(Seq(1, 2, 3)))
+
+    injector.instance[Int](AnnotationFlags.named("int")) should equal(10)
+    injector.instance[Seq[Int]](AnnotationFlags.named("list.int.no.default")) should equal(
+      Seq(1, 2, 3))
+  }
+
+  test("doesn't bind flags with defaults as options") {
+    intercept[ConfigurationException] {
+      injector.instance[Option[String]](AnnotationFlags.named("my.flag.value"))
+    }
+
+    intercept[ConfigurationException] {
+      injector.instance[Option[Qux]](AnnotationFlags.named("qux"))
+    }
+  }
+
+  test("when Flaggable isn't typed only injects strings") {
+    injector.instance[String](AnnotationFlags.named("qux")) should equal("Qux()")
+    injector.instance[String](AnnotationFlags.named("quxs")) should equal("")
+
+    intercept[ConfigurationException] {
+      injector.instance[Qux](AnnotationFlags.named("qux"))
+    }
+
+    intercept[ConfigurationException] {
+      injector.instance[Seq[Qux]](AnnotationFlags.named("quxs"))
+    }
   }
 
   test("throw exception when injecting flag without default") {
@@ -220,38 +305,25 @@ class FlagsModuleTest extends Test {
     injector.instance[java.util.List[File]](AnnotationFlags.named("list.file")) should equal(
       Arrays.asList(defaultFile))
   }
-
-  test("injector without TwitterTypeConvertersModule module fails to inject flag by type") {
-    val injctr = Injector(Guice.createInjector(flagsModule))
-    intercept[ConfigurationException] {
-      injctr.instance[LocalTime](AnnotationFlags.named("local.time"))
-    }
-    intercept[ConfigurationException] {
-      injctr.instance[Time](AnnotationFlags.named("twitter.time"))
-    }
-    intercept[ConfigurationException] {
-      injctr.instance[Duration](AnnotationFlags.named("twitter.duration"))
-    }
-    intercept[ConfigurationException] {
-      injctr.instance[StorageUnit](AnnotationFlags.named("storage.unit"))
-    }
-    intercept[ConfigurationException] {
-      injctr.instance[InetSocketAddress](AnnotationFlags.named("some.address"))
-    }
-
-    // can be asked for as Strings
-    injector.instance[String](AnnotationFlags.named("local.time")) should equal(
-      defaultLocalTime.toString)
-    injector.instance[String](AnnotationFlags.named("twitter.time")) should equal(
-      defaultTime.toString)
-    injector.instance[String](AnnotationFlags.named("twitter.duration")) should equal(
-      defaultDuration.toString)
-    injector.instance[String](AnnotationFlags.named("storage.unit")) should equal(
-      defaultStorageUnit.toString())
-    injector.instance[String](AnnotationFlags.named("some.address")) should equal(
-      defaultInetSocketAddress.toString)
-  }
 }
+
+class OptionalScalaFlag @Inject() (
+  @Flag("int") val flagValue: Option[Int],
+  @Flag("list.int.no.default") val flagsValue: Option[Seq[Int]])
+class RequiredScalaFlag @Inject() (
+  @Flag("int") val flagValue: Int,
+  @Flag("list.int.no.default") val flagsValue: Seq[Int])
+
+class OptionalJavaFlag @Inject() (
+  @Flag("int") val flagValue: Optional[Int],
+  @Flag("list.int.no.default") val flagsValue: Optional[Seq[Int]])
 
 class RequiresFlag @Inject() (@Flag("my.flag") val flagValue: String)
 class RequiresFlagWithDefault @Inject() (@Flag("my.flag.with.default") val flagValue: String)
+
+final case class Qux()
+object Qux {
+  implicit val f: Flaggable[Qux] = new Flaggable[Qux] {
+    def parse(s: String): Qux = Qux()
+  }
+}
