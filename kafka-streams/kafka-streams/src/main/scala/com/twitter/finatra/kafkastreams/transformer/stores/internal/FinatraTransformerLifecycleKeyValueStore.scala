@@ -7,7 +7,7 @@ import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.errors.InvalidStateStoreException
 import org.apache.kafka.streams.processor.{ProcessorContext, StateStore, TaskId}
 import org.apache.kafka.streams.state.KeyValueIterator
-import org.apache.kafka.streams.state.internals.WrappedStateStore
+import com.twitter.finatra.kafkastreams.internal.utils.CompatibleUtils
 
 /**
  * A FinatraKeyValueStore which allows FinatraTransformer#getKeyValueStore to retrieve a key value
@@ -33,9 +33,7 @@ case class FinatraTransformerLifecycleKeyValueStore[K, V](
     debug(s"init ${processorContext.taskId}")
     this._processorContext = processorContext
 
-    val unwrappedStateStore = processorContext
-      .getStateStore(name).asInstanceOf[WrappedStateStore[_]]
-      .wrapped()
+    val unwrappedStateStore = CompatibleUtils.getUnwrappedStateStore[K, V](name, processorContext)
 
     this.keyValueStore = unwrappedStateStore match {
       case cachingStore: CachingFinatraKeyValueStoreImpl[K, V] =>

@@ -5,9 +5,10 @@ import com.twitter.finatra.annotations.Experimental
 import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
 import com.twitter.finatra.kafkastreams.internal.utils.ReflectionUtils
 import com.twitter.finatra.kafkastreams.partitioning.StaticPartitioning
+import com.twitter.finatra.kafkastreams.internal.utils.CompatibleUtils
+
 import java.util.Properties
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicInteger
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.common.Metric
 import org.apache.kafka.common.utils.Utils
@@ -53,7 +54,7 @@ trait PreRestoreState extends KafkaStreamsTwitterServer with StaticPartitioning 
           info(s"Pre-restore complete.")
 
           //Reset the thread id and start Kafka Streams as if we weren't using pre-restore mode
-          resetStreamThreadId()
+          CompatibleUtils.resetStreamThreadId()
           PreRestoreState.super.createAndStartKafkaStreams()
         } catch {
           case NonFatal(e) =>
@@ -97,21 +98,6 @@ trait PreRestoreState extends KafkaStreamsTwitterServer with StaticPartitioning 
     properties.put(StreamsConfig.POLL_MS_CONFIG, "0")
 
     properties
-  }
-
-  //HACK: Reset StreamThread's so the kafka broker doesn't see 2x the consumer client.ids (since thread number is part of client id)
-  private def resetStreamThreadId(): Unit = {
-    try {
-      val streamThreadClass = classOf[StreamThread]
-      val streamThreadIdSequenceField =
-        streamThreadClass.getDeclaredField("STREAM_THREAD_ID_SEQUENCE")
-      streamThreadIdSequenceField.setAccessible(true)
-      val streamThreadIdSequence = streamThreadIdSequenceField.get(null).asInstanceOf[AtomicInteger]
-      streamThreadIdSequence.set(1)
-    } catch {
-      case NonFatal(e) =>
-        error("Error resetting stream threads", e)
-    }
   }
 
   private def findRestoreConsumerLagMetrics(kafkaStreams: KafkaStreams): Seq[Metric] = {

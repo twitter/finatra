@@ -3,6 +3,7 @@ package com.twitter.finatra.kafkastreams.integration.wordcount
 import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.kafka.serde.ScalaSerdes
+import com.twitter.finatra.kafkastreams.internal.utils.CompatibleUtils
 import com.twitter.finatra.kafkastreams.test.KafkaStreamsMultiServerFeatureTest
 import com.twitter.util.{Await, Duration}
 import org.apache.kafka.common.serialization.Serdes
@@ -64,7 +65,7 @@ class PreRestoreWordCountServerFeatureTest extends KafkaStreamsMultiServerFeatur
     server.close()
     Await.result(server.mainResult)
     server.clearStats()
-    resetStreamThreadId()
+    CompatibleUtils.resetStreamThreadId()
   }
 
   private def testRestartWithoutPrerestore(): Unit = {

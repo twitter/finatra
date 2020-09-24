@@ -4,13 +4,14 @@ import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.finatra.kafka.serde.ScalaSerdes
 import com.twitter.inject.Test
 import com.twitter.inject.server.InMemoryStatsReceiverUtility
+import com.twitter.finatra.kafkastreams.test.KafkaTestUtil
 import org.apache.kafka.common.metrics.Metrics
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.utils.LogContext
 import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.processor.internals.MockStreamsMetrics
 import org.apache.kafka.streams.state.internals.{RocksDBStoreFactory, ThreadCache}
-import org.apache.kafka.test.{InternalMockProcessorContext, NoOpRecordCollector, TestUtils}
+import org.apache.kafka.test.{InternalMockProcessorContext, TestUtils}
 import scala.collection.JavaConverters._
 
 class FinatraKeyValueStoreLatencyTest extends Test {
@@ -19,13 +20,13 @@ class FinatraKeyValueStoreLatencyTest extends Test {
     TestUtils.tempDirectory,
     Serdes.String,
     Serdes.String,
-    new NoOpRecordCollector,
+    KafkaTestUtil.createNoopRecord(),
     new ThreadCache(new LogContext("testCache"), 0, new MockStreamsMetrics(new Metrics()))
   )
 
   private val statsReceiver = new InMemoryStatsReceiver()
   private val statsUtil = new InMemoryStatsReceiverUtility(statsReceiver)
-  private val rocksDbStore = RocksDBStoreFactory.create("FinatraKeyValueStoreTest")
+  private val rocksDbStore = RocksDBStoreFactory.create("FinatraKeyValueStoreTest", "TestMetrics")
   private val keyValueStore = new MetricsFinatraKeyValueStore[Int, String](
     new FinatraKeyValueStoreImpl(rocksDbStore, rocksDbStore, ScalaSerdes.Int, Serdes.String),
     statsReceiver = statsReceiver)

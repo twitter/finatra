@@ -1,5 +1,8 @@
 scala_library(
-    sources = ["**/*.scala"],
+    sources = [
+        "../scala-kafka2.2/**/*.scala",
+        "com/**/*.scala",
+    ],
     compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(
         org = "com.twitter",

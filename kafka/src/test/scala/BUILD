@@ -20,6 +20,8 @@ junit_tests(
         "finatra/kafka/src/main/java",
         "finatra/kafka/src/test/resources",
         "finatra/kafka/src/test/thrift:thrift-scala",
+        # EmbeddedKafkaCluster.java in 2.5 has dependency on kafka-streams code.
+        "3rdparty/jvm/org/apache/kafka:kafka-streams",
     ],
 )
 

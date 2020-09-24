@@ -1,4 +1,5 @@
 java_library(
+    # only include with compiling with kafka2.2
     sources = ["**/*.java"],
     compiler_option_sets = [],
     provides = artifact(

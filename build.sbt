@@ -1177,6 +1177,10 @@ lazy val kafkaStreamsStaticPartitioning =
       name := "finatra-kafka-streams-static-partitioning",
       moduleName := "finatra-kafka-streams-static-partitioning",
       ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
+      unmanagedSourceDirectories in Compile += {
+        val sourceDir = (sourceDirectory in Compile).value
+        sourceDir / "scala-kafka2.2"
+      },
       excludeDependencies in Test ++= kafkaStreamsExclusionRules,
       excludeDependencies ++= kafkaStreamsExclusionRules,
       excludeFilter in unmanagedResources := "BUILD",
@@ -1237,6 +1241,14 @@ lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))
     name := "finatra-kafka-streams",
     moduleName := "finatra-kafka-streams",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
+    unmanagedSourceDirectories in Compile += {
+      val sourceDir = (sourceDirectory in Compile).value
+      sourceDir / "scala-kafka2.2"
+    },
+    unmanagedSourceDirectories in Test += {
+      val testDir = (sourceDirectory in Test).value
+      testDir / "scala-kafka2.2"
+    },
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-jvm" % versions.twLibVersion,
       "it.unimi.dsi" % "fastutil" % versions.fastutil,

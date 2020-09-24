@@ -159,6 +159,9 @@ class KafkaStreamsConfig(
   def stateDir(directory: String): This =
     withConfig(StreamsConfig.STATE_DIR_CONFIG, directory)
 
+  def upgradeFrom(version: String): This =
+    withConfig(StreamsConfig.UPGRADE_FROM_CONFIG, version)
+
   def windowStoreChangeLogAdditionalRetention(duration: Duration): This =
     withConfig(StreamsConfig.WINDOW_STORE_CHANGE_LOG_ADDITIONAL_RETENTION_MS_CONFIG, duration)
 }

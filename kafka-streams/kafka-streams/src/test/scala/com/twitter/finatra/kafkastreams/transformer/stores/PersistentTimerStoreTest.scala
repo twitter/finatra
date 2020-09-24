@@ -6,6 +6,7 @@ import com.twitter.finatra.kafkastreams.transformer.stores.internal.{
   FinatraKeyValueStoreImpl,
   Timer
 }
+import com.twitter.finatra.kafkastreams.test.KafkaTestUtil
 import com.twitter.finatra.kafkastreams.transformer.watermarks.Watermark
 import com.twitter.finatra.streams.transformer.internal.domain.TimerSerde
 import com.twitter.inject.Test
@@ -14,7 +15,7 @@ import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.utils.LogContext
 import org.apache.kafka.streams.processor.internals.MockStreamsMetrics
 import org.apache.kafka.streams.state.internals.{RocksDBStoreFactory, ThreadCache}
-import org.apache.kafka.test.{InternalMockProcessorContext, NoOpRecordCollector, TestUtils}
+import org.apache.kafka.test.{InternalMockProcessorContext, TestUtils}
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ArrayBuffer
 
@@ -26,11 +27,11 @@ class PersistentTimerStoreTest extends Test {
     TestUtils.tempDirectory,
     Serdes.String,
     Serdes.String,
-    new NoOpRecordCollector,
+    KafkaTestUtil.createNoopRecord,
     new ThreadCache(new LogContext("testCache"), 0, new MockStreamsMetrics(new Metrics()))
   )
 
-  private val rocksDBStore = RocksDBStoreFactory.create("mystore")
+  private val rocksDBStore = RocksDBStoreFactory.create("mystore", "TestMetrics")
 
   private val keyValueStore = new FinatraKeyValueStoreImpl[Timer[TimerKey], Array[Byte]](
     _rocksDBStore = rocksDBStore,

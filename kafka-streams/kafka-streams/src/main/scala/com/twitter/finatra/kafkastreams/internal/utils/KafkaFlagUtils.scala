@@ -134,6 +134,12 @@ private[kafkastreams] trait KafkaFlagUtils extends App {
         s"Kafka doesn't have a default value for $key, please provide a default value"
       )
     }
-    configKey.defaultValue.asInstanceOf[T]
+
+    if (configKey.defaultValue.isInstanceOf[Integer] && key == ProducerConfig.LINGER_MS_CONFIG) {
+      // compatibility workaround: kafka 2.2 Linger is int, 2.5 is long
+      configKey.defaultValue.asInstanceOf[Integer].toLong.asInstanceOf[T]
+    } else {
+      configKey.defaultValue.asInstanceOf[T]
+    }
   }
 }

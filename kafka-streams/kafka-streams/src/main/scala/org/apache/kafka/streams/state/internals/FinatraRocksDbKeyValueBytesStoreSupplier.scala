@@ -17,7 +17,7 @@ class FinatraRocksDbKeyValueBytesStoreSupplier(
   override val name: String)
     extends KeyValueBytesStoreSupplier {
 
-  override def get: RocksDBStore = new RocksDBStore(name)
+  override def get: RocksDBStore = RocksDBStoreFactory.create(name, "rocksdb-state")
 
   override def metricsScope: String = "rocksdb-state"
 }

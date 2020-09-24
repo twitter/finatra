@@ -13,9 +13,9 @@ jar_library(
 
 scala_library(
     sources = [
+        "../scala-kafka2.2/*.scala",
         "com/twitter/finatra/kafkastreams/**/*.scala",
-        "com/twitter/finatra/streams/**/*.scala",
-        "org/**/*.scala",
+        "org/apache/kafka/streams/state/**/*.scala",
     ],
     compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(
@@ -25,6 +25,7 @@ scala_library(
     ),
     strict_deps = True,
     dependencies = [
+        # NOTE: remove this direct rocksDB dependency when building 2.5
         ":rocksdb-5.14.2",
         "3rdparty/jvm/it/unimi/dsi:fastutil",
         "3rdparty/jvm/org/agrona",

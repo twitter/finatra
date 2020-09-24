@@ -2,12 +2,11 @@ package com.twitter.finatra.kafkastreams.test
 
 import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.kafka.test._
+import com.twitter.finatra.kafkastreams.internal.utils.CompatibleUtils
 import com.twitter.inject.Test
 import com.twitter.util.Duration
 import java.io.File
-import java.util.concurrent.atomic.AtomicInteger
 import org.apache.kafka.common.serialization.Serde
-import org.apache.kafka.streams.processor.internals.StreamThread
 
 /**
  * Extensible abstract test class used when testing a single KafkaStreamsTwitterServer in your test.
@@ -142,14 +141,7 @@ abstract class AbstractKafkaStreamsFeatureTest extends Test with EmbeddedKafka {
     )
   }
 
-  //HACK: Reset StreamThread's id after each test so that each test starts from a known fresh state
-  //Without this hack, tests would need to always wildcard the thread number when asserting stats
   protected def resetStreamThreadId(): Unit = {
-    val streamThreadClass = classOf[StreamThread]
-    val streamThreadIdSequenceField = streamThreadClass
-      .getDeclaredField("STREAM_THREAD_ID_SEQUENCE")
-    streamThreadIdSequenceField.setAccessible(true)
-    val streamThreadIdSequence = streamThreadIdSequenceField.get(null).asInstanceOf[AtomicInteger]
-    streamThreadIdSequence.set(1)
+    CompatibleUtils.resetStreamThreadId()
   }
 }

@@ -42,6 +42,9 @@ Added
 
 Changed
 ~~~~~~~
+* finatra-kafka-streams: Update and separate the Finatra kafka stream code base which has direct
+  dependency on Kafka 2.2. Separate any code which cannot easily be upgraded to separate build
+  target. ``PHAB_ID=D545900``
 
 * inject-core: `c.t.inject.Injector` is now an abstract class. Use `Injector.apply` to create
   a new instance (versus the `new Injector(...)` before). ``PHAB_ID=D543297``

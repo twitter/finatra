@@ -1,10 +1,12 @@
 package com.twitter.finatra.kafkastreams.partitioning.internal
 
 import java.util
-import org.apache.kafka.clients.consumer.{Consumer, ConsumerConfig}
+import org.apache.kafka.clients.consumer._
 import org.apache.kafka.streams.processor.internals.DefaultKafkaClientSupplier
 
-class StaticPartitioningKafkaClientSupplierSupplier(numApplicationInstances: Int)
+class StaticPartitioningKafkaClientSupplierSupplier(
+  numApplicationInstances: Int,
+  serverConfig: String)
     extends DefaultKafkaClientSupplier {
 
   override def getConsumer(config: util.Map[String, AnyRef]): Consumer[Array[Byte], Array[Byte]] = {

@@ -1,6 +1,7 @@
 scala_library(
     name = "test-deps",
     sources = [
+        "../scala-kafka2.2/*.scala",
         "com/twitter/finatra/kafkastreams/test/*.scala",
         "com/twitter/inject/*.scala",
     ],

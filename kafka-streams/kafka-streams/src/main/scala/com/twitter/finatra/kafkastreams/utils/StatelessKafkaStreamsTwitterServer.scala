@@ -1,7 +1,7 @@
 package com.twitter.finatra.kafkastreams.utils
 
 import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
-import com.twitter.finatra.kafkastreams.internal.utils.TopologyReflectionUtils
+import com.twitter.finatra.kafkastreams.internal.utils.CompatibleUtils
 import org.apache.kafka.streams.Topology
 
 /**
@@ -15,7 +15,7 @@ abstract class StatelessKafkaStreamsTwitterServer extends KafkaStreamsTwitterSer
 
   override def createKafkaStreamsTopology(): Topology = {
     val topology = super.createKafkaStreamsTopology()
-    if (!TopologyReflectionUtils.isStateless(topology)) {
+    if (!CompatibleUtils.isStateless(topology)) {
       throw new UnsupportedOperationException(
         "This server is using StatelessKafkaStreamsTwitterServer but it is not a stateless topology"
       )

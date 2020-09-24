@@ -180,7 +180,7 @@ case class FinatraTopologyTester private (
 
   def getKeyValueStore[K, V](name: String): KeyValueStore[K, V] = {
     driver
-      .getStateStore(name)
+      .getKeyValueStore(name)
       .asInstanceOf[KeyValueStore[K, V]]
   }
 

@@ -3,7 +3,8 @@ package com.twitter.finatra.kafkastreams.flushing
 import com.twitter.finagle.stats.{Stat, StatsReceiver, Verbosity}
 import com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging
 import com.twitter.util.{Duration, Future}
-import java.util.concurrent.ConcurrentHashMap
+import java.util.Collections
+import java.util
 import org.apache.kafka.streams.processor.internals.{
   InternalProcessorContext,
   ProcessorRecordContext
@@ -55,8 +56,8 @@ abstract class AsyncTransformer[K1, V1, K2, V2](
 
   @volatile private var flushOutputRecordsCancellable: Cancellable = _
 
-  private val outstandingResults = ConcurrentHashMap
-    .newKeySet[(K2, V2, ProcessorRecordContext)](maxOutstandingFuturesPerTask)
+  val oldList = new util.LinkedList[(K2, V2, ProcessorRecordContext)]()
+  val outstandingResults = Collections.synchronizedList(oldList)
 
   private val outstandingResultsGauge =
     statsReceiver.addGauge(Verbosity.Debug, "outstandingResults")(numOutstandingResults)

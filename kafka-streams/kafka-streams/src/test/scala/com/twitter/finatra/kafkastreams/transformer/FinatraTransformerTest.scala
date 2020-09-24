@@ -6,20 +6,16 @@ import com.twitter.finatra.kafkastreams.config.KafkaStreamsConfig
 import com.twitter.finatra.kafkastreams.transformer.domain.Time
 import com.twitter.finatra.kafkastreams.transformer.stores.CachingKeyValueStores
 import com.twitter.finatra.kafkastreams.transformer.watermarks.Watermark
+import com.twitter.finatra.kafkastreams.test.KafkaTestUtil
 import com.twitter.inject.Test
 import com.twitter.inject.server.InMemoryStatsReceiverUtility
 import com.twitter.util.Duration
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.processor._
-import org.apache.kafka.streams.processor.internals.{ProcessorNode, RecordCollector, ToInternal}
+import org.apache.kafka.streams.processor.internals._
 import org.apache.kafka.streams.state.internals.{FinatraStores, WrappedStateStore}
-import org.apache.kafka.test.{
-  InternalMockProcessorContext,
-  MockProcessorNode,
-  NoOpRecordCollector,
-  TestUtils
-}
+import org.apache.kafka.test.{InternalMockProcessorContext, MockProcessorNode, TestUtils}
 import org.mockito.{ArgumentMatcher, ArgumentMatchers, Mockito}
 
 class FinatraTransformerTest extends Test with com.twitter.util.mock.Mockito {
@@ -157,7 +153,7 @@ class FinatraTransformerTest extends Test with com.twitter.util.mock.Mockito {
     }
 
     override def recordCollector(): RecordCollector = {
-      new NoOpRecordCollector
+      KafkaTestUtil.createNoopRecord()
     }
 
     override def forward[K, V](key: K, value: V, to: To): Unit = {}
