@@ -920,7 +920,8 @@ lazy val http = project
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
       "com.novocode" % "junit-interface" % "0.11" % Test,
-      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
+      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal",
+      "com.twitter" %% "util-security-test-certs" % versions.twLibVersion % Test
     ),
     unmanagedResourceDirectories in Test += baseDirectory(
       _ / "src" / "test" / "webapp"

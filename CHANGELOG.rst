@@ -19,6 +19,8 @@ Added
 Changed
 ~~~~~~~
 
+* http: Adding support for optionally passing chain in the TLS sever trait. ``PHAB_ID=D553718``
+
 Fixed
 ~~~~~
 
