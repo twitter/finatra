@@ -2,6 +2,7 @@ junit_tests(
     sources = ["**/*.scala"],
     compiler_option_sets = ["fatal_warnings"],
     dependencies = [
+        "3rdparty/jvm/ch/qos/logback:logback-classic",
         "3rdparty/jvm/ch/qos/logback:logback-core",
         "3rdparty/jvm/org/scalatestplus:junit",
         "3rdparty/jvm/org/slf4j:slf4j-api",

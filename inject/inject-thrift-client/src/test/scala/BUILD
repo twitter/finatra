@@ -57,6 +57,7 @@ junit_tests(
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/response",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/routing",
         "finatra/thrift/src/test/scala/com/twitter/finatra/thrift",
+        "finatra/utils/src/main/java/com/twitter/finatra/annotations",
         "scrooge/scrooge-core/src/main/scala",
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",

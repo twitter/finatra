@@ -17,6 +17,7 @@ junit_tests(
         ),
         "finagle/finagle-core/src/main",
         "finagle/finagle-http/src/main/scala",
+        "finagle/finagle-stats-core/src/main/scala",
         "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app",
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-core/src/test/scala/com/twitter/inject",

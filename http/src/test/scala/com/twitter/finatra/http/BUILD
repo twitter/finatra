@@ -15,6 +15,7 @@ scala_library(
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/net/codingwell:scala-guice",
+        "3rdparty/jvm/org/scalactic",
         "finagle/finagle-base-http/src/main",
         "finagle/finagle-core/src/main",
         "finatra/http-annotations/src/main/java/com/twitter/finatra/http/annotations",
