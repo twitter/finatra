@@ -34,7 +34,7 @@ which allows you to pass it a set of `TwitterModules` and `Flags` to construct a
     `Flag` instances defined in the set of `TwitterModules`.
 
 To write an integration test, extend the `c.t.inject.IntegrationTest` trait. Then override the
-`injector` val with your constructed instance of on a `c.t.inject.Injector <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala>`_
+`injector` val with your constructed instance of a `c.t.inject.Injector <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala>`_
 created from the `c.t.inject.app.TestInjector`.
 
 You'll then be able to access instances of necessary classes to execute tests.
@@ -96,12 +96,26 @@ and, instead, leaves this exercise to the users. Put this way, you're responsibl
       }
     }
 
+.. note::
+
+    You are not required to extend `com.twitter.inject.IntegrationTest` for integration testing. You can 
+    choose to instead just extend `com.twitter.inject.Test` and implement everything above as well. 
+
+    Finatra provides the `com.twitter.inject.IntegrationTest` utility as a placeholder to provide future 
+    functionality on the basis that the test code is aware of the `injector` member variable and is thus 
+    able to add functionality on top it.
+
 `bind[T]` DSL
 -------------
 
-Note that the `c.t.inject.app.TestInjector` also supports the `bind[T]` DSL for overriding
+The `c.t.inject.app.TestInjector` also supports the `bind[T]` DSL for overriding
 bound types. See the `bind[T]` `documentation <./bind_dsl.html#testinjector-bind-t>`_ for more
-information.
+information. 
+
+Practically, this means that you can create an object graph from the list of modules provided 
+to the `TestInjector` and then swap out any bound instances in that object graph with a differing
+implementation without needing to explicitly provide any `override modules <override_modules.html>`__. 
+This can be particularly useful when working with `Mocks <mocks.html#using-mocks>`__ in a test.
 
 Http Tests
 ----------
