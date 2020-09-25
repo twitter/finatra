@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Feature Tests &#8212; Finatra 20.8.1 documentation</title>
+    <title>Feature Tests &#8212; Finatra 20.9.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '20.8.1',
+        VERSION:     '20.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -582,7 +582,7 @@ trait BaseMyServiceFeatureTest extends FeatureTest {
 </div>
 <p>This “base” trait defines a method for obtaining a properly configured embedded server for test
 implementations to use. Then in tests we could do:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.mock.Mockito
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.util.mock.Mockito
 
 class MyServiceFirstFeatureTest extends BaseMyServiceFeatureTest with Mockito {
   override val foo: Foo = mock[Foo]
@@ -646,9 +646,9 @@ a method for obtaining a properly configured embedded server for test instances 
 <p>Each subclass implementation would then just cycle through different server configurations, setting
 that configuration as it’s own <cite>server</cite> under test.</p>
 <p>For example, we could extend our defined “base” testing trait to include test cases:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.mock.Mockito
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.server.FeatureTest
-import com.twitter.finatra.http.EmbeddedHttpServer
+import com.twitter.util.mock.Mockito
 import scala.collection.immutable.ListMap
 
 trait BaseMyServiceFeatureTest extends FeatureTest with Mockito {

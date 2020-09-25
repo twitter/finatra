@@ -207,7 +207,7 @@ the `PropertyNamingStrategy` different than the default:
     import com.fasterxml.jackson.databind.PropertyNamingStrategy
     import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 
-    object MyCustomObjectMapperModule extends ScalaObjectMapperModule = {
+    object MyCustomObjectMapperModule extends ScalaObjectMapperModule {
 
         override val propertyNamingStrategy: PropertyNamingStrategy =
           new PropertyNamingStrategy.KebabCaseStrategy
@@ -225,7 +225,7 @@ Or to set additional modules or configuration:
     }
     import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 
-    object MyCustomObjectMapperModule extends ScalaObjectMapperModule = {
+    object MyCustomObjectMapperModule extends ScalaObjectMapperModule {
 
         override val propertyNamingStrategy: PropertyNamingStrategy =
           new PropertyNamingStrategy.KebabCaseStrategy

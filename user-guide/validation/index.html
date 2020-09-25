@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Validation Framework &#8212; Finatra 20.8.1 documentation</title>
+    <title>Validation Framework &#8212; Finatra 20.9.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '20.8.1',
+        VERSION:     '20.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -127,6 +127,10 @@ try {
 }
 </pre></div>
 </div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Case classes with multiple constructors or multiple constructor lists with non-public constructor args are <strong>not-supported</strong>.</p>
+</div>
 <div class="section" id="instantiate-a-validator">
 <h3>Instantiate a <cite>Validator</cite><a class="headerlink" href="#instantiate-a-validator" title="Permalink to this headline">¶</a></h3>
 <p>There are 2 ways to obtain a <cite>Validator</cite> instance:</p>
@@ -207,18 +211,18 @@ object CustomizedValidatorModule extends ValidatorModule {
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">By overriding the default <cite>validatorModule</cite>, you are also replacing the default Validator in
-<a href="#id1"><span class="problematic" id="id2">`jacksonModule https://github.com/twitter/finatra/blob/ef7197324cba8dfe6274ffb4570dea6c34b9fc33/http/src/main/scala/com/twitter/finatra/http/servers.scala#L526`__</span></a>,
-the new <cite>Validator</cite> will be used to apply the validation logic in
-<a href="#id1"><span class="problematic" id="id3">`ScalaObjectMapper https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala`__</span></a>
-and during HTTP request parsing. Checkout
-<a class="reference external" href="#integrate-with-finatra-jackson-framework">Integrate with Finatra Jackson framework</a> For
-more information about how validations works in Finatra Jackson Framework.</p>
+<p>By overriding the default <cite>validatorModule</cite>, you are also replacing the default <cite>Validator</cite> in
+the <a class="reference external" href="https://github.com/twitter/finatra/blob/ef7197324cba8dfe6274ffb4570dea6c34b9fc33/http/src/main/scala/com/twitter/finatra/http/servers.scala#L526">jacksonModule</a>.
+The newly defined <cite>Validator</cite> will be used to apply the validation logic in the
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala">ScalaObjectMapper</a>
+and during HTTP request parsing.</p>
+<p class="last">See <a class="reference external" href="#integration-with-finatra-jackson-support">Integration with Finatra Jackson Support</a>
+for more information about how validations works in Finatra Jackson Framework.</p>
 </div>
 </div>
 </div>
-<div class="section" id="integrate-with-finatra-jackson-framework">
-<h2>Integrate with Finatra Jackson framework<a class="headerlink" href="#integrate-with-finatra-jackson-framework" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="integration-with-finatra-jackson-support">
+<h2>Integration with Finatra Jackson Support<a class="headerlink" href="#integration-with-finatra-jackson-support" title="Permalink to this headline">¶</a></h2>
 <p>The validation framework integrates with Finatra’s custom <cite>case class</cite> deserializer to efficiently
 apply per field and method validations as request parsing is performed.</p>
 <p>Assume you have the following HTTP request case class defined:</p>
@@ -235,7 +239,7 @@ apply per field and method validations as request parsing is performed.</p>
 }
 </pre></div>
 </div>
-<p>When you perform a call to the POST /validate_user/, Finatra will deserialize the JSON you passed to the call
+<p>When you perform a call to the POST <cite>/validate_user/</cite>, Finatra will deserialize the JSON you passed to the call
 to a <cite>ValidationUserRequest</cite> case class, and perform validations of the annotated fields. If any validation
 fails, the case class will not be created and a
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/exceptions/CaseClassMappingException.scala">CaseClassMappingException</a>
@@ -253,6 +257,47 @@ will be thrown.</p>
 <p>The <code class="docutils literal"><span class="pre">&#64;MethodValidation</span></code> annotation also supports specifying an optional <code class="docutils literal"><span class="pre">fields</span></code> parameter to
 state which fields are being evaluated in the validation. If the evaluation fails the resulting
 exception will contain details about each of the fields specified in the annotation.</p>
+</div>
+<div class="section" id="best-practices-guidance-limitations">
+<h2>Best Practices, Guidance &amp; Limitations<a class="headerlink" href="#best-practices-guidance-limitations" title="Permalink to this headline">¶</a></h2>
+<p>Case classes are generally expected to be defined like simple <a class="reference external" href="https://en.wikipedia.org/wiki/Plain_old_Java_object">POJOs</a>,
+or <a class="reference external" href="https://en.wikipedia.org/wiki/JavaBeans#JavaBean_conventions">JavaBeans</a> (but without the
+need to implement <cite>java.io.Serializable</cite>). Constraints are expected to be defined on case class
+constructor fields.</p>
+<ul>
+<li><p class="first">When defining constraints, case classes MUST be defined with a single constructor. If multiple
+constructors are defined, there is currently no way to signal to the Validation framework which
+constructor should be used for finding constraint annotations.</p>
+</li>
+<li><p class="first">When defining constraints, case classes MUST be defined with all constructors args publicly visible.
+E.g., a constructor defined like so:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class DoublePerson(@NotEmpty name: String)(@NotEmpty otherName: String)
+</pre></div>
+</div>
+<p>will <strong>not work</strong> properly as second parameter list fields by default are not publicly visible. If you
+find you need to do this case, you will need to explicitly make the fields in the second parameter
+list visible:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class DoublePerson(@NotEmpty name: String)(@NotEmpty val otherName: String)
+</pre></div>
+</div>
+</li>
+<li><p class="first">Nested case classes are currently not supported. That is, validation will not occur for fields which are
+case classes themselves with constructor field annotated with constraints. E.g.,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class Bar(@Max(1000) id: Int, @NonEmpty name: String)
+
+case Foo(@Min(1) id: Int, bar: Bar)
+</pre></div>
+</div>
+<p><cite>Bar</cite> validations will not be performed. We hope to support the case of validating nested case classes
+in a future version of the API.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">However, note when used within the <a class="reference external" href="../json/index.html">Finatra Jackson Integration</a>,
+nested case class validations will be performed due to the library’s integration with Jackson’s
+deserializers.</p>
+</div>
+</li>
+</ul>
 </div>
 </div>
 
@@ -285,8 +330,9 @@ exception will contain details about each of the fields specified in the annotat
 <li><a class="reference internal" href="#injecting-a-customized-validator">Injecting a customized Validator</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#integrate-with-finatra-jackson-framework">Integrate with Finatra Jackson framework</a></li>
+<li><a class="reference internal" href="#integration-with-finatra-jackson-support">Integration with Finatra Jackson Support</a></li>
 <li><a class="reference internal" href="#method-validations">Method Validations</a></li>
+<li><a class="reference internal" href="#best-practices-guidance-limitations">Best Practices, Guidance &amp; Limitations</a></li>
 </ul>
 </li>
 </ul>

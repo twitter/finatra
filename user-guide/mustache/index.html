@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Mustache Support &#8212; Finatra 20.8.1 documentation</title>
+    <title>Mustache Support &#8212; Finatra 20.9.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '20.8.1',
+        VERSION:     '20.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -88,7 +88,7 @@ val result =
 </div>
 <div class="section" id="mustachefactorymodule">
 <h2><cite>MustacheFactoryModule</cite><a class="headerlink" href="#mustachefactorymodule" title="Permalink to this headline">¶</a></h2>
-<p>To do so you will need to include the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/modules/MustacheFactoryModule.scala"><cite>c.t.finatra.mustache.modules.MustacheFactoryModule</cite></a> in the list of
+<p>To do so, you will need to include the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/modules/MustacheFactoryModule.scala"><cite>c.t.finatra.mustache.modules.MustacheFactoryModule</cite></a> in the list of
 modules passed to create the injector. This module provides a correctly configured
 <cite>MustacheFactory</cite> which the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/marshalling/MustacheService.scala"><cite>c.t.finatra.mustache.marshalling.MustacheService</cite></a> uses. E.g.,</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
@@ -104,8 +104,11 @@ class MyServer extends TwitterServer {
 </div>
 <p><a class="reference external" href="https://mustache.github.io/">Mustache</a> templates are resolved by Finatra’s
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/utils/FileResolver.scala"><cite>c.t.finatra.utils.FileResolver</cite></a>.</p>
-<p>By default, files are loaded from the classpath root. To configure a classpath “namespace” for loading mustache templates,
-set the <cite>-mustache.templates.dir</cite> flag which is defined by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/modules/MustacheFactoryModule.scala"><cite>c.t.finatra.mustache.modules.MustacheFactoryModule</cite></a>.</p>
+<p>By default, files are loaded from the classpath root. To configure a classpath “namespace” for loading mustache templates, set the <cite>-mustache.templates.dir</cite> flag which is defined by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/modules/MustacheFactoryModule.scala"><cite>c.t.finatra.mustache.modules.MustacheFactoryModule</cite></a>.</p>
+<div class="admonition-mustache-templates-are-loaded-from-templates-by-default admonition">
+<p class="first admonition-title">Mustache templates are loaded from <cite>/templates</cite> by default.</p>
+<p class="last">The framework default “namespace” for Mustache templates is <cite>/templates</cite>, meaning the framework will try to resolve file <cite>file.mustache</cite> as <cite>/templates/file.mustache</cite>. To change this, set the <cite>-mustache.templates.dir</cite> flag to a different value. See: the Flag documentation <a class="reference external" href="../getting-started/flags.html#passing-flag-values-as-command-line-arguments">here</a> for information on setting flag values.</p>
+</div>
 </div>
 <div class="section" id="local-filesystem">
 <h2>Local filesystem<a class="headerlink" href="#local-filesystem" title="Permalink to this headline">¶</a></h2>
@@ -115,17 +118,20 @@ the <a class="reference external" href="https://github.com/twitter/finatra/blob/
 <p>Note, that the interplay between the <cite>mustache.temaplates.dir</cite> and the <cite>local.doc.root</cite> flags is as follows:</p>
 <ul>
 <li><p class="first">in “local file mode” (e.g., when the <cite>-local.doc.root</cite> flag is set to a <strong>non-empty</strong> value) the framework will
-try to load a template first from the absolute path under <cite>mustache.templates.dir</cite></p>
+try to load a template first from the absolute path under <cite>mustache.templates.dir</cite>, e.g.,</p>
+<div class="code bash highlight-text"><div class="highlight"><pre><span></span>/${mustache.templates.dir}/template.mustache
+</pre></div>
+</div>
 </li>
 <li><p class="first">if the template is not found, it will then be loaded from a location of <cite>mustache.templates.dir</cite> relative to
-the specified <cite>-local.doc.root</cite>, value e.g,</p>
+the specified <cite>-local.doc.root</cite>, value e.g.,</p>
 <div class="code bash highlight-text"><div class="highlight"><pre><span></span>/${local.doc.root}/${mustache.templates.dir}/template.mustache
 </pre></div>
 </div>
 </li>
 </ul>
-<div class="admonition important">
-<p class="first admonition-title">Important</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
 <p class="last">It is <strong>not recommended</strong> that you set the <cite>-local.doc.root</cite> in a production environment, but
 rather load templates as classpath resources.</p>
 </div>

@@ -9,11 +9,11 @@ Working with Mocks
 Finatra recommends and integrates with the excellent |Mockito|_ Java mocking framework. As mentioned in the main `Testing <./index.html#scalatest>`__ section, it is recommended that Scala users use the `ScalaTest <https://www.scalatest.org/>`__ 
 testing framework, however it is also recommended that users prefer |MockitoScala|_ for |Mockito|_ mocking in Scala over the `ScalaTest MockitoSugar <https://www.scalatest.org/user_guide/testing_with_mock_objects#mockito>`__ utility (which provides only basic syntax sugar for |Mockito|_).
 
-|c.t.mock.Mockito|_
+|c.t.util.mock.Mockito|_
 ---------------------
 
-|c.t.mock.Mockito|_ provides a |MockitoScala|_ integration for Scala users of the framework. Java
-users are encouraged to use |Mockito|_ directly. The |c.t.mock.Mockito|_ will work as a full
+|c.t.util.mock.Mockito|_ provides a |MockitoScala|_ integration for Scala users of the framework. Java
+users are encouraged to use |Mockito|_ directly. The |c.t.util.mock.Mockito|_ will work as a full
 replacement of the `ScalaTest <https://www.scalatest.org/>`__ `org.scalatestplus.mockito.MockitoSugar <http://doc.scalatest.org/3.0.8/org/scalatestplus/mockito/MockitoSugar.html>`_
 trait.
 
@@ -24,7 +24,7 @@ integration.
 
 .. note::
 
-  Usage of the |MockitoScala|_ integration via |c.t.mock.Mockito|_ is optional. Users are free to
+  Usage of the |MockitoScala|_ integration via |c.t.util.mock.Mockito|_ is optional. Users are free to
   choose `ScalaTest <https://www.scalatest.org/>`__ `MockitoSugar <http://doc.scalatest.org/3.0.8/org/scalatestplus/mockito/MockitoSugar.html>`_ or another mocking library entirely for use in writing tests.
 
 Using Mocks
@@ -37,13 +37,13 @@ control over the lifecycle of a mock within a given test rather than binding a m
 `#bind[T] <bind_dsl.html>`__ DSL allows for the test to retain control of the mock in order to
 expect or if necessary, reset, behavior.
 
-To use, first add a dependency on `util/util-mock` and then mix in the `c.t.mock.Mockito` trait to your test. E.g.,
+To use, first add a dependency on `util/util-mock` and then mix in the `c.t.util.mock.Mockito` trait to your test. E.g.,
 
 .. code:: scala
 
     import com.twitter.finatra.http.EmbeddedHttpServer
     import com.twitter.inject.server.FeatureTest
-    import com.twitter.mock.Mockito
+    import com.twitter.util.mock.Mockito
 
     class ExampleFeatureTest
       extends FeatureTest
@@ -73,7 +73,7 @@ mock to the object graph in the module, e.g.,
 .. code:: scala
 
     import com.twitter.inject.TwitterModule
-    import com.twitter.mock.Mockito
+    import com.twitter.util.mock.Mockito
 
     // NOT RECOMMENDED
     object MyTestModule extends TwitterModule with Mockito {
@@ -137,7 +137,7 @@ trait, thus the ScalaTest `afterEach()` function is available to override. E.g.,
 
     import com.twitter.finatra.http.EmbeddedHttpServer
     import com.twitter.inject.server.FeatureTest
-    import com.twitter.mock.Mockito
+    import com.twitter.util.mock.Mockito
 
     class ExampleFeatureTest
       extends FeatureTest
@@ -152,7 +152,7 @@ trait, thus the ScalaTest `afterEach()` function is available to override. E.g.,
         .bind[IdService].toInstance(mockIdService)
 
       override afterEach(): Unit = {
-        // c.t.mock.Mockito provides a `reset(mocks*)` function
+        // c.t.util.mock.Mockito provides a `reset(mocks*)` function
         reset(mockDownstreamServiceClient, mockIdService)
       }
 
@@ -163,7 +163,7 @@ trait, thus the ScalaTest `afterEach()` function is available to override. E.g.,
       }
 
 This will `reset <https://javadoc.io/static/org.mockito/mockito-core/3.3.3/org/mockito/Mockito.html#resetting_mocks>`__
-the mocks passed to the `c.t.mock.Mockito.reset` function *after* each test case has been run.
+the mocks passed to the `c.t.util.mock.Mockito.reset` function *after* each test case has been run.
 
 .. note::
 
@@ -211,7 +211,7 @@ More Information
 .. |MockitoScala| replace:: Mockito Scala
 .. _MockitoScala: https://github.com/mockito/mockito-scala
 
-.. |c.t.mock.Mockito| replace:: `c.t.mock.Mockito`
-.. _c.t.mock.Mockito: https://github.com/twitter/util/blob/develop/util-mock/src/main/scala/com/twitter/mock/Mockito.scala
+.. |c.t.util.mock.Mockito| replace:: `c.t.util.mock.Mockito`
+.. _c.t.util.mock.Mockito: https://github.com/twitter/util/blob/develop/util-mock/src/main/scala/com/twitter/util/mock/Mockito.scala
 
 

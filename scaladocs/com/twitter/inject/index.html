@@ -362,9 +362,9 @@
                         <a class="class" href="Flags.html" title="Transforms a com.twitter.app.Flags collection into a map look up"></a>
                         <a href="Flags.html" title="Transforms a com.twitter.app.Flags collection into a map look up">Flags</a>
                       </li><li class="current-entities indented3">
-                        <span class="separator"></span>
-                        <a class="class" href="Injector.html" title=""></a>
-                        <a href="Injector.html" title="">Injector</a>
+                        <a class="object" href="Injector$.html" title=""></a>
+                        <a class="class" href="Injector.html" title="An injector used within Finatra."></a>
+                        <a href="Injector.html" title="An injector used within Finatra.">Injector</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="object" href="InjectorModule$.html" title=""></a>
@@ -484,22 +484,24 @@
       </span>
       
       <p class="shortcomment cmt">Transforms a <a href="https://twitter.github.io/util/docs/com/twitter/app/Flags.html" class="extype" name="com.twitter.app.Flags">com.twitter.app.Flags</a> collection into a map look up</p>
-    </li><li name="com.twitter.inject.Injector" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="InjectorextendsProductwithSerializable"></a><a id="Injector:Injector"></a>
+    </li><li name="com.twitter.inject.Injector" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="InjectorextendsAnyRef"></a><a id="Injector:Injector"></a>
       <span class="permalink">
       <a href="../../../com/twitter/inject/Injector.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="Injector.html"><span class="name">Injector</span></a><span class="params">(<span name="underlying">underlying: <span class="extype" name="com.google.inject.Injector">google.inject.Injector</span></span>)</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.11/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.11/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="An injector used within Finatra." href="Injector.html"><span class="name">Injector</span></a><span class="result"> extends <a href="../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">An injector used within Finatra.</p><div class="fullcomment"><div class="comment cmt"><p>An injector used within Finatra.</p><p>This is abstract class to allow for two implementations:</p><p>- production injector, created via <code>Injector.apply</code> and
+- test injector, created via <code>TestInjector.apply</code></p><p>DO NOT EXTEND this class on your own.
+</p></div></div>
     </li><li name="com.twitter.inject.Logging" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="LoggingextendsLogging"></a><a id="Logging:Logging"></a>
       <span class="permalink">
@@ -631,7 +633,23 @@ This module may expose the bindings it creates and the bindings of the modules i
         <div class="values members">
               <h3>Value Members</h3>
               <ol>
-                <li name="com.twitter.inject.InjectorModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+                <li name="com.twitter.inject.Injector" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Injector"></a><a id="Injector:Injector"></a>
+      <span class="permalink">
+      <a href="../../../com/twitter/inject/Injector$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="Injector$.html"><span class="name">Injector</span></a>
+      </span>
+      
+      
+    </li><li name="com.twitter.inject.InjectorModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="InjectorModule"></a><a id="InjectorModule:InjectorModule"></a>
       <span class="permalink">
       <a href="../../../com/twitter/inject/InjectorModule$.html" title="Permalink">

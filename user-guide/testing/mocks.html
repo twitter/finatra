@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Working with Mocks &#8212; Finatra 20.8.1 documentation</title>
+    <title>Working with Mocks &#8212; Finatra 20.9.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '20.8.1',
+        VERSION:     '20.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -74,10 +74,10 @@
 <p>Finatra recommends and integrates with the excellent <a class="reference external" href="https://site.mockito.org/">Mockito</a> Java mocking framework. As mentioned in the main <a class="reference external" href="./index.html#scalatest">Testing</a> section, it is recommended that Scala users use the <a class="reference external" href="https://www.scalatest.org/">ScalaTest</a>
 testing framework, however it is also recommended that users prefer <a class="reference external" href="https://github.com/mockito/mockito-scala">Mockito Scala</a> for <a class="reference external" href="https://site.mockito.org/">Mockito</a> mocking in Scala over the <a class="reference external" href="https://www.scalatest.org/user_guide/testing_with_mock_objects#mockito">ScalaTest MockitoSugar</a> utility (which provides only basic syntax sugar for <a class="reference external" href="https://site.mockito.org/">Mockito</a>).</p>
 </div>
-<div class="section" id="c-t-mock-mockito">
-<h2><a class="reference external" href="https://github.com/twitter/util/blob/develop/util-mock/src/main/scala/com/twitter/mock/Mockito.scala"><cite>c.t.mock.Mockito</cite></a><a class="headerlink" href="#c-t-mock-mockito" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="https://github.com/twitter/util/blob/develop/util-mock/src/main/scala/com/twitter/mock/Mockito.scala"><cite>c.t.mock.Mockito</cite></a> provides a <a class="reference external" href="https://github.com/mockito/mockito-scala">Mockito Scala</a> integration for Scala users of the framework. Java
-users are encouraged to use <a class="reference external" href="https://site.mockito.org/">Mockito</a> directly. The <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-mock/src/main/scala/com/twitter/mock/Mockito.scala"><cite>c.t.mock.Mockito</cite></a> will work as a full
+<div class="section" id="c-t-util-mock-mockito">
+<h2><a class="reference external" href="https://github.com/twitter/util/blob/develop/util-mock/src/main/scala/com/twitter/util/mock/Mockito.scala"><cite>c.t.util.mock.Mockito</cite></a><a class="headerlink" href="#c-t-util-mock-mockito" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/twitter/util/blob/develop/util-mock/src/main/scala/com/twitter/util/mock/Mockito.scala"><cite>c.t.util.mock.Mockito</cite></a> provides a <a class="reference external" href="https://github.com/mockito/mockito-scala">Mockito Scala</a> integration for Scala users of the framework. Java
+users are encouraged to use <a class="reference external" href="https://site.mockito.org/">Mockito</a> directly. The <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-mock/src/main/scala/com/twitter/util/mock/Mockito.scala"><cite>c.t.util.mock.Mockito</cite></a> will work as a full
 replacement of the <a class="reference external" href="https://www.scalatest.org/">ScalaTest</a> <a class="reference external" href="http://doc.scalatest.org/3.0.8/org/scalatestplus/mockito/MockitoSugar.html">org.scalatestplus.mockito.MockitoSugar</a>
 trait.</p>
 <p>The trait uses <a class="reference external" href="https://github.com/mockito/mockito-scala">Mockito Scala</a> <a class="reference external" href="https://github.com/mockito/mockito-scala#idiomatic-mockito">Idiomatic Mockito</a>
@@ -86,7 +86,7 @@ which is heavily influenced by ScalaTest Matchers and provides a mocking DSL sim
 integration.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Usage of the <a class="reference external" href="https://github.com/mockito/mockito-scala">Mockito Scala</a> integration via <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-mock/src/main/scala/com/twitter/mock/Mockito.scala"><cite>c.t.mock.Mockito</cite></a> is optional. Users are free to
+<p class="last">Usage of the <a class="reference external" href="https://github.com/mockito/mockito-scala">Mockito Scala</a> integration via <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-mock/src/main/scala/com/twitter/util/mock/Mockito.scala"><cite>c.t.util.mock.Mockito</cite></a> is optional. Users are free to
 choose <a class="reference external" href="https://www.scalatest.org/">ScalaTest</a> <a class="reference external" href="http://doc.scalatest.org/3.0.8/org/scalatestplus/mockito/MockitoSugar.html">MockitoSugar</a> or another mocking library entirely for use in writing tests.</p>
 </div>
 </div>
@@ -98,10 +98,10 @@ control over the lifecycle of a mock within a given test rather than binding a m
 <cite>TwitterModule</cite> passed as an <a class="reference external" href="./override_modules.html">Override Module</a>. Using the
 <a class="reference external" href="bind_dsl.html">#bind[T]</a> DSL allows for the test to retain control of the mock in order to
 expect or if necessary, reset, behavior.</p>
-<p>To use, first add a dependency on <cite>util/util-mock</cite> and then mix in the <cite>c.t.mock.Mockito</cite> trait to your test. E.g.,</p>
+<p>To use, first add a dependency on <cite>util/util-mock</cite> and then mix in the <cite>c.t.util.mock.Mockito</cite> trait to your test. E.g.,</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.server.FeatureTest
-import com.twitter.mock.Mockito
+import com.twitter.util.mock.Mockito
 
 class ExampleFeatureTest
   extends FeatureTest
@@ -128,7 +128,7 @@ necessary.</p>
 <p>This is preferable over creating a <a class="reference external" href="../getting-started/modules.html">Module</a> then binding the
 mock to the object graph in the module, e.g.,</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.TwitterModule
-import com.twitter.mock.Mockito
+import com.twitter.util.mock.Mockito
 
 // NOT RECOMMENDED
 object MyTestModule extends TwitterModule with Mockito {
@@ -185,7 +185,7 @@ The Finatra framework mixes in the ScalaTest <a class="reference external" href=
 trait, thus the ScalaTest <cite>afterEach()</cite> function is available to override. E.g.,</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.server.FeatureTest
-import com.twitter.mock.Mockito
+import com.twitter.util.mock.Mockito
 
 class ExampleFeatureTest
   extends FeatureTest
@@ -200,7 +200,7 @@ class ExampleFeatureTest
     .bind[IdService].toInstance(mockIdService)
 
   override afterEach(): Unit = {
-    // c.t.mock.Mockito provides a `reset(mocks*)` function
+    // c.t.util.mock.Mockito provides a `reset(mocks*)` function
     reset(mockDownstreamServiceClient, mockIdService)
   }
 
@@ -212,7 +212,7 @@ class ExampleFeatureTest
 </pre></div>
 </div>
 <p>This will <a class="reference external" href="https://javadoc.io/static/org.mockito/mockito-core/3.3.3/org/mockito/Mockito.html#resetting_mocks">reset</a>
-the mocks passed to the <cite>c.t.mock.Mockito.reset</cite> function <em>after</em> each test case has been run.</p>
+the mocks passed to the <cite>c.t.util.mock.Mockito.reset</cite> function <em>after</em> each test case has been run.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">In some cases you may want to reset a mock <strong>before</strong> each test case (because you do some pre-work
@@ -280,7 +280,7 @@ to do so. Note that as documented, you should use the <cite>org.mockito.scalates
   <ul>
 <li><a class="reference internal" href="#">Working with Mocks</a><ul>
 <li><a class="reference internal" href="#mockito">Mockito</a></li>
-<li><a class="reference internal" href="#c-t-mock-mockito"><cite>c.t.mock.Mockito</cite></a></li>
+<li><a class="reference internal" href="#c-t-util-mock-mockito"><cite>c.t.util.mock.Mockito</cite></a></li>
 <li><a class="reference internal" href="#using-mocks">Using Mocks</a></li>
 <li><a class="reference internal" href="#resetting-mocks">Resetting Mocks</a></li>
 <li><a class="reference internal" href="#with-mockitoscala">With Mockito Scala</a></li>

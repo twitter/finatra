@@ -176,7 +176,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">RichIterable</span><span class="tparams">[<span name="Elem">Elem</span>, <span name="From">From<span class="tparams">[<span name="Elem">Elem</span>]</span> &lt;: <span class="extype" name="scala.Iterable">Iterable</span>[<span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.From.Elem">Elem</span>]</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.11/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a></span>
+        <span class="name">RichIterable</span><span class="tparams">[<span name="Elem">Elem</span>, <span name="From">From<span class="tparams">[<span name="Elem">Elem</span>]</span> &lt;: <a href="../../../../scala/index.html#Iterable[+A]=Iterable[A]" class="extmbr" name="scala.Iterable">Iterable</a>[<span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.From.Elem">Elem</span>]</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.11/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a></span>
       </span>
       </h4>
 
@@ -322,9 +322,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="com.twitter.inject.conversions.iterable.RichIterable#distinctBy" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="distinctBy[HashCodeType](hash:Elem=&gt;HashCodeType)(implicitcbf:scala.collection.generic.CanBuildFrom[From[Elem],Elem,From[Elem]]):From[Elem]"></a><a id="distinctBy[HashCodeType]((Elem)⇒HashCodeType)(CanBuildFrom[From[Elem],Elem,From[Elem]]):From[Elem]"></a>
+      <a id="distinctBy[HashCodeType](hash:Elem=&gt;HashCodeType)(implicitcbf:scala.collection.compat.BuildFrom[From[Elem],Elem,From[Elem]]):From[Elem]"></a><a id="distinctBy[HashCodeType]((Elem)⇒HashCodeType)(BuildFrom[From[Elem],Elem,From[Elem]]):From[Elem]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/conversions/iterable$$RichIterable.html#distinctBy[HashCodeType](hash:Elem=&gt;HashCodeType)(implicitcbf:scala.collection.generic.CanBuildFrom[From[Elem],Elem,From[Elem]]):From[Elem]" title="Permalink">
+      <a href="../../../../com/twitter/inject/conversions/iterable$$RichIterable.html#distinctBy[HashCodeType](hash:Elem=&gt;HashCodeType)(implicitcbf:scala.collection.compat.BuildFrom[From[Elem],Elem,From[Elem]]):From[Elem]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -333,7 +333,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">distinctBy</span><span class="tparams">[<span name="HashCodeType">HashCodeType</span>]</span><span class="params">(<span name="hash">hash: (<span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.Elem">Elem</span>) ⇒ <span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.distinctBy.HashCodeType">HashCodeType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="cbf">cbf: <a href="https://www.scala-lang.org/api/2.12.11/scala/collection/generic/CanBuildFrom.html#scala.collection.generic.CanBuildFrom" class="extype" name="scala.collection.generic.CanBuildFrom">CanBuildFrom</a>[<span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.From">From</span>[<span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.Elem">Elem</span>], <span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.Elem">Elem</span>, <span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.From">From</span>[<span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.Elem">Elem</span>]]</span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.From">From</span>[<span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.Elem">Elem</span>]</span>
+        <span class="name">distinctBy</span><span class="tparams">[<span name="HashCodeType">HashCodeType</span>]</span><span class="params">(<span name="hash">hash: (<span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.Elem">Elem</span>) ⇒ <span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.distinctBy.HashCodeType">HashCodeType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="cbf">cbf: <span class="extype" name="scala.collection.compat.BuildFrom">BuildFrom</span>[<span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.From">From</span>[<span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.Elem">Elem</span>], <span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.Elem">Elem</span>, <span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.From">From</span>[<span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.Elem">Elem</span>]]</span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.From">From</span>[<span class="extype" name="com.twitter.inject.conversions.iterable.RichIterable.Elem">Elem</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Distinct 'iterable' elements using the passed in 'hash' function</p><div class="fullcomment"><div class="comment cmt"><p>Distinct 'iterable' elements using the passed in 'hash' function</p></div><dl class="paramcmts block"><dt class="param">hash</dt><dd class="cmt"><p>Hash function to determine unique elements</p></dd><dt>returns</dt><dd class="cmt"><p>Distinct elements</p></dd></dl></div>

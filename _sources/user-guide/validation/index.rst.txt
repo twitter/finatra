@@ -69,6 +69,10 @@ Whereas the following would pass:
         error(e, e.getMessage)
     }
 
+.. warning::
+
+    Case classes with multiple constructors or multiple constructor lists with non-public constructor args are **not-supported**.
+
 Instantiate a `Validator`
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 There are 2 ways to obtain a `Validator` instance:
@@ -158,15 +162,16 @@ Override `validatorModule` in your server definition:
 
 .. note::
 
-    By overriding the default `validatorModule`, you are also replacing the default Validator in
-    `jacksonModule https://github.com/twitter/finatra/blob/ef7197324cba8dfe6274ffb4570dea6c34b9fc33/http/src/main/scala/com/twitter/finatra/http/servers.scala#L526`__,
-    the new `Validator` will be used to apply the validation logic in
-    `ScalaObjectMapper https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala`__
-    and during HTTP request parsing. Checkout
-    `Integrate with Finatra Jackson framework  <#integrate-with-finatra-jackson-framework>`__ For
-    more information about how validations works in Finatra Jackson Framework.
+    By overriding the default `validatorModule`, you are also replacing the default `Validator` in
+    the `jacksonModule <https://github.com/twitter/finatra/blob/ef7197324cba8dfe6274ffb4570dea6c34b9fc33/http/src/main/scala/com/twitter/finatra/http/servers.scala#L526>`__.
+    The newly defined `Validator` will be used to apply the validation logic in the
+    `ScalaObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala>`__
+    and during HTTP request parsing.
 
-Integrate with Finatra Jackson framework
+    See `Integration with Finatra Jackson Support <#integration-with-finatra-jackson-support>`__
+    for more information about how validations works in Finatra Jackson Framework.
+
+Integration with Finatra Jackson Support
 ----------------------------------------
 The validation framework integrates with Finatra's custom `case class` deserializer to efficiently
 apply per field and method validations as request parsing is performed.
@@ -189,7 +194,7 @@ And in your controller, you define a Post endpoint as:
       ...
     }
 
-When you perform a call to the POST /validate_user/, Finatra will deserialize the JSON you passed to the call
+When you perform a call to the POST `/validate_user/`, Finatra will deserialize the JSON you passed to the call
 to a `ValidationUserRequest` case class, and perform validations of the annotated fields. If any validation
 fails, the case class will not be created and a
 `CaseClassMappingException <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/exceptions/CaseClassMappingException.scala>`__
@@ -210,3 +215,46 @@ For an example see the `User <https://github.com/twitter/finatra/blob/d874b1a92c
 The ``@MethodValidation`` annotation also supports specifying an optional ``fields`` parameter to
 state which fields are being evaluated in the validation. If the evaluation fails the resulting
 exception will contain details about each of the fields specified in the annotation.
+
+Best Practices, Guidance & Limitations
+--------------------------------------
+
+Case classes are generally expected to be defined like simple `POJOs <https://en.wikipedia.org/wiki/Plain_old_Java_object>`__,
+or `JavaBeans <https://en.wikipedia.org/wiki/JavaBeans#JavaBean_conventions>`__ (but without the
+need to implement `java.io.Serializable`). Constraints are expected to be defined on case class
+constructor fields.
+
+- When defining constraints, case classes MUST be defined with a single constructor. If multiple
+  constructors are defined, there is currently no way to signal to the Validation framework which
+  constructor should be used for finding constraint annotations.
+- When defining constraints, case classes MUST be defined with all constructors args publicly visible.
+  E.g., a constructor defined like so:
+
+  .. code:: scala
+
+      case class DoublePerson(@NotEmpty name: String)(@NotEmpty otherName: String)
+
+  will **not work** properly as second parameter list fields by default are not publicly visible. If you
+  find you need to do this case, you will need to explicitly make the fields in the second parameter
+  list visible:
+
+  .. code:: scala
+
+      case class DoublePerson(@NotEmpty name: String)(@NotEmpty val otherName: String)
+- Nested case classes are currently not supported. That is, validation will not occur for fields which are
+  case classes themselves with constructor field annotated with constraints. E.g.,
+
+  .. code:: scala
+
+      case class Bar(@Max(1000) id: Int, @NonEmpty name: String)
+
+      case Foo(@Min(1) id: Int, bar: Bar)
+
+  `Bar` validations will not be performed. We hope to support the case of validating nested case classes
+  in a future version of the API.
+
+  .. important ::
+
+    However, note when used within the `Finatra Jackson Integration <../json/index.html>`__,
+    nested case class validations will be performed due to the library's integration with Jackson's
+    deserializers.

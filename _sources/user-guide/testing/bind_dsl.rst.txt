@@ -22,7 +22,7 @@ test.
 
     import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
     import com.twitter.inject.server.FeatureTest
-    import com.twitter.mock.Mockito
+    import com.twitter.util.mock.Mockito
 
     class ExampleFeatureTest
       extends FeatureTest
@@ -53,7 +53,7 @@ Note this is also available for `EmbeddedApp <https://github.com/twitter/finatra
     import com.twitter.finagle.stats.InMemoryStatsReceiver
     import com.twitter.inject.Test
     import com.twitter.inject.app.EmbeddedApp
-    import com.twitter.mock.Mockito
+    import com.twitter.util.mock.Mockito
 
     class MyAppTest extends Test with Mockito {
       private val inMemoryStatsReceiver: InMemoryStatsReceiver = new InMemoryStatsReceiver

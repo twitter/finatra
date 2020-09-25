@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Integration Tests &#8212; Finatra 20.8.1 documentation</title>
+    <title>Integration Tests &#8212; Finatra 20.9.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '20.8.1',
+        VERSION:     '20.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -101,16 +101,15 @@ created from <cite>TwitterModules</cite> will skip both the lifecycle functions 
 <cite>injector</cite> val with your constructed instance of on a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">c.t.inject.Injector</a>
 created from the <cite>c.t.inject.app.TestInjector</cite>.</p>
 <p>You’ll then be able to access instances of necessary classes to execute tests.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.Injector
-import com.twitter.inject.IntegrationTest
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.IntegrationTest
 import com.twitter.inject.app.TestInjector
 
 class ExampleIntegrationTest extends IntegrationTest {
-  override val injector: Injector =
+  override val injector: TestInjector =
     TestInjector(
       flags = Map(&quot;foo.flag&quot; -&gt; &quot;meaningfulValue&quot;),
       modules = Seq(ExampleModule)
-    ).create
+    ).create()
 
   test(&quot;MyTest#perform feature&quot;) {
     val exampleThingy = injector.instance[ExampleThingy]
@@ -124,6 +123,36 @@ class ExampleIntegrationTest extends IntegrationTest {
 <p class="last">The <cite>injector</cite> is specified as a <cite>def</cite> the in <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-core/src/test/scala/com/twitter/inject/IntegrationTestMixin.scala#L27"><cite>c.t.inject.IntegrationTestMixin</cite></a> trait. If you
 only want to start <strong>one instance of your injector per test file</strong> make sure to override this
 <cite>def</cite> with a <cite>val</cite>.</p>
+</div>
+<p>The <cite>TestInjector</cite> also allows you to test modules’ lifecycle logic via its <cite>start()</cite>
+and <cite>close()</cite> methods. Note that the <cite>TestInjector</cite> doesn’t take ownership of modules’ lifecycle
+and, instead, leaves this exercise to the users. Put this way, you’re responsible for calling
+<cite>start()</cite> and <cite>close()</cite> in your test if you want to execute the lifecycle hooks in modules.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.IntegrationTest
+import com.twitter.inject.app.TestInjector
+
+class ExampleLifecycleTest extends IntegrationTest {
+  override val injector: TestInjector = TestInjector(
+    flags = Map(&quot;foo.flag&quot; -&gt; &quot;meaningfulValue&quot;),
+    modules = Seq(ExampleModule)
+  ).create()
+
+  override def beforeAll(): Unit = {
+    // NOTE: This may throw an exception if any of your startup callbacks throw.
+    injector.start()
+  }
+
+  override def afterAll(): Unit = {
+    // NOTE: This may throw an exception if any of your shutdown callbacks throw.
+    injector.close()
+  }
+
+  test(&quot;MyTest#perform feature&quot;) {
+    val exampleThingy = injector.instance[ExampleThingy]
+    ...
+  }
+}
+</pre></div>
 </div>
 </div>
 <div class="section" id="bind-t-dsl">
