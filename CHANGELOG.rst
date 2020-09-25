@@ -7,6 +7,9 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+* finatra-kafka-streams: Revert AsyncTransformer to still use ConcurrentHashMap.
+ ``PHAB_ID=D555422``
+
 Added
 ~~~~~
 
