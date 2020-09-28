@@ -22,6 +22,9 @@ Added
 Changed
 ~~~~~~~
 
+* utils: (BREAKING API CHANGE) Rename `maybeIsCaseClass` to `notCaseClass` in
+  `ClassUtils` and change the scope of the method. ``PHAB_ID=D556169``
+
 * http: Adding support for optionally passing chain in the TLS sever trait. ``PHAB_ID=D553718``
 
 Fixed

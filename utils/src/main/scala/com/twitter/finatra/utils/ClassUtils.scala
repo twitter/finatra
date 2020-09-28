@@ -14,6 +14,7 @@ object ClassUtils {
 
   /**
    * Determine if a given class type is a case class.
+   * Returns `true` if it is NOT considered a case class.
    *
    * A class is NOT considered as a case class if one of the following criteria is met:
    * 1. the class is NOT the same as or the super class of class type [[Product]].
@@ -24,12 +25,19 @@ object ClassUtils {
    *
    * @param cls runtime representation of class type.
    */
-  def maybeIsCaseClass(cls: Class[_]): Boolean = {
-    if (!PRODUCT.isAssignableFrom(cls)) false
-    else if (OPTION.isAssignableFrom(cls)) false
-    else if (LIST.isAssignableFrom(cls)) false
-    else if (cls.getName.startsWith("scala.Tuple")) false
-    else if (cls.getName.startsWith("scala.util.Either")) false
-    else true
+  private[twitter] def notCaseClass(cls: Class[_]): Boolean = {
+    (!PRODUCT.isAssignableFrom(cls)) ||
+    OPTION.isAssignableFrom(cls) ||
+    LIST.isAssignableFrom(cls) ||
+    cls.getName.startsWith("scala.Tuple") ||
+    cls.getName.startsWith("scala.util.Either")
   }
+
+  /**
+   * This is the negation of [[ClassUtils.notCaseClass]] It returns
+   * `true` if the given class type is considered a case class.
+   *
+   * @param cls runtime representation of class type.
+   */
+  private[twitter] def isCaseClass(cls: Class[_]): Boolean = !notCaseClass(cls)
 }

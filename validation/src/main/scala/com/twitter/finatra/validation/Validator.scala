@@ -111,7 +111,7 @@ class Validator private[finatra] (cacheSize: Long, messageResolver: MessageResol
   @throws[ValidationException]
   def validate(obj: Any): Unit = {
     val clazz: Class[_] = obj.getClass
-    if (!ClassUtils.maybeIsCaseClass(clazz)) throw InvalidCaseClassException(clazz)
+    if (ClassUtils.notCaseClass(clazz)) throw InvalidCaseClassException(clazz)
 
     val AnnotatedClass(_, fields, methods) = getAnnotatedClass(clazz)
 

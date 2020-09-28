@@ -15,7 +15,7 @@ private[finatra] class CaseClassDeserializerResolver(
     deserializationConfig: DeserializationConfig,
     beanDescription: BeanDescription
   ): CaseClassDeserializer = {
-    if (ClassUtils.maybeIsCaseClass(javaType.getRawClass))
+    if (ClassUtils.isCaseClass(javaType.getRawClass))
       new CaseClassDeserializer(
         javaType,
         deserializationConfig,
