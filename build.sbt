@@ -746,7 +746,7 @@ lazy val benchmarks = project
 lazy val utilsTestJarSources =
   Seq("com/twitter/finatra/modules/", "com/twitter/finatra/test/")
 lazy val utils = project
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "finatra-utils",
     moduleName := "finatra-utils",
@@ -879,7 +879,7 @@ lazy val jsonAnnotations = (project in file("json-annotations"))
   )
 
 lazy val mustache = project
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "finatra-mustache",
     moduleName := "finatra-mustache",

@@ -116,5 +116,5 @@ class FileResolver(localDocRoot: String, docRoot: String) extends Logging {
     } else None
   }
 
-  private[this] def dottedFileExtension(uri: String) = '.' + getFileExtension(uri)
+  private[this] def dottedFileExtension(uri: String) = s".${getFileExtension(uri)}"
 }

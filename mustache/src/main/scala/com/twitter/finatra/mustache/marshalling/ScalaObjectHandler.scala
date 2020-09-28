@@ -21,7 +21,7 @@ import com.twitter.util.{Await, Future}
 import java.io.Writer
 import java.lang.reflect.{Field, Method}
 import java.util.concurrent.Callable
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.reflect.ClassTag
 import scala.runtime.BoxedUnit
 
@@ -102,7 +102,7 @@ private[mustache] class ScalaObjectHandler extends ReflectionObjectHandler {
     }
   }
 
-  val TraversableAnyRef = new Def[Traversable[AnyRef]]
+  val TraversableAnyRef = new Def[Iterable[AnyRef]]
 
   class Def[C: ClassTag] {
     def unapply[X: ClassTag](x: X): Option[C] = {
