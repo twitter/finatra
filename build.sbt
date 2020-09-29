@@ -785,7 +785,7 @@ lazy val validationTestJarSources =
     "com/twitter/finatra/validation/ValidatorTest"
   )
 lazy val validation = project
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "finatra-validation",
     moduleName := "finatra-validation",
