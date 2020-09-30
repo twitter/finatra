@@ -9,6 +9,7 @@ junit_tests(
             scope = "runtime",
         ),
         "finatra/examples/injectable-app/scala/src/main/scala/com/twitter/finatra/example",
+        "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app",
         "finatra/inject/inject-app/src/test/scala/com/twitter/inject/app",
         "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
     ],

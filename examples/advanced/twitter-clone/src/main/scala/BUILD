@@ -51,4 +51,7 @@ scala_library(
             name = "slf4j-jdk14",
         ),
     ],
+    exports = [
+        "finatra/inject/inject-dtab/src/main/scala/com/twitter/inject/app",
+    ],
 )

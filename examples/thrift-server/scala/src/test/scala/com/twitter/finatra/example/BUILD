@@ -16,6 +16,7 @@ junit_tests(
         "finatra/examples/thrift-server/scala/src/main/scala/com/twitter/finatra/example",
         "finatra/inject/inject-server/src/main/scala",
         "finatra/inject/inject-server/src/test/scala/com/twitter/inject/server",
+        "finatra/thrift/src/main/scala/com/twitter/finatra/thrift",
         "finatra/thrift/src/test/scala/com/twitter/finatra/thrift",
     ],
 )

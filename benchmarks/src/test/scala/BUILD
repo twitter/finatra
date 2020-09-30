@@ -43,6 +43,7 @@ junit_tests(
         "finatra/inject/inject-app/src/test/scala/com/twitter/inject/app",
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
+        "finatra/inject/inject-modules/src/main/scala/com/twitter/inject/modules/internal",
         "finatra/inject/inject-request-scope/src/main/scala",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/modules",
