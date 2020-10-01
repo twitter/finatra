@@ -13,17 +13,16 @@ import com.twitter.inject.app.AbstractApp;
 import com.twitter.inject.modules.LoggerModule;
 import com.twitter.inject.modules.StatsReceiverModule;
 import com.twitter.util.logging.Logger;
-import com.twitter.util.logging.Loggers;
 
 public class HelloWorldApp extends AbstractApp {
-  private static final Logger LOG = Loggers.getLogger("HelloWorldApp");
+  private static final Logger LOG = Logger.getLogger("HelloWorldApp");
 
-  private List<Integer> queue;
+  private final List<Integer> queue;
 
   public HelloWorldApp(List<Integer> q) {
     this.queue = q;
 
-    flag().createMandatory(
+    createMandatoryFlag(
         "username",
         "Username to use.",
         "-username=Bob",
