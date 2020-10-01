@@ -1,9 +1,15 @@
 scala_library(
     name = "test-deps",
     sources = [
-        "../scala-kafka2.2/*.scala",
         "com/twitter/finatra/kafkastreams/test/*.scala",
         "com/twitter/inject/*.scala",
+
+        # The below entries are trying to achieve the same effect in Pants and Bazel.
+        # This is taken in Pants; entry starting with ".." will be ignored by Bazel
+        "../scala-kafka2.2/*.scala",
+        # This is a bazel filegroup target, however, Pants will see this as a path to match files,
+        # which would return nothing.
+        "finatra/kafka-streams/kafka-streams/src/test/scala-kafka2.2:kafka-2.2",
     ],
     compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(
@@ -71,6 +77,7 @@ junit_tests(
             "3rdparty/jvm/org/slf4j:slf4j-simple",
             scope = "runtime",
         ),
+        ":test-deps",
         "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app",
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
@@ -80,7 +87,6 @@ junit_tests(
         "finatra/jackson/src/test/scala/com/twitter/finatra/json",
         "finatra/kafka-streams/kafka-streams/src/main/scala",
         "finatra/kafka-streams/kafka-streams/src/test/resources",
-        "finatra/kafka-streams/kafka-streams/src/test/scala:test-deps",
         "finatra/kafka/src/main/java",
         "finatra/kafka/src/test/scala:test-deps",
         "finatra/thrift/src/test/scala/com/twitter/finatra/thrift",
