@@ -3,7 +3,7 @@ package com.twitter.finatra.kafkastreams.flushing
 import com.twitter.finagle.stats.{Stat, StatsReceiver, Verbosity}
 import com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging
 import com.twitter.util.{Duration, Future}
-import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentLinkedQueue
 import org.apache.kafka.streams.processor.internals.{
   InternalProcessorContext,
   ProcessorRecordContext
@@ -55,8 +55,7 @@ abstract class AsyncTransformer[K1, V1, K2, V2](
 
   @volatile private var flushOutputRecordsCancellable: Cancellable = _
 
-  private val outstandingResults = ConcurrentHashMap
-    .newKeySet[(K2, V2, ProcessorRecordContext)](maxOutstandingFuturesPerTask)
+  private val outstandingResults = new ConcurrentLinkedQueue[(K2, V2, ProcessorRecordContext)]
 
   private val outstandingResultsGauge =
     statsReceiver.addGauge(Verbosity.Debug, "outstandingResults")(numOutstandingResults)
@@ -181,16 +180,16 @@ abstract class AsyncTransformer[K1, V1, K2, V2](
     // first save the current context
     val preflushingRecordContext: ProcessorRecordContext = internalProcessorContext.recordContext()
 
-    val iterator = outstandingResults.iterator()
-    while (iterator.hasNext) {
-      val (key, value, recordContext) = iterator.next()
+    var ele = outstandingResults.poll()
+    while (ele != null) {
+      val (key, value, recordContext) = ele
 
       // set the RecordContext to the one associated with the original message
       internalProcessorContext.setRecordContext(recordContext)
 
       processorContext.forward(key, value)
 
-      iterator.remove()
+      ele = outstandingResults.poll()
     }
 
     // restore to the previous pre-flushing context
