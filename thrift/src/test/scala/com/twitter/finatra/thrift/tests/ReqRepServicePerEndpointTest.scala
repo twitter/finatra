@@ -12,7 +12,9 @@ import java.nio.charset.{StandardCharsets => JChar}
 object ReqRepServicePerEndpointTest {
   /* filter out com.twitter.finagle header keys */
   def filteredHeaders(headers: HeaderMap): Map[String, Seq[Buf]] = {
-    headers.toMap.filterKeys(key => !key.startsWith("com.twitter.finagle"))
+    headers.toMap.filter {
+      case (key, _) => !key.startsWith("com.twitter.finagle")
+    }
   }
 
   def printHeaders(headers: Map[String, Seq[Buf]]): String = {
