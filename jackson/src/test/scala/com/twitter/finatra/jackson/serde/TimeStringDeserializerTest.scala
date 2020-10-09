@@ -9,14 +9,16 @@ import com.twitter.finatra.jackson.serde.SerDeSimpleModule
 import com.twitter.inject.Test
 import com.twitter.util.{Time, TimeFormat}
 
-case class WithoutJsonFormat(time: Time)
-
-case class WithJsonFormat(@JsonFormat(pattern = "yyyy-MM-dd") time: Time)
-
-case class WithJsonFormatAndTimezone(
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Los_Angeles") time: Time)
-
+private object TimeStringDeserializerTest {
+  case class WithoutJsonFormat(time: Time)
+  case class WithJsonFormat(@JsonFormat(pattern = "yyyy-MM-dd") time: Time)
+  case class WithJsonFormatAndTimezone(
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Los_Angeles") time: Time)
+  case class WithEpochJsonFormat(
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER, pattern = "s") time: Time)
+}
 class TimeStringDeserializerTest extends Test {
+  import TimeStringDeserializerTest._
 
   private[this] final val Input1 =
     """
@@ -36,6 +38,13 @@ class TimeStringDeserializerTest extends Test {
     """
       |{
       |  "time": "2019-06-17 16:30:00"
+      |}
+    """.stripMargin
+
+  private[this] final val EpochInput =
+    """
+      |{
+      |  "time": 1560786300
       |}
     """.stripMargin
 
@@ -85,5 +94,15 @@ class TimeStringDeserializerTest extends Test {
     intercept[CaseClassMappingException] {
       objectMapper.parse[WithoutJsonFormat]("{}")
     }
+  }
+
+  test("should support JsonFormat with epoch timestamp") {
+    val expected = 1560786300000L
+    val jacksonActual: WithEpochJsonFormat =
+      jacksonObjectMapper.readValue(EpochInput, classOf[WithEpochJsonFormat])
+    jacksonActual.time.inMillis shouldEqual expected
+
+    val frameworkActual = objectMapper.parse[WithEpochJsonFormat](EpochInput)
+    frameworkActual.time.inMillis shouldEqual expected
   }
 }
