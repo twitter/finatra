@@ -631,7 +631,7 @@ lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
   )
 
 lazy val injectRequestScope = (project in file("inject/inject-request-scope"))
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "inject-request-scope",
     moduleName := "inject-request-scope",
