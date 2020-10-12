@@ -316,7 +316,7 @@ trait HttpServerTrait extends TwitterServer {
           info(s"http server announced to $addr")
           httpServer.announce(addr)
       }
-      info(s"http server started on port: $address")
+      info(s"http server started on port ${PortUtils.getPort(httpServer.boundAddress)}")
     }
 
     // START HTTPS

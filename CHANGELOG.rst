@@ -22,6 +22,9 @@ Added
 Changed
 ~~~~~~~
 
+* http: The http server did not properly log the bound address on server startup. Fix this
+  and make the thrift server consistent. ``PHAB_ID=D563758``
+
 * utils: (BREAKING API CHANGE) Rename `maybeIsCaseClass` to `notCaseClass` in
   `ClassUtils` and change the scope of the method. ``PHAB_ID=D556169``
 

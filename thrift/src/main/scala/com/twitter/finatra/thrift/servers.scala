@@ -194,7 +194,7 @@ trait ThriftServerTrait extends TwitterServer {
         info(s"thrift server announced to $addr")
         thriftServer.announce(addr)
     }
-    info(s"thrift server started on port: ${thriftPort.get}")
+    info(s"thrift server started on port ${PortUtils.getPort(thriftServer.boundAddress)}")
   }
 
   /* Overrides */
