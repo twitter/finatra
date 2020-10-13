@@ -715,6 +715,15 @@ configuration.
 
 For more information on mocking, see the `Working with Mocks <./mocks.html>`_ documentation.
 
+Injecting Members of a Test
+---------------------------
+
+.. warning::
+
+    Do not inject members of a test class into the server, application or TestInjector object graph under test.
+
+For an explanation of why, see the documentation `here <./bind_dsl.html#injecting-members-of-a-test>`__.
+
 Examples:
 ---------
 

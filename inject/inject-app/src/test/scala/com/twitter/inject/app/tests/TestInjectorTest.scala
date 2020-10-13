@@ -278,13 +278,13 @@ class TestInjectorTest extends Test with Mockito {
   }
 
   test("default boolean flags properly") {
-    val injector = TestInjector(BooleanFlagModule).create
+    val injector = TestInjector(BooleanFlagModule).create()
     injector.instance[FooWithInject].bar should be(false)
     injector.instance[Boolean](Flags.named("x")) should be(false)
   }
 
   test("default global flags properly") {
-    val bar = TestInjector().create.instance[Bar]
+    val bar = TestInjector().create().instance[Bar]
     bar.booleanGlobalFlag should be(false)
     bar.stringGlobalFlag should equal("foo")
     bar.mapGlobalFlag should equal(Map.empty)
@@ -298,7 +298,7 @@ class TestInjectorTest extends Test with Mockito {
         "com.twitter.inject.app.tests.testStringGlobalFlag" -> "bar",
         "com.twitter.inject.app.tests.testMapGlobalFlag" -> "key1=foo,key2=bar"
       )
-    ).create
+    ).create()
     val bar = injector.instance[Bar]
     bar.booleanGlobalFlag should be(true)
     bar.stringGlobalFlag should equal("bar")
@@ -306,7 +306,7 @@ class TestInjectorTest extends Test with Mockito {
   }
 
   test("module defaults") {
-    val injector = TestInjector(modules = Seq(TestBindModule)).create
+    val injector = TestInjector(modules = Seq(TestBindModule)).create()
 
     injector.instance[Baz].value should equal(10)
     injector.instance[Baz]("five").value should equal(5)
@@ -382,7 +382,7 @@ class TestInjectorTest extends Test with Mockito {
       .bind[Option[Service[String, String]]].toInstance(None)
       .bind[Seq[Long]].toInstance(Seq(33L, 34L))
       .bind[DoEverything[Future]].toInstance(new DoEverythingImpl137)
-      .create
+      .create()
 
     injector.instance[TestTrait].foobar() should be("TestTraitImpl1")
     injector.instance[Processor].process should be("ProcessorA")
@@ -439,7 +439,7 @@ class TestInjectorTest extends Test with Mockito {
         classOf[ThirtyThree])
       .bindClass(classOf[String]).annotatedWith(classOf[Down]).toInstance("Lorem ipsum")
       .bindClass(classOf[String]).annotatedWith(Flags.named("dog.flag")).toInstance("Fido")
-      .create
+      .create()
 
     injector.instance[TestTrait].foobar() should be("TestTraitImpl2")
     injector.instance(classOf[TestTrait]).foobar() should be("TestTraitImpl2")
@@ -468,7 +468,7 @@ class TestInjectorTest extends Test with Mockito {
     val injector = TestInjector(
       modules = Seq(BooleanFlagModule),
       flags = Map("x" -> "true")
-    ).create
+    ).create()
     injector.instance[WithInjector].assertFlag(true)
   }
 }

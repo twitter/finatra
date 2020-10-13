@@ -139,6 +139,15 @@ Additionally, your test can also extend the |c.t.finatra.thrift.ThriftTest|_ tra
 utility specifically for constructing a |resolverMap|_ flag value for setting on your server under
 test.
 
+Injecting Members of a Test
+---------------------------
+
+.. warning::
+
+    Do not inject members of a test class into the server, application or TestInjector object graph under test.
+
+For an explanation of why, see the documentation `here <./bind_dsl.html#injecting-members-of-a-test>`__.
+
 More Information
 ----------------
 
