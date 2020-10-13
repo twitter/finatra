@@ -1151,7 +1151,7 @@ lazy val kafka = (project in file("kafka"))
 
 lazy val kafkaStreamsQueryableThriftClient =
   (project in file("kafka-streams/kafka-streams-queryable-thrift-client"))
-    .settings(projectSettings)
+    .settings(projectSettings, withTwoThirteen)
     .settings(
       name := "finatra-kafka-streams-queryable-thrift-client",
       moduleName := "finatra-kafka-streams-queryable-thrift-client",

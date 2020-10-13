@@ -156,7 +156,7 @@ private final class ShardIdAwareRoundRobinBalancer[Req, Rep](
     for {
       node <- vector
       shardId <- node.shardId
-      prevNode <- shardIdToNode.put(shardId, node)
+      prevNode <- shardIdToNode.put(shardId.toLong, node)
     } {
       warn(
         s"Multiple nodes assigned the same shardId! prevNode: $prevNode newNode: $node"
@@ -182,7 +182,7 @@ private final class ShardIdAwareRoundRobinBalancer[Req, Rep](
             case Some(chosenShardId) =>
               val node =
                 shardIdToNode(
-                  chosenShardId.id
+                  chosenShardId.id.toLong
                 ) //Note: chooseShardId ensures that we choose a shardId that exists in the map
               if (node.status != Status.Open) {
                 sawDown = true
