@@ -41,6 +41,7 @@ scala_library(
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-server/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-slf4j",
+        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/kafka-streams/kafka-streams-queryable-thrift-client/src/main/scala",
         "finatra/kafka-streams/kafka-streams/src/main/java",
         "finatra/kafka/src/main/java",
