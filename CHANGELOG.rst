@@ -7,9 +7,6 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
-* finatra-kafka-streams: Revert AsyncTransformer to still use ConcurrentHashMap.
- ``PHAB_ID=D555422``
-
 Added
 ~~~~~
 
@@ -22,6 +19,12 @@ Added
 Changed
 ~~~~~~~
 
+* utils: Update `ClassUtils#simpleName` to handle when package names have underscores
+  followed by a number which throws an `InternalError`. Add tests. ``PHAB_ID=D566069``
+
+* utils: Revamp `ClassUtils#isCaseClass` to use the TypesApi for help in determining
+  if a class is a Scala case class. Add tests. ``PHAB_ID=D566069``
+
 * http: The http server did not properly log the bound address on server startup. Fix this
   and make the thrift server consistent. ``PHAB_ID=D563758``
 
@@ -32,6 +35,9 @@ Changed
 
 Fixed
 ~~~~~
+
+* finatra-kafka-streams: Revert AsyncTransformer to still use ConcurrentHashMap.
+ ``PHAB_ID=D555422``
 
 * inject-thrift-client: The `Singleton` annotation has been removed from the `DarkTrafficFilter` and
   the `JavaDarkTrafficFilter`. It was there in error. `PHAB_ID=D553539`
