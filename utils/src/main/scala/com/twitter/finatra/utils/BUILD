@@ -11,7 +11,6 @@ scala_library(
         "3rdparty/jvm/com/sun/activation:javax.activation",
         "finagle/finagle-core/src/main",
         "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",
-        "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/utils/src/main/resources",  # for META-INF/mime.types

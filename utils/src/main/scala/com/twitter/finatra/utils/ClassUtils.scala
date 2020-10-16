@@ -1,14 +1,12 @@
 package com.twitter.finatra.utils
 
-import com.twitter.inject.TypeUtils
 import com.twitter.util.Memoize
-import scala.reflect.runtime.universe._
 
 object ClassUtils {
 
-  private val PRODUCT: Type = typeOf[Product]
-  private val OPTION: Type = typeOf[Option[_]]
-  private val LIST: Type = typeOf[List[_]]
+  private val PRODUCT: Class[Product] = classOf[Product]
+  private val OPTION: Class[Option[_]] = classOf[Option[_]]
+  private val LIST: Class[List[_]] = classOf[List[_]]
 
   /**
    * Safely compute the `clazz.getSimpleName` of a given [[Class]] handling malformed
@@ -28,30 +26,31 @@ object ClassUtils {
   }
 
   /**
-   * This is the negation of [[ClassUtils.isCaseClass]]
    * Determine if a given class type is a case class.
    * Returns `true` if it is NOT considered a case class.
    *
-   * @param clazz runtime representation of class type.
+   * A class is NOT considered as a case class if one of the following criteria is met:
+   * 1. the class is NOT the same as or the super class of class type [[Product]].
+   * 2. the class is the same as or the super class of class type [[Option[_]].
+   * 3. the class is the same as or the super class of class type [[List]].
+   * 4. the class starts with `scala.Tuple`.
+   * 5. the class starts with `scala.util.Either`.
+   *
+   * @param cls runtime representation of class type.
    */
-  private[twitter] def notCaseClass[T](clazz: Class[T]): Boolean = !isCaseClass(clazz)
+  private[twitter] def notCaseClass(cls: Class[_]): Boolean = {
+    (!PRODUCT.isAssignableFrom(cls)) ||
+    OPTION.isAssignableFrom(cls) ||
+    LIST.isAssignableFrom(cls) ||
+    cls.getName.startsWith("scala.Tuple") ||
+    cls.getName.startsWith("scala.util.Either")
+  }
 
   /**
-   * Returns  `true` if the given class type is considered a case class.
-   * True if:
-   *  - is assignable from PRODUCT and
-   *  - not assignable from OPTION nor LIST and
-   *  - is not a Tuple and
-   *  - class symbol is case class.
+   * This is the negation of [[ClassUtils.notCaseClass]] It returns
+   * `true` if the given class type is considered a case class.
    *
-   * @param clazz runtime representation of class type.
+   * @param cls runtime representation of class type.
    */
-  private[twitter] def isCaseClass[T](clazz: Class[T]): Boolean = {
-    val tpe = TypeUtils.asTypeTag(clazz).tpe
-    val classSymbol = tpe.typeSymbol.asClass
-    tpe <:< PRODUCT &&
-    !(tpe <:< OPTION || tpe <:< LIST) &&
-    !clazz.getName.startsWith("scala.Tuple") &&
-    classSymbol.isCaseClass
-  }
+  private[twitter] def isCaseClass(cls: Class[_]): Boolean = !notCaseClass(cls)
 }

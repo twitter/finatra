@@ -19,6 +19,10 @@ Added
 Changed
 ~~~~~~~
 
+* utils: Undo usage of TypesApi for help in determining if a class is a Scala case class
+  as this fails for generic case classes in Scala 2.11, failing some supported cases for
+  Jackson processing. ``PHAB_ID=D566596``
+
 * utils: Update `ClassUtils#simpleName` to handle when package names have underscores
   followed by a number which throws an `InternalError`. Add tests. ``PHAB_ID=D566069``
 
