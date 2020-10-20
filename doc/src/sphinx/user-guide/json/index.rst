@@ -3,14 +3,43 @@
 Jackson Integration
 ===================
 
-Finatra builds upon the excellent |jackson-module-scala|_ for `JSON <https://www.json.org/json-en.html>`_
-support. One of the biggest features Finatra provides is an improved `case class`
-`deserializer <#improved-case-class-deserializer>`_ which accumulates deserialization errors while
-parsing JSON into a `case class` instead of failing-fast, such that all errors can be reported at
-once.
+Finatra builds upon the excellent |jackson-module-scala|_ for `JSON <https://en.wikipedia.org/wiki/JSON>`_
+support by wrapping the `Jackson <https://github.com/FasterXML/jackson>`__ `ScalaObjectMapper <https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/scala/com/fasterxml/jackson/module/scala/ScalaObjectMapper.scala>`__.
+One of the biggest features Finatra provides is a default improved `case class` `deserializer <#improved-case-class-deserializer>`_
+which *accumulates* deserialization errors while parsing JSON into a `case class` instead of failing-fast,
+such that all errors can be reported at once.
 
-Features
---------
+.. admonition :: 🚨 This documentation assumes some level of familiarity with `Jackson JSON Processing library <https://github.com/FasterXML/jackson>`__
+
+    Specifically Jackson `databinding <https://github.com/FasterXML/jackson-databind#1-minute-tutorial-pojos-to-json-and-back>`__
+    and the Jackson `ObjectMapper <http://fasterxml.github.io/jackson-databind/javadoc/2.10/com/fasterxml/jackson/databind/ObjectMapper.html>`__.
+
+    There are several `tutorials <https://github.com/FasterXML/jackson-docs#tutorials>`__ (and `external documentation <https://github.com/FasterXML/jackson-docs#external-off-github-documentation>`__)
+    which may be useful if you are unfamiliar with Jackson.
+
+    Additionally, you may want to familiarize yourself with the `Jackson Annotations <https://github.com/FasterXML/jackson-docs#annotations>`_
+    as they allow for finer-grain customization of Jackson databinding.
+
+Case Classes
+------------
+
+As mentioned, `Jackson <https://github.com/FasterXML/jackson>`__ is a JSON processing library. We
+generally use Jackson for `databinding <https://www.tutorialspoint.com/jackson/jackson_data_binding.htm>`__,
+or more specifically:
+
+- object serialization: converting an object **into a JSON String** and
+- object deserialization: converting a JSON String **into an object**
+
+The Finatra Jackson integration is primarily centered around serializing and deserializing Scala
+`case classes <https://docs.scala-lang.org/tour/case-classes.html>`__. This is because Scala
+`case classes <https://docs.scala-lang.org/tour/case-classes.html>`__ map well to the two JSON
+structures [`reference <https://www.json.org/json-en.html>`__]:
+
+- A collection of name/value pairs. Generally termed an *object*. Here, the name/value pairs are the case field name to field value but can also be an actual Scala `Map[T, U]` as well.
+- An ordered list of values. Typically an *array*, *vector*, *list*, or *sequence*, which for case classes can be represented by a Scala `Iterable`.
+
+Library Features
+----------------
 
 -  Usable outside of the Finatra framework as a limited replacement for the |jackson-module-scala|_ or `Jerkson <https://github.com/codahale/jerkson>`__.
 -  A `c.t.finatra.jackson.ScalaObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala>`__ which provides additional Scala friendly methods not found in the |jackson-module-scala|_ `ScalaObjectMapper <https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/scala/com/fasterxml/jackson/module/scala/ScalaObjectMapper.scala>`_.
@@ -41,8 +70,8 @@ The following integrations are provided by default when using the |FinatraScalaO
 -  Twitter `c.t.util.Time <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Time.scala>`_ and `c.t.util.Duration <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Duration.scala>`_ serializers [`1 <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/serde/TimeStringSerializer.scala>`_, `2 <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/serde/DurationStringSerializer.scala>`_] and deserializers [`1 <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/serde/TimeStringDeserializer.scala>`_, `2 <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/serde/DurationStringDeserializer.scala>`_].
 -  An improved `CaseClassDeserializer <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/internal/caseclass/jackson/CaseClassDeserializer.scala>`__: see details `below <#improved-case-class-deserializer>`__.
 
-Instantiation & Configuration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Instantiation
+~~~~~~~~~~~~~
 
 There are `apply` functions available for creation of a |FinatraScalaObjectMapper|_ configured
 with the defaults listed above:
@@ -65,9 +94,91 @@ with the defaults listed above:
     configuration of the `ScalaObjectMapper#Builder` to the provided Jackson `ObjectMapper`. That is,
     they should be considered builder functions to help produce a configured |FinatraScalaObjectMapper|_.
 
-    However, there may be times where you would like to only wrap an already configured Jackson `ObjectMapper`.
+    However, there may be times where you would like to *only wrap* an already configured Jackson `ObjectMapper`.
+
     To do, use `ScalaObjectMapper.objectMapper(underlying)` to create a |FinatraScalaObjectMapper|_
-    which wraps but does not mutate the configuration of the given underlying Jackson `ObjectMapper`.
+    which **wraps but does not mutate** the configuration of the given underlying Jackson `ObjectMapper`.
+
+Basic Usage
+~~~~~~~~~~~
+
+Let's assume we have these two case classes:
+
+.. code:: scala
+
+    case class Bar(d: String)
+    case class Foo(a: String, b: Int, c: Bar)
+
+To **serialize** a case class into a JSON string, use
+
+.. code:: scala
+
+    ScalaObjectMapper#writeValueAsString(any: Any): String
+
+For example:
+
+.. code:: scala
+
+    Welcome to Scala 2.12.12 (JDK 64-Bit Server VM, Java 1.8.0_242).
+    Type in expressions for evaluation. Or try :help.
+
+    scala> val mapper = ScalaObjectMapper()
+    mapper: com.twitter.finatra.jackson.ScalaObjectMapper = com.twitter.finatra.jackson.ScalaObjectMapper@490d9c41
+
+    scala> val foo = Foo("Hello, World", 42, Bar("Goodbye, World"))
+    foo: Foo = Foo(Hello, World,42,Bar(Goodbye, World))
+
+    scala> mapper.writeValueAsString(foo)
+    res0: String = {"a":"Hello, World","b":42,"c":{"d":"Goodbye, World"}}
+
+    scala> // or use the configured "pretty print mapper"
+
+    scala> mapper.writePrettyString(foo)
+    res1: String =
+    {
+      "a" : "Hello, World",
+      "b" : 42,
+      "c" : {
+        "d" : "Goodbye, World"
+      }
+    }
+
+    scala>
+
+To **deserialize** a JSON string into a case class, use
+
+.. code:: scala
+
+    ScalaObjectMapper#parse[T](s: String): T
+
+For example, assuming the same `Bar` and `Foo` case classes defined above:
+
+.. code:: scala
+
+    Welcome to Scala 2.12.12 (JDK 64-Bit Server VM, Java 1.8.0_242).
+    Type in expressions for evaluation. Or try :help.
+
+    scala> val mapper = ScalaObjectMapper()
+    mapper: com.twitter.finatra.jackson.ScalaObjectMapper = com.twitter.finatra.jackson.ScalaObjectMapper@3b64f131
+
+    scala> val s = """{"a": "Hello, World", "b": 42, "c": {"d": "Goodbye, World"}}"""
+    s: String = {"a": "Hello, World", "b": 42, "c": {"d": "Goodbye, World"}}
+
+    scala> val foo = mapper.parse[Foo](s)
+    foo: Foo = Foo(Hello, World,42,Bar(Goodbye, World))
+
+    scala>
+
+You can find many examples of using the `ScalaObjectMapper` in the various framework tests:
+
+- Scala examples [`1 <https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/jackson/AbstractScalaObjectMapperTest.scala>`__, `2 <https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/jackson/ScalaObjectMapperTest.scala>`__].
+- Java `example <https://github.com/twitter/finatra/blob/develop/jackson/src/test/java/com/twitter/finatra/jackson/tests/ScalaObjectMapperJavaTest.java>`__.
+
+As mentioned above, there is also a plethora of Jackson `tutorials <https://github.com/FasterXML/jackson-docs#tutorials>`__ and `HOW-TOs <https://github.com/FasterXML/jackson-docs#external-off-github-documentation>`__
+online which can give you more in-depth of examples of how to use a Jackson `ObjectMapper <http://fasterxml.github.io/jackson-databind/javadoc/2.10/com/fasterxml/jackson/databind/ObjectMapper.html>`__.
+
+Advanced Configuration
+~~~~~~~~~~~~~~~~~~~~~~
 
 To apply more custom configuration to create a |FinatraScalaObjectMapper|_, there is a builder for
 constructing a customized mapper.
