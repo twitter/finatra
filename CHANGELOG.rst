@@ -10,6 +10,9 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-kafka-streams: Add toCluster DSL call to publish to another Kafka cluster.
+ ``PHAB_ID=D562195``
+
 * jackson: Add support for validating `@JsonCreator` annotated static (e.g., companion
   object defined apply methods) or secondary case class constructors. ``PHAB_ID=D552921``
 

@@ -59,7 +59,7 @@ abstract class TopologyFeatureTest extends Test {
     topologyTester.reset()
   }
 
-  override def afterAll(): Unit = {
+  override protected def afterAll(): Unit = {
     super.afterAll()
     topologyTester.close()
   }
