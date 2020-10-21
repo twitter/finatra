@@ -41,7 +41,7 @@ trait FinatraDslToCluster extends FlushingAwareServer {
       kafkaProducerConfig: FinagleKafkaProducerConfig[K, V] = defaultFinagleKafkaProducerConfig,
       commitInterval: Duration = 1.minute,
       flushTimeout: Duration = Duration.Top,
-      maxPendingEvents: Int = 1000,
+      maxPendingEvents: Int = 1000
     )(
       implicit produced: Produced[K, V]
     ): Unit = {
