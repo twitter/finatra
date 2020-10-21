@@ -82,8 +82,11 @@ class ClassUtilsTest extends Test {
 
     // show we don't blow up
     ClassUtils.simpleName(classOf[Ok]) should equal("Ok")
-    intercept[InternalError] {
-      classOf[Ok].getSimpleName
+    try {
+      classOf[Ok].getSimpleName should equal("Ok")
+    } catch {
+      case _: InternalError =>
+      // do nothing -- fails in JDK8 but not JDK11
     }
 
     // ensure we don't blow up
