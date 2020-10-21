@@ -74,7 +74,7 @@ class ClassUtilsTest extends Test {
     }
     ClassUtils.simpleName(classOf[Response]) should equal("Response")
     try {
-      cclassOf[Response].getSimpleName should equal("Response")
+      classOf[Response].getSimpleName should equal("Response")
     } catch {
       case _: InternalError =>
       // do nothing -- fails in JDK8 but not JDK11
