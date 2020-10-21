@@ -175,7 +175,7 @@ You can find many examples of using the `ScalaObjectMapper` in the various frame
 - Java `example <https://github.com/twitter/finatra/blob/develop/jackson/src/test/java/com/twitter/finatra/jackson/tests/ScalaObjectMapperJavaTest.java>`__.
 
 As mentioned above, there is also a plethora of Jackson `tutorials <https://github.com/FasterXML/jackson-docs#tutorials>`__ and `HOW-TOs <https://github.com/FasterXML/jackson-docs#external-off-github-documentation>`__
-online which can give you more in-depth of examples of how to use a Jackson `ObjectMapper <http://fasterxml.github.io/jackson-databind/javadoc/2.10/com/fasterxml/jackson/databind/ObjectMapper.html>`__.
+available online which provide more in-depth examples of how to use a Jackson `ObjectMapper <http://fasterxml.github.io/jackson-databind/javadoc/2.10/com/fasterxml/jackson/databind/ObjectMapper.html>`__.
 
 Advanced Configuration
 ~~~~~~~~~~~~~~~~~~~~~~
