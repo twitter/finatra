@@ -91,14 +91,20 @@ class ClassUtilsTest extends Test {
 
     // ensure we don't blow up
     ClassUtils.simpleName(classOf[ClassB]) should equal("ClassB")
-    intercept[InternalError] {
-      classOf[ClassB].getSimpleName
+    try {
+      classOf[ClassB].getSimpleName should equal("ClassB")
+    } catch {
+      case _: InternalError =>
+      // do nothing -- fails in JDK8 but not JDK11
     }
 
     // this causes class.getSimpleName to blow up, ensure we don't
     ClassUtils.simpleName(classOf[Foo]) should equal("Foo")
-    intercept[InternalError] {
-      classOf[Foo].getSimpleName
+    try {
+      classOf[Foo].getSimpleName should equal("Foo")
+    } catch {
+      case _: InternalError =>
+      // do nothing -- fails in JDK8 but not JDK11
     }
 
     ClassUtils.simpleName(classOf[ClassA]) should equal("ClassA")
@@ -118,9 +124,14 @@ class ClassUtilsTest extends Test {
     ClassUtils.simpleName(classOf[DoEverything$Client]) should equal(
       classOf[DoEverything$Client].getSimpleName)
 
-    ClassUtils.simpleName(classOf[This$Breaks$In$ManyWays]) should equal("ManyWays")
-    intercept[InternalError] {
-      classOf[This$Breaks$In$ManyWays].getSimpleName
+    val manyWays = ClassUtils.simpleName(classOf[This$Breaks$In$ManyWays])
+    (manyWays == "ManyWays" /* JDK8 */ ||
+    manyWays == "This$Breaks$In$ManyWays" /* JDK11 */ ) should be(true)
+    try {
+      classOf[This$Breaks$In$ManyWays].getSimpleName should equal("This$Breaks$In$ManyWays")
+    } catch {
+      case _: InternalError =>
+      // do nothing -- fails in JDK8 but not JDK11
     }
   }
 
