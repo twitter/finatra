@@ -66,8 +66,11 @@ class ClassUtilsTest extends Test {
   test("ClassUtils#simpleName") {
     // these cause class.getSimpleName to blow up, ensure we don't
     ClassUtils.simpleName(classOf[Ext]) should equal("Ext")
-    intercept[InternalError] {
-      classOf[Ext].getSimpleName
+    try {
+      classOf[Ext].getSimpleName should equal("Ext")
+    } catch {
+      case _: InternalError =>
+      // do nothing -- fails in JDK8 but not JDK11
     }
     ClassUtils.simpleName(classOf[Response]) should equal("Response")
     intercept[InternalError] {
