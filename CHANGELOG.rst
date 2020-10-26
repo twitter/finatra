@@ -40,6 +40,8 @@ Changed
 
 * http: Adding support for optionally passing chain in the TLS sever trait. ``PHAB_ID=D553718``
 
+* finatra: Bump version of Joda-Time to 2.10.8. ``PHAB_ID=D570496``
+
 Fixed
 ~~~~~
 
