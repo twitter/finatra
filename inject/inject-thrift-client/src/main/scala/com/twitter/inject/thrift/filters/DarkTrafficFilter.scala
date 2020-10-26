@@ -69,9 +69,14 @@ class DarkTrafficFilter[ServiceIface: ClassTag](
 
   private def getService(methodName: String): AnyRef = {
     if (lookupByMethod) {
+      // We use getMethod here because it allows us to get access to the thrift
+      // generated inherited methods only defined in the parent service
       val field = serviceIfaceClass.getMethod(methodName)
       field.invoke(this.darkServiceIface)
     } else {
+      // getDeclaredField works because in the thrift generated code,
+      // the inherited fields (from the parent) to which the services
+      // are assigned are declared in the child as well
       val field = serviceIfaceClass.getDeclaredField(methodName)
       field.setAccessible(true)
       field.get(this.darkServiceIface)

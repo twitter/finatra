@@ -3,12 +3,12 @@ package com.twitter.inject.thrift.integration.snakeCase
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.inject.server.PortUtils
 
-object ExtendedMultiServerDarkTrafficFilterFeatureTest {
+object LegacyExtendedMultiServerDarkTrafficFilterFeatureTest {
   protected val clientId = "client123"
   protected val darkExtendedSnakeCaseThriftServer =
-    new EmbeddedThriftServer(new ExtendedSnakeCaseThriftServer, disableTestLogging = true)
+    new EmbeddedThriftServer(new LegacyExtendedSnakeCaseThriftServer, disableTestLogging = true)
   protected val liveExtendedSnakeCaseThriftServer = new EmbeddedThriftServer(
-    new ExtendedSnakeCaseThriftServer,
+    new LegacyExtendedSnakeCaseThriftServer,
     flags = Map(
       "thrift.dark.service.dest" ->
         s"/$$/inet/${PortUtils.loopbackAddress}/${darkExtendedSnakeCaseThriftServer.thriftPort()}",
@@ -19,9 +19,9 @@ object ExtendedMultiServerDarkTrafficFilterFeatureTest {
   )
 }
 
-class ExtendedMultiServerDarkTrafficFilterFeatureTest
+class LegacyExtendedMultiServerDarkTrafficFilterFeatureTest
     extends AbstractExtendedMultiServerDarkTrafficFilterFeatureTest(
-      ExtendedMultiServerDarkTrafficFilterFeatureTest.darkExtendedSnakeCaseThriftServer,
-      ExtendedMultiServerDarkTrafficFilterFeatureTest.liveExtendedSnakeCaseThriftServer,
-      ExtendedMultiServerDarkTrafficFilterFeatureTest.clientId
+      LegacyExtendedMultiServerDarkTrafficFilterFeatureTest.darkExtendedSnakeCaseThriftServer,
+      LegacyExtendedMultiServerDarkTrafficFilterFeatureTest.liveExtendedSnakeCaseThriftServer,
+      LegacyExtendedMultiServerDarkTrafficFilterFeatureTest.clientId
     )
