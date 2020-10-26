@@ -22,7 +22,6 @@ import com.twitter.finatra.kafkastreams.utils.ScalaStreamsImplicits
 import com.twitter.inject.server.TwitterServer
 import com.twitter.util.Duration
 import java.util.Properties
-import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicLong
 import org.apache.kafka.clients.consumer.{ConsumerConfig, OffsetResetStrategy}
 import org.apache.kafka.clients.producer.ProducerConfig
@@ -197,7 +196,7 @@ abstract class KafkaStreamsTwitterServer
     kafkaStreams = new KafkaStreams(topology, properties, kafkaStreamsClientSupplier)
     setExceptionHandler(kafkaStreams)
     monitorStateChanges(kafkaStreams)
-    closeKafkaStreamsOnExit(kafkaStreams)
+    closeKafkaStreamsOnExit()
 
     kafkaStreams.start()
     // after upgraded to 2.5, we can move to isRunningOrRebalancing() function
@@ -354,15 +353,12 @@ abstract class KafkaStreamsTwitterServer
 
   /* Private */
 
-  private def closeKafkaStreamsOnExit(
-    kafkaStreamsToClose: KafkaStreams
-  ): Unit = {
+  private def closeKafkaStreamsOnExit(): Unit = {
     onExit {
       info("Closing kafka streams")
       try {
         kafkaStreams.close(
-          defaultCloseGracePeriod.inMillis,
-          TimeUnit.MILLISECONDS
+          java.time.Duration.ofMillis(defaultCloseGracePeriod.inMillis)
         )
       } catch {
         case e: Throwable =>
