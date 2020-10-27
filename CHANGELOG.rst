@@ -7,6 +7,14 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+
+* kafka: Split `c.t.f.kafka.tracingEnabled` flag into `c.t.f.k.producers.producerTracingEnabled` and
+  `c.t.f.k.consumers.consumerTracingEnabled` to selectively enable/disable tracing for
+  producers/consumers. Producer tracing is turned on by default and consumer tracing is turned off
+  by default now. ``PHAB_ID=D571064``
+
 20.10.0
 -------
 

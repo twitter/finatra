@@ -13,10 +13,13 @@ import com.twitter.finatra.kafka.producers.TracingKafkaProducer.{
   ProducerTopicAnnotation,
   TraceIdHeader
 }
-import com.twitter.finatra.kafka.producers.{FinagleKafkaProducerBuilder, TracingKafkaProducer}
+import com.twitter.finatra.kafka.producers.{
+  FinagleKafkaProducerBuilder,
+  TracingKafkaProducer,
+  producerTracingEnabled
+}
 import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter
 import com.twitter.finatra.kafka.test.EmbeddedKafka
-import com.twitter.finatra.kafka.tracingEnabled
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.inject.server.InMemoryStatsReceiverUtility
@@ -111,7 +114,7 @@ class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
     when(nullTracer.isActivelyTracing(any[TraceId])).thenReturn(true)
     val testTraceId = Trace.nextId.copy(_sampled = Some(true))
 
-    tracingEnabled.let(true) {
+    producerTracingEnabled.let(true) {
       Trace.letTracer(nullTracer) {
         Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, testTraceId) {
           val producer = getNativeTestProducer(NullStatsReceiver)
@@ -160,7 +163,7 @@ class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
     when(nullTracer.isActivelyTracing(any[TraceId])).thenReturn(false)
     val testTraceId = Trace.nextId
 
-    tracingEnabled.let(true) {
+    producerTracingEnabled.let(true) {
       Trace.letTracer(nullTracer) {
         Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, testTraceId) {
           val producer = getNativeTestProducer(NullStatsReceiver)
@@ -191,7 +194,7 @@ class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
     when(nullTracer.isActivelyTracing(any[TraceId])).thenReturn(true)
     val testTraceId = Trace.nextId
 
-    tracingEnabled.let(false) {
+    producerTracingEnabled.let(false) {
       Trace.letTracer(nullTracer) {
         Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, testTraceId) {
           val producer = getNativeTestProducer(NullStatsReceiver)
@@ -223,7 +226,7 @@ class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
     when(nullTracer.isActivelyTracing(any[TraceId])).thenReturn(true)
     val testTraceId = Trace.nextId.copy(_sampled = Some(true))
 
-    tracingEnabled.let(true) {
+    producerTracingEnabled.let(true) {
       Trace.letTracer(nullTracer) {
         Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, testTraceId) {
           val producer = getTestProducer(NullStatsReceiver)
@@ -271,7 +274,7 @@ class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
     when(nullTracer.isActivelyTracing(any[TraceId])).thenReturn(false)
     val testTraceId = Trace.nextId
 
-    tracingEnabled.let(true) {
+    producerTracingEnabled.let(true) {
       Trace.letTracer(nullTracer) {
         Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, testTraceId) {
           val producer = getTestProducer(NullStatsReceiver)
@@ -301,7 +304,7 @@ class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
     when(nullTracer.isActivelyTracing(any[TraceId])).thenReturn(false)
     val testTraceId = Trace.nextId
 
-    tracingEnabled.let(false) {
+    producerTracingEnabled.let(false) {
       Trace.letTracer(nullTracer) {
         Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, testTraceId) {
           val producer = getTestProducer(NullStatsReceiver)

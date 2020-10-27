@@ -16,7 +16,6 @@ import org.apache.kafka.clients.producer.{
 }
 import org.apache.kafka.common.serialization.Serializer
 import scala.collection.JavaConverters._
-import com.twitter.finatra.kafka.tracingEnabled
 
 object TracingKafkaProducer {
 
@@ -101,7 +100,7 @@ class TracingKafkaProducer[K, V](
   import TracingKafkaProducer._
 
   override def send(record: ProducerRecord[K, V], callback: Callback): Future[RecordMetadata] = {
-    val shouldTrace = tracingEnabled()
+    val shouldTrace = producerTracingEnabled()
     withTracing { trace =>
       if (trace.isActivelyTracing && shouldTrace) {
         info(s"Tracing producer record with trace id: ${trace.id}")
@@ -135,7 +134,14 @@ class TracingKafkaProducer[K, V](
     // NOTE: This code can be called from a non-finagle controlled thread and hence the
     // Trace.tracers can be empty as it's absent from Contexts.local.
     val tracer = if (Trace.tracers.isEmpty) DefaultTracer.self else BroadcastTracer(Trace.tracers)
-    val nextTraceId = Contexts.local.get(TestTraceIdKey).getOrElse(Trace.nextId)
+    val nextTraceId = Contexts.local.get(TestTraceIdKey).getOrElse {
+      val nextId = Trace.nextId
+      nextId._parentId match {
+        case Some(_) => nextId
+        // Don't trace if parent span is absent. This generally leads to single span traces
+        case None => nextId.copy(_sampled = Some(false))
+      }
+    }
     Trace.letTracerAndId(tracer, nextTraceId) {
       val trace = Trace()
       f(trace)

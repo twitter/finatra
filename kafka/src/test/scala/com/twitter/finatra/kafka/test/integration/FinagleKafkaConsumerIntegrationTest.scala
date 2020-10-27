@@ -12,7 +12,11 @@ import com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.{
   ProducerTraceIdAnnotation,
   ClientIdAnnotation => ConsumerClientIdAnnotation
 }
-import com.twitter.finatra.kafka.consumers.{FinagleKafkaConsumer, FinagleKafkaConsumerBuilder}
+import com.twitter.finatra.kafka.consumers.{
+  FinagleKafkaConsumer,
+  FinagleKafkaConsumerBuilder,
+  consumerTracingEnabled
+}
 import com.twitter.finatra.kafka.domain.{AckMode, KafkaGroupId}
 import com.twitter.finatra.kafka.producers.TracingKafkaProducer.{
   ProducerSendAnnotation,
@@ -22,10 +26,10 @@ import com.twitter.finatra.kafka.producers.TracingKafkaProducer.{
 import com.twitter.finatra.kafka.producers.{
   FinagleKafkaProducer,
   FinagleKafkaProducerBuilder,
-  TracingKafkaProducer
+  TracingKafkaProducer,
+  producerTracingEnabled
 }
 import com.twitter.finatra.kafka.test.EmbeddedKafka
-import com.twitter.finatra.kafka.tracingEnabled
 import com.twitter.util.{Duration, Time}
 import java.util.concurrent.TimeUnit
 import org.apache.kafka.clients.consumer.{KafkaConsumer, OffsetResetStrategy}
@@ -244,25 +248,27 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
     val producerTraceId = Trace.nextId
     val nullTracer = spy(new NullTracer())
 
-    tracingEnabled.let(true) {
-      Trace.letTracer(nullTracer) {
-        val producer = buildNativeTestProducer()
-        val consumer = buildNativeTestConsumer(OffsetResetStrategy.EARLIEST)
-        consumer.subscribe(Seq(tracingTopic.topic).asJava)
-        try {
-          Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, producerTraceId) {
-            producer
-              .send(new ProducerRecord(tracingTopic.topic, null, "Foo", "Bar"))
-              .get(5, TimeUnit.SECONDS)
+    producerTracingEnabled.let(true) {
+      consumerTracingEnabled.let(true) {
+        Trace.letTracer(nullTracer) {
+          val producer = buildNativeTestProducer()
+          val consumer = buildNativeTestConsumer(OffsetResetStrategy.EARLIEST)
+          consumer.subscribe(Seq(tracingTopic.topic).asJava)
+          try {
+            Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, producerTraceId) {
+              producer
+                .send(new ProducerRecord(tracingTopic.topic, null, "Foo", "Bar"))
+                .get(5, TimeUnit.SECONDS)
+            }
+            val records = consumer.poll(java.time.Duration.ofSeconds(5))
+            records.asScala.flatMap(_.headers().asScala) should contain noElementsOf Seq(
+              new RecordHeader(
+                TracingKafkaProducer.TraceIdHeader,
+                TraceId.serialize(producerTraceId.copy(_sampled = Some(false)))))
+          } finally {
+            producer.close(java.time.Duration.ofSeconds(5))
+            consumer.close(java.time.Duration.ofSeconds(5))
           }
-          val records = consumer.poll(java.time.Duration.ofSeconds(5))
-          records.asScala.flatMap(_.headers().asScala) should contain noElementsOf Seq(
-            new RecordHeader(
-              TracingKafkaProducer.TraceIdHeader,
-              TraceId.serialize(producerTraceId.copy(_sampled = Some(false)))))
-        } finally {
-          producer.close(java.time.Duration.ofSeconds(5))
-          consumer.close(java.time.Duration.ofSeconds(5))
         }
       }
     }
@@ -271,30 +277,32 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
   }
 
   test(
-    "consumer should not record topic and producer information in the trace when tracingEnabledToggle is 0.0") {
+    "consumer should not record topic and producer information in the trace when producer and consumer tracing is disabled") {
     val producerTraceId = Trace.nextId
     val nullTracer = spy(new NullTracer())
     when(nullTracer.isActivelyTracing(any[TraceId])).thenReturn(true)
 
-    tracingEnabled.let(false) {
-      Trace.letTracer(nullTracer) {
-        val producer = buildNativeTestProducer()
-        val consumer = buildNativeTestConsumer(OffsetResetStrategy.EARLIEST)
-        consumer.subscribe(Seq(tracingTopic.topic).asJava)
-        try {
-          Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, producerTraceId) {
-            producer
-              .send(new ProducerRecord(tracingTopic.topic, null, "Foo", "Bar"))
-              .get(5, TimeUnit.SECONDS)
+    producerTracingEnabled.let(false) {
+      consumerTracingEnabled.let(false) {
+        Trace.letTracer(nullTracer) {
+          val producer = buildNativeTestProducer()
+          val consumer = buildNativeTestConsumer(OffsetResetStrategy.EARLIEST)
+          consumer.subscribe(Seq(tracingTopic.topic).asJava)
+          try {
+            Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, producerTraceId) {
+              producer
+                .send(new ProducerRecord(tracingTopic.topic, null, "Foo", "Bar"))
+                .get(5, TimeUnit.SECONDS)
+            }
+            val records = consumer.poll(java.time.Duration.ofSeconds(5))
+            records.asScala.flatMap(_.headers().asScala) should contain noElementsOf Seq(
+              new RecordHeader(
+                TracingKafkaProducer.TraceIdHeader,
+                TraceId.serialize(producerTraceId.copy(_sampled = Some(false)))))
+          } finally {
+            producer.close(java.time.Duration.ofSeconds(5))
+            consumer.close(java.time.Duration.ofSeconds(5))
           }
-          val records = consumer.poll(java.time.Duration.ofSeconds(5))
-          records.asScala.flatMap(_.headers().asScala) should contain noElementsOf Seq(
-            new RecordHeader(
-              TracingKafkaProducer.TraceIdHeader,
-              TraceId.serialize(producerTraceId.copy(_sampled = Some(false)))))
-        } finally {
-          producer.close(java.time.Duration.ofSeconds(5))
-          consumer.close(java.time.Duration.ofSeconds(5))
         }
       }
     }
@@ -306,38 +314,40 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
     val traceRecordsCaptor: ArgumentCaptor[Record] = ArgumentCaptor.forClass(classOf[Record])
     val nullTracer = spy(new NullTracer())
 
-    tracingEnabled.let(true) {
-      Trace.letTracer(nullTracer) {
-        val producer = buildNativeTestProducer()
-        val consumer = buildNativeTestConsumer(OffsetResetStrategy.EARLIEST)
-        consumer.subscribe(Seq(tracingTopic.topic).asJava)
-        try {
-          // Always trace for producer
-          when(nullTracer.isActivelyTracing(any[TraceId])).thenReturn(true)
-          Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, producerTraceId) {
-            producer
-              .send(new ProducerRecord(tracingTopic.topic, null, "Foo", "Bar"))
-              .get(5, TimeUnit.SECONDS)
-          }
-          // Answer based on sampling for consumer
-          when(nullTracer.isActivelyTracing(any[TraceId]))
-            .thenAnswer(new Answer[Boolean] { // kept for sbt compatibility
-              override def answer(invocation: InvocationOnMock): Boolean = {
-                // compatibility with older mockito versions
-                invocation.getArguments()(0).asInstanceOf[TraceId].sampled match {
-                  case Some(sampled) => sampled
-                  case None => false
+    producerTracingEnabled.let(true) {
+      consumerTracingEnabled.let(true) {
+        Trace.letTracer(nullTracer) {
+          val producer = buildNativeTestProducer()
+          val consumer = buildNativeTestConsumer(OffsetResetStrategy.EARLIEST)
+          consumer.subscribe(Seq(tracingTopic.topic).asJava)
+          try {
+            // Always trace for producer
+            when(nullTracer.isActivelyTracing(any[TraceId])).thenReturn(true)
+            Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, producerTraceId) {
+              producer
+                .send(new ProducerRecord(tracingTopic.topic, null, "Foo", "Bar"))
+                .get(5, TimeUnit.SECONDS)
+            }
+            // Answer based on sampling for consumer
+            when(nullTracer.isActivelyTracing(any[TraceId]))
+              .thenAnswer(new Answer[Boolean] { // kept for sbt compatibility
+                override def answer(invocation: InvocationOnMock): Boolean = {
+                  // compatibility with older mockito versions
+                  invocation.getArguments()(0).asInstanceOf[TraceId].sampled match {
+                    case Some(sampled) => sampled
+                    case None => false
+                  }
                 }
-              }
-            })
-          val records = consumer.poll(java.time.Duration.ofSeconds(5))
-          records.asScala.flatMap(_.headers().asScala) should contain oneElementOf Seq(
-            new RecordHeader(
-              TracingKafkaProducer.TraceIdHeader,
-              TraceId.serialize(producerTraceId)))
-        } finally {
-          producer.close(java.time.Duration.ofSeconds(5))
-          consumer.close(java.time.Duration.ofSeconds(5))
+              })
+            val records = consumer.poll(java.time.Duration.ofSeconds(5))
+            records.asScala.flatMap(_.headers().asScala) should contain oneElementOf Seq(
+              new RecordHeader(
+                TracingKafkaProducer.TraceIdHeader,
+                TraceId.serialize(producerTraceId)))
+          } finally {
+            producer.close(java.time.Duration.ofSeconds(5))
+            consumer.close(java.time.Duration.ofSeconds(5))
+          }
         }
       }
     }

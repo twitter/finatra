@@ -14,9 +14,12 @@ import com.twitter.finatra.kafka.producers.TracingKafkaProducer.{
   ProducerTopicAnnotation,
   TraceIdHeader
 }
-import com.twitter.finatra.kafka.producers.{FinagleKafkaProducerBuilder, TracingKafkaProducer}
+import com.twitter.finatra.kafka.producers.{
+  FinagleKafkaProducerBuilder,
+  TracingKafkaProducer,
+  producerTracingEnabled
+}
 import com.twitter.finatra.kafka.serde.ScalaSerdes
-import com.twitter.finatra.kafka.tracingEnabled
 import com.twitter.finatra.kafkastreams.test.KafkaStreamsMultiServerFeatureTest
 import com.twitter.inject.server.EmbeddedTwitterServer
 import java.util.concurrent.TimeUnit
@@ -61,7 +64,7 @@ class TracingServerTest extends KafkaStreamsMultiServerFeatureTest {
     val tracer = new RecordingTracer(true, Some(true))
     val producerTraceId = Trace.nextId.copy(_sampled = Some(true))
 
-    tracingEnabled.let(true) {
+    producerTracingEnabled.let(true) {
       Trace.letTracer(tracer) {
         val server = createServer
         server.start()
