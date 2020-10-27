@@ -115,8 +115,9 @@ If the Flag defines a default, the `default value <https://github.com/twitter/ut
 given. If the Flag is defined without a default and no command line value is given, any attempt to
 read the Flag's value via the `apply()` function will fail with an `IllegalArgumentException`.
 
-For more information on defining and accessing Flags without default values, see
-`here <#flags-without-defaults>`__.
+It is, however, possible to inject Flags without default values as options (both `scala.Option` and
+`java.util.Optional`). For more information on defining and accessing Flags without default values,
+see `here <#flags-without-defaults>`__.
 
 How To Define Flags
 -------------------
@@ -146,10 +147,10 @@ In this case within an `HttpServer <../http/server.html>`__,
     import javax.inject.Inject
 
     class ExampleController @Inject()(
-      @Flag("magic.num") magicNum: String
+      @Flag("magic.num") magicNum: Int
     ) extends Controller {
         get("/foo") { request: Request =>
-          magicNum
+          magicNum.toString
         }
     }
 
@@ -157,7 +158,7 @@ In this case within an `HttpServer <../http/server.html>`__,
 
     class ExampleServer extends HttpServer {
 
-      flag("magic.num", "42", "Defines a magic number flag.")
+      flag("magic.num", 42, "Defines a magic number flag.")
 
       override val modules = Seq(
         DoEverythingModule)
@@ -191,16 +192,16 @@ or in Java:
     import scala.reflect.ManifestFactory;
 
     public class ExampleController extends AbstractController {
-      private final String magicNum;
+      private final Integer magicNum;
 
       @Inject
       public ExampleController() {
-        @Flag("magic.num") String magicNum) {
+        @Flag("magic.num") Integer magicNum) {
         this.magicNum = magicNum;
       }
 
       public void configureRoutes() {
-        get("/foo", (Request request) -> magicNum)
+        get("/foo", (Request request) -> magicNum.toString)
       }
     }
 
@@ -270,7 +271,7 @@ Or it can be obtained directly from the Injector:
 
     class ExampleServer extends HttpServer {
 
-      flag("magic.num", "42", "Defines a magic number flag.")
+      flag("magic.num", 42, "Defines a magic number flag.")
 
       override val modules = Seq(
         DoEverythingModule)
@@ -280,7 +281,7 @@ Or it can be obtained directly from the Injector:
           .filter[LoggingMDCFilter[Request, Response]]
           .filter[TraceIdMDCFilter[Request, Response]]
           .filter[CommonFilters]
-          .add(new ExampleController(injector.instance[String](Flags.named("magic.num"))))
+          .add(new ExampleController(injector.instance[Int](Flags.named("magic.num"))))
     }
 
 Within a `TwitterModule <modules.html>`__
@@ -356,22 +357,24 @@ Understanding Flag Binding
 
 The key component of Flag binding is |Flaggable[T]|_, a type-class that defines how a Flag of
 type `T` can be parsed from a given string. In Finatra, you can bind / inject any Flag value as
-long as you register its corresponding `Flaggable` instance within a framework middleware (e.g.,
-a module). The most common `Flaggable` instances are already registered so primitive types as well as
-comma-separated lists (either as `scala.Seq` or `java.util.List` of primitive types will work off
-the shelf.
+long as there is a `Flaggable.Typed[T]` instance available for it. Otherwise, you'd need to either
+manually register a flag converter (if you don't control / can't change the Flaggable) within a
+framework middleware or make sure a Flaggable is implemented as `Flaggable.Typed[T]`.
 
-These additional `Flag` types are also registered (as both primitive and comma-separated):
+Making a Flaggable `Flaggable.Typed[T]`
 
- - `java.net.InetSocketAddress`
- - `java.time.LocalTime`
- - `com.twitter.util.Duration`
- - `com.twitter.util.Time`
- - `com.twitter.util.StorageUnit`
- - `java.io.File`
+.. code:: scala
 
-For anything that falls outside of these types (and their `scala.Seq[_]` and `java.util.List[_]`
-variants) you'd need to register a `Flaggable[T]` to be able to inject a Flag of type `T`.
+   import com.twitter.app.Flaggable
+   import java.lang.reflect.Type
+
+   case class Foo(s: String)
+   object Foo {
+     implicit val flaggable: Flaggable[Foo] = Flaggable.mandatory(s => Foo(s))
+   }
+
+
+Registering a Flag converter
 
 .. code:: scala
 
@@ -591,75 +594,11 @@ for more information and examples of Dependency Injection approaches to writing 
 Flags Without Defaults
 ----------------------
 
-Flags defined without a default value are typically considered to be "mandatory" flags. That is, a
-command line value MUST be supplied and it is not expected that the server will be able to correctly
-function without a supplied value.
-
-When creating a Flag, the returned Flag instance is parameterized to the type of the supplied default
-argument, e.g., the method signature looks like this:
-
-.. code:: scala
-
-    import com.twitter.app.{Flag, Flaggable}
-
-    def apply[T: Flaggable](name: String, default: => T, help: String): Flag[T]
-
-Thus when you do not specify a default value, you must *explicitly* parameterize calling `flag[T](...)`
-with a defined type `T`.
-
-E.g.,
-
-A Bad Example
-~~~~~~~~~~~~~
-
-.. code:: scala
-
-    import com.foo.bar.ThirdPartyFoo
-    import com.google.inject.Provides
-    import com.twitter.inject.TwitterModule
-    import javax.inject.Singleton
-
-    object MyModule1 extends TwitterModule {
-      val key = flag[String](name = "key", help = "The key to use")
-
-      @Singleton
-      @Provides
-      def provideThirdPartyFoo: ThirdPartyFoo = {
-        val myKey = key.get match {
-          case Some(value) => value
-          case _ => "DEFAULT"
-        }
-        new ThirdPartyFoo(myKey)
-      }
-    }
-
-Keep in mind that the specified `T` in this case must be a `Flaggable <https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flaggable.scala>`__
-type. `Flag#get` will return a `None` when no value is passed on the command line for a Flag with no
-default.
-
-.. warning::
-
-    This is not a recommended way of defining or using a Flag within a TwitterModule but is
-    included to show aspects of the Flag API. Please see the section on why `holding a reference <#holding-a-reference>`_ to a Flag in a Module is dangerous and why this is not recommended.
-
-Note that you should not call `Flag#apply <https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L171>`__
-on a Flag without a default (as this will result in an `IllegalArgumentException`) but instead use
-`Flag#get <https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L205>`__ or `Flag#getWithDefault <https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L213>`__
-which return an `Option[T]` on which you can then pattern match.
-
-Injection
-~~~~~~~~~
-
 Flags without a default nor a user-supplied value will fail injection (since de-referencing the value
-in this case results in an `IllegalArgumentException`). This means if you try to inject the value of
-a non-defaulted Flag that has not been supplied a value from the command-line using the |@Flag|_
-binding annotation, a `ProvisionException` will be thrown caused by the `IllegalArgumentException`
-`here <https://github.com/twitter/finatra/blob/ec8d584eb914f50f92314c740dc68fb7abb47eff/inject/inject-app/src/main/scala/com/twitter/inject/app/internal/FlagsModule.scala#L34>`__.
-
-A Better Example
-~~~~~~~~~~~~~~~~
-
-A better example of injecting a parsed value from a Flag defined without a default:
+in this case results in an `IllegalArgumentException`), unless they are injected
+as `optional flags <#injecting-optional-flags>`__. This means if you try to inject the value of a
+non-defaulted Flag that has not been supplied a value from the command-line using the |@Flag|_
+binding annotation, a `ProvisionException` will be thrown caused by the `IllegalArgumentException` `here <https://github.com/twitter/finatra/blob/ec8d584eb914f50f92314c740dc68fb7abb47eff/inject/inject-app/src/main/scala/com/twitter/inject/app/internal/FlagsModule.scala>`__.
 
 .. code:: scala
 
@@ -674,8 +613,7 @@ A better example of injecting a parsed value from a Flag defined without a defau
 
       @Singleton
       @Provides
-      def provideThirdPartyFoo(
-        @Flag("key") myKey: String): ThirdPartyFoo =
+      def provideThirdPartyFoo(@Flag("key") myKey: String): ThirdPartyFoo =
         new ThirdPartyFoo(myKey)
     }
 
@@ -701,8 +639,7 @@ and in Java:
 
       @Singleton
       @Provides
-      public ThirdPartyFoo provideThirdPartyFoo(
-        @Flag("key") String myKey) {
+      public ThirdPartyFoo provideThirdPartyFoo(@Flag("key") String myKey) {
         return new ThirdPartyFoo(myKey);
       }
     }
@@ -710,9 +647,72 @@ and in Java:
 In this example, we are assured that we will have the parsed Flag value obtained from the Injector
 in our `@Provides`-annotated method. If there is no supplied command-line value this will fail
 (as mentioned previously) at server startup with a `ProvisionException`. Thus, this ensures that
-we cannot start the server without a command-line value being supplied. This fits the contract
-of a Flag defined without a default in that the Flag is meant to be treated as **required** for the
-server.
+we cannot start the server without a command-line value being supplied.
+
+Injecting Optional Flags
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+|@Flag|_ API allows querying the value as an `Option`, where `None` means a Flag was neither
+supplied via CLI nor had a default value. To replicate this functionality and allow users to define
+their flags without a forced default, Finatra binds such flags as both `scala.Option[T]` or
+`java.util.Optional[T]`, in addition to just `T`. Note: if a Flag had a default value, it's only
+bound as `T`.
+
+Rephrasing the example from above:
+
+.. code:: scala
+
+    import com.foo.bar.{ForthPartyFoo, ThirdPartyFoo, XPartyFoo}
+    import com.google.inject.Provides
+    import com.twitter.inject.TwitterModule
+    import com.twitter.inject.annotations.Flag
+    import javax.inject.Singleton
+
+    object MyModule1 extends TwitterModule {
+      flag[String](name = "key", help = "The key to use")
+
+      @Singleton
+      @Provides
+      def provideXPartyFoo(
+        @Flag("key") myKey: Option[String]): XPartyFoo = myKey match {
+          case Some(v) => new ThirdPartyFoo(v)
+          case None => new ForthPartyFoo()
+        }
+    }
+
+And in Java:
+
+.. code:: java
+
+    import com.foo.bar.ThirdPartyFoo;
+    import com.foo.bar.ForthPartyFoo;
+    import com.google.inject.Provides;
+    import com.twitter.inject.TwitterModule;
+    import com.twitter.inject.annotations.Flag;
+    import java.util.Optional;
+    import javax.inject.Singleton;
+
+    public final class MyModule1 extends TwitterModule {
+
+      public MyModule1() {
+        createMandatoryFlag(
+          /* name      = */ "key",
+          /* help      = */ "The key to use",
+          /* usage     = */ "Pass -key=value",
+          /* flaggable = */ Flaggable.ofString());
+      }
+
+      @Singleton
+      @Provides
+      public XPartyFoo provideXPartyFoo(
+        @Flag("key") Optional<String> myKey) {
+        if (myKey.isPresent()) {
+          return new ThirdPartyFoo(myKey.get());
+        } else {
+          return new ForthPartyFoo();
+        }
+      }
+    }
 
 Modules Depending on Other Modules - Flags Edition
 --------------------------------------------------

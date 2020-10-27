@@ -419,7 +419,7 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A helper trait for serving HTTPS requests with standard TLS. To use,
 mix into an <a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a> and pass the <code>cert.path</code> and <code>key.path</code> flags
-or set the defaults accordingly.</p><pre><span class="kw">object</span> MyServiceMain <span class="kw">extends</span> MyService
+and optionally <code>chain.path</code> flag if using a custom chain or set the defaults accordingly.</p><pre><span class="kw">object</span> MyServiceMain <span class="kw">extends</span> MyService
 
 <span class="kw">class</span> MyService <span class="kw">extends</span> HttpServer <span class="kw">with</span> Tls {
    <span class="kw">override</span> <span class="kw">val</span> defaultCertificatePath = <span class="lit">"/path/to/cert"</span>
@@ -603,6 +603,22 @@ method.
       </span>
       <span class="symbol">
         <span class="name">defaultCertificatePath</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="com.twitter.finatra.http.Tls#defaultChainPath" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="defaultChainPath:String"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/http/Tls.html#defaultChainPath:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defaultChainPath</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>

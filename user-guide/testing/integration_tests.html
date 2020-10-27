@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Integration Tests &#8212; Finatra 20.9.0 documentation</title>
+    <title>Integration Tests &#8212; Finatra 20.10.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '20.9.0',
+        VERSION:     '20.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -98,7 +98,7 @@ created from <cite>TwitterModules</cite> will skip both the lifecycle functions 
 <cite>Flag</cite> instances defined in the set of <cite>TwitterModules</cite>.</p>
 </div>
 <p>To write an integration test, extend the <cite>c.t.inject.IntegrationTest</cite> trait. Then override the
-<cite>injector</cite> val with your constructed instance of on a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">c.t.inject.Injector</a>
+<cite>injector</cite> val with your constructed instance of a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">c.t.inject.Injector</a>
 created from the <cite>c.t.inject.app.TestInjector</cite>.</p>
 <p>You’ll then be able to access instances of necessary classes to execute tests.</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.IntegrationTest
@@ -154,12 +154,24 @@ class ExampleLifecycleTest extends IntegrationTest {
 }
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>You are not required to extend <cite>com.twitter.inject.IntegrationTest</cite> for integration testing. You can
+choose to instead just extend <cite>com.twitter.inject.Test</cite> and implement everything above as well.</p>
+<p class="last">Finatra provides the <cite>com.twitter.inject.IntegrationTest</cite> utility as a placeholder to provide future
+functionality on the basis that the test code is aware of the <cite>injector</cite> member variable and is thus
+able to add functionality on top it.</p>
+</div>
 </div>
 <div class="section" id="bind-t-dsl">
 <h2><cite>bind[T]</cite> DSL<a class="headerlink" href="#bind-t-dsl" title="Permalink to this headline">¶</a></h2>
-<p>Note that the <cite>c.t.inject.app.TestInjector</cite> also supports the <cite>bind[T]</cite> DSL for overriding
+<p>The <cite>c.t.inject.app.TestInjector</cite> also supports the <cite>bind[T]</cite> DSL for overriding
 bound types. See the <cite>bind[T]</cite> <a class="reference external" href="./bind_dsl.html#testinjector-bind-t">documentation</a> for more
 information.</p>
+<p>Practically, this means that you can create an object graph from the list of modules provided
+to the <cite>TestInjector</cite> and then swap out any bound instances in that object graph with a differing
+implementation without needing to explicitly provide any <a class="reference external" href="override_modules.html">override modules</a>.
+This can be particularly useful when working with <a class="reference external" href="mocks.html#using-mocks">Mocks</a> in a test.</p>
 </div>
 <div class="section" id="http-tests">
 <h2>Http Tests<a class="headerlink" href="#http-tests" title="Permalink to this headline">¶</a></h2>
@@ -178,6 +190,14 @@ information on creating a Finagle Thrift client.</p>
 <p>Additionally, your test can also extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftTest.scala"><cite>c.t.finatra.thrift.ThriftTest</cite></a> trait which provides a
 utility specifically for constructing a <a class="reference external" href="https://github.com/twitter/twitter-server/blob/15e35a3a3070c50168ff55fd83a2dff28b09795c/server/src/main/scala/com/twitter/server/FlagResolver.scala#L9&gt;"><cite>resolverMap</cite></a> flag value for setting on your server under
 test.</p>
+</div>
+<div class="section" id="injecting-members-of-a-test">
+<h2>Injecting Members of a Test<a class="headerlink" href="#injecting-members-of-a-test" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Do not inject members of a test class into the server, application or TestInjector object graph under test.</p>
+</div>
+<p>For an explanation of why, see the documentation <a class="reference external" href="./bind_dsl.html#injecting-members-of-a-test">here</a>.</p>
 </div>
 <div class="section" id="more-information">
 <h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
@@ -220,6 +240,7 @@ test.</p>
 <li><a class="reference internal" href="#bind-t-dsl"><cite>bind[T]</cite> DSL</a></li>
 <li><a class="reference internal" href="#http-tests">Http Tests</a></li>
 <li><a class="reference internal" href="#thrift-tests">Thrift Tests</a></li>
+<li><a class="reference internal" href="#injecting-members-of-a-test">Injecting Members of a Test</a></li>
 <li><a class="reference internal" href="#more-information">More Information</a></li>
 </ul>
 </li>

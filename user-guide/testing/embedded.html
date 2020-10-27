@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Embedded Servers and Apps &#8212; Finatra 20.9.0 documentation</title>
+    <title>Embedded Servers and Apps &#8212; Finatra 20.10.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '20.9.0',
+        VERSION:     '20.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -194,6 +194,14 @@ to stdout after each test by default.</p>
 <p>See: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject-thrift-client-http-mapper/src/test/scala/com/twitter/finatra/multiserver/test/MultiServerFeatureTest.scala">c.t.finatra.multiserver.test.MultiServerFeatureTest</a>
 for an example usage.</p>
 </div>
+<div class="section" id="injecting-members-of-a-test">
+<h2>Injecting Members of a Test<a class="headerlink" href="#injecting-members-of-a-test" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Do not inject members of a test class into the server or application under test.</p>
+</div>
+<p>For an explanation of why, see the documentation <a class="reference external" href="./bind_dsl.html#injecting-members-of-a-test">here</a>.</p>
+</div>
 <div class="section" id="more-information">
 <h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -233,6 +241,7 @@ for an example usage.</p>
 <li><a class="reference internal" href="#">Embedded Servers and Apps</a><ul>
 <li><a class="reference internal" href="#testing-with-global-flags">Testing With <cite>Global Flags</cite></a></li>
 <li><a class="reference internal" href="#inmemorystatsreceiver">InMemoryStatsReceiver</a></li>
+<li><a class="reference internal" href="#injecting-members-of-a-test">Injecting Members of a Test</a></li>
 <li><a class="reference internal" href="#more-information">More Information</a></li>
 </ul>
 </li>

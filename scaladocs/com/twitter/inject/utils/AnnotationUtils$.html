@@ -472,27 +472,6 @@ annotation is itself annotated with the passed annotation.
       
       <p class="shortcomment cmt">Find an <span class="extype" name="Annotation">Annotation</span> within a given list of annotations of the given target.</p><div class="fullcomment"><div class="comment cmt"><p>Find an <span class="extype" name="Annotation">Annotation</span> within a given list of annotations of the given target.
 annotation type.</p></div><dl class="paramcmts block"><dt class="param">target</dt><dd class="cmt"><p>the class of the <span class="extype" name="Annotation">Annotation</span> to find.</p></dd><dt class="param">annotations</dt><dd class="cmt"><p>the list of <span class="extype" name="Annotation">Annotation</span> instances to search.</p></dd><dt>returns</dt><dd class="cmt"><p>the matching <span class="extype" name="Annotation">Annotation</span> instance if found, otherwise None.</p></dd></dl></div>
-    </li><li name="com.twitter.inject.utils.AnnotationUtils#findAnnotations" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="findAnnotations(clazz:Class[_],fields:Array[String]):scala.collection.Map[String,Array[java.lang.annotation.Annotation]]"></a><a id="findAnnotations(Class[_],Array[String]):Map[String,Array[Annotation]]"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/AnnotationUtils$.html#findAnnotations(clazz:Class[_],fields:Array[String]):scala.collection.Map[String,Array[java.lang.annotation.Annotation]]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">findAnnotations</span><span class="params">(<span name="clazz">clazz: <span class="extype" name="scala.Predef.Class">Class</span>[_]</span>, <span name="fields">fields: <a href="https://www.scala-lang.org/api/2.12.11/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.11/scala/collection/Map.html#scala.collection.Map" class="extype" name="scala.collection.Map">Map</a>[<span class="extype" name="scala.Predef.String">String</span>, <a href="https://www.scala-lang.org/api/2.12.11/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<span class="extype" name="java.lang.annotation.Annotation">Annotation</span>]]</span>
-      </span>
-      
-      <p class="shortcomment cmt">Attempts to find annotations per <code>case class</code> field returning a mapping of field name to list
-of any found annotations.</p><div class="fullcomment"><div class="comment cmt"><p>Attempts to find annotations per <code>case class</code> field returning a mapping of field name to list
-of any found annotations.
-</p></div><dl class="paramcmts block"><dt class="param">clazz</dt><dd class="cmt"><p>the <code>Class</code> to inspect. This should represent a Scala case class.</p></dd><dt class="param">fields</dt><dd class="cmt"><p>the list of case class fields.</p></dd><dt>returns</dt><dd class="cmt"><p>a mapping of field name to list of annotations. Note, this only returns fields which have
-        annotations.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>IMPORTANT: this is only intended for Scala case classes as it only tries to find annotations
-      on constructors of the given class.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://docs.scala-lang.org/tour/case-classes.html" target="_blank">Tour of Scala Case Classes</a></p></span></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -746,7 +725,34 @@ type param.</p></div><dl class="paramcmts block"><dt class="tparam">A</dt><dd cl
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="com.twitter.inject.utils.AnnotationUtils#findAnnotations" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="findAnnotations(clazz:Class[_],fields:Array[String]):scala.collection.Map[String,Array[java.lang.annotation.Annotation]]"></a><a id="findAnnotations(Class[_],Array[String]):Map[String,Array[Annotation]]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/utils/AnnotationUtils$.html#findAnnotations(clazz:Class[_],fields:Array[String]):scala.collection.Map[String,Array[java.lang.annotation.Annotation]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2020-09-22) No public replacement">findAnnotations</span><span class="params">(<span name="clazz">clazz: <span class="extype" name="scala.Predef.Class">Class</span>[_]</span>, <span name="fields">fields: <a href="https://www.scala-lang.org/api/2.12.11/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.11/scala/collection/Map.html#scala.collection.Map" class="extype" name="scala.collection.Map">Map</a>[<span class="extype" name="scala.Predef.String">String</span>, <a href="https://www.scala-lang.org/api/2.12.11/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<span class="extype" name="java.lang.annotation.Annotation">Annotation</span>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Attempts to find annotations per <code>case class</code> field returning a mapping of field name to list
+of any found annotations.</p><div class="fullcomment"><div class="comment cmt"><p>Attempts to find annotations per <code>case class</code> field returning a mapping of field name to list
+of any found annotations.
+</p></div><dl class="paramcmts block"><dt class="param">clazz</dt><dd class="cmt"><p>the <code>Class</code> to inspect. This should represent a Scala case class.</p></dd><dt class="param">fields</dt><dd class="cmt"><p>the list of case class fields.</p></dd><dt>returns</dt><dd class="cmt"><p>a mapping of field name to list of annotations. Note, this only returns fields which have
+        annotations.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-09-22)</i> No public replacement</p></dd><dt>Note</dt><dd><span class="cmt"><p>IMPORTANT: this is only intended for Scala case classes as it only tries to find annotations
+      on constructors of the given class.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://docs.scala-lang.org/tour/case-classes.html" target="_blank">Tour of Scala Case Classes</a></p></span></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

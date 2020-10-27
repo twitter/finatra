@@ -144,6 +144,15 @@ to stdout after each test by default.
 See: `c.t.finatra.multiserver.test.MultiServerFeatureTest <https://github.com/twitter/finatra/blob/develop/inject-thrift-client-http-mapper/src/test/scala/com/twitter/finatra/multiserver/test/MultiServerFeatureTest.scala>`__
 for an example usage.
 
+Injecting Members of a Test
+---------------------------
+
+.. warning::
+
+    Do not inject members of a test class into the server or application under test.
+
+For an explanation of why, see the documentation `here <./bind_dsl.html#injecting-members-of-a-test>`__.
+
 More Information
 ----------------
 

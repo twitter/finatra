@@ -442,28 +442,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.twitter.finatra.utils.ClassUtils#maybeIsCaseClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="maybeIsCaseClass(cls:Class[_]):Boolean"></a><a id="maybeIsCaseClass(Class[_]):Boolean"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/utils/ClassUtils$.html#maybeIsCaseClass(cls:Class[_]):Boolean" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">maybeIsCaseClass</span><span class="params">(<span name="cls">cls: <span class="extype" name="scala.Predef.Class">Class</span>[_]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.11/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
-      </span>
-      
-      <p class="shortcomment cmt">Determine if a given class type is a case class.</p><div class="fullcomment"><div class="comment cmt"><p>Determine if a given class type is a case class.</p><p>A class is NOT considered as a case class if one of the following criteria is met:
-1. the class is NOT the same as or the super class of class type <span class="extype" name="Product">Product</span>.
-2. the class is the same as or the super class of class type <span class="extype" name="Option[_">Option[_</span>.
-3. the class is the same as or the super class of class type <span class="extype" name="List">List</span>.
-4. the class starts with <code>scala.Tuple</code>.
-5. the class starts with <code>scala.util.Either</code>.
-</p></div><dl class="paramcmts block"><dt class="param">cls</dt><dd class="cmt"><p>runtime representation of class type.</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -533,7 +511,9 @@
         <span class="name">simpleName</span><span class="result">: (<span class="extype" name="scala.Predef.Class">Class</span>[_]) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Safely compute the <code>clazz.getSimpleName</code> of a given <span class="extype" name="Class">Class</span> handling malformed
+names with a best-effort to parse the final segment after the last <code>.</code> after
+transforming all <code>$</code> to <code>.</code>.</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">

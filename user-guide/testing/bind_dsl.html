@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Explicit Binding with #bind[T] &#8212; Finatra 20.9.0 documentation</title>
+    <title>Explicit Binding with #bind[T] &#8212; Finatra 20.10.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '20.9.0',
+        VERSION:     '20.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -71,7 +71,8 @@
 <span id="bind-dsl"></span><h1>Explicit Binding with <code class="docutils literal"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#explicit-binding-with-bind-t" title="Permalink to this headline">¶</a></h1>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
-<p class="last">Please see the section on including test-jar dependencies in your project: <a class="reference external" href="../..#test-dependencies">Test Dependencies</a>.</p>
+<p class="last">Please see the section on including test-jar dependencies in your project:
+<a class="reference external" href="../..#test-dependencies">Test Dependencies</a>.</p>
 </div>
 <div class="section" id="embedded-bind-t">
 <h2>Embedded <code class="docutils literal"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#embedded-bind-t" title="Permalink to this headline">¶</a></h2>
@@ -107,7 +108,8 @@ class ExampleFeatureTest
 </div>
 <p>For a complete example, see the
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/examples/advanced/twitter-clone/src/test/scala/finatra/quickstart/TwitterCloneFeatureTest.scala">TwitterCloneFeatureTest</a>.</p>
-<p>Note this is also available for <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala">EmbeddedApp</a> as well:</p>
+<p>Note this is also available for <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala">EmbeddedApp</a>
+as well:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.inject.Test
 import com.twitter.inject.app.EmbeddedApp
@@ -137,10 +139,10 @@ class MyAppTest extends Test with Mockito {
 </div>
 <div class="section" id="testinjector-bind-t">
 <h2>TestInjector <code class="docutils literal"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#testinjector-bind-t" title="Permalink to this headline">¶</a></h2>
-<p>As described in the <a class="reference external" href="#integration_tests">Integration Tests</a> section you can use the <cite>TestInjector</cite>
-to construct a minimal object graph for testing. The <cite>TestInjector</cite> also supports a <cite>bind[T]</cite> function
-to let you easily replace bound instances in the constructed object graph with another instance, like
-a mock or stub.</p>
+<p>As described in the <a class="reference external" href="./integration_tests.html">Integration Tests</a> section you can use the
+<a class="reference external" href="./integration_tests.html#id2"><cite>TestInjector</cite></a> to construct a minimal object graph for testing. The <cite>TestInjector</cite> also supports a
+<cite>bind[T]</cite> function to let you replace bound instances in the constructed object graph with another
+instance, like a mock or stub.</p>
 <p>E.g.,</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.IntegrationTest
 
@@ -263,20 +265,191 @@ for a full example of using the <cite>#bind[T]</cite> DSL in test to override a 
 <h2>Injecting Members of a Test<a class="headerlink" href="#injecting-members-of-a-test" title="Permalink to this headline">¶</a></h2>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">Do not inject members of a test class into the server or application under test.</p>
+<p class="last">Do not inject members of a test class into the server, application or <a class="reference external" href="./integration_tests.html#id2"><cite>TestInjector</cite></a> object
+graph under test.</p>
 </div>
-<p>We strongly discourage injecting members of a test into your server or application. This includes using <cite>&#64;Inject</cite> or
-<cite>&#64;Bind</cite> (the com.google.inject.testing.fieldbinder.Bind annotation) on a test member field then using the server or
-application’s <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">c.t.inject.Injector</a> to do <cite>injector.underlying.injectMembers(this)</cite>.</p>
+<p>We strongly <strong>discourage</strong> injecting members of a test via your server, application or
+<a class="reference external" href="./integration_tests.html#id2"><cite>TestInjector</cite></a>. This includes using <cite>&#64;Inject</cite> or <cite>&#64;Bind</cite> (the <cite>com.google.inject.testing.fieldbinder.Bind</cite>
+annotation with the <a class="reference external" href="https://github.com/google/guice/wiki/BoundFields">BoundFieldModule</a>) on a
+test member field then using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">c.t.inject.Injector</a>
+of the server, application or <a class="reference external" href="./integration_tests.html#id2"><cite>TestInjector</cite></a> under test to do <cite>injector.underlying.injectMembers(this)</cite>.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyIntegrationTest extends IntegrationTest {
+
+  // THIS IS NOT RECOMMENDED
+  @Bind(to = classOf[StubBarImp]) private val bar: Bar
+  // Foo depends on Bar.
+  @Inject private val foo: Foo
+  @Bind private val mockDatasource: Datasource = mock[DatasourceImplementation]
+
+  override val injector =
+    TestInjector(
+      modules = Seq(new OurGreatModule(), BoundFieldModule.of(this)),
+    ).create()
+
+    injector.injectMembers(this)
+
+    test(&quot;test something&quot;) {
+      ...
+    }
+}
+</pre></div>
+</div>
+<p>Or you could choose to do the test class member injection in a <cite>beforeAll</cite>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyIntegrationTest extends IntegrationTest {
+
+  // THIS IS NOT RECOMMENDED
+  @Bind(to = classOf[StubBarImp]) private val bar: Bar
+  // Foo depends on Bar.
+  @Inject private val foo: Foo
+  @Bind private val mockDatasource = mock[DatasourceImplementation]
+
+  override val injector =
+    TestInjector(
+      modules = Seq(new OurGreatModule(), BoundFieldModule.of(this)),
+    ).create()
+
+  override protected def beforeAll(): Unit = {
+    super.beforeAll()
+    injector.injectMembers(this)
+  }
+
+    test(&quot;test something&quot;) {
+      ...
+    }
+}
+</pre></div>
+</div>
+<p>Or with a <a class="reference external" href="./feature_tests.html">FeatureTest</a>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyFeatureTest extends FeatureTest {
+  // THIS IS NOT RECOMMENDED
+  @Inject val fakeFilesystem: Filesystem
+  @Inject val mockSubsystem: Subsystem
+
+  override val server = new EmbeddedHttpServer(
+    twitterServer = new OurHttpTwitterServerUnderTest {
+      val modules: Seq[Module] = defaultModules ++ Seq(TestModuleWithTheSystemBindings)
+    }
+  )
+
+  override protected def beforeAll(): Unit = {
+    super.beforeAll()
+    server.injector.underlying.injectMembers(this)
+  }
+
+  test(&quot;test something&quot;) {
+    ...
+  }
+
+}
+</pre></div>
+</div>
 <div class="section" id="why">
 <h3>Why?<a class="headerlink" href="#why" title="Permalink to this headline">¶</a></h3>
-<p>The server or application under test has a different lifecycle than the test class. Mixing them in this manner is first,
-hard to reason about and second, can lead to possibly non-deterministic tests. You will also make it hard to test
-<a class="reference external" href="./feature_tests.html#testing-multiple-applications-or-servers">multiple servers or applications</a> in a single test file.</p>
-<p>Lastly, but perhaps most importantly, the <cite>Injector</cite> of a server or application under test is meant to be encapsulated to that server or application. Any mutation of its object graph should happen within the constraints of its lifecycle and thus you should not mutate its object graph after it has started. The framework thus provides ways to do this safely taking into account the server
-or application’s lifecyle: either provide an <a class="reference external" href="./override_modules.html">override module</a> or use the <cite>#bind[T]</cite> DSL here
-to replace a binding <strong>when instantiating</strong> the server or application under test.</p>
+<p>You can perhaps see from the above that there is an impedance mismatch from the creation of the
+object graph under test via creation of the <cite>Injector</cite> and calling <cite>injectMembers(this)</cite>.</p>
+<p>At the very least, this usage tends to violate the encapsulation of the system under test. As
+mentioned previously, the object graph under test is created from a stateful <cite>Injector</cite> with a
+lifecycle that is managed by the framework that is different from the lifecycle of the test class.
+Mixing them in this manner is hard to reason about and can lead to possibly non-deterministic tests.
+This usage also makes it harder to test <a class="reference external" href="./feature_tests.html#testing-multiple-applications-or-servers">multiple servers or applications</a>
+in a single test file.</p>
+<p>If something accesses a value from the <cite>Injector</cite> before <cite>beforeAll()</cite> was called, e.g., another eager
+<cite>val</cite> in the constructor of the test class, this could potentially fail, or worse, an incorrect value
+could be returned (since the <cite>Injector</cite> will try to instantiate whatever is asked for, relying on
+any default no-arg constructor). Moving the <cite>injectMembers(this)</cite> to also be in the test class
+constructor can help, but then ordering of calls is important as the <cite>injectMembers(this)</cite> would need
+to happen before any access of <cite>Injector</cite> values that are expected to be bound. As such, we have
+generally found that in any sufficiently large or complex test suite, this usages tends towards
+brittle tests.</p>
 </div>
+<div class="section" id="alternatives">
+<h3>Alternatives<a class="headerlink" href="#alternatives" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="replacing-object-graph-bindings">
+<h4>Replacing object graph bindings<a class="headerlink" href="#replacing-object-graph-bindings" title="Permalink to this headline">¶</a></h4>
+<p>The framework provides ways to safely replace bindings in the object graph under test, properly
+taking into account the lifecycle to handle parsing of flag values. Users should prefer to either
+provide an <a class="reference external" href="./override_modules.html">override module</a> or use the <cite>#bind[T]</cite> DSL to replace a
+binding <strong>when instantiating</strong> the object graph under test when it is necessary to <em>replace</em> a
+binding in the object graph under test.</p>
+</div>
+<div class="section" id="managing-test-fixtures">
+<h4>Managing test fixtures<a class="headerlink" href="#managing-test-fixtures" title="Permalink to this headline">¶</a></h4>
+<p>One reason for test member injection is to be able to easily create test fixtures. If it is
+necessary to use an object graph for managing some set of test fixture instances that are separate
+from the server or application, <strong>do not use</strong> the <cite>Injector</cite> from the server, application, nor the
+<a class="reference external" href="./integration_tests.html#id2"><cite>TestInjector</cite></a> under test. Instead, create a separate <cite>Injector</cite> – you can use a new
+<a class="reference external" href="integration_tests.html#id2">c.t.inject.app.TestInjector</a> to aid in this.</p>
+<p>Thus, we recommend that you explicitly create a separate object graph and obtain any necessary
+instances from the appropriate object graph over using the indirection of injecting test members. In
+this way, all object graphs are established at instantiation of the test member making it easier to
+reason about the test lifecycle.</p>
+<p>For example:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyIntegrationTest extends IntegrationTest {
+
+  private val mockDatasource = mock[DatasourceImplementation]
+
+  // create an object graph for obtaining test fixtures. `OurIntegrationTestModule`
+  // provides bindings for `Foo` and `Bar`
+  private[this] val testFixturesInjector =
+    TestInjector(
+      modules = Seq(new OurIntegrationTestModule())
+    )
+    .bind[Datasource].toInstance(mockDatasource)
+    .create()
+
+  private val foo: Foo = testFixturesInjector.instance[Foo]
+  private val bar: Bar = testFixturesInjector.instance[Bar]
+
+  // the object graph under test
+  override val injector =
+    TestInjector(
+      modules = Seq(new OurGreatModule())
+    ).create()
+
+  test(&quot;test something&quot;) {
+    ...
+  }
+}
+</pre></div>
+</div>
+<p>Or with a <a class="reference external" href="./feature_tests.html">FeatureTest</a>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyFeatureTest extends FeatureTest {
+
+  // create an object graph for obtaining test fixtures, `OurIntegrationTestModule`
+  // provides bindings for `Filesystem` and `Subsystem`
+  private[this] val testFixturesInjector =
+    TestInjector(
+      modules = Seq(new OurIntegrationTestModule())
+    ).create()
+
+  private val fakeFilesystem: Filesystem = testFixturesInjector.instance[Filesystem]
+  private val mockSubsystem: Subsystem = testFixturesInjector.instance[Subsystem]
+
+  // the object graph under test is encapsulated in the embedded server
+  override val server = new EmbeddedHttpServer(
+    twitterServer = new OurHttpTwitterServerUnderTest
+  )
+
+  test(&quot;test something&quot;) {
+    ...
+  }
+}
+</pre></div>
+</div>
+<p>This is the same tactic taken in testing <a class="reference external" href="./feature_tests.html#testing-multiple-applications-or-servers">multiple servers or applications</a>
+in a single test file. Each server or application encapsulates an <cite>Injector</cite> which is established at
+instantiation of each server or application within the test. Any necessary instances are then explicitly
+obtained from the appropriate object graph for use in testing.</p>
+</div>
+</div>
+</div>
+<div class="section" id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Permalink to this headline">¶</a></h2>
+<p>More resources on <a class="reference external" href="http://xunitpatterns.com/Test%20Double.html">test doubles</a>:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://martinfowler.com/articles/mocksArentStubs.html">Mocks Aren’t Stubs</a></li>
+<li><a class="reference external" href="https://blog.pragmatists.com/test-doubles-fakes-mocks-and-stubs-1a7491dfa3da">Test Doubles — Fakes, Mocks and Stubs.</a></li>
+</ul>
 </div>
 <div class="section" id="more-information">
 <h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
@@ -321,8 +494,14 @@ to replace a binding <strong>when instantiating</strong> the server or applicati
 <li><a class="reference internal" href="#usage-from-java">Usage from Java</a></li>
 <li><a class="reference internal" href="#injecting-members-of-a-test">Injecting Members of a Test</a><ul>
 <li><a class="reference internal" href="#why">Why?</a></li>
+<li><a class="reference internal" href="#alternatives">Alternatives</a><ul>
+<li><a class="reference internal" href="#replacing-object-graph-bindings">Replacing object graph bindings</a></li>
+<li><a class="reference internal" href="#managing-test-fixtures">Managing test fixtures</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a class="reference internal" href="#further-reading">Further Reading</a></li>
 <li><a class="reference internal" href="#more-information">More Information</a></li>
 </ul>
 </li>

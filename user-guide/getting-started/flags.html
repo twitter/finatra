@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Flags &#8212; Finatra 20.9.0 documentation</title>
+    <title>Flags &#8212; Finatra 20.10.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '20.9.0',
+        VERSION:     '20.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -158,8 +158,9 @@ has completed.</p>
 <p>If the Flag defines a default, the <a class="reference external" href="https://github.com/twitter/util/blob/ed6f6a73a41d1b7e8331687567e3191cd5ead19e/util-app/src/main/scala/com/twitter/app/Flag.scala#L186">default value</a> will be returned when no command line value is
 given. If the Flag is defined without a default and no command line value is given, any attempt to
 read the Flag’s value via the <cite>apply()</cite> function will fail with an <cite>IllegalArgumentException</cite>.</p>
-<p>For more information on defining and accessing Flags without default values, see
-<a class="reference external" href="#flags-without-defaults">here</a>.</p>
+<p>It is, however, possible to inject Flags without default values as options (both <cite>scala.Option</cite> and
+<cite>java.util.Optional</cite>). For more information on defining and accessing Flags without default values,
+see <a class="reference external" href="#flags-without-defaults">here</a>.</p>
 </div>
 </div>
 </div>
@@ -184,10 +185,10 @@ import com.twitter.inject.annotations.Flag
 import javax.inject.Inject
 
 class ExampleController @Inject()(
-  @Flag(&quot;magic.num&quot;) magicNum: String
+  @Flag(&quot;magic.num&quot;) magicNum: Int
 ) extends Controller {
     get(&quot;/foo&quot;) { request: Request =&gt;
-      magicNum
+      magicNum.toString
     }
 }
 
@@ -195,7 +196,7 @@ object ExampleServerMain extends ExampleServer
 
 class ExampleServer extends HttpServer {
 
-  flag(&quot;magic.num&quot;, &quot;42&quot;, &quot;Defines a magic number flag.&quot;)
+  flag(&quot;magic.num&quot;, 42, &quot;Defines a magic number flag.&quot;)
 
   override val modules = Seq(
     DoEverythingModule)
@@ -227,16 +228,16 @@ import javax.inject.Inject;
 import scala.reflect.ManifestFactory;
 
 public class ExampleController extends AbstractController {
-  private final String magicNum;
+  private final Integer magicNum;
 
   @Inject
   public ExampleController() {
-    @Flag(&quot;magic.num&quot;) String magicNum) {
+    @Flag(&quot;magic.num&quot;) Integer magicNum) {
     this.magicNum = magicNum;
   }
 
   public void configureRoutes() {
-    get(&quot;/foo&quot;, (Request request) -&gt; magicNum)
+    get(&quot;/foo&quot;, (Request request) -&gt; magicNum.toString)
   }
 }
 
@@ -303,7 +304,7 @@ object ExampleServerMain extends ExampleServer
 
 class ExampleServer extends HttpServer {
 
-  flag(&quot;magic.num&quot;, &quot;42&quot;, &quot;Defines a magic number flag.&quot;)
+  flag(&quot;magic.num&quot;, 42, &quot;Defines a magic number flag.&quot;)
 
   override val modules = Seq(
     DoEverythingModule)
@@ -313,7 +314,7 @@ class ExampleServer extends HttpServer {
       .filter[LoggingMDCFilter[Request, Response]]
       .filter[TraceIdMDCFilter[Request, Response]]
       .filter[CommonFilters]
-      .add(new ExampleController(injector.instance[String](Flags.named(&quot;magic.num&quot;))))
+      .add(new ExampleController(injector.instance[Int](Flags.named(&quot;magic.num&quot;))))
 }
 </pre></div>
 </div>
@@ -382,23 +383,20 @@ allows parsed Flag values to be injected into classes (and provider methods).</p
 <h4>Understanding Flag Binding<a class="headerlink" href="#understanding-flag-binding" title="Permalink to this headline">¶</a></h4>
 <p>The key component of Flag binding is <a class="reference external" href="https://github.com/twitter/util/blob/1bdeab56e49015c1f4c097ef76e47b93a079a239/util-app/src/main/scala/com/twitter/app/Flaggable.scala#L19"><code class="docutils literal"><span class="pre">Flaggable[T]</span></code></a>, a type-class that defines how a Flag of
 type <cite>T</cite> can be parsed from a given string. In Finatra, you can bind / inject any Flag value as
-long as you register its corresponding <cite>Flaggable</cite> instance within a framework middleware (e.g.,
-a module). The most common <cite>Flaggable</cite> instances are already registered so primitive types as well as
-comma-separated lists (either as <cite>scala.Seq</cite> or <cite>java.util.List</cite> of primitive types will work off
-the shelf.</p>
-<p>These additional <cite>Flag</cite> types are also registered (as both primitive and comma-separated):</p>
-<blockquote>
-<div><ul class="simple">
-<li><cite>java.net.InetSocketAddress</cite></li>
-<li><cite>java.time.LocalTime</cite></li>
-<li><cite>com.twitter.util.Duration</cite></li>
-<li><cite>com.twitter.util.Time</cite></li>
-<li><cite>com.twitter.util.StorageUnit</cite></li>
-<li><cite>java.io.File</cite></li>
-</ul>
-</div></blockquote>
-<p>For anything that falls outside of these types (and their <cite>scala.Seq[_]</cite> and <cite>java.util.List[_]</cite>
-variants) you’d need to register a <cite>Flaggable[T]</cite> to be able to inject a Flag of type <cite>T</cite>.</p>
+long as there is a <cite>Flaggable.Typed[T]</cite> instance available for it. Otherwise, you’d need to either
+manually register a flag converter (if you don’t control / can’t change the Flaggable) within a
+framework middleware or make sure a Flaggable is implemented as <cite>Flaggable.Typed[T]</cite>.</p>
+<p>Making a Flaggable <cite>Flaggable.Typed[T]</cite></p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.app.Flaggable
+import java.lang.reflect.Type
+
+case class Foo(s: String)
+object Foo {
+  implicit val flaggable: Flaggable[Foo] = Flaggable.mandatory(s =&gt; Foo(s))
+}
+</pre></div>
+</div>
+<p>Registering a Flag converter</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.TwitterModule
 
 class MyModule extends TwitterModule {
@@ -595,65 +593,11 @@ for more information and examples of Dependency Injection approaches to writing 
 </div>
 <div class="section" id="flags-without-defaults">
 <h2>Flags Without Defaults<a class="headerlink" href="#flags-without-defaults" title="Permalink to this headline">¶</a></h2>
-<p>Flags defined without a default value are typically considered to be “mandatory” flags. That is, a
-command line value MUST be supplied and it is not expected that the server will be able to correctly
-function without a supplied value.</p>
-<p>When creating a Flag, the returned Flag instance is parameterized to the type of the supplied default
-argument, e.g., the method signature looks like this:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.app.{Flag, Flaggable}
-
-def apply[T: Flaggable](name: String, default: =&gt; T, help: String): Flag[T]
-</pre></div>
-</div>
-<p>Thus when you do not specify a default value, you must <em>explicitly</em> parameterize calling <cite>flag[T](…)</cite>
-with a defined type <cite>T</cite>.</p>
-<p>E.g.,</p>
-<div class="section" id="a-bad-example">
-<h3>A Bad Example<a class="headerlink" href="#a-bad-example" title="Permalink to this headline">¶</a></h3>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.foo.bar.ThirdPartyFoo
-import com.google.inject.Provides
-import com.twitter.inject.TwitterModule
-import javax.inject.Singleton
-
-object MyModule1 extends TwitterModule {
-  val key = flag[String](name = &quot;key&quot;, help = &quot;The key to use&quot;)
-
-  @Singleton
-  @Provides
-  def provideThirdPartyFoo: ThirdPartyFoo = {
-    val myKey = key.get match {
-      case Some(value) =&gt; value
-      case _ =&gt; &quot;DEFAULT&quot;
-    }
-    new ThirdPartyFoo(myKey)
-  }
-}
-</pre></div>
-</div>
-<p>Keep in mind that the specified <cite>T</cite> in this case must be a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flaggable.scala">Flaggable</a>
-type. <cite>Flag#get</cite> will return a <cite>None</cite> when no value is passed on the command line for a Flag with no
-default.</p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This is not a recommended way of defining or using a Flag within a TwitterModule but is
-included to show aspects of the Flag API. Please see the section on why <a class="reference external" href="#holding-a-reference">holding a reference</a> to a Flag in a Module is dangerous and why this is not recommended.</p>
-</div>
-<p>Note that you should not call <a class="reference external" href="https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L171">Flag#apply</a>
-on a Flag without a default (as this will result in an <cite>IllegalArgumentException</cite>) but instead use
-<a class="reference external" href="https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L205">Flag#get</a> or <a class="reference external" href="https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala#L213">Flag#getWithDefault</a>
-which return an <cite>Option[T]</cite> on which you can then pattern match.</p>
-</div>
-<div class="section" id="injection">
-<h3>Injection<a class="headerlink" href="#injection" title="Permalink to this headline">¶</a></h3>
 <p>Flags without a default nor a user-supplied value will fail injection (since de-referencing the value
-in this case results in an <cite>IllegalArgumentException</cite>). This means if you try to inject the value of
-a non-defaulted Flag that has not been supplied a value from the command-line using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/java/com/twitter/inject/annotations/Flag.java"><code class="docutils literal"><span class="pre">&#64;Flag</span></code></a>
-binding annotation, a <cite>ProvisionException</cite> will be thrown caused by the <cite>IllegalArgumentException</cite>
-<a class="reference external" href="https://github.com/twitter/finatra/blob/ec8d584eb914f50f92314c740dc68fb7abb47eff/inject/inject-app/src/main/scala/com/twitter/inject/app/internal/FlagsModule.scala#L34">here</a>.</p>
-</div>
-<div class="section" id="a-better-example">
-<h3>A Better Example<a class="headerlink" href="#a-better-example" title="Permalink to this headline">¶</a></h3>
-<p>A better example of injecting a parsed value from a Flag defined without a default:</p>
+in this case results in an <cite>IllegalArgumentException</cite>), unless they are injected
+as <a class="reference external" href="#injecting-optional-flags">optional flags</a>. This means if you try to inject the value of a
+non-defaulted Flag that has not been supplied a value from the command-line using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/java/com/twitter/inject/annotations/Flag.java"><code class="docutils literal"><span class="pre">&#64;Flag</span></code></a>
+binding annotation, a <cite>ProvisionException</cite> will be thrown caused by the <cite>IllegalArgumentException</cite> <a class="reference external" href="https://github.com/twitter/finatra/blob/ec8d584eb914f50f92314c740dc68fb7abb47eff/inject/inject-app/src/main/scala/com/twitter/inject/app/internal/FlagsModule.scala">here</a>.</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.foo.bar.ThirdPartyFoo
 import com.google.inject.Provides
 import com.twitter.inject.TwitterModule
@@ -665,8 +609,7 @@ object MyModule1 extends TwitterModule {
 
   @Singleton
   @Provides
-  def provideThirdPartyFoo(
-    @Flag(&quot;key&quot;) myKey: String): ThirdPartyFoo =
+  def provideThirdPartyFoo(@Flag(&quot;key&quot;) myKey: String): ThirdPartyFoo =
     new ThirdPartyFoo(myKey)
 }
 </pre></div>
@@ -690,8 +633,7 @@ public final class MyModule1 extends TwitterModule {
 
   @Singleton
   @Provides
-  public ThirdPartyFoo provideThirdPartyFoo(
-    @Flag(&quot;key&quot;) String myKey) {
+  public ThirdPartyFoo provideThirdPartyFoo(@Flag(&quot;key&quot;) String myKey) {
     return new ThirdPartyFoo(myKey);
   }
 }
@@ -700,9 +642,66 @@ public final class MyModule1 extends TwitterModule {
 <p>In this example, we are assured that we will have the parsed Flag value obtained from the Injector
 in our <cite>&#64;Provides</cite>-annotated method. If there is no supplied command-line value this will fail
 (as mentioned previously) at server startup with a <cite>ProvisionException</cite>. Thus, this ensures that
-we cannot start the server without a command-line value being supplied. This fits the contract
-of a Flag defined without a default in that the Flag is meant to be treated as <strong>required</strong> for the
-server.</p>
+we cannot start the server without a command-line value being supplied.</p>
+<div class="section" id="injecting-optional-flags">
+<h3>Injecting Optional Flags<a class="headerlink" href="#injecting-optional-flags" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/java/com/twitter/inject/annotations/Flag.java"><code class="docutils literal"><span class="pre">&#64;Flag</span></code></a> API allows querying the value as an <cite>Option</cite>, where <cite>None</cite> means a Flag was neither
+supplied via CLI nor had a default value. To replicate this functionality and allow users to define
+their flags without a forced default, Finatra binds such flags as both <cite>scala.Option[T]</cite> or
+<cite>java.util.Optional[T]</cite>, in addition to just <cite>T</cite>. Note: if a Flag had a default value, it’s only
+bound as <cite>T</cite>.</p>
+<p>Rephrasing the example from above:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.foo.bar.{ForthPartyFoo, ThirdPartyFoo, XPartyFoo}
+import com.google.inject.Provides
+import com.twitter.inject.TwitterModule
+import com.twitter.inject.annotations.Flag
+import javax.inject.Singleton
+
+object MyModule1 extends TwitterModule {
+  flag[String](name = &quot;key&quot;, help = &quot;The key to use&quot;)
+
+  @Singleton
+  @Provides
+  def provideXPartyFoo(
+    @Flag(&quot;key&quot;) myKey: Option[String]): XPartyFoo = myKey match {
+      case Some(v) =&gt; new ThirdPartyFoo(v)
+      case None =&gt; new ForthPartyFoo()
+    }
+}
+</pre></div>
+</div>
+<p>And in Java:</p>
+<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.foo.bar.ThirdPartyFoo;
+import com.foo.bar.ForthPartyFoo;
+import com.google.inject.Provides;
+import com.twitter.inject.TwitterModule;
+import com.twitter.inject.annotations.Flag;
+import java.util.Optional;
+import javax.inject.Singleton;
+
+public final class MyModule1 extends TwitterModule {
+
+  public MyModule1() {
+    createMandatoryFlag(
+      /* name      = */ &quot;key&quot;,
+      /* help      = */ &quot;The key to use&quot;,
+      /* usage     = */ &quot;Pass -key=value&quot;,
+      /* flaggable = */ Flaggable.ofString());
+  }
+
+  @Singleton
+  @Provides
+  public XPartyFoo provideXPartyFoo(
+    @Flag(&quot;key&quot;) Optional&lt;String&gt; myKey) {
+    if (myKey.isPresent()) {
+      return new ThirdPartyFoo(myKey.get());
+    } else {
+      return new ForthPartyFoo();
+    }
+  }
+}
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="modules-depending-on-other-modules-flags-edition">
@@ -942,8 +941,8 @@ HelloWorldServer
 </pre></div>
 </div>
 </div>
-<div class="section" id="id5">
-<h2>Best Practices<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id4">
+<h2>Best Practices<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Prefer defining Flags as <em>granular</em> as possible. i.e., do not define an “environment” Flag which is
 then used to choose application functionality in code. It is considered best practice
@@ -1013,15 +1012,13 @@ with <cite>TwitterModules</cite> as this will correctly handle the lifecycle and
 </ul>
 </li>
 <li><a class="reference internal" href="#flags-without-defaults">Flags Without Defaults</a><ul>
-<li><a class="reference internal" href="#a-bad-example">A Bad Example</a></li>
-<li><a class="reference internal" href="#injection">Injection</a></li>
-<li><a class="reference internal" href="#a-better-example">A Better Example</a></li>
+<li><a class="reference internal" href="#injecting-optional-flags">Injecting Optional Flags</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#modules-depending-on-other-modules-flags-edition">Modules Depending on Other Modules - Flags Edition</a></li>
 <li><a class="reference internal" href="#this-is-just-an-example">This is just an Example</a></li>
 <li><a class="reference internal" href="#passing-flag-values-as-command-line-arguments">Passing Flag Values as Command-Line Arguments</a></li>
-<li><a class="reference internal" href="#id5">Best Practices</a></li>
+<li><a class="reference internal" href="#id4">Best Practices</a></li>
 </ul>
 </li>
 </ul>

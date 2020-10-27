@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Jackson Integration &#8212; Finatra 20.9.0 documentation</title>
+    <title>Jackson Integration &#8212; Finatra 20.10.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '20.9.0',
+        VERSION:     '20.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -69,13 +69,40 @@
             
   <div class="section" id="jackson-integration">
 <span id="json"></span><h1>Jackson Integration<a class="headerlink" href="#jackson-integration" title="Permalink to this headline">¶</a></h1>
-<p>Finatra builds upon the excellent <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala"><cite>jackson-module-scala</cite></a> for <a class="reference external" href="https://www.json.org/json-en.html">JSON</a>
-support. One of the biggest features Finatra provides is an improved <cite>case class</cite>
-<a class="reference external" href="#improved-case-class-deserializer">deserializer</a> which accumulates deserialization errors while
-parsing JSON into a <cite>case class</cite> instead of failing-fast, such that all errors can be reported at
-once.</p>
-<div class="section" id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<p>Finatra builds upon the excellent <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala"><cite>jackson-module-scala</cite></a> for <a class="reference external" href="https://en.wikipedia.org/wiki/JSON">JSON</a>
+support by wrapping the <a class="reference external" href="https://github.com/FasterXML/jackson">Jackson</a> <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/scala/com/fasterxml/jackson/module/scala/ScalaObjectMapper.scala">ScalaObjectMapper</a>.
+One of the biggest features Finatra provides is a default improved <cite>case class</cite> <a class="reference external" href="#improved-case-class-deserializer">deserializer</a>
+which <em>accumulates</em> deserialization errors while parsing JSON into a <cite>case class</cite> instead of failing-fast,
+such that all errors can be reported at once.</p>
+<div class="admonition-this-documentation-assumes-some-level-of-familiarity-with-jackson-json-processing-library-https-github-com-fasterxml-jackson admonition">
+<p class="first admonition-title">🚨 This documentation assumes some level of familiarity with <a class="reference external" href="https://github.com/FasterXML/jackson">Jackson JSON Processing library</a></p>
+<p>Specifically Jackson <a class="reference external" href="https://github.com/FasterXML/jackson-databind#1-minute-tutorial-pojos-to-json-and-back">databinding</a>
+and the Jackson <a class="reference external" href="http://fasterxml.github.io/jackson-databind/javadoc/2.10/com/fasterxml/jackson/databind/ObjectMapper.html">ObjectMapper</a>.</p>
+<p>There are several <a class="reference external" href="https://github.com/FasterXML/jackson-docs#tutorials">tutorials</a> (and <a class="reference external" href="https://github.com/FasterXML/jackson-docs#external-off-github-documentation">external documentation</a>)
+which may be useful if you are unfamiliar with Jackson.</p>
+<p class="last">Additionally, you may want to familiarize yourself with the <a class="reference external" href="https://github.com/FasterXML/jackson-docs#annotations">Jackson Annotations</a>
+as they allow for finer-grain customization of Jackson databinding.</p>
+</div>
+<div class="section" id="case-classes">
+<h2>Case Classes<a class="headerlink" href="#case-classes" title="Permalink to this headline">¶</a></h2>
+<p>As mentioned, <a class="reference external" href="https://github.com/FasterXML/jackson">Jackson</a> is a JSON processing library. We
+generally use Jackson for <a class="reference external" href="https://www.tutorialspoint.com/jackson/jackson_data_binding.htm">databinding</a>,
+or more specifically:</p>
+<ul class="simple">
+<li>object serialization: converting an object <strong>into a JSON String</strong> and</li>
+<li>object deserialization: converting a JSON String <strong>into an object</strong></li>
+</ul>
+<p>The Finatra Jackson integration is primarily centered around serializing and deserializing Scala
+<a class="reference external" href="https://docs.scala-lang.org/tour/case-classes.html">case classes</a>. This is because Scala
+<a class="reference external" href="https://docs.scala-lang.org/tour/case-classes.html">case classes</a> map well to the two JSON
+structures [<a class="reference external" href="https://www.json.org/json-en.html">reference</a>]:</p>
+<ul class="simple">
+<li>A collection of name/value pairs. Generally termed an <em>object</em>. Here, the name/value pairs are the case field name to field value but can also be an actual Scala <cite>Map[T, U]</cite> as well.</li>
+<li>An ordered list of values. Typically an <em>array</em>, <em>vector</em>, <em>list</em>, or <em>sequence</em>, which for case classes can be represented by a Scala <cite>Iterable</cite>.</li>
+</ul>
+</div>
+<div class="section" id="library-features">
+<h2>Library Features<a class="headerlink" href="#library-features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Usable outside of the Finatra framework as a limited replacement for the <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala"><cite>jackson-module-scala</cite></a> or <a class="reference external" href="https://github.com/codahale/jerkson">Jerkson</a>.</li>
 <li>A <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala">c.t.finatra.jackson.ScalaObjectMapper</a> which provides additional Scala friendly methods not found in the <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala"><cite>jackson-module-scala</cite></a> <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/scala/com/fasterxml/jackson/module/scala/ScalaObjectMapper.scala">ScalaObjectMapper</a>.</li>
@@ -105,8 +132,8 @@ However, the Finatra <a class="reference external" href="https://github.com/twit
 <li>An improved <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/internal/caseclass/jackson/CaseClassDeserializer.scala">CaseClassDeserializer</a>: see details <a class="reference external" href="#improved-case-class-deserializer">below</a>.</li>
 </ul>
 </div>
-<div class="section" id="instantiation-configuration">
-<h3>Instantiation &amp; Configuration<a class="headerlink" href="#instantiation-configuration" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="instantiation">
+<h3>Instantiation<a class="headerlink" href="#instantiation" title="Permalink to this headline">¶</a></h3>
 <p>There are <cite>apply</cite> functions available for creation of a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> configured
 with the defaults listed above:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>val injector: com.google.inject.Injector = ???
@@ -125,10 +152,80 @@ val objectMapper = ScalaObjectMapper(injector, underlying)
 <strong>mutate the configuration</strong> of the underlying Jackson <cite>ObjectMapper</cite> to apply the current
 configuration of the <cite>ScalaObjectMapper#Builder</cite> to the provided Jackson <cite>ObjectMapper</cite>. That is,
 they should be considered builder functions to help produce a configured <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a>.</p>
-<p class="last">However, there may be times where you would like to only wrap an already configured Jackson <cite>ObjectMapper</cite>.
-To do, use <cite>ScalaObjectMapper.objectMapper(underlying)</cite> to create a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a>
-which wraps but does not mutate the configuration of the given underlying Jackson <cite>ObjectMapper</cite>.</p>
+<p>However, there may be times where you would like to <em>only wrap</em> an already configured Jackson <cite>ObjectMapper</cite>.</p>
+<p class="last">To do, use <cite>ScalaObjectMapper.objectMapper(underlying)</cite> to create a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a>
+which <strong>wraps but does not mutate</strong> the configuration of the given underlying Jackson <cite>ObjectMapper</cite>.</p>
 </div>
+</div>
+<div class="section" id="basic-usage">
+<h3>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h3>
+<p>Let’s assume we have these two case classes:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class Bar(d: String)
+case class Foo(a: String, b: Int, c: Bar)
+</pre></div>
+</div>
+<p>To <strong>serialize</strong> a case class into a JSON string, use</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>ScalaObjectMapper#writeValueAsString(any: Any): String
+</pre></div>
+</div>
+<p>For example:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>Welcome to Scala 2.12.12 (JDK 64-Bit Server VM, Java 1.8.0_242).
+Type in expressions for evaluation. Or try :help.
+
+scala&gt; val mapper = ScalaObjectMapper()
+mapper: com.twitter.finatra.jackson.ScalaObjectMapper = com.twitter.finatra.jackson.ScalaObjectMapper@490d9c41
+
+scala&gt; val foo = Foo(&quot;Hello, World&quot;, 42, Bar(&quot;Goodbye, World&quot;))
+foo: Foo = Foo(Hello, World,42,Bar(Goodbye, World))
+
+scala&gt; mapper.writeValueAsString(foo)
+res0: String = {&quot;a&quot;:&quot;Hello, World&quot;,&quot;b&quot;:42,&quot;c&quot;:{&quot;d&quot;:&quot;Goodbye, World&quot;}}
+
+scala&gt; // or use the configured &quot;pretty print mapper&quot;
+
+scala&gt; mapper.writePrettyString(foo)
+res1: String =
+{
+  &quot;a&quot; : &quot;Hello, World&quot;,
+  &quot;b&quot; : 42,
+  &quot;c&quot; : {
+    &quot;d&quot; : &quot;Goodbye, World&quot;
+  }
+}
+
+scala&gt;
+</pre></div>
+</div>
+<p>To <strong>deserialize</strong> a JSON string into a case class, use</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>ScalaObjectMapper#parse[T](s: String): T
+</pre></div>
+</div>
+<p>For example, assuming the same <cite>Bar</cite> and <cite>Foo</cite> case classes defined above:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>Welcome to Scala 2.12.12 (JDK 64-Bit Server VM, Java 1.8.0_242).
+Type in expressions for evaluation. Or try :help.
+
+scala&gt; val mapper = ScalaObjectMapper()
+mapper: com.twitter.finatra.jackson.ScalaObjectMapper = com.twitter.finatra.jackson.ScalaObjectMapper@3b64f131
+
+scala&gt; val s = &quot;&quot;&quot;{&quot;a&quot;: &quot;Hello, World&quot;, &quot;b&quot;: 42, &quot;c&quot;: {&quot;d&quot;: &quot;Goodbye, World&quot;}}&quot;&quot;&quot;
+s: String = {&quot;a&quot;: &quot;Hello, World&quot;, &quot;b&quot;: 42, &quot;c&quot;: {&quot;d&quot;: &quot;Goodbye, World&quot;}}
+
+scala&gt; val foo = mapper.parse[Foo](s)
+foo: Foo = Foo(Hello, World,42,Bar(Goodbye, World))
+
+scala&gt;
+</pre></div>
+</div>
+<p>You can find many examples of using the <cite>ScalaObjectMapper</cite> in the various framework tests:</p>
+<ul class="simple">
+<li>Scala examples [<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/jackson/AbstractScalaObjectMapperTest.scala">1</a>, <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/jackson/ScalaObjectMapperTest.scala">2</a>].</li>
+<li>Java <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/test/java/com/twitter/finatra/jackson/tests/ScalaObjectMapperJavaTest.java">example</a>.</li>
+</ul>
+<p>As mentioned above, there is also a plethora of Jackson <a class="reference external" href="https://github.com/FasterXML/jackson-docs#tutorials">tutorials</a> and <a class="reference external" href="https://github.com/FasterXML/jackson-docs#external-off-github-documentation">HOW-TOs</a>
+available online which provide more in-depth examples of how to use a Jackson <a class="reference external" href="http://fasterxml.github.io/jackson-databind/javadoc/2.10/com/fasterxml/jackson/databind/ObjectMapper.html">ObjectMapper</a>.</p>
+</div>
+<div class="section" id="advanced-configuration">
+<h3>Advanced Configuration<a class="headerlink" href="#advanced-configuration" title="Permalink to this headline">¶</a></h3>
 <p>To apply more custom configuration to create a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a>, there is a builder for
 constructing a customized mapper.</p>
 <p>E.g., to set a <cite>PropertyNamingStrategy</cite> different than the default:</p>
@@ -741,10 +838,13 @@ useful when working with Enums:</p>
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Jackson Integration</a><ul>
-<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#case-classes">Case Classes</a></li>
+<li><a class="reference internal" href="#library-features">Library Features</a></li>
 <li><a class="reference internal" href="#c-t-finatra-jackson-scalaobjectmapper">c.t.finatra.jackson.ScalaObjectMapper</a><ul>
 <li><a class="reference internal" href="#defaults">Defaults</a></li>
-<li><a class="reference internal" href="#instantiation-configuration">Instantiation &amp; Configuration</a></li>
+<li><a class="reference internal" href="#instantiation">Instantiation</a></li>
+<li><a class="reference internal" href="#basic-usage">Basic Usage</a></li>
+<li><a class="reference internal" href="#advanced-configuration">Advanced Configuration</a></li>
 <li><a class="reference internal" href="#access-to-the-underlying-jackson-object-mapper">Access to the underlying Jackson Object Mapper</a></li>
 <li><a class="reference internal" href="#c-t-finatra-jackson-modules-scalaobjectmappermodule">c.t.finatra.jackson.modules.ScalaObjectMapperModule</a></li>
 </ul>

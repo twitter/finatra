@@ -782,7 +782,7 @@ intended for use from Scala or with generated Scala code.
       
       <p class="shortcomment cmt">A helper trait for serving HTTPS requests with standard TLS.</p><div class="fullcomment"><div class="comment cmt"><p>A helper trait for serving HTTPS requests with standard TLS. To use,
 mix into an <a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a> and pass the <code>cert.path</code> and <code>key.path</code> flags
-or set the defaults accordingly.</p><pre><span class="kw">object</span> MyServiceMain <span class="kw">extends</span> MyService
+and optionally <code>chain.path</code> flag if using a custom chain or set the defaults accordingly.</p><pre><span class="kw">object</span> MyServiceMain <span class="kw">extends</span> MyService
 
 <span class="kw">class</span> MyService <span class="kw">extends</span> HttpServer <span class="kw">with</span> Tls {
    <span class="kw">override</span> <span class="kw">val</span> defaultCertificatePath = <span class="lit">"/path/to/cert"</span>
