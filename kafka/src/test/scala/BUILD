@@ -20,8 +20,6 @@ junit_tests(
         "finatra/kafka/src/main/java",
         "finatra/kafka/src/test/resources",
         "finatra/kafka/src/test/thrift:thrift-scala",
-        # EmbeddedKafkaCluster.java in 2.5 has dependency on kafka-streams code.
-        "3rdparty/jvm/org/apache/kafka:kafka-streams",
     ],
 )
 
@@ -44,6 +42,8 @@ scala_library(
         "3rdparty/jvm/org/apache/kafka",
         "3rdparty/jvm/org/apache/kafka:kafka-clients",
         "3rdparty/jvm/org/apache/kafka:kafka-clients-test",
+        # EmbeddedKafkaCluster.java in 2.5 has dependency on kafka-streams code.
+        "3rdparty/jvm/org/apache/kafka:kafka-streams",
         "3rdparty/jvm/org/apache/kafka:kafka-streams-test",
         "3rdparty/jvm/org/apache/kafka:kafka-test",
         "3rdparty/jvm/org/apache/zookeeper:zookeeper-server",
@@ -61,6 +61,7 @@ scala_library(
         "3rdparty/jvm/org/apache/kafka",
         "3rdparty/jvm/org/apache/kafka:kafka-clients",
         "3rdparty/jvm/org/apache/kafka:kafka-clients-test",
+        "3rdparty/jvm/org/apache/kafka:kafka-streams",
         "3rdparty/jvm/org/apache/kafka:kafka-streams-test",
         "3rdparty/jvm/org/apache/kafka:kafka-test",
         "3rdparty/jvm/org/apache/zookeeper:zookeeper-server",

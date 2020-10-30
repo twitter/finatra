@@ -1,5 +1,7 @@
 junit_tests(
-    sources = ["**/*.scala"],
+    sources = [
+        "../scala-kafka2.2/**/*.scala",
+    ],
     compiler_option_sets = ["fatal_warnings"],
     strict_deps = True,
     dependencies = [

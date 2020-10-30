@@ -69,7 +69,7 @@ class KafkaStreamsTwitterServerDefaultFlagsFeatureTest
   test("KafkaStreamsTwitterServer default flags") {
     val properties = topologyTester.properties
     properties.getProperty("application.id") should be("no-op")
-    properties.getProperty("application.server") should be("localhost:9990")
+    properties.getProperty("application.server") should be("0.localhost:9990")
     properties.getProperty("bootstrap.servers") should be("127.0.0.1:12345")
     properties.getProperty("cache.max.bytes.buffering") should be("10485760")
     properties.getProperty("commit.interval.ms") should be("30000")

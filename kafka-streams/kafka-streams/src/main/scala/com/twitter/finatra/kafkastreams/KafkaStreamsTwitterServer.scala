@@ -125,7 +125,7 @@ abstract class KafkaStreamsTwitterServer
   protected[kafkastreams] val applicationServerConfig =
     kafkaFlag(
       StreamsConfig.APPLICATION_SERVER_CONFIG,
-      s"localhost:$defaultAdminPort"
+      s"0.localhost:$defaultAdminPort"
     )
   private[finatra] val stateDir =
     kafkaFlag(StreamsConfig.STATE_DIR_CONFIG, "kafka-stream-state")
