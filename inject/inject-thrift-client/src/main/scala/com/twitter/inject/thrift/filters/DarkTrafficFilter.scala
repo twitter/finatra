@@ -1,7 +1,7 @@
 package com.twitter.inject.thrift.filters
 
 import com.twitter.conversions.StringOps._
-import com.twitter.finagle.exp.AbstractDarkTrafficFilter
+import com.twitter.finagle.filter.AbstractDarkTrafficFilter
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.thrift.{MethodMetadata, ThriftClientRequest}
 import com.twitter.finagle.{Filter, Service}
@@ -39,9 +39,9 @@ sealed abstract class BaseDarkTrafficFilter(
 }
 
 /**
- * An implementation of [[com.twitter.finagle.exp.AbstractDarkTrafficFilter]] which extends
+ * An implementation of [[AbstractDarkTrafficFilter]] which extends
  * [[com.twitter.finagle.Filter.TypeAgnostic]] and thus works in a Finatra ThriftRouter
- * filter chain. This differs from the [[com.twitter.finagle.exp.DarkTrafficFilter]] in that
+ * filter chain. This differs from the [[DarkTrafficFilter]] in that
  * this class is typed to work like other ThriftFilters as agnostic to types until apply() is
  * invoked.
  *
@@ -55,7 +55,7 @@ sealed abstract class BaseDarkTrafficFilter(
  *
  * @tparam ServiceIface - the type of the Service to take dark traffic.
  *
- * @see [[com.twitter.finagle.exp.AbstractDarkTrafficFilter]]
+ * @see [[AbstractDarkTrafficFilter]]
  */
 class DarkTrafficFilter[ServiceIface: ClassTag](
   darkServiceIface: ServiceIface,
@@ -107,7 +107,7 @@ class DarkTrafficFilter[ServiceIface: ClassTag](
 }
 
 /**
- * An implementation of [[com.twitter.finagle.exp.AbstractDarkTrafficFilter]] which extends
+ * An implementation of [[AbstractDarkTrafficFilter]] which extends
  * [[com.twitter.finagle.Filter.TypeAgnostic]] for use with generated Java code.
  *
  * @note This filter is expected to be applied on a `Service[Array[Byte], Array[Byte]]`
@@ -120,7 +120,7 @@ class DarkTrafficFilter[ServiceIface: ClassTag](
  * @param statsReceiver keeps stats for requests forwarded, skipped and failed.
  *
  * @see [[com.twitter.finagle.ThriftMux.newService]]
- * @see [[com.twitter.finagle.exp.AbstractDarkTrafficFilter]]
+ * @see [[AbstractDarkTrafficFilter]]
  */
 class JavaDarkTrafficFilter(
   darkService: Service[ThriftClientRequest, Array[Byte]],

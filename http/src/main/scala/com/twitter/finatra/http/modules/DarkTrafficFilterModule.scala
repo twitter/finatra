@@ -2,7 +2,7 @@ package com.twitter.finatra.http.modules
 
 import com.google.inject.Provides
 import com.twitter.app.Flag
-import com.twitter.finagle.exp.DarkTrafficFilter
+import com.twitter.finagle.filter.DarkTrafficFilter
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.{Filter, Http, Service}

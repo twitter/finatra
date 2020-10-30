@@ -673,7 +673,6 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
     scroogeLanguages in Test := Seq("java", "scala"),
     scroogePublishThrift in Test := true,
     libraryDependencies ++= Seq(
-      "com.twitter" %% "finagle-exp" % versions.twLibVersion,
       "com.twitter" %% "finagle-thrift" % versions.twLibVersion,
       "com.twitter" %% "finagle-thriftmux" % versions.twLibVersion,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
@@ -916,7 +915,7 @@ lazy val http = project
     moduleName := "finatra-http",
     ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*ThriftExceptionMapper.*;.*HttpResponseExceptionMapper.*;.*HttpResponseException.*",
     libraryDependencies ++= Seq(
-      "com.twitter" %% "finagle-exp" % versions.twLibVersion,
+      "org.apache.thrift" % "libthrift" % versions.libThrift intransitive (),
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
       "com.novocode" % "junit-interface" % "0.11" % Test,
