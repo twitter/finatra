@@ -2,7 +2,7 @@ package com.twitter.finatra.http.tests.marshalling
 
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Request, Response, Status, Method => HttpMethod}
-import com.twitter.finatra.http.internal.routing.CallbackConverter
+import com.twitter.finatra.http.internal.routing.{CallbackConverter, CallbackConverterImpl}
 import com.twitter.finatra.http.modules.MessageBodyModule
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.http.streaming.{StreamingRequest, StreamingResponse}
@@ -37,7 +37,7 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
       StatsReceiverModule
     ).create
 
-  private val callbackConverter = injector.instance[CallbackConverter]
+  private val callbackConverter: CallbackConverter = injector.instance[CallbackConverterImpl]
   private val mapper = injector.instance[ScalaObjectMapper]
 
   val ford = Car("Ford")

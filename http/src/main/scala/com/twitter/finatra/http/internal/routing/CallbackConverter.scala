@@ -18,18 +18,25 @@ import scala.concurrent.{ExecutionContext => ScalaExecutionContext, Future => Sc
 import scala.reflect.runtime.universe._
 import scala.util.{Failure, Success}
 
-private object CallbackConverter {
+private[http] trait CallbackConverter {
+  def convertToFutureResponse[RequestType: TypeTag, ResponseType: TypeTag](
+    callback: RequestType => ResponseType
+  ): Request => Future[Response]
+}
+
+private object CallbackConverterImpl {
   val url =
     "https://twitter.github.io/finatra/user-guide/http/controllers.html#controllers-and-routing"
 }
 
-private[http] class CallbackConverter @Inject() (
+private[http] class CallbackConverterImpl @Inject() (
   messageBodyManager: MessageBodyManager,
   responseBuilder: ResponseBuilder,
   mapper: ScalaObjectMapper,
-  jsonStreamParser: JsonStreamParser) {
+  jsonStreamParser: JsonStreamParser)
+    extends CallbackConverter {
 
-  import CallbackConverter._
+  import CallbackConverterImpl._
 
   /* Public */
 

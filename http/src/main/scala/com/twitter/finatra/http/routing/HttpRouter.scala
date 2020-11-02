@@ -7,7 +7,7 @@ import com.twitter.finatra.http.exceptions.{
   ExceptionMapper,
   ExceptionMapperCollection
 }
-import com.twitter.finatra.http.internal.routing.{CallbackConverter, Route, RoutingService}
+import com.twitter.finatra.http.internal.routing.{CallbackConverterImpl, Route, RoutingService}
 import com.twitter.finatra.http.marshalling.{MessageBodyComponent, MessageBodyManager}
 import com.twitter.finatra.http.{AbstractController, Controller, HttpFilter}
 import com.twitter.inject.TypeUtils._
@@ -35,7 +35,7 @@ object HttpRouter {
 @Singleton
 class HttpRouter @Inject() (
   injector: Injector,
-  callbackConverter: CallbackConverter,
+  callbackConverter: CallbackConverterImpl,
   messageBodyManager: MessageBodyManager,
   exceptionManager: ExceptionManager)
     extends Logging {
