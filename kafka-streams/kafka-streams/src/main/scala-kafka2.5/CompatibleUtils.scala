@@ -5,12 +5,12 @@ import org.apache.kafka.streams.processor.{ProcessorContext, StateStore}
 import org.apache.kafka.streams.processor.internals.InternalTopologyBuilder
 import org.apache.kafka.streams.state.internals.WrappedStateStore
 
-private[kafkastreams] object CompatibleUtils {
+object CompatibleUtils {
 
   private val internalTopologyBuilderField =
     ReflectionUtils.getFinalField(classOf[Topology], "internalTopologyBuilder")
 
-  def isStateless(topology: Topology): Boolean = {
+  private[kafkastreams] def isStateless(topology: Topology): Boolean = {
     val internalTopologyBuilder = getInternalTopologyBuilder(topology)
 
     internalTopologyBuilder.stateStores.isEmpty
@@ -22,13 +22,13 @@ private[kafkastreams] object CompatibleUtils {
       .asInstanceOf[InternalTopologyBuilder]
   }
 
-  def getUnwrappedStateStore[K, V](name: String, processorContext: ProcessorContext): StateStore = {
-    val unwrappedStateStore = processorContext
-      .getStateStore(name).asInstanceOf[WrappedStateStore[_, K, V]]
-      .wrapped().asInstanceOf[StateStore]
-
-    unwrappedStateStore
+  implicit class ProcessorContextWrapper(context: ProcessorContext) {
+    def unwrap[S <: StateStore, K, V](name: String): S = {
+      context
+        .getStateStore(name).asInstanceOf[WrappedStateStore[S, K, V]]
+        .wrapped()
+    }
   }
 
-  def resetStreamThreadId() = {}
+  private[kafkastreams] def resetStreamThreadId() = {}
 }
