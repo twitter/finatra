@@ -240,6 +240,35 @@ class MinConstraintValidatorTest
     }
   }
 
+  test("pass validation for map of integers") {
+    val mapGenerator = for {
+      n <- Gen.alphaStr
+      m <- Gen.choose(10, 1000)
+    } yield (n, m)
+
+    val passValue = Gen.mapOfN[String, Int](100, mapGenerator).suchThat(_.size >= 10)
+    forAll(passValue) { value =>
+      validate[MinMapExample](value).isInstanceOf[Valid] shouldBe true
+    }
+  }
+
+  test("fail validation for map of integers") {
+    val mapGenerator = for {
+      n <- Gen.alphaStr
+      m <- Gen.choose(10, 1000)
+    } yield (n, m)
+
+    val failValue = Gen.mapOfN[String, Int](9, mapGenerator)
+    forAll(failValue) { value =>
+      validate[MinMapExample](value) should equal(
+        Invalid(
+          errorMessage(value = Integer.valueOf(value.size), minValue = 10),
+          errorCode(value = Integer.valueOf(value.size), minValue = 10)
+        )
+      )
+    }
+  }
+
   test("pass validation for array of integers") {
     val passValue = for {
       n <- Gen.containerOfN[Array, Int](10, Gen.choose(0, 200))
@@ -272,8 +301,8 @@ class MinConstraintValidatorTest
     }
   }
 
-  private def validate[C: Manifest](value: Any): ValidationResult =
-    super.validate(manifest[C].runtimeClass, "numberValue", classOf[Min], value)
+  private def validate[T: Manifest](value: Any): ValidationResult =
+    super.validate(manifest[T].runtimeClass, "numberValue", classOf[Min], value)
 
   private def errorMessage(value: Number, minValue: Long = 1): String =
     MinConstraintValidator.errorMessage(messageResolver, value, minValue)

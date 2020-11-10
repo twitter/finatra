@@ -7,8 +7,6 @@ import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode, Valid
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
-case class RangeInvalidTypeExample(@Range(min = 1, max = 5) pointValue: String)
-
 class RangeConstraintValidatorTest
     extends ConstraintValidatorTest
     with ScalaCheckDrivenPropertyChecks {
@@ -201,8 +199,15 @@ class RangeConstraintValidatorTest
     }
   }
 
-  private def validate[C: Manifest](value: Any): ValidationResult =
-    super.validate(manifest[C].runtimeClass, "pointValue", classOf[Range], value)
+  test("fail for invalid range") {
+    val e = intercept[IllegalArgumentException] {
+      validate[RangeInvalidRangeExample](3)
+    }
+    e.getMessage should be("invalid range: 5 > 1")
+  }
+
+  private def validate[T: Manifest](value: Any): ValidationResult =
+    super.validate(manifest[T].runtimeClass, "pointValue", classOf[Range], value)
 
   private def errorMessage(value: Number, minValue: Long, maxValue: Long): String =
     RangeConstraintValidator.errorMessage(messageResolver, value, minValue, maxValue)

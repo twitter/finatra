@@ -1,9 +1,9 @@
 package com.twitter.finatra.validation.tests;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
+import java.util.Collections;
 
-import scala.collection.Seq;
+import scala.reflect.ClassTag;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,13 +12,23 @@ import com.twitter.finatra.validation.MessageResolver;
 import com.twitter.finatra.validation.ValidationException;
 import com.twitter.finatra.validation.ValidationResult;
 import com.twitter.finatra.validation.Validator;
+import com.twitter.finatra.validation.Validator$;
+import com.twitter.finatra.validation.ValidatorModule;
 import com.twitter.finatra.validation.internal.AnnotatedClass;
-import com.twitter.finatra.validation.internal.AnnotatedField;
+import com.twitter.finatra.validation.internal.AnnotatedMethod;
 import com.twitter.finatra.validation.internal.FieldValidator;
+import com.twitter.inject.Injector;
+import com.twitter.inject.app.TestInjector;
 
 public class ValidatorJavaTest extends Assert {
-  private MessageResolver messageResolver = new MessageResolver();
-  private Validator validator = Validator.apply();
+  private final ValidatorModule validatorModule = ValidatorModule.get();
+  private final MessageResolver messageResolver = new MessageResolver();
+
+  /* Class under test */
+  private final Validator validator = Validator.apply();
+  /* Test Injector */
+  private final Injector injector =
+      TestInjector.apply(Collections.singletonList(validatorModule)).create();
 
   /* Test Constructors */
   @Test
@@ -31,6 +41,15 @@ public class ValidatorJavaTest extends Assert {
   public void testBuilderConstructors() {
     Assert.assertNotNull(Validator.builder().withMessageResolver(messageResolver));
     Assert.assertNotNull(Validator.builder().withCacheSize(512));
+    Assert.assertNotNull(
+        Validator.builder()
+            .withMessageResolver(messageResolver)
+            .withCacheSize(128));
+  }
+
+  @Test
+  public void testFromInjectorViaModule() {
+    Assert.assertNotNull(injector.instance(Validator.class));
   }
 
   /* Test Builder style */
@@ -46,9 +65,27 @@ public class ValidatorJavaTest extends Assert {
 
       // 2.13 override
       // @Override omitted to present both overloads as examples
+      @SuppressWarnings("unused")
       public String resolve(Class<? extends Annotation> clazz,
         scala.collection.immutable.Seq<Object> values) {
           return "Whatever you provided is wrong.";
+      }
+
+      // 2.12 override
+      // @Override omitted to present both overloads as examples
+      public <A extends Annotation> String resolve(
+          scala.collection.Seq<Object> values,
+          ClassTag<A> clazzTag) {
+        return "Whatever you provided is wrong.";
+      }
+
+      // 2.13 override
+      // @Override omitted to present both overloads as examples
+      @SuppressWarnings("unused")
+      public <A extends Annotation> String resolve(
+          scala.collection.immutable.Seq<Object> values,
+          ClassTag<A> clazzTag) {
+        return "Whatever you provided is wrong.";
       }
     }
 
@@ -58,22 +95,21 @@ public class ValidatorJavaTest extends Assert {
 
     caseclasses.User testUser = new caseclasses.User("", "jack", "M");
     try {
-      customizedValidator.validate(testUser);
+      customizedValidator.verify(testUser);
     } catch (ValidationException e) {
       ValidationResult.Invalid result = e.errors().head();
       assertFalse(result.isValid());
-      assertEquals(result.message(), "Whatever you provided is wrong.");
+      assertEquals("id: Whatever you provided is wrong.", result.message());
       assertEquals(
-          result.annotation().get(),
-          getValidationAnnotations(testUser.getClass(), "id").get(0)
-      );
+          getValidationAnnotations(testUser.getClass(), "id")[0],
+          result.annotation().get());
     }
   }
 
   @Test
   public void testWithCacheSize() {
     Validator.Builder customizedValidatorBuilder = Validator.builder().withCacheSize(512);
-    assertEquals(customizedValidatorBuilder.cacheSize(), 512);
+    assertEquals(512, customizedValidatorBuilder.cacheSize());
   }
 
   /* Test validate() endpoint */
@@ -82,7 +118,7 @@ public class ValidatorJavaTest extends Assert {
     caseclasses.User testUser = new caseclasses.User("1", "jack", "M");
     // valid result won't be returned
     try {
-      validator.validate(testUser);
+      validator.verify(testUser);
     } catch (ValidationException e) {
       assertEquals(0, e.errors().size());
     }
@@ -93,16 +129,15 @@ public class ValidatorJavaTest extends Assert {
     caseclasses.User testUser = new caseclasses.User("", "jack", "M");
 
     try {
-      validator.validate(testUser);
+      validator.verify(testUser);
     } catch (ValidationException e) {
       ValidationResult.Invalid result = e.errors().head();
 
       assertFalse(result.isValid());
-      assertEquals(result.message(), "cannot be empty");
+      assertEquals("id: cannot be empty", result.message());
       assertEquals(
-          result.annotation().get(),
-          getValidationAnnotations(testUser.getClass(), "id").get(0)
-      );
+          getValidationAnnotations(testUser.getClass(), "id")[0],
+          result.annotation().get());
     }
   }
 
@@ -111,15 +146,14 @@ public class ValidatorJavaTest extends Assert {
     caseclasses.StateValidationExample stateValidationExample =
         new caseclasses.StateValidationExample("NY");
     try {
-      validator.validate(stateValidationExample);
+      validator.verify(stateValidationExample);
     } catch (ValidationException e) {
       ValidationResult.Invalid result = e.errors().head();
       assertFalse(result.isValid());
-      assertEquals(result.message(), "Please register with state CA");
+      assertEquals("state: Please register with state CA", result.message());
       assertEquals(
-          result.annotation().get(),
-          getValidationAnnotations(stateValidationExample.getClass(), "state").get(0)
-      );
+          getValidationAnnotations(stateValidationExample.getClass(), "state")[0],
+          result.annotation().get());
     }
   }
 
@@ -129,11 +163,11 @@ public class ValidatorJavaTest extends Assert {
     caseclasses.MinIntExample minIntExample = new caseclasses.MinIntExample(10);
     FieldValidator[] fieldValidators = {
         validator
-            .findFieldValidator(getValidationAnnotations(minIntExample.getClass(), "numberValue")
-            .get(0))
+            .findFieldValidator(
+                getValidationAnnotations(minIntExample.getClass(), "numberValue")[0])
     };
     // valid result won't be returned
-    Assert.assertEquals(0, validator.validateField(2, fieldValidators).size());
+    Assert.assertEquals(0, validator.validateField(2, "numberValue", fieldValidators).size());
   }
 
   @Test
@@ -141,15 +175,14 @@ public class ValidatorJavaTest extends Assert {
     caseclasses.MinIntExample minIntExample = new caseclasses.MinIntExample(0);
     FieldValidator[] fieldValidators = {
         validator
-            .findFieldValidator(getValidationAnnotations(minIntExample.getClass(), "numberValue")
-            .get(0))
+            .findFieldValidator(
+                getValidationAnnotations(minIntExample.getClass(), "numberValue")[0])
     };
-    ValidationResult result = validator.validateField(0, fieldValidators).head();
+    ValidationResult result = validator.validateField(0, "numberValue", fieldValidators).head();
     assertFalse(result.isValid());
     assertEquals(
-        result.annotation().get(),
-        getValidationAnnotations(minIntExample.getClass(), "numberValue").get(0)
-    );
+        getValidationAnnotations(minIntExample.getClass(), "numberValue")[0],
+        result.annotation().get());
   }
 
   /* Test validateMethod() endpoint */
@@ -161,7 +194,7 @@ public class ValidatorJavaTest extends Assert {
         0,
         validator.validateMethods(
             testUser,
-            validator.getMethodValidations(testUser.getClass())
+            getMethodValidations(testUser.getClass())
         ).size()
     );
   }
@@ -172,25 +205,23 @@ public class ValidatorJavaTest extends Assert {
     ValidationResult.Invalid result =
         (ValidationResult.Invalid) validator.validateMethods(
             testUser,
-            validator.getMethodValidations(testUser.getClass())
+            getMethodValidations(testUser.getClass())
         ).head();
     assertFalse(result.isValid());
-    assertEquals(result.message(), "name cannot be empty");
+    assertEquals("cannot be empty", result.message());
     assertEquals(
-        result.annotation().get(),
-        testUser.getClass().getMethod("nameCheck").getAnnotations()[0]
+        getValidationAnnotations(testUser.getClass(), "nameCheck")[0],
+        result.annotation().get()
     );
   }
 
   /* Utils */
-  private ArrayList<Annotation> getValidationAnnotations(Class<?> clazz, String name) {
-    AnnotatedClass annotatedClass = validator.getAnnotatedClass(clazz);
-    AnnotatedField field = annotatedClass.fields().get(name).get();
-    FieldValidator[] fieldValidators = field.fieldValidators();
-    ArrayList<Annotation> annotations = new ArrayList<>();
-    for (FieldValidator fieldValidator : fieldValidators) {
-      annotations.add(fieldValidator.annotation());
-    }
-    return annotations;
+  private Annotation[] getValidationAnnotations(Class<?> clazz, String name) {
+    AnnotatedClass annotatedClass = validator.findAnnotatedClass(clazz);
+    return annotatedClass.getAnnotationsForAnnotatedMember(name);
+  }
+
+  private AnnotatedMethod[] getMethodValidations(Class<?> clazz) {
+    return Validator$.MODULE$.getMethodValidations(clazz);
   }
 }

@@ -4,11 +4,6 @@ import com.fasterxml.jackson.annotation.{JsonIgnore, JsonProperty}
 import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.NumberDeserializers.BigDecimalDeserializer
-import com.twitter.finatra.jackson.caseclass.{
-  CaseClassDeserializer,
-  CaseClassField,
-  NullInjectableTypes
-}
 import com.twitter.finatra.jackson._
 import com.twitter.finatra.jackson.{
   JacksonScalaObjectMapperType,

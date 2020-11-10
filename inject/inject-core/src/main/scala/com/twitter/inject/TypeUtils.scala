@@ -73,4 +73,18 @@ object TypeUtils {
     }
     TypeTag[T](clazzMirror, typeCreator)
   }
+
+  /**
+   * If the given [[java.lang.reflect.Type]] is parameterized, return an Array of the
+   * type parameter names. E.g., `Map<T, U>` returns, `Array("T", "U")`.
+   */
+  private[twitter] def parameterizedTypeNames(`type`: java.lang.reflect.Type): Array[String] =
+    `type` match {
+      case pt: java.lang.reflect.ParameterizedType =>
+        pt.getActualTypeArguments.map(_.getTypeName)
+      case tv: java.lang.reflect.TypeVariable[_] =>
+        Array(tv.getTypeName)
+      case _ =>
+        Array.empty
+    }
 }

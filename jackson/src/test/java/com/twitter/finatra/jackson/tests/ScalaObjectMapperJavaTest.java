@@ -7,18 +7,18 @@ import org.junit.Test;
 
 import com.twitter.finatra.jackson.ScalaObjectMapper;
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule;
-import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule$;
 import com.twitter.inject.Injector;
 import com.twitter.inject.app.TestInjector;
 
 public class ScalaObjectMapperJavaTest extends Assert {
 
-  private ScalaObjectMapperModule mapperModule = ScalaObjectMapperModule$.MODULE$;
+  private final ScalaObjectMapperModule mapperModule = ScalaObjectMapperModule.get();
 
   /* Class under test */
-  private ScalaObjectMapper mapper = ScalaObjectMapper.apply();
+  private final ScalaObjectMapper mapper = ScalaObjectMapper.apply();
   /* Test Injector */
-  private Injector injector = TestInjector.apply(Collections.singletonList(mapperModule)).create();
+  private final Injector injector =
+      TestInjector.apply(Collections.singletonList(mapperModule)).create();
 
   @Test
   public void testConstructors() {

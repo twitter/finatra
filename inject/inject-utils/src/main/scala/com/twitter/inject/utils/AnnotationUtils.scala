@@ -197,6 +197,19 @@ object AnnotationUtils {
     )
   }
 
+  private[twitter] def findAnnotations(
+    clazz: Class[_],
+    fieldAnnotations: scala.collection.Map[String, Array[Annotation]]
+  ): scala.collection.Map[String, Array[Annotation]] = {
+    val collectorMap = new scala.collection.mutable.HashMap[String, Array[Annotation]]()
+    collectorMap ++= fieldAnnotations
+    // find inherited annotations
+    findDeclaredMethodAnnotations(
+      clazz,
+      collectorMap
+    )
+  }
+
   /**
    * Attempts to return the `value()` of an [[Annotation]] annotated by an [[Annotation]] of
    * type [[A]].

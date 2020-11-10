@@ -10,8 +10,7 @@ import com.twitter.finatra.validation.{
 private[validation] object OneOfConstraintValidator {
 
   def errorMessage(resolver: MessageResolver, oneOfValues: Set[String], value: Any): String =
-    resolver.resolve(
-      classOf[OneOf],
+    resolver.resolve[OneOf](
       toCommaSeparatedValue(value),
       toCommaSeparatedValue(oneOfValues)
     )
@@ -19,9 +18,9 @@ private[validation] object OneOfConstraintValidator {
   private def toCommaSeparatedValue(value: Any): String =
     value match {
       case arrayValue: Array[_] =>
-        arrayValue mkString (",")
+        arrayValue.mkString(",")
       case traversableValue: Traversable[_] =>
-        traversableValue mkString (",")
+        traversableValue.mkString(",")
       case anyValue =>
         anyValue.toString
     }
@@ -45,7 +44,7 @@ private[validation] class OneOfConstraintValidator(messageResolver: MessageResol
     value match {
       case arrayValue: Array[_] =>
         validationResult(arrayValue, oneOfValues)
-      case traversableValue: Traversable[_] =>
+      case traversableValue: Iterable[_] =>
         validationResult(traversableValue, oneOfValues)
       case anyValue =>
         validationResult(Seq(anyValue.toString), oneOfValues)
@@ -55,7 +54,7 @@ private[validation] class OneOfConstraintValidator(messageResolver: MessageResol
   /* Private */
 
   private[this] def validationResult(
-    value: Traversable[_],
+    value: Iterable[_],
     oneOfValues: Set[String]
   ): ValidationResult = {
     val invalidValues = findInvalidValues(value, oneOfValues)
@@ -67,10 +66,10 @@ private[validation] class OneOfConstraintValidator(messageResolver: MessageResol
   }
 
   private[this] def findInvalidValues(
-    value: Traversable[_],
+    value: Iterable[_],
     oneOfValues: Set[String]
   ): Set[String] = {
     val valueAsStrings = value.map(_.toString).toSet
-    valueAsStrings diff oneOfValues
+    valueAsStrings.diff(oneOfValues)
   }
 }

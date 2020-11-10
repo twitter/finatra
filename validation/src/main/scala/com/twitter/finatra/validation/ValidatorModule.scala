@@ -6,7 +6,7 @@ import javax.inject.Singleton
 
 object ValidatorModule extends ValidatorModule {
   // java-friendly access to singleton
-  def get(): TwitterModule = this
+  def get(): this.type = this
 }
 
 /**

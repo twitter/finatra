@@ -5,8 +5,8 @@ import java.lang.annotation.Annotation
 
 /**
  * Validator and annotation pair of a case class field
- * @param constraintValidator  A [[ConstraintValidator]] for a certain annotation
- * @param annotation The case class [[Constraint]] annotation
+ * @param constraintValidator A [[ConstraintValidator]] for a certain annotation
+ * @param annotation The case class [[com.twitter.finatra.validation.Constraint]] annotation
  */
 private[finatra] case class FieldValidator(
   constraintValidator: ConstraintValidator[_ <: Annotation, _],

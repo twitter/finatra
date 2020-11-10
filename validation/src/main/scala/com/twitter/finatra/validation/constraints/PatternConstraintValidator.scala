@@ -13,7 +13,17 @@ import com.twitter.finatra.validation.{
 private[validation] object PatternConstraintValidator {
 
   def errorMessage(resolver: MessageResolver, value: Any, regex: String): String =
-    resolver.resolve(classOf[Pattern], value, regex)
+    resolver.resolve[Pattern](toErrorValue(value), regex)
+
+  private def toErrorValue(value: Any): String =
+    value match {
+      case arrayValue: Array[_] =>
+        arrayValue.mkString(",")
+      case traversableValue: Iterable[_] =>
+        traversableValue.mkString(",")
+      case anyValue =>
+        anyValue.toString
+    }
 }
 
 /**
@@ -21,8 +31,9 @@ private[validation] object PatternConstraintValidator {
  *
  * Validates whether given [[CharSequence]] value matches with the specified regular expression.
  *
- * @example {{{
- *            case class ExampleRequest(@Pattern(regexp= "exampleRegex") exampleValue : String)
+ * @example
+ * {{{
+ *   case class ExampleRequest(@Pattern(regexp= "exampleRegex") exampleValue : String)
  * }}}
  */
 private[validation] class PatternConstraintValidator(messageResolver: MessageResolver)
@@ -40,13 +51,13 @@ private[validation] class PatternConstraintValidator(messageResolver: MessageRes
       value match {
         case arrayValue: Array[_] =>
           validationResult(arrayValue, regexp, regex)
-        case traversableValue: Traversable[_] =>
+        case traversableValue: Iterable[_] =>
           validationResult(traversableValue, regexp, regex)
         case stringValue: String =>
           validationResult(stringValue, regexp, regex)
         case _ =>
           throw new IllegalArgumentException(
-            s"Class [${value.getClass}}] is not supported by ${this.getClass}")
+            s"Class [${value.getClass.getName}] is not supported by ${this.getClass.getName}")
       }
     } else validateRegexResult
   }
@@ -54,17 +65,17 @@ private[validation] class PatternConstraintValidator(messageResolver: MessageRes
   /* Private */
 
   private[this] def validationResult(
-    value: Traversable[_],
+    value: Iterable[_],
     regexp: String,
     regex: Try[Regex]
   ): ValidationResult =
     ValidationResult.validate(
-      value.forall(x => validateValue(x.toString, regex)),
-      errorMessage(messageResolver, value, regexp),
+      value.isEmpty || value.forall(x => validateValue(x.toString, regex)),
+      errorMessage(messageResolver, value.mkString(","), regexp),
       errorCode(value, regexp)
     )
 
-  private[this] def errorCode(value: Traversable[_], regex: String): ErrorCode =
+  private[this] def errorCode(value: Iterable[_], regex: String): ErrorCode =
     ErrorCode.PatternNotMatched(value.mkString(","), regex)
 
   private[this] def validationResult(

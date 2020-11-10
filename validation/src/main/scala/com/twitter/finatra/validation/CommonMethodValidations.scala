@@ -1,6 +1,5 @@
 package com.twitter.finatra.validation
 
-import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
 import com.twitter.inject.conversions.time._
 import org.joda.time.DateTime
 
@@ -19,11 +18,11 @@ object CommonMethodValidations {
     if (rangeDefined)
       validateTimeRange(startTime.get, endTime.get, startTimeProperty, endTimeProperty)
     else if (partialRange)
-      Invalid(
+      ValidationResult.Invalid(
         "both %s and %s are required for a valid range".format(startTimeProperty, endTimeProperty)
       )
     else
-      Valid()
+      ValidationResult.Valid()
   }
 
   def validateTimeRange(

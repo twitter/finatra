@@ -1,6 +1,5 @@
 package com.twitter.finatra.jackson.streaming
 
-import com.twitter.finatra.jackson.streaming.ByteBufferUtils
 import com.twitter.inject.conversions.bytebuffer._
 import com.twitter.inject.Test
 import com.twitter.io.Buf

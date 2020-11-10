@@ -13,7 +13,7 @@ import com.twitter.finatra.validation.{
 private[validation] object TimeGranularityConstraintValidator {
 
   def errorMessage(resolver: MessageResolver, timeGranularity: TimeUnit, value: DateTime): String =
-    resolver.resolve(classOf[TimeGranularity], value, singularize(timeGranularity))
+    resolver.resolve[TimeGranularity](value, singularize(timeGranularity))
 
   private def singularize(timeUnit: TimeUnit): String = {
     val timeUnitStr = timeUnit.toString.toLowerCase

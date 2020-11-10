@@ -11,7 +11,6 @@ import com.fasterxml.jackson.module.scala.{
   DefaultScalaModule,
   ScalaObjectMapper => JacksonScalaObjectMapper
 }
-import com.twitter.finatra.jackson.{JacksonScalaObjectMapperType, ScalaObjectMapper}
 import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassMappingException
 import com.twitter.finatra.jackson.AbstractScalaObjectMapperTest.ZeroOrOneDeserializer
 

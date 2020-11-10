@@ -5,7 +5,6 @@ import com.fasterxml.jackson.datatype.joda.JodaModule
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.{ScalaObjectMapper => JacksonScalaObjectMapper}
 import com.twitter.finatra.jackson.ScalaObjectMapper
-import com.twitter.finatra.jackson.serde.SerDeSimpleModule
 import com.twitter.inject.Test
 import org.joda.time.{DateTime, DateTimeZone}
 

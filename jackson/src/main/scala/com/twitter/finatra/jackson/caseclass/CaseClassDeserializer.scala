@@ -29,19 +29,20 @@ import com.twitter.finatra.json.annotations.JsonCamelCase
 import com.twitter.finatra.validation.ValidationResult.Invalid
 import com.twitter.finatra.validation.internal.{
   FieldValidator,
-  AnnotatedClass => ValidationAnnotatedClass,
   AnnotatedField => ValidationAnnotatedField,
+  AnnotatedMember => ValidationAnnotatedMember,
   AnnotatedMethod => ValidationAnnotatedMethod
 }
 import com.twitter.finatra.validation.{
-  MethodValidation,
+  Path,
   ValidationResult,
   Validator,
   ErrorCode => ValidationErrorCode
 }
-import com.twitter.inject.Logging
+import com.twitter.inject.{Logging, TypeUtils}
 import com.twitter.inject.domain.WrappedValue
 import com.twitter.inject.utils.AnnotationUtils
+import com.twitter.util.Try
 import java.lang.annotation.Annotation
 import java.lang.reflect.{
   Constructor,
@@ -56,26 +57,36 @@ import java.lang.reflect.{
 import javax.annotation.concurrent.ThreadSafe
 import org.json4s.reflect.{ClassDescriptor, ConstructorDescriptor, Reflector, ScalaType}
 import scala.collection.JavaConverters._
-import scala.collection.mutable
+import scala.collection.{Map, mutable}
 import scala.util.control.NonFatal
-
-/* For supporting JsonCreator */
-private case class CaseClassCreator(
-  executable: Executable,
-  propertyDefinitions: Array[PropertyDefinition])
-
-/* Holder for a fully specified JavaType with generics and a Jackson BeanPropertyDefinition */
-private case class PropertyDefinition(
-  javaType: JavaType,
-  scalaType: ScalaType,
-  beanPropertyDefinition: BeanPropertyDefinition)
-
-/* Holder of constructor arg to ScalaType */
-private case class ConstructorParam(name: String, scalaType: ScalaType)
 
 private object CaseClassDeserializer {
   // For reporting an InvalidDefinitionException
   val EmptyJsonParser: JsonParser = new JsonFactory().createParser("")
+
+  /* For supporting JsonCreator */
+  case class CaseClassCreator(
+    executable: Executable,
+    propertyDefinitions: Array[PropertyDefinition])
+
+  /* Holder for a fully specified JavaType with generics and a Jackson BeanPropertyDefinition */
+  case class PropertyDefinition(
+    javaType: JavaType,
+    scalaType: ScalaType,
+    beanPropertyDefinition: BeanPropertyDefinition)
+
+  /* Holder of constructor arg to ScalaType */
+  case class ConstructorParam(name: String, scalaType: ScalaType)
+
+  case class ValidationDescriptor(
+    clazz: Class[_],
+    path: Path,
+    fields: Map[String, ValidationAnnotatedField],
+    methods: Array[ValidationAnnotatedMethod])
+      extends ValidationAnnotatedMember {
+    // the name is tracked by the deserializer
+    override final val name: Option[String] = None
+  }
 }
 
 /**
@@ -123,6 +134,7 @@ private[jackson] class CaseClassDeserializer(
   validator: Option[Validator])
     extends JsonDeserializer[AnyRef]
     with Logging {
+  import CaseClassDeserializer._
 
   private[this] val clazz: Class[_] = javaType.getRawClass
   // we explicitly do not read a mix-in for a primitive type
@@ -249,13 +261,44 @@ private[jackson] class CaseClassDeserializer(
     collectedFieldAnnotations
   }
 
-  private[this] val annotatedValidationClazz: Option[ValidationAnnotatedClass] =
+  private[this] val annotatedValidationClazz: Option[ValidationDescriptor] =
     validator match {
       case Some(v) =>
-        Some(v.createAnnotatedClass(clazz, fieldAnnotations))
+        Some(createConstructionValidationClass(v, clazz, fieldAnnotations))
       case _ =>
         None
     }
+
+  private[this] def createConstructionValidationClass(
+    validator: Validator,
+    clazz: Class[_],
+    annotationsMap: Map[String, Array[Annotation]]
+  ): ValidationDescriptor = {
+    val annotatedFieldsMap = for {
+      (name, annotations) <- annotationsMap
+    } yield {
+      val fieldValidators = for {
+        annotation <- annotations if Validator.isConstraintAnnotation(annotation)
+      } yield validator.findFieldValidator(annotation)
+
+      (
+        name,
+        ValidationAnnotatedField(
+          Some(name),
+          Path(name),
+          // the annotation may be from a static or secondary constructor
+          // for which we have no field information
+          Try(clazz.getDeclaredField(name)).toOption,
+          fieldValidators
+        )
+      )
+    }
+    ValidationDescriptor(
+      clazz,
+      Path.Empty,
+      annotatedFieldsMap,
+      Validator.getMethodValidations(clazz))
+  }
 
   /* exposed for testing */
   private[jackson] val fields: Array[CaseClassField] =
@@ -438,7 +481,8 @@ private[jackson] class CaseClassDeserializer(
 
         annotatedValidationClazz match {
           case Some(annotatedClazz) if annotatedClazz.fields.nonEmpty =>
-            val fieldValidationErrors = executeFieldValidations(value, field, annotatedClazz.fields)
+            val fieldValidationErrors =
+              executeFieldValidations(value, field, annotatedClazz.fields)
             append(errors, fieldValidationErrors)
           case _ => // do nothing
         }
@@ -619,9 +663,10 @@ private[jackson] class CaseClassDeserializer(
     validator match {
       case Some(v) =>
         for {
-          invalid @ Invalid(_, _, _) <- v.validateField(
+          invalid @ Invalid(_, _, _, _) <- v.validateField(
             value,
-            fields.get(field.beanPropertyDefinition.getInternalName) match {
+            field.beanPropertyDefinition.getInternalName,
+            fieldValidators = fields.get(field.beanPropertyDefinition.getInternalName) match {
               case Some(annotatedField) => annotatedField.fieldValidators
               case _ => Array.empty[FieldValidator]
             }
@@ -648,41 +693,35 @@ private[jackson] class CaseClassDeserializer(
     obj: Any,
     methods: Array[ValidationAnnotatedMethod]
   ): Unit = {
-    validator match {
-      case Some(v) =>
-        def extractFieldsFromMethodValidation(annotation: Option[Annotation]): Iterable[String] = {
-          annotation match {
-            case Some(methodValidation) if methodValidation.isInstanceOf[MethodValidation] =>
-              methodValidation.asInstanceOf[MethodValidation].fields.toIterable.filter(_.nonEmpty)
-            case _ =>
-              Iterable.empty[String]
-          }
-        }
-
-        val results = v.validateMethods(obj, methods)
-        if (results.nonEmpty) {
-          val methodValidationErrors: Seq[Iterable[CaseClassFieldMappingException]] = for {
-            result <- results if !result.isValid
-            invalid = result.asInstanceOf[Invalid]
-            caseClassFields = extractFieldsFromMethodValidation(invalid.annotation)
-            propertyPaths = caseClassFields.map(CaseClassFieldMappingException.PropertyPath.leaf)
-            exceptions = propertyPaths.map(CaseClassFieldMappingException(_, invalid))
-          } yield {
-            if (exceptions.isEmpty) {
+    if (validator.isDefined) {
+      // only run method validations if we have a configured Validator
+      val methodValidationErrors =
+        new mutable.ArrayBuffer[Iterable[CaseClassFieldMappingException]]()
+      Validator.validateMethods(obj, methods) {
+        case (_, invalid) =>
+          val caseClassFields = Validator.extractFieldsFromMethodValidation(invalid.annotation)
+          val exceptions = caseClassFields
+            .map(
+              CaseClassFieldMappingException.PropertyPath.leaf
+            ) // per field, create a new PropertyPath with the given field as the leaf
+            .map(
+              CaseClassFieldMappingException(_, invalid)
+            ) // create a new CaseClassFieldMappingException
+          // with the given PropertyPath and the ValidationResult.Invalid
+          if (exceptions.isEmpty) {
+            methodValidationErrors.append(
               Seq(
                 CaseClassFieldMappingException(
                   CaseClassFieldMappingException.PropertyPath.Empty,
-                  invalid))
-            } else {
-              exceptions
-            }
+                  invalid)))
+          } else {
+            methodValidationErrors.append(exceptions)
           }
+      }
 
-          if (methodValidationErrors.nonEmpty) {
-            throw CaseClassMappingException(fieldErrors.toSet ++ methodValidationErrors.flatten)
-          }
-        }
-      case _ => // do nothing
+      if (methodValidationErrors.nonEmpty) {
+        throw CaseClassMappingException(fieldErrors.toSet ++ methodValidationErrors.flatten)
+      }
     }
   }
 
@@ -753,7 +792,8 @@ private[jackson] class CaseClassDeserializer(
           shouldFullyDefineParameterizedType(scalaType, parameter)) {
           // what types are bound to the generic case class parameters
           val boundTypeParameters: Array[JavaType] =
-            parameterizedTypeNames(parameter.getParameterizedType)
+            TypeUtils
+              .parameterizedTypeNames(parameter.getParameterizedType)
               .map(javaType.getBindings.findBoundType)
           Types
             .javaType(
@@ -812,16 +852,6 @@ private[jackson] class CaseClassDeserializer(
       index += 1
     }
     None
-  }
-
-  // for use in mapping the case class type parameters to the current type binding
-  private[this] def parameterizedTypeNames(`type`: Type): Array[String] = `type` match {
-    case pt: ParameterizedType =>
-      pt.getActualTypeArguments.map(_.getTypeName)
-    case tv: TypeVariable[_] =>
-      Array(tv.getTypeName)
-    case _ =>
-      Array.empty
   }
 
   // if we need to attempt to fully specify the JavaType because it is generically types

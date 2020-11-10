@@ -11,7 +11,7 @@ import com.twitter.finatra.validation.{
 private[validation] object FutureTimeConstraintValidator {
 
   def errorMessage(resolver: MessageResolver, value: DateTime): String =
-    resolver.resolve(classOf[FutureTime], value)
+    resolver.resolve[FutureTime](value)
 }
 
 /**

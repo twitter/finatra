@@ -2,6 +2,7 @@ package com.twitter.finatra.validation
 
 import java.lang.annotation.Annotation
 import java.util.Properties
+import scala.reflect.ClassTag
 
 /**
  * To resolve error messages for the type of validation failure. May be pattern-matched
@@ -11,9 +12,9 @@ import java.util.Properties
  */
 class MessageResolver {
 
-  val validationProperties: Properties = load
+  private[validation] val validationProperties: Properties = load
 
-  //TODO: Use [T <: Annotation : Manifest] instead of clazz
+  @deprecated("Use resolve[Ann <: Annotation](values: Any*)", "2020-10-09")
   def resolve(clazz: Class[_ <: Annotation], values: Any*): String = {
     val unresolvedMessage = validationProperties.getProperty(clazz.getName)
     if (unresolvedMessage == null)
@@ -22,19 +23,36 @@ class MessageResolver {
       unresolvedMessage.format(values: _*)
   }
 
-  private def load: Properties = {
+  /**
+   * Resolve the passed object reference for a given Constraint [[Annotation]] type.
+   * @param values object references to resolve using the reference Constraint [[Annotation]].
+   * @param clazzTag implicit [[ClassTag]] for the given [[Annotation]] type param.
+   * @tparam Ann the Constraint [[Annotation]] to use for message resolution.
+   * @return resolved [[String]] from the inputs.
+   */
+  def resolve[Ann <: Annotation](values: Any*)(implicit clazzTag: ClassTag[Ann]): String = {
+    // Note: the method signature is equivalent to `def resolve[Ann <: Annotation: ClassTag](..): String`
+    val clazz = clazzTag.runtimeClass
+    val unresolvedMessage = validationProperties.getProperty(clazz.getName)
+    if (unresolvedMessage == null)
+      "unable to resolve error message due to unknown validation annotation: " + clazz
+    else
+      unresolvedMessage.format(values: _*)
+  }
+
+  private[this] def load: Properties = {
     val properties = new Properties()
     loadBaseProperties(properties)
     loadPropertiesFromClasspath(properties)
     properties
   }
 
-  private def loadBaseProperties(properties: Properties): Unit = {
+  private[this] def loadBaseProperties(properties: Properties): Unit = {
     properties.load(
       getClass.getResourceAsStream("/com/twitter/finatra/validation/validation.properties"))
   }
 
-  private def loadPropertiesFromClasspath(properties: Properties): Unit = {
+  private[this] def loadPropertiesFromClasspath(properties: Properties): Unit = {
     val validationPropertiesUrl = getClass.getResource("/validation.properties")
     if (validationPropertiesUrl != null) {
       properties.load(validationPropertiesUrl.openStream())

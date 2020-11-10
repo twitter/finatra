@@ -10,7 +10,7 @@ import com.twitter.finatra.validation.{
 private[validation] object MinConstraintValidator {
 
   def errorMessage(resolver: MessageResolver, value: Any, minValue: Long): String =
-    resolver.resolve(classOf[Min], value, minValue)
+    resolver.resolve[Min](value, minValue)
 }
 
 /**
@@ -30,7 +30,9 @@ private[validation] class MinConstraintValidator(messageResolver: MessageResolve
     value match {
       case arrayValue: Array[_] =>
         validationResult(arrayValue, minValue)
-      case traversableValue: Traversable[_] =>
+      case mapValue: Map[_, _] =>
+        validationResult(mapValue, minValue)
+      case traversableValue: Iterable[_] =>
         validationResult(traversableValue, minValue)
       case bigDecimalValue: BigDecimal =>
         validationResult(bigDecimalValue, minValue)
@@ -40,13 +42,13 @@ private[validation] class MinConstraintValidator(messageResolver: MessageResolve
         validationResult(numberValue, minValue)
       case _ =>
         throw new IllegalArgumentException(
-          s"Class [${value.getClass}] is not supported by ${this.getClass}")
+          s"Class [${value.getClass.getName}] is not supported by ${this.getClass.getName}")
     }
   }
 
   /* Private */
 
-  private[this] def validationResult(value: Traversable[_], minValue: Long) = {
+  private[this] def validationResult(value: Iterable[_], minValue: Long) = {
     val size = value.size
     ValidationResult.validate(
       minValue <= size,

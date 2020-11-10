@@ -37,23 +37,22 @@ class PatternConstraintValidatorTest
   }
 
   test("fail validation when regex not matches for a invalid value in array type") {
-    forAll(Traversable("invalid", "6666")) { value =>
-      validate[NumberPatternArrayExample](value) should equal(
-        Invalid(
-          errorMessage(value.toString, "[0-9]+"),
-          ErrorCode.PatternNotMatched(value mkString ",", "[0-9]+"))
-      )
-    }
+    val value = Iterable("invalid", "6666")
+    validate[NumberPatternArrayExample](value) should equal(
+      Invalid(
+        errorMessage(value, "[0-9]+"),
+        ErrorCode.PatternNotMatched(value mkString ",", "[0-9]+"))
+    )
   }
 
   test("it should throw exception for invalid class type") {
     the[IllegalArgumentException] thrownBy validate[NumberPatternArrayExample](
       new Object()) should have message
-      "Class [class java.lang.Object}] is not supported by class com.twitter.finatra.validation.constraints.PatternConstraintValidator"
+      "Class [java.lang.Object] is not supported by com.twitter.finatra.validation.constraints.PatternConstraintValidator"
   }
 
   test("pass validation when regex matches for traversable type") {
-    forAll(Traversable("1234", "6666")) { value =>
+    forAll(Iterable("1234", "6666")) { value =>
       validate[NumberPatternArrayExample](value).isInstanceOf[Valid] shouldBe true
     }
   }
@@ -69,6 +68,6 @@ class PatternConstraintValidatorTest
   private def validate[C: Manifest](value: Any): ValidationResult =
     super.validate(manifest[C].runtimeClass, "stringValue", classOf[Pattern], value)
 
-  private def errorMessage(value: String, regex: String): String =
+  private def errorMessage(value: Any, regex: String): String =
     PatternConstraintValidator.errorMessage(messageResolver, value, regex)
 }

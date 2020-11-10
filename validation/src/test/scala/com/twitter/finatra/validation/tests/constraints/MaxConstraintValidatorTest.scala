@@ -238,6 +238,35 @@ class MaxConstraintValidatorTest
     }
   }
 
+  test("pass validation for map of integers") {
+    val mapGenerator = for {
+      n <- Gen.alphaStr
+      m <- Gen.choose(10, 1000)
+    } yield (n, m)
+
+    val passValue = Gen.mapOfN[String, Int](100, mapGenerator)
+    forAll(passValue) { value =>
+      validate[MaxMapExample](value).isInstanceOf[Valid] shouldBe true
+    }
+  }
+
+  test("fail validation for map of integers") {
+    val mapGenerator = for {
+      n <- Gen.alphaStr
+      m <- Gen.choose(10, 1000)
+    } yield (n, m)
+
+    val failValue = Gen.mapOfN[String, Int](200, mapGenerator).suchThat(_.size >= 101)
+    forAll(failValue) { value =>
+      validate[MaxMapExample](value) should equal(
+        Invalid(
+          errorMessage(value = Integer.valueOf(value.size), maxValue = 100),
+          errorCode(value = Integer.valueOf(value.size), maxValue = 100)
+        )
+      )
+    }
+  }
+
   test("pass validation for array of integers") {
     val passValue = for {
       size <- Gen.choose(0, 100)
@@ -272,8 +301,8 @@ class MaxConstraintValidatorTest
     }
   }
 
-  private def validate[C: Manifest](value: Any): ValidationResult = {
-    super.validate(manifest[C].runtimeClass, "numberValue", classOf[Max], value)
+  private def validate[T: Manifest](value: Any): ValidationResult = {
+    super.validate(manifest[T].runtimeClass, "numberValue", classOf[Max], value)
   }
 
   private def errorMessage(value: Number, maxValue: Long = 0): String =

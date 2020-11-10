@@ -21,7 +21,7 @@ class DefaultValidatorIntegrationServerFeatureTest extends FeatureTest {
     server.httpGet(
       "/validate_things",
       andExpect = Ok,
-      withBody = "\nValidation Errors:\t\t" + "size [0] is not between 1 and 2" + "\n\n"
+      withBody = "\nValidation Errors:\t\t" + "names: size [0] is not between 1 and 2" + "\n\n"
     )
   }
 

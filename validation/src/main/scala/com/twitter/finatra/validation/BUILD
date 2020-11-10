@@ -22,6 +22,7 @@ scala_library(
         "finatra/validation/src/main/java/com/twitter/finatra/validation:pants-workaround",
         "finatra/validation/src/main/resources",
         "util/util-core:scala",
+        "util/util-slf4j-api/src/main/scala",
     ],
     exports = [
         "3rdparty/jvm/joda-time",

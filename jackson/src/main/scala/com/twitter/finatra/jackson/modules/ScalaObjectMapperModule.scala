@@ -15,7 +15,10 @@ import com.twitter.inject.TwitterModule
 import javax.annotation.Nullable
 import javax.inject.Singleton
 
-object ScalaObjectMapperModule extends ScalaObjectMapperModule
+object ScalaObjectMapperModule extends ScalaObjectMapperModule {
+  // java-friendly access to singleton
+  def get(): this.type = this
+}
 
 /**
  * [[TwitterModule]] to configure Jackson object mappers. Extend this module to override defaults

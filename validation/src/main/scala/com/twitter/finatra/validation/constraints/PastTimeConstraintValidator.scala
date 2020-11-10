@@ -11,7 +11,7 @@ import org.joda.time.DateTime
 private[validation] object PastTimeConstraintValidator {
 
   def errorMessage(resolver: MessageResolver, value: DateTime): String =
-    resolver.resolve(classOf[PastTime], value)
+    resolver.resolve[PastTime](value)
 }
 
 /**

@@ -3,6 +3,7 @@ package com.twitter.finatra.http.tests.integration.json
 import com.twitter.finatra.validation.{MessageResolver, Validator, ValidatorModule}
 import com.twitter.inject.Injector
 import java.lang.annotation.Annotation
+import scala.reflect.ClassTag
 
 object CustomizedValidatorModule extends ValidatorModule {
 
@@ -12,10 +13,16 @@ object CustomizedValidatorModule extends ValidatorModule {
   ): Validator.Builder =
     builder
       .withCacheSize(512)
-      .withMessageResolver(new CustomizedMessageResolver())
+      .withMessageResolver(new CustomizedMessageResolver)
+}
+
+private object CustomizedMessageResolver {
+  private val Message = "Whatever you provided is wrong."
 }
 
 class CustomizedMessageResolver extends MessageResolver {
-  override def resolve(clazz: Class[_ <: Annotation], values: Any*): String =
-    "Whatever you provided is wrong."
+  import CustomizedMessageResolver._
+
+  override def resolve(clazz: Class[_ <: Annotation], values: Any*): String = Message
+  override def resolve[Ann <: Annotation: ClassTag](values: Any*): String = Message
 }

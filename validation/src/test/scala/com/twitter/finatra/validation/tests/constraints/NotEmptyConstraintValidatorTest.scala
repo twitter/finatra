@@ -6,6 +6,7 @@ import com.twitter.finatra.validation.tests.caseclasses.{
   NotEmptyArrayExample,
   NotEmptyExample,
   NotEmptyInvalidTypeExample,
+  NotEmptyMapExample,
   NotEmptySeqExample
 }
 import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode, ValidationResult}
@@ -68,6 +69,26 @@ class NotEmptyConstraintValidatorTest
   test("fail validation for empty seq") {
     val failValue = Seq.empty
     validate[NotEmptySeqExample](failValue) should equal(
+      Invalid(errorMessage, ErrorCode.ValueCannotBeEmpty)
+    )
+  }
+
+  test("pass validation for valid values in map") {
+    val stringTuplesGen = for {
+      n <- Gen.alphaStr
+      m <- Gen.alphaStr
+    } yield (n, m)
+
+    val passValue = Gen.nonEmptyMap[String, String](stringTuplesGen)
+    forAll(passValue) { value =>
+      validate[NotEmptyMapExample](value)
+        .isInstanceOf[Valid] shouldBe true
+    }
+  }
+
+  test("fail validation for empty map") {
+    val failValue = Map.empty
+    validate[NotEmptyMapExample](failValue) should equal(
       Invalid(errorMessage, ErrorCode.ValueCannotBeEmpty)
     )
   }

@@ -14,8 +14,9 @@ class ValidationController @Inject() (
 
   get("/validate_things") { _: Request =>
     var errorMessage: String = ""
-    try { validator.validate(Things(Seq.empty[String])) }
-    catch {
+    try {
+      validator.verify(Things(Seq.empty[String]))
+    } catch {
       case e: ValidationException =>
         errorMessage = e.getMessage
     }
@@ -27,8 +28,9 @@ class ValidationController @Inject() (
     val raw = """
             { "names": [] }
         """
-    try { scalaObjectMapper.parse[Things](raw) }
-    catch {
+    try {
+      scalaObjectMapper.parse[Things](raw)
+    } catch {
       case e: CaseClassMappingException =>
         errorMessage = e.errors.head.getMessage
     }

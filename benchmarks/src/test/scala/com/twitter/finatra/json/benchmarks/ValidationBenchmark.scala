@@ -35,31 +35,37 @@ class ValidationBenchmark extends StdBenchAnnotations {
 
   @Benchmark
   def withValidUser(): Unit = {
-    validator.validate(validUser)
+    validator.verify(validUser)
   }
 
   @Benchmark
   def withInvalidUser(): Unit = {
-    try validator.validate(invalidUser)
-    catch {
+    try {
+      validator.verify(invalidUser)
+    } catch {
       case _: ValidationException => // avoid throwing exceptions so the benchmark can finish
     }
   }
 
   @Benchmark
   def withNestedValidUser(): Unit = {
-    validator.validate(nestedValidUser)
+    validator.verify(nestedValidUser)
   }
 
   @Benchmark
   def withNestedInvalidUser(): Unit = {
-    validator.validate(nestedInvalidUser)
+    try {
+      validator.verify(nestedInvalidUser)
+    } catch {
+      case _: ValidationException => // avoid throwing exceptions so the benchmark can finish
+    }
   }
 
   @Benchmark
   def withNestedDuplicateUser(): Unit = {
-    try validator.validate(nestedDuplicateUser)
-    catch {
+    try {
+      validator.verify(nestedDuplicateUser)
+    } catch {
       case _: ValidationException => // avoid throwing exceptions so the benchmark can finish
     }
   }

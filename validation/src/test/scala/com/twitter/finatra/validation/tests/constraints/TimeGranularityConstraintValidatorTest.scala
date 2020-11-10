@@ -169,12 +169,12 @@ class TimeGranularityConstraintValidatorTest
     }
   }
 
-  private def validate[C: Manifest](value: Any): ValidationResult =
-    super.validate(manifest[C].runtimeClass, "timeValue", classOf[TimeGranularity], value)
+  private def validate[T: Manifest](value: Any): ValidationResult =
+    super.validate(manifest[T].runtimeClass, "timeValue", classOf[TimeGranularity], value)
 
-  private def errorMessage[C: Manifest](value: DateTime): String = {
+  private def errorMessage[T: Manifest](value: DateTime): String = {
     val annotation =
-      getValidationAnnotation(manifest[C].runtimeClass, "timeValue", classOf[TimeGranularity])
+      getValidationAnnotation(manifest[T].runtimeClass, "timeValue", classOf[TimeGranularity])
 
     TimeGranularityConstraintValidator.errorMessage(messageResolver, annotation.value(), value)
   }

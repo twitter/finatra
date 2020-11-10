@@ -1,7 +1,6 @@
 package com.twitter.finatra.jackson
 
 import com.fasterxml.jackson.databind.JsonMappingException
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.caseclass.exceptions.InjectableValuesException
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 import com.twitter.finatra.jackson.AbstractScalaObjectMapperTest.failOnUnknownPropertiesModule
@@ -13,7 +12,7 @@ class ScalaObjectMapperFromInjectorTest extends AbstractScalaObjectMapperTest {
   private[this] val mapperModule: ScalaObjectMapperModule = ScalaObjectMapperModule
 
   /* Test Injector */
-  private[this] final val injector: Injector = TestInjector(mapperModule).create
+  private[this] final val injector: Injector = TestInjector(mapperModule).create()
   /* Class under test */
   override protected val mapper: ScalaObjectMapper = injector.instance[ScalaObjectMapper]
 
@@ -77,7 +76,7 @@ class ScalaObjectMapperFromInjectorTest extends AbstractScalaObjectMapperTest {
   }
 
   test("mapper from injection handles unknown properties") {
-    val testInjector = TestInjector(failOnUnknownPropertiesModule).create
+    val testInjector = TestInjector(failOnUnknownPropertiesModule).create()
     val testMapper = testInjector.instance[ScalaObjectMapper]
 
     // mapper = strict, case class = unannotated --> Fail

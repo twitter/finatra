@@ -12,7 +12,7 @@ import com.twitter.finatra.validation.{
 private[validation] object UUIDConstraintValidator {
 
   def errorMessage(resolver: MessageResolver, value: String): String =
-    resolver.resolve(classOf[UUID], value)
+    resolver.resolve[UUID](value)
 
   def isValid(value: String): Boolean = Try(JUUID.fromString(value)).isReturn
 }

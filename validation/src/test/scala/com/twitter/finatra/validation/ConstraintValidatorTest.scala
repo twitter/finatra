@@ -1,9 +1,11 @@
 package com.twitter.finatra.validation
 
-import com.twitter.finatra.validation.internal.AnnotatedClass
 import com.twitter.inject.Test
 import java.lang.annotation.Annotation
 
+/**
+ * Utility for testing custom ConstraintValidators.
+ */
 abstract class ConstraintValidatorTest extends Test {
   protected def messageResolver: MessageResolver = new MessageResolver
   protected def validator: Validator = Validator(messageResolver)
@@ -20,11 +22,11 @@ abstract class ConstraintValidatorTest extends Test {
         ConstraintValidator[A, V]].isValid(annotation, value)
   }
 
-  def getValidationAnnotations(clazz: Class[_], paramName: String): Array[Annotation] = {
-    val AnnotatedClass(_, fields, _) = validator.getAnnotatedClass(clazz)
-    fields
-      .get(paramName).map(_.fieldValidators.map(_.annotation)).getOrElse(Array.empty[Annotation])
-  }
+  private[this] def getValidationAnnotations(
+    clazz: Class[_],
+    fieldName: String
+  ): Seq[Annotation] =
+    validator.findAnnotatedClass(clazz).getAnnotationsForAnnotatedMember(fieldName).toIndexedSeq
 
   def getValidationAnnotation[A <: Annotation](
     clazz: Class[_],

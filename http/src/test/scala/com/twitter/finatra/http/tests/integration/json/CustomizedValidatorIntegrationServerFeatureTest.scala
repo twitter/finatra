@@ -26,7 +26,7 @@ class CustomizedValidatorIntegrationServerFeatureTest extends FeatureTest {
     server.httpGet(
       "/validate_things",
       andExpect = Ok,
-      withBody = "\nValidation Errors:\t\t" + "Whatever you provided is wrong." + "\n\n"
+      withBody = "\nValidation Errors:\t\t" + "names: Whatever you provided is wrong." + "\n\n"
     )
   }
 

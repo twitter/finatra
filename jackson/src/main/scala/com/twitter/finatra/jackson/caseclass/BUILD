@@ -15,7 +15,7 @@ scala_library(
         "3rdparty/jvm/javax/inject:javax.inject",
         "3rdparty/jvm/net/codingwell:scala-guice",
         "3rdparty/jvm/org/json4s:json4s-core",
-        "finatra/inject/inject-core/src/main/scala",
+        "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions",

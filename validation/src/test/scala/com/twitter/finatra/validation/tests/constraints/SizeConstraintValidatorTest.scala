@@ -5,6 +5,7 @@ import com.twitter.finatra.validation.constraints.{Size, SizeConstraintValidator
 import com.twitter.finatra.validation.tests.caseclasses.{
   SizeArrayExample,
   SizeInvalidTypeExample,
+  SizeMapExample,
   SizeSeqExample,
   SizeStringExample
 }
@@ -84,6 +85,46 @@ class SizeConstraintValidatorTest
     }
   }
 
+  test("pass validation for map type") {
+    val mapGenerator = for {
+      n <- Gen.alphaStr
+      m <- Gen.choose(10, 1000)
+    } yield (n, m)
+
+    val passValue = Gen.mapOfN[String, Int](50, mapGenerator).suchThat(_.size >= 10)
+    forAll(passValue) { value =>
+      validate[SizeMapExample](value).isInstanceOf[Valid] shouldBe true
+    }
+  }
+
+  test("fail validation for too few map type") {
+    val mapGenerator = for {
+      n <- Gen.alphaStr
+      m <- Gen.choose(10, 1000)
+    } yield (n, m)
+
+    val failValue = Gen.mapOfN[String, Int](9, mapGenerator).suchThat(_.size <= 9)
+    forAll(failValue) { value =>
+      validate[SizeMapExample](value) should equal(
+        Invalid(errorMessage(value), ErrorCode.SizeOutOfRange(value.size, 10, 50))
+      )
+    }
+  }
+
+  test("fail validation for too many map type") {
+    val mapGenerator = for {
+      n <- Gen.alphaStr
+      m <- Gen.choose(10, 1000)
+    } yield (n, m)
+
+    val failValue = Gen.mapOfN[String, Int](200, mapGenerator).suchThat(_.size >= 51)
+    forAll(failValue) { value =>
+      validate[SizeMapExample](value) should equal(
+        Invalid(errorMessage(value), ErrorCode.SizeOutOfRange(value.size, 10, 50))
+      )
+    }
+  }
+
   test("pass validation for string type") {
     val passValue = for {
       size <- Gen.choose(10, 140)
@@ -98,6 +139,21 @@ class SizeConstraintValidatorTest
     val failValue = for {
       size <- Gen.choose(0, 9)
     } yield List.fill(size) { 'a' }.mkString
+
+    forAll(failValue) { value =>
+      validate[SizeStringExample](value) should equal(
+        Invalid(
+          errorMessage(value, maxValue = 140),
+          ErrorCode.SizeOutOfRange(value.length, 10, 140)
+        )
+      )
+    }
+  }
+
+  test("fail validation for too many string type") {
+    val failValue = (for {
+      size <- Gen.choose(150, 200)
+    } yield List.fill(size) { 'a' }.mkString)
 
     forAll(failValue) { value =>
       validate[SizeStringExample](value) should equal(

@@ -10,6 +10,12 @@ Unreleased
 Changed
 ~~~~~~~
 
+* validation: (BREAKING API CHANGE) Introduce new Validation Framework APIs which support
+  cascading validation to nested case classes and other improvements which also closer align
+  to JSR380. `Validator#validate` has changed from returning `Unit` and throwing an exception
+  to model the JSR380 version that returns a Set of failed constraints. There is a new method
+  which replicates the throwing behavior. ``PHAB_ID=D559644``
+
 * kafka: Split `c.t.f.kafka.tracingEnabled` flag into `c.t.f.k.producers.producerTracingEnabled` and
   `c.t.f.k.consumers.consumerTracingEnabled` to selectively enable/disable tracing for
   producers/consumers. Producer tracing is turned on by default and consumer tracing is turned off

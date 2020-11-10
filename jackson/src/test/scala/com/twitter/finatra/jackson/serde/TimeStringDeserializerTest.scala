@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassMappingException
-import com.twitter.finatra.jackson.serde.SerDeSimpleModule
 import com.twitter.inject.Test
 import com.twitter.util.{Time, TimeFormat}
 

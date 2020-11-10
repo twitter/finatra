@@ -10,7 +10,7 @@ import com.twitter.finatra.validation.{
 private[validation] object RangeConstraintValidator {
 
   def errorMessage(resolver: MessageResolver, value: Any, minValue: Long, maxValue: Long): String =
-    resolver.resolve(classOf[Range], value, minValue, maxValue)
+    resolver.resolve[Range](value, minValue, maxValue)
 }
 
 /**
@@ -29,6 +29,7 @@ private[validation] class RangeConstraintValidator(messageResolver: MessageResol
     val rangeAnnotation = annotation.asInstanceOf[Range]
     val minValue = rangeAnnotation.min()
     val maxValue = rangeAnnotation.max()
+    assertValidRange(minValue, maxValue)
     value match {
       case bigDecimalValue: BigDecimal =>
         validationResult(bigDecimalValue, minValue, maxValue)
@@ -38,7 +39,7 @@ private[validation] class RangeConstraintValidator(messageResolver: MessageResol
         validationResult(numberValue, minValue, maxValue)
       case _ =>
         throw new IllegalArgumentException(
-          s"Class [${value.getClass}] is not supported by ${this.getClass}")
+          s"Class [${value.getClass.getName}] is not supported by ${this.getClass.getName}")
     }
   }
 
@@ -72,4 +73,9 @@ private[validation] class RangeConstraintValidator(messageResolver: MessageResol
       errorCode(value, minValue, maxValue)
     )
   }
+
+  /** Asserts that the start is less than the end */
+  private[this] def assertValidRange(startIndex: Long, endIndex: Long): Unit =
+    if (startIndex > endIndex)
+      throw new IllegalArgumentException(s"invalid range: $startIndex > $endIndex")
 }

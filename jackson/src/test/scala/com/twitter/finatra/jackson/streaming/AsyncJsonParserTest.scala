@@ -3,7 +3,6 @@ package com.twitter.finatra.jackson.streaming
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finatra.jackson.ScalaObjectMapper
-import com.twitter.finatra.jackson.streaming.AsyncJsonParser
 import com.twitter.finatra.json.JsonDiff
 import com.twitter.inject.Test
 import com.twitter.io.Buf

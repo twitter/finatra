@@ -10,18 +10,21 @@ import com.twitter.finatra.validation.{
 private[validation] object SizeConstraintValidator {
 
   def errorMessage(resolver: MessageResolver, value: Any, minValue: Long, maxValue: Long): String =
-    resolver.resolve(classOf[Size], toErrorValue(value), minValue, maxValue)
+    resolver.resolve[Size](toErrorValue(value), minValue, maxValue)
 
   private def toErrorValue(value: Any): Int =
     value match {
       case arrayValue: Array[_] =>
         arrayValue.length
-      case traversableValue: Traversable[_] =>
+      case mapValue: Map[_, _] =>
+        mapValue.size
+      case traversableValue: Iterable[_] =>
         traversableValue.size
       case str: String =>
         str.length
       case _ =>
-        throw new IllegalArgumentException(s"Class [${value.getClass}] is not supported")
+        throw new IllegalArgumentException(
+          s"Class [${value.getClass.getName}] is not supported by ${this.getClass.getName}")
     }
 }
 
@@ -43,10 +46,12 @@ private[validation] class SizeConstraintValidator(messageResolver: MessageResolv
     val maxValue: Long = sizeAnnotation.max()
     val size = value match {
       case arrayValue: Array[_] => arrayValue.length
-      case traversableValue: Traversable[_] => traversableValue.size
+      case mapValue: Map[_, _] => mapValue.size
+      case traversableValue: Iterable[_] => traversableValue.size
       case str: String => str.length
       case _ =>
-        throw new IllegalArgumentException(s"Class [${value.getClass}] is not supported")
+        throw new IllegalArgumentException(
+          s"Class [${value.getClass.getName}] is not supported by ${this.getClass.getName}")
     }
 
     ValidationResult.validate(

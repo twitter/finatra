@@ -37,7 +37,7 @@ object CaseClassField {
     clazz: Class[_],
     constructor: Executable,
     clazzDescriptor: ClassDescriptor,
-    propertyDefinitions: Array[PropertyDefinition],
+    propertyDefinitions: Array[CaseClassDeserializer.PropertyDefinition],
     fieldAnnotations: scala.collection.Map[String, Array[Annotation]],
     namingStrategy: PropertyNamingStrategy,
     typeFactory: TypeFactory,
