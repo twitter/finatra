@@ -11,7 +11,7 @@ import com.twitter.inject.app.{BindDSL, StartupTimeoutException}
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.inject.server.PortUtils.getPort
-import com.twitter.inject.{Injector, PoolUtils, TwitterModule}
+import com.twitter.inject.{Injector, InMemoryStatsReceiverUtility, PoolUtils, TwitterModule}
 import com.twitter.util.lint.{GlobalRules, Rule}
 import com.twitter.util.{
   Await,

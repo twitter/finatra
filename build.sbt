@@ -370,6 +370,8 @@ lazy val root = (project in file("."))
 
 lazy val injectCoreTestJarSources =
   Seq(
+    "com/twitter/inject/InMemoryStats",
+    "com/twitter/inject/InMemoryStatsReceiverUtility",
     "com/twitter/inject/IntegrationTest",
     "com/twitter/inject/IntegrationTestMixin",
     "com/twitter/inject/PoolUtils",
@@ -386,6 +388,7 @@ lazy val injectCore = (project in file("inject/inject-core"))
       "com.google.inject" % "guice" % versions.guice,
       "com.google.inject.extensions" % "guice-assistedinject" % versions.guice,
       "com.google.inject.extensions" % "guice-multibindings" % versions.guice,
+      "com.twitter" %% "finagle-stats" % versions.twLibVersion,
       "com.twitter" %% "util-app" % versions.twLibVersion,
       "javax.inject" % "javax.inject" % "1",
       "joda-time" % "joda-time" % versions.jodaTime,
@@ -563,8 +566,6 @@ lazy val injectServerTestJarSources =
     "com/twitter/inject/server/EmbeddedTwitterServer",
     "com/twitter/inject/server/FeatureTest",
     "com/twitter/inject/server/FeatureTestMixin",
-    "com/twitter/inject/server/InMemoryStats",
-    "com/twitter/inject/server/InMemoryStatsReceiverUtility",
     "com/twitter/inject/server/package"
   )
 lazy val injectServer = (project in file("inject/inject-server"))
@@ -574,7 +575,6 @@ lazy val injectServer = (project in file("inject/inject-server"))
     moduleName := "inject-server",
     ScoverageKeys.coverageExcludedPackages := "<empty>",
     libraryDependencies ++= Seq(
-      "com.twitter" %% "finagle-stats" % versions.twLibVersion,
       "com.twitter" %% "twitter-server" % versions.twLibVersion,
       "org.slf4j" % "slf4j-api" % versions.slf4j,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"

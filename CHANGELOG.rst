@@ -10,6 +10,10 @@ Unreleased
 Changed
 ~~~~~~~
 
+* inject-core: (BREAKING API CHANGE) Move the testing utility `InMemoryStatsReceiverUtility`
+  and `InMemoryStats` into inject-core from inject-server. They can both be found under
+  `com.twitter.inject`. ``PHAB_ID=D574643``
+
 * validation: (BREAKING API CHANGE) Introduce new Validation Framework APIs which support
   cascading validation to nested case classes and other improvements which also closer align
   to JSR380. `Validator#validate` has changed from returning `Unit` and throwing an exception

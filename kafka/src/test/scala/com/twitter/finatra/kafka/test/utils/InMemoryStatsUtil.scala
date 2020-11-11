@@ -2,11 +2,11 @@ package com.twitter.finatra.kafka.test.utils
 
 import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
-import com.twitter.inject.server.InMemoryStatsReceiverUtility
+import com.twitter.inject.InMemoryStatsReceiverUtility
 import com.twitter.inject.{Injector, Logging}
 import org.scalatest.matchers.should.Matchers
 
-@deprecated("Use com.twitter.inject.server.InMemoryStatsReceiverUtility", "2019-05-17")
+@deprecated("Use com.twitter.inject.InMemoryStatsReceiverUtility", "2019-05-17")
 object InMemoryStatsUtil {
   def apply(injector: Injector): InMemoryStatsUtil = {
     val inMemoryStatsReceiver = injector.instance[StatsReceiver].asInstanceOf[InMemoryStatsReceiver]
@@ -14,7 +14,7 @@ object InMemoryStatsUtil {
   }
 }
 
-@deprecated("Use com.twitter.inject.server.InMemoryStatsReceiverUtility", "2019-05-17")
+@deprecated("Use com.twitter.inject.InMemoryStatsReceiverUtility", "2019-05-17")
 class InMemoryStatsUtil(val inMemoryStatsReceiver: InMemoryStatsReceiver)
     extends Logging
     with Matchers {

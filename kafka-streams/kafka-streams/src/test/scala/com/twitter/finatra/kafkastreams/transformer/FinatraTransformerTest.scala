@@ -7,8 +7,7 @@ import com.twitter.finatra.kafkastreams.transformer.domain.Time
 import com.twitter.finatra.kafkastreams.transformer.stores.CachingKeyValueStores
 import com.twitter.finatra.kafkastreams.transformer.watermarks.Watermark
 import com.twitter.finatra.kafkastreams.test.KafkaTestUtil
-import com.twitter.inject.Test
-import com.twitter.inject.server.InMemoryStatsReceiverUtility
+import com.twitter.inject.{InMemoryStatsReceiverUtility, Test}
 import com.twitter.util.Duration
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.StreamsConfig

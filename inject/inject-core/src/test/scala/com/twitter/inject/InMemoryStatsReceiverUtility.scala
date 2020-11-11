@@ -1,9 +1,7 @@
-package com.twitter.inject.server
+package com.twitter.inject
 
 import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
-import com.twitter.inject.Injector
-import com.twitter.inject.conversions.map._
 import com.twitter.util.Duration
 import java.io.{ByteArrayOutputStream, PrintStream}
 import java.nio.charset.StandardCharsets
@@ -41,6 +39,8 @@ object InMemoryStatsReceiverUtility {
 class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
     extends Matchers
     with Eventually {
+
+  import MapUtils._
 
   class Counters private[InMemoryStatsReceiverUtility] () extends InMemoryStats[Long] {
 
@@ -578,7 +578,10 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
     try {
       this.print(ps)
       val message = baos.toString(StandardCharsets.UTF_8.name())
-      info(message)
+      // NOTE: We avoid using slf4j-api info logging here so that we can differentiate
+      // the underlying server logs from the testing framework logging without requiring
+      // a test logging configuration to be loaded.
+      println(message)
     } finally {
       ps.close() // also closes the underlying ByteArrayOutputStream
     }
@@ -602,5 +605,23 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
   /** Coverts `Seq("foo", "bar", "baz")` to `foo/bar/baz` */
   private[this] def keyStr(keys: Seq[String]): String = {
     keys.mkString("/")
+  }
+}
+
+/**
+ * This is copied from [[com.twitter.inject.conversions.map]] in order to avoid a
+ * circular dependency in sbt, or adding additional overhead to the sbt build by
+ * adding a project containing the conversions package under inject-utils.
+ */
+private object MapUtils {
+  implicit class RichMap[K, V](val self: Map[K, V]) extends AnyVal {
+    def mapKeys[T](func: K => T): Map[T, V] = {
+      for ((k, v) <- self) yield {
+        func(k) -> v
+      }
+    }
+    def toSortedMap(implicit ordering: Ordering[K]): SortedMap[K, V] = {
+      SortedMap[K, V](self.toSeq: _*)
+    }
   }
 }

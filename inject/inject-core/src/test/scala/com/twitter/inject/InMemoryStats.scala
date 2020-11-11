@@ -1,4 +1,4 @@
-package com.twitter.inject.server
+package com.twitter.inject
 
 import com.twitter.util.Duration
 import scala.collection.{SortedMap, SortedSet}

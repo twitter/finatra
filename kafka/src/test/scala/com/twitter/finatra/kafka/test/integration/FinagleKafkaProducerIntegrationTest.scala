@@ -22,7 +22,7 @@ import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter
 import com.twitter.finatra.kafka.test.EmbeddedKafka
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
-import com.twitter.inject.server.InMemoryStatsReceiverUtility
+import com.twitter.inject.InMemoryStatsReceiverUtility
 import com.twitter.util.{Await, Duration, Time}
 import java.util.concurrent.TimeUnit
 import org.apache.kafka.clients.producer.ProducerRecord

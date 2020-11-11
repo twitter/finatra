@@ -2,8 +2,7 @@ package com.twitter.finatra.kafkastreams.transformer.stores.internal
 
 import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.finatra.kafka.serde.ScalaSerdes
-import com.twitter.inject.Test
-import com.twitter.inject.server.InMemoryStatsReceiverUtility
+import com.twitter.inject.{InMemoryStatsReceiverUtility, Test}
 import com.twitter.finatra.kafkastreams.test.KafkaTestUtil
 import org.apache.kafka.common.metrics.Metrics
 import org.apache.kafka.common.serialization.Serdes
