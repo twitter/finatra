@@ -149,8 +149,8 @@ Fixed
   fields with generic case classes. Reported (with a thorough reproducer and an analysis) on GitHub
   by @aatasiei (https://github.com/twitter/finatra/issues/548). Fixes #548. ``PHAB_ID=D531452``
 
-20.8.0
-------
+20.8.0 (DO NOT USE)
+-------------------
 
 Added
 ~~~~~
@@ -405,8 +405,8 @@ Fixed
 
 * finatra-kafka: Close a result observer when Namer.resolve fails. ``PHAB_ID=D416044``
 
-20.4.0
-------
+20.4.0 (DO NOT USE)
+-------------------
 
 Added
 ~~~~~
