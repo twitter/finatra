@@ -1,16 +1,12 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main;
 
-import java.util.Collection;
-import java.util.Collections;
-
-import scala.collection.JavaConverters;
-import scala.collection.Seq;
-
 import com.google.inject.Module;
-
 import com.twitter.app.Flag;
 import com.twitter.app.Flaggable;
 import com.twitter.inject.TwitterModule;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public final class TestModuleB extends TwitterModule {
   // FOR TESTING ONLY
@@ -27,16 +23,11 @@ public final class TestModuleB extends TwitterModule {
   }
 
   @Override
-  public Seq<Module> modules() {
-    return JavaConverters.asScalaIteratorConverter(
-        Collections.<Module>singletonList(
-            new TestModuleA()).iterator()).asScala().toSeq();
-  }
-
-  @Override
   public Collection<Module> javaModules() {
-    return Collections.singletonList(
-        new TestModuleC());
+    ArrayList<Module> modules = new ArrayList<>();
+    modules.add(new TestModuleA());
+    modules.add(new TestModuleC());
+    return modules;
   }
 
   @Override

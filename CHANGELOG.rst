@@ -7,8 +7,16 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
+* finatra: Enables cross-build for 2.13.0 for httpclient, http, and jackson. ``PHAB_ID=D574391``
+
 Changed
 ~~~~~~~
+
+* c.t.finatra.http.exceptions.ExceptionMapperCollection changed from Traversable to Iterable
+  for cross-building 2.12 and 2.13. ``PHAB_ID=D574391``
 
 * inject-core: (BREAKING API CHANGE) Move the testing utility `InMemoryStatsReceiverUtility`
   and `InMemoryStats` into inject-core from inject-server. They can both be found under

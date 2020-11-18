@@ -107,6 +107,7 @@ lazy val versions = new {
   val scalaTest = "3.1.2"
   val scalaTestPlusJunit = "3.1.2.0"
   val scalaTestPlusScalaCheck = "3.1.2.0"
+  val servletApi = "2.5"
   val slf4j = "1.7.30"
   val snakeyaml = "1.24"
   val javaxBind = "2.3.0"
@@ -826,7 +827,7 @@ lazy val jacksonTestJarSources =
     "com/twitter/finatra/json/JsonDiff"
   )
 lazy val jackson = project
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "finatra-jackson",
     moduleName := "finatra-jackson",
@@ -911,7 +912,7 @@ lazy val httpTestJarSources =
     "com/twitter/finatra/http/response/DefaultResponseBuilder"
   )
 lazy val http = project
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "finatra-http",
     moduleName := "finatra-http",
@@ -920,6 +921,7 @@ lazy val http = project
       "org.apache.thrift" % "libthrift" % versions.libThrift intransitive (),
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
+      "javax.servlet" % "servlet-api" % versions.servletApi % "provided;compile->compile;test->test",
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal",
       "com.twitter" %% "util-security-test-certs" % versions.twLibVersion % Test
@@ -988,7 +990,7 @@ lazy val httpMustache = (project in file("http-mustache"))
 lazy val httpclientTestJarSources =
   Seq("com/twitter/finatra/httpclient/test/")
 lazy val httpclient = project
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "finatra-httpclient",
     moduleName := "finatra-httpclient",

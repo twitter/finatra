@@ -111,22 +111,30 @@ abstract class AbstractScalaObjectMapperTest extends Test {
           _.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true))
         .objectMapper
 
-    val withErrors = Seq("month: key not found: feb", "weekday: key not found: sat")
+    val withErrors212 = Seq("month: key not found: feb", "weekday: key not found: sat")
+    val withErrors213 = Seq("month: null", "weekday: null")
+
     val expectedCaseInsensitiveStr = """{"month":"feb","day":29,"year":2020,"weekday":"sat"}"""
     val e = intercept[CaseClassMappingException] {
       caseInsensitiveEnumMapper.parse[BasicDate](expectedCaseInsensitiveStr)
     }
     val actualMessages = e.errors.map(_.getMessage)
-    JsonDiff.jsonDiff(actualMessages, withErrors)
+    assert(
+      actualMessages.mkString(",") == withErrors212.mkString(",") ||
+        actualMessages.mkString(",") == withErrors213.mkString(","))
 
     // non-existent values
-    val withErrors2 = Seq("month: key not found: Nnn", "weekday: key not found: Flub")
+    val withErrors2212 = Seq("month: key not found: Nnn", "weekday: key not found: Flub")
+    val withErrors2213 = Seq("month: null", "weekday: null")
+
     val expectedStr2 = """{"month":"Nnn","day":29,"year":2020,"weekday":"Flub"}"""
     val e2 = intercept[CaseClassMappingException] {
       parse[BasicDate](expectedStr2)
     }
     val actualMessages2 = e2.errors.map(_.getMessage)
-    JsonDiff.jsonDiff(actualMessages2, withErrors2)
+    assert(
+      actualMessages2.mkString(",") == withErrors2212.mkString(",") ||
+        actualMessages2.mkString(",") == withErrors2213.mkString(","))
   }
 
   // based on Jackson test to ensure compatibility:

@@ -71,7 +71,7 @@ private[finatra] class AsyncJsonParser {
       }
     }
 
-    result
+    result.toSeq
   }
 
   private def getSlicedBuf: Buf = {

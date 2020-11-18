@@ -11,7 +11,7 @@ private object HttpWarmup {
   val userAgent = "http-warmup-client"
 
   /**  Function curried as the default arg for the responseCallback: Response => Unit parameter. */
-  val unitFunction: Response => Unit = _ => Unit
+  val unitFunction: Response => Unit = _ => ()
 }
 
 /**
