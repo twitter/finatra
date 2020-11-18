@@ -15,6 +15,11 @@ Added
 Changed
 ~~~~~~~
 
+* inject-utils: Remove deprecated `camelify`, `pascalify`, and `snakify` from
+  `c.t.inject.conversions.string.RichString`. Additionally, deprecate `toOption` and
+  `getOrElse` in `c.t.inject.conversions.string.RichString`, and move functionality to
+  `c.t.conversions.StringOps` in the util/util-core project. ``PHAB_ID=D578549``
+
 * c.t.finatra.http.exceptions.ExceptionMapperCollection changed from Traversable to Iterable
   for cross-building 2.12 and 2.13. ``PHAB_ID=D574391``
 

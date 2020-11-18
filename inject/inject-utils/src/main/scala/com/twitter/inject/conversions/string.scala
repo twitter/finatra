@@ -5,19 +5,11 @@ import com.twitter.conversions.StringOps
 object string {
 
   implicit class RichString(val self: String) extends AnyVal {
-    def toOption: Option[String] = {
-      if (self == null || self.isEmpty)
-        None
-      else
-        Some(self)
-    }
+    @deprecated("Use com.twitter.conversions.StringOps#toOption instead", "2020-11-16")
+    def toOption: Option[String] = StringOps.toOption(self)
 
-    def getOrElse(default: => String): String = {
-      if (self == null || self.isEmpty)
-        default
-      else
-        self
-    }
+    @deprecated("Use com.twitter.conversions.StringOps#getOrElse instead", "2020-11-16")
+    def getOrElse(default: => String): String = StringOps.getOrElse(self, default)
 
     def ellipse(len: Int): String = {
       if (self.length <= len) {
@@ -27,52 +19,5 @@ object string {
       }
     }
 
-    /**
-     * Converts foo_bar to fooBar (first letter lowercased)
-     *
-     * For example:
-     *
-     * {{{
-     *   "hello_world".camelify
-     * }}}
-     *
-     * will return the String `"helloWorld"`.
-     */
-    @deprecated(
-      "Users are encouraged to use com.twitter.conversions.StringOps#toCamelCase",
-      "2019-03-02")
-    def camelify: String = StringOps.toCamelCase(self)
-
-    /**
-     * Converts foo_bar to FooBar (first letter uppercased)
-     *
-     * For example:
-     *
-     * {{{
-     *   "hello_world".pascalify
-     * }}}
-     *
-     * will return the String `"HelloWorld"`.
-     */
-    @deprecated(
-      "Users are encouraged to use com.twitter.conversions.StringOps#toPascalCase",
-      "2019-03-02")
-    def pascalify: String = StringOps.toPascalCase(self)
-
-    /**
-     * Converts FooBar to foo_bar (all lowercase)
-     *
-     *  For example:
-     *
-     * {{{
-     *   "HelloWorld".snakify
-     * }}}
-     *
-     * will return the String `"hello_world"`.
-     */
-    @deprecated(
-      "Users are encouraged to use com.twitter.conversions.StringOps#toSnakeCase",
-      "2019-03-02")
-    def snakify: String = StringOps.toSnakeCase(self)
   }
 }
