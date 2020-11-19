@@ -15,6 +15,9 @@ Added
 Changed
 ~~~~~~~
 
+* inject-utils: Deprecate all methods in `c.t.inject.conversions.seq`, and move functionality
+  to `c.t.conversions.SeqOps` in the util/util-core project.. ``PHAB_ID=D578605``
+
 * inject-utils: Remove deprecated `camelify`, `pascalify`, and `snakify` from
   `c.t.inject.conversions.string.RichString`. Additionally, deprecate `toOption` and
   `getOrElse` in `c.t.inject.conversions.string.RichString`, and move functionality to

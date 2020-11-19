@@ -1,47 +1,31 @@
 package com.twitter.inject.conversions
 
-import scala.annotation.tailrec
+import com.twitter.conversions.SeqOps
 
+@deprecated("Use com.twitter.conversions.SeqOps instead", "2020-11-16")
 object seq {
 
   implicit class RichSeq[A](val self: Seq[A]) extends AnyVal {
 
-    def createMap[K, V](keys: A => K, values: A => V): Map[K, V] = {
-      self.iterator.map { elem =>
-        keys(elem) -> values(elem)
-      }.toMap
-    }
+    @deprecated("Use com.twitter.conversions.SeqOps#createMap instead", "2020-11-16")
+    def createMap[K, V](keys: A => K, values: A => V): Map[K, V] =
+      SeqOps.createMap(self, keys, values)
 
-    def createMap[K, V](values: A => V): Map[A, V] = {
-      self.iterator.map { elem =>
-        elem -> values(elem)
-      }.toMap
-    }
+    @deprecated("Use com.twitter.conversions.SeqOps#createMap instead", "2020-11-16")
+    def createMap[K, V](values: A => V): Map[A, V] = SeqOps.createMap(self, values)
 
-    def foreachPartial(pf: PartialFunction[A, Unit]): Unit = {
-
-      self.foreach { elem =>
-        if (pf.isDefinedAt(elem)) {
-          pf(elem)
-        }
-      }
-    }
+    @deprecated("Use com.twitter.conversions.SeqOps#foreachPartial instead", "2020-11-16")
+    def foreachPartial(pf: PartialFunction[A, Unit]): Unit = SeqOps.foreachPartial(self, pf)
 
     /**
      * Chooses last element in seq when key collision occurs
      */
+    @deprecated("Use com.twitter.conversions.SeqOps#groupBySingleValue instead", "2020-11-16")
     def groupBySingleValue[B](keys: A => B): Map[B, A] = {
       createMap(keys, identity)
     }
 
-    def findItemAfter(itemToFind: A): Option[A] = {
-      @tailrec
-      def recurse(itemToFind: A, seq: Seq[A]): Option[A] = seq match {
-        case Seq(x, xs @ _*) if x == itemToFind => xs.headOption
-        case Seq(x, xs @ _*) => recurse(itemToFind, xs)
-        case Seq() => None
-      }
-      recurse(itemToFind, self)
-    }
+    @deprecated("Use com.twitter.conversions.SeqOps#findItemAfter instead", "2020-11-16")
+    def findItemAfter(itemToFind: A): Option[A] = SeqOps.findItemAfter(self, itemToFind)
   }
 }
