@@ -15,6 +15,9 @@ Added
 Changed
 ~~~~~~~
 
+* inject-utils: Deprecate all methods in `c.t.inject.conversions.tuple`, and move functionality
+  to `c.t.conversions.TupleOps` in the util/util-core project. ``PHAB_ID=D578804``
+
 * inject-utils: Deprecate all methods in `c.t.inject.conversions.seq`, and move functionality
   to `c.t.conversions.SeqOps` in the util/util-core project.. ``PHAB_ID=D578605``
 

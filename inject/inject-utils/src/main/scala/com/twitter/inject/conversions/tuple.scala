@@ -1,59 +1,40 @@
 package com.twitter.inject.conversions
 
-import scala.collection.{SortedMap, immutable, mutable}
+import com.twitter.conversions.TupleOps
+import scala.collection.SortedMap
 import scala.math.Ordering
 
+@deprecated("Use com.twitter.conversions.TupleOps instead", "2020-11-16")
 object tuple {
 
   implicit class RichTuples[A, B](val self: Iterable[(A, B)]) extends AnyVal {
-    def toKeys: Seq[A] = {
-      self.toSeq map { case (key, value) => key }
-    }
+    @deprecated("Use com.twitter.conversions.TupleOps#toKeys instead", "2020-11-16")
+    def toKeys: Seq[A] = TupleOps.toKeys(self)
 
-    def toKeySet: Set[A] = {
-      toKeys.toSet
-    }
+    @deprecated("Use com.twitter.conversions.TupleOps#toKeys instead", "2020-11-16")
+    def toKeySet: Set[A] = TupleOps.toKeySet(self)
 
-    def toValues: Seq[B] = {
-      self.toSeq map { case (key, value) => value }
-    }
+    @deprecated("Use com.twitter.conversions.TupleOps#toValues instead", "2020-11-16")
+    def toValues: Seq[B] = TupleOps.toValues(self)
 
-    def mapValues[C](func: B => C): Seq[(A, C)] = {
-      self.toSeq map {
-        case (key, value) =>
-          key -> func(value)
-      }
-    }
+    @deprecated("Use com.twitter.conversions.TupleOps#mapValues instead", "2020-11-16")
+    def mapValues[C](func: B => C): Seq[(A, C)] =
+      TupleOps.mapValues(self, func)
 
-    def groupByKey: Map[A, Seq[B]] = {
-      val mutableMapBuilder = mutable.Map.empty[A, mutable.Builder[B, Seq[B]]]
-      for ((a, b) <- self) {
-        val seqBuilder = mutableMapBuilder.getOrElseUpdate(a, immutable.Seq.newBuilder[B])
-        seqBuilder += b
-      }
+    @deprecated("Use com.twitter.conversions.TupleOps#groupByKey instead", "2020-11-16")
+    def groupByKey: Map[A, Seq[B]] =
+      TupleOps.groupByKey(self)
 
-      val mapBuilder = immutable.Map.newBuilder[A, Seq[B]]
-      for ((k, v) <- mutableMapBuilder) {
-        mapBuilder += ((k, v.result()))
-      }
+    @deprecated("Use com.twitter.conversions.TupleOps#groupByKeyAndReduce instead", "2020-11-16")
+    def groupByKeyAndReduce(reduceFunc: (B, B) => B): Map[A, B] =
+      TupleOps.groupByKeyAndReduce(self, reduceFunc)
 
-      mapBuilder.result()
-    }
+    @deprecated("Use com.twitter.conversions.TupleOps#sortByKey instead", "2020-11-16")
+    def sortByKey(implicit ord: Ordering[A]): Seq[(A, B)] =
+      TupleOps.sortByKey(self)
 
-    def groupByKeyAndReduce(reduceFunc: (B, B) => B): Map[A, B] = {
-      // use map instead of mapValues(deprecated since 2.13.0) for cross-building.
-      groupByKey.map {
-        case (k, values) =>
-          k -> values.reduce(reduceFunc)
-      }
-    }
-
-    def sortByKey(implicit ord: Ordering[A]): Seq[(A, B)] = {
-      self.toSeq sortBy { case (key, value) => key }
-    }
-
-    def toSortedMap(implicit ord: Ordering[A]): SortedMap[A, B] = {
-      SortedMap(self.toSeq: _*)
-    }
+    @deprecated("Use com.twitter.conversions.TupleOps#toSortedMap instead", "2020-11-16")
+    def toSortedMap(implicit ord: Ordering[A]): SortedMap[A, B] =
+      TupleOps.toSortedMap(self)
   }
 }
