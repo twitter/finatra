@@ -15,11 +15,14 @@ Added
 Changed
 ~~~~~~~
 
+* inject-utils: Deprecate all methods in `c.t.inject.conversions.map.RichMap`, and move
+  functionality to `c.t.conversions.MapOps` in the util/util-core project. ``PHAB_ID=D578819``
+
 * inject-utils: Deprecate all methods in `c.t.inject.conversions.tuple`, and move functionality
   to `c.t.conversions.TupleOps` in the util/util-core project. ``PHAB_ID=D578804``
 
 * inject-utils: Deprecate all methods in `c.t.inject.conversions.seq`, and move functionality
-  to `c.t.conversions.SeqOps` in the util/util-core project.. ``PHAB_ID=D578605``
+  to `c.t.conversions.SeqOps` in the util/util-core project. ``PHAB_ID=D578605``
 
 * inject-utils: Remove deprecated `camelify`, `pascalify`, and `snakify` from
   `c.t.inject.conversions.string.RichString`. Additionally, deprecate `toOption` and

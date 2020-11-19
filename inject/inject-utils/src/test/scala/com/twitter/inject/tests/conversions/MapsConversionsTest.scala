@@ -28,41 +28,6 @@ class MapsConversionsTest extends Test {
     Map("a" -> None, "b" -> Some(2)).flattenEntries should equal(Map("b" -> 2))
   }
 
-  test("RichMap#mapKeys") {
-    Map(1 -> "a") mapKeys { _.toString } should
-      equal(Map("1" -> "a"))
-  }
-
-  test("RichMap#invert simple") {
-    Map(1 -> "a").invert should
-      equal(Map("a" -> Iterable(1)))
-  }
-
-  test("RichMap#invert complex") {
-    Map(1 -> "a", 2 -> "a", 3 -> "b").invert should
-      equal(Map("a" -> Iterable(1, 2), "b" -> Iterable(3)))
-  }
-
-  test("RichMap#invertSingleValue") {
-    Map(1 -> "a", 2 -> "a", 3 -> "b").invertSingleValue should
-      equal(Map("a" -> 2, "b" -> 3))
-  }
-
-  test("RichMap#filterValues") {
-    Map(1 -> "a", 2 -> "a", 3 -> "b") filterValues { _ == "b" } should
-      equal(Map(3 -> "b"))
-  }
-
-  test("RichMap#filterNotValues") {
-    Map(1 -> "a", 2 -> "a", 3 -> "b") filterNotValues { _ == "b" } should
-      equal(Map(1 -> "a", 2 -> "a"))
-  }
-
-  test("RichMap#filterNotKeys") {
-    Map(1 -> "a", 2 -> "a", 3 -> "b") filterNotKeys { _ == 3 } should
-      equal(Map(1 -> "a", 2 -> "a"))
-  }
-
   test("RichJavaMap#toOrderedMap") {
     val treeMap = new java.util.TreeMap[String, Int]()
     treeMap.put("c", 3)

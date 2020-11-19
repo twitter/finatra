@@ -1,57 +1,39 @@
 package com.twitter.inject.conversions
 
+import com.twitter.conversions.MapOps
 import com.twitter.inject.conversions.tuple._
 import java.util.concurrent.ConcurrentHashMap
 import scala.collection.compat.immutable.ArraySeq
-import scala.collection.{SortedMap, immutable, mutable}
+import scala.collection.{SortedMap, immutable}
 
+@deprecated("Use com.twitter.conversions.MapOps instead", "2020-11-16")
 object map {
 
   implicit class RichMap[K, V](val self: Map[K, V]) extends AnyVal {
-    def mapKeys[T](func: K => T): Map[T, V] = {
-      for ((k, v) <- self) yield {
-        func(k) -> v
-      }
-    }
+    @deprecated("Use com.twitter.conversions.MapOps#mapKeys instead", "2020-11-16")
+    def mapKeys[T](func: K => T): Map[T, V] = MapOps.mapKeys(self, func)
 
-    def invert: Map[V, Seq[K]] = {
-      val invertedMapWithBuilderValues = mutable.Map.empty[V, mutable.Builder[K, Seq[K]]]
-      for ((k, v) <- self) {
-        val valueBuilder = invertedMapWithBuilderValues.getOrElseUpdate(v, Seq.newBuilder[K])
-        valueBuilder += k
-      }
+    @deprecated("Use com.twitter.conversions.MapOps#invert instead", "2020-11-16")
+    def invert: Map[V, Seq[K]] = MapOps.invert(self)
 
-      val invertedMap = immutable.Map.newBuilder[V, Seq[K]]
-      for ((k, valueBuilder) <- invertedMapWithBuilderValues) {
-        invertedMap += (k -> valueBuilder.result)
-      }
+    @deprecated("Use com.twitter.conversions.MapOps#invertSingleValue instead", "2020-11-16")
+    def invertSingleValue: Map[V, K] = MapOps.invertSingleValue(self)
 
-      invertedMap.result()
-    }
+    @deprecated("Use com.twitter.conversions.MapOps#filterValues instead", "2020-11-16")
+    def filterValues(func: V => Boolean): Map[K, V] =
+      MapOps.filterValues(self, func)
 
-    def invertSingleValue: Map[V, K] = {
-      self map { _.swap }
-    }
+    @deprecated("Use com.twitter.conversions.MapOps#filterNotValues instead", "2020-11-16")
+    def filterNotValues(func: V => Boolean): Map[K, V] =
+      MapOps.filterNotValues(self, func)
 
-    def filterValues(func: V => Boolean): Map[K, V] = {
-      self filter {
-        case (_, value) =>
-          func(value)
-      }
-    }
+    @deprecated("Use com.twitter.conversions.MapOps#filterNotKeys instead", "2020-11-16")
+    def filterNotKeys(func: K => Boolean): Map[K, V] =
+      MapOps.filterNotKeys(self, func)
 
-    def filterNotValues(func: V => Boolean): Map[K, V] = {
-      filterValues(!func(_))
-    }
-
-    def filterNotKeys(func: K => Boolean): Map[K, V] = {
-      // use filter instead of filterKeys(deprecated since 2.13.0) for cross-building.
-      self.filter { case (key, _) => !func(key) }
-    }
-
-    def toSortedMap(implicit ordering: Ordering[K]): SortedMap[K, V] = {
-      SortedMap[K, V](self.toSeq: _*)
-    }
+    @deprecated("Use com.twitter.conversions.MapOps#toSortedMap instead", "2020-11-16")
+    def toSortedMap(implicit ordering: Ordering[K]): SortedMap[K, V] =
+      MapOps.toSortedMap(self)
 
   }
 
