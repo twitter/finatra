@@ -1,6 +1,7 @@
 package com.twitter.inject
 
 import com.twitter.conversions.DurationOps._
+import com.twitter.conversions.MapOps._
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
 import com.twitter.util.Duration
 import java.io.{ByteArrayOutputStream, PrintStream}
@@ -39,8 +40,6 @@ object InMemoryStatsReceiverUtility {
 class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
     extends Matchers
     with Eventually {
-
-  import MapUtils._
 
   class Counters private[InMemoryStatsReceiverUtility] () extends InMemoryStats[Long] {
 
@@ -605,23 +604,5 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
   /** Coverts `Seq("foo", "bar", "baz")` to `foo/bar/baz` */
   private[this] def keyStr(keys: Seq[String]): String = {
     keys.mkString("/")
-  }
-}
-
-/**
- * This is copied from [[com.twitter.inject.conversions.map]] in order to avoid a
- * circular dependency in sbt, or adding additional overhead to the sbt build by
- * adding a project containing the conversions package under inject-utils.
- */
-private object MapUtils {
-  implicit class RichMap[K, V](val self: Map[K, V]) extends AnyVal {
-    def mapKeys[T](func: K => T): Map[T, V] = {
-      for ((k, v) <- self) yield {
-        func(k) -> v
-      }
-    }
-    def toSortedMap(implicit ordering: Ordering[K]): SortedMap[K, V] = {
-      SortedMap[K, V](self.toSeq: _*)
-    }
   }
 }
