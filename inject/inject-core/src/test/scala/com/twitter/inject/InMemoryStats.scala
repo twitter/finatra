@@ -86,7 +86,7 @@ trait InMemoryStats[T] {
   /**
    * Waits for the metric represented by the given name to
    * equal the given expected value. If a metric value is not found
-   * or does not match the expected a [[org.scalatest.exceptions.TestFailedDueToTimeoutException]]
+   * or does not match the expected value, a [[org.scalatest.exceptions.TestFailedDueToTimeoutException]]
    * will be thrown.
    *
    * @note The default timeout is 150ms. To specify a different timeout, users should use
@@ -98,13 +98,14 @@ trait InMemoryStats[T] {
    *
    * @see [[org.scalatest.concurrent.Eventually.eventually]]
    * @see [[waitFor(name: String, predicate: T => Boolean, timeout: Duration)]]
+   * @see [[waitFor(name: String, expected: T, timeout: Duration)]]
    */
   def waitFor(name: String, expected: T): Unit
 
   /**
    * Waits for the metric represented by the given name to
    * equal the given expected value. If a metric value is not found
-   * or does not match the expected a [[org.scalatest.exceptions.TestFailedDueToTimeoutException]]
+   * or does not match the expected value, a [[org.scalatest.exceptions.TestFailedDueToTimeoutException]]
    * will be thrown.
    *
    * @param name      the identifier of the metric to lookup
@@ -118,4 +119,19 @@ trait InMemoryStats[T] {
    */
   def waitFor(name: String, timeout: Duration)(predicate: T => Boolean): Unit
 
+  /**
+   * Waits for the metric represented by the given name to
+   * equal the given expected value. If a metric value is not found
+   * or does not match the expected value, a [[org.scalatest.exceptions.TestFailedDueToTimeoutException]]
+   * will be thrown.
+   *
+   * @param name      the identifier of the metric to lookup
+   *                  from the underlying [[com.twitter.finagle.stats.InMemoryStatsReceiver]].
+   * @param expected  the expected value of the metric
+   * @param timeout   the [[com.twitter.util.Duration]] to wait for the retrieval of the counter and
+   *                  the predicate to return `True`.
+   *
+   * @see [[org.scalatest.concurrent.Eventually.eventually]]
+   */
+  def waitFor(name: String, expected: T, timeout: Duration): Unit
 }

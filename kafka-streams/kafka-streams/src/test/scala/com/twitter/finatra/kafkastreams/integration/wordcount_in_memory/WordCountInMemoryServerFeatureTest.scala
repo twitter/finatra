@@ -22,7 +22,7 @@ class WordCountInMemoryServerFeatureTest extends KafkaStreamsFeatureTest {
 
     textLinesTopic.publish(1L -> "hello world hello")
     server.inMemoryStats.gauges
-      .waitFor("kafka/thread1/consumer/text_lines_topic/records_consumed_total", 500.millis)(_ == 1)
+      .waitFor("kafka/thread1/consumer/text_lines_topic/records_consumed_total", 1, 500.millis)
     wordsWithCountsTopic.consumeMessages(numMessages = 3) should contain theSameElementsAs Seq(
       "world" -> 1,
       "hello" -> 1,

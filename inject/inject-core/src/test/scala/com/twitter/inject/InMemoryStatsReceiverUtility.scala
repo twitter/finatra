@@ -145,11 +145,11 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
     /**
      * Waits for the [[com.twitter.finagle.stats.Counter]] represented by the given name to
      * equal the given expected value. If a [[com.twitter.finagle.stats.Counter]] value is not found
-     * or does not match the expected a [[org.scalatest.exceptions.TestFailedDueToTimeoutException]]
-     * will be thrown.
+     * or does not match the expected value, a
+     * [[org.scalatest.exceptions.TestFailedDueToTimeoutException]] will be thrown.
      *
      * @note The default timeout is 150ms. To specify a different timeout, users should use
-     *       [[waitFor(name: String, timeout: Duration)(predicate: Long => Boolean)]].
+     *       [[waitFor(name: String, expected: Long, timeout: Duration)]].
      *
      * @param name the identifier of the [[com.twitter.finagle.stats.Counter]] to lookup
      *             from the underlying [[InMemoryStatsReceiver]].
@@ -157,14 +157,15 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
      *
      * @see [[org.scalatest.concurrent.Eventually.eventually]]
      * @see [[waitFor(name: String, predicate: Long => Boolean, timeout: Duration)]]
+     * @see [[waitFor(name: String, expected: Long, timeout: Duration)]]
      */
-    def waitFor(name: String, expected: Long): Unit = this.assertCounter(name, expected)
+    def waitFor(name: String, expected: Long): Unit = this.assertCounter(name, expected, 150.millis)
 
     /**
      * Waits for the [[com.twitter.finagle.stats.Counter]] represented by the given name to
      * equal the given expected value. If a [[com.twitter.finagle.stats.Counter]] value is not found
-     * or does not match the expected a [[org.scalatest.exceptions.TestFailedDueToTimeoutException]]
-     * will be thrown.
+     * or does not match the expected value, a
+     * [[org.scalatest.exceptions.TestFailedDueToTimeoutException]] will be thrown.
      *
      * @param name      the identifier of the [[com.twitter.finagle.stats.Counter]] to lookup
      *                  from the underlying [[InMemoryStatsReceiver]].
@@ -174,9 +175,30 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
      *                  which is expected to return `True`.
      *
      * @see [[org.scalatest.concurrent.Eventually.eventually]]
+     * @see [[waitFor(name: String, expected: Long)]]
+     * @see [[waitFor(name: String, expected: Long, timeout: Duration)]]
      */
     def waitFor(name: String, timeout: Duration = 150.millis)(predicate: Long => Boolean): Unit =
       this.assertCounter(name, predicate, timeout)
+
+    /**
+     * Waits for the [[com.twitter.finagle.stats.Counter]] represented by the given name to
+     * equal the given expected value. If a [[com.twitter.finagle.stats.Counter]] value is not found
+     * or does not match the expected value, a
+     * [[org.scalatest.exceptions.TestFailedDueToTimeoutException]] will be thrown.
+     *
+     * @param name     the identifier of the [[com.twitter.finagle.stats.Counter]] to lookup
+     *                 from the underlying [[InMemoryStatsReceiver]].
+     * @param expected the expected value of the [[com.twitter.finagle.stats.Counter]].
+     * @param timeout  the [[com.twitter.util.Duration]] to wait for the retrieval of the counter and
+     *                 the predicate to return `True`.
+     *
+     * @see [[org.scalatest.concurrent.Eventually.eventually]]
+     * @see [[waitFor(name: String, predicate: Long => Boolean, timeout: Duration)]]
+     * @see [[waitFor(name: String, expected: Long)]]
+     */
+    def waitFor(name: String, expected: Long, timeout: Duration): Unit =
+      this.assertCounter(name, expected, timeout)
 
     private def assertCounter(
       name: String,
@@ -192,7 +214,7 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
     private def assertCounter(
       name: String,
       expectedValue: Long,
-      timeout: Duration = 150.millis
+      timeout: Duration
     ): Assertion = eventually(timeout) {
       val actualValue: Long = this.apply(name, verbose = false)
       withClue(s"""Expected "$expectedValue" for counter "$name" but got "$actualValue"""") {
@@ -314,24 +336,26 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
     /**
      * Waits for the [[com.twitter.finagle.stats.Stat]] represented by the given name to
      * equal the given expected value. If a metric value is not found
-     * or does not match the expected a [[org.scalatest.exceptions.TestFailedDueToTimeoutException]]
-     * will be thrown.
+     * or does not match the expected value, a
+     * [[org.scalatest.exceptions.TestFailedDueToTimeoutException]] will be thrown.
      *
      * @note The default timeout is 150ms. To specify a different timeout, users should use
-     *       [[waitFor(name: String, timeout: Duration)(predicate: T => Boolean)]].
+     *       [[waitFor(name: String, expected: Seq[Float], timeout: Duration)]].
      * @param name     the identifier of the metric to lookup
      *                 from the underlying [[InMemoryStatsReceiver]].
      * @param expected the expected value of the metric.
      *
      * @see [[org.scalatest.concurrent.Eventually.eventually]]
      * @see [[waitFor(name: String, predicate: Seq[Float] => Boolean, timeout: Duration)]]
+     * @see [[waitFor(name: String, expected: Seq[Float], timeout: Duration)]]
      */
-    override def waitFor(name: String, expected: Seq[Float]): Unit = this.assertStat(name, expected)
+    override def waitFor(name: String, expected: Seq[Float]): Unit =
+      this.assertStat(name, expected, 150.millis)
 
     /**
      * Waits for the metric represented by the given name to
      * equal the given expected value. If a metric value is not found
-     * or does not match the expected a [[org.scalatest.exceptions.TestFailedDueToTimeoutException]]
+     * or does not match the expected value, a [[org.scalatest.exceptions.TestFailedDueToTimeoutException]]
      * will be thrown.
      *
      * @param name      the identifier of the metric to lookup
@@ -342,6 +366,8 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
      *                  which is expected to return `True`.
      *
      * @see [[org.scalatest.concurrent.Eventually.eventually]]
+     * @see [[waitFor(name: String, expected: Seq[Float])]]
+     * @see [[waitFor(name: String, expected: Seq[Float], timeout: Duration)]]
      */
     override def waitFor(
       name: String,
@@ -349,6 +375,23 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
     )(
       predicate: Seq[Float] => Boolean
     ): Unit = this.assertStat(name, predicate, timeout)
+
+    /**
+     * Waits for the metric  represented by the given name to equal the given expected value. If a
+     * metric value is not found or does not match the expected value, a
+     * [[org.scalatest.exceptions.TestFailedDueToTimeoutException]] will be thrown.
+     * @param name     the identifier of the metric to lookup
+     *                 from the underlying [[InMemoryStatsReceiver]].
+     * @param expected the expected value of the metric.
+     * @param timeout  the [[com.twitter.util.Duration]] to wait for the retrieval of the counter and
+     *                 the predicate to return `True`.
+     *
+     * @see [[org.scalatest.concurrent.Eventually.eventually]]
+     * @see [[waitFor(name: String, predicate: Seq[Float] => Boolean, timeout: Duration)]]
+     * @see [[waitFor(name: String, expected: Seq[Float])]]
+     */
+    override def waitFor(name: String, expected: Seq[Float], timeout: Duration): Unit =
+      this.assertStat(name, expected, timeout)
 
     private def assertStat(
       name: String,
@@ -364,7 +407,7 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
     private def assertStat(
       name: String,
       expectedValue: Seq[Float],
-      timeout: Duration = 150.millis
+      timeout: Duration
     ): Assertion = eventually(timeout) {
       val actualValue: Seq[Float] = this.apply(name, verbose = false)
       withClue(s"""Expected "$expectedValue" for stat "$name" but got "$actualValue":""") {
@@ -482,26 +525,27 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
     /**
      * Waits for the [[com.twitter.finagle.stats.Gauge]] represented by the given name to
      * equal the given expected value. If a [[com.twitter.finagle.stats.Gauge]] value is not found
-     * or does not match the expected a [[org.scalatest.exceptions.TestFailedDueToTimeoutException]]
-     * will be thrown.
+     * or does not match the expected value, a
+     * [[org.scalatest.exceptions.TestFailedDueToTimeoutException]] will be thrown.
      *
      * @note The default timeout is 150ms. To specify a different timeout, users should use
-     *       [[waitFor(name: String, timeout: Duration)(predicate: Long => Boolean)]].
+     *       [[waitFor(name: String, expected: Float, timeout: Duration)]].
      *
      * @param name the identifier of the [[com.twitter.finagle.stats.Gauge]] to lookup
      *             from the underlying [[InMemoryStatsReceiver]].
      * @param expected the expected value of the [[com.twitter.finagle.stats.Gauge]].
      *
      * @see [[org.scalatest.concurrent.Eventually.eventually]]
-     * @see [[waitFor(name: String, predicate: Long => Boolean, timeout: Duration)]]
+     * @see [[waitFor(name: String, predicate: Float => Boolean, timeout: Duration)]]
+     * @see [[waitFor(name: String, expected: Float, timeout: Duration)]]
      */
-    def waitFor(name: String, expected: Float): Unit = this.assertGauge(name, expected)
+    def waitFor(name: String, expected: Float): Unit = this.assertGauge(name, expected, 150.millis)
 
     /**
      * Waits for the [[com.twitter.finagle.stats.Gauge]] represented by the given name to
      * equal the given expected value. If a [[com.twitter.finagle.stats.Gauge]] value is not found
-     * or does not match the expected a [[org.scalatest.exceptions.TestFailedDueToTimeoutException]]
-     * will be thrown.
+     * or does not match the expected value, a
+     * [[org.scalatest.exceptions.TestFailedDueToTimeoutException]] will be thrown.
      *
      * @param name      the identifier of the [[com.twitter.finagle.stats.Gauge]] to lookup
      *                  from the underlying [[InMemoryStatsReceiver]].
@@ -511,9 +555,30 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
      *                  which is expected to return `True`.
      *
      * @see [[org.scalatest.concurrent.Eventually.eventually]]
+     * @see [[waitFor(name: String, expected: Float)]]
+     * @see [[waitFor(name: String, expected: Float, timeout: Duration)]]
      */
     def waitFor(name: String, timeout: Duration = 150.millis)(predicate: Float => Boolean): Unit =
       this.assertGauge(name, predicate, timeout)
+
+    /**
+     * Waits for the [[com.twitter.finagle.stats.Gauge]] represented by the given name to
+     * equal the given expected value. If a [[com.twitter.finagle.stats.Gauge]] value is not found
+     * or does not match the expected value, a
+     * [[org.scalatest.exceptions.TestFailedDueToTimeoutException]] will be thrown.
+     *
+     * @param name     the identifier of the [[com.twitter.finagle.stats.Gauge]] to lookup
+     *                 from the underlying [[InMemoryStatsReceiver]].
+     * @param expected the expected value of the [[com.twitter.finagle.stats.Gauge]].
+     * @param timeout  the [[com.twitter.util.Duration]] to wait for the retrieval of the counter and
+     *                 the predicate to return `True`.
+     *
+     * @see [[org.scalatest.concurrent.Eventually.eventually]]
+     * @see [[waitFor(name: String, predicate: Float => Boolean, timeout: Duration)]]
+     * @see [[waitFor(name: String, expected: Float)]]
+     */
+    def waitFor(name: String, expected: Float, timeout: Duration): Unit =
+      this.assertGauge(name, expected, timeout)
 
     private def assertGauge(
       name: String,
@@ -529,7 +594,7 @@ class InMemoryStatsReceiverUtility(inMemoryStatsReceiver: InMemoryStatsReceiver)
     private def assertGauge(
       name: String,
       expectedValue: Float,
-      timeout: Duration = 150.millis
+      timeout: Duration
     ): Assertion = eventually(timeout) {
       val actualValue: Float = this.apply(name, verbose = false)
       withClue(s"""Expected "$expectedValue" for gauge "$name" but got "$actualValue":""") {

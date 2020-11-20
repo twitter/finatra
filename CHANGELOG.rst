@@ -10,6 +10,9 @@ Unreleased
 Added
 ~~~~~
 
+* inject-core: Add ability to call `InMemoryStats#waitFor` with a fixed timeout
+  ``PHAB_ID=D576147``
+
 * finatra: Enables cross-build for 2.13.0 for httpclient, http, and jackson. ``PHAB_ID=D574391``
 
 Changed

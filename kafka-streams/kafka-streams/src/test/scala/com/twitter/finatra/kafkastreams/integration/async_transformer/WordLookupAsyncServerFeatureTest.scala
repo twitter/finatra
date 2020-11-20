@@ -107,7 +107,7 @@ class WordLookupAsyncServerFeatureTestBase extends KafkaStreamsFeatureTest {
       headers = recordHeaders3
     )
 
-    server.inMemoryStats.gauges.waitFor("kafka/stream/outstandingFutures", 5.seconds)(_ == 3)
+    server.inMemoryStats.gauges.waitFor("kafka/stream/outstandingFutures", 3, 5.seconds)
     server.inMemoryStats.gauges.assert("kafka/stream/outstandingResults", 0)
 
     assertOutputRecordsAndHeaders(
