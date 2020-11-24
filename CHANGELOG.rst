@@ -10,6 +10,9 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-kafka-streams: Add `c.t.f.k.t.s.PersistentTimerValueStore` which stores a value in the
+  timerstore that can be used when the timer is triggered. ``PHAB_ID=D583020``
+
 * inject-core: Add ability to call `InMemoryStats#waitFor` with a fixed timeout
   ``PHAB_ID=D576147``
 

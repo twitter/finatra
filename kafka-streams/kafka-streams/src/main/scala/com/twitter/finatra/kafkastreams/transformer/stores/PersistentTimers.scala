@@ -18,20 +18,31 @@ import scala.reflect.ClassTag
  */
 @Beta
 trait PersistentTimers extends OnWatermark with OnInit {
-
-  private val timerStoresMap = scala.collection.mutable.Map[String, PersistentTimerStore[_]]()
-  private val timerStores = new util.ArrayList[PersistentTimerStore[_]]
+  private val timerValueStoresMap =
+    scala.collection.mutable.Map[String, PersistentTimerValueStore[_, _]]()
+  private val timerValueStores = new util.ArrayList[PersistentTimerValueStore[_, _]]
 
   protected def getKeyValueStore[KK: ClassTag, VV](name: String): FinatraKeyValueStore[KK, VV]
 
   override def onInit(): Unit = {
-    val iterator = timerStores.iterator
-    while (iterator.hasNext) {
-      iterator.next.onInit()
+    val valueIterator = timerValueStores.iterator
+    while (valueIterator.hasNext) {
+      valueIterator.next.onInit()
     }
     super.onInit()
   }
 
+  /**
+   * Creates a key-only timer store. The timer store is implemented using a
+   * PersistentTimerValueStore, but the values stored are just zero-length
+   * byte arrays.
+   *
+   * @param timerStoreName The name of the timerstore
+   * @param onTimer A function that is called when the timer is triggered
+   * @param punctuationType Must be STREAM_TIME, WALL_CLOCK_TIME is not supported
+   * @param maxTimerFiresPerWatermark Maximum number of timers can can fire per watermark event
+   * @tparam TimerKey The type of the key for each timer
+   */
   protected def getPersistentTimerStore[TimerKey](
     timerStoreName: String,
     onTimer: (Time, TimerMetadata, TimerKey) => Unit,
@@ -46,10 +57,44 @@ trait PersistentTimers extends OnWatermark with OnInit {
       maxTimerFiresPerWatermark = maxTimerFiresPerWatermark)
 
     assert(
-      timerStoresMap.put(timerStoreName, store).isEmpty,
+      timerValueStoresMap.put(timerStoreName, store).isEmpty,
       s"getPersistentTimerStore already called for $timerStoreName")
 
-    timerStores.add(store)
+    timerValueStores.add(store)
+
+    store
+  }
+
+  /**
+   * Creates a key/value timer store. When addTimer is called on the timer store with
+   * a time, key, and value, a timer is stored in the store which triggered as the specified
+   * time. The specified `onTimer` function is then called with the key and value.
+   *
+   * @param timerStoreName The name of the timerstore, created seperately
+   * @param onTimer A function that is called when the timer is triggered
+   * @param punctuationType Must be STREAM_TIME, WALL_CLOCK_TIME is not supported
+   * @param maxTimerFiresPerWatermark Maximum number of timers can can fire per watermark event
+   * @tparam TimerKey The type of the key for each timer
+   * @tparam TimerValue The type of the value stored for each timer
+   */
+  protected def getPersistentTimerValueStore[TimerKey, TimerValue](
+    timerStoreName: String,
+    onTimer: (Time, TimerMetadata, TimerKey, TimerValue) => Unit,
+    punctuationType: PunctuationType,
+    maxTimerFiresPerWatermark: Int = 10000
+  ): PersistentTimerValueStore[TimerKey, TimerValue] = {
+    assert(punctuationType == PunctuationType.STREAM_TIME) //TODO: Support WALL CLOCK TIME
+
+    val store = new PersistentTimerValueStore[TimerKey, TimerValue](
+      timersStore = getKeyValueStore[Timer[TimerKey], TimerValue](timerStoreName),
+      onTimer = onTimer,
+      maxTimerFiresPerWatermark = maxTimerFiresPerWatermark)
+
+    assert(
+      timerValueStoresMap.put(timerStoreName, store).isEmpty,
+      s"getPersistentTimerStore already called for $timerStoreName")
+
+    timerValueStores.add(store)
 
     store
   }
@@ -57,7 +102,7 @@ trait PersistentTimers extends OnWatermark with OnInit {
   //TODO: protected def getCursoredTimerStore[TimerKey, CursorKey] ...
 
   final override def onWatermark(watermark: Watermark): Unit = {
-    val iterator = timerStores.iterator
+    val iterator = timerValueStores.iterator
     while (iterator.hasNext) {
       iterator.next.onWatermark(watermark)
     }
