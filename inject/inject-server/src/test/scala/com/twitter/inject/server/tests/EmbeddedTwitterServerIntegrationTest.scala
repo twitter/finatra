@@ -437,7 +437,7 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
 
   test("server#httpPostAdmin sends a valid POST request") {
     val embeddedServer = new EmbeddedTwitterServer(
-      twitterServer = new TwitterServer {},
+      twitterServer = new TwitterServer {}
     )
     try {
       embeddedServer.httpPostAdmin("/quitquitquit", andExpect = Status.Ok, withBody = "quitting\n")
