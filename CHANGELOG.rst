@@ -53,6 +53,12 @@ Changed
   producers/consumers. Producer tracing is turned on by default and consumer tracing is turned off
   by default now. ``PHAB_ID=D571064``
 
+Fixed
+~~~~~~~
+
+* inject-server: Wire through HTTP method in AdminHttpClient so that POST requests can be made to
+  HTTPAdmin endpoints. ``PHAB_ID=D584988``
+
 20.10.0
 -------
 

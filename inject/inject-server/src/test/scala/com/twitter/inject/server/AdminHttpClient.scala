@@ -79,7 +79,7 @@ private[twitter] abstract class AdminHttpClient private[twitter] (
     method: Method
   ): Response = {
 
-    val request = createApiRequest(path)
+    val request = createApiRequest(path, method)
     httpAdminClient(
       request,
       addAcceptHeader(accept, headers),
