@@ -10,6 +10,8 @@ Unreleased
 Added
 ~~~~~
 
+* finatra: Enables cross-build for 2.13.0 for inject-thrift-client. ``PHAB_ID=D583509``
+
 * finatra-kafka-streams: Add `c.t.f.k.t.s.PersistentTimerValueStore` which stores a value in the
   timerstore that can be used when the timer is triggered. ``PHAB_ID=D583020``
 

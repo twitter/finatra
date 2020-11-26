@@ -18,7 +18,7 @@ private[thrift] class LatencyFilter[Req, Rep](
 
     service(request).respond { response =>
       if (!isBlackHoleResponse(response)) {
-        latencyStat.add(elapsed().inUnit(timeUnit))
+        latencyStat.add(elapsed().inUnit(timeUnit).toFloat)
       }
     }
   }

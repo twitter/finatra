@@ -212,7 +212,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
 
     withRetryPolicy(
       constantRetryPolicy(
-        delay = start * retryMultiplier,
+        delay = start * retryMultiplier.toLong,
         retries = retries,
         shouldRetry = chooseShouldRetryFunction(shouldRetry, shouldRetryResponse)
       )
@@ -247,7 +247,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
 
     withRetryPolicy(
       exponentialRetryPolicy(
-        start = start * retryMultiplier,
+        start = start * retryMultiplier.toLong,
         multiplier = multiplier,
         numRetries = retries,
         shouldRetry = chooseShouldRetryFunction(shouldRetry, shouldRetryResponse)
@@ -290,7 +290,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
    * @return [[ThriftClientFilterChain]]
    */
   def withTimeout(duration: Duration): ThriftClientFilterChain[Req, Rep] = {
-    val twitterTimeout = duration * timeoutMultiplier
+    val twitterTimeout = duration * timeoutMultiplier.toLong
 
     timeoutFilter = new TimeoutFilter[Req, Rep](
       twitterTimeout,
@@ -310,7 +310,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
    */
   def withTimeout(duration: Tunable[Duration]): ThriftClientFilterChain[Req, Rep] = {
     val exceptionFn = (duration: Duration) =>
-      new GlobalRequestTimeoutException(duration * timeoutMultiplier)
+      new GlobalRequestTimeoutException(duration * timeoutMultiplier.toLong)
 
     timeoutFilter = new TimeoutFilter[Req, Rep](
       duration,
@@ -329,7 +329,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
    * @return [[ThriftClientFilterChain]]
    */
   def withRequestTimeout(duration: Duration): ThriftClientFilterChain[Req, Rep] = {
-    val twitterTimeout = duration * timeoutMultiplier
+    val twitterTimeout = duration * timeoutMultiplier.toLong
 
     requestTimeoutFilter = new TimeoutFilter[Req, Rep](
       twitterTimeout,
@@ -349,7 +349,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
    */
   def withRequestTimeout(duration: Tunable[Duration]): ThriftClientFilterChain[Req, Rep] = {
     val exceptionFn = (duration: Duration) =>
-      new IndividualRequestTimeoutException(duration * timeoutMultiplier)
+      new IndividualRequestTimeoutException(duration * timeoutMultiplier.toLong)
 
     requestTimeoutFilter = new TimeoutFilter[Req, Rep](
       duration,
@@ -530,7 +530,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
   ): RetryPolicy[T] = {
 
     backoff(
-      decorrelatedJittered(start, start * multiplier) take numRetries
+      decorrelatedJittered(start, start * multiplier.toLong) take numRetries
     )(shouldRetry)
   }
 

@@ -232,7 +232,7 @@ abstract class FilteredThriftClientModule[
     clientId: ClientId,
     statsReceiver: StatsReceiver
   ): ServiceIface = {
-    val acquisitionTimeout = sessionAcquisitionTimeout * timeoutMultiplier
+    val acquisitionTimeout = sessionAcquisitionTimeout * timeoutMultiplier.toLong
     val clientStatsReceiver = statsReceiver.scope("clnt")
 
     val thriftClient =
