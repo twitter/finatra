@@ -10,6 +10,9 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-kafka-streams: Add delay DSL calls to insert a delay into a Kafka Streams topology.
+  ``PHAB_ID=D566409``
+
 * finatra: Enables cross-build for 2.13.0 for inject-thrift-client. ``PHAB_ID=D583509``
 
 * finatra-kafka-streams: Add `c.t.f.k.t.s.PersistentTimerValueStore` which stores a value in the

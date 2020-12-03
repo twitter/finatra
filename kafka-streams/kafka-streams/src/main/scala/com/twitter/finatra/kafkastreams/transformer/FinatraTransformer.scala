@@ -51,13 +51,21 @@ object FinatraTransformer {
     name: String,
     timerKeySerde: Serde[TimerKey],
     statsReceiver: StatsReceiver
-  ): StoreBuilder[FinatraKeyValueStore[Timer[TimerKey], Array[Byte]]] = {
+  ): StoreBuilder[FinatraKeyValueStore[Timer[TimerKey], Array[Byte]]] =
+    timerValueStore(name, timerKeySerde, Serdes.ByteArray, statsReceiver)
+
+  def timerValueStore[TimerKey, TimerValue](
+    name: String,
+    timerKeySerde: Serde[TimerKey],
+    valueSerde: Serde[TimerValue],
+    statsReceiver: StatsReceiver
+  ): StoreBuilder[FinatraKeyValueStore[Timer[TimerKey], TimerValue]] = {
     FinatraStores
       .keyValueStoreBuilder(
         statsReceiver,
         FinatraStores.persistentKeyValueStore(name),
         TimerSerde(timerKeySerde),
-        Serdes.ByteArray)
+        valueSerde)
       .withLoggingEnabled(DefaultTopicConfig.FinatraChangelogConfig)
   }
 }
