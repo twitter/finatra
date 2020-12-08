@@ -10,6 +10,8 @@ Unreleased
 Added
 ~~~~~
 
+* finatra: Enables cross-build for 2.13.0 for inject-logback. ``PHAB_ID=D588586``
+
 * finatra-kafka-streams: Add delay DSL calls to insert a delay into a Kafka Streams topology.
   ``PHAB_ID=D566409``
 

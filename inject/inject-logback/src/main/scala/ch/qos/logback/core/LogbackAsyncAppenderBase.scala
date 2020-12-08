@@ -12,7 +12,7 @@ import com.twitter.finagle.stats.{
 }
 import com.twitter.inject.internal.{Library, LibraryRegistry}
 import java.util.concurrent.ConcurrentLinkedQueue
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.util.control.NonFatal
 
 /**

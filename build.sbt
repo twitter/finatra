@@ -429,7 +429,7 @@ lazy val injectStack = (project in file("inject/inject-stack"))
   )
 
 lazy val injectLogback = (project in file("inject/inject-logback"))
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "inject-logback",
     moduleName := "inject-logback",
