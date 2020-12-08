@@ -29,7 +29,11 @@ import com.twitter.finatra.kafka.producers.{
   TracingKafkaProducer,
   producerTracingEnabled
 }
+import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter
 import com.twitter.finatra.kafka.test.EmbeddedKafka
+import com.twitter.inject.InMemoryStatsReceiverUtility
+import com.twitter.inject.app.TestInjector
+import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.util.{Duration, Time}
 import java.util.concurrent.TimeUnit
 import org.apache.kafka.clients.consumer.{KafkaConsumer, OffsetResetStrategy}
@@ -49,7 +53,7 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
   private val tracingTopic = kafkaTopic(Serdes.String, Serdes.String, "tracing-topic")
   private val emptyTestTopic = kafkaTopic(Serdes.String, Serdes.String, "empty-test-topic")
 
-  private def buildTestConsumer(): FinagleKafkaConsumer[String, String] = {
+  private def buildTestConsumerBuilder(): FinagleKafkaConsumerBuilder[String, String] = {
     FinagleKafkaConsumerBuilder()
       .dest(brokers.map(_.brokerList()).mkString(","))
       .clientId("test-consumer")
@@ -57,39 +61,35 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
       .keyDeserializer(Serdes.String.deserializer)
       .valueDeserializer(Serdes.String.deserializer)
       .requestTimeout(Duration.fromSeconds(1))
-      .build()
   }
 
-  private def buildTestProducer(): FinagleKafkaProducer[String, String] = {
+  private def buildTestConsumer(): FinagleKafkaConsumer[String, String] = {
+    buildTestConsumerBuilder().build()
+  }
+
+  private def buildTestProducerBuilder(): FinagleKafkaProducerBuilder[String, String] = {
     FinagleKafkaProducerBuilder()
       .dest(brokers.map(_.brokerList()).mkString(","))
       .clientId("test-producer")
       .ackMode(AckMode.ALL)
       .keySerializer(Serdes.String.serializer)
       .valueSerializer(Serdes.String.serializer)
+  }
+
+  private def buildTestProducer(): FinagleKafkaProducer[String, String] = {
+    buildTestProducerBuilder
       .build()
   }
 
   private def buildNativeTestProducer(): KafkaProducer[String, String] = {
-    FinagleKafkaProducerBuilder()
-      .dest(brokers.map(_.brokerList()).mkString(","))
-      .clientId("test-producer")
-      .ackMode(AckMode.ALL)
-      .keySerializer(Serdes.String.serializer)
-      .valueSerializer(Serdes.String.serializer)
+    buildTestProducerBuilder
       .buildClient()
   }
 
   private def buildNativeTestConsumer(
     offsetResetStrategy: OffsetResetStrategy = OffsetResetStrategy.NONE
   ): KafkaConsumer[String, String] = {
-    FinagleKafkaConsumerBuilder()
-      .dest(brokers.map(_.brokerList()).mkString(","))
-      .clientId("test-consumer")
-      .groupId(KafkaGroupId("test-group"))
-      .keyDeserializer(Serdes.String.deserializer)
-      .valueDeserializer(Serdes.String.deserializer)
-      .requestTimeout(Duration.fromSeconds(1))
+    buildTestConsumerBuilder()
       .autoOffsetReset(offsetResetStrategy)
       .buildClient()
   }
@@ -212,6 +212,52 @@ class FinagleKafkaConsumerIntegrationTest extends EmbeddedKafka {
         await(consumer.endOffset(notExistTopicPartition)))
     } finally {
       await(consumer.close())
+    }
+  }
+
+  test("partition stats recorded by default") {
+    val injector = TestInjector(InMemoryStatsReceiverModule).create
+    KafkaFinagleMetricsReporter.init(injector)
+
+    val producer = buildNativeTestProducer()
+    val consumer = buildTestConsumerBuilder().buildClient()
+
+    try {
+      producer
+        .send(new ProducerRecord(testTopic.topic, null, "Foo", "Bar"))
+        .get(5, TimeUnit.SECONDS)
+      consumer.subscribe(Seq(testTopic.topic).asJava)
+      consumer.poll(java.time.Duration.ofSeconds(5))
+
+      val statsUtils = InMemoryStatsReceiverUtility(injector)
+      statsUtils.gauges.assert("kafka/test_consumer/test_topic/0/records_lag_avg", 0.0f)
+    } finally {
+      producer.close(java.time.Duration.ofSeconds(5))
+      consumer.close(java.time.Duration.ofSeconds(5))
+    }
+  }
+
+  test("partition stats not recorded when includePartitionMetrics false") {
+    val injector = TestInjector(InMemoryStatsReceiverModule).create
+    KafkaFinagleMetricsReporter.init(injector)
+
+    val producer = buildNativeTestProducer()
+    val consumer = buildTestConsumerBuilder()
+      .includePartitionMetrics(false)
+      .buildClient()
+
+    try {
+      producer
+        .send(new ProducerRecord(testTopic.topic, null, "Foo", "Bar"))
+        .get(5, TimeUnit.SECONDS)
+      consumer.subscribe(Seq(testTopic.topic).asJava)
+      consumer.poll(java.time.Duration.ofSeconds(5))
+
+      val statsUtils = InMemoryStatsReceiverUtility(injector)
+      statsUtils.gauges.get("kafka/test_consumer/test_topic/0/records_lag_avg") shouldBe None
+    } finally {
+      producer.close(java.time.Duration.ofSeconds(5))
+      consumer.close(java.time.Duration.ofSeconds(5))
     }
   }
 

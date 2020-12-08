@@ -10,10 +10,12 @@ Unreleased
 Added
 ~~~~~
 
+* kafka: Add an option `includePartitionMetrics` to `KafkaFinagleMetricsReporter` to not include
+  metrics per partition of the `FinagleKafkaConsumer`. Defaults to true. ``PHAB_ID=D587636``
+
 * finatra: Enables cross-build for 2.13.0 for inject-logback. ``PHAB_ID=D588586``
 
 * finatra-kafka-streams: Add delay DSL calls to insert a delay into a Kafka Streams topology.
-  ``PHAB_ID=D566409``
 
 * finatra: Enables cross-build for 2.13.0 for inject-thrift-client. ``PHAB_ID=D583509``
 

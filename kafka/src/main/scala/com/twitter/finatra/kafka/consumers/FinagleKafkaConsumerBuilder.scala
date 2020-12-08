@@ -73,6 +73,12 @@ trait FinagleKafkaConsumerBuilderMethods[K, V, Self] extends KafkaConsumerConfig
   def includeNodeMetrics(include: Boolean): This =
     fromFinagleConsumerConfig(config.copy(includeNodeMetrics = include))
 
+  /**
+   * For KafkaFinagleMetricsReporter: whether to include node-level metrics.
+   */
+  def includePartitionMetrics(include: Boolean): This =
+    fromFinagleConsumerConfig(config.copy(includePartitionMetrics = include))
+
   @deprecated("Use buildClient instead", "2018-05-30")
   def build(): FinagleKafkaConsumer[K, V] = {
     validateConfigs(config)
@@ -120,7 +126,8 @@ case class FinagleKafkaConsumerConfig[K, V](
   pollTimeout: Duration = 100.millis,
   seekStrategy: SeekStrategy = SeekStrategy.RESUME,
   rewindDuration: Option[Duration] = None,
-  includeNodeMetrics: Boolean = false)
+  includeNodeMetrics: Boolean = false,
+  includePartitionMetrics: Boolean = true)
     extends KafkaConfig
     with ToKafkaProperties {
   override protected def configMap: Map[String, String] = kafkaConsumerConfig.configMap
@@ -129,6 +136,9 @@ case class FinagleKafkaConsumerConfig[K, V](
     val properties = super.properties
 
     properties.put(KafkaFinagleMetricsReporter.IncludeNodeMetrics, includeNodeMetrics.toString)
+    properties.put(
+      KafkaFinagleMetricsReporter.IncludePartitionMetrics,
+      includePartitionMetrics.toString)
 
     properties
   }

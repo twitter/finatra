@@ -12,6 +12,8 @@ import scala.collection.mutable
 object KafkaFinagleMetricsReporter {
 
   private[kafka] val IncludeNodeMetrics: String = "include.node.metrics"
+  private[kafka] val IncludePartitionMetrics: String = "include.partition.metrics"
+  private[kafka] val IncludePartition: String = "includePartition"
 
   //Hack to allow tests to use an injected StatsReceiver suitable for assertions
   private var globalStatsReceiver: StatsReceiver = LoadedStatsReceiver
@@ -61,6 +63,7 @@ class KafkaFinagleMetricsReporter extends MetricsReporter with Logging {
   private var statsScope: String = ""
   private var includeNodeMetrics: Boolean = _
   private var includePartition: Boolean = _
+  private var includePartitionMetrics: Boolean = _
 
   /* Public */
 
@@ -72,8 +75,15 @@ class KafkaFinagleMetricsReporter extends MetricsReporter with Logging {
     trace("Configure: " + configs.asScala.mkString("\n"))
     statsScope = Option(configs.get("stats_scope")).getOrElse("kafka").toString
     includeNodeMetrics = Option(configs.get(KafkaFinagleMetricsReporter.IncludeNodeMetrics))
-      .getOrElse("false").toString.toBoolean
-    includePartition = Option(configs.get("includePartition")).getOrElse("true").toString.toBoolean
+      .map(_.toString.toBoolean)
+      .getOrElse(false)
+    includePartition = Option(configs.get(KafkaFinagleMetricsReporter.IncludePartition))
+      .map(_.toString.toBoolean)
+      .getOrElse(true)
+    includePartitionMetrics =
+      Option(configs.get(KafkaFinagleMetricsReporter.IncludePartitionMetrics))
+        .map(_.toString.toBoolean)
+        .getOrElse(true)
     statsReceiver = KafkaFinagleMetricsReporter.globalStatsReceiver.scope(statsScope.toString)
   }
 
@@ -167,6 +177,10 @@ class KafkaFinagleMetricsReporter extends MetricsReporter with Logging {
     } else if (metricName.group
         .contains("node")) { //By default we omit node level metrics which leads to lots of fine grained stats
       includeNodeMetrics
+    } else if (metricName
+        .tags()
+        .containsKey("partition")) { // per partition metrics can explode the metrics namespace
+      includePartitionMetrics
     } else {
       metricName.group() != "kafka-metrics-count" &&
       metric.metricValue().isInstanceOf[Number]
