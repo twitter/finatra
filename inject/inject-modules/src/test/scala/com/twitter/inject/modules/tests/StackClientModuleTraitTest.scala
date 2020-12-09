@@ -31,7 +31,7 @@ class StackClientModuleTraitTest extends Test {
     val clnt = injector.getInstance(classOf[Test.Client])
     assert(clnt.params[TimeoutFilter.Param].timeout == Duration.Top)
     assert(clnt.params[TimeoutFactory.Param].timeout == Duration.Top)
-    assert(clnt.params[Stats].statsReceiver.isNull)
+    assert(clnt.params[Stats].statsReceiver != null)
     assert(clnt.params[Monitor].monitor == NullMonitor)
     assert(clnt.params[Label].label == "test-client")
     assert(clnt.params[Retries.Budget].retryBudget.balance == RetryBudget().balance)
@@ -42,7 +42,7 @@ class StackClientModuleTraitTest extends Test {
     val clnt = injector.getInstance(classOf[Test.Client])
     assert(clnt.params[TimeoutFilter.Param].timeout == 200.milliseconds)
     assert(clnt.params[TimeoutFactory.Param].timeout == 1.second)
-    assert(clnt.params[Stats].statsReceiver.isNull)
+    assert(clnt.params[Stats].statsReceiver != null)
     assert(clnt.params[Monitor].monitor == com.twitter.util.RootMonitor)
     assert(clnt.params[Label].label == "test-client")
     assert(
@@ -54,7 +54,7 @@ class StackClientModuleTraitTest extends Test {
     val clnt = injector.getInstance(classOf[Test.Client])
     assert(clnt.params[TimeoutFilter.Param].timeout == 100.milliseconds)
     assert(clnt.params[TimeoutFactory.Param].timeout == 1.second)
-    assert(clnt.params[Stats].statsReceiver.isNull)
+    assert(clnt.params[Stats].statsReceiver != null)
     assert(clnt.params[Monitor].monitor == com.twitter.util.RootMonitor)
     assert(clnt.params[Label].label == "test-client")
     assert(
@@ -66,7 +66,7 @@ class StackClientModuleTraitTest extends Test {
     val clnt = injector.getInstance(classOf[Test.Client])
     assert(clnt.params[TimeoutFilter.Param].timeout == 50.milliseconds)
     assert(clnt.params[TimeoutFactory.Param].timeout == 1.second)
-    assert(clnt.params[Stats].statsReceiver.isNull)
+    assert(clnt.params[Stats].statsReceiver != null)
     assert(clnt.params[Monitor].monitor == com.twitter.util.RootMonitor)
     assert(clnt.params[Label].label == "test-client")
     assert(

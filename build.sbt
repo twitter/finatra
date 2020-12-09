@@ -389,7 +389,6 @@ lazy val injectCore = (project in file("inject/inject-core"))
       "com.google.inject" % "guice" % versions.guice,
       "com.google.inject.extensions" % "guice-assistedinject" % versions.guice,
       "com.google.inject.extensions" % "guice-multibindings" % versions.guice,
-      "com.twitter" %% "finagle-stats" % versions.twLibVersion,
       "com.twitter" %% "util-app" % versions.twLibVersion,
       "javax.inject" % "javax.inject" % "1",
       "joda-time" % "joda-time" % versions.jodaTime,
@@ -399,6 +398,7 @@ lazy val injectCore = (project in file("inject/inject-core"))
       "org.scala-lang" % "scalap" % scalaVersion.value,
       "com.google.inject" % "guice" % versions.guice % Test,
       "com.google.inject.extensions" % "guice-testlib" % versions.guice % Test,
+      "com.twitter" %% "finagle-stats" % versions.twLibVersion % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
     publishArtifact in Test := true,
