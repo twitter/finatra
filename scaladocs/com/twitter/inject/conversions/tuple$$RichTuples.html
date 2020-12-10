@@ -145,10 +145,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="tuple$.html"><span class="name">tuple</span></a>
+        <a title="" href="tuple$.html"><span class="name deprecated" title="Deprecated: (Since version 2020-11-16) Use com.twitter.conversions.TupleOps instead">tuple</span></a>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="com.twitter.inject.conversions">conversions</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="com.twitter.inject.conversions">conversions</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-11-16)</i> Use com.twitter.conversions.TupleOps instead</p></dd></dl></div>
     </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="class" href="" title=""></a>
@@ -337,38 +340,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyVal → Any</dd></dl></div>
-    </li><li name="com.twitter.inject.conversions.tuple.RichTuples#groupByKey" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="groupByKey:Map[A,Seq[B]]"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/inject/conversions/tuple$$RichTuples.html#groupByKey:Map[A,Seq[B]]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">groupByKey</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.A">A</span>, <a href="../../../../scala/index.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.B">B</span>]]</span>
-      </span>
-      
-      
-    </li><li name="com.twitter.inject.conversions.tuple.RichTuples#groupByKeyAndReduce" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="groupByKeyAndReduce(reduceFunc:(B,B)=&gt;B):Map[A,B]"></a><a id="groupByKeyAndReduce((B,B)⇒B):Map[A,B]"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/inject/conversions/tuple$$RichTuples.html#groupByKeyAndReduce(reduceFunc:(B,B)=&gt;B):Map[A,B]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">groupByKeyAndReduce</span><span class="params">(<span name="reduceFunc">reduceFunc: (<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.B">B</span>, <span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.B">B</span>) ⇒ <span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.B">B</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.A">A</span>, <span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.B">B</span>]</span>
-      </span>
-      
-      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
@@ -385,22 +356,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.twitter.inject.conversions.tuple.RichTuples#mapValues" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="mapValues[C](func:B=&gt;C):Seq[(A,C)]"></a><a id="mapValues[C]((B)⇒C):Seq[(A,C)]"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/inject/conversions/tuple$$RichTuples.html#mapValues[C](func:B=&gt;C):Seq[(A,C)]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">mapValues</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="func">func: (<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.B">B</span>) ⇒ <span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.mapValues.C">C</span></span>)</span><span class="result">: <a href="../../../../scala/index.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[(<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.A">A</span>, <span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.mapValues.C">C</span>)]</span>
-      </span>
-      
-      
     </li><li name="com.twitter.inject.conversions.tuple.RichTuples#self" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="self:Iterable[(A,B)]"></a>
       <span class="permalink">
@@ -414,70 +369,6 @@
       </span>
       <span class="symbol">
         <span class="name">self</span><span class="result">: <a href="../../../../scala/index.html#Iterable[+A]=Iterable[A]" class="extmbr" name="scala.Iterable">Iterable</a>[(<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.A">A</span>, <span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.B">B</span>)]</span>
-      </span>
-      
-      
-    </li><li name="com.twitter.inject.conversions.tuple.RichTuples#sortByKey" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="sortByKey(implicitord:scala.math.Ordering[A]):Seq[(A,B)]"></a><a id="sortByKey(Ordering[A]):Seq[(A,B)]"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/inject/conversions/tuple$$RichTuples.html#sortByKey(implicitord:scala.math.Ordering[A]):Seq[(A,B)]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">sortByKey</span><span class="params">(<span class="implicit">implicit </span><span name="ord">ord: <a href="https://www.scala-lang.org/api/2.12.11/scala/math/Ordering.html#scala.math.Ordering" class="extype" name="scala.math.Ordering">Ordering</a>[<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.A">A</span>]</span>)</span><span class="result">: <a href="../../../../scala/index.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[(<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.A">A</span>, <span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.B">B</span>)]</span>
-      </span>
-      
-      
-    </li><li name="com.twitter.inject.conversions.tuple.RichTuples#toKeySet" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="toKeySet:Set[A]"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/inject/conversions/tuple$$RichTuples.html#toKeySet:Set[A]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">toKeySet</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.A">A</span>]</span>
-      </span>
-      
-      
-    </li><li name="com.twitter.inject.conversions.tuple.RichTuples#toKeys" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="toKeys:Seq[A]"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/inject/conversions/tuple$$RichTuples.html#toKeys:Seq[A]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">toKeys</span><span class="result">: <a href="../../../../scala/index.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.A">A</span>]</span>
-      </span>
-      
-      
-    </li><li name="com.twitter.inject.conversions.tuple.RichTuples#toSortedMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="toSortedMap(implicitord:scala.math.Ordering[A]):scala.collection.SortedMap[A,B]"></a><a id="toSortedMap(Ordering[A]):SortedMap[A,B]"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/inject/conversions/tuple$$RichTuples.html#toSortedMap(implicitord:scala.math.Ordering[A]):scala.collection.SortedMap[A,B]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">toSortedMap</span><span class="params">(<span class="implicit">implicit </span><span name="ord">ord: <a href="https://www.scala-lang.org/api/2.12.11/scala/math/Ordering.html#scala.math.Ordering" class="extype" name="scala.math.Ordering">Ordering</a>[<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.A">A</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.11/scala/collection/SortedMap.html#scala.collection.SortedMap" class="extype" name="scala.collection.SortedMap">SortedMap</a>[<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.A">A</span>, <span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.B">B</span>]</span>
       </span>
       
       
@@ -497,7 +388,148 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.twitter.inject.conversions.tuple.RichTuples#toValues" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li>
+              </ol>
+            </div>
+
+        
+
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="com.twitter.inject.conversions.tuple.RichTuples#groupByKey" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupByKey:Map[A,Seq[B]]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/conversions/tuple$$RichTuples.html#groupByKey:Map[A,Seq[B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2020-11-16) Use com.twitter.conversions.TupleOps#groupByKey instead">groupByKey</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.A">A</span>, <a href="../../../../scala/index.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.B">B</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-11-16)</i> Use com.twitter.conversions.TupleOps#groupByKey instead</p></dd></dl></div>
+    </li><li name="com.twitter.inject.conversions.tuple.RichTuples#groupByKeyAndReduce" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupByKeyAndReduce(reduceFunc:(B,B)=&gt;B):Map[A,B]"></a><a id="groupByKeyAndReduce((B,B)⇒B):Map[A,B]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/conversions/tuple$$RichTuples.html#groupByKeyAndReduce(reduceFunc:(B,B)=&gt;B):Map[A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2020-11-16) Use com.twitter.conversions.TupleOps#groupByKeyAndReduce instead">groupByKeyAndReduce</span><span class="params">(<span name="reduceFunc">reduceFunc: (<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.B">B</span>, <span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.B">B</span>) ⇒ <span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.B">B</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.A">A</span>, <span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.B">B</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-11-16)</i> Use com.twitter.conversions.TupleOps#groupByKeyAndReduce instead</p></dd></dl></div>
+    </li><li name="com.twitter.inject.conversions.tuple.RichTuples#mapValues" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mapValues[C](func:B=&gt;C):Seq[(A,C)]"></a><a id="mapValues[C]((B)⇒C):Seq[(A,C)]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/conversions/tuple$$RichTuples.html#mapValues[C](func:B=&gt;C):Seq[(A,C)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2020-11-16) Use com.twitter.conversions.TupleOps#mapValues instead">mapValues</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="func">func: (<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.B">B</span>) ⇒ <span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.mapValues.C">C</span></span>)</span><span class="result">: <a href="../../../../scala/index.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[(<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.A">A</span>, <span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.mapValues.C">C</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-11-16)</i> Use com.twitter.conversions.TupleOps#mapValues instead</p></dd></dl></div>
+    </li><li name="com.twitter.inject.conversions.tuple.RichTuples#sortByKey" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="sortByKey(implicitord:scala.math.Ordering[A]):Seq[(A,B)]"></a><a id="sortByKey(Ordering[A]):Seq[(A,B)]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/conversions/tuple$$RichTuples.html#sortByKey(implicitord:scala.math.Ordering[A]):Seq[(A,B)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2020-11-16) Use com.twitter.conversions.TupleOps#sortByKey instead">sortByKey</span><span class="params">(<span class="implicit">implicit </span><span name="ord">ord: <a href="https://www.scala-lang.org/api/2.12.11/scala/math/Ordering.html#scala.math.Ordering" class="extype" name="scala.math.Ordering">Ordering</a>[<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.A">A</span>]</span>)</span><span class="result">: <a href="../../../../scala/index.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[(<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.A">A</span>, <span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.B">B</span>)]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-11-16)</i> Use com.twitter.conversions.TupleOps#sortByKey instead</p></dd></dl></div>
+    </li><li name="com.twitter.inject.conversions.tuple.RichTuples#toKeySet" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toKeySet:Set[A]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/conversions/tuple$$RichTuples.html#toKeySet:Set[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2020-11-16) Use com.twitter.conversions.TupleOps#toKeys instead">toKeySet</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.A">A</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-11-16)</i> Use com.twitter.conversions.TupleOps#toKeys instead</p></dd></dl></div>
+    </li><li name="com.twitter.inject.conversions.tuple.RichTuples#toKeys" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toKeys:Seq[A]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/conversions/tuple$$RichTuples.html#toKeys:Seq[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2020-11-16) Use com.twitter.conversions.TupleOps#toKeys instead">toKeys</span><span class="result">: <a href="../../../../scala/index.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.A">A</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-11-16)</i> Use com.twitter.conversions.TupleOps#toKeys instead</p></dd></dl></div>
+    </li><li name="com.twitter.inject.conversions.tuple.RichTuples#toSortedMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toSortedMap(implicitord:scala.math.Ordering[A]):scala.collection.SortedMap[A,B]"></a><a id="toSortedMap(Ordering[A]):SortedMap[A,B]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/conversions/tuple$$RichTuples.html#toSortedMap(implicitord:scala.math.Ordering[A]):scala.collection.SortedMap[A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2020-11-16) Use com.twitter.conversions.TupleOps#toSortedMap instead">toSortedMap</span><span class="params">(<span class="implicit">implicit </span><span name="ord">ord: <a href="https://www.scala-lang.org/api/2.12.11/scala/math/Ordering.html#scala.math.Ordering" class="extype" name="scala.math.Ordering">Ordering</a>[<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.A">A</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.11/scala/collection/SortedMap.html#scala.collection.SortedMap" class="extype" name="scala.collection.SortedMap">SortedMap</a>[<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.A">A</span>, <span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.B">B</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-11-16)</i> Use com.twitter.conversions.TupleOps#toSortedMap instead</p></dd></dl></div>
+    </li><li name="com.twitter.inject.conversions.tuple.RichTuples#toValues" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toValues:Seq[B]"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/inject/conversions/tuple$$RichTuples.html#toValues:Seq[B]" title="Permalink">
@@ -509,17 +541,15 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toValues</span><span class="result">: <a href="../../../../scala/index.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.B">B</span>]</span>
+        <span class="name deprecated" title="Deprecated: (Since version 2020-11-16) Use com.twitter.conversions.TupleOps#toValues instead">toValues</span><span class="result">: <a href="../../../../scala/index.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="com.twitter.inject.conversions.tuple.RichTuples.B">B</span>]</span>
       </span>
       
-      
-    </li>
-              </ol>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-11-16)</i> Use com.twitter.conversions.TupleOps#toValues instead</p></dd></dl></div>
+    </li></ol>
             </div>
-
-        
-
-        
         </div>
 
         <div id="inheritedMembers">

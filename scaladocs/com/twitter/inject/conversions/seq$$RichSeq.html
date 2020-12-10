@@ -145,10 +145,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="seq$.html"><span class="name">seq</span></a>
+        <a title="" href="seq$.html"><span class="name deprecated" title="Deprecated: (Since version 2020-11-16) Use com.twitter.conversions.SeqOps instead">seq</span></a>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="com.twitter.inject.conversions">conversions</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="com.twitter.inject.conversions">conversions</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-11-16)</i> Use com.twitter.conversions.SeqOps instead</p></dd></dl></div>
     </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="class" href="" title=""></a>
@@ -321,70 +324,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.twitter.inject.conversions.seq.RichSeq#createMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="createMap[K,V](values:A=&gt;V):Map[A,V]"></a><a id="createMap[K,V]((A)⇒V):Map[A,V]"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/inject/conversions/seq$$RichSeq.html#createMap[K,V](values:A=&gt;V):Map[A,V]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">createMap</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="values">values: (<span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.A">A</span>) ⇒ <span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.createMap.V">V</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.A">A</span>, <span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.createMap.V">V</span>]</span>
-      </span>
-      
-      
-    </li><li name="com.twitter.inject.conversions.seq.RichSeq#createMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="createMap[K,V](keys:A=&gt;K,values:A=&gt;V):Map[K,V]"></a><a id="createMap[K,V]((A)⇒K,(A)⇒V):Map[K,V]"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/inject/conversions/seq$$RichSeq.html#createMap[K,V](keys:A=&gt;K,values:A=&gt;V):Map[K,V]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">createMap</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="keys">keys: (<span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.A">A</span>) ⇒ <span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.createMap.K">K</span></span>, <span name="values">values: (<span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.A">A</span>) ⇒ <span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.createMap.V">V</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.createMap.K">K</span>, <span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.createMap.V">V</span>]</span>
-      </span>
-      
-      
-    </li><li name="com.twitter.inject.conversions.seq.RichSeq#findItemAfter" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="findItemAfter(itemToFind:A):Option[A]"></a><a id="findItemAfter(A):Option[A]"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/inject/conversions/seq$$RichSeq.html#findItemAfter(itemToFind:A):Option[A]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">findItemAfter</span><span class="params">(<span name="itemToFind">itemToFind: <span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.11/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.A">A</span>]</span>
-      </span>
-      
-      
-    </li><li name="com.twitter.inject.conversions.seq.RichSeq#foreachPartial" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="foreachPartial(pf:PartialFunction[A,Unit]):Unit"></a><a id="foreachPartial(PartialFunction[A,Unit]):Unit"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/inject/conversions/seq$$RichSeq.html#foreachPartial(pf:PartialFunction[A,Unit]):Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">foreachPartial</span><span class="params">(<span name="pf">pf: <a href="https://www.scala-lang.org/api/2.12.11/scala/PartialFunction.html#scala.PartialFunction" class="extype" name="scala.PartialFunction">PartialFunction</a>[<span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.A">A</span>, <a href="https://www.scala-lang.org/api/2.12.11/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.11/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      
     </li><li name="scala.AnyVal#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_&lt;:AnyVal]"></a>
       <span class="permalink">
@@ -401,23 +340,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyVal → Any</dd></dl></div>
-    </li><li name="com.twitter.inject.conversions.seq.RichSeq#groupBySingleValue" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="groupBySingleValue[B](keys:A=&gt;B):Map[B,A]"></a><a id="groupBySingleValue[B]((A)⇒B):Map[B,A]"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/inject/conversions/seq$$RichSeq.html#groupBySingleValue[B](keys:A=&gt;B):Map[B,A]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">groupBySingleValue</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="keys">keys: (<span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.A">A</span>) ⇒ <span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.groupBySingleValue.B">B</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.groupBySingleValue.B">B</span>, <span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.A">A</span>]</span>
-      </span>
-      
-      <p class="shortcomment cmt">Chooses last element in seq when key collision occurs
-</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
@@ -472,7 +394,107 @@
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="com.twitter.inject.conversions.seq.RichSeq#createMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createMap[K,V](values:A=&gt;V):Map[A,V]"></a><a id="createMap[K,V]((A)⇒V):Map[A,V]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/conversions/seq$$RichSeq.html#createMap[K,V](values:A=&gt;V):Map[A,V]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2020-11-16) Use com.twitter.conversions.SeqOps#createMap instead">createMap</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="values">values: (<span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.A">A</span>) ⇒ <span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.createMap.V">V</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.A">A</span>, <span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.createMap.V">V</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-11-16)</i> Use com.twitter.conversions.SeqOps#createMap instead</p></dd></dl></div>
+    </li><li name="com.twitter.inject.conversions.seq.RichSeq#createMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createMap[K,V](keys:A=&gt;K,values:A=&gt;V):Map[K,V]"></a><a id="createMap[K,V]((A)⇒K,(A)⇒V):Map[K,V]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/conversions/seq$$RichSeq.html#createMap[K,V](keys:A=&gt;K,values:A=&gt;V):Map[K,V]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2020-11-16) Use com.twitter.conversions.SeqOps#createMap instead">createMap</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="keys">keys: (<span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.A">A</span>) ⇒ <span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.createMap.K">K</span></span>, <span name="values">values: (<span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.A">A</span>) ⇒ <span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.createMap.V">V</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.createMap.K">K</span>, <span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.createMap.V">V</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-11-16)</i> Use com.twitter.conversions.SeqOps#createMap instead</p></dd></dl></div>
+    </li><li name="com.twitter.inject.conversions.seq.RichSeq#findItemAfter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="findItemAfter(itemToFind:A):Option[A]"></a><a id="findItemAfter(A):Option[A]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/conversions/seq$$RichSeq.html#findItemAfter(itemToFind:A):Option[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2020-11-16) Use com.twitter.conversions.SeqOps#findItemAfter instead">findItemAfter</span><span class="params">(<span name="itemToFind">itemToFind: <span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.A">A</span></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.11/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.A">A</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-11-16)</i> Use com.twitter.conversions.SeqOps#findItemAfter instead</p></dd></dl></div>
+    </li><li name="com.twitter.inject.conversions.seq.RichSeq#foreachPartial" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="foreachPartial(pf:PartialFunction[A,Unit]):Unit"></a><a id="foreachPartial(PartialFunction[A,Unit]):Unit"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/conversions/seq$$RichSeq.html#foreachPartial(pf:PartialFunction[A,Unit]):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2020-11-16) Use com.twitter.conversions.SeqOps#foreachPartial instead">foreachPartial</span><span class="params">(<span name="pf">pf: <a href="https://www.scala-lang.org/api/2.12.11/scala/PartialFunction.html#scala.PartialFunction" class="extype" name="scala.PartialFunction">PartialFunction</a>[<span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.A">A</span>, <a href="https://www.scala-lang.org/api/2.12.11/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.11/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-11-16)</i> Use com.twitter.conversions.SeqOps#foreachPartial instead</p></dd></dl></div>
+    </li><li name="com.twitter.inject.conversions.seq.RichSeq#groupBySingleValue" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupBySingleValue[B](keys:A=&gt;B):Map[B,A]"></a><a id="groupBySingleValue[B]((A)⇒B):Map[B,A]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/conversions/seq$$RichSeq.html#groupBySingleValue[B](keys:A=&gt;B):Map[B,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2020-11-16) Use com.twitter.conversions.SeqOps#groupBySingleValue instead">groupBySingleValue</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="keys">keys: (<span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.A">A</span>) ⇒ <span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.groupBySingleValue.B">B</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.groupBySingleValue.B">B</span>, <span class="extype" name="com.twitter.inject.conversions.seq.RichSeq.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Chooses last element in seq when key collision occurs
+</p><div class="fullcomment"><div class="comment cmt"><p>Chooses last element in seq when key collision occurs
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-11-16)</i> Use com.twitter.conversions.SeqOps#groupBySingleValue instead</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

@@ -271,6 +271,10 @@
                         <a href="PersistentTimerStore.html" title="">PersistentTimerStore</a>
                       </li><li class="current-entities indented6">
                         <span class="separator"></span>
+                        <a class="class" href="PersistentTimerValueStore.html" title=""></a>
+                        <a href="PersistentTimerValueStore.html" title="">PersistentTimerValueStore</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
                         <a class="trait" href="PersistentTimers.html" title="Per-Key Persistent Timers inspired by Flink's ProcessFunction: https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/operators/process_function.html"></a>
                         <a href="PersistentTimers.html" title="Per-Key Persistent Timers inspired by Flink's ProcessFunction: https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/operators/process_function.html">PersistentTimers</a>
                       </li><li name="com.twitter.finatra.kafkastreams.transformer.utils" visbl="pub" class="indented6 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -433,7 +437,7 @@ are expected.
       
       
     </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerStore" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="PersistentTimerStore[TimerKey]extendsOnWatermarkwithLogging"></a><a id="PersistentTimerStore[TimerKey]:PersistentTimerStore[TimerKey]"></a>
+      <a id="PersistentTimerStore[TimerKey]extendsPersistentTimerValueStore[TimerKey,Array[Byte]]"></a><a id="PersistentTimerStore[TimerKey]:PersistentTimerStore[TimerKey]"></a>
       <span class="permalink">
       <a href="../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/PersistentTimerStore.html" title="Permalink">
         <i class="material-icons"></i>
@@ -444,7 +448,26 @@ are expected.
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="PersistentTimerStore.html"><span class="name">PersistentTimerStore</span></a><span class="tparams">[<span name="TimerKey">TimerKey</span>]</span><span class="result"> extends <a href="../lifecycle/OnWatermark.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnWatermark">OnWatermark</a> with <a href="../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+        <a title="" href="PersistentTimerStore.html"><span class="name">PersistentTimerStore</span></a><span class="tparams">[<span name="TimerKey">TimerKey</span>]</span><span class="result"> extends <a href="PersistentTimerValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerValueStore">PersistentTimerValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerStore.TimerKey">TimerKey</span>, <a href="https://www.scala-lang.org/api/2.12.11/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<a href="https://www.scala-lang.org/api/2.12.11/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Beta</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerValueStore" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="PersistentTimerValueStore[TimerKey,TimerValue]extendsOnWatermarkwithLogging"></a><a id="PersistentTimerValueStore[TimerKey,TimerValue]:PersistentTimerValueStore[TimerKey,TimerValue]"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/PersistentTimerValueStore.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="PersistentTimerValueStore.html"><span class="name">PersistentTimerValueStore</span></a><span class="tparams">[<span name="TimerKey">TimerKey</span>, <span name="TimerValue">TimerValue</span>]</span><span class="result"> extends <a href="../lifecycle/OnWatermark.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnWatermark">OnWatermark</a> with <a href="../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>

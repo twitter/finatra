@@ -207,6 +207,10 @@
                         <a href="" title="">PersistentTimerStore</a>
                       </li><li class="current-entities indented6">
                         <span class="separator"></span>
+                        <a class="class" href="PersistentTimerValueStore.html" title=""></a>
+                        <a href="PersistentTimerValueStore.html" title="">PersistentTimerValueStore</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
                         <a class="trait" href="PersistentTimers.html" title="Per-Key Persistent Timers inspired by Flink's ProcessFunction: https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/operators/process_function.html"></a>
                         <a href="PersistentTimers.html" title="Per-Key Persistent Timers inspired by Flink's ProcessFunction: https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/operators/process_function.html">PersistentTimers</a>
                       </li>
@@ -232,7 +236,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">PersistentTimerStore</span><span class="tparams">[<span name="TimerKey">TimerKey</span>]</span><span class="result"> extends <a href="../lifecycle/OnWatermark.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnWatermark">OnWatermark</a> with <a href="../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+        <span class="name">PersistentTimerStore</span><span class="tparams">[<span name="TimerKey">TimerKey</span>]</span><span class="result"> extends <a href="PersistentTimerValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerValueStore">PersistentTimerValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerStore.TimerKey">TimerKey</span>, <a href="https://www.scala-lang.org/api/2.12.11/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<a href="https://www.scala-lang.org/api/2.12.11/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]]</span>
       </span>
       </h4>
 
@@ -244,7 +248,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <a href="../lifecycle/OnWatermark.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnWatermark">OnWatermark</a>, <a href="../../../../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.11/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="PersistentTimerValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerValueStore">PersistentTimerValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerStore.TimerKey">TimerKey</span>, <a href="https://www.scala-lang.org/api/2.12.11/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<a href="https://www.scala-lang.org/api/2.12.11/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]], <a href="../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <a href="../lifecycle/OnWatermark.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnWatermark">OnWatermark</a>, <a href="../../../../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.11/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -270,7 +274,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerStore"><span>PersistentTimerStore</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnWatermark"><span>OnWatermark</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerStore"><span>PersistentTimerStore</span></li><li class="in" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerValueStore"><span>PersistentTimerValueStore</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnWatermark"><span>OnWatermark</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -380,6 +384,22 @@
       </span>
       
       
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerValueStore#addTimer" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="addTimer(time:com.twitter.finatra.kafkastreams.transformer.domain.Time,metadata:com.twitter.finatra.kafkastreams.transformer.domain.TimerMetadata,key:TimerKey,value:TimerValue):Unit"></a><a id="addTimer(Time,TimerMetadata,TimerKey,Array[Byte]):Unit"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/PersistentTimerStore.html#addTimer(time:com.twitter.finatra.kafkastreams.transformer.domain.Time,metadata:com.twitter.finatra.kafkastreams.transformer.domain.TimerMetadata,key:TimerKey,value:TimerValue):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">addTimer</span><span class="params">(<span name="time">time: <a href="../domain/Time.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.domain.Time">Time</a></span>, <span name="metadata">metadata: <a href="../domain/TimerMetadata.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.domain.TimerMetadata">TimerMetadata</a></span>, <span name="key">key: <span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerStore.TimerKey">TimerKey</span></span>, <span name="value">value: <a href="https://www.scala-lang.org/api/2.12.11/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<a href="https://www.scala-lang.org/api/2.12.11/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.11/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="PersistentTimerValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerValueStore">PersistentTimerValueStore</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
@@ -1031,7 +1051,7 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerStore#onInit" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerValueStore#onInit" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="onInit():Unit"></a>
       <span class="permalink">
       <a href="../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/PersistentTimerStore.html#onInit():Unit" title="Permalink">
@@ -1046,8 +1066,8 @@
         <span class="name">onInit</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.11/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      
-    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerStore#onWatermark" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="PersistentTimerValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerValueStore">PersistentTimerValueStore</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerValueStore#onWatermark" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="onWatermark(watermark:com.twitter.finatra.kafkastreams.transformer.watermarks.Watermark):Unit"></a><a id="onWatermark(Watermark):Unit"></a>
       <span class="permalink">
       <a href="../../../../../../com/twitter/finatra/kafkastreams/transformer/stores/PersistentTimerStore.html#onWatermark(watermark:com.twitter.finatra.kafkastreams.transformer.watermarks.Watermark):Unit" title="Permalink">
@@ -1062,7 +1082,7 @@
         <span class="name">onWatermark</span><span class="params">(<span name="watermark">watermark: <a href="../watermarks/Watermark.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.watermarks.Watermark">Watermark</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.11/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerStore">PersistentTimerStore</a> → <a href="../lifecycle/OnWatermark.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnWatermark">OnWatermark</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="PersistentTimerValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerValueStore">PersistentTimerValueStore</a> → <a href="../lifecycle/OnWatermark.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.lifecycle.OnWatermark">OnWatermark</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
@@ -1349,7 +1369,9 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.twitter.inject.Logging">
+        <div class="parent" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerValueStore">
+              <h3>Inherited from <a href="PersistentTimerValueStore.html" class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerValueStore">PersistentTimerValueStore</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimerStore.TimerKey">TimerKey</span>, <a href="https://www.scala-lang.org/api/2.12.11/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<a href="https://www.scala-lang.org/api/2.12.11/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]]</h3>
+            </div><div class="parent" name="com.twitter.inject.Logging">
               <h3>Inherited from <a href="../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></h3>
             </div><div class="parent" name="com.twitter.util.logging.Logging">
               <h3>Inherited from <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a></h3>

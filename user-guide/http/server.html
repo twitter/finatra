@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>HTTP Server Definition &#8212; Finatra 20.10.0 documentation</title>
+    <title>HTTP Server Definition &#8212; Finatra 20.12.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '20.10.0',
+        VERSION:     '20.12.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -74,7 +74,7 @@
 <p>To start, add a dependency on the <a class="reference external" href="https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http_2.12%22">finatra-http</a> library. We also recommend using <a class="reference external" href="https://logback.qos.ch/">Logback</a> as your <a class="reference external" href="https://www.slf4j.org/manual.html">SLF4J</a> implementation. E.g.,</p>
 <p>with sbt:</p>
 <pre class="literal-block">
-&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;20.10.0&quot;,
+&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;20.12.0&quot;,
 &quot;ch.qos.logback&quot; % &quot;logback-classic&quot; % versions.logback,
 </pre>
 <p>For more information on logging with Finatra see: <a class="reference external" href="../logging/index.html#introduction-to-logging-with-finatra">Introduction to Logging With Finatra</a>.</p>
@@ -394,6 +394,7 @@ by default to a server’s object graph. This includes:</p>
 <li>an <a class="reference external" href="https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/http/src/main/scala/com/twitter/finatra/http/servers.scala#L363">overridable</a> default <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/HttpResponseClassifierModule.scala">HttpResponseClassifierModule</a> (see: <a class="reference external" href="#id2">Server-side Response Classification</a>)</li>
 <li>an <a class="reference external" href="https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/http/src/main/scala/com/twitter/finatra/http/servers.scala#L508">overridable</a> default <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/AccessLogModule.scala">AccessLogModule</a></li>
 <li>an <a class="reference external" href="https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/http/src/main/scala/com/twitter/finatra/http/servers.scala#L526">overridable</a> default <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala">ScalaObjectMapperModule</a> (see: <a class="reference external" href="../json/index.html">Jackson Integration</a>)</li>
+<li>an <a class="reference external" href="https://github.com/twitter/finatra/blob/bfb6e22c9260eb3150b6768d6628ee6b3498183c/http/src/main/scala/com/twitter/finatra/http/servers.scala#L539">overridable</a> default <a class="reference external" href="https://github.com/twitter/finatra/blob/bfb6e22c9260eb3150b6768d6628ee6b3498183c/validation/src/main/scala/com/twitter/finatra/validation/ValidatorModule.scala">ValidatorModule</a> (see: <a class="reference external" href="../validation/index.html">Validation Framework</a>)</li>
 <li>an <a class="reference external" href="https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/http/src/main/scala/com/twitter/finatra/http/servers.scala#L519">overridable</a> default <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MessageBodyModule.scala">MessageBodyManagerModule</a> (see: <a class="reference external" href="./message_body.html">Message Body Components</a>)</li>
 </ul>
 <p>As expressed above, some of the <a class="reference external" href="../getting-started/modules.html">modules</a> provided in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/servers.scala">HttpServer</a>
@@ -484,8 +485,8 @@ class ExampleServer extends HttpServer {
 <p>For more information on <a class="reference external" href="https://github.com/twitter/finagle">Finagle</a> server configuration see the documentation <a class="reference external" href="https://twitter.github.io/finagle/guide/Configuration.html">here</a>;
 specifically the server documentation <a class="reference external" href="https://twitter.github.io/finagle/guide/Servers.html">here</a>.</p>
 </div>
-<div class="section" id="id6">
-<h3>Server-side Response Classification<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h3>Server-side Response Classification<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <p>The default Response Classifier for HTTP servers is <a class="reference external" href="https://github.com/twitter/finatra/blob/8b448065f5f74c1eedd744bd15618cbf932ea1bc/http/src/main/scala/com/twitter/finatra/http/response/HttpResponseClassifier.scala#L15">HttpResponseClassifier.ServerErrorsAsFailures</a>,
 which classifies any HTTP 5xx response code as a failure. To configure server-side <a class="reference external" href="https://twitter.github.io/finagle/guide/Servers.html#response-classification">Response Classification</a> you could choose to
 set the classifier directly on the underlying Finagle server by overriding the <cite>configureHttpServer</cite> (or <cite>configureHttpsServer</cite>) in your server, e.g.,</p>
@@ -553,7 +554,7 @@ class ExampleServer extends HttpServer {
 <li><a class="reference internal" href="#flags">Flags</a></li>
 <li><a class="reference internal" href="#framework-modules">Framework Modules</a></li>
 <li><a class="reference internal" href="#finagle-server-configuration">Finagle Server Configuration</a></li>
-<li><a class="reference internal" href="#id6">Server-side Response Classification</a></li>
+<li><a class="reference internal" href="#id7">Server-side Response Classification</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#testing">Testing</a></li>
