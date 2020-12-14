@@ -12,6 +12,10 @@ public class AppendToHeaderJavaFilter extends SimpleFilter<Request, Response> {
         private final String headerName;
         private final String headerValue;
 
+        public AppendToHeaderJavaFilter() {
+                this("test", "0");
+        }
+
         public AppendToHeaderJavaFilter(String header, String value) {
             this.headerName = header;
             this.headerValue = value;

@@ -199,6 +199,17 @@ class HttpRouter @Inject() (
   def add[F1 <: HttpFilter: Manifest, C <: Controller: Manifest]: HttpRouter =
     addFiltered[C](injector.instance[F1])
 
+  /**
+   * Add per-controller filter (Note: Per-controller filters only run if the paired controller has a matching route).
+   *
+   * This is a recommended API for Java users. Scala users should prefer [[Manifest]]-variant of this method.
+   */
+  def add(
+    f1Clazz: Class[_ <: HttpFilter],
+    controllerClazz: Class[_ <: AbstractController]
+  ): HttpRouter =
+    add(injector.instance(f1Clazz), injector.instance(controllerClazz))
+
   /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
   def add[
     F1 <: HttpFilter: Manifest,
@@ -209,6 +220,21 @@ class HttpRouter @Inject() (
       injector
         .instance[F1]
         .andThen(injector.instance[F2])
+    )
+
+  /**
+   * Add per-controller filter (Note: Per-controller filters only run if the paired controller has a matching route).
+   *
+   * This is a recommended API for Java users. Scala users should prefer [[Manifest]]-variant of this method.
+   */
+  def add(
+    f1Clazz: Class[_ <: HttpFilter],
+    f2Clazz: Class[_ <: HttpFilter],
+    controllerClazz: Class[_ <: AbstractController]
+  ): HttpRouter =
+    add(
+      injector.instance(f1Clazz).andThen(injector.instance(f2Clazz)),
+      injector.instance(controllerClazz)
     )
 
   /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
@@ -223,6 +249,25 @@ class HttpRouter @Inject() (
         .instance[F1]
         .andThen(injector.instance[F2])
         .andThen(injector.instance[F3])
+    )
+
+  /**
+   * Add per-controller filter (Note: Per-controller filters only run if the paired controller has a matching route).
+   *
+   * This is a recommended API for Java users. Scala users should prefer [[Manifest]]-variant of this method.
+   */
+  def add(
+    f1Clazz: Class[_ <: HttpFilter],
+    f2Clazz: Class[_ <: HttpFilter],
+    f3Clazz: Class[_ <: HttpFilter],
+    controllerClazz: Class[_ <: AbstractController]
+  ): HttpRouter =
+    add(
+      injector
+        .instance(f1Clazz)
+        .andThen(injector.instance(f2Clazz))
+        .andThen(injector.instance(f3Clazz)),
+      injector.instance(controllerClazz)
     )
 
   /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
@@ -239,6 +284,27 @@ class HttpRouter @Inject() (
         .andThen(injector.instance[F2])
         .andThen(injector.instance[F3])
         .andThen(injector.instance[F4])
+    )
+
+  /**
+   * Add per-controller filter (Note: Per-controller filters only run if the paired controller has a matching route).
+   *
+   * This is a recommended API for Java users. Scala users should prefer [[Manifest]]-variant of this method.
+   */
+  def add(
+    f1Clazz: Class[_ <: HttpFilter],
+    f2Clazz: Class[_ <: HttpFilter],
+    f3Clazz: Class[_ <: HttpFilter],
+    f4Clazz: Class[_ <: HttpFilter],
+    controllerClazz: Class[_ <: AbstractController]
+  ): HttpRouter =
+    add(
+      injector
+        .instance(f1Clazz)
+        .andThen(injector.instance(f2Clazz))
+        .andThen(injector.instance(f3Clazz))
+        .andThen(injector.instance(f4Clazz)),
+      injector.instance(controllerClazz)
     )
 
   /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
@@ -257,6 +323,29 @@ class HttpRouter @Inject() (
         .andThen(injector.instance[F3])
         .andThen(injector.instance[F4])
         .andThen(injector.instance[F5])
+    )
+
+  /**
+   * Add per-controller filter (Note: Per-controller filters only run if the paired controller has a matching route).
+   *
+   * This is a recommended API for Java users. Scala users should prefer [[Manifest]]-variant of this method.
+   */
+  def add(
+    f1Clazz: Class[_ <: HttpFilter],
+    f2Clazz: Class[_ <: HttpFilter],
+    f3Clazz: Class[_ <: HttpFilter],
+    f4Clazz: Class[_ <: HttpFilter],
+    f5Clazz: Class[_ <: HttpFilter],
+    controllerClazz: Class[_ <: AbstractController]
+  ): HttpRouter =
+    add(
+      injector
+        .instance(f1Clazz)
+        .andThen(injector.instance(f2Clazz))
+        .andThen(injector.instance(f3Clazz))
+        .andThen(injector.instance(f4Clazz))
+        .andThen(injector.instance(f5Clazz)),
+      injector.instance(controllerClazz)
     )
 
   /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
@@ -277,6 +366,31 @@ class HttpRouter @Inject() (
         .andThen(injector.instance[F4])
         .andThen(injector.instance[F5])
         .andThen(injector.instance[F6])
+    )
+
+  /**
+   * Add per-controller filter (Note: Per-controller filters only run if the paired controller has a matching route).
+   *
+   * This is a recommended API for Java users. Scala users should prefer [[Manifest]]-variant of this method.
+   */
+  def add(
+    f1Clazz: Class[_ <: HttpFilter],
+    f2Clazz: Class[_ <: HttpFilter],
+    f3Clazz: Class[_ <: HttpFilter],
+    f4Clazz: Class[_ <: HttpFilter],
+    f5Clazz: Class[_ <: HttpFilter],
+    f6Clazz: Class[_ <: HttpFilter],
+    controllerClazz: Class[_ <: AbstractController]
+  ): HttpRouter =
+    add(
+      injector
+        .instance(f1Clazz)
+        .andThen(injector.instance(f2Clazz))
+        .andThen(injector.instance(f3Clazz))
+        .andThen(injector.instance(f4Clazz))
+        .andThen(injector.instance(f5Clazz))
+        .andThen(injector.instance(f6Clazz)),
+      injector.instance(controllerClazz)
     )
 
   /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
@@ -299,6 +413,33 @@ class HttpRouter @Inject() (
         .andThen(injector.instance[F5])
         .andThen(injector.instance[F6])
         .andThen(injector.instance[F7])
+    )
+
+  /**
+   * Add per-controller filter (Note: Per-controller filters only run if the paired controller has a matching route).
+   *
+   * This is a recommended API for Java users. Scala users should prefer [[Manifest]]-variant of this method.
+   */
+  def add(
+    f1Clazz: Class[_ <: HttpFilter],
+    f2Clazz: Class[_ <: HttpFilter],
+    f3Clazz: Class[_ <: HttpFilter],
+    f4Clazz: Class[_ <: HttpFilter],
+    f5Clazz: Class[_ <: HttpFilter],
+    f6Clazz: Class[_ <: HttpFilter],
+    f7Clazz: Class[_ <: HttpFilter],
+    controllerClazz: Class[_ <: AbstractController]
+  ): HttpRouter =
+    add(
+      injector
+        .instance(f1Clazz)
+        .andThen(injector.instance(f2Clazz))
+        .andThen(injector.instance(f3Clazz))
+        .andThen(injector.instance(f4Clazz))
+        .andThen(injector.instance(f5Clazz))
+        .andThen(injector.instance(f6Clazz))
+        .andThen(injector.instance(f7Clazz)),
+      injector.instance(controllerClazz)
     )
 
   /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
@@ -323,6 +464,35 @@ class HttpRouter @Inject() (
         .andThen(injector.instance[F6])
         .andThen(injector.instance[F7])
         .andThen(injector.instance[F8])
+    )
+
+  /**
+   * Add per-controller filter (Note: Per-controller filters only run if the paired controller has a matching route).
+   *
+   * This is a recommended API for Java users. Scala users should prefer [[Manifest]]-variant of this method.
+   */
+  def add(
+    f1Clazz: Class[_ <: HttpFilter],
+    f2Clazz: Class[_ <: HttpFilter],
+    f3Clazz: Class[_ <: HttpFilter],
+    f4Clazz: Class[_ <: HttpFilter],
+    f5Clazz: Class[_ <: HttpFilter],
+    f6Clazz: Class[_ <: HttpFilter],
+    f7Clazz: Class[_ <: HttpFilter],
+    f8Clazz: Class[_ <: HttpFilter],
+    controllerClazz: Class[_ <: AbstractController]
+  ): HttpRouter =
+    add(
+      injector
+        .instance(f1Clazz)
+        .andThen(injector.instance(f2Clazz))
+        .andThen(injector.instance(f3Clazz))
+        .andThen(injector.instance(f4Clazz))
+        .andThen(injector.instance(f5Clazz))
+        .andThen(injector.instance(f6Clazz))
+        .andThen(injector.instance(f7Clazz))
+        .andThen(injector.instance(f8Clazz)),
+      injector.instance(controllerClazz)
     )
 
   /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
@@ -349,6 +519,37 @@ class HttpRouter @Inject() (
         .andThen(injector.instance[F7])
         .andThen(injector.instance[F8])
         .andThen(injector.instance[F9])
+    )
+
+  /**
+   * Add per-controller filter (Note: Per-controller filters only run if the paired controller has a matching route).
+   *
+   * This is a recommended API for Java users. Scala users should prefer [[Manifest]]-variant of this method.
+   */
+  def add(
+    f1Clazz: Class[_ <: HttpFilter],
+    f2Clazz: Class[_ <: HttpFilter],
+    f3Clazz: Class[_ <: HttpFilter],
+    f4Clazz: Class[_ <: HttpFilter],
+    f5Clazz: Class[_ <: HttpFilter],
+    f6Clazz: Class[_ <: HttpFilter],
+    f7Clazz: Class[_ <: HttpFilter],
+    f8Clazz: Class[_ <: HttpFilter],
+    f9Clazz: Class[_ <: HttpFilter],
+    controllerClazz: Class[_ <: AbstractController]
+  ): HttpRouter =
+    add(
+      injector
+        .instance(f1Clazz)
+        .andThen(injector.instance(f2Clazz))
+        .andThen(injector.instance(f3Clazz))
+        .andThen(injector.instance(f4Clazz))
+        .andThen(injector.instance(f5Clazz))
+        .andThen(injector.instance(f6Clazz))
+        .andThen(injector.instance(f7Clazz))
+        .andThen(injector.instance(f8Clazz))
+        .andThen(injector.instance(f9Clazz)),
+      injector.instance(controllerClazz)
     )
 
   /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
@@ -377,6 +578,39 @@ class HttpRouter @Inject() (
         .andThen(injector.instance[F8])
         .andThen(injector.instance[F9])
         .andThen(injector.instance[F10])
+    )
+
+  /**
+   * Add per-controller filter (Note: Per-controller filters only run if the paired controller has a matching route).
+   *
+   * This is a recommended API for Java users. Scala users should prefer [[Manifest]]-variant of this method.
+   */
+  def add(
+    f1Clazz: Class[_ <: HttpFilter],
+    f2Clazz: Class[_ <: HttpFilter],
+    f3Clazz: Class[_ <: HttpFilter],
+    f4Clazz: Class[_ <: HttpFilter],
+    f5Clazz: Class[_ <: HttpFilter],
+    f6Clazz: Class[_ <: HttpFilter],
+    f7Clazz: Class[_ <: HttpFilter],
+    f8Clazz: Class[_ <: HttpFilter],
+    f9Clazz: Class[_ <: HttpFilter],
+    f10Clazz: Class[_ <: HttpFilter],
+    controllerClazz: Class[_ <: AbstractController]
+  ): HttpRouter =
+    add(
+      injector
+        .instance(f1Clazz)
+        .andThen(injector.instance(f2Clazz))
+        .andThen(injector.instance(f3Clazz))
+        .andThen(injector.instance(f4Clazz))
+        .andThen(injector.instance(f5Clazz))
+        .andThen(injector.instance(f6Clazz))
+        .andThen(injector.instance(f7Clazz))
+        .andThen(injector.instance(f8Clazz))
+        .andThen(injector.instance(f9Clazz))
+        .andThen(injector.instance(f10Clazz)),
+      injector.instance(controllerClazz)
     )
 
   /* Private */

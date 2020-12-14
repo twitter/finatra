@@ -72,6 +72,14 @@ public class DoEverythingJavaServerFeatureTest extends Assert {
   }
 
   @Test
+  public void testInjectedHeadersEndpoint() {
+    Request request = RequestBuilder.get("/injected/headers");
+    Response response = SERVER.httpRequest(request);
+    assertEquals(Status.Ok(), response.status());
+    assertEquals("10", response.contentString());
+  }
+
+  @Test
   public void testNonInjectedHelloEndpoint() {
     Request request = RequestBuilder.get("/nonInjected/hello?name=Bob");
     Response response = SERVER.httpRequest(request);

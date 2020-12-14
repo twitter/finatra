@@ -30,6 +30,7 @@ public class DoEverythingJavaServer extends AbstractHttpServer {
         .add(new DoEverythingJavaNonInjectedController())
         .add(new AppendToHeaderJavaFilter("test", "2"),
             new DoEverythingJavaReadHeadersController())
+        .add(AppendToHeaderJavaFilter.class, DoEverythingJavaReadHeadersInjectedController.class)
         .exceptionMapper(DoEverythingJavaExceptionMapper.class);
   }
 }

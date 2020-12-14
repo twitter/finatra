@@ -13,6 +13,8 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-http: Allow injecting filtered controllers in HttpRouter from Java. ``PHAB_ID=D590707``
+
 * inject-utils: Move deprecation warning from `c.t.inject.conversions.map` to
   `c.t.inject.conversions.map.RichMap`. ``PHAB_ID=D591979``
 
