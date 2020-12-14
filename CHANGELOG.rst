@@ -13,6 +13,9 @@ Unreleased
 Added
 ~~~~~
 
+* inject-utils: Move deprecation warning from `c.t.inject.conversions.map` to
+  `c.t.inject.conversions.map.RichMap`. ``PHAB_ID=D591979``
+
 * kafka: Add an option `includePartitionMetrics` to `KafkaFinagleMetricsReporter` to not include
   metrics per partition of the `FinagleKafkaConsumer`. Defaults to true. ``PHAB_ID=D587636``
 

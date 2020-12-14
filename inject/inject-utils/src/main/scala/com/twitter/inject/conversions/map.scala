@@ -6,9 +6,9 @@ import java.util.concurrent.ConcurrentHashMap
 import scala.collection.compat.immutable.ArraySeq
 import scala.collection.{SortedMap, immutable}
 
-@deprecated("Use com.twitter.conversions.MapOps instead", "2020-11-16")
 object map {
 
+  @deprecated("Use com.twitter.conversions.MapOps instead", "2020-11-16")
   implicit class RichMap[K, V](val self: Map[K, V]) extends AnyVal {
     @deprecated("Use com.twitter.conversions.MapOps#mapKeys instead", "2020-11-16")
     def mapKeys[T](func: K => T): Map[T, V] = MapOps.mapKeys(self, func)
