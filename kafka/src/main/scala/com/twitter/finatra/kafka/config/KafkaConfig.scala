@@ -88,7 +88,9 @@ trait ToKafkaProperties { self: KafkaConfig =>
     val p = new Properties
     configMap.foreach {
       case (k, v) =>
-        p.setProperty(k, v)
+        // allow null property, and ignore the null properties
+        if (v != null)
+          p.setProperty(k, v)
     }
     p
   }

@@ -45,6 +45,7 @@ class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
       .ackMode(AckMode.ALL)
       .keySerializer(Serdes.String.serializer)
       .valueSerializer(Serdes.String.serializer)
+      .transactionalId(null) // test null string config causing non impact
   }
 
   private def getTestProducer(statsReceiver: StatsReceiver) = {

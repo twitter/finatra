@@ -13,6 +13,9 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-kafka-streams: Allow String configuration to be null and set upgradefrom to null if it is
+   running in 2.5 kafka client.  ``PHAB_ID=D592608``
+
 * finatra-http: Allow injecting filtered controllers in HttpRouter from Java. ``PHAB_ID=D590707``
 
 * inject-utils: Move deprecation warning from `c.t.inject.conversions.map` to

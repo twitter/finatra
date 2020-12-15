@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicLong
 import org.apache.kafka.clients.consumer.{ConsumerConfig, OffsetResetStrategy}
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.metrics.Sensor.RecordingLevel
+import org.apache.kafka.common.utils.AppInfoParser
 import org.apache.kafka.streams.KafkaStreams.{State, StateListener}
 import org.apache.kafka.streams.{
   KafkaClientSupplier,
@@ -258,8 +259,6 @@ abstract class KafkaStreamsTwitterServer
   protected[finatra] def createKafkaStreamsProperties(): Properties = {
     var defaultConfig =
       new KafkaStreamsConfig()
-      // Set upgradeFrom when we first move to 2.5 binary
-      //.upgradeFrom("2.2")
         .metricReporter[KafkaStreamsFinagleMetricsReporter]
         .metricsRecordingLevelConfig(
           RecordingLevel.forName(metricsRecordingLevel())
@@ -328,6 +327,14 @@ abstract class KafkaStreamsTwitterServer
 
     if (applicationId().nonEmpty) {
       defaultConfig = defaultConfig.applicationId(applicationId())
+    }
+
+    // if the code is run from 2.5 library, it will set the compatible mode.
+    // use ProtocolUpgrade mixin to override
+    if (AppInfoParser.getVersion().startsWith("2.5")) {
+      // we can't use StreamsConfig.UPGRADE_FROM_22 because the code
+      // need to compile for 2.2
+      defaultConfig = defaultConfig.upgradeFrom("2.2")
     }
 
     val properties = streamsProperties(defaultConfig).properties
