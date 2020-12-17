@@ -3,8 +3,8 @@ package com.twitter.finatra.kafkastreams.integration.delay
 import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
 import com.twitter.finatra.kafkastreams.dsl.FinatraDslDelay
-import com.twitter.finatra.kafkastreams.integration.delay.DelayStoreServer.Delay
-import com.twitter.finatra.kafkastreams.integration.tocluster.ToClusterServer.{
+import com.twitter.finatra.kafkastreams.integration.delay.DelayStoreServer.{
+  Delay,
   IncomingTopic,
   OutgoingTopic
 }

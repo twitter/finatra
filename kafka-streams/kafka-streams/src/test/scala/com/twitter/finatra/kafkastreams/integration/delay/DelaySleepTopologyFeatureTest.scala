@@ -1,6 +1,6 @@
 package com.twitter.finatra.kafkastreams.integration.delay
 
-import com.twitter.finatra.kafkastreams.integration.delay.DelayStoreServer.{
+import com.twitter.finatra.kafkastreams.integration.delay.DelaySleepServer.{
   IncomingTopic,
   OutgoingTopic
 }
