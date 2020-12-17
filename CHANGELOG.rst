@@ -7,6 +7,12 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+
+* finatra-http: Remove deprecated `c.t.finatra.http.response.StreamingResponse`.
+  Use `c.t.finatra.http.streaming.StreamingResponse` instead. ``PHAB_ID=D594642``
+
 20.12.0
 -------
 

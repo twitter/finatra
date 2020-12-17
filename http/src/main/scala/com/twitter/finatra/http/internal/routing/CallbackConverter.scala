@@ -3,10 +3,7 @@ package com.twitter.finatra.http.internal.routing
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Fields, Request, Response, Status, Version}
 import com.twitter.finatra.http.marshalling.MessageBodyManager
-import com.twitter.finatra.http.response.{
-  ResponseBuilder,
-  StreamingResponse => DeprecatedStreamingResponse
-}
+import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.finatra.http.streaming.{FromReader, StreamingRequest, StreamingResponse}
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.streaming.JsonStreamParser
@@ -184,7 +181,6 @@ private[http] class CallbackConverterImpl @Inject() (
   private def isStreamingType(manifested: Manifest[_]): Boolean = {
     runtimeClassEqs[AsyncStream[_]](manifested) ||
     runtimeClassEqs[Reader[_]](manifested) ||
-    runtimeClassEqs[DeprecatedStreamingResponse[_, _]](manifested) ||
     runtimeClassEqs[StreamingResponse[Any, _]](manifested)
   }
 
@@ -217,11 +213,6 @@ private[http] class CallbackConverterImpl @Inject() (
         request: Request =>
           val reader = requestCallback(request).asInstanceOf[Reader[_]]
           responseBuilder.streaming(reader).toFutureResponse()
-      case depStreamingResponse
-          if runtimeClassEqs[DeprecatedStreamingResponse[_, _]](depStreamingResponse) =>
-        request: Request =>
-          requestCallback(request)
-            .asInstanceOf[DeprecatedStreamingResponse[_, _]].toFutureFinagleResponse
       case streamingResponse if runtimeClassEqs[StreamingResponse[Any, _]](streamingResponse) =>
         request: Request =>
           streamingResponse.typeArguments.head match {
