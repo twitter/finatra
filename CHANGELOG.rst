@@ -10,8 +10,19 @@ Unreleased
 Changed
 ~~~~~~~
 
+* thrift: (BREAKING API CHANGE) Removed `JavaThriftRouter.add(controller, protocolFactory)` method.
+  Use `AbstractThriftServer.configureThriftServer` to override Thrift-specific stack params
+  (including `Thrift.param.ProtocolFactory`).  ``PHAB_ID=D593876``
+
 * finatra-http: Remove deprecated `c.t.finatra.http.response.StreamingResponse`.
   Use `c.t.finatra.http.streaming.StreamingResponse` instead. ``PHAB_ID=D594642``
+
+Fixed
+~~~~~
+
+* thrift: Fixed a bug where Thrift stack params (i.e., protocol factory) that are passed to
+  `AbstractThriftServer.configureThriftServer` are ignored in `JavaThriftRouter`.
+  ``PHAB_ID=D593876``
 
 20.12.0
 -------

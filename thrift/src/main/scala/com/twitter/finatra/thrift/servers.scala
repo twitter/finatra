@@ -265,7 +265,8 @@ trait ThriftServer extends ThriftServerTrait {
    * is defined by configuring the [[ThriftRouter]] and not by implementation of this method,
    * thus this method overridden to be final and set to a `NilService`.
    */
-  protected def thriftService: Service[Array[Byte], Array[Byte]] = NilService
+  final override protected def thriftService: Service[Array[Byte], Array[Byte]] =
+    NilService
 
   /** Serve the `Service[Array[Byte], Array[Byte]]` from the configured [[ThriftRouter]]. */
   override private[thrift] def build(addr: String, server: ThriftMux.Server): ListeningServer = {
@@ -310,20 +311,14 @@ trait ThriftServer extends ThriftServerTrait {
  */
 abstract class AbstractThriftServer extends AbstractTwitterServer with ThriftServer {
 
-  /** This Server returns a [[JavaThriftRouter]] configured `Service[Array[Byte], Array[Byte]]` */
-  override protected def thriftService: Service[Array[Byte], Array[Byte]] = {
-    val router = injector.instance[JavaThriftRouter]
-    registerService(configureService(router.service))
-  }
-
-  /* Overrides */
-
   /** Serve the `Service[Array[Byte], Array[Byte]]` from the configured [[JavaThriftRouter]]. */
   override private[thrift] final def build(
     addr: String,
     server: ThriftMux.Server
   ): ListeningServer = {
-    server.serve(addr, this.thriftService)
+    val router = injector.instance[JavaThriftRouter]
+    val service = registerService(configureService(router.createService(server.serverParam)))
+    server.serve(addr, service)
   }
 
   /** Users are expected to use [[configureThrift(router: JavaThriftRouter)]] */

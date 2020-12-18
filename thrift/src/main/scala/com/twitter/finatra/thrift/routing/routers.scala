@@ -2,7 +2,12 @@ package com.twitter.finatra.thrift.routing
 
 import com.twitter.finagle
 import com.twitter.finagle.service.NilService
-import com.twitter.finagle.thrift.{AbstractThriftService, RichServerParam, ThriftService, ToThriftService}
+import com.twitter.finagle.thrift.{
+  AbstractThriftService,
+  RichServerParam,
+  ThriftService,
+  ToThriftService
+}
 import com.twitter.finagle._
 import com.twitter.finatra.thrift.Controller
 import com.twitter.finatra.thrift.ScroogeServiceImpl
@@ -16,7 +21,6 @@ import com.twitter.scrooge.{Request, Response, ThriftMethod}
 import java.lang.annotation.{Annotation => JavaAnnotation}
 import java.lang.reflect.{Method => JMethod}
 import javax.inject.{Inject, Singleton}
-import org.apache.thrift.protocol.TProtocolFactory
 
 private[routing] abstract class BaseThriftRouter[Router <: BaseThriftRouter[Router]](
   injector: Injector,
@@ -340,14 +344,18 @@ class ThriftRouter @Inject() (
 class JavaThriftRouter @Inject() (injector: Injector, exceptionManager: ExceptionManager)
     extends BaseThriftRouter[JavaThriftRouter](injector, exceptionManager) {
 
-  private[this] var underlying: Service[Array[Byte], Array[Byte]] = NilService
+  private class ServiceCreator {
+    def apply(param: RichServerParam): Service[Array[Byte], Array[Byte]] = NilService
+  }
+
+  private[this] var serviceCreator: ServiceCreator = new ServiceCreator
   private[this] var filters: Filter.TypeAgnostic = Filter.TypeAgnostic.Identity
 
   /* Public */
 
-  def service: Service[Array[Byte], Array[Byte]] =
+  def createService(params: RichServerParam): Service[Array[Byte], Array[Byte]] =
     postConfig("Router has not been configured with a controller") {
-      this.underlying
+      serviceCreator(params)
     }
 
   /**
@@ -404,16 +412,6 @@ class JavaThriftRouter @Inject() (injector: Injector, exceptionManager: Exceptio
     }
 
   /**
-   * Add controller used for all requests for usage from Java. The [[ThriftRouter]] only supports
-   * a single controller, so `add` may only be called once.
-   *
-   * @see the [[https://twitter.github.io/finatra/user-guide/thrift/controllers.html user guide]]
-   */
-  def add(controller: Class[_ <: AbstractThriftService]): JavaThriftRouter = {
-    add(controller, ThriftMux.server.params.apply[Thrift.param.ProtocolFactory].protocolFactory)
-  }
-
-  /**
    * Add controller used for all requests for usage from Java. The [[ThriftRouter]] only supports a
    * single controller, so `add` may only be called once.
    *
@@ -423,20 +421,9 @@ class JavaThriftRouter @Inject() (injector: Injector, exceptionManager: Exceptio
    * @see the [[https://twitter.github.io/finatra/user-guide/thrift/controllers.html user guide]]
    */
   def add(
-    controller: Class[_ <: AbstractThriftService],
-    protocolFactory: TProtocolFactory
+    controller: Class[_ <: AbstractThriftService]
   ): JavaThriftRouter = {
-    add(injector.instance(controller), protocolFactory)
-  }
-
-  /**
-   * Add controller used for all requests for usage from Java. The [[ThriftRouter]] only supports
-   * a single controller, so `add` may only be called once.
-   *
-   * @see the [[https://twitter.github.io/finatra/user-guide/thrift/controllers.html user guide]]
-   */
-  def add(controller: AbstractThriftService): JavaThriftRouter = {
-    add(controller, ThriftMux.server.params.apply[Thrift.param.ProtocolFactory].protocolFactory)
+    add(injector.instance(controller))
   }
 
   /**
@@ -449,50 +436,56 @@ class JavaThriftRouter @Inject() (injector: Injector, exceptionManager: Exceptio
    * @see the [[https://twitter.github.io/finatra/user-guide/thrift/controllers.html user guide]]
    */
   def add(
-    controller: AbstractThriftService,
-    protocolFactory: TProtocolFactory
+    controller: AbstractThriftService
   ): JavaThriftRouter = {
     def deriveServiceName(clazz: Class[_]): String = {
       val base = clazz.getName.stripSuffix("$" + "Service")
       base.substring(base.lastIndexOf(".") + 1)
     }
 
-    assertController {
-      val controllerClazz = controller.getClass
-      val serviceIfaceClazz: Class[_] = controllerClazz.getInterfaces.head // MyService$ServiceIface
-      val serviceClazz: Class[_] = // MyService$Service
-        // note, the $ gets concat-ed strangely to avoid a false positive scalac warning
-        // for "possible missing interpolator".
-        Class.forName(serviceIfaceClazz.getName.stripSuffix("$ServiceIface") + "$" + "Service")
-      val serviceConstructor =
-        serviceClazz.getConstructor(
-          serviceIfaceClazz,
-          classOf[Filter.TypeAgnostic],
-          classOf[RichServerParam]
-        )
+    serviceCreator = assertController {
+      new ServiceCreator {
+        override def apply(param: RichServerParam): Service[Array[Byte], Array[Byte]] = {
+          val controllerClazz = controller.getClass
+          val serviceIfaceClazz: Class[_] =
+            controllerClazz.getInterfaces.head // MyService$ServiceIface
+          val serviceClazz: Class[_] = // MyService$Service
+            // note, the $ gets concat-ed strangely to avoid a false positive scalac warning
+            // for "possible missing interpolator".
+            Class.forName(serviceIfaceClazz.getName.stripSuffix("$ServiceIface") + "$" + "Service")
+          val serviceConstructor =
+            serviceClazz.getConstructor(
+              serviceIfaceClazz,
+              classOf[Filter.TypeAgnostic],
+              classOf[RichServerParam]
+            )
 
-      val serviceName = deriveServiceName(serviceClazz)
+          val serviceName = deriveServiceName(serviceClazz)
 
-      // instantiate service
-      val serviceInstance: Service[Array[Byte], Array[Byte]] =
-        serviceConstructor
-          .newInstance(
-            controller.asInstanceOf[Object],
-            filters,
-            new RichServerParam(protocolFactory)
+          // instantiate service
+          val serviceInstance: Service[Array[Byte], Array[Byte]] =
+            serviceConstructor
+              .newInstance(
+                controller.asInstanceOf[Object],
+                filters,
+                param
+              )
+              .asInstanceOf[Service[Array[Byte], Array[Byte]]]
+
+          val declaredMethods: Array[JMethod] = controllerClazz.getDeclaredMethods
+          info(
+            "Adding methods\n" +
+              declaredMethods.map(method => s"$serviceName.${method.getName}").mkString("\n")
           )
-          .asInstanceOf[Service[Array[Byte], Array[Byte]]]
 
-      val declaredMethods: Array[JMethod] = controllerClazz.getDeclaredMethods
-      info(
-        "Adding methods\n" +
-          declaredMethods.map(method => s"$serviceName.${method.getName}").mkString("\n")
-      )
+          registerGlobalFilter(filters, libraryRegistry)
+          registerMethods(serviceName, controllerClazz, declaredMethods.toSeq)
 
-      registerGlobalFilter(filters, libraryRegistry)
-      registerMethods(serviceName, controllerClazz, declaredMethods.toSeq)
-      underlying = serviceInstance
+          serviceInstance
+        }
+      }
     }
+
     this
   }
 
