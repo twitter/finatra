@@ -966,7 +966,7 @@ lazy val httpAnnotations = (project in file("http-annotations"))
   )
 
 lazy val httpMustache = (project in file("http-mustache"))
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "finatra-http-mustache",
     moduleName := "finatra-http-mustache",
@@ -1070,7 +1070,7 @@ lazy val thrift = project
   )
 
 lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-http-mapper"))
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "inject-thrift-client-http-mapper",
     moduleName := "inject-thrift-client-http-mapper",

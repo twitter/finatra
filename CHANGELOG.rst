@@ -10,6 +10,10 @@ Unreleased
 Changed
 ~~~~~~~
 
+* inject-thrift-client-http-mapper: Enables cross-build for 2.13.0. ``PHAB_ID=D596470``
+
+* http-mustache: Enables cross-build for 2.13.0. ``PHAB_ID=D596470``
+
 * thrift: (BREAKING API CHANGE) Removed `JavaThriftRouter.add(controller, protocolFactory)` method.
   Use `AbstractThriftServer.configureThriftServer` to override Thrift-specific stack params
   (including `Thrift.param.ProtocolFactory`).  ``PHAB_ID=D593876``
