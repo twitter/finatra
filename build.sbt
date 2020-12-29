@@ -729,7 +729,7 @@ lazy val injectUtils = (project in file("inject/inject-utils"))
  * optimizations.
  */
 lazy val benchmarks = project
-  .settings(baseServerSettings)
+  .settings(baseServerSettings, withTwoThirteen)
   .enablePlugins(JmhPlugin)
   .settings(
     libraryDependencies ++= Seq("org.slf4j" % "slf4j-simple" % versions.slf4j % Test)

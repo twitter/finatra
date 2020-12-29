@@ -10,6 +10,8 @@ Unreleased
 Changed
 ~~~~~~~
 
+* benchmarks: Enables cross-build for 2.13.0. ``PHAB_ID=D597288``
+
 * inject-thrift-client-http-mapper: Enables cross-build for 2.13.0. ``PHAB_ID=D596470``
 
 * http-mustache: Enables cross-build for 2.13.0. ``PHAB_ID=D596470``
