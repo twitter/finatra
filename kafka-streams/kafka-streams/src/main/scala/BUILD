@@ -7,6 +7,7 @@ jar_library(
             name = "rocksdbjni",
             force = True,
             rev = "5.14.2",
+            intransitive = False,
         ),
     ],
 )
