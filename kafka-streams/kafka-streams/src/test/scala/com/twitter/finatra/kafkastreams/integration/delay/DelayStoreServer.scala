@@ -5,6 +5,7 @@ import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
 import com.twitter.finatra.kafkastreams.dsl.FinatraDslDelay
 import com.twitter.finatra.kafkastreams.integration.delay.DelayStoreServer.{
   Delay,
+  DelayStoreKey,
   IncomingTopic,
   OutgoingTopic
 }
@@ -16,6 +17,7 @@ object DelayStoreServer {
   val IncomingTopic = "incoming-topic"
   val OutgoingTopic = "outgoing-topic"
   val Delay = 10.seconds
+  val DelayStoreKey = "storekey"
 }
 
 class DelayStoreServer extends KafkaStreamsTwitterServer with FinatraDslDelay {
@@ -26,7 +28,7 @@ class DelayStoreServer extends KafkaStreamsTwitterServer with FinatraDslDelay {
 
     builder.asScala
       .stream(IncomingTopic)(Consumed.`with`(Serdes.Long, Serdes.Long))
-      .delayWithStore(Delay)
+      .delayWithStore(Delay, DelayStoreKey)
       .to(OutgoingTopic)
   }
 }

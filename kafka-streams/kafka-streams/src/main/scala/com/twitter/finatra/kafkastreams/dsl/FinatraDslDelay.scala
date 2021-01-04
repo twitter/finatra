@@ -25,10 +25,12 @@ trait FinatraDslDelay extends KafkaStreamsTwitterServer with FinatraTransformerF
      * events persist in the store across service restarts.
      *
      * @param delay How long to delay events
+     * @param storeKey A unique key to differentiate multiple delay stores in a single topology
      * @param produced key/value Serdes for the key and value.
      */
     def delayWithStore(
-      delay: Duration
+      delay: Duration,
+      storeKey: String
     )(
       implicit produced: Produced[K, V]
     ): KStream[K, V] = {
@@ -36,7 +38,7 @@ trait FinatraDslDelay extends KafkaStreamsTwitterServer with FinatraTransformerF
 
       val timerStore =
         FinatraTransformer.timerValueStore(
-          f"delay_timerstore_$hashCode%X",
+          s"delay_timerstore_$storeKey",
           producedInternal.keySerde,
           producedInternal.valueSerde,
           streamsStatsReceiver)

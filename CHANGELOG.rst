@@ -23,6 +23,10 @@ Changed
 * finatra-http: Remove deprecated `c.t.finatra.http.response.StreamingResponse`.
   Use `c.t.finatra.http.streaming.StreamingResponse` instead. ``PHAB_ID=D594642``
 
+* finatra-kafka-streams: (BREAKING API CHANGE) Changed the `delayWithStore` DSL call to ensure that
+  the store name is consistent across shards. Requires a new `storeName` parameter to allow
+  for multiple delays in a single topology. ```PHAB_ID=D593593``
+
 Fixed
 ~~~~~
 
