@@ -40,6 +40,9 @@ Fixed
 Added
 ~~~~~
 
+* finatra-kafka-streams: Add async map commands to Kafka Streams DSL (`flatMapAsync`,
+  `flatMapValuesAsync`, `mapAsync`, and `mapValuesAsync`) ``PHAB_ID=D593995``
+
 * finatra-kafka-streams: Allow String configuration to be null and set upgradefrom to null if it is
    running in 2.5 kafka client.  ``PHAB_ID=D592608``
 
