@@ -12,7 +12,7 @@ import scala.reflect.ClassTag
  * that return a `Future`.
  */
 trait FinatraDslFlatMapAsync extends FlushingAwareServer with FinatraTransformerFlags {
-  implicit class FinatraKeyValueStream[K1: ClassTag, V1](kstream: KStream[K1, V1]) {
+  implicit class FlatMapAsyncKeyValueStream[K1: ClassTag, V1](kstream: KStream[K1, V1]) {
 
     /**
      * An async version of the regular kafka streams flatMapValues DSL function.

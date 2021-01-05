@@ -25,10 +25,14 @@ Changed
 
 * finatra-kafka-streams: (BREAKING API CHANGE) Changed the `delayWithStore` DSL call to ensure that
   the store name is consistent across shards. Requires a new `storeName` parameter to allow
-  for multiple delays in a single topology. ```PHAB_ID=D593593``
+  for multiple delays in a single topology. ``PHAB_ID=D593593``
 
 Fixed
 ~~~~~
+
+* finatra-kafka-streams: Renamed implicit Kafka Streams DSL classes in order to
+  permit multiple DSL extensions to be used in the same Kafka Streams topology.
+  ``PHAB_ID=D598368``
 
 * thrift: Fixed a bug where Thrift stack params (i.e., protocol factory) that are passed to
   `AbstractThriftServer.configureThriftServer` are ignored in `JavaThriftRouter`.

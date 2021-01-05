@@ -66,7 +66,7 @@ trait FinatraDslWindowedAggregations
 
   protected def commitInterval: Flag[Duration]
 
-  implicit class FinatraKeyValueStream[K: ClassTag, V](inner: KStreamS[K, V]) {
+  implicit class WindowedAggregationsKeyValueStream[K: ClassTag, V](inner: KStreamS[K, V]) {
 
     /**
      * For each unique key, aggregate the values in the stream that occurred within a given time window
@@ -287,7 +287,7 @@ trait FinatraDslWindowedAggregations
     ): KStreamS[TimeWindowed[K], WindowedValue[Int]] = {
       val windowSizeMillis = windowSize.inMillis
 
-      FinatraKeyValueStream(inner).aggregate(
+      WindowedAggregationsKeyValueStream(inner).aggregate(
         stateStore = stateStore,
         windowSize = windowSize,
         allowedLateness = allowedLateness,

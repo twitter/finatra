@@ -30,7 +30,7 @@ trait FinatraDslSampling
 
   protected def kafkaStreamsBuilder: StreamsBuilder
 
-  implicit class FinatraKeyValueStream[K: ClassTag, V](inner: KStreamS[K, V]) {
+  implicit class SamplingKeyValueStream[K: ClassTag, V](inner: KStreamS[K, V]) {
 
     /**
      * Counts and samples an attribute of a stream of records.

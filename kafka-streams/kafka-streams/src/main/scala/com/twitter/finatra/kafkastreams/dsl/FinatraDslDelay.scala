@@ -10,7 +10,7 @@ import org.apache.kafka.streams.scala.kstream.{KStream, Produced}
 import scala.reflect.ClassTag
 
 trait FinatraDslDelay extends KafkaStreamsTwitterServer with FinatraTransformerFlags {
-  implicit class FinatraKeyValueStream[K: ClassTag, V](kstream: KStream[K, V]) {
+  implicit class DelayKeyValueStream[K: ClassTag, V](kstream: KStream[K, V]) {
 
     /**
      * Inserts a transformer into the stream which delays events.

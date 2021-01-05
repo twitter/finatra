@@ -15,7 +15,7 @@ import org.apache.kafka.streams.kstream.internals.ProducedInternal
 import org.apache.kafka.streams.scala.kstream.{KStream, Produced}
 
 trait FinatraDslToCluster extends FlushingAwareServer {
-  implicit class FinatraKeyValueStream[K, V](kstream: KStream[K, V]) {
+  implicit class ToClusterKeyValueStream[K, V](kstream: KStream[K, V]) {
 
     /**
      * Publishes events to a kafka topic on the specified cluster rather than the primary cluster.
