@@ -1,17 +1,3 @@
-# Upgrade version of rocksdb
-jar_library(
-    name = "rocksdb-5.14.2",
-    jars = [
-        jar(
-            org = "org.rocksdb",
-            name = "rocksdbjni",
-            force = True,
-            rev = "5.14.2",
-            intransitive = False,
-        ),
-    ],
-)
-
 scala_library(
     sources = [
         "com/twitter/finatra/kafkastreams/**/*.scala",
@@ -33,7 +19,7 @@ scala_library(
     strict_deps = True,
     dependencies = [
         # NOTE: remove this direct rocksDB dependency when building 2.5
-        ":rocksdb-5.14.2",
+        "3rdparty/jvm/org/rocksdb:rocksdb-5.14.2",
         "3rdparty/jvm/it/unimi/dsi:fastutil",
         "3rdparty/jvm/org/agrona",
         "3rdparty/jvm/org/apache/kafka:kafka-clients",
