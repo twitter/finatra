@@ -59,7 +59,7 @@ trait EmbeddedKafka extends Test with Logging {
   override protected def beforeAll(): Unit = {
     super.beforeAll()
     kafkaCluster.start()
-    createKafkaTopics(kafkaTopics)
+    createKafkaTopics(kafkaTopics.toSeq)
   }
 
   protected def kafkaBootstrapFlag: Map[String, String] = {

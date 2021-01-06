@@ -10,11 +10,17 @@ Unreleased
 Changed
 ~~~~~~~
 
-* benchmarks: Enables cross-build for 2.13.0. ``PHAB_ID=D597288``
+* kafka: Enables cross-build for 2.13.1. Note that kafka 2.5 is bundled with scala 2.13+
+  and kafka 2.2 is bundled with scala 2.12-. ``PHAB_ID=D597065``
 
-* inject-thrift-client-http-mapper: Enables cross-build for 2.13.0. ``PHAB_ID=D596470``
+* kafkaStreams: Enables cross-build for 2.13.1. Note that kafka 2.5 is bundled with
+  scala 2.13+ and kafka 2.2 is bundled with scala 2.12-. ``PHAB_ID=D597065``
 
-* http-mustache: Enables cross-build for 2.13.0. ``PHAB_ID=D596470``
+* benchmarks: Enables cross-build for 2.13.1. ``PHAB_ID=D597288``
+
+* inject-thrift-client-http-mapper: Enables cross-build for 2.13.1. ``PHAB_ID=D596470``
+
+* http-mustache: Enables cross-build for 2.13.1. ``PHAB_ID=D596470``
 
 * thrift: (BREAKING API CHANGE) Removed `JavaThriftRouter.add(controller, protocolFactory)` method.
   Use `AbstractThriftServer.configureThriftServer` to override Thrift-specific stack params
@@ -58,11 +64,11 @@ Added
 * kafka: Add an option `includePartitionMetrics` to `KafkaFinagleMetricsReporter` to not include
   metrics per partition of the `FinagleKafkaConsumer`. Defaults to true. ``PHAB_ID=D587636``
 
-* finatra: Enables cross-build for 2.13.0 for inject-logback. ``PHAB_ID=D588586``
+* finatra: Enables cross-build for 2.13.1 for inject-logback. ``PHAB_ID=D588586``
 
 * finatra-kafka-streams: Add delay DSL calls to insert a delay into a Kafka Streams topology.
 
-* finatra: Enables cross-build for 2.13.0 for inject-thrift-client. ``PHAB_ID=D583509``
+* finatra: Enables cross-build for 2.13.1 for inject-thrift-client. ``PHAB_ID=D583509``
 
 * finatra-kafka-streams: Add `c.t.f.k.t.s.PersistentTimerValueStore` which stores a value in the
   timerstore that can be used when the timer is triggered. ``PHAB_ID=D583020``
@@ -70,7 +76,7 @@ Added
 * inject-core: Add ability to call `InMemoryStats#waitFor` with a fixed timeout
   ``PHAB_ID=D576147``
 
-* finatra: Enables cross-build for 2.13.0 for httpclient, http, and jackson. ``PHAB_ID=D574391``
+* finatra: Enables cross-build for 2.13.1 for httpclient, http, and jackson. ``PHAB_ID=D574391``
 
 Changed
 ~~~~~~~

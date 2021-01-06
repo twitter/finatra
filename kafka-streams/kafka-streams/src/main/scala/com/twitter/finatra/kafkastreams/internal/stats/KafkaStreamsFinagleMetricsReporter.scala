@@ -210,8 +210,11 @@ private[kafkastreams] class KafkaStreamsFinagleMetricsReporter extends KafkaFina
 
   private def isGlobalTableMetric(metricName: MetricName): Boolean = {
     val clientId = metricName.tags.get("client-id")
+    val threadId = metricName.tags.get("thread-id")
     if (clientId != null) {
       KafkaStreamsFinagleMetricsReporter.globalTableClientIdPatterns.exists(clientId.contains)
+    } else if (threadId != null) {
+      KafkaStreamsFinagleMetricsReporter.globalTableClientIdPatterns.exists(threadId.contains)
     } else {
       false
     }

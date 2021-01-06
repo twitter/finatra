@@ -85,4 +85,14 @@ class TopologyTesterTopic[K, V](
           Tuple3(key, value, time.getMillis.iso8601Millis))
     }
   }
+
+  // assert all output with certain order.
+  // The output order is different between kafka 2.2 and kafka 2.5.
+  // see https://github.com/apache/kafka/pull/8065
+  def assertAllOutput(expected22: Seq[(K, V)], expected25: Seq[(K, V)]): Unit = {
+    val allOutputRecord = readAllOutput()
+    assert(allOutputRecord != null, "No output record is available for this assertion")
+    val output = allOutputRecord.map { r => Tuple2(r.key(), r.value()) }
+    assert(output == expected22 || output == expected25)
+  }
 }

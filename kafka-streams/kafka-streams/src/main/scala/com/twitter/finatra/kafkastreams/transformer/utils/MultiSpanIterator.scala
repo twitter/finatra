@@ -37,23 +37,23 @@ package com.twitter.finatra.kafkastreams.transformer.utils
  * @tparam T the type of the item
  * @tparam SpanId the type of the span
  */
-class MultiSpanIterator[T, SpanId](private var iterator: Iterator[T], getSpanId: T => SpanId)
+class MultiSpanIterator[T, SpanId](private var iter: Iterator[T], getSpanId: T => SpanId)
     extends Iterator[Iterator[T]] {
 
   override def hasNext: Boolean = {
-    iterator.nonEmpty
+    iter.nonEmpty
   }
 
   override def next(): Iterator[T] = {
-    val headItem = iterator.next
+    val headItem = iter.next
     val headSpanId = getSpanId(headItem)
 
-    val (contiguousItems, remainingItems) = iterator.span { currentItem =>
+    val (contiguousItems, remainingItems) = iter.span { currentItem =>
       getSpanId(currentItem) == headSpanId
     }
 
     // mutate the iterator member to be the remaining items
-    iterator = remainingItems
+    iter = remainingItems
 
     Iterator(headItem) ++ contiguousItems
   }

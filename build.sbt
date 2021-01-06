@@ -95,7 +95,8 @@ lazy val versions = new {
   val jodaTime = "2.10.8"
   val json4s = "3.6.7"
   val junit = "4.12"
-  val kafka = "2.2.0"
+  val kafka22 = "2.2.0"
+  val kafka25 = "2.5.0"
   val libThrift = "0.10.0"
   val logback = "1.2.3"
   val mockitoScala = "1.14.8"
@@ -1103,8 +1104,41 @@ lazy val kafkaTestJarSources =
     "com/twitter/finatra/kafka/test/KafkaFeatureTest",
     "com/twitter/finatra/kafka/test/KafkaStateStore"
   )
+
+def kafkaDependencies(kafkaVersion: String): Seq[ModuleID] = {
+  Seq(
+    "org.apache.kafka" %% "kafka" % kafkaVersion % "compile->compile;test->test",
+    "org.apache.kafka" %% "kafka" % kafkaVersion % "test" classifier "test",
+    "org.apache.kafka" % "kafka-clients" % kafkaVersion % "test->test",
+    "org.apache.kafka" % "kafka-clients" % kafkaVersion % "test" classifier "test",
+    "org.apache.kafka" % "kafka-streams" % kafkaVersion % "compile->compile;test->test",
+    "org.apache.kafka" % "kafka-streams" % kafkaVersion % "test" classifier "test",
+    "org.apache.kafka" % "kafka-streams-test-utils" % kafkaVersion % "compile->compile;test->test",
+    "org.apache.kafka" % "kafka-streams-test-utils" % kafkaVersion % "test" classifier "test"
+  )
+}
+
+def kafkaStreamsDependencies(kafkaVersion: String): Seq[ModuleID] = {
+  Seq(
+    "org.apache.kafka" %% "kafka-streams-scala" % kafkaVersion % "compile->compile;test->test",
+    "org.apache.kafka" % "kafka-streams" % kafkaVersion % "compile->compile;test->test",
+    "org.apache.kafka" % "kafka-streams" % kafkaVersion % "test" classifier "test"
+  )
+}
+
+def crossVersionKafka(
+  scalaVersion: Option[(Long, Long)],
+  kafka22: String,
+  kafka25: String
+): String = {
+  scalaVersion match {
+    case Some((2, n)) if n <= 12 => kafka22
+    case _ => kafka25
+  }
+}
+
 lazy val kafka = (project in file("kafka"))
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "finatra-kafka",
     moduleName := "finatra-kafka",
@@ -1115,17 +1149,13 @@ lazy val kafka = (project in file("kafka"))
       "com.twitter" %% "finagle-thrift" % versions.twLibVersion,
       "com.twitter" %% "scrooge-serializer" % versions.twLibVersion,
       "com.twitter" %% "util-codec" % versions.twLibVersion,
-      "org.apache.kafka" %% "kafka" % versions.kafka % "compile->compile;test->test",
-      "org.apache.kafka" %% "kafka" % versions.kafka % "test" classifier "test",
-      "org.apache.kafka" % "kafka-clients" % versions.kafka % "test->test",
-      "org.apache.kafka" % "kafka-clients" % versions.kafka % "test" classifier "test",
-      "org.apache.kafka" % "kafka-streams" % versions.kafka % "compile->compile;test->test",
-      "org.apache.kafka" % "kafka-streams" % versions.kafka % "test" classifier "test",
-      "org.apache.kafka" % "kafka-streams-test-utils" % versions.kafka % "compile->compile;test->test",
-      "org.apache.kafka" % "kafka-streams-test-utils" % versions.kafka % "test" classifier "test",
       "org.slf4j" % "slf4j-api" % versions.slf4j % "compile->compile;test->test",
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
+    libraryDependencies ++= {
+      val scalaV = CrossVersion.partialVersion(scalaVersion.value)
+      kafkaDependencies(crossVersionKafka(scalaV, versions.kafka22, versions.kafka25))
+    },
     excludeDependencies in Test ++= kafkaStreamsExclusionRules,
     excludeDependencies ++= kafkaStreamsExclusionRules,
     scroogeThriftIncludeFolders in Test := Seq(file("src/test/thrift")),
@@ -1240,30 +1270,33 @@ lazy val kafkaStreamsQueryableThrift =
     )
 
 lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))
-  .settings(projectSettings)
+  .settings(projectSettings, withTwoThirteen)
   .settings(
     name := "finatra-kafka-streams",
     moduleName := "finatra-kafka-streams",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
     unmanagedSourceDirectories in Compile += {
       val sourceDir = (sourceDirectory in Compile).value
-      sourceDir / "scala-kafka2.2"
+      val scalaV = CrossVersion.partialVersion(scalaVersion.value)
+      sourceDir / crossVersionKafka(scalaV, "scala-kafka2.2", "scala-kafka2.5")
     },
     unmanagedSourceDirectories in Test += {
       val testDir = (sourceDirectory in Test).value
-      testDir / "scala-kafka2.2"
+      val scalaV = CrossVersion.partialVersion(scalaVersion.value)
+      testDir / crossVersionKafka(scalaV, "scala-kafka2.2", "scala-kafka2.5")
     },
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-jvm" % versions.twLibVersion,
       "it.unimi.dsi" % "fastutil" % versions.fastutil,
       "jakarta.ws.rs" % "jakarta.ws.rs-api" % "2.1.3",
       "org.agrona" % "agrona" % versions.agrona,
-      "org.apache.kafka" %% "kafka-streams-scala" % versions.kafka % "compile->compile;test->test",
       "org.rocksdb" % "rocksdbjni" % versions.rocksdbjni % "provided;compile->compile;test->test",
-      "org.apache.kafka" % "kafka-streams" % versions.kafka % "compile->compile;test->test",
-      "org.apache.kafka" % "kafka-streams" % versions.kafka % "test" classifier "test",
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
+    libraryDependencies ++= {
+      val scalaV = CrossVersion.partialVersion(scalaVersion.value)
+      kafkaStreamsDependencies(crossVersionKafka(scalaV, versions.kafka22, versions.kafka25))
+    },
     excludeDependencies in Test ++= kafkaStreamsExclusionRules,
     excludeDependencies ++= kafkaStreamsExclusionRules,
     excludeFilter in unmanagedResources := "BUILD",

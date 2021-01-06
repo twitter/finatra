@@ -130,7 +130,7 @@ private[kafkastreams] class RocksDBStatsCallback(statsReceiver: StatsReceiver)
    * Accessor for this callback's ticker values.
    */
   def tickerValues: Map[TickerType, Long] = {
-    mostRecentCounterValues.mapValues(_.get())
+    mostRecentCounterValues.mapValues(_.get()).toMap
   }
 
   /**

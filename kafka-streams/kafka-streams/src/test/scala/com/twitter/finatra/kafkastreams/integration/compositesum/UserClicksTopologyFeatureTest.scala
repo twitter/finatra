@@ -42,53 +42,66 @@ class UserClicksTopologyFeatureTest extends TopologyFeatureTest {
     userIdToClicksTopic.pipeInput(userId1, 300)
     userIdToClicksTopic.pipeInput(userId1, 300)
 
-    topologyTester.advanceWallClockTime(30.seconds)
-    hourlyWordAndCountTopic.assertOutput(
+    val record1 = (
       TimeWindowed.hourly(firstHourStartTime, UserClicks(userId1, clickType = 100)),
       WindowedValue(WindowOpen, 1))
 
-    hourlyWordAndCountTopic.assertOutput(
+    val record2 = (
+      TimeWindowed.hourly(firstHourStartTime, UserClicks(userId1, clickType = 200)),
+      WindowedValue(WindowOpen, 2))
+
+    val record3 = (
       TimeWindowed.hourly(firstHourStartTime, UserClicks(userId1, clickType = 300)),
       WindowedValue(WindowOpen, 3))
 
-    hourlyWordAndCountTopic.assertOutput(
-      TimeWindowed.hourly(firstHourStartTime, UserClicks(userId1, clickType = 200)),
-      WindowedValue(WindowOpen, 2))
+    topologyTester.advanceWallClockTime(30.seconds)
+    hourlyWordAndCountTopic.assertAllOutput(
+      Seq(record1, record3, record2), //kafka 2.2
+      Seq(record3, record1, record2) //kafka 2.5
+    )
 
     userIdToClicksTopic.pipeInput(userId1, 100)
     userIdToClicksTopic.pipeInput(userId1, 200)
     userIdToClicksTopic.pipeInput(userId1, 300)
 
-    topologyTester.advanceWallClockTime(5.hours)
-    hourlyWordAndCountTopic.assertOutput(
+    val record4 = (
       TimeWindowed.hourly(firstHourStartTime, UserClicks(userId1, clickType = 100)),
       WindowedValue(WindowOpen, 2))
 
-    hourlyWordAndCountTopic.assertOutput(
+    val record5 = (
       TimeWindowed.hourly(firstHourStartTime, UserClicks(userId1, clickType = 300)),
       WindowedValue(WindowOpen, 4))
 
-    hourlyWordAndCountTopic.assertOutput(
+    val record6 = (
       TimeWindowed.hourly(firstHourStartTime, UserClicks(userId1, clickType = 200)),
       WindowedValue(WindowOpen, 3))
+
+    topologyTester.advanceWallClockTime(5.hours)
+    hourlyWordAndCountTopic.assertAllOutput(
+      Seq(record4, record5, record6), //kafka2.2
+      Seq(record5, record4, record6) //kafka2.5
+    )
 
     userIdToClicksTopic.pipeInput(userId1, 1)
     topologyTester.advanceWallClockTime(30.seconds)
 
-    hourlyWordAndCountTopic.assertOutput(
+    val record7 = (
       TimeWindowed.hourly(fifthHourStartTime, UserClicks(userId1, clickType = 1)),
       WindowedValue(WindowOpen, 1))
-
-    hourlyWordAndCountTopic.assertOutput(
+    val record8 = (
       TimeWindowed.hourly(firstHourStartTime, UserClicks(userId1, clickType = 100)),
       WindowedValue(WindowClosed, 2))
-
-    hourlyWordAndCountTopic.assertOutput(
+    val record9 = (
       TimeWindowed.hourly(firstHourStartTime, UserClicks(userId1, clickType = 200)),
       WindowedValue(WindowClosed, 3))
-
-    hourlyWordAndCountTopic.assertOutput(
+    val record10 = (
       TimeWindowed.hourly(firstHourStartTime, UserClicks(userId1, clickType = 300)),
       WindowedValue(WindowClosed, 4))
+
+    hourlyWordAndCountTopic.assertAllOutput(
+      Seq(record7, record8, record9, record10), //kafka2.2
+      Seq(record7, record8, record9, record10) //kafka2.5
+    )
+
   }
 }

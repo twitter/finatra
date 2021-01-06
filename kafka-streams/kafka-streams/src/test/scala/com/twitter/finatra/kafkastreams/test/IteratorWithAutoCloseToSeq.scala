@@ -18,7 +18,7 @@ trait IteratorWithAutoCloseToSeq {
       }
 
       keyValueIterator.close()
-      keyValueBuffer
+      keyValueBuffer.toSeq
     }
   }
 }
