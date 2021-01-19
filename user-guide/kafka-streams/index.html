@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Finatra Kafka Streams &#8212; Finatra 20.12.0 documentation</title>
+    <title>Finatra Kafka Streams &#8212; Finatra 21.1.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '20.12.0',
+        VERSION:     '21.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -70,6 +70,10 @@
   <div class="section" id="finatra-kafka-streams">
 <span id="kafka-streams"></span><h1>Finatra Kafka Streams<a class="headerlink" href="#finatra-kafka-streams" title="Permalink to this headline">¶</a></h1>
 <p>Finatra has native integration with <a class="reference external" href="https://kafka.apache.org/documentation/streams">Kafka Streams</a> to easily build Kafka Streams applications on top of a <a class="reference external" href="https://github.com/twitter/twitter-server">TwitterServer</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Versions of finatra-kafka and finatra-kafka-streams that are published against Scala 2.12 or 2.11 uses Kafka 2.2, versions of that are published against Scala 2.13 use Kafka 2.5. This simplified cross-version support is ephemeral until we can drop Kafka 2.2.</p>
+</div>
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -197,7 +201,7 @@ a fully functional service can be written by simply configuring the Kafka Stream
   
 
   <div class="footer">
-    &copy; Copyright 2013-2020 Twitter, Inc.
+    &copy; Copyright 2013-2021 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

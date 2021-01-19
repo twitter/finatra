@@ -149,10 +149,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.kafkastreams">kafkastreams</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.kafkastreams.dsl.FinatraDslToCluster" visbl="pub" class="indented6 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="FinatraDslToClusterextendsKafkaStreamsTwitterServerwithFlushingAwareServer"></a><a id="FinatraDslToCluster:FinatraDslToCluster"></a>
+    </li><li name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync" visbl="pub" class="indented6 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="FinatraDslFlatMapAsyncextendsKafkaStreamsTwitterServerwithFlushingAwareServerwithFinatraTransformerFlags"></a><a id="FinatraDslFlatMapAsync:FinatraDslFlatMapAsync"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster.html" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -161,14 +161,17 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="FinatraDslToCluster.html"><span class="name">FinatraDslToCluster</span></a><span class="result"> extends <a href="../KafkaStreamsTwitterServer.html" class="extype" name="com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer">KafkaStreamsTwitterServer</a> with <a href="../flushing/FlushingAwareServer.html" class="extype" name="com.twitter.finatra.kafkastreams.flushing.FlushingAwareServer">FlushingAwareServer</a></span>
+        <a title="Async DSL calls for Kafka Streams which allows us to map / flatMap over functions that return a Future." href="FinatraDslFlatMapAsync.html"><span class="name">FinatraDslFlatMapAsync</span></a><span class="result"> extends <a href="../KafkaStreamsTwitterServer.html" class="extype" name="com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer">KafkaStreamsTwitterServer</a> with <a href="../flushing/FlushingAwareServer.html" class="extype" name="com.twitter.finatra.kafkastreams.flushing.FlushingAwareServer">FlushingAwareServer</a> with <a href="../config/FinatraTransformerFlags.html" class="extype" name="com.twitter.finatra.kafkastreams.config.FinatraTransformerFlags">FinatraTransformerFlags</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="com.twitter.finatra.kafkastreams.dsl">dsl</a></dd></dl></div>
+      <p class="shortcomment cmt">Async DSL calls for Kafka Streams which allows us to map / flatMap over functions
+that return a <code>Future</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Async DSL calls for Kafka Streams which allows us to map / flatMap over functions
+that return a <code>Future</code>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="com.twitter.finatra.kafkastreams.dsl">dsl</a></dd></dl></div>
     </li><li class="current-entities indented6">
                         <span class="separator"></span>
                         <a class="class" href="" title=""></a>
-                        <a href="" title="">FinatraKeyValueStream</a>
+                        <a href="" title="">FlatMapAsyncKeyValueStream</a>
                       </li><li class="current-entities indented6">
                         <span class="separator"></span>
                         <a class="class" href="../utils/ScalaStreamsImplicits$KStreamJConversions.html" title=""></a>
@@ -189,9 +192,9 @@
             <body class="class type">
       <div id="definition">
         <div class="big-circle class">c</div>
-        <p id="owner"><a href="../../../../index.html" class="extype" name="com">com</a>.<a href="../../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../index.html" class="extype" name="com.twitter.finatra.kafkastreams">kafkastreams</a>.<a href="index.html" class="extype" name="com.twitter.finatra.kafkastreams.dsl">dsl</a>.<a href="FinatraDslToCluster.html" class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslToCluster">FinatraDslToCluster</a></p>
-        <h1>FinatraKeyValueStream<span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html" title="Permalink">
+        <p id="owner"><a href="../../../../index.html" class="extype" name="com">com</a>.<a href="../../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../index.html" class="extype" name="com.twitter.finatra.kafkastreams">kafkastreams</a>.<a href="index.html" class="extype" name="com.twitter.finatra.kafkastreams.dsl">dsl</a>.<a href="FinatraDslFlatMapAsync.html" class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync">FinatraDslFlatMapAsync</a></p>
+        <h1>FlatMapAsyncKeyValueStream<span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
@@ -204,7 +207,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">FinatraKeyValueStream</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <a href="../../../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">FlatMapAsyncKeyValueStream</span><span class="tparams">[<span name="K1">K1</span>, <span name="V1">V1</span>]</span><span class="result"> extends <a href="../../../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
 
@@ -239,7 +242,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslToCluster.FinatraKeyValueStream"><span>FinatraKeyValueStream</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream"><span>FlatMapAsyncKeyValueStream</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -259,10 +262,10 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="com.twitter.finatra.kafkastreams.dsl.FinatraDslToCluster.FinatraKeyValueStream#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(kstream:org.apache.kafka.streams.scala.kstream.KStream[K,V]):FinatraDslToCluster.this.FinatraKeyValueStream[K,V]"></a><a id="&lt;init&gt;:FinatraKeyValueStream[K,V]"></a>
+              <ol><li name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(kstream:org.apache.kafka.streams.scala.kstream.KStream[K1,V1])(implicitevidence$1:scala.reflect.ClassTag[K1]):FinatraDslFlatMapAsync.this.FlatMapAsyncKeyValueStream[K1,V1]"></a><a id="&lt;init&gt;:FlatMapAsyncKeyValueStream[K1,V1]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#&lt;init&gt;(kstream:org.apache.kafka.streams.scala.kstream.KStream[K,V]):FinatraDslToCluster.this.FinatraKeyValueStream[K,V]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#&lt;init&gt;(kstream:org.apache.kafka.streams.scala.kstream.KStream[K1,V1])(implicitevidence$1:scala.reflect.ClassTag[K1]):FinatraDslFlatMapAsync.this.FlatMapAsyncKeyValueStream[K1,V1]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -271,7 +274,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">FinatraKeyValueStream</span><span class="params">(<span name="kstream">kstream: <span class="extype" name="org.apache.kafka.streams.scala.kstream.KStream">KStream</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslToCluster.FinatraKeyValueStream.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslToCluster.FinatraKeyValueStream.V">V</span>]</span>)</span>
+        <span class="name">FlatMapAsyncKeyValueStream</span><span class="params">(<span name="kstream">kstream: <span class="extype" name="org.apache.kafka.streams.scala.kstream.KStream">KStream</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.K1">K1</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.V1">V1</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.11/scala/reflect/ClassTag.html#scala.reflect.ClassTag" class="extype" name="scala.reflect.ClassTag">ClassTag</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.K1">K1</span>]</span>)</span>
       </span>
       
       
@@ -288,7 +291,7 @@
                 <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#!=(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#!=(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -304,7 +307,7 @@
     </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html###():Int" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html###():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -320,7 +323,7 @@
     </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#==(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#==(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -336,7 +339,7 @@
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#asInstanceOf[T0]:T0" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#asInstanceOf[T0]:T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -352,7 +355,7 @@
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#clone():Object" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#clone():Object" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -376,7 +379,7 @@
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#eq(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -392,7 +395,7 @@
     </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#equals(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#equals(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -408,7 +411,7 @@
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#finalize():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#finalize():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -427,10 +430,48 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream#flatMapAsync" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="flatMapAsync[K2,V2](commitInterval:com.twitter.util.Duration,numWorkers:Int)(func:(K1,V1)=&gt;com.twitter.util.Future[Iterable[(K2,V2)]]):org.apache.kafka.streams.scala.kstream.KStream[K2,V2]"></a><a id="flatMapAsync[K2,V2](Duration,Int)((K1,V1)⇒Future[Iterable[(K2,V2)]]):KStream[K2,V2]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#flatMapAsync[K2,V2](commitInterval:com.twitter.util.Duration,numWorkers:Int)(func:(K1,V1)=&gt;com.twitter.util.Future[Iterable[(K2,V2)]]):org.apache.kafka.streams.scala.kstream.KStream[K2,V2]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flatMapAsync</span><span class="tparams">[<span name="K2">K2</span>, <span name="V2">V2</span>]</span><span class="params">(<span name="commitInterval">commitInterval: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>, <span name="numWorkers">numWorkers: <a href="https://www.scala-lang.org/api/2.12.11/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="params">(<span name="func">func: (<span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.K1">K1</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.V1">V1</span>) ⇒ <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<a href="../../../../../scala/index.html#Iterable[+A]=Iterable[A]" class="extmbr" name="scala.Iterable">Iterable</a>[(<span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.flatMapAsync.K2">K2</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.flatMapAsync.V2">V2</span>)]]</span>)</span><span class="result">: <span class="extype" name="org.apache.kafka.streams.scala.kstream.KStream">KStream</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.flatMapAsync.K2">K2</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.flatMapAsync.V2">V2</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">An async version of the regular kafka streams flatMap DSL function.</p><div class="fullcomment"><div class="comment cmt"><p>An async version of the regular kafka streams flatMap DSL function.
+Takes a function which returns a <code>Future[Iterable[(K, V)]]</code>
+rather than just an <code>Iterable[(K, V)]</code>.
+</p></div><dl class="paramcmts block"><dt class="param">commitInterval</dt><dd class="cmt"><p>The interval between commits to Kafka</p></dd><dt class="param">numWorkers</dt><dd class="cmt"><p>Max number of active Futures</p></dd><dt class="param">func</dt><dd class="cmt"><p>A function from <code>(K1, V1)</code> to <code>Future[Iterable[(K2, V2)]]</code></p></dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream#flatMapValuesAsync" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="flatMapValuesAsync[V2](commitInterval:com.twitter.util.Duration,numWorkers:Int)(func:V1=&gt;com.twitter.util.Future[Iterable[V2]]):org.apache.kafka.streams.scala.kstream.KStream[K1,V2]"></a><a id="flatMapValuesAsync[V2](Duration,Int)((V1)⇒Future[Iterable[V2]]):KStream[K1,V2]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#flatMapValuesAsync[V2](commitInterval:com.twitter.util.Duration,numWorkers:Int)(func:V1=&gt;com.twitter.util.Future[Iterable[V2]]):org.apache.kafka.streams.scala.kstream.KStream[K1,V2]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flatMapValuesAsync</span><span class="tparams">[<span name="V2">V2</span>]</span><span class="params">(<span name="commitInterval">commitInterval: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>, <span name="numWorkers">numWorkers: <a href="https://www.scala-lang.org/api/2.12.11/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="params">(<span name="func">func: (<span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.V1">V1</span>) ⇒ <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<a href="../../../../../scala/index.html#Iterable[+A]=Iterable[A]" class="extmbr" name="scala.Iterable">Iterable</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.flatMapValuesAsync.V2">V2</span>]]</span>)</span><span class="result">: <span class="extype" name="org.apache.kafka.streams.scala.kstream.KStream">KStream</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.K1">K1</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.flatMapValuesAsync.V2">V2</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">An async version of the regular kafka streams flatMapValues DSL function.</p><div class="fullcomment"><div class="comment cmt"><p>An async version of the regular kafka streams flatMapValues DSL function.
+Takes a function which returns a <code>Future[Iterable[V]]</code> rather than just
+an <code>Iterable[V]</code>. Note that this will generate events with duplicate keys.
+</p></div><dl class="paramcmts block"><dt class="param">commitInterval</dt><dd class="cmt"><p>The interval between commits to Kafka</p></dd><dt class="param">numWorkers</dt><dd class="cmt"><p>Max number of active Futures</p></dd><dt class="param">func</dt><dd class="cmt"><p>A function from <code>V1</code> to <code>Future[Iterable[V2]]</code></p></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#getClass():Class[_]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#getClass():Class[_]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -449,7 +490,7 @@
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#hashCode():Int" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#hashCode():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -468,7 +509,7 @@
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#isInstanceOf[T0]:Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#isInstanceOf[T0]:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -481,10 +522,48 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream#mapAsync" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mapAsync[K2,V2](commitInterval:com.twitter.util.Duration,numWorkers:Int)(func:(K1,V1)=&gt;com.twitter.util.Future[(K2,V2)]):org.apache.kafka.streams.scala.kstream.KStream[K2,V2]"></a><a id="mapAsync[K2,V2](Duration,Int)((K1,V1)⇒Future[(K2,V2)]):KStream[K2,V2]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#mapAsync[K2,V2](commitInterval:com.twitter.util.Duration,numWorkers:Int)(func:(K1,V1)=&gt;com.twitter.util.Future[(K2,V2)]):org.apache.kafka.streams.scala.kstream.KStream[K2,V2]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mapAsync</span><span class="tparams">[<span name="K2">K2</span>, <span name="V2">V2</span>]</span><span class="params">(<span name="commitInterval">commitInterval: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>, <span name="numWorkers">numWorkers: <a href="https://www.scala-lang.org/api/2.12.11/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="params">(<span name="func">func: (<span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.K1">K1</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.V1">V1</span>) ⇒ <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[(<span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.mapAsync.K2">K2</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.mapAsync.V2">V2</span>)]</span>)</span><span class="result">: <span class="extype" name="org.apache.kafka.streams.scala.kstream.KStream">KStream</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.mapAsync.K2">K2</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.mapAsync.V2">V2</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">An async version of the regular kafka streams map DSL function.</p><div class="fullcomment"><div class="comment cmt"><p>An async version of the regular kafka streams map DSL function.
+Takes a function which returns a <code>Future[(K, V)]</code> rather than just
+a <code>(K, V)</code>.
+</p></div><dl class="paramcmts block"><dt class="param">commitInterval</dt><dd class="cmt"><p>The interval between commits to Kafka</p></dd><dt class="param">numWorkers</dt><dd class="cmt"><p>Max number of active Futures</p></dd><dt class="param">func</dt><dd class="cmt"><p>A function from <code>(K1, V1)</code> to <code>Future[(K2, V2)]</code></p></dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream#mapValuesAsync" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mapValuesAsync[V2](commitInterval:com.twitter.util.Duration,numWorkers:Int)(func:V1=&gt;com.twitter.util.Future[V2]):org.apache.kafka.streams.scala.kstream.KStream[K1,V2]"></a><a id="mapValuesAsync[V2](Duration,Int)((V1)⇒Future[V2]):KStream[K1,V2]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#mapValuesAsync[V2](commitInterval:com.twitter.util.Duration,numWorkers:Int)(func:V1=&gt;com.twitter.util.Future[V2]):org.apache.kafka.streams.scala.kstream.KStream[K1,V2]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mapValuesAsync</span><span class="tparams">[<span name="V2">V2</span>]</span><span class="params">(<span name="commitInterval">commitInterval: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>, <span name="numWorkers">numWorkers: <a href="https://www.scala-lang.org/api/2.12.11/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="params">(<span name="func">func: (<span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.V1">V1</span>) ⇒ <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.mapValuesAsync.V2">V2</span>]</span>)</span><span class="result">: <span class="extype" name="org.apache.kafka.streams.scala.kstream.KStream">KStream</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.K1">K1</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslFlatMapAsync.FlatMapAsyncKeyValueStream.mapValuesAsync.V2">V2</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">An async version of the regular kafka streams mapValues DSL function.</p><div class="fullcomment"><div class="comment cmt"><p>An async version of the regular kafka streams mapValues DSL function.
+Takes a function which returns a <code>Future[V]</code> rather than just
+a <code>V</code>.
+</p></div><dl class="paramcmts block"><dt class="param">commitInterval</dt><dd class="cmt"><p>The interval between commits to Kafka</p></dd><dt class="param">numWorkers</dt><dd class="cmt"><p>Max number of active Futures</p></dd><dt class="param">func</dt><dd class="cmt"><p>A function from <code>V1</code> to <code>Future[V2]</code></p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#ne(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -500,7 +579,7 @@
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#notify():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#notify():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -519,7 +598,7 @@
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#notifyAll():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#notifyAll():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -538,7 +617,7 @@
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -551,30 +630,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.twitter.finatra.kafkastreams.dsl.FinatraDslToCluster.FinatraKeyValueStream#toCluster" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toCluster(cluster:String,topic:com.twitter.finatra.kafka.domain.KafkaTopic,clientId:String,statsReceiver:com.twitter.finagle.stats.StatsReceiver,kafkaProducerConfig:com.twitter.finatra.kafka.producers.FinagleKafkaProducerConfig[K,V],commitInterval:com.twitter.util.Duration,flushTimeout:com.twitter.util.Duration,maxPendingEvents:Int)(implicitproduced:org.apache.kafka.streams.scala.kstream.Produced[K,V]):Unit"></a><a id="toCluster(String,KafkaTopic,String,StatsReceiver,FinagleKafkaProducerConfig[K,V],Duration,Duration,Int)(Produced[K,V]):Unit"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#toCluster(cluster:String,topic:com.twitter.finatra.kafka.domain.KafkaTopic,clientId:String,statsReceiver:com.twitter.finagle.stats.StatsReceiver,kafkaProducerConfig:com.twitter.finatra.kafka.producers.FinagleKafkaProducerConfig[K,V],commitInterval:com.twitter.util.Duration,flushTimeout:com.twitter.util.Duration,maxPendingEvents:Int)(implicitproduced:org.apache.kafka.streams.scala.kstream.Produced[K,V]):Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">toCluster</span><span class="params">(<span name="cluster">cluster: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="topic">topic: <a href="../../kafka/domain/KafkaTopic.html" class="extype" name="com.twitter.finatra.kafka.domain.KafkaTopic">KafkaTopic</a></span>, <span name="clientId">clientId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>, <span name="kafkaProducerConfig">kafkaProducerConfig: <a href="../../kafka/producers/FinagleKafkaProducerConfig.html" class="extype" name="com.twitter.finatra.kafka.producers.FinagleKafkaProducerConfig">FinagleKafkaProducerConfig</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslToCluster.FinatraKeyValueStream.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslToCluster.FinatraKeyValueStream.V">V</span>] = <span class="symbol">defaultFinagleKafkaProducerConfig</span></span>, <span name="commitInterval">commitInterval: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a> = <span class="symbol"><span class="name"><a href="../../../../index.html">1.minute</a></span></span></span>, <span name="flushTimeout">flushTimeout: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a> = <span class="symbol"><span class="name"><a href="../../../../index.html">Duration.Top</a></span></span></span>, <span name="maxPendingEvents">maxPendingEvents: <a href="https://www.scala-lang.org/api/2.12.11/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a> = <span class="symbol">1000</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="produced">produced: <span class="extype" name="org.apache.kafka.streams.scala.kstream.Produced">Produced</span>[<span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslToCluster.FinatraKeyValueStream.K">K</span>, <span class="extype" name="com.twitter.finatra.kafkastreams.dsl.FinatraDslToCluster.FinatraKeyValueStream.V">V</span>]</span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.11/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <p class="shortcomment cmt">Publishes events to a kafka topic on the specified cluster rather than the primary cluster.</p><div class="fullcomment"><div class="comment cmt"><p>Publishes events to a kafka topic on the specified cluster rather than the primary cluster.
-This call is needed because KafkaStreams does not natively provide the ability
-to publish to a cluster different from the cluster from whith it is consuming.
-Can only be used in at_least_once processing guarantee. Will not work with exactly_once.
-</p></div><dl class="paramcmts block"><dt class="param">cluster</dt><dd class="cmt"><p>Cluster to which events are published (wily path or host:port)</p></dd><dt class="param">topic</dt><dd class="cmt"><p>Topic to which events are published</p></dd><dt class="param">clientId</dt><dd class="cmt"><p>ClientId used in the FinagleKafkaProducer</p></dd><dt class="param">statsReceiver</dt><dd class="cmt"><p>StatsReceiver used both in the FinagleKafkaProducer and AsyncProcessor</p></dd><dt class="param">kafkaProducerConfig</dt><dd class="cmt"><p>Configuration used to configure the FinagleKafkaProducer</p></dd><dt class="param">commitInterval</dt><dd class="cmt"><p>Interval at which the AsyncProcessor performs commits</p></dd><dt class="param">flushTimeout</dt><dd class="cmt"><p>Timeout for which the AsyncProcessor waits for publishes to complete</p></dd><dt class="param">maxPendingEvents</dt><dd class="cmt"><p>Maximum number of events pending publishing</p></dd><dt class="param">produced</dt><dd class="cmt"><p>An [org.apache.kafka.streams.scala.Produced] to specify the serializers for the key &amp; value</p></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#toString():String" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#toString():String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -590,7 +649,7 @@ Can only be used in at_least_once processing guarantee. Will not work with exact
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#wait():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#wait():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -612,7 +671,7 @@ Can only be used in at_least_once processing guarantee. Will not work with exact
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -634,7 +693,7 @@ Can only be used in at_least_once processing guarantee. Will not work with exact
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslToCluster$FinatraKeyValueStream.html#wait(x$1:Long):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslFlatMapAsync$FlatMapAsyncKeyValueStream.html#wait(x$1:Long):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>

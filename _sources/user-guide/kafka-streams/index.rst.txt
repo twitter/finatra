@@ -5,6 +5,10 @@ Finatra Kafka Streams
 
 Finatra has native integration with `Kafka Streams <https://kafka.apache.org/documentation/streams>`__ to easily build Kafka Streams applications on top of a `TwitterServer <https://github.com/twitter/twitter-server>`__.
 
+.. note::
+
+    Versions of finatra-kafka and finatra-kafka-streams that are published against Scala 2.12 or 2.11 uses Kafka 2.2, versions of that are published against Scala 2.13 use Kafka 2.5. This simplified cross-version support is ephemeral until we can drop Kafka 2.2. 
+
 Features
 --------
 

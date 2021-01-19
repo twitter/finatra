@@ -60,7 +60,7 @@ When you set the `-local.doc.root` flag defined by the `FlagResolverModule` for 
 the |MustacheFactoryModule|_ will load templates from the local filesystem and the templates will be 
 **reloaded on every render** in order to aid in local development. 
 
-Note, that the interplay between the `mustache.temaplates.dir` and the `local.doc.root` flags is as follows:
+Note, that the interplay between the `mustache.templates.dir` and the `local.doc.root` flags is as follows:
 
 -  in "local file mode" (e.g., when the `-local.doc.root` flag is set to a **non-empty** value) the framework will 
    try to load a template first from the absolute path under `mustache.templates.dir`, e.g.,

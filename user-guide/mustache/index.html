@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Mustache Support &#8212; Finatra 20.12.0 documentation</title>
+    <title>Mustache Support &#8212; Finatra 21.1.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '20.12.0',
+        VERSION:     '21.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -115,7 +115,7 @@ class MyServer extends TwitterServer {
 <p>When you set the <cite>-local.doc.root</cite> flag defined by the <cite>FlagResolverModule</cite> for configuring the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/utils/FileResolver.scala"><cite>c.t.finatra.utils.FileResolver</cite></a>,
 the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/modules/MustacheFactoryModule.scala"><cite>c.t.finatra.mustache.modules.MustacheFactoryModule</cite></a> will load templates from the local filesystem and the templates will be
 <strong>reloaded on every render</strong> in order to aid in local development.</p>
-<p>Note, that the interplay between the <cite>mustache.temaplates.dir</cite> and the <cite>local.doc.root</cite> flags is as follows:</p>
+<p>Note, that the interplay between the <cite>mustache.templates.dir</cite> and the <cite>local.doc.root</cite> flags is as follows:</p>
 <ul>
 <li><p class="first">in “local file mode” (e.g., when the <cite>-local.doc.root</cite> flag is set to a <strong>non-empty</strong> value) the framework will
 try to load a template first from the absolute path under <cite>mustache.templates.dir</cite>, e.g.,</p>
@@ -199,7 +199,7 @@ section.</p>
   
 
   <div class="footer">
-    &copy; Copyright 2013-2020 Twitter, Inc.
+    &copy; Copyright 2013-2021 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

@@ -323,25 +323,6 @@ should use the <a href="ThriftRouter.html" class="extype" name="com.twitter.fina
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.routing.JavaThriftRouter#add" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="add(controller:com.twitter.finagle.thrift.AbstractThriftService,protocolFactory:org.apache.thrift.protocol.TProtocolFactory):com.twitter.finatra.thrift.routing.JavaThriftRouter"></a><a id="add(AbstractThriftService,TProtocolFactory):JavaThriftRouter"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/routing/JavaThriftRouter.html#add(controller:com.twitter.finagle.thrift.AbstractThriftService,protocolFactory:org.apache.thrift.protocol.TProtocolFactory):com.twitter.finatra.thrift.routing.JavaThriftRouter" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">add</span><span class="params">(<span name="controller">controller: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/AbstractThriftService.html#com.twitter.finagle.thrift.AbstractThriftService" class="extype" name="com.twitter.finagle.thrift.AbstractThriftService">AbstractThriftService</a></span>, <span name="protocolFactory">protocolFactory: <span class="extype" name="org.apache.thrift.protocol.TProtocolFactory">TProtocolFactory</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.JavaThriftRouter">JavaThriftRouter</a></span>
-      </span>
-      
-      <p class="shortcomment cmt">Add controller used for all requests for usage from Java.</p><div class="fullcomment"><div class="comment cmt"><p>Add controller used for all requests for usage from Java. The <a href="ThriftRouter.html" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a> only supports a
-single controller, so <code>add</code> may only be called once.
-</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>We do not apply filters per-method but instead all filters are applied across the service.
-      thus &quot;per-method&quot; metrics will be scoped to the controller name (Class#getSimpleName).</p></span></dd><dt>See also</dt><dd><span class="cmt"><p>the <a href="https://twitter.github.io/finatra/user-guide/thrift/controllers.html" target="_blank">user guide</a></p></span></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.routing.JavaThriftRouter#add" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="add(controller:com.twitter.finagle.thrift.AbstractThriftService):com.twitter.finatra.thrift.routing.JavaThriftRouter"></a><a id="add(AbstractThriftService):JavaThriftRouter"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/thrift/routing/JavaThriftRouter.html#add(controller:com.twitter.finagle.thrift.AbstractThriftService):com.twitter.finatra.thrift.routing.JavaThriftRouter" title="Permalink">
@@ -354,24 +335,6 @@ single controller, so <code>add</code> may only be called once.
       </span>
       <span class="symbol">
         <span class="name">add</span><span class="params">(<span name="controller">controller: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/AbstractThriftService.html#com.twitter.finagle.thrift.AbstractThriftService" class="extype" name="com.twitter.finagle.thrift.AbstractThriftService">AbstractThriftService</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.JavaThriftRouter">JavaThriftRouter</a></span>
-      </span>
-      
-      <p class="shortcomment cmt">Add controller used for all requests for usage from Java.</p><div class="fullcomment"><div class="comment cmt"><p>Add controller used for all requests for usage from Java. The <a href="ThriftRouter.html" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a> only supports
-a single controller, so <code>add</code> may only be called once.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>the <a href="https://twitter.github.io/finatra/user-guide/thrift/controllers.html" target="_blank">user guide</a></p></span></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.routing.JavaThriftRouter#add" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="add(controller:Class[_&lt;:com.twitter.finagle.thrift.AbstractThriftService],protocolFactory:org.apache.thrift.protocol.TProtocolFactory):com.twitter.finatra.thrift.routing.JavaThriftRouter"></a><a id="add(Class[_&lt;:AbstractThriftService],TProtocolFactory):JavaThriftRouter"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/routing/JavaThriftRouter.html#add(controller:Class[_&lt;:com.twitter.finagle.thrift.AbstractThriftService],protocolFactory:org.apache.thrift.protocol.TProtocolFactory):com.twitter.finatra.thrift.routing.JavaThriftRouter" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">add</span><span class="params">(<span name="controller">controller: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/AbstractThriftService.html#com.twitter.finagle.thrift.AbstractThriftService" class="extype" name="com.twitter.finagle.thrift.AbstractThriftService">AbstractThriftService</a>]</span>, <span name="protocolFactory">protocolFactory: <span class="extype" name="org.apache.thrift.protocol.TProtocolFactory">TProtocolFactory</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.JavaThriftRouter">JavaThriftRouter</a></span>
       </span>
       
       <p class="shortcomment cmt">Add controller used for all requests for usage from Java.</p><div class="fullcomment"><div class="comment cmt"><p>Add controller used for all requests for usage from Java. The <a href="ThriftRouter.html" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a> only supports a
@@ -393,9 +356,10 @@ single controller, so <code>add</code> may only be called once.
         <span class="name">add</span><span class="params">(<span name="controller">controller: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/AbstractThriftService.html#com.twitter.finagle.thrift.AbstractThriftService" class="extype" name="com.twitter.finagle.thrift.AbstractThriftService">AbstractThriftService</a>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.JavaThriftRouter">JavaThriftRouter</a></span>
       </span>
       
-      <p class="shortcomment cmt">Add controller used for all requests for usage from Java.</p><div class="fullcomment"><div class="comment cmt"><p>Add controller used for all requests for usage from Java. The <a href="ThriftRouter.html" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a> only supports
-a single controller, so <code>add</code> may only be called once.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>the <a href="https://twitter.github.io/finatra/user-guide/thrift/controllers.html" target="_blank">user guide</a></p></span></dd></dl></div>
+      <p class="shortcomment cmt">Add controller used for all requests for usage from Java.</p><div class="fullcomment"><div class="comment cmt"><p>Add controller used for all requests for usage from Java. The <a href="ThriftRouter.html" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a> only supports a
+single controller, so <code>add</code> may only be called once.
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>We do not apply filters per-method but instead all filters are applied across the service.
+      thus &quot;per-method&quot; metrics will be scoped to the controller name (Class#getSimpleName).</p></span></dd><dt>See also</dt><dd><span class="cmt"><p>the <a href="https://twitter.github.io/finatra/user-guide/thrift/controllers.html" target="_blank">user guide</a></p></span></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
@@ -454,6 +418,22 @@ a single controller, so <code>add</code> may only be called once.
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.routing.JavaThriftRouter#createService" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="createService(params:com.twitter.finagle.thrift.RichServerParam):com.twitter.finagle.Service[Array[Byte],Array[Byte]]"></a><a id="createService(RichServerParam):Service[Array[Byte],Array[Byte]]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/JavaThriftRouter.html#createService(params:com.twitter.finagle.thrift.RichServerParam):com.twitter.finagle.Service[Array[Byte],Array[Byte]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createService</span><span class="params">(<span name="params">params: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/RichServerParam.html#com.twitter.finagle.thrift.RichServerParam" class="extype" name="com.twitter.finagle.thrift.RichServerParam">RichServerParam</a></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.Service">Service</span>[<a href="https://www.scala-lang.org/api/2.12.11/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<a href="https://www.scala-lang.org/api/2.12.11/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>], <a href="https://www.scala-lang.org/api/2.12.11/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<a href="https://www.scala-lang.org/api/2.12.11/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]]</span>
+      </span>
+      
+      
     </li><li name="com.twitter.util.logging.Logging#debug" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debug(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="debug(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
@@ -1271,22 +1251,6 @@ via <code>filter</code>.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>BaseThriftRouter</dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.routing.JavaThriftRouter#service" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="service:com.twitter.finagle.Service[Array[Byte],Array[Byte]]"></a><a id="service:Service[Array[Byte],Array[Byte]]"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/routing/JavaThriftRouter.html#service:com.twitter.finagle.Service[Array[Byte],Array[Byte]]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">service</span><span class="result">: <span class="extype" name="com.twitter.finagle.Service">Service</span>[<a href="https://www.scala-lang.org/api/2.12.11/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<a href="https://www.scala-lang.org/api/2.12.11/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>], <a href="https://www.scala-lang.org/api/2.12.11/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<a href="https://www.scala-lang.org/api/2.12.11/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]]</span>
-      </span>
-      
-      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
