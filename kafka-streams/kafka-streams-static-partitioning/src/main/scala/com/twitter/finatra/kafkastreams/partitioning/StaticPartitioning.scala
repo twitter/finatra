@@ -2,9 +2,12 @@ package com.twitter.finatra.kafkastreams.partitioning
 
 import com.twitter.app.Flag
 import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
+import com.twitter.finatra.kafkastreams.config.KafkaStreamsConfig
 import com.twitter.finatra.kafkastreams.partitioning.internal.StaticPartitioningKafkaClientSupplierSupplier
 import com.twitter.finatra.streams.queryable.thrift.domain.ServiceShardId
 import org.apache.kafka.streams.KafkaClientSupplier
+import org.apache.kafka.common.utils.Utils
+import org.apache.kafka.common.utils.AppInfoParser
 import scala.util.control.NonFatal
 
 object StaticPartitioning {
@@ -40,11 +43,22 @@ trait StaticPartitioning extends KafkaStreamsTwitterServer {
       "Total number of instances for static partitioning"
     )
 
+  override def streamsProperties(
+    config: KafkaStreamsConfig
+  ): KafkaStreamsConfig = {
+    val configReturn = super.streamsProperties(config)
+    if (AppInfoParser.getVersion().startsWith("2.5")) {
+      val applicationServerHost = Utils.getHost(applicationServerConfig())
+      val serviceShardId = StaticPartitioning.parseShardId(applicationServerHost)
+      configReturn.consumer.groupInstanceId(serviceShardId.id.toString)
+    } else {
+      configReturn
+    }
+  }
+
   /* Protected */
 
   override def kafkaStreamsClientSupplier: KafkaClientSupplier = {
-    new StaticPartitioningKafkaClientSupplierSupplier(
-      numApplicationInstances(),
-      applicationServerConfig())
+    new StaticPartitioningKafkaClientSupplierSupplier(numApplicationInstances())
   }
 }

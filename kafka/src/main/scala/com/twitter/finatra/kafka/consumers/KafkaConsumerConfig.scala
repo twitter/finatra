@@ -161,6 +161,11 @@ trait KafkaConsumerConfigMethods[Self] extends KafkaConfigMethods[Self] with Log
   def sessionTimeout(duration: Duration): This =
     withConfig(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, duration)
 
+  // Use "group.instance.id" now as ConsumerConfig.GROUP_INSTANCE_ID_CONFIG is ony defined
+  // from 2.4+
+  def groupInstanceId(instanceId: String): This =
+    withConfig("group.instance.id", instanceId)
+
   // Unsupported. Pass instances directly to the consumer instead.
   // ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG
   // ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG

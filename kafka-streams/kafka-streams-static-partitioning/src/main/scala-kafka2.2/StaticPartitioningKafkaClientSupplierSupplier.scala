@@ -5,8 +5,7 @@ import org.apache.kafka.clients.consumer._
 import org.apache.kafka.streams.processor.internals.DefaultKafkaClientSupplier
 
 class StaticPartitioningKafkaClientSupplierSupplier(
-  numApplicationInstances: Int,
-  serverConfig: String)
+  numApplicationInstances: Int)
     extends DefaultKafkaClientSupplier {
 
   override def getConsumer(config: util.Map[String, AnyRef]): Consumer[Array[Byte], Array[Byte]] = {
