@@ -4,7 +4,7 @@ target(
     ],
 )
 
-target(
+test_suite(
     name = "tests",
     dependencies = [
         "finatra/examples/advanced/twitter-clone/src/test/scala",

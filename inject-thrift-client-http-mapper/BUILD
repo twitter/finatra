@@ -4,7 +4,7 @@ target(
     ],
 )
 
-target(
+test_suite(
     name = "tests",
     dependencies = [
         "finatra/inject-thrift-client-http-mapper/src/test/scala",

@@ -1,4 +1,4 @@
-target(
+test_suite(
     name = "tests",
     dependencies = [
         "finatra/inject/inject-app/src/test/scala/com/twitter/inject/app/tests",
