@@ -1,4 +1,5 @@
 java_library(
+    sources = [],
     compiler_option_sets = [],
     provides = artifact(
         org = "com.twitter",
