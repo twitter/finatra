@@ -107,6 +107,7 @@ lazy val versions = new {
   val scalaGuice = "4.2.11"
   val scalaTest = "3.1.2"
   val scalaTestPlusJunit = "3.1.2.0"
+  val scalaTestPlusMockito = "3.1.2.0"
   val scalaTestPlusScalaCheck = "3.1.2.0"
   val servletApi = "2.5"
   val slf4j = "1.7.30"
@@ -150,6 +151,7 @@ lazy val testDependenciesSettings = Seq(
     "org.scalacheck" %% "scalacheck" % versions.scalaCheck % Test,
     "org.scalatest" %% "scalatest" % versions.scalaTest % Test,
     "org.scalatestplus" %% "junit-4-12" % versions.scalaTestPlusJunit % Test,
+    "org.scalatestplus" %% "mockito-3-2" % versions.scalaTestPlusMockito % Test,
     "org.scalatestplus" %% "scalacheck-1-14" % versions.scalaTestPlusScalaCheck % Test
   )
 )

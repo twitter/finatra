@@ -7,6 +7,13 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+
+* finatra-kafka: Poll in a Future for Metadata when sending instead of blocking. This prevents
+  the `FinagleKafkaProducer` from blocking during normal sending operations, even when
+  metadata isn't available or the message buffer is full. ``PHAB_ID=D597313``
+
 21.1.0
 ------
 
