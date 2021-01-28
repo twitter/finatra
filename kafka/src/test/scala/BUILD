@@ -1,10 +1,8 @@
 junit_tests(
     sources = [
         "com/twitter/finatra/kafka/consumers/*.scala",
-        "com/twitter/finatra/kafka/producers/*.scala",
         "com/twitter/finatra/kafka/serde/*.scala",
         "com/twitter/finatra/kafka/test/integration/*.scala",
-        "com/twitter/finatra/kafka/utils/*.scala",
     ],
     compiler_option_sets = ["fatal_warnings"],
     strict_deps = True,
@@ -13,7 +11,6 @@ junit_tests(
         "3rdparty/jvm/org/apache/zookeeper:zookeeper-server",
         "3rdparty/jvm/org/mockito:mockito-core",
         "3rdparty/jvm/org/scalatestplus:junit",
-        "3rdparty/jvm/org/scalatestplus:mockito-3-2",
         scoped(
             "3rdparty/jvm/org/slf4j:slf4j-simple",
             scope = "runtime",
