@@ -30,6 +30,7 @@ import com.twitter.io.Buf;
 import com.twitter.io.BufReaders;
 import com.twitter.io.Bufs;
 import com.twitter.io.Reader;
+import com.twitter.io.Reader$;
 import com.twitter.io.Readers;
 import com.twitter.io.StreamTermination;
 import com.twitter.util.Await;
@@ -107,14 +108,32 @@ public class StreamingResponseJavaTest extends Assert {
     Assert.assertEquals("[{\"v1\":1,\"v2\":\"first\"},{\"v1\":2,\"v2\":\"second\"}]", result);
   }
 
+//  @Test
+//  public void readerWriteFailureWithReaderDicardedException() throws Exception {
+//    Reader<Buf> reader = infiniteReader(Bufs.UTF_8.apply("foo"));
+//    Response response = fromReader(reader, ManifestFactory.<Buf>classType(Buf.class));
+//    response.reader().discard();
+//    burnLoop(response.reader());
+//    Assert.assertEquals(
+//        await(response.reader().onClose()), StreamTermination.Discarded$.MODULE$);
+//  }
+
   @Test
-  public void readerWriteFailureWithReaderDicardedException() throws Exception {
-    Reader<Buf> reader = infiniteReader(Bufs.UTF_8.apply("foo"));
-    Response response = fromReader(reader, ManifestFactory.<Buf>classType(Buf.class));
-    response.reader().discard();
-    burnLoop(response.reader());
-    Assert.assertEquals(
-        await(response.reader().onClose()), StreamTermination.Discarded$.MODULE$);
+  public void shouldSucceed213(){
+    Buf buf = Bufs.UTF_8.apply("foo");
+    Stream<Buf> infiniteStream = Stream.iterate(buf, i -> i.concat(buf));
+    Reader<Buf> reader = Reader$.MODULE$.fromSeq(JavaConverters.asScalaIteratorConverter(infiniteStream.iterator())
+        .asScala().toStream());
+    reader.read();
+  }
+
+  @Test
+  public void shouldFail213(){
+    Buf buf = Bufs.UTF_8.apply("foo");
+    Stream<Buf> infiniteStream = Stream.iterate(buf, i -> i.concat(buf));
+    Reader<Buf> reader = Reader$.MODULE$.fromSeq(JavaConverters.asScalaIteratorConverter(infiniteStream.iterator())
+        .asScala().toSeq());
+    reader.read();
   }
 
   @SuppressWarnings("rawtypes")
