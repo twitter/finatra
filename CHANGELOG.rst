@@ -10,6 +10,8 @@ Unreleased
 Changed
 ~~~~~~~
 
+* finatra: all subprojects cross-building with 2.13.1. ``PHAB_ID=D613483``
+
 * kafkaStreams: Enables cross-build for 2.13.1 for projects kafkaStreamsStaticPartitioning,
   kafkaStreamsPrerestore, and kafkaStreamsQueryableThrift. ``PHAB_ID=D608958``
 

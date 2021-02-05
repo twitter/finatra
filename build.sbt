@@ -9,10 +9,17 @@ val releaseVersion = "21.2.0-SNAPSHOT"
 lazy val buildSettings = Seq(
   version := releaseVersion,
   scalaVersion := "2.12.11",
-  crossScalaVersions := Seq("2.11.12", "2.12.11"),
+  crossScalaVersions := Seq("2.11.12", "2.12.11", "2.13.1"),
   scalaModuleInfo := scalaModuleInfo.value.map(_.withOverrideScalaVersion(true)),
   fork in Test := true, // We have to fork to get the JavaOptions
-  javaOptions in Test ++= travisTestJavaOptions
+  javaOptions in Test ++= travisTestJavaOptions,
+  scalacOptions := {
+    val previous = scalacOptions.value
+    if (scalaVersion.value.startsWith("2.11")) {
+      previous.filterNot(_ == "-Ywarn-unused:imports") ++ Seq("-Ywarn-unused-import")
+    } else previous
+  },
+  libraryDependencies += scalaCollectionCompat
 )
 
 lazy val noPublishSettings = Seq(
@@ -118,17 +125,6 @@ lazy val versions = new {
 
 lazy val scalaCollectionCompat = "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.2"
 
-lazy val withTwoThirteen = Seq(
-  crossScalaVersions += "2.13.1",
-  libraryDependencies += scalaCollectionCompat,
-  scalacOptions := {
-    val previous = scalacOptions.value
-    if (scalaVersion.value.startsWith("2.13")) {
-      previous.filterNot(_ == "-Ywarn-unused-import") ++ Seq("-Ywarn-unused:imports")
-    } else previous
-  }
-)
-
 lazy val scalaCompilerOptions = scalacOptions ++= Seq(
   "-deprecation",
   "-encoding",
@@ -141,7 +137,7 @@ lazy val scalaCompilerOptions = scalacOptions ++= Seq(
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
   "-Xlint",
-  "-Ywarn-unused-import"
+  "-Ywarn-unused:imports"
 )
 
 lazy val testDependenciesSettings = Seq(
@@ -382,7 +378,7 @@ lazy val injectCoreTestJarSources =
     "com/twitter/inject/WhenReadyMixin"
   )
 lazy val injectCore = (project in file("inject/inject-core"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "inject-core",
     moduleName := "inject-core",
@@ -420,7 +416,7 @@ lazy val injectCore = (project in file("inject/inject-core"))
   )
 
 lazy val injectStack = (project in file("inject/inject-stack"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "inject-stack",
     moduleName := "inject-stack",
@@ -430,7 +426,7 @@ lazy val injectStack = (project in file("inject/inject-stack"))
   )
 
 lazy val injectLogback = (project in file("inject/inject-logback"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "inject-logback",
     moduleName := "inject-logback",
@@ -455,7 +451,7 @@ lazy val injectLogback = (project in file("inject/inject-logback"))
 lazy val injectModulesTestJarSources =
   Seq("com/twitter/inject/modules/InMemoryStatsReceiverModule")
 lazy val injectModules = (project in file("inject/inject-modules"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "inject-modules",
     moduleName := "inject-modules",
@@ -494,7 +490,7 @@ lazy val injectAppTestJarSources =
     "com/twitter/inject/app/TestInjector"
   )
 lazy val injectApp = (project in file("inject/inject-app"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "inject-app",
     moduleName := "inject-app",
@@ -534,7 +530,7 @@ lazy val injectApp = (project in file("inject/inject-app"))
   )
 
 lazy val injectDtab = (project in file("inject/inject-dtab"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "inject-dtab",
     moduleName := "inject-dtab",
@@ -546,7 +542,7 @@ lazy val injectDtab = (project in file("inject/inject-dtab"))
   )
 
 lazy val injectPorts = (project in file("inject/inject-ports"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "inject-ports",
     moduleName := "inject-ports",
@@ -571,7 +567,7 @@ lazy val injectServerTestJarSources =
     "com/twitter/inject/server/package"
   )
 lazy val injectServer = (project in file("inject/inject-server"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "inject-server",
     moduleName := "inject-server",
@@ -603,7 +599,7 @@ lazy val injectServer = (project in file("inject/inject-server"))
   )
 
 lazy val injectMdc = (project in file("inject/inject-mdc"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "inject-mdc",
     moduleName := "inject-mdc",
@@ -620,7 +616,7 @@ lazy val injectMdc = (project in file("inject/inject-mdc"))
   )
 
 lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "inject-slf4j",
     moduleName := "inject-slf4j",
@@ -633,7 +629,7 @@ lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
   )
 
 lazy val injectRequestScope = (project in file("inject/inject-request-scope"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "inject-request-scope",
     moduleName := "inject-request-scope",
@@ -647,7 +643,7 @@ lazy val injectRequestScope = (project in file("inject/inject-request-scope"))
   )
 
 lazy val injectThrift = (project in file("inject/inject-thrift"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "inject-thrift",
     moduleName := "inject-thrift",
@@ -667,7 +663,7 @@ lazy val injectThrift = (project in file("inject/inject-thrift"))
   )
 
 lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "inject-thrift-client",
     moduleName := "inject-thrift-client",
@@ -693,7 +689,7 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
   )
 
 lazy val injectUtils = (project in file("inject/inject-utils"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "inject-utils",
     moduleName := "inject-utils",
@@ -730,7 +726,7 @@ lazy val injectUtils = (project in file("inject/inject-utils"))
  * optimizations.
  */
 lazy val benchmarks = project
-  .settings(baseServerSettings, withTwoThirteen)
+  .settings(baseServerSettings)
   .enablePlugins(JmhPlugin)
   .settings(
     libraryDependencies ++= Seq("org.slf4j" % "slf4j-simple" % versions.slf4j % Test)
@@ -747,7 +743,7 @@ lazy val benchmarks = project
 lazy val utilsTestJarSources =
   Seq("com/twitter/finatra/modules/", "com/twitter/finatra/test/")
 lazy val utils = project
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "finatra-utils",
     moduleName := "finatra-utils",
@@ -786,7 +782,7 @@ lazy val validationTestJarSources =
     "com/twitter/finatra/validation/ValidatorTest"
   )
 lazy val validation = project
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "finatra-validation",
     moduleName := "finatra-validation",
@@ -828,7 +824,7 @@ lazy val jacksonTestJarSources =
     "com/twitter/finatra/json/JsonDiff"
   )
 lazy val jackson = project
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "finatra-jackson",
     moduleName := "finatra-jackson",
@@ -872,7 +868,7 @@ lazy val jackson = project
   )
 
 lazy val jsonAnnotations = (project in file("json-annotations"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "finatra-json-annotations",
     moduleName := "finatra-json-annotations",
@@ -882,7 +878,7 @@ lazy val jsonAnnotations = (project in file("json-annotations"))
   )
 
 lazy val mustache = project
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "finatra-mustache",
     moduleName := "finatra-mustache",
@@ -913,7 +909,7 @@ lazy val httpTestJarSources =
     "com/twitter/finatra/http/response/DefaultResponseBuilder"
   )
 lazy val http = project
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "finatra-http",
     moduleName := "finatra-http",
@@ -958,7 +954,7 @@ lazy val http = project
   )
 
 lazy val httpAnnotations = (project in file("http-annotations"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "finatra-http-annotations",
     moduleName := "finatra-http-annotations"
@@ -967,7 +963,7 @@ lazy val httpAnnotations = (project in file("http-annotations"))
   )
 
 lazy val httpMustache = (project in file("http-mustache"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "finatra-http-mustache",
     moduleName := "finatra-http-mustache",
@@ -991,7 +987,7 @@ lazy val httpMustache = (project in file("http-mustache"))
 lazy val httpclientTestJarSources =
   Seq("com/twitter/finatra/httpclient/test/")
 lazy val httpclient = project
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "finatra-httpclient",
     moduleName := "finatra-httpclient",
@@ -1029,7 +1025,7 @@ lazy val thriftTestJarSources =
     "com/twitter/finatra/thrift/ThriftClient",
     "com/twitter/finatra/thrift/ThriftTest")
 lazy val thrift = project
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "finatra-thrift",
     moduleName := "finatra-thrift",
@@ -1071,7 +1067,7 @@ lazy val thrift = project
   )
 
 lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-http-mapper"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "inject-thrift-client-http-mapper",
     moduleName := "inject-thrift-client-http-mapper",
@@ -1138,7 +1134,7 @@ def crossVersionKafka(
 }
 
 lazy val kafka = (project in file("kafka"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "finatra-kafka",
     moduleName := "finatra-kafka",
@@ -1184,7 +1180,7 @@ lazy val kafka = (project in file("kafka"))
 
 lazy val kafkaStreamsQueryableThriftClient =
   (project in file("kafka-streams/kafka-streams-queryable-thrift-client"))
-    .settings(projectSettings, withTwoThirteen)
+    .settings(projectSettings)
     .settings(
       name := "finatra-kafka-streams-queryable-thrift-client",
       moduleName := "finatra-kafka-streams-queryable-thrift-client",
@@ -1206,7 +1202,7 @@ lazy val kafkaStreamsQueryableThriftClient =
 
 lazy val kafkaStreamsStaticPartitioning =
   (project in file("kafka-streams/kafka-streams-static-partitioning"))
-    .settings(projectSettings, withTwoThirteen)
+    .settings(projectSettings)
     .settings(
       name := "finatra-kafka-streams-static-partitioning",
       moduleName := "finatra-kafka-streams-static-partitioning",
@@ -1240,7 +1236,7 @@ lazy val kafkaStreamsStaticPartitioning =
     )
 
 lazy val kafkaStreamsPrerestore = (project in file("kafka-streams/kafka-streams-prerestore"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "finatra-kafka-streams-prerestore",
     moduleName := "finatra-kafka-streams-prerestore",
@@ -1258,7 +1254,7 @@ lazy val kafkaStreamsPrerestore = (project in file("kafka-streams/kafka-streams-
 
 lazy val kafkaStreamsQueryableThrift =
   (project in file("kafka-streams/kafka-streams-queryable-thrift"))
-    .settings(projectSettings, withTwoThirteen)
+    .settings(projectSettings)
     .settings(
       name := "finatra-kafka-streams-queryable-thrift",
       moduleName := "finatra-kafka-streams-queryable-thrift",
@@ -1278,7 +1274,7 @@ lazy val kafkaStreamsQueryableThrift =
     )
 
 lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))
-  .settings(projectSettings, withTwoThirteen)
+  .settings(projectSettings)
   .settings(
     name := "finatra-kafka-streams",
     moduleName := "finatra-kafka-streams",

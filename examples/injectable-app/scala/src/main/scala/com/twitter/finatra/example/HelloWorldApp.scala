@@ -51,5 +51,5 @@ class SampleApp extends App {
     queue += 6
   }
 
-  def getQueue: Seq[Int] = this.queue
+  def getQueue: Seq[Int] = this.queue.toSeq
 }
