@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Explicit Binding with #bind[T] &#8212; Finatra 21.1.0 documentation</title>
+    <title>Explicit Binding with #bind[T] &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -68,21 +60,21 @@
           <div class="body" role="main">
             
   <div class="section" id="explicit-binding-with-bind-t">
-<span id="bind-dsl"></span><h1>Explicit Binding with <code class="docutils literal"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#explicit-binding-with-bind-t" title="Permalink to this headline">¶</a></h1>
+<span id="bind-dsl"></span><h1>Explicit Binding with <code class="docutils literal notranslate"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#explicit-binding-with-bind-t" title="Permalink to this headline">¶</a></h1>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
 <p class="last">Please see the section on including test-jar dependencies in your project:
 <a class="reference external" href="../..#test-dependencies">Test Dependencies</a>.</p>
 </div>
 <div class="section" id="embedded-bind-t">
-<h2>Embedded <code class="docutils literal"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#embedded-bind-t" title="Permalink to this headline">¶</a></h2>
+<h2>Embedded <code class="docutils literal notranslate"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#embedded-bind-t" title="Permalink to this headline">¶</a></h2>
 <p>In the cases where we’d like to easily replace a bound instance with another instance in our tests
 (e.g. with a mock or a simple stub implementation), we do not need to create a specific module
 for testing to compose into our server as an override module. Instead we can use the <cite>#bind[T]</cite>
 function on the embedded server.</p>
 <p>This is especially useful if you want to replace a bound instance with a mock under control of the
 test.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.mock.Mockito
 
@@ -110,7 +102,7 @@ class ExampleFeatureTest
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/examples/advanced/twitter-clone/src/test/scala/finatra/quickstart/TwitterCloneFeatureTest.scala">TwitterCloneFeatureTest</a>.</p>
 <p>Note this is also available for <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala">EmbeddedApp</a>
 as well:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.stats.InMemoryStatsReceiver
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.inject.Test
 import com.twitter.inject.app.EmbeddedApp
 import com.twitter.util.mock.Mockito
@@ -138,13 +130,13 @@ class MyAppTest extends Test with Mockito {
 </div>
 </div>
 <div class="section" id="testinjector-bind-t">
-<h2>TestInjector <code class="docutils literal"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#testinjector-bind-t" title="Permalink to this headline">¶</a></h2>
+<h2>TestInjector <code class="docutils literal notranslate"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#testinjector-bind-t" title="Permalink to this headline">¶</a></h2>
 <p>As described in the <a class="reference external" href="./integration_tests.html">Integration Tests</a> section you can use the
 <a class="reference external" href="./integration_tests.html#id2"><cite>TestInjector</cite></a> to construct a minimal object graph for testing. The <cite>TestInjector</cite> also supports a
 <cite>bind[T]</cite> function to let you replace bound instances in the constructed object graph with another
 instance, like a mock or stub.</p>
 <p>E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.IntegrationTest
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.IntegrationTest
 
 class ExampleIntegrationTest extends IntegrationTest {
   val mockIdService = mock[IdService]
@@ -171,7 +163,7 @@ example, see the <a class="reference external" href="https://github.com/twitter/
 <h2><a class="reference external" href="https://github.com/twitter/finatra/tree/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/BindDSL.scala"><cite>#bind[T]</cite></a> DSL<a class="headerlink" href="#bind-t-dsl" title="Permalink to this headline">¶</a></h2>
 <p>The primary DSL can be expressed as such (and is similar to the Guice <a class="reference external" href="https://github.com/google/guice/wiki/LinkedBindings">Linked</a>
 and <a class="reference external" href="https://github.com/google/guice/wiki/InstanceBindings">Instance</a> bindings):</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>bind[T].to[U &lt;: T]
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>bind[T].to[U &lt;: T]
 bind[T].to[Class[U &lt;: T]]
 bind[T].toInstance(T)
 
@@ -204,7 +196,7 @@ bindClass(Class[T]).annotatedWith(Annotation).toInstance(T)
 <div class="section" id="usage-from-java">
 <h2>Usage from Java<a class="headerlink" href="#usage-from-java" title="Permalink to this headline">¶</a></h2>
 <p>The <cite>#bind[T]</cite> DSL also provides several Java-friendly methods for binding:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>bindClass(Class[T], T)
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>bindClass(Class[T], T)
 bindClass(Class[T], Annotation, T)
 bindClass(Class[T], Class[Annotation], T)
 
@@ -214,7 +206,7 @@ bindClass(Class[T], Class[Annotation], Class[U &lt;: T])
 </pre></div>
 </div>
 <p>Example:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>import java.util.Collections;
+<div class="code java highlight-text notranslate"><div class="highlight"><pre><span></span>import java.util.Collections;
 
 import com.google.inject.Stage;
 
@@ -273,7 +265,7 @@ graph under test.</p>
 annotation with the <a class="reference external" href="https://github.com/google/guice/wiki/BoundFields">BoundFieldModule</a>) on a
 test member field then using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">c.t.inject.Injector</a>
 of the server, application or <a class="reference external" href="./integration_tests.html#id2"><cite>TestInjector</cite></a> under test to do <cite>injector.underlying.injectMembers(this)</cite>.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyIntegrationTest extends IntegrationTest {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class MyIntegrationTest extends IntegrationTest {
 
   // THIS IS NOT RECOMMENDED
   @Bind(to = classOf[StubBarImp]) private val bar: Bar
@@ -295,7 +287,7 @@ of the server, application or <a class="reference external" href="./integration_
 </pre></div>
 </div>
 <p>Or you could choose to do the test class member injection in a <cite>beforeAll</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyIntegrationTest extends IntegrationTest {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class MyIntegrationTest extends IntegrationTest {
 
   // THIS IS NOT RECOMMENDED
   @Bind(to = classOf[StubBarImp]) private val bar: Bar
@@ -320,7 +312,7 @@ of the server, application or <a class="reference external" href="./integration_
 </pre></div>
 </div>
 <p>Or with a <a class="reference external" href="./feature_tests.html">FeatureTest</a>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyFeatureTest extends FeatureTest {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class MyFeatureTest extends FeatureTest {
   // THIS IS NOT RECOMMENDED
   @Inject val fakeFilesystem: Filesystem
   @Inject val mockSubsystem: Subsystem
@@ -384,7 +376,7 @@ instances from the appropriate object graph over using the indirection of inject
 this way, all object graphs are established at instantiation of the test member making it easier to
 reason about the test lifecycle.</p>
 <p>For example:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyIntegrationTest extends IntegrationTest {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class MyIntegrationTest extends IntegrationTest {
 
   private val mockDatasource = mock[DatasourceImplementation]
 
@@ -413,7 +405,7 @@ reason about the test lifecycle.</p>
 </pre></div>
 </div>
 <p>Or with a <a class="reference external" href="./feature_tests.html">FeatureTest</a>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyFeatureTest extends FeatureTest {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class MyFeatureTest extends FeatureTest {
 
   // create an object graph for obtaining test fixtures, `OurIntegrationTestModule`
   // provides bindings for `Filesystem` and `Subsystem`
@@ -485,11 +477,11 @@ obtained from the appropriate object graph for use in testing.</p>
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Explicit Binding with <code class="docutils literal"><span class="pre">#bind[T]</span></code></a><ul>
-<li><a class="reference internal" href="#embedded-bind-t">Embedded <code class="docutils literal"><span class="pre">#bind[T]</span></code></a></li>
-<li><a class="reference internal" href="#testinjector-bind-t">TestInjector <code class="docutils literal"><span class="pre">#bind[T]</span></code></a></li>
+<li><a class="reference internal" href="#">Explicit Binding with <code class="docutils literal notranslate"><span class="pre">#bind[T]</span></code></a><ul>
+<li><a class="reference internal" href="#embedded-bind-t">Embedded <code class="docutils literal notranslate"><span class="pre">#bind[T]</span></code></a></li>
+<li><a class="reference internal" href="#testinjector-bind-t">TestInjector <code class="docutils literal notranslate"><span class="pre">#bind[T]</span></code></a></li>
 <li><a class="reference internal" href="#bind-t-dsl"><cite>#bind[T]</cite> DSL</a></li>
 <li><a class="reference internal" href="#usage-from-java">Usage from Java</a></li>
 <li><a class="reference internal" href="#injecting-members-of-a-test">Injecting Members of a Test</a><ul>

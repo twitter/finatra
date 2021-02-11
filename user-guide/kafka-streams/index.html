@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Finatra Kafka Streams &#8212; Finatra 21.1.0 documentation</title>
+    <title>Finatra Kafka Streams &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -87,18 +79,18 @@
 <div class="section" id="basics">
 <h2>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
 <p>With <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/kafka-streams/kafka-streams/src/main/scala/com/twitter/finatra/kafkastreams/KafkaStreamsTwitterServer.scala">KafkaStreamsTwitterServer</a>,
-a fully functional service can be written by simply configuring the Kafka Streams Builder via the <code class="docutils literal"><span class="pre">configureKafkaStreams()</span></code> lifecycle method. See the <a class="reference external" href="examples.html">examples</a> section.</p>
+a fully functional service can be written by simply configuring the Kafka Streams Builder via the <code class="docutils literal notranslate"><span class="pre">configureKafkaStreams()</span></code> lifecycle method. See the <a class="reference external" href="examples.html">examples</a> section.</p>
 <div class="section" id="transformers">
 <h3>Transformers<a class="headerlink" href="#transformers" title="Permalink to this headline">¶</a></h3>
 <p>Implement custom <a class="reference external" href="https://kafka.apache.org/21/javadoc/org/apache/kafka/streams/kstream/Transformer.html">transformers</a> using <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/kafka-streams/kafka-streams/src/main/scala/com/twitter/finatra/kafkastreams/transformer/FinatraTransformer.scala">FinatraTransformer</a>.</p>
 <div class="section" id="aggregations">
 <h4>Aggregations<a class="headerlink" href="#aggregations" title="Permalink to this headline">¶</a></h4>
 <dl class="docutils">
-<dt>There are several included aggregating transformers, which may be used when configuring a <code class="docutils literal"><span class="pre">StreamsBuilder</span></code></dt>
+<dt>There are several included aggregating transformers, which may be used when configuring a <code class="docutils literal notranslate"><span class="pre">StreamsBuilder</span></code></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">aggregate</span></code></li>
-<li><code class="docutils literal"><span class="pre">sample</span></code></li>
-<li><code class="docutils literal"><span class="pre">sum</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">aggregate</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">sample</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">sum</span></code></li>
 </ul>
 </dd>
 </dl>
@@ -148,7 +140,7 @@ a fully functional service can be written by simply configuring the Kafka Stream
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Finatra Kafka Streams</a><ul>
 <li><a class="reference internal" href="#features">Features</a></li>

@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Application and Server Lifecycle &#8212; Finatra 21.1.0 documentation</title>
+    <title>Application and Server Lifecycle &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -88,11 +80,11 @@ fact it did not start properly as it could not bind to a port.</li>
 </ul>
 <p>Thus you do not have access to the <a class="reference external" href="https://github.com/twitter/util/blob/9fa550a269d2287b24e94921a352ba954f9f4bfb/util-app/src/main/scala/com/twitter/app/App.scala#L24">App</a>
 or <a class="reference external" href="https://github.com/twitter/twitter-server/blob/5fea9c2a6220ab9bbdb449c99c946e2aef322e7d/server/src/main/scala/com/twitter/server/TwitterServer.scala#L93">TwitterServer</a>
-<cite>main()</cite> method. Instead, any logic should be contained in overriding an <code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code>-annotated
+<cite>main()</cite> method. Instead, any logic should be contained in overriding an <code class="docutils literal notranslate"><span class="pre">&#64;Lifecycle</span></code>-annotated
 method or in the application or server callbacks.</p>
 <div class="admonition caution">
 <p class="first admonition-title">Caution</p>
-<p class="last">If you override an <code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code>-annotated method you <strong>MUST</strong> first call
+<p class="last">If you override an <code class="docutils literal notranslate"><span class="pre">&#64;Lifecycle</span></code>-annotated method you <strong>MUST</strong> first call
 <cite>super.lifecycleMethod()</cite> in your override to ensure that framework lifecycle events happen
 accordingly.</p>
 </div>
@@ -104,7 +96,7 @@ accordingly.</p>
 cover the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a> lifecycle.</p>
 <p>When writing a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a>, you extend the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a> trait and place your application logic
 inside of a public <cite>main()</cite> method.</p>
-<div class="code Scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.app.App
+<div class="code Scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.app.App
 
 class MyApp extends App {
     val n = flag(&quot;n&quot;, 100, &quot;Number of items to process&quot;)
@@ -119,7 +111,7 @@ class MyApp extends App {
 different lifecycle phases. E.g., to run logic in the <cite>init</cite> lifecycle phase, the user can call
 the <cite>init</cite> function passing a callback to run. <cite>App</cite> collects every call to the <cite>init</cite> function and
 will run the callbacks in the order added during the <cite>init</cite> lifecycle phase.</p>
-<div class="code Scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.app.App
+<div class="code Scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.app.App
 
 class MyApp extends App {
 
@@ -149,7 +141,7 @@ class MyApp extends App {
 </div>
 <p>Additional hooks are <cite>premain</cite>, <cite>postmain</cite>, <cite>onExit</cite> and <cite>closeOnExitLast()</cite>, as shown above.</p>
 <p>The lifecycle could thus be represented:</p>
-<div class="code shell highlight-text"><div class="highlight"><pre><span></span>App#main() --&gt;
+<div class="code shell highlight-text notranslate"><div class="highlight"><pre><span></span>App#main() --&gt;
 App#nonExitingMain() --&gt;
     bind LoadService bindings
     run all init {} blocks
@@ -168,7 +160,7 @@ App#nonExitingMain() --&gt;
 <p>The Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><cite>c.t.inject.app.App</cite></a> extends the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a> lifecycle by adding more structure to the
 defined <cite>main()</cite> method.</p>
 <p>The lifecycle for a Finatra “injectable” App <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala"><cite>c.t.inject.app.App</cite></a> can be described:</p>
-<div class="code shell highlight-text"><div class="highlight"><pre><span></span>App#main() --&gt;
+<div class="code shell highlight-text notranslate"><div class="highlight"><pre><span></span>App#main() --&gt;
 App#nonExitingMain() --&gt;
     bind LoadService bindings
     run all init {} blocks
@@ -230,7 +222,7 @@ properly instantiated, all Twitter Util <a class="reference external" href="./fl
 interfaces are properly bound and the application is correctly started with minimal intervention
 needed on the part of the implementor.</p>
 <p>In text, at a high-level, the start-up lifecycle of a Finatra server looks like:</p>
-<div class="code shell highlight-text"><div class="highlight"><pre><span></span>App#main() --&gt;
+<div class="code shell highlight-text notranslate"><div class="highlight"><pre><span></span>App#main() --&gt;
 App#nonExitingMain() --&gt;
     bind LoadService bindings
     run all init {} blocks
@@ -290,7 +282,7 @@ data, and then publishing (via a “publisher”) to another queue. When the mai
 you most likely want to close the “subscriber” first to ensure that you transform and publish all
 available data before closing the “publisher”.</p>
 <p>Assuming, that both objects are a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Closable.scala"><cite>c.t.util.Closable</cite></a> type, a simple way to close them would be:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>closeOnExit(subscriber)
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>closeOnExit(subscriber)
 closeOnExit(publisher)
 </pre></div>
 </div>
@@ -301,7 +293,7 @@ the “publisher” has closed.</p>
 <h4>Ordering <cite>onExit</cite> and <cite>closeOnExit</cite> functions?<a class="headerlink" href="#ordering-onexit-and-closeonexit-functions" title="Permalink to this headline">¶</a></h4>
 <p>Assuming, that the <cite>#close()</cite> method of both returns <cite>Future[Unit]</cite>, e.g. like a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Closable.scala"><cite>c.t.util.Closable</cite></a>,
 a way of doing this could be:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>onExit {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>onExit {
   Await.result(subscriber.close(defaultCloseGracePeriod))
   Await.result(publisher.close(defaultCloseGracePeriod))
 }
@@ -316,7 +308,7 @@ well since we do not want to accidentally block our server shutdown if the <cite
 is set to something high or infinite (e.g., <a class="reference external" href="https://github.com/twitter/util/blob/bf47b55ff45a31bbd541f66257f2244df5c35f5b/util-core/src/main/scala/com/twitter/util/Time.scala#L302">Time.Top</a>).</p>
 <p>But if we don’t know the configured value of the  <cite>defaultCloseGracePeriod</cite> this makes things
 complicated. We could just hardcode a value for the Await, or not use the <cite>defaultCloseGracePeriod</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>onExit {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>onExit {
   Await.result(subscriber.close(defaultCloseGracePeriod), 5.seconds)
   Await.result(publisher.close(defaultCloseGracePeriod), 5.seconds)
 }
@@ -333,7 +325,7 @@ onExit {
 closing Closables by using <cite>closeOnExitLast</cite>.</p>
 <p>A <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Closable.scala"><cite>c.t.util.Closable</cite></a> passed to <cite>closeOnExitLast</cite> will be closed <em>after</em> all <cite>onExit</cite> and
 <cite>closeOnExit</cite> functions are executed. E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>closeOnExit(subscriber)
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>closeOnExit(subscriber)
 closeOnExitLast(publisher)
 </pre></div>
 </div>
@@ -347,7 +339,7 @@ And if the <cite>lastExits</cite> (collected <cite>closeOnExitLast</cite> functi
 </div>
 <p>If you have multiple <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Closable.scala"><cite>c.t.util.Closable</cite></a> objects you want to close in parallel and one you want to
 close after all the others, you could do:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>closeOnExit(subscriberA)
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>closeOnExit(subscriberA)
 closeOnExit(subscriberB)
 closeOnExit(subscriberC)
 closeOnExitLast(publisher)
@@ -361,7 +353,7 @@ closeOnExitLast(publisher)
 <p>You can simply use the <cite>onExit</cite> block to perform any shutdown logic, or you can wrap a function in
 a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Closable.scala"><cite>c.t.util.Closable</cite></a> to be passed to <cite>closeOnExit</cite> or <cite>closeOnExitLast</cite>.</p>
 <p>For example:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>onExit {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>onExit {
    DatabaseConnection.drain()
    Await.result(someFutureOperation, 2.seconds)
 }
@@ -382,7 +374,7 @@ closeOnExitLast {
 </pre></div>
 </div>
 <p>You can also wrap multiple functions in a Closable:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>closeOnExit {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>closeOnExit {
    Closable.make { deadline =&gt;
      database.drain()
      fileCleanUp.do()
@@ -438,7 +430,7 @@ see the <a class="reference external" href="../app/index.html">Creating an injec
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Application and Server Lifecycle</a><ul>
 <li><a class="reference internal" href="#c-t-app-app-lifecycle"><cite>c.t.app.App</cite> Lifecycle</a></li>

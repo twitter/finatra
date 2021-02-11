@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>HTTP Server Definition &#8212; Finatra 21.1.0 documentation</title>
+    <title>HTTP Server Definition &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -74,12 +66,12 @@
 <p>To start, add a dependency on the <a class="reference external" href="https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http_2.12%22">finatra-http</a> library. We also recommend using <a class="reference external" href="https://logback.qos.ch/">Logback</a> as your <a class="reference external" href="https://www.slf4j.org/manual.html">SLF4J</a> implementation. E.g.,</p>
 <p>with sbt:</p>
 <pre class="literal-block">
-&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;21.1.0&quot;,
+&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;21.2.0&quot;,
 &quot;ch.qos.logback&quot; % &quot;logback-classic&quot; % versions.logback,
 </pre>
 <p>For more information on logging with Finatra see: <a class="reference external" href="../logging/index.html#introduction-to-logging-with-finatra">Introduction to Logging With Finatra</a>.</p>
 <p>Create a new class which extends <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala">c.t.finatra.http.HttpServer</a>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.HttpServer
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.routing.HttpRouter
 
 object ExampleServerMain extends ExampleServer
@@ -93,7 +85,7 @@ class ExampleServer extends HttpServer {
 </pre></div>
 </div>
 <p>Or in Java, extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/100b858ca2786199114247e1440a1bfb4a460b28/http/src/main/scala/com/twitter/finatra/http/servers.scala#L505">c.t.finatra.http.AbstractHttpServer</a>:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.twitter.app.Flaggable;
+<div class="code java highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.app.Flaggable;
 import com.twitter.finatra.http.AbstractHttpServer;
 import com.twitter.finatra.http.routing.HttpRouter;
 
@@ -115,7 +107,7 @@ public class ExampleServer extends AbstractHttpServer {
 </pre></div>
 </div>
 <p>A more complete example includes adding Modules, a Controller, and Filters. In Scala:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.google.inject.Module
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter, TraceIdMDCFilter}
 import com.twitter.finatra.http.routing.HttpRouter
@@ -138,7 +130,7 @@ class ExampleServer extends HttpServer {
 </pre></div>
 </div>
 <p>in Java:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module;
+<div class="code java highlight-text notranslate"><div class="highlight"><pre><span></span>import com.google.inject.Module;
 import com.twitter.app.Flaggable;
 import com.twitter.finatra.http.AbstractHttpServer;
 import com.twitter.finatra.http.filters.CommonFilters;
@@ -189,7 +181,7 @@ Additionally, a server can define <a class="reference external" href="../getting
 with a name ending in “Main” that extends your server class. The server <em>class</em> can be used in
 testing as this allows your server to be instantiated multiple times in tests without worrying about
 static state persisting across test runs in the same JVM.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object ExampleServerMain extends ExampleServer
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>object ExampleServerMain extends ExampleServer
 </pre></div>
 </div>
 <p>The static object, e.g., <cite>ExampleServerMain</cite>, would then contain a static <cite>main()</cite> method for the server
@@ -199,7 +191,7 @@ for running the server in all other cases.</p>
 <h3>Java Naming Convention<a class="headerlink" href="#java-naming-convention" title="Permalink to this headline">¶</a></h3>
 <p>In Java you would create a separate “main” class which defines a static <cite>main()</cite> method and accepts args
 for flag parsing:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>public final class ExampleServerMain {
+<div class="code java highlight-text notranslate"><div class="highlight"><pre><span></span>public final class ExampleServerMain {
     private ExampleServerMain() {
     }
 
@@ -221,7 +213,7 @@ framework allows for users to specify starting an HTTPS server, either additiona
 <p>An HTTPS server can be started by passing in a value for the <cite>-https.port</cite> flag or overriding the
 <cite>defaultHttpsPort</cite> with a non-empty value. To configure the underlying Finagle <cite>c.t.finagle.Http.Server</cite>
 transport correctly, override the <cite>configureHttpsServer</cite> method in your HttpServer definition. E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.Http
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.Http
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.routing.HttpRouter
 
@@ -256,7 +248,7 @@ class ExampleHttpsServer extends HttpServer {
 <p>For convenience, a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/Tls.scala">Tls</a>
 trait is provided which encapsulates standard <a class="reference external" href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS</a>
 configuration for an HTTPS server. Thus you can also do:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.Http
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.Http
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.Tls
 import com.twitter.finatra.http.routing.HttpRouter
@@ -281,7 +273,7 @@ class ExampleHttpsServer
 <p>As mentioned, the above configuration will still attempt to start a non-ssl HTTP server. To disable
 the non-ssl HTTP server, override the <cite>defaultHttpPort</cite> value to an empty String (and do not
 pass a value for the <cite>-http.port</cite> flag), e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.Http
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.Http
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.Tls
 import com.twitter.finatra.http.routing.HttpRouter
@@ -311,7 +303,7 @@ creating an <a class="reference external" href="./controllers.html">HTTP Control
 <cite>Service[Request, Response]</cite> via the <cite>HttpRouter</cite>.</p>
 <p>To do so, extend the <cite>HttpServerTrait</cite> (or <cite>AbstractHttpServerTrait</cite> in Java) and implement the
 <cite>httpService: Service[Request, Response]</cite> method:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.google.inject.Module
 import com.twitter.finagle.Service
 import com.twitter.finatra.http.HttpServerTrait
 import com.twitter.finatra.http.filters.{LoggingMDCFilter, TraceIdMDCFilter}
@@ -329,7 +321,7 @@ class ExampleServer extends HttpServerTrait {
 </pre></div>
 </div>
 <p>in Java:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module;
+<div class="code java highlight-text notranslate"><div class="highlight"><pre><span></span>import com.google.inject.Module;
 import com.twitter.finagle.Service;
 import com.twitter.finagle.Request;
 import com.twitter.finagle.Response;
@@ -368,7 +360,7 @@ constructed Finagle <cite>Service[Request, Response]</cite>.</p>
 <p>Some deployment environments may make it difficult to set <a class="reference external" href="../getting-started/flags.html">Flag values</a> with command line arguments. If this is the case, Finatra’s <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala">HttpServer</a>’s
 core flags can be set from code.</p>
 <p>For example, instead of setting the <cite>-http.port</cite> flag, you can override the following method in your server.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.HttpServer
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.routing.HttpRouter
 
 class ExampleServer extends HttpServer {
@@ -402,7 +394,7 @@ are overridable. An example use-case would be to provide a custom <cite>ScalaObj
 implementation in place of the default <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala">ScalaObjectMapperModule</a></p>
 <p>To do so you would override the <cite>protected def jacksonModule</cite> in your server with your custom
 implementation.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.fasterxml.jackson.databind.PropertyNamingStrategy
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 
 object MyCustomJacksonModule extends ScalaObjectMapperModule {
@@ -427,7 +419,7 @@ class ExampleServer extends HttpServer {
 </div>
 <p>If your module is defined as a class, you would pass an instance of the
 class, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.fasterxml.jackson.databind.PropertyNamingStrategy
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 
 class MyCustomJacksonModule extends ScalaObjectMapperModule {
@@ -462,7 +454,7 @@ the Framework Module will be replaced.</p>
 <p>If you want to further configure the underlying <a class="reference external" href="https://github.com/twitter/finagle">Finagle</a> server you can override <cite>configureHttpServer</cite> (or <cite>configureHttpsServer</cite>)
 in your server to specify additional configuration on (or override the default configuration of) the underlying Finagle server.</p>
 <p>For example:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.Http
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.Http
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.routing.HttpRouter
 
@@ -490,7 +482,7 @@ specifically the server documentation <a class="reference external" href="https:
 <p>The default Response Classifier for HTTP servers is <a class="reference external" href="https://github.com/twitter/finatra/blob/8b448065f5f74c1eedd744bd15618cbf932ea1bc/http/src/main/scala/com/twitter/finatra/http/response/HttpResponseClassifier.scala#L15">HttpResponseClassifier.ServerErrorsAsFailures</a>,
 which classifies any HTTP 5xx response code as a failure. To configure server-side <a class="reference external" href="https://twitter.github.io/finagle/guide/Servers.html#response-classification">Response Classification</a> you could choose to
 set the classifier directly on the underlying Finagle server by overriding the <cite>configureHttpServer</cite> (or <cite>configureHttpsServer</cite>) in your server, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>override def configureHttpServer(server: Http.Server): Http.Server = {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>override def configureHttpServer(server: Http.Server): Http.Server = {
     server.withResponseClassifier(???)
 }
 </pre></div>
@@ -500,7 +492,7 @@ set the classifier directly on the underlying Finagle server by overriding the <
 to the object graph that is then available to be injected into things like the HTTP <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala">StatsFilter</a>
 for a more accurate reporting of metrics that takes into account server-side response classification.</p>
 <p>For example, in your <cite>HttpServer</cite> you would do:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.google.inject.Module
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.routing.HttpRouter
 
@@ -538,7 +530,7 @@ class ExampleServer extends HttpServer {
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">HTTP Server Definition</a><ul>
 <li><a class="reference internal" href="#naming-convention">Naming Convention</a><ul>

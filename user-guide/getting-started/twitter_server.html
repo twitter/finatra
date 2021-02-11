@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>TwitterServer Basics &#8212; Finatra 21.1.0 documentation</title>
+    <title>TwitterServer Basics &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -86,7 +78,7 @@ this will be bound to a <em>separate</em> port configurable via either the <cite
 and <a class="reference external" href="https://www.openshift.com">OpenShift</a> only allow a single port to be used when deploying an
 application.</p>
 <p>In these cases, you can programmatically disable the TwitterServer <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#http-admin-interface">HTTP Admin Interface</a>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class ExampleServer extends HttpServer {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class ExampleServer extends HttpServer {
   override val disableAdminHttpServer: Boolean = true
   ...
 }
@@ -135,7 +127,7 @@ section.</p>
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">TwitterServer Basics</a><ul>
 <li><a class="reference internal" href="#http-admin-interface">HTTP Admin Interface</a></li>

@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>How to properly configure the server StatsReceiver &#8212; Finatra 21.1.0 documentation</title>
+    <title>How to properly configure the server StatsReceiver &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -101,7 +93,7 @@ which by default binds the <cite>StatsReceiver</cite> type to the <cite>LoadedSt
 <a class="reference external" href="https://github.com/twitter/finatra/blob/bfc557786087e7acddc8dec9434cba440a4987b8/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala#L116">c.t.inject.server.Twitter#statsReceiverModule</a>
 with your customized implementation which will bind the <cite>StatsReceiver</cite> instance to the
 object graph.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.google.inject.Module
 import com.twitter.finagle.stats.{StatsReceiver, LoadedStatsReceiver}
 import com.twitter.inject.server.TwitterServer
 import com.twitter.inject.TwitterModule
@@ -132,13 +124,13 @@ class MyServer extends TwitterServer {
 will prevent proper testing of the server. Users should instead obtain the server <cite>StatsReceiver</cite>
 instance from the object graph, e.g.:</p>
 <p>Directly from the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">Injector</a>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.stats.StatsReceiver
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.stats.StatsReceiver
 
 val sr = injector.instance[StatsReceiver]
 </pre></div>
 </div>
 <p>Or as an injected constructor argument to a class:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.stats.StatsReceiver
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.stats.StatsReceiver
 import javax.inject.Inject
 
 class Foo @Inject() (statsReceiver: StatsReceiver) {
@@ -147,7 +139,7 @@ class Foo @Inject() (statsReceiver: StatsReceiver) {
 </pre></div>
 </div>
 <p>Or in an <cite>&#64;Provides</cite>-annotated method in a <cite>TwitterModule</cite></p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Provides
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.google.inject.Provides
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.inject.TwitterModule
 import javax.inject.Singleton
@@ -184,7 +176,7 @@ object MyModule extends TwitterModule {
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">How to properly configure the server <cite>StatsReceiver</cite></a><ul>
 <li><a class="reference internal" href="#c-t-server-stats-statsreceiver"><cite>c.t.server.Stats#statsReceiver</cite></a></li>

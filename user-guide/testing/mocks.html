@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Working with Mocks &#8212; Finatra 21.1.0 documentation</title>
+    <title>Working with Mocks &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -99,7 +91,7 @@ control over the lifecycle of a mock within a given test rather than binding a m
 <a class="reference external" href="bind_dsl.html">#bind[T]</a> DSL allows for the test to retain control of the mock in order to
 expect or if necessary, reset, behavior.</p>
 <p>To use, first add a dependency on <cite>util/util-mock</cite> and then mix in the <cite>c.t.util.mock.Mockito</cite> trait to your test. E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.EmbeddedHttpServer
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.mock.Mockito
 
@@ -127,7 +119,7 @@ using the <a class="reference external" href="bind_dsl.html">#bind[T]</a> DSL an
 necessary.</p>
 <p>This is preferable over creating a <a class="reference external" href="../getting-started/modules.html">Module</a> then binding the
 mock to the object graph in the module, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.TwitterModule
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.TwitterModule
 import com.twitter.util.mock.Mockito
 
 // NOT RECOMMENDED
@@ -144,7 +136,7 @@ object MyTestModule extends TwitterModule with Mockito {
 <p>In the above example, the user of the module has no access to the mock object to be able to expect
 behavior of the mock (this is in essence a <a class="reference external" href="https://martinfowler.com/articles/mocksArentStubs.html#TheDifferenceBetweenMocksAndStubs">stub</a> and you may very well find this useful).</p>
 <p>You could change the code to instead expose passing of the mock object into the module,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.TwitterModule
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.TwitterModule
 
 class MyTestModule(foo: Foo) extends TwitterModule {
   override def configure(): Unit = {
@@ -183,7 +175,7 @@ and using stat assertions.</p>
 if using Scala or similar functionality with an <cite>&#64;After</cite> annotated method in JUnit if using Java.
 The Finatra framework mixes in the ScalaTest <a class="reference external" href="http://doc.scalatest.org/3.1.2/org/scalatest/BeforeAndAfterEach.html">BeforeAndAfterEach</a>
 trait, thus the ScalaTest <cite>afterEach()</cite> function is available to override. E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.EmbeddedHttpServer
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.mock.Mockito
 
@@ -276,7 +268,7 @@ to do so. Note that as documented, you should use the <cite>org.mockito.scalates
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Working with Mocks</a><ul>
 <li><a class="reference internal" href="#mockito">Mockito</a></li>

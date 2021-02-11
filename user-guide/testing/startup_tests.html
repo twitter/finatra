@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Startup Tests &#8212; Finatra 21.1.0 documentation</title>
+    <title>Startup Tests &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -97,7 +89,7 @@ eagerly created at startup (<cite>Stage.DEVELOPMENT</cite> is set by default).</
 resolution of clients to <cite>nil</cite>. See: <a class="reference external" href="feature_tests.html#disabling-clients-using-dtabs">Disabling Client using Dtabs</a>.</li>
 </ul>
 <p>For example:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Stage
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.google.inject.Stage
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.server.FeatureTest
 import scala.collection.immutable.ListMap
@@ -119,7 +111,7 @@ class MyServiceStartupTest extends FeatureTest {
 </div>
 <div class="admonition tip">
 <p class="first admonition-title">Tip</p>
-<p class="last">This works for <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><cite>EmbeddedHttpServer</cite></a> or <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala"><cite>EmbeddedThriftServer</cite></a> as well because <code class="docutils literal"><span class="pre">#assertHealthy()</span></code>
+<p class="last">This works for <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><cite>EmbeddedHttpServer</cite></a> or <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala"><cite>EmbeddedThriftServer</cite></a> as well because <code class="docutils literal notranslate"><span class="pre">#assertHealthy()</span></code>
 is defined on the <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L264"><cite>EmbeddedTwitterServer</cite></a> super class.</p>
 </div>
 </div>
@@ -131,7 +123,7 @@ be a server written using the Finatra framework.</p>
 <p>Here is an example of writing a StartupTest that starts a <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a> and asserts
 that it reports itself “healthy”.</p>
 <p>Given a simple <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.{Http, ListeningServer, Service}
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.{Http, ListeningServer, Service}
 import com.twitter.finagle.http.{Status, Response, Request}
 import com.twitter.server.TwitterServer
 import com.twitter.util.{Await, Future}
@@ -172,7 +164,7 @@ class MyTwitterServer extends TwitterServer {
 <p>First, extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala"><cite>c.t.inject.server.FeatureTest</cite></a> trait. Then override the <cite>server</cite> definition
 with an instance of your <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L264"><cite>EmbeddedTwitterServer</cite></a> which wraps your <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a>
 under test.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest, PortUtils}
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest, PortUtils}
 import scala.collection.immutable.ListMap
 
 class MyTwitterServerFeatureTest extends FeatureTest {
@@ -260,7 +252,7 @@ and not only assert it is reported as healthy. Again, see the documentation on t
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Startup Tests</a><ul>
 <li><a class="reference internal" href="#best-practices">Best Practices</a></li>

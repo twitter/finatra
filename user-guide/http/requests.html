@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>HTTP Requests &#8212; Finatra 21.1.0 documentation</title>
+    <title>HTTP Requests &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -92,7 +84,7 @@ can be configured to handle common name substitutions (e.g. <cite>snake_case</ci
 <cite>snake_case</cite> is used (defaults are set by the <cite>ScalaObjectMapper</cite> provided by the <a class="reference external" href="https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala">ScalaObjectMapperModule</a>).</p>
 <p>For example, if we have a <cite>POST</cite> endpoint which expects a JSON body with a <cite>Long</cite> <cite>“id”</cite> and a
 <cite>String</cite> <cite>“name”</cite>, we could define the following case class and Controller route:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class HiRequest(id: Long, name: String)
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class HiRequest(id: Long, name: String)
 
 ...
 
@@ -101,8 +93,8 @@ post(&quot;/hi&quot;) { hiRequest: HiRequest =&gt;
 }
 </pre></div>
 </div>
-<p>For the request: <code class="docutils literal"><span class="pre">POST</span> <span class="pre">/hi</span></code></p>
-<div class="code json highlight-text"><div class="highlight"><pre><span></span>{
+<p>For the request: <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/hi</span></code></p>
+<div class="code json highlight-text notranslate"><div class="highlight"><pre><span></span>{
   &quot;id&quot;: 1,
   &quot;name&quot;: &quot;Bob&quot;
 }
@@ -144,7 +136,7 @@ the <cite>c.t.finagle.http.Request</cite>. Supported annotations:</p>
 <div class="section" id="routeparam">
 <h4><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-annotations/src/main/java/com/twitter/finatra/http/annotations/RouteParam.java">&#64;RouteParam</a><a class="headerlink" href="#routeparam" title="Permalink to this headline">¶</a></h4>
 <p>Denotes a field to be parsed from a named parameter in a given route, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class FromRouteRequest(
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class FromRouteRequest(
   @RouteParam(&quot;entity&quot;) resource: String,
   @RouteParam id: String)
 
@@ -154,7 +146,7 @@ get(&quot;/foo/:entity/:id&quot;) { request: FromRouteRequest =&gt;
 }
 </pre></div>
 </div>
-<p>Given a request: <code class="docutils literal"><span class="pre">GET</span> <span class="pre">/foo/users/1234</span></code></p>
+<p>Given a request: <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/foo/users/1234</span></code></p>
 <p>Using <cite>FromRouteRequest</cite> as an input to the route callback would parse the string “users” into the
 value of <cite>FromRouteRequest#resource</cite> and the string “1234” into the value of <cite>FromRouteRequest#id</cite>.</p>
 <p>Thus, this route would respond:</p>
@@ -178,13 +170,13 @@ value of <cite>FromRouteRequest#resource</cite> and the string “1234” into t
 <div class="section" id="queryparam">
 <h4><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-annotations/src/main/java/com/twitter/finatra/http/annotations/QueryParam.java">&#64;QueryParam</a><a class="headerlink" href="#queryparam" title="Permalink to this headline">¶</a></h4>
 <p>Read a value from the request query string by a parameter named for the case class field or by the
-<code class="docutils literal"><span class="pre">&#64;QueryParam</span></code> annotation value.</p>
+<code class="docutils literal notranslate"><span class="pre">&#64;QueryParam</span></code> annotation value.</p>
 <p>For example, suppose you want to parse a <cite>GET</cite> request with three query params: <cite>max</cite>, <cite>startDate</cite>,
 and <cite>verbose</cite>, e.g.,</p>
-<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/users?max=10&amp;start_date=2014-05-30TZ&amp;verbose=true</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/users?max=10&amp;start_date=2014-05-30TZ&amp;verbose=true</span></code></p>
 <p>This can be modeled with the following custom “request” case class which also applies
 <a class="reference external" href="../json/validations.html">validations</a>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class UsersRequest(
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class UsersRequest(
   @Max(100) @QueryParam max: Int,
   @PastDate @QueryParam startDate: Option[DateTime],
   @QueryParam verbose: Boolean = false)
@@ -199,27 +191,27 @@ get(&quot;/users&quot;) { request: UsersRequest =&gt;
 The <cite>startDate</cite> will be parsed into an <cite>Option[DateTime]</cite> (meaning it could be omitted without error
 from the query string) and if present will be validated to be a date in the past. Lastly, the
 <cite>verbose</cite> parameter will be parsed into a <cite>Boolean</cite> type.</p>
-<p>You can also set the parameter name as a value in the <code class="docutils literal"><span class="pre">&#64;QueryParam</span></code> annotation, e.g.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class QueryParamRequest(
+<p>You can also set the parameter name as a value in the <code class="docutils literal notranslate"><span class="pre">&#64;QueryParam</span></code> annotation, e.g.</p>
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class QueryParamRequest(
   @QueryParam foo: String,
   @QueryParam(&quot;skip&quot;) isSkipped: Boolean)
 </pre></div>
 </div>
 <p>Using this case class in a route callback for a request:</p>
-<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/?foo=bar&amp;skip=false</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/?foo=bar&amp;skip=false</span></code></p>
 <p>would parse the string “bar” into the value of <cite>QueryParamRequest#foo</cite> and parse the string “false”
 as a Boolean into the <cite>QueryParamRequest#isSkipped</cite> field.</p>
 <p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala">example</a>.</p>
 <p>You can parse comma-separated lists in your query parameters by setting <cite>commaSeparatedList</cite> to <cite>true</cite> in the QueryParam annotation, e.g.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class ManyUsersRequest(
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class ManyUsersRequest(
   @QueryParam(commaSeparatedList=true) ids: Seq[Long])
 </pre></div>
 </div>
 <p>Using this class in a route callback for a request:</p>
-<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/?ids=1,2,3</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/?ids=1,2,3</span></code></p>
 <p>would split the string “1,2,3” into “1”, “2”, and “3”, and then parse each into a <cite>Long</cite>.</p>
 <p>Note that turning this on will disallow repeating the ‘ids’ parameter, ie.</p>
-<p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/?ids=1&amp;ids=2,3</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/?ids=1&amp;ids=2,3</span></code></p>
 <p>will return a Bad Request with an appropriate error message when <cite>commaSeparatedList</cite> is <cite>true</cite>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -230,7 +222,7 @@ as a Boolean into the <cite>QueryParamRequest#isSkipped</cite> field.</p>
 <div class="section" id="formparam">
 <h4><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-annotations/src/main/java/com/twitter/finatra/http/annotations/FormParam.java">&#64;FormParam</a><a class="headerlink" href="#formparam" title="Permalink to this headline">¶</a></h4>
 <p>Read a value from a form field with the case class field’s name or as the value specified in the
-<code class="docutils literal"><span class="pre">&#64;FormParam</span></code> annotation from the request body.</p>
+<code class="docutils literal notranslate"><span class="pre">&#64;FormParam</span></code> annotation from the request body.</p>
 <p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/FormPostRequest.scala">example</a>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -240,25 +232,25 @@ as a Boolean into the <cite>QueryParamRequest#isSkipped</cite> field.</p>
 <hr class="docutils" />
 <div class="section" id="header">
 <h4><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-annotations/src/main/java/com/twitter/finatra/http/annotations/Header.java">&#64;Header</a><a class="headerlink" href="#header" title="Permalink to this headline">¶</a></h4>
-<p>Read a header value specified by the case class field name or by the <code class="docutils literal"><span class="pre">&#64;Header</span></code> annotation value.
+<p>Read a header value specified by the case class field name or by the <code class="docutils literal notranslate"><span class="pre">&#64;Header</span></code> annotation value.
 You can use a Scala <a class="reference external" href="https://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html">“back-quote” literal</a>
 for the field name when special characters are involved.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>@Header `user-agent`: String
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>@Header `user-agent`: String
 </pre></div>
 </div>
-<p>or specify the header name as a parameter to the <code class="docutils literal"><span class="pre">&#64;Header</span></code> annotation, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>@Header(&quot;user-agent&quot;) agent: String
+<p>or specify the header name as a parameter to the <code class="docutils literal notranslate"><span class="pre">&#64;Header</span></code> annotation, e.g.,</p>
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>@Header(&quot;user-agent&quot;) agent: String
 </pre></div>
 </div>
 <p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/CreateUserRequest.scala">example</a>.</p>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
 <p>Route, query, and form params are all stored in the “params” field of the incoming Finagle http
-request. As such, you should ensure that <code class="docutils literal"><span class="pre">&#64;RouteParam</span></code> names do not collide with <code class="docutils literal"><span class="pre">&#64;QueryParam</span></code>
-names. Otherwise, an <code class="docutils literal"><span class="pre">&#64;QueryParam</span></code> could end up parsing an <code class="docutils literal"><span class="pre">&#64;RouteParam</span></code> or <code class="docutils literal"><span class="pre">&#64;FormParam</span></code>
+request. As such, you should ensure that <code class="docutils literal notranslate"><span class="pre">&#64;RouteParam</span></code> names do not collide with <code class="docutils literal notranslate"><span class="pre">&#64;QueryParam</span></code>
+names. Otherwise, an <code class="docutils literal notranslate"><span class="pre">&#64;QueryParam</span></code> could end up parsing an <code class="docutils literal notranslate"><span class="pre">&#64;RouteParam</span></code> or <code class="docutils literal notranslate"><span class="pre">&#64;FormParam</span></code>
 field.</p>
 <p>Also note that headers are accessed <strong>case-insensitively</strong>. Thus, the annotated fields:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>@Header(&quot;Accept-Charset&quot;) acceptCharset: String
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>@Header(&quot;Accept-Charset&quot;) acceptCharset: String
 @Header(&quot;accept-charset&quot;) acceptCharset: String
 @Header(&quot;aCcEpT-cHaRsEt&quot;) acceptCharset: String
 @Header `accept-charset`: String
@@ -272,7 +264,7 @@ field.</p>
 <h4>&#64;Inject<a class="headerlink" href="#inject" title="Permalink to this headline">¶</a></h4>
 <p>Can be used to inject any <a class="reference external" href="https://github.com/google/guice">Guice</a> managed class into your case
 class.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class InjectedFieldCaseClass(
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class InjectedFieldCaseClass(
   @Inject defaultOptString: Option[String],
   @Inject foo Foo)
 </pre></div>
@@ -281,7 +273,7 @@ class.</p>
 case class. To access the underlying Finagle HTTP Request in your custom case class, simply
 include a field of type <cite>c.t.finagle.http.Request</cite> and the framework will properly inject the
 incoming request into your custom case class, for example:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
 
 case class CaseClassWithRequestField(
  @Header(&quot;user-agent&quot;) agent: String,
@@ -296,7 +288,7 @@ case class CaseClassWithRequestField(
 <p>HTTP requests with a content-type of <cite>application/json</cite> sent to routes with a custom request
 case class callback input type will <strong>always trigger</strong> the parsing of the request body as
 well-formed JSON in attempt to convert the JSON into the request case class.</p>
-<p class="last">This behavior can be disabled by annotating the case class with <code class="docutils literal"><span class="pre">&#64;JsonIgnoreBody</span></code> leaving the
+<p class="last">This behavior can be disabled by annotating the case class with <code class="docutils literal notranslate"><span class="pre">&#64;JsonIgnoreBody</span></code> leaving the
 raw request body accessible by simply adding a member of type <cite>c.t.finagle.http.Request</cite> as
 mentioned above.</p>
 </div>
@@ -349,7 +341,7 @@ forwarding will re-use the same request as opposed to issuing a redirect which w
 to issue a new request.</p>
 <p>To forward, you need to include a <cite>c.t.finatra.http.request.HttpForward</cite> instance in your controller,
 e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 
 class MyController @Inject()(
@@ -358,7 +350,7 @@ class MyController @Inject()(
 </pre></div>
 </div>
 <p>Then, to use in your route:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>get(&quot;/foo&quot;) { request: Request =&gt;
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>get(&quot;/foo&quot;) { request: Request =&gt;
   forward(request, &quot;/bar&quot;)
 }
 </pre></div>
@@ -366,7 +358,7 @@ class MyController @Inject()(
 <p>Forwarded requests will bypass the server defined filter chain (as the requests have already passed
 through the filter chain) but will still pass through controller defined filters.</p>
 <p>For example, if a route is defined:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>filter[MyAwesomeFilter].get(&quot;/bar&quot;) { request: Request =&gt;
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>filter[MyAwesomeFilter].get(&quot;/bar&quot;) { request: Request =&gt;
   &quot;Hello, world.&quot;
 }
 </pre></div>
@@ -379,7 +371,7 @@ request.</p>
 <cite>HttpRouter#withMaxRequestForwardingDepth</cite>. This helps prevent a given request from being
 forwarded in an infinite loop.</p>
 <p>In the example below, the server has been setup to allow a request to forward a maximum of 10 times.</p>
-<div class="code scala last highlight-text"><div class="highlight"><pre><span></span>override def configureHttp(router: HttpRouter) {
+<div class="code scala last highlight-text notranslate"><div class="highlight"><pre><span></span>override def configureHttp(router: HttpRouter) {
   router
     .withMaxRequestForwardingDepth(10)
     .add[MyController]
@@ -392,13 +384,13 @@ forwarded in an infinite loop.</p>
 <h2>Multipart Requests<a class="headerlink" href="#multipart-requests" title="Permalink to this headline">¶</a></h2>
 <p>Finatra has support for multi-part requests. Here’s an example of a multi-part <cite>POST</cite> controller
 route definition that simply returns all of the keys in the multi-part request:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>post(&quot;/multipartParamsEcho&quot;) { request: Request =&gt;
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>post(&quot;/multipartParamsEcho&quot;) { request: Request =&gt;
   RequestUtils.multiParams(request).keys
 }
 </pre></div>
 </div>
 <p>An example of testing this endpoint:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>def deserializeRequest(name: String) = {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>def deserializeRequest(name: String) = {
   val requestBytes = IOUtils.toByteArray(getClass.getResourceAsStream(name))
   HttpCodec.decodeBytesToRequest(requestBytes)
 }
@@ -424,7 +416,7 @@ the <cite>JsonPatchExceptionMapper</cite> in the server. The <cite>JsonPatchMess
 Patch requests as type <cite>c.t.finatra.http.jsonpatch.JsonPatch</cite>, and <cite>JsonPatchExceptionMapper</cite> can
 convert JsonPatchExceptions to HTTP responses.</p>
 <p>See <a class="reference external" href="exceptions.html">Add an ExceptionMapper</a> for more information on exception mappers.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.HttpServer
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.routing.HttpRouter
 
 class ExampleServer extends HttpServer {
@@ -440,7 +432,7 @@ class ExampleServer extends HttpServer {
 </div>
 <p>Next, you should include a <cite>c.t.finatra.http.jsonpatch.JsonPatchOperator</cite> instance in your controller,
 which provides <cite>JsonPatchOperator#toJsonNode</cite> conversions and support for all JSON Patch operations.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.Controller
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.Controller
 
 class MyController @Inject()(
   jsonPatchOperator: JsonPatchOperator
@@ -452,7 +444,7 @@ class MyController @Inject()(
 <p>After the target data has been converted to a JsonNode, just call <cite>JsonPatchUtility.operate</cite> to apply
 JSON Patch operations to the target.</p>
 <p>For example:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>patch(&quot;/jsonPatch&quot;) { jsonPatch: JsonPatch =&gt;
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>patch(&quot;/jsonPatch&quot;) { jsonPatch: JsonPatch =&gt;
   val testCase = ExampleCaseClass(&quot;world&quot;)
   val originalJson = jsonPatchOperator.toJsonNode[ExampleCaseClass](testCase)
   JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
@@ -460,7 +452,7 @@ JSON Patch operations to the target.</p>
 </pre></div>
 </div>
 <p>An example of testing this endpoint:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>&quot;JsonPatch&quot; in {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>&quot;JsonPatch&quot; in {
   val request = RequestBuilder.patch(&quot;/jsonPatch&quot;)
     .body(
       &quot;&quot;&quot;[
@@ -510,7 +502,7 @@ JSON Patch operations to the target.</p>
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">HTTP Requests</a><ul>
 <li><a class="reference internal" href="#finagle-c-t-finagle-http-request">Finagle <cite>c.t.finagle.http.Request</cite></a></li>

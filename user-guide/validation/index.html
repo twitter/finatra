@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Validation Framework &#8212; Finatra 21.1.0 documentation</title>
+    <title>Validation Framework &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -98,7 +90,7 @@ Constraints, see <a class="reference external" href="#define-additional-constrai
 <li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/validation/src/main/java/com/twitter/finatra/validation/MethodValidation.java">&#64;MethodValidation</a></li>
 </ul>
 <p>To specify a constraints on a case class:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class CoolCaseClass(@NotEmpty name: String, @Size(min = 1, max = 10) things: Seq[Int])
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class CoolCaseClass(@NotEmpty name: String, @Size(min = 1, max = 10) things: Seq[Int])
 </pre></div>
 </div>
 </div>
@@ -116,7 +108,7 @@ test case class.</p>
 which case class fields (if any) are being evaluated in the validation. If the evaluation fails, the
 resulting exception will contain details about each of the fields specified in the annotation.</p>
 <p>To specify a <cite>&#64;MethodValidation</cite> on a case class field:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class CoolCaseClass(@PastTime start: DateTime, @FutureTime end: DateTime) {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class CoolCaseClass(@PastTime start: DateTime, @FutureTime end: DateTime) {
   @MethodValidation(fields = Array(&quot;start&quot;, &quot;end&quot;))
   def ensureMinimumDelta: ValidationResult = {
     ValidationResult.validate(Days.daysBetween(start, end).getDays() &gt;= 3, &quot;dates must be at least 3 days apart&quot;)
@@ -140,7 +132,7 @@ class’ fields and methods with any built-in or additional constraints.</p>
 <h3>Instantiation<a class="headerlink" href="#instantiation" title="Permalink to this headline">¶</a></h3>
 <p>There are <cite>apply</cite> functions available for creation of a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/validation/src/main/scala/com/twitter/finatra/validation/Validator.scala"><cite>c.t.finatra.validation.Validator</cite></a> configured
 with defaults.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>val messageResolver: com.twitter.finatra.validation.MessageResolver = ???
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>val messageResolver: com.twitter.finatra.validation.MessageResolver = ???
 
 val validator = Validator()
 val validator = Validator(messageResolver)
@@ -158,7 +150,7 @@ checkout <a class="reference external" href="#using-a-customized-validator">Usin
 <div class="section" id="basic-usage">
 <h3>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h3>
 <p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/validation/src/main/scala/com/twitter/finatra/validation/Validator.scala"><cite>c.t.finatra.validation.Validator</cite></a> provides two methods:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>com.twitter.finatra.validation.Validator#validate(obj: Any): Set[ValidationResult]
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>com.twitter.finatra.validation.Validator#validate(obj: Any): Set[ValidationResult]
 com.twitter.finatra.validation.Validator#verify(obj: Any): Unit
 </pre></div>
 </div>
@@ -166,15 +158,15 @@ com.twitter.finatra.validation.Validator#verify(obj: Any): Unit
 processing. The <cite>Validator#verify(obj: Any)</cite> method will throw <cite>ValidationException</cite> if any
 constraints fail. The exception will contain all failed constraint results.</p>
 <p>Let’s assume we have the following case class:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class Things(@Size(min = 1, max = 2) names: Seq[String])
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class Things(@Size(min = 1, max = 2) names: Seq[String])
 </pre></div>
 </div>
 <p>To validate and return the <cite>Set[ValidationResult]</cite> of failed constraints, use</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>Validator#validate(obj: Any): Set[ValidationResult]
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>Validator#validate(obj: Any): Set[ValidationResult]
 </pre></div>
 </div>
 <p>For example:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>Welcome to Scala 2.12.12 (JDK 64-Bit Server VM, Java 1.8.0_242).
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>Welcome to Scala 2.12.12 (JDK 64-Bit Server VM, Java 1.8.0_242).
 Type in expressions for evaluation. Or try :help.
 
 scala&gt; case class Things(@Size(min = 1, max = 2) names: Seq[String])
@@ -199,11 +191,11 @@ res1: Set[com.twitter.finatra.validation.ValidationResult] = Set()
 </pre></div>
 </div>
 <p>To instead throw an exception when validating, use</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>Validator#verify(obj: Any): Unit
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>Validator#verify(obj: Any): Unit
 </pre></div>
 </div>
 <p>For example, assuming the same <cite>Things</cite> case class defined above:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>Welcome to Scala 2.12.12 (TwitterJDK 64-Bit Server VM, Java 1.8.0_242).
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>Welcome to Scala 2.12.12 (TwitterJDK 64-Bit Server VM, Java 1.8.0_242).
 Type in expressions for evaluation. Or try :help.
 
 scala&gt; val validator = Validator()
@@ -239,7 +231,7 @@ is called.</p>
 <p>To apply more custom configuration to create a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/validation/src/main/scala/com/twitter/finatra/validation/Validator.scala"><cite>c.t.finatra.validation.Validator</cite></a>, there is a
 builder for constructing a customized validator.</p>
 <p>E.g., to set a <cite>MessageResolver</cite> different than the default:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>val validator = Validator.builder
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>val validator = Validator.builder
   .withMessageResolver(new MyCustomMessageResolver)
 </pre></div>
 </div>
@@ -260,7 +252,7 @@ the following requirements:</p>
 <h3>Object validation<a class="headerlink" href="#object-validation" title="Permalink to this headline">¶</a></h3>
 <p>This is not supported. Constraints must be defined on a field or property of a case class and not on
 the case class itself. E.g., the following not supported will not have any effect:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>@Min(1) // THIS DOES NOT APPLY
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>@Min(1) // THIS DOES NOT APPLY
 case class WrappedValue(int: Int)
 </pre></div>
 </div>
@@ -290,7 +282,7 @@ By annotating the case class <cite>Y</cite> with constraint annotations, the Val
 field declared of type <cite>Y</cite> (subclass, implementation) is determined at runtime. The constraint
 definitions of <cite>Z</cite> are used. This ensures proper polymorphic behavior for associations marked
 with <cite>&#64;Valid</cite>. E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class Bar(@Max(1000) id: Int, @NonEmpty name: String)
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class Bar(@Max(1000) id: Int, @NonEmpty name: String)
 
 case Foo(@Min(1) id: Int, @Valid bar: Bar)
 </pre></div>
@@ -301,7 +293,7 @@ case Foo(@Min(1) id: Int, @Valid bar: Bar)
 <p>Collection-valued, array-valued and generally <cite>Iterable[+A]</cite> fields may also be decorated with the
 <cite>&#64;Valid</cite> annotation. This causes <strong>all contents</strong> of the collection to be validated. Any
 collection type implementing <cite>scala.Iterable[+A]</cite> is supported. E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class Bar(@Max(1000) id: Int, @NonEmpty name: String)
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class Bar(@Max(1000) id: Int, @NonEmpty name: String)
 case Foo(@Min(1) id: Int, @Valid bars: Seq[Bar])
 </pre></div>
 </div>
@@ -326,21 +318,21 @@ the collection with <cite>&#64;Valid</cite> will cascade validation to <strong>e
 <p>The <cite>Validator</cite> will always “unwrap” a field of type <cite>Option[_]</cite> by default for validation,
 meaning that when a case class field is of type <cite>Option[_]</cite> any defined constraints will apply to
 the contained type. E.g. for the case class, <cite>Bar</cite> defined:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class Bar(@Min(10) b: Option[Int])
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class Bar(@Min(10) b: Option[Int])
 </pre></div>
 </div>
 <p>When validated, the <cite>b</cite> field will only be validated when the valueis defined, otherwise the
 validation will be skipped. In this manner the annotation can be thought of as being applied to the
 contained type for the <cite>Option[_]</cite> but note that the default constraints will only for known types
 and not general case classes, thus this would do nothing:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class Foo(i: Int)
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class Foo(i: Int)
 case class Bar(@Min(10) b: Option[Foo])
 </pre></div>
 </div>
 <p>And result in an error from the <a class="reference external" href="https://github.com/twitter/finatra/blob/bfb6e22c9260eb3150b6768d6628ee6b3498183c/validation/src/main/scala/com/twitter/finatra/validation/constraints/MinConstraintValidator.scala#L42">MinConstraintValidator</a>
 since it does not support the <cite>Foo</cite> type. However, you can still trigger graph validation of the
 contained case class within an option using the <cite>&#64;Valid</cite> annotation, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class Foo(@Min(10) i: Int)
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class Foo(@Min(10) i: Int)
 case class Bar(@Valid b: Option[Foo])
 </pre></div>
 </div>
@@ -353,7 +345,7 @@ the failed field.</p>
 <h4>Maps<a class="headerlink" href="#maps" title="Permalink to this headline">¶</a></h4>
 <p>Validation of case class field of type <cite>Map[T, U]</cite> or other multi-typed collections is
 <strong>not supported</strong> for validation. For example, case classes defined:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class Bar(@Max(1000) id: Int, @NonEmpty name: String)
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class Bar(@Max(1000) id: Int, @NonEmpty name: String)
 case class Baz(@NotEmpty id: String)
 
 case Foo(@Min(1) id: Int, @Valid barBaz: Map[Bar, Baz])
@@ -361,7 +353,7 @@ case Foo(@Min(1) id: Int, @Valid barBaz: Map[Bar, Baz])
 </div>
 <p>The <cite>Validator</cite> <em>will not</em> validate the key nor value elements of <cite>Bar</cite> or <cite>Baz</cite> for the <cite>barbaz</cite> field.</p>
 <p>However, constraints <em>on</em> the <cite>barBaz</cite> field will be applied, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class Bar(@Max(1000) id: Int, @NonEmpty name: String)
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class Bar(@Max(1000) id: Int, @NonEmpty name: String)
 case class Baz(@NotEmpty id: String)
 
 case Foo(@Min(1) id: Int, @NotEmpty @Valid barBaz: Map[Bar, Baz])
@@ -378,7 +370,7 @@ for validation.</p>
 <div class="section" id="generic-case-classes">
 <h4>Generic Case Classes<a class="headerlink" href="#generic-case-classes" title="Permalink to this headline">¶</a></h4>
 <p>Additionally, using <cite>&#64;Valid</cite> on an generically typed field <strong>is unsupported</strong>. E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class Baz(@NotEmpty id: String)
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class Baz(@NotEmpty id: String)
 case class GenericCaseClass[T](@Valid data: T)
 
 val obj = GenericCaseClass(data = Baz(id = &quot;1234&quot;))
@@ -412,7 +404,7 @@ and method validations).</li>
 interface, and define a matching <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/validation/src/main/scala/com/twitter/finatra/validation/ConstraintValidator.scala">ConstraintValidator</a>
 that is referred to in then`validatedBy` field of the new constraint definition.</p>
 <p>Define an additional <cite>Constraint</cite>:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>import java.lang.annotation.ElementType;
+<div class="code java highlight-text notranslate"><div class="highlight"><pre><span></span>import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -426,7 +418,7 @@ public @interface StateConstraint {}
 </pre></div>
 </div>
 <p>Define an additional <cite>ConstraintValidator</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.validation.{ConstraintValidator, MessageResolver, ValidationResult}
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.validation.{ConstraintValidator, MessageResolver, ValidationResult}
 
 class StateConstraintValidator(messageResolver: MessageResolver)
     extends ConstraintValidator[StateConstraint, String](messageResolver) {
@@ -449,7 +441,7 @@ defined in its matching <cite>StateConstraintValidator</cite> automatically at r
 <p>Provide a customized Validator in a <cite>TwitterModule</cite>. The easiest way to do so is to extend the
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/validation/src/main/scala/com/twitter/finatra/validation/ValidatorModule.scala">c.t.finatra.validation.ValidatorModule</a>
 and implement the <cite>ValidatorModule#configureValidator</cite> method:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.validation.{Validator, ValidatorModule}
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.validation.{Validator, ValidatorModule}
 import com.twitter.inject.Injector
 
 object CustomizedValidatorModule extends ValidatorModule {
@@ -461,7 +453,7 @@ object CustomizedValidatorModule extends ValidatorModule {
 </pre></div>
 </div>
 <p>Use your new module as the implementation of <cite>validatorModule</cite> in your <a class="reference external" href="../http/server.html#framework-modules">server definition</a>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>ValidationServer extends HttpServer {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>ValidationServer extends HttpServer {
   override val name: String = &quot;validation-server&quot;
   override def validatorModule: TwitterModule = CustomizedValidatorModule
 
@@ -484,7 +476,7 @@ to efficiently apply field and method validations. For more information, please 
 allow for validation of JSON request bodies.</p>
 <p>For example, if you have the following HTTP <a class="reference external" href="../http/requests.html#custom-case-class-request-object">custom request case class</a>
 defined:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class ValidateUserRequest(
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class ValidateUserRequest(
   @NotEmpty @Pattern(regexp = &quot;[a-z]+&quot;) userName: String,
   @Max(value = 9999) id: Long,
   title: String
@@ -492,7 +484,7 @@ defined:</p>
 </pre></div>
 </div>
 <p>And in your HTTP controller, you define a <cite>POST</cite> endpoint:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>post(&quot;/validate_user&quot;) { _: ValidateUserRequest =&gt;
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>post(&quot;/validate_user&quot;) { _: ValidateUserRequest =&gt;
   ...
 }
 </pre></div>
@@ -509,19 +501,19 @@ in a Finatra HTTP server by default to translate the exception into a suitable H
 <ul>
 <li><p class="first">When defining constraints, case classes MUST be defined with all constructors args publicly visible.
 E.g., a constructor defined like so:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class DoublePerson(@NotEmpty name: String)(@NotEmpty otherName: String)
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class DoublePerson(@NotEmpty name: String)(@NotEmpty otherName: String)
 </pre></div>
 </div>
 <p>will throw an <cite>IllegalArgumentException</cite> if passed to the <cite>Validator</cite>. The reason being that the
 second parameter list fields are by default not publicly visible. If you find you need to separate
 a constructor like so, you will need to explicitly make the fields in the second parameter list
 visible for validation:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class DoublePerson(@NotEmpty name: String)(@NotEmpty val otherName: String)
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class DoublePerson(@NotEmpty name: String)(@NotEmpty val otherName: String)
 </pre></div>
 </div>
 <p>or reference the second argument somewhere within the body of the case class which has the effect
 of making the second argument list visible via reflection as a declared field, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class DoublePerson(@NotEmpty name: String)(@NotEmpty otherName: String) {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class DoublePerson(@NotEmpty name: String)(@NotEmpty otherName: String) {
   def someMethod: String =
     s&quot;This references the second parameter argument: $otherName&quot;
 }
@@ -532,7 +524,7 @@ of making the second argument list visible via reflection as a declared field, e
 case class field should be able to be done eagerly and without side-effects.</p>
 </li>
 <li><p class="first">Case classes with generic type params are <strong>not supported</strong> for validation. E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class GenericCaseClass[T](@NotEmpty @Valid data: T)
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class GenericCaseClass[T](@NotEmpty @Valid data: T)
 </pre></div>
 </div>
 <p>This may appear to work for some category of data but caching of reflection data does not discriminate
@@ -570,7 +562,7 @@ of contents when annotated with <cite>&#64;Valid</cite>. Annotated unsupported t
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Validation Framework</a><ul>
 <li><a class="reference internal" href="#constraints">Constraints</a></li>

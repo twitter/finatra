@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Working With Files &#8212; Finatra 21.1.0 documentation</title>
+    <title>Working With Files &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -90,7 +82,7 @@ You can use the flag <cite>-doc.root</cite> to customize the classpath root (i.e
 </ul>
 <p>Additionally, it is recommend to use local filesystem serving <em>only during testing</em> and <strong>not in production</strong>. It is recommended that you include files to be served as <a class="reference external" href="https://docs.oracle.com/javase/8/docs/technotes/guides/lang/resources.html">classpath resources</a> in production.</p>
 <p>To set a flag value, pass the flag and its value as an argument to your server:</p>
-<div class="code bash highlight-text"><div class="highlight"><pre><span></span>$ java -jar finatra-http-server-assembly-2.0.0.jar -doc.root=/namespace
+<div class="code bash highlight-text notranslate"><div class="highlight"><pre><span></span>$ java -jar finatra-http-server-assembly-2.0.0.jar -doc.root=/namespace
 </pre></div>
 </div>
 <p>For more information on using and setting command-line flags see <a class="reference external" href="../getting-started/flags.html#passing-flag-values-as-command-line-arguments">Flags</a>.</p>
@@ -105,7 +97,7 @@ of the <a class="reference external" href="https://github.com/twitter/finatra/bl
 <h2>File Serving Examples<a class="headerlink" href="#file-serving-examples" title="Permalink to this headline">¶</a></h2>
 <p>File serving is most commonly done through an HTTP <a class="reference external" href="../http/server.html">server</a> to serve assets. Thus we’ll show examples assuming an HTTP controller. For utility, the framework provides methods to return the contents of a file as the body of an HTTP response through the
 <a class="reference external" href="../http/responses.html#responsebuilder">ResponseBuilder</a>.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import ExampleService
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import ExampleService
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 import javax.inject.Inject
@@ -161,7 +153,7 @@ defined in order of most-specific to least-specific.</p>
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Working With Files</a><ul>
 <li><a class="reference internal" href="#file-locations">File Locations</a></li>

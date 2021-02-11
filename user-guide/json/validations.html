@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>JSON Validation Framework &#8212; Finatra 21.1.0 documentation</title>
+    <title>JSON Validation Framework &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -88,7 +80,7 @@ validations must currently be specified <em>inside</em> of the actual class to b
 <h2>Validation Errors<a class="headerlink" href="#validation-errors" title="Permalink to this headline">¶</a></h2>
 <p>By default validation errors are returned <strong>alphabetically sorted</strong> by validation error message (for determinism when testing). See the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/exceptions/CaseClassMappingException.scala">CaseClassMappingException</a>.</p>
 <p>Eg.,</p>
-<div class="code json highlight-text"><div class="highlight"><pre><span></span>{
+<div class="code json highlight-text notranslate"><div class="highlight"><pre><span></span>{
   &quot;errors&quot; : [
     &quot;location.lat: [9999.0] is not between -85 and 85&quot;,
     &quot;location.long: field is required&quot;,
@@ -106,12 +98,12 @@ For example, you may want to validate a <cite>POST</cite> request on the write p
 bypass validating that same JSON for a <cite>GET</cite> request on the read path.</p>
 <p>You can create a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala">ScalaObjectMapper</a>
 that will bypass validation like this:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>ScalaObjectMapper.builder.withNoValidation.objectMapper
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>ScalaObjectMapper.builder.withNoValidation.objectMapper
 </pre></div>
 </div>
 <p>If you desire to bypass validation in all scenarios throughout your service, you can disable validation when defining a new <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala">ScalaObjectMapperModule</a>
 and replace the default <cite>jacksonModule</cite> in your server definition.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object NoValidationJacksonModule extends ScalaObjectMapperModule {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>object NoValidationJacksonModule extends ScalaObjectMapperModule {
   override val validation = false
 }
 
@@ -144,7 +136,7 @@ class ValidationServer extends HttpServer {
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">JSON Validation Framework</a><ul>
 <li><a class="reference internal" href="#id1">MixIn Annotations</a></li>

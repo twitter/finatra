@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Override Modules &#8212; Finatra 21.1.0 documentation</title>
+    <title>Override Modules &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -81,7 +73,7 @@ calls to an external service through a real client we want to instead use a mock
 Or load an in-memory implementation to which we can keep a reference in order to make assertions on
 its internal state. In these cases we can compose a server with a collection of override modules that
 selectively replace bound instances.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>override val server = new EmbeddedHttpServer(
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>override val server = new EmbeddedHttpServer(
   twitterServer = new ExampleServer {
     override def overrideModules = Seq(OverrideSomeBehaviorModule)
   },
@@ -89,7 +81,7 @@ selectively replace bound instances.</p>
 </pre></div>
 </div>
 <p>For instance if you have a controller which takes in a type of <cite>ServiceA</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyController(serviceA: ServiceA) extends Controller {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class MyController(serviceA: ServiceA) extends Controller {
   get(&quot;/:id&quot;) { request: Request =&gt;
     serviceA.lookupInformation(request.params(&quot;id&quot;))
   }
@@ -98,7 +90,7 @@ selectively replace bound instances.</p>
 </div>
 <p>With a <a class="reference external" href="../getting-started/modules.html">Module</a> that provides the implementation of <cite>ServiceA</cite>
 to the injector:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object MyServiceAModule extends TwitterModule {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>object MyServiceAModule extends TwitterModule {
   val key = flag(&quot;key&quot;, &quot;defaultkey&quot;, &quot;The key to use.&quot;)
 
   @Singleton
@@ -112,7 +104,7 @@ to the injector:</p>
 <p>In order to test, you may want to use a mock or stub version of <cite>ServiceA</cite> in your controller instead
 of the real version. You could do this by writing a re-usable module for testing and compose it into
 the server when testing by including it as an override module.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object StubServiceAModule extends TwitterModule {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>object StubServiceAModule extends TwitterModule {
   @Singleton
   @Provides
   def providesServiceA: ServiceA = {
@@ -122,7 +114,7 @@ the server when testing by including it as an override module.</p>
 </pre></div>
 </div>
 <p>And in your test, add this stub module as a override module:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>override val server = new EmbeddedHttpServer(
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>override val server = new EmbeddedHttpServer(
   twitterServer = new MyGreatServer {
     override def overrideModules = Seq(StubServiceAModule)
   },
@@ -176,7 +168,7 @@ functionality in a test.</p>
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Override Modules</a><ul>
 <li><a class="reference internal" href="#more-information">More Information</a></li>
@@ -188,7 +180,7 @@ functionality in a test.</p>
   <li><a href="../../index.html">Documentation overview</a><ul>
   <li><a href="../index.html">User’s Guide</a><ul>
       <li>Previous: <a href="mocks.html" title="previous chapter">Working with Mocks</a></li>
-      <li>Next: <a href="bind_dsl.html" title="next chapter">Explicit Binding with <code class="docutils literal"><span class="pre">#bind[T]</span></code></a></li>
+      <li>Next: <a href="bind_dsl.html" title="next chapter">Explicit Binding with <code class="docutils literal notranslate"><span class="pre">#bind[T]</span></code></a></li>
   </ul></li>
   </ul></li>
 </ul>

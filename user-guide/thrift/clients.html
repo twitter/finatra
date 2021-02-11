@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Communicate with a Thrift Service &#8212; Finatra 21.1.0 documentation</title>
+    <title>Communicate with a Thrift Service &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -73,18 +65,18 @@
 <a class="reference external" href="https://twitter.github.io/finagle/guide/Clients.html">Finagle Thrift clients</a>.</p>
 <p>As mentioned in the Scrooge <a class="reference external" href="https://twitter.github.io/scrooge/Finagle.html">Finagle Integration</a>
 documentation, users have three API choices for building an interface to a Finagle Thrift client —
-<code class="docutils literal"><span class="pre">ServicePerEndpoint</span></code>, <code class="docutils literal"><span class="pre">ReqRepServicePerEndpoint</span></code>, and <code class="docutils literal"><span class="pre">MethodPerEndpoint</span></code>.</p>
-<p>The <code class="docutils literal"><span class="pre">MethodPerEndpoint</span></code> interface is a collection of methods which return <cite>Futures</cite>.</p>
-<p>The <code class="docutils literal"><span class="pre">ServicePerEndpoint</span></code> interface is a collection of Finagle <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#services"><cite>Services</cite></a> where each Thrift method
+<code class="docutils literal notranslate"><span class="pre">ServicePerEndpoint</span></code>, <code class="docutils literal notranslate"><span class="pre">ReqRepServicePerEndpoint</span></code>, and <code class="docutils literal notranslate"><span class="pre">MethodPerEndpoint</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">MethodPerEndpoint</span></code> interface is a collection of methods which return <cite>Futures</cite>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">ServicePerEndpoint</span></code> interface is a collection of Finagle <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#services"><cite>Services</cite></a> where each Thrift method
 is represented as a Finagle <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Service.scala">Service</a>
 of <cite>ThriftMethod.Args</cite> to <cite>ThriftMethod.SuccessType</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>Service[method.Args, method.SuccessType]
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>Service[method.Args, method.SuccessType]
 </pre></div>
 </div>
 <p>By their nature of being <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#services"><cite>Services</cite></a>, the methods are composable with Finagle’s <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters"><cite>Filters</cite></a>.</p>
-<p>The <code class="docutils literal"><span class="pre">ReqRepServicePerEndpoint</span></code> interface is also a collection of Finagle <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#services"><cite>Services</cite></a>, however
+<p>The <code class="docutils literal notranslate"><span class="pre">ReqRepServicePerEndpoint</span></code> interface is also a collection of Finagle <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#services"><cite>Services</cite></a>, however
 methods are <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#services"><cite>Services</cite></a> from a <a class="reference external" href="https://github.com/twitter/scrooge/blob/develop/scrooge-core/src/main/scala/com/twitter/scrooge/Request.scala"><cite>c.t.scrooge.Request</cite></a> to a <a class="reference external" href="https://github.com/twitter/scrooge/blob/develop/scrooge-core/src/main/scala/com/twitter/scrooge/Response.scala"><cite>c.t.scrooge.Response</cite></a>, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.scrooge.{Request, Response}
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.scrooge.{Request, Response}
 
 Service[Request[method.Args], Response[method.SuccessType]]
 </pre></div>
@@ -97,7 +89,7 @@ protocol.</p>
 <p>To start, add a dependency on the Finatra <a class="reference external" href="https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22inject-thrift-client_2.12%22">inject-thrift-client</a> library.</p>
 <p>E.g., with sbt:</p>
 <pre class="literal-block">
-&quot;com.twitter&quot; %% &quot;inject-thrift-client&quot; % &quot;21.1.0&quot;,
+&quot;com.twitter&quot; %% &quot;inject-thrift-client&quot; % &quot;21.2.0&quot;,
 </pre>
 </div>
 <div class="section" id="thriftmethodbuilderclientmodule">
@@ -111,17 +103,17 @@ protocol.</p>
 <p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftMethodBuilderClientModule.scala"><cite>c.t.inject.thrift.modules.ThriftMethodBuilderClientModule</cite></a> allows for configuration of a Finagle
 Thrift client using the Finagle <a class="reference external" href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ThriftMux$">ThriftMux</a>
 <a class="reference external" href="https://twitter.github.io/finagle/guide/MethodBuilder.html">MethodBuilder</a> integration.</p>
-<p>Users have the option to configure a <cite>service-per-endpoint</cite>, i.e., <code class="docutils literal"><span class="pre">ServicePerEndpoint</span></code> or
-<code class="docutils literal"><span class="pre">ReqRepServicePerEndpoint</span></code> interface of the Thrift client and the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftMethodBuilderClientModule.scala"><cite>c.t.inject.thrift.modules.ThriftMethodBuilderClientModule</cite></a>
-provides bindings for both the chosen <cite>service-per-endpoint</cite> interface and the <code class="docutils literal"><span class="pre">MethodPerEndpoint</span></code>
-interface. In this case, the <code class="docutils literal"><span class="pre">MethodPerEndpoint</span></code> interface functions as a thin wrapper over the
+<p>Users have the option to configure a <cite>service-per-endpoint</cite>, i.e., <code class="docutils literal notranslate"><span class="pre">ServicePerEndpoint</span></code> or
+<code class="docutils literal notranslate"><span class="pre">ReqRepServicePerEndpoint</span></code> interface of the Thrift client and the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftMethodBuilderClientModule.scala"><cite>c.t.inject.thrift.modules.ThriftMethodBuilderClientModule</cite></a>
+provides bindings for both the chosen <cite>service-per-endpoint</cite> interface and the <code class="docutils literal notranslate"><span class="pre">MethodPerEndpoint</span></code>
+interface. In this case, the <code class="docutils literal notranslate"><span class="pre">MethodPerEndpoint</span></code> interface functions as a thin wrapper over the
 configured <cite>service-per-endpoint</cite>.</p>
 <p>The choice to interact with Finagle <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#services"><cite>Services</cite></a> when calling the configured Thrift client or to
 use the Thrift method interface is up to you. You will have access to both in the object graph when
 implementing a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftMethodBuilderClientModule.scala"><cite>ThriftMethodBuilderClientModule</cite></a>.</p>
 <p>To create a new client, first create a new <a class="reference external" href="../getting-started/modules.html">TwitterModule</a> which
 extends <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftMethodBuilderClientModule.scala"><cite>c.t.inject.thrift.modules.ThriftMethodBuilderClientModule</cite></a>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.service.RetryBudget
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.service.RetryBudget
 import com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule
 import com.twitter.myservice.thriftscala.MyService
 import com.twitter.util.{Duration, Monitor}
@@ -142,10 +134,10 @@ object MyServiceModule
 </pre></div>
 </div>
 <p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftMethodBuilderClientModule.scala"><cite>ThriftMethodBuilderClientModule</cite></a> implementation must be typed to a Scrooge-generated <cite>service-per-endpoint</cite>
-and the <code class="docutils literal"><span class="pre">MethodPerEndpoint</span></code>. Users can choose either the <cite>MyService.ServicePerEndpoint</cite> interface
+and the <code class="docutils literal notranslate"><span class="pre">MethodPerEndpoint</span></code>. Users can choose either the <cite>MyService.ServicePerEndpoint</cite> interface
 (as in the above example) or the <cite>MyService.ReqRepServicePerEndpoint</cite> interface depending on their
 requirements:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object MyServiceModule
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>object MyServiceModule
   extends ThriftMethodBuilderClientModule[
     MyService.ReqRepServicePerEndpoint,
     MyService.MethodPerEndpoint] {
@@ -160,7 +152,7 @@ requirements:</p>
 <h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
 <p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftMethodBuilderClientModule.scala"><cite>ThriftMethodBuilderClientModule</cite></a> intends to allow users to configure
 <a class="reference external" href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ThriftMux$">ThriftMux</a> client
-semantics and apply filters per-method via the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/ThriftMethodBuilder.scala"><code class="docutils literal"><span class="pre">c.t.inject.thrift.ThriftMethodBuilder</span></code></a> which is a
+semantics and apply filters per-method via the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/ThriftMethodBuilder.scala"><code class="docutils literal notranslate"><span class="pre">c.t.inject.thrift.ThriftMethodBuilder</span></code></a> which is a
 thin wrapper over the Finagle <a class="reference external" href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ThriftMux$">ThriftMux</a>
 <a class="reference external" href="https://twitter.github.io/finagle/guide/MethodBuilder.html">MethodBuilder</a>.</p>
 <p>Advanced <a class="reference external" href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ThriftMux$">ThriftMux</a> client
@@ -174,7 +166,7 @@ for more information on client configuration parameters and their meanings.</p>
 <h3>Per-Method Configuration<a class="headerlink" href="#per-method-configuration" title="Permalink to this headline">¶</a></h3>
 <p>To configure per-method semantics, override and provide an implementation for the
 <cite>ThriftMethodBuilderClientModule#configureServicePerEndpoint</cite> method. E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.Injector
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.Injector
 import com.twitter.inject.thrift.ThriftMethodBuilderFactory
 import com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule
 import com.twitter.myservice.thriftscala.MyService
@@ -212,7 +204,7 @@ object MyServiceModule
 </div>
 <p>In this example we are configuring the given <cite>servicePerEndpoint</cite> by re-implementing the <cite>Foo</cite> and
 <cite>Bar</cite> functions using a “builder”-like API. Each <a class="reference external" href="https://twitter.github.io/scrooge">Scrooge</a>-generated
-client-side <code class="docutils literal"><span class="pre">ServicePerEndpoint</span></code> provides a <cite>withXXXX</cite> function over every defined Thrift method that
+client-side <code class="docutils literal notranslate"><span class="pre">ServicePerEndpoint</span></code> provides a <cite>withXXXX</cite> function over every defined Thrift method that
 allows users to replace the current implementation of the method with a new implementation. The
 replacement must still be a correctly-typed Finagle <cite>Service</cite>.</p>
 <p>In the above example we replace the methods with implementations built up from a combination of
@@ -222,11 +214,11 @@ resultant <cite>Service[-Req, +Rep]</cite>.</p>
 <div class="section" id="global-filters">
 <h4>Global Filters<a class="headerlink" href="#global-filters" title="Permalink to this headline">¶</a></h4>
 <p>Note that <a class="reference external" href="https://github.com/twitter/finagle/blob/f61b6f99c7d108b458d5adcb9891ff6ddda7f125/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala#L203">TypeAgnostic</a>
-Finagle <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters"><cite>Filters</cite></a> can also be applied “globally” across the all methods of a <code class="docutils literal"><span class="pre">ServicePerEndpoint</span></code>
+Finagle <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters"><cite>Filters</cite></a> can also be applied “globally” across the all methods of a <code class="docutils literal notranslate"><span class="pre">ServicePerEndpoint</span></code>
 interface by calling <cite>ServicePerEndpoint#filtered</cite>.</p>
 <p>For example, to apply a set of <a class="reference external" href="https://github.com/twitter/finagle/blob/f61b6f99c7d108b458d5adcb9891ff6ddda7f125/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala#L203">TypeAgnostic</a>
-Finagle Filters to a <code class="docutils literal"><span class="pre">ServicePerEndpoint</span></code>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.Injector
+Finagle Filters to a <code class="docutils literal notranslate"><span class="pre">ServicePerEndpoint</span></code>:</p>
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.Injector
 import com.twitter.inject.thrift.ThriftMethodBuilderFactory
 import com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule
 import com.twitter.myservice.thriftscala.MyService
@@ -260,7 +252,7 @@ of the <a class="reference external" href="https://github.com/twitter/finatra/bl
 <a class="reference external" href="https://twitter.github.io/scrooge/Finagle.html#id3">MyService.ReqRepServicePerEndpoint</a>) <strong>and</strong>
 <a class="reference external" href="https://twitter.github.io/scrooge/Finagle.html#id1">MyService.MethodPerEndpoint</a>.</p>
 <p>For example, given the following <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftMethodBuilderClientModule.scala"><cite>ThriftMethodBuilderClientModule</cite></a> implementation:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule
 import com.twitter.myservice.thriftscala.MyService
 
 object MyServiceModule
@@ -275,7 +267,7 @@ object MyServiceModule
 </div>
 <p>This means that both the <cite>MyService.ServicePerEndpoint</cite> and <cite>MyService.MethodPerEndpoint</cite> types will
 be injectable. Which to use is dependent on your use-case.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 import com.twitter.myservice.thriftscala.MyService
 import javax.inject.{Inject, Singleton}
@@ -302,12 +294,12 @@ protocol.</p>
 </div>
 <p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftClientModule.scala"><cite>c.t.inject.thrift.modules.ThriftClientModule</cite></a> allows for simpler configuration of a Finagle
 Thrift client than the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftMethodBuilderClientModule.scala"><cite>c.t.inject.thrift.modules.ThriftMethodBuilderClientModule</cite></a>.</p>
-<p>Users have the option of configuring either a <code class="docutils literal"><span class="pre">MethodPerEndpoint</span></code> or the higher-kinded, e.g.,
-<code class="docutils literal"><span class="pre">MyService[+MM[_]]</span></code>, interface of the Thrift client and the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftClientModule.scala"><cite>c.t.inject.thrift.modules.ThriftClientModule</cite></a>
+<p>Users have the option of configuring either a <code class="docutils literal notranslate"><span class="pre">MethodPerEndpoint</span></code> or the higher-kinded, e.g.,
+<code class="docutils literal notranslate"><span class="pre">MyService[+MM[_]]</span></code>, interface of the Thrift client and the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftClientModule.scala"><cite>c.t.inject.thrift.modules.ThriftClientModule</cite></a>
 provides a binding to the chosen interface.</p>
 <p>To create a new client, first create a new <a class="reference external" href="../getting-started/modules.html">TwitterModule</a> which
 extends <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftClientModule.scala"><cite>c.t.inject.thrift.modules.ThriftClientModule</cite></a>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.thrift.modules.ThriftClientModule
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.thrift.modules.ThriftClientModule
 import com.twitter.myservice.thriftscala.MyService
 
 object MyServiceModule
@@ -319,12 +311,12 @@ object MyServiceModule
 </pre></div>
 </div>
 <p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftClientModule.scala"><cite>ThriftClientModule</cite></a> implementation must be typed to either the Scrooge-generated
-<code class="docutils literal"><span class="pre">MethodPerEndpoint</span></code> or the <code class="docutils literal"><span class="pre">MyService[+MM[_]]</span></code> Thrift service interface. These interfaces are
+<code class="docutils literal notranslate"><span class="pre">MethodPerEndpoint</span></code> or the <code class="docutils literal notranslate"><span class="pre">MyService[+MM[_]]</span></code> Thrift service interface. These interfaces are
 semantically equivalent, however there are differences when it comes to some testing features which
 have trouble dealing with higher-kinded types (like mocking).</p>
-<p>Users can choose either interface depending on their requirements. E.g., to use the <code class="docutils literal"><span class="pre">MyService[+MM[_]]</span></code>
+<p>Users can choose either interface depending on their requirements. E.g., to use the <code class="docutils literal notranslate"><span class="pre">MyService[+MM[_]]</span></code>
 interface for <cite>MyService</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object MyServiceModule
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>object MyServiceModule
   extends ThriftClientModule[MyService[Future]] {
   ...
 </pre></div>
@@ -337,7 +329,7 @@ interface for <cite>MyService</cite>:</p>
 <h3>Configuration<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftClientModule.scala"><cite>ThriftClientModule</cite></a> intends to allow users to easily configure common parameters of a
 <a class="reference external" href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ThriftMux$">ThriftMux</a> client.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.service.RetryBudget
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.service.RetryBudget
 import com.twitter.inject.Injector
 import com.twitter.inject.thrift.ThriftMethodBuilderFactory
 import com.twitter.inject.thrift.modules.ThriftClientModule
@@ -373,7 +365,7 @@ of the <a class="reference external" href="https://github.com/twitter/finatra/bl
 Either <a class="reference external" href="https://twitter.github.io/scrooge/Finagle.html#id1">MyService.MethodPerEndpoint</a> or
 <cite>MyService[Future]</cite>.</p>
 <p>For example, given the following <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftClientModule.scala"><cite>ThriftClientModule</cite></a> implementation:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.thrift.modules.ThriftClientModule
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.thrift.modules.ThriftClientModule
 import com.twitter.myservice.thriftscala.MyService
 
 object MyServiceModule
@@ -385,7 +377,7 @@ object MyServiceModule
 </pre></div>
 </div>
 <p>This means that the <cite>MyService.MethodPerEndpoint</cite> type will be injectable.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 import com.twitter.myservice.thriftscala.MyService
 import javax.inject.{Inject, Singleton}
@@ -446,7 +438,7 @@ of the <a class="reference external" href="https://twitter.github.io/scrooge/ind
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Communicate with a Thrift Service</a><ul>
 <li><a class="reference internal" href="#getting-started">Getting Started</a></li>

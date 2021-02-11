@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Custom Logback AsyncAppender &#8212; Finatra 21.1.0 documentation</title>
+    <title>Custom Logback AsyncAppender &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -88,7 +80,7 @@ gauges track:</p>
 <li><a class="reference external" href="https://logback.qos.ch/manual/appenders.html#asyncMaxFlushTime">Max flush time</a></li>
 <li><a class="reference external" href="https://logback.qos.ch/manual/appenders.html#asyncQueueSize">Maximum queue size</a></li>
 </ul>
-<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="nt">&quot;logback/appender/async-service/current_queue_size&quot;</span> <span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
   <span class="nt">&quot;logback/appender/async-service/discard/threshold&quot;</span> <span class="p">:</span> <span class="mf">20.0</span><span class="p">,</span>
   <span class="nt">&quot;logback/appender/async-service/max_flush_time&quot;</span> <span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
@@ -112,7 +104,7 @@ on enabling the custom Logback AsyncAppender metrics.</p>
 <p>Users need to create a JSON file and place it in the <cite>src/main/resources</cite> folder in
 <cite>com/twitter/tunables/finagle/instances.json</cite> to acceptlist the Logback metrics.
 To acceptlist all Logback metrics the JSON file could contain the following:</p>
-<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="nt">&quot;tunables&quot;</span><span class="p">:</span>
   <span class="p">[</span>
      <span class="p">{</span>
@@ -130,7 +122,7 @@ To acceptlist all Logback metrics the JSON file could contain the following:</p>
 <p>The configuration of each AsyncAppender will be added to the registry such that it can viewed
 without accessing the statically defined configuration. Different AsyncAppenders will registered
 in the registry by their defined name.</p>
-<div class="highlight-json"><div class="highlight"><pre><span></span>&quot;library&quot; : {
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>&quot;library&quot; : {
   &quot;logback&quot; : {
     &quot;async-service&quot; : {
       &quot;never_block&quot; : &quot;false&quot;,
@@ -167,7 +159,7 @@ in the registry by their defined name.</p>
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Custom Logback AsyncAppender</a><ul>
 <li><a class="reference internal" href="#usage">Usage</a></li>

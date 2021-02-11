@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Thrift Exception Mapping &#8212; Finatra 21.1.0 documentation</title>
+    <title>Thrift Exception Mapping &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -86,7 +78,7 @@ another action). You are encouraged to do what makes sense for your use case or 
 <cite>ThriftServer</cite> which provides a root-level <em>no-op</em> mapping for exceptions. You can register
 additional mappers or override the default altogether.</p>
 <p>Given the following Thrift IDL:</p>
-<div class="highlight-text"><div class="highlight"><pre><span></span>namespace java com.twitter.example.thriftjava
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>namespace java com.twitter.example.thriftjava
 #@namespace scala com.twitter.example.thriftscala
 namespace rb ExampleService
 
@@ -149,7 +141,7 @@ service ExampleService {
 </div>
 <p>If you wanted to map a <cite>java.lang.ClassCastException</cite> to an exception specified in the Thrift
 IDL, you could create the following <cite>ExceptionMapper</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.example.thriftscala.{ClientError, ClientErrorCause}
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.example.thriftscala.{ClientError, ClientErrorCause}
 import com.twitter.finatra.thrift.exceptions.ExceptionMapper
 import com.twitter.util.Future
 import java.lang.ClassCastException
@@ -166,7 +158,7 @@ class ClassCastExceptionMapper
 </pre></div>
 </div>
 <p>Then register this exception mapper in your server.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.ThriftServer
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.ThriftServer
 import com.twitter.finatra.thrift.filters.ExceptionMappingFilter
 import com.twitter.finatra.thrift.routing.ThriftRouter
 
@@ -244,7 +236,7 @@ previous mapper will be overwritten.</p>
 <h2>Register an Exception Mapper<a class="headerlink" href="#register-an-exception-mapper" title="Permalink to this headline">¶</a></h2>
 <p>There are several ways to add a mapper.</p>
 <p>Either directly through the <cite>ThriftRouter</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>override def configureThrift(router: ThriftRouter): Unit = {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>override def configureThrift(router: ThriftRouter): Unit = {
   router
     .filter[ExceptionMappingFilter]
     .exceptionMapper[MyThrowableExceptionMapper]
@@ -253,7 +245,7 @@ previous mapper will be overwritten.</p>
 </pre></div>
 </div>
 <p>With the <cite>JavaThriftRouter</cite>:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>@Override
+<div class="code java highlight-text notranslate"><div class="highlight"><pre><span></span>@Override
 public void configureThrift(router: JavaThriftRouter) {
    router
      .filter(ExceptionMappingFilter.class)
@@ -263,7 +255,7 @@ public void configureThrift(router: JavaThriftRouter) {
 </pre></div>
 </div>
 <p>Or in a module which is then added to the Server, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object MyExceptionMapperModule extends TwitterModule {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>object MyExceptionMapperModule extends TwitterModule {
   override def singletonStartup(injector: Injector): Unit = {
     val manager = injector.instance[ExceptionManager]
     manager.add[MyThrowableExceptionMapper]
@@ -278,7 +270,7 @@ override val modules = Seq(
 </pre></div>
 </div>
 <p>in Java:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>public class MyExceptionMapperModule extends TwitterModule {
+<div class="code java highlight-text notranslate"><div class="highlight"><pre><span></span>public class MyExceptionMapperModule extends TwitterModule {
   @Override
   public void singletonStartup(Injector injector) {
     ExceptionManager manager = injector.instance(ExceptionManager.class);
@@ -317,7 +309,7 @@ public Collection&lt;Module&gt; javaModules() {
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Thrift Exception Mapping</a><ul>
 <li><a class="reference internal" href="#why">Why?</a></li>

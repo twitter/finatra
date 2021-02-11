@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Examples &#8212; Finatra 21.1.0 documentation</title>
+    <title>Examples &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -73,7 +65,7 @@
 <div class="section" id="word-count-server">
 <h2>Word Count Server<a class="headerlink" href="#word-count-server" title="Permalink to this headline">¶</a></h2>
 <p>We can build a lightweight server which counts the unique words from an input topic, storing the results in RocksDB.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class WordCountRocksDbServer extends KafkaStreamsTwitterServer {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class WordCountRocksDbServer extends KafkaStreamsTwitterServer {
 
   override val name = &quot;wordcount&quot;
   private val countStoreName = &quot;CountsStore&quot;
@@ -93,7 +85,7 @@
 <div class="section" id="queryable-state">
 <h3>Queryable State<a class="headerlink" href="#queryable-state" title="Permalink to this headline">¶</a></h3>
 <p>We can then expose a Thrift endpoint enabling clients to directly query the state via <a class="reference external" href="https://kafka.apache.org/21/documentation/streams/developer-guide/interactive-queries.html">interactive queries</a>.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class WordCountRocksDbServer extends KafkaStreamsTwitterServer with QueryableState {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class WordCountRocksDbServer extends KafkaStreamsTwitterServer with QueryableState {
 
   ...
 
@@ -111,7 +103,7 @@
 }
 </pre></div>
 </div>
-<p>In this example, <code class="docutils literal"><span class="pre">WordCountQueryService</span></code> is an underlying Thrift service.</p>
+<p>In this example, <code class="docutils literal notranslate"><span class="pre">WordCountQueryService</span></code> is an underlying Thrift service.</p>
 </div>
 </div>
 </div>
@@ -135,7 +127,7 @@
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Examples</a><ul>
 <li><a class="reference internal" href="#word-count-server">Word Count Server</a><ul>

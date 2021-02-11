@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Thrift Server Definition &#8212; Finatra 21.1.0 documentation</title>
+    <title>Thrift Server Definition &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -77,12 +69,12 @@ for an example <cite>ThriftServer</cite>.</p>
 library. We also recommend using <a class="reference external" href="https://logback.qos.ch/">Logback</a> as your
 <a class="reference external" href="https://www.slf4j.org/manual.html">SLF4J</a> implementation. E.g., with sbt:</p>
 <pre class="literal-block">
-&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % &quot;21.1.0&quot;
+&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % &quot;21.2.0&quot;
 &quot;ch.qos.logback&quot; % &quot;logback-classic&quot; % versions.logback,
 </pre>
 <p>For more information on logging with Finatra see: <a class="reference external" href="../logging/index.html#introduction-to-logging-with-finatra">Introduction to Logging With Finatra</a>.</p>
 <p>Create a new class that extends <a class="reference external" href="https://github.com/twitter/finatra/blob/700e741f41368d9bc2ba76489e0641c4cfb8545a/thrift/src/main/scala/com/twitter/finatra/thrift/servers.scala#L143">c.t.finatra.thrift.ThriftServer</a>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.ThriftServer
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.ThriftServer
 import com.twitter.finatra.thrift.routing.ThriftRouter
 
 object ExampleServerMain extends ExampleServer
@@ -96,7 +88,7 @@ class ExampleServer extends ThriftServer {
 </pre></div>
 </div>
 <p>Or in Java, extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/700e741f41368d9bc2ba76489e0641c4cfb8545a/thrift/src/main/scala/com/twitter/finatra/thrift/servers.scala#L168">c.t.finatra.thrift.AbstractThriftServer</a>:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.AbstractThriftServer;
+<div class="code java highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.AbstractThriftServer;
 import com.twitter.finatra.thrift.routing.JavaThriftRouter;
 
 public class ExampleServer extends AbstractThriftServer {
@@ -109,7 +101,7 @@ public class ExampleServer extends AbstractThriftServer {
 </pre></div>
 </div>
 <p>A more complete example includes adding Modules, a Controller, and Filters.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.google.inject.Module
 import com.twitter.finatra.thrift.ThriftServer
 import com.twitter.finatra.thrift.filters.{LoggingMDCFilter, TraceIdMDCFilter}
 import com.twitter.finatra.thrift.routing.ThriftRouter
@@ -131,7 +123,7 @@ class ExampleServer extends ThriftServer {
 </pre></div>
 </div>
 <p>in Java:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module;
+<div class="code java highlight-text notranslate"><div class="highlight"><pre><span></span>import com.google.inject.Module;
 import com.twitter.finatra.thrift.AbstractThriftServer;
 import com.twitter.finatra.thrift.filters.LoggingMDCFilter;
 import com.twitter.finatra.thrift.filters.TraceIdMDCFilter;
@@ -172,7 +164,7 @@ for providing instances to the object graph.</p>
 with a name ending in “Main” that extends your server class. The server <em>class</em> can be used in
 testing as this allows your server to be instantiated multiple times in tests without worrying about
 static state persisting across test runs in the same JVM.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object ExampleServerMain extends ExampleServer
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>object ExampleServerMain extends ExampleServer
 </pre></div>
 </div>
 <p>The static object, e.g., <cite>ExampleServerMain</cite>, would then contain a static <cite>main()</cite> method for the server
@@ -182,7 +174,7 @@ for running the server in all other cases.</p>
 <h3>Java Naming Convention<a class="headerlink" href="#java-naming-convention" title="Permalink to this headline">¶</a></h3>
 <p>In Java you would create a separate “main” class which defines a static <cite>main()</cite> method and accepts args
 for flag parsing:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>public final class ExampleServerMain {
+<div class="code java highlight-text notranslate"><div class="highlight"><pre><span></span>public final class ExampleServerMain {
     private ExampleServerMain() {
     }
 
@@ -218,7 +210,7 @@ instead of creating a <a class="reference external" href="./controllers.html">Th
 a <cite>Service[Array[Byte], Array[Byte]]</cite> via the <cite>ThriftRouter</cite>.</p>
 <p>To do so, extend the <cite>ThriftServerTrait</cite> (or <cite>AbstractThriftServerTrait</cite> in Java) and implement the
 <cite>thriftService: Service[Array[Byte], Array[Byte]]</cite> method:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.google.inject.Module
 import com.twitter.finagle.Service
 import com.twitter.finatra.thrift.ThriftServerTrait
 import com.twitter.finatra.thrift.filters.{LoggingMDCFilter, TraceIdMDCFilter}
@@ -236,7 +228,7 @@ class ExampleServer extends ThriftServerTrait {
 </pre></div>
 </div>
 <p>in Java:</p>
-<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module;
+<div class="code java highlight-text notranslate"><div class="highlight"><pre><span></span>import com.google.inject.Module;
 import com.twitter.finagle.Service;
 import com.twitter.finatra.thrift.AbstractThriftServerTrait;
 import java.util.Collection;
@@ -275,7 +267,7 @@ with command line arguments. If this is the case, Finatra’s <a class="referenc
 core flags can be set from code.</p>
 <p>For example, instead of setting the <cite>-thrift.port</cite> flag, you can override the following method in
 your server.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.ThriftServer
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.ThriftServer
 import com.twitter.finatra.thrift.routing.ThriftRouter
 
 class ExampleServer extends ThriftServer {
@@ -314,7 +306,7 @@ the Framework Module will be replaced.</p>
 server you can override <cite>configureThriftServer</cite> in your server to specify additional configuration
 on (or override the default configuration of) the underlying Finagle server.</p>
 <p>For example:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.ThriftMux
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.ThriftMux
 import com.twitter.finatra.thrift.ThriftServer
 import com.twitter.finatra.thrift.routing.ThriftRouter
 
@@ -344,7 +336,7 @@ the server documentation <a class="reference external" href="https://twitter.git
 which classifies any deserialized Thrift Exception as a failure. To configure server-side <a class="reference external" href="https://twitter.github.io/finagle/guide/Servers.html#response-classification">Response Classification</a>
 you could choose to set the classifier directly on the underlying Finagle server by overriding the
 <cite>configureThriftServer</cite> in your server, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>override def configureThriftServer(server: ThriftMux.Server): ThriftMux.Server = {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>override def configureThriftServer(server: ThriftMux.Server): ThriftMux.Server = {
     server.withResponseClassifier(???)
 }
 </pre></div>
@@ -356,7 +348,7 @@ to the object graph that is then available to be injected into things like the T
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/StatsFilter.scala">StatsFilter</a>
 for a more accurate reporting of metrics that takes into account server-side response classification.</p>
 <p>For example, in your <cite>ThriftServer</cite> you would do:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.google.inject.Module
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.routing.HttpRouter
 
@@ -395,7 +387,7 @@ section.</p>
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Thrift Server Definition</a><ul>
 <li><a class="reference internal" href="#naming-convention">Naming Convention</a><ul>

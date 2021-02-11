@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>HTTP Exception Mapping &#8212; Finatra 21.1.0 documentation</title>
+    <title>HTTP Exception Mapping &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -80,7 +72,7 @@ encouraged to do what makes sense for your use case or team.</p>
 <h2>How?<a class="headerlink" href="#how" title="Permalink to this headline">¶</a></h2>
 <p>The Finatra framework adds a set of <a class="reference external" href="#default-exception-mappers">mappers by default</a> to your HttpServer which provide high-level mapping for exceptions. You can register additional mappers or <a class="reference external" href="#override-default-behavior">override the default mappers</a> altogether.</p>
 <p>For instance, if you wanted to map a <cite>java.net.MalformedURLException</cite> to a <cite>400 - BadRequest</cite> response you could create the following ExceptionMapper:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>@Singleton
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>@Singleton
 class MalformedURLExceptionMapper @Inject()(response: ResponseBuilder)
   extends ExceptionMapper[MalformedURLException] {
 
@@ -91,7 +83,7 @@ class MalformedURLExceptionMapper @Inject()(response: ResponseBuilder)
 </pre></div>
 </div>
 <p>Then register this exception mapper in your server.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyHttpServer extends HttpServer {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class MyHttpServer extends HttpServer {
 
   override def configureHttp(router; HttpRouter): Unit = {
     router
@@ -113,7 +105,7 @@ class MalformedURLExceptionMapper @Inject()(response: ResponseBuilder)
 Thus if you have installed the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala">c.t.finatra.http.filters.CommonFilters</a> the ExceptionMappingFilter is already installed.</p>
 </div>
 <p>To manually add the <cite>ExceptionMappingFilter</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import DoEverythingModule
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import DoEverythingModule
 import ExampleController
 import ExampleFilter
 import MalformedURLExceptionMapper
@@ -197,7 +189,7 @@ as a framework module in every <a class="reference external" href="https://githu
 <h2>Register an Exception Mapper<a class="headerlink" href="#register-an-exception-mapper" title="Permalink to this headline">¶</a></h2>
 <p>There are multiple ways to add a mapper.</p>
 <p>Either directly through the <cite>HttpRouter</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>override def configureHttp(router: HttpRouter): Unit = {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>override def configureHttp(router: HttpRouter): Unit = {
   router
     .filter[ExceptionMappingFilter[Request]]
     .exceptionMapper[MyThrowableExceptionMapper]
@@ -206,7 +198,7 @@ as a framework module in every <a class="reference external" href="https://githu
 </pre></div>
 </div>
 <p>Or in a module which is then added to the Server, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object MyExceptionMapperModule extends TwitterModule {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>object MyExceptionMapperModule extends TwitterModule {
   override def singletonStartup(injector: Injector): Unit = {
     val manager = injector.instance[ExceptionManager]
     manager.add[MyThrowableExceptionMapper]
@@ -242,7 +234,7 @@ override val modules = Seq(
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">HTTP Exception Mapping</a><ul>
 <li><a class="reference internal" href="#why">Why?</a></li>

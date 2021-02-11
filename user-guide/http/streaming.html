@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>HTTP Streaming &#8212; Finatra 21.1.0 documentation</title>
+    <title>HTTP Streaming &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -88,7 +80,7 @@
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
 <p>Finatra streaming support lets controllers stream input, output, or both. By recognizing the input and output signatures of a handler as either a <cite>Reader</cite>, <cite>StreamingRequest</cite>, or <cite>StreamingResponse</cite>, Finatra will make the necessary conversions.</p>
 <p><cite>StreamingRequest</cite> and <cite>StreamingResponse</cite> are fully featured Request/Response objects and allow you control over, and access to, request parameters and headers. If instead, you only need to consume or return data without having to inspect the request or modify the response, you can deal completely in terms of our streaming primitives.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.Controller
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.streaming.StreamingRequest
 import com.twitter.io.{Buf, Reader}
 
@@ -130,7 +122,7 @@ class MyTweetController extends Controller {
 </pre></div>
 </div>
 <p>Resource management is performed by listening to <cite>Reader#onClose</cite>.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.streaming.StreamingRequest
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.streaming.StreamingRequest
 import com.twitter.io.Reader
 import com.twitter.util.Closable
 
@@ -182,7 +174,7 @@ class MyOtherTweetController extends Controller {
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">HTTP Streaming</a><ul>
 <li><a class="reference internal" href="#features">Features</a></li>

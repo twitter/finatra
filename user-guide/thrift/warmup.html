@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Thrift Server Warmup &#8212; Finatra 21.1.0 documentation</title>
+    <title>Thrift Server Warmup &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -80,7 +72,7 @@ TwitterServer <a class="reference external" href="https://twitter.github.io/twit
 <p>See <a class="reference external" href="../getting-started/lifecycle.html">here</a> for more information on the lifecycle of a Finatra
 server.</p>
 <p>To perform warmup, simply override this callback method and implement your logic. E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import DoEverythingModule
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import DoEverythingModule
 import com.twitter.finatra.thrift.ThriftServer
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.filters._
@@ -122,7 +114,7 @@ which simply instantiates a given <a class="reference external" href="https://gi
 via the injector and invokes its <cite>#handle()</cite> function.</p>
 <p>Combining the above, if we wanted to run an initial call through our Thrift service we could create
 the following handler:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import ExampleThriftController
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import ExampleThriftController
 import com.twitter.example.thriftscala.ExampleService.Add1
 import com.twitter.finatra.thrift.routing.ThriftWarmup
 import com.twitter.inject.Logging
@@ -176,7 +168,7 @@ of the handler.</p>
 </div>
 <p>You would then run this handler in <cite>warmup()</cite> lifecycle callback E.g.,</p>
 <p>E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import DoEverythingModule
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import DoEverythingModule
 import com.twitter.finatra.thrift.ThriftServer
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.filters._
@@ -232,7 +224,7 @@ class ExampleServer extends ThriftServer {
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Thrift Server Warmup</a><ul>
 <li><a class="reference internal" href="#warmup">Warmup</a></li>

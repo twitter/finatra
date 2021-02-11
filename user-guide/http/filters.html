@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Filtering HTTP Requests &#8212; Finatra 21.1.0 documentation</title>
+    <title>Filtering HTTP Requests &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -125,7 +117,7 @@ this is especially useful if the Filter manually inspects to see if it should ap
 request URI path that may not exist in the routing table (e.g., is not defined by any controller
 added to the server).</p>
 <p>If you want to apply a Filter or Filters to <strong>all</strong> added controllers you can do the following:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import DoEverythingModule
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import DoEverythingModule
 import ExampleController
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.routing.HttpRouter
@@ -155,7 +147,7 @@ section on <a class="reference external" href="https://twitter.github.io/finagle
 <h3>Per-controller Filters<a class="headerlink" href="#per-controller-filters" title="Permalink to this headline">¶</a></h3>
 <p>It is also possible to add Filters per controller, using <cite>HttpRouter#add[F1 &lt;: HttpFilter, C &lt;: Controller]</cite>.</p>
 <p>These Filters will apply to all routes in the Controller.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import DoEverythingModule
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import DoEverythingModule
 import ExampleController
 import ExampleFilter
 import com.twitter.finagle.http.Request
@@ -188,7 +180,7 @@ instances of the Filters. However, all of these methods support passing construc
 <h3>Per-route Filters<a class="headerlink" href="#per-route-filters" title="Permalink to this headline">¶</a></h3>
 <p>Additionally, you can specify Filters <em>inside</em> of a Controller per-route,
 e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class ExampleController @Inject()(
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class ExampleController @Inject()(
   exampleService: ExampleService
 ) extends Controller {
 
@@ -215,12 +207,12 @@ you can chain <cite>Controller#filter</cite> calls arbitrarily deep.</p>
 <div class="section" id="request-scope">
 <h3>Request Scope<a class="headerlink" href="#request-scope" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="https://github.com/google/guice">Guice</a> supports <a class="reference external" href="https://github.com/google/guice/wiki/CustomScopes">custom scopes</a> in addition
-to the defined <code class="docutils literal"><span class="pre">&#64;Singleton</span></code>, <code class="docutils literal"><span class="pre">&#64;SessionScoped</span></code>, and <a class="reference external" href="https://github.com/google/guice/blob/master/extensions/servlet/src/com/google/inject/servlet/RequestScoped.java"><code class="docutils literal"><span class="pre">&#64;RequestScoped</span></code></a>
-<a class="reference external" href="https://github.com/google/guice/wiki/Scopes">scopes</a>. <a class="reference external" href="https://github.com/google/guice/blob/master/extensions/servlet/src/com/google/inject/servlet/RequestScoped.java"><code class="docutils literal"><span class="pre">&#64;RequestScoped</span></code></a> is often used to allow
+to the defined <code class="docutils literal notranslate"><span class="pre">&#64;Singleton</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;SessionScoped</span></code>, and <a class="reference external" href="https://github.com/google/guice/blob/master/extensions/servlet/src/com/google/inject/servlet/RequestScoped.java"><code class="docutils literal notranslate"><span class="pre">&#64;RequestScoped</span></code></a>
+<a class="reference external" href="https://github.com/google/guice/wiki/Scopes">scopes</a>. <a class="reference external" href="https://github.com/google/guice/blob/master/extensions/servlet/src/com/google/inject/servlet/RequestScoped.java"><code class="docutils literal notranslate"><span class="pre">&#64;RequestScoped</span></code></a> is often used to allow
 injection of instances which can change depending on the incoming request (e.g. the currently
 authenticated User).</p>
-<p>Finatra provides a custom implementation of the default <a class="reference external" href="https://github.com/google/guice">Guice</a> <a class="reference external" href="https://github.com/google/guice/blob/master/extensions/servlet/src/com/google/inject/servlet/RequestScoped.java"><code class="docutils literal"><span class="pre">&#64;RequestScoped</span></code></a> functionality
-which works across Finagle non-blocking threads. The default <a class="reference external" href="https://github.com/google/guice">Guice</a> <a class="reference external" href="https://github.com/google/guice/blob/master/extensions/servlet/src/com/google/inject/servlet/RequestScoped.java"><code class="docutils literal"><span class="pre">&#64;RequestScoped</span></code></a>
+<p>Finatra provides a custom implementation of the default <a class="reference external" href="https://github.com/google/guice">Guice</a> <a class="reference external" href="https://github.com/google/guice/blob/master/extensions/servlet/src/com/google/inject/servlet/RequestScoped.java"><code class="docutils literal notranslate"><span class="pre">&#64;RequestScoped</span></code></a> functionality
+which works across Finagle non-blocking threads. The default <a class="reference external" href="https://github.com/google/guice">Guice</a> <a class="reference external" href="https://github.com/google/guice/blob/master/extensions/servlet/src/com/google/inject/servlet/RequestScoped.java"><code class="docutils literal notranslate"><span class="pre">&#64;RequestScoped</span></code></a>
 implementation uses <a class="reference external" href="https://docs.oracle.com/javase/7/docs/api/java/lang/ThreadLocal.html">ThreadLocals</a>
 which will not work within the context of a Twitter <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala">c.t.util.Future</a>.</p>
 <div class="admonition note">
@@ -235,7 +227,7 @@ which will not work within the context of a Twitter <a class="reference external
 <p>Then define a module which mixes in the <cite>c.t.inject.requestscope.RequestScopeBinding</cite> trait.
 This trait defines <cite>#bindRequestScope[T]</cite> which will bind the given type to an “unseeded”
 <cite>Provider[T]</cite> of the type <em>in</em> the custom “FinagleRequestScope”. E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.TwitterModule
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.TwitterModule
 import com.twitter.inject.requestscope.RequestScopeBinding
 
 object UserModule extends TwitterModule with RequestScopeBinding {
@@ -256,7 +248,7 @@ and calling <cite>#seed[T](instance)</cite>. For request scoping, you would gene
 executed on the request path.</p>
 <p>For example, to define a <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala">Filter</a>
 which seeds a <cite>User</cite> into the “FinagleRequestScope”:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.{Service, SimpleFilter}
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.inject.requestscope.FinagleRequestScope
 import com.twitter.util.Future
@@ -285,7 +277,7 @@ server _above_ the defined <a class="reference external" href="https://github.co
 <cite>com.twitter.finagle.http.Request</cite> and <cite>com.twitter.finagle.http.Response</cite>.</p>
 </div>
 <p>E.g., for the <cite>UserFilter</cite> defined above (shown with common Filters in a recommended Filter order):</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.{Request, Response}
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter, TraceIdMDCFilter}
 import com.twitter.finatra.http.routing.HttpRouter
@@ -306,7 +298,7 @@ class Server extends HttpServer {
 </div>
 <p>Lastly, wherever you need to access the Request scoped <cite>User</cite> inject a <cite>User</cite> or a <cite>Provider[User]</cite>
 type.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 import javax.inject.{Inject, Provider, Singleton}
 
@@ -343,7 +335,7 @@ method is defined in an <cite>implicit class</cite> which takes a <cite>c.t.fina
 Importing the “context” members into scope thus allows for calling the method defined in the
 <cite>implicit class</cite> as though it were a method on the HTTP <cite>Request</cite> object.</p>
 <p>For example, a UserContext</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
 
 // domain object to set as a RecordSchema field
 case class User(id: Long)
@@ -366,7 +358,7 @@ object UserContext {
 </div>
 <p>And a <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala">Filter</a>
 which can set the <cite>User</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>// create a Filter
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>// create a Filter
 class UserFilter extends SimpleFilter[Request, Response] {
   override def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
     UserContext.setUser(request)
@@ -377,7 +369,7 @@ class UserFilter extends SimpleFilter[Request, Response] {
 </div>
 <p>In the above example, the retrieval method defined in the implicit class <cite>UserContextSyntax</cite> will
 then be available on the the <cite>request</cite> when the <cite>UserContext._</cite> members are imported:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>// import the UserContext members into scope, the method Request#user
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>// import the UserContext members into scope, the method Request#user
 // will now be available on the Request object.
 import UserContext._
 
@@ -411,7 +403,7 @@ class MyController() extends Controller {
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Filtering HTTP Requests</a><ul>
 <li><a class="reference internal" href="#c-t-finatra-http-filters-accessloggingfilter-rarrow">c.t.finatra.http.filters.AccessLoggingFilter →</a></li>

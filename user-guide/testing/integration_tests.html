@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Integration Tests &#8212; Finatra 21.1.0 documentation</title>
+    <title>Integration Tests &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -101,7 +93,7 @@ created from <cite>TwitterModules</cite> will skip both the lifecycle functions 
 <cite>injector</cite> val with your constructed instance of a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">c.t.inject.Injector</a>
 created from the <cite>c.t.inject.app.TestInjector</cite>.</p>
 <p>You’ll then be able to access instances of necessary classes to execute tests.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.IntegrationTest
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.IntegrationTest
 import com.twitter.inject.app.TestInjector
 
 class ExampleIntegrationTest extends IntegrationTest {
@@ -128,7 +120,7 @@ only want to start <strong>one instance of your injector per test file</strong> 
 and <cite>close()</cite> methods. Note that the <cite>TestInjector</cite> doesn’t take ownership of modules’ lifecycle
 and, instead, leaves this exercise to the users. Put this way, you’re responsible for calling
 <cite>start()</cite> and <cite>close()</cite> in your test if you want to execute the lifecycle hooks in modules.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.IntegrationTest
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.IntegrationTest
 import com.twitter.inject.app.TestInjector
 
 class ExampleLifecycleTest extends IntegrationTest {
@@ -233,7 +225,7 @@ test.</p>
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Integration Tests</a><ul>
 <li><a class="reference internal" href="#id2">c.t.inject.app.TestInjector</a></li>

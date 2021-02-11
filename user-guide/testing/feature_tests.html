@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Feature Tests &#8212; Finatra 21.1.0 documentation</title>
+    <title>Feature Tests &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -154,7 +146,7 @@ to start the server and test it in a controlled environment.</p>
 </div>
 <p>Here’s an example of writing a test that starts a <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a> and asserts that it reports itself “healthy”.</p>
 <p>Given a simple <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.{Http, ListeningServer, Service}
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.{Http, ListeningServer, Service}
 import com.twitter.finagle.http.{Status, Response, Request}
 import com.twitter.server.TwitterServer
 import com.twitter.util.{Await, Future}
@@ -195,7 +187,7 @@ class MyTwitterServer extends TwitterServer {
 <p>First, extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala"><cite>c.t.inject.server.FeatureTest</cite></a> trait. Then override the <cite>server</cite> definition
 with an instance of your <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala"><cite>EmbeddedTwitterServer</cite></a> which wraps your <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a>
 under test.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest, PortUtils}
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest, PortUtils}
 import scala.collection.immutable.ListMap
 
 class MyTwitterServerFeatureTest extends FeatureTest {
@@ -229,7 +221,7 @@ documentation.</p>
 keep them from making remote connections when your server starts, you can override the <cite>Dtab</cite> of the clients by
 passing the <cite>-dtab.add</cite> flag (defined by the <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/DtabFlags.scala">c.t.finagle.DtabFlags</a> trait mixed into <a class="reference external" href="https://github.com/twitter/twitter-server/blob/55d6d28862f7f260f3171342ad8ca363553bac40/server/src/main/scala/com/twitter/server/TwitterServer.scala#L40">c.t.server.TwitterServer</a>)
 to your server under test.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest}
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest}
 import scala.collection.immutable.ListMap
 
 class MyTwitterServerFeatureTest extends FeatureTest {
@@ -260,7 +252,7 @@ started in your <a class="reference external" href="https://github.com/twitter/t
 after the server has been started.</p>
 <p>Assuming we have exposed this bound port as written above with <cite>MyTwitterServer#httpExternalPort</cite> we could create
 a client:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.Http
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.Http
 import com.twitter.finagle.http.{Request, Status}
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest}
@@ -315,7 +307,7 @@ client creation work can then be done for you by the framework’s testing tools
 <h2><cite>c.t.finatra.http.HttpServer</cite><a class="headerlink" href="#c-t-finatra-http-httpserver" title="Permalink to this headline">¶</a></h2>
 <p>To write a <cite>FeatureTest</cite> for an <cite>c.t.finatra.http.HttpServer</cite>, extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala"><cite>c.t.inject.server.FeatureTest</cite></a>
 trait. Then override the <cite>server</cite> definition with an instance of your <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><cite>EmbeddedHttpServer</cite></a>.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Status
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Status
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.server.FeatureTest
 import scala.collection.immutable.ListMap
@@ -348,7 +340,7 @@ class ExampleServerFeatureTest extends FeatureTest {
 methods which use the client for issuing HTTP requests to the server under test.</p>
 <p>You can also create a <cite>c.t.finagle.http.Request</cite> and execute it with the test HTTP client. Finatra has a simple <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/httpclient/src/main/scala/com/twitter/finatra/httpclient/RequestBuilder.scala">RequestBuilder</a>
 to help easily construct a <cite>c.t.finagle.http.Request</cite>.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Status
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Status
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
@@ -384,7 +376,7 @@ class ExampleServerFeatureTest extends FeatureTest {
 <a class="reference external" href="#thrift-tests">client</a> to it, extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala"><cite>c.t.inject.server.FeatureTest</cite></a> trait, override the
 <cite>server</cite> definition with an instance of your <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala"><cite>EmbeddedThriftServer</cite></a>, and then create a Thrift client
 from the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala"><cite>EmbeddedThriftServer</cite></a>.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.example.thriftscala.ExampleThrift
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.example.thriftscala.ExampleThrift
 import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.inject.server.FeatureTest
@@ -417,34 +409,34 @@ function in the above example.</p>
 <h3>Thrift Client Interface Types<a class="headerlink" href="#thrift-client-interface-types" title="Permalink to this headline">¶</a></h3>
 <p>As mentioned in the Scrooge <a class="reference external" href="https://twitter.github.io/scrooge/Finagle.html">Finagle Integration</a>
 documentation, users have three API choices for building an interface to a Finagle Thrift client —
-<code class="docutils literal"><span class="pre">ServicePerEndpoint</span></code>, <code class="docutils literal"><span class="pre">ReqRepServicePerEndpoint</span></code>, and <code class="docutils literal"><span class="pre">MethodPerEndpoint</span></code>. This is true even
+<code class="docutils literal notranslate"><span class="pre">ServicePerEndpoint</span></code>, <code class="docutils literal notranslate"><span class="pre">ReqRepServicePerEndpoint</span></code>, and <code class="docutils literal notranslate"><span class="pre">MethodPerEndpoint</span></code>. This is true even
 when creating a test Thrift client to a Thrift server.</p>
 <p>In the example above, we create a Thrift client in the form of the higher-kinded type interface,
 e.g., <cite>MyService[+MM[_]]</cite>. We could choose to create a <cite>ExampleThrift.MethodPerEndpoint</cite>
 interface instead by changing the type parameter given to the <a class="reference external" href="https://github.com/twitter/finatra/blob/72664be4439da4425dfe63fa325f4c1ebbc5bf4b/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala#L77"><cite>c.t.finatra.thrift.ThriftClient#thriftClient[T]</cite></a>
 method:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>lazy val client: ExampleThrift.MethodPerEndpoint =
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>lazy val client: ExampleThrift.MethodPerEndpoint =
   server.thriftClient[ExampleThrift.MethodPerEndpoint](clientId = &quot;client123&quot;)
 </pre></div>
 </div>
 <p>Users can also choose to create a <cite>service-per-endpoint</cite> Thrift client interface by calling the
-<a class="reference external" href="https://github.com/twitter/finatra/blob/72664be4439da4425dfe63fa325f4c1ebbc5bf4b/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala#L103"><cite>c.t.finatra.thrift.ThriftClient#servicePerEndpoint[T]</cite></a> with either the <code class="docutils literal"><span class="pre">ServicePerEndpoint</span></code> or
-<code class="docutils literal"><span class="pre">ReqRepServicePerEndpoint</span></code> type. E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>lazy val client: ExampleThrift.ServicePerEndpoint =
+<a class="reference external" href="https://github.com/twitter/finatra/blob/72664be4439da4425dfe63fa325f4c1ebbc5bf4b/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala#L103"><cite>c.t.finatra.thrift.ThriftClient#servicePerEndpoint[T]</cite></a> with either the <code class="docutils literal notranslate"><span class="pre">ServicePerEndpoint</span></code> or
+<code class="docutils literal notranslate"><span class="pre">ReqRepServicePerEndpoint</span></code> type. E.g.,</p>
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>lazy val client: ExampleThrift.ServicePerEndpoint =
   server.servicePerEndpoint[ExampleThrift.ServicePerEndpoint](clientId = &quot;client123&quot;)
 </pre></div>
 </div>
 <p>or</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>lazy val client: ExampleThrift.ReqRepServicePerEndpoint =
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>lazy val client: ExampleThrift.ReqRepServicePerEndpoint =
   server.servicePerEndpoint[ExampleThrift.ReqRepServicePerEndpoint](clientId = &quot;client123&quot;)
 </pre></div>
 </div>
-<p>Lastly, the Thrift client can also be expressed as a <code class="docutils literal"><span class="pre">MethodPerEndpoint</span></code> wrapping a
+<p>Lastly, the Thrift client can also be expressed as a <code class="docutils literal notranslate"><span class="pre">MethodPerEndpoint</span></code> wrapping a
 <cite>service-per-endpoint</cite> type by using <a class="reference external" href="https://github.com/twitter/finatra/blob/72664be4439da4425dfe63fa325f4c1ebbc5bf4b/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala#L134"><cite>c.t.finatra.thrift.ThriftClient#methodPerEndpoint[T, U]</cite></a>.
 This would allow for applying a set of filters on the Thrift client interface before interacting
-with the Thrift client as a <code class="docutils literal"><span class="pre">MethodPerEndpoint</span></code> interface.</p>
+with the Thrift client as a <code class="docutils literal notranslate"><span class="pre">MethodPerEndpoint</span></code> interface.</p>
 <p>For example:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>lazy val servicePerEndpoint: ExampleThrift.ServicePerEndpoint =
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>lazy val servicePerEndpoint: ExampleThrift.ServicePerEndpoint =
   server
     .servicePerEndpoint[ExampleThrift.ServicePerEndpoint](clientId = &quot;client123&quot;)
     .filtered(???)
@@ -464,7 +456,7 @@ on Thrift clients.</p>
 opened resources are closed.</p>
 <p>For instance, if you are instantiating a single Thrift client interface for all of your tests, you
 could close the client in the ScalaTest <cite>afterAll</cite> lifecycle block. E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.example.thriftscala.ExampleThrift
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.example.thriftscala.ExampleThrift
 import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.inject.server.FeatureTest
@@ -501,7 +493,7 @@ your testing.</p>
 <h2>Combined <cite>c.t.finatra.http.HttpServer</cite> &amp; <cite>c.t.finatra.thrift.ThriftServer</cite><a class="headerlink" href="#combined-c-t-finatra-http-httpserver-c-t-finatra-thrift-thriftserver" title="Permalink to this headline">¶</a></h2>
 <p>If you are extending both <cite>c.t.finatra.http.HttpServer</cite> <strong>and</strong> <cite>c.t.finatra.thrift.ThriftServer</cite>
 then you can <cite>FeatureTest</cite> by constructing an <cite>EmbeddedHttpServer with ThriftClient</cite>, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.example.thriftscala.ExampleThrift
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.example.thriftscala.ExampleThrift
 import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.thrift.ThriftClient
@@ -545,15 +537,15 @@ your tests can extend.</p>
 <p>Creating a “base” trait that defines shared state is a fine strategy. However, when doing so it
 is generally considered a best practice to <strong>not</strong> share an instance of an embedded server.
 That is, issues can arise when this “base” trait overrides and implements the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala"><cite>c.t.inject.server.FeatureTest</cite></a>
-trait <code class="docutils literal"><span class="pre">def</span> <span class="pre">server</span></code>.</p>
-<p>Thus, we recommend to <em>always</em> implement the abstract <code class="docutils literal"><span class="pre">def</span> <span class="pre">server</span></code> in each <em>actual</em> <cite>FeatureTest</cite>
+trait <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">server</span></code>.</p>
+<p>Thus, we recommend to <em>always</em> implement the abstract <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">server</span></code> in each <em>actual</em> <cite>FeatureTest</cite>
 implementation.</p>
 <p>This does not mean that you cannot share a configured embedded server fixture. To do so effectively
 and efficiently, have the “base” trait define a utility method which allows a <cite>FeatureTest</cite>
 implementation to obtain an instance of an embedded server fixture which it can then set as <em>its</em>
 embedded server for testing.</p>
 <p>For example, we could define a “base” testing trait:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.server.FeatureTest
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.server.FeatureTest
 import com.twitter.finatra.http.EmbeddedHttpServer
 import scala.collection.immutable.ListMap
 
@@ -582,7 +574,7 @@ trait BaseMyServiceFeatureTest extends FeatureTest {
 </div>
 <p>This “base” trait defines a method for obtaining a properly configured embedded server for test
 implementations to use. Then in tests we could do:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.util.mock.Mockito
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.util.mock.Mockito
 
 class MyServiceFirstFeatureTest extends BaseMyServiceFeatureTest with Mockito {
   override val foo: Foo = mock[Foo]
@@ -646,7 +638,7 @@ a method for obtaining a properly configured embedded server for test instances 
 <p>Each subclass implementation would then just cycle through different server configurations, setting
 that configuration as it’s own <cite>server</cite> under test.</p>
 <p>For example, we could extend our defined “base” testing trait to include test cases:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.EmbeddedHttpServer
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.mock.Mockito
 import scala.collection.immutable.ListMap
@@ -687,7 +679,7 @@ trait BaseMyServiceFeatureTest extends FeatureTest with Mockito {
 </pre></div>
 </div>
 <p>Then in tests we would do:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyServiceFirstFeatureTest extends BaseMyServiceFeatureTest {
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class MyServiceFirstFeatureTest extends BaseMyServiceFeatureTest {
   // We override and implement the c.t.inject.server.FeatureTest#server as a val in our actual test file
   override val server = buildExampleServiceTestServer(
     &quot;firstFeatureServer&quot;,
@@ -765,7 +757,7 @@ for “combined” HTTP and Thrift server.</li>
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Feature Tests</a><ul>
 <li><a class="reference internal" href="#testing-multiple-applications-or-servers">Testing Multiple Applications or Servers</a></li>

@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Logback &#8212; Finatra 21.1.0 documentation</title>
+    <title>Logback &#8212; Finatra 21.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '21.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -40,8 +33,7 @@
 
   </script>
 
-  </head>
-  <body>
+  </head><body>
   
   
 
@@ -81,12 +73,12 @@ logback-access.</p>
 <p>See Logback’s documentation on <a class="reference external" href="https://logback.qos.ch/reasonsToSwitch.html">reasons to switch from Log4j</a>.</p>
 <p>If you choose to use Logback, just include a jar dependency on <cite>ch.qos.logback:logback-classic</cite>.</p>
 <p>E.g., with <a class="reference external" href="https://www.scala-sbt.org/">sbt</a>:</p>
-<div class="highlight-text"><div class="highlight"><pre><span></span>&quot;ch.qos.logback&quot; % &quot;logback-classic&quot; % VERSION
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&quot;ch.qos.logback&quot; % &quot;logback-classic&quot; % VERSION
 </pre></div>
 </div>
 <p>Where, <cite>VERSION</cite> represents the version of Logback you want to use.</p>
 <p>Similarly, with <a class="reference external" href="https://maven.apache.org/">Maven</a>:</p>
-<div class="code xml highlight-text"><div class="highlight"><pre><span></span>&lt;dependency&gt;
+<div class="code xml highlight-text notranslate"><div class="highlight"><pre><span></span>&lt;dependency&gt;
   &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
   &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;
   &lt;version&gt;VERSION&lt;/version&gt;
@@ -102,7 +94,7 @@ APIs</a>.</p>
 <p>To configure dynamic changing log levels with <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a>,
 be sure to <em>also</em> include a dependency on the TwitterServer Logback library.</p>
 <p>With <a class="reference external" href="https://www.scala-sbt.org/">sbt</a>:</p>
-<div class="highlight-text"><div class="highlight"><pre><span></span>&quot;com.twitter&quot; % &quot;twitter-server-logback-classic&quot; % VERSION
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&quot;com.twitter&quot; % &quot;twitter-server-logback-classic&quot; % VERSION
 </pre></div>
 </div>
 <p class="last">See the TwitterServer <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#dynamically-change-log-levels">documentation</a>
@@ -122,13 +114,13 @@ example project for example Logback configurations.</p>
 <p>The example
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/examples/http-server/scala/src/main/resources/logback.xml">logback.xml</a>
 configuration file makes use of <a class="reference external" href="https://logback.qos.ch/manual/configuration.html#variableSubstitution">Logback’s variable substitution</a></p>
-<div class="code xml highlight-text"><div class="highlight"><pre><span></span>${log.access.output:-access.log}
+<div class="code xml highlight-text notranslate"><div class="highlight"><pre><span></span>${log.access.output:-access.log}
 ${log.service.output:-service.log}
 </pre></div>
 </div>
 <p>for configuring the <cite>&lt;file/&gt;</cite> output of the appenders. A variable’s value is specified at
 runtime as a Java system property, e.g.,</p>
-<div class="code bash highlight-text"><div class="highlight"><pre><span></span>-Dlog.service.output=myservice.log
+<div class="code bash highlight-text notranslate"><div class="highlight"><pre><span></span>-Dlog.service.output=myservice.log
 </pre></div>
 </div>
 <p>If a value is not provided the inlined default will be used, i.e., what is on the other side of the
@@ -170,7 +162,7 @@ This module is added by the framework to Http and Thrift servers by default.</p>
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Logback</a><ul>
 <li><a class="reference internal" href="#logback-configuration">Logback Configuration</a><ul>
