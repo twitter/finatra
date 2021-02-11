@@ -9,7 +9,7 @@ scala_library(
         "../scala-kafka2.2/*.scala",
         # This is a bazel filegroup target, however, Pants will see this as a path to match files,
         # which would return nothing.
-        "finatra/kafka-streams/kafka-streams/src/test/scala-kafka2.2:kafka-2.2",
+        "finatra/kafka-streams/kafka-streams/src/test/scala-kafka2.5:kafka-2.5",
     ],
     compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(

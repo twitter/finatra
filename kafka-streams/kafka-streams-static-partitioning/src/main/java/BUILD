@@ -1,6 +1,7 @@
 java_library(
     # only include with compiling with kafka2.2
-    sources = ["**/*.java"],
+    # sources = ["**/*.java"],
+    sources = [],
     compiler_option_sets = [],
     provides = artifact(
         org = "com.twitter",

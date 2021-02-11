@@ -9,6 +9,8 @@ Unreleased
 
 Changed
 ~~~~~~~
+* kafkaStreams:  Switch the default Kafka client and Kafka Stream client to version 2.4.1.
+  ``PHAB_ID=D606782``
 
 * finatra: Rename the finatra/http project to finatra/http-server. Please update your
            build artifact references (i.e. SBT, Maven) to use "finatra-http-server". See the

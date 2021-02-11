@@ -329,11 +329,11 @@ abstract class KafkaStreamsTwitterServer
       defaultConfig = defaultConfig.applicationId(applicationId())
     }
 
-    // if the code is run from 2.5 library, it will set the compatible mode.
+    // Set to the compatible mode from higher version library, customer can
     // use ProtocolUpgrade mixin to override
-    if (AppInfoParser.getVersion().startsWith("2.5")) {
-      // we can't use StreamsConfig.UPGRADE_FROM_22 because the code
-      // need to compile for 2.2
+    if (!AppInfoParser.getVersion().startsWith("2.2")) {
+      // we can't use StreamsConfig.UPGRADE_FROM_22 because the variable is
+      // not defined in lower version.
       defaultConfig = defaultConfig.upgradeFrom("2.2")
     }
 

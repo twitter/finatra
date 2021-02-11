@@ -47,12 +47,13 @@ trait StaticPartitioning extends KafkaStreamsTwitterServer {
     config: KafkaStreamsConfig
   ): KafkaStreamsConfig = {
     val configReturn = super.streamsProperties(config)
-    if (AppInfoParser.getVersion().startsWith("2.5")) {
+    if (AppInfoParser.getVersion().startsWith("2.2")) {
+      configReturn
+    } else {
+      // all future version will use group.instance.id based approach
       val applicationServerHost = Utils.getHost(applicationServerConfig())
       val serviceShardId = StaticPartitioning.parseShardId(applicationServerHost)
       configReturn.consumer.groupInstanceId(serviceShardId.id.toString)
-    } else {
-      configReturn
     }
   }
 

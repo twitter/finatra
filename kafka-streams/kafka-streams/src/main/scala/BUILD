@@ -5,10 +5,10 @@ scala_library(
 
         # The below entries are trying to achieve the same effect in Pants and Bazel.
         # This is taken in Pants; entry starting with ".." will be ignored by Bazel
-        "../scala-kafka2.2/*.scala",
+        "../scala-kafka2.5/*.scala",
         # This is a bazel filegroup target, however, Pants will see this as a path to match files,
         # which would return nothing.
-        "finatra/kafka-streams/kafka-streams/src/main/scala-kafka2.2:kafka-2.2",
+        "finatra/kafka-streams/kafka-streams/src/main/scala-kafka2.5:kafka-2.5",
     ],
     compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(
@@ -19,7 +19,7 @@ scala_library(
     strict_deps = True,
     dependencies = [
         # NOTE: remove this direct rocksDB dependency when building 2.5
-        "3rdparty/jvm/org/rocksdb:rocksdb-5.14.2",
+        #"3rdparty/jvm/org/rocksdb:rocksdb-5.14.2",
         "3rdparty/jvm/it/unimi/dsi:fastutil",
         "3rdparty/jvm/org/agrona",
         "3rdparty/jvm/org/apache/kafka:kafka-clients",

@@ -102,7 +102,7 @@ lazy val versions = new {
   val jodaTime = "2.10.8"
   val json4s = "3.6.7"
   val junit = "4.12"
-  val kafka22 = "2.2.0"
+  val kafka24 = "2.4.1"
   val kafka25 = "2.5.0"
   val libThrift = "0.10.0"
   val logback = "1.2.3"
@@ -1122,14 +1122,15 @@ def kafkaStreamsDependencies(kafkaVersion: String): Seq[ModuleID] = {
   )
 }
 
+// select the library and different set of source files with different scala version
 def crossVersionKafka(
   scalaVersion: Option[(Long, Long)],
-  kafka22: String,
-  kafka25: String
+  kafkaWithscala212: String,
+  kafkaWithscala213: String
 ): String = {
   scalaVersion match {
-    case Some((2, n)) if n <= 12 => kafka22
-    case _ => kafka25
+    case Some((2, n)) if n <= 12 => kafkaWithscala212
+    case _ => kafkaWithscala213
   }
 }
 
@@ -1150,7 +1151,7 @@ lazy val kafka = (project in file("kafka"))
     ),
     libraryDependencies ++= {
       val scalaV = CrossVersion.partialVersion(scalaVersion.value)
-      kafkaDependencies(crossVersionKafka(scalaV, versions.kafka22, versions.kafka25))
+      kafkaDependencies(crossVersionKafka(scalaV, versions.kafka24, versions.kafka25))
     },
     excludeDependencies in Test ++= kafkaStreamsExclusionRules,
     excludeDependencies ++= kafkaStreamsExclusionRules,
@@ -1210,14 +1211,13 @@ lazy val kafkaStreamsStaticPartitioning =
       unmanagedSources / includeFilter in Compile := {
         val scalaV = CrossVersion.partialVersion(scalaVersion.value)
         scalaV match {
-          case Some((2, n)) if n <= 12 => "*.scala" || "*.java"
           case _ => "*.scala"
         }
       },
       unmanagedSourceDirectories in Compile += {
         val sourceDir = (sourceDirectory in Compile).value
         val scalaV = CrossVersion.partialVersion(scalaVersion.value)
-        sourceDir / crossVersionKafka(scalaV, "scala-kafka2.2", "scala-kafka2.5")
+        sourceDir / "scala-kafka2.5"
       },
       excludeDependencies in Test ++= kafkaStreamsExclusionRules,
       excludeDependencies ++= kafkaStreamsExclusionRules,
@@ -1282,7 +1282,7 @@ lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))
     unmanagedSourceDirectories in Compile += {
       val sourceDir = (sourceDirectory in Compile).value
       val scalaV = CrossVersion.partialVersion(scalaVersion.value)
-      sourceDir / crossVersionKafka(scalaV, "scala-kafka2.2", "scala-kafka2.5")
+      sourceDir / "scala-kafka2.5"
     },
     unmanagedSourceDirectories in Test += {
       val testDir = (sourceDirectory in Test).value
@@ -1299,7 +1299,7 @@ lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))
     ),
     libraryDependencies ++= {
       val scalaV = CrossVersion.partialVersion(scalaVersion.value)
-      kafkaStreamsDependencies(crossVersionKafka(scalaV, versions.kafka22, versions.kafka25))
+      kafkaStreamsDependencies(crossVersionKafka(scalaV, versions.kafka24, versions.kafka25))
     },
     excludeDependencies in Test ++= kafkaStreamsExclusionRules,
     excludeDependencies ++= kafkaStreamsExclusionRules,
