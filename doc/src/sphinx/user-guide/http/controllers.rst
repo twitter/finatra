@@ -99,7 +99,7 @@ it will scan all registered controllers **in the order they are added** and disp
 the **first matching** route starting from the top of each controller then invoking the matching
 route's associated callback function.
 
-That is, routes are matched in the order they are added to the `c.t.finatra.http.routing.HttpRouter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__.
+That is, routes are matched in the order they are added to the `c.t.finatra.http.routing.HttpRouter <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__.
 Thus if you are creating routes with overlapping URIs it is recommended to list the routes in order
 starting with the "most specific" to the least specific. Although you don't need to do this for
 constant routes, we encourage you to do it anyway to make it easier to reason about.
@@ -117,7 +117,7 @@ group routes related to a single resource into one controller.
 Per-Route Stats
 ^^^^^^^^^^^^^^^
 
-The per-route stats recording provided by Finatra in the `c.t.finatra.http.filters.StatsFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala>`__
+The per-route stats recording provided by Finatra in the `c.t.finatra.http.filters.StatsFilter <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala>`__
 works best when the above convention is followed.
 
 .. code:: scala
@@ -374,7 +374,7 @@ For example,
 
   -  Routes and Prefixes **MUST** begin with a forward slash (/).
 
-  -  Routes are always added to the `c.t.finatra.http.routing.HttpRouter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__
+  -  Routes are always added to the `c.t.finatra.http.routing.HttpRouter <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__
      **in the order defined** in the `Controller <../http/controllers.html#controllers-and-routing>`__
      and are thus matched in this order as well. This remains true even when defined within a `prefix`
      block. I.e., the `prefix` is merely a convenience for adding a common prefix to a set of routes.
@@ -490,12 +490,12 @@ Admin Path Routing
 ^^^^^^^^^^^^^^^^^^
 
 **Note**: only admin routes which start with `/admin/finatra/` will be routed to using the server's
-configured `HttpRouter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__.
+configured `HttpRouter <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__.
 All other admin routes will be routed to by TwitterServer's `AdminHttpServer <https://github.com/twitter/twitter-server/blob/15e35a3a3070c50168ff55fd83a2dff28b09795c/server/src/main/scala/com/twitter/server/AdminHttpServer.scala#L140>`__
 which only supports **exact path matching** and thus why only constant routes are allowed.
 
-Therefore any configuration defined on your server's `HttpRouter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__
+Therefore any configuration defined on your server's `HttpRouter <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__
 will thus only apply to admin routes starting with `/admin/finatra`. And because these routes will
-use the Finatra `RoutingService <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/routing/RoutingService.scala>`__
+use the Finatra `RoutingService <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/routing/RoutingService.scala>`__
 these routes cannot be included in the `TwitterServer <https://twitter.github.io/twitter-server/>`__
 `HTTP Admin Interface <https://twitter.github.io/twitter-server/Admin.html>`__ index.

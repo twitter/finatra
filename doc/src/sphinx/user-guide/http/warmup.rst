@@ -53,11 +53,11 @@ To perform warmup, simply override this callback method and implement your logic
 `c.t.finatra.http.routing.HttpWarmup`
 -------------------------------------
 
-Finatra provides a utility, `c.t.finatra.http.routing.HttpWarmup <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpWarmup.scala>`__
+Finatra provides a utility, `c.t.finatra.http.routing.HttpWarmup <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/routing/HttpWarmup.scala>`__
 which will route requests to correct service implementation configured by the
 `HttpRouter <https://github.com/twitter/finatra/blob/ad4b1fb37d13ae7b27aae50b885fa4ecfd0ed105/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala#L41>`__.
 
-The most common way to use the `c.t.finatra.http.routing.HttpWarmup <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpWarmup.scala>`__
+The most common way to use the `c.t.finatra.http.routing.HttpWarmup <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/routing/HttpWarmup.scala>`__
 is via a constructor-arg to an implementation of a
 `c.t.inject.utils.Handler <https://github.com/twitter/finatra/blob/develop/inject/inject-utils/src/main/scala/com/twitter/inject/utils/Handler.scala>`__.
 

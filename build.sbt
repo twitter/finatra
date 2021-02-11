@@ -278,7 +278,7 @@ lazy val exampleServerSettings = baseServerSettings ++ Seq(
 
 lazy val finatraModules = Seq[sbt.ProjectReference](
   benchmarks,
-  http,
+  httpServer,
   httpAnnotations,
   httpMustache,
   httpclient,
@@ -445,7 +445,7 @@ lazy val injectLogback = (project in file("inject/inject-logback"))
     )
   ).dependsOn(
     injectCore % "test->test;compile->compile",
-    http % "test->test;test->compile"
+    httpServer % "test->test;test->compile"
   )
 
 lazy val injectModulesTestJarSources =
@@ -683,7 +683,7 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
     injectApp % "test->test;compile->compile",
     injectModules % "test->test;compile->compile",
     injectThrift,
-    http % "test->test",
+    httpServer % "test->test",
     thrift % "test->test",
     utils
   )
@@ -733,8 +733,8 @@ lazy val benchmarks = project
   )
   .settings(noPublishSettings)
   .dependsOn(
-    http,
     httpMustache % "test",
+    httpServer,
     injectRequestScope,
     injectCore % "test->test",
     injectApp % "test->test;compile->compile"
@@ -908,11 +908,11 @@ lazy val httpTestJarSources =
     "com/twitter/finatra/http/modules/ResponseBuilderModule",
     "com/twitter/finatra/http/response/DefaultResponseBuilder"
   )
-lazy val http = project
+lazy val httpServer = (project in file("http-server"))
   .settings(projectSettings)
   .settings(
-    name := "finatra-http",
-    moduleName := "finatra-http",
+    name := "finatra-http-server",
+    moduleName := "finatra-http-server",
     ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*ThriftExceptionMapper.*;.*HttpResponseExceptionMapper.*;.*HttpResponseException.*",
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % versions.libThrift intransitive (),
@@ -976,7 +976,7 @@ lazy val httpMustache = (project in file("http-mustache"))
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
-    http % "test->test;compile->compile",
+    httpServer % "test->test;compile->compile",
     httpAnnotations,
     injectCore % "test->test;compile->compile",
     injectUtils,
@@ -1076,7 +1076,7 @@ lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-h
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
-    http % "test->test;compile->compile",
+    httpServer % "test->test;compile->compile",
     injectCore,
     injectServer % "test->test",
     injectSlf4j % "test->test",
@@ -1248,7 +1248,7 @@ lazy val kafkaStreamsPrerestore = (project in file("kafka-streams/kafka-streams-
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
-    http % "test->test",
+    httpServer % "test->test",
     kafkaStreamsStaticPartitioning % "test->test;compile->compile"
   )
 
@@ -1338,7 +1338,7 @@ lazy val benchmark = (project in file("examples/benchmark"))
       "org.slf4j" % "slf4j-nop" % versions.slf4j
     )
   ).dependsOn(
-    http % "test->test;compile->compile",
+    httpServer % "test->test;compile->compile",
     injectCore % "test->test"
   )
 
@@ -1428,7 +1428,7 @@ lazy val javaHttpServer = (project in file("examples/http/java"))
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
-    http % "test->test;compile->compile",
+    httpServer % "test->test;compile->compile",
     httpclient,
     injectCore % "test->test",
     injectSlf4j,
@@ -1445,7 +1445,7 @@ lazy val scalaHttpServer = (project in file("examples/http/scala"))
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
-    http % "test->test;compile->compile",
+    httpServer % "test->test;compile->compile",
     injectCore % "test->test",
     injectSlf4j,
     injectLogback
@@ -1518,7 +1518,7 @@ lazy val streamingExample = (project in file("examples/advanced/streaming-exampl
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
-    http % "test->test;compile->compile",
+    httpServer % "test->test;compile->compile",
     injectCore % "test->test",
     injectSlf4j,
     injectLogback
@@ -1536,7 +1536,7 @@ lazy val twitterClone = (project in file("examples/advanced/twitter-clone"))
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
-    http % "test->test;compile->compile",
+    httpServer % "test->test;compile->compile",
     httpclient,
     injectCore % "test->test",
     injectDtab,
@@ -1556,7 +1556,7 @@ lazy val exampleWebDashboard = (project in file("examples/advanced/web-dashboard
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
-    http % "test->test;compile->compile",
+    httpServer % "test->test;compile->compile",
     httpMustache,
     httpclient,
     injectCore % "test->test",

@@ -7,6 +7,14 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+
+* finatra: Rename the finatra/http project to finatra/http-server. Please update your
+           build artifact references (i.e. SBT, Maven) to use "finatra-http-server". See the
+           `Finatra User's Guide <https://twitter.github.io/finatra/user-guide/index.html>`__
+           ``PHAB_ID=D616257``
+
 21.2.0
 ------
 

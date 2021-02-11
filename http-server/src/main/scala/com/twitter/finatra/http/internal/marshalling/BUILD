@@ -1,0 +1,26 @@
+scala_library(
+    sources = ["*.scala"],
+    compiler_option_sets = ["fatal_warnings"],
+    provides = scala_artifact(
+        org = "com.twitter",
+        name = "finatra-http-marshalling-internal",
+        repo = artifactory,
+    ),
+    strict_deps = "True",
+    dependencies = [
+        "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
+        "3rdparty/jvm/com/google/inject:guice",
+        "3rdparty/jvm/javax/inject:javax.inject",
+        "finagle/finagle-base-http/src/main",
+        "finatra/http-annotations/src/main/java/com/twitter/finatra/http/annotations",
+        "finatra/http-server/src/main/scala/com/twitter/finatra/http/marshalling",
+        "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",
+        "finatra/inject/inject-utils/src/main/scala",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions",
+        "finatra/json-annotations/src/main/java/com/twitter/finatra/json/annotations",
+        "finatra/utils/src/main/scala/com/twitter/finatra/utils",
+        "finatra/validation/src/main/scala/com/twitter/finatra/validation",
+    ],
+)

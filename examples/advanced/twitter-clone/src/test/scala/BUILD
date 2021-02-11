@@ -16,7 +16,7 @@ junit_tests(
             scope = "runtime",
         ),
         "finatra/examples/advanced/twitter-clone/src/main/scala",
-        "finatra/http/src/test/scala/com/twitter/finatra/http",
+        "finatra/http-server/src/test/scala/com/twitter/finatra/http",
         "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
         "finatra/inject/inject-server/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-server/src/test/scala/com/twitter/inject/server",

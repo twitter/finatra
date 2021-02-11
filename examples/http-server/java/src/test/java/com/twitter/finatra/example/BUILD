@@ -11,7 +11,7 @@ junit_tests(
         ),
         "finagle/finagle-base-http/src/main",
         "finatra/examples/http-server/java/src/main/java/com/twitter/finatra/example",
-        "finatra/http/src/test/scala/com/twitter/finatra/http",
+        "finatra/http-server/src/test/scala/com/twitter/finatra/http",
         "finatra/httpclient/src/main/scala",
         "finatra/inject/inject-app/src/main/scala",
         "finatra/inject/inject-server/src/main/scala",

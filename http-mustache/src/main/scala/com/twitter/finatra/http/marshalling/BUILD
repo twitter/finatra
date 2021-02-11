@@ -11,15 +11,15 @@ scala_library(
         "3rdparty/jvm/javax/inject:javax.inject",
         "finagle/finagle-base-http/src/main",
         "finatra/http-mustache/src/main/java/com/twitter/finatra/http/annotations",
-        "finatra/http/src/main/scala/com/twitter/finatra/http/marshalling",
-        "finatra/http/src/main/scala/com/twitter/finatra/http/response",
+        "finatra/http-server/src/main/scala/com/twitter/finatra/http/marshalling",
+        "finatra/http-server/src/main/scala/com/twitter/finatra/http/response",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/mustache/src/main/scala/com/twitter/finatra/mustache/marshalling",
     ],
     exports = [
         "3rdparty/jvm/javax/inject:javax.inject",
         "finagle/finagle-base-http/src/main",
-        "finatra/http/src/main/scala/com/twitter/finatra/http/marshalling",
+        "finatra/http-server/src/main/scala/com/twitter/finatra/http/marshalling",
         "finatra/mustache/src/main/scala/com/twitter/finatra/mustache/marshalling",
     ],
 )

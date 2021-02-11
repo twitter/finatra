@@ -11,7 +11,7 @@ junit_tests(
         "3rdparty/jvm/org/apache/zookeeper:zookeeper-client",
         "3rdparty/jvm/org/apache/zookeeper:zookeeper-server",
         "3rdparty/jvm/org/scalatestplus:junit",
-        "finatra/http/src/test/scala/com/twitter/finatra/http",
+        "finatra/http-server/src/test/scala/com/twitter/finatra/http",
         "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
         "finatra/inject/inject-server/src/test/scala/com/twitter/inject/server",
         "finatra/kafka-streams/kafka-streams-prerestore/src/main/scala",

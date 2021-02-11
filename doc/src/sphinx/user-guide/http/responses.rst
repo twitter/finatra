@@ -44,7 +44,7 @@ A request to ``GET /foo`` will produce a response:
     }
 
 
-**Note:** If you change the default `MessageBodyWriter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyWriterImpl.scala>`__ implementation (used by the `MessageBodyManager <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala>`__)
+**Note:** If you change the default `MessageBodyWriter <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyWriterImpl.scala>`__ implementation (used by the `MessageBodyManager <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala>`__)
 this will no longer be the default behavior, depending.
 
 You can also always use the |ResponseBuilder|_ to explicitly render a JSON response.
@@ -96,7 +96,7 @@ More information on blocking in Finagle can be found `here <https://finagle.gith
 |ResponseBuilder|_
 ------------------
 
-All HTTP Controllers have a protected `response` field of type `c.t.finatra.http.response.ResponseBuilder <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala>`__ which can be used to build a `c.t.finagle.http.Response` in your Controller route callback functions.
+All HTTP Controllers have a protected `response` field of type `c.t.finatra.http.response.ResponseBuilder <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala>`__ which can be used to build a `c.t.finagle.http.Response` in your Controller route callback functions.
 
 For example:
 
@@ -152,7 +152,7 @@ For example:
     }
 
 
-For more examples, see the `ResponseBuilderTest <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/response/ResponseBuilderTest.scala>`__.
+For more examples, see the `ResponseBuilderTest <https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/response/ResponseBuilderTest.scala>`__.
 
 Wait, how do I create a `Response` from a `Future[T]`?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -165,7 +165,7 @@ is meant to be somewhat generic so its API for constructing a response body acce
 If you have a `Future[T]` and want to return a `c.t.finagle.http.Response` you should either:
 
 - convert it to a `Future[Response]` or 
-- do nothing and let the Finatra `CallbackConverter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala>`__ convert the  `Future[T]` to an HTTP `200 OK` with `T` as the body (as mentioned in `Future Conversion`_ section above).
+- do nothing and let the Finatra `CallbackConverter <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala>`__ convert the  `Future[T]` to an HTTP `200 OK` with `T` as the body (as mentioned in `Future Conversion`_ section above).
 
 To convert a `Future[T]` to a `Future[Response]`, you would use `Future#map <https://twitter.github.io/effectivescala/#Twitter's%20standard%20libraries-Futures>`__:
 
@@ -185,7 +185,7 @@ To convert a `Future[T]` to a `Future[Response]`, you would use `Future#map <htt
 Cookies:
 --------
 
-Cookies, like Headers, are read from request and can set on the response via the `c.t.finatra.http.response.ResponseBuilder <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala>`__:
+Cookies, like Headers, are read from request and can set on the response via the `c.t.finatra.http.response.ResponseBuilder <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala>`__:
 
 .. code:: scala
 
@@ -254,9 +254,9 @@ Setting the Response Location Header:
 which can be used:
 
 -  if the URI has a valid scheme then the URI is placed in the Location header unchanged.
--  `response.location("/users/123")` will get turned into the correct full URI by the `HttpResponseFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/HttpResponseFilter.scala>`__ (e.g. `https://host.com/users/123`) according to rules defined in the `URI specification <https://en.wikipedia.org/wiki/Uniform_Resource_Identifier#Generic_syntax>`__
+-  `response.location("/users/123")` will get turned into the correct full URI by the `HttpResponseFilter <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/HttpResponseFilter.scala>`__ (e.g. `https://host.com/users/123`) according to rules defined in the `URI specification <https://en.wikipedia.org/wiki/Uniform_Resource_Identifier#Generic_syntax>`__
 - The scheme is assumed to be `http` when rewritten unless otherwise specified in the `"x-forwarded-proto"` header in the request.
 
 .. |ResponseBuilder| replace:: `c.t.finatra.http.response.ResponseBuilder`
-.. ResponseBuilder: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala
+.. ResponseBuilder: https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala
 
