@@ -281,7 +281,7 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   httpServer,
   httpAnnotations,
   httpMustache,
-  httpclient,
+  httpClient,
   injectApp,
   injectCore,
   injectDtab,
@@ -942,7 +942,7 @@ lazy val httpServer = (project in file("http-server"))
     }
   ).dependsOn(
     httpAnnotations,
-    httpclient % "test->test",
+    httpClient % "test->test",
     injectRequestScope % Test,
     injectPorts % "test->test",
     injectMdc,
@@ -984,13 +984,13 @@ lazy val httpMustache = (project in file("http-mustache"))
     utils % "test->test;compile->compile"
   )
 
-lazy val httpclientTestJarSources =
+lazy val httpClientTestJarSources =
   Seq("com/twitter/finatra/httpclient/test/")
-lazy val httpclient = project
+lazy val httpClient = (project in file("http-client"))
   .settings(projectSettings)
   .settings(
-    name := "finatra-httpclient",
-    moduleName := "finatra-httpclient",
+    name := "finatra-http-client",
+    moduleName := "finatra-http-client",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
@@ -1001,15 +1001,15 @@ lazy val httpclient = project
     publishArtifact in Test := true,
     mappings in (Test, packageBin) := {
       val previous = (mappings in (Test, packageBin)).value
-      previous.filter(mappingContainsAnyPath(_, httpclientTestJarSources))
+      previous.filter(mappingContainsAnyPath(_, httpClientTestJarSources))
     },
     mappings in (Test, packageDoc) := {
       val previous = (mappings in (Test, packageDoc)).value
-      previous.filter(mappingContainsAnyPath(_, httpclientTestJarSources))
+      previous.filter(mappingContainsAnyPath(_, httpClientTestJarSources))
     },
     mappings in (Test, packageSrc) := {
       val previous = (mappings in (Test, packageSrc)).value
-      previous.filter(mappingContainsAnyPath(_, httpclientTestJarSources))
+      previous.filter(mappingContainsAnyPath(_, httpClientTestJarSources))
     }
   ).dependsOn(
     jackson,
@@ -1429,7 +1429,7 @@ lazy val javaHttpServer = (project in file("examples/http/java"))
     )
   ).dependsOn(
     httpServer % "test->test;compile->compile",
-    httpclient,
+    httpClient,
     injectCore % "test->test",
     injectSlf4j,
     injectLogback
@@ -1537,7 +1537,7 @@ lazy val twitterClone = (project in file("examples/advanced/twitter-clone"))
     )
   ).dependsOn(
     httpServer % "test->test;compile->compile",
-    httpclient,
+    httpClient,
     injectCore % "test->test",
     injectDtab,
     injectSlf4j,
@@ -1558,7 +1558,7 @@ lazy val exampleWebDashboard = (project in file("examples/advanced/web-dashboard
   ).dependsOn(
     httpServer % "test->test;compile->compile",
     httpMustache,
-    httpclient,
+    httpClient,
     injectCore % "test->test",
     injectSlf4j,
     injectLogback,
