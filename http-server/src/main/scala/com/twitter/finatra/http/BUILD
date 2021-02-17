@@ -34,6 +34,7 @@ scala_library(
         "finagle/finagle-http/src/main/scala",
         "finatra/http-server/src/main/scala/com/twitter/finatra/http/modules",
         "finatra/http-server/src/main/scala/com/twitter/finatra/http/routing",
+        "finatra/inject/inject-server/src/main/scala",
         "util/util-core:util-core-util",
     ],
 )
