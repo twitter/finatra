@@ -55,16 +55,6 @@ class HttpClient(
     }
   }
 
-  @deprecated("Use execute(Request)", "")
-  def get(uri: String, headers: Seq[(String, String)] = Seq()): Future[Response] = {
-    execute(
-      RequestBuilder
-        .get(uri)
-        .headers(headers)
-        .request
-    )
-  }
-
   /* Private */
 
   private def setHostname(request: Request) = {

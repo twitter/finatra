@@ -68,16 +68,6 @@ class HttpClientIntegrationTest extends IntegrationTest {
     assert(e.getMessage.contains("com.fasterxml.jackson.databind.exc.MismatchedInputException"))
   }
 
-  test("get#deprecated") {
-    val mockResponse = Response(Status.Ok)
-    mockResponse.setContentString("{}")
-    inMemoryHttpService.mockGet("/foo", mockResponse)
-
-    Await.result(httpClient.get("/foo")) should be(
-      mockResponse
-    ) //Purposely using deprecated method for test coverage
-  }
-
   object MyHttpClientModule extends HttpClientModuleTrait {
     override val dest = "/my-http-service"
     override val label = "test-client"
