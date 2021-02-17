@@ -278,10 +278,11 @@ lazy val exampleServerSettings = baseServerSettings ++ Seq(
 
 lazy val finatraModules = Seq[sbt.ProjectReference](
   benchmarks,
-  httpServer,
   httpAnnotations,
-  httpMustache,
   httpClient,
+  httpCore,
+  httpMustache,
+  httpServer,
   injectApp,
   injectCore,
   injectDtab,
@@ -896,6 +897,21 @@ lazy val mustache = project
     utils
   )
 
+lazy val httpCore = (project in file("http-core"))
+  .settings(projectSettings)
+  .settings(
+    name := "finatra-http-core",
+    moduleName := "finatra-http-core",
+    libraryDependencies ++= Seq(
+      "com.twitter" %% "finagle-http" % versions.twLibVersion,
+      "com.novocode" % "junit-interface" % "0.11" % Test
+    ),
+    excludeFilter in Test in unmanagedResources := "BUILD",
+    publishArtifact in Test := true
+  ).dependsOn(
+    utils % "test->test;compile->compile"
+  )
+
 lazy val httpTestJarSources =
   Seq(
     "com/twitter/finatra/http/EmbeddedHttpServer",
@@ -943,6 +959,7 @@ lazy val httpServer = (project in file("http-server"))
   ).dependsOn(
     httpAnnotations,
     httpClient % "test->test",
+    httpCore,
     injectRequestScope % Test,
     injectPorts % "test->test",
     injectMdc,
@@ -1012,6 +1029,7 @@ lazy val httpClient = (project in file("http-client"))
       previous.filter(mappingContainsAnyPath(_, httpClientTestJarSources))
     }
   ).dependsOn(
+    httpCore,
     jackson,
     injectModules,
     injectUtils,

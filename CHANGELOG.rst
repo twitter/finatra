@@ -10,6 +10,12 @@ Unreleased
 Changed
 ~~~~~~~
 
+* finatra: Create the finatra/http-core project, which is meant to contain common artifacts
+           for the finatra/http-server and finatra/http-client project. As part of this
+           change, the `com.twitter.finatra.httpclient.RequestBuilder` has been deprecated
+           and should be updated to reference `com.twitter.finatra.http.request.RequestBuilder`.
+           ```PHAB_ID=D618583```
+
 * finatra: Rename the finatra/httpclient project to finatra/http-client. Please update your
            build artifact references (i.e. SBT, Maven) to use "finatra-http-client".
            ``PHAB_ID=D617614``
