@@ -7,6 +7,13 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
+* inject-thrift-client: Add per-method retry configuration withMaxRetries in
+  `com.twitter.inject.thrift.ThriftMethodBuilder` for customizing `configureServicePerEndpoint`.
+  ``PHAB_ID=D619565``
+
 Changed
 ~~~~~~~
 
@@ -14,22 +21,22 @@ Changed
   Use HttpClient's `execute` instead. ``PHAB_ID=D618904``
 
 * finatra: Create the finatra/http-core project, which is meant to contain common artifacts
-           for the finatra/http-server and finatra/http-client project. As part of this
-           change, the `com.twitter.finatra.httpclient.RequestBuilder` has been deprecated
-           and should be updated to reference `com.twitter.finatra.http.request.RequestBuilder`.
-           ```PHAB_ID=D618583```
+  for the finatra/http-server and finatra/http-client project. As part of this
+  change, the `com.twitter.finatra.httpclient.RequestBuilder` has been deprecated
+  and should be updated to reference `com.twitter.finatra.http.request.RequestBuilder`.
+  ```PHAB_ID=D618583```
 
 * finatra: Rename the finatra/httpclient project to finatra/http-client. Please update your
-           build artifact references (i.e. SBT, Maven) to use "finatra-http-client".
-           ``PHAB_ID=D617614``
+  build artifact references (i.e. SBT, Maven) to use "finatra-http-client".
+  ``PHAB_ID=D617614``
 
 * kafkaStreams:  Switch the default Kafka client and Kafka Stream client to version 2.4.1.
   ``PHAB_ID=D606782``
 
 * finatra: Rename the finatra/http project to finatra/http-server. Please update your
-           build artifact references (i.e. SBT, Maven) to use "finatra-http-server". See the
-           `Finatra User's Guide <https://twitter.github.io/finatra/user-guide/index.html>`__
-           ``PHAB_ID=D616257``
+  build artifact references (i.e. SBT, Maven) to use "finatra-http-server". See the
+  `Finatra User's Guide <https://twitter.github.io/finatra/user-guide/index.html>`__
+  ``PHAB_ID=D616257``
 
 21.2.0
 ------

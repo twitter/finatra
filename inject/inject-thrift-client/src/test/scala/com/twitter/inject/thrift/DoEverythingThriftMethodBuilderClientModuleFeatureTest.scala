@@ -83,23 +83,21 @@ class DoEverythingThriftMethodBuilderClientModuleFeatureTest extends FeatureTest
   }
 
   test("Say hi") {
-    // fails more times (3) than the MethodBuilder number of retries (2).
-    intercept[Exception] {
-      server.httpGet(path = "/hi?name=Bob", andExpect = Ok, withBody = "Hi Bob")
-    }
+    // retries are configured as maximum 10 (MethodBuilder default is 2).
+    server.httpGet(path = "/hi?name=Bob", andExpect = Ok, withBody = "Hi Bob")
     // per-method -- all the requests in this test were to the same method
     /* assert counters added by ThriftServicePerEndpoint#statsFilter */
     server.inMemoryStats.counters
-      .assert("clnt/greeter-thrift-client/Greeter/hi/requests", 3)
+      .assert("clnt/greeter-thrift-client/Greeter/hi/requests", 6)
     server.inMemoryStats.counters
       .assert("clnt/greeter-thrift-client/Greeter/hi/success", 1)
     server.inMemoryStats.counters
-      .assert("clnt/greeter-thrift-client/Greeter/hi/failures", 2)
+      .assert("clnt/greeter-thrift-client/Greeter/hi/failures", 5)
     /* assert MethodBuilder stats exist */
     server.inMemoryStats.stats
       .get("clnt/greeter-thrift-client/hi/logical/request_latency_ms") should not be None
     server.inMemoryStats.stats
-      .assert("clnt/greeter-thrift-client/hi/retries", Seq(2.0f))
+      .assert("clnt/greeter-thrift-client/hi/retries", Seq(5.0f))
     /* assert MethodBuilder counters */
     server.inMemoryStats.counters
       .assert("clnt/greeter-thrift-client/hi/logical/requests", 1)

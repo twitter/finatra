@@ -228,6 +228,14 @@ final class ThriftMethodBuilder[
   }
 
   /**
+   * @see [[com.twitter.finagle.client.BaseMethodBuilder#withMaxRetries(int)]]
+   */
+  def withMaxRetries(value: Int): this.type = {
+    methodBuilder = methodBuilder.withMaxRetries(value)
+    this
+  }
+
+  /**
    * Method-specific Filters are 'outside' of TypeAgnostic *and* the MethodBuilder filters
    *
    * The layer of indirection via the `AndThenService` is to allow for implementations that may wish

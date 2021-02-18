@@ -35,6 +35,7 @@ object GreeterThriftMethodBuilderClientModule
           .method[Greeter.Hi.Args, Greeter.Hi.SuccessType](Greeter.Hi)
           // method type-agnostic filter
           .withAgnosticFilter[HiLoggingTypeAgnosticFilter]
+          .withMaxRetries(10)
           .withRetryForClassifier(PossiblyRetryable.ResponseClassifier)
           .service)
       .withHello(

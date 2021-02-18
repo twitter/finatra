@@ -24,12 +24,8 @@ class GreeterThriftService(
     info(s"Hi called with message: " + name)
     assertClientId(clientId)
 
-    if (numCalled == 1)
+    if (numCalled <= 5)
       Future.exception(new IllegalArgumentException)
-    else if (numCalled == 2)
-      Future.exception(new InvalidOperation(what = 123, why = "whoops"))
-    else if (numCalled == 3)
-      Future.value("ERROR")
     else
       Future.value(s"Hi $name")
   }
