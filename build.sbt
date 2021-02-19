@@ -905,7 +905,8 @@ lazy val httpCore = (project in file("http-core"))
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
-      "com.novocode" % "junit-interface" % "0.11" % Test
+      "com.novocode" % "junit-interface" % "0.11" % Test,
+      "javax.servlet" % "servlet-api" % versions.servletApi % "provided;compile->compile;test->test"
     ),
     excludeFilter in Test in unmanagedResources := "BUILD",
     publishArtifact in Test := true
