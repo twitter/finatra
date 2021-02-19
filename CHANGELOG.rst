@@ -17,6 +17,10 @@ Added
 Changed
 ~~~~~~~
 
+* finatra: Move c.t.finatra.http.fileupload from the finatra/http-server project to
+  finatra/http-core project. Please update your build artifact references accordingly.
+  ``PHAB_ID=D620478``
+
 * http-client: Remove deprecated method `get` from c.t.finatra.httpclient.HttpClient.
   Use HttpClient's `execute` instead. ``PHAB_ID=D618904``
 

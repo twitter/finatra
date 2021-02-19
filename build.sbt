@@ -904,11 +904,14 @@ lazy val httpCore = (project in file("http-core"))
     moduleName := "finatra-http-core",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
+      "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
       "com.novocode" % "junit-interface" % "0.11" % Test
     ),
     excludeFilter in Test in unmanagedResources := "BUILD",
     publishArtifact in Test := true
   ).dependsOn(
+    httpAnnotations,
+    jackson % "test->test;compile->compile",
     utils % "test->test;compile->compile"
   )
 
@@ -933,7 +936,6 @@ lazy val httpServer = (project in file("http-server"))
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % versions.libThrift intransitive (),
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
-      "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
       "javax.servlet" % "servlet-api" % versions.servletApi % "provided;compile->compile;test->test",
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal",
