@@ -6,7 +6,7 @@ import com.twitter.finagle
 import com.twitter.finagle._
 import com.twitter.finagle.filter.RequestSemaphoreFilter
 import com.twitter.finagle.param.HighResTimer
-import com.twitter.finagle.service.Backoff._
+import com.twitter.finagle.Backoff._
 import com.twitter.finagle.service.Retries.Budget
 import com.twitter.finagle.service.RetryPolicy._
 import com.twitter.finagle.service._
@@ -221,7 +221,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
 
   /**
    * Install a [[com.twitter.finagle.service.RetryFilter]] configured with a [[com.twitter.finagle.service.RetryPolicy]]
-   * using backoffs that grow exponentially using [[com.twitter.finagle.service.Backoff#decorrelatedJittered]]. The jittered
+   * using backoffs that grow exponentially using [[com.twitter.finagle.Backoff#decorrelatedJittered]]. The jittered
    * maximum is the `start` duration * the `multiplier` value.
    *
    * @param shouldRetry a PartialFunction over the both the [[Req]] and a Try-wrapped returned [[Rep]]. Only one of
@@ -230,7 +230,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
    *                            `#shouldRetry` or `#shouldRetryResponse` should be configured
    * @param start how long to delay before retrying
    * @param multiplier used to create a jitter with a random distribution between `start` and 3 times the previously selected value,
-   *                   capped at `start` * `multiplier`. See: [[com.twitter.finagle.service.Backoff#decorrelatedJittered]]
+   *                   capped at `start` * `multiplier`. See: [[com.twitter.finagle.Backoff#decorrelatedJittered]]
    * @param retries number of times to retry
    *
    * @see [[com.twitter.finagle.service.RetryFilter]]

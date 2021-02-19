@@ -1,6 +1,6 @@
 package com.twitter.inject.utils
 
-import com.twitter.finagle.service.Backoff._
+import com.twitter.finagle.Backoff._
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.service.RetryPolicy._
 import com.twitter.util.{Duration, Throw, Try}
