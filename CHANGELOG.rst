@@ -17,6 +17,12 @@ Added
 Changed
 ~~~~~~~
 
+* http-client: Remove deprecated c.t.finatra.httpclient.RichHttpClient. Use c.t.finagle.Http.Client
+  or c.t.finatra.httpclient.modules.HttpClientModuleTrait instead. Additionally,
+  `c.t.finatra.httpclient.modules.HttpClientModule.provideHttpService` has been removed. Use
+  `c.t.finatra.httpclient.modules.HttpClientModuleTrait.newService(injector, statsReceiver)`
+  instead. ``PHAB_ID=D619547``
+
 * finatra: Move c.t.finatra.http.fileupload from the finatra/http-server project to
   finatra/http-core project. Please update your build artifact references accordingly.
   ``PHAB_ID=D620478``
