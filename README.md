@@ -1,6 +1,6 @@
 # Finatra
 
-[![Build Status](https://travis-ci.com/twitter/finatra.svg?branch=develop)](https://travis-ci.com/twitter/finatra?branch=develop)
+[![Build Status](https://github.com/twitter/finatra/workflows/continuous%20integration/badge.svg?branch=develop)](https://github.com/twitter/finatra/actions?query=workflow%3A%22continuous+integration%22+branch%3Adevelop)
 [![Test Coverage](https://codecov.io/github/twitter/finatra/coverage.svg?branch=develop)](https://codecov.io/github/twitter/finatra?branch=develop)
 [![Project status](https://img.shields.io/badge/status-active-brightgreen.svg)](#status)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.12/badge.svg)][maven-central]

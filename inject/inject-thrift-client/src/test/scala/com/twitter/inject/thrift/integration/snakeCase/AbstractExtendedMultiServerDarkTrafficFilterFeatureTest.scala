@@ -59,7 +59,7 @@ abstract class AbstractExtendedMultiServerDarkTrafficFilterFeatureTest(
       .assertHealthy() // give a chance for the stat to be recorded on the dark service
     // "dark" service stats
     darkExtendedSnakeCaseThriftServer.inMemoryStats.counters
-      .assert("per_method_stats/enqueue_event/success", 1)
+      .waitFor("per_method_stats/enqueue_event/success", 1)
   }
 
   test("dequeue_event is not forwarded") {
@@ -113,6 +113,6 @@ abstract class AbstractExtendedMultiServerDarkTrafficFilterFeatureTest(
       .assertHealthy() // give a chance for the stat to be recorded on the dark service
     // "dark" service stats
     darkExtendedSnakeCaseThriftServer.inMemoryStats.counters
-      .assert("per_method_stats/additional_event/success", 1)
+      .waitFor("per_method_stats/additional_event/success", 1)
   }
 }
