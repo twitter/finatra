@@ -17,6 +17,10 @@ Added
 Changed
 ~~~~~~~
 
+* http-client: Remove deprecated c.t.finatra.httpclient.modules.HttpClientModule.
+  Use c.t.finatra.httpclient.modules.HttpClientModuleTrait instead.
+  ``PHAB_ID=D619591``
+
 * http-client: Remove deprecated c.t.finatra.httpclient.RichHttpClient. Use c.t.finagle.Http.Client
   or c.t.finatra.httpclient.modules.HttpClientModuleTrait instead. Additionally,
   `c.t.finatra.httpclient.modules.HttpClientModule.provideHttpService` has been removed. Use

@@ -1,8 +1,9 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main
 
-import com.google.inject.Module
+import com.google.inject.{Module, Provides}
 import com.twitter.finagle.Filter
 import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.jsonpatch.{JsonPatchExceptionMapper, JsonPatchMessageBodyReader}
 import com.twitter.finatra.http.routing.HttpRouter
@@ -22,7 +23,11 @@ import com.twitter.finatra.http.tests.integration.doeverything.main.modules.{
   DoEverythingStatsReceiverModule
 }
 import com.twitter.finatra.http.{Controller, HttpServer}
-import com.twitter.finatra.httpclient.modules.HttpClientModule
+import com.twitter.finatra.httpclient.HttpClient
+import com.twitter.finatra.httpclient.modules.HttpClientModuleTrait
+import com.twitter.finatra.jackson.ScalaObjectMapper
+import com.twitter.inject.Injector
+import javax.inject.Singleton
 
 object DoEverythingServerMain extends DoEverythingServer
 
@@ -34,11 +39,22 @@ class DoEverythingServer extends HttpServer {
 
   flag("magicNum", "26", "Magic number")
 
+  private val httpClientModuleTrait = new HttpClientModuleTrait {
+    val dest: String = "localhost:1234"
+    val label: String = "doeverything-server"
+
+    @Singleton
+    @Provides
+    final def provideHttpClient(
+      injector: Injector,
+      statsReceiver: StatsReceiver,
+      mapper: ScalaObjectMapper
+    ): HttpClient = newHttpClient(injector, statsReceiver, mapper)
+  }
+
   override val modules: Seq[Module] = Seq(
     new DoEverythingModule,
-    new HttpClientModule {
-      override val dest = "localhost:1234"
-    }
+    httpClientModuleTrait
   )
 
   override def configureHttp(router: HttpRouter): Unit = {
