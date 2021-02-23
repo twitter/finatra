@@ -1308,7 +1308,7 @@ lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))
     unmanagedSourceDirectories in Test += {
       val testDir = (sourceDirectory in Test).value
       val scalaV = CrossVersion.partialVersion(scalaVersion.value)
-      testDir / crossVersionKafka(scalaV, "scala-kafka2.2", "scala-kafka2.5")
+      testDir / crossVersionKafka(scalaV, "scala-kafka2.4", "scala-kafka2.5")
     },
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-jvm" % versions.twLibVersion,

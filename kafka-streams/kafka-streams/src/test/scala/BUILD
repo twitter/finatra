@@ -6,10 +6,10 @@ scala_library(
 
         # The below entries are trying to achieve the same effect in Pants and Bazel.
         # This is taken in Pants; entry starting with ".." will be ignored by Bazel
-        "../scala-kafka2.2/*.scala",
+        "../scala-kafka2.4/*.scala",
         # This is a bazel filegroup target, however, Pants will see this as a path to match files,
         # which would return nothing.
-        "finatra/kafka-streams/kafka-streams/src/test/scala-kafka2.5:kafka-2.5",
+        "finatra/kafka-streams/kafka-streams/src/test/scala-kafka2.4:kafka-2.4",
     ],
     compiler_option_sets = ["fatal_warnings"],
     provides = scala_artifact(

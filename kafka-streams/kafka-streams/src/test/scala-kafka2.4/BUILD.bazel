@@ -1,5 +1,5 @@
 filegroup(
-    name = "kafka-2.2",
+    name = "kafka-2.4",
     srcs = glob(["*.scala"]),
     visibility = ["//visibility:public"],
 )
