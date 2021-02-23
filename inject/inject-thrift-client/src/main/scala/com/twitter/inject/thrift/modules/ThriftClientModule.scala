@@ -52,7 +52,7 @@ abstract class ThriftClientModule[ThriftService: ClassTag]
     statsReceiver: StatsReceiver
   ): ThriftService = {
     val thriftmuxClient = newClient(injector, statsReceiver).build[ThriftService](dest, label)
-    closeOnExit {
+    onExit {
       val closable = asClosableThriftService(thriftmuxClient)
       Await.result(closable.close(defaultClosableGracePeriod), defaultClosableAwaitPeriod)
     }

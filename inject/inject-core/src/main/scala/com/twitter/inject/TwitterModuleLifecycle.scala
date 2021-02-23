@@ -56,7 +56,7 @@ private[inject] trait TwitterModuleLifecycle extends Logging {
    * @see [[com.twitter.util.Awaitable]]
    * @see [[com.twitter.util.Closable]]
    */
-  protected def closeOnExit(f: => Unit): Unit = {
+  protected def onExit(f: => Unit): Unit = {
     // `c.t.app.App#onExit` will swallow any exception from a given function, thus we try to ensure
     // some visibility into any potential exception resulting from executing the passed function.
     def tryCatchFn(fn: => Unit): () => Unit = { () =>

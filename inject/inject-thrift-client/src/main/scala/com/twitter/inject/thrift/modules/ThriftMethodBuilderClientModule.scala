@@ -141,7 +141,7 @@ abstract class ThriftMethodBuilderClientModule[
         servicePerEndpoint = methodBuilder.servicePerEndpoint[ServicePerEndpoint]
       )
 
-    closeOnExit {
+    onExit {
       val closable = asClosableThriftService(configuredServicePerEndpoint)
       Await.result(closable.close(defaultClosableGracePeriod), defaultClosableAwaitPeriod)
     }

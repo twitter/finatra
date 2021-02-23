@@ -187,7 +187,7 @@ class TestLifecycleHooksModule extends TwitterModule {
   var shutDown: Boolean = false
   var closed: Boolean = false
 
-  closeOnExit { closed = true }
+  onExit { closed = true }
 
   override def singletonStartup(injector: Injector): Unit = {
     started = true

@@ -17,6 +17,9 @@ Added
 Changed
 ~~~~~~~
 
+* inject-core: (BREAKING API CHANGE) Rename `c.t.inject.TwitterModule.closeOnExit` to `onExit` so
+  it mirrors the API from `c.t.inject.App`.  ``PHAB_ID=D621095``
+
 * http-client: Remove deprecated c.t.finatra.httpclient.modules.HttpClientModule.
   Use c.t.finatra.httpclient.modules.HttpClientModuleTrait instead.
   ``PHAB_ID=D619591``

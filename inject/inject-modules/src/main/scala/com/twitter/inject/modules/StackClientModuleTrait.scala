@@ -313,7 +313,7 @@ trait StackClientModuleTrait[
     statsReceiver: StatsReceiver
   ): Service[Req, Rep] = {
     val service = newClient(injector, statsReceiver).newService(dest, label)
-    closeOnExit {
+    onExit {
       Await.result(service.close(defaultClosableGracePeriod), defaultClosableAwaitPeriod)
     }
     service
