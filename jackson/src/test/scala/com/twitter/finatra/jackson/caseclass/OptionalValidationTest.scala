@@ -2,7 +2,7 @@ package com.twitter.finatra.jackson.caseclass
 
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassMappingException
-import com.twitter.finatra.validation._
+import com.twitter.finatra.validation.{MethodValidation, ValidationResult}
 import com.twitter.finatra.validation.constraints.{Min, NotEmpty, OneOf}
 import com.twitter.inject.Test
 import com.twitter.inject.domain.WrappedValue

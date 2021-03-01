@@ -17,10 +17,14 @@ Added
 Changed
 ~~~~~~~
 
-* jackson: Remove deprecated `com.twitter.finatra.json.utils.CamelCasePropertyNamingStrategy`, 
+* validation: Remove deprecated constraint type aliases under `com.twitter.finatra.validation`, users
+  should prefer the actual constraint annotations at `com.twitter.finatra.validation.constraints`.
+  ``PHAB_ID=D625174``
+
+* jackson: Remove deprecated `com.twitter.finatra.json.utils.CamelCasePropertyNamingStrategy`,
   users should prefer to use `PropertyNamingStrategy#LOWER_CAMEL_CASE` or an equivalent directly.
   Also remove the deprecated `com.twitter.finatra.json.annotations.JsonCamelCase`, users should
-  use the `@JsonProperty` or `@JsonNaming` annotations or an appropriately configured 
+  use the `@JsonProperty` or `@JsonNaming` annotations or an appropriately configured
   Jackson `PropertyNamingStrategy` instead. ``PHAB_ID=D623807``
 
 * inject-core: (BREAKING API CHANGE) Rename `c.t.inject.TwitterModule.closeOnExit` to `onExit` so
