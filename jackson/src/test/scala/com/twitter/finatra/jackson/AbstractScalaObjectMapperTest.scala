@@ -1996,16 +1996,20 @@ abstract class AbstractScalaObjectMapperTest extends Test {
   test("deserialization#test @JsonNaming 2") {
     val snakeCaseMapper = ScalaObjectMapper.snakeCaseObjectMapper(mapper.underlying)
 
+    // case class is marked with @JsonNaming and the default naming strategy is LOWER_CAMEL_CASE
+    // which overrides the mapper's configured naming strategy
     val json =
       """
         |{
-        |  "this_field_should_use_default_property_naming_strategy": true
+        |  "thisFieldShouldUseDefaultPropertyNamingStrategy": true
         |}
         |""".stripMargin
 
     snakeCaseMapper.parse[UseDefaultNamingStrategy](json) should equal(
       UseDefaultNamingStrategy(true))
-    // default for mapper is also snake_case
+
+    // default for mapper is snake_case, but the case class is annotated with @JsonNaming which
+    // tells the mapper what property naming strategy to expect.
     parse[UseDefaultNamingStrategy](json) should equal(UseDefaultNamingStrategy(true))
   }
 
@@ -2021,10 +2025,10 @@ abstract class AbstractScalaObjectMapperTest extends Test {
 
     camelCaseMapper.parse[UseDefaultNamingStrategy](json) should equal(
       UseDefaultNamingStrategy(true))
-    // default for mapper is snake_case, so this will not work since the incoming JSON is camelcase
-    intercept[CaseClassMappingException] {
-      parse[UseDefaultNamingStrategy](json) should equal(UseDefaultNamingStrategy(true))
-    }
+
+    // default for mapper is snake_case, but the case class is annotated with @JsonNaming which
+    // tells the mapper what property naming strategy to expect.
+    parse[UseDefaultNamingStrategy](json) should equal(UseDefaultNamingStrategy(true))
   }
 
   test("deserialization#test @JsonNaming with mixin") {

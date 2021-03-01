@@ -25,7 +25,6 @@ import com.twitter.finatra.jackson.caseclass.exceptions.{
   InjectableValuesException,
   _
 }
-import com.twitter.finatra.json.annotations.JsonCamelCase
 import com.twitter.finatra.validation.ValidationResult.Invalid
 import com.twitter.finatra.validation.internal.{
   FieldValidator,
@@ -727,16 +726,11 @@ private[jackson] class CaseClassDeserializer(
   }
 
   private[this] def propertyNamingStrategy: PropertyNamingStrategy = {
-    if (AnnotationUtils.findAnnotation[JsonCamelCase](clazzAnnotations).isDefined) {
-      PropertyNamingStrategy.LOWER_CAMEL_CASE
-    } else {
-      AnnotationUtils.findAnnotation[JsonNaming](clazzAnnotations) match {
-        case Some(jsonNaming)
-            if !jsonNaming.value().isAssignableFrom(classOf[PropertyNamingStrategy]) =>
-          jsonNaming.value().newInstance()
-        case _ =>
-          config.getPropertyNamingStrategy
-      }
+    AnnotationUtils.findAnnotation[JsonNaming](clazzAnnotations) match {
+      case Some(jsonNaming) =>
+        jsonNaming.value().newInstance()
+      case _ =>
+        config.getPropertyNamingStrategy
     }
   }
 

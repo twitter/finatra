@@ -17,6 +17,12 @@ Added
 Changed
 ~~~~~~~
 
+* jackson: Remove deprecated `com.twitter.finatra.json.utils.CamelCasePropertyNamingStrategy`, 
+  users should prefer to use `PropertyNamingStrategy#LOWER_CAMEL_CASE` or an equivalent directly.
+  Also remove the deprecated `com.twitter.finatra.json.annotations.JsonCamelCase`, users should
+  use the `@JsonProperty` or `@JsonNaming` annotations or an appropriately configured 
+  Jackson `PropertyNamingStrategy` instead. ``PHAB_ID=D623807``
+
 * inject-core: (BREAKING API CHANGE) Rename `c.t.inject.TwitterModule.closeOnExit` to `onExit` so
   it mirrors the API from `c.t.inject.App`.  ``PHAB_ID=D621095``
 

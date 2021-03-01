@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.node.ValueNode
 import com.fasterxml.jackson.module.scala.JsonScalaEnumeration
 import com.twitter.finatra.jackson.caseclass.SerdeLogging
-import com.twitter.finatra.json.annotations.JsonCamelCase
 import com.twitter.finatra.validation.constraints._
 import com.twitter.finatra.validation.{
   CommonMethodValidations,
@@ -192,7 +191,7 @@ trait TestTrait {
   @NotEmpty
   def name: String
 }
-@JsonCamelCase
+@JsonNaming
 case class TestTraitImpl(
   @JsonProperty("ageness") age: Int, // should override inherited annotation from trait
   @TestInjectableValue name: String, // should have two annotations, one from trait and one here
@@ -458,7 +457,7 @@ case class PersonWithThings(
 
 case class Things(@Size(min = 1, max = 2) names: Seq[String])
 
-@JsonCamelCase
+@JsonNaming
 case class CamelCaseSimplePerson(myName: String)
 
 case class CamelCaseSimplePersonNoAnnotation(myName: String)
