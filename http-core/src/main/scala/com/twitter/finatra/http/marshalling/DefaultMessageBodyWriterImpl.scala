@@ -1,21 +1,14 @@
-package com.twitter.finatra.http.internal.marshalling
+package com.twitter.finatra.http.marshalling
 
 import com.twitter.finagle.http.MediaType
-import com.twitter.finatra.http.marshalling.{
-  DefaultMessageBodyWriter,
-  MessageBodyFlags,
-  WriterResponse
-}
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.utils.{AutoClosable, FileResolver}
 import com.twitter.inject.annotations.Flag
 import com.twitter.io.{Buf, StreamIO}
 import java.io.{BufferedInputStream, File, FileInputStream, InputStream}
-import javax.inject.{Inject, Singleton}
 import scala.runtime.BoxedUnit
 
-@Singleton
-private[finatra] class DefaultMessageBodyWriterImpl @Inject() (
+private class DefaultMessageBodyWriterImpl(
   @Flag(MessageBodyFlags.ResponseCharsetEnabled) includeContentTypeCharset: Boolean,
   fileResolver: FileResolver,
   mapper: ScalaObjectMapper)

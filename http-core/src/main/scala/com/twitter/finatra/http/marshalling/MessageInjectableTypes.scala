@@ -1,4 +1,4 @@
-package com.twitter.finatra.http.internal.marshalling
+package com.twitter.finatra.http.marshalling
 
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.jackson.caseclass.InjectableTypes

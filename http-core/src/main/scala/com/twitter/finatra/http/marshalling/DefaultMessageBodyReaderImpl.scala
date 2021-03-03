@@ -1,21 +1,16 @@
-package com.twitter.finatra.http.internal.marshalling
+package com.twitter.finatra.http.marshalling
 
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.inject.Injector
 import com.twitter.finagle.http.{MediaType, Message}
-import com.twitter.finatra.http.marshalling.{DefaultMessageBodyReader, MessageBodyReader}
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.http.annotations.JsonIgnoreBody
-import javax.inject.{Inject, Singleton}
 
-private[finatra] object DefaultMessageBodyReaderImpl {
+private object DefaultMessageBodyReaderImpl {
   private val EmptyObjectNode = new ObjectNode(null)
 }
 
-@Singleton
-private[finatra] class DefaultMessageBodyReaderImpl @Inject() (
-  injector: Injector,
-  objectMapper: ScalaObjectMapper)
+private class DefaultMessageBodyReaderImpl(injector: Injector, objectMapper: ScalaObjectMapper)
     extends DefaultMessageBodyReader {
 
   /* Public */

@@ -1,4 +1,4 @@
-package com.twitter.finatra.http.internal.marshalling
+package com.twitter.finatra.http.marshalling
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.core.{JsonParser, JsonToken, ObjectCodec}

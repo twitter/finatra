@@ -39,7 +39,6 @@ junit_tests(
         "finatra/http-server/src/main/scala/com/twitter/finatra/http/filters",
         "finatra/http-server/src/main/scala/com/twitter/finatra/http/internal/exceptions",
         "finatra/http-server/src/main/scala/com/twitter/finatra/http/internal/exceptions/json",
-        "finatra/http-server/src/main/scala/com/twitter/finatra/http/internal/marshalling",
         "finatra/http-server/src/main/scala/com/twitter/finatra/http/internal/routing",
         "finatra/http-server/src/main/scala/com/twitter/finatra/http/jsonpatch",
         "finatra/http-server/src/main/scala/com/twitter/finatra/http/modules",

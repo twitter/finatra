@@ -16,6 +16,8 @@ scala_library(
         "finagle/finagle-base-http/src/main",
         "finagle/finagle-core/src/main",
         "finagle/finagle-http/src/main/scala",
+        "finatra/http-core/src/main/scala/com/twitter/finatra/http/marshalling",
+        "finatra/http-core/src/main/scala/com/twitter/finatra/http/marshalling/modules",
         "finatra/http-server/src/main/scala/com/twitter/finatra/http/modules",
         "finatra/http-server/src/main/scala/com/twitter/finatra/http/response",
         "finatra/http-server/src/main/scala/com/twitter/finatra/http/routing",
@@ -32,6 +34,7 @@ scala_library(
     exports = [
         "finagle/finagle-core/src/main",
         "finagle/finagle-http/src/main/scala",
+        "finatra/http-core/src/main/scala/com/twitter/finatra/http/marshalling/modules",
         "finatra/http-server/src/main/scala/com/twitter/finatra/http/modules",
         "finatra/http-server/src/main/scala/com/twitter/finatra/http/routing",
         "finatra/inject/inject-server/src/main/scala",

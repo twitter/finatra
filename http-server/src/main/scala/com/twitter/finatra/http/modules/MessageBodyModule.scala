@@ -1,33 +1,27 @@
 package com.twitter.finatra.http.modules
 
 import com.google.inject.Module
-import com.twitter.finatra.http.internal.marshalling.{
-  DefaultMessageBodyReaderImpl,
-  DefaultMessageBodyWriterImpl,
-  MessageInjectableTypes
-}
-import com.twitter.finatra.http.marshalling.{DefaultMessageBodyReader, DefaultMessageBodyWriter}
+import com.twitter.finatra.http.marshalling.MessageInjectableTypes
+import com.twitter.finatra.http.marshalling.modules.MessageBodyManagerModule
 import com.twitter.finatra.jackson.caseclass.InjectableTypes
 import com.twitter.inject.TwitterModule
-import javax.inject.Singleton
 
 /**
- * Provides implementations for the [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]]
- * and the [[com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter]].
- *
- * @see [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]]
- * @see [[com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter]]
- * @see [[com.twitter.finatra.http.marshalling.MessageBodyManager]]
+ * A [[TwitterModule]] that provides default implementations for [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]],
+ * and [[com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter]] and assigns a default binding for
+ * [[com.twitter.finatra.jackson.caseclass.InjectableTypes]] to [[com.twitter.finatra.http.marshalling.MessageInjectableTypes]].
  */
-object MessageBodyModule extends MessageBodyModule
+object MessageBodyModule extends TwitterModule {
+  // java-friendly access to singleton
+  def get(): this.type = this
 
-class MessageBodyModule extends TwitterModule {
-
-  override val modules: Seq[Module] = Seq(MessageBodyFlagsModule)
+  /**
+   * The [[com.twitter.finatra.http.marshalling.MessageBodyManagerModule]] provide the default reader
+   * and writer implementations
+   */
+  override val modules: Seq[Module] = Seq(MessageBodyManagerModule)
 
   override def configure(): Unit = {
-    bind[DefaultMessageBodyReader].to[DefaultMessageBodyReaderImpl].in[Singleton]
-    bind[DefaultMessageBodyWriter].to[DefaultMessageBodyWriterImpl].in[Singleton]
     // override the default binding of `InjectableTypes` to the more specific `RequestInjectableTypes`
     bindOption[InjectableTypes].setBinding.toInstance(MessageInjectableTypes)
   }

@@ -8,11 +8,11 @@ import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.service.NilService
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.{Http, ListeningServer, NullServer, Service}
+import com.twitter.finatra.http.marshalling.modules.MessageBodyFlagsModule
 import com.twitter.finatra.http.modules.{
   AccessLogModule,
   ExceptionManagerModule,
   HttpResponseClassifierModule,
-  MessageBodyFlagsModule,
   MessageBodyModule
 }
 import com.twitter.finatra.http.response.HttpResponseClassifier
@@ -510,13 +510,15 @@ trait HttpServer extends HttpServerTrait {
   protected def accessLogModule: Module = AccessLogModule
 
   /**
-   * Default [[com.twitter.inject.TwitterModule]] for providing implementations for a
-   * [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]] and a
-   * [[com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter]].
+   * Default [[com.twitter.inject.TwitterModule]] for providing implementations,
+   * [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]],
+   * [[com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter]] and a default
+   * binding for [[com.twitter.finatra.jackson.caseclass.InjectableTypes]].
    *
    * @return a [[com.twitter.inject.TwitterModule]] which provides implementations for
-   *         [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]] and
-   *         [[com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter]].
+   *         [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]],
+   *         [[com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter]], and
+   *         [[com.twitter.finatra.jackson.caseclass.InjectableTypes]].
    */
   protected def messageBodyModule: Module = MessageBodyModule
 

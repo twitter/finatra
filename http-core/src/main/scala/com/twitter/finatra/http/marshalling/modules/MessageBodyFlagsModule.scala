@@ -1,9 +1,11 @@
-package com.twitter.finatra.http.modules
+package com.twitter.finatra.http.marshalling.modules
 
 import com.twitter.finatra.http.marshalling.MessageBodyFlags
 import com.twitter.inject.TwitterModule
 
 object MessageBodyFlagsModule extends TwitterModule {
+  // java-friendly access to singleton
+  def get(): this.type = this
 
   flag(
     MessageBodyFlags.ResponseCharsetEnabled,

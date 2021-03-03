@@ -17,6 +17,9 @@ Added
 Changed
 ~~~~~~~
 
+* http-server: Move `c.t.finatra.http.modules.MessageBodyFlagsModule` to
+  `c.t.finatra.http.marshalling.modules.MessageBodyFlagsModule`. ``PHAB_ID=D626600``
+
 * validation: Remove deprecated constraint type aliases under `com.twitter.finatra.validation`, users
   should prefer the actual constraint annotations at `com.twitter.finatra.validation.constraints`.
   ``PHAB_ID=D625174``
