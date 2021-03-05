@@ -17,6 +17,10 @@ Added
 Changed
 ~~~~~~~
 
+* http-core: Introduce `c.t.finatra.http.marshalling.MessageBodyManager#builder` for creating an immutable
+  `c.t.finatra.http.marshalling.MessageBodyManager`. The MessageBodyManager's constructor is now private.
+  ``PHAB_ID=D621755``
+
 * http-server: Move `c.t.finatra.http.modules.MessageBodyFlagsModule` to
   `c.t.finatra.http.marshalling.modules.MessageBodyFlagsModule`. ``PHAB_ID=D626600``
 

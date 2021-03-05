@@ -8,9 +8,11 @@ import com.twitter.finatra.http.marshalling.{
   DefaultMessageBodyReaderImpl,
   DefaultMessageBodyWriter,
   DefaultMessageBodyWriterImpl,
-  MessageBodyFlags
+  MessageBodyFlags,
+  MessageInjectableTypes
 }
 import com.twitter.finatra.jackson.ScalaObjectMapper
+import com.twitter.finatra.jackson.caseclass.InjectableTypes
 import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.finatra.utils.FileResolver
 import javax.inject.Singleton
@@ -25,10 +27,17 @@ object MessageBodyManagerModule extends TwitterModule {
 
   override val modules: Seq[Module] = Seq(FileResolverModule, MessageBodyFlagsModule)
 
+  override def configure(): Unit = {
+    // override the default binding of `InjectableTypes` to the more specific `RequestInjectableTypes`
+    bindOption[InjectableTypes].setBinding.toInstance(MessageInjectableTypes)
+  }
+
   @Provides
   @Singleton
-  private def providesDefaultMessageBodyReader(injector: Injector): DefaultMessageBodyReader = {
-    val objectMapper = injector.instance[ScalaObjectMapper]
+  private def providesDefaultMessageBodyReader(
+    injector: Injector,
+    objectMapper: ScalaObjectMapper
+  ): DefaultMessageBodyReader = {
     new DefaultMessageBodyReaderImpl(injector.underlying, objectMapper)
   }
 
@@ -37,9 +46,9 @@ object MessageBodyManagerModule extends TwitterModule {
   private def providesDefaultMessageBodyWriter(
     injector: Injector,
     @Flag(MessageBodyFlags.ResponseCharsetEnabled) includeContentTypeCharset: Boolean,
-    fileResolver: FileResolver
+    fileResolver: FileResolver,
+    objectMapper: ScalaObjectMapper
   ): DefaultMessageBodyWriter = {
-    val objectMapper = injector.instance[ScalaObjectMapper]
     new DefaultMessageBodyWriterImpl(includeContentTypeCharset, fileResolver, objectMapper)
   }
 }

@@ -56,4 +56,12 @@ class MapsConversionsTest extends Test {
     map.atomicGetOrElseUpdate("1", 2) should equal(1)
     map.get("1") should equal(1)
   }
+
+  test("RichConcurrentMap#getOption") {
+    val map = new ConcurrentHashMap[String, Int]()
+    assert(map.getOption("1") == None)
+
+    map.atomicGetOrElseUpdate("1", 1)
+    assert(map.getOption("1") == Some(1))
+  }
 }

@@ -1,28 +1,70 @@
 package com.twitter.finatra.http.modules
 
-import com.google.inject.Module
-import com.twitter.finatra.http.marshalling.MessageInjectableTypes
+import com.google.inject.{Module, Provides}
+import com.twitter.finatra.http.marshalling.{
+  DefaultMessageBodyReader,
+  DefaultMessageBodyWriter,
+  MessageBodyManager
+}
 import com.twitter.finatra.http.marshalling.modules.MessageBodyManagerModule
-import com.twitter.finatra.jackson.caseclass.InjectableTypes
-import com.twitter.inject.TwitterModule
+import com.twitter.inject.{Injector, TwitterModule}
+import javax.inject.Singleton
+
+object MessageBodyModule extends MessageBodyModule {
+  // java-friendly access to singleton
+  def get(): this.type = this
+}
 
 /**
  * A [[TwitterModule]] that provides default implementations for [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]],
  * and [[com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter]] and assigns a default binding for
- * [[com.twitter.finatra.jackson.caseclass.InjectableTypes]] to [[com.twitter.finatra.http.marshalling.MessageInjectableTypes]].
+ * [[com.twitter.finatra.jackson.caseclass.InjectableTypes]].
+ *
+ * Extend this module to override the defaults of the bound [[com.twitter.finatra.http.marshalling.MessageBodyManager]].
+ *
+ * Example:
+ *
+ * {{{
+ *    import com.twitter.finatra.http.marshalling.MessageBodyManager
+ *    import com.twitter.finatra.http.modules.MessageBodyModule
+ *    import com.twitter.inject.Injector
+ *
+ *    object CustomizedMessageBodyModule extends MessageBodyModule {
+ *      override def configureMessageBodyManager(injector: Injector, builder: MessageBodyManager.Builder): MessageBodyManager.Builder =
+ *        builder
+ *          .withDefaultMessageBodyReader(MyDefaultReader)
+ *          .withDefaultMessageBodyWriter(MyDefaultWriter)
+ *    }
+ * }}}
  */
-object MessageBodyModule extends TwitterModule {
-  // java-friendly access to singleton
-  def get(): this.type = this
+class MessageBodyModule extends TwitterModule {
 
   /**
-   * The [[com.twitter.finatra.http.marshalling.MessageBodyManagerModule]] provide the default reader
-   * and writer implementations
+   * The [[com.twitter.finatra.http.marshalling.modules.MessageBodyManagerModule]] provides the default reader
+   * and writer implementations along with a default binding for [[com.twitter.finatra.jackson.caseclass.InjectableTypes]].
    */
-  override val modules: Seq[Module] = Seq(MessageBodyManagerModule)
+  override val frameworkModules: Seq[Module] = Seq(MessageBodyManagerModule)
 
-  override def configure(): Unit = {
-    // override the default binding of `InjectableTypes` to the more specific `RequestInjectableTypes`
-    bindOption[InjectableTypes].setBinding.toInstance(MessageInjectableTypes)
+  /**
+   * Override this method to build an instance of [[MessageBodyManager]]. Custom [[DefaultMessageBodyWriter]]
+   * and [[DefaultMessageBodyReader]] implementations can be set on the builder. The created
+   * MessageBodyManager will override the default one that is bound to the object graph.
+   *
+   * @return a configured [[MessageBodyManager.Builder]] to that creates the [[MessageBodyManager]] instance.
+   */
+  protected def configureMessageBodyManager(
+    injector: Injector,
+    builder: MessageBodyManager.Builder
+  ): MessageBodyManager.Builder = builder
+
+  @Provides
+  @Singleton
+  private def provideMessageBodyManager(
+    injector: Injector,
+    defaultReader: DefaultMessageBodyReader,
+    defaultWriter: DefaultMessageBodyWriter
+  ): MessageBodyManager = {
+    val builder = MessageBodyManager.builder(injector, defaultReader, defaultWriter)
+    configureMessageBodyManager(injector, builder).build()
   }
 }

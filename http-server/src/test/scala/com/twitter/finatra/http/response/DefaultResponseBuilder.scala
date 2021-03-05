@@ -25,10 +25,12 @@ object DefaultResponseBuilder {
   }
 
   private[this] def simpleMessageBodyManager(mapper: ScalaObjectMapper) =
-    new MessageBodyManager(
-      injector = null,
-      defaultMessageBodyReader(mapper),
-      defaultMessageBodyWriter)
+    MessageBodyManager
+      .builder(
+        injector = null,
+        defaultMessageBodyReader = defaultMessageBodyReader(mapper),
+        defaultMessageBodyWriter = defaultMessageBodyWriter
+      ).build()
 
   /** An instance with all defaults -- usable from Java */
   val Instance: ResponseBuilder = apply()

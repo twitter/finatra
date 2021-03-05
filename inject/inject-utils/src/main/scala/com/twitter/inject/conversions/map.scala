@@ -111,5 +111,11 @@ object map {
           }
         })
     }
+
+    def getOption(key: A): Option[B] = {
+      val value = map.get(key)
+      if (value == null) None
+      else Some(value)
+    }
   }
 }

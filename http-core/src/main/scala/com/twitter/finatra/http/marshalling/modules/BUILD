@@ -14,6 +14,7 @@ scala_library(
         "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",
         "finatra/inject/inject-core/src/main/scala",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass",
         "finatra/utils/src/main/scala/com/twitter/finatra/modules",
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",
     ],
