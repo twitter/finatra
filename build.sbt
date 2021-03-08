@@ -1235,9 +1235,8 @@ lazy val kafkaStreamsStaticPartitioning =
           case _ => "*.scala"
         }
       },
-      unmanagedSourceDirectories in Compile += {
-        val sourceDir = (sourceDirectory in Compile).value
-        val scalaV = CrossVersion.partialVersion(scalaVersion.value)
+      Compile / unmanagedSourceDirectories += {
+        val sourceDir = (Compile / sourceDirectory).value
         sourceDir / "scala-kafka2.5"
       },
       excludeDependencies in Test ++= kafkaStreamsExclusionRules,
