@@ -17,6 +17,10 @@ Added
 Changed
 ~~~~~~~
 
+* finatra: Move c.t.finatra.http.streaming from the finatra/http-server project to
+  finatra/http-core project. Please update your build artifact references accordingly.
+  ``PHAB_ID=D631371``
+
 * http-core: Introduce `c.t.finatra.http.marshalling.MessageBodyManager#builder` for creating an immutable
   `c.t.finatra.http.marshalling.MessageBodyManager`. The MessageBodyManager's constructor is now private.
   ``PHAB_ID=D621755``

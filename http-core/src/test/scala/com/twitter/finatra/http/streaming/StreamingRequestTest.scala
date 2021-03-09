@@ -1,12 +1,16 @@
-package com.twitter.finatra.http.tests.streaming
+package com.twitter.finatra.http.streaming
 
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Method, Request, Version}
-import com.twitter.finatra.http.streaming.StreamingRequest
+import com.twitter.finatra.http.streaming.StreamingRequestTest.BarClass
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.streaming.JsonStreamParser
 import com.twitter.inject.Test
 import com.twitter.io.{Buf, Reader}
+
+private object StreamingRequestTest {
+  case class BarClass(v1: Int, v2: String)
+}
 
 class StreamingRequestTest extends Test {
 
@@ -68,5 +72,3 @@ class StreamingRequestTest extends Test {
         Seq(BarClass(1, "first"), BarClass(2, "second")))
   }
 }
-
-case class BarClass(v1: Int, v2: String)
