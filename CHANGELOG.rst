@@ -16,6 +16,9 @@ Added
 
 Changed
 ~~~~~~~
+* finatra: Move c.t.finatra.http.{context,exceptions,response} from the finatra/http-server project
+  to finatra/http-core project. Please update your build artifact references accordingly.
+  ``PHAB_ID=D631772``
 
 * finatra: Move c.t.finatra.http.streaming from the finatra/http-server project to
   finatra/http-core project. Please update your build artifact references accordingly.

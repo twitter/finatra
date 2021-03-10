@@ -1,11 +1,9 @@
-package com.twitter.finatra.http.tests.marshalling
+package com.twitter.finatra.http.marshalling
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finagle.http.{Fields, MediaType, Message, Request, Response}
 import com.twitter.finatra.http.annotations.{Header, QueryParam}
-import com.twitter.finatra.http.marshalling._
-import com.twitter.finatra.http.modules.MessageBodyModule
-import com.twitter.finatra.http.tests.integration.json.CaseClassWithBoolean
+import com.twitter.finatra.http.marshalling.modules.MessageBodyManagerModule
 import com.twitter.finatra.http.{Prod, TestMessageBodyWriterAnn}
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.caseclass.exceptions.InjectableValuesException
@@ -21,6 +19,7 @@ private object MessageBodyManagerTest {
     def name: String
   }
 
+  case class CaseClassWithBoolean(foo: Boolean)
   case class FooCar(name: String) extends Car
   case class BarCar(name: String) extends Car
   case class Car2(name: String)
@@ -65,26 +64,34 @@ private object MessageBodyManagerTest {
   }
 }
 
-// note: these tests can be removed once we remove the mutable methods from MessageBodyManager
 class MessageBodyManagerTest extends Test with Mockito {
   import MessageBodyManagerTest._
 
   private val message: Message = mock[Message]
   private val injector: Injector =
-    TestInjector(FileResolverModule, MessageBodyModule, ScalaObjectMapperModule).create
-
-  private val messageBodyManager: MessageBodyManager = injector.instance[MessageBodyManager]
-  messageBodyManager.add[DogMessageBodyReader]()
-  messageBodyManager.add[Car2MessageBodyReader]()
-  messageBodyManager.addExplicit[CarMessageBodyWriter, FooCar]()
-  messageBodyManager.addExplicit[CarMessageBodyWriter, BarCar]()
-  messageBodyManager.addWriterByAnnotation[TestMessageBodyWriterAnn, TestMessageBodyWriter]()
-  messageBodyManager
-    .addWriterByComponentType[ReallyCoolMessageBodyComponent, ReallyCoolMessageBodyWriter]()
+    TestInjector(FileResolverModule, ScalaObjectMapperModule, MessageBodyManagerModule).create
 
   private val defaultMessageBodyReader: DefaultMessageBodyReader =
     injector.instance[DefaultMessageBodyReader]
+
+  private val defaultMessageBodyWriter: DefaultMessageBodyWriter =
+    injector.instance[DefaultMessageBodyWriter]
+
   private val mapper: ScalaObjectMapper = injector.instance[ScalaObjectMapper]
+
+  private val messageBodyManager: MessageBodyManager = MessageBodyManager
+    .builder(
+      injector = injector,
+      defaultMessageBodyReader = defaultMessageBodyReader,
+      defaultMessageBodyWriter = defaultMessageBodyWriter
+    )
+    .add[DogMessageBodyReader]
+    .add[Car2MessageBodyReader]
+    .addExplicit[CarMessageBodyWriter, FooCar]
+    .addExplicit[CarMessageBodyWriter, BarCar]
+    .addWriterByAnnotation[TestMessageBodyWriterAnn, TestMessageBodyWriter]
+    .addWriterByComponentType[ReallyCoolMessageBodyComponent, ReallyCoolMessageBodyWriter]
+    .build()
 
   test("adding by writer annotation for an annotation without MessageBodyWriter annotation fails") {
     intercept[AssertionError] {

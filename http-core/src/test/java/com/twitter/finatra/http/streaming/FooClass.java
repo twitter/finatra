@@ -1,4 +1,4 @@
-package com.twitter.finatra.http.tests.streaming;
+package com.twitter.finatra.http.streaming;
 
 public class FooClass {
   public Integer v1;

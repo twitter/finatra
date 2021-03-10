@@ -1,19 +1,65 @@
-package com.twitter.finatra.http.tests.exceptions
+package com.twitter.finatra.http.exceptions
 
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finagle.stats.InMemoryStatsReceiver
-import com.twitter.finatra.http.exceptions.{
-  ExceptionManager,
-  ExceptionMapper,
-  ExceptionMapperCollection
-}
 import com.twitter.finatra.http.response.SimpleResponse
-import com.twitter.finatra.httpclient.RequestBuilder
+import com.twitter.finatra.http.request.RequestBuilder
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.Test
 import scala.util.Random
 
+private object ExceptionManagerTest {
+  class UnregisteredException extends Exception
+  class ForbiddenException extends Exception
+  class ForbiddenException1 extends ForbiddenException
+  class ForbiddenException2 extends ForbiddenException1
+  class UnauthorizedException extends Exception
+  class UnauthorizedException1 extends UnauthorizedException
+  class ExceptionForDupMapper extends Exception
+  case class RaiseInnerException(cause: Exception) extends Exception
+
+  class TestRootExceptionMapper extends ExceptionMapper[Throwable] {
+    def toResponse(request: Request, throwable: Throwable): Response = {
+      SimpleResponse(Status.InternalServerError)
+    }
+  }
+
+  class ForbiddenExceptionMapper extends ExceptionMapper[ForbiddenException] {
+    def toResponse(request: Request, throwable: ForbiddenException): Response =
+      SimpleResponse(Status.Forbidden)
+  }
+
+  class UnauthorizedExceptionMapper extends ExceptionMapper[UnauthorizedException] {
+    def toResponse(request: Request, throwable: UnauthorizedException): Response =
+      SimpleResponse(Status.Unauthorized)
+  }
+
+  class UnauthorizedException1Mapper extends ExceptionMapper[UnauthorizedException1] {
+    def toResponse(request: Request, throwable: UnauthorizedException1): Response =
+      SimpleResponse(Status.NotFound)
+  }
+
+  class FirstExceptionMapper extends ExceptionMapper[ExceptionForDupMapper] {
+    def toResponse(request: Request, throwable: ExceptionForDupMapper): Response = {
+      SimpleResponse(Status.Accepted)
+    }
+  }
+
+  class SecondExceptionMapper extends ExceptionMapper[ExceptionForDupMapper] {
+    def toResponse(request: Request, throwable: ExceptionForDupMapper): Response = {
+      SimpleResponse(Status.BadRequest)
+    }
+  }
+
+  class RaiseInnerExceptionMapper extends ExceptionMapper[RaiseInnerException] {
+    def toResponse(request: Request, throwable: RaiseInnerException): Response = {
+      throw throwable.cause
+    }
+  }
+}
+
 class ExceptionManagerTest extends Test {
+  import ExceptionManagerTest._
 
   def newExceptionManager =
     new ExceptionManager(TestInjector().create, new InMemoryStatsReceiver)
@@ -97,53 +143,5 @@ class ExceptionManagerTest extends Test {
       RaiseInnerException(new UnregisteredException),
       Status.InternalServerError,
       collectionExceptionManager)
-  }
-}
-
-class UnregisteredException extends Exception
-class ForbiddenException extends Exception
-class ForbiddenException1 extends ForbiddenException
-class ForbiddenException2 extends ForbiddenException1
-class UnauthorizedException extends Exception
-class UnauthorizedException1 extends UnauthorizedException
-class ExceptionForDupMapper extends Exception
-case class RaiseInnerException(cause: Exception) extends Exception
-
-class TestRootExceptionMapper extends ExceptionMapper[Throwable] {
-  def toResponse(request: Request, throwable: Throwable): Response = {
-    SimpleResponse(Status.InternalServerError)
-  }
-}
-
-class ForbiddenExceptionMapper extends ExceptionMapper[ForbiddenException] {
-  def toResponse(request: Request, throwable: ForbiddenException): Response =
-    SimpleResponse(Status.Forbidden)
-}
-
-class UnauthorizedExceptionMapper extends ExceptionMapper[UnauthorizedException] {
-  def toResponse(request: Request, throwable: UnauthorizedException): Response =
-    SimpleResponse(Status.Unauthorized)
-}
-
-class UnauthorizedException1Mapper extends ExceptionMapper[UnauthorizedException1] {
-  def toResponse(request: Request, throwable: UnauthorizedException1): Response =
-    SimpleResponse(Status.NotFound)
-}
-
-class FirstExceptionMapper extends ExceptionMapper[ExceptionForDupMapper] {
-  def toResponse(request: Request, throwable: ExceptionForDupMapper): Response = {
-    SimpleResponse(Status.Accepted)
-  }
-}
-
-class SecondExceptionMapper extends ExceptionMapper[ExceptionForDupMapper] {
-  def toResponse(request: Request, throwable: ExceptionForDupMapper): Response = {
-    SimpleResponse(Status.BadRequest)
-  }
-}
-
-class RaiseInnerExceptionMapper extends ExceptionMapper[RaiseInnerException] {
-  def toResponse(request: Request, throwable: RaiseInnerException): Response = {
-    throw throwable.cause
   }
 }

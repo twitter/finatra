@@ -1,4 +1,4 @@
-package com.twitter.finatra.http.tests.streaming;
+package com.twitter.finatra.http.streaming;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -21,11 +21,8 @@ import com.twitter.finagle.http.Response;
 import com.twitter.finagle.stats.StatsReceiver;
 import com.twitter.finatra.http.marshalling.MessageBodyManager;
 import com.twitter.finatra.http.response.ResponseBuilder;
-import com.twitter.finatra.http.streaming.StreamingResponse;
-import com.twitter.finatra.http.streaming.ToReader;
 import com.twitter.finatra.jackson.ScalaObjectMapper;
 import com.twitter.finatra.utils.FileResolver;
-
 import com.twitter.io.Buf;
 import com.twitter.io.BufReaders;
 import com.twitter.io.Bufs;

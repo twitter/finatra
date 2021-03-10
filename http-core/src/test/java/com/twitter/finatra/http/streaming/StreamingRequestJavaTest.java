@@ -1,4 +1,4 @@
-package com.twitter.finatra.http.tests.streaming;
+package com.twitter.finatra.http.streaming;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,8 +13,6 @@ import com.twitter.concurrent.AsyncStream;
 import com.twitter.finagle.http.Method;
 import com.twitter.finagle.http.Request;
 import com.twitter.finagle.http.Version;
-import com.twitter.finatra.http.streaming.FromReader;
-import com.twitter.finatra.http.streaming.StreamingRequest;
 import com.twitter.finatra.jackson.ScalaObjectMapper;
 import com.twitter.finatra.jackson.streaming.JsonStreamParser;
 import com.twitter.io.Buf;

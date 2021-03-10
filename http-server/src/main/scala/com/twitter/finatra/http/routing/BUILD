@@ -10,8 +10,8 @@ scala_library(
     dependencies = [
         "3rdparty/jvm/javax/inject:javax.inject",
         "finagle/finagle-base-http/src/main",
+        "finatra/http-core/src/main/scala/com/twitter/finatra/http/exceptions",
         "finatra/http-server/src/main/scala/com/twitter/finatra/http:controller",
-        "finatra/http-server/src/main/scala/com/twitter/finatra/http/exceptions",
         "finatra/http-server/src/main/scala/com/twitter/finatra/http/internal/routing",
         "finatra/http-server/src/main/scala/com/twitter/finatra/http/request",
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject/internal",

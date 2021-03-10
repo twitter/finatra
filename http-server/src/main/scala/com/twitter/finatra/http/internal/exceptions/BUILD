@@ -13,14 +13,14 @@ scala_library(
         "3rdparty/jvm/org/apache/thrift:libthrift",
         "finagle/finagle-base-http/src/main",
         "finagle/finagle-core/src/main",
-        "finatra/http-server/src/main/scala/com/twitter/finatra/http/exceptions",
-        "finatra/http-server/src/main/scala/com/twitter/finatra/http/response",
+        "finatra/http-core/src/main/scala/com/twitter/finatra/http/exceptions",
+        "finatra/http-core/src/main/scala/com/twitter/finatra/http/response",
         "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",
     ],
     exports = [
         "3rdparty/jvm/org/apache/thrift:libthrift",
-        "finatra/http-server/src/main/scala/com/twitter/finatra/http/exceptions",
+        "finatra/http-core/src/main/scala/com/twitter/finatra/http/exceptions",
     ],
 )

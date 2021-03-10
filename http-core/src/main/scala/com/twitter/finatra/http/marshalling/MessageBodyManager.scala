@@ -365,9 +365,13 @@ class MessageBodyManager private (
     val clazz = obj.getClass
     val messageWriter = writerCache.get(clazz)
     if (messageWriter == null) {
-      classAnnotationToWriter(clazz) match {
+      classTypeToWriter.get(clazz) match {
         case Some(writer) => writer
-        case None => defaultMessageBodyWriter
+        case None =>
+          classAnnotationToWriter(clazz) match {
+            case Some(writer) => writer
+            case None => defaultMessageBodyWriter
+          }
       }
     } else messageWriter
   }
@@ -401,6 +405,10 @@ class MessageBodyManager private (
     // we stop at the first supported annotation for looking up a writer
     clazz.getAnnotations
       .collectFirst(MessageBodyManager.isRequiredAnnotationPresent)
-      .flatMap(annotation => annotationCache.getOption(annotation.annotationType))
+      .flatMap(annotation =>
+        annotationCache.getOption(annotation.annotationType) match {
+          case r @ Some(_) => r
+          case _ => annotationTypeToWriter.get(annotation.annotationType())
+        })
   }
 }
