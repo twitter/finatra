@@ -9,7 +9,7 @@ object PollUtils extends Logging {
     func: => T,
     sleepDuration: Duration = 100.millis,
     timeout: Duration = 60.seconds,
-    @deprecated("Use timeout") maxTries: Int = -1,
+    @deprecated("Use timeout", since = "2020-03-02") maxTries: Int = -1,
     pollMessage: String = "",
     exhaustedTimeoutMessage: => String = "",
     exhaustedTriesMessage: (T => String) = (_: T) => ""
