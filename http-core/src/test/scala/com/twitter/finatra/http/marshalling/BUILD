@@ -2,6 +2,7 @@ junit_tests(
     dependencies = [
         "finagle/finagle-core/src/main",
         "finagle/finagle-http/src/main/scala",
+        "finatra/http-annotations/src/main/java/com/twitter/finatra/http/annotations",
         "finatra/http-core/src/main/scala/com/twitter/finatra/http/marshalling",
         "finatra/http-core/src/main/scala/com/twitter/finatra/http/marshalling/modules",
         "finatra/http-core/src/main/scala/com/twitter/finatra/http/response",
@@ -11,8 +12,10 @@ junit_tests(
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/modules",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/streaming",
+        "finatra/utils/src/main/scala/com/twitter/finatra/modules",
         "util/util-core:scala",
         "util/util-mock/src/main/scala/com/twitter/util/mock",
     ],
