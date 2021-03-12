@@ -14,6 +14,11 @@ Added
   `com.twitter.inject.thrift.ThriftMethodBuilder` for customizing `configureServicePerEndpoint`.
   ``PHAB_ID=D619565``
 
+Breaking API Changes
+~~~~~~~~~~~~~~~~~~~~
+
+* finatra: Builds are now only supported for Scala 2.12+ ``PHAB_ID=D631091``
+
 Changed
 ~~~~~~~
 * finatra: Move c.t.finatra.http.{context,exceptions,response} from the finatra/http-server project

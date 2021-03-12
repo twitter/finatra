@@ -9,16 +9,10 @@ val releaseVersion = "21.3.0-SNAPSHOT"
 lazy val buildSettings = Seq(
   version := releaseVersion,
   scalaVersion := "2.12.11",
-  crossScalaVersions := Seq("2.11.12", "2.12.11", "2.13.1"),
+  crossScalaVersions := Seq("2.12.11", "2.13.1"),
   scalaModuleInfo := scalaModuleInfo.value.map(_.withOverrideScalaVersion(true)),
   fork in Test := true, // We have to fork to get the JavaOptions
   javaOptions in Test ++= travisTestJavaOptions,
-  scalacOptions := {
-    val previous = scalacOptions.value
-    if (scalaVersion.value.startsWith("2.11")) {
-      previous.filterNot(_ == "-Ywarn-unused:imports") ++ Seq("-Ywarn-unused-import")
-    } else previous
-  },
   libraryDependencies += scalaCollectionCompat
 )
 
