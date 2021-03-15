@@ -11,13 +11,13 @@ java_library(
         "deprecated",
     ],
     dependencies = [
+        "finatra/http-core/src/main/java/com/twitter/finatra/http",
+        "finatra/http-core/src/main/java/com/twitter/finatra/http/jsonpatch",
         "finatra/http-core/src/main/java/com/twitter/finatra/http/request",
-        "finatra/http-server/src/main/java/com/twitter/finatra/http",
-        "finatra/http-server/src/main/java/com/twitter/finatra/http/jsonpatch",
     ],
     exports = [
+        "finatra/http-core/src/main/java/com/twitter/finatra/http",
+        "finatra/http-core/src/main/java/com/twitter/finatra/http/jsonpatch",
         "finatra/http-core/src/main/java/com/twitter/finatra/http/request",
-        "finatra/http-server/src/main/java/com/twitter/finatra/http",
-        "finatra/http-server/src/main/java/com/twitter/finatra/http/jsonpatch",
     ],
 )

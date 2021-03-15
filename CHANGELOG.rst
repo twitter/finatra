@@ -21,6 +21,9 @@ Breaking API Changes
 
 Changed
 ~~~~~~~
+* finatra: Move com.twitter.finatra.http.{jsonpatch,request} from the finatra/http-server project to
+  finatra/http-core project. Please update your build artifact references accordingly.
+  ``PHAB_ID=D623745``
 
 * http-server|http-core|jackson|thrift|validation: Update to use `c.t.util.reflect.Types`
   in places for TypeTag reflection. ``PHAB_ID=D631819``
