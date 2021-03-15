@@ -21,6 +21,10 @@ Breaking API Changes
 
 Changed
 ~~~~~~~
+
+* http-server|http-core|jackson|thrift|validation: Update to use `c.t.util.reflect.Types`
+  in places for TypeTag reflection. ``PHAB_ID=D631819``
+
 * finatra: Move c.t.finatra.http.{context,exceptions,response} from the finatra/http-server project
   to finatra/http-core project. Please update your build artifact references accordingly.
   ``PHAB_ID=D631772``

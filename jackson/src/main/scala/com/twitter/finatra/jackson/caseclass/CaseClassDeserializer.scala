@@ -38,9 +38,10 @@ import com.twitter.finatra.validation.{
   Validator,
   ErrorCode => ValidationErrorCode
 }
-import com.twitter.inject.{Logging, TypeUtils}
+import com.twitter.inject.Logging
 import com.twitter.inject.domain.WrappedValue
 import com.twitter.inject.utils.AnnotationUtils
+import com.twitter.util.reflect.{Types => ReflectionTypes}
 import com.twitter.util.Try
 import java.lang.annotation.Annotation
 import java.lang.reflect.{
@@ -787,7 +788,7 @@ private[jackson] class CaseClassDeserializer(
           shouldFullyDefineParameterizedType(scalaType, parameter)) {
           // what types are bound to the generic case class parameters
           val boundTypeParameters: Array[JavaType] =
-            TypeUtils
+            ReflectionTypes
               .parameterizedTypeNames(parameter.getParameterizedType)
               .map(javaType.getBindings.findBoundType)
           Types

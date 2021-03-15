@@ -10,7 +10,7 @@ import com.twitter.finatra.http.exceptions.{
 import com.twitter.finatra.http.internal.routing.{CallbackConverterImpl, Route, RoutingService}
 import com.twitter.finatra.http.marshalling.{MessageBodyComponent, MessageBodyManager}
 import com.twitter.finatra.http.{AbstractController, Controller, HttpFilter}
-import com.twitter.inject.TypeUtils._
+import com.twitter.inject.TypeUtils
 import com.twitter.inject.internal.LibraryRegistry
 import com.twitter.inject.{Injector, Logging}
 import java.lang.annotation.{Annotation => JavaAnnotation}
@@ -83,8 +83,8 @@ class HttpRouter @Inject() (
   }
 
   def exceptionMapper[T <: Throwable](clazz: Class[_ <: AbstractExceptionMapper[T]]): HttpRouter = {
-    val mapperType = superTypeFromClass(clazz, classOf[ExceptionMapper[_]])
-    val throwableType = singleTypeParam(mapperType)
+    val mapperType = TypeUtils.superTypeFromClass(clazz, classOf[ExceptionMapper[_]])
+    val throwableType = TypeUtils.singleTypeParam(mapperType)
     exceptionMapper(injector.instance(clazz))(
       Manifest.classType(Class.forName(throwableType.getTypeName))
     )

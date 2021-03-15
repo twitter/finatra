@@ -6,6 +6,7 @@ import com.twitter.finatra.http.annotations.{MessageBodyWriter => MessageBodyWri
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.utils.AnnotationUtils
 import com.twitter.inject.{Injector, TypeUtils}
+import com.twitter.util.reflect.Types
 import java.lang.annotation.Annotation
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
@@ -341,7 +342,7 @@ class MessageBodyManager private (
 
   /** For use from Java */
   final def read[T](message: Message, clazz: Class[T]): T = {
-    val typeTag = TypeUtils.asTypeTag(clazz)
+    val typeTag = Types.asTypeTag(clazz)
     read[T](message)(typeTag)
   }
 

@@ -3,10 +3,10 @@ package com.twitter.finatra.validation
 import com.github.benmanes.caffeine.cache.{Cache, Caffeine}
 import com.twitter.finatra.utils.ClassUtils
 import com.twitter.finatra.validation.internal._
-import com.twitter.inject.TypeUtils
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.utils.AnnotationUtils
 import com.twitter.util.logging.Logger
+import com.twitter.util.reflect.Types
 import com.twitter.util.{Return, Try}
 import java.lang.annotation.Annotation
 import java.lang.reflect.{Field, Parameter}
@@ -239,7 +239,7 @@ object Validator {
         descriptor.name,
         AnnotatedConstructorParamDescriptor(
           descriptor,
-          TypeUtils.parameterizedTypeNames(parameter.getParameterizedType),
+          Types.parameterizedTypeNames(parameter.getParameterizedType),
           filteredAnnotations
         )
       )

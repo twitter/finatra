@@ -23,6 +23,7 @@ scala_library(
         "finatra/json-annotations/src/main/java/com/twitter/finatra/json/annotations",
         "finatra/utils/src/main/scala/com/twitter/finatra/modules",
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",
+        "util/util-reflect/src/main/scala/com/twitter/util/reflect",
     ],
     exports = [
         "3rdparty/jvm/com/google/inject:guice",

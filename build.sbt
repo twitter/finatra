@@ -784,6 +784,7 @@ lazy val validation = project
     libraryDependencies ++= Seq(
       "joda-time" % "joda-time" % versions.jodaTime,
       "com.twitter" %% "util-core" % versions.twLibVersion,
+      "com.twitter" %% "util-reflect" % versions.twLibVersion,
       "org.json4s" %% "json4s-core" % versions.json4s,
       "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
@@ -832,6 +833,7 @@ lazy val jackson = project
       "org.json4s" %% "json4s-core" % versions.json4s,
       "com.twitter" %% "finagle-http" % versions.twLibVersion % "test",
       "com.twitter" %% "util-core" % versions.twLibVersion,
+      "com.twitter" %% "util-reflect" % versions.twLibVersion,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
     // special-case to only scaladoc what's necessary as some of the tests cannot generate scaladocs
@@ -898,6 +900,7 @@ lazy val httpCore = (project in file("http-core"))
     moduleName := "finatra-http-core",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
+      "com.twitter" %% "util-reflect" % versions.twLibVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "javax.servlet" % "servlet-api" % versions.servletApi % "provided;compile->compile;test->test"
@@ -931,6 +934,7 @@ lazy val httpServer = (project in file("http-server"))
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % versions.libThrift intransitive (),
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
+      "com.twitter" %% "util-reflect" % versions.twLibVersion,
       "javax.servlet" % "servlet-api" % versions.servletApi % "provided;compile->compile;test->test",
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal",
@@ -1051,6 +1055,7 @@ lazy val thrift = project
       "com.twitter" %% "finagle-thrift" % versions.twLibVersion,
       "com.twitter" %% "finagle-thriftmux" % versions.twLibVersion,
       "com.twitter" %% "util-core" % versions.twLibVersion,
+      "com.twitter" %% "util-reflect" % versions.twLibVersion,
       "javax.inject" % "javax.inject" % "1",
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "org.yaml" % "snakeyaml" % versions.snakeyaml,

@@ -13,8 +13,8 @@ import com.twitter.finatra.thrift.Controller
 import com.twitter.finatra.thrift.ScroogeServiceImpl
 import com.twitter.finatra.thrift.exceptions.{ExceptionManager, ExceptionMapper}
 import com.twitter.finatra.thrift.internal.routing.{NullThriftService, Registrar}
-import com.twitter.inject.TypeUtils._
 import com.twitter.inject.annotations.Flag
+import com.twitter.inject.TypeUtils
 import com.twitter.inject.internal.LibraryRegistry
 import com.twitter.inject.{Injector, Logging, StackTransformer}
 import com.twitter.scrooge.{Request, Response, ThriftMethod}
@@ -60,8 +60,8 @@ private[routing] abstract class BaseThriftRouter[Router <: BaseThriftRouter[Rout
    */
   def exceptionMapper[T <: Throwable](clazz: Class[_ <: ExceptionMapper[T, _]]): Router =
     preConfig("Exception mappers must be added before a controller is added") {
-      val mapperType = superTypeFromClass(clazz, classOf[ExceptionMapper[_, _]])
-      val throwableType = singleTypeParam(mapperType)
+      val mapperType = TypeUtils.superTypeFromClass(clazz, classOf[ExceptionMapper[_, _]])
+      val throwableType = TypeUtils.singleTypeParam(mapperType)
       exceptionMapper(injector.instance(clazz))(
         Manifest.classType(Class.forName(throwableType.getTypeName))
       )

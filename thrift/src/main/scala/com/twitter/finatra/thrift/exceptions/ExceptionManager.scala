@@ -1,8 +1,7 @@
 package com.twitter.finatra.thrift.exceptions
 
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.inject.Injector
-import com.twitter.inject.TypeUtils.singleTypeParam
+import com.twitter.inject.{Injector, TypeUtils}
 import com.twitter.util.Future
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
@@ -37,7 +36,7 @@ class ExceptionManager(injector: Injector, statsReceiver: StatsReceiver) {
    */
   def add[T <: ExceptionMapper[_, _]: Manifest]: Unit = {
     val mapperType = typeLiteral[T].getSupertype(classOf[ExceptionMapper[_, _]]).getType
-    val throwableType = singleTypeParam(mapperType)
+    val throwableType = TypeUtils.singleTypeParam(mapperType)
     register(throwableType, injector.instance[T])
   }
 
