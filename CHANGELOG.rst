@@ -22,6 +22,9 @@ Breaking API Changes
 Changed
 ~~~~~~~
 
+* finatra: Revert to scala version 2.12.12 due to https://github.com/scoverage/sbt-scoverage/issues/319
+  ``PHAB_ID=D635917``
+
 * finatra: Bump scala version to 2.12.13 ``PHAB_ID=D632567``
 
 * finatra: Move com.twitter.finatra.http.{jsonpatch,request} from the finatra/http-server project to
