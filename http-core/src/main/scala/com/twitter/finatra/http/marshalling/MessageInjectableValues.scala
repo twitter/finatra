@@ -32,7 +32,7 @@ import com.twitter.finatra.json.annotations.InjectableValue
 import com.twitter.finatra.http.annotations.{FormParam, Header, QueryParam, RouteParam}
 import com.twitter.finatra.validation.ErrorCode
 import com.twitter.finatra.validation.ValidationResult.Invalid
-import com.twitter.inject.utils.AnnotationUtils
+import com.twitter.util.reflect.Annotations
 import java.lang.annotation.Annotation
 import scala.collection.JavaConverters._
 
@@ -373,7 +373,7 @@ private[http] class MessageInjectableValues(
   private[this] def fieldNameForAnnotation(forProperty: BeanProperty): String = {
     findAnnotation(forProperty, annotations) match {
       case Some(annotation) =>
-        AnnotationUtils.getValueIfAnnotatedWith[InjectableValue](annotation) match {
+        Annotations.getValueIfAnnotatedWith[InjectableValue](annotation) match {
           case Some(value) if value != null && value.nonEmpty => value
           case _ => forProperty.getName
         }

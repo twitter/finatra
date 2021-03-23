@@ -4,9 +4,8 @@ import com.google.inject.internal.MoreTypes.ParameterizedTypeImpl
 import com.twitter.finagle.http.Message
 import com.twitter.finatra.http.annotations.{MessageBodyWriter => MessageBodyWriterAnnotation}
 import com.twitter.inject.conversions.map._
-import com.twitter.inject.utils.AnnotationUtils
 import com.twitter.inject.{Injector, TypeUtils}
-import com.twitter.util.reflect.Types
+import com.twitter.util.reflect.{Annotations, Types}
 import java.lang.annotation.Annotation
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
@@ -128,7 +127,7 @@ object MessageBodyManager {
       val annotation = manifest[A].runtimeClass.asInstanceOf[Class[A]]
       val requiredAnnotationClazz = classOf[MessageBodyWriterAnnotation]
       assert(
-        AnnotationUtils.isAnnotationPresent[MessageBodyWriterAnnotation, A],
+        Annotations.isAnnotationPresent[MessageBodyWriterAnnotation, A],
         s"The annotation: ${annotation.getSimpleName} is not annotated with the required ${requiredAnnotationClazz.getName} annotation."
       )
       this.copy(
@@ -209,7 +208,7 @@ object MessageBodyManager {
   // Partial function to pass when filtering class annotations.
   private val isRequiredAnnotationPresent: PartialFunction[Annotation, Annotation] = {
     case annotation: Annotation
-        if AnnotationUtils.isAnnotationPresent[MessageBodyWriterAnnotation](annotation) =>
+        if Annotations.isAnnotationPresent[MessageBodyWriterAnnotation](annotation) =>
       annotation
   }
 }
@@ -297,7 +296,7 @@ class MessageBodyManager private (
     val annotation = manifest[A].runtimeClass.asInstanceOf[Class[A]]
     val requiredAnnotationClazz = classOf[MessageBodyWriterAnnotation]
     assert(
-      AnnotationUtils.isAnnotationPresent[MessageBodyWriterAnnotation, A],
+      Annotations.isAnnotationPresent[MessageBodyWriterAnnotation, A],
       s"The annotation: ${annotation.getSimpleName} is not annotated with the required ${requiredAnnotationClazz.getName} annotation."
     )
     annotationCache.put(annotation, messageBodyWriter.asInstanceOf[MessageBodyWriter[Any]])

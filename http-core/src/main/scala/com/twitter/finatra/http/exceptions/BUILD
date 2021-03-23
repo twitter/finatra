@@ -37,6 +37,7 @@ scala_library(
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",
+        "util/util-reflect/src/main/scala/com/twitter/util/reflect",
         "util/util-stats/src/main/scala",
     ],
     exports = [

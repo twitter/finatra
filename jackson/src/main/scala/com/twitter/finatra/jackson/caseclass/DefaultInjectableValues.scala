@@ -11,7 +11,7 @@ import com.google.inject.{ConfigurationException, Injector}
 import com.twitter.finatra.jackson.caseclass.exceptions.InjectableValuesException
 import com.twitter.finatra.json.annotations.InjectableValue
 import com.twitter.inject.Logging
-import com.twitter.inject.utils.AnnotationUtils
+import com.twitter.util.reflect.Annotations
 import java.lang.annotation.Annotation
 import javax.inject.Inject
 
@@ -53,11 +53,11 @@ private[finatra] object DefaultInjectableValues {
     annotations: Array[Annotation]
   ): Boolean = {
     // dependency injection annotations -- cannot be used in combination with any JacksonAnnotation
-    val injectionAnnotations = AnnotationUtils.filterAnnotations(InjectionAnnotations, annotations)
+    val injectionAnnotations = Annotations.filterAnnotations(InjectionAnnotations, annotations)
     // annotations that are annotated with `@InjectableValue` -- OK in combo with JacksonAnnotations,
     // though support for a given JacksonAnnotation may vary or be non-existent
     // depending on what `InjectableValues` implementation is configured
-    val injectableAnnotations = injectionAnnotations ++ AnnotationUtils
+    val injectableAnnotations = injectionAnnotations ++ Annotations
       .filterIfAnnotationPresent[InjectableValue](annotations)
 
     assert(
@@ -71,7 +71,7 @@ private[finatra] object DefaultInjectableValues {
       // has one of `javax.inject.Inject`, `com.google.inject.Inject` or `com.fasterxml.jackson.annotation.JacksonInject`
       // should not also have any JacksonAnnotation
       val jacksonAnnotations =
-        AnnotationUtils
+        Annotations
           .filterIfAnnotationPresent[JacksonAnnotation](annotations)
       assert(
         jacksonAnnotations.isEmpty,

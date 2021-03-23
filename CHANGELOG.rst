@@ -17,6 +17,12 @@ Added
 Breaking API Changes
 ~~~~~~~~~~~~~~~~~~~~
 
+* finatra: Deprecate `c.t.inject.utils.AnnotationUtils`, users should instead use
+  `c.t.util.reflect.Annotations` from `com.twitter:util-reflect`. Deprecate
+  `c.t.finatra.utils.ClassUtils`, users should instead use either
+  `c.t.util.reflect.Classes#simpleName`, `c.t.util.reflect.Types#isCaseClass` or
+  `c.t.util.reflect.Types#notCaseClass` from `com.twitter:util-reflect`. ``PHAB_ID=D638655``
+
 * finatra: Builds are now only supported for Scala 2.12+ ``PHAB_ID=D631091``
 
 Changed

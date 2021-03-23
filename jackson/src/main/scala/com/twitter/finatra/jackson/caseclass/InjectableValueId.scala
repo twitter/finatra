@@ -2,7 +2,7 @@ package com.twitter.finatra.jackson.caseclass
 
 import com.fasterxml.jackson.databind.JavaType
 import com.google.inject.{BindingAnnotation, Key}
-import com.twitter.inject.utils.AnnotationUtils
+import com.twitter.util.reflect.Annotations
 import java.lang.annotation.Annotation
 import java.lang.reflect.Type
 
@@ -56,7 +56,7 @@ private[caseclass] case class InjectableValueId(
   /** Key[_] to use for DefaultInjectableValues (Guice) injection */
   lazy val key: Key[_] = {
     val bindingAnnotations =
-      AnnotationUtils.filterIfAnnotationPresent[BindingAnnotation](annotations)
+      Annotations.filterIfAnnotationPresent[BindingAnnotation](annotations)
     if (bindingAnnotations.length > 1) {
       throw new IllegalArgumentException("Too many binding annotations on " + name)
     } else if (bindingAnnotations.length == 1) {

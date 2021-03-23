@@ -2,8 +2,8 @@ package com.twitter.finatra.jackson.caseclass
 
 import com.fasterxml.jackson.databind.deser.Deserializers
 import com.fasterxml.jackson.databind.{BeanDescription, DeserializationConfig, JavaType}
-import com.twitter.finatra.utils.ClassUtils
 import com.twitter.finatra.validation.Validator
+import com.twitter.util.reflect.{Types => ReflectionTypes}
 
 private[finatra] class CaseClassDeserializerResolver(
   injectableTypes: InjectableTypes,
@@ -15,7 +15,7 @@ private[finatra] class CaseClassDeserializerResolver(
     deserializationConfig: DeserializationConfig,
     beanDescription: BeanDescription
   ): CaseClassDeserializer = {
-    if (ClassUtils.isCaseClass(javaType.getRawClass))
+    if (ReflectionTypes.isCaseClass(javaType.getRawClass))
       new CaseClassDeserializer(
         javaType,
         deserializationConfig,

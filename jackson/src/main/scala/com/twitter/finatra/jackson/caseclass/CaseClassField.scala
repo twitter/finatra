@@ -20,7 +20,7 @@ import com.twitter.finatra.json.annotations.InjectableValue
 import com.twitter.finatra.validation.ErrorCode
 import com.twitter.finatra.validation.ValidationResult.Invalid
 import com.twitter.inject.Logging
-import com.twitter.inject.utils.AnnotationUtils
+import com.twitter.util.reflect.Annotations
 import java.lang.annotation.Annotation
 import java.lang.reflect.Executable
 import org.json4s.reflect.ClassDescriptor
@@ -88,7 +88,7 @@ object CaseClassField {
     annotations: Array[Annotation],
     name: String
   ): String = {
-    AnnotationUtils.findAnnotation[JsonProperty](annotations) match {
+    Annotations.findAnnotation[JsonProperty](annotations) match {
       case Some(jsonProperty) if jsonProperty.value.nonEmpty =>
         jsonProperty.value
       case _ =>
@@ -144,16 +144,16 @@ private[jackson] case class CaseClassField private (
 
   /** If the field has a [[JsonIgnore(true)]] annotation or the type has been annotated with [[JsonIgnoreType(true)]]*/
   private[this] lazy val isIgnored: Boolean =
-    AnnotationUtils
+    Annotations
       .findAnnotation[JsonIgnore](annotations).exists(_.value) ||
-      AnnotationUtils
+      Annotations
         .findAnnotation[JsonIgnoreType](clazzAnnotations).exists(_.value)
 
   /** If the field is annotated directly with [[JsonDeserialize]] of if the class is annotated similarly */
   private[this] lazy val jsonDeserializer: Option[JsonDeserialize] =
-    AnnotationUtils
+    Annotations
       .findAnnotation[JsonDeserialize](annotations)
-      .orElse(AnnotationUtils.findAnnotation[JsonDeserialize](clazzAnnotations))
+      .orElse(Annotations.findAnnotation[JsonDeserialize](clazzAnnotations))
 
   /* Public */
   /**
@@ -179,7 +179,7 @@ private[jackson] case class CaseClassField private (
     val activeJsonView: Option[Class[_]] = Option(context.getActiveView)
     // current @JsonView annotation (if any)
     val fieldJsonViews: Option[Seq[Class[_]]] =
-      AnnotationUtils.findAnnotation[JsonView](annotations).map(_.value.toSeq)
+      Annotations.findAnnotation[JsonView](annotations).map(_.value.toSeq)
 
     if (fieldInjection.isInjectable) {
       fieldInjection
@@ -307,7 +307,7 @@ private[jackson] case class CaseClassField private (
     subTypeClazz: Option[Class[_]]
   ): Object = {
     val resolvedType = resolveSubType(context, forProperty.getType, subTypeClazz)
-    AnnotationUtils.findAnnotation[JsonTypeInfo](clazzAnnotations) match {
+    Annotations.findAnnotation[JsonTypeInfo](clazzAnnotations) match {
       case Some(_) =>
         // for polymorphic types we cannot contextualize
         // thus we go back to the field codec to read
@@ -409,8 +409,8 @@ private[jackson] case class CaseClassField private (
     fieldName: String,
     annotation: Annotation
   ): Option[(String, String)] = {
-    if (AnnotationUtils.isAnnotationPresent[InjectableValue](annotation)) {
-      val name = AnnotationUtils.getValueIfAnnotatedWith[InjectableValue](annotation) match {
+    if (Annotations.isAnnotationPresent[InjectableValue](annotation)) {
+      val name = Annotations.getValueIfAnnotatedWith[InjectableValue](annotation) match {
         case Some(value) if value != null && value.nonEmpty => value
         case _ => fieldName
       }

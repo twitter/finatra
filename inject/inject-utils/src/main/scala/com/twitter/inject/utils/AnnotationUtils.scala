@@ -4,6 +4,7 @@ import com.twitter.util.{Return, Try}
 import java.lang.annotation.Annotation
 
 /** Utility methods for dealing with [[java.lang.annotation.Annotation]] */
+@deprecated("Users should use c.t.util.reflect.Annotations", "2021-03-20")
 object AnnotationUtils {
 
   /**
@@ -15,6 +16,7 @@ object AnnotationUtils {
    *
    * @return the filtered list of matching annotations.
    */
+  @deprecated("Use c.t.util.reflect.Annotations#filterIfAnnotationPresent", "2021-03-20")
   def filterIfAnnotationPresent[A <: Annotation: Manifest](
     annotations: Array[Annotation]
   ): Array[Annotation] = annotations.filter(isAnnotationPresent[A])
@@ -26,6 +28,7 @@ object AnnotationUtils {
    *
    * @return the filtered list of matching annotations.
    */
+  @deprecated("Use c.t.util.reflect.Annotations#filterAnnotations", "2021-03-20")
   def filterAnnotations(
     filterSet: Set[Class[_ <: Annotation]],
     annotations: Array[Annotation]
@@ -41,6 +44,7 @@ object AnnotationUtils {
    * @return the matching [[Annotation]] instance if found, otherwise None.
    */
   // optimized
+  @deprecated("Use c.t.util.reflect.Annotations#findAnnotation", "2021-03-20")
   def findAnnotation(
     target: Class[_ <: Annotation],
     annotations: Array[Annotation]
@@ -63,6 +67,7 @@ object AnnotationUtils {
    * @return the matching [[Annotation]] instance if found, otherwise None.
    */
   // optimized
+  @deprecated("Use c.t.util.reflect.Annotations#findAnnotation", "2021-03-20")
   def findAnnotation[A <: Annotation: Manifest](annotations: Array[Annotation]): Option[A] = {
     val size = annotations.length
     val annotationType = manifest[A].runtimeClass.asInstanceOf[Class[A]]
@@ -83,6 +88,7 @@ object AnnotationUtils {
    *
    * @return true if the given [[Annotation]] is of type [[A]], false otherwise.
    */
+  @deprecated("Use c.t.util.reflect.Annotations#annotationEquals", "2021-03-20")
   def annotationEquals[A <: Annotation: Manifest](annotation: Annotation): Boolean =
     annotation.annotationType() == manifest[A].runtimeClass.asInstanceOf[Class[A]]
 
@@ -95,6 +101,7 @@ object AnnotationUtils {
    * @return true if the given [[Annotation]] is annotated with an [[Annotation]] of type [[A]],
    *         false otherwise.
    */
+  @deprecated("Use c.t.util.reflect.Annotations#isAnnotationPresent", "2021-03-20")
   def isAnnotationPresent[A <: Annotation: Manifest](annotation: Annotation): Boolean =
     annotation.annotationType.isAnnotationPresent(manifest[A].runtimeClass.asInstanceOf[Class[A]])
 
@@ -108,6 +115,7 @@ object AnnotationUtils {
    * @return true if the given [[Annotation]] is annotated with an [[Annotation]] of type [[ToFindAnnotation]],
    *         false otherwise.
    */
+  @deprecated("Use c.t.util.reflect.Annotations#isAnnotationPresent", "2021-03-20")
   def isAnnotationPresent[
     ToFindAnnotation <: Annotation: Manifest,
     A <: Annotation: Manifest

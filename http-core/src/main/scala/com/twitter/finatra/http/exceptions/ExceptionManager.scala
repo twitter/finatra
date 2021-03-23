@@ -3,10 +3,10 @@ package com.twitter.finatra.http.exceptions
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.contexts.RouteInfo
-import com.twitter.finatra.utils.ClassUtils
 import com.twitter.inject.Injector
 import com.twitter.inject.TypeUtils.singleTypeParam
 import com.twitter.inject.exceptions.DetailedNonRetryableSourcedException
+import com.twitter.util.reflect.Classes
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Singleton
@@ -27,8 +27,6 @@ import scala.util.control.NonFatal
  * exception mapper over Throwable which will eventually be invoked. Users are
  * free to register their own ExceptionMapper[Throwable] which overrides the
  * "root" exception mapper.
- *
- * @see [[com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper]]
  */
 @Singleton
 class ExceptionManager(injector: Injector, statsReceiver: StatsReceiver) {
@@ -121,7 +119,7 @@ class ExceptionManager(injector: Injector, statsReceiver: StatsReceiver) {
   }
 
   private def exceptionDetails(throwable: Throwable): String = {
-    val className = ClassUtils.simpleName(throwable.getClass)
+    val className = Classes.simpleName(throwable.getClass)
     throwable match {
       case sourceDetails: DetailedNonRetryableSourcedException =>
         className + "/" + sourceDetails.toDetailsString

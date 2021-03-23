@@ -40,8 +40,7 @@ import com.twitter.finatra.validation.{
 }
 import com.twitter.inject.Logging
 import com.twitter.inject.domain.WrappedValue
-import com.twitter.inject.utils.AnnotationUtils
-import com.twitter.util.reflect.{Types => ReflectionTypes}
+import com.twitter.util.reflect.{Annotations, Types => ReflectionTypes}
 import com.twitter.util.Try
 import java.lang.annotation.Annotation
 import java.lang.reflect.{
@@ -201,12 +200,10 @@ private[jackson] class CaseClassDeserializer(
   private[this] val allAnnotations: scala.collection.Map[String, Array[Annotation]] = {
     // use the carried scalaType in order to find the appropriate constructor by the
     // unresolved scalaTypes -- e.g., before we resolve generic types to their bound type
-    AnnotationUtils.findAnnotations(
+    Annotations.findAnnotations(
       clazz,
       caseClazzCreator.propertyDefinitions
-        .map(_.scalaType.erasure),
-      caseClazzCreator.propertyDefinitions
-        .map(_.beanPropertyDefinition.getInternalName)
+        .map(_.scalaType.erasure)
     )
   }
 
@@ -395,7 +392,7 @@ private[jackson] class CaseClassDeserializer(
   ): Seq[String] = {
     // if there is a JsonIgnoreProperties annotation on the class, it should prevail
     val nonIgnoredFields: Seq[String] =
-      AnnotationUtils.findAnnotation[JsonIgnoreProperties](clazzAnnotations) match {
+      Annotations.findAnnotation[JsonIgnoreProperties](clazzAnnotations) match {
         case Some(annotation) if !annotation.ignoreUnknown() =>
           // has a JsonIgnoreProperties annotation and is configured to NOT ignore unknown properties
           val annotationIgnoredFields: Seq[String] = annotation.value()
@@ -727,7 +724,7 @@ private[jackson] class CaseClassDeserializer(
   }
 
   private[this] def propertyNamingStrategy: PropertyNamingStrategy = {
-    AnnotationUtils.findAnnotation[JsonNaming](clazzAnnotations) match {
+    Annotations.findAnnotation[JsonNaming](clazzAnnotations) match {
       case Some(jsonNaming) =>
         jsonNaming.value().newInstance()
       case _ =>

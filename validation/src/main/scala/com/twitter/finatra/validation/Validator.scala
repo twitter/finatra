@@ -1,12 +1,11 @@
 package com.twitter.finatra.validation
 
 import com.github.benmanes.caffeine.cache.{Cache, Caffeine}
-import com.twitter.finatra.utils.ClassUtils
 import com.twitter.finatra.validation.internal._
 import com.twitter.inject.conversions.map._
-import com.twitter.inject.utils.AnnotationUtils
 import com.twitter.util.logging.Logger
-import com.twitter.util.reflect.Types
+import com.twitter.util.reflect.Annotations.findDeclaredAnnotations
+import com.twitter.util.reflect.{Annotations, Classes, Types}
 import com.twitter.util.{Return, Try}
 import java.lang.annotation.Annotation
 import java.lang.reflect.{Field, Parameter}
@@ -40,11 +39,11 @@ object Validator {
 
   /* Exposed for finatra/jackson */
   private[finatra] def isMethodValidationAnnotation(annotation: Annotation): Boolean =
-    AnnotationUtils.annotationEquals[MethodValidation](annotation)
+    Annotations.annotationEquals[MethodValidation](annotation)
 
   /* Exposed for finatra/jackson */
   private[finatra] def isConstraintAnnotation(annotation: Annotation): Boolean =
-    AnnotationUtils.isAnnotationPresent[Constraint](annotation)
+    Annotations.isAnnotationPresent[Constraint](annotation)
 
   /* Exposed for finatra/jackson */
   private[finatra] def extractFieldsFromMethodValidation(
@@ -112,7 +111,7 @@ object Validator {
 
   /** If the given class is marked for cascaded validation or not. True if the class is a case class and has the `@Valid` annotation */
   private def isCascadedValidation(erasure: Class[_], annotations: Array[Annotation]): Boolean =
-    ClassUtils.isCaseClass(erasure) && AnnotationUtils.findAnnotation[Valid](annotations).isDefined
+    Types.isCaseClass(erasure) && Annotations.findAnnotation[Valid](annotations).isDefined
 
   /** Each Constraint annotation defines its ConstraintValidator in a `validatedBy` field */
   private def getValidatedBy[A <: Annotation, V](
@@ -203,8 +202,7 @@ object Validator {
     clazz: Class[_],
     clazzDescriptor: ClassDescriptor
   ): scala.collection.Map[String, AnnotatedConstructorParamDescriptor] = {
-    // find the default constructor descriptor via json4s. this is used to obtain parameter names
-    // which are not properly carried in Scala 2.11 reflection
+    // find the default constructor descriptor via json4s.
     val constructorDescriptor: ConstructorDescriptor = defaultConstructor(clazzDescriptor)
     // attempt to locate the class constructor with the same param args
     val constructor = Try(
@@ -218,11 +216,13 @@ object Validator {
     }
 
     // find all inherited annotations for every constructor param
-    val allFieldAnnotations = AnnotationUtils.findAnnotations(
+    val allFieldAnnotations = findAnnotations(
       clazz,
+      clazz.getDeclaredFields.map(_.getName).toSet,
       constructorDescriptor.params.map { param =>
         param.name -> constructorParameters(param.argIndex).getAnnotations
-      }.toMap)
+      }.toMap
+    )
 
     val result: mutable.HashMap[String, AnnotatedConstructorParamDescriptor] =
       new mutable.HashMap[String, AnnotatedConstructorParamDescriptor]()
@@ -231,8 +231,8 @@ object Validator {
       val parameter = constructorParameters(index)
       val descriptor = constructorDescriptor.params(index)
       val filteredAnnotations = allFieldAnnotations(descriptor.name).filter { ann =>
-        AnnotationUtils.isAnnotationPresent[Constraint](ann) ||
-        AnnotationUtils.annotationEquals[Valid](ann)
+        Annotations.isAnnotationPresent[Constraint](ann) ||
+        Annotations.annotationEquals[Valid](ann)
       }
 
       result.put(
@@ -248,6 +248,21 @@ object Validator {
     }
 
     result
+  }
+
+  private[this] def findAnnotations(
+    clazz: Class[_],
+    declaredFields: Set[String],
+    fieldAnnotations: scala.collection.Map[String, Array[Annotation]]
+  ): scala.collection.Map[String, Array[Annotation]] = {
+    val collectorMap = new scala.collection.mutable.HashMap[String, Array[Annotation]]()
+    collectorMap ++= fieldAnnotations
+    // find inherited annotations
+    findDeclaredAnnotations(
+      clazz,
+      declaredFields,
+      collectorMap
+    )
   }
 
   /**
@@ -415,7 +430,7 @@ class Validator private[finatra] (cacheSize: Long, messageResolver: MessageResol
         }
       case _ =>
         val clazz: Class[_] = value.getClass
-        if (ClassUtils.notCaseClass(clazz)) throw InvalidCaseClassException(clazz)
+        if (Types.notCaseClass(clazz)) throw InvalidCaseClassException(clazz)
         val annotatedClazz: AnnotatedClass = findAnnotatedClass(clazz)
         validate(value, Some(annotatedClazz))
     }
@@ -483,7 +498,7 @@ class Validator private[finatra] (cacheSize: Long, messageResolver: MessageResol
         // given instance. thus shouldFindFieldValue is true if the given annotatedClass has
         // a case class type argument
         shouldFindFieldValue =
-          annotatedClass.scalaType.exists(t => ClassUtils.isCaseClass(t.typeArgs.head.erasure))
+          annotatedClass.scalaType.exists(t => Types.isCaseClass(t.typeArgs.head.erasure))
       )
     }).flatten
   }
@@ -704,7 +719,7 @@ class Validator private[finatra] (cacheSize: Long, messageResolver: MessageResol
             Some(name),
             path
               .append(name)
-              .append(ClassUtils.simpleName(argType.typeArgs.head.erasure).toLowerCase),
+              .append(Classes.simpleName(argType.typeArgs.head.erasure).toLowerCase),
             argType.typeArgs.head.erasure,
             Some(argType),
             observed :+ argType.typeArgs.head.erasure
