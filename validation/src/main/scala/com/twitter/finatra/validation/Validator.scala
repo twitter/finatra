@@ -181,8 +181,6 @@ object Validator {
   }
 
   // find the constructor with parameters that are all declared class fields
-  // we use json4s here because in Scala 2.11 constructor params do not carry their
-  // actual names (fixed in 2.12+) and we have logic based on the name of the constructor param
   private def defaultConstructor(clazzDescriptor: ClassDescriptor): ConstructorDescriptor = {
     def isDefaultConstructorDescriptor(constructorDescriptor: ConstructorDescriptor): Boolean = {
       constructorDescriptor.params.forall { param =>

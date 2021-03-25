@@ -100,12 +100,6 @@ trait HttpClientModuleTrait extends StackClientModuleTrait[Request, Response, Ht
     statsReceiver: StatsReceiver
   ): Http.Client = super.newClient(injector, statsReceiver)
 
-  // Java friendly: https://issues.scala-lang.org/browse/SI-8905 - only an issue in Scala 2.11
-  override protected[twitter] def frameworkConfigureClient(
-    injector: Injector,
-    client: Http.Client
-  ): Http.Client = super.frameworkConfigureClient(injector, client)
-
   final def newHttpClient(
     injector: Injector,
     statsReceiver: StatsReceiver,

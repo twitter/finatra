@@ -332,7 +332,6 @@ class ValidatorTest extends Test with AssertValidation {
     val e = intercept[Exception] {
       validator.verify(d3)
     }
-    // in Scala 2.11 this produces an IllegalArgumentException, in Scala 2.12 it correctly validates
     e match {
       case ve: ValidationException =>
         val errors = Seq(
@@ -340,7 +339,7 @@ class ValidatorTest extends Test with AssertValidation {
           "otherName: cannot be empty"
         )
         assertValidationException(ve, errors)
-      case _: IllegalArgumentException => // do nothing
+      case _ => fail(e.getMessage, e)
     }
 
     val d4 = PossiblyValidDoublePerson("Andrea")("")

@@ -63,12 +63,6 @@ private[twitter] trait ThriftClientModuleTrait
     statsReceiver: StatsReceiver
   ): ThriftMux.Client = super.newClient(injector, statsReceiver)
 
-  // Java friendly: https://issues.scala-lang.org/browse/SI-8905 - only an issue in Scala 2.11
-  override protected[twitter] def frameworkConfigureClient(
-    injector: Injector,
-    client: ThriftMux.Client
-  ): ThriftMux.Client = super.frameworkConfigureClient(injector, client)
-
   override protected def initialClientConfiguration(
     injector: Injector,
     client: ThriftMux.Client,

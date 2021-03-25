@@ -26,9 +26,7 @@ import scala.reflect.ClassTag
 import scala.runtime.BoxedUnit
 
 /*
- * We need to copy a mustache.java class here since:
- * - 0.8.x doesn't support 2.11
- * - 0.9.x is Java 8 only
+ * We need to copy a mustache.java class here since 0.9.x is Java 8 only
  *
  * Copied from https://github.com/spullara/mustache.java/blob/master/scala-extensions/scala-extensions-2.10/src/main/scala/com/twitter/mustache/ScalaObjectHandler.scala
  * and combined with TwitterObjectHandler for Future support.
