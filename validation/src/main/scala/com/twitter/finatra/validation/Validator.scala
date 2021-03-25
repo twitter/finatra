@@ -39,7 +39,7 @@ object Validator {
 
   /* Exposed for finatra/jackson */
   private[finatra] def isMethodValidationAnnotation(annotation: Annotation): Boolean =
-    Annotations.annotationEquals[MethodValidation](annotation)
+    Annotations.equals[MethodValidation](annotation)
 
   /* Exposed for finatra/jackson */
   private[finatra] def isConstraintAnnotation(annotation: Annotation): Boolean =
@@ -230,7 +230,7 @@ object Validator {
       val descriptor = constructorDescriptor.params(index)
       val filteredAnnotations = allFieldAnnotations(descriptor.name).filter { ann =>
         Annotations.isAnnotationPresent[Constraint](ann) ||
-        Annotations.annotationEquals[Valid](ann)
+        Annotations.equals[Valid](ann)
       }
 
       result.put(

@@ -88,7 +88,7 @@ object AnnotationUtils {
    *
    * @return true if the given [[Annotation]] is of type [[A]], false otherwise.
    */
-  @deprecated("Use c.t.util.reflect.Annotations#annotationEquals", "2021-03-20")
+  @deprecated("Use c.t.util.reflect.Annotations#equals", "2021-03-20")
   def annotationEquals[A <: Annotation: Manifest](annotation: Annotation): Boolean =
     annotation.annotationType() == manifest[A].runtimeClass.asInstanceOf[Class[A]]
 
