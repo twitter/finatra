@@ -74,7 +74,7 @@ public class MultiJavaServerDarkTrafficFeatureTest extends Assert {
     LIVE_THRIFT_SERVER.assertHealthy(true);
 
     // darkTrafficFilter stats
-    LIVE_THRIFT_SERVER.inMemoryStats().counters().expect(
+    LIVE_THRIFT_SERVER.inMemoryStats().counters().waitFor(
         "dark_traffic_filter/forwarded", 1);
     assertFalse(LIVE_THRIFT_SERVER.inMemoryStats().counters().get(
         "dark_traffic_filter/skipped").isDefined());
@@ -82,9 +82,9 @@ public class MultiJavaServerDarkTrafficFeatureTest extends Assert {
     // give a chance for the stat to be recorded on the dark service
     DARK_THRIFT_SERVER.assertHealthy(true);
     // "dark" service stats
-    DARK_THRIFT_SERVER.inMemoryStats().counters().expect(
+    DARK_THRIFT_SERVER.inMemoryStats().counters().waitFor(
         "srv/thrift/requests", 1);
-    DARK_THRIFT_SERVER.inMemoryStats().counters().expect(
+    DARK_THRIFT_SERVER.inMemoryStats().counters().waitFor(
         "srv/thrift/success", 1);
   }
 
@@ -97,7 +97,7 @@ public class MultiJavaServerDarkTrafficFeatureTest extends Assert {
     LIVE_THRIFT_SERVER.assertHealthy(true);
 
     // darkTrafficFilter stats
-    LIVE_THRIFT_SERVER.inMemoryStats().counters().expect(
+    LIVE_THRIFT_SERVER.inMemoryStats().counters().waitFor(
         "dark_traffic_filter/forwarded", 1);
     assertFalse(LIVE_THRIFT_SERVER.inMemoryStats().counters().get(
         "dark_traffic_filter/skipped").isDefined());
@@ -105,9 +105,9 @@ public class MultiJavaServerDarkTrafficFeatureTest extends Assert {
     // give a chance for the stat to be recorded on the dark service
     DARK_THRIFT_SERVER.assertHealthy(true);
     // "dark" service stats
-    DARK_THRIFT_SERVER.inMemoryStats().counters().expect(
+    DARK_THRIFT_SERVER.inMemoryStats().counters().waitFor(
         "srv/thrift/requests", 1);
-    DARK_THRIFT_SERVER.inMemoryStats().counters().expect(
+    DARK_THRIFT_SERVER.inMemoryStats().counters().waitFor(
         "srv/thrift/success", 1);
   }
 

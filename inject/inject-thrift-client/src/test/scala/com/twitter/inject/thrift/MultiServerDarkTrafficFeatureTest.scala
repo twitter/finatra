@@ -39,7 +39,7 @@ class MultiServerDarkTrafficFeatureTest extends Test with ThriftTest {
     darkEchoThriftServer
       .assertHealthy() // give a chance for the stat to be recorded on the dark service
     // "dark" service stats
-    darkEchoThriftServer.inMemoryStats.counters.assert("per_method_stats/echo/success", 1)
+    darkEchoThriftServer.inMemoryStats.counters.waitFor("per_method_stats/echo/success", 1)
   }
 
   test("setTimesToEcho is not forwarded") {
