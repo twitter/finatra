@@ -16,13 +16,13 @@ For servers, Finatra builds on top of the `features <https://twitter.github.io/t
 Getting Started
 ---------------
 
-To get started, add a dependency on either `finatra-http <https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http_2.12%22>`__ or `finatra-thrift <https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-thrift_2.12%22>`__ depending if you are building an HTTP or Thrift server.
+To get started, add a dependency on either `finatra-http-server <https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http-server_2.12%22>`__ or `finatra-thrift <https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-thrift_2.12%22>`__ depending if you are building an HTTP or Thrift server.
 
 E.g., with `sbt <https://www.scala-sbt.org/>`__:
 
 .. parsed-literal::
 
-    "com.twitter" %% "finatra-http" % "\ |release|\ "
+    "com.twitter" %% "finatra-http-server" % "\ |release|\ "
 
 or
 
@@ -36,7 +36,7 @@ Or similarily with `Maven <https://maven.apache.org/>`__:
 
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>finatra-http_2.12</artifactId>
+      <artifactId>finatra-http-server_2.12</artifactId>
       <version>\ |release|\ </version>
     </dependency>
 
@@ -63,7 +63,7 @@ To add a test-jar dependency, depend on the appropriate module with the `tests` 
 
 .. parsed-literal::
 
-    "com.twitter" %% "finatra-http" % "\ |release|\ " % "test" classifier "tests"
+    "com.twitter" %% "finatra-http-server" % "\ |release|\ " % "test" classifier "tests"
 
 .. tip::
     See the `sbt <https://www.scala-sbt.org/>`__ documentation for more information on using `ivy configurations and classifiers <https://www.scala-sbt.org/1.x/docs/Library-Management.html>`__.    
@@ -74,7 +74,7 @@ And with `Maven <https://maven.apache.org/>`__:
 
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>finatra-http_2.12</artifactId>
+      <artifactId>finatra-http-server_2.12</artifactId>
       <scope>test</scope>
       <type>test-jar</type>
       <version>\ |release|\ </version>
@@ -94,14 +94,14 @@ E.g.,
         "com.twitter" %% "inject-modules" % "\ |release|\ " % "test" classifier "tests"
     )
 
-For example, the `finatra-http` test-jar depends on the `inject-app` test-jar (among others). Therefore, you will have to **manually add** a dependency on the `inject-app` test-jar when using the `finatra-http` test-jar since the `inject-app` test-jar will not be resolved transitively. 
+For example, the `finatra-http-server` test-jar depends on the `inject-app` test-jar (among others). Therefore, you will have to **manually add** a dependency on the `inject-app` test-jar when using the `finatra-http-server` test-jar since the `inject-app` test-jar will not be resolved transitively.
 
-Using the `sbt-dependency-graph <https://github.com/jrudolph/sbt-dependency-graph>`__ plugin, you can list the dependencies of the `finatra-http` test configuration for the `packageBin` task to help in understanding the dependencies to add:
+Using the `sbt-dependency-graph <https://github.com/jrudolph/sbt-dependency-graph>`__ plugin, you can list the dependencies of the `finatra-http-server` test configuration for the `packageBin` task to help in understanding the dependencies to add:
 
 .. code:: bash
 
     $ ./sbt -Dsbt.log.noformat=true http/test:packageBin::dependencyList 2>&1 | grep 'com\.twitter:finatra\|com\.twitter:inject'
-    [info] com.twitter:finatra-http_2.12:...
+    [info] com.twitter:finatra-http-server_2.12:...
     [info] com.twitter:finatra-httpclient_2.12:...
     [info] com.twitter:finatra-jackson_2.12:...
     [info] com.twitter:finatra-slf4j_2.12:...
@@ -114,7 +114,7 @@ Using the `sbt-dependency-graph <https://github.com/jrudolph/sbt-dependency-grap
     [info] com.twitter:inject-slf4j_2.12:...
     [info] com.twitter:inject-utils_2.12:...
 
-In this case, when executing the `packageBin` task for `finatra-http` in the test configuration these dependencies are necessary. Unfortunately, this listing does not explicity state if it's the compile-time or the test-jar version of the dependency that is necessary. However, it is safe to assume that if you want a dependency on the `finatra-http` test-jar you will also need to add dependencies on any test-jar from the listed dependencies as well.
+In this case, when executing the `packageBin` task for `finatra-http-server` in the test configuration these dependencies are necessary. Unfortunately, this listing does not explicity state if it's the compile-time or the test-jar version of the dependency that is necessary. However, it is safe to assume that if you want a dependency on the `finatra-http-server` test-jar you will also need to add dependencies on any test-jar from the listed dependencies as well.
 
 To continue getting started, please see the `Finatra User's Guide <user-guide/index.html>`__.
 
@@ -145,6 +145,6 @@ For support feel free to follow and/or tweet at the `@finatra <https://twitter.c
    :target: https://codecov.io/github/twitter/finatra?branch=develop
 .. |Project status| image:: https://img.shields.io/badge/status-active-brightgreen.svg 
    :target: https://github.com/twitter/finatra#status
-.. |Maven Central| image:: https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.12/badge.svg
+.. |Maven Central| image:: https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http-server_2.12/badge.svg
 .. |Gitter| image:: https://badges.gitter.im/Join%20Chat.svg 
    :target: https://gitter.im/twitter/finatra

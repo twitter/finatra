@@ -437,12 +437,7 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
-          <span class="toggle">
-            Linear Supertypes
-          </span>
-          <div class="superTypes hiddenContent"><a href="../../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.11/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
-        </div></div>
+          <div id="comment" class="fullcommenttop"></div>
         
 
       <div id="mbrsel">
@@ -460,22 +455,10 @@
             <ol>
               
               <li class="alpha in"><span>Alphabetic</span></li>
-              <li class="inherit out"><span>By Inheritance</span></li>
+              
             </ol>
           </div>
-          <div class="ancestors">
-                  <span class="filtertype">Inherited<br />
-                  </span>
-                  <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.validation"><span>validation</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
-                  </ol>
-                </div><div class="ancestors">
-              <span class="filtertype"></span>
-              <ol>
-                <li class="hideall out"><span>Hide All</span></li>
-                <li class="showall in"><span>Show All</span></li>
-              </ol>
-            </div>
+          
           <div id="visbl">
               <span class="filtertype">Visibility</span>
               <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
@@ -489,7 +472,7 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.twitter.finatra.validation.Constraint" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="com.twitter.finatra.validation.Constraint" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ConstraintextendsAnnotationwithAnnotationwithClassfileAnnotation"></a><a id="Constraint:Constraint"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/validation/Constraint.html" title="Permalink">
@@ -501,10 +484,17 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="Constraint.html"><span class="name">Constraint</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.11/scala/annotation/Annotation.html#scala.annotation.Annotation" class="extype" name="scala.annotation.Annotation">Annotation</a> with <span class="extype" name="java.lang.annotation.Annotation">Annotation</span> with <a href="https://www.scala-lang.org/api/2.12.11/scala/annotation/ClassfileAnnotation.html#scala.annotation.ClassfileAnnotation" class="extype" name="scala.annotation.ClassfileAnnotation">ClassfileAnnotation</a></span>
+        <a title="" href="Constraint.html"><span class="name">Constraint</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.12/scala/annotation/Annotation.html#scala.annotation.Annotation" class="extype" name="scala.annotation.Annotation">Annotation</a> with <span class="extype" name="java.lang.annotation.Annotation">Annotation</span> with <a href="https://www.scala-lang.org/api/2.12.12/scala/annotation/ClassfileAnnotation.html#scala.annotation.ClassfileAnnotation" class="extype" name="scala.annotation.ClassfileAnnotation">ClassfileAnnotation</a></span>
       </span>
       
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Documented</span><span class="args">()</span>
+              
+                <span class="name">@Target</span><span class="args">()</span>
+              
+                <span class="name">@Retention</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="com.twitter.finatra.validation.ConstraintValidator" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="ConstraintValidator[A&lt;:java.lang.annotation.Annotation,T]extendsAnyRef"></a><a id="ConstraintValidator[A&lt;:Annotation,T]:ConstraintValidator[A,T]"></a>
       <span class="permalink">
@@ -554,7 +544,7 @@ to customize handling of specific errors.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="InvalidCaseClassException.html"><span class="name">InvalidCaseClassException</span></a><span class="params">(<span name="clazz">clazz: <span class="extype" name="scala.Predef.Class">Class</span>[_]</span>)</span><span class="result"> extends <a href="ValidationException.html" class="extype" name="com.twitter.finatra.validation.ValidationException">ValidationException</a> with <a href="https://www.scala-lang.org/api/2.12.11/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.11/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="InvalidCaseClassException.html"><span class="name">InvalidCaseClassException</span></a><span class="params">(<span name="clazz">clazz: <span class="extype" name="scala.Predef.Class">Class</span>[_]</span>)</span><span class="result"> extends <a href="ValidationException.html" class="extype" name="com.twitter.finatra.validation.ValidationException">ValidationException</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -576,7 +566,7 @@ to customize handling of specific errors.
       <p class="shortcomment cmt">To resolve error messages for the type of validation failure.</p><div class="fullcomment"><div class="comment cmt"><p>To resolve error messages for the type of validation failure. May be pattern-matched
 to customize handling of specific failures.</p><p>Can be overridden to customize and localize error messages.
 </p></div></div>
-    </li><li name="com.twitter.finatra.validation.MethodValidation" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.validation.MethodValidation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="MethodValidationextendsAnnotationwithAnnotationwithClassfileAnnotation"></a><a id="MethodValidation:MethodValidation"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/validation/MethodValidation.html" title="Permalink">
@@ -588,10 +578,15 @@ to customize handling of specific failures.</p><p>Can be overridden to customize
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="MethodValidation.html"><span class="name">MethodValidation</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.11/scala/annotation/Annotation.html#scala.annotation.Annotation" class="extype" name="scala.annotation.Annotation">Annotation</a> with <span class="extype" name="java.lang.annotation.Annotation">Annotation</span> with <a href="https://www.scala-lang.org/api/2.12.11/scala/annotation/ClassfileAnnotation.html#scala.annotation.ClassfileAnnotation" class="extype" name="scala.annotation.ClassfileAnnotation">ClassfileAnnotation</a></span>
+        <a title="" href="MethodValidation.html"><span class="name">MethodValidation</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.12/scala/annotation/Annotation.html#scala.annotation.Annotation" class="extype" name="scala.annotation.Annotation">Annotation</a> with <span class="extype" name="java.lang.annotation.Annotation">Annotation</span> with <a href="https://www.scala-lang.org/api/2.12.12/scala/annotation/ClassfileAnnotation.html#scala.annotation.ClassfileAnnotation" class="extype" name="scala.annotation.ClassfileAnnotation">ClassfileAnnotation</a></span>
       </span>
       
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Target</span><span class="args">()</span>
+              
+                <span class="name">@Retention</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="com.twitter.finatra.validation.Path" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="PathextendsProductwithSerializable"></a><a id="Path:Path"></a>
       <span class="permalink">
@@ -604,11 +599,11 @@ to customize handling of specific failures.</p><p>Can be overridden to customize
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="Represents the navigation path from an object to another in an object graph." href="Path.html"><span class="name">Path</span></a><span class="params">(<span name="names">names: <a href="../../../../scala/index.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.11/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.11/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="Represents the navigation path from an object to another in an object graph." href="Path.html"><span class="name">Path</span></a><span class="params">(<span name="names">names: <a href="../../../../scala/index.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.12/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">Represents the navigation path from an object to another in an object graph.</p>
-    </li><li name="com.twitter.finatra.validation.Valid" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.validation.Valid" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ValidextendsAnnotationwithAnnotationwithClassfileAnnotation"></a><a id="Valid:Valid"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/validation/Valid.html" title="Permalink">
@@ -620,10 +615,17 @@ to customize handling of specific failures.</p><p>Can be overridden to customize
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="Valid.html"><span class="name">Valid</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.11/scala/annotation/Annotation.html#scala.annotation.Annotation" class="extype" name="scala.annotation.Annotation">Annotation</a> with <span class="extype" name="java.lang.annotation.Annotation">Annotation</span> with <a href="https://www.scala-lang.org/api/2.12.11/scala/annotation/ClassfileAnnotation.html#scala.annotation.ClassfileAnnotation" class="extype" name="scala.annotation.ClassfileAnnotation">ClassfileAnnotation</a></span>
+        <a title="" href="Valid.html"><span class="name">Valid</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.12/scala/annotation/Annotation.html#scala.annotation.Annotation" class="extype" name="scala.annotation.Annotation">Annotation</a> with <span class="extype" name="java.lang.annotation.Annotation">Annotation</span> with <a href="https://www.scala-lang.org/api/2.12.12/scala/annotation/ClassfileAnnotation.html#scala.annotation.ClassfileAnnotation" class="extype" name="scala.annotation.ClassfileAnnotation">ClassfileAnnotation</a></span>
       </span>
       
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Documented</span><span class="args">()</span>
+              
+                <span class="name">@Target</span><span class="args">()</span>
+              
+                <span class="name">@Retention</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="com.twitter.finatra.validation.ValidationException" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ValidationExceptionextendsExceptionwithNoStackTrace"></a><a id="ValidationException:ValidationException"></a>
       <span class="permalink">
@@ -636,7 +638,7 @@ to customize handling of specific failures.</p><p>Can be overridden to customize
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="Used to signal validation errors during case class validations." href="ValidationException.html"><span class="name">ValidationException</span></a><span class="result"> extends <a href="../../../../scala/index.html#Exception=Exception" class="extmbr" name="scala.Exception">Exception</a> with <a href="https://www.scala-lang.org/api/2.12.11/scala/util/control/NoStackTrace.html#scala.util.control.NoStackTrace" class="extype" name="scala.util.control.NoStackTrace">NoStackTrace</a></span>
+        <a title="Used to signal validation errors during case class validations." href="ValidationException.html"><span class="name">ValidationException</span></a><span class="result"> extends <a href="../../../../scala/index.html#Exception=Exception" class="extmbr" name="scala.Exception">Exception</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/util/control/NoStackTrace.html#scala.util.control.NoStackTrace" class="extype" name="scala.util.control.NoStackTrace">NoStackTrace</a></span>
       </span>
       
       <p class="shortcomment cmt">Used to signal validation errors during case class validations.</p>
@@ -698,234 +700,6 @@ default <a href="ConstraintValidator.html" class="extype" name="com.twitter.fina
          .withCacheSize(<span class="num">512</span>)
          .withMessageResolver(<span class="kw">new</span> CustomizedMessageResolver())
 }</pre></div></div>
-    </li><li name="com.twitter.finatra.validation.CountryCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="CountryCode=com.twitter.finatra.validation.constraints.CountryCode@scala.annotation.meta.param"></a><a id="CountryCode:CountryCode"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/validation/index.html#CountryCode=com.twitter.finatra.validation.constraints.CountryCode@scala.annotation.meta.param" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 2020-03-09) Use com.twitter.finatra.validation.constraints.CountryCode">CountryCode</span><span class="result alias"> = com.twitter.finatra.validation.constraints.CountryCode @scala.annotation.meta.param</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-03-09)</i> Use com.twitter.finatra.validation.constraints.CountryCode</p></dd></dl></div>
-    </li><li name="com.twitter.finatra.validation.FutureTime" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="FutureTime=com.twitter.finatra.validation.constraints.FutureTime@scala.annotation.meta.param"></a><a id="FutureTime:FutureTime"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/validation/index.html#FutureTime=com.twitter.finatra.validation.constraints.FutureTime@scala.annotation.meta.param" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 2020-03-09) Use com.twitter.finatra.validation.constraints.FutureTime">FutureTime</span><span class="result alias"> = com.twitter.finatra.validation.constraints.FutureTime @scala.annotation.meta.param</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-03-09)</i> Use com.twitter.finatra.validation.constraints.FutureTime</p></dd></dl></div>
-    </li><li name="com.twitter.finatra.validation.Max" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Max=com.twitter.finatra.validation.constraints.Max@scala.annotation.meta.param"></a><a id="Max:Max"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/validation/index.html#Max=com.twitter.finatra.validation.constraints.Max@scala.annotation.meta.param" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 2020-03-09) Use com.twitter.finatra.validation.constraints.Max">Max</span><span class="result alias"> = com.twitter.finatra.validation.constraints.Max @scala.annotation.meta.param</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-03-09)</i> Use com.twitter.finatra.validation.constraints.Max</p></dd></dl></div>
-    </li><li name="com.twitter.finatra.validation.Min" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Min=com.twitter.finatra.validation.constraints.Min@scala.annotation.meta.param"></a><a id="Min:Min"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/validation/index.html#Min=com.twitter.finatra.validation.constraints.Min@scala.annotation.meta.param" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 2020-03-09) Use com.twitter.finatra.validation.constraints.Min">Min</span><span class="result alias"> = com.twitter.finatra.validation.constraints.Min @scala.annotation.meta.param</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-03-09)</i> Use com.twitter.finatra.validation.constraints.Min</p></dd></dl></div>
-    </li><li name="com.twitter.finatra.validation.NotEmpty" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="NotEmpty=com.twitter.finatra.validation.constraints.NotEmpty@scala.annotation.meta.param"></a><a id="NotEmpty:NotEmpty"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/validation/index.html#NotEmpty=com.twitter.finatra.validation.constraints.NotEmpty@scala.annotation.meta.param" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 2020-03-09) Use com.twitter.finatra.validation.constraints.NotEmpty">NotEmpty</span><span class="result alias"> = com.twitter.finatra.validation.constraints.NotEmpty @scala.annotation.meta.param</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-03-09)</i> Use com.twitter.finatra.validation.constraints.NotEmpty</p></dd></dl></div>
-    </li><li name="com.twitter.finatra.validation.OneOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="OneOf=com.twitter.finatra.validation.constraints.OneOf@scala.annotation.meta.param"></a><a id="OneOf:OneOf"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/validation/index.html#OneOf=com.twitter.finatra.validation.constraints.OneOf@scala.annotation.meta.param" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 2020-03-09) Use com.twitter.finatra.validation.constraints.OneOf">OneOf</span><span class="result alias"> = com.twitter.finatra.validation.constraints.OneOf @scala.annotation.meta.param</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-03-09)</i> Use com.twitter.finatra.validation.constraints.OneOf</p></dd></dl></div>
-    </li><li name="com.twitter.finatra.validation.PastTime" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="PastTime=com.twitter.finatra.validation.constraints.PastTime@scala.annotation.meta.param"></a><a id="PastTime:PastTime"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/validation/index.html#PastTime=com.twitter.finatra.validation.constraints.PastTime@scala.annotation.meta.param" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 2020-03-09) Use com.twitter.finatra.validation.constraints.PastTime">PastTime</span><span class="result alias"> = com.twitter.finatra.validation.constraints.PastTime @scala.annotation.meta.param</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-03-09)</i> Use com.twitter.finatra.validation.constraints.PastTime</p></dd></dl></div>
-    </li><li name="com.twitter.finatra.validation.Pattern" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Pattern=com.twitter.finatra.validation.constraints.Pattern@scala.annotation.meta.param"></a><a id="Pattern:Pattern"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/validation/index.html#Pattern=com.twitter.finatra.validation.constraints.Pattern@scala.annotation.meta.param" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 2020-03-09) Use com.twitter.finatra.validation.constraints.Pattern">Pattern</span><span class="result alias"> = com.twitter.finatra.validation.constraints.Pattern @scala.annotation.meta.param</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-03-09)</i> Use com.twitter.finatra.validation.constraints.Pattern</p></dd></dl></div>
-    </li><li name="com.twitter.finatra.validation.Range" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Range=com.twitter.finatra.validation.constraints.Range@scala.annotation.meta.param"></a><a id="Range:Range"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/validation/index.html#Range=com.twitter.finatra.validation.constraints.Range@scala.annotation.meta.param" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 2020-03-09) Use com.twitter.finatra.validation.constraints.Range">Range</span><span class="result alias"> = com.twitter.finatra.validation.constraints.Range @scala.annotation.meta.param</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-03-09)</i> Use com.twitter.finatra.validation.constraints.Range</p></dd></dl></div>
-    </li><li name="com.twitter.finatra.validation.Size" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Size=com.twitter.finatra.validation.constraints.Size@scala.annotation.meta.param"></a><a id="Size:Size"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/validation/index.html#Size=com.twitter.finatra.validation.constraints.Size@scala.annotation.meta.param" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 2020-03-09) Use com.twitter.finatra.validation.constraints.Size">Size</span><span class="result alias"> = com.twitter.finatra.validation.constraints.Size @scala.annotation.meta.param</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-03-09)</i> Use com.twitter.finatra.validation.constraints.Size</p></dd></dl></div>
-    </li><li name="com.twitter.finatra.validation.TimeGranularity" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="TimeGranularity=com.twitter.finatra.validation.constraints.TimeGranularity@scala.annotation.meta.param"></a><a id="TimeGranularity:TimeGranularity"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/validation/index.html#TimeGranularity=com.twitter.finatra.validation.constraints.TimeGranularity@scala.annotation.meta.param" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 2020-03-09) Use com.twitter.finatra.validation.constraints.TimeGranularity">TimeGranularity</span><span class="result alias"> = com.twitter.finatra.validation.constraints.TimeGranularity @scala.annotation.meta.param</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-03-09)</i> Use com.twitter.finatra.validation.constraints.TimeGranularity</p></dd></dl></div>
-    </li><li name="com.twitter.finatra.validation.UUID" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="UUID=com.twitter.finatra.validation.constraints.UUID@scala.annotation.meta.param"></a><a id="UUID:UUID"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/validation/index.html#UUID=com.twitter.finatra.validation.constraints.UUID@scala.annotation.meta.param" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 2020-03-09) Use com.twitter.finatra.validation.constraints.UUID">UUID</span><span class="result alias"> = com.twitter.finatra.validation.constraints.UUID @scala.annotation.meta.param</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2020-03-09)</i> Use com.twitter.finatra.validation.constraints.UUID</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -978,7 +752,7 @@ default <a href="ConstraintValidator.html" class="extype" name="com.twitter.fina
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="Path$.html"><span class="name">Path</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.11/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="Path$.html"><span class="name">Path</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.12/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -1040,11 +814,7 @@ default <a href="ConstraintValidator.html" class="extype" name="com.twitter.fina
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="../../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
-            </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.11/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
-            </div>
+        
         
         </div>
 

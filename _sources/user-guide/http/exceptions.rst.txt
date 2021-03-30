@@ -50,12 +50,12 @@ Then register this exception mapper in your server.
 ExceptionMappingFilter
 ----------------------
 
-Using exception mappers requires you to include the `c.t.finatra.http.filters.ExceptionMappingFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala>`__ in your server's filter chain.
+Using exception mappers requires you to include the `c.t.finatra.http.filters.ExceptionMappingFilter <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala>`__ in your server's filter chain.
 
 .. note::
 
-  The `ExceptionMappingFilter` is included as part of `c.t.finatra.http.filters.CommonFilters <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala>`__. 
-  Thus if you have installed the `c.t.finatra.http.filters.CommonFilters <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala>`__ the ExceptionMappingFilter is already installed.
+  The `ExceptionMappingFilter` is included as part of `c.t.finatra.http.filters.CommonFilters <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala>`__.
+  Thus if you have installed the `c.t.finatra.http.filters.CommonFilters <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala>`__ the ExceptionMappingFilter is already installed.
 
 To manually add the `ExceptionMappingFilter`:
 
@@ -100,21 +100,21 @@ As noted above the last registered mapper for a type wins.
 By default the framework will add the follow mappers:
 
 ==============================  ============================================================================================================================================================================================
-`Throwable`                     `ThrowableExceptionMapper <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/ThrowableExceptionMapper.scala>`__
+`Throwable`                     `ThrowableExceptionMapper <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/exceptions/ThrowableExceptionMapper.scala>`__
 
-`JsonParseException`            `JsonParseExceptionMapper <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/json/JsonParseExceptionMapper.scala>`__
+`JsonParseException`            `JsonParseExceptionMapper <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/exceptions/json/JsonParseExceptionMapper.scala>`__
 
-`CaseClassMappingException`     `CaseClassExceptionMapper <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/json/CaseClassExceptionMapper.scala>`__
+`CaseClassMappingException`     `CaseClassExceptionMapper <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/exceptions/json/CaseClassExceptionMapper.scala>`__
 
-`CancelledRequestException`     `CancelledRequestExceptionMapper <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/CancelledRequestExceptionMapper.scala>`__
+`CancelledRequestException`     `CancelledRequestExceptionMapper <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/exceptions/CancelledRequestExceptionMapper.scala>`__
 
-`c.t.finagle.Failure`           `FailureExceptionMapper <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/FailureExceptionMapper.scala>`__
+`c.t.finagle.Failure`           `FailureExceptionMapper <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/exceptions/FailureExceptionMapper.scala>`__
 
-`HttpException`                 `HttpExceptionMapper <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/HttpExceptionMapper.scala>`__
+`HttpException`                 `HttpExceptionMapper <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/exceptions/HttpExceptionMapper.scala>`__
 
-`HttpResponseException`         `HttpResponseExceptionMapper <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/HttpResponseExceptionMapper.scala>`__
+`HttpResponseException`         `HttpResponseExceptionMapper <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/exceptions/HttpResponseExceptionMapper.scala>`__
 
-`org.apache.thrift.TException`  `ThriftExceptionMapper <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/ThriftExceptionMapper.scala>`__
+`org.apache.thrift.TException`  `ThriftExceptionMapper <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/exceptions/ThriftExceptionMapper.scala>`__
 ==============================  ============================================================================================================================================================================================
 
 The `ExceptionManager` walks the exception type hierarchy starting at the given exception type moving up the inheritance chain until it finds mapper configured for the type.
@@ -125,11 +125,11 @@ Therefore to change the framework "default" mapper, simply add a new mapper over
 Override Default Behavior
 -------------------------
 
-The `ExceptionManager <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/exceptions/ExceptionManager.scala>`__ is the class that handles registration of exception mappers.
+The `ExceptionManager <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/exceptions/ExceptionManager.scala>`__ is the class that handles registration of exception mappers.
 In the example above, the `HttpRouter#exceptionMapper <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala#L51>`__ method is simply registering the given mapper
 with the `ExceptionManager`.
 
-The `ExceptionManager` is configured by the inclusion of the `ExceptionManagerModule <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/ExceptionManagerModule.scala>`__
+The `ExceptionManager` is configured by the inclusion of the `ExceptionManagerModule <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/modules/ExceptionManagerModule.scala>`__
 as a framework module in every `HttpServer <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L22>`__.
 
 If a new mapper is added over an exception type already registered in the `ExceptionManager`, the previous mapper will be overwritten.

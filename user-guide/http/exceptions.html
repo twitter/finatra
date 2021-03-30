@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>HTTP Exception Mapping &#8212; Finatra 21.2.0 documentation</title>
+    <title>HTTP Exception Mapping &#8212; Finatra 21.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -98,11 +98,11 @@ class MalformedURLExceptionMapper @Inject()(response: ResponseBuilder)
 </div>
 <div class="section" id="exceptionmappingfilter">
 <h2>ExceptionMappingFilter<a class="headerlink" href="#exceptionmappingfilter" title="Permalink to this headline">¶</a></h2>
-<p>Using exception mappers requires you to include the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala">c.t.finatra.http.filters.ExceptionMappingFilter</a> in your server’s filter chain.</p>
+<p>Using exception mappers requires you to include the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala">c.t.finatra.http.filters.ExceptionMappingFilter</a> in your server’s filter chain.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The <cite>ExceptionMappingFilter</cite> is included as part of <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala">c.t.finatra.http.filters.CommonFilters</a>.
-Thus if you have installed the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala">c.t.finatra.http.filters.CommonFilters</a> the ExceptionMappingFilter is already installed.</p>
+<p class="last">The <cite>ExceptionMappingFilter</cite> is included as part of <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala">c.t.finatra.http.filters.CommonFilters</a>.
+Thus if you have installed the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala">c.t.finatra.http.filters.CommonFilters</a> the ExceptionMappingFilter is already installed.</p>
 </div>
 <p>To manually add the <cite>ExceptionMappingFilter</cite>:</p>
 <div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import DoEverythingModule
@@ -141,33 +141,33 @@ class ExampleServer extends HttpServer {
 <p>By default the framework will add the follow mappers:</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="14%" />
-<col width="86%" />
+<col width="13%" />
+<col width="87%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><cite>Throwable</cite></td>
-<td><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/ThrowableExceptionMapper.scala">ThrowableExceptionMapper</a></td>
+<td><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/exceptions/ThrowableExceptionMapper.scala">ThrowableExceptionMapper</a></td>
 </tr>
 <tr class="row-even"><td><cite>JsonParseException</cite></td>
-<td><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/json/JsonParseExceptionMapper.scala">JsonParseExceptionMapper</a></td>
+<td><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/exceptions/json/JsonParseExceptionMapper.scala">JsonParseExceptionMapper</a></td>
 </tr>
 <tr class="row-odd"><td><cite>CaseClassMappingException</cite></td>
-<td><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/json/CaseClassExceptionMapper.scala">CaseClassExceptionMapper</a></td>
+<td><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/exceptions/json/CaseClassExceptionMapper.scala">CaseClassExceptionMapper</a></td>
 </tr>
 <tr class="row-even"><td><cite>CancelledRequestException</cite></td>
-<td><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/CancelledRequestExceptionMapper.scala">CancelledRequestExceptionMapper</a></td>
+<td><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/exceptions/CancelledRequestExceptionMapper.scala">CancelledRequestExceptionMapper</a></td>
 </tr>
 <tr class="row-odd"><td><cite>c.t.finagle.Failure</cite></td>
-<td><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/FailureExceptionMapper.scala">FailureExceptionMapper</a></td>
+<td><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/exceptions/FailureExceptionMapper.scala">FailureExceptionMapper</a></td>
 </tr>
 <tr class="row-even"><td><cite>HttpException</cite></td>
-<td><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/HttpExceptionMapper.scala">HttpExceptionMapper</a></td>
+<td><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/exceptions/HttpExceptionMapper.scala">HttpExceptionMapper</a></td>
 </tr>
 <tr class="row-odd"><td><cite>HttpResponseException</cite></td>
-<td><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/HttpResponseExceptionMapper.scala">HttpResponseExceptionMapper</a></td>
+<td><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/exceptions/HttpResponseExceptionMapper.scala">HttpResponseExceptionMapper</a></td>
 </tr>
 <tr class="row-even"><td><cite>org.apache.thrift.TException</cite></td>
-<td><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/ThriftExceptionMapper.scala">ThriftExceptionMapper</a></td>
+<td><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/exceptions/ThriftExceptionMapper.scala">ThriftExceptionMapper</a></td>
 </tr>
 </tbody>
 </table>
@@ -177,10 +177,10 @@ In this manner an <cite>ExceptionMapper[Throwable]</cite> will be the last mappe
 </div>
 <div class="section" id="override-default-behavior">
 <h2>Override Default Behavior<a class="headerlink" href="#override-default-behavior" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/exceptions/ExceptionManager.scala">ExceptionManager</a> is the class that handles registration of exception mappers.
+<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/exceptions/ExceptionManager.scala">ExceptionManager</a> is the class that handles registration of exception mappers.
 In the example above, the <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala#L51">HttpRouter#exceptionMapper</a> method is simply registering the given mapper
 with the <cite>ExceptionManager</cite>.</p>
-<p>The <cite>ExceptionManager</cite> is configured by the inclusion of the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/ExceptionManagerModule.scala">ExceptionManagerModule</a>
+<p>The <cite>ExceptionManager</cite> is configured by the inclusion of the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/modules/ExceptionManagerModule.scala">ExceptionManagerModule</a>
 as a framework module in every <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L22">HttpServer</a>.</p>
 <p>If a new mapper is added over an exception type already registered in the <cite>ExceptionManager</cite>, the previous mapper will be overwritten.</p>
 <p>Thus, the last registered mapper for an exception type wins.</p>

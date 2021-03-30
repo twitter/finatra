@@ -8,18 +8,18 @@ See `examples/http-server <https://github.com/twitter/finatra/tree/develop/examp
 HTTP Server Definition
 ======================
 
-To start, add a dependency on the `finatra-http <https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http_2.12%22>`__ library. We also recommend using `Logback <https://logback.qos.ch/>`__ as your `SLF4J <https://www.slf4j.org/manual.html>`__ implementation. E.g.,
+To start, add a dependency on the `finatra-http-server <https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http-server_2.12%22>`__ library. We also recommend using `Logback <https://logback.qos.ch/>`__ as your `SLF4J <https://www.slf4j.org/manual.html>`__ implementation. E.g.,
 
 with sbt:
 
 .. parsed-literal::
 
-    "com.twitter" %% "finatra-http" % "\ |release|\ ",
+    "com.twitter" %% "finatra-http-server" % "\ |release|\ ",
     "ch.qos.logback" % "logback-classic" % versions.logback,
 
 For more information on logging with Finatra see: `Introduction to Logging With Finatra <../logging/index.html#introduction-to-logging-with-finatra>`__.
 
-Create a new class which extends `c.t.finatra.http.HttpServer <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala>`__:
+Create a new class which extends `c.t.finatra.http.HttpServer <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/HttpServer.scala>`__:
 
 .. code:: scala
 
@@ -35,7 +35,7 @@ Create a new class which extends `c.t.finatra.http.HttpServer <https://github.co
       }
     }
 
-Or in Java, extend the `c.t.finatra.http.AbstractHttpServer <https://github.com/twitter/finatra/blob/100b858ca2786199114247e1440a1bfb4a460b28/http/src/main/scala/com/twitter/finatra/http/servers.scala#L505>`__:
+Or in Java, extend the `c.t.finatra.http.AbstractHttpServer <https://github.com/twitter/finatra/blob/100b858ca2786199114247e1440a1bfb4a460b28/http-server/src/main/scala/com/twitter/finatra/http/servers.scala#L505>`__:
 
 .. code:: java
 
@@ -213,7 +213,7 @@ transport correctly, override the `configureHttpsServer` method in your HttpServ
       }
     }
 
-For convenience, a `Tls <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/Tls.scala>`__
+For convenience, a `Tls <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/Tls.scala>`__
 trait is provided which encapsulates standard `TLS <https://en.wikipedia.org/wiki/Transport_Layer_Security>`__
 configuration for an HTTPS server. Thus you can also do:
 
@@ -336,7 +336,7 @@ Override Default Behavior
 Flags
 ~~~~~
 
-Some deployment environments may make it difficult to set `Flag values <../getting-started/flags.html>`__ with command line arguments. If this is the case, Finatra's `HttpServer <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala>`__'s 
+Some deployment environments may make it difficult to set `Flag values <../getting-started/flags.html>`__ with command line arguments. If this is the case, Finatra's `HttpServer <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/HttpServer.scala>`__'s
 core flags can be set from code. 
 
 For example, instead of setting the `-http.port` flag, you can override the following method in your server.
@@ -356,24 +356,24 @@ For example, instead of setting the `-http.port` flag, you can override the foll
     }
 
 
-For a list of what flags can be set programmatically, please see the `HttpServerTrait <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/servers.scala>`__ class.
+For a list of what flags can be set programmatically, please see the `HttpServerTrait <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/servers.scala>`__ class.
 
 Framework Modules
 ~~~~~~~~~~~~~~~~~
 
-The `HttpServer <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/servers.scala>`__
+The `HttpServer <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/servers.scala>`__
 provides some base configurations in the form of `modules <../getting-started/modules.html>`_ added
 by default to a server's object graph. This includes:
 
 - the `FileResolverModule <https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/modules/FileResolverModule.scala>`_ (see: `Working With Files <../files/index.html>`_)
-- the `ExceptionManagerModule <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/ExceptionManagerModule.scala>`_ (see: `HTTP Exception Mapping <./exceptions.html>`_)
-- an `overridable <https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/http/src/main/scala/com/twitter/finatra/http/servers.scala#L363>`_ default `HttpResponseClassifierModule <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/HttpResponseClassifierModule.scala>`_ (see: `Server-side Response Classification <#id2>`_)
-- an `overridable <https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/http/src/main/scala/com/twitter/finatra/http/servers.scala#L508>`_ default `AccessLogModule <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/AccessLogModule.scala>`_
+- the `ExceptionManagerModule <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/modules/ExceptionManagerModule.scala>`_ (see: `HTTP Exception Mapping <./exceptions.html>`_)
+- an `overridable <https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/http/src/main/scala/com/twitter/finatra/http/servers.scala#L363>`_ default `HttpResponseClassifierModule <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/modules/HttpResponseClassifierModule.scala>`_ (see: `Server-side Response Classification <#id2>`_)
+- an `overridable <https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/http/src/main/scala/com/twitter/finatra/http/servers.scala#L508>`_ default `AccessLogModule <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/modules/AccessLogModule.scala>`_
 - an `overridable <https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/http/src/main/scala/com/twitter/finatra/http/servers.scala#L526>`_ default `ScalaObjectMapperModule <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala>`_ (see: `Jackson Integration <../json/index.html>`_)
 - an `overridable <https://github.com/twitter/finatra/blob/bfb6e22c9260eb3150b6768d6628ee6b3498183c/http/src/main/scala/com/twitter/finatra/http/servers.scala#L539>`_ default `ValidatorModule <https://github.com/twitter/finatra/blob/bfb6e22c9260eb3150b6768d6628ee6b3498183c/validation/src/main/scala/com/twitter/finatra/validation/ValidatorModule.scala>`_ (see: `Validation Framework <../validation/index.html>`_)
-- an `overridable <https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/http/src/main/scala/com/twitter/finatra/http/servers.scala#L519>`_ default `MessageBodyManagerModule <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MessageBodyModule.scala>`_ (see: `Message Body Components <./message_body.html>`_)
+- an `overridable <https://github.com/twitter/finatra/blob/356f242a8b9a340374646ae577efa99f132125cb/http/src/main/scala/com/twitter/finatra/http/servers.scala#L519>`_ default `MessageBodyManagerModule <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/modules/MessageBodyModule.scala>`_ (see: `Message Body Components <./message_body.html>`_)
 
-As expressed above, some of the `modules <../getting-started/modules.html>`_ provided in the `HttpServer <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/servers.scala>`__
+As expressed above, some of the `modules <../getting-started/modules.html>`_ provided in the `HttpServer <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/servers.scala>`__
 are overridable. An example use-case would be to provide a custom `ScalaObjectMapperModule`
 implementation in place of the default `ScalaObjectMapperModule <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala>`_
 
@@ -485,8 +485,8 @@ set the classifier directly on the underlying Finagle server by overriding the `
     }
 
 However, since the server-side ResponseClassifier could affect code not just at the Finagle level, we actually recommend overriding the specific `framework module <#framework-modules>`__,
-`HttpResponseClassifierModule` instead. This binds an instance of an `HttpResponseClassifier <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/HttpResponseClassifier.scala>`__
-to the object graph that is then available to be injected into things like the HTTP `StatsFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala>`__
+`HttpResponseClassifierModule` instead. This binds an instance of an `HttpResponseClassifier <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/response/HttpResponseClassifier.scala>`__
+to the object graph that is then available to be injected into things like the HTTP `StatsFilter <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala>`__
 for a more accurate reporting of metrics that takes into account server-side response classification.
 
 For example, in your `HttpServer` you would do:

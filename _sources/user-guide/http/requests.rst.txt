@@ -110,7 +110,7 @@ Thus, this route would respond:
 
    :statuscode 200: `The resource is users and the id = 1234`
 
-Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/IdAndNameRequest.scala>`__.
+Code `example <https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/IdAndNameRequest.scala>`__.
 
 .. note::
 
@@ -164,7 +164,7 @@ Using this case class in a route callback for a request:
 would parse the string "bar" into the value of `QueryParamRequest#foo` and parse the string "false"
 as a Boolean into the `QueryParamRequest#isSkipped` field.
 
-Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala>`__.
+Code `example <https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala>`__.
 
 You can parse comma-separated lists in your query parameters by setting `commaSeparatedList` to `true` in the QueryParam annotation, e.g.
 
@@ -197,7 +197,7 @@ will return a Bad Request with an appropriate error message when `commaSeparated
 Read a value from a form field with the case class field's name or as the value specified in the
 ``@FormParam`` annotation from the request body.
 
-Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/FormPostRequest.scala>`__.
+Code `example <https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/FormPostRequest.scala>`__.
 
 .. note::
 
@@ -222,7 +222,7 @@ or specify the header name as a parameter to the ``@Header`` annotation, e.g.,
 
   @Header("user-agent") agent: String
 
-Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/CreateUserRequest.scala>`__.
+Code `example <https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/CreateUserRequest.scala>`__.
 
 .. important::
 
@@ -271,7 +271,7 @@ incoming request into your custom case class, for example:
      @QueryParam verbose: Boolean = false,
      request: Request)
 
-Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithInjections.scala>`__.
+Code `example <https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithInjections.scala>`__.
 
 ------------
 
@@ -300,14 +300,14 @@ InjectableValues
 ^^^^^^^^^^^^^^^^
 
 These annotations are implemented via a Finatra HTTP integration with Jackson `InjectableValues <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/InjectableValues.java>`_
-implemented in the `MessageInjectableValues <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageInjectableValues.scala>`_
+implemented in the `MessageInjectableValues <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageInjectableValues.scala>`_
 class.
 
 .. caution::
 
-    The `MessageInjectableValues <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageInjectableValues.scala>`_
+    The `MessageInjectableValues <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageInjectableValues.scala>`_
     is only configured via the framework's `DefaultMessageBodyReader <./message_body.html#id2>`_
-    `DefaultMessageBodyReaderImpl <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyReaderImpl.scala>`_
+    `DefaultMessageBodyReaderImpl <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyReaderImpl.scala>`_
     which is bound in the `MessageBodyModule <./message_body.html#id5>`_.
 
     Thus, attempting to use the HTTP-specific field annotations with a |FinatraScalaObjectMapper|_
@@ -326,7 +326,7 @@ Message Body Components
 Finatra also provides a way to specify how to parse the request into a callback function input via a
 `Message Body Reader <message_body.html#message-body-readers>`__. Similar to `custom request case
 classes <#custom-request-case-class>`__ (which are implemented with a framework
-`default message body reader <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyReaderImpl.scala>`__),
+`default message body reader <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyReaderImpl.scala>`__),
 these objects allow for customized parsing the full incoming `c.t.finagle.http.Request` into a
 specific type. For more information, see the `Message Body Readers <./message_body.html#message-body-readers>`__
 section.
@@ -502,11 +502,11 @@ An example of testing this endpoint:
 
 For more information and examples, see:
 
--  `c.t.finatra.http.request.RequestUtils <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/request/RequestUtils.scala>`__
--  `c.t.finatra.http.fileupload.MultipartItem <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/fileupload/MultipartItem.scala>`__
--  `DoEverythingController <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/controllers/DoEverythingController.scala>`__
--  `DoEverythingServerFeatureTest <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala>`__
--  `MultiParamsTest <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/request/MultiParamsTest.scala>`__
+-  `c.t.finatra.http.request.RequestUtils <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/request/RequestUtils.scala>`__
+-  `c.t.finatra.http.fileupload.MultipartItem <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/fileupload/MultipartItem.scala>`__
+-  `DoEverythingController <https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/controllers/DoEverythingController.scala>`__
+-  `DoEverythingServerFeatureTest <https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala>`__
+-  `MultiParamsTest <https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/request/MultiParamsTest.scala>`__
 
 .. |FinatraScalaObjectMapper| replace:: `ScalaObjectMapper`
 .. _FinatraScalaObjectMapper: https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Startup Tests &#8212; Finatra 21.2.0 documentation</title>
+    <title>Startup Tests &#8212; Finatra 21.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -114,6 +114,7 @@ class MyServiceStartupTest extends FeatureTest {
 <p class="last">This works for <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><cite>EmbeddedHttpServer</cite></a> or <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala"><cite>EmbeddedThriftServer</cite></a> as well because <code class="docutils literal notranslate"><span class="pre">#assertHealthy()</span></code>
 is defined on the <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L264"><cite>EmbeddedTwitterServer</cite></a> super class.</p>
 </div>
+<p>For examples of how to accomplish this in Java, see <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/examples/http-server/java/src/test/java/com/twitter/finatra/example/HelloWorldServerStartupTest.java"><cite>HelloWorldServerStartupTest</cite></a>.</p>
 </div>
 <div class="section" id="c-t-server-twitterserver">
 <h2><a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a><a class="headerlink" href="#c-t-server-twitterserver" title="Permalink to this headline">¶</a></h2>
@@ -159,6 +160,7 @@ class MyTwitterServer extends TwitterServer {
 }
 </pre></div>
 </div>
+<p>For examples of how to accomplish this in Java, see <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/examples/injectable-twitter-server/java/src/test/java/com/twitter/finatra/example/ExampleTwitterServerStartupTest.java"><cite>ExampleTwitterServerStartupTest</cite></a>.</p>
 <div class="section" id="writing-the-startuptest">
 <h3>Writing the StartupTest<a class="headerlink" href="#writing-the-startuptest" title="Permalink to this headline">¶</a></h3>
 <p>First, extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala"><cite>c.t.inject.server.FeatureTest</cite></a> trait. Then override the <cite>server</cite> definition

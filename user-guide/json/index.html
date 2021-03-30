@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Jackson Integration &#8212; Finatra 21.2.0 documentation</title>
+    <title>Jackson Integration &#8212; Finatra 21.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -102,7 +102,7 @@ structures [<a class="reference external" href="https://www.json.org/json-en.htm
 <li>Integration with Finatra’s <a class="reference external" href="https://beanvalidation.org/1.0/spec/">JSR-303 style</a> validations during JSON deserialization.</li>
 <li>A Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala">c.t.inject.TwitterModule</a> for injecting the Finatra <cite>ScalaObjectMapper</cite> with support for customization.</li>
 <li>Integration with Finatra <a class="reference external" href="routing.html">HTTP routing</a> to support binding and validation of query, route, form params, and headers.</li>
-<li>Utilities for comparing JSON strings.</li>
+<li>Utilities for comparing JSON strings. These utilities include <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/utils/JsonDiffUtil.scala">c.t.finatra.json.utils.JsonDiffUtil</a>, a production line utility with the primary responsibility of calculating Json diffs. In the case where a difference is found, a Some(JsonDiffResult) is returned, otherwise a None. <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/json/JsonDiff.scala">c.t.finatra.json.JsonDiff</a> is a test utility built on upon JsonDiffUtil.</li>
 </ul>
 </div>
 <div class="section" id="c-t-finatra-jackson-scalaobjectmapper">

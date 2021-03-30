@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>HTTP Server Warmup &#8212; Finatra 21.2.0 documentation</title>
+    <title>HTTP Server Warmup &#8212; Finatra 21.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -105,10 +105,10 @@ class ExampleServer extends HttpServer {
 </div>
 <div class="section" id="c-t-finatra-http-routing-httpwarmup">
 <h2><cite>c.t.finatra.http.routing.HttpWarmup</cite><a class="headerlink" href="#c-t-finatra-http-routing-httpwarmup" title="Permalink to this headline">¶</a></h2>
-<p>Finatra provides a utility, <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpWarmup.scala">c.t.finatra.http.routing.HttpWarmup</a>
+<p>Finatra provides a utility, <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/routing/HttpWarmup.scala">c.t.finatra.http.routing.HttpWarmup</a>
 which will route requests to correct service implementation configured by the
 <a class="reference external" href="https://github.com/twitter/finatra/blob/ad4b1fb37d13ae7b27aae50b885fa4ecfd0ed105/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala#L41">HttpRouter</a>.</p>
-<p>The most common way to use the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpWarmup.scala">c.t.finatra.http.routing.HttpWarmup</a>
+<p>The most common way to use the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/routing/HttpWarmup.scala">c.t.finatra.http.routing.HttpWarmup</a>
 is via a constructor-arg to an implementation of a
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-utils/src/main/scala/com/twitter/inject/utils/Handler.scala">c.t.inject.utils.Handler</a>.</p>
 <p>The Finatra <cite>c.t.inject.serverTwitterServer</cite> provides a <cite>#handle[T &lt;: Handler: Manifest]</cite> utility

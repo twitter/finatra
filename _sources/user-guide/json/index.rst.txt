@@ -47,7 +47,7 @@ Library Features
 -  Integration with Finatra's `JSR-303 style <https://beanvalidation.org/1.0/spec/>`_ validations during JSON deserialization.
 -  A Finatra `c.t.inject.TwitterModule <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala>`__ for injecting the Finatra `ScalaObjectMapper` with support for customization.
 -  Integration with Finatra `HTTP routing <routing.html>`__ to support binding and validation of query, route, form params, and headers.
--  Utilities for comparing JSON strings.
+-  Utilities for comparing JSON strings. These utilities include `c.t.finatra.json.utils.JsonDiffUtil <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/utils/JsonDiffUtil.scala>`__, a production line utility with the primary responsibility of calculating Json diffs. In the case where a difference is found, a Some(JsonDiffResult) is returned, otherwise a None. `c.t.finatra.json.JsonDiff <https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/json/JsonDiff.scala>`__ is a test utility built on upon JsonDiffUtil.
 
 c.t.finatra.jackson.ScalaObjectMapper
 -------------------------------------

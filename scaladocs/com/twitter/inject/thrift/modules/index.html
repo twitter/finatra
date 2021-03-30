@@ -297,7 +297,7 @@
       
       <p class="shortcomment cmt">A <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which configures and binds a <span class="extype" name="JavaDarkTrafficFilter">JavaDarkTrafficFilter</span> to the object graph.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which configures and binds a <span class="extype" name="JavaDarkTrafficFilter">JavaDarkTrafficFilter</span> to the object graph.
 </p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>This is only applicable with code that uses generated Java classes as it expects to configure
-      the <span class="extype" name="JavaDarkTrafficFilter">JavaDarkTrafficFilter</span> over a <span class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</span> that is generated from
+      the <span class="extype" name="JavaDarkTrafficFilter">JavaDarkTrafficFilter</span> over a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html" class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</a> that is generated from
       Finagle via generated Java code. Users of generated Scala code should use the
       <a href="ReqRepDarkTrafficFilterModule.html" class="extype" name="com.twitter.inject.thrift.modules.ReqRepDarkTrafficFilterModule">ReqRepDarkTrafficFilterModule</a>.</p></span></dd></dl></div>
     </li><li name="com.twitter.inject.thrift.modules.ReqRepDarkTrafficFilterModule" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
@@ -320,7 +320,7 @@
       extending <code>Controller(GeneratedThriftService)</code>. For Controllers that are constructed using
       the deprecated method of extending <code>Controller with GeneratedThriftService.BaseServiceIface</code>,
       Use the <a href="DarkTrafficFilterModule.html" class="extype" name="com.twitter.inject.thrift.modules.DarkTrafficFilterModule">DarkTrafficFilterModule</a> above.</p></span>, <span class="cmt"><p>This is only applicable in Scala as it uses generated Scala classes and expects to configure
-      the <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> over a <span class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</span> that is generated from
+      the <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> over a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html" class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</a> that is generated from
       Finagle via generated Scala code. Users of generated Java code should use the
       <a href="JavaDarkTrafficFilterModule.html" class="extype" name="com.twitter.inject.thrift.modules.JavaDarkTrafficFilterModule">JavaDarkTrafficFilterModule</a>.</p></span></dd></dl></div>
     </li><li name="com.twitter.inject.thrift.modules.ThriftClientIdModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -416,7 +416,7 @@ use with <span class="extype" name="Controllers">Controllers</span> constructed 
       the deprecated method of extending the <code>BaseServiceIface</code> of the generated Thrift service.
       For services that construct their Controllers by extending
       <code>Controller(GeneratedThriftService)</code>, use the <span class="extype" name="ReqRepDarkTrafficFilter">ReqRepDarkTrafficFilter</span> instead</p></span>, <span class="cmt"><p>This is only applicable in Scala as it uses generated Scala classes and expects to configure
-      the <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> over a <span class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</span> that is generated from
+      the <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> over a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html" class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</a> that is generated from
       Finagle via generated Scala code. Users of generated Java code should use the
       <a href="JavaDarkTrafficFilterModule.html" class="extype" name="com.twitter.inject.thrift.modules.JavaDarkTrafficFilterModule">JavaDarkTrafficFilterModule</a>.</p></span></dd></dl></div>
     </li><li name="com.twitter.inject.thrift.modules.FilteredThriftClientModule" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
@@ -435,7 +435,7 @@ use with <span class="extype" name="Controllers">Controllers</span> constructed 
       </span>
       
       <p class="shortcomment cmt">Provides a <span class="extype" name="FutureIface">FutureIface</span> in the form of <code>RemoteService[Future]</code> for making calls to a remote service.</p><div class="fullcomment"><div class="comment cmt"><p>Provides a <span class="extype" name="FutureIface">FutureIface</span> in the form of <code>RemoteService[Future]</code> for making calls to a remote service. The <span class="extype" name="FutureIface">FutureIface</span>
-(e.g., RemoteService[Future]) wraps a ServiceIface in which each method is implemented in the form of a <span class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</span>
+(e.g., RemoteService[Future]) wraps a ServiceIface in which each method is implemented in the form of a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html" class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</a>
 typed from <span class="extype" name="com.twitter.scrooge.ThriftMethod.Args">com.twitter.scrooge.ThriftMethod.Args</span> to <span class="extype" name="com.twitter.scrooge.ThriftMethod.SuccessType">com.twitter.scrooge.ThriftMethod.SuccessType</span>.</p><p>A <span class="extype" name="FutureIface">FutureIface</span> of <code>RemoteService[Future]</code> is used as this is the <span class="extype" name="FutureIface">FutureIface</span> type generated by Scrooge's
 &quot;services-per-endpoint&quot; functionality  e.g. the result of calling <code>Thrift.Client.newMethodIface(...)</code>; as opposed to
 the functionally equivalent <code>RemoteService.FutureIface</code>.</p><p>To provide per-method filters to the <span class="extype" name="ServiceIface">ServiceIface</span> provide an implementation of <a href="FilteredThriftClientModule.html#filterServiceIface(serviceIface:ServiceIface,filters:com.twitter.inject.thrift.filters.ThriftClientFilterBuilder):ServiceIface" class="extmbr" name="com.twitter.inject.thrift.modules.FilteredThriftClientModule#filterServiceIface">filterServiceIface</a> and use the provided

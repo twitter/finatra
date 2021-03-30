@@ -277,6 +277,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.http">http</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.marshalling.modules" visbl="pub" class="indented6 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="modules"></a><a id="modules:modules"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/marshalling/modules/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="modules/index.html"><span class="name">modules</span></a>
+      </span>
+      
+      
     </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="class" href="AbstractMessageBodyReader.html" title="Transforms an HTTP Message into an object."></a>
@@ -302,7 +318,7 @@
                         <a class="object" href="MessageBodyFlags$.html" title=""></a>
                         <a href="MessageBodyFlags$.html" title="">MessageBodyFlags</a>
                       </li><li class="current-entities indented5">
-                        <span class="separator"></span>
+                        <a class="object" href="MessageBodyManager$.html" title=""></a>
                         <a class="class" href="MessageBodyManager.html" title="Manages registration of message body components."></a>
                         <a href="MessageBodyManager.html" title="Manages registration of message body components.">MessageBodyManager</a>
                       </li><li class="current-entities indented5">
@@ -561,7 +577,7 @@ ever generate a single type <code>T</code> from its <code>parse[T]</code> implem
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="A marker trait denoting a class that can act as a default com.twitter.finatra.http.marshalling.MessageBodyWriter for the HTTP server." href="DefaultMessageBodyWriter.html"><span class="name">DefaultMessageBodyWriter</span></a><span class="result"> extends <a href="MessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyWriter">MessageBodyWriter</a>[<a href="https://www.scala-lang.org/api/2.12.11/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a>]</span>
+        <a title="A marker trait denoting a class that can act as a default com.twitter.finatra.http.marshalling.MessageBodyWriter for the HTTP server." href="DefaultMessageBodyWriter.html"><span class="name">DefaultMessageBodyWriter</span></a><span class="result"> extends <a href="MessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyWriter">MessageBodyWriter</a>[<a href="https://www.scala-lang.org/api/2.12.12/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a>]</span>
       </span>
       
       <p class="shortcomment cmt">A marker trait denoting a class that can act as a default <a href="MessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyWriter">com.twitter.finatra.http.marshalling.MessageBodyWriter</a>
@@ -619,13 +635,10 @@ render a given type as a response (&quot;message body writer&quot;).</p><p>A def
 behavior to invoke when a reader or writer is not found for a requested type <code>T</code>. The framework
 binds two default implementations: <a href="DefaultMessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyReader">DefaultMessageBodyReader</a> and <a href="DefaultMessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter">DefaultMessageBodyWriter</a> via
 the <a href="../modules/MessageBodyModule.html" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">com.twitter.finatra.http.modules.MessageBodyModule</a>.</p><p>These defaults are overridable by providing a customized <code>MessageBodyModule</code> in your
-<a href="../HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">com.twitter.finatra.http.HttpServer</a> by overriding the <a href="../HttpServer.html#messageBodyModule:com.google.inject.Module" class="extmbr" name="com.twitter.finatra.http.HttpServer#messageBodyModule">com.twitter.finatra.http.HttpServer.messageBodyModule</a>.</p><p>When the <a href="MessageBodyManager.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyManager">MessageBodyManager</a> is obtained from the injector (which is configured with the framework
+<a href="../HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">com.twitter.finatra.http.HttpServer</a> by overriding the <span class="extype" name="com.twitter.finatra.http.HttpServer.MessageBodyModule">com.twitter.finatra.http.HttpServer.MessageBodyModule</span>.</p><p>When the <a href="MessageBodyManager.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyManager">MessageBodyManager</a> is obtained from the injector (which is configured with the framework
 <a href="../modules/MessageBodyModule.html" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">com.twitter.finatra.http.modules.MessageBodyModule</a>) the framework default implementations for
 the reader and writer will be provided accordingly (along with the configured server injector).
-</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@Singleton</span><span class="args">()</span>
-              
-        </dd></dl></div>
+</p></div></div>
     </li><li name="com.twitter.finatra.http.marshalling.MessageBodyReader" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="MessageBodyReader[T]extendsMessageBodyComponent"></a><a id="MessageBodyReader[T]:MessageBodyReader[T]"></a>
       <span class="permalink">
@@ -670,7 +683,7 @@ the reader and writer will be provided accordingly (along with the configured se
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="MustacheBodyComponent.html"><span class="name">MustacheBodyComponent</span></a><span class="params">(<span name="data">data: <a href="https://www.scala-lang.org/api/2.12.11/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="templateName">templateName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="contentType">contentType: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="MessageBodyComponent.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyComponent">MessageBodyComponent</a> with <a href="https://www.scala-lang.org/api/2.12.11/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.11/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="MustacheBodyComponent.html"><span class="name">MustacheBodyComponent</span></a><span class="params">(<span name="data">data: <a href="https://www.scala-lang.org/api/2.12.12/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>, <span name="templateName">templateName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="contentType">contentType: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="MessageBodyComponent.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyComponent">MessageBodyComponent</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -686,7 +699,7 @@ the reader and writer will be provided accordingly (along with the configured se
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="MustacheMessageBodyWriter.html"><span class="name">MustacheMessageBodyWriter</span></a><span class="result"> extends <a href="MessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyWriter">MessageBodyWriter</a>[<a href="https://www.scala-lang.org/api/2.12.11/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a>]</span>
+        <a title="" href="MustacheMessageBodyWriter.html"><span class="name">MustacheMessageBodyWriter</span></a><span class="result"> extends <a href="MessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyWriter">MessageBodyWriter</a>[<a href="https://www.scala-lang.org/api/2.12.12/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
@@ -730,6 +743,22 @@ the reader and writer will be provided accordingly (along with the configured se
       </span>
       <span class="symbol">
         <a title="" href="MessageBodyFlags$.html"><span class="name">MessageBodyFlags</span></a>
+      </span>
+      
+      
+    </li><li name="com.twitter.finatra.http.marshalling.MessageBodyManager" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MessageBodyManager"></a><a id="MessageBodyManager:MessageBodyManager"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/marshalling/MessageBodyManager$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="MessageBodyManager$.html"><span class="name">MessageBodyManager</span></a>
       </span>
       
       

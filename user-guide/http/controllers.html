@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Defining HTTP Controllers &#8212; Finatra 21.2.0 documentation</title>
+    <title>Defining HTTP Controllers &#8212; Finatra 21.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -137,7 +137,7 @@ matches the path exactly. If there is, it will dispatch the request to that rout
 it will scan all registered controllers <strong>in the order they are added</strong> and dispatch the request to
 the <strong>first matching</strong> route starting from the top of each controller then invoking the matching
 route’s associated callback function.</p>
-<p>That is, routes are matched in the order they are added to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">c.t.finatra.http.routing.HttpRouter</a>.
+<p>That is, routes are matched in the order they are added to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">c.t.finatra.http.routing.HttpRouter</a>.
 Thus if you are creating routes with overlapping URIs it is recommended to list the routes in order
 starting with the “most specific” to the least specific. Although you don’t need to do this for
 constant routes, we encourage you to do it anyway to make it easier to reason about.</p>
@@ -154,7 +154,7 @@ group routes related to a single resource into one controller.</p>
 </div>
 <div class="section" id="per-route-stats">
 <h3>Per-Route Stats<a class="headerlink" href="#per-route-stats" title="Permalink to this headline">¶</a></h3>
-<p>The per-route stats recording provided by Finatra in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala">c.t.finatra.http.filters.StatsFilter</a>
+<p>The per-route stats recording provided by Finatra in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala">c.t.finatra.http.filters.StatsFilter</a>
 works best when the above convention is followed.</p>
 <div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
@@ -372,7 +372,7 @@ class MyController @Inject()(
 <p class="first admonition-title">Important</p>
 <ul class="last simple">
 <li>Routes and Prefixes <strong>MUST</strong> begin with a forward slash (/).</li>
-<li>Routes are always added to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">c.t.finatra.http.routing.HttpRouter</a>
+<li>Routes are always added to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">c.t.finatra.http.routing.HttpRouter</a>
 <strong>in the order defined</strong> in the <a class="reference external" href="../http/controllers.html#controllers-and-routing">Controller</a>
 and are thus matched in this order as well. This remains true even when defined within a <cite>prefix</cite>
 block. I.e., the <cite>prefix</cite> is merely a convenience for adding a common prefix to a set of routes.
@@ -474,12 +474,12 @@ on the admin interface.</p>
 <div class="section" id="admin-path-routing">
 <h3>Admin Path Routing<a class="headerlink" href="#admin-path-routing" title="Permalink to this headline">¶</a></h3>
 <p><strong>Note</strong>: only admin routes which start with <cite>/admin/finatra/</cite> will be routed to using the server’s
-configured <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">HttpRouter</a>.
+configured <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">HttpRouter</a>.
 All other admin routes will be routed to by TwitterServer’s <a class="reference external" href="https://github.com/twitter/twitter-server/blob/15e35a3a3070c50168ff55fd83a2dff28b09795c/server/src/main/scala/com/twitter/server/AdminHttpServer.scala#L140">AdminHttpServer</a>
 which only supports <strong>exact path matching</strong> and thus why only constant routes are allowed.</p>
-<p>Therefore any configuration defined on your server’s <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">HttpRouter</a>
+<p>Therefore any configuration defined on your server’s <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">HttpRouter</a>
 will thus only apply to admin routes starting with <cite>/admin/finatra</cite>. And because these routes will
-use the Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/routing/RoutingService.scala">RoutingService</a>
+use the Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/routing/RoutingService.scala">RoutingService</a>
 these routes cannot be included in the <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a>
 <a class="reference external" href="https://twitter.github.io/twitter-server/Admin.html">HTTP Admin Interface</a> index.</p>
 </div>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Filtering HTTP Requests &#8212; Finatra 21.2.0 documentation</title>
+    <title>Filtering HTTP Requests &#8212; Finatra 21.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -62,50 +62,50 @@
   <div class="section" id="filtering-http-requests">
 <span id="http-filters"></span><h1>Filtering HTTP Requests<a class="headerlink" href="#filtering-http-requests" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="c-t-finatra-http-filters-accessloggingfilter-rarrow">
-<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/AccessLoggingFilter.scala">c.t.finatra.http.filters.AccessLoggingFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-accessloggingfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/AccessLoggingFilter.scala">c.t.finatra.http.filters.AccessLoggingFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-accessloggingfilter-rarrow" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>provides for “Common Log Format” style logging for HTTP requests and responses.</li>
 </ul>
 </div>
 <div class="section" id="c-t-finatra-http-filters-exceptionmappingfilter-rarrow">
-<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala">c.t.finatra.http.filters.ExceptionMappingFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-exceptionmappingfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala">c.t.finatra.http.filters.ExceptionMappingFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-exceptionmappingfilter-rarrow" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Filter for use in mapping exceptions to HTTP responses. See <a class="reference external" href="exceptions.html#exceptionmappingfilter">ExceptionMappingFilter</a> for more information.</li>
 </ul>
 </div>
 <div class="section" id="c-t-finatra-http-filters-httpnackfilter-rarrow">
-<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/HttpNackFilter.scala">c.t.finatra.http.filters.HttpNackFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-httpnackfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/HttpNackFilter.scala">c.t.finatra.http.filters.HttpNackFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-httpnackfilter-rarrow" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>ensures that Finagle <a class="reference external" href="https://twitter.github.io/finagle/guide/Glossary.html?highlight=nack">Nacks</a> are propagated as HTTP headers in responses.</li>
 </ul>
 </div>
 <div class="section" id="c-t-finatra-http-filters-httpresponsefilter-rarrow">
-<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/HttpResponseFilter.scala">c.t.finatra.http.filters.HttpResponseFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-httpresponsefilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/HttpResponseFilter.scala">c.t.finatra.http.filters.HttpResponseFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-httpresponsefilter-rarrow" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>an HTTP response conformance Filter which, among other things, ensures <cite>Location</cite> response headers are properly specified.</li>
 </ul>
 </div>
 <div class="section" id="c-t-finatra-http-filters-loggingmdcfilter-rarrow">
-<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/LoggingMDCFilter.scala">c.t.finatra.http.filters.LoggingMDCFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-loggingmdcfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/LoggingMDCFilter.scala">c.t.finatra.http.filters.LoggingMDCFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-loggingmdcfilter-rarrow" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>properly initializes the framework’s <a class="reference external" href="https://www.slf4j.org/manual.html#mdc">Mapped Diagnostic Context (MDC)</a> adapter for logging.</li>
 </ul>
 </div>
 <div class="section" id="c-t-finatra-http-filters-statsfilter-rarrow">
-<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala">c.t.finatra.http.filters.StatsFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-statsfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala">c.t.finatra.http.filters.StatsFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-statsfilter-rarrow" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>a drop-in replacement for the <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/service/StatsFilter.scala">Finagle StatsFilter</a> which can additionally provide <a class="reference external" href="controllers.html#per-route-stats">per-route stats</a>.</li>
 </ul>
 </div>
 <div class="section" id="c-t-finatra-http-filters-traceidmdcfilter-rarrow">
-<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/TraceIdMDCFilter.scala">c.t.finatra.http.filters.TraceIdMDCFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-traceidmdcfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/TraceIdMDCFilter.scala">c.t.finatra.http.filters.TraceIdMDCFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-traceidmdcfilter-rarrow" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>places the current Finagle <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/tracing/TraceId.scala">TraceId</a> local into the <a class="reference external" href="https://www.slf4j.org/manual.html#mdc">Mapped Diagnostic Context (MDC)</a>.</li>
 </ul>
 <div class="admonition-c-t-finatra-http-filters-commonfilters admonition">
 <p class="first admonition-title">c.t.finatra.http.filters.CommonFilters</p>
 <p class="last">Finatra composes – in a recommended order – several typically useful HTTP Filters into
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala">c.t.finatra.http.filters.CommonFilters</a>.
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala">c.t.finatra.http.filters.CommonFilters</a>.
 <cite>CommonFilters</cite> can be added in the same manner as any other Filter.</p>
 </div>
 <div class="section" id="global-filters">
@@ -171,7 +171,7 @@ class ExampleServer extends HttpServer {
 </div>
 <p>Currently, <cite>HttpRouter#add</cite> supports in-lining up to ten (10) filters before a Controller. If you
 need to include more than ten Filters please consider combining them with <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/filters/MergedFilter.scala">c.t.finatra.filters.MergedFilter</a>
-in the same manner as <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala">c.t.finatra.http.filters.CommonFilters</a>
+in the same manner as <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala">c.t.finatra.http.filters.CommonFilters</a>
 then using the combined Filter in your call to <cite>HttpRouter#add</cite>.</p>
 <p>In all the above usages, we are applying the Filter <em>by type</em> allowing the framework to instantiate
 instances of the Filters. However, all of these methods support passing constructed instances.</p>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>HTTP Requests &#8212; Finatra 21.2.0 documentation</title>
+    <title>HTTP Requests &#8212; Finatra 21.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -160,7 +160,7 @@ value of <cite>FromRouteRequest#resource</cite> and the string “1234” into t
 </tbody>
 </table>
 </div></blockquote>
-<p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/IdAndNameRequest.scala">example</a>.</p>
+<p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/IdAndNameRequest.scala">example</a>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Route parameter names are case sensitive.</p>
@@ -201,7 +201,7 @@ from the query string) and if present will be validated to be a date in the past
 <p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/?foo=bar&amp;skip=false</span></code></p>
 <p>would parse the string “bar” into the value of <cite>QueryParamRequest#foo</cite> and parse the string “false”
 as a Boolean into the <cite>QueryParamRequest#isSkipped</cite> field.</p>
-<p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala">example</a>.</p>
+<p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala">example</a>.</p>
 <p>You can parse comma-separated lists in your query parameters by setting <cite>commaSeparatedList</cite> to <cite>true</cite> in the QueryParam annotation, e.g.</p>
 <div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class ManyUsersRequest(
   @QueryParam(commaSeparatedList=true) ids: Seq[Long])
@@ -223,7 +223,7 @@ as a Boolean into the <cite>QueryParamRequest#isSkipped</cite> field.</p>
 <h4><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-annotations/src/main/java/com/twitter/finatra/http/annotations/FormParam.java">&#64;FormParam</a><a class="headerlink" href="#formparam" title="Permalink to this headline">¶</a></h4>
 <p>Read a value from a form field with the case class field’s name or as the value specified in the
 <code class="docutils literal notranslate"><span class="pre">&#64;FormParam</span></code> annotation from the request body.</p>
-<p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/FormPostRequest.scala">example</a>.</p>
+<p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/FormPostRequest.scala">example</a>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Form parameter names are case sensitive.</p>
@@ -242,7 +242,7 @@ for the field name when special characters are involved.</p>
 <div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>@Header(&quot;user-agent&quot;) agent: String
 </pre></div>
 </div>
-<p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/CreateUserRequest.scala">example</a>.</p>
+<p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/CreateUserRequest.scala">example</a>.</p>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
 <p>Route, query, and form params are all stored in the “params” field of the incoming Finagle http
@@ -281,7 +281,7 @@ case class CaseClassWithRequestField(
  request: Request)
 </pre></div>
 </div>
-<p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithInjections.scala">example</a>.</p>
+<p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithInjections.scala">example</a>.</p>
 <hr class="docutils" />
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -305,13 +305,13 @@ error to use a field annotation in conjunction with <strong>any</strong> <a clas
 <div class="section" id="injectablevalues">
 <h4>InjectableValues<a class="headerlink" href="#injectablevalues" title="Permalink to this headline">¶</a></h4>
 <p>These annotations are implemented via a Finatra HTTP integration with Jackson <a class="reference external" href="https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/InjectableValues.java">InjectableValues</a>
-implemented in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageInjectableValues.scala">MessageInjectableValues</a>
+implemented in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageInjectableValues.scala">MessageInjectableValues</a>
 class.</p>
 <div class="admonition caution">
 <p class="first admonition-title">Caution</p>
-<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageInjectableValues.scala">MessageInjectableValues</a>
+<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageInjectableValues.scala">MessageInjectableValues</a>
 is only configured via the framework’s <a class="reference external" href="./message_body.html#id2">DefaultMessageBodyReader</a>
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyReaderImpl.scala">DefaultMessageBodyReaderImpl</a>
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyReaderImpl.scala">DefaultMessageBodyReaderImpl</a>
 which is bound in the <a class="reference external" href="./message_body.html#id5">MessageBodyModule</a>.</p>
 <p>Thus, attempting to use the HTTP-specific field annotations with a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a>
 instance <strong>will not work</strong>.</p>
@@ -329,7 +329,7 @@ instance <strong>will not work</strong>.</p>
 <p>Finatra also provides a way to specify how to parse the request into a callback function input via a
 <a class="reference external" href="message_body.html#message-body-readers">Message Body Reader</a>. Similar to <a class="reference external" href="#custom-request-case-class">custom request case
 classes</a> (which are implemented with a framework
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyReaderImpl.scala">default message body reader</a>),
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyReaderImpl.scala">default message body reader</a>),
 these objects allow for customized parsing the full incoming <cite>c.t.finagle.http.Request</cite> into a
 specific type. For more information, see the <a class="reference external" href="./message_body.html#message-body-readers">Message Body Readers</a>
 section.</p>
@@ -474,11 +474,11 @@ JSON Patch operations to the target.</p>
 </div>
 <p>For more information and examples, see:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/request/RequestUtils.scala">c.t.finatra.http.request.RequestUtils</a></li>
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/fileupload/MultipartItem.scala">c.t.finatra.http.fileupload.MultipartItem</a></li>
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/controllers/DoEverythingController.scala">DoEverythingController</a></li>
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala">DoEverythingServerFeatureTest</a></li>
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/request/MultiParamsTest.scala">MultiParamsTest</a></li>
+<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/request/RequestUtils.scala">c.t.finatra.http.request.RequestUtils</a></li>
+<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/fileupload/MultipartItem.scala">c.t.finatra.http.fileupload.MultipartItem</a></li>
+<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/controllers/DoEverythingController.scala">DoEverythingController</a></li>
+<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala">DoEverythingServerFeatureTest</a></li>
+<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/request/MultiParamsTest.scala">MultiParamsTest</a></li>
 </ul>
 </div>
 </div>

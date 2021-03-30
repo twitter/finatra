@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>HTTP Streaming &#8212; Finatra 21.2.0 documentation</title>
+    <title>HTTP Streaming &#8212; Finatra 21.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -61,7 +61,7 @@
             
   <div class="section" id="http-streaming">
 <span id="id1"></span><h1>HTTP Streaming<a class="headerlink" href="#http-streaming" title="Permalink to this headline">¶</a></h1>
-<p>Finatra supports streaming over HTTP by defining the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/streaming/StreamingRequest.scala">StreamingRequest</a> or a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/streaming/StreamingResponse.scala">StreamingResponse</a> request/response types. A <cite>StreamingRequest</cite>/<cite>StreamingResponse</cite> is an HTTP Request/Response that carries a stream of objects in its body. We support using either of our streaming primitives, <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/io/Reader.scala">Reader</a> or <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/concurrent/AsyncStream.scala">AsyncStream</a>, but we recommend using <cite>Reader</cite> as it has better support for resource management.</p>
+<p>Finatra supports streaming over HTTP by defining the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/streaming/StreamingRequest.scala">StreamingRequest</a> or a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/streaming/StreamingResponse.scala">StreamingResponse</a> request/response types. A <cite>StreamingRequest</cite>/<cite>StreamingResponse</cite> is an HTTP Request/Response that carries a stream of objects in its body. We support using either of our streaming primitives, <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/io/Reader.scala">Reader</a> or <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/concurrent/AsyncStream.scala">AsyncStream</a>, but we recommend using <cite>Reader</cite> as it has better support for resource management.</p>
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">

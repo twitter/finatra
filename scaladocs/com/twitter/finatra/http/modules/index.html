@@ -310,13 +310,9 @@
                         <a class="class" href="HttpResponseExceptionMapper.html" title=""></a>
                         <a href="HttpResponseExceptionMapper.html" title="">HttpResponseExceptionMapper</a>
                       </li><li class="current-entities indented5">
-                        <span class="separator"></span>
-                        <a class="object" href="MessageBodyFlagsModule$.html" title=""></a>
-                        <a href="MessageBodyFlagsModule$.html" title="">MessageBodyFlagsModule</a>
-                      </li><li class="current-entities indented5">
-                        <a class="object" href="MessageBodyModule$.html" title="Provides implementations for the com.twitter.finatra.http.marshalling.DefaultMessageBodyReader and the com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter."></a>
-                        <a class="class" href="MessageBodyModule.html" title=""></a>
-                        <a href="MessageBodyModule.html" title="">MessageBodyModule</a>
+                        <a class="object" href="MessageBodyModule$.html" title=""></a>
+                        <a class="class" href="MessageBodyModule.html" title="A TwitterModule that provides default implementations for com.twitter.finatra.http.marshalling.DefaultMessageBodyReader, and com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter and assigns a default binding for com.twitter.finatra.jackson.caseclass.InjectableTypes."></a>
+                        <a href="MessageBodyModule.html" title="A TwitterModule that provides default implementations for com.twitter.finatra.http.marshalling.DefaultMessageBodyReader, and com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter and assigns a default binding for com.twitter.finatra.jackson.caseclass.InjectableTypes.">MessageBodyModule</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="object" href="MustacheModule$.html" title="This TwitterModule ties together Mustache and HTTP by registering a Mustache-specific com.twitter.finatra.http.marshalling.MessageBodyWriter to the com.twitter.finatra.http.marshalling.MessageBodyManager."></a>
@@ -483,7 +479,7 @@
                 <span class="name">@Singleton</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.modules.MessageBodyModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.modules.MessageBodyModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="MessageBodyModuleextendsTwitterModule"></a><a id="MessageBodyModule:MessageBodyModule"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/modules/MessageBodyModule.html" title="Permalink">
@@ -495,10 +491,23 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="MessageBodyModule.html"><span class="name">MessageBodyModule</span></a><span class="result"> extends <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></span>
+        <a title="A TwitterModule that provides default implementations for com.twitter.finatra.http.marshalling.DefaultMessageBodyReader, and com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter and assigns a default binding for com.twitter.finatra.jackson.caseclass.InjectableTypes." href="MessageBodyModule.html"><span class="name">MessageBodyModule</span></a><span class="result"> extends <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">A <span class="extype" name="TwitterModule">TwitterModule</span> that provides default implementations for <a href="../marshalling/DefaultMessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyReader">com.twitter.finatra.http.marshalling.DefaultMessageBodyReader</a>,
+and <a href="../marshalling/DefaultMessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter">com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter</a> and assigns a default binding for
+<span class="extype" name="com.twitter.finatra.jackson.caseclass.InjectableTypes">com.twitter.finatra.jackson.caseclass.InjectableTypes</span>.</p><div class="fullcomment"><div class="comment cmt"><p>A <span class="extype" name="TwitterModule">TwitterModule</span> that provides default implementations for <a href="../marshalling/DefaultMessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyReader">com.twitter.finatra.http.marshalling.DefaultMessageBodyReader</a>,
+and <a href="../marshalling/DefaultMessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter">com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter</a> and assigns a default binding for
+<span class="extype" name="com.twitter.finatra.jackson.caseclass.InjectableTypes">com.twitter.finatra.jackson.caseclass.InjectableTypes</span>.</p><p>Extend this module to override the defaults of the bound <a href="../marshalling/MessageBodyManager.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyManager">com.twitter.finatra.http.marshalling.MessageBodyManager</a>.</p><p>Example:</p><pre><span class="kw">import</span> com.twitter.finatra.http.marshalling.MessageBodyManager
+<span class="kw">import</span> com.twitter.finatra.http.modules.MessageBodyModule
+<span class="kw">import</span> com.twitter.inject.Injector
+
+<span class="kw">object</span> CustomizedMessageBodyModule <span class="kw">extends</span> MessageBodyModule {
+  <span class="kw">override</span> <span class="kw">def</span> configureMessageBodyManager(injector: Injector, builder: MessageBodyManager.Builder): MessageBodyManager.Builder =
+    builder
+      .withDefaultMessageBodyReader(MyDefaultReader)
+      .withDefaultMessageBodyWriter(MyDefaultWriter)
+}</pre></div></div>
     </li></ol>
             </div>
 
@@ -540,23 +549,7 @@
       </span>
       
       
-    </li><li name="com.twitter.finatra.http.modules.MessageBodyFlagsModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="MessageBodyFlagsModule"></a><a id="MessageBodyFlagsModule:MessageBodyFlagsModule"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/modules/MessageBodyFlagsModule$.html" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="MessageBodyFlagsModule$.html"><span class="name">MessageBodyFlagsModule</span></a><span class="result"> extends <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></span>
-      </span>
-      
-      
-    </li><li name="com.twitter.finatra.http.modules.MessageBodyModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.modules.MessageBodyModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="MessageBodyModule"></a><a id="MessageBodyModule:MessageBodyModule"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/modules/MessageBodyModule$.html" title="Permalink">
@@ -568,13 +561,10 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="Provides implementations for the com.twitter.finatra.http.marshalling.DefaultMessageBodyReader and the com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter." href="MessageBodyModule$.html"><span class="name">MessageBodyModule</span></a><span class="result"> extends <a href="MessageBodyModule.html" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">MessageBodyModule</a></span>
+        <a title="" href="MessageBodyModule$.html"><span class="name">MessageBodyModule</span></a><span class="result"> extends <a href="MessageBodyModule.html" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">MessageBodyModule</a></span>
       </span>
       
-      <p class="shortcomment cmt">Provides implementations for the <a href="../marshalling/DefaultMessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyReader">com.twitter.finatra.http.marshalling.DefaultMessageBodyReader</a>
-and the <a href="../marshalling/DefaultMessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter">com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Provides implementations for the <a href="../marshalling/DefaultMessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyReader">com.twitter.finatra.http.marshalling.DefaultMessageBodyReader</a>
-and the <a href="../marshalling/DefaultMessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter">com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter</a>.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../marshalling/DefaultMessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyReader">com.twitter.finatra.http.marshalling.DefaultMessageBodyReader</a></p></span><span class="cmt"><p><a href="../marshalling/DefaultMessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter">com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter</a></p></span><span class="cmt"><p><a href="../marshalling/MessageBodyManager.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyManager">com.twitter.finatra.http.marshalling.MessageBodyManager</a></p></span></dd></dl></div>
+      
     </li><li name="com.twitter.finatra.http.modules.MustacheModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="MustacheModule"></a><a id="MustacheModule:MustacheModule"></a>
       <span class="permalink">

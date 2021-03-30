@@ -322,6 +322,10 @@
                         <a class="class" href="MediaType.html" title="A media type as defined by RFC 2616 3.7."></a>
                         <a href="MediaType.html" title="A media type as defined by RFC 2616 3.7.">MediaType</a>
                       </li><li class="current-entities indented5">
+                        <a class="object" href="RequestBuilder$.html" title="Provides a class for building finagle.http.Request objects"></a>
+                        <a class="class" href="RequestBuilder.html" title="RequestBuilder is a finagle.http.Request with a builder API for common mutations"></a>
+                        <a href="RequestBuilder.html" title="RequestBuilder is a finagle.http.Request with a builder API for common mutations">RequestBuilder</a>
+                      </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="object" href="RequestUtils$.html" title=""></a>
                         <a href="RequestUtils$.html" title="">RequestUtils</a>
@@ -405,7 +409,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="../../../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.11/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../../../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.12/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -498,11 +502,28 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="A media type as defined by RFC 2616 3.7." href="MediaType.html"><span class="name">MediaType</span></a><span class="params">(<span name="mediaType">mediaType: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="mediaSubType">mediaSubType: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="parameters">parameters: <a href="../../../../../scala/index.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[(<span class="extype" name="scala.Predef.String">String</span>, <a href="https://www.scala-lang.org/api/2.12.11/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="scala.Predef.String">String</span>])]</span>)</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.11/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.11/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="A media type as defined by RFC 2616 3.7." href="MediaType.html"><span class="name">MediaType</span></a><span class="params">(<span name="mediaType">mediaType: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="mediaSubType">mediaSubType: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="parameters">parameters: <a href="../../../../../scala/index.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[(<span class="extype" name="scala.Predef.String">String</span>, <a href="https://www.scala-lang.org/api/2.12.12/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="scala.Predef.String">String</span>])]</span>)</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.12/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">A media type as defined by RFC 2616 3.7.</p><div class="fullcomment"><div class="comment cmt"><p>A media type as defined by RFC 2616 3.7.
 </p></div><dl class="paramcmts block"><dt class="param">mediaType</dt><dd class="cmt"><p>The media type</p></dd><dt class="param">mediaSubType</dt><dd class="cmt"><p>The media sub type</p></dd><dt class="param">parameters</dt><dd class="cmt"><p>The parameters</p></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.request.RequestBuilder" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RequestBuilderextendsRequestProxy"></a><a id="RequestBuilder:RequestBuilder"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/request/RequestBuilder.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="RequestBuilder is a finagle.http.Request with a builder API for common mutations" href="RequestBuilder.html"><span class="name">RequestBuilder</span></a><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/RequestProxy.html#com.twitter.finagle.http.RequestProxy" class="extype" name="com.twitter.finagle.http.RequestProxy">RequestProxy</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">RequestBuilder is a finagle.http.Request with a builder API for common mutations
+</p>
     </li></ol>
             </div>
 
@@ -523,10 +544,27 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="MediaRange$.html"><span class="name">MediaRange</span></a><span class="result"> extends <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a> with <a href="https://www.scala-lang.org/api/2.12.11/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="MediaRange$.html"><span class="name">MediaRange</span></a><span class="result"> extends <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
+    </li><li name="com.twitter.finatra.http.request.RequestBuilder" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RequestBuilder"></a><a id="RequestBuilder:RequestBuilder"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/request/RequestBuilder$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="Provides a class for building finagle.http.Request objects" href="RequestBuilder$.html"><span class="name">RequestBuilder</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">Provides a class for building <code>finagle.http.Request</code> objects
+</p>
     </li><li name="com.twitter.finatra.http.request.RequestUtils" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="RequestUtils"></a><a id="RequestUtils:RequestUtils"></a>
       <span class="permalink">
@@ -556,7 +594,7 @@
         <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.11/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.12/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
             </div>
         
         </div>

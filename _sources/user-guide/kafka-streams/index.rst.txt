@@ -7,7 +7,7 @@ Finatra has native integration with `Kafka Streams <https://kafka.apache.org/doc
 
 .. note::
 
-    Versions of finatra-kafka and finatra-kafka-streams that are published against Scala 2.12 or 2.11 uses Kafka 2.2, versions of that are published against Scala 2.13 use Kafka 2.5. This simplified cross-version support is ephemeral until we can drop Kafka 2.2. 
+    Versions of finatra-kafka and finatra-kafka-streams that are published against Scala 2.12 use Kafka 2.2, versions of that are published against Scala 2.13 use Kafka 2.5. This simplified cross-version support is ephemeral until we can drop Kafka 2.2. 
 
 Features
 --------

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>HTTP Responses &#8212; Finatra 21.2.0 documentation</title>
+    <title>HTTP Responses &#8212; Finatra 21.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -95,7 +95,7 @@ get(&quot;/foo&quot;) { request: Request =&gt;
 }
 </pre></div>
 </div>
-<p><strong>Note:</strong> If you change the default <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyWriterImpl.scala">MessageBodyWriter</a> implementation (used by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala">MessageBodyManager</a>)
+<p><strong>Note:</strong> If you change the default <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyWriterImpl.scala">MessageBodyWriter</a> implementation (used by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala">MessageBodyManager</a>)
 this will no longer be the default behavior, depending.</p>
 <p>You can also always use the <a class="reference internal" href="#responsebuilder"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a> to explicitly render a JSON response.</p>
 </div>
@@ -140,7 +140,7 @@ class MyController extends Controller {
 </div>
 <div class="section" id="responsebuilder">
 <h2><a class="reference internal" href="#responsebuilder"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a><a class="headerlink" href="#responsebuilder" title="Permalink to this headline">¶</a></h2>
-<p>All HTTP Controllers have a protected <cite>response</cite> field of type <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala">c.t.finatra.http.response.ResponseBuilder</a> which can be used to build a <cite>c.t.finagle.http.Response</cite> in your Controller route callback functions.</p>
+<p>All HTTP Controllers have a protected <cite>response</cite> field of type <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala">c.t.finatra.http.response.ResponseBuilder</a> which can be used to build a <cite>c.t.finagle.http.Response</cite> in your Controller route callback functions.</p>
 <p>For example:</p>
 <div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>get(&quot;/foo&quot;) { request: Request =&gt;
   ...
@@ -192,7 +192,7 @@ post(&quot;/users&quot;) { request: MyPostRequest =&gt;
 }
 </pre></div>
 </div>
-<p>For more examples, see the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/response/ResponseBuilderTest.scala">ResponseBuilderTest</a>.</p>
+<p>For more examples, see the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/response/ResponseBuilderTest.scala">ResponseBuilderTest</a>.</p>
 <div class="section" id="wait-how-do-i-create-a-response-from-a-future-t">
 <h3>Wait, how do I create a <cite>Response</cite> from a <cite>Future[T]</cite>?<a class="headerlink" href="#wait-how-do-i-create-a-response-from-a-future-t" title="Permalink to this headline">¶</a></h3>
 <p>As noted in the <a class="reference internal" href="#future-conversion">Future Conversion</a> section, Finatra will attempt to construct a proper return type of <cite>Future[Response]</cite> from your callback’s return type. Though, in many cases, you may find that you have a <cite>Future[T]</cite> and want to translate this into a <cite>c.t.finagle.http.Response</cite> yourself using the <a class="reference internal" href="#responsebuilder"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a>.</p>
@@ -201,7 +201,7 @@ is meant to be somewhat generic so its API for constructing a response body acce
 <p>If you have a <cite>Future[T]</cite> and want to return a <cite>c.t.finagle.http.Response</cite> you should either:</p>
 <ul class="simple">
 <li>convert it to a <cite>Future[Response]</cite> or</li>
-<li>do nothing and let the Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala">CallbackConverter</a> convert the  <cite>Future[T]</cite> to an HTTP <cite>200 OK</cite> with <cite>T</cite> as the body (as mentioned in <a class="reference internal" href="#future-conversion">Future Conversion</a> section above).</li>
+<li>do nothing and let the Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala">CallbackConverter</a> convert the  <cite>Future[T]</cite> to an HTTP <cite>200 OK</cite> with <cite>T</cite> as the body (as mentioned in <a class="reference internal" href="#future-conversion">Future Conversion</a> section above).</li>
 </ul>
 <p>To convert a <cite>Future[T]</cite> to a <cite>Future[Response]</cite>, you would use <a class="reference external" href="https://twitter.github.io/effectivescala/#Twitter's%20standard%20libraries-Futures">Future#map</a>:</p>
 <div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>get(&quot;/foo&quot;) { request: Request =&gt;
@@ -219,7 +219,7 @@ is meant to be somewhat generic so its API for constructing a response body acce
 </div>
 <div class="section" id="cookies">
 <h2>Cookies:<a class="headerlink" href="#cookies" title="Permalink to this headline">¶</a></h2>
-<p>Cookies, like Headers, are read from request and can set on the response via the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala">c.t.finatra.http.response.ResponseBuilder</a>:</p>
+<p>Cookies, like Headers, are read from request and can set on the response via the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala">c.t.finatra.http.response.ResponseBuilder</a>:</p>
 <div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>get(&quot;/&quot;) { request =&gt;
   val loggedIn = request.cookies.getValue(&quot;loggedIn&quot;).getOrElse(&quot;false&quot;)
   response.ok.
@@ -277,7 +277,7 @@ get(&quot;/ServiceUnavailable&quot;) { request: Request =&gt;
 <p>which can be used:</p>
 <ul class="simple">
 <li>if the URI has a valid scheme then the URI is placed in the Location header unchanged.</li>
-<li><cite>response.location(“/users/123”)</cite> will get turned into the correct full URI by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/HttpResponseFilter.scala">HttpResponseFilter</a> (e.g. <cite>https://host.com/users/123</cite>) according to rules defined in the <a class="reference external" href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier#Generic_syntax">URI specification</a></li>
+<li><cite>response.location(“/users/123”)</cite> will get turned into the correct full URI by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/HttpResponseFilter.scala">HttpResponseFilter</a> (e.g. <cite>https://host.com/users/123</cite>) according to rules defined in the <a class="reference external" href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier#Generic_syntax">URI specification</a></li>
 <li>The scheme is assumed to be <cite>http</cite> when rewritten unless otherwise specified in the <cite>“x-forwarded-proto”</cite> header in the request.</li>
 </ul>
 </div>

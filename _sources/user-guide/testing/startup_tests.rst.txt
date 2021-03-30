@@ -62,6 +62,8 @@ For example:
   This works for |EmbeddedHttpServer|_ or |EmbeddedThriftServer|_ as well because ``#assertHealthy()``
   is defined on the |EmbeddedTwitterServer|_ super class.
 
+For examples of how to accomplish this in Java, see |HelloWorldServerStartupTest|_.
+
 |c.t.server.TwitterServer|_
 ---------------------------
 
@@ -110,6 +112,8 @@ Given a simple |c.t.server.TwitterServer|_:
         Await.ready(server)
       }
     }
+
+For examples of how to accomplish this in Java, see |ExampleTwitterServerStartupTest|_.
 
 Writing the StartupTest
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -211,4 +215,8 @@ More Information
 .. |EmbeddedThriftServer| replace:: `EmbeddedThriftServer`
 .. _EmbeddedThriftServer: https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala
 
+.. |HelloWorldServerStartupTest| replace:: `HelloWorldServerStartupTest`
+.. _HelloWorldServerStartupTest: https://github.com/twitter/finatra/blob/develop/examples/http-server/java/src/test/java/com/twitter/finatra/example/HelloWorldServerStartupTest.java
 
+.. |ExampleTwitterServerStartupTest| replace:: `ExampleTwitterServerStartupTest`
+.. _ExampleTwitterServerStartupTest: https://github.com/twitter/finatra/blob/develop/examples/injectable-twitter-server/java/src/test/java/com/twitter/finatra/example/ExampleTwitterServerStartupTest.java

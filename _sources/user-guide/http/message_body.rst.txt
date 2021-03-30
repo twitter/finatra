@@ -8,7 +8,7 @@ and specify how to parse an incoming |c.t.finagle.http.Request|_ into a model or
 object ("message body reader") or how to transform a given type `T` into a |c.t.finagle.http.Response|_
 ("message body writer").
 
-`MessageBodyComponent <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyComponent.scala>`_
+`MessageBodyComponent <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyComponent.scala>`_
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 A |MessageBodyComponent| is a marker trait superclass of both |MessageBodyReader|_ and
@@ -66,7 +66,7 @@ will trigger the framework to search for a registered `MessageBodyReader[MyModel
 If a |MessageBodyReader|_ for the `MyModelObject` type cannot be found the `DefaultMessageBodyReader`
 implementation configured in the |MessageBodyManager|_ will be used.
 
-`DefaultMessageBodyReader <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyReader.scala>`_
+`DefaultMessageBodyReader <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyReader.scala>`_
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The framework provides a default |MessageBodyReader|_:
@@ -143,7 +143,7 @@ will trigger the framework to search for a registered `MessageBodyWriter[MyRende
 If a |MessageBodyWriter|_ for the `MyRenderableObjectType` type cannot be found the
 `DefaultMessageBodyWriter` implementation configured in the |MessageBodyManager|_ will be used.
 
-`DefaultMessageBodyWriter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyWriter.scala>`_
+`DefaultMessageBodyWriter <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyWriter.scala>`_
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The framework provides a default |MessageBodyWriter|_: |DefaultMessageBodyWriter|_
@@ -231,7 +231,7 @@ will be invoked.
 Again, this happens when these types are returned from a route callback or when passed as a body
 to a function in the |ResponseBuilder|_.
 
-`MessageBodyManager <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala>`_
+`MessageBodyManager <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala>`_
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 The |MessageBodyManager|_ registers message body components.
@@ -239,7 +239,7 @@ The |MessageBodyManager|_ registers message body components.
 Generally, you will not need to interact directly with the manager because the |HttpRouter|_
 provides a DSL for registration of components to the bound |MessageBodyManager|_.
 
-`MessageBodyModule <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MessageBodyModule.scala>`_
+`MessageBodyModule <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/modules/MessageBodyModule.scala>`_
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 The |DefaultMessageBodyReader|_, and the |DefaultMessageBodyWriter|_ are provided by the framework
@@ -333,7 +333,7 @@ For more information the Finatra's Mustache integration with HTTP see the docume
 .. _c.t.finagle.http.Response: https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Response.scala
 
 .. |HttpRouter| replace:: `c.t.finatra.http.routing.HttpRouter`
-.. _HttpRouter: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala
+.. _HttpRouter: https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala
 
 .. |MessageBodyReader| replace:: `MessageBodyReader`
 .. _MessageBodyReader: https://github.com/twitter/finatra/blob/416cb3467c88e26704d695c1d6b8176172afa9c4/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyReader.scala#L42
@@ -342,16 +342,16 @@ For more information the Finatra's Mustache integration with HTTP see the docume
 .. _MessageBodyWriter: https://github.com/twitter/finatra/blob/416cb3467c88e26704d695c1d6b8176172afa9c4/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyWriter.scala#L19
 
 .. |DefaultMessageBodyReader| replace:: `c.t.finatra.http.marshalling.DefaultMessageBodyReader`
-.. _DefaultMessageBodyReader: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyReader.scala
+.. _DefaultMessageBodyReader: https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyReader.scala
 
 .. |DefaultMessageBodyWriter| replace:: `c.t.finatra.http.marshalling.DefaultMessageBodyWriter`
-.. _DefaultMessageBodyWriter: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyWriter.scala
+.. _DefaultMessageBodyWriter: https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyWriter.scala
 
 .. |ResponseBuilder| replace:: `c.t.finatra.http.response.ResponseBuilder`
-.. _ResponseBuilder: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala
+.. _ResponseBuilder: https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala
 
 .. |MessageBodyManager| replace:: `c.t.finatra.http.marshalling.MessageBodyManager`
-.. _MessageBodyManager: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala
+.. _MessageBodyManager: https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala
 
 .. |MessageBodyManager#addByAnnotation| replace:: `MessageBodyManager#addByAnnotation`
 .. _MessageBodyManager#addByAnnotation: https://github.com/twitter/finatra/blob/6e09e95b95b20d2599a6210dfa0ce4c82dbe636b/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala#L54
@@ -360,10 +360,10 @@ For more information the Finatra's Mustache integration with HTTP see the docume
 .. _MessageBodyManager#addByComponentType: https://github.com/twitter/finatra/blob/6e09e95b95b20d2599a6210dfa0ce4c82dbe636b/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala#L60
 
 .. |MessageBodyModule| replace:: `c.t.finatra.http.modules.MessageBodyModule`
-.. _MessageBodyModule:  https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MessageBodyModule.scala
+.. _MessageBodyModule:  https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/modules/MessageBodyModule.scala
 
 .. |MessageBodyComponent| replace:: `c.t.finatra.http.marshalling.MessageBodyComponent`
-.. _MessageBodyComponent: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyComponent.scala
+.. _MessageBodyComponent: https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyComponent.scala
 
 .. |MustacheMessageBodyWriter| replace:: `c.t.finatra.mustache.writer.MustacheMessageBodyWriter`
 .. _MustacheMessageBodyWriter: https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/writer/MustacheMessageBodyWriter.scala
