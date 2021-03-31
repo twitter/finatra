@@ -7,6 +7,11 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+
+* finatra-kafka-streams: Set kafka.producer.acks=all by default ``PHAB_ID=D643266``
+
 21.3.0
 ------
 

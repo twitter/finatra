@@ -4,6 +4,7 @@ import com.twitter.app.Flag
 import com.twitter.conversions.DurationOps._
 import com.twitter.conversions.StorageUnitOps._
 import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.finatra.kafka.domain.AckMode
 import com.twitter.finatra.kafka.interceptors.{
   InstanceMetadataProducerInterceptor,
   MonitoringConsumerInterceptor,
@@ -132,6 +133,8 @@ abstract class KafkaStreamsTwitterServer
     kafkaFlag(StreamsConfig.STATE_DIR_CONFIG, "kafka-stream-state")
   private val metricsRecordingLevel =
     kafkaFlag(StreamsConfig.METRICS_RECORDING_LEVEL_CONFIG, "INFO")
+
+  private val producerAckMode = producerFlag(ProducerConfig.ACKS_CONFIG, "all")
 
   protected val commitInterval: Flag[Duration] = flag(
     "kafka.commit.interval",
@@ -282,6 +285,8 @@ abstract class KafkaStreamsTwitterServer
           InstanceMetadataProducerInterceptor.KafkaInstanceKeyFlagName,
           instanceKey()
         )
+        .producer
+        .ackMode(AckMode.valueOf(producerAckMode().toUpperCase))
         .producer
         .metricReporter[KafkaStreamsFinagleMetricsReporter]
         .producer

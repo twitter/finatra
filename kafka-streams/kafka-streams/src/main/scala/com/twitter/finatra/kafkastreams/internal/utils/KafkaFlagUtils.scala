@@ -87,6 +87,23 @@ private[kafkastreams] trait KafkaFlagUtils extends App {
   }
 
   /**
+   * Create a flag prefixed by "kafka.producer." with the specified default value and help string
+   * that is populated from the Kafka ProducerConfig class
+   *
+   * @param key Name of the KafkaStreams flag as specified in the ProducerConfig class
+   * @param default Default value for this flag
+   * @tparam T Type of the flag value
+   * @return Flag for the specified key
+   */
+  def producerFlag[T: Flaggable](key: String, default: => T): Flag[T] = {
+    kafkaFlag(
+      prefix = "kafka.producer.",
+      key = key,
+      default = default,
+      helpDoc = kafkaDocumentation(producerConfigDef, key))
+  }
+
+  /**
    * Create a flag prefixed by "kafka.producer." with a default value and help string that is
    * populated from the Kafka ProducerConfig class
    *
@@ -95,11 +112,7 @@ private[kafkastreams] trait KafkaFlagUtils extends App {
    * @return Flag for the specified key
    */
   def producerFlagWithKafkaDefault[T: Flaggable](key: String): Flag[T] = {
-    kafkaFlag(
-      prefix = "kafka.producer.",
-      key = key,
-      default = getKafkaDefault[T](producerConfigDef, key),
-      helpDoc = kafkaDocumentation(producerConfigDef, key))
+    producerFlag(key = key, default = getKafkaDefault[T](producerConfigDef, key))
   }
 
   /* Private */

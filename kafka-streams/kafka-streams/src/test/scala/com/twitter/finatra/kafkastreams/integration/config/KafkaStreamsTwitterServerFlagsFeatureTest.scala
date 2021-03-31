@@ -104,6 +104,7 @@ class KafkaStreamsTwitterServerDefaultFlagsFeatureTest
     properties.getProperty("num.standby.replicas") should be("0")
     properties.getProperty("num.stream.threads") should be("1")
     properties.getProperty("processing.guarantee") should be("at_least_once")
+    properties.getProperty("producer.acks") should be("all")
     properties.getProperty("producer.interceptor.classes") should be(
       "com.twitter.finatra.kafka.interceptors.PublishTimeProducerInterceptor" +
         ",com.twitter.finatra.kafka.interceptors.InstanceMetadataProducerInterceptor")
@@ -136,6 +137,7 @@ class KafkaStreamsTwitterServerNonDefaultFlagsFeatureTest
     "kafka.consumer.max.partition.fetch.bytes" -> "12309812",
     "kafka.consumer.request.timeout.ms" -> "33333",
     "kafka.consumer.connections.max.idle.ms" -> "545454",
+    "kafka.producer.acks" -> "one",
     "kafka.producer.linger.ms" -> "42",
     "kafka.replication.factor" -> "5",
     "kafka.application.server" -> "localhost:1212",
@@ -161,6 +163,7 @@ class KafkaStreamsTwitterServerNonDefaultFlagsFeatureTest
     properties.getProperty("consumer.max.partition.fetch.bytes") should be("12309812")
     properties.getProperty("consumer.request.timeout.ms") should be("33333")
     properties.getProperty("consumer.connections.max.idle.ms") should be("545454")
+    properties.getProperty("producer.acks") should be("1")
     properties.getProperty("producer.linger.ms") should be("42")
     properties.getProperty("replication.factor") should be("5")
     properties.getProperty("application.server") should be("localhost:1212")
