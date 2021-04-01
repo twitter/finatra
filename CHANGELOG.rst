@@ -10,6 +10,8 @@ Unreleased
 Changed
 ~~~~~~~
 
+* finatra-kafka-streams: Update AsyncTransformer to support threadpools. ``PHAB_ID=D611608``
+
 * finatra-kafka-streams: Set kafka.producer.acks=all by default ``PHAB_ID=D643266``
 
 21.3.0

@@ -39,13 +39,15 @@ trait AsyncFlushing[K1, V1, K2, V2] extends Flushing with OnInit with OnClose {
     addPermits.acquire()
 
     outstandingFutures = outstandingFutures
-      .join(future.respond {
+      .join(future.transform {
         case Throw(t) =>
           addPermits.release()
           onFutureFailure(key, value, t)
+          Future.exception(t)
         case Return(fr) =>
           addPermits.release()
           onFutureSuccess(key, value, fr)
+          Future.value(fr)
       }).unit
   }
 
