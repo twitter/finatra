@@ -14,7 +14,6 @@ scala_library(
         "3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala",
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/net/codingwell:scala-guice",
-        "finagle/finagle-base-http/src/main",
         "finatra/jackson/src/main/scala/com/fasterxml/jackson/databind",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions",
