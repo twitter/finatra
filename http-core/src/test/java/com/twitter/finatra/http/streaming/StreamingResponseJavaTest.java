@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
+import scala.collection.immutable.Stream;
 
 import scala.collection.JavaConverters;
 import scala.reflect.Manifest;
@@ -24,10 +24,9 @@ import com.twitter.finatra.http.response.ResponseBuilder;
 import com.twitter.finatra.jackson.ScalaObjectMapper;
 import com.twitter.finatra.utils.FileResolver;
 import com.twitter.io.Buf;
-import com.twitter.io.BufReaders;
+import com.twitter.io.BufReader;
 import com.twitter.io.Bufs;
 import com.twitter.io.Reader;
-import com.twitter.io.Readers;
 import com.twitter.io.StreamTermination;
 import com.twitter.util.Await;
 import com.twitter.util.Duration;
@@ -68,14 +67,14 @@ public class StreamingResponseJavaTest extends Assert {
 
   private Reader<Buf> infiniteReader(Buf buf) {
     Stream<Buf> infiniteStream = Stream.iterate(buf, i -> i.concat(buf));
-    return Readers.fromSeq(infiniteStream);
+    return Reader.fromSeq(infiniteStream);
   }
 
   @Test
   public void emptyReader() throws Exception {
-    Reader<Object> reader = Readers.newEmptyReader();
+    Reader<Object> reader = Reader.empty();
     Response response = fromReader(reader, ManifestFactory.Object());
-    Future<Buf> fBuf = BufReaders.readAll(response.reader());
+    Future<Buf> fBuf = BufReader.readAll(response.reader());
     String result = Buf.decodeString(await(fBuf), StandardCharsets.UTF_8);
     Assert.assertEquals("[]", result);
     Assert.assertEquals(
@@ -85,9 +84,9 @@ public class StreamingResponseJavaTest extends Assert {
   @Test
   public void serdeReaderofString() throws Exception {
     List<String> stringList = Arrays.asList("first", "second", "third");
-    Reader<String> reader = Readers.fromSeq(stringList);
+    Reader<String> reader = Reader.<String>fromCollection(stringList);
     Response response = fromReader(reader, ManifestFactory.<String>classType(String.class));
-    Future<Buf> fBuf = BufReaders.readAll(response.reader());
+    Future<Buf> fBuf = BufReader.readAll(response.reader());
     String result = Buf.decodeString(await(fBuf), StandardCharsets.UTF_8);
     Assert.assertEquals("[\"first\",\"second\",\"third\"]", result);
   }
@@ -97,9 +96,9 @@ public class StreamingResponseJavaTest extends Assert {
     FooClass f1 = new FooClass(1, "first");
     FooClass f2 = new FooClass(2, "second");
     List<FooClass> fooList = Arrays.asList(f1, f2);
-    Reader<FooClass> reader = Readers.fromSeq(fooList);
+    Reader<FooClass> reader = Reader.<FooClass>fromCollection(fooList);
     Response response = fromReader(reader, ManifestFactory.<FooClass>classType(FooClass.class));
-    Future<Buf> fBuf = BufReaders.readAll(response.reader());
+    Future<Buf> fBuf = BufReader.readAll(response.reader());
     String result = Buf.decodeString(await(fBuf), StandardCharsets.UTF_8);
     Assert.assertEquals("[{\"v1\":1,\"v2\":\"first\"},{\"v1\":2,\"v2\":\"second\"}]", result);
   }
@@ -128,7 +127,7 @@ public class StreamingResponseJavaTest extends Assert {
     AsyncStream<String> stream = AsyncStream.fromSeq(
         JavaConverters.asScalaIteratorConverter(stringList.iterator()).asScala().toSeq());
     Response response = fromStream(stream, ManifestFactory.<String>classType(String.class));
-    Future<Buf> fBuf = BufReaders.readAll(response.reader());
+    Future<Buf> fBuf = BufReader.readAll(response.reader());
     String result = Buf.decodeString(await(fBuf), StandardCharsets.UTF_8);
     Assert.assertEquals("[\"first\",\"second\",\"third\"]", result);
   }
@@ -142,19 +141,20 @@ public class StreamingResponseJavaTest extends Assert {
 
     StreamingResponse<Reader, Lunch> streamingResponse1 =
         responseBuilder.streaming(
-            Readers.fromSeq(lunches),
+            Reader.fromCollection(lunches),
             ToReader.ReaderIdentity(),
             ManifestFactory.<Lunch>classType(Lunch.class));
     Reader<Buf> lunchBuf = streamingResponse1.toBufReader();
     Reader<Buf> prefix =
-        Readers.newBufReader(Bufs.utf8Buf("{\"options\":"), Integer.MAX_VALUE);
+        Reader.fromBuf(Bufs.utf8Buf("{\"options\":"), Integer.MAX_VALUE);
     Reader<Buf> suffix =
-        Readers.newBufReader(Bufs.utf8Buf(",\"date\": \"02/12/2020\"}"), Integer.MAX_VALUE);
+        Reader.fromBuf(Bufs.utf8Buf(",\"date\": \"02/12/2020\"}"), Integer.MAX_VALUE);
     Response response = fromReader(
-        Readers.concat(Arrays.asList(prefix, lunchBuf, suffix)),
+        Reader.concat(JavaConverters.asScalaIteratorConverter(
+           Arrays.asList(prefix, lunchBuf, suffix).iterator()).asScala().toSeq()),
         ManifestFactory.<Buf>classType(Buf.class));
     String result =
-        Buf.decodeString(await(BufReaders.readAll(response.reader())), StandardCharsets.UTF_8);
+        Buf.decodeString(await(BufReader.readAll(response.reader())), StandardCharsets.UTF_8);
 
     String expectedJson = "{\"options\":["
         + "{\"drink\":\"coke\",\"protein\":8,\"carbs\":4},"
