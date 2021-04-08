@@ -10,6 +10,10 @@ Unreleased
 Changed
 ~~~~~~~
 
+finatra-kafka: Poll in a Future for Metadata when sending instead of blocking. This prevents
+  the `FinagleKafkaProducer` from blocking during normal sending operations, even when
+  metadata isn't available or the message buffer is full. ``PHAB_ID=D645643``
+
 * finatra-kafka-streams: Update AsyncTransformer to support threadpools. ``PHAB_ID=D611608``
 
 * finatra-kafka-streams: Set kafka.producer.acks=all by default ``PHAB_ID=D643266``

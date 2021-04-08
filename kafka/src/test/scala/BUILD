@@ -7,6 +7,7 @@ cross_junit_tests(
     name = "scala",
     sources = [
         "com/twitter/finatra/kafka/consumers/*.scala",
+        "com/twitter/finatra/kafka/producers/*.scala",
         "com/twitter/finatra/kafka/serde/*.scala",
         "com/twitter/finatra/kafka/test/integration/*.scala",
     ],
@@ -27,6 +28,7 @@ cross_junit_tests(
         "finatra/kafka/src/main/java",
         "finatra/kafka/src/test/resources",
         "finatra/kafka/src/test/thrift:thrift-scala",
+        "util/util-mock/src/main/scala/com/twitter/util/mock",
     ],
 )
 
