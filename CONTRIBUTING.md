@@ -220,4 +220,4 @@ Scaladocs. Please file an [issue](https://github.com/twitter/finatra/issues).
 
 ### License 
 By contributing your code, you agree to license your contribution under the 
-terms of the APLv2: https://github.com/twitter/finatra/blob/master/LICENSE
+terms of the APLv2: https://github.com/twitter/finatra/blob/release/LICENSE
