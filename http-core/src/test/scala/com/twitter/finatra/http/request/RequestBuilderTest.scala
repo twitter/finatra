@@ -2,7 +2,9 @@ package com.twitter.finatra.http.request
 
 import com.twitter.finagle.http.{Message, Method}
 import com.twitter.finagle.http.Method._
+import com.twitter.finatra.http.fileupload.MultipartItem
 import com.twitter.inject.Test
+import org.apache.commons.fileupload.util.FileItemHeadersImpl
 
 class RequestBuilderTest extends Test {
 
@@ -147,7 +149,43 @@ class RequestBuilderTest extends Test {
     request.headerMap("Content-Length") should be("24")
   }
 
-  def assertRequestWithBody(expectedMethod: Method, request: RequestBuilder): Unit = {
+  test("multipart/form-data request") {
+    def mkHeader(map: Map[String, String]) = {
+      val headers = new FileItemHeadersImpl
+      for ((key, value) <- map) {
+        headers.addHeader(key, value)
+      }
+      headers
+    }
+    val multipartItems = Seq(
+      MultipartItem(
+        data = "text".getBytes("utf-8"),
+        fieldName = "type",
+        isFormField = true,
+        contentType = None,
+        filename = None,
+        headers = mkHeader(Map("content-disposition" -> "form-data; name=\"true\""))
+      ),
+      MultipartItem(
+        data = "Submit".getBytes("utf-8"),
+        fieldName = "submit",
+        isFormField = true,
+        contentType = None,
+        filename = None,
+        headers = mkHeader(Map("content-disposition" -> "form-data; name=\"submit\""))
+      )
+    )
+    val request = RequestBuilder.post("/xyz.com").bodyMultipart(multipartItems)
+    request.method should be(Post)
+    request.headerMap("Content-Type") should startWith("multipart/form-data")
+
+    // a multipart request should be a Post request
+    intercept[IllegalArgumentException] {
+      RequestBuilder.get("/xyz.com").bodyMultipart(multipartItems)
+    }
+  }
+
+  private def assertRequestWithBody(expectedMethod: Method, request: RequestBuilder): Unit = {
     request.uri should be("/abc")
     request.method should be(expectedMethod)
 
