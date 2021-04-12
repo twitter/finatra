@@ -22,6 +22,9 @@ dependencies on the `inject` libraries as well as other libraries.
     be used directly and no guarantee is given as to the stability of their interfaces. Please do
     not use internal package namespaces directly.
 
+.. image:: ../../_static/framework.png
+   :alt: Diagram of the Finatra Framework
+
 Inject
 ------
 

@@ -10,7 +10,7 @@ Finatra recommends and integrates with the excellent |Mockito|_ Java mocking fra
 testing framework, however it is also recommended that users prefer |MockitoScala|_ for |Mockito|_ mocking in Scala over the `ScalaTest MockitoSugar <https://www.scalatest.org/user_guide/testing_with_mock_objects#mockito>`__ utility (which provides only basic syntax sugar for |Mockito|_).
 
 |c.t.util.mock.Mockito|_
----------------------
+------------------------
 
 |c.t.util.mock.Mockito|_ provides a |MockitoScala|_ integration for Scala users of the framework. Java
 users are encouraged to use |Mockito|_ directly. The |c.t.util.mock.Mockito|_ will work as a full
