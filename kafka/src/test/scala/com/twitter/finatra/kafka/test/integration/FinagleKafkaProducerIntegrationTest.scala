@@ -14,7 +14,6 @@ import com.twitter.finatra.kafka.producers.TracingKafkaProducer.{
   TraceIdHeader
 }
 import com.twitter.finatra.kafka.producers.{
-  FinagleKafkaProducer,
   FinagleKafkaProducerBuilder,
   TracingKafkaProducer,
   producerTracingEnabled
@@ -26,7 +25,7 @@ import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.inject.InMemoryStatsReceiverUtility
 import com.twitter.util.{Await, Duration, Time}
 import java.util.concurrent.TimeUnit
-import org.apache.kafka.clients.producer.{Callback, ProducerRecord}
+import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.Serdes
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers._
@@ -228,25 +227,10 @@ class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
     when(nullTracer.isActivelyTracing(any[TraceId])).thenReturn(true)
     val testTraceId = Trace.nextId.copy(_sampled = Some(true))
 
-    // need to capture the record that the underlying Kafka client sends as it
-    // is a copy of the original record and contains the tracing info, whereas
-    // the original record does not
-    val producerRecordsCaptor: ArgumentCaptor[ProducerRecord[String, String]] =
-      ArgumentCaptor.forClass(classOf[ProducerRecord[String, String]])
-    val kafkaProducerConfig = getTestProducerBuilder(NullStatsReceiver).config
-
-    val kafkaProducer =
-      spy(
-        TracingKafkaProducer(
-          kafkaProducerConfig.properties,
-          kafkaProducerConfig.keySerializer.get,
-          kafkaProducerConfig.valueSerializer.get))
-
     producerTracingEnabled.let(true) {
       Trace.letTracer(nullTracer) {
         Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, testTraceId) {
-          val producer =
-            new FinagleKafkaProducer[String, String](kafkaProducer, kafkaProducerConfig)
+          val producer = getTestProducer(NullStatsReceiver)
           try {
             await(producer.send(producerRecord))
           } finally {
@@ -256,9 +240,7 @@ class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
       }
     }
 
-    verify(kafkaProducer).send(producerRecordsCaptor.capture(), any[Callback])
-    val traceIdHeader =
-      producerRecordsCaptor.getValue.headers.asScala.find(_.key() == TraceIdHeader)
+    val traceIdHeader = producerRecord.headers.asScala.find(_.key() == TraceIdHeader)
     traceIdHeader should not be None
     traceIdHeader.value.value() shouldEqual TraceId.serialize(testTraceId)
 
@@ -293,22 +275,10 @@ class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
     when(nullTracer.isActivelyTracing(any[TraceId])).thenReturn(false)
     val testTraceId = Trace.nextId
 
-    val producerRecordsCaptor: ArgumentCaptor[ProducerRecord[String, String]] =
-      ArgumentCaptor.forClass(classOf[ProducerRecord[String, String]])
-    val kafkaProducerConfig = getTestProducerBuilder(NullStatsReceiver).config
-
-    val kafkaProducer =
-      spy(
-        TracingKafkaProducer(
-          kafkaProducerConfig.properties,
-          kafkaProducerConfig.keySerializer.get,
-          kafkaProducerConfig.valueSerializer.get))
-
     producerTracingEnabled.let(true) {
       Trace.letTracer(nullTracer) {
         Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, testTraceId) {
-          val producer =
-            new FinagleKafkaProducer[String, String](kafkaProducer, kafkaProducerConfig)
+          val producer = getTestProducer(NullStatsReceiver)
           try {
             await(producer.send(producerRecord))
           } finally {
@@ -318,9 +288,7 @@ class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
       }
     }
 
-    verify(kafkaProducer).send(producerRecordsCaptor.capture(), any[Callback])
-    val traceIdHeader =
-      producerRecordsCaptor.getValue.headers.asScala.find(_.key() == TraceIdHeader)
+    val traceIdHeader = producerRecord.headers.asScala.find(_.key() == TraceIdHeader)
     traceIdHeader shouldBe None
 
     verify(nullTracer, times(0)).record(any[Record])
@@ -337,22 +305,10 @@ class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
     when(nullTracer.isActivelyTracing(any[TraceId])).thenReturn(false)
     val testTraceId = Trace.nextId
 
-    val producerRecordsCaptor: ArgumentCaptor[ProducerRecord[String, String]] =
-      ArgumentCaptor.forClass(classOf[ProducerRecord[String, String]])
-    val kafkaProducerConfig = getTestProducerBuilder(NullStatsReceiver).config
-
-    val kafkaProducer =
-      spy(
-        TracingKafkaProducer(
-          kafkaProducerConfig.properties,
-          kafkaProducerConfig.keySerializer.get,
-          kafkaProducerConfig.valueSerializer.get))
-
     producerTracingEnabled.let(false) {
       Trace.letTracer(nullTracer) {
         Contexts.local.let(TracingKafkaProducer.TestTraceIdKey, testTraceId) {
-          val producer =
-            new FinagleKafkaProducer[String, String](kafkaProducer, kafkaProducerConfig)
+          val producer = getTestProducer(NullStatsReceiver)
           try {
             await(producer.send(producerRecord))
           } finally {
@@ -362,9 +318,7 @@ class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
       }
     }
 
-    verify(kafkaProducer).send(producerRecordsCaptor.capture(), any[Callback])
-    val traceIdHeader =
-      producerRecordsCaptor.getValue.headers.asScala.find(_.key() == TraceIdHeader)
+    val traceIdHeader = producerRecord.headers.asScala.find(_.key() == TraceIdHeader)
     traceIdHeader shouldBe None
 
     verify(nullTracer, times(0)).record(any[Record])

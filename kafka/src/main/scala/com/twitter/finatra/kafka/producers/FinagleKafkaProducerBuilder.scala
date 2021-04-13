@@ -41,7 +41,7 @@ case class FinagleKafkaProducerBuilder[K, V](
 
   def build(): FinagleKafkaProducer[K, V] = {
     validateConfigs(config)
-    FinagleKafkaProducer[K, V](config)
+    new FinagleKafkaProducer[K, V](config)
   }
 
   /**
