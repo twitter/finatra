@@ -18,6 +18,7 @@ object KafkaProducerConfig {
   def apply(): KafkaProducerConfig =
     new KafkaProducerConfig()
       .ackMode(AckMode.ALL) // kafka default is AckMode.ONE
+      .linger(5.milliseconds)
       .metricReporter[KafkaFinagleMetricsReporter]
       .metricsRecordingLevel(RecordingLevel.INFO)
       .metricsSampleWindow(60.seconds)
