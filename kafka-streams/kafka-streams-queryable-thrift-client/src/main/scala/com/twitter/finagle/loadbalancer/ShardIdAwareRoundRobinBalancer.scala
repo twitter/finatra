@@ -87,8 +87,6 @@ private final class ShardIdAwareRoundRobinBalancer[Req, Rep](
 
   override def newNode(factory: EndpointFactory[Req, Rep]): Node = new Node(factory)
 
-  override def failingNode(cause: Throwable): Node = new Node(new FailingEndpointFactory(cause))
-
   protected class Node(val factory: EndpointFactory[Req, Rep])
       extends ServiceFactoryProxy[Req, Rep](factory)
       with NodeT[Req, Rep] {
