@@ -339,9 +339,6 @@ And lastly, for the complete testing guide, see the Testing `table of contents <
 .. |c.t.app.App| replace:: `util-app App`
 .. _c.t.app.App: https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala
 
-.. |c.t.inject.app.App| replace:: ``c.t.inject.app.App``
-.. _c.t.inject.app.App: https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala
-
 .. |c.t.inject.Test| replace:: `c.t.inject.Test`
 .. _c.t.inject.Test: https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/Test.scala
 

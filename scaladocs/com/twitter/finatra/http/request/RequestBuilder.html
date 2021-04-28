@@ -532,6 +532,25 @@
       </span>
       
       
+    </li><li name="com.twitter.finatra.http.request.RequestBuilder#bodyMultipart" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bodyMultipart(items:Seq[com.twitter.finatra.http.fileupload.MultipartItem]):com.twitter.finatra.http.request.RequestBuilder"></a><a id="bodyMultipart(Seq[MultipartItem]):RequestBuilder"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/request/RequestBuilder.html#bodyMultipart(items:Seq[com.twitter.finatra.http.fileupload.MultipartItem]):com.twitter.finatra.http.request.RequestBuilder" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bodyMultipart</span><span class="params">(<span name="items">items: <a href="../../../../../scala/index.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<a href="../fileupload/MultipartItem.html" class="extype" name="com.twitter.finatra.http.fileupload.MultipartItem">MultipartItem</a>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.request.RequestBuilder">RequestBuilder</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Build a multipart/form-data POST request.</p><div class="fullcomment"><div class="comment cmt"><p>Build a multipart/form-data POST request.</p></div><dl class="paramcmts block"><dt class="param">items</dt><dd class="cmt"><p>a list of <span class="extype" name="MultipartItem">MultipartItem</span></p></dd><dt>returns</dt><dd class="cmt"><p>a RequestBuilder to build a multipart/form-data POST request</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>When using this api, the request must already be configured as
+      a Post request, otherwise an <span class="extype" name="IllegalArgumentException">IllegalArgumentException</span> will
+      be thrown.</p></span>, <span class="cmt"><p>This method isn't additive, when called multiple times, it will
+      override the content that was previously set on the request.</p></span></dd></dl></div>
     </li><li name="com.twitter.finagle.http.Message#cacheControl" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="cacheControl:Option[String]"></a>
       <span class="permalink">

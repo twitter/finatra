@@ -479,7 +479,7 @@ Use your new module as the implementation of `validatorModule` in your `server d
       }
     }
 
-.. import::
+.. important::
 
     By overriding the default `validatorModule` in an `HttpServer <../http/server.html#framework-modules>`__,
     you are also replacing the default `Validator` used by the `ScalaObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala>`__

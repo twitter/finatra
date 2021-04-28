@@ -167,7 +167,7 @@ your typed `Filter[-ReqIn, +RepOut, +ReqOut, -RepIn]` to your `Service[-ReqOut, 
         }
       }
 
-      handle(Echo).withService(new echoLoggingFilter.andThen(svc))
+      handle(Echo).withService(echoLoggingFilter.andThen(svc))
     }
 
 For more information on the `handle(ThriftMethod)` DSL of the Controller, see the documentation on `Thrift

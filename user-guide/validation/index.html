@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Validation Framework &#8212; Finatra 21.3.0 documentation</title>
+    <title>Validation Framework &#8212; Finatra 21.4.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -465,6 +465,15 @@ object CustomizedValidatorModule extends ValidatorModule {
   }
 }
 </pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>By overriding the default <cite>validatorModule</cite> in an <a class="reference external" href="../http/server.html#framework-modules">HttpServer</a>,
+you are also replacing the default <cite>Validator</cite> used by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala">ScalaObjectMapper</a>
+provided by the default framework <a class="reference external" href="https://github.com/twitter/finatra/blob/ef7197324cba8dfe6274ffb4570dea6c34b9fc33/http/src/main/scala/com/twitter/finatra/http/servers.scala#L526">jacksonModule</a>.</p>
+<p>The newly defined <cite>Validator</cite> will be used to apply the validation logic in the <a href="#id2"><span class="problematic" id="id3">`ScalaObjectMapper`__</span></a>.</p>
+<p class="last">See <a class="reference external" href="#integration-with-finatra-jackson-support">Integration with Finatra Jackson Support</a>
+for more information about how validations works in Finatra Jackson Framework.</p>
 </div>
 </div>
 <div class="section" id="integration-with-finatra-jackson-support">

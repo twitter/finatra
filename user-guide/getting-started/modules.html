@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Modules &#8212; Finatra 21.3.0 documentation</title>
+    <title>Modules &#8212; Finatra 21.4.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -673,8 +673,8 @@ as this will ensure that the lifecycle of a <cite>c.t.inject.TwitterModule</cite
 the Module is installed.</p>
 </div>
 </div>
-<div class="section" id="id6">
-<h2>Best Practices<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id4">
+<h2>Best Practices<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Do not install a <cite>TwitterModule</cite> within another Module via <cite>Module#configure</cite> using <a class="reference external" href="https://google.github.io/guice/api-docs/4.2/javadoc/com/google/inject/Binder.html#install-com.google.inject.Module-">Binder#install</a>.
 Installing a <cite>TwitterModule</cite> with this mechanism will skip all <a class="reference external" href="#module-lifecycle">lifecycle functions</a>
@@ -727,7 +727,7 @@ with <cite>TwitterModules</cite> as this will correctly handle the lifecycle and
 <li><a class="reference internal" href="#module-configuration-in-servers">Module Configuration in Servers</a></li>
 <li><a class="reference internal" href="#module-lifecycle">Module Lifecycle</a></li>
 <li><a class="reference internal" href="#modules-depending-on-other-modules">Modules Depending on Other Modules</a></li>
-<li><a class="reference internal" href="#id6">Best Practices</a></li>
+<li><a class="reference internal" href="#id4">Best Practices</a></li>
 </ul>
 </li>
 </ul>

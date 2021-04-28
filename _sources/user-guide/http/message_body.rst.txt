@@ -9,7 +9,7 @@ object ("message body reader") or how to transform a given type `T` into a |c.t.
 ("message body writer").
 
 `MessageBodyComponent <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyComponent.scala>`_
--------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 A |MessageBodyComponent| is a marker trait superclass of both |MessageBodyReader|_ and
 |MessageBodyWriter|_.
@@ -67,7 +67,7 @@ If a |MessageBodyReader|_ for the `MyModelObject` type cannot be found the `Defa
 implementation configured in the |MessageBodyManager|_ will be used.
 
 `DefaultMessageBodyReader <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyReader.scala>`_
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The framework provides a default |MessageBodyReader|_:
 |DefaultMessageBodyReader|_ which is invoked when a more specific
@@ -144,7 +144,7 @@ If a |MessageBodyWriter|_ for the `MyRenderableObjectType` type cannot be found 
 `DefaultMessageBodyWriter` implementation configured in the |MessageBodyManager|_ will be used.
 
 `DefaultMessageBodyWriter <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyWriter.scala>`_
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The framework provides a default |MessageBodyWriter|_: |DefaultMessageBodyWriter|_
 which is invoked when a more specific |MessageBodyWriter|_ cannot be found to convert given type `T`
@@ -232,7 +232,7 @@ Again, this happens when these types are returned from a route callback or when 
 to a function in the |ResponseBuilder|_.
 
 `MessageBodyManager <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyManager.scala>`_
----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 The |MessageBodyManager|_ registers message body components.
 
@@ -240,7 +240,7 @@ Generally, you will not need to interact directly with the manager because the |
 provides a DSL for registration of components to the bound |MessageBodyManager|_.
 
 `MessageBodyModule <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/modules/MessageBodyModule.scala>`_
----------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 The |DefaultMessageBodyReader|_, and the |DefaultMessageBodyWriter|_ are provided by the framework
 via configuration in the |MessageBodyModule|_.

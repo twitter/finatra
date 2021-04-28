@@ -18,14 +18,14 @@ base class which extends the capabilities of the excellent Scala extensions for 
 
     See the `Best Practices <#best-practices>`_ section for general guidelines on working with Modules in Finatra.
 
-Differences with Google Guice `Modules <https://github.com/google/guice/wiki/GettingStarted#guice-modules>`_
-------------------------------------------------------------------------------------------------------------
+Differences with Google Guice `Modules <https://github.com/google/guice/wiki/GettingStarted#guice-modules>`__
+-------------------------------------------------------------------------------------------------------------
 
 The `c.t.inject.TwitterModule <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModule.scala>`__
-differs from the regular Google Guice `Module <https://github.com/google/guice/wiki/GettingStarted#guice-modules>`_
+differs from the regular Google Guice `Module <https://github.com/google/guice/wiki/GettingStarted#guice-modules>`__
 in two important ways:
 
-- **It layers in the application lifecycle**. That is, a `TwitterModule` has `lifecycle functions <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala>`_
+- **It layers in the application lifecycle**. That is, a `TwitterModule` has `lifecycle functions <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala>`__
   which are exposed to users in order to tie Module behavior to the application `lifecycle <lifecycle.html>`__.
 
 - **Integration with** `Flags <flags.html>`__.

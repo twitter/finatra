@@ -2636,10 +2636,30 @@ of the server lifecycle.</p></span></dd></dl></div>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>App</dd></dl></div>
-    </li><li name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils#producerFlagWithKafkaDefault" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="producerFlagWithKafkaDefault[T](key:String)(implicitevidence$6:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="producerFlagWithKafkaDefault[T](String)(Flaggable[T]):Flag[T]"></a>
+    </li><li name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils#producerFlag" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="producerFlag[T](key:String,default:=&gt;T)(implicitevidence$6:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="producerFlag[T](String,⇒T)(Flaggable[T]):Flag[T]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslSampling.html#producerFlagWithKafkaDefault[T](key:String)(implicitevidence$6:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslSampling.html#producerFlag[T](key:String,default:=&gt;T)(implicitevidence$6:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">producerFlag</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="default">default: ⇒ <span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils.producerFlag.T">T</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flaggable.html#com.twitter.app.Flaggable" class="extype" name="com.twitter.app.Flaggable">Flaggable</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils.producerFlag.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[<span class="extype" name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils.producerFlag.T">T</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Create a flag prefixed by &quot;kafka.producer.&quot; with the specified default value and help string
+that is populated from the Kafka ProducerConfig class
+</p><div class="fullcomment"><div class="comment cmt"><p>Create a flag prefixed by &quot;kafka.producer.&quot; with the specified default value and help string
+that is populated from the Kafka ProducerConfig class
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>Type of the flag value</p></dd><dt class="param">key</dt><dd class="cmt"><p>Name of the KafkaStreams flag as specified in the ProducerConfig class</p></dd><dt class="param">default</dt><dd class="cmt"><p>Default value for this flag</p></dd><dt>returns</dt><dd class="cmt"><p>Flag for the specified key</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>KafkaFlagUtils</dd></dl></div>
+    </li><li name="com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils#producerFlagWithKafkaDefault" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="producerFlagWithKafkaDefault[T](key:String)(implicitevidence$7:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="producerFlagWithKafkaDefault[T](String)(Flaggable[T]):Flag[T]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafkastreams/dsl/FinatraDslSampling.html#producerFlagWithKafkaDefault[T](key:String)(implicitevidence$7:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
