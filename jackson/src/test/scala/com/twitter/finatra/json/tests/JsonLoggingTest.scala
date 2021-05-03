@@ -16,21 +16,49 @@ object JsonLoggingTest {
 class JsonLoggingTest extends Test with JsonLogging {
   import JsonLoggingTest._
 
-  test("json logging") {
-    val fooBar = FooBar("steve")
-    infoJson("foo", fooBar)
-    infoPretty("foo", fooBar)
+  // Set SLFJ Simple Logger log level to Info
+  System.setProperty("org.slf4j.simpleLogger.log.com.twitter.finatra.json.tests", "info")
 
-    debugJson("foo", fooBar)
-    debugPretty("foo", fooBar)
+  test("log params should be evaluated for log levels >= the configured info level") {
+    var msgCalled = 0
+    def msg: String = {
+      msgCalled += 1
+      "foo"
+    }
 
-    traceJson("foo", fooBar)
-    tracePretty("foo", fooBar)
+    var fooBarCalled = 0
+    def fooBar: FooBar = {
+      fooBarCalled += 1
+      FooBar("steve")
+    }
 
-    warnJson("foo", fooBar)
-    warnPretty("foo", fooBar)
+    infoJson(msg, fooBar)
+    infoPretty(msg, fooBar)
 
-    errorJson("foo", fooBar)
-    errorPretty("foo", fooBar)
+    warnJson(msg, fooBar)
+    warnPretty(msg, fooBar)
+
+    errorJson(msg, fooBar)
+    errorPretty(msg, fooBar)
+
+    msgCalled should be(6)
+    fooBarCalled should be(6)
+  }
+
+  test("log params should *not* be evaluated for log levels < the configured info level") {
+    def msg: String = {
+      fail("msg param should not be executed based on the configured log level")
+      "foo"
+    }
+    def fooBar: FooBar = {
+      fail("msg param should not be executed based on the configured log level")
+      FooBar("steve")
+    }
+
+    debugJson(msg, fooBar)
+    debugPretty(msg, fooBar)
+
+    traceJson(msg, fooBar)
+    tracePretty(msg, fooBar)
   }
 }

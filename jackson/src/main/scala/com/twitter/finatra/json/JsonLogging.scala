@@ -21,63 +21,53 @@ trait JsonLogging extends Logging {
 
   /* Protected */
 
-  protected def infoJson[T](msg: => Any, arg: T): T = {
-    logger.info(jsonMessage(msg, arg))
-    arg
+  protected def infoJson(msg: => Any, arg: => Any): Unit = {
+    info(jsonMessage(msg, arg))
   }
 
-  protected def infoPretty[T](msg: => Any, arg: T): T = {
-    logger.info(jsonPrettyMessage(msg, arg))
-    arg
+  protected def infoPretty(msg: => Any, arg: => Any): Unit = {
+    info(jsonPrettyMessage(msg, arg))
   }
 
-  protected def warnJson[T](msg: => Any, arg: T): T = {
-    logger.warn(jsonMessage(msg, arg))
-    arg
+  protected def warnJson(msg: => Any, arg: => Any): Unit = {
+    warn(jsonMessage(msg, arg))
   }
 
-  protected def warnPretty[T](msg: => Any, arg: T): T = {
-    logger.warn(jsonPrettyMessage(msg, arg))
-    arg
+  protected def warnPretty(msg: => Any, arg: => Any): Unit = {
+    warn(jsonPrettyMessage(msg, arg))
   }
 
-  protected def debugJson[T](msg: => Any, arg: T): T = {
-    logger.debug(jsonMessage(msg, arg))
-    arg
+  protected def debugJson(msg: => Any, arg: => Any): Unit = {
+    debug(jsonMessage(msg, arg))
   }
 
-  protected def debugPretty[T](msg: => Any, arg: T): T = {
-    logger.debug(jsonPrettyMessage(msg, arg))
-    arg
+  protected def debugPretty(msg: => Any, arg: => Any): Unit = {
+    debug(jsonPrettyMessage(msg, arg))
   }
 
-  protected def errorJson[T](msg: => Any, arg: T): T = {
-    logger.error(jsonMessage(msg, arg))
-    arg
+  protected def errorJson(msg: => Any, arg: => Any): Unit = {
+    error(jsonMessage(msg, arg))
   }
 
-  protected def errorPretty[T](msg: => Any, arg: T): T = {
-    logger.error(jsonPrettyMessage(msg, arg))
-    arg
+  protected def errorPretty(msg: => Any, arg: => Any): Unit = {
+    error(jsonPrettyMessage(msg, arg))
   }
 
-  protected def traceJson[T](msg: => Any, arg: T): T = {
-    logger.trace(jsonMessage(msg, arg))
-    arg
+  protected def traceJson(msg: => Any, arg: => Any): Unit = {
+    trace(jsonMessage(msg, arg))
   }
 
-  protected def tracePretty[T](msg: => Any, arg: T): T = {
-    logger.trace(jsonPrettyMessage(msg, arg))
-    arg
+  protected def tracePretty(msg: => Any, arg: => Any): Unit = {
+    trace(jsonPrettyMessage(msg, arg))
   }
 
   /* Private */
 
-  private def jsonMessage(msg: => Any, arg: Any): String = {
+  private def jsonMessage(msg: => Any, arg: => Any): String = {
     msg + logMapper.writeValueAsString(arg)
   }
 
-  private def jsonPrettyMessage(msg: => Any, arg: Any): String = {
+  private def jsonPrettyMessage(msg: => Any, arg: => Any): String = {
     msg + logMapper.writePrettyString(arg)
   }
 }

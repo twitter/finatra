@@ -7,6 +7,12 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+
+* finatra-jackson: (BREAKING API CHANGE) JsonLogging should use the lazy Scala SLF4J logger
+  and no longer return the passed in argument that's logged as JSON
+  
 21.4.0
 ------
 
