@@ -1,6 +1,6 @@
 package com.twitter.finatra.validation.tests.constraints
 
-import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
+import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode}
 import com.twitter.finatra.validation.constraints.{CountryCode, CountryCodeConstraintValidator}
 import com.twitter.finatra.validation.tests.caseclasses.{
   CountryCodeArrayExample,
@@ -8,9 +8,11 @@ import com.twitter.finatra.validation.tests.caseclasses.{
   CountryCodeInvalidTypeExample,
   CountryCodeSeqExample
 }
-import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode, ValidationResult}
+import com.twitter.util.validation.conversions.ConstraintViolationOps._
+import jakarta.validation.ConstraintViolation
 import java.util.Locale
 import org.scalacheck.Gen
+import org.scalacheck.Shrink.shrinkAny
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 class CountryCodeConstraintValidatorTest
@@ -21,15 +23,19 @@ class CountryCodeConstraintValidatorTest
 
   test("pass validation for valid country code") {
     countryCodes.foreach { value =>
-      validate[CountryCodeExample](value).isInstanceOf[Valid] shouldBe true
+      validate[CountryCodeExample](value).isEmpty should be(true)
     }
   }
 
   test("fail validation for invalid country code") {
     forAll(genFakeCountryCode) { value =>
-      validate[CountryCodeExample](value) should equal(
-        Invalid(errorMessage(value), ErrorCode.InvalidCountryCodes(Set(value)))
-      )
+      val violations = validate[CountryCodeExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("countryCode")
+      violations.head.getMessage should be(errorMessage(violations.head.getInvalidValue))
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.InvalidCountryCodes])
+      payload.isDefined should be(true)
+      payload.get.codes.isEmpty should be(false)
     }
   }
 
@@ -37,22 +43,26 @@ class CountryCodeConstraintValidatorTest
     val passValue = Gen.containerOf[Seq, String](Gen.oneOf(countryCodes))
 
     forAll(passValue) { value =>
-      validate[CountryCodeSeqExample](value).isInstanceOf[Valid] shouldBe true
+      validate[CountryCodeSeqExample](value).isEmpty should be(true)
     }
   }
 
   test("pass validation for empty seq") {
     val emptyValue = Seq.empty
-    validate[CountryCodeSeqExample](emptyValue).isInstanceOf[Valid] shouldBe true
+    validate[CountryCodeSeqExample](emptyValue).isEmpty should be(true)
   }
 
   test("fail validation for invalid country codes in seq") {
     val failValue = Gen.nonEmptyContainerOf[Seq, String](genFakeCountryCode)
 
     forAll(failValue) { value =>
-      validate[CountryCodeSeqExample](value) should equal(
-        Invalid(errorMessage(value), ErrorCode.InvalidCountryCodes(value.toSet))
-      )
+      val violations = validate[CountryCodeSeqExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("countryCode")
+      violations.head.getMessage should be(errorMessage(violations.head.getInvalidValue))
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.InvalidCountryCodes])
+      payload.isDefined should be(true)
+      payload.get.codes.isEmpty should be(false)
     }
   }
 
@@ -60,7 +70,7 @@ class CountryCodeConstraintValidatorTest
     val passValue = Gen.containerOf[Array, String](Gen.oneOf(countryCodes))
 
     forAll(passValue) { value =>
-      validate[CountryCodeArrayExample](value).isInstanceOf[Valid] shouldBe true
+      validate[CountryCodeArrayExample](value).isEmpty should be(true)
     }
   }
 
@@ -68,9 +78,13 @@ class CountryCodeConstraintValidatorTest
     val failValue = Gen.nonEmptyContainerOf[Array, String](genFakeCountryCode)
 
     forAll(failValue) { value =>
-      validate[CountryCodeArrayExample](value) should equal(
-        Invalid(errorMessage(value), ErrorCode.InvalidCountryCodes(value.toSet))
-      )
+      val violations = validate[CountryCodeArrayExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("countryCode")
+      violations.head.getMessage should be(errorMessage(violations.head.getInvalidValue))
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.InvalidCountryCodes])
+      payload.isDefined should be(true)
+      payload.get.codes.isEmpty should be(false)
     }
   }
 
@@ -78,9 +92,13 @@ class CountryCodeConstraintValidatorTest
     val failValue = Gen.choose[Int](0, 100)
 
     forAll(failValue) { value =>
-      validate[CountryCodeInvalidTypeExample](value) should equal(
-        Invalid(errorMessage(value), ErrorCode.InvalidCountryCodes(Set(value.toString)))
-      )
+      val violations = validate[CountryCodeInvalidTypeExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("countryCode")
+      violations.head.getMessage should be(errorMessage(violations.head.getInvalidValue))
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.InvalidCountryCodes])
+      payload.isDefined should be(true)
+      payload.get.codes.isEmpty should be(false)
     }
   }
 
@@ -89,14 +107,15 @@ class CountryCodeConstraintValidatorTest
     Gen
       .nonEmptyContainerOf[Seq, Char](Gen.alphaUpperChar)
       .map(_.mkString)
+      .filter(_.nonEmpty)
       .filter(!countryCodes.contains(_))
   }
 
-  private def validate[C: Manifest](value: Any): ValidationResult = {
-    super.validate(manifest[C].runtimeClass, "countryCode", classOf[CountryCode], value)
+  private def validate[T: Manifest](value: Any): Set[ConstraintViolation[T]] = {
+    super.validate[CountryCode, T](manifest[T].runtimeClass, "countryCode", value)
   }
 
   private def errorMessage(value: Any): String = {
-    CountryCodeConstraintValidator.errorMessage(messageResolver, value)
+    s"[${CountryCodeConstraintValidator.toErrorValue(value)}] is not a valid country code"
   }
 }

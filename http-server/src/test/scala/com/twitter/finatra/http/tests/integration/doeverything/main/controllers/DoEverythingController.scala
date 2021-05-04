@@ -31,6 +31,7 @@ import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.json.annotations.CamelCaseMapper
 import com.twitter.inject.annotations.Flag
 import com.twitter.util.Future
+import jakarta.validation.ValidationException
 import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.ThreadLocalRandom
@@ -848,7 +849,7 @@ class DoEverythingController @Inject() (
     try {
       response.ok(objectMapper.parse[InvalidValidationRequest](request.contentString))
     } catch {
-      case e: IllegalArgumentException =>
+      case e: ValidationException =>
         // want to return the actual error to the client for testing against this case
         response.internalServerError(e.getMessage)
     }

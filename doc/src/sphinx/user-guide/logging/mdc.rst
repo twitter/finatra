@@ -54,7 +54,7 @@ MDC functionality and configuration in Logback.
 `LoggingMDCFilter`
 ------------------
 
-This MDC Filter initialization integration is already provided by either the http `LoggingMDCFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/LoggingMDCFilter.scala>`__
+This MDC Filter initialization integration is already provided by either the http `LoggingMDCFilter <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/LoggingMDCFilter.scala>`__
 or the thrift `LoggingMDCFilter <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/LoggingMDCFilter.scala>`__
 which can then be included in your server Filter chain.
 
@@ -70,7 +70,7 @@ Here's an example Logback `configuration <https://github.com/twitter/finatra/blo
 which references the contextual key `traceId` which will be logged with every statement sent to a Logback
 `Appender <https://logback.qos.ch/manual/appenders.html>`__. It is the responsibility of the
 application to populate the MDC with this contextual information. In this case, the `traceId` is
-added by including the http `TraceIdMDCLoggingFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/TraceIdMDCFilter.scala>`__
+added by including the http `TraceIdMDCLoggingFilter <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/TraceIdMDCFilter.scala>`__
 (there is also a thrift `TraceIdMDCLoggingFilter <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/TraceIdMDCFilter.scala>`__).
 
 In a server definition, the `LoggingMDCFilter` must be listed before the `TraceIdMDCLoggingFilter`,

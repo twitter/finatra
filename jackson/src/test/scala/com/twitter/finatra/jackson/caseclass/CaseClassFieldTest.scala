@@ -10,9 +10,9 @@ import com.twitter.finatra.jackson.{
   ScalaObjectMapper,
   TestInjectableValue
 }
-import com.twitter.finatra.validation.Validator
 import com.twitter.finatra.validation.constraints.NotEmpty
 import com.twitter.inject.Test
+import com.twitter.util.validation.ScalaValidator
 
 class CaseClassFieldTest extends Test {
   private[this] val mapper: JacksonScalaObjectMapperType =
@@ -217,7 +217,7 @@ class CaseClassFieldTest extends Test {
       mapper.getDeserializationConfig,
       mapper.getDeserializationConfig.introspect(javaType),
       NullInjectableTypes,
-      Some(Validator())
+      Some(ScalaValidator())
     )
   }
 }

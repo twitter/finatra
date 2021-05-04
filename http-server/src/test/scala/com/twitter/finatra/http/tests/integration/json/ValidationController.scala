@@ -4,11 +4,12 @@ import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassMappingException
-import com.twitter.finatra.validation.{ValidationException, Validator}
+import com.twitter.util.validation.ScalaValidator
+import jakarta.validation.ValidationException
 import javax.inject.Inject
 
 class ValidationController @Inject() (
-  validator: Validator,
+  validator: ScalaValidator,
   scalaObjectMapper: ScalaObjectMapper)
     extends Controller {
 

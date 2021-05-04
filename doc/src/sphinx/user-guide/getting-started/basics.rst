@@ -14,7 +14,7 @@ With that, a great place to start on understanding the reasoning behind `Depende
 .. attention::
   You are **not required** to use Google `Guice <https://github.com/google/guice>`__ `Dependency Injection <https://en.wikipedia.org/wiki/Dependency_injection>`_ when using Finatra. Creating servers, wiring in controllers and applying filters can all be done without using any dependency injection. However, you will not be able to take full-advantage of Finatra's `testing <../testing/index.html>`__ features.
 
-A simple example of Finatra's `Dependency Injection <https://en.wikipedia.org/wiki/Dependency_injection>`_  integration is adding controllers to Finatra's `HttpRouter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__ *by type*:
+A simple example of Finatra's `Dependency Injection <https://en.wikipedia.org/wiki/Dependency_injection>`_  integration is adding controllers to Finatra's `HttpRouter <https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__ *by type*:
 
 .. code:: scala
 

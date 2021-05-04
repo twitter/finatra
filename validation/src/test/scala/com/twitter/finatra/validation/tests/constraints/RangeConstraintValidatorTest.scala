@@ -1,10 +1,16 @@
 package com.twitter.finatra.validation.tests.constraints
 
-import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
-import com.twitter.finatra.validation.constraints.{Range, RangeConstraintValidator}
+import com.twitter.finatra.validation.constraints.Range
 import com.twitter.finatra.validation.tests.caseclasses._
-import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode, ValidationResult}
+import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode}
+import com.twitter.util.validation.conversions.ConstraintViolationOps.RichConstraintViolation
+import jakarta.validation.{
+  ConstraintDefinitionException,
+  ConstraintViolation,
+  UnexpectedTypeException
+}
 import org.scalacheck.Gen
+import org.scalacheck.Shrink.shrinkAny
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 class RangeConstraintValidatorTest
@@ -15,7 +21,7 @@ class RangeConstraintValidatorTest
     val passValue = Gen.choose(1, 50)
 
     forAll(passValue) { value =>
-      validate[RangeIntExample](value).isInstanceOf[Valid] shouldBe true
+      validate[RangeIntExample](value).isEmpty shouldBe true
     }
   }
 
@@ -25,7 +31,18 @@ class RangeConstraintValidatorTest
     val failValue = Gen.frequency((1, smallerValue), (1, largerValue))
 
     forAll(failValue) { value =>
-      validate[RangeIntExample](value) should equal(invalid(Integer.valueOf(value)))
+      val violations =
+        validate[RangeIntExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("pointValue")
+      violations.head.getMessage shouldBe errorMessage(
+        Integer.valueOf(value),
+        minValue = 1,
+        maxValue = 50)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueOutOfRange])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(Integer.valueOf(value), minValue = 1, maxValue = 50)
     }
   }
 
@@ -33,7 +50,7 @@ class RangeConstraintValidatorTest
     val passValue = Gen.choose(1L, 50L)
 
     forAll(passValue) { value =>
-      validate[RangeLongExample](value).isInstanceOf[Valid] shouldBe true
+      validate[RangeLongExample](value).isEmpty shouldBe true
     }
   }
 
@@ -43,7 +60,17 @@ class RangeConstraintValidatorTest
     val failValue = Gen.frequency((1, smallerValue), (1, largerValue))
 
     forAll(failValue) { value =>
-      validate[RangeLongExample](value) should equal(invalid(java.lang.Long.valueOf(value)))
+      val violations = validate[RangeLongExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("pointValue")
+      violations.head.getMessage shouldBe errorMessage(
+        java.lang.Long.valueOf(value),
+        minValue = 1,
+        maxValue = 50)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueOutOfRange])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(java.lang.Long.valueOf(value), minValue = 1, maxValue = 50)
     }
   }
 
@@ -51,7 +78,7 @@ class RangeConstraintValidatorTest
     val passValue = Gen.choose(1.0, 50.0)
 
     forAll(passValue) { value =>
-      validate[RangeDoubleExample](value).isInstanceOf[Valid] shouldBe true
+      validate[RangeDoubleExample](value).isEmpty shouldBe true
     }
   }
 
@@ -61,7 +88,18 @@ class RangeConstraintValidatorTest
     val failValue = Gen.frequency((1, smallerValue), (1, largerValue))
 
     forAll(failValue) { value =>
-      validate[RangeDoubleExample](value) should equal(invalid(java.lang.Double.valueOf(value)))
+      val violations =
+        validate[RangeDoubleExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("pointValue")
+      violations.head.getMessage shouldBe errorMessage(
+        java.lang.Double.valueOf(value),
+        minValue = 1,
+        maxValue = 50)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueOutOfRange])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(value, minValue = 1, maxValue = 50)
     }
   }
 
@@ -69,7 +107,7 @@ class RangeConstraintValidatorTest
     val passValue = Gen.choose(1.0F, 50.0F)
 
     forAll(passValue) { value =>
-      validate[RangeFloatExample](value).isInstanceOf[Valid] shouldBe true
+      validate[RangeFloatExample](value).isEmpty shouldBe true
     }
   }
 
@@ -79,7 +117,20 @@ class RangeConstraintValidatorTest
     val failValue = Gen.frequency((1, smallerValue), (1, largerValue))
 
     forAll(failValue) { value =>
-      validate[RangeFloatExample](value) should equal(invalid(java.lang.Float.valueOf(value)))
+      val violations = validate[RangeFloatExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("pointValue")
+      violations.head.getMessage shouldBe errorMessage(
+        java.lang.Float.valueOf(value),
+        minValue = 1,
+        maxValue = 50)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueOutOfRange])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(
+        java.lang.Double.valueOf(value.toString),
+        minValue = 1,
+        maxValue = 50)
     }
   }
 
@@ -89,7 +140,7 @@ class RangeConstraintValidatorTest
     } yield BigDecimal(double)
 
     forAll(passBigDecimalValue) { value =>
-      validate[RangeBigDecimalExample](value).isInstanceOf[Valid] shouldBe true
+      validate[RangeBigDecimalExample](value).isEmpty shouldBe true
     }
   }
 
@@ -100,7 +151,14 @@ class RangeConstraintValidatorTest
     val failBigDecimalValue = for { value <- failValue } yield BigDecimal.decimal(value)
 
     forAll(failBigDecimalValue) { value =>
-      validate[RangeBigDecimalExample](value) should equal(invalid(value))
+      val violations = validate[RangeBigDecimalExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("pointValue")
+      violations.head.getMessage shouldBe errorMessage(value, minValue = 1, maxValue = 50)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueOutOfRange])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(value.toDouble, minValue = 1, maxValue = 50)
     }
   }
 
@@ -110,7 +168,7 @@ class RangeConstraintValidatorTest
     } yield BigInt(int)
 
     forAll(passBigIntValue) { value =>
-      validate[RangeBigIntExample](value).isInstanceOf[Valid] shouldBe true
+      validate[RangeBigIntExample](value).isEmpty shouldBe true
     }
   }
 
@@ -121,7 +179,14 @@ class RangeConstraintValidatorTest
     val failBigIntValue = for { value <- failValue } yield BigInt(value)
 
     forAll(failBigIntValue) { value =>
-      validate[RangeBigIntExample](value) should equal(invalid(value))
+      val violations = validate[RangeBigIntExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("pointValue")
+      violations.head.getMessage shouldBe errorMessage(value, minValue = 1, maxValue = 50)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueOutOfRange])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(value, minValue = 1, maxValue = 50)
     }
   }
 
@@ -131,15 +196,23 @@ class RangeConstraintValidatorTest
     } yield BigDecimal(double)
 
     forAll(passBigDecimalValue) { value =>
-      validate[RangeLargestLongBigDecimalExample](value).isInstanceOf[Valid] shouldBe true
+      validate[RangeLargestLongBigDecimalExample](value).isEmpty shouldBe true
     }
   }
 
   test("fail validation for very large big decimal type") {
     val value = BigDecimal(Long.MaxValue)
-    validate[RangeSecondLargestLongBigDecimalExample](value) should equal(
-      invalid(value, maxValue = Long.MaxValue - 1)
-    )
+    val violations = validate[RangeSecondLargestLongBigDecimalExample](value)
+    violations.size should equal(1)
+    violations.head.getPropertyPath.toString should equal("pointValue")
+    violations.head.getMessage shouldBe errorMessage(
+      value,
+      minValue = 1,
+      maxValue = Long.MaxValue - 1)
+    violations.head.getInvalidValue shouldBe value
+    val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueOutOfRange])
+    payload.isDefined shouldBe true
+    payload.get shouldBe errorCode(value, minValue = 1, maxValue = Long.MaxValue - 1)
   }
 
   test("pass validation for very large big int type") {
@@ -148,15 +221,23 @@ class RangeConstraintValidatorTest
     } yield BigInt(int)
 
     forAll(passBigIntValue) { value =>
-      validate[RangeLargestLongBigIntExample](value).isInstanceOf[Valid] shouldBe true
+      validate[RangeLargestLongBigIntExample](value).isEmpty shouldBe true
     }
   }
 
   test("fail validation for very large big int type") {
     val value = BigInt(Long.MaxValue)
-    validate[RangeSecondLargestLongBigIntExample](value) should equal(
-      invalid(value, maxValue = Long.MaxValue - 1)
-    )
+    val violations = validate[RangeSecondLargestLongBigIntExample](value)
+    violations.size should equal(1)
+    violations.head.getPropertyPath.toString should equal("pointValue")
+    violations.head.getMessage shouldBe errorMessage(
+      value,
+      minValue = 1,
+      maxValue = Long.MaxValue - 1)
+    violations.head.getInvalidValue shouldBe value
+    val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueOutOfRange])
+    payload.isDefined shouldBe true
+    payload.get shouldBe errorCode(value, minValue = 1, maxValue = Long.MaxValue - 1)
   }
 
   test("pass validation for very small big int type") {
@@ -165,15 +246,23 @@ class RangeConstraintValidatorTest
     } yield BigInt(int)
 
     forAll(passBigIntValue) { value =>
-      validate[RangeSmallestLongBigIntExample](value).isInstanceOf[Valid] shouldBe true
+      validate[RangeSmallestLongBigIntExample](value).isEmpty shouldBe true
     }
   }
 
   test("fail validation for very small big int type") {
     val value = BigInt(Long.MinValue)
-    validate[RangeSecondSmallestLongBigIntExample](value) should equal(
-      invalid(value, minValue = Long.MinValue + 1, maxValue = 5)
-    )
+    val violations = validate[RangeSecondSmallestLongBigIntExample](value)
+    violations.size should equal(1)
+    violations.head.getPropertyPath.toString should equal("pointValue")
+    violations.head.getMessage shouldBe errorMessage(
+      value,
+      minValue = Long.MinValue + 1,
+      maxValue = 5)
+    violations.head.getInvalidValue shouldBe value
+    val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueOutOfRange])
+    payload.isDefined shouldBe true
+    payload.get shouldBe errorCode(value, minValue = Long.MinValue + 1, maxValue = 5)
   }
 
   test("pass validation for very small big decimal type") {
@@ -182,39 +271,45 @@ class RangeConstraintValidatorTest
     } yield BigDecimal(double)
 
     forAll(passBigDecimalValue) { value =>
-      validate[RangeSmallestLongBigDecimalExample](value).isInstanceOf[Valid] shouldBe true
+      validate[RangeSmallestLongBigDecimalExample](value).isEmpty shouldBe true
     }
   }
 
   test("fail validation for a very small big decimal type") {
     val value = BigDecimal(Long.MinValue)
-    validate[RangeSecondSmallestLongBigDecimalExample](value) should equal(
-      invalid(value, minValue = Long.MinValue + 1, maxValue = 5)
-    )
+    val violations = validate[RangeSecondSmallestLongBigDecimalExample](value)
+    violations.size should equal(1)
+    violations.head.getPropertyPath.toString should equal("pointValue")
+    violations.head.getMessage shouldBe errorMessage(
+      value,
+      minValue = Long.MinValue + 1,
+      maxValue = 5)
+    violations.head.getInvalidValue shouldBe value
+    val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueOutOfRange])
+    payload.isDefined shouldBe true
+    payload.get shouldBe errorCode(value, minValue = Long.MinValue + 1, maxValue = 5)
   }
 
   test("fail for unsupported class type") {
-    intercept[IllegalArgumentException] {
+    intercept[UnexpectedTypeException] {
       validate[RangeInvalidTypeExample]("strings are not supported")
     }
   }
 
   test("fail for invalid range") {
-    val e = intercept[IllegalArgumentException] {
+    val e = intercept[ConstraintDefinitionException] {
       validate[RangeInvalidRangeExample](3)
     }
     e.getMessage should be("invalid range: 5 > 1")
   }
 
-  private def validate[T: Manifest](value: Any): ValidationResult =
-    super.validate(manifest[T].runtimeClass, "pointValue", classOf[Range], value)
+  private def validate[T: Manifest](value: Any): Set[ConstraintViolation[T]] = {
+    super.validate[Range, T](manifest[T].runtimeClass, "pointValue", value)
+  }
 
   private def errorMessage(value: Number, minValue: Long, maxValue: Long): String =
-    RangeConstraintValidator.errorMessage(messageResolver, value, minValue, maxValue)
+    s"[${value.toString}] is not between $minValue and $maxValue"
 
   private def errorCode(value: Number, minValue: Long, maxValue: Long): ErrorCode =
-    ErrorCode.ValueOutOfRange(java.lang.Long.valueOf(value.longValue), minValue, maxValue)
-
-  private def invalid(value: Number, minValue: Long = 1, maxValue: Long = 50): Invalid =
-    Invalid(errorMessage(value, minValue, maxValue), errorCode(value, minValue, maxValue))
+    ErrorCode.ValueOutOfRange(value.doubleValue(), minValue, maxValue)
 }

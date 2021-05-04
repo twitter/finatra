@@ -1,15 +1,17 @@
 package com.twitter.finatra.validation.tests
 
-import com.twitter.finatra.validation.Validator
 import com.twitter.finatra.validation.tests.caseclasses._
 import com.twitter.inject.Test
 import com.twitter.inject.conversions.time._
+import com.twitter.util.validation.ScalaValidator
 import java.util.UUID
 import org.joda.time.DateTime
 
 class CascadedValidationsTest extends Test with AssertValidation {
 
-  override protected val validator: Validator = Validator.builder.build()
+  override protected val validator: ScalaValidator =
+    ScalaValidator.builder.validator
+
   private[this] val DefaultAddress =
     Address(line1 = "1234 Main St", city = "Anywhere", state = "CA", zipcode = "94102")
 
@@ -37,12 +39,12 @@ class CascadedValidationsTest extends Test with AssertValidation {
         )
       ),
       withErrors = Seq(
-        "car.owners.person.0.name: cannot be empty",
-        "car.ownershipEnd: %s [%s] must be after %s [%s]"
+        "car.owners[0].name: cannot be empty",
+        "car.ownershipTimesValid.ownershipEnd: %s [%s] must be after %s [%s]"
           .format("ownershipEnd", end.utcIso8601, "ownershipStart", start.utcIso8601),
         "car.validateId: id may not be even",
-        "car.warrantyEnd: both warrantyStart and warrantyEnd are required for a valid range",
-        "car.warrantyStart: both warrantyStart and warrantyEnd are required for a valid range",
+        "car.warrantyTimeValid.warrantyEnd: both warrantyStart and warrantyEnd are required for a valid range",
+        "car.warrantyTimeValid.warrantyStart: both warrantyStart and warrantyEnd are required for a valid range",
         "car.year: [1970] is not greater than or equal to 2000"
       )
     )
@@ -64,11 +66,11 @@ class CascadedValidationsTest extends Test with AssertValidation {
         warrantyEnd = Some(end)
       ),
       withErrors = Seq(
-        "ownershipEnd: %s [%s] must be after %s [%s]"
+        "ownershipTimesValid.ownershipEnd: %s [%s] must be after %s [%s]"
           .format("ownershipEnd", end.utcIso8601, "ownershipStart", start.utcIso8601),
         "validateId: id may not be even",
-        "warrantyEnd: both warrantyStart and warrantyEnd are required for a valid range",
-        "warrantyStart: both warrantyStart and warrantyEnd are required for a valid range",
+        "warrantyTimeValid.warrantyEnd: both warrantyStart and warrantyEnd are required for a valid range",
+        "warrantyTimeValid.warrantyStart: both warrantyStart and warrantyEnd are required for a valid range",
         "year: [1970] is not greater than or equal to 2000"
       )
     )
@@ -125,12 +127,12 @@ class CascadedValidationsTest extends Test with AssertValidation {
         )
       ),
       withErrors = Seq(
-        "team.group.0.person.0.address.state: Please register with state CA",
-        "team.group.0.person.2.address.state: Please register with state CA",
-        "team.group.0.person.2.address: state must be specified",
-        "team.group.1.person.0.address.state: Please register with state CA",
-        "team.group.1.person.2.address.state: Please register with state CA",
-        "team.group.1.person.2.address: state must be specified"
+        "team[0].people[0].address.state: Please register with state CA",
+        "team[0].people[2].address.state: Please register with state CA",
+        "team[0].people[2].validateAddress.address: state must be specified",
+        "team[1].people[0].address.state: Please register with state CA",
+        "team[1].people[2].address.state: Please register with state CA",
+        "team[1].people[2].validateAddress.address: state must be specified"
       )
     )
   }
@@ -168,7 +170,7 @@ class CascadedValidationsTest extends Test with AssertValidation {
         "savings",
         Some(User("1", "", "Other"))
       ),
-      withErrors = Seq("customer.user.name: cannot be empty")
+      withErrors = Seq("customer.nameCheck.name: cannot be empty")
     )
   }
 
@@ -213,7 +215,7 @@ class CascadedValidationsTest extends Test with AssertValidation {
         job = ""),
       withErrors = Seq(
         "gender: [X] is not one of [F,M,Other]",
-        "job: cannot be empty",
+        "jobCheck.job: cannot be empty",
         "person.name: cannot be empty"
       )
     )
@@ -223,7 +225,7 @@ class CascadedValidationsTest extends Test with AssertValidation {
     assertValidation(
       obj = Persons(
         id = UUID.randomUUID().toString,
-        people = scala.collection.immutable.Seq(
+        people = Seq(
           Person(id = "1", name = "Peter", address = DefaultAddress),
           Person(id = "2", name = "Paul", address = DefaultAddress),
           Person(id = "3", name = "Mary", address = DefaultAddress)
@@ -241,7 +243,7 @@ class CascadedValidationsTest extends Test with AssertValidation {
           Person(id = "3", name = "Mary", address = DefaultAddress)
         )
       ),
-      withErrors = Seq("people.person.0.name: cannot be empty")
+      withErrors = Seq("people[0].name: cannot be empty")
     )
 
     // people Seq is empty which violates constraint
@@ -309,7 +311,7 @@ class CascadedValidationsTest extends Test with AssertValidation {
         )
       ),
       withErrors = Seq(
-        "bool: [false] is not true"
+        "bool: must be true"
       )
     )
 

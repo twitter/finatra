@@ -1,11 +1,13 @@
 package com.twitter.finatra.validation.tests.constraints
 
-import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
-import com.twitter.finatra.validation.constraints.{FutureTime, FutureTimeConstraintValidator}
+import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode}
+import com.twitter.finatra.validation.constraints.FutureTime
 import com.twitter.finatra.validation.tests.caseclasses.FutureExample
-import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode, ValidationResult}
+import com.twitter.util.validation.conversions.ConstraintViolationOps._
+import jakarta.validation.ConstraintViolation
 import org.joda.time.DateTime
 import org.scalacheck.Gen
+import org.scalacheck.Shrink.shrinkAny
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 class FutureConstraintValidatorTest
@@ -18,7 +20,7 @@ class FutureConstraintValidatorTest
 
     forAll(futureDateTimeMillis) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[FutureExample](dateTimeValue).isInstanceOf[Valid] shouldBe true
+      validate[FutureExample](dateTimeValue).isEmpty shouldBe true
     }
   }
 
@@ -28,17 +30,22 @@ class FutureConstraintValidatorTest
 
     forAll(passDateTimeMillis) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[FutureExample](dateTimeValue) should equal(
-        Invalid(errorMessage(dateTimeValue), ErrorCode.TimeNotFuture(dateTimeValue))
-      )
+      val violations = validate[FutureExample](dateTimeValue)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("dateTime")
+      violations.head.getMessage should be(errorMessage(violations.head.getInvalidValue))
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.TimeNotFuture])
+      payload.isDefined should be(true)
+      payload.get should equal(
+        ErrorCode.TimeNotFuture(violations.head.getInvalidValue.asInstanceOf[DateTime]))
     }
   }
 
-  private def validate[C: Manifest](value: DateTime): ValidationResult = {
-    super.validate(manifest[C].runtimeClass, "dateTime", classOf[FutureTime], value)
+  private def validate[T: Manifest](value: DateTime): Set[ConstraintViolation[T]] = {
+    super.validate[FutureTime, T](manifest[T].runtimeClass, "dateTime", value)
   }
 
-  private def errorMessage(value: DateTime) = {
-    FutureTimeConstraintValidator.errorMessage(messageResolver, value)
+  private def errorMessage(value: Any): String = {
+    s"[${value.toString}] is not in the future"
   }
 }

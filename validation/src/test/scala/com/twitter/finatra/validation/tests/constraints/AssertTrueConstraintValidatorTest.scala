@@ -1,10 +1,12 @@
 package com.twitter.finatra.validation.tests.constraints
 
-import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
-import com.twitter.finatra.validation.constraints.{AssertTrue, AssertTrueConstraintValidator}
 import com.twitter.finatra.validation.tests.caseclasses.AssertTrueExample
-import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode, ValidationResult}
+import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode}
+import com.twitter.finatra.validation.constraints.AssertTrue
+import com.twitter.util.validation.conversions.ConstraintViolationOps._
+import jakarta.validation.ConstraintViolation
 import org.scalacheck.Arbitrary
+import org.scalacheck.Shrink.shrinkAny
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 class AssertTrueConstraintValidatorTest
@@ -15,7 +17,7 @@ class AssertTrueConstraintValidatorTest
     val passValue = Arbitrary.arbBool.arbitrary.filter(_ == true)
 
     forAll(passValue) { value =>
-      validate[AssertTrueExample](value).isInstanceOf[Valid] shouldBe true
+      validate[AssertTrueExample](value).isEmpty should be(true)
     }
   }
 
@@ -23,17 +25,17 @@ class AssertTrueConstraintValidatorTest
     val failValue = Arbitrary.arbBool.arbitrary.filter(_ == false)
 
     forAll(failValue) { value =>
-      validate[AssertTrueExample](value) should equal(
-        Invalid(errorMessage(value), ErrorCode.InvalidBooleanValue(value))
-      )
+      val violations = validate[AssertTrueExample](value)
+      val violation = violations.head
+      violation.getPropertyPath.toString should equal("boolValue")
+      violation.getMessage should be("must be true")
+      val payload = violation.getDynamicPayload(classOf[ErrorCode.InvalidBooleanValue])
+      payload.isDefined should be(true)
+      payload.get should equal(ErrorCode.InvalidBooleanValue(false))
     }
   }
 
-  private def validate[C: Manifest](value: Any): ValidationResult = {
-    super.validate(manifest[C].runtimeClass, "boolValue", classOf[AssertTrue], value)
-  }
-
-  private def errorMessage(value: Boolean): String = {
-    AssertTrueConstraintValidator.errorMessage(messageResolver, value)
+  private def validate[T: Manifest](value: Boolean): Set[ConstraintViolation[T]] = {
+    super.validate[AssertTrue, T](manifest[T].runtimeClass, "boolValue", value)
   }
 }

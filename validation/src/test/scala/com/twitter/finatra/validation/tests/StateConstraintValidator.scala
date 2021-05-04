@@ -1,13 +1,13 @@
 package com.twitter.finatra.validation.tests
 
-import com.twitter.finatra.validation.{ConstraintValidator, MessageResolver, ValidationResult}
+import jakarta.validation.{ConstraintValidator, ConstraintValidatorContext}
 
-class StateConstraintValidator(messageResolver: MessageResolver)
-    extends ConstraintValidator[StateConstraint, String](messageResolver) {
+class StateConstraintValidator extends ConstraintValidator[StateConstraint, String] {
 
-  override def isValid(annotation: StateConstraint, value: String): ValidationResult =
-    ValidationResult.validate(
-      value.equalsIgnoreCase("CA"),
-      "Please register with state CA"
-    )
+  override def isValid(
+    obj: String,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean = {
+    obj.equalsIgnoreCase("CA")
+  }
 }

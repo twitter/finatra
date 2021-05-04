@@ -10,7 +10,9 @@ scala_library(
     dependencies = [
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
         "3rdparty/jvm/com/google/inject:guice",
+        "3rdparty/jvm/jakarta/validation:jakarta.validation-api",
         "finatra/json-annotations/src/main/java/com/twitter/finatra/json/annotations",
         "finatra/validation/src/main/scala/com/twitter/finatra/validation",
+        "util/util-validator/src/main/scala/com/twitter/util/validation",
     ],
 )

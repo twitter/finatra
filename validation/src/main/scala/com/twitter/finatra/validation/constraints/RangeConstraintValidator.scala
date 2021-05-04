@@ -1,36 +1,36 @@
 package com.twitter.finatra.validation.constraints
 
-import com.twitter.finatra.validation.{
+import com.twitter.finatra.validation.ErrorCode
+import com.twitter.util.validation.constraintvalidation.TwitterConstraintValidatorContext
+import jakarta.validation.{
+  ConstraintDefinitionException,
   ConstraintValidator,
-  ErrorCode,
-  MessageResolver,
-  ValidationResult
-}
-
-private[validation] object RangeConstraintValidator {
-
-  def errorMessage(resolver: MessageResolver, value: Any, minValue: Long, maxValue: Long): String =
-    resolver.resolve[Range](value, minValue, maxValue)
+  ConstraintValidatorContext,
+  UnexpectedTypeException
 }
 
 /**
  * The validator for [[Range]] annotation.
  *
- * Validate if a if if the value of the field is within the min and max value defined in the annotation.
- *
- * @param messageResolver to resolve error message when validation fails.
+ * Validate if the value of the field is within the min and max value defined in the annotation.
  */
-private[validation] class RangeConstraintValidator(messageResolver: MessageResolver)
-    extends ConstraintValidator[Range, Any](messageResolver) {
+@deprecated("Users should prefer to use standard constraints.", "2021-03-05")
+private[validation] class RangeConstraintValidator extends ConstraintValidator[Range, Any] {
 
-  /* Public */
+  @volatile private[this] var minValue: Long = _
+  @volatile private[this] var maxValue: Long = _
 
-  override def isValid(annotation: Range, value: Any): ValidationResult = {
-    val rangeAnnotation = annotation.asInstanceOf[Range]
-    val minValue = rangeAnnotation.min()
-    val maxValue = rangeAnnotation.max()
+  override def initialize(constraintAnnotation: Range): Unit = {
+    this.minValue = constraintAnnotation.min()
+    this.maxValue = constraintAnnotation.max()
+  }
+
+  override def isValid(
+    obj: Any,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean = {
     assertValidRange(minValue, maxValue)
-    value match {
+    val valid = obj match {
       case bigDecimalValue: BigDecimal =>
         validationResult(bigDecimalValue, minValue, maxValue)
       case bigIntValue: BigInt =>
@@ -38,44 +38,36 @@ private[validation] class RangeConstraintValidator(messageResolver: MessageResol
       case numberValue: Number =>
         validationResult(numberValue, minValue, maxValue)
       case _ =>
-        throw new IllegalArgumentException(
-          s"Class [${value.getClass.getName}] is not supported by ${this.getClass.getName}")
+        throw new UnexpectedTypeException(
+          s"Class [${obj.getClass.getName}] is not supported by ${this.getClass.getName}")
     }
+
+    if (!valid) {
+      TwitterConstraintValidatorContext
+        .withDynamicPayload(
+          ErrorCode
+            .ValueOutOfRange(java.lang.Double.valueOf(obj.toString), minValue, maxValue))
+        .withMessageTemplate(s"[${obj.toString}] is not between $minValue and $maxValue")
+        .addConstraintViolation(constraintValidatorContext)
+    }
+    valid
   }
 
   /* Private */
 
-  private[this] def validationResult(value: BigDecimal, minValue: Long, maxValue: Long) =
-    ValidationResult.validate(
-      BigDecimal(minValue) <= value && value <= BigDecimal(maxValue),
-      errorMessage(value, minValue, maxValue),
-      errorCode(value, minValue, maxValue)
-    )
+  private[this] def validationResult(value: BigDecimal, minValue: Long, maxValue: Long): Boolean =
+    BigDecimal(minValue) <= value && value <= BigDecimal(maxValue)
 
-  private[this] def errorMessage(value: Number, minValue: Long, maxValue: Long): String =
-    RangeConstraintValidator.errorMessage(messageResolver, value, minValue, maxValue)
+  private[this] def validationResult(value: BigInt, minValue: Long, maxValue: Long): Boolean =
+    BigInt(minValue) <= value && value <= BigInt(maxValue)
 
-  private[this] def errorCode(value: Number, minValue: Long, maxValue: Long): ErrorCode =
-    ErrorCode.ValueOutOfRange(java.lang.Long.valueOf(value.longValue), minValue, maxValue)
-
-  private[this] def validationResult(value: BigInt, minValue: Long, maxValue: Long) =
-    ValidationResult.validate(
-      BigInt(minValue) <= value && value <= BigInt(maxValue),
-      errorMessage(value, minValue, maxValue),
-      errorCode(value, minValue, maxValue)
-    )
-
-  private[this] def validationResult(value: Number, minValue: Long, maxValue: Long) = {
+  private[this] def validationResult(value: Number, minValue: Long, maxValue: Long): Boolean = {
     val doubleValue = value.doubleValue()
-    ValidationResult.validate(
-      minValue <= doubleValue && doubleValue <= maxValue,
-      errorMessage(value, minValue, maxValue),
-      errorCode(value, minValue, maxValue)
-    )
+    minValue <= doubleValue && doubleValue <= maxValue
   }
 
   /** Asserts that the start is less than the end */
   private[this] def assertValidRange(startIndex: Long, endIndex: Long): Unit =
     if (startIndex > endIndex)
-      throw new IllegalArgumentException(s"invalid range: $startIndex > $endIndex")
+      throw new ConstraintDefinitionException(s"invalid range: $startIndex > $endIndex")
 }

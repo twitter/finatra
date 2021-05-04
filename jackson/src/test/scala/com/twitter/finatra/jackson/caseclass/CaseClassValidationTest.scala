@@ -1,17 +1,14 @@
 package com.twitter.finatra.jackson.caseclass
 
+import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.ValidationError
 import com.twitter.finatra.jackson.caseclass.exceptions.{
   CaseClassFieldMappingException,
   CaseClassMappingException
 }
-import com.twitter.finatra.jackson.{Address, Car, Person}
-import com.twitter.finatra.jackson.{CarMake, ScalaObjectMapper}
-import com.twitter.finatra.validation.ValidationResult.Invalid
-import com.twitter.finatra.validation.constraints.{Min, NotEmpty}
-import com.twitter.finatra.validation.{ErrorCode, MethodValidation}
+import com.twitter.finatra.jackson.{Address, Car, CarMake, Person, ScalaObjectMapper}
+import com.twitter.finatra.validation.ErrorCode
 import com.twitter.inject.Test
 import org.joda.time.DateTime
-import org.scalatest.OptionValues._
 
 class CaseClassValidationTest extends Test {
   private final val now: DateTime = new DateTime("2015-04-09T05:17:15Z")
@@ -31,39 +28,64 @@ class CaseClassValidationTest extends Test {
   )
   private final val mapper: ScalaObjectMapper = ScalaObjectMapper()
 
+  /*
+   Notes:
+
+   ValidationError.Field types will not have a root bean instance and the violation property path
+   will include the class name, e.g., for a violation on the `id` parameter of the `RentalStation` case
+   class, the property path would be: `RentalStation.id`.
+
+   ValidationError.Method types will have a root bean instance (since they require an instance in order for
+   the method to be invoked) and the violation property path will not include the class name since this
+   is understood to be known since the method validations typically have to be manually invoked, e.g.,
+   for the method `validateState` that is annotated with field `state`, the property path of a violation would be:
+   `validateState.state`.
+   */
+
   test("class and field level validations#success") {
     parseCar(baseCar)
   }
 
   test("class and field level validations#top-level failed validations") {
+    val value = baseCar.copy(id = 2, year = 1910)
     val parseError = intercept[CaseClassMappingException] {
-      parseCar(baseCar.copy(id = 2, year = 1910))
+      parseCar(value)
     }
 
     parseError.errors.size shouldEqual 1
 
     val error = parseError.errors.head
-    error.path shouldEqual CaseClassFieldMappingException.PropertyPath.leaf("year")
-    error.reason.code shouldEqual ErrorCode.ValueTooSmall(2000, 1910)
-    error.reason.message shouldEqual "[1910] is not greater than or equal to 2000"
-    error.reason.annotation shouldBe defined
-    error.reason.annotation.value shouldBe a[Min]
+    error.path should equal(CaseClassFieldMappingException.PropertyPath.leaf("year"))
+    error.reason.message should equal("[1910] is not greater than or equal to 2000")
+    error.reason.detail match {
+      case ValidationError(violation, ValidationError.Field, Some(errorCode)) =>
+        errorCode shouldEqual ErrorCode.ValueTooSmall(2000, 1910)
+        violation.getPropertyPath.toString should equal("Car.year")
+        violation.getMessage should equal("[1910] is not greater than or equal to 2000")
+        violation.getInvalidValue should equal(1910)
+        violation.getRootBeanClass should equal(classOf[Car])
+        violation.getRootBean == null should be(
+          true
+        ) // ValidationError.Field types won't have a root bean instance
+      case _ => fail()
+    }
   }
 
   test("class and field level validations#nested failed validations") {
+    val invalidAddress =
+      Address(
+        street = Some(""), // invalid
+        city = "", // invalid
+        state = "FL" // invalid
+      )
+
     val owners = Seq(
       Person(
         id = 1,
         name = "joe smith",
         dob = Some(DateTime.now),
         age = None,
-        address = Some(
-          Address(
-            street = Some(""), // invalid
-            city = "", // invalid
-            state = "FL"
-          )
-        )
+        address = Some(invalidAddress)
       )
     )
     val car = baseCar.copy(owners = owners)
@@ -78,18 +100,34 @@ class CaseClassValidationTest extends Test {
     errors.head.path shouldEqual
       CaseClassFieldMappingException.PropertyPath
         .leaf("city").withParent("address").withParent("owners")
-    errors.head.reason.code shouldEqual ErrorCode.ValueCannotBeEmpty
     errors.head.reason.message shouldEqual "cannot be empty"
-    errors.head.reason.annotation shouldBe defined
-    errors.head.reason.annotation.value shouldBe a[NotEmpty]
+    errors.head.reason.detail match {
+      case ValidationError(violation, ValidationError.Field, Some(errorCode)) =>
+        errorCode shouldEqual ErrorCode.ValueCannotBeEmpty
+        violation.getPropertyPath.toString shouldEqual "Address.city"
+        violation.getMessage shouldEqual "cannot be empty"
+        violation.getInvalidValue shouldEqual ""
+        violation.getRootBeanClass shouldEqual classOf[Address]
+        violation.getRootBean == null shouldBe true // ValidationError.Field types won't have a root bean instance
+      case _ =>
+        fail()
+    }
 
     errors(1).path shouldEqual
       CaseClassFieldMappingException.PropertyPath
         .leaf("street").withParent("address").withParent("owners")
-    errors(1).reason.code shouldEqual ErrorCode.ValueCannotBeEmpty
     errors(1).reason.message shouldEqual "cannot be empty"
-    errors(1).reason.annotation shouldBe defined
-    errors(1).reason.annotation.value shouldBe a[NotEmpty]
+    errors(1).reason.detail match {
+      case ValidationError(violation, ValidationError.Field, Some(errorCode)) =>
+        errorCode shouldEqual ErrorCode.ValueCannotBeEmpty
+        violation.getPropertyPath.toString shouldEqual "Address.street"
+        violation.getMessage shouldEqual "cannot be empty"
+        violation.getInvalidValue shouldEqual ""
+        violation.getRootBeanClass shouldEqual classOf[Address]
+        violation.getRootBean == null shouldBe true // ValidationError.Field types won't have a root bean instance
+      case _ =>
+        fail()
+    }
   }
 
   test("class and field level validations#nested method validations") {
@@ -102,7 +140,7 @@ class CaseClassValidationTest extends Test {
         address = Some(Address(city = "pyongyang", state = "KP" /* invalid */ ))
       )
     )
-    val car = baseCar.copy(owners = owners)
+    val car: Car = baseCar.copy(owners = owners)
 
     val parseError = intercept[CaseClassMappingException] {
       parseCar(car)
@@ -112,107 +150,162 @@ class CaseClassValidationTest extends Test {
     val errors = parseError.errors
 
     errors.head.path shouldEqual
-      CaseClassFieldMappingException.PropertyPath.leaf("address").withParent("owners")
-    errors.head.reason.code shouldEqual ErrorCode.Unknown
+      CaseClassFieldMappingException.PropertyPath
+        .leaf("address").withParent("owners")
     errors.head.reason.message shouldEqual "state must be one of [CA, MD, WI]"
-    errors.head.reason.annotation shouldBe defined
-    errors.head.reason.annotation.value shouldBe a[MethodValidation]
+    errors.head.reason.detail.getClass shouldEqual classOf[ValidationError]
+    errors.head.reason.detail match {
+      case ValidationError(violation, ValidationError.Method, Some(errorCode)) =>
+        errorCode shouldEqual ErrorCode.IllegalArgument
+        violation.getPropertyPath.toString shouldEqual "validateState" // the @MethodValidation annotation does not specify a field.
+        violation.getMessage shouldEqual "state must be one of [CA, MD, WI]"
+        violation.getInvalidValue shouldEqual Address(city = "pyongyang", state = "KP")
+        violation.getRootBeanClass shouldEqual classOf[Address]
+        violation.getRootBean shouldEqual Address(
+          city = "pyongyang",
+          state = "KP"
+        ) // ValidationError.Method types have a root bean instance
+      case _ =>
+        fail()
+    }
 
-    errors.map(_.getMessage) should equal(
+    errors.map(_.getMessage) shouldEqual (
       Seq("owners.address: state must be one of [CA, MD, WI]")
     )
   }
 
   test("class and field level validations#end before start") {
+    val value: Car =
+      baseCar.copy(ownershipStart = baseCar.ownershipEnd, ownershipEnd = baseCar.ownershipStart)
     val parseError = intercept[CaseClassMappingException] {
-      parseCar(
-        baseCar.copy(ownershipStart = baseCar.ownershipEnd, ownershipEnd = baseCar.ownershipStart)
-      )
+      parseCar(value)
     }
 
     parseError.errors.size shouldEqual 1
     val errors = parseError.errors
 
-    errors.head.path shouldEqual CaseClassFieldMappingException.PropertyPath.leaf("ownershipEnd")
-    errors.head.reason.code shouldEqual ErrorCode.Unknown
+    errors.head.path shouldEqual CaseClassFieldMappingException.PropertyPath.leaf("ownership_end")
     errors.head.reason.message shouldEqual "ownershipEnd [2015-04-09T05:17:15.000Z] must be after ownershipStart [2015-04-09T05:18:15.000Z]"
-    errors.head.reason.annotation shouldBe defined
-    errors.head.reason.annotation.value shouldBe a[MethodValidation]
+    errors.head.reason.detail.getClass shouldEqual classOf[ValidationError]
+    errors.head.reason.detail match {
+      case ValidationError(violation, ValidationError.Method, Some(errorCode)) =>
+        errorCode shouldEqual ErrorCode.Unknown
+        violation.getPropertyPath.toString shouldEqual "ownershipTimesValid.ownershipEnd" // the @MethodValidation annotation specifies a single field.
+        violation.getMessage shouldEqual "ownershipEnd [2015-04-09T05:17:15.000Z] must be after ownershipStart [2015-04-09T05:18:15.000Z]"
+        violation.getInvalidValue shouldEqual value
+        violation.getRootBeanClass shouldEqual classOf[Car]
+        violation.getRootBean shouldEqual value // ValidationError.Method types have a root bean instance
+      case _ =>
+        fail()
+    }
   }
 
   test("class and field level validations#optional end before start") {
+    val value: Car =
+      baseCar.copy(warrantyStart = baseCar.warrantyEnd, warrantyEnd = baseCar.warrantyStart)
     val parseError = intercept[CaseClassMappingException] {
-      parseCar(
-        baseCar.copy(warrantyStart = baseCar.warrantyEnd, warrantyEnd = baseCar.warrantyStart)
-      )
+      parseCar(value)
     }
 
     parseError.errors.size shouldEqual 2
     val errors = parseError.errors
 
-    errors.head.path shouldEqual CaseClassFieldMappingException.PropertyPath.leaf("warrantyEnd")
-    errors.head.reason.code shouldEqual ErrorCode.Unknown
+    errors.head.path shouldEqual CaseClassFieldMappingException.PropertyPath.leaf("warranty_end")
     errors.head.reason.message shouldEqual
       "warrantyEnd [2015-04-09T05:17:15.000Z] must be after warrantyStart [2015-04-09T06:17:15.000Z]"
-    errors.head.reason.annotation shouldBe defined
-    errors.head.reason.annotation.value shouldBe a[MethodValidation]
+    errors.head.reason.detail.getClass shouldEqual classOf[ValidationError]
+    errors.head.reason.detail match {
+      case ValidationError(violation, ValidationError.Method, Some(errorCode)) =>
+        errorCode shouldEqual ErrorCode.Unknown
+        violation.getPropertyPath.toString shouldEqual "warrantyTimeValid.warrantyEnd" // the @MethodValidation annotation specifies two fields.
+        violation.getMessage shouldEqual "warrantyEnd [2015-04-09T05:17:15.000Z] must be after warrantyStart [2015-04-09T06:17:15.000Z]"
+        violation.getInvalidValue shouldEqual value
+        violation.getRootBeanClass shouldEqual classOf[Car]
+        violation.getRootBean shouldEqual value // ValidationError.Method types have a root bean instance
+      case _ =>
+        fail()
+    }
 
-    errors(1).path shouldEqual CaseClassFieldMappingException.PropertyPath.leaf("warrantyStart")
-    errors(1).reason.code shouldEqual ErrorCode.Unknown
+    errors(1).path shouldEqual CaseClassFieldMappingException.PropertyPath.leaf("warranty_start")
     errors(1).reason.message shouldEqual
       "warrantyEnd [2015-04-09T05:17:15.000Z] must be after warrantyStart [2015-04-09T06:17:15.000Z]"
-    errors(1).reason.annotation shouldBe defined
-    errors(1).reason.annotation.value shouldBe a[MethodValidation]
+    errors(1).reason.detail.getClass shouldEqual classOf[ValidationError]
+    errors(1).reason.detail match {
+      case ValidationError(violation, ValidationError.Method, Some(errorCode)) =>
+        errorCode shouldEqual ErrorCode.Unknown
+        violation.getPropertyPath.toString shouldEqual "warrantyTimeValid.warrantyStart" // the @MethodValidation annotation specifies two fields.
+        violation.getMessage shouldEqual "warrantyEnd [2015-04-09T05:17:15.000Z] must be after warrantyStart [2015-04-09T06:17:15.000Z]"
+        violation.getInvalidValue shouldEqual value
+        violation.getRootBeanClass shouldEqual classOf[Car]
+        violation.getRootBean shouldEqual value // ValidationError.Method types have a root bean instance
+      case _ =>
+        fail()
+    }
   }
 
   test("class and field level validations#no start with end") {
+    val value: Car = baseCar.copy(warrantyStart = None, warrantyEnd = baseCar.warrantyEnd)
     val parseError = intercept[CaseClassMappingException] {
-      parseCar(baseCar.copy(warrantyStart = None, warrantyEnd = baseCar.warrantyEnd))
+      parseCar(value)
     }
 
     parseError.errors.size shouldEqual 2
     val errors = parseError.errors
 
-    errors.head.path shouldEqual CaseClassFieldMappingException.PropertyPath.leaf("warrantyEnd")
-    errors.head.reason.code shouldEqual ErrorCode.Unknown
+    errors.head.path shouldEqual CaseClassFieldMappingException.PropertyPath.leaf("warranty_end")
     errors.head.reason.message shouldEqual
       "both warrantyStart and warrantyEnd are required for a valid range"
-    errors.head.reason.annotation shouldBe defined
-    errors.head.reason.annotation.value shouldBe a[MethodValidation]
+    errors.head.reason.detail.getClass shouldEqual classOf[ValidationError]
+    errors.head.reason.detail match {
+      case ValidationError(violation, ValidationError.Method, Some(errorCode)) =>
+        errorCode shouldEqual ErrorCode.Unknown
+        violation.getPropertyPath.toString shouldEqual "warrantyTimeValid.warrantyEnd" // the @MethodValidation annotation specifies two fields.
+        violation.getMessage shouldEqual "both warrantyStart and warrantyEnd are required for a valid range"
+        violation.getInvalidValue shouldEqual value
+        violation.getRootBeanClass shouldEqual classOf[Car]
+        violation.getRootBean shouldEqual value // ValidationError.Method types have a root bean instance
+      case _ =>
+        fail()
+    }
 
-    errors(1).path shouldEqual CaseClassFieldMappingException.PropertyPath.leaf("warrantyStart")
-    errors(1).reason.code shouldEqual ErrorCode.Unknown
+    errors(1).path shouldEqual CaseClassFieldMappingException.PropertyPath.leaf("warranty_start")
     errors(1).reason.message shouldEqual
       "both warrantyStart and warrantyEnd are required for a valid range"
-    errors(1).reason.annotation shouldBe defined
-    errors(1).reason.annotation.value shouldBe a[MethodValidation]
-  }
-
-  test("class and field level validations#start with end") {
-    parseCar(baseCar)
+    errors(1).reason.detail.getClass shouldEqual classOf[ValidationError]
+    errors(1).reason.detail match {
+      case ValidationError(violation, ValidationError.Method, Some(errorCode)) =>
+        errorCode shouldEqual ErrorCode.Unknown
+        violation.getPropertyPath.toString shouldEqual "warrantyTimeValid.warrantyStart" // the @MethodValidation annotation specifies two fields.
+        violation.getMessage shouldEqual "both warrantyStart and warrantyEnd are required for a valid range"
+        violation.getInvalidValue shouldEqual value
+        violation.getRootBeanClass shouldEqual classOf[Car]
+        violation.getRootBean shouldEqual value // ValidationError.Method types have a root bean instance
+      case _ =>
+        fail()
+    }
   }
 
   test("class and field level validations#errors sorted by message") {
     val first =
       CaseClassFieldMappingException(
         CaseClassFieldMappingException.PropertyPath.Empty,
-        Invalid("123"))
+        CaseClassFieldMappingException.Reason("123"))
     val second =
       CaseClassFieldMappingException(
         CaseClassFieldMappingException.PropertyPath.Empty,
-        Invalid("aaa"))
+        CaseClassFieldMappingException.Reason("aaa"))
     val third = CaseClassFieldMappingException(
       CaseClassFieldMappingException.PropertyPath.leaf("bla"),
-      Invalid("zzz"))
+      CaseClassFieldMappingException.Reason("zzz"))
     val fourth =
       CaseClassFieldMappingException(
         CaseClassFieldMappingException.PropertyPath.Empty,
-        Invalid("xxx"))
+        CaseClassFieldMappingException.Reason("xxx"))
 
     val unsorted = Set(third, second, fourth, first)
     val expectedSorted = Seq(first, second, third, fourth)
 
-    CaseClassMappingException(unsorted).errors should equal(expectedSorted)
+    CaseClassMappingException(unsorted).errors shouldEqual (expectedSorted)
   }
 
   test("class and field level validations#option[string] validation") {

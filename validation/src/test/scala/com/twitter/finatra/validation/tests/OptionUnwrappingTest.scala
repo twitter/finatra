@@ -1,9 +1,10 @@
 package com.twitter.finatra.validation.tests
 
-import com.twitter.finatra.validation.Validator
 import com.twitter.finatra.validation.tests.caseclasses._
 import com.twitter.inject.Test
 import com.twitter.inject.conversions.time._
+import com.twitter.util.validation.ScalaValidator
+import jakarta.validation.UnexpectedTypeException
 import org.joda.time.DateTime
 
 /**
@@ -15,13 +16,13 @@ import org.joda.time.DateTime
  */
 class OptionUnwrappingTest extends Test with AssertValidation {
 
-  override protected val validator: Validator = Validator.builder.build()
+  override protected val validator: ScalaValidator = ScalaValidator.builder.validator
 
   test("AssertFalse") {
     assertValidation(
       obj = AssertFalseOptionExample(Some(true)),
       withErrors = Seq(
-        "boolValue: [true] is not false"
+        "boolValue: must be false"
       )
     )
     assertValidation(obj = AssertFalseOptionExample(None))
@@ -31,7 +32,7 @@ class OptionUnwrappingTest extends Test with AssertValidation {
     assertValidation(
       obj = AssertTrueOptionExample(Some(false)),
       withErrors = Seq(
-        "boolValue: [false] is not true"
+        "boolValue: must be true"
       )
     )
     assertValidation(obj = AssertTrueOptionExample(None))
@@ -160,7 +161,7 @@ class OptionUnwrappingTest extends Test with AssertValidation {
     )
     assertValidation(MaxOptionArrayExample(None))
 
-    val e = intercept[IllegalArgumentException] {
+    val e = intercept[UnexpectedTypeException] {
       assertValidation(MaxOptionInvalidTypeExample(Some("foobar")))
     }
     e.getMessage should be(
@@ -241,7 +242,7 @@ class OptionUnwrappingTest extends Test with AssertValidation {
     )
     assertValidation(MinOptionArrayExample(None))
 
-    val e = intercept[IllegalArgumentException] {
+    val e = intercept[UnexpectedTypeException] {
       assertValidation(MinOptionInvalidTypeExample(Some("10")))
     }
     e.getMessage should be(
@@ -282,7 +283,7 @@ class OptionUnwrappingTest extends Test with AssertValidation {
     )
     assertValidation(NotEmptyOptionSeqExample(None))
 
-    val e = intercept[IllegalArgumentException] {
+    val e = intercept[UnexpectedTypeException] {
       assertValidation(NotEmptyOptionInvalidTypeExample(Some(10L)))
     }
     e.getMessage should be(
@@ -406,7 +407,7 @@ class OptionUnwrappingTest extends Test with AssertValidation {
     )
     assertValidation(RangeOptionBigIntExample(None))
 
-    val e = intercept[IllegalArgumentException] {
+    val e = intercept[UnexpectedTypeException] {
       assertValidation(RangeOptionInvalidTypeExample(Some("hello")))
     }
     e.getMessage should be(
@@ -447,7 +448,7 @@ class OptionUnwrappingTest extends Test with AssertValidation {
     )
     assertValidation(SizeOptionStringExample(None))
 
-    val e = intercept[IllegalArgumentException] {
+    val e = intercept[UnexpectedTypeException] {
       assertValidation(SizeOptionInvalidTypeExample(Some(10)))
     }
     e.getMessage should be(

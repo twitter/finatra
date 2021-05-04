@@ -1,16 +1,14 @@
 package com.twitter.finatra.validation.tests
 
 import com.fasterxml.jackson.annotation.JsonCreator
-import com.twitter.finatra.validation.{
-  CommonMethodValidations,
-  MethodValidation,
-  Valid,
-  ValidationResult
-}
-import java.util.concurrent.TimeUnit
-import org.joda.time.DateTime
+import com.twitter.finatra.validation.CommonMethodValidations
 import com.twitter.finatra.validation.constraints._
 import com.twitter.util.Try
+import com.twitter.util.validation.MethodValidation
+import com.twitter.util.validation.engine.MethodValidationResult
+import jakarta.validation.Valid
+import java.util.concurrent.TimeUnit
+import org.joda.time.DateTime
 import scala.beans.BeanProperty
 
 object caseclasses {
@@ -193,8 +191,8 @@ object caseclasses {
     name: String,
     @OneOf(Array("F", "M", "Other")) gender: String) {
     @MethodValidation(fields = Array("name"))
-    def nameCheck: ValidationResult = {
-      ValidationResult.validate(name.length > 0, "cannot be empty")
+    def nameCheck: MethodValidationResult = {
+      MethodValidationResult.validIfTrue(name.length > 0, "cannot be empty")
     }
   }
   // Other fields not in constructor
@@ -204,8 +202,8 @@ object caseclasses {
     val state: String = "California"
 
     @MethodValidation(fields = Array("address"))
-    def validateAddress: ValidationResult =
-      ValidationResult.validate(address.state.nonEmpty, "state must be specified")
+    def validateAddress: MethodValidationResult =
+      MethodValidationResult.validIfTrue(address.state.nonEmpty, "state must be specified")
   }
 
   case class NoConstructorParams() {
@@ -244,8 +242,8 @@ object caseclasses {
     @OneOf(Array("F", "M", "Other")) gender: String,
     job: String) {
     @MethodValidation(fields = Array("job"))
-    def jobCheck: ValidationResult = {
-      ValidationResult.validate(job.length > 0, "cannot be empty")
+    def jobCheck: MethodValidationResult = {
+      MethodValidationResult.validIfTrue(job.length > 0, "cannot be empty")
     }
   }
 
@@ -367,8 +365,8 @@ object caseclasses {
     @NotEmpty def field1: String
 
     @MethodValidation(fields = Array("field1"))
-    def validateField1: ValidationResult =
-      ValidationResult.validate(Try(field1.toDouble).isReturn, "not a double value")
+    def validateField1: MethodValidationResult =
+      MethodValidationResult.validIfTrue(Try(field1.toDouble).isReturn, "not a double value")
   }
 
   case class ImplementsAncestor(override val field1: String) extends AncestorWithValidation
@@ -377,8 +375,10 @@ object caseclasses {
   case class DoublePerson(@NotEmpty name: String)(@NotEmpty val otherName: String)
   case class ValidDoublePerson(@NotEmpty name: String)(@NotEmpty otherName: String) {
     @MethodValidation
-    def checkOtherName: ValidationResult =
-      ValidationResult.validate(otherName.length >= 3, "otherName must be longer than 3 chars")
+    def checkOtherName: MethodValidationResult =
+      MethodValidationResult.validIfTrue(
+        otherName.length >= 3,
+        "otherName must be longer than 3 chars")
   }
   case class PossiblyValidDoublePerson(@NotEmpty name: String)(@NotEmpty otherName: String) {
     def referenceSecondArgInMethod: String =
@@ -421,24 +421,24 @@ object caseclasses {
     @Valid passengers: Seq[Person] = Seq()) {
 
     @MethodValidation
-    def validateId: ValidationResult = {
-      ValidationResult.validate(id % 2 == 1, "id may not be even")
+    def validateId: MethodValidationResult = {
+      MethodValidationResult.validIfTrue(id % 2 == 1, "id may not be even")
     }
 
     @MethodValidation
-    def validateYearBeforeNow: ValidationResult = {
+    def validateYearBeforeNow: MethodValidationResult = {
       val thisYear = new DateTime().getYear
       val yearMoreThanOneYearInFuture: Boolean =
         if (year > thisYear) { (year - thisYear) > 1 }
         else false
-      ValidationResult.validateNot(
+      MethodValidationResult.validIfFalse(
         yearMoreThanOneYearInFuture,
         "Model year can be at most one year newer."
       )
     }
 
     @MethodValidation(fields = Array("ownershipEnd"))
-    def ownershipTimesValid: ValidationResult = {
+    def ownershipTimesValid: MethodValidationResult = {
       CommonMethodValidations.validateTimeRange(
         ownershipStart,
         ownershipEnd,
@@ -448,7 +448,7 @@ object caseclasses {
     }
 
     @MethodValidation(fields = Array("warrantyStart", "warrantyEnd"))
-    def warrantyTimeValid: ValidationResult = {
+    def warrantyTimeValid: MethodValidationResult = {
       CommonMethodValidations.validateTimeRange(
         warrantyStart,
         warrantyEnd,

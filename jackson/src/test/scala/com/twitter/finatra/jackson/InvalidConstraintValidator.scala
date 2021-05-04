@@ -1,11 +1,12 @@
 package com.twitter.finatra.jackson
 
-import com.twitter.finatra.validation.{ConstraintValidator, MessageResolver, ValidationResult}
+import jakarta.validation.{ConstraintValidator, ConstraintValidatorContext}
 import scala.util.control.NoStackTrace
 
-class InvalidConstraintValidator(messageResolver: MessageResolver)
-    extends ConstraintValidator[InvalidConstraint, Any](messageResolver) {
+class InvalidConstraintValidator extends ConstraintValidator[InvalidConstraint, Any] {
 
-  override def isValid(annotation: InvalidConstraint, value: Any): ValidationResult =
-    throw new RuntimeException("validator foo error") with NoStackTrace
+  override def isValid(
+    obj: Any,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean = throw new RuntimeException("validator foo error") with NoStackTrace
 }

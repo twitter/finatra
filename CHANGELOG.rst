@@ -10,9 +10,31 @@ Unreleased
 Changed
 ~~~~~~~
 
+* finatra (BREAKING API CHANGE): Update to use the new util/util-validator `ScalaValidator` for case
+  class field validations. We've removed the custom Finatra `c.t.finatra.validation.Validator` and
+  instead now use the `c.t.util.validation.ScalaValidator`. Constraint annotations and validator
+  implementations now use the standard `jakarta.validation` API interface classes instead of any
+  custom Finatra types. We've deprecated the custom Finatra constraints as they are duplicative of
+  already existing "standard" or otherwise provided constraints and validators. Additionally,
+  `c.t.finatra.validation.ErrorCode` is deprecated with no replacement. The same data carried can be
+  obtained via the standard `jakarta.validation.ConstraintViolation[T]`.
+
+  Adapting the Finatra framework to use the util/util-validator also includes the framework Jackson
+  integration. We're also taking this opportunity to clean up the error reporting interface of
+  the `CaseClassFieldMappingException` to define a `CaseClassFieldMappingException.Reason` type to
+  replace the usage of the (removed) `ValidationResult.Invalid` type. The `Reason` carries a message
+  String as well as a `CaseClassFieldMappingException.Detail` which can be one of several possible
+  types including a `CaseClassFieldMappingException.ValidationError` which carries any failed validation
+  information including the emitted `ConstraintViolation[T]`.
+
+  Lastly, we are deprecating support for JSON serialization/deserialization of JodaTime fields in
+  case classes. This support will be dropped in an upcoming release. Users should prefer to use the
+  JDK 8 `java.time` classes and we will be adding support for these types in the Finatra Jackson
+  integration in the future. ``PHAB_ID=D659556``
+
 * finatra-jackson: (BREAKING API CHANGE) JsonLogging should use the lazy Scala SLF4J logger
   and no longer return the passed in argument that's logged as JSON
-  
+
 21.4.0
 ------
 

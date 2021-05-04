@@ -34,7 +34,7 @@ in Finatra revolves around the following definitions:
     which could be run post-deploy for deploy verification and certification.
 - `Integration Tests <integration_tests>`__ - similar to `Feature Tests <feature_tests.html>`__, but
   the entire service is not started. Instead, a list of `modules <../getting-started/modules.html>`__ are loaded with method calls and
-  assertions are performed at the class-level. You can see an example integration test `here <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/marshalling/CallbackConverterIntegrationTest.scala>`__.
+  assertions are performed at the class-level. You can see an example integration test `here <https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/marshalling/CallbackConverterIntegrationTest.scala>`__.
 - `Unit Tests <https://en.wikipedia.org/wiki/Unit_testing>`__ - these are tests generally of a single
   class and since constructor injection is used throughout the framework, Finatra stays out of your
   way.

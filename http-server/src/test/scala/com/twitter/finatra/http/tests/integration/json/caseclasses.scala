@@ -10,8 +10,9 @@ import com.fasterxml.jackson.databind.{DeserializationContext, JsonNode}
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.annotations.{Header, QueryParam, RouteParam}
 import com.twitter.finatra.validation.constraints.{Max, Min, NotEmpty, Pattern, Size}
-import com.twitter.finatra.validation.{MethodValidation, ValidationResult}
 import com.twitter.util.Time
+import com.twitter.util.validation.MethodValidation
+import com.twitter.util.validation.engine.MethodValidationResult
 import scala.math.BigDecimal.RoundingMode
 
 class MyBigDecimalDeserializer extends StdDeserializer[BigDecimal](classOf[BigDecimal]) {
@@ -76,14 +77,14 @@ trait TestRequest {
   protected[this] def validateFormat(
     formatValue: Option[String],
     formatKey: String
-  ): ValidationResult = {
+  ): MethodValidationResult = {
     if (formatValue.isEmpty) {
-      ValidationResult.Valid()
+      MethodValidationResult.Valid
     } else {
       val actualFormat = formatValue.get
       val errorMsg = s"Bad parameter value: <$actualFormat>." +
         s" The only format values allowed for <$formatKey> are ${ValidFormats.mkString(",")}"
-      ValidationResult.validate(ValidFormats.contains(actualFormat), errorMsg)
+      MethodValidationResult.validIfTrue(ValidFormats.contains(actualFormat), errorMsg)
     }
   }
 
@@ -150,15 +151,15 @@ case class UserLookupRequest(
   def validationPassesForNames: Boolean = validateListOfUsers(names)
 
   @MethodValidation
-  def validateIds(): ValidationResult =
-    ValidationResult.validate(
+  def validateIds: MethodValidationResult =
+    MethodValidationResult.validIfTrue(
       validationPassesForIds,
       createErrorMessage("ids", ids, "Must be a comma separated list of decimal numbers.")
     )
 
   @MethodValidation
-  def validateNames(): ValidationResult = {
-    ValidationResult.validate(
+  def validateNames: MethodValidationResult = {
+    MethodValidationResult.validIfTrue(
       validationPassesForNames,
       createErrorMessage(
         "names",
@@ -169,20 +170,20 @@ case class UserLookupRequest(
   }
 
   @MethodValidation
-  def validateUserFormat(): ValidationResult =
+  def validateUserFormat: MethodValidationResult =
     validateFormat(userFormat, "user.format")
 
   @MethodValidation
-  def validateStatusFormat(): ValidationResult =
+  def validateStatusFormat: MethodValidationResult =
     validateFormat(statusFormat, "status.format")
 
   @MethodValidation
-  def validateMinimalRequestParams: ValidationResult = {
+  def validateMinimalRequestParams: MethodValidationResult = {
     // in case one of the validations failed, don't add this error message
     val atLeastOneValidEntry =
       (!validationPassesForIds || !validationPassesForNames) ||
         listOfIds.nonEmpty || listOfNames.nonEmpty
-    ValidationResult.validate(
+    MethodValidationResult.validIfTrue(
       atLeastOneValidEntry,
       "At least one valid id or one valid name must be provided"
     )

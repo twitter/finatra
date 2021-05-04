@@ -1,26 +1,26 @@
 package com.twitter.finatra.validation.constraints
 
-import com.twitter.finatra.validation.{
-  ConstraintValidator,
-  ErrorCode,
-  MessageResolver,
-  ValidationResult
-}
+import com.twitter.finatra.validation.ErrorCode
+import com.twitter.util.validation.constraintvalidation.TwitterConstraintValidatorContext
+import jakarta.validation.{ConstraintValidator, ConstraintValidatorContext}
 
-private[validation] object AssertTrueConstraintValidator {
-  def errorMessage(resolver: MessageResolver, value: Boolean): String =
-    resolver.resolve[AssertTrue](value)
-}
-
-private[validation] class AssertTrueConstraintValidator(messageResolver: MessageResolver)
-    extends ConstraintValidator[AssertTrue, Boolean](messageResolver) {
+@deprecated("Users should prefer to use standard constraints.", "2021-03-05")
+private[validation] class AssertTrueConstraintValidator
+    extends ConstraintValidator[AssertTrue, Boolean] {
 
   override def isValid(
-    annotation: AssertTrue,
-    value: Boolean
-  ): ValidationResult = ValidationResult.validate(
-    value,
-    AssertTrueConstraintValidator.errorMessage(messageResolver, value),
-    ErrorCode.InvalidBooleanValue(value)
-  )
+    obj: Boolean,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean = {
+    val valid = obj
+
+    if (!valid) {
+      TwitterConstraintValidatorContext
+        .withDynamicPayload(ErrorCode.InvalidBooleanValue(obj))
+        .withMessageTemplate("must be true")
+        .addConstraintViolation(constraintValidatorContext)
+    }
+
+    valid
+  }
 }

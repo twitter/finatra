@@ -1,16 +1,17 @@
 package com.twitter.finatra.validation.tests.constraints
 
-import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
-import com.twitter.finatra.validation.constraints.{
-  TimeGranularity,
-  TimeGranularityConstraintValidator
-}
+import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode}
+import com.twitter.finatra.validation.constraints.TimeGranularity
+import com.twitter.finatra.validation.constraints.TimeGranularityConstraintValidator.singularize
 import com.twitter.finatra.validation.tests.caseclasses._
-import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode, ValidationResult}
+import com.twitter.util.validation.conversions.ConstraintViolationOps._
+import jakarta.validation.ConstraintViolation
 import java.util.concurrent.TimeUnit
 import org.joda.time.DateTime
 import org.scalacheck.Gen
+import org.scalacheck.Shrink.shrinkAny
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
+import scala.util.control.NonFatal
 
 class TimeGranularityConstraintValidatorTest
     extends ConstraintValidatorTest
@@ -24,24 +25,34 @@ class TimeGranularityConstraintValidatorTest
 
     forAll(dayGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[TimeGranularityDaysExample](dateTimeValue).isInstanceOf[Valid] shouldBe true
+      validate[TimeGranularityDaysExample](dateTimeValue).isEmpty shouldBe true
     }
   }
 
   test("fail validation for an invalid day granularity value") {
     val dayInvalidGranularity = for {
-      hour <- Gen.choose[Long](1, 1000).filter(_ % 24 != 0)
-    } yield new DateTime("2014-3-26T00:00:00Z").getMillis + java.util.concurrent.TimeUnit.HOURS
-      .toMillis(hour)
+      hour <- Gen.choose[Long](1, 1000).filter(_ % 24 != 0).filter(_ > 0)
+    } yield new DateTime("2014-3-26T00:00:00Z").getMillis +
+      java.util.concurrent.TimeUnit.HOURS.toMillis(hour)
 
     forAll(dayInvalidGranularity) { millisValue =>
-      val dateTimeValue = new DateTime(millisValue)
-      validate[TimeGranularityDaysExample](dateTimeValue) should equal(
-        Invalid(
-          errorMessage[TimeGranularityDaysExample](dateTimeValue),
-          ErrorCode.InvalidTimeGranularity(dateTimeValue, TimeUnit.DAYS)
+      try {
+        val dateTimeValue = new DateTime(millisValue)
+        val violations = validate[TimeGranularityDaysExample](dateTimeValue)
+        violations.size should equal(1)
+        violations.head.getPropertyPath.toString should equal("timeValue")
+        violations.head.getMessage should be(errorMessage(violations.head.getInvalidValue))
+        val payload = violations.head.getDynamicPayload(classOf[ErrorCode.InvalidTimeGranularity])
+        payload.isDefined should be(true)
+        payload.get should equal(
+          ErrorCode.InvalidTimeGranularity(
+            violations.head.getInvalidValue.asInstanceOf[DateTime],
+            TimeUnit.DAYS
+          )
         )
-      )
+      } catch {
+        case NonFatal(_: IllegalArgumentException) => //do nothing
+      }
     }
   }
 
@@ -53,7 +64,7 @@ class TimeGranularityConstraintValidatorTest
 
     forAll(hourGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[TimeGranularityHoursExample](dateTimeValue).isInstanceOf[Valid] shouldBe true
+      validate[TimeGranularityHoursExample](dateTimeValue).isEmpty shouldBe true
     }
   }
 
@@ -64,13 +75,23 @@ class TimeGranularityConstraintValidatorTest
       .toMillis(min)
 
     forAll(hourInvalidGranularity) { millisValue =>
-      val dateTimeValue = new DateTime(millisValue)
-      validate[TimeGranularityHoursExample](dateTimeValue) should equal(
-        Invalid(
-          errorMessage[TimeGranularityHoursExample](dateTimeValue),
-          ErrorCode.InvalidTimeGranularity(dateTimeValue, TimeUnit.HOURS)
+      try {
+        val dateTimeValue = new DateTime(millisValue)
+        val violations = validate[TimeGranularityHoursExample](dateTimeValue)
+        violations.size should equal(1)
+        violations.head.getPropertyPath.toString should equal("timeValue")
+        violations.head.getMessage should be(errorMessage(violations.head.getInvalidValue))
+        val payload = violations.head.getDynamicPayload(classOf[ErrorCode.InvalidTimeGranularity])
+        payload.isDefined should be(true)
+        payload.get should equal(
+          ErrorCode.InvalidTimeGranularity(
+            violations.head.getInvalidValue.asInstanceOf[DateTime],
+            TimeUnit.HOURS
+          )
         )
-      )
+      } catch {
+        case NonFatal(_: IllegalArgumentException) => //do nothing
+      }
     }
   }
 
@@ -82,7 +103,7 @@ class TimeGranularityConstraintValidatorTest
 
     forAll(minGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[TimeGranularityMinutesExample](dateTimeValue).isInstanceOf[Valid] shouldBe true
+      validate[TimeGranularityMinutesExample](dateTimeValue).isEmpty shouldBe true
     }
   }
 
@@ -93,13 +114,22 @@ class TimeGranularityConstraintValidatorTest
       .toMillis(second)
 
     forAll(minInvalidGranularity) { millisValue =>
-      val dateTimeValue = new DateTime(millisValue)
-      validate[TimeGranularityMinutesExample](dateTimeValue) should equal(
-        Invalid(
-          errorMessage[TimeGranularityMinutesExample](dateTimeValue),
-          ErrorCode.InvalidTimeGranularity(dateTimeValue, TimeUnit.MINUTES)
+      try {
+        val dateTimeValue = new DateTime(millisValue)
+        val violations = validate[TimeGranularityMinutesExample](dateTimeValue)
+        violations.size should equal(1)
+        violations.head.getPropertyPath.toString should equal("timeValue")
+        violations.head.getMessage should be(errorMessage(violations.head.getInvalidValue))
+        val payload = violations.head.getDynamicPayload(classOf[ErrorCode.InvalidTimeGranularity])
+        payload.isDefined should be(true)
+        payload.get should equal(
+          ErrorCode.InvalidTimeGranularity(
+            violations.head.getInvalidValue.asInstanceOf[DateTime],
+            TimeUnit.MINUTES)
         )
-      )
+      } catch {
+        case NonFatal(_: IllegalArgumentException) => //do nothing
+      }
     }
   }
 
@@ -112,7 +142,7 @@ class TimeGranularityConstraintValidatorTest
 
     forAll(secondGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[TimeGranularitySecondsExample](dateTimeValue).isInstanceOf[Valid] shouldBe true
+      validate[TimeGranularitySecondsExample](dateTimeValue).isEmpty shouldBe true
     }
   }
 
@@ -122,13 +152,22 @@ class TimeGranularityConstraintValidatorTest
     } yield new DateTime("2014-3-26T02:20:20.000Z").getMillis + millis
 
     forAll(secondInvalidGranularity) { millisValue =>
-      val dateTimeValue = new DateTime(millisValue)
-      validate[TimeGranularitySecondsExample](dateTimeValue) should equal(
-        Invalid(
-          errorMessage[TimeGranularitySecondsExample](dateTimeValue),
-          ErrorCode.InvalidTimeGranularity(dateTimeValue, TimeUnit.SECONDS)
+      try {
+        val dateTimeValue = new DateTime(millisValue)
+        val violations = validate[TimeGranularitySecondsExample](dateTimeValue)
+        violations.size should equal(1)
+        violations.head.getPropertyPath.toString should equal("timeValue")
+        violations.head.getMessage should be(errorMessage(violations.head.getInvalidValue))
+        val payload = violations.head.getDynamicPayload(classOf[ErrorCode.InvalidTimeGranularity])
+        payload.isDefined should be(true)
+        payload.get should equal(
+          ErrorCode.InvalidTimeGranularity(
+            violations.head.getInvalidValue.asInstanceOf[DateTime],
+            TimeUnit.SECONDS)
         )
-      )
+      } catch {
+        case NonFatal(_: IllegalArgumentException) => //do nothing
+      }
     }
   }
 
@@ -139,7 +178,7 @@ class TimeGranularityConstraintValidatorTest
 
     forAll(millisGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[TimeGranularityMillisecondsExample](dateTimeValue).isInstanceOf[Valid] shouldBe true
+      validate[TimeGranularityMillisecondsExample](dateTimeValue).isEmpty shouldBe true
     }
   }
 
@@ -152,7 +191,7 @@ class TimeGranularityConstraintValidatorTest
 
     forAll(microGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[TimeGranularityMicrosecondsExample](dateTimeValue).isInstanceOf[Valid] shouldBe true
+      validate[TimeGranularityMicrosecondsExample](dateTimeValue).isEmpty shouldBe true
     }
   }
 
@@ -165,17 +204,18 @@ class TimeGranularityConstraintValidatorTest
 
     forAll(nanoGranularity) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[TimeGranularityNanosecondsExample](dateTimeValue).isInstanceOf[Valid] shouldBe true
+      validate[TimeGranularityNanosecondsExample](dateTimeValue).isEmpty shouldBe true
     }
   }
 
-  private def validate[T: Manifest](value: Any): ValidationResult =
-    super.validate(manifest[T].runtimeClass, "timeValue", classOf[TimeGranularity], value)
+  private def validate[T: Manifest](value: Any): Set[ConstraintViolation[T]] = {
+    super.validate[TimeGranularity, T](manifest[T].runtimeClass, "timeValue", value)
+  }
 
-  private def errorMessage[T: Manifest](value: DateTime): String = {
+  private def errorMessage[T: Manifest](value: Any): String = {
     val annotation =
       getValidationAnnotation(manifest[T].runtimeClass, "timeValue", classOf[TimeGranularity])
 
-    TimeGranularityConstraintValidator.errorMessage(messageResolver, annotation.value(), value)
+    s"[${value.toString}] is not ${singularize(annotation.value())} granularity"
   }
 }

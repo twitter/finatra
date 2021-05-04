@@ -28,12 +28,12 @@ Filtering Thrift Requests
 
 - Tracks `per-method stats <controllers.html#per-method-stats>`__ scoped under `per_method_stats/<method>` including success/failure (with exceptions) counters, and a latency (in millis) histogram.
 
-`c.t.finatra.http.filters.ThriftMDCFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/ThriftMDCFilter.scala>`__ |rarrow|
+`c.t.finatra.thrift.filters.ThriftMDCFilter <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/ThriftMDCFilter.scala>`__ |rarrow|
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - places the current Finagle `MethodMetadata <https://github.com/twitter/finagle/blob/develop/finagle-thrift/src/main/scala/com/twitter/finagle/thrift/MethodMetadata.scala>`__ and `ClientId <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/thrift/ClientId.scala>`__ locals into the `Mapped Diagnostic Context (MDC) <https://www.slf4j.org/manual.html#mdc>`__.
 
-`c.t.finatra.http.filters.TraceIdMDCFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/TraceIdMDCFilter.scala>`__ |rarrow|
+`c.t.finatra.thrift.filters.TraceIdMDCFilter <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/TraceIdMDCFilter.scala>`__ |rarrow|
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - places the current Finagle `TraceId <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/tracing/TraceId.scala>`__ local into the `Mapped Diagnostic Context (MDC) <https://www.slf4j.org/manual.html#mdc>`__.

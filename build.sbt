@@ -742,7 +742,7 @@ lazy val utils = project
   .settings(
     name := "finatra-utils",
     moduleName := "finatra-utils",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*WrappedValue.*;.*DeadlineValues.*;.*RichBuf.*;.*RichByteBuf.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*DeadlineValues.*;.*RichBuf.*;.*RichByteBuf.*",
     libraryDependencies ++= Seq(
       "com.google.inject" % "guice" % versions.guice,
       "joda-time" % "joda-time" % versions.jodaTime,
@@ -786,6 +786,7 @@ lazy val validation = project
       "joda-time" % "joda-time" % versions.jodaTime,
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "com.twitter" %% "util-reflect" % versions.twLibVersion,
+      "com.twitter" %% "util-validator" % versions.twLibVersion,
       "org.json4s" %% "json4s-core" % versions.json4s,
       "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
@@ -835,6 +836,7 @@ lazy val jackson = project
       "com.twitter" %% "finagle-http" % versions.twLibVersion % "test",
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "com.twitter" %% "util-reflect" % versions.twLibVersion,
+      "com.twitter" %% "util-validator" % versions.twLibVersion,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
     // special-case to only scaladoc what's necessary as some of the tests cannot generate scaladocs

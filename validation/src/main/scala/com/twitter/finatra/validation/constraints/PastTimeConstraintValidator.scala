@@ -1,33 +1,31 @@
 package com.twitter.finatra.validation.constraints
 
-import com.twitter.finatra.validation.{
-  ConstraintValidator,
-  ErrorCode,
-  MessageResolver,
-  ValidationResult
-}
+import com.twitter.finatra.validation.ErrorCode
+import com.twitter.util.validation.constraintvalidation.TwitterConstraintValidatorContext
+import jakarta.validation.{ConstraintValidator, ConstraintValidatorContext}
 import org.joda.time.DateTime
-
-private[validation] object PastTimeConstraintValidator {
-
-  def errorMessage(resolver: MessageResolver, value: DateTime): String =
-    resolver.resolve[PastTime](value)
-}
 
 /**
  * The validator for [[PastTime]] annotation.
  *
- * Validate if a if a datetime is in the past.
- *
- * @param messageResolver to resolve error message when validation fails.
+ * Validate if a datetime is in the past.
  */
-private[validation] class PastTimeConstraintValidator(messageResolver: MessageResolver)
-    extends ConstraintValidator[PastTime, DateTime](messageResolver) {
+@deprecated("Users should prefer to use standard constraints.", "2021-03-05")
+private[validation] class PastTimeConstraintValidator
+    extends ConstraintValidator[PastTime, DateTime] {
 
-  override def isValid(annotation: PastTime, value: DateTime): ValidationResult =
-    ValidationResult.validate(
-      value.isBeforeNow,
-      PastTimeConstraintValidator.errorMessage(messageResolver, value),
-      ErrorCode.TimeNotPast(value)
-    )
+  override def isValid(
+    obj: DateTime,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean = {
+    val valid = obj.isBeforeNow
+
+    if (!valid) {
+      TwitterConstraintValidatorContext
+        .withDynamicPayload(ErrorCode.TimeNotPast(obj))
+        .withMessageTemplate(s"[${obj.toString}] is not in the past")
+        .addConstraintViolation(constraintValidatorContext)
+    }
+    valid
+  }
 }

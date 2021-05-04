@@ -1,10 +1,12 @@
 package com.twitter.finatra.validation.tests.constraints
 
-import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
-import com.twitter.finatra.validation.constraints.{Min, MinConstraintValidator}
+import com.twitter.finatra.validation.constraints.Min
 import com.twitter.finatra.validation.tests.caseclasses._
-import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode, ValidationResult}
+import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode}
+import com.twitter.util.validation.conversions.ConstraintViolationOps.RichConstraintViolation
+import jakarta.validation.{ConstraintViolation, UnexpectedTypeException}
 import org.scalacheck.Gen
+import org.scalacheck.Shrink.shrinkAny
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 class MinConstraintValidatorTest
@@ -15,7 +17,7 @@ class MinConstraintValidatorTest
     val passValue = Gen.choose(1, Int.MaxValue)
 
     forAll(passValue) { value: Int =>
-      validate[MinIntExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MinIntExample](value).isEmpty shouldBe true
     }
   }
 
@@ -23,9 +25,14 @@ class MinConstraintValidatorTest
     val failValue = Gen.choose(Int.MinValue, 0)
 
     forAll(failValue) { value =>
-      validate[MinIntExample](value) should equal(
-        Invalid(errorMessage(Integer.valueOf(value)), errorCode(Integer.valueOf(value)))
-      )
+      val violations = validate[MinIntExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(Integer.valueOf(value))
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooSmall])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(Integer.valueOf(value))
     }
   }
 
@@ -33,7 +40,7 @@ class MinConstraintValidatorTest
     val passValue = Gen.choose(1L, Long.MaxValue)
 
     forAll(passValue) { value =>
-      validate[MinLongExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MinLongExample](value).isEmpty shouldBe true
     }
   }
 
@@ -41,12 +48,14 @@ class MinConstraintValidatorTest
     val failValue = Gen.choose(Long.MinValue, 0L)
 
     forAll(failValue) { value =>
-      validate[MinLongExample](value) should equal(
-        Invalid(
-          errorMessage(java.lang.Long.valueOf(value)),
-          errorCode(java.lang.Long.valueOf(value))
-        )
-      )
+      val violations = validate[MinLongExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(java.lang.Long.valueOf(value))
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooSmall])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(java.lang.Long.valueOf(value))
     }
   }
 
@@ -54,7 +63,7 @@ class MinConstraintValidatorTest
     val passValue = Gen.choose(0.1, Double.MaxValue)
 
     forAll(passValue) { value =>
-      validate[MinDoubleExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MinDoubleExample](value).isEmpty shouldBe true
     }
   }
 
@@ -62,12 +71,14 @@ class MinConstraintValidatorTest
     val failValue = Gen.choose(Double.MinValue, 0.0)
 
     forAll(failValue) { value =>
-      validate[MinDoubleExample](value) should equal(
-        Invalid(
-          errorMessage(java.lang.Double.valueOf(value)),
-          errorCode(java.lang.Double.valueOf(value))
-        )
-      )
+      val violations = validate[MinDoubleExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(java.lang.Double.valueOf(value))
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooSmall])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(value.toLong)
     }
   }
 
@@ -75,7 +86,7 @@ class MinConstraintValidatorTest
     val passValue = Gen.choose(0.1F, Float.MaxValue)
 
     forAll(passValue) { value =>
-      validate[MinFloatExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MinFloatExample](value).isEmpty shouldBe true
     }
   }
 
@@ -83,12 +94,14 @@ class MinConstraintValidatorTest
     val failValue = Gen.choose(Float.MinValue, 0.0F)
 
     forAll(failValue) { value =>
-      validate[MinFloatExample](value) should equal(
-        Invalid(
-          errorMessage(java.lang.Float.valueOf(value)),
-          errorCode(java.lang.Float.valueOf(value))
-        )
-      )
+      val violations = validate[MinFloatExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(java.lang.Float.valueOf(value))
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooSmall])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(value.toLong)
     }
   }
 
@@ -98,7 +111,7 @@ class MinConstraintValidatorTest
     } yield BigInt(long)
 
     forAll(passBigIntValue) { value =>
-      validate[MinBigIntExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MinBigIntExample](value).isEmpty shouldBe true
     }
   }
 
@@ -108,13 +121,13 @@ class MinConstraintValidatorTest
     } yield BigInt(long)
 
     forAll(passBigIntValue) { value =>
-      validate[MinSmallestLongBigIntExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MinSmallestLongBigIntExample](value).isEmpty shouldBe true
     }
   }
 
   test("pass validation for very large big int type") {
     val passValue = BigInt(Long.MaxValue)
-    validate[MinLargestLongBigIntExample](passValue).isInstanceOf[Valid] shouldBe true
+    validate[MinLargestLongBigIntExample](passValue).isEmpty shouldBe true
   }
 
   test("fail validation for big int type") {
@@ -123,18 +136,27 @@ class MinConstraintValidatorTest
     } yield BigInt(long)
 
     forAll(failBigIntValue) { value =>
-      validate[MinBigIntExample](value) should equal(Invalid(errorMessage(value), errorCode(value)))
+      val violations = validate[MinBigIntExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(value)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooSmall])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(value)
     }
   }
 
   test("fail validation for very small big int type") {
     val value = BigInt(Long.MinValue)
-    validate[MinSecondSmallestLongBigIntExample](value) should equal(
-      Invalid(
-        errorMessage(value, minValue = Long.MinValue + 1),
-        errorCode(value, minValue = Long.MinValue + 1)
-      )
-    )
+    val violations = validate[MinSecondSmallestLongBigIntExample](value)
+    violations.size should equal(1)
+    violations.head.getPropertyPath.toString should equal("numberValue")
+    violations.head.getMessage shouldBe errorMessage(value, minValue = Long.MinValue + 1)
+    violations.head.getInvalidValue shouldBe value
+    val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooSmall])
+    payload.isDefined shouldBe true
+    payload.get shouldBe errorCode(value, minValue = Long.MinValue + 1)
   }
 
   test("fail validation for very large big int type") {
@@ -143,12 +165,14 @@ class MinConstraintValidatorTest
     } yield BigInt(long)
 
     forAll(failBigIntValue) { value =>
-      validate[MinLargestLongBigIntExample](value) should equal(
-        Invalid(
-          errorMessage(value, minValue = Long.MaxValue),
-          errorCode(value, minValue = Long.MaxValue)
-        )
-      )
+      val violations = validate[MinLargestLongBigIntExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(value, minValue = Long.MaxValue)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooSmall])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(value, minValue = Long.MaxValue)
     }
   }
 
@@ -158,7 +182,7 @@ class MinConstraintValidatorTest
     } yield BigDecimal(double)
 
     forAll(passBigDecimalValue) { value =>
-      validate[MinBigDecimalExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MinBigDecimalExample](value).isEmpty shouldBe true
     }
   }
 
@@ -168,13 +192,13 @@ class MinConstraintValidatorTest
     } yield BigDecimal(double)
 
     forAll(passBigDecimalValue) { value =>
-      validate[MinSmallestLongBigDecimalExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MinSmallestLongBigDecimalExample](value).isEmpty shouldBe true
     }
   }
 
   test("pass validation for very large big decimal type") {
     val passValue = BigDecimal(Long.MaxValue)
-    validate[MinLargestLongBigDecimalExample](passValue).isInstanceOf[Valid] shouldBe true
+    validate[MinLargestLongBigDecimalExample](passValue).isEmpty shouldBe true
   }
 
   test("fail validation for big decimal type") {
@@ -183,20 +207,27 @@ class MinConstraintValidatorTest
     } yield BigDecimal(double)
 
     forAll(failBigDecimalValue) { value =>
-      validate[MinBigDecimalExample](value) should equal(
-        Invalid(errorMessage(value), errorCode(value))
-      )
+      val violations = validate[MinBigDecimalExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(value)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooSmall])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(value)
     }
   }
 
   test("fail validation for very small big decimal type") {
     val value = BigDecimal(Long.MinValue) + 0.1
-    validate[MinSecondSmallestLongBigDecimalExample](value) should equal(
-      Invalid(
-        errorMessage(value, minValue = Long.MinValue + 1),
-        errorCode(value, minValue = Long.MinValue + 1)
-      )
-    )
+    val violations = validate[MinSecondSmallestLongBigDecimalExample](value)
+    violations.size should equal(1)
+    violations.head.getPropertyPath.toString should equal("numberValue")
+    violations.head.getMessage shouldBe errorMessage(value, minValue = Long.MinValue + 1)
+    violations.head.getInvalidValue shouldBe value
+    val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooSmall])
+    payload.isDefined shouldBe true
+    payload.get shouldBe errorCode(value.toLong, minValue = Long.MinValue + 1)
   }
 
   test("fail validation for very large big decimal type") {
@@ -205,12 +236,14 @@ class MinConstraintValidatorTest
     } yield BigDecimal(double)
 
     forAll(failBigDecimalValue) { value =>
-      validate[MinLargestLongBigDecimalExample](value) should equal(
-        Invalid(
-          errorMessage(value, minValue = Long.MaxValue),
-          errorCode(value, minValue = Long.MaxValue)
-        )
-      )
+      val violations = validate[MinLargestLongBigDecimalExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(value, minValue = Long.MaxValue)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooSmall])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(value.toLong, minValue = Long.MaxValue)
     }
   }
 
@@ -221,7 +254,7 @@ class MinConstraintValidatorTest
     } yield n ++ m
 
     forAll(passValue) { value =>
-      validate[MinSeqExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MinSeqExample](value).isEmpty shouldBe true
     }
   }
 
@@ -231,12 +264,16 @@ class MinConstraintValidatorTest
     } yield Seq.fill(size) { 0 }
 
     forAll(failValue) { value =>
-      validate[MinSeqExample](value) should equal(
-        Invalid(
-          errorMessage(value = Integer.valueOf(value.size), minValue = 10),
-          errorCode(value = Integer.valueOf(value.size), minValue = 10)
-        )
-      )
+      val violations = validate[MinSeqExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(
+        value = Integer.valueOf(value.size),
+        minValue = 10)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooSmall])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(value = Integer.valueOf(value.size), minValue = 10)
     }
   }
 
@@ -248,7 +285,7 @@ class MinConstraintValidatorTest
 
     val passValue = Gen.mapOfN[String, Int](100, mapGenerator).suchThat(_.size >= 10)
     forAll(passValue) { value =>
-      validate[MinMapExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MinMapExample](value).isEmpty shouldBe true
     }
   }
 
@@ -260,12 +297,16 @@ class MinConstraintValidatorTest
 
     val failValue = Gen.mapOfN[String, Int](9, mapGenerator)
     forAll(failValue) { value =>
-      validate[MinMapExample](value) should equal(
-        Invalid(
-          errorMessage(value = Integer.valueOf(value.size), minValue = 10),
-          errorCode(value = Integer.valueOf(value.size), minValue = 10)
-        )
-      )
+      val violations = validate[MinMapExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(
+        value = Integer.valueOf(value.size),
+        minValue = 10)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooSmall])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(value = Integer.valueOf(value.size), minValue = 10)
     }
   }
 
@@ -276,7 +317,7 @@ class MinConstraintValidatorTest
     } yield n ++ m
 
     forAll(passValue) { value =>
-      validate[MinArrayExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MinArrayExample](value).isEmpty shouldBe true
     }
   }
 
@@ -286,26 +327,31 @@ class MinConstraintValidatorTest
     } yield Array.fill(size) { 0 }
 
     forAll(failValue) { value =>
-      validate[MinArrayExample](value) should equal(
-        Invalid(
-          errorMessage(value = Integer.valueOf(value.length), minValue = 10),
-          errorCode(value = Integer.valueOf(value.length), minValue = 10)
-        )
-      )
+      val violations = validate[MinArrayExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(
+        value = Integer.valueOf(value.length),
+        minValue = 10)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooSmall])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(value = Integer.valueOf(value.length), minValue = 10)
     }
   }
 
   test("fail for unsupported class type") {
-    intercept[IllegalArgumentException] {
+    intercept[UnexpectedTypeException] {
       validate[MinInvalidTypeExample]("strings are not supported")
     }
   }
 
-  private def validate[T: Manifest](value: Any): ValidationResult =
-    super.validate(manifest[T].runtimeClass, "numberValue", classOf[Min], value)
+  private def validate[T: Manifest](value: Any): Set[ConstraintViolation[T]] = {
+    super.validate[Min, T](manifest[T].runtimeClass, "numberValue", value)
+  }
 
   private def errorMessage(value: Number, minValue: Long = 1): String =
-    MinConstraintValidator.errorMessage(messageResolver, value, minValue)
+    s"[$value] is not greater than or equal to $minValue"
 
   private def errorCode(value: Number, minValue: Long = 1): ErrorCode =
     ErrorCode.ValueTooSmall(minValue, value)

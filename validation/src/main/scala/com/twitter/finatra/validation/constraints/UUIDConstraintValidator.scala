@@ -1,19 +1,12 @@
 package com.twitter.finatra.validation.constraints
 
+import com.twitter.finatra.validation.ErrorCode
 import com.twitter.util.Try
+import com.twitter.util.validation.constraintvalidation.TwitterConstraintValidatorContext
+import jakarta.validation.{ConstraintValidator, ConstraintValidatorContext}
 import java.util.{UUID => JUUID}
-import com.twitter.finatra.validation.{
-  ConstraintValidator,
-  ErrorCode,
-  MessageResolver,
-  ValidationResult
-}
 
-private[validation] object UUIDConstraintValidator {
-
-  def errorMessage(resolver: MessageResolver, value: String): String =
-    resolver.resolve[UUID](value)
-
+private object UUIDConstraintValidator {
   def isValid(value: String): Boolean = Try(JUUID.fromString(value)).isReturn
 }
 
@@ -21,16 +14,22 @@ private[validation] object UUIDConstraintValidator {
  * The default validator for [[UUID]] annotation.
  *
  * Validate if the value of the field is a UUID.
- *
- * @param messageResolver to resolve error message when validation fails.
  */
-private[validation] class UUIDConstraintValidator(messageResolver: MessageResolver)
-    extends ConstraintValidator[UUID, String](messageResolver) {
+@deprecated("Users should prefer to use standard constraints.", "2021-03-05")
+private[validation] class UUIDConstraintValidator extends ConstraintValidator[UUID, String] {
 
-  override def isValid(annotation: UUID, value: String): ValidationResult =
-    ValidationResult.validate(
-      UUIDConstraintValidator.isValid(value),
-      UUIDConstraintValidator.errorMessage(messageResolver, value),
-      ErrorCode.InvalidUUID(value)
-    )
+  override def isValid(
+    obj: String,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean = {
+    val valid = UUIDConstraintValidator.isValid(obj)
+
+    if (!valid) {
+      TwitterConstraintValidatorContext
+        .withDynamicPayload(ErrorCode.InvalidUUID(obj))
+        .withMessageTemplate(s"[$obj] is not a valid UUID")
+        .addConstraintViolation(constraintValidatorContext)
+    }
+    valid
+  }
 }

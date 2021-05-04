@@ -1,28 +1,32 @@
 package com.twitter.finatra.http.tests.integration.json
 
-import com.twitter.finatra.validation.{MessageResolver, Validator, ValidatorModule}
+import com.twitter.finatra.validation.ValidatorModule
 import com.twitter.inject.Injector
-import java.lang.annotation.Annotation
-import scala.reflect.ClassTag
+import com.twitter.util.validation.ScalaValidator
+import jakarta.validation.MessageInterpolator
+import java.util.Locale
 
 object CustomizedValidatorModule extends ValidatorModule {
+  private val Message = "Whatever you provided is wrong."
+
+  class CustomizedMessageInterpolator extends MessageInterpolator {
+    override def interpolate(
+      s: String,
+      context: MessageInterpolator.Context
+    ): String = Message
+
+    override def interpolate(
+      s: String,
+      context: MessageInterpolator.Context,
+      locale: Locale
+    ): String = Message
+  }
 
   override def configureValidator(
     injector: Injector,
-    builder: Validator.Builder
-  ): Validator.Builder =
+    builder: ScalaValidator.Builder
+  ): ScalaValidator.Builder =
     builder
-      .withCacheSize(512)
-      .withMessageResolver(new CustomizedMessageResolver)
-}
-
-private object CustomizedMessageResolver {
-  private val Message = "Whatever you provided is wrong."
-}
-
-class CustomizedMessageResolver extends MessageResolver {
-  import CustomizedMessageResolver._
-
-  override def resolve(clazz: Class[_ <: Annotation], values: Any*): String = Message
-  override def resolve[Ann <: Annotation: ClassTag](values: Any*): String = Message
+      .withDescriptorCacheSize(512)
+      .withMessageInterpolator(new CustomizedMessageInterpolator)
 }

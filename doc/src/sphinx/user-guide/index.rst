@@ -52,8 +52,8 @@ HTTP Server
 - :doc:`http/exceptions`
 - :doc:`http/warmup`
 
-Validation
-----------
+Case Class Validation
+---------------------
 
 - :doc:`validation/index`
 

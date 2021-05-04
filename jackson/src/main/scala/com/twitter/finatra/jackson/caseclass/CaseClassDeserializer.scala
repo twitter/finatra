@@ -18,30 +18,20 @@ import com.fasterxml.jackson.databind.exc.{
 }
 import com.fasterxml.jackson.databind.introspect._
 import com.fasterxml.jackson.databind.util.SimpleBeanPropertyDefinition
+import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.ValidationError
 import com.twitter.finatra.jackson.caseclass.exceptions.{
   CaseClassFieldMappingException,
   CaseClassMappingException,
-  ErrorCode,
   InjectableValuesException,
   _
-}
-import com.twitter.finatra.validation.ValidationResult.Invalid
-import com.twitter.finatra.validation.internal.{
-  FieldValidator,
-  AnnotatedField => ValidationAnnotatedField,
-  AnnotatedMember => ValidationAnnotatedMember,
-  AnnotatedMethod => ValidationAnnotatedMethod
-}
-import com.twitter.finatra.validation.{
-  Path,
-  ValidationResult,
-  Validator,
-  ErrorCode => ValidationErrorCode
 }
 import com.twitter.inject.Logging
 import com.twitter.inject.domain.WrappedValue
 import com.twitter.util.reflect.{Annotations, Types => ReflectionTypes}
-import com.twitter.util.Try
+import com.twitter.util.validation.ScalaValidator
+import com.twitter.util.validation.conversions.ConstraintViolationOps._
+import com.twitter.util.validation.conversions.PathOps._
+import jakarta.validation.{ConstraintViolation, Payload}
 import java.lang.annotation.Annotation
 import java.lang.reflect.{
   Constructor,
@@ -56,7 +46,7 @@ import java.lang.reflect.{
 import javax.annotation.concurrent.ThreadSafe
 import org.json4s.reflect.{ClassDescriptor, ConstructorDescriptor, Reflector, ScalaType}
 import scala.collection.JavaConverters._
-import scala.collection.{Map, mutable}
+import scala.collection.mutable
 import scala.util.control.NonFatal
 
 private object CaseClassDeserializer {
@@ -77,14 +67,105 @@ private object CaseClassDeserializer {
   /* Holder of constructor arg to ScalaType */
   case class ConstructorParam(name: String, scalaType: ScalaType)
 
-  case class ValidationDescriptor(
-    clazz: Class[_],
-    path: Path,
-    fields: Map[String, ValidationAnnotatedField],
-    methods: Array[ValidationAnnotatedMethod])
-      extends ValidationAnnotatedMember {
-    // the name is tracked by the deserializer
-    override final val name: Option[String] = None
+  private[this] def applyPropertyNamingStrategy(
+    config: DeserializationConfig,
+    fieldName: String
+  ): String =
+    config.getPropertyNamingStrategy.nameForField(config, null, fieldName)
+
+  // Validate `Constraint` annotations for all fields.
+  def executeFieldValidations(
+    validatorOption: Option[ScalaValidator],
+    config: DeserializationConfig,
+    executable: Executable,
+    mixinClazz: Option[Class[_]],
+    constructorValues: Array[Object],
+    fields: Array[CaseClassField]
+  ): Seq[CaseClassFieldMappingException] = validatorOption match {
+    case Some(validator) =>
+      val results = mutable.ListBuffer[CaseClassFieldMappingException]()
+      val violations: Set[ConstraintViolation[Any]] =
+        validator.forExecutables.validateExecutableParameters[Any](
+          executable,
+          constructorValues.asInstanceOf[Array[Any]],
+          fields.map(_.name),
+          mixinClazz
+        )
+      val iterator = violations.iterator
+      while (iterator.hasNext) {
+        val violation: ConstraintViolation[Any] = iterator.next()
+        results.append(
+          CaseClassFieldMappingException(
+            CaseClassFieldMappingException.PropertyPath.leaf(
+              applyPropertyNamingStrategy(config, violation.getPropertyPath.getLeafNode.toString)
+            ),
+            CaseClassFieldMappingException.Reason(
+              message = violation.getMessage,
+              detail = ValidationError(
+                violation,
+                CaseClassFieldMappingException.ValidationError.Field,
+                violation.getDynamicPayload(classOf[Payload])
+              )
+            )
+          )
+        )
+      }
+      results.toSeq
+    case _ =>
+      Seq.empty[CaseClassFieldMappingException]
+  }
+
+  // We do not want to "leak" method names, so we only want to return the leaf node
+  // if the ConstraintViolation PropertyPath size is greater than 1 element.
+  private[this] def getMethodValidationViolationPropertyPath(
+    config: DeserializationConfig,
+    violation: ConstraintViolation[_]
+  ): CaseClassFieldMappingException.PropertyPath = {
+    val propertyPath = violation.getPropertyPath
+    val iterator = propertyPath.iterator.asScala
+    if (iterator.hasNext) {
+      iterator.next() // move the iterator
+      if (iterator.hasNext) { // has another element, return the leaf
+        CaseClassFieldMappingException.PropertyPath.leaf(
+          applyPropertyNamingStrategy(config, propertyPath.getLeafNode.toString)
+        )
+      } else { // does not have another element, return empty
+        CaseClassFieldMappingException.PropertyPath.Empty
+      }
+    } else {
+      CaseClassFieldMappingException.PropertyPath.Empty
+    }
+  }
+
+  // Validate all methods annotated with `MethodValidation` defined in the deserialized case class.
+  // This is called after the case class is created.
+  def executeMethodValidations(
+    validatorOption: Option[ScalaValidator],
+    config: DeserializationConfig,
+    obj: Any
+  ): Seq[CaseClassFieldMappingException] = validatorOption match {
+    case Some(validator) =>
+      try {
+        validator
+          .validateMethods[Any](obj).map { violation: ConstraintViolation[Any] =>
+            CaseClassFieldMappingException(
+              getMethodValidationViolationPropertyPath(config, violation),
+              CaseClassFieldMappingException.Reason(
+                message = violation.getMessage,
+                detail = ValidationError(
+                  violation,
+                  CaseClassFieldMappingException.ValidationError.Method,
+                  violation.getDynamicPayload(classOf[Payload]))
+              )
+            )
+          }.toSeq
+      } catch {
+        case NonFatal(e: InvocationTargetException) if e.getCause != null =>
+          // propagate the InvocationTargetException
+          throw e.getCause
+      }
+    case _ =>
+      Seq.empty[CaseClassFieldMappingException]
   }
 }
 
@@ -130,7 +211,7 @@ private[jackson] class CaseClassDeserializer(
   config: DeserializationConfig,
   beanDescription: BeanDescription,
   injectableTypes: InjectableTypes,
-  validator: Option[Validator])
+  validator: Option[ScalaValidator])
     extends JsonDeserializer[AnyRef]
     with Logging {
   import CaseClassDeserializer._
@@ -258,45 +339,6 @@ private[jackson] class CaseClassDeserializer(
     collectedFieldAnnotations
   }
 
-  private[this] val annotatedValidationClazz: Option[ValidationDescriptor] =
-    validator match {
-      case Some(v) =>
-        Some(createConstructionValidationClass(v, clazz, fieldAnnotations))
-      case _ =>
-        None
-    }
-
-  private[this] def createConstructionValidationClass(
-    validator: Validator,
-    clazz: Class[_],
-    annotationsMap: Map[String, Array[Annotation]]
-  ): ValidationDescriptor = {
-    val annotatedFieldsMap = for {
-      (name, annotations) <- annotationsMap
-    } yield {
-      val fieldValidators = for {
-        annotation <- annotations if Validator.isConstraintAnnotation(annotation)
-      } yield validator.findFieldValidator(annotation)
-
-      (
-        name,
-        ValidationAnnotatedField(
-          Some(name),
-          Path(name),
-          // the annotation may be from a static or secondary constructor
-          // for which we have no field information
-          Try(clazz.getDeclaredField(name)).toOption,
-          fieldValidators
-        )
-      )
-    }
-    ValidationDescriptor(
-      clazz,
-      Path.Empty,
-      annotatedFieldsMap,
-      Validator.getMethodValidations(clazz))
-  }
-
   /* exposed for testing */
   private[jackson] val fields: Array[CaseClassField] =
     CaseClassField.createFields(
@@ -306,7 +348,6 @@ private[jackson] class CaseClassDeserializer(
       caseClazzCreator.propertyDefinitions,
       fieldAnnotations,
       propertyNamingStrategy,
-      config.getTypeFactory,
       injectableTypes
     )
 
@@ -367,21 +408,23 @@ private[jackson] class CaseClassDeserializer(
   ): Object = {
     val jsonFieldNames: Seq[String] = jsonNode.fieldNames().asScala.toSeq
     val caseClassFieldNames: Seq[String] = fields.map(_.name)
-    val unknownFields: Seq[String] = unknownProperties(context, jsonFieldNames, caseClassFieldNames)
 
-    val (values, errors) = if (unknownFields.nonEmpty) {
-      // more incoming fields in the JSON than are defined in the case class
-      (
-        Seq.empty[Object].toArray,
-        unknownFieldErrors(
-          jsonParser,
-          caseClassFieldNames,
-          jsonFieldNames.diff(caseClassFieldNames)))
-    } else {
-      parseConstructorValues(jsonParser, context, jsonNode)
-    }
+    handleUnknownFields(jsonParser, context, jsonFieldNames, caseClassFieldNames)
+    val (values, parseErrors) = parseConstructorValues(jsonParser, context, jsonNode)
 
-    createAndValidate(values, errors)
+    // run field validations
+    val validationErrors = executeFieldValidations(
+      validator,
+      config,
+      caseClazzCreator.executable,
+      mixinClazz,
+      values,
+      fields)
+
+    val errors = parseErrors ++ validationErrors
+    if (errors.nonEmpty) throw CaseClassMappingException(errors.toSet)
+
+    newInstance(values)
   }
 
   /** Return all "unknown" properties sent in the incoming JSON */
@@ -411,25 +454,31 @@ private[jackson] class CaseClassDeserializer(
     } else Seq.empty[String]
   }
 
-  /** Return the list of [[CaseClassFieldMappingException]] per unknown field */
-  private[this] def unknownFieldErrors(
+  /** Throws a [[CaseClassMappingException]] with a set of [[CaseClassFieldMappingException]] per unknown field */
+  private[this] def handleUnknownFields(
     jsonParser: JsonParser,
-    caseClassFieldNames: Seq[String],
-    unknownFields: Seq[String]
-  ): Seq[CaseClassFieldMappingException] = {
-    unknownFields.map { field =>
-      CaseClassFieldMappingException(
-        CaseClassFieldMappingException.PropertyPath.Empty,
-        ValidationResult.Invalid(
-          message = UnrecognizedPropertyException
-            .from(
-              jsonParser,
-              clazz,
-              field,
-              caseClassFieldNames.map(_.asInstanceOf[Object]).asJavaCollection
-            ).getMessage
+    context: DeserializationContext,
+    jsonFieldNames: Seq[String],
+    caseClassFieldNames: Seq[String]
+  ): Unit = {
+    // handles more or less incoming fields in the JSON than are defined in the case class
+    val unknownFields: Seq[String] = unknownProperties(context, jsonFieldNames, caseClassFieldNames)
+    if (unknownFields.nonEmpty) {
+      val errors = unknownFields.map { field =>
+        CaseClassFieldMappingException(
+          CaseClassFieldMappingException.PropertyPath.Empty,
+          CaseClassFieldMappingException.Reason(
+            message = UnrecognizedPropertyException
+              .from(
+                jsonParser,
+                clazz,
+                field,
+                caseClassFieldNames.map(_.asInstanceOf[Object]).asJavaCollection
+              ).getMessage
+          )
         )
-      )
+      }
+      throw CaseClassMappingException(errors.toSet)
     }
   }
 
@@ -468,25 +517,17 @@ private[jackson] class CaseClassDeserializer(
     /* Mutable Fields */
     var constructorValuesIdx = 0
     val constructorValues = new Array[Object](numConstructorArgs)
-    val errors = mutable.ArrayBuffer[CaseClassFieldMappingException]()
+    val errors = mutable.ListBuffer[CaseClassFieldMappingException]()
 
     while (constructorValuesIdx < numConstructorArgs) {
       val field = fields(constructorValuesIdx)
       try {
         val value = field.parse(context, jsonParser.getCodec, jsonNode)
         constructorValues(constructorValuesIdx) = value //mutation
-
-        annotatedValidationClazz match {
-          case Some(annotatedClazz) if annotatedClazz.fields.nonEmpty =>
-            val fieldValidationErrors =
-              executeFieldValidations(value, field, annotatedClazz.fields)
-            append(errors, fieldValidationErrors)
-          case _ => // do nothing
-        }
       } catch {
         case e: CaseClassFieldMappingException =>
           if (e.path == null) {
-            // fill in missing path details
+            // fill in missing path detail
             addException(
               field,
               e.withPropertyPath(CaseClassFieldMappingException.PropertyPath.leaf(field.name)),
@@ -507,7 +548,7 @@ private[jackson] class CaseClassDeserializer(
           // don't catch just IllegalArgumentException as that hides errors from validating an incorrect type
           val ex = CaseClassFieldMappingException(
             CaseClassFieldMappingException.PropertyPath.leaf(field.name),
-            Invalid(e.getMessage, ValidationErrorCode.Unknown)
+            CaseClassFieldMappingException.Reason(e.getMessage)
           )
           addException(
             field,
@@ -521,10 +562,10 @@ private[jackson] class CaseClassDeserializer(
             field,
             CaseClassFieldMappingException(
               CaseClassFieldMappingException.PropertyPath.leaf(field.name),
-              Invalid(
+              CaseClassFieldMappingException.Reason(
                 s"'${e.getValue.toString}' is not a " +
                   s"valid ${Types.wrapperType(e.getTargetType).getSimpleName}${validValuesString(e)}",
-                ErrorCode.JsonProcessingError(e)
+                CaseClassFieldMappingException.JsonProcessingError(e)
               )
             ),
             constructorValues,
@@ -536,10 +577,10 @@ private[jackson] class CaseClassDeserializer(
             field,
             CaseClassFieldMappingException(
               CaseClassFieldMappingException.PropertyPath.leaf(field.name),
-              Invalid(
+              CaseClassFieldMappingException.Reason(
                 s"'${jsonNode.asText("")}' is not a " +
                   s"valid ${Types.wrapperType(e.getTargetType).getSimpleName}${validValuesString(e)}",
-                ErrorCode.JsonProcessingError(e)
+                CaseClassFieldMappingException.JsonProcessingError(e)
               )
             ),
             constructorValues,
@@ -556,7 +597,10 @@ private[jackson] class CaseClassDeserializer(
             field,
             CaseClassFieldMappingException(
               CaseClassFieldMappingException.PropertyPath.leaf(field.name),
-              Invalid(e.errorMessage, ErrorCode.JsonProcessingError(e))
+              CaseClassFieldMappingException.Reason(
+                e.errorMessage,
+                CaseClassFieldMappingException.JsonProcessingError(e)
+              )
             ),
             constructorValues,
             constructorValuesIdx,
@@ -569,17 +613,14 @@ private[jackson] class CaseClassDeserializer(
             field,
             CaseClassFieldMappingException(
               CaseClassFieldMappingException.PropertyPath.leaf(field.name),
-              Invalid(
-                e.getMessage,
-                ValidationErrorCode.Unknown
-              )
+              CaseClassFieldMappingException.Reason(e.getMessage)
             ),
             constructorValues,
             constructorValuesIdx,
             errors
           )
         case e: InjectableValuesException =>
-          // we rethrow, to prevent leaking internal injection details in the "errors" array
+          // we rethrow, to prevent leaking internal injection detail in the "errors" array
           throw e
         case NonFatal(e) =>
           error("Unexpected exception parsing field: " + field, e)
@@ -600,7 +641,7 @@ private[jackson] class CaseClassDeserializer(
     e: CaseClassFieldMappingException,
     array: Array[Object],
     idx: Int,
-    errors: mutable.ArrayBuffer[CaseClassFieldMappingException]
+    errors: mutable.ListBuffer[CaseClassFieldMappingException]
   ): Unit = {
     array(idx) = field.missingValue //mutation
     errors += e //mutation
@@ -613,113 +654,33 @@ private[jackson] class CaseClassDeserializer(
       ""
   }
 
-  private[this] def createAndValidate(
-    constructorValues: Array[Object],
-    fieldErrors: Seq[CaseClassFieldMappingException]
-  ): Object = {
-    if (fieldErrors.nonEmpty) {
-      throw CaseClassMappingException(fieldErrors.toSet)
-    }
+  private[this] def newInstance(constructorValues: Array[Object]): Object = {
+    val obj =
+      try {
+        instantiate(constructorValues)
+      } catch {
+        case e @ (_: InvocationTargetException | _: ExceptionInInitializerError) =>
+          if (e.getCause == null)
+            throw e // propagate the underlying cause of the failed instantiation if available
+          else throw e.getCause
+      }
+    val methodValidationErrors = executeMethodValidations(validator, config, obj)
+    if (methodValidationErrors.nonEmpty)
+      throw CaseClassMappingException(methodValidationErrors.toSet)
 
-    val obj = create(constructorValues)
-    annotatedValidationClazz match {
-      case Some(annotatedClazz) if annotatedClazz.methods.nonEmpty =>
-        executeMethodValidations(fieldErrors, obj, annotatedClazz.methods)
-      case _ => // do nothing
-    }
     obj
   }
 
-  private[this] def create(constructorValues: Array[Object]): Object = {
-    try {
-      caseClazzCreator.executable match {
-        case method: Method =>
-          // if the creator is of type Method, we assume the need to invoke the companion object
-          method.invoke(clazzDescriptor.companion.get.instance, constructorValues: _*)
-        case const: Constructor[_] =>
-          // otherwise simply invoke the constructor
-          const.newInstance(constructorValues: _*).asInstanceOf[Object]
-      }
-    } catch {
-      case e @ (_: InvocationTargetException | _: ExceptionInInitializerError) =>
-        // propagate the underlying cause of the failed instantiation if available
-        // TODO: use DeserializationContext.handleInstantiationProblem which will wrap the cause in a JsonMappingException
-        if (e.getCause == null) throw e else throw e.getCause
-    }
-  }
-
-  // Validate `Constraint` annotations for each field.
-  //
-  // fields: All field's `Constraint` annotations and their matching `ConstraintValidator`s are stored in
-  // `ValidationAnnotationField`, keyed by the field name.
-  private[this] def executeFieldValidations(
-    value: Any,
-    field: CaseClassField,
-    fields: Map[String, ValidationAnnotatedField]
-  ): Seq[CaseClassFieldMappingException] = {
-    validator match {
-      case Some(v) =>
-        for {
-          invalid @ Invalid(_, _, _, _) <-
-            v.validateField(
-                value,
-                field.beanPropertyDefinition.getInternalName,
-                fieldValidators = fields.get(field.beanPropertyDefinition.getInternalName) match {
-                  case Some(annotatedField) => annotatedField.fieldValidators
-                  case _ => Array.empty[FieldValidator]
-                }
-              ).toSeq
-        } yield {
-          CaseClassFieldMappingException(
-            CaseClassFieldMappingException.PropertyPath.leaf(field.name),
-            invalid)
-        }
-      case _ =>
-        Seq.empty[CaseClassFieldMappingException]
-    }
-  }
-
-  // Validate all methods annotated with `MethodValidation` defined in the deserialized case class.
-  // This is called after the case class is created.
-  //
-  // obj: the deserialized case class
-  // methods: all methods and their annotations are stored in `ValidationAnnotatedMethod`, and is
-  //          passed in to this method as the value of `methods` parameter.
-  // fieldErrors: all failed field validations from
-  private[this] def executeMethodValidations(
-    fieldErrors: Seq[CaseClassFieldMappingException],
-    obj: Any,
-    methods: Array[ValidationAnnotatedMethod]
-  ): Unit = {
-    if (validator.isDefined) {
-      // only run method validations if we have a configured Validator
-      val methodValidationErrors =
-        new mutable.ArrayBuffer[Iterable[CaseClassFieldMappingException]]()
-      Validator.validateMethods(obj, methods) {
-        case (_, invalid) =>
-          val caseClassFields = Validator.extractFieldsFromMethodValidation(invalid.annotation)
-          val exceptions = caseClassFields
-            .map(
-              CaseClassFieldMappingException.PropertyPath.leaf
-            ) // per field, create a new PropertyPath with the given field as the leaf
-            .map(
-              CaseClassFieldMappingException(_, invalid)
-            ) // create a new CaseClassFieldMappingException
-          // with the given PropertyPath and the ValidationResult.Invalid
-          if (exceptions.isEmpty) {
-            methodValidationErrors.append(
-              Seq(
-                CaseClassFieldMappingException(
-                  CaseClassFieldMappingException.PropertyPath.Empty,
-                  invalid)))
-          } else {
-            methodValidationErrors.append(exceptions)
-          }
-      }
-
-      if (methodValidationErrors.nonEmpty) {
-        throw CaseClassMappingException(fieldErrors.toSet ++ methodValidationErrors.flatten)
-      }
+  private[this] def instantiate(
+    constructorValues: Array[Object]
+  ): Object = {
+    caseClazzCreator.executable match {
+      case method: Method =>
+        // if the creator is of type Method, we assume the need to invoke the companion object
+        method.invoke(clazzDescriptor.companion.get.instance, constructorValues: _*)
+      case constructor: Constructor[_] =>
+        // otherwise simply invoke the constructor
+        constructor.newInstance(constructorValues: _*).asInstanceOf[Object]
     }
   }
 
@@ -731,10 +692,6 @@ private[jackson] class CaseClassDeserializer(
         config.getPropertyNamingStrategy
     }
   }
-
-  // optimized
-  private[this] def append[T](buffer: mutable.ArrayBuffer[T], seqToAppend: Seq[T]): Unit =
-    if (seqToAppend.nonEmpty) buffer ++= seqToAppend
 
   private[this] def annotateConstructor(
     constructor: Constructor[_],

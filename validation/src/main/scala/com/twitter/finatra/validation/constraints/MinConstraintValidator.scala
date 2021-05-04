@@ -1,84 +1,91 @@
 package com.twitter.finatra.validation.constraints
 
-import com.twitter.finatra.validation.{
-  ConstraintValidator,
-  ErrorCode,
-  MessageResolver,
-  ValidationResult
-}
-
-private[validation] object MinConstraintValidator {
-
-  def errorMessage(resolver: MessageResolver, value: Any, minValue: Long): String =
-    resolver.resolve[Min](value, minValue)
-}
+import com.twitter.finatra.validation.ErrorCode
+import com.twitter.util.validation.constraintvalidation.TwitterConstraintValidatorContext
+import jakarta.validation.{ConstraintValidator, ConstraintValidatorContext, UnexpectedTypeException}
 
 /**
  * The validator for [[Min]] annotation.
  *
  * Validate if a given value is greater than or equal to the value defined in [[Min]] annotation.
- *
- * @param messageResolver to resolve error message when validation fails.
  */
-private[validation] class MinConstraintValidator(messageResolver: MessageResolver)
-    extends ConstraintValidator[Min, Any](messageResolver) {
+@deprecated("Users should prefer to use standard constraints.", "2021-03-05")
+private[validation] class MinConstraintValidator extends ConstraintValidator[Min, Any] {
 
-  /* Public */
+  @volatile private[this] var minValue: Long = _
 
-  override def isValid(annotation: Min, value: Any): ValidationResult = {
-    val minValue = annotation.asInstanceOf[Min].value()
-    value match {
-      case arrayValue: Array[_] =>
-        validationResult(arrayValue, minValue)
-      case mapValue: Map[_, _] =>
-        validationResult(mapValue, minValue)
-      case traversableValue: Iterable[_] =>
-        validationResult(traversableValue, minValue)
-      case bigDecimalValue: BigDecimal =>
-        validationResult(bigDecimalValue, minValue)
-      case bigIntValue: BigInt =>
-        validationResult(bigIntValue, minValue)
-      case numberValue: Number =>
-        validationResult(numberValue, minValue)
-      case _ =>
-        throw new IllegalArgumentException(
-          s"Class [${value.getClass.getName}] is not supported by ${this.getClass.getName}")
-    }
+  override def initialize(constraintAnnotation: Min): Unit = {
+    this.minValue = constraintAnnotation.value()
+  }
+
+  override def isValid(
+    obj: Any,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean = obj match {
+    case arrayValue: Array[_] => isValid(arrayValue.length, constraintValidatorContext)
+    case mapValue: Map[_, _] => isValid(mapValue.size, constraintValidatorContext)
+    case traversableValue: Iterable[_] =>
+      isValid(traversableValue.size, constraintValidatorContext)
+    case iterableWrapper: java.util.Collection[_] =>
+      isValid(iterableWrapper.size(), constraintValidatorContext)
+    case bigDecimalValue: BigDecimal => isValid(bigDecimalValue, constraintValidatorContext)
+    case bigIntValue: BigInt => isValid(bigIntValue, constraintValidatorContext)
+    case numberValue: Number => isValid(numberValue, constraintValidatorContext)
+    case _ =>
+      throw new UnexpectedTypeException(
+        s"Class [${obj.getClass.getName}] is not supported by ${this.getClass.getName}")
   }
 
   /* Private */
 
-  private[this] def validationResult(value: Iterable[_], minValue: Long) = {
-    val size = value.size
-    ValidationResult.validate(
-      minValue <= size,
-      errorMessage(Integer.valueOf(size), minValue),
-      errorCode(Integer.valueOf(size), minValue)
-    )
+  private[this] def isValid(
+    value: BigDecimal,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean =
+    handleInvalid(
+      BigDecimal(this.minValue) <= value,
+      value.toString,
+      value.longValue,
+      constraintValidatorContext)
+
+  private[this] def isValid(
+    value: BigInt,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean =
+    handleInvalid(
+      BigInt(this.minValue) <= value,
+      value.toString,
+      value.longValue,
+      constraintValidatorContext)
+
+  private[this] def isValid(
+    value: Number,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean =
+    handleInvalid(
+      this.minValue <= value.doubleValue,
+      value.toString,
+      value.longValue(),
+      constraintValidatorContext)
+
+  private[this] def isValid(
+    value: Int,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean =
+    handleInvalid(this.minValue <= value, value.toString, value.toLong, constraintValidatorContext)
+
+  private[this] def handleInvalid(
+    valid: => Boolean,
+    value: String,
+    valueAsLong: Long,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean = {
+    if (!valid) {
+      TwitterConstraintValidatorContext
+        .withDynamicPayload(ErrorCode.ValueTooSmall(minValue, valueAsLong))
+        .withMessageTemplate(s"[$value] is not greater than or equal to $minValue")
+        .addConstraintViolation(constraintValidatorContext)
+    }
+    valid
   }
-
-  private[this] def errorMessage(value: Number, minValue: Long) =
-    MinConstraintValidator.errorMessage(messageResolver, value, minValue)
-
-  private[this] def errorCode(value: Number, minValue: Long): ErrorCode =
-    ErrorCode.ValueTooSmall(minValue, value)
-
-  private[this] def validationResult(value: BigDecimal, minValue: Long) =
-    ValidationResult.validate(
-      BigDecimal(minValue) <= value,
-      errorMessage(value, minValue),
-      errorCode(value, minValue))
-
-  private[this] def validationResult(value: BigInt, minValue: Long) =
-    ValidationResult.validate(
-      BigInt(minValue) <= value,
-      errorMessage(value, minValue),
-      errorCode(value, minValue))
-
-  private[this] def validationResult(value: Number, minValue: Long) =
-    ValidationResult.validate(
-      minValue <= value.doubleValue(),
-      errorMessage(value, minValue),
-      errorCode(value, minValue)
-    )
 }

@@ -111,7 +111,7 @@ class ScalaObjectMapperTest extends AbstractScalaObjectMapperTest {
     )
 
     // mapper = loose, case class = annotated strict --> Fail
-    intercept[JsonMappingException] {
+    val e = intercept[JsonMappingException] {
       mapper.parse[StrictCaseClass](
         """
           |{
@@ -122,6 +122,7 @@ class ScalaObjectMapperTest extends AbstractScalaObjectMapperTest {
           |""".stripMargin
       )
     }
+    e.getMessage.contains("Unrecognized field \"extra\"") should be(true)
   }
 
   test("regular mapper handles unknown properties when json provides LESS fields than case class") {
@@ -136,7 +137,7 @@ class ScalaObjectMapperTest extends AbstractScalaObjectMapperTest {
     )
 
     // mapper = loose, case class = annotated strict --> Fail
-    intercept[JsonMappingException] {
+    val e = intercept[JsonMappingException] {
       mapper.parse[StrictCaseClassWithOption](
         """
           |{
@@ -146,6 +147,7 @@ class ScalaObjectMapperTest extends AbstractScalaObjectMapperTest {
           |""".stripMargin
       )
     }
+    e.getMessage.contains("Unrecognized field \"extra\"") should be(true)
   }
 
   test("regular mapper handles unknown properties") {
@@ -160,7 +162,7 @@ class ScalaObjectMapperTest extends AbstractScalaObjectMapperTest {
     )
 
     // mapper = loose, case class = annotated strict --> Fail (no field named 'flame')
-    intercept[JsonMappingException] {
+    val e = intercept[JsonMappingException] {
       mapper.parse[StrictCaseClassIdAndOption](
         """
           |{
@@ -170,6 +172,7 @@ class ScalaObjectMapperTest extends AbstractScalaObjectMapperTest {
           |""".stripMargin
       )
     }
+    e.getMessage.contains("Unrecognized field \"flame\"") should be(true)
   }
 
   test("mapper with deserialization config fails on unknown properties") {

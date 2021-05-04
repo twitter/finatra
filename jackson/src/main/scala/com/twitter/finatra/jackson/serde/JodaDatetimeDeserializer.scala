@@ -10,6 +10,9 @@ import org.joda.time.{DateTime, DateTimeZone}
 /**
  * A Datetime deserializer with improved exception handling (compared to jackson-datatype-joda)
  */
+@deprecated(
+  "Users should prefer JDK8 equivalent classes and associated Jackson support",
+  "2021-04-12")
 private[finatra] class JodaDatetimeDeserializer(format: JacksonJodaDateFormat)
     extends JodaDateDeserializerBase[DateTime](classOf[DateTime], format) {
 

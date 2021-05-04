@@ -210,7 +210,7 @@ More Information
 .. _EmbeddedTwitterServer: https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L264
 
 .. |EmbeddedHttpServer| replace:: `EmbeddedHttpServer`
-.. _EmbeddedHttpServer: https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala
+.. _EmbeddedHttpServer: https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala
 
 .. |EmbeddedThriftServer| replace:: `EmbeddedThriftServer`
 .. _EmbeddedThriftServer: https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala

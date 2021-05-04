@@ -2,10 +2,11 @@ package com.twitter.finatra.jackson.caseclass
 
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassMappingException
-import com.twitter.finatra.validation.{MethodValidation, ValidationResult}
 import com.twitter.finatra.validation.constraints.{Min, NotEmpty, OneOf}
 import com.twitter.inject.Test
 import com.twitter.inject.domain.WrappedValue
+import com.twitter.util.validation.MethodValidation
+import com.twitter.util.validation.engine.MethodValidationResult
 
 private object OptionalValidationTest {
   case class State(
@@ -19,7 +20,7 @@ private object OptionalValidationTest {
     @Min(0) upperBound: Int,
     state: State) {
     @MethodValidation
-    def method: ValidationResult = ValidationResult.validate(
+    def method: MethodValidationResult = MethodValidationResult.validIfTrue(
       lowerBound <= upperBound,
       "Lower Bound cannot be greater than Upper Bound"
     )

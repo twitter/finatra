@@ -23,6 +23,7 @@ scala_library(
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/serde",
         "finatra/json-annotations/src/main/java/com/twitter/finatra/json/annotations",
         "finatra/validation/src/main/scala/com/twitter/finatra/validation",
+        "util/util-validator/src/main/scala/com/twitter/util/validation",
     ],
     exports = [
         "3rdparty/jvm/com/google/inject:guice",
@@ -30,5 +31,6 @@ scala_library(
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
         "finatra/json-annotations/src/main/java/com/twitter/finatra/json/annotations",
         "finatra/validation/src/main/scala/com/twitter/finatra/validation",
+        "util/util-validator/src/main/scala/com/twitter/util/validation",
     ],
 )

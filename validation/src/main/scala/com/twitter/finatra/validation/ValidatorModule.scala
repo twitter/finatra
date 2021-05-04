@@ -2,6 +2,7 @@ package com.twitter.finatra.validation
 
 import com.google.inject.Provides
 import com.twitter.inject.{Injector, TwitterModule}
+import com.twitter.util.validation.ScalaValidator
 import javax.inject.Singleton
 
 object ValidatorModule extends ValidatorModule {
@@ -10,42 +11,41 @@ object ValidatorModule extends ValidatorModule {
 }
 
 /**
- * A [[TwitterModule]] to provide a [[Validator]] with with default [[MessageResolver]] and
- * default [[com.twitter.finatra.validation.ConstraintValidator]]s.
+ * A [[TwitterModule]] to provide a [[ScalaValidator]] with default [[jakarta.validation.ConstraintValidator]]s.
  *
- * Extend this module to override defaults of the bound [[Validator]] instance.
+ * Extend this module to override defaults of the bound [[ScalaValidator]] instance.
  *
  * Example:
  *
  * {{{
- *    import com.twitter.finatra.validation.{Validator, ValidatorModule}
+ *    import com.twitter.finatra.validation.{ScalaValidator, ValidatorModule}
  *    import com.twitter.inject.Injector
  *
  *    object CustomizedValidatorModule extends ValidatorModule {
- *      override def configureValidator(injector: Injector, builder: Validator.Builder): Validator.Builder =
+ *      override def configureValidator(injector: Injector, builder: ScalaValidator.Builder): ScalaValidator.Builder =
  *        builder
- *          .withCacheSize(512)
- *          .withMessageResolver(new CustomizedMessageResolver())
+ *          .withDescriptorCacheSize(512)
+ *          .withConstraintMapping(???)
  * }
  * }}}
  */
 class ValidatorModule extends TwitterModule {
 
-  private[this] val baseValidator: Validator.Builder = Validator.builder
+  private[this] val baseValidator: ScalaValidator.Builder = ScalaValidator.builder
 
   /**
-   * Override this method to build an instance of [[Validator]], the new Validator will override the
-   * default one that is bond to the object graph.
+   * Override this method to build an instance of [[ScalaValidator]], the new ScalaValidator will override the
+   * default one that is bound to the object graph.
    *
-   * @return a configured [[Validator.Builder]] to create a [[Validator]] instance.
+   * @return a configured [[ScalaValidator.Builder]] to create a [[ScalaValidator]] instance.
    */
   protected def configureValidator(
     injector: Injector,
-    builder: Validator.Builder
-  ): Validator.Builder = builder
+    builder: ScalaValidator.Builder
+  ): ScalaValidator.Builder = builder
 
   @Provides
   @Singleton
-  private final def provideValidator(injector: Injector): Validator =
-    configureValidator(injector, baseValidator).build()
+  private final def provideValidator(injector: Injector): ScalaValidator =
+    configureValidator(injector, baseValidator).validator
 }

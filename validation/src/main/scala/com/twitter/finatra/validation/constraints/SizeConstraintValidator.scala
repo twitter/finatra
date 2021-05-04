@@ -1,64 +1,49 @@
 package com.twitter.finatra.validation.constraints
 
-import com.twitter.finatra.validation.{
-  ConstraintValidator,
-  ErrorCode,
-  MessageResolver,
-  ValidationResult
-}
-
-private[validation] object SizeConstraintValidator {
-
-  def errorMessage(resolver: MessageResolver, value: Any, minValue: Long, maxValue: Long): String =
-    resolver.resolve[Size](toErrorValue(value), minValue, maxValue)
-
-  private def toErrorValue(value: Any): Int =
-    value match {
-      case arrayValue: Array[_] =>
-        arrayValue.length
-      case mapValue: Map[_, _] =>
-        mapValue.size
-      case traversableValue: Iterable[_] =>
-        traversableValue.size
-      case str: String =>
-        str.length
-      case _ =>
-        throw new IllegalArgumentException(
-          s"Class [${value.getClass.getName}] is not supported by ${this.getClass.getName}")
-    }
-}
+import com.twitter.finatra.validation.ErrorCode
+import com.twitter.util.validation.constraintvalidation.TwitterConstraintValidatorContext
+import jakarta.validation.{ConstraintValidator, ConstraintValidatorContext, UnexpectedTypeException}
 
 /**
  * The validator for [[Size]] annotation.
  *
- * Validate if a if if the size of the field is within the min and max value defined in the annotation.
- *
- * @param messageResolver to resolve error message when validation fails.
+ * Validate if the size of the field is within the min and max value defined in the annotation.
  */
-private[validation] class SizeConstraintValidator(messageResolver: MessageResolver)
-    extends ConstraintValidator[Size, Any](messageResolver) {
+@deprecated("Users should prefer to use standard constraints.", "2021-03-05")
+private[validation] class SizeConstraintValidator extends ConstraintValidator[Size, Any] {
 
-  /* Public */
+  @volatile private[this] var minValue: Long = _
+  @volatile private[this] var maxValue: Long = _
 
-  override def isValid(annotation: Size, value: Any): ValidationResult = {
-    val sizeAnnotation = annotation.asInstanceOf[Size]
-    val minValue: Long = sizeAnnotation.min()
-    val maxValue: Long = sizeAnnotation.max()
-    val size = value match {
+  override def initialize(constraintAnnotation: Size): Unit = {
+    this.minValue = constraintAnnotation.min()
+    this.maxValue = constraintAnnotation.max()
+  }
+
+  override def isValid(
+    obj: Any,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean = {
+    val size = obj match {
       case arrayValue: Array[_] => arrayValue.length
       case mapValue: Map[_, _] => mapValue.size
       case traversableValue: Iterable[_] => traversableValue.size
+      case iterableWrapper: java.util.Collection[_] => iterableWrapper.size()
       case str: String => str.length
       case _ =>
-        throw new IllegalArgumentException(
-          s"Class [${value.getClass.getName}] is not supported by ${this.getClass.getName}")
+        throw new UnexpectedTypeException(
+          s"Class [${obj.getClass.getName}] is not supported by ${this.getClass.getName}")
     }
 
-    ValidationResult.validate(
-      isValid(size.toLong, minValue, maxValue),
-      SizeConstraintValidator.errorMessage(messageResolver, value, minValue, maxValue),
-      ErrorCode.SizeOutOfRange(Integer.valueOf(size), minValue, maxValue)
-    )
+    val valid = isValid(size.toLong, minValue, maxValue)
+    if (!valid) {
+      TwitterConstraintValidatorContext
+        .withDynamicPayload(
+          ErrorCode.SizeOutOfRange(java.lang.Integer.valueOf(size), minValue, maxValue))
+        .withMessageTemplate(s"size [${size.toString}] is not between $minValue and $maxValue")
+        .addConstraintViolation(constraintValidatorContext)
+    }
+    valid
   }
 
   /* Private */

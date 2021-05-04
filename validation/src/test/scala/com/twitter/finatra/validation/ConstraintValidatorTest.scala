@@ -1,32 +1,33 @@
 package com.twitter.finatra.validation
 
 import com.twitter.inject.Test
+import com.twitter.util.validation.ScalaValidator
+import com.twitter.util.validation.metadata.PropertyDescriptor
+import jakarta.validation.ConstraintViolation
 import java.lang.annotation.Annotation
 
 /**
  * Utility for testing custom ConstraintValidators.
  */
 abstract class ConstraintValidatorTest extends Test {
-  protected def messageResolver: MessageResolver = new MessageResolver
-  protected def validator: Validator = Validator(messageResolver)
+  protected def validator: ScalaValidator = ScalaValidator.builder.validator
 
-  def validate[A <: Annotation, V](
+  protected def validate[A <: Annotation, T: Manifest](
     clazz: Class[_],
     paramName: String,
-    annotationClass: Class[A],
-    value: V
-  ): ValidationResult = {
-    val annotation = getValidationAnnotation[A](clazz, paramName, annotationClass)
-    validator
-      .findFieldValidator[V](annotation).constraintValidator.asInstanceOf[
-        ConstraintValidator[A, V]].isValid(annotation, value)
-  }
+    value: Any
+  ): Set[ConstraintViolation[T]] =
+    validator.validateValue(clazz.asInstanceOf[Class[T]], paramName, value)
 
   private[this] def getValidationAnnotations(
     clazz: Class[_],
     fieldName: String
   ): Seq[Annotation] =
-    validator.findAnnotatedClass(clazz).getAnnotationsForAnnotatedMember(fieldName).toIndexedSeq
+    validator.getConstraintsForClass(clazz).members.get(fieldName) match {
+      case Some(memberDescriptor: PropertyDescriptor) =>
+        memberDescriptor.annotations
+      case _ => Seq.empty
+    }
 
   def getValidationAnnotation[A <: Annotation](
     clazz: Class[_],

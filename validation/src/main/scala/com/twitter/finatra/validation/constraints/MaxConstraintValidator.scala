@@ -1,82 +1,96 @@
 package com.twitter.finatra.validation.constraints
 
-import com.twitter.finatra.validation.{
-  ConstraintValidator,
-  ErrorCode,
-  MessageResolver,
-  ValidationResult
-}
-
-private[validation] object MaxConstraintValidator {
-
-  def errorMessage(resolver: MessageResolver, value: Any, maxValue: Long): String =
-    resolver.resolve[Max](value, maxValue)
-}
+import com.twitter.finatra.validation.ErrorCode
+import com.twitter.util.validation.constraintvalidation.TwitterConstraintValidatorContext
+import jakarta.validation.{ConstraintValidator, ConstraintValidatorContext, UnexpectedTypeException}
 
 /**
  * The validator for [[Max]] annotation.
  *
- * Validate if a given value is less than or equal to the value defined in [[Max]] annotation.
- *
- * @param messageResolver to resolve error message when validation fails.
+ * Validate if a given value is less than or equal to the value defined in [[Max]] annotation.=
  */
-private[validation] class MaxConstraintValidator(messageResolver: MessageResolver)
-    extends ConstraintValidator[Max, Any](messageResolver) {
+@deprecated("Users should prefer to use standard constraints.", "2021-03-05")
+private[validation] class MaxConstraintValidator extends ConstraintValidator[Max, Any] {
 
-  /* Public */
+  @volatile private[this] var maxValue: Long = _
 
-  override def isValid(annotation: Max, value: Any): ValidationResult = {
-    val maxValue = annotation.asInstanceOf[Max].value()
-    value match {
-      case arrayValue: Array[_] =>
-        validationResult(arrayValue, maxValue)
-      case mapValue: Map[_, _] =>
-        validationResult(mapValue, maxValue)
-      case traversableValue: Iterable[_] =>
-        validationResult(traversableValue, maxValue)
-      case bigDecimalValue: BigDecimal =>
-        validationResult(bigDecimalValue, maxValue)
-      case bigIntValue: BigInt =>
-        validationResult(bigIntValue, maxValue)
-      case numberValue: Number =>
-        validationResult(numberValue, maxValue)
-      case _ =>
-        throw new IllegalArgumentException(
-          s"Class [${value.getClass.getName}] is not supported by ${this.getClass.getName}")
-    }
+  override def initialize(constraintAnnotation: Max): Unit = {
+    this.maxValue = constraintAnnotation.value()
+  }
+
+  override def isValid(
+    obj: Any,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean = obj match {
+    case arrayValue: Array[_] =>
+      isValid(arrayValue.length, constraintValidatorContext)
+    case mapValue: Map[_, _] =>
+      isValid(mapValue.size, constraintValidatorContext)
+    case traversableValue: Iterable[_] =>
+      isValid(traversableValue.size, constraintValidatorContext)
+    case iterableWrapper: java.util.Collection[_] =>
+      isValid(iterableWrapper.size(), constraintValidatorContext)
+    case bigDecimalValue: BigDecimal =>
+      isValid(bigDecimalValue, constraintValidatorContext)
+    case bigIntValue: BigInt =>
+      isValid(bigIntValue, constraintValidatorContext)
+    case numberValue: Number =>
+      isValid(numberValue, constraintValidatorContext)
+    case _ =>
+      throw new UnexpectedTypeException(
+        s"Class [${obj.getClass.getName}] is not supported by ${this.getClass.getName}")
   }
 
   /* Private */
 
-  private[this] def validationResult(value: Iterable[_], maxValue: Long) =
-    ValidationResult.validate(
-      value.size <= maxValue,
-      errorMessage(Integer.valueOf(value.size), maxValue),
-      errorCode(Integer.valueOf(value.size), maxValue)
-    )
+  private[this] def isValid(
+    value: BigDecimal,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean =
+    handleInvalid(
+      value <= BigDecimal(this.maxValue),
+      value.toString,
+      value.longValue,
+      constraintValidatorContext)
 
-  private[this] def errorMessage(value: Number, maxValue: Long) =
-    MaxConstraintValidator.errorMessage(messageResolver, value, maxValue)
+  private[this] def isValid(
+    value: BigInt,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean =
+    handleInvalid(
+      value <= BigInt(this.maxValue),
+      value.toString,
+      value.longValue,
+      constraintValidatorContext)
 
-  private[this] def errorCode(value: Number, maxValue: Long): ErrorCode =
-    ErrorCode.ValueTooLarge(maxValue, value)
+  private[this] def isValid(
+    value: Number,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean =
+    handleInvalid(
+      value.doubleValue <= this.maxValue,
+      value.toString,
+      value.longValue,
+      constraintValidatorContext)
 
-  private[this] def validationResult(value: BigDecimal, maxValue: Long) =
-    ValidationResult.validate(
-      value <= BigDecimal(maxValue),
-      errorMessage(value, maxValue),
-      errorCode(value, maxValue))
+  private[this] def isValid(
+    value: Int,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean =
+    handleInvalid(value <= this.maxValue, value.toString, value.toLong, constraintValidatorContext)
 
-  private[this] def validationResult(value: BigInt, maxValue: Long) =
-    ValidationResult.validate(
-      value <= BigInt(maxValue),
-      errorMessage(value, maxValue),
-      errorCode(value, maxValue))
-
-  private[this] def validationResult(value: Number, maxValue: Long) =
-    ValidationResult.validate(
-      value.doubleValue() <= maxValue,
-      errorMessage(value, maxValue),
-      errorCode(value, maxValue)
-    )
+  private[this] def handleInvalid(
+    valid: => Boolean,
+    value: String,
+    valueAsLong: Long,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean = {
+    if (!valid) {
+      TwitterConstraintValidatorContext
+        .withDynamicPayload(ErrorCode.ValueTooLarge(maxValue, valueAsLong))
+        .withMessageTemplate(s"[$value] is not less than or equal to $maxValue")
+        .addConstraintViolation(constraintValidatorContext)
+    }
+    valid
+  }
 }

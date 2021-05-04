@@ -1,26 +1,20 @@
 package com.twitter.finatra.validation.constraints
 
-import com.twitter.finatra.validation.{
-  ConstraintValidator,
-  ErrorCode,
-  MessageResolver,
-  ValidationResult
-}
+import com.twitter.finatra.validation.ErrorCode
+import com.twitter.util.validation.constraintvalidation.TwitterConstraintValidatorContext
+import jakarta.validation.{ConstraintValidator, ConstraintValidatorContext}
+import scala.jdk.CollectionConverters._
 
 private[validation] object OneOfConstraintValidator {
 
-  def errorMessage(resolver: MessageResolver, oneOfValues: Set[String], value: Any): String =
-    resolver.resolve[OneOf](
-      toCommaSeparatedValue(value),
-      toCommaSeparatedValue(oneOfValues)
-    )
-
-  private def toCommaSeparatedValue(value: Any): String =
+  private[validation] def toCommaSeparatedValue(value: Any): String =
     value match {
       case arrayValue: Array[_] =>
         arrayValue.mkString(",")
       case traversableValue: Traversable[_] =>
         traversableValue.mkString(",")
+      case iterableWrapper: java.util.Collection[_] =>
+        String.join(",", iterableWrapper.asInstanceOf[java.lang.Iterable[_ <: String]])
       case anyValue =>
         anyValue.toString
     }
@@ -29,47 +23,49 @@ private[validation] object OneOfConstraintValidator {
 /**
  * The validator for [[OneOf]] annotation.
  *
- * Validate if a if one or more values exist in a given set of values defined in [[OneOf]] annotation.
+ * Validate if one or more values exist in a given set of values defined in [[OneOf]] annotation.
  * The check for existence is case-sensitive by default.
- *
- * @param messageResolver to resolve error message when validation fails.
  */
-private[validation] class OneOfConstraintValidator(messageResolver: MessageResolver)
-    extends ConstraintValidator[OneOf, Any](messageResolver) {
+@deprecated("Users should prefer to use standard constraints.", "2021-03-05")
+private[validation] class OneOfConstraintValidator extends ConstraintValidator[OneOf, Any] {
+  import OneOfConstraintValidator._
 
-  /* Public */
+  @volatile private[this] var oneOfValues: Set[String] = _
 
-  override def isValid(annotation: OneOf, value: Any): ValidationResult = {
-    val oneOfValues = annotation.asInstanceOf[OneOf].value().toSet
-    value match {
-      case arrayValue: Array[_] =>
-        validationResult(arrayValue, oneOfValues)
-      case traversableValue: Iterable[_] =>
-        validationResult(traversableValue, oneOfValues)
-      case anyValue =>
-        validationResult(Seq(anyValue.toString), oneOfValues)
-    }
+  override def initialize(constraintAnnotation: OneOf): Unit = {
+    this.oneOfValues = constraintAnnotation.value().toSet
+  }
+
+  override def isValid(
+    obj: Any,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean = obj match {
+    case arrayValue: Array[_] =>
+      findInvalidValues(arrayValue, constraintValidatorContext)
+    case traversableValue: Iterable[_] =>
+      findInvalidValues(traversableValue, constraintValidatorContext)
+    case iterableWrapper: java.util.Collection[_] =>
+      findInvalidValues(iterableWrapper.asScala, constraintValidatorContext)
+    case anyValue =>
+      findInvalidValues(Seq(anyValue.toString), constraintValidatorContext)
   }
 
   /* Private */
 
-  private[this] def validationResult(
-    value: Iterable[_],
-    oneOfValues: Set[String]
-  ): ValidationResult = {
-    val invalidValues = findInvalidValues(value, oneOfValues)
-    ValidationResult.validate(
-      invalidValues.isEmpty,
-      OneOfConstraintValidator.errorMessage(messageResolver, oneOfValues, value),
-      ErrorCode.InvalidValues(invalidValues, oneOfValues)
-    )
-  }
-
   private[this] def findInvalidValues(
     value: Iterable[_],
-    oneOfValues: Set[String]
-  ): Set[String] = {
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean = {
     val valueAsStrings = value.map(_.toString).toSet
-    valueAsStrings.diff(oneOfValues)
+    val invalidValues = valueAsStrings.diff(this.oneOfValues)
+    val valid = invalidValues.isEmpty
+    if (!valid) {
+      TwitterConstraintValidatorContext
+        .withDynamicPayload(ErrorCode.InvalidValues(invalidValues, this.oneOfValues))
+        .withMessageTemplate(
+          s"[${toCommaSeparatedValue(value)}] is not one of [${toCommaSeparatedValue(this.oneOfValues)}]")
+        .addConstraintViolation(constraintValidatorContext)
+    }
+    valid
   }
 }

@@ -1,34 +1,31 @@
 package com.twitter.finatra.validation.constraints
 
+import com.twitter.finatra.validation.ErrorCode
+import com.twitter.util.validation.constraintvalidation.TwitterConstraintValidatorContext
+import jakarta.validation.{ConstraintValidator, ConstraintValidatorContext}
 import org.joda.time.DateTime
-import com.twitter.finatra.validation.{
-  ConstraintValidator,
-  ErrorCode,
-  MessageResolver,
-  ValidationResult
-}
-
-private[validation] object FutureTimeConstraintValidator {
-
-  def errorMessage(resolver: MessageResolver, value: DateTime): String =
-    resolver.resolve[FutureTime](value)
-}
 
 /**
  * The validator for [[FutureTime]] annotation.
  *
- * Validate if a if a datetime is in the future.
+ * Validate if a datetime is in the future.
  * @note So far there is no test control in place for [[DateTime]].
- *
- * @param messageResolver to resolve error message when validation fails.
  */
-private[validation] class FutureTimeConstraintValidator(messageResolver: MessageResolver)
-    extends ConstraintValidator[FutureTime, DateTime](messageResolver) {
+@deprecated("Users should prefer to use standard constraints.", "2021-03-05")
+private[validation] class FutureTimeConstraintValidator
+    extends ConstraintValidator[FutureTime, DateTime] {
 
-  override def isValid(annotation: FutureTime, value: DateTime): ValidationResult =
-    ValidationResult.validate(
-      value.isAfterNow,
-      FutureTimeConstraintValidator.errorMessage(messageResolver, value),
-      ErrorCode.TimeNotFuture(value)
-    )
+  override def isValid(
+    obj: DateTime,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean = {
+    val valid = obj.isAfterNow
+    if (!valid) {
+      TwitterConstraintValidatorContext
+        .withDynamicPayload(ErrorCode.TimeNotFuture(obj))
+        .withMessageTemplate(s"[${obj.toString}] is not in the future")
+        .addConstraintViolation(constraintValidatorContext)
+    }
+    valid
+  }
 }

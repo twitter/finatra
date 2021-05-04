@@ -1,11 +1,13 @@
 package com.twitter.finatra.validation.tests.constraints
 
-import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
-import com.twitter.finatra.validation.constraints.{PastTime, PastTimeConstraintValidator}
+import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode}
+import com.twitter.finatra.validation.constraints.PastTime
 import com.twitter.finatra.validation.tests.caseclasses.PastExample
-import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode, ValidationResult}
+import com.twitter.util.validation.conversions.ConstraintViolationOps._
+import jakarta.validation.ConstraintViolation
 import org.joda.time.DateTime
 import org.scalacheck.Gen
+import org.scalacheck.Shrink.shrinkAny
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 class PastTimeConstraintValidatorTest
@@ -18,7 +20,7 @@ class PastTimeConstraintValidatorTest
 
     forAll(passDateTimeMillis) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[PastExample](dateTimeValue).isInstanceOf[Valid] shouldBe true
+      validate[PastExample](dateTimeValue).isEmpty shouldBe true
     }
   }
 
@@ -28,14 +30,22 @@ class PastTimeConstraintValidatorTest
 
     forAll(futureDateTimeMillis) { millisValue =>
       val dateTimeValue = new DateTime(millisValue)
-      validate[PastExample](dateTimeValue) should equal(
-        Invalid(
-          PastTimeConstraintValidator.errorMessage(messageResolver, dateTimeValue),
-          ErrorCode.TimeNotPast(dateTimeValue))
-      )
+      val violations = validate[PastExample](dateTimeValue)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("dateTime")
+      violations.head.getMessage should be(errorMessage(violations.head.getInvalidValue))
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.TimeNotPast])
+      payload.isDefined should be(true)
+      payload.get should equal(
+        ErrorCode.TimeNotPast(violations.head.getInvalidValue.asInstanceOf[DateTime]))
     }
   }
 
-  private def validate[C: Manifest](value: Any): ValidationResult =
-    super.validate(manifest[C].runtimeClass, "dateTime", classOf[PastTime], value)
+  private def validate[T: Manifest](value: DateTime): Set[ConstraintViolation[T]] = {
+    super.validate[PastTime, T](manifest[T].runtimeClass, "dateTime", value)
+  }
+
+  private def errorMessage(value: Any): String = {
+    s"[${value.toString}] is not in the past"
+  }
 }

@@ -1,21 +1,15 @@
 package com.twitter.finatra.validation.constraints
 
+import com.twitter.finatra.validation.ErrorCode
+import com.twitter.util.validation.constraintvalidation.TwitterConstraintValidatorContext
+import jakarta.validation.{ConstraintValidator, ConstraintValidatorContext}
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit._
 import org.joda.time.{DateTime, DateTimeZone}
-import com.twitter.finatra.validation.{
-  ConstraintValidator,
-  ErrorCode,
-  MessageResolver,
-  ValidationResult
-}
 
 private[validation] object TimeGranularityConstraintValidator {
 
-  def errorMessage(resolver: MessageResolver, timeGranularity: TimeUnit, value: DateTime): String =
-    resolver.resolve[TimeGranularity](value, singularize(timeGranularity))
-
-  private def singularize(timeUnit: TimeUnit): String = {
+  private[validation] def singularize(timeUnit: TimeUnit): String = {
     val timeUnitStr = timeUnit.toString.toLowerCase
     timeUnitStr.substring(0, timeUnitStr.length - 1)
   }
@@ -26,23 +20,32 @@ private[validation] object TimeGranularityConstraintValidator {
  *
  * Validates if a given value is of a given time granularity (e.g., days, hours, minutes, seconds).
  * E.g. A granularity of Minute is valid for 10:05:00 and not valid for 10:05:13.
- *
- * @param messageResolver to resolve error message when validation fails.
  */
-private[validation] class TimeGranularityConstraintValidator(
-  messageResolver: MessageResolver)
-    extends ConstraintValidator[TimeGranularity, DateTime](messageResolver) {
+@deprecated("Users should prefer to use standard constraints.", "2021-03-05")
+private[validation] class TimeGranularityConstraintValidator
+    extends ConstraintValidator[TimeGranularity, DateTime] {
+  import TimeGranularityConstraintValidator._
 
-  /* Public */
+  @volatile private[this] var timeGranularity: TimeUnit = _
 
-  override def isValid(annotation: TimeGranularity, value: DateTime): ValidationResult = {
-    val timeGranularity = annotation.asInstanceOf[TimeGranularity].value()
-    ValidationResult.validate(
-      isGranularity(value, timeGranularity),
-      TimeGranularityConstraintValidator
-        .errorMessage(messageResolver, timeGranularity, value),
-      ErrorCode.InvalidTimeGranularity(value, timeGranularity)
-    )
+  override def initialize(constraintAnnotation: TimeGranularity): Unit = {
+    this.timeGranularity = constraintAnnotation.value
+  }
+
+  override def isValid(
+    obj: DateTime,
+    constraintValidatorContext: ConstraintValidatorContext
+  ): Boolean = {
+    val valid = isGranularity(obj, timeGranularity)
+
+    if (!valid) {
+      TwitterConstraintValidatorContext
+        .withDynamicPayload(ErrorCode.InvalidTimeGranularity(obj, timeGranularity))
+        .withMessageTemplate(
+          s"[${obj.toString}] is not ${singularize(timeGranularity)} granularity")
+        .addConstraintViolation(constraintValidatorContext)
+    }
+    valid
   }
 
   /* Private */

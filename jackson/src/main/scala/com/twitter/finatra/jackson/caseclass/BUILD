@@ -23,6 +23,7 @@ scala_library(
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",
         "finatra/validation/src/main/scala/com/twitter/finatra/validation",
         "util/util-reflect/src/main/scala/com/twitter/util/reflect",
+        "util/util-validator/src/main/scala/com/twitter/util/validation",
     ],
     exports = [
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",

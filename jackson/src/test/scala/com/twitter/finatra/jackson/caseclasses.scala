@@ -15,14 +15,11 @@ import com.fasterxml.jackson.databind.node.ValueNode
 import com.fasterxml.jackson.module.scala.JsonScalaEnumeration
 import com.twitter.finatra.jackson.caseclass.SerdeLogging
 import com.twitter.finatra.validation.constraints._
-import com.twitter.finatra.validation.{
-  CommonMethodValidations,
-  ErrorCode,
-  MethodValidation,
-  ValidationResult
-}
+import com.twitter.finatra.validation.{CommonMethodValidations, ErrorCode}
 import com.twitter.inject.domain.WrappedValue
 import com.twitter.util.Time
+import com.twitter.util.validation.MethodValidation
+import com.twitter.util.validation.engine.MethodValidationResult
 import com.twitter.{util => ctu}
 import javax.inject.Inject
 import org.joda.time.DateTime
@@ -399,25 +396,25 @@ case class Car(
   warrantyEnd: Option[DateTime] = None,
   passengers: Seq[Person] = Seq()) {
 
-  @MethodValidation
-  def validateId: ValidationResult = {
-    ValidationResult.validate(id % 2 == 1, "id may not be even")
+  @MethodValidation(fields = Array("id"))
+  def validateId: MethodValidationResult = {
+    MethodValidationResult.validIfTrue(id % 2 == 1, "may not be even")
   }
 
   @MethodValidation
-  def validateYearBeforeNow: ValidationResult = {
+  def validateYearBeforeNow: MethodValidationResult = {
     val thisYear = new DateTime().getYear
     val yearMoreThanOneYearInFuture: Boolean =
       if (year > thisYear) { (year - thisYear) > 1 }
       else false
-    ValidationResult.validateNot(
+    MethodValidationResult.validIfFalse(
       yearMoreThanOneYearInFuture,
       "Model year can be at most one year newer."
     )
   }
 
   @MethodValidation(fields = Array("ownershipEnd"))
-  def ownershipTimesValid: ValidationResult = {
+  def ownershipTimesValid: MethodValidationResult = {
     CommonMethodValidations.validateTimeRange(
       ownershipStart,
       ownershipEnd,
@@ -427,7 +424,7 @@ case class Car(
   }
 
   @MethodValidation(fields = Array("warrantyStart", "warrantyEnd"))
-  def warrantyTimeValid: ValidationResult = {
+  def warrantyTimeValid: MethodValidationResult = {
     CommonMethodValidations.validateTimeRange(
       warrantyStart,
       warrantyEnd,
@@ -655,10 +652,11 @@ case class Address(
   @NotEmpty state: String) {
 
   @MethodValidation
-  def validateState: ValidationResult =
-    ValidationResult.validate(
+  def validateState: MethodValidationResult =
+    MethodValidationResult.validIfTrue(
       state == "CA" || state == "MD" || state == "WI",
-      "state must be one of [CA, MD, WI]"
+      "state must be one of [CA, MD, WI]",
+      Some(ErrorCode.IllegalArgument)
     )
 }
 
@@ -711,16 +709,17 @@ case class AddClusterRequest(
     extends ClusterRequest {
 
   @MethodValidation(fields = Array("clusterName"))
-  def validateClusterName: ValidationResult = {
+  def validateClusterName: MethodValidationResult = {
     validateName(clusterName)
   }
 
-  private def validateName(name: String): ValidationResult = {
+  private def validateName(name: String): MethodValidationResult = {
     val regex = "[0-9a-zA-Z_\\-\\.>]+"
-    ValidationResult.validate(
+    MethodValidationResult.validIfTrue(
       name.matches(regex),
       s"$name is invalid. Only alphanumeric and special characters from (_,-,.,>) are allowed.",
-      ErrorCode.PatternNotMatched(name, regex))
+      Some(ErrorCode.PatternNotMatched(name, regex))
+    )
   }
 }
 

@@ -109,7 +109,7 @@ E.g.,
     }
 
 In this example, the bound `IdService` would be replaced with the `mockIdService`. For a more complete
-example, see the `DarkTrafficCanonicalResourceHeaderTest <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/darktraffic/test/DarkTrafficCanonicalResourceHeaderTest.scala>`__.
+example, see the `DarkTrafficCanonicalResourceHeaderTest <https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/darktraffic/test/DarkTrafficCanonicalResourceHeaderTest.scala>`__.
 
 |#bind[T]|_ DSL
 ---------------

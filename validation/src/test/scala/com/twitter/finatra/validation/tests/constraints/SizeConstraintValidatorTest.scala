@@ -1,7 +1,6 @@
 package com.twitter.finatra.validation.tests.constraints
 
-import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
-import com.twitter.finatra.validation.constraints.{Size, SizeConstraintValidator}
+import com.twitter.finatra.validation.constraints.Size
 import com.twitter.finatra.validation.tests.caseclasses.{
   SizeArrayExample,
   SizeInvalidTypeExample,
@@ -9,8 +8,11 @@ import com.twitter.finatra.validation.tests.caseclasses.{
   SizeSeqExample,
   SizeStringExample
 }
-import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode, ValidationResult}
+import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode}
+import com.twitter.util.validation.conversions.ConstraintViolationOps.RichConstraintViolation
+import jakarta.validation.{ConstraintViolation, UnexpectedTypeException}
 import org.scalacheck.Gen
+import org.scalacheck.Shrink.shrinkAny
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 class SizeConstraintValidatorTest
@@ -23,7 +25,7 @@ class SizeConstraintValidatorTest
     } yield Array.fill(size) { 0 }
 
     forAll(passValue) { value =>
-      validate[SizeArrayExample](value).isInstanceOf[Valid] shouldBe true
+      validate[SizeArrayExample](value).isEmpty shouldBe true
     }
   }
 
@@ -33,9 +35,14 @@ class SizeConstraintValidatorTest
     } yield Array.fill(size) { 0 }
 
     forAll(failValue) { value =>
-      validate[SizeArrayExample](value) should equal(
-        Invalid(errorMessage(value), ErrorCode.SizeOutOfRange(value.length, 10, 50))
-      )
+      val violations = validate[SizeArrayExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("sizeValue")
+      violations.head.getMessage shouldBe errorMessage(value.length)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.SizeOutOfRange])
+      payload.isDefined shouldBe true
+      payload.get shouldBe ErrorCode.SizeOutOfRange(value.length, 10, 50)
     }
   }
 
@@ -45,9 +52,14 @@ class SizeConstraintValidatorTest
     } yield Array.fill(size) { 0 }
 
     forAll(failValue) { value =>
-      validate[SizeArrayExample](value) should equal(
-        Invalid(errorMessage(value), ErrorCode.SizeOutOfRange(value.length, 10, 50))
-      )
+      val violations = validate[SizeArrayExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("sizeValue")
+      violations.head.getMessage shouldBe errorMessage(value.length)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.SizeOutOfRange])
+      payload.isDefined shouldBe true
+      payload.get shouldBe ErrorCode.SizeOutOfRange(value.length, 10, 50)
     }
   }
 
@@ -57,7 +69,7 @@ class SizeConstraintValidatorTest
     } yield Seq.fill(size) { 0 }
 
     forAll(passValue) { value =>
-      validate[SizeSeqExample](value).isInstanceOf[Valid] shouldBe true
+      validate[SizeSeqExample](value).isEmpty shouldBe true
     }
   }
 
@@ -67,9 +79,14 @@ class SizeConstraintValidatorTest
     } yield Seq.fill(size) { 0 }
 
     forAll(failValue) { value =>
-      validate[SizeSeqExample](value) should equal(
-        Invalid(errorMessage(value), ErrorCode.SizeOutOfRange(value.size, 10, 50))
-      )
+      val violations = validate[SizeSeqExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("sizeValue")
+      violations.head.getMessage shouldBe errorMessage(value.size)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.SizeOutOfRange])
+      payload.isDefined shouldBe true
+      payload.get shouldBe ErrorCode.SizeOutOfRange(value.size, 10, 50)
     }
   }
 
@@ -79,9 +96,14 @@ class SizeConstraintValidatorTest
     } yield Seq.fill(size) { 0 }
 
     forAll(failValue) { value =>
-      validate[SizeSeqExample](value) should equal(
-        Invalid(errorMessage(value), ErrorCode.SizeOutOfRange(value.size, 10, 50))
-      )
+      val violations = validate[SizeSeqExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("sizeValue")
+      violations.head.getMessage shouldBe errorMessage(value.size)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.SizeOutOfRange])
+      payload.isDefined shouldBe true
+      payload.get shouldBe ErrorCode.SizeOutOfRange(value.size, 10, 50)
     }
   }
 
@@ -93,7 +115,7 @@ class SizeConstraintValidatorTest
 
     val passValue = Gen.mapOfN[String, Int](50, mapGenerator).suchThat(_.size >= 10)
     forAll(passValue) { value =>
-      validate[SizeMapExample](value).isInstanceOf[Valid] shouldBe true
+      validate[SizeMapExample](value).isEmpty shouldBe true
     }
   }
 
@@ -105,9 +127,14 @@ class SizeConstraintValidatorTest
 
     val failValue = Gen.mapOfN[String, Int](9, mapGenerator).suchThat(_.size <= 9)
     forAll(failValue) { value =>
-      validate[SizeMapExample](value) should equal(
-        Invalid(errorMessage(value), ErrorCode.SizeOutOfRange(value.size, 10, 50))
-      )
+      val violations = validate[SizeMapExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("sizeValue")
+      violations.head.getMessage shouldBe errorMessage(value.size)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.SizeOutOfRange])
+      payload.isDefined shouldBe true
+      payload.get shouldBe ErrorCode.SizeOutOfRange(value.size, 10, 50)
     }
   }
 
@@ -119,9 +146,14 @@ class SizeConstraintValidatorTest
 
     val failValue = Gen.mapOfN[String, Int](200, mapGenerator).suchThat(_.size >= 51)
     forAll(failValue) { value =>
-      validate[SizeMapExample](value) should equal(
-        Invalid(errorMessage(value), ErrorCode.SizeOutOfRange(value.size, 10, 50))
-      )
+      val violations = validate[SizeMapExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("sizeValue")
+      violations.head.getMessage shouldBe errorMessage(value.size)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.SizeOutOfRange])
+      payload.isDefined shouldBe true
+      payload.get shouldBe ErrorCode.SizeOutOfRange(value.size, 10, 50)
     }
   }
 
@@ -131,7 +163,7 @@ class SizeConstraintValidatorTest
     } yield List.fill(size) { 'a' }.mkString
 
     forAll(passValue) { value =>
-      validate[SizeStringExample](value).isInstanceOf[Valid] shouldBe true
+      validate[SizeStringExample](value).isEmpty shouldBe true
     }
   }
 
@@ -141,12 +173,14 @@ class SizeConstraintValidatorTest
     } yield List.fill(size) { 'a' }.mkString
 
     forAll(failValue) { value =>
-      validate[SizeStringExample](value) should equal(
-        Invalid(
-          errorMessage(value, maxValue = 140),
-          ErrorCode.SizeOutOfRange(value.length, 10, 140)
-        )
-      )
+      val violations = validate[SizeStringExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("sizeValue")
+      violations.head.getMessage shouldBe errorMessage(value.length, maxValue = 140)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.SizeOutOfRange])
+      payload.isDefined shouldBe true
+      payload.get shouldBe ErrorCode.SizeOutOfRange(value.length, 10, 140)
     }
   }
 
@@ -156,25 +190,27 @@ class SizeConstraintValidatorTest
     } yield List.fill(size) { 'a' }.mkString)
 
     forAll(failValue) { value =>
-      validate[SizeStringExample](value) should equal(
-        Invalid(
-          errorMessage(value, maxValue = 140),
-          ErrorCode.SizeOutOfRange(value.length, 10, 140)
-        )
-      )
+      val violations = validate[SizeStringExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("sizeValue")
+      violations.head.getMessage shouldBe errorMessage(value.length, maxValue = 140)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.SizeOutOfRange])
+      payload.isDefined shouldBe true
+      payload.get shouldBe ErrorCode.SizeOutOfRange(value.length, 10, 140)
     }
   }
 
   test("fail for unsupported class type") {
-    intercept[IllegalArgumentException] {
+    intercept[UnexpectedTypeException] {
       validate[SizeInvalidTypeExample](2)
     }
   }
 
-  private def validate[C: Manifest](value: Any): ValidationResult =
-    super.validate(manifest[C].runtimeClass, "sizeValue", classOf[Size], value)
+  private def validate[T: Manifest](value: Any): Set[ConstraintViolation[T]] = {
+    super.validate[Size, T](manifest[T].runtimeClass, "sizeValue", value)
+  }
 
   private def errorMessage(value: Any, minValue: Long = 10, maxValue: Long = 50): String =
-    SizeConstraintValidator.errorMessage(messageResolver, value, minValue, maxValue)
-
+    s"size [${value.toString}] is not between $minValue and $maxValue"
 }

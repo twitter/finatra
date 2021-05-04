@@ -23,7 +23,7 @@ See:
 
 -  `c.t.inject.app.EmbeddedApp <https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala>`__
 -  `c.t.inject.server.EmbeddedTwitterServer <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala>`__
--  `c.t.finatra.http.EmbeddedHttpServer <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala>`__
+-  `c.t.finatra.http.EmbeddedHttpServer <https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala>`__
 -  `c.t.finatra.thrift.EmbeddedThriftServer <https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala>`__
 
 
@@ -166,7 +166,7 @@ More Information
 - :doc:`bind_dsl`
 
 .. |c.t.finatra.http.HttpServer| replace:: `c.t.finatra.http.HttpServer`
-.. _c.t.finatra.http.HttpServer: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala
+.. _c.t.finatra.http.HttpServer: https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/HttpServer.scala
 
 .. |c.t.finatra.thrift.ThriftServer| replace:: `c.t.finatra.thrift.ThriftServer`
 .. _c.t.finatra.thrift.ThriftServer: https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/TwitterServer.scala
@@ -184,7 +184,7 @@ More Information
 .. _EmbeddedTwitterServer: https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala
 
 .. |EmbeddedHttpServer| replace:: `EmbeddedHttpServer`
-.. _EmbeddedHttpServer: https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala
+.. _EmbeddedHttpServer: https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala
 
 .. |EmbeddedThriftServer| replace:: `EmbeddedThriftServer`
 .. _EmbeddedThriftServer: https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala

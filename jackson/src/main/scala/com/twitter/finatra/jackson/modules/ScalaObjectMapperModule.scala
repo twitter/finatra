@@ -10,8 +10,8 @@ import com.google.inject.{Injector, Provides}
 import com.twitter.finatra.jackson.caseclass.{InjectableTypes, NullInjectableTypes}
 import com.twitter.finatra.jackson.{JacksonScalaObjectMapperType, ScalaObjectMapper}
 import com.twitter.finatra.json.annotations.{CamelCaseMapper, SnakeCaseMapper}
-import com.twitter.finatra.validation.Validator
 import com.twitter.inject.TwitterModule
+import com.twitter.util.validation.ScalaValidator
 import javax.annotation.Nullable
 import javax.inject.Singleton
 
@@ -58,7 +58,7 @@ class ScalaObjectMapperModule extends TwitterModule {
     // allows injection of `Option[InjectableTypes]` which will be a None by default as
     // we do not provide any binding here.
     bindOption[InjectableTypes]
-    bindOption[Validator]
+    bindOption[ScalaValidator]
   }
 
   /* Public */
@@ -192,7 +192,7 @@ class ScalaObjectMapperModule extends TwitterModule {
   protected final def provideScalaObjectMapper(
     injector: Injector,
     injectableTypes: Option[InjectableTypes],
-    validator: Option[Validator]
+    validator: Option[ScalaValidator]
   ): JacksonScalaObjectMapperType =
     withBuilder
       .withValidator(validator.getOrElse(ScalaObjectMapper.DefaultValidator))
@@ -226,7 +226,7 @@ class ScalaObjectMapperModule extends TwitterModule {
   private final def provideSnakeCaseObjectMapper(
     injector: Injector,
     injectableTypes: Option[InjectableTypes],
-    validator: Option[Validator]
+    validator: Option[ScalaValidator]
   ): ScalaObjectMapper =
     ScalaObjectMapper.snakeCaseObjectMapper(
       provideScalaObjectMapper(injector, injectableTypes, validator))
@@ -237,7 +237,7 @@ class ScalaObjectMapperModule extends TwitterModule {
   private final def provideCamelCaseObjectMapper(
     injector: Injector,
     injectableTypes: Option[InjectableTypes],
-    validator: Option[Validator]
+    validator: Option[ScalaValidator]
   ): ScalaObjectMapper =
     ScalaObjectMapper.camelCaseObjectMapper(
       provideScalaObjectMapper(injector, injectableTypes, validator))
@@ -247,7 +247,7 @@ class ScalaObjectMapperModule extends TwitterModule {
   private final def provideObjectMapper(
     injector: Injector,
     injectableTypes: Option[InjectableTypes],
-    validator: Option[Validator]
+    validator: Option[ScalaValidator]
   ): ScalaObjectMapper =
     new ScalaObjectMapper(provideScalaObjectMapper(injector, injectableTypes, validator))
 }

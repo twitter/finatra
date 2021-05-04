@@ -23,5 +23,7 @@ junit_tests(
         "finatra/validation/src/main/java/com/twitter/finatra/validation",
         "finatra/validation/src/main/scala/com/twitter/finatra/validation",
         "finatra/validation/src/test/scala/com/twitter/finatra/validation",
+        "util/util-validator/src/main/scala/com/twitter/util/validation",
+        "util/util-validator/src/main/scala/com/twitter/util/validation/conversions",
     ],
 )

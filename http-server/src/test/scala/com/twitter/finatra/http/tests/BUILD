@@ -76,5 +76,7 @@ junit_tests(
         "util/util-mock/src/main/scala/com/twitter/util/mock",
         "util/util-security-test-certs/src/main/resources",
         "util/util-stats/src/main/scala",
+        "util/util-validator/src/main/scala/com/twitter/util/validation",
+        "util/util-validator/src/main/scala/com/twitter/util/validation/engine",
     ],
 )

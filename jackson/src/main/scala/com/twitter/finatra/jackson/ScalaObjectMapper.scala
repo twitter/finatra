@@ -18,16 +18,16 @@ import com.twitter.finatra.jackson.caseclass.{
   NullInjectableTypes
 }
 import com.twitter.finatra.jackson.serde.{LongKeyDeserializers, SerDeSimpleModule}
-import com.twitter.finatra.validation.Validator
 import com.twitter.io.Buf
+import com.twitter.util.validation.ScalaValidator
 import java.io.{ByteArrayOutputStream, InputStream, OutputStream}
 import java.nio.ByteBuffer
 import javax.annotation.Nullable
 
 object ScalaObjectMapper {
 
-  /** The default [[Validator]] for a [[ScalaObjectMapper]] */
-  private[jackson] val DefaultValidator: Validator = Validator()
+  /** The default [[ScalaValidator]] for a [[ScalaObjectMapper]] */
+  private[jackson] val DefaultValidator: ScalaValidator = ScalaValidator()
 
   /** The default [[InjectableTypes]] for a [[ScalaObjectMapper]] */
   private[jackson] val DefaultInjectableTypes: InjectableTypes = NullInjectableTypes
@@ -241,7 +241,7 @@ object ScalaObjectMapper {
     serializationConfig: Map[SerializationFeature, Boolean] = DefaultSerializationConfig,
     deserializationConfig: Map[DeserializationFeature, Boolean] = DefaultDeserializationConfig,
     defaultJacksonModules: Seq[Module] = DefaultJacksonModules,
-    validator: Option[Validator] = Some(DefaultValidator),
+    validator: Option[ScalaValidator] = Some(DefaultValidator),
     injectableTypes: InjectableTypes = DefaultInjectableTypes,
     additionalJacksonModules: Seq[Module] = DefaultAdditionalJacksonModules,
     additionalMapperConfigurationFn: JacksonObjectMapper => Unit =
@@ -485,7 +485,7 @@ object ScalaObjectMapper {
      * @note If you pass `withNoValidation` to the builder all case class validations will be
      *       bypassed, regardless of the `withValidator` configuration.
      */
-    final def withValidator(validator: Validator): Builder =
+    final def withValidator(validator: ScalaValidator): Builder =
       Builder(
         this.propertyNamingStrategy,
         this.numbersAsStrings,

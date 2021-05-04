@@ -1,18 +1,20 @@
 package com.twitter.finatra.validation.tests
 
-import com.twitter.finatra.validation.{ValidationException, Validator}
 import com.twitter.inject.Test
+import com.twitter.util.validation.ScalaValidator
+import com.twitter.util.validation.engine.ConstraintViolationHelper
+import jakarta.validation.{ConstraintViolation, ConstraintViolationException}
+import scala.jdk.CollectionConverters._
 
 private[tests] trait AssertValidation { self: Test =>
-
-  protected def validator: Validator
+  protected def validator: ScalaValidator
 
   protected def assertValidation(
     obj: Any,
     withErrors: Seq[String] = Seq.empty[String]
   ): Unit = {
     if (withErrors.nonEmpty) {
-      val e = intercept[ValidationException] {
+      val e = intercept[ConstraintViolationException] {
         validator.verify(obj)
       }
       assertValidationException(e, withErrors)
@@ -22,13 +24,17 @@ private[tests] trait AssertValidation { self: Test =>
   }
 
   protected def assertValidationException(
-    e: ValidationException,
+    e: ConstraintViolationException,
     withErrors: Seq[String]
   ): Unit = {
-    e.errors.size should equal(withErrors.size)
-    for ((error, index) <- e.errors.zipWithIndex) {
+    val violations: Iterable[ConstraintViolation[Any]] =
+      e.getConstraintViolations.asScala.map(_.asInstanceOf[ConstraintViolation[Any]])
+    violations.size should equal(withErrors.size)
+    val sortedViolations: Seq[ConstraintViolation[Any]] =
+      ConstraintViolationHelper.sortViolations(violations.toSet)
+    for ((error, index) <- sortedViolations.zipWithIndex) {
       val withErrorMessage = withErrors(index)
-      error.message should equal(withErrorMessage)
+      ConstraintViolationHelper.messageWithPath(error) should equal(withErrorMessage)
     }
   }
 }

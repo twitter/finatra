@@ -1,10 +1,12 @@
 package com.twitter.finatra.validation.tests.constraints
 
-import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
-import com.twitter.finatra.validation.constraints.{Max, MaxConstraintValidator}
+import com.twitter.finatra.validation.constraints.Max
 import com.twitter.finatra.validation.tests.caseclasses._
-import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode, ValidationResult}
+import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode}
+import com.twitter.util.validation.conversions.ConstraintViolationOps.RichConstraintViolation
+import jakarta.validation.{ConstraintViolation, UnexpectedTypeException}
 import org.scalacheck.Gen
+import org.scalacheck.Shrink.shrinkAny
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 class MaxConstraintValidatorTest
@@ -15,7 +17,7 @@ class MaxConstraintValidatorTest
     val passValue = Gen.choose(Int.MinValue, 0)
 
     forAll(passValue) { value: Int =>
-      validate[MaxIntExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MaxIntExample](value).isEmpty shouldBe true
     }
   }
 
@@ -23,9 +25,14 @@ class MaxConstraintValidatorTest
     val failValue = Gen.choose(1, Int.MaxValue)
 
     forAll(failValue) { value =>
-      validate[MaxIntExample](value) should equal(
-        Invalid(errorMessage(Integer.valueOf(value)), errorCode(Integer.valueOf(value)))
-      )
+      val violations = validate[MaxIntExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(Integer.valueOf(value))
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooLarge])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(Integer.valueOf(value))
     }
   }
 
@@ -33,7 +40,7 @@ class MaxConstraintValidatorTest
     val passValue = Gen.choose(Long.MinValue, 0L)
 
     forAll(passValue) { value =>
-      validate[MaxLongExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MaxLongExample](value).isEmpty shouldBe true
     }
   }
 
@@ -41,10 +48,14 @@ class MaxConstraintValidatorTest
     val failValue = Gen.choose(1L, Long.MaxValue)
 
     forAll(failValue) { value =>
-      validate[MaxLongExample](value) == Invalid(
-        errorMessage(java.lang.Long.valueOf(value)),
-        errorCode(java.lang.Long.valueOf(value))
-      )
+      val violations = validate[MaxLongExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(java.lang.Long.valueOf(value))
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooLarge])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(java.lang.Long.valueOf(value))
     }
   }
 
@@ -52,7 +63,7 @@ class MaxConstraintValidatorTest
     val passValue = Gen.choose(Double.MinValue, 0.0)
 
     forAll(passValue) { value =>
-      validate[MaxDoubleExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MaxDoubleExample](value).isEmpty shouldBe true
     }
   }
 
@@ -60,12 +71,14 @@ class MaxConstraintValidatorTest
     val failValue = Gen.choose(0.1, Double.MaxValue)
 
     forAll(failValue) { value =>
-      validate[MaxDoubleExample](value) should equal(
-        Invalid(
-          errorMessage(java.lang.Double.valueOf(value)),
-          errorCode(java.lang.Double.valueOf(value))
-        )
-      )
+      val violations = validate[MaxDoubleExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(java.lang.Double.valueOf(value))
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooLarge])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(value.toLong)
     }
   }
 
@@ -73,7 +86,7 @@ class MaxConstraintValidatorTest
     val passValue = Gen.choose(Float.MinValue, 0.0F)
 
     forAll(passValue) { value =>
-      validate[MaxFloatExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MaxFloatExample](value).isEmpty shouldBe true
     }
   }
 
@@ -81,12 +94,14 @@ class MaxConstraintValidatorTest
     val failValue = Gen.choose(0.1F, Float.MaxValue)
 
     forAll(failValue) { value =>
-      validate[MaxFloatExample](value) should equal(
-        Invalid(
-          errorMessage(java.lang.Float.valueOf(value)),
-          errorCode(java.lang.Float.valueOf(value))
-        )
-      )
+      val violations = validate[MaxFloatExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(java.lang.Float.valueOf(value))
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooLarge])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(value.toLong)
     }
   }
 
@@ -96,13 +111,13 @@ class MaxConstraintValidatorTest
     } yield BigInt(long)
 
     forAll(passBigIntValue) { value =>
-      validate[MaxBigIntExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MaxBigIntExample](value).isEmpty shouldBe true
     }
   }
 
   test("pass validation for very small big int type") {
     val passValue = BigInt(Long.MinValue)
-    validate[MaxSmallestLongBigIntExample](passValue).isInstanceOf[Valid] shouldBe true
+    validate[MaxSmallestLongBigIntExample](passValue).isEmpty shouldBe true
   }
 
   test("pass validation for very large big int type") {
@@ -111,7 +126,7 @@ class MaxConstraintValidatorTest
     } yield BigInt(long)
 
     forAll(passBigIntValue) { value =>
-      validate[MaxLargestLongBigIntExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MaxLargestLongBigIntExample](value).isEmpty shouldBe true
     }
   }
 
@@ -121,7 +136,14 @@ class MaxConstraintValidatorTest
     } yield BigInt(long)
 
     forAll(failBigIntValue) { value =>
-      validate[MaxBigIntExample](value) should equal(Invalid(errorMessage(value), errorCode(value)))
+      val violations = validate[MaxBigIntExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(value)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooLarge])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(value)
     }
   }
 
@@ -131,23 +153,27 @@ class MaxConstraintValidatorTest
     } yield BigInt(long)
 
     forAll(failBigIntValue) { value =>
-      validate[MaxSmallestLongBigIntExample](value) should equal(
-        Invalid(
-          errorMessage(value, maxValue = Long.MinValue),
-          errorCode(value, maxValue = Long.MinValue)
-        )
-      )
+      val violations = validate[MaxSmallestLongBigIntExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(value, maxValue = Long.MinValue)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooLarge])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(value, maxValue = Long.MinValue)
     }
   }
 
   test("fail validation for very large big int type") {
     val value = BigInt(Long.MaxValue)
-    validate[MaxSecondLargestLongBigIntExample](value) should equal(
-      Invalid(
-        errorMessage(value, maxValue = Long.MaxValue - 1),
-        errorCode(value, maxValue = Long.MaxValue - 1)
-      )
-    )
+    val violations = validate[MaxSecondLargestLongBigIntExample](value)
+    violations.size should equal(1)
+    violations.head.getPropertyPath.toString should equal("numberValue")
+    violations.head.getMessage shouldBe errorMessage(value, maxValue = Long.MaxValue - 1)
+    violations.head.getInvalidValue shouldBe value
+    val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooLarge])
+    payload.isDefined shouldBe true
+    payload.get shouldBe errorCode(value, maxValue = Long.MaxValue - 1)
   }
 
   test("pass validation for big decimal type") {
@@ -156,13 +182,13 @@ class MaxConstraintValidatorTest
     } yield BigDecimal(double)
 
     forAll(passBigDecimalValue) { value =>
-      validate[MaxBigDecimalExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MaxBigDecimalExample](value).isEmpty shouldBe true
     }
   }
 
   test("pass validation for very small big decimal type") {
     val passValue = BigDecimal(Long.MinValue)
-    validate[MaxSmallestLongBigDecimalExample](passValue).isInstanceOf[Valid] shouldBe true
+    validate[MaxSmallestLongBigDecimalExample](passValue).isEmpty shouldBe true
   }
 
   test("pass validation for very large big decimal type") {
@@ -171,7 +197,7 @@ class MaxConstraintValidatorTest
     } yield BigDecimal(double)
 
     forAll(passBigDecimalValue) { value =>
-      validate[MaxLargestLongBigDecimalExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MaxLargestLongBigDecimalExample](value).isEmpty shouldBe true
     }
   }
 
@@ -181,9 +207,14 @@ class MaxConstraintValidatorTest
     } yield BigDecimal(double)
 
     forAll(failBigDecimalValue) { value =>
-      validate[MaxBigDecimalExample](value) should equal(
-        Invalid(errorMessage(value), errorCode(value))
-      )
+      val violations = validate[MaxBigDecimalExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(value)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooLarge])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(value)
     }
   }
 
@@ -193,23 +224,27 @@ class MaxConstraintValidatorTest
     } yield BigDecimal(double)
 
     forAll(failBigDecimalValue) { value =>
-      validate[MaxSmallestLongBigDecimalExample](value) should equal(
-        Invalid(
-          errorMessage(value, maxValue = Long.MinValue),
-          errorCode(value, maxValue = Long.MinValue)
-        )
-      )
+      val violations = validate[MaxSmallestLongBigDecimalExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(value, maxValue = Long.MinValue)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooLarge])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(value, maxValue = Long.MinValue)
     }
   }
 
   test("fail validation for very large big decimal type") {
     val value = BigDecimal(Long.MaxValue) - 0.1
-    validate[MaxSecondLargestLongBigDecimalExample](value) should equal(
-      Invalid(
-        errorMessage(value, maxValue = Long.MaxValue - 1),
-        errorCode(value, maxValue = Long.MaxValue - 1)
-      )
-    )
+    val violations = validate[MaxSecondLargestLongBigDecimalExample](value)
+    violations.size should equal(1)
+    violations.head.getPropertyPath.toString should equal("numberValue")
+    violations.head.getMessage shouldBe errorMessage(value, maxValue = Long.MaxValue - 1)
+    violations.head.getInvalidValue shouldBe value
+    val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooLarge])
+    payload.isDefined shouldBe true
+    payload.get shouldBe errorCode(value.toLong, Long.MaxValue - 1)
   }
 
   test("pass validation for sequence of integers") {
@@ -218,7 +253,7 @@ class MaxConstraintValidatorTest
     } yield Seq.fill(size) { 0 }
 
     forAll(passValue) { value =>
-      validate[MaxSeqExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MaxSeqExample](value).isEmpty shouldBe true
     }
   }
 
@@ -229,12 +264,16 @@ class MaxConstraintValidatorTest
     } yield { n ++ m }
 
     forAll(failValue) { value =>
-      validate[MaxSeqExample](value) should equal(
-        Invalid(
-          errorMessage(value = Integer.valueOf(value.size), maxValue = 100),
-          errorCode(value = Integer.valueOf(value.size), maxValue = 100)
-        )
-      )
+      val violations = validate[MaxSeqExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(
+        value = Integer.valueOf(value.size),
+        maxValue = 100)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooLarge])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(value = Integer.valueOf(value.size), maxValue = 100)
     }
   }
 
@@ -246,7 +285,7 @@ class MaxConstraintValidatorTest
 
     val passValue = Gen.mapOfN[String, Int](100, mapGenerator)
     forAll(passValue) { value =>
-      validate[MaxMapExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MaxMapExample](value).isEmpty shouldBe true
     }
   }
 
@@ -258,12 +297,14 @@ class MaxConstraintValidatorTest
 
     val failValue = Gen.mapOfN[String, Int](200, mapGenerator).suchThat(_.size >= 101)
     forAll(failValue) { value =>
-      validate[MaxMapExample](value) should equal(
-        Invalid(
-          errorMessage(value = Integer.valueOf(value.size), maxValue = 100),
-          errorCode(value = Integer.valueOf(value.size), maxValue = 100)
-        )
-      )
+      val violations = validate[MaxMapExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(Integer.valueOf(value.size), maxValue = 100)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooLarge])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(Integer.valueOf(value.size), maxValue = 100)
     }
   }
 
@@ -275,7 +316,7 @@ class MaxConstraintValidatorTest
     }
 
     forAll(passValue) { value =>
-      validate[MaxArrayExample](value).isInstanceOf[Valid] shouldBe true
+      validate[MaxArrayExample](value).isEmpty shouldBe true
     }
   }
 
@@ -286,27 +327,31 @@ class MaxConstraintValidatorTest
     } yield { n ++ m }
 
     forAll(failValue) { value =>
-      validate[MaxArrayExample](value) should equal(
-        Invalid(
-          errorMessage(value = Integer.valueOf(value.length), maxValue = 100),
-          errorCode(value = Integer.valueOf(value.length), maxValue = 100)
-        )
-      )
+      val violations = validate[MaxArrayExample](value)
+      violations.size should equal(1)
+      violations.head.getPropertyPath.toString should equal("numberValue")
+      violations.head.getMessage shouldBe errorMessage(
+        Integer.valueOf(value.length),
+        maxValue = 100)
+      violations.head.getInvalidValue shouldBe value
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooLarge])
+      payload.isDefined shouldBe true
+      payload.get shouldBe errorCode(Integer.valueOf(value.length), maxValue = 100)
     }
   }
 
   test("fail for unsupported class type") {
-    intercept[IllegalArgumentException] {
+    intercept[UnexpectedTypeException] {
       validate[MaxInvalidTypeExample]("strings are not supported")
     }
   }
 
-  private def validate[T: Manifest](value: Any): ValidationResult = {
-    super.validate(manifest[T].runtimeClass, "numberValue", classOf[Max], value)
+  private def validate[T: Manifest](value: Any): Set[ConstraintViolation[T]] = {
+    super.validate[Max, T](manifest[T].runtimeClass, "numberValue", value)
   }
 
   private def errorMessage(value: Number, maxValue: Long = 0): String =
-    MaxConstraintValidator.errorMessage(messageResolver, value, maxValue)
+    s"[$value] is not less than or equal to $maxValue"
 
   private def errorCode(value: Number, maxValue: Long = 0): ErrorCode =
     ErrorCode.ValueTooLarge(maxValue, value)

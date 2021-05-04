@@ -1,10 +1,12 @@
 package com.twitter.finatra.validation.tests.constraints
 
-import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
-import com.twitter.finatra.validation.constraints.{UUID, UUIDConstraintValidator}
+import com.twitter.finatra.validation.constraints.UUID
 import com.twitter.finatra.validation.tests.caseclasses.UUIDExample
-import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode, ValidationResult}
+import com.twitter.finatra.validation.{ConstraintValidatorTest, ErrorCode}
+import com.twitter.util.validation.conversions.ConstraintViolationOps._
+import jakarta.validation.ConstraintViolation
 import org.scalacheck.Gen
+import org.scalacheck.Shrink.shrinkAny
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 class UUIDConstraintValidatorTest
@@ -15,7 +17,7 @@ class UUIDConstraintValidatorTest
     val passValue = Gen.uuid
 
     forAll(passValue) { value =>
-      validate[UUIDExample](value.toString).isInstanceOf[Valid] shouldBe true
+      validate[UUIDExample](value.toString).isEmpty shouldBe true
     }
   }
 
@@ -23,16 +25,23 @@ class UUIDConstraintValidatorTest
     val passValue = Gen.alphaStr
 
     forAll(passValue) { value =>
-      validate[UUIDExample](value) should equal(
-        Invalid(errorMessage(value), ErrorCode.InvalidUUID(value))
-      )
+      val violations = validate[UUIDExample](value)
+      violations.size should equal(1)
+      val violation = violations.head
+      violation.getPropertyPath.toString should equal("uuid")
+      violation.getMessage should be(errorMessage(violation.getInvalidValue))
+      val payload = violations.head.getDynamicPayload(classOf[ErrorCode.InvalidUUID])
+      payload.isDefined should be(true)
+      payload.get should equal(
+        ErrorCode.InvalidUUID(violations.head.getInvalidValue.asInstanceOf[String]))
     }
   }
 
-  private def validate[C: Manifest](value: String): ValidationResult = {
-    super.validate(manifest[C].runtimeClass, "uuid", classOf[UUID], value)
+  private def validate[C: Manifest](
+    value: Any
+  ): Set[ConstraintViolation[C]] = {
+    super.validate[UUID, C](manifest[C].runtimeClass, "uuid", value)
   }
 
-  private def errorMessage(value: String): String =
-    UUIDConstraintValidator.errorMessage(messageResolver, value)
+  private def errorMessage(value: Any): String = s"[${value}] is not a valid UUID"
 }

@@ -3,7 +3,7 @@
 HTTP Exception Mapping
 ======================
 
-It is recommended that you use exceptions for flow control in your controller and services and rely on the `c.t.finatra.http.exceptions.ExceptionMapper <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/exceptions/ExceptionMapper.scala>`__ to convert exceptions into proper HTTP responses.
+It is recommended that you use exceptions for flow control in your controller and services and rely on the `c.t.finatra.http.exceptions.ExceptionMapper <https://github.com/twitter/finatra/blob/develop/http-core/src/main/scala/com/twitter/finatra/http/exceptions/ExceptionMapper.scala>`__ to convert exceptions into proper HTTP responses.
 
 Why?
 ----

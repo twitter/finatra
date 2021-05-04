@@ -73,7 +73,7 @@ File serving is most commonly done through an HTTP `server <../http/server.html>
     }
 
 
-In the first route definiton, we use the `ResponseBuilder <../http/responses.html#responsebuilder>`_ of the HTTP Controller to return an HTTP `200 - OK` response with a body rendered from the contents of the file `file123.txt`. In this case, if the file cannot be found an HTTP `404 - NOT FOUND` response `will be returned <https://github.com/twitter/finatra/blob/e9aa2dacd4ba2efd2db380135a10cf8ad10ee2b5/http/src/main/scala/com/twitter/finatra/http/response/EnrichedResponse.scala#L638>`_. See the methods of the `c.t.finatra.http.response.EnrichedResponse <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/EnrichedResponse.scala>`_ for more details on returning file responses.
+In the first route definition, we use the `ResponseBuilder <../http/responses.html#responsebuilder>`_ of the HTTP Controller to return an HTTP `200 - OK` response with a body rendered from the contents of the file `file123.txt`. In this case, if the file cannot be found an HTTP `404 - NOT FOUND` response `will be returned <https://github.com/twitter/finatra/blob/e9aa2dacd4ba2efd2db380135a10cf8ad10ee2b5/http/src/main/scala/com/twitter/finatra/http/response/EnrichedResponse.scala#L638>`_. See the methods of the `c.t.finatra.http.response.EnrichedResponse <https://github.com/twitter/finatra/blob/develop/http-core/src/main/scala/com/twitter/finatra/http/response/EnrichedResponse.scala>`_ for more details on returning file responses.
 
 In the second route definition, we use the `ResponseBuilder <../http/responses.html#responsebuilder>`_ to return an HTTP `200 - OK` response with a body rendered from either the filename represented by the incoming wildcard path parameter (`:*`), or if not found the contents of the `index.html` file. 
 
@@ -89,7 +89,7 @@ could not would instead load `index.html` and render a response with a body of t
 This can be useful for building "single-page" `web applications <https://en.wikipedia.org/wiki/Single-page_application>`_. See the 
 `web-dashboard <https://github.com/twitter/finatra/tree/develop/examples/advanced/web-dashboard>`_ project for a runnable example.
 
-Or see the local file system `test class <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/fileserver/LocalFileServerFeatureTest.scala>`__ for more general file resolving examples.
+Or see the local file system `test class <https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/fileserver/LocalFileServerFeatureTest.scala>`__ for more general file resolving examples.
 
 .. |FileResolver| replace:: `c.t.finatra.utils.FileResolver`
 .. _FileResolver: https://github.com/twitter/finatra/blob/e9aa2dacd4ba2efd2db380135a10cf8ad10ee2b5/utils/src/main/scala/com/twitter/finatra/utils/FileResolver.scala#L21

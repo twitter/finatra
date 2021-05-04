@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.{
 }
 import com.google.inject.Injector
 import com.twitter.finagle.http.{Message, Request, Response}
+import com.twitter.finatra.http.annotations.{FormParam, Header, QueryParam, RouteParam}
 import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.caseclass.exceptions.{
   CaseClassFieldMappingException,
@@ -29,9 +30,6 @@ import com.twitter.finatra.jackson.caseclass.{
   resolveSubType
 }
 import com.twitter.finatra.json.annotations.InjectableValue
-import com.twitter.finatra.http.annotations.{FormParam, Header, QueryParam, RouteParam}
-import com.twitter.finatra.validation.ErrorCode
-import com.twitter.finatra.validation.ValidationResult.Invalid
 import com.twitter.util.reflect.Annotations
 import java.lang.annotation.Annotation
 import scala.collection.JavaConverters._
@@ -47,10 +45,11 @@ private object MessageInjectableValues {
 
   private[http] class RepeatedCommaSeparatedQueryParameterException(fieldName: String)
       extends CaseClassFieldMappingException(
-        null,
-        Invalid(
-          s"Repeating $fieldName is not allowed. Pass multiple values as a single comma-separated string.",
-          ErrorCode.RepeatedCommaSeparatedCollection)
+        CaseClassFieldMappingException.PropertyPath.leaf(fieldName),
+        CaseClassFieldMappingException.Reason(
+          message =
+            s"Repeating $fieldName is not allowed. Pass multiple values as a single comma-separated string."
+        )
       )
 }
 

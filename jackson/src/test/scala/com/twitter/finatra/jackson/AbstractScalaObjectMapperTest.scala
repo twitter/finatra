@@ -27,11 +27,13 @@ import com.twitter.finatra.jackson.Obj.{
   NestedCaseClassInObjectWithNestedCaseClassInObjectParam
 }
 import com.twitter.finatra.jackson.TypeAndCompanion.NestedCaseClassInCompanion
+import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.ValidationError
 import com.twitter.finatra.jackson.internal.{
   SimplePersonInPackageObject,
   SimplePersonInPackageObjectWithoutConstructorParams
 }
 import com.twitter.finatra.json.JsonDiff
+import com.twitter.finatra.validation.ErrorCode
 import com.twitter.inject.Test
 import com.twitter.inject.conversions.time._
 import com.twitter.io.Buf
@@ -1805,7 +1807,27 @@ abstract class AbstractScalaObjectMapperTest extends Test {
     }
     e.errors.size should equal(2)
     e.errors.head.getMessage should be("first.x: [-1] is not greater than or equal to 0")
+    e.errors.head.reason.detail match {
+      case ValidationError(violation, ValidationError.Field, Some(errorCode)) =>
+        errorCode should equal(ErrorCode.ValueTooSmall(0L, -1))
+        violation.getPropertyPath.toString should equal("Point.x")
+        violation.getMessage should equal("[-1] is not greater than or equal to 0")
+        violation.getInvalidValue should equal(-1)
+        violation.getRootBeanClass should equal(classOf[Point])
+        violation.getRootBean == null should be(true)
+      case _ => fail()
+    }
     e.errors.last.getMessage should be("first.y: [120] is not less than or equal to 100")
+    e.errors.last.reason.detail match {
+      case ValidationError(violation, ValidationError.Field, Some(errorCode)) =>
+        errorCode should equal(ErrorCode.ValueTooLarge(100, 120))
+        violation.getPropertyPath.toString should equal("Point.y")
+        violation.getMessage should equal("[120] is not less than or equal to 100")
+        violation.getInvalidValue should equal(120)
+        violation.getRootBeanClass should equal(classOf[Point])
+        violation.getRootBean == null should be(true)
+      case _ => fail()
+    }
   }
 
   test("deserialization#ignore type with no default fails") {

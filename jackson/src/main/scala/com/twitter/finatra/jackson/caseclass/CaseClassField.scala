@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.{
 }
 import com.fasterxml.jackson.core.{JsonParser, ObjectCodec}
 import com.fasterxml.jackson.databind._
-import com.fasterxml.jackson.databind.`type`.TypeFactory
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition
 import com.fasterxml.jackson.databind.node.TreeTraversingParser
@@ -17,8 +16,6 @@ import com.fasterxml.jackson.databind.util.ClassUtil
 import com.twitter.conversions.StringOps._
 import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException
 import com.twitter.finatra.json.annotations.InjectableValue
-import com.twitter.finatra.validation.ErrorCode
-import com.twitter.finatra.validation.ValidationResult.Invalid
 import com.twitter.inject.Logging
 import com.twitter.util.reflect.Annotations
 import java.lang.annotation.Annotation
@@ -40,7 +37,6 @@ object CaseClassField {
     propertyDefinitions: Array[CaseClassDeserializer.PropertyDefinition],
     fieldAnnotations: scala.collection.Map[String, Array[Annotation]],
     namingStrategy: PropertyNamingStrategy,
-    typeFactory: TypeFactory,
     injectableTypes: InjectableTypes
   ): Array[CaseClassField] = {
     /* CaseClassFields MUST be returned in constructor/method parameter invocation order */
@@ -379,7 +375,10 @@ private[jackson] case class CaseClassField private (
       else s"$fieldInfoAttributeType is required"
     throw CaseClassFieldMappingException(
       CaseClassFieldMappingException.PropertyPath.leaf(fieldInfoAttributeName),
-      Invalid(message, ErrorCode.RequiredFieldMissing)
+      CaseClassFieldMappingException.Reason(
+        message,
+        CaseClassFieldMappingException.RequiredFieldMissing
+      )
     )
   }
 

@@ -1,11 +1,11 @@
 package com.twitter.finatra.jackson.caseclass
 
 import com.fasterxml.jackson.module.scala._
-import com.twitter.finatra.validation.Validator
+import com.twitter.util.validation.ScalaValidator
 
 private[jackson] class CaseClassJacksonModule(
   injectableTypes: InjectableTypes,
-  validator: Option[Validator])
+  validator: Option[ScalaValidator])
     extends JacksonModule {
   override def getModuleName: String = this.getClass.getName
 
