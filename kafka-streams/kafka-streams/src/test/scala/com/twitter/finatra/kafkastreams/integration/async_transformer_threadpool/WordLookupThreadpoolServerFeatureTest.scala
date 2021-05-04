@@ -43,8 +43,9 @@ class WordLookupThreadpoolServerFeatureTestBase extends KafkaStreamsFeatureTest 
     server.start()
 
     textLinesTopic.publish(1L -> words.mkString(" "))
-    wordsWithCountsTopic.consumeMessages(numMessages =
-      numberOfWords) should contain theSameElementsAs wordsToLengths
+    wordsWithCountsTopic.consumeMessages(
+      numMessages = numberOfWords,
+      75.seconds) should contain theSameElementsAs wordsToLengths
     assertOutputTopicEmpty()
 
     server.close()
