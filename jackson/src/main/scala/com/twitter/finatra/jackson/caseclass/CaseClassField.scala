@@ -116,7 +116,7 @@ private[jackson] case class CaseClassField private (
       null
   }
 
-  private[this] val isOption = javaType.hasRawClass(classOf[Option[_]])
+  private[caseclass] val isOption = javaType.hasRawClass(classOf[Option[_]])
   private[this] val isString = javaType.hasRawClass(classOf[String])
   private[this] val fieldInjection =
     new FieldInjection(

@@ -7,6 +7,13 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Fixed
+~~~~~
+
+* finatra-jackson: Properly handle Scala enumeration fields wrapped in an `Option` during
+  deserialization failures in the `CaseClassDeserializer#isScalaEnumerationType` method.
+  ``PHAB_ID=D665062``
+
 Changed
 ~~~~~~~
 

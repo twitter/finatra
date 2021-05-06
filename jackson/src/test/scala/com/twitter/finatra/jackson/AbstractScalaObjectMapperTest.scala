@@ -27,7 +27,10 @@ import com.twitter.finatra.jackson.Obj.{
   NestedCaseClassInObjectWithNestedCaseClassInObjectParam
 }
 import com.twitter.finatra.jackson.TypeAndCompanion.NestedCaseClassInCompanion
-import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.ValidationError
+import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.{
+  Unspecified,
+  ValidationError
+}
 import com.twitter.finatra.jackson.internal.{
   SimplePersonInPackageObject,
   SimplePersonInPackageObjectWithoutConstructorParams
@@ -137,6 +140,21 @@ abstract class AbstractScalaObjectMapperTest extends Test {
     assert(
       actualMessages2.mkString(",") == withErrors2212.mkString(",") ||
         actualMessages2.mkString(",") == withErrors2213.mkString(","))
+
+    val invalidWithOptionalScalaEnumerationValue = """{"month":"Nnn"}"""
+    val e3 = intercept[CaseClassMappingException] {
+      parse[WithOptionalScalaEnumeration](invalidWithOptionalScalaEnumerationValue)
+    }
+    e3.errors.size shouldEqual 1
+    e3.errors.head.getMessage should be("month: key not found: Nnn")
+    e3.errors.head.reason.message should be("key not found: Nnn")
+    e3.errors.head.reason.detail shouldEqual Unspecified
+
+    val validWithOptionalScalaEnumerationValue = """{"month":"Apr"}"""
+    val validWithOptionalScalaEnumeration =
+      parse[WithOptionalScalaEnumeration](validWithOptionalScalaEnumerationValue)
+    validWithOptionalScalaEnumeration.month.isDefined shouldBe true
+    validWithOptionalScalaEnumeration.month.get shouldEqual Month.Apr
   }
 
   // based on Jackson test to ensure compatibility:

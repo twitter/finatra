@@ -71,6 +71,9 @@ case class BasicDate(
   year: Int,
   @JsonScalaEnumeration(classOf[WeekdayType]) weekday: Weekday.Weekday)
 
+case class WithOptionalScalaEnumeration(
+  @JsonScalaEnumeration(classOf[MonthType]) month: Option[Month.Month])
+
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes(
   Array(

@@ -606,8 +606,7 @@ private[jackson] class CaseClassDeserializer(
             constructorValuesIdx,
             errors
           )
-        case e: java.util.NoSuchElementException
-            if isScalaEnumerationType(field.javaType.getRawClass) =>
+        case e: java.util.NoSuchElementException if isScalaEnumerationType(field) =>
           // Scala enumeration mapping issue
           addException(
             field,
@@ -632,8 +631,15 @@ private[jackson] class CaseClassDeserializer(
     (constructorValues, errors.toSeq)
   }
 
-  private[this] def isScalaEnumerationType(clazz: Class[_]): Boolean =
-    clazz.getName.startsWith(classOf[scala.Enumeration].getName)
+  private[this] def isScalaEnumerationType(field: CaseClassField): Boolean = {
+    // scala.Enumerations are challenging for class type comparison and thus we simply check
+    // if the class name "starts with" scala.Enumeration which should indicate if a class
+    // is a scala.Enumeration type. The added benefit is that this should work even if the
+    // classes come from different classloaders.
+    field.javaType.getRawClass.getName.startsWith(classOf[scala.Enumeration].getName) ||
+    (field.isOption && field.javaType
+      .containedType(0).getRawClass.getName.startsWith(classOf[scala.Enumeration].getName))
+  }
 
   /** Add the given exception to the given array buffer of errors while also adding a missing value field to the given array */
   private[this] def addException(
