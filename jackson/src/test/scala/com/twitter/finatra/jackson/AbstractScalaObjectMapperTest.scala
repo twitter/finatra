@@ -146,8 +146,16 @@ abstract class AbstractScalaObjectMapperTest extends Test {
       parse[WithOptionalScalaEnumeration](invalidWithOptionalScalaEnumerationValue)
     }
     e3.errors.size shouldEqual 1
-    e3.errors.head.getMessage should be("month: key not found: Nnn")
-    e3.errors.head.reason.message should be("key not found: Nnn")
+    e3.errors.head.getMessage match {
+      case "month: key not found: Nnn" => // Scala 2.12.x (https://github.com/scala/scala/blob/2.12.x/src/library/scala/collection/MapLike.scala#L236)
+      case "month: null" => // Scala 2.13.1 (https://github.com/scala/scala/blob/2.13.x/src/library/scala/collection/immutable/HashMap.scala#L635)
+      case _ => fail()
+    }
+    e3.errors.head.reason.message match {
+      case "key not found: Nnn" => // Scala 2.12.x (https://github.com/scala/scala/blob/2.12.x/src/library/scala/collection/MapLike.scala#L236_
+      case null => // Scala 2.13.1 (https://github.com/scala/scala/blob/2.13.x/src/library/scala/collection/immutable/HashMap.scala#L635)
+      case _ => fail()
+    }
     e3.errors.head.reason.detail shouldEqual Unspecified
 
     val validWithOptionalScalaEnumerationValue = """{"month":"Apr"}"""
