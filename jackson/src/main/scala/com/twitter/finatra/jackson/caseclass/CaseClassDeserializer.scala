@@ -31,6 +31,7 @@ import com.twitter.util.reflect.{Annotations, Types => ReflectionTypes}
 import com.twitter.util.validation.ScalaValidator
 import com.twitter.util.validation.conversions.ConstraintViolationOps._
 import com.twitter.util.validation.conversions.PathOps._
+import com.twitter.util.validation.metadata.{ExecutableDescriptor, MethodDescriptor}
 import jakarta.validation.{ConstraintViolation, Payload}
 import java.lang.annotation.Annotation
 import java.lang.reflect.{
@@ -56,7 +57,9 @@ private object CaseClassDeserializer {
   /* For supporting JsonCreator */
   case class CaseClassCreator(
     executable: Executable,
-    propertyDefinitions: Array[PropertyDefinition])
+    propertyDefinitions: Array[PropertyDefinition],
+    executableValidationDescription: Option[ExecutableDescriptor],
+    executableValidationMethodDescriptions: Option[Array[MethodDescriptor]])
 
   /* Holder for a fully specified JavaType with generics and a Jackson BeanPropertyDefinition */
   case class PropertyDefinition(
@@ -76,41 +79,42 @@ private object CaseClassDeserializer {
   // Validate `Constraint` annotations for all fields.
   def executeFieldValidations(
     validatorOption: Option[ScalaValidator],
+    executableDescriptorOption: Option[ExecutableDescriptor],
     config: DeserializationConfig,
-    executable: Executable,
-    mixinClazz: Option[Class[_]],
     constructorValues: Array[Object],
     fields: Array[CaseClassField]
-  ): Seq[CaseClassFieldMappingException] = validatorOption match {
-    case Some(validator) =>
-      val results = mutable.ListBuffer[CaseClassFieldMappingException]()
+  ): Seq[CaseClassFieldMappingException] = (validatorOption, executableDescriptorOption) match {
+    case (Some(validator), Some(executableDescriptor)) =>
       val violations: Set[ConstraintViolation[Any]] =
-        validator.forExecutables.validateExecutableParameters[Any](
-          executable,
-          constructorValues.asInstanceOf[Array[Any]],
-          fields.map(_.name),
-          mixinClazz
-        )
-      val iterator = violations.iterator
-      while (iterator.hasNext) {
-        val violation: ConstraintViolation[Any] = iterator.next()
-        results.append(
-          CaseClassFieldMappingException(
-            CaseClassFieldMappingException.PropertyPath.leaf(
-              applyPropertyNamingStrategy(config, violation.getPropertyPath.getLeafNode.toString)
-            ),
-            CaseClassFieldMappingException.Reason(
-              message = violation.getMessage,
-              detail = ValidationError(
-                violation,
-                CaseClassFieldMappingException.ValidationError.Field,
-                violation.getDynamicPayload(classOf[Payload])
+        validator.forExecutables
+          .validateExecutableParameters[Any](
+            executableDescriptor,
+            constructorValues.asInstanceOf[Array[Any]],
+            fields.map(_.name)
+          )
+      if (violations.nonEmpty) {
+        val results = mutable.ListBuffer[CaseClassFieldMappingException]()
+        val iterator = violations.iterator
+        while (iterator.hasNext) {
+          val violation: ConstraintViolation[Any] = iterator.next()
+          results.append(
+            CaseClassFieldMappingException(
+              CaseClassFieldMappingException.PropertyPath.leaf(
+                applyPropertyNamingStrategy(config, violation.getPropertyPath.getLeafNode.toString)
+              ),
+              CaseClassFieldMappingException.Reason(
+                message = violation.getMessage,
+                detail = ValidationError(
+                  violation,
+                  CaseClassFieldMappingException.ValidationError.Field,
+                  violation.getDynamicPayload(classOf[Payload])
+                )
               )
             )
           )
-        )
-      }
-      results.toSeq
+        }
+        results.toSeq
+      } else Seq.empty[CaseClassFieldMappingException]
     case _ =>
       Seq.empty[CaseClassFieldMappingException]
   }
@@ -141,13 +145,14 @@ private object CaseClassDeserializer {
   // This is called after the case class is created.
   def executeMethodValidations(
     validatorOption: Option[ScalaValidator],
+    methodDescriptorsOption: Option[Array[MethodDescriptor]],
     config: DeserializationConfig,
     obj: Any
-  ): Seq[CaseClassFieldMappingException] = validatorOption match {
-    case Some(validator) =>
+  ): Seq[CaseClassFieldMappingException] = (validatorOption, methodDescriptorsOption) match {
+    case (Some(validator), Some(methodDescriptors)) =>
       try {
-        validator
-          .validateMethods[Any](obj).map { violation: ConstraintViolation[Any] =>
+        validator.forExecutables
+          .validateMethods[Any](methodDescriptors, obj).map { violation: ConstraintViolation[Any] =>
             CaseClassFieldMappingException(
               getMethodValidationViolationPropertyPath(config, violation),
               CaseClassFieldMappingException.Reason(
@@ -244,7 +249,9 @@ private[jackson] class CaseClassDeserializer(
           getBeanPropertyDefinitions(
             jsonCreatorAnnotatedMethod.getAnnotated.getParameters,
             jsonCreatorAnnotatedMethod,
-            fromCompanion = true)
+            fromCompanion = true),
+          validator.map(_.describeExecutable(jsonCreatorAnnotatedMethod.getAnnotated, mixinClazz)),
+          validator.map(_.describeMethods(clazz))
         )
       case _ =>
         fromClazz match {
@@ -253,7 +260,10 @@ private[jackson] class CaseClassDeserializer(
               jsonCreatorAnnotatedConstructor.getAnnotated,
               getBeanPropertyDefinitions(
                 jsonCreatorAnnotatedConstructor.getAnnotated.getParameters,
-                jsonCreatorAnnotatedConstructor)
+                jsonCreatorAnnotatedConstructor),
+              validator.map(
+                _.describeExecutable(jsonCreatorAnnotatedConstructor.getAnnotated, mixinClazz)),
+              validator.map(_.describeMethods(clazz))
             )
           case _ =>
             // try to use what Jackson thinks is the default -- however Jackson does not
@@ -268,7 +278,9 @@ private[jackson] class CaseClassDeserializer(
             }
             CaseClassCreator(
               constructor.getAnnotated,
-              getBeanPropertyDefinitions(constructor.getAnnotated.getParameters, constructor)
+              getBeanPropertyDefinitions(constructor.getAnnotated.getParameters, constructor),
+              validator.map(_.describeExecutable(constructor.getAnnotated, mixinClazz)),
+              validator.map(_.describeMethods(clazz))
             )
         }
     }
@@ -415,9 +427,8 @@ private[jackson] class CaseClassDeserializer(
     // run field validations
     val validationErrors = executeFieldValidations(
       validator,
+      caseClazzCreator.executableValidationDescription,
       config,
-      caseClazzCreator.executable,
-      mixinClazz,
       values,
       fields)
 
@@ -670,7 +681,13 @@ private[jackson] class CaseClassDeserializer(
             throw e // propagate the underlying cause of the failed instantiation if available
           else throw e.getCause
       }
-    val methodValidationErrors = executeMethodValidations(validator, config, obj)
+    val methodValidationErrors =
+      executeMethodValidations(
+        validator,
+        caseClazzCreator.executableValidationMethodDescriptions,
+        config,
+        obj
+      )
     if (methodValidationErrors.nonEmpty)
       throw CaseClassMappingException(methodValidationErrors.toSet)
 
