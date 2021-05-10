@@ -236,10 +236,6 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     jsonDiff(response.contentString, """{"id":"1","name":"bob","magic":"1","module_magic":"2"}""")
   }
 
-  test("json response to /example with encoding issue") {
-    server.httpGet("/example/routing/json/1%%", andExpect = BadRequest)
-  }
-
   test("GET /stringMap") {
     server.httpGet("/stringMap", andExpect = Ok, withJsonBody = """{"message":"Hello, World!"}""")
   }
