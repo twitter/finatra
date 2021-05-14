@@ -7,6 +7,11 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
+* finatra-jackson: Add `@NullValueAllowed` field annotations, allowing to accept json null values.
+
 Fixed
 ~~~~~
 

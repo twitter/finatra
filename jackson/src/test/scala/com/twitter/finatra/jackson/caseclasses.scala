@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.node.ValueNode
 import com.fasterxml.jackson.module.scala.JsonScalaEnumeration
 import com.twitter.finatra.jackson.caseclass.SerdeLogging
+import com.twitter.finatra.json.annotations.NullValueAllowed
 import com.twitter.finatra.validation.constraints._
 import com.twitter.finatra.validation.{CommonMethodValidations, ErrorCode}
 import com.twitter.inject.domain.WrappedValue
@@ -774,3 +775,7 @@ case class CaseClassShouldUseKebabCaseFromMixin(willThisGetTheRightCasing: Boole
 
 @JsonNaming
 case class UseDefaultNamingStrategy(thisFieldShouldUseDefaultPropertyNamingStrategy: Boolean)
+
+case class NullableField(@NullValueAllowed() value: String)
+
+case class NullableFieldDefault(@NullValueAllowed() value: String = "foo")

@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.node.TreeTraversingParser
 import com.fasterxml.jackson.databind.util.ClassUtil
 import com.twitter.conversions.StringOps._
 import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException
-import com.twitter.finatra.json.annotations.InjectableValue
+import com.twitter.finatra.json.annotations.{InjectableValue, NullValueAllowed}
 import com.twitter.inject.Logging
 import com.twitter.util.reflect.Annotations
 import java.lang.annotation.Annotation
@@ -234,6 +234,8 @@ private[jackson] case class CaseClassField private (
           fieldJsonNode,
           parseFieldValue(context, codec, fieldJsonNode, forProperty))
       }
+    } else if (fieldJsonNode != null && fieldJsonNode.isNull && annotations.exists(_.isInstanceOf[NullValueAllowed])) {
+      null
     } else defaultValueOrException(isIgnored)
   }
 
