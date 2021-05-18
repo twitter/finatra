@@ -1,9 +1,3 @@
-target(
-    dependencies = [
-        "finatra/examples/advanced/streaming-example/src/main/scala",
-    ],
-)
-
 test_suite(
     name = "tests",
     dependencies = [
@@ -16,7 +10,7 @@ jvm_binary(
     basename = "streaming-example",
     main = "com.twitter.streaming.StreamingServerMain",
     dependencies = [
-        ":streaming-example",
+        "finatra/examples/advanced/streaming-example/src/main/scala",
         "twitter-server/logback-classic/src/main/scala",
     ],
 )
