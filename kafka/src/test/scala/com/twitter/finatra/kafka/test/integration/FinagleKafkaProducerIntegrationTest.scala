@@ -7,11 +7,11 @@ import com.twitter.finagle.stats.{NullStatsReceiver, StatsReceiver}
 import com.twitter.finagle.tracing.Annotation.BinaryAnnotation
 import com.twitter.finagle.tracing.{Annotation, NullTracer, Record, Trace, TraceId}
 import com.twitter.finatra.kafka.domain.AckMode
-import com.twitter.finatra.kafka.producers.TracingKafkaProducer.{
+import com.twitter.finatra.kafka.producers.TracingKafkaProducer.TraceIdHeader
+import com.twitter.finatra.kafka.producers.KafkaProducerTraceAnnotatorImpl.{
   ClientIdAnnotation,
   ProducerSendAnnotation,
-  ProducerTopicAnnotation,
-  TraceIdHeader
+  ProducerTopicAnnotation
 }
 import com.twitter.finatra.kafka.producers.{
   FinagleKafkaProducerBuilder,

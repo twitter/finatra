@@ -90,7 +90,7 @@ trait FinagleKafkaConsumerBuilderMethods[K, V, Self] extends KafkaConsumerConfig
    */
   def buildClient(): KafkaConsumer[K, V] = {
     validateConfigs(config)
-    TracingKafkaConsumer[K, V](
+    new KafkaConsumer[K, V](
       config.properties,
       config.keyDeserializer.get,
       config.valueDeserializer.get)

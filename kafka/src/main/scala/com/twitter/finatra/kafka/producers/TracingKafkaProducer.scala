@@ -3,39 +3,15 @@ package com.twitter.finatra.kafka.producers
 import com.twitter.finagle.context.Contexts
 import com.twitter.finagle.filter.PayloadSizeFilter.ClientReqTraceKey
 import com.twitter.finagle.tracing._
-import com.twitter.finagle.{Dtab, Init}
+import com.twitter.finagle.util.LoadService
 import com.twitter.inject.Logging
 import java.util.Properties
 import java.util.concurrent.Future
-import org.apache.kafka.clients.producer.{
-  Callback,
-  KafkaProducer,
-  ProducerConfig,
-  ProducerRecord,
-  RecordMetadata
-}
+import org.apache.kafka.clients.producer.{Callback, KafkaProducer, ProducerRecord, RecordMetadata}
 import org.apache.kafka.common.serialization.Serializer
 import scala.collection.JavaConverters._
 
 object TracingKafkaProducer {
-
-  /**
-   * Trace annotation for the topic being used by the publisher. This is present as a
-   * [[com.twitter.finagle.tracing.Annotation.BinaryAnnotation BinaryAnnotation]] in the trace.
-   */
-  val ProducerTopicAnnotation = "clnt/kafka.producer.topic"
-
-  /**
-   * Trace annotation to record the send event.
-   */
-  val ProducerSendAnnotation = "clnt/kafka.producer.send"
-
-  /**
-   * Trace annotation for the client id defined inside [[ProducerConfig.CLIENT_ID_CONFIG CLIENT_ID_CONFIG]].
-   * This is present as a [[com.twitter.finagle.tracing.Annotation.BinaryAnnotation BinaryAnnotation]]
-   * in the trace.
-   */
-  val ClientIdAnnotation = "kafka.clientId"
 
   /**
    * A Kafka Header to make the traceId of the producer visible to the consumer.
@@ -47,6 +23,9 @@ object TracingKafkaProducer {
    */
   private[finatra] val TestTraceIdKey: Contexts.local.Key[TraceId] =
     Contexts.local.newKey[TraceId]()
+
+  private val KafkaProducerTraceAnnotators: Seq[KafkaProducerTraceAnnotator] =
+    LoadService[KafkaProducerTraceAnnotator]()
 
   /**
    * Helper constructor which accepts [[Properties]] for constructing the [[TracingKafkaProducer]].
@@ -96,22 +75,20 @@ class TracingKafkaProducer[K, V](
   valueSerializer: Serializer[V])
     extends KafkaProducer[K, V](configs.asJava, keySerializer, valueSerializer)
     with Logging {
-
   import TracingKafkaProducer._
 
   override def send(record: ProducerRecord[K, V], callback: Callback): Future[RecordMetadata] = {
     val shouldTrace = producerTracingEnabled()
-    withTracing { trace =>
+    withTracing {
+      val trace = Trace()
       if (trace.isActivelyTracing && shouldTrace) {
-        info(s"Tracing producer record with trace id: ${trace.id}")
-        addSendTraceAnnotations(trace, record)
+        debug(s"Tracing producer record with trace id: ${trace.id}")
+        KafkaProducerTraceAnnotators.foreach(_.recordAnnotations(trace, record, configs))
         try {
           record.headers().add(TraceIdHeader, TraceId.serialize(trace.id))
         } catch {
           case ex: IllegalStateException =>
-            warn(
-              s"[traceId=${trace.id.traceId.toString}] Unable to add TraceId header to the producer record",
-              ex)
+            warn("Unable to add TraceId header to the producer record", ex)
         }
       }
       super.send(
@@ -130,7 +107,7 @@ class TracingKafkaProducer[K, V](
     }
   }
 
-  private def withTracing[R](f: Tracing => R): R = {
+  private def withTracing[R](f: => R): R = {
     // NOTE: This code can be called from a non-finagle controlled thread and hence the
     // Trace.tracers can be empty as it's absent from Contexts.local.
     val tracer = if (Trace.tracers.isEmpty) DefaultTracer.self else BroadcastTracer(Trace.tracers)
@@ -142,36 +119,7 @@ class TracingKafkaProducer[K, V](
         case None => nextId.copy(_sampled = Some(false))
       }
     }
-    Trace.letTracerAndId(tracer, nextTraceId) {
-      val trace = Trace()
-      f(trace)
-    }
-  }
-
-  private def addSendTraceAnnotations(trace: Tracing, record: ProducerRecord[K, V]): Unit = {
-    val serviceName = TraceServiceName() match {
-      case Some(name) => name
-      case None => "kafka.producer"
-    }
-    trace.recordServiceName(serviceName)
-    trace.recordBinary("clnt/finagle.label", serviceName)
-    trace.recordBinary("clnt/finagle.version", Init.finagleVersion)
-    if (Dtab.local.nonEmpty) {
-      trace.recordBinary("clnt/dtab.local", Dtab.local.show)
-    }
-    configs.get(KafkaProducerConfig.FinagleDestKey) match {
-      case Some(dest) => trace.recordBinary("clnt/namer.path", dest)
-      case None => // nop
-    }
-    configs.get(ProducerConfig.CLIENT_ID_CONFIG) match {
-      case Some(clientId) => trace.recordBinary(ClientIdAnnotation, clientId)
-      case None => // nop
-    }
-    trace.recordBinary(ProducerTopicAnnotation, record.topic())
-    trace.recordRpc("send")
-    trace.record(Annotation.ClientSend)
-    trace.record(Annotation.WireSend)
-    trace.record(ProducerSendAnnotation)
+    Trace.letTracerAndId(tracer, nextTraceId)(f)
   }
 
   private def addReceiveTraceAnnotations(

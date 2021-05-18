@@ -17,6 +17,14 @@ Fixed
 Changed
 ~~~~~~~
 
+* finatra-kafka: Deprecate `c.t.finatra.kafka.consumers.TracingKafkaConsumer`
+  as it only produced single-span traces and there is no way to propagate the `TraceId` back to the
+  caller without changing the entire API. Users should use the
+  `c.t.finatra.kafka.consumers.KafkaConsumerTracer.trace` method instead to enable tracing for
+  Kafka Consumers. Also added `c.t.finatra.kafka.producers.KafkaProducerTraceAnnotator` and
+  `c.t.finatra.kafka.consumers.KafkaConsumerTraceAnnotator` services which will can be used to add
+  custom trace annotations to the producer and consumer spans. ``PHAB_ID=D649655``
+
 * finatra (BREAKING API CHANGE): Update to use the new util/util-validator `ScalaValidator` for case
   class field validations. We've removed the custom Finatra `c.t.finatra.validation.Validator` and
   instead now use the `c.t.util.validation.ScalaValidator`. Constraint annotations and validator
