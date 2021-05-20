@@ -7,7 +7,6 @@ import com.twitter.finatra.multiserver.CombinedServer.{AdminAdd1Request, DoEvery
 import com.twitter.finatra.thrift.ThriftClient
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.{Await, Future}
-import scala.util.parsing.json.JSON
 
 class DoEverythingCombinedServerFeatureTest extends FeatureTest {
 
@@ -32,10 +31,10 @@ class DoEverythingCombinedServerFeatureTest extends FeatureTest {
   }
 
   test("GET /admin/registry.json") {
-    val response = server.httpGetAdmin("/admin/registry.json", andExpect = Status.Ok)
-
-    val json: Map[String, Any] =
-      JSON.parseFull(response.contentString).get.asInstanceOf[Map[String, Any]]
+    val json = server.httpGetJson[Map[String, Any]](
+      "/admin/registry.json",
+      andExpect = Status.Ok,
+      routeHint = RouteHint.AdminServer)
 
     val registry = json("registry").asInstanceOf[Map[String, Any]]
     registry.contains("library") should be(true)

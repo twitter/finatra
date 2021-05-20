@@ -1,5 +1,7 @@
 package com.twitter.inject.server.tests
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.google.inject.{AbstractModule, Module}
 import com.twitter.app.CloseException
 import com.twitter.conversions.DurationOps._
@@ -11,7 +13,6 @@ import com.twitter.server.Lifecycle.Warmup
 import com.twitter.server.{TwitterServer => BaseTwitterServer}
 import com.twitter.util.{Await, Closable, Duration, Future}
 import com.twitter.util.registry.GlobalRegistry
-import scala.util.parsing.json.JSON
 
 class StartupIntegrationTest extends Test {
 
@@ -132,11 +133,12 @@ class StartupIntegrationTest extends Test {
     val server = new EmbeddedTwitterServer(new ServerWithModuleInstall, disableTestLogging = true)
     try {
       server.start()
+      val mapper: ObjectMapper = new ObjectMapper().registerModule(DefaultScalaModule)
 
       val response = server.httpGetAdmin("/admin/registry.json", andExpect = Status.Ok)
 
       val json: Map[String, Any] =
-        JSON.parseFull(response.contentString).get.asInstanceOf[Map[String, Any]]
+        mapper.readValue(response.contentString, classOf[Map[String, Any]])
       val registry = json("registry").asInstanceOf[Map[String, Any]]
       assert(registry.contains("library"))
       assert(registry("library").asInstanceOf[Map[String, String]].contains("finatra"))
