@@ -776,6 +776,6 @@ case class CaseClassShouldUseKebabCaseFromMixin(willThisGetTheRightCasing: Boole
 @JsonNaming
 case class UseDefaultNamingStrategy(thisFieldShouldUseDefaultPropertyNamingStrategy: Boolean)
 
-case class NullableField(@NullValueAllowed() value: String)
+case class NullableField(@NullValueAllowed value: String)
 
-case class NullableFieldDefault(@NullValueAllowed() value: String = "foo")
+case class NullableFieldDefault(@NullValueAllowed value: String = "foo")
