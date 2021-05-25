@@ -3,11 +3,10 @@ package com.twitter.finatra.kafka.consumers
 import com.twitter.finagle.tracing._
 import com.twitter.finagle.util.LoadService
 import com.twitter.finatra.kafka.producers.TracingKafkaProducer.TraceIdHeader
-import com.twitter.util.logging.Logger
+import com.twitter.util.logging.Logging
 import com.twitter.util.{Future, Return, Throw}
 import org.apache.kafka.clients.consumer.{ConsumerRecord, ConsumerRecords}
 import org.apache.kafka.common.header.Header
-import org.slf4j.LoggerFactory
 import scala.collection.JavaConverters._
 
 /**
@@ -22,7 +21,7 @@ import scala.collection.JavaConverters._
  *   }
  * }}}
  */
-object KafkaConsumerTracer {
+object KafkaConsumerTracer extends Logging {
 
   /**
    * Trace annotation for the traceId of the publisher that published the record. This is present as
@@ -36,8 +35,6 @@ object KafkaConsumerTracer {
   private[this] val TraceIdSampled = Some(true)
 
   private[this] val TraceIdIsDebug = (traceId: TraceId) => traceId.flags.isDebug
-
-  private[this] val logger = Logger(LoggerFactory.getLogger(getClass))
 
   /**
    * Setup tracing from the Kafka records that were consumed and perform future operations in the
@@ -80,9 +77,9 @@ object KafkaConsumerTracer {
       withTracing(isSampled, isDebug) {
         val trace = Trace()
         if (trace.isActivelyTracing) {
-          logger.debug(s"Tracing consumer records with trace id: ${trace.id}")
+          debug(s"Tracing consumer records with trace id: ${trace.id}")
           KafkaConsumerTraceAnnotators.foreach(_.recordAnnotations(trace, records, configMap))
-          logger.debug(s"Recording producer trace ids: $producerTraceIds")
+          debug(s"Recording producer trace ids: $producerTraceIds")
           producerTraceIds.foreach(id => trace.recordBinary(ProducerTraceIdAnnotation, id.toString))
         }
         f
