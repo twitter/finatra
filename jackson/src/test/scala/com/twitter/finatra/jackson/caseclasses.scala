@@ -641,6 +641,29 @@ class MyBigDecimalDeserializer extends StdDeserializer[BigDecimal](classOf[BigDe
   override def getEmptyValue: BigDecimal = BigDecimal(0)
 }
 
+// allows parsing a JSON null into a null type for this object
+class NullableCarMakeDeserializer extends StdDeserializer[CarMakeEnum](classOf[CarMakeEnum]) {
+  override def deserialize(jp: JsonParser, ctxt: DeserializationContext): CarMakeEnum = {
+    val jsonNode: ValueNode = jp.getCodec.readTree(jp)
+    if (jsonNode.isNull) {
+      null
+    } else {
+      CarMakeEnum.valueOf(jsonNode.asText())
+    }
+  }
+}
+
+case class WithNullableCarMake(
+  nonNullCarMake: CarMakeEnum,
+  @JsonDeserialize(using = classOf[NullableCarMakeDeserializer]) nullableCarMake: CarMakeEnum)
+
+case class WithDefaultNullableCarMake(
+  @JsonDeserialize(using = classOf[NullableCarMakeDeserializer]) nullableCarMake: CarMakeEnum =
+    CarMakeEnum.ford)
+
+// is a string type but json types are passed as the value
+case class WithJsonStringType(value: String)
+
 case class WithEmptyJsonProperty(@JsonProperty foo: String)
 
 case class WithNonemptyJsonProperty(@JsonProperty("bar") foo: String)

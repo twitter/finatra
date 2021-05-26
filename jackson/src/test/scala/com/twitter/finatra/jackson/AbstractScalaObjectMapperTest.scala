@@ -2127,6 +2127,74 @@ abstract class AbstractScalaObjectMapperTest extends Test {
     parse[OptionalView](result) should equal(view)
   }
 
+  test("nullable deserializer - allows parsing a JSON null into a null type") {
+    parse[WithNullableCarMake](
+      """{"non_null_car_make": "vw", "nullable_car_make": null}""") should be(
+      WithNullableCarMake(nonNullCarMake = CarMakeEnum.vw, nullableCarMake = null))
+  }
+
+  test("nullable deserializer - fail on missing value even when null allowed") {
+    val e = intercept[CaseClassMappingException] {
+      parse[WithNullableCarMake]("""{}""")
+    }
+    e.errors.size should equal(2)
+    e.errors.head.getMessage should equal("non_null_car_make: field is required")
+    e.errors.last.getMessage should equal("nullable_car_make: field is required")
+  }
+
+  test("nullable deserializer - allow null values when default is provided") {
+    parse[WithDefaultNullableCarMake]("""{"nullable_car_make":null}""") should be(
+      WithDefaultNullableCarMake(null))
+  }
+
+  test("nullable deserializer - use default when null is allowed, but not provided") {
+    parse[WithDefaultNullableCarMake]("""{}""") should be(
+      WithDefaultNullableCarMake(CarMakeEnum.ford))
+  }
+
+  test("deserialization of json array into a string field") {
+    val json =
+      """
+        |{
+        |  "value": [{
+        |   "languages": "es",
+        |   "reviewable": "tweet",
+        |   "baz": "too",
+        |   "foo": "bar",
+        |   "coordinates": "polar"
+        | }]
+        |}
+        |""".stripMargin
+
+    val expected = WithJsonStringType(
+      """[{"languages":"es","reviewable":"tweet","baz":"too","foo":"bar","coordinates":"polar"}]""".stripMargin)
+    parse[WithJsonStringType](json) should equal(expected)
+  }
+
+  test("deserialization of json int into a string field") {
+    val json =
+      """
+        |{
+        |  "value": 1
+        |}
+        |""".stripMargin
+
+    val expected = WithJsonStringType("1")
+    parse[WithJsonStringType](json) should equal(expected)
+  }
+
+  test("deserialization of json object into a string field") {
+    val json =
+      """
+        |{
+        |  "value": {"foo": "bar"}
+        |}
+        |""".stripMargin
+
+    val expected = WithJsonStringType("""{"foo":"bar"}""")
+    parse[WithJsonStringType](json) should equal(expected)
+  }
+
   protected def copy(underlying: JacksonScalaObjectMapperType): JacksonScalaObjectMapperType = {
     ObjectMapperCopier.copy(underlying)
   }

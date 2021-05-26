@@ -145,7 +145,7 @@ private[jackson] case class CaseClassField private (
       Annotations
         .findAnnotation[JsonIgnoreType](clazzAnnotations).exists(_.value)
 
-  /** If the field is annotated directly with [[JsonDeserialize]] of if the class is annotated similarly */
+  /** If the field is annotated directly with [[JsonDeserialize]] or if the class is annotated similarly */
   private[this] lazy val jsonDeserializer: Option[JsonDeserialize] =
     Annotations
       .findAnnotation[JsonDeserialize](annotations)
@@ -220,74 +220,106 @@ private[jackson] case class CaseClassField private (
     forProperty: BeanProperty
   ): Object = {
     val fieldJsonNode = objectJsonNode.get(name)
-    if (!isIgnored && fieldJsonNode != null && !fieldJsonNode.isNull) {
-      if (isOption) {
-        Option(
-          parseFieldValue(
-            context,
-            codec,
-            fieldJsonNode,
-            beanProperty(context, Some(firstTypeParam))))
-      } else {
-        assertNotNull(
-          context,
-          fieldJsonNode,
-          parseFieldValue(context, codec, fieldJsonNode, forProperty))
+    if (!isIgnored && fieldJsonNode != null) {
+      // not ignored and a value was passed in the JSON
+      resolveWithDeserializerAnnotation(context, codec, fieldJsonNode, forProperty) match {
+        case Some(obj) => obj
+        case _ => // wasn't handled by another resolved deserializer
+          parseFieldValue(context, codec, fieldJsonNode, forProperty, None)
       }
     } else defaultValueOrException(isIgnored)
   }
 
-  //optimized
+  private[this] def resolveWithDeserializerAnnotation(
+    context: DeserializationContext,
+    fieldCodec: ObjectCodec,
+    fieldJsonNode: JsonNode,
+    forProperty: BeanProperty
+  ): Option[Object] = jsonDeserializer match {
+    case Some(annotation: JsonDeserialize)
+        if isNotAssignableFrom(annotation.using, classOf[JsonDeserializer.None]) =>
+      // specifies a deserializer to use. we don't want to run any processing of the field
+      // node value here as the field is specified to be deserialized by some other deserializer
+      Option(
+        context
+          .deserializerInstance(beanPropertyDefinition.getPrimaryMember, annotation.using)) match {
+        case Some(deserializer) =>
+          val treeTraversingParser = new TreeTraversingParser(fieldJsonNode, fieldCodec)
+          try {
+            // advance the parser to the next token for deserialization
+            treeTraversingParser.nextToken
+            if (isOption) {
+              Some(
+                Option(
+                  deserializer
+                    .deserialize(treeTraversingParser, context)))
+            } else {
+              Some(deserializer.deserialize(treeTraversingParser, context))
+            }
+          } finally {
+            treeTraversingParser.close()
+          }
+        case _ =>
+          Some(
+            context.handleInstantiationProblem(
+              javaType.getRawClass,
+              annotation.using.toString,
+              JsonMappingException.from(
+                context,
+                "Unable to locate/create deserializer specified by: " +
+                  s"${annotation.getClass.getName}(using = ${annotation.using()})")
+            )
+          )
+      }
+    case Some(annotation: JsonDeserialize)
+        if isNotAssignableFrom(annotation.contentAs, classOf[java.lang.Void]) =>
+      // there is a @JsonDeserialize annotation but it merely states to deserialize as a specific type
+      Some(
+        parseFieldValue(
+          context,
+          fieldCodec,
+          fieldJsonNode,
+          forProperty,
+          Some(annotation.contentAs)
+        )
+      )
+    case _ => None
+  }
+
   private def parseFieldValue(
     context: DeserializationContext,
     fieldCodec: ObjectCodec,
-    field: JsonNode,
-    forProperty: BeanProperty
+    fieldJsonNode: JsonNode,
+    forProperty: BeanProperty,
+    subTypeClazz: Option[Class[_]]
   ): Object = {
-    if (isString) {
-      field.asText
+    if (fieldJsonNode.isNull) {
+      // the passed JSON value is a 'null' value
+      defaultValueOrException(isIgnored)
+    } else if (isString) {
+      // if this is a String type, do not try to use a JsonParser and simply return the node as text
+      if (fieldJsonNode.isValueNode) fieldJsonNode.asText()
+      else fieldJsonNode.toString
     } else {
-      val treeTraversingParser = new TreeTraversingParser(field, fieldCodec)
+      val treeTraversingParser = new TreeTraversingParser(fieldJsonNode, fieldCodec)
       try {
         // advance the parser to the next token for deserialization
         treeTraversingParser.nextToken
-        jsonDeserializer match {
-          case Some(annotation: JsonDeserialize)
-              if isNotAssignableFrom(annotation.using, classOf[JsonDeserializer.None]) =>
-            // Jackson doesn't seem to properly find deserializers specified with `@JsonDeserialize`
-            // unless they are contextual, so we manually lookup and instantiate.
-            Option(
-              context.deserializerInstance(
-                beanPropertyDefinition.getPrimaryMember,
-                annotation.using)) match {
-              case Some(deserializer) =>
-                deserializer.deserialize(treeTraversingParser, context)
-              case _ =>
-                context.handleInstantiationProblem(
-                  javaType.getRawClass,
-                  annotation.using.toString,
-                  JsonMappingException.from(
-                    context,
-                    "Unable to locate/create deserializer specified by: " +
-                      s"${annotation.getClass.getName}(using = ${annotation.using()})")
-                )
-            }
-          case Some(annotation: JsonDeserialize)
-              if isNotAssignableFrom(annotation.contentAs, classOf[java.lang.Void]) =>
+        if (isOption) {
+          Option(
             parseFieldValue(
               context,
               fieldCodec,
               treeTraversingParser,
-              forProperty,
-              Some(annotation.contentAs))
-          case _ =>
-            parseFieldValue(
-              context,
-              fieldCodec,
-              treeTraversingParser,
-              forProperty,
-              None
-            )
+              beanProperty(context, Some(firstTypeParam)),
+              subTypeClazz)
+          )
+        } else {
+          assertNotNull(
+            context,
+            fieldJsonNode,
+            parseFieldValue(context, fieldCodec, treeTraversingParser, forProperty, subTypeClazz)
+          )
         }
       } finally {
         treeTraversingParser.close()

@@ -10,6 +10,19 @@ Unreleased
 Fixed
 ~~~~~
 
+* finatra-jackson: Do not enforce `CaseClassDeserializer` deserialization semantics for a
+  field until after any deserializer annotation has been resolved. This fully allows a deserializer
+  to specify how to deserialize a field completely independent of the `CaseClassDeserializer`
+  requirements for fields. For example, if a user wanted to allow parsing of a JSON `null` value
+  into a `null` field instance value, they could define a custom deserializer to do so and annotate
+  the case class field with `@JsonDeserialize(using = classOf[CustomNullableDeserializer])`.
+
+  Additionally, we fix a bug in how String case class fields are handled when the incoming JSON is
+  not a String-type. The current code incorrectly returns an empty string when the field value is
+  parsed into Jackson ContainerNode or ObjectNode types and an incorrect `toString` representation
+  for a PojoNode type. We now correctly represent the field value as a string in these cases to
+  deserialize into the case class field. ``PHAB_ID=D676938``
+
 * finatra-jackson: Properly handle Scala enumeration fields wrapped in an `Option` during
   deserialization failures in the `CaseClassDeserializer#isScalaEnumerationType` method.
   ``PHAB_ID=D665062``
