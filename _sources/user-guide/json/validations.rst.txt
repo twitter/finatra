@@ -3,28 +3,33 @@
 JSON Validation Framework
 =========================
 
-Finatra provides a simple `Validation Framework <../validation/index.html>`__ to integrate with Finatra's custom `case class` deserializer
-to efficiently apply per field and method validations as request parsing is performed.
+Finatra integrates with the `util-validator <https://github.com/twitter/util/tree/develop/util-validator>`__
+`ScalaValidator <https://github.com/twitter/util/blob/develop/util-validator/src/main/scala/com/twitter/util/validation/ScalaValidator.scala>`__
+for Scala `case class <https://docs.scala-lang.org/tour/case-classes.html>`__ field validation. For
+more information on the `util-validator <https://github.com/twitter/util/tree/develop/util-validator>`__
+library, please see the `documentation <http://twitter.github.io/util/guide/util-validator/index.html>`__.
 
 `MixIn Annotations <https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations>`_
 ---------------------------------------------------------------------------------------------
 
 With Jackson `MixIn Annotations <https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations>`_
-support it is possible to specify field-level validation annotations for case classes that are not
-under your control to be annotated.
+support it is possible to specify field-level constraint annotations for case classes that are not
+under your control.
 
 For an example on how to use `MixIn Annotations <https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations>`_
-with Finatra validations, see the documentation `here <./index.html#id19>`_.
+with validations, see the documentation `here <./index.html#id19>`_.
 
 .. important::
 
-    Note this integration will only work for field-level validation annotations since method
-    validations must currently be specified *inside* of the actual class to be validated.
+    Note this integration will only work for field-level constraint annotations since method
+    validations using `@MethodValidation` annotation must be specified as a method of the
+    case class instance.
 
 Validation Errors
 -----------------
 
-By default validation errors are returned **alphabetically sorted** by validation error message (for determinism when testing). See the `CaseClassMappingException <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/exceptions/CaseClassMappingException.scala>`__.
+By default, validation errors are returned **alphabetically sorted** by validation error message (for
+determinism when testing). See the `CaseClassMappingException <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions/CaseClassMappingException.scala>`__.
 
 Eg.,
 
@@ -42,9 +47,9 @@ Eg.,
 Bypassing Validation
 --------------------
 
-You may desire to execute validation for specific case classes in certain scenarios, but bypass validation in others.
-For example, you may want to validate a `POST` request on the write path and store the JSON results somewhere, but
-bypass validating that same JSON for a `GET` request on the read path.
+You may wish to execute validation for case classes in certain scenarios, but bypass validation in
+others. For example, you may want to validate a `POST` request on the write path and store the JSON
+results somewhere, but bypass validating that same JSON for a `GET` request on the read path.
 
 You can create a `ScalaObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala>`__
 that will bypass validation like this:
@@ -53,17 +58,22 @@ that will bypass validation like this:
 
     ScalaObjectMapper.builder.withNoValidation.objectMapper
 
-If you desire to bypass validation in all scenarios throughout your service, you can disable validation when defining a new `ScalaObjectMapperModule <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala>`__
-and replace the default `jacksonModule` in your server definition.
+If you desire to bypass validation **in all scenarios throughout your service**, you can disable validation
+when defining a new `ScalaObjectMapperModule <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala>`__
 
 .. code:: scala
+   :emphasize-lines: 4
+
+    import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 
     object NoValidationJacksonModule extends ScalaObjectMapperModule {
-      override val validation = false
+      override val validation: Boolean = false
     }
 
-    class ValidationServer extends HttpServer {
-      override val name = "validation-server"
-      override def jacksonModule: Module = NoValidationJacksonModule
-      override protected def configureHttp(router: HttpRouter): Unit = ...
-    }
+See the `Modules Configuration in Servers <../getting-started/modules.html#module-configuration-in-servers>`_
+or the HTTP Server `Framework Modules <../http/server.html#framework-modules>`_ for more information
+on how to make use of any custom |ScalaObjectMapperModule|_.
+
+.. |ScalaObjectMapperModule| replace:: `ScalaObjectMapperModule`
+.. _ScalaObjectMapperModule: https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala
+

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Filtering Thrift Requests &#8212; Finatra 21.4.0 documentation</title>
+    <title>Filtering Thrift Requests &#8212; Finatra 21.5.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -91,14 +91,14 @@
 <li>Tracks <a class="reference external" href="controllers.html#per-method-stats">per-method stats</a> scoped under <cite>per_method_stats/&lt;method&gt;</cite> including success/failure (with exceptions) counters, and a latency (in millis) histogram.</li>
 </ul>
 </div>
-<div class="section" id="c-t-finatra-http-filters-thriftmdcfilter-rarrow">
-<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/ThriftMDCFilter.scala">c.t.finatra.http.filters.ThriftMDCFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-thriftmdcfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="c-t-finatra-thrift-filters-thriftmdcfilter-rarrow">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/ThriftMDCFilter.scala">c.t.finatra.thrift.filters.ThriftMDCFilter</a> →<a class="headerlink" href="#c-t-finatra-thrift-filters-thriftmdcfilter-rarrow" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>places the current Finagle <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-thrift/src/main/scala/com/twitter/finagle/thrift/MethodMetadata.scala">MethodMetadata</a> and <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/thrift/ClientId.scala">ClientId</a> locals into the <a class="reference external" href="https://www.slf4j.org/manual.html#mdc">Mapped Diagnostic Context (MDC)</a>.</li>
 </ul>
 </div>
-<div class="section" id="c-t-finatra-http-filters-traceidmdcfilter-rarrow">
-<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/TraceIdMDCFilter.scala">c.t.finatra.http.filters.TraceIdMDCFilter</a> →<a class="headerlink" href="#c-t-finatra-http-filters-traceidmdcfilter-rarrow" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="c-t-finatra-thrift-filters-traceidmdcfilter-rarrow">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/TraceIdMDCFilter.scala">c.t.finatra.thrift.filters.TraceIdMDCFilter</a> →<a class="headerlink" href="#c-t-finatra-thrift-filters-traceidmdcfilter-rarrow" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>places the current Finagle <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/tracing/TraceId.scala">TraceId</a> local into the <a class="reference external" href="https://www.slf4j.org/manual.html#mdc">Mapped Diagnostic Context (MDC)</a>.</li>
 </ul>
@@ -374,8 +374,8 @@ class MyController @Inject()(
 <li><a class="reference internal" href="#c-t-finatra-thrift-filters-exceptionmappingfilter-rarrow">c.t.finatra.thrift.filters.ExceptionMappingFilter →</a></li>
 <li><a class="reference internal" href="#c-t-finatra-thrift-filters-loggingmdcfilter-rarrow">c.t.finatra.thrift.filters.LoggingMDCFilter →</a></li>
 <li><a class="reference internal" href="#c-t-finatra-thrift-filters-statsfilter-rarrow">c.t.finatra.thrift.filters.StatsFilter →</a></li>
-<li><a class="reference internal" href="#c-t-finatra-http-filters-thriftmdcfilter-rarrow">c.t.finatra.http.filters.ThriftMDCFilter →</a></li>
-<li><a class="reference internal" href="#c-t-finatra-http-filters-traceidmdcfilter-rarrow">c.t.finatra.http.filters.TraceIdMDCFilter →</a><ul>
+<li><a class="reference internal" href="#c-t-finatra-thrift-filters-thriftmdcfilter-rarrow">c.t.finatra.thrift.filters.ThriftMDCFilter →</a></li>
+<li><a class="reference internal" href="#c-t-finatra-thrift-filters-traceidmdcfilter-rarrow">c.t.finatra.thrift.filters.TraceIdMDCFilter →</a><ul>
 <li><a class="reference internal" href="#global-filters">Global Filters</a></li>
 <li><a class="reference internal" href="#per-method-filtering">Per-method Filtering</a><ul>
 <li><a class="reference internal" href="#typeagnostic-filters"><cite>TypeAgnostic</cite> Filters</a></li>

@@ -777,9 +777,9 @@ given (nullable) <span class="extype" name="Injector">Injector</span>.</p></div>
       
       
     </li><li name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder#validator" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="validator:Option[com.twitter.finatra.validation.Validator]"></a><a id="validator:Option[Validator]"></a>
+      <a id="validator:Option[com.twitter.util.validation.ScalaValidator]"></a><a id="validator:Option[ScalaValidator]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/jackson/ScalaObjectMapper$$Builder.html#validator:Option[com.twitter.finatra.validation.Validator]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/jackson/ScalaObjectMapper$$Builder.html#validator:Option[com.twitter.util.validation.ScalaValidator]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -788,7 +788,7 @@ given (nullable) <span class="extype" name="Injector">Injector</span>.</p></div>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">validator</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.12/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="../validation/Validator.html" class="extype" name="com.twitter.finatra.validation.Validator">Validator</a>]</span>
+        <span class="name">validator</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.12/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/util/docs/com/twitter/util/validation/ScalaValidator.html#com.twitter.util.validation.ScalaValidator" class="extype" name="com.twitter.util.validation.ScalaValidator">ScalaValidator</a>]</span>
       </span>
       
       
@@ -1012,9 +1012,9 @@ to <code>Boolean</code> (enabled).</p></div><dl class="attributes block"> <dt>No
       
       <p class="shortcomment cmt">Configure a <span class="extype" name="JsonInclude.Include">JsonInclude.Include</span> for serialization for this <a href="" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder">Builder</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Configure a <span class="extype" name="JsonInclude.Include">JsonInclude.Include</span> for serialization for this <a href="" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder">Builder</a>.</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>the default is <span class="extype" name="JsonInclude.Include.NON_ABSENT">JsonInclude.Include.NON_ABSENT</span></p></span></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="ScalaObjectMapper.DefaultSerializationInclude">ScalaObjectMapper.DefaultSerializationInclude</span></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder#withValidator" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="withValidator(validator:com.twitter.finatra.validation.Validator):com.twitter.finatra.jackson.ScalaObjectMapper.Builder"></a><a id="withValidator(Validator):Builder"></a>
+      <a id="withValidator(validator:com.twitter.util.validation.ScalaValidator):com.twitter.finatra.jackson.ScalaObjectMapper.Builder"></a><a id="withValidator(ScalaValidator):Builder"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/jackson/ScalaObjectMapper$$Builder.html#withValidator(validator:com.twitter.finatra.validation.Validator):com.twitter.finatra.jackson.ScalaObjectMapper.Builder" title="Permalink">
+      <a href="../../../../com/twitter/finatra/jackson/ScalaObjectMapper$$Builder.html#withValidator(validator:com.twitter.util.validation.ScalaValidator):com.twitter.finatra.jackson.ScalaObjectMapper.Builder" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1023,7 +1023,7 @@ to <code>Boolean</code> (enabled).</p></div><dl class="attributes block"> <dt>No
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">withValidator</span><span class="params">(<span name="validator">validator: <a href="../validation/Validator.html" class="extype" name="com.twitter.finatra.validation.Validator">Validator</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder">Builder</a></span>
+        <span class="name">withValidator</span><span class="params">(<span name="validator">validator: <a href="https://twitter.github.io/util/docs/com/twitter/util/validation/ScalaValidator.html#com.twitter.util.validation.ScalaValidator" class="extype" name="com.twitter.util.validation.ScalaValidator">ScalaValidator</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder">Builder</a></span>
       </span>
       
       <p class="shortcomment cmt">Configure a <span class="extype" name="Validator">Validator</span> for this <a href="" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder">Builder</a></p><div class="fullcomment"><div class="comment cmt"><p>Configure a <span class="extype" name="Validator">Validator</span> for this <a href="" class="extype" name="com.twitter.finatra.jackson.ScalaObjectMapper.Builder">Builder</a></p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>If you pass <code>withNoValidation</code> to the builder all case class validations will be

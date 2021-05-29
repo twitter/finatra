@@ -228,7 +228,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">AssertTrue</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.12/scala/annotation/Annotation.html#scala.annotation.Annotation" class="extype" name="scala.annotation.Annotation">Annotation</a> with <span class="extype" name="java.lang.annotation.Annotation">Annotation</span> with <a href="https://www.scala-lang.org/api/2.12.12/scala/annotation/ClassfileAnnotation.html#scala.annotation.ClassfileAnnotation" class="extype" name="scala.annotation.ClassfileAnnotation">ClassfileAnnotation</a></span>
+        <span class="name deprecated" title="Deprecated: ">AssertTrue</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.12/scala/annotation/Annotation.html#scala.annotation.Annotation" class="extype" name="scala.annotation.Annotation">Annotation</a> with <span class="extype" name="java.lang.annotation.Annotation">Annotation</span> with <a href="https://www.scala-lang.org/api/2.12.12/scala/annotation/ClassfileAnnotation.html#scala.annotation.ClassfileAnnotation" class="extype" name="scala.annotation.ClassfileAnnotation">ClassfileAnnotation</a></span>
       </span>
       </h4>
 
@@ -238,9 +238,11 @@
               
                 <span class="name">@Retention</span><span class="args">()</span>
               
-                <span class="name">@<a href="../Constraint.html" class="extype" name="com.twitter.finatra.validation.Constraint">Constraint</a></span><span class="args">()</span>
+                <span class="name">@Constraint</span><span class="args">()</span>
               
-        </dd></dl><div class="toggleContainer block">
+                <span class="name">@Deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -329,6 +331,63 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Annotation</dd></dl></div>
+    </li><li name="com.twitter.finatra.validation.constraints.AssertTrue#groups" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="groups():Array[Class[_]]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/validation/constraints/AssertTrue.html#groups():Array[Class[_]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groups</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.12/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<span class="extype" name="java.lang.Class">Class</span>[_]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@AnnotationDefault</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="com.twitter.finatra.validation.constraints.AssertTrue#message" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="message():String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/validation/constraints/AssertTrue.html#message():String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">message</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@AnnotationDefault</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="com.twitter.finatra.validation.constraints.AssertTrue#payload" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="payload():Array[Class[_&lt;:jakarta.validation.Payload]]"></a><a id="payload():Array[Class[_&lt;:Payload]]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/validation/constraints/AssertTrue.html#payload():Array[Class[_&lt;:jakarta.validation.Payload]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">payload</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.12/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<span class="extype" name="java.lang.Class">Class</span>[_ &lt;: <span class="extype" name="jakarta.validation.Payload">Payload</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@AnnotationDefault</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li></ol>
             </div>
 

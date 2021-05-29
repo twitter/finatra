@@ -154,15 +154,7 @@
                         <a class="object" href="CommonMethodValidations$.html" title=""></a>
                         <a href="CommonMethodValidations$.html" title="">CommonMethodValidations</a>
                       </li><li class="current-entities indented4">
-                        <span class="separator"></span>
-                        <a class="class" href="Constraint.html" title=""></a>
-                        <a href="Constraint.html" title="">Constraint</a>
-                      </li><li class="current-entities indented4">
-                        <span class="separator"></span>
-                        <a class="class" href="ConstraintValidator.html" title="A ConstraintValidator to validate the given value of type T against a particular annotation of type A."></a>
-                        <a href="ConstraintValidator.html" title="A ConstraintValidator to validate the given value of type T against a particular annotation of type A.">ConstraintValidator</a>
-                      </li><li class="current-entities indented4">
-                        <a class="object" href="ErrorCode$.html" title=""></a>
+                        <a class="object" href="ErrorCode$.html" title="Users can obtain the same information by inspecting returned ConstraintViolation instances."></a>
                         <a class="trait" href="ErrorCode.html" title="A descriptor for the type of validation error."></a>
                         <a href="ErrorCode.html" title="A descriptor for the type of validation error.">ErrorCode</a>
                       </li><li class="current-entities indented4">
@@ -171,36 +163,12 @@
                         <a href="InvalidCaseClassException.html" title="">InvalidCaseClassException</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="class" href="MessageResolver.html" title="To resolve error messages for the type of validation failure."></a>
-                        <a href="MessageResolver.html" title="To resolve error messages for the type of validation failure.">MessageResolver</a>
-                      </li><li class="current-entities indented4">
-                        <span class="separator"></span>
-                        <a class="class" href="MethodValidation.html" title=""></a>
-                        <a href="MethodValidation.html" title="">MethodValidation</a>
-                      </li><li class="current-entities indented4">
-                        <a class="object" href="Path$.html" title=""></a>
-                        <a class="class" href="Path.html" title="Represents the navigation path from an object to another in an object graph."></a>
-                        <a href="Path.html" title="Represents the navigation path from an object to another in an object graph.">Path</a>
-                      </li><li class="current-entities indented4">
-                        <span class="separator"></span>
-                        <a class="class" href="Valid.html" title=""></a>
-                        <a href="Valid.html" title="">Valid</a>
-                      </li><li class="current-entities indented4">
-                        <span class="separator"></span>
-                        <a class="class" href="ValidationException.html" title="Used to signal validation errors during case class validations."></a>
-                        <a href="ValidationException.html" title="Used to signal validation errors during case class validations.">ValidationException</a>
-                      </li><li class="current-entities indented4">
                         <a class="object" href="ValidationResult$.html" title=""></a>
-                        <a class="trait" href="ValidationResult.html" title=""></a>
-                        <a href="ValidationResult.html" title="">ValidationResult</a>
-                      </li><li class="current-entities indented4">
-                        <a class="object" href="Validator$.html" title=""></a>
-                        <a class="class" href="Validator.html" title=""></a>
-                        <a href="Validator.html" title="">Validator</a>
+                        <a href="ValidationResult$.html" title="">ValidationResult</a>
                       </li><li class="current-entities indented4">
                         <a class="object" href="" title=""></a>
-                        <a class="class" href="ValidatorModule.html" title="A TwitterModule to provide a Validator with with default MessageResolver and default com.twitter.finatra.validation.ConstraintValidators."></a>
-                        <a href="ValidatorModule.html" title="A TwitterModule to provide a Validator with with default MessageResolver and default com.twitter.finatra.validation.ConstraintValidators.">ValidatorModule</a>
+                        <a class="class" href="ValidatorModule.html" title="A TwitterModule to provide a ScalaValidator with default jakarta.validation.ConstraintValidators."></a>
+                        <a href="ValidatorModule.html" title="A TwitterModule to provide a ScalaValidator with default jakarta.validation.ConstraintValidators.">ValidatorModule</a>
                       </li>
               </ul>
             </div>
@@ -1101,9 +1069,9 @@ if <code>setDefault</code> or <code>setBinding</code> are called. For example:</
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AbstractModule → Module</dd></dl></div>
     </li><li name="com.twitter.finatra.validation.ValidatorModule#configureValidator" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="configureValidator(injector:com.twitter.inject.Injector,builder:com.twitter.finatra.validation.Validator.Builder):com.twitter.finatra.validation.Validator.Builder"></a><a id="configureValidator(Injector,Builder):Builder"></a>
+      <a id="configureValidator(injector:com.twitter.inject.Injector,builder:com.twitter.util.validation.ScalaValidator.Builder):com.twitter.util.validation.ScalaValidator.Builder"></a><a id="configureValidator(Injector,Builder):Builder"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/validation/ValidatorModule$.html#configureValidator(injector:com.twitter.inject.Injector,builder:com.twitter.finatra.validation.Validator.Builder):com.twitter.finatra.validation.Validator.Builder" title="Permalink">
+      <a href="../../../../com/twitter/finatra/validation/ValidatorModule$.html#configureValidator(injector:com.twitter.inject.Injector,builder:com.twitter.util.validation.ScalaValidator.Builder):com.twitter.util.validation.ScalaValidator.Builder" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1112,13 +1080,13 @@ if <code>setDefault</code> or <code>setBinding</code> are called. For example:</
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">configureValidator</span><span class="params">(<span name="injector">injector: <a href="../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="builder">builder: <a href="Validator$$Builder.html" class="extype" name="com.twitter.finatra.validation.Validator.Builder">Builder</a></span>)</span><span class="result">: <a href="Validator$$Builder.html" class="extype" name="com.twitter.finatra.validation.Validator.Builder">Builder</a></span>
+        <span class="name">configureValidator</span><span class="params">(<span name="injector">injector: <a href="../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="builder">builder: <span class="extype" name="com.twitter.util.validation.ScalaValidator.Builder">Builder</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.util.validation.ScalaValidator.Builder">Builder</span></span>
       </span>
       
-      <p class="shortcomment cmt">Override this method to build an instance of <a href="Validator.html" class="extype" name="com.twitter.finatra.validation.Validator">Validator</a>, the new Validator will override the
-default one that is bond to the object graph.</p><div class="fullcomment"><div class="comment cmt"><p>Override this method to build an instance of <a href="Validator.html" class="extype" name="com.twitter.finatra.validation.Validator">Validator</a>, the new Validator will override the
-default one that is bond to the object graph.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a configured <a href="Validator$$Builder.html" class="extype" name="com.twitter.finatra.validation.Validator.Builder">Validator.Builder</a> to create a <a href="Validator.html" class="extype" name="com.twitter.finatra.validation.Validator">Validator</a> instance.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ValidatorModule.html" class="extype" name="com.twitter.finatra.validation.ValidatorModule">ValidatorModule</a></dd></dl></div>
+      <p class="shortcomment cmt">Override this method to build an instance of <span class="extype" name="ScalaValidator">ScalaValidator</span>, the new ScalaValidator will override the
+default one that is bound to the object graph.</p><div class="fullcomment"><div class="comment cmt"><p>Override this method to build an instance of <span class="extype" name="ScalaValidator">ScalaValidator</span>, the new ScalaValidator will override the
+default one that is bound to the object graph.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a configured <span class="extype" name="ScalaValidator.Builder">ScalaValidator.Builder</span> to create a <span class="extype" name="ScalaValidator">ScalaValidator</span> instance.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ValidatorModule.html" class="extype" name="com.twitter.finatra.validation.ValidatorModule">ValidatorModule</a></dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#convertToTypes" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="convertToTypes(x$1:com.google.inject.matcher.Matcher[_&gt;:com.google.inject.TypeLiteral[_]],x$2:com.google.inject.spi.TypeConverter):Unit"></a><a id="convertToTypes(Matcher[_&gt;:TypeLiteral[_]],TypeConverter):Unit"></a>
       <span class="permalink">

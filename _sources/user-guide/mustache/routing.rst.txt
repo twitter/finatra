@@ -123,7 +123,7 @@ For more information on referencing files in Finatra, see the `Working with File
 section.
 
 .. |ResponseBuilder| replace:: `c.t.finatra.http.response.ResponseBuilder`
-.. _ResponseBuilder: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala
+.. _ResponseBuilder: https://github.com/twitter/finatra/blob/develop/http-core/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala
 
 .. |MustacheModule| replace:: `c.t.finatra.http.modules.MustacheModule`
 .. _MustacheModule: https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/scala/com/twitter/finatra/http/modules/MustacheModule.scala
@@ -132,7 +132,7 @@ section.
 .. _@Mustache: https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/java/com/twitter/finatra/http/annotations/Mustache.java
 
 .. |MessageBodyComponent| replace:: `c.t.finatra.http.marshalling.MessageBodyComponent`
-.. _MessageBodyComponent: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyComponent.scala
+.. _MessageBodyComponent: https://github.com/twitter/finatra/blob/develop/http-core/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyComponent.scala
 
 .. |MustacheMessageBodyWriter| replace:: `c.t.finatra.mustache.writer.MustacheMessageBodyWriter`
 .. _MustacheMessageBodyWriter: https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/writer/MustacheMessageBodyWriter.scala

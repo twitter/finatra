@@ -829,9 +829,9 @@ Known `CaseClassDeserializer` Limitations
 -----------------------------------------
 
 The |FinatraCaseClassDeserializer|_ provides a fair amount of utility but can not and does not
-support all Jackson Annotations. In a lot of cases the behavior of supporting a Jackson Annotation
-can at times be ambiguous (or even nonsensical), especially when it comes to combining Jackson
-Annotations and injectable field annotations.
+support all Jackson Annotations. The behavior of supporting a Jackson Annotation can at times be
+ambiguous (or even nonsensical), especially when it comes to combining Jackson Annotations and
+injectable field annotations.
 
 Java Enums
 ----------

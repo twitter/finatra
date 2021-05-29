@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Embedded Servers and Apps &#8212; Finatra 21.4.0 documentation</title>
+    <title>Embedded Servers and Apps &#8212; Finatra 21.5.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -79,11 +79,11 @@ your service locally and attach a remote debugger.</p>
 <ul class="simple">
 <li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala">c.t.inject.app.EmbeddedApp</a></li>
 <li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala">c.t.inject.server.EmbeddedTwitterServer</a></li>
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala">c.t.finatra.http.EmbeddedHttpServer</a></li>
+<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala">c.t.finatra.http.EmbeddedHttpServer</a></li>
 <li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala">c.t.finatra.thrift.EmbeddedThriftServer</a></li>
 </ul>
 <img alt="../../_images/embedded.png" src="../../_images/embedded.png" />
-<p>You’ll notice that this hierarchy generally follows the server trait hierarchy as <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala"><cite>c.t.finatra.http.HttpServer</cite></a>
+<p>You’ll notice that this hierarchy generally follows the server trait hierarchy as <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/HttpServer.scala"><cite>c.t.finatra.http.HttpServer</cite></a>
 and <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.finatra.thrift.ThriftServer</cite></a> extend from <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>c.t.server.TwitterServer</cite></a> which extends from
 <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><cite>c.t.app.App</cite></a>.</p>
 <div class="section" id="testing-with-global-flags">
@@ -171,7 +171,7 @@ for more information on using <a class="reference external" href="https://twitte
 </div>
 <div class="section" id="inmemorystatsreceiver">
 <h2>InMemoryStatsReceiver<a class="headerlink" href="#inmemorystatsreceiver" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala"><cite>EmbeddedTwitterServer</cite></a> (and thus its subclasses: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><cite>EmbeddedHttpServer</cite></a> and <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala"><cite>EmbeddedThriftServer</cite></a>)
+<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala"><cite>EmbeddedTwitterServer</cite></a> (and thus its subclasses: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><cite>EmbeddedHttpServer</cite></a> and <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala"><cite>EmbeddedThriftServer</cite></a>)
 binds an instance of the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-stats/src/main/scala/com/twitter/finagle/stats/InMemoryStatsReceiver.scala">com.twitter.finagle.stats.InMemoryStatsReceiver</a>
 to the underlying server’s object graph (if the underlying server supports injection). This will
 override any other bound implementation of a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-stats/src/main/scala/com/twitter/finagle/stats/StatsReceiver.scala">c.t.finagle.stats.StatsReceiver</a>

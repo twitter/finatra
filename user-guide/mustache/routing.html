@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Mustache Integration with HTTP Routing &#8212; Finatra 21.4.0 documentation</title>
+    <title>Mustache Integration with HTTP Routing &#8212; Finatra 21.5.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -103,7 +103,7 @@ filename without the suffix (which the framework <strong>always assumes</strong>
 </div>
 <div class="section" id="explicitly-created-response-body">
 <h3>Explicitly created response body<a class="headerlink" href="#explicitly-created-response-body" title="Permalink to this headline">¶</a></h3>
-<p>Or you can manually create a response via the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a> which explicitly references a template, e.g.,</p>
+<p>Or you can manually create a response via the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-core/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a> which explicitly references a template, e.g.,</p>
 <div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.marshalling.response._
 
 get(&quot;/foo&quot;) { request: Request =&gt;
@@ -157,7 +157,7 @@ For more information see the <a class="reference external" href="../mustache/ind
 <div class="section" id="template-resolving">
 <h3>Template Resolving<a class="headerlink" href="#template-resolving" title="Permalink to this headline">¶</a></h3>
 <p>To better understand how <a class="reference external" href="https://mustache.github.io/">Mustache</a> templates are resolved via the
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/java/com/twitter/finatra/http/annotations/Mustache.java"><code class="docutils literal notranslate"><span class="pre">&#64;Mustache</span></code></a> annotation or from a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyComponent.scala"><cite>c.t.finatra.http.marshalling.MessageBodyComponent</cite></a>, please see <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/writer/MustacheTemplateLookup.scala"><cite>MustacheTemplateLookup</cite></a> and the
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-mustache/src/main/java/com/twitter/finatra/http/annotations/Mustache.java"><code class="docutils literal notranslate"><span class="pre">&#64;Mustache</span></code></a> annotation or from a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-core/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyComponent.scala"><cite>c.t.finatra.http.marshalling.MessageBodyComponent</cite></a>, please see <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/writer/MustacheTemplateLookup.scala"><cite>MustacheTemplateLookup</cite></a> and the
 corresponding <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/test/scala/com/twitter/finatra/mustache/tests/MustacheTemplateLookupTest.scala"><cite>MustacheTemplateLookupTest</cite></a>.</p>
 <p>For more information on referencing files in Finatra, see the <a class="reference external" href="../files/index.html">Working with Files</a>
 section.</p>

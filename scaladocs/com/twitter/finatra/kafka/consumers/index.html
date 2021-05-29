@@ -206,6 +206,18 @@
                         <a class="trait" href="KafkaConsumerConfigMethods.html" title=""></a>
                         <a href="KafkaConsumerConfigMethods.html" title="">KafkaConsumerConfigMethods</a>
                       </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="trait" href="KafkaConsumerTraceAnnotator.html" title="A service to add trace annotations to the Kafka consumer's poll span."></a>
+                        <a href="KafkaConsumerTraceAnnotator.html" title="A service to add trace annotations to the Kafka consumer's poll span.">KafkaConsumerTraceAnnotator</a>
+                      </li><li class="current-entities indented5">
+                        <a class="object" href="KafkaConsumerTraceAnnotatorImpl$.html" title=""></a>
+                        <a class="class" href="KafkaConsumerTraceAnnotatorImpl.html" title="An implementation of KafkaConsumerTraceAnnotator which records standard annotations for a Kafka consumer's poll operation."></a>
+                        <a href="KafkaConsumerTraceAnnotatorImpl.html" title="An implementation of KafkaConsumerTraceAnnotator which records standard annotations for a Kafka consumer's poll operation.">KafkaConsumerTraceAnnotatorImpl</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="object" href="KafkaConsumerTracer$.html" title="Setup tracing from the Kafka records that were consumed and perform future operations in the provided continuation function f."></a>
+                        <a href="KafkaConsumerTracer$.html" title="Setup tracing from the Kafka records that were consumed and perform future operations in the provided continuation function f.">KafkaConsumerTracer</a>
+                      </li><li class="current-entities indented5">
                         <a class="object" href="TracingKafkaConsumer$.html" title=""></a>
                         <a class="class" href="TracingKafkaConsumer.html" title="An extension of KafkaConsumer with Zipkin tracing to trace the records received from Kafka."></a>
                         <a href="TracingKafkaConsumer.html" title="An extension of KafkaConsumer with Zipkin tracing to trace the records received from Kafka.">TracingKafkaConsumer</a>
@@ -521,10 +533,26 @@ FinagleKafkaConsumer (pollTimeout and seekStrategy).
       </span>
       
       
-    </li><li name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="TracingKafkaConsumer[K,V]extendsKafkaConsumer[K,V]withLogging"></a><a id="TracingKafkaConsumer[K,V]:TracingKafkaConsumer[K,V]"></a>
+    </li><li name="com.twitter.finatra.kafka.consumers.KafkaConsumerTraceAnnotator" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="KafkaConsumerTraceAnnotatorextendsAnyRef"></a><a id="KafkaConsumerTraceAnnotator:KafkaConsumerTraceAnnotator"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer.html" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/KafkaConsumerTraceAnnotator.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="A service to add trace annotations to the Kafka consumer's poll span." href="KafkaConsumerTraceAnnotator.html"><span class="name">KafkaConsumerTraceAnnotator</span></a><span class="result"> extends <a href="../../../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A service to add trace annotations to the Kafka consumer's <code>poll</code> span.</p>
+    </li><li name="com.twitter.finatra.kafka.consumers.KafkaConsumerTraceAnnotatorImpl" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="KafkaConsumerTraceAnnotatorImplextendsKafkaConsumerTraceAnnotatorwithLogging"></a><a id="KafkaConsumerTraceAnnotatorImpl:KafkaConsumerTraceAnnotatorImpl"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/KafkaConsumerTraceAnnotatorImpl.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -533,14 +561,11 @@ FinagleKafkaConsumer (pollTimeout and seekStrategy).
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="An extension of KafkaConsumer with Zipkin tracing to trace the records received from Kafka." href="TracingKafkaConsumer.html"><span class="name">TracingKafkaConsumer</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <span class="extype" name="org.apache.kafka.clients.consumer.KafkaConsumer">KafkaConsumer</span>[<span class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.K">K</span>, <span class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.V">V</span>] with <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+        <a title="An implementation of KafkaConsumerTraceAnnotator which records standard annotations for a Kafka consumer's poll operation." href="KafkaConsumerTraceAnnotatorImpl.html"><span class="name">KafkaConsumerTraceAnnotatorImpl</span></a><span class="result"> extends <a href="KafkaConsumerTraceAnnotator.html" class="extype" name="com.twitter.finatra.kafka.consumers.KafkaConsumerTraceAnnotator">KafkaConsumerTraceAnnotator</a> with <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
       </span>
       
-      <p class="shortcomment cmt">An extension of <span class="extype" name="KafkaConsumer">KafkaConsumer</span> with Zipkin tracing to trace the records received
-from Kafka.</p><div class="fullcomment"><div class="comment cmt"><p>An extension of <span class="extype" name="KafkaConsumer">KafkaConsumer</span> with Zipkin tracing to trace the records received
-from Kafka. This is inspired by openzipkin's <a href="https://github.com/openzipkin/brave">brave</a>
-instrumentation.
-</p></div><dl class="paramcmts block"><dt class="tparam">K</dt><dd class="cmt"><p>type of Key.</p></dd><dt class="tparam">V</dt><dd class="cmt"><p>type of value.</p></dd></dl></div>
+      <p class="shortcomment cmt">An implementation of <a href="KafkaConsumerTraceAnnotator.html" class="extype" name="com.twitter.finatra.kafka.consumers.KafkaConsumerTraceAnnotator">KafkaConsumerTraceAnnotator</a> which records standard annotations for a
+Kafka consumer's <code>poll</code> operation.</p>
     </li><li name="com.twitter.finatra.kafka.consumers.FinagleKafkaConsumer" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="FinagleKafkaConsumer[K,V]extendsClosablewithLogging"></a><a id="FinagleKafkaConsumer[K,V]:FinagleKafkaConsumer[K,V]"></a>
       <span class="permalink">
@@ -560,6 +585,29 @@ instrumentation.
                 <span class="name">@deprecated</span>
               
         </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2019-05-30)</i> Use the FinagleKafkaConsumerBuilder.buildClient to create a native Kafka Consumer instead.</p></dd></dl></div>
+    </li><li name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="TracingKafkaConsumer[K,V]extendsKafkaConsumer[K,V]"></a><a id="TracingKafkaConsumer[K,V]:TracingKafkaConsumer[K,V]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="An extension of KafkaConsumer with Zipkin tracing to trace the records received from Kafka." href="TracingKafkaConsumer.html"><span class="name deprecated" title="Deprecated: (Since version 2021-05-06)">TracingKafkaConsumer</span></a><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <span class="extype" name="org.apache.kafka.clients.consumer.KafkaConsumer">KafkaConsumer</span>[<span class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.K">K</span>, <span class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.V">V</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">An extension of <span class="extype" name="KafkaConsumer">KafkaConsumer</span> with Zipkin tracing to trace the records received
+from Kafka.</p><div class="fullcomment"><div class="comment cmt"><p>An extension of <span class="extype" name="KafkaConsumer">KafkaConsumer</span> with Zipkin tracing to trace the records received
+from Kafka. This is inspired by openzipkin's <a href="https://github.com/openzipkin/brave">brave</a>
+instrumentation.
+</p></div><dl class="paramcmts block"><dt class="tparam">K</dt><dd class="cmt"><p>type of Key.</p></dd><dt class="tparam">V</dt><dd class="cmt"><p>type of value.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2021-05-06)</i></p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -600,6 +648,47 @@ instrumentation.
       </span>
       
       
+    </li><li name="com.twitter.finatra.kafka.consumers.KafkaConsumerTraceAnnotatorImpl" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="KafkaConsumerTraceAnnotatorImpl"></a><a id="KafkaConsumerTraceAnnotatorImpl:KafkaConsumerTraceAnnotatorImpl"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/KafkaConsumerTraceAnnotatorImpl$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="KafkaConsumerTraceAnnotatorImpl$.html"><span class="name">KafkaConsumerTraceAnnotatorImpl</span></a>
+      </span>
+      
+      
+    </li><li name="com.twitter.finatra.kafka.consumers.KafkaConsumerTracer" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="KafkaConsumerTracer"></a><a id="KafkaConsumerTracer:KafkaConsumerTracer"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/KafkaConsumerTracer$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="Setup tracing from the Kafka records that were consumed and perform future operations in the provided continuation function f." href="KafkaConsumerTracer$.html"><span class="name">KafkaConsumerTracer</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">Setup tracing from the Kafka records that were consumed and perform future operations in the
+provided continuation function <code>f</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Setup tracing from the Kafka records that were consumed and perform future operations in the
+provided continuation function <code>f</code>. We will only start a trace if one of the <span class="extype" name="TraceId">TraceId</span>s in
+the <span class="extype" name="ConsumerRecord">ConsumerRecord</span>s was sampled or flagged as debug.
+</p></div><dl class="attributes block"> <div class="block">Example:
+               <ol><li class="cmt"><p></p><pre><span class="kw">val</span> records = consumer.poll(<span class="num">5.</span>seconds.asJava)
+KafkaConsumerTracer.trace(records) {
+  <span class="cmt">// make more RPCs</span>
+}</pre></li></ol>
+            </div></dl></div>
     </li><li name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="TracingKafkaConsumer"></a><a id="TracingKafkaConsumer:TracingKafkaConsumer"></a>
       <span class="permalink">

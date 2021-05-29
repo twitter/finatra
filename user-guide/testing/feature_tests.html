@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Feature Tests &#8212; Finatra 21.4.0 documentation</title>
+    <title>Feature Tests &#8212; Finatra 21.5.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -113,7 +113,7 @@ servers to prevent any resource leaking in your tests.</p>
 <p>Please take a look at these tests for examples of testing multiple embedded servers in a single test
 file:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/multiserver/test/MultiServerFeatureTest.scala">Http to Http example</a></li>
+<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/multiserver/test/MultiServerFeatureTest.scala">Http to Http example</a></li>
 <li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject-thrift-client-http-mapper/src/test/scala/com/twitter/finatra/multiserver/test/MultiServerFeatureTest.scala">Http to Http to Thrift example</a></li>
 <li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/test/scala/com/twitter/inject/thrift/MultiServerDarkTrafficFeatureTest.scala">Thrift to Thrift (via the DarkTrafficFilter) example</a></li>
 <li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/test/java/com/twitter/inject/thrift/integration/MultiJavaServerDarkTrafficFeatureTest.java">Thrift to Thrift (via the DarkTrafficFilter) Java example</a></li>
@@ -299,14 +299,14 @@ class MyTwitterServerFeatureTest extends FeatureTest {
 </pre></div>
 </div>
 <p>This is where using the Finatra <cite>c.t.finatra.http.HttpServer</cite> or <cite>c.t.finatra.thrift.ThriftServer</cite> can help since much of the
-client creation work can then be done for you by the framework’s testing tools, e.g., the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><cite>EmbeddedHttpServer</cite></a> or
+client creation work can then be done for you by the framework’s testing tools, e.g., the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><cite>EmbeddedHttpServer</cite></a> or
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala"><cite>EmbeddedThriftServer</cite></a> without the need to add code to expose anything your external <cite>ListeningServer</cite>.</p>
 </div>
 </div>
 <div class="section" id="c-t-finatra-http-httpserver">
 <h2><cite>c.t.finatra.http.HttpServer</cite><a class="headerlink" href="#c-t-finatra-http-httpserver" title="Permalink to this headline">¶</a></h2>
 <p>To write a <cite>FeatureTest</cite> for an <cite>c.t.finatra.http.HttpServer</cite>, extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala"><cite>c.t.inject.server.FeatureTest</cite></a>
-trait. Then override the <cite>server</cite> definition with an instance of your <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><cite>EmbeddedHttpServer</cite></a>.</p>
+trait. Then override the <cite>server</cite> definition with an instance of your <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><cite>EmbeddedHttpServer</cite></a>.</p>
 <div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Status
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.server.FeatureTest
@@ -336,7 +336,7 @@ class ExampleServerFeatureTest extends FeatureTest {
 }
 </pre></div>
 </div>
-<p>Note: The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><cite>EmbeddedHttpServer</cite></a> creates a client to the external HTTP interface defined by the server and exposes
+<p>Note: The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><cite>EmbeddedHttpServer</cite></a> creates a client to the external HTTP interface defined by the server and exposes
 methods which use the client for issuing HTTP requests to the server under test.</p>
 <p>You can also create a <cite>c.t.finagle.http.Request</cite> and execute it with the test HTTP client. Finatra has a simple <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/httpclient/src/main/scala/com/twitter/finatra/httpclient/RequestBuilder.scala">RequestBuilder</a>
 to help easily construct a <cite>c.t.finagle.http.Request</cite>.</p>
@@ -713,7 +713,7 @@ configuration.</p>
 <h2>Examples:<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>the
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala">DoEverythingServerFeatureTest</a>
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala">DoEverythingServerFeatureTest</a>
 for an HTTP server.</li>
 <li>the
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/tests/DoEverythingThriftServerFeatureTest.scala">DoEverythingThriftServerFeatureTest</a>

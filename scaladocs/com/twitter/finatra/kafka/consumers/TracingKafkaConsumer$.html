@@ -190,6 +190,18 @@
                         <a class="trait" href="KafkaConsumerConfigMethods.html" title=""></a>
                         <a href="KafkaConsumerConfigMethods.html" title="">KafkaConsumerConfigMethods</a>
                       </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="trait" href="KafkaConsumerTraceAnnotator.html" title="A service to add trace annotations to the Kafka consumer's poll span."></a>
+                        <a href="KafkaConsumerTraceAnnotator.html" title="A service to add trace annotations to the Kafka consumer's poll span.">KafkaConsumerTraceAnnotator</a>
+                      </li><li class="current-entities indented5">
+                        <a class="object" href="KafkaConsumerTraceAnnotatorImpl$.html" title=""></a>
+                        <a class="class" href="KafkaConsumerTraceAnnotatorImpl.html" title="An implementation of KafkaConsumerTraceAnnotator which records standard annotations for a Kafka consumer's poll operation."></a>
+                        <a href="KafkaConsumerTraceAnnotatorImpl.html" title="An implementation of KafkaConsumerTraceAnnotator which records standard annotations for a Kafka consumer's poll operation.">KafkaConsumerTraceAnnotatorImpl</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="object" href="KafkaConsumerTracer$.html" title="Setup tracing from the Kafka records that were consumed and perform future operations in the provided continuation function f."></a>
+                        <a href="KafkaConsumerTracer$.html" title="Setup tracing from the Kafka records that were consumed and perform future operations in the provided continuation function f.">KafkaConsumerTracer</a>
+                      </li><li class="current-entities indented5">
                         <a class="object" href="" title=""></a>
                         <a class="class" href="TracingKafkaConsumer.html" title="An extension of KafkaConsumer with Zipkin tracing to trace the records received from Kafka."></a>
                         <a href="TracingKafkaConsumer.html" title="An extension of KafkaConsumer with Zipkin tracing to trace the records received from Kafka.">TracingKafkaConsumer</a>
@@ -332,122 +344,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer#ClientIdAnnotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ClientIdAnnotation:String"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#ClientIdAnnotation:String" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ClientIdAnnotation</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      
-      <p class="shortcomment cmt">Trace annotation for the client id defined inside <span class="extype" name="ConsumerConfig.CLIENT_ID_CONFIG">CLIENT_ID_CONFIG</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Trace annotation for the client id defined inside <span class="extype" name="ConsumerConfig.CLIENT_ID_CONFIG">CLIENT_ID_CONFIG</span>.
-This is present as a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/tracing/Annotation$$BinaryAnnotation.html" class="extype" name="com.twitter.finagle.tracing.Annotation.BinaryAnnotation">BinaryAnnotation</a>
-in the trace.
-</p></div></div>
-    </li><li name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer#ConsumerGroupIdAnnotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ConsumerGroupIdAnnotation:String"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#ConsumerGroupIdAnnotation:String" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ConsumerGroupIdAnnotation</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      
-      <p class="shortcomment cmt">Trace annotation for the group id defined inside <span class="extype" name="ConsumerConfig.GROUP_ID_CONFIG">GROUP_ID_CONFIG</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Trace annotation for the group id defined inside <span class="extype" name="ConsumerConfig.GROUP_ID_CONFIG">GROUP_ID_CONFIG</span>.
-This is present as a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/tracing/Annotation$$BinaryAnnotation.html" class="extype" name="com.twitter.finagle.tracing.Annotation.BinaryAnnotation">BinaryAnnotation</a>
-in the trace.
-</p></div></div>
-    </li><li name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer#ConsumerPollAnnotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ConsumerPollAnnotation:String"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#ConsumerPollAnnotation:String" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ConsumerPollAnnotation</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      
-      <p class="shortcomment cmt">Trace annotation to record the poll event.</p>
-    </li><li name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer#ConsumerTopicAnnotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ConsumerTopicAnnotation:String"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#ConsumerTopicAnnotation:String" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ConsumerTopicAnnotation</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      
-      <p class="shortcomment cmt">Trace annotation for the topic(s) subscribed by the consumer subscribes.</p><div class="fullcomment"><div class="comment cmt"><p>Trace annotation for the topic(s) subscribed by the consumer subscribes. This is present as a
-<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/tracing/Annotation$$BinaryAnnotation.html" class="extype" name="com.twitter.finagle.tracing.Annotation.BinaryAnnotation">BinaryAnnotation</a> in a trace.
-</p></div></div>
-    </li><li name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer#ProducerTraceIdAnnotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ProducerTraceIdAnnotation:String"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#ProducerTraceIdAnnotation:String" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ProducerTraceIdAnnotation</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      
-      <p class="shortcomment cmt">Trace annotation for the traceId of the publisher that published the record.</p><div class="fullcomment"><div class="comment cmt"><p>Trace annotation for the traceId of the publisher that published the record. This is present as
-a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/tracing/Annotation$$BinaryAnnotation.html" class="extype" name="com.twitter.finagle.tracing.Annotation.BinaryAnnotation">BinaryAnnotation</a> in a trace.
-</p></div></div>
-    </li><li name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply[K,V](configs:java.util.Properties,keyDeserializer:org.apache.kafka.common.serialization.Deserializer[K],valueDeserializer:org.apache.kafka.common.serialization.Deserializer[V]):com.twitter.finatra.kafka.consumers.TracingKafkaConsumer[K,V]"></a><a id="apply[K,V](Properties,Deserializer[K],Deserializer[V]):TracingKafkaConsumer[K,V]"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#apply[K,V](configs:java.util.Properties,keyDeserializer:org.apache.kafka.common.serialization.Deserializer[K],valueDeserializer:org.apache.kafka.common.serialization.Deserializer[V]):com.twitter.finatra.kafka.consumers.TracingKafkaConsumer[K,V]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="configs">configs: <span class="extype" name="java.util.Properties">Properties</span></span>, <span name="keyDeserializer">keyDeserializer: <span class="extype" name="org.apache.kafka.common.serialization.Deserializer">Deserializer</span>[<span class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.apply.K">K</span>]</span>, <span name="valueDeserializer">valueDeserializer: <span class="extype" name="org.apache.kafka.common.serialization.Deserializer">Deserializer</span>[<span class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.apply.V">V</span>]</span>)</span><span class="result">: <a href="TracingKafkaConsumer.html" class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer">TracingKafkaConsumer</a>[<span class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.apply.K">K</span>, <span class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.apply.V">V</span>]</span>
-      </span>
-      
-      <p class="shortcomment cmt">Helper constructor which accepts <span class="extype" name="Properties">Properties</span> for constructing the <a href="TracingKafkaConsumer.html" class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer">TracingKafkaConsumer</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Helper constructor which accepts <span class="extype" name="Properties">Properties</span> for constructing the <a href="TracingKafkaConsumer.html" class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer">TracingKafkaConsumer</a>.
-</p></div><dl class="paramcmts block"><dt class="tparam">K</dt><dd class="cmt"><p>type of Key.</p></dd><dt class="tparam">V</dt><dd class="cmt"><p>type of value.</p></dd><dt class="param">configs</dt><dd class="cmt"><p>The consumer configs.</p></dd><dt class="param">keyDeserializer</dt><dd class="cmt"><p>The serializer for key that implements <span class="extype" name="Deserializer">Deserializer</span>. The 
-<pre>
-configure()
-</pre>
-                       method won't be called in the consumer when the deserializer is passed in
-                       directly.</p></dd><dt class="param">valueDeserializer</dt><dd class="cmt"><p>The serializer for value that implements <span class="extype" name="Deserializer">Deserializer</span>. The
-<pre>
-configure()
-</pre>
-                         deserializer is passed in directly.</p></dd><dt>returns</dt><dd class="cmt"><p>an instance of <a href="TracingKafkaConsumer.html" class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer">TracingKafkaConsumer</a>.</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
@@ -756,7 +652,39 @@ configure()
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[K,V](configs:java.util.Properties,keyDeserializer:org.apache.kafka.common.serialization.Deserializer[K],valueDeserializer:org.apache.kafka.common.serialization.Deserializer[V]):com.twitter.finatra.kafka.consumers.TracingKafkaConsumer[K,V]"></a><a id="apply[K,V](Properties,Deserializer[K],Deserializer[V]):TracingKafkaConsumer[K,V]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/consumers/TracingKafkaConsumer$.html#apply[K,V](configs:java.util.Properties,keyDeserializer:org.apache.kafka.common.serialization.Deserializer[K],valueDeserializer:org.apache.kafka.common.serialization.Deserializer[V]):com.twitter.finatra.kafka.consumers.TracingKafkaConsumer[K,V]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2021-05-06)">apply</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="configs">configs: <span class="extype" name="java.util.Properties">Properties</span></span>, <span name="keyDeserializer">keyDeserializer: <span class="extype" name="org.apache.kafka.common.serialization.Deserializer">Deserializer</span>[<span class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.apply.K">K</span>]</span>, <span name="valueDeserializer">valueDeserializer: <span class="extype" name="org.apache.kafka.common.serialization.Deserializer">Deserializer</span>[<span class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.apply.V">V</span>]</span>)</span><span class="result">: <a href="TracingKafkaConsumer.html" class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer">TracingKafkaConsumer</a>[<span class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.apply.K">K</span>, <span class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer.apply.V">V</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Helper constructor which accepts <span class="extype" name="Properties">Properties</span> for constructing the <a href="TracingKafkaConsumer.html" class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer">TracingKafkaConsumer</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Helper constructor which accepts <span class="extype" name="Properties">Properties</span> for constructing the <a href="TracingKafkaConsumer.html" class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer">TracingKafkaConsumer</a>.
+</p></div><dl class="paramcmts block"><dt class="tparam">K</dt><dd class="cmt"><p>type of Key.</p></dd><dt class="tparam">V</dt><dd class="cmt"><p>type of value.</p></dd><dt class="param">configs</dt><dd class="cmt"><p>The consumer configs.</p></dd><dt class="param">keyDeserializer</dt><dd class="cmt"><p>The serializer for key that implements <span class="extype" name="Deserializer">Deserializer</span>. The 
+<pre>
+configure()
+</pre>
+                       method won't be called in the consumer when the deserializer is passed in
+                       directly.</p></dd><dt class="param">valueDeserializer</dt><dd class="cmt"><p>The serializer for value that implements <span class="extype" name="Deserializer">Deserializer</span>. The
+<pre>
+configure()
+</pre>
+                         deserializer is passed in directly.</p></dd><dt>returns</dt><dd class="cmt"><p>an instance of <a href="TracingKafkaConsumer.html" class="extype" name="com.twitter.finatra.kafka.consumers.TracingKafkaConsumer">TracingKafkaConsumer</a>.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2021-05-06)</i></p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Working With Files &#8212; Finatra 21.4.0 documentation</title>
+    <title>Working With Files &#8212; Finatra 21.5.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -118,7 +118,7 @@ class ExampleController @Inject()(
 }
 </pre></div>
 </div>
-<p>In the first route definiton, we use the <a class="reference external" href="../http/responses.html#responsebuilder">ResponseBuilder</a> of the HTTP Controller to return an HTTP <cite>200 - OK</cite> response with a body rendered from the contents of the file <cite>file123.txt</cite>. In this case, if the file cannot be found an HTTP <cite>404 - NOT FOUND</cite> response <a class="reference external" href="https://github.com/twitter/finatra/blob/e9aa2dacd4ba2efd2db380135a10cf8ad10ee2b5/http/src/main/scala/com/twitter/finatra/http/response/EnrichedResponse.scala#L638">will be returned</a>. See the methods of the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/EnrichedResponse.scala">c.t.finatra.http.response.EnrichedResponse</a> for more details on returning file responses.</p>
+<p>In the first route definition, we use the <a class="reference external" href="../http/responses.html#responsebuilder">ResponseBuilder</a> of the HTTP Controller to return an HTTP <cite>200 - OK</cite> response with a body rendered from the contents of the file <cite>file123.txt</cite>. In this case, if the file cannot be found an HTTP <cite>404 - NOT FOUND</cite> response <a class="reference external" href="https://github.com/twitter/finatra/blob/e9aa2dacd4ba2efd2db380135a10cf8ad10ee2b5/http/src/main/scala/com/twitter/finatra/http/response/EnrichedResponse.scala#L638">will be returned</a>. See the methods of the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-core/src/main/scala/com/twitter/finatra/http/response/EnrichedResponse.scala">c.t.finatra.http.response.EnrichedResponse</a> for more details on returning file responses.</p>
 <p>In the second route definition, we use the <a class="reference external" href="../http/responses.html#responsebuilder">ResponseBuilder</a> to return an HTTP <cite>200 - OK</cite> response with a body rendered from either the filename represented by the incoming wildcard path parameter (<cite>:*</cite>), or if not found the contents of the <cite>index.html</cite> file.</p>
 <p>Specifically, this means that given an incoming URI of <cite>/foo.html</cite>, this route will attempt to load the <cite>foo.html</cite> file and if it
 could not would instead load <cite>index.html</cite> and render a response with a body of the resolved file contents. Likewise, an incoming URI of <cite>/foo/bar/file.html</cite> will attempt to resolve the file at that path, <cite>foo/bar/file.html</cite> otherwise it will return the contents of the
@@ -130,7 +130,7 @@ defined in order of most-specific to least-specific.</p>
 </div>
 <p>This can be useful for building “single-page” <a class="reference external" href="https://en.wikipedia.org/wiki/Single-page_application">web applications</a>. See the
 <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/examples/advanced/web-dashboard">web-dashboard</a> project for a runnable example.</p>
-<p>Or see the local file system <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/fileserver/LocalFileServerFeatureTest.scala">test class</a> for more general file resolving examples.</p>
+<p>Or see the local file system <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/fileserver/LocalFileServerFeatureTest.scala">test class</a> for more general file resolving examples.</p>
 </div>
 </div>
 

@@ -117,10 +117,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../index.html" class="extype" name="com.twitter">twitter</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.validation" visbl="pub" class="indented4 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="validation"></a><a id="validation:validation"></a>
+    </li><li name="com.twitter.finatra.kafka" visbl="pub" class="indented4 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="kafka"></a><a id="kafka:kafka"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/index.html" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/index.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -129,14 +129,14 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="" href="../index.html"><span class="name">validation</span></a>
+        <a title="" href="../index.html"><span class="name">kafka</span></a>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.validation.constraints" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="constraints"></a><a id="constraints:constraints"></a>
+    </li><li name="com.twitter.finatra.kafka.producers" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="producers"></a><a id="producers:producers"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/index.html" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/index.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -145,108 +145,89 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="" href="index.html"><span class="name">constraints</span></a>
+        <a title="" href="index.html"><span class="name">producers</span></a>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.validation">validation</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.kafka">kafka</a></dd></dl></div>
     </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="AssertFalse.html" title=""></a>
-                        <a href="AssertFalse.html" title="">AssertFalse</a>
+                        <a class="class" href="FinagleKafkaProducer.html" title="A standard implementation of KafkaProducerBase that forwards events in key/value pairs to org.apache.kafka.clients.producer.KafkaProducer"></a>
+                        <a href="FinagleKafkaProducer.html" title="A standard implementation of KafkaProducerBase that forwards events in key/value pairs to org.apache.kafka.clients.producer.KafkaProducer">FinagleKafkaProducer</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="AssertTrue.html" title=""></a>
-                        <a href="AssertTrue.html" title="">AssertTrue</a>
+                        <a class="class" href="FinagleKafkaProducerBuilder.html" title=""></a>
+                        <a href="FinagleKafkaProducerBuilder.html" title="">FinagleKafkaProducerBuilder</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="CountryCode.html" title=""></a>
-                        <a href="CountryCode.html" title="">CountryCode</a>
+                        <a class="class" href="FinagleKafkaProducerConfig.html" title=""></a>
+                        <a href="FinagleKafkaProducerConfig.html" title="">FinagleKafkaProducerConfig</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="FutureTime.html" title=""></a>
-                        <a href="FutureTime.html" title="">FutureTime</a>
+                        <a class="trait" href="KafkaProducerBase.html" title="An interface for publishing events in key/value pairs to Kafka and returning a com.twitter.util.Future"></a>
+                        <a href="KafkaProducerBase.html" title="An interface for publishing events in key/value pairs to Kafka and returning a com.twitter.util.Future">KafkaProducerBase</a>
+                      </li><li class="current-entities indented5">
+                        <a class="object" href="KafkaProducerConfig$.html" title=""></a>
+                        <a class="class" href="KafkaProducerConfig.html" title=""></a>
+                        <a href="KafkaProducerConfig.html" title="">KafkaProducerConfig</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="Max.html" title=""></a>
-                        <a href="Max.html" title="">Max</a>
+                        <a class="trait" href="KafkaProducerConfigMethods.html" title=""></a>
+                        <a href="KafkaProducerConfigMethods.html" title="">KafkaProducerConfigMethods</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="" title=""></a>
-                        <a href="" title="">Min</a>
+                        <a class="trait" href="KafkaProducerTraceAnnotator.html" title="A service to add annotations to the Kafka producer's send span."></a>
+                        <a href="KafkaProducerTraceAnnotator.html" title="A service to add annotations to the Kafka producer's send span.">KafkaProducerTraceAnnotator</a>
+                      </li><li class="current-entities indented5">
+                        <a class="object" href="" title=""></a>
+                        <a class="class" href="KafkaProducerTraceAnnotatorImpl.html" title="An implementation of KafkaProducerTraceAnnotator which records standard annotations for a Kafka producer's send operation."></a>
+                        <a href="KafkaProducerTraceAnnotatorImpl.html" title="An implementation of KafkaProducerTraceAnnotator which records standard annotations for a Kafka producer's send operation.">KafkaProducerTraceAnnotatorImpl</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="NotEmpty.html" title=""></a>
-                        <a href="NotEmpty.html" title="">NotEmpty</a>
+                        <a class="class" href="NullKafkaProducer.html" title="A no-op KafkaProducerBase."></a>
+                        <a href="NullKafkaProducer.html" title="A no-op KafkaProducerBase.">NullKafkaProducer</a>
+                      </li><li class="current-entities indented5">
+                        <a class="object" href="TracingKafkaProducer$.html" title=""></a>
+                        <a class="class" href="TracingKafkaProducer.html" title="An extension of KafkaProducer with Zipkin tracing to trace the records sent to Kafka."></a>
+                        <a href="TracingKafkaProducer.html" title="An extension of KafkaProducer with Zipkin tracing to trace the records sent to Kafka.">TracingKafkaProducer</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="OneOf.html" title=""></a>
-                        <a href="OneOf.html" title="">OneOf</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
-                        <a class="class" href="PastTime.html" title=""></a>
-                        <a href="PastTime.html" title="">PastTime</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
-                        <a class="class" href="Pattern.html" title=""></a>
-                        <a href="Pattern.html" title="">Pattern</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
-                        <a class="class" href="Range.html" title=""></a>
-                        <a href="Range.html" title="">Range</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
-                        <a class="class" href="Size.html" title=""></a>
-                        <a href="Size.html" title="">Size</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
-                        <a class="class" href="TimeGranularity.html" title=""></a>
-                        <a href="TimeGranularity.html" title="">TimeGranularity</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
-                        <a class="class" href="UUID.html" title=""></a>
-                        <a href="UUID.html" title="">UUID</a>
+                        <a class="object" href="producerTracingEnabled$.html" title="GlobalFlag to enable/disable tracing for Kafka producers."></a>
+                        <a href="producerTracingEnabled$.html" title="GlobalFlag to enable/disable tracing for Kafka producers.">producerTracingEnabled</a>
                       </li>
               </ul>
             </div>
           </div>
           <div id="content">
-            <body class="class type">
+            <body class="object value">
       <div id="definition">
-        <div class="big-circle class">c</div>
-        <p id="owner"><a href="../../../../index.html" class="extype" name="com">com</a>.<a href="../../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../index.html" class="extype" name="com.twitter.finatra.validation">validation</a>.<a href="index.html" class="extype" name="com.twitter.finatra.validation.constraints">constraints</a></p>
-        <h1>Min<span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html" title="Permalink">
+        <a href="KafkaProducerTraceAnnotatorImpl.html" title="See companion class"><div class="big-circle object-companion-class">o</div></a>
+        <p id="owner"><a href="../../../../index.html" class="extype" name="com">com</a>.<a href="../../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../index.html" class="extype" name="com.twitter.finatra.kafka">kafka</a>.<a href="index.html" class="extype" name="com.twitter.finatra.kafka.producers">producers</a></p>
+        <h1><a href="KafkaProducerTraceAnnotatorImpl.html" title="See companion class">KafkaProducerTraceAnnotatorImpl</a><span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
-        <h3><span class="morelinks"></span></h3>
+        <h3><span class="morelinks"><div>
+            Companion <a href="KafkaProducerTraceAnnotatorImpl.html" title="See companion class">class KafkaProducerTraceAnnotatorImpl</a>
+          </div></span></h3>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name deprecated" title="Deprecated: ">Min</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.12/scala/annotation/Annotation.html#scala.annotation.Annotation" class="extype" name="scala.annotation.Annotation">Annotation</a> with <span class="extype" name="java.lang.annotation.Annotation">Annotation</span> with <a href="https://www.scala-lang.org/api/2.12.12/scala/annotation/ClassfileAnnotation.html#scala.annotation.ClassfileAnnotation" class="extype" name="scala.annotation.ClassfileAnnotation">ClassfileAnnotation</a></span>
+        <span class="name">KafkaProducerTraceAnnotatorImpl</span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@Target</span><span class="args">()</span>
-              
-                <span class="name">@Retention</span><span class="args">()</span>
-              
-                <span class="name">@Constraint</span><span class="args">()</span>
-              
-                <span class="name">@Deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.12/scala/annotation/ClassfileAnnotation.html#scala.annotation.ClassfileAnnotation" class="extype" name="scala.annotation.ClassfileAnnotation">ClassfileAnnotation</a>, <a href="https://www.scala-lang.org/api/2.12.12/scala/annotation/StaticAnnotation.html#scala.annotation.StaticAnnotation" class="extype" name="scala.annotation.StaticAnnotation">StaticAnnotation</a>, <span class="extype" name="java.lang.annotation.Annotation">Annotation</span>, <a href="https://www.scala-lang.org/api/2.12.12/scala/annotation/Annotation.html#scala.annotation.Annotation" class="extype" name="scala.annotation.Annotation">Annotation</a>, <a href="../../../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.12/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../../../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.12/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -272,7 +253,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.validation.constraints.Min"><span>Min</span></li><li class="in" name="scala.annotation.ClassfileAnnotation"><span>ClassfileAnnotation</span></li><li class="in" name="scala.annotation.StaticAnnotation"><span>StaticAnnotation</span></li><li class="in" name="java.lang.annotation.Annotation"><span>Annotation</span></li><li class="in" name="scala.annotation.Annotation"><span>Annotation</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.kafka.producers.KafkaProducerTraceAnnotatorImpl"><span>KafkaProducerTraceAnnotatorImpl</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -290,130 +271,19 @@
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="com.twitter.finatra.validation.constraints.Min#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;():com.twitter.finatra.validation.constraints.Min"></a><a id="&lt;init&gt;:Min"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#&lt;init&gt;():com.twitter.finatra.validation.constraints.Min" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">Min</span><span class="params">()</span>
-      </span>
-      
-      
-    </li></ol>
-            </div>
+        
+
+        
 
         
 
         <div class="values members">
-              <h3>Abstract Value Members</h3>
-              <ol><li name="java.lang.annotation.Annotation#annotationType" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="annotationType():Class[_&lt;:java.lang.annotation.Annotation]"></a><a id="annotationType():Class[_&lt;:Annotation]"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#annotationType():Class[_&lt;:java.lang.annotation.Annotation]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">annotationType</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_ &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span>]</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Annotation</dd></dl></div>
-    </li><li name="com.twitter.finatra.validation.constraints.Min#groups" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="groups():Array[Class[_]]"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#groups():Array[Class[_]]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">groups</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.12/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<span class="extype" name="java.lang.Class">Class</span>[_]]</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@AnnotationDefault</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li name="com.twitter.finatra.validation.constraints.Min#message" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="message():String"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#message():String" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">message</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@AnnotationDefault</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li name="com.twitter.finatra.validation.constraints.Min#payload" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="payload():Array[Class[_&lt;:jakarta.validation.Payload]]"></a><a id="payload():Array[Class[_&lt;:Payload]]"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#payload():Array[Class[_&lt;:jakarta.validation.Payload]]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">payload</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.12/scala/Array.html#scala.Array" class="extype" name="scala.Array">Array</a>[<span class="extype" name="java.lang.Class">Class</span>[_ &lt;: <span class="extype" name="jakarta.validation.Payload">Payload</span>]]</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@AnnotationDefault</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li name="com.twitter.finatra.validation.constraints.Min#value" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="value():Long"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#value():Long" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">value</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.12/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>
-      </span>
-      
-      
-    </li></ol>
-            </div>
-
-        <div class="values members">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol>
                 <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#!=(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#!=(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -429,7 +299,7 @@
     </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html###():Int" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html###():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -445,7 +315,7 @@
     </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#==(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#==(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -458,10 +328,63 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.twitter.finatra.kafka.producers.KafkaProducerTraceAnnotatorImpl#ClientIdAnnotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ClientIdAnnotation:String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#ClientIdAnnotation:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ClientIdAnnotation</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Trace annotation for the client id defined inside <span class="extype" name="ProducerConfig.CLIENT_ID_CONFIG">CLIENT_ID_CONFIG</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Trace annotation for the client id defined inside <span class="extype" name="ProducerConfig.CLIENT_ID_CONFIG">CLIENT_ID_CONFIG</span>.
+This is present as a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/tracing/Annotation$$BinaryAnnotation.html" class="extype" name="com.twitter.finagle.tracing.Annotation.BinaryAnnotation">BinaryAnnotation</a>
+in the trace.
+</p></div></div>
+    </li><li name="com.twitter.finatra.kafka.producers.KafkaProducerTraceAnnotatorImpl#ProducerSendAnnotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ProducerSendAnnotation:String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#ProducerSendAnnotation:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ProducerSendAnnotation</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Trace annotation to record the send event.</p>
+    </li><li name="com.twitter.finatra.kafka.producers.KafkaProducerTraceAnnotatorImpl#ProducerTopicAnnotation" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ProducerTopicAnnotation:String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#ProducerTopicAnnotation:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ProducerTopicAnnotation</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Trace annotation for the topic being used by the publisher.</p><div class="fullcomment"><div class="comment cmt"><p>Trace annotation for the topic being used by the publisher. This is present as a
+<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/tracing/Annotation$$BinaryAnnotation.html" class="extype" name="com.twitter.finagle.tracing.Annotation.BinaryAnnotation">BinaryAnnotation</a> in the trace.
+</p></div></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#asInstanceOf[T0]:T0" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#asInstanceOf[T0]:T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -477,7 +400,7 @@
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#clone():Object" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#clone():Object" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -501,7 +424,7 @@
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#eq(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -517,7 +440,7 @@
     </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#equals(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#equals(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -533,7 +456,7 @@
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#finalize():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#finalize():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -555,7 +478,7 @@
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#getClass():Class[_]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#getClass():Class[_]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -574,7 +497,7 @@
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#hashCode():Int" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#hashCode():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -593,7 +516,7 @@
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#isInstanceOf[T0]:Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#isInstanceOf[T0]:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -609,7 +532,7 @@
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#ne(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -625,7 +548,7 @@
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#notify():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#notify():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -644,7 +567,7 @@
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#notifyAll():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#notifyAll():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -663,7 +586,7 @@
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -679,7 +602,7 @@
     </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#toString():String" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#toString():String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -695,7 +618,7 @@
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#wait():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#wait():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -717,7 +640,7 @@
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -739,7 +662,7 @@
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/validation/constraints/Min.html#wait(x$1:Long):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/kafka/producers/KafkaProducerTraceAnnotatorImpl$.html#wait(x$1:Long):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -770,15 +693,7 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.annotation.ClassfileAnnotation">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.12/scala/annotation/ClassfileAnnotation.html#scala.annotation.ClassfileAnnotation" class="extype" name="scala.annotation.ClassfileAnnotation">ClassfileAnnotation</a></h3>
-            </div><div class="parent" name="scala.annotation.StaticAnnotation">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.12/scala/annotation/StaticAnnotation.html#scala.annotation.StaticAnnotation" class="extype" name="scala.annotation.StaticAnnotation">StaticAnnotation</a></h3>
-            </div><div class="parent" name="java.lang.annotation.Annotation">
-              <h3>Inherited from <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></h3>
-            </div><div class="parent" name="scala.annotation.Annotation">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.12/scala/annotation/Annotation.html#scala.annotation.Annotation" class="extype" name="scala.annotation.Annotation">Annotation</a></h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.12/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>

@@ -167,16 +167,12 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.jackson.caseclass">caseclass</a></dd></dl></div>
     </li><li class="current-entities indented6">
                         <a class="object" href="" title=""></a>
-                        <a class="class" href="CaseClassFieldMappingException.html" title="A subclass of JsonMappingException which bundles together a failed field location as a CaseClassFieldMappingException.PropertyPath with the the failure reason represented by a ValidationResult.Invalid to carry the failure reason."></a>
-                        <a href="CaseClassFieldMappingException.html" title="A subclass of JsonMappingException which bundles together a failed field location as a CaseClassFieldMappingException.PropertyPath with the the failure reason represented by a ValidationResult.Invalid to carry the failure reason.">CaseClassFieldMappingException</a>
+                        <a class="class" href="CaseClassFieldMappingException.html" title="A subclass of JsonMappingException which bundles together a failed field location as a CaseClassFieldMappingException.PropertyPath with the the failure reason represented by a CaseClassFieldMappingException.Reason to carry the failure reason."></a>
+                        <a href="CaseClassFieldMappingException.html" title="A subclass of JsonMappingException which bundles together a failed field location as a CaseClassFieldMappingException.PropertyPath with the the failure reason represented by a CaseClassFieldMappingException.Reason to carry the failure reason.">CaseClassFieldMappingException</a>
                       </li><li class="current-entities indented6">
                         <a class="object" href="CaseClassMappingException$.html" title=""></a>
                         <a class="class" href="CaseClassMappingException.html" title="A subclass of JsonMappingException used to signal fatal problems with mapping of JSON content to a Scala case class."></a>
                         <a href="CaseClassMappingException.html" title="A subclass of JsonMappingException used to signal fatal problems with mapping of JSON content to a Scala case class.">CaseClassMappingException</a>
-                      </li><li class="current-entities indented6">
-                        <span class="separator"></span>
-                        <a class="object" href="ErrorCode$.html" title=""></a>
-                        <a href="ErrorCode$.html" title="">ErrorCode</a>
                       </li><li class="current-entities indented6">
                         <a class="object" href="InjectableValuesException$.html" title=""></a>
                         <a class="class" href="InjectableValuesException.html" title="Represents an exception during deserialization due to the inability to properly inject a value via Jackson com.fasterxml.jackson.databind.InjectableValues."></a>
@@ -267,7 +263,39 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.PropertyPath" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.Detail" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DetailextendsAnyRef"></a><a id="Detail:Detail"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/twitter/finatra/jackson/caseclass/exceptions/CaseClassFieldMappingException$$Detail.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="Marker trait for CaseClassFieldMappingException detail" href="CaseClassFieldMappingException$$Detail.html"><span class="name">Detail</span></a><span class="result"> extends <a href="../../../../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Marker trait for CaseClassFieldMappingException detail</p>
+    </li><li name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.JsonProcessingError" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JsonProcessingErrorextendsCaseClassFieldMappingException.DetailwithProductwithSerializable"></a><a id="JsonProcessingError:JsonProcessingError"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/twitter/finatra/jackson/caseclass/exceptions/CaseClassFieldMappingException$$JsonProcessingError.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="A JsonProcessingException occurred during deserialization" href="CaseClassFieldMappingException$$JsonProcessingError.html"><span class="name">JsonProcessingError</span></a><span class="params">(<span name="cause">cause: <span class="extype" name="com.fasterxml.jackson.core.JsonProcessingException">JsonProcessingException</span></span>)</span><span class="result"> extends <a href="CaseClassFieldMappingException$$Detail.html" class="extype" name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.Detail">Detail</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A JsonProcessingException occurred during deserialization</p>
+    </li><li name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.PropertyPath" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="PropertyPathextendsProductwithSerializable"></a><a id="PropertyPath:PropertyPath"></a>
       <span class="permalink">
       <a href="../../../../../../com/twitter/finatra/jackson/caseclass/exceptions/CaseClassFieldMappingException$$PropertyPath.html" title="Permalink">
@@ -283,6 +311,54 @@
       </span>
       
       <p class="shortcomment cmt">Represents a path to the case class field/property germane to the exception</p>
+    </li><li name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.Reason" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ReasonextendsProductwithSerializable"></a><a id="Reason:Reason"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/twitter/finatra/jackson/caseclass/exceptions/CaseClassFieldMappingException$$Reason.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="Represents the reason with message and more details for the field mapping exception." href="CaseClassFieldMappingException$$Reason.html"><span class="name">Reason</span></a><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="detail">detail: <a href="CaseClassFieldMappingException$$Detail.html" class="extype" name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.Detail">Detail</a> = <span class="symbol"><span class="name"><a href="CaseClassFieldMappingException$$Unspecified$.html">Unspecified</a></span></span></span>)</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.12/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Represents the reason with message and more details for the field mapping exception.</p>
+    </li><li name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.ThrowableError" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ThrowableErrorextendsCaseClassFieldMappingException.DetailwithProductwithSerializable"></a><a id="ThrowableError:ThrowableError"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/twitter/finatra/jackson/caseclass/exceptions/CaseClassFieldMappingException$$ThrowableError.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="Throwable detail which specifies a message" href="CaseClassFieldMappingException$$ThrowableError.html"><span class="name">ThrowableError</span></a><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cause">cause: <a href="../../../../../../scala/index.html#Throwable=Throwable" class="extmbr" name="scala.Throwable">Throwable</a></span>)</span><span class="result"> extends <a href="CaseClassFieldMappingException$$Detail.html" class="extype" name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.Detail">Detail</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Throwable detail which specifies a message</p>
+    </li><li name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.ValidationError" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ValidationErrorextendsCaseClassFieldMappingException.DetailwithProductwithSerializable"></a><a id="ValidationError:ValidationError"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/twitter/finatra/jackson/caseclass/exceptions/CaseClassFieldMappingException$$ValidationError.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="A violation was raised when performing a field or method validation" href="CaseClassFieldMappingException$$ValidationError.html"><span class="name">ValidationError</span></a><span class="params">(<span name="violation">violation: <span class="extype" name="jakarta.validation.ConstraintViolation">ConstraintViolation</span>[_]</span>, <span name="location">location: <a href="CaseClassFieldMappingException$$ValidationError$$Location.html" class="extype" name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.ValidationError.Location">Location</a></span>, <span name="payload">payload: <a href="https://www.scala-lang.org/api/2.12.12/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="jakarta.validation.Payload">Payload</span>]</span>)</span><span class="result"> extends <a href="CaseClassFieldMappingException$$Detail.html" class="extype" name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.Detail">Detail</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A violation was raised when performing a field or method validation</p>
     </li></ol>
             </div>
 
@@ -654,6 +730,54 @@
       </span>
       <span class="symbol">
         <a title="" href="CaseClassFieldMappingException$$PropertyPath$.html"><span class="name">PropertyPath</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.12/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      
+    </li><li name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.RequiredFieldMissing" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RequiredFieldMissing"></a><a id="RequiredFieldMissing:RequiredFieldMissing"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/twitter/finatra/jackson/caseclass/exceptions/CaseClassFieldMappingException$$RequiredFieldMissing$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="A case class field specified as required is missing from JSON to deserialize" href="CaseClassFieldMappingException$$RequiredFieldMissing$.html"><span class="name">RequiredFieldMissing</span></a><span class="result"> extends <a href="CaseClassFieldMappingException$$Detail.html" class="extype" name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.Detail">Detail</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A case class field specified as required is missing from JSON to deserialize</p>
+    </li><li name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.Unspecified" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Unspecified"></a><a id="Unspecified:Unspecified"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/twitter/finatra/jackson/caseclass/exceptions/CaseClassFieldMappingException$$Unspecified$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="No specified detail" href="CaseClassFieldMappingException$$Unspecified$.html"><span class="name">Unspecified</span></a><span class="result"> extends <a href="CaseClassFieldMappingException$$Detail.html" class="extype" name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.Detail">Detail</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">No specified detail</p>
+    </li><li name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.ValidationError" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ValidationError"></a><a id="ValidationError:ValidationError"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/twitter/finatra/jackson/caseclass/exceptions/CaseClassFieldMappingException$$ValidationError$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="CaseClassFieldMappingException$$ValidationError$.html"><span class="name">ValidationError</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.12/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       

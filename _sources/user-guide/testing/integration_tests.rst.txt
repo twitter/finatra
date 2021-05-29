@@ -165,7 +165,7 @@ More Information
 .. _c.t.inject.IntegrationTestMixin: https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-core/src/test/scala/com/twitter/inject/IntegrationTestMixin.scala#L27
 
 .. |c.t.finatra.http.HttpTest| replace:: `c.t.finatra.http.HttpTest`
-.. _c.t.finatra.http.HttpTest: https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/HttpTest.scala
+.. _c.t.finatra.http.HttpTest: https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/HttpTest.scala
 
 .. |c.t.finatra.thrift.ThriftClient| replace:: `c.t.finatra.thrift.ThriftClient`
 .. _c.t.finatra.thrift.ThriftClient: https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala

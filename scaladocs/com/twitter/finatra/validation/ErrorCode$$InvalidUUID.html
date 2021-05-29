@@ -145,10 +145,16 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="ErrorCode$.html"><span class="name">ErrorCode</span></a>
+        <a title="Users can obtain the same information by inspecting returned ConstraintViolation instances." href="ErrorCode$.html"><span class="name deprecated" title="Deprecated: (Since version 2021-03-25) No replacement.">ErrorCode</span></a>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="com.twitter.finatra.validation">validation</a></dd></dl></div>
+      <p class="shortcomment cmt">Users can obtain the same information by inspecting returned <code>ConstraintViolation</code> instances.</p><div class="fullcomment"><div class="comment cmt"><p>Users can obtain the same information by inspecting returned <code>ConstraintViolation</code> instances.
+The invalid value is returned from <code>violation#getInvalidValue</code> and the configured annotation
+which specified configuration values can be obtained from <code>violation#getConstraintDescriptor#getAnnotation</code>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="com.twitter.finatra.validation">validation</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2021-03-25)</i> No replacement.</p></dd></dl></div>
     </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="object" href="ErrorCode$$IllegalArgument$.html" title=""></a>
@@ -181,10 +187,6 @@
                         <span class="separator"></span>
                         <a class="class" href="ErrorCode$$PatternSyntaxError.html" title=""></a>
                         <a href="ErrorCode$$PatternSyntaxError.html" title="">PatternSyntaxError</a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
-                        <a class="object" href="ErrorCode$$RepeatedCommaSeparatedCollection$.html" title=""></a>
-                        <a href="ErrorCode$$RepeatedCommaSeparatedCollection$.html" title="">RepeatedCommaSeparatedCollection</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="object" href="ErrorCode$$RequiredFieldMissing$.html" title=""></a>
@@ -253,7 +255,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.12/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.12/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a>, <a href="https://www.scala-lang.org/api/2.12.12/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a>, <a href="ErrorCode.html" class="extype" name="com.twitter.finatra.validation.ErrorCode">ErrorCode</a>, <a href="../../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.12/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.12/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.12/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a>, <a href="https://www.scala-lang.org/api/2.12.12/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a>, <a href="ErrorCode.html" class="extype" name="com.twitter.finatra.validation.ErrorCode">ErrorCode</a>, <span class="extype" name="jakarta.validation.Payload">Payload</span>, <a href="../../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.12.12/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -279,7 +281,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.validation.ErrorCode.InvalidUUID"><span>InvalidUUID</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="com.twitter.finatra.validation.ErrorCode"><span>ErrorCode</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.validation.ErrorCode.InvalidUUID"><span>InvalidUUID</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="com.twitter.finatra.validation.ErrorCode"><span>ErrorCode</span></li><li class="in" name="jakarta.validation.Payload"><span>Payload</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -660,6 +662,8 @@
               <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.12/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a></h3>
             </div><div class="parent" name="com.twitter.finatra.validation.ErrorCode">
               <h3>Inherited from <a href="ErrorCode.html" class="extype" name="com.twitter.finatra.validation.ErrorCode">ErrorCode</a></h3>
+            </div><div class="parent" name="jakarta.validation.Payload">
+              <h3>Inherited from <span class="extype" name="jakarta.validation.Payload">Payload</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../scala/index.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

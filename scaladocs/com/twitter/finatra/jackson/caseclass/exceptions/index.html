@@ -167,16 +167,12 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.jackson.caseclass">caseclass</a></dd></dl></div>
     </li><li class="current-entities indented6">
                         <a class="object" href="CaseClassFieldMappingException$.html" title=""></a>
-                        <a class="class" href="CaseClassFieldMappingException.html" title="A subclass of JsonMappingException which bundles together a failed field location as a CaseClassFieldMappingException.PropertyPath with the the failure reason represented by a ValidationResult.Invalid to carry the failure reason."></a>
-                        <a href="CaseClassFieldMappingException.html" title="A subclass of JsonMappingException which bundles together a failed field location as a CaseClassFieldMappingException.PropertyPath with the the failure reason represented by a ValidationResult.Invalid to carry the failure reason.">CaseClassFieldMappingException</a>
+                        <a class="class" href="CaseClassFieldMappingException.html" title="A subclass of JsonMappingException which bundles together a failed field location as a CaseClassFieldMappingException.PropertyPath with the the failure reason represented by a CaseClassFieldMappingException.Reason to carry the failure reason."></a>
+                        <a href="CaseClassFieldMappingException.html" title="A subclass of JsonMappingException which bundles together a failed field location as a CaseClassFieldMappingException.PropertyPath with the the failure reason represented by a CaseClassFieldMappingException.Reason to carry the failure reason.">CaseClassFieldMappingException</a>
                       </li><li class="current-entities indented6">
                         <a class="object" href="CaseClassMappingException$.html" title=""></a>
                         <a class="class" href="CaseClassMappingException.html" title="A subclass of JsonMappingException used to signal fatal problems with mapping of JSON content to a Scala case class."></a>
                         <a href="CaseClassMappingException.html" title="A subclass of JsonMappingException used to signal fatal problems with mapping of JSON content to a Scala case class.">CaseClassMappingException</a>
-                      </li><li class="current-entities indented6">
-                        <span class="separator"></span>
-                        <a class="object" href="ErrorCode$.html" title=""></a>
-                        <a href="ErrorCode$.html" title="">ErrorCode</a>
                       </li><li class="current-entities indented6">
                         <a class="object" href="InjectableValuesException$.html" title=""></a>
                         <a class="class" href="InjectableValuesException.html" title="Represents an exception during deserialization due to the inability to properly inject a value via Jackson com.fasterxml.jackson.databind.InjectableValues."></a>
@@ -277,19 +273,19 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="A subclass of JsonMappingException which bundles together a failed field location as a CaseClassFieldMappingException.PropertyPath with the the failure reason represented by a ValidationResult.Invalid to carry the failure reason." href="CaseClassFieldMappingException.html"><span class="name">CaseClassFieldMappingException</span></a><span class="params">(<span name="path">path: <a href="CaseClassFieldMappingException$$PropertyPath.html" class="extype" name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.PropertyPath">PropertyPath</a></span>, <span name="reason">reason: <a href="../../../validation/ValidationResult$$Invalid.html" class="extype" name="com.twitter.finatra.validation.ValidationResult.Invalid">Invalid</a></span>)</span><span class="result"> extends <span class="extype" name="com.fasterxml.jackson.databind.JsonMappingException">JsonMappingException</span> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="A subclass of JsonMappingException which bundles together a failed field location as a CaseClassFieldMappingException.PropertyPath with the the failure reason represented by a CaseClassFieldMappingException.Reason to carry the failure reason." href="CaseClassFieldMappingException.html"><span class="name">CaseClassFieldMappingException</span></a><span class="params">(<span name="path">path: <a href="CaseClassFieldMappingException$$PropertyPath.html" class="extype" name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.PropertyPath">PropertyPath</a></span>, <span name="reason">reason: <a href="CaseClassFieldMappingException$$Reason.html" class="extype" name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.Reason">Reason</a></span>)</span><span class="result"> extends <span class="extype" name="com.fasterxml.jackson.databind.JsonMappingException">JsonMappingException</span> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="https://www.scala-lang.org/api/2.12.12/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       <p class="shortcomment cmt">A subclass of <span class="extype" name="JsonMappingException">JsonMappingException</span> which bundles together a failed field location as a
 <code>CaseClassFieldMappingException.PropertyPath</code> with the the failure reason represented by a
-<span class="extype" name="ValidationResult.Invalid">ValidationResult.Invalid</span> to carry the failure reason.</p><div class="fullcomment"><div class="comment cmt"><p>A subclass of <span class="extype" name="JsonMappingException">JsonMappingException</span> which bundles together a failed field location as a
+<code>CaseClassFieldMappingException.Reason</code> to carry the failure reason.</p><div class="fullcomment"><div class="comment cmt"><p>A subclass of <span class="extype" name="JsonMappingException">JsonMappingException</span> which bundles together a failed field location as a
 <code>CaseClassFieldMappingException.PropertyPath</code> with the the failure reason represented by a
-<span class="extype" name="ValidationResult.Invalid">ValidationResult.Invalid</span> to carry the failure reason.
+<code>CaseClassFieldMappingException.Reason</code> to carry the failure reason.
 </p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>- a <code>CaseClassFieldMappingException.PropertyPath</code> instance to the case class field
-            that caused the failure.</p></dd><dt class="param">reason</dt><dd class="cmt"><p>- an instance of a <span class="extype" name="ValidationResult.Invalid">ValidationResult.Invalid</span> which carries details of the
+              that caused the failure.</p></dd><dt class="param">reason</dt><dd class="cmt"><p>- an instance of a <code>CaseClassFieldMappingException.Reason</code> which carries detail of the
               failure reason.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>this exception is a case class in order to have a useful equals() and hashcode()
       methods since this exception is generally carried in a collection inside of a
-      <a href="CaseClassMappingException.html" class="extype" name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassMappingException">CaseClassMappingException</a>.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="CaseClassFieldMappingException$$PropertyPath.html" class="extype" name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.PropertyPath">com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.PropertyPath</a></p></span><span class="cmt"><p><a href="../../../validation/ValidationResult$$Invalid.html" class="extype" name="com.twitter.finatra.validation.ValidationResult.Invalid">com.twitter.finatra.validation.ValidationResult.Invalid</a></p></span><span class="cmt"><p><span class="extype" name="com.fasterxml.jackson.databind.JsonMappingException">com.fasterxml.jackson.databind.JsonMappingException</span></p></span><span class="cmt"><p><a href="CaseClassMappingException.html" class="extype" name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassMappingException">CaseClassMappingException</a></p></span></dd></dl></div>
+      <a href="CaseClassMappingException.html" class="extype" name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassMappingException">CaseClassMappingException</a>.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="CaseClassFieldMappingException$$PropertyPath.html" class="extype" name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.PropertyPath">com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.PropertyPath</a></p></span><span class="cmt"><p><a href="CaseClassFieldMappingException$$Reason.html" class="extype" name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.Reason">com.twitter.finatra.jackson.caseclass.exceptions.CaseClassFieldMappingException.Reason</a></p></span><span class="cmt"><p><span class="extype" name="com.fasterxml.jackson.databind.JsonMappingException">com.fasterxml.jackson.databind.JsonMappingException</span></p></span><span class="cmt"><p><a href="CaseClassMappingException.html" class="extype" name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassMappingException">CaseClassMappingException</a></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.jackson.caseclass.exceptions.CaseClassMappingException" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="CaseClassMappingExceptionextendsJsonMappingException"></a><a id="CaseClassMappingException:CaseClassMappingException"></a>
       <span class="permalink">
@@ -387,22 +383,6 @@ during deserialization.
       </span>
       <span class="symbol">
         <a title="" href="CaseClassMappingException$.html"><span class="name">CaseClassMappingException</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.12/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
-      </span>
-      
-      
-    </li><li name="com.twitter.finatra.jackson.caseclass.exceptions.ErrorCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ErrorCode"></a><a id="ErrorCode:ErrorCode"></a>
-      <span class="permalink">
-      <a href="../../../../../../com/twitter/finatra/jackson/caseclass/exceptions/ErrorCode$.html" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="ErrorCode$.html"><span class="name">ErrorCode</span></a>
       </span>
       
       
