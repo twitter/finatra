@@ -48,6 +48,9 @@ class KafkaProducerTraceAnnotatorImpl extends KafkaProducerTraceAnnotator with L
     if (Dtab.local.nonEmpty) {
       trace.recordBinary("clnt/dtab.local", Dtab.local.show)
     }
+    if (Dtab.limited.nonEmpty) {
+      trace.recordBinary("clnt/dtab.limited", Dtab.limited.show)
+    }
     producerConfig.get(KafkaProducerConfig.FinagleDestKey) match {
       case Some(dest) => trace.recordBinary("clnt/namer.path", dest)
       case None => // nop
