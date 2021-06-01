@@ -64,7 +64,7 @@ Changed
   integration in the future. ``PHAB_ID=D659556``
 
 * finatra-jackson: (BREAKING API CHANGE) JsonLogging should use the lazy Scala SLF4J logger
-  and no longer return the passed in argument that's logged as JSON
+  and no longer return the passed in argument that's logged as JSON. ``PHAB_ID=D563699``
 
 21.4.0
 ------
