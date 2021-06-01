@@ -20,19 +20,26 @@ We recommend that you put the annotation in its own `.java` file.
     import java.lang.annotation.Retention;
     import java.lang.annotation.Target;
 
-    import com.google.inject.BindingAnnotation;
+    import javax.inject.Qualifier;
 
     import static java.lang.annotation.ElementType.PARAMETER;
+    import static java.lang.annotation.ElementType.FIELD;
+    import static java.lang.annotation.ElementType.METHOD;
     import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-    @BindingAnnotation
-    @Target(PARAMETER)
+    @Qualifier
+    @Target({ FIELD, PARAMETER, METHOD })
     @Retention(RUNTIME)
     public @interface FooClient {}
 
-For more information on the meta-annotations see the Google Guice
-`documentation on Binding
-Annotations <https://github.com/google/guice/wiki/BindingAnnotations>`__.
+    // Older code may still use Guice `com.google.inject.BindingAnnotation` in place of the standard
+    // `@Qualifier` annotation. New code should use `@Qualifier` instead.
+    @BindingAnnotation
+    @Target({ FIELD, PARAMETER, METHOD })
+    @Retention(RUNTIME)
+    public @interface FooClient {}
+
+For more information on these meta-annotations see the Google Guice `documentation on Binding Annotations <https://github.com/google/guice/wiki/BindingAnnotations>`__.
 
 Create a Binding with the Annotation
 ------------------------------------
