@@ -2,11 +2,9 @@ package com.twitter.inject.server.tests
 
 import com.twitter.finagle.stats.{
   Counter,
-  CounterSchema,
   Gauge,
-  GaugeSchema,
-  HistogramSchema,
   InMemoryStatsReceiver,
+  MetricBuilder,
   Stat,
   StatsReceiver
 }
@@ -33,14 +31,14 @@ private[tests] class TestStatsReceiver extends StatsReceiver {
   /**
    * Get a [[Counter counter]] with the given `name`.
    */
-  def counter(schema: CounterSchema): Counter =
-    underlying.counter(schema)
+  def counter(metricBuilder: MetricBuilder): Counter =
+    underlying.counter(metricBuilder)
 
   /**
    * Get a [[Stat stat]] with the given name.
    */
-  def stat(schema: HistogramSchema): Stat =
-    underlying.stat(schema)
+  def stat(metricBuilder: MetricBuilder): Stat =
+    underlying.stat(metricBuilder)
 
   /**
    * Add the function `f` as a [[Gauge gauge]] with the given name.
@@ -58,8 +56,8 @@ private[tests] class TestStatsReceiver extends StatsReceiver {
    *      to store the returned [[Gauge gauge]] that can give the desired lifecycle.
    * @see [[https://docs.oracle.com/javase/7/docs/api/java/lang/ref/WeakReference.html java.lang.ref.WeakReference]]
    */
-  def addGauge(schema: GaugeSchema)(f: => Float): Gauge =
-    underlying.addGauge(schema)(f)
+  def addGauge(metricBuilder: MetricBuilder)(f: => Float): Gauge =
+    underlying.addGauge(metricBuilder)(f)
 
   override def toString: String = "TestStatsReceiver"
 
