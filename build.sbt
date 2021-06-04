@@ -1,7 +1,9 @@
 import scala.language.reflectiveCalls
 import scoverage.ScoverageKeys
 
-concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
+Global / onChangedBuildSource := ReloadOnSourceChanges
+Global / excludeLintKeys += scalacOptions
+Global / concurrentRestrictions += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
 val releaseVersion = "21.6.0-SNAPSHOT"
@@ -11,13 +13,13 @@ lazy val buildSettings = Seq(
   scalaVersion := "2.12.12",
   crossScalaVersions := Seq("2.12.12", "2.13.1"),
   scalaModuleInfo := scalaModuleInfo.value.map(_.withOverrideScalaVersion(true)),
-  fork in Test := true, // We have to fork to get the JavaOptions
-  javaOptions in Test ++= travisTestJavaOptions,
+  Test / fork := true, // We have to fork to get the JavaOptions
+  Test / javaOptions ++= travisTestJavaOptions,
   libraryDependencies += scalaCollectionCompat
 )
 
 lazy val noPublishSettings = Seq(
-  skip in publish := true
+  publish / skip := true
 )
 
 def gcJavaOptions: Seq[String] = {
@@ -150,13 +152,13 @@ lazy val baseSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   scalaCompilerOptions,
-  javacOptions in (Compile, compile) ++= Seq(
+  Compile / compile / javacOptions ++= Seq(
     "-source",
     "1.8",
     "-target",
     "1.8",
     "-Xlint:unchecked"),
-  javacOptions in doc ++= Seq("-source", "1.8"),
+  doc / javacOptions ++= Seq("-source", "1.8"),
   javaOptions ++= Seq(
     "-Djava.net.preferIPv4Stack=true",
     "-XX:+AggressiveOpts",
@@ -166,7 +168,7 @@ lazy val baseSettings = Seq(
   // -a: print stack traces for failing asserts
   testOptions += Tests.Argument(TestFrameworks.JUnit, "-a", "-v"),
   // broken in 2.12 due to: https://issues.scala-lang.org/browse/SI-10134
-  scalacOptions in (Compile, doc) ++= {
+  Compile / doc / scalacOptions ++= {
     if (scalaVersion.value.startsWith("2.12")) Seq("-no-java-comments")
     else Nil
   }
@@ -176,8 +178,8 @@ lazy val publishSettings = Seq(
   publishMavenStyle := true,
   publishConfiguration := publishConfiguration.value.withOverwrite(true),
   publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(true),
-  publishArtifact in Compile := true,
-  publishArtifact in Test := false,
+  Compile / publishArtifact := true,
+  Test / publishArtifact := false,
   pomIncludeRepository := { _ => false },
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -190,10 +192,10 @@ lazy val publishSettings = Seq(
   homepage := Some(url("https://github.com/twitter/finatra")),
   autoAPIMappings := true,
   apiURL := Some(url("https://twitter.github.io/finatra/scaladocs/")),
-  excludeFilter in (Compile, managedSources) := HiddenFileFilter || "BUILD",
-  excludeFilter in (Compile, unmanagedSources) := HiddenFileFilter || "BUILD",
-  excludeFilter in (Compile, managedResources) := HiddenFileFilter || "BUILD",
-  excludeFilter in (Compile, unmanagedResources) := HiddenFileFilter || "BUILD",
+  Compile / managedSources / excludeFilter := HiddenFileFilter || "BUILD",
+  Compile / unmanagedSources / excludeFilter := HiddenFileFilter || "BUILD",
+  Compile / managedResources / excludeFilter := HiddenFileFilter || "BUILD",
+  Compile / unmanagedResources / excludeFilter := HiddenFileFilter || "BUILD",
   pomExtra :=
     <scm>
       <url>git://github.com/twitter/finatra.git</url>
@@ -217,8 +219,8 @@ lazy val publishSettings = Seq(
 
     new scala.xml.transform.RuleTransformer(rule).transform(node).head
   },
-  resourceGenerators in Compile += Def.task {
-    val dir = (resourceManaged in Compile).value
+  Compile / resourceGenerators += Def.task {
+    val dir = (Compile / resourceManaged).value
     val file = dir / "com" / "twitter" / name.value / "build.properties"
     val buildRev = scala.sys.process.Process("git" :: "rev-parse" :: "HEAD" :: Nil).!!.trim
     val buildName = new java.text.SimpleDateFormat("yyyyMMdd-HHmmss").format(new java.util.Date)
@@ -240,7 +242,7 @@ lazy val baseServerSettings = baseSettings ++ buildSettings ++ publishSettings +
   publishArtifact := false,
   publishLocal := {},
   publish := {},
-  assemblyMergeStrategy in assembly := {
+  assembly / assemblyMergeStrategy := {
     case "BUILD" => MergeStrategy.discard
     case "META-INF/io.netty.versions.properties" => MergeStrategy.last
     case PathList(ps @ _*) if ps.last endsWith ".class" => MergeStrategy.first
@@ -249,8 +251,8 @@ lazy val baseServerSettings = baseSettings ++ buildSettings ++ publishSettings +
 )
 
 lazy val exampleServerSettings = baseServerSettings ++ Seq(
-  fork in run := true,
-  javaOptions in Test ++= Seq(
+  run / fork := true,
+  Test / javaOptions ++= Seq(
     // we are unable to guarantee that Logback will not get picked up b/c of coursier caching
     // so we set the Logback System properties in addition to the slf4j-simple and the
     // the Framework test logging disabled property.
@@ -340,7 +342,7 @@ lazy val root = (project in file("."))
   .settings(
     organization := "com.twitter",
     moduleName := "finatra-root",
-    unidocProjectFilter in (ScalaUnidoc, unidoc) := inAnyProject
+    ScalaUnidoc / unidoc / unidocProjectFilter := inAnyProject
       -- inProjects(benchmarks)
     // START EXAMPLES
       -- inProjects(
@@ -393,17 +395,17 @@ lazy val injectCore = (project in file("inject/inject-core"))
       "com.twitter" %% "finagle-stats" % versions.twLibVersion % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
-    publishArtifact in Test := true,
-    mappings in (Test, packageBin) := {
-      val previous = (mappings in (Test, packageBin)).value
+    Test / publishArtifact := true,
+    Test / packageBin / mappings := {
+      val previous = (Test / packageBin / mappings).value
       previous.filter(mappingContainsAnyPath(_, injectCoreTestJarSources))
     },
-    mappings in (Test, packageDoc) := {
-      val previous = (mappings in (Test, packageDoc)).value
+    Test / packageDoc / mappings := {
+      val previous = (Test / packageDoc / mappings).value
       previous.filter(mappingContainsAnyPath(_, injectCoreTestJarSources))
     },
-    mappings in (Test, packageSrc) := {
-      val previous = (mappings in (Test, packageSrc)).value
+    Test / packageSrc / mappings := {
+      val previous = (Test / packageSrc / mappings).value
       previous.filter(mappingContainsAnyPath(_, injectCoreTestJarSources))
     }
   ).dependsOn(
@@ -434,8 +436,8 @@ lazy val injectLogback = (project in file("inject/inject-logback"))
       "com.twitter" %% "util-registry" % versions.twLibVersion,
       "com.twitter" %% "util-stats" % versions.twLibVersion
     ),
-    // we don't want slf4j-simple in test from any dependency (3rdparty or other module)
-    excludeDependencies in Test ++= Seq(
+    // we don't want test / slf4j-simple from any dependency (3rdparty or other module)
+    Test / excludeDependencies ++= Seq(
       ExclusionRule(organization = "org.slf4j", name = "slf4j-simple")
     )
   ).dependsOn(
@@ -456,17 +458,17 @@ lazy val injectModules = (project in file("inject/inject-modules"))
       "com.twitter" %% "util-stats" % versions.twLibVersion,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
-    publishArtifact in Test := true,
-    mappings in (Test, packageBin) := {
-      val previous = (mappings in (Test, packageBin)).value
+    Test / publishArtifact := true,
+    (Test / packageBin / mappings) := {
+      val previous = (Test / packageBin / mappings).value
       previous.filter(mappingContainsAnyPath(_, injectModulesTestJarSources))
     },
-    mappings in (Test, packageDoc) := {
-      val previous = (mappings in (Test, packageDoc)).value
+    (Test / packageDoc / mappings) := {
+      val previous = (Test / packageDoc / mappings).value
       previous.filter(mappingContainsAnyPath(_, injectModulesTestJarSources))
     },
-    mappings in (Test, packageSrc) := {
-      val previous = (mappings in (Test, packageSrc)).value
+    (Test / packageSrc / mappings) := {
+      val previous = (Test / packageSrc / mappings).value
       previous.filter(mappingContainsAnyPath(_, injectModulesTestJarSources))
     }
   ).dependsOn(
@@ -505,17 +507,17 @@ lazy val injectApp = (project in file("inject/inject-app"))
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*TypeConverter.*",
-    publishArtifact in Test := true,
-    mappings in (Test, packageBin) := {
-      val previous = (mappings in (Test, packageBin)).value
+    Test / publishArtifact := true,
+    (Test / packageBin / mappings) := {
+      val previous = (Test / packageBin / mappings).value
       previous.filter(mappingContainsAnyPath(_, injectAppTestJarSources))
     },
-    mappings in (Test, packageDoc) := {
-      val previous = (mappings in (Test, packageDoc)).value
+    (Test / packageDoc / mappings) := {
+      val previous = (Test / packageDoc / mappings).value
       previous.filter(mappingContainsAnyPath(_, injectAppTestJarSources))
     },
-    mappings in (Test, packageSrc) := {
-      val previous = (mappings in (Test, packageSrc)).value
+    (Test / packageSrc / mappings) := {
+      val previous = (Test / packageSrc / mappings).value
       previous.filter(mappingContainsAnyPath(_, injectAppTestJarSources))
     }
   ).dependsOn(
@@ -572,17 +574,17 @@ lazy val injectServer = (project in file("inject/inject-server"))
       "org.slf4j" % "slf4j-api" % versions.slf4j,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
-    publishArtifact in Test := true,
-    mappings in (Test, packageBin) := {
-      val previous = (mappings in (Test, packageBin)).value
+    Test / publishArtifact := true,
+    (Test / packageBin / mappings) := {
+      val previous = (Test / packageBin / mappings).value
       previous.filter(mappingContainsAnyPath(_, injectServerTestJarSources))
     },
-    mappings in (Test, packageDoc) := {
-      val previous = (mappings in (Test, packageDoc)).value
+    (Test / packageDoc / mappings) := {
+      val previous = (Test / packageDoc / mappings).value
       previous.filter(mappingContainsAnyPath(_, injectServerTestJarSources))
     },
-    mappings in (Test, packageSrc) := {
-      val previous = (mappings in (Test, packageSrc)).value
+    (Test / packageSrc / mappings) := {
+      val previous = (Test / packageSrc / mappings).value
       previous.filter(mappingContainsAnyPath(_, injectServerTestJarSources))
     }
   ).dependsOn(
@@ -663,8 +665,8 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
     name := "inject-thrift-client",
     moduleName := "inject-thrift-client",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*;.*LatencyFilter.*",
-    scroogeLanguages in Test := Seq("java", "scala"),
-    scroogePublishThrift in Test := true,
+    Test / scroogeLanguages := Seq("java", "scala"),
+    Test / scroogePublishThrift := true,
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-thrift" % versions.twLibVersion,
       "com.twitter" %% "finagle-thriftmux" % versions.twLibVersion,
@@ -700,7 +702,7 @@ lazy val injectUtils = (project in file("inject/inject-utils"))
 
 /**
  * This project relies on other projects test dependencies and as such
- * needs to have all of the benchmarks defined in test scope to play
+ * needs to have all of the benchmarks test / defined scope to play
  * well with IDEs other build systems.
  *
  * @see https://github.com/ktoso/sbt-jmh/issues/63
@@ -713,7 +715,7 @@ lazy val injectUtils = (project in file("inject/inject-utils"))
  * }}}
  *
  * Which means "10 iterations" "20 warm up iterations" "1 fork" "1 thread". Note that
- * benchmarks should be usually executed at least in 10 iterations (as a rule of thumb),
+ * benchmarks should be usually executed at 10 / least iterations (as a rule of thumb),
  * but more is better.
  *
  * For "real" results the recommendation is to warm up at least 10 to 20 iterations, and then
@@ -753,17 +755,17 @@ lazy val utils = project
       "javax.activation" % "activation" % versions.javaxActivation,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
-    publishArtifact in Test := true,
-    mappings in (Test, packageBin) := {
-      val previous = (mappings in (Test, packageBin)).value
+    Test / publishArtifact := true,
+    (Test / packageBin / mappings) := {
+      val previous = (Test / packageBin / mappings).value
       previous.filter(mappingContainsAnyPath(_, utilsTestJarSources))
     },
-    mappings in (Test, packageDoc) := {
-      val previous = (mappings in (Test, packageDoc)).value
+    (Test / packageDoc / mappings) := {
+      val previous = (Test / packageDoc / mappings).value
       previous.filter(mappingContainsAnyPath(_, utilsTestJarSources))
     },
-    mappings in (Test, packageSrc) := {
-      val previous = (mappings in (Test, packageSrc)).value
+    (Test / packageSrc / mappings) := {
+      val previous = (Test / packageSrc / mappings).value
       previous.filter(mappingContainsAnyPath(_, utilsTestJarSources))
     }
   ).dependsOn(
@@ -792,22 +794,22 @@ lazy val validation = project
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
     // special-case to only scaladoc what's necessary as some of the tests cannot generate scaladocs
-    sources in Test in doc := {
-      val previous: Seq[File] = (sources in Test in doc).value
+    Test / doc / sources := {
+      val previous: Seq[File] = (Test / doc / sources).value
       previous.filter(file =>
         validationTestJarSources.foldLeft(false)(_ || file.getPath.contains(_)))
     },
-    publishArtifact in Test := true,
-    mappings in (Test, packageBin) := {
-      val previous = (mappings in (Test, packageBin)).value
+    Test / publishArtifact := true,
+    (Test / packageBin / mappings) := {
+      val previous = (Test / packageBin / mappings).value
       previous.filter(mappingContainsAnyPath(_, validationTestJarSources))
     },
-    mappings in (Test, packageDoc) := {
-      val previous = (mappings in (Test, packageDoc)).value
+    (Test / packageDoc / mappings) := {
+      val previous = (Test / packageDoc / mappings).value
       previous.filter(mappingContainsAnyPath(_, validationTestJarSources))
     },
-    mappings in (Test, packageSrc) := {
-      val previous = (mappings in (Test, packageSrc)).value
+    (Test / packageSrc / mappings) := {
+      val previous = (Test / packageSrc / mappings).value
       previous.filter(mappingContainsAnyPath(_, validationTestJarSources))
     }
   ).dependsOn(
@@ -840,21 +842,21 @@ lazy val jackson = project
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
     // special-case to only scaladoc what's necessary as some of the tests cannot generate scaladocs
-    sources in Test in doc := {
-      val previous: Seq[File] = (sources in Test in doc).value
+    Test / doc / sources := {
+      val previous: Seq[File] = (Test / doc / sources).value
       previous.filter(file => jacksonTestJarSources.foldLeft(false)(_ || file.getPath.contains(_)))
     },
-    publishArtifact in Test := true,
-    mappings in (Test, packageBin) := {
-      val previous = (mappings in (Test, packageBin)).value
+    Test / publishArtifact := true,
+    (Test / packageBin / mappings) := {
+      val previous = (Test / packageBin / mappings).value
       previous.filter(mappingContainsAnyPath(_, jacksonTestJarSources))
     },
-    mappings in (Test, packageDoc) := {
-      val previous = (mappings in (Test, packageDoc)).value
+    (Test / packageDoc / mappings) := {
+      val previous = (Test / packageDoc / mappings).value
       previous.filter(mappingContainsAnyPath(_, jacksonTestJarSources))
     },
-    mappings in (Test, packageSrc) := {
-      val previous = (mappings in (Test, packageSrc)).value
+    (Test / packageSrc / mappings) := {
+      val previous = (Test / packageSrc / mappings).value
       previous.filter(mappingContainsAnyPath(_, jacksonTestJarSources))
     }
   ).dependsOn(
@@ -908,8 +910,8 @@ lazy val httpCore = (project in file("http-core"))
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "javax.servlet" % "servlet-api" % versions.servletApi % "provided;compile->compile;test->test"
     ),
-    excludeFilter in Test in unmanagedResources := "BUILD",
-    publishArtifact in Test := true
+    Test / unmanagedResources / excludeFilter := "BUILD",
+    Test / publishArtifact := true
   ).dependsOn(
     httpAnnotations,
     jackson % "test->test;compile->compile",
@@ -943,21 +945,21 @@ lazy val httpServer = (project in file("http-server"))
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal",
       "com.twitter" %% "util-security-test-certs" % versions.twLibVersion % Test
     ),
-    unmanagedResourceDirectories in Test += baseDirectory(
+    Test / unmanagedResourceDirectories += baseDirectory(
       _ / "src" / "test" / "webapp"
     ).value,
-    excludeFilter in Test in unmanagedResources := "BUILD",
-    publishArtifact in Test := true,
-    mappings in (Test, packageBin) := {
-      val previous = (mappings in (Test, packageBin)).value
+    Test / unmanagedResources / excludeFilter := "BUILD",
+    Test / publishArtifact := true,
+    (Test / packageBin / mappings) := {
+      val previous = (Test / packageBin / mappings).value
       previous.filter(mappingContainsAnyPath(_, httpTestJarSources))
     },
-    mappings in (Test, packageDoc) := {
-      val previous = (mappings in (Test, packageDoc)).value
+    (Test / packageDoc / mappings) := {
+      val previous = (Test / packageDoc / mappings).value
       previous.filter(mappingContainsAnyPath(_, httpTestJarSources))
     },
-    mappings in (Test, packageSrc) := {
-      val previous = (mappings in (Test, packageSrc)).value
+    (Test / packageSrc / mappings) := {
+      val previous = (Test / packageSrc / mappings).value
       previous.filter(mappingContainsAnyPath(_, httpTestJarSources))
     }
   ).dependsOn(
@@ -1019,17 +1021,17 @@ lazy val httpClient = (project in file("http-client"))
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
-    publishArtifact in Test := true,
-    mappings in (Test, packageBin) := {
-      val previous = (mappings in (Test, packageBin)).value
+    Test / publishArtifact := true,
+    (Test / packageBin / mappings) := {
+      val previous = (Test / packageBin / mappings).value
       previous.filter(mappingContainsAnyPath(_, httpClientTestJarSources))
     },
-    mappings in (Test, packageDoc) := {
-      val previous = (mappings in (Test, packageDoc)).value
+    (Test / packageDoc / mappings) := {
+      val previous = (Test / packageDoc / mappings).value
       previous.filter(mappingContainsAnyPath(_, httpClientTestJarSources))
     },
-    mappings in (Test, packageSrc) := {
-      val previous = (mappings in (Test, packageSrc)).value
+    (Test / packageSrc / mappings) := {
+      val previous = (Test / packageSrc / mappings).value
       previous.filter(mappingContainsAnyPath(_, httpClientTestJarSources))
     }
   ).dependsOn(
@@ -1064,20 +1066,20 @@ lazy val thrift = project
       "org.yaml" % "snakeyaml" % versions.snakeyaml,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
-    scroogePublishThrift in Test := true,
-    scroogeLanguages in Test := Seq("java", "scala"),
-    excludeFilter in unmanagedResources := "BUILD",
-    publishArtifact in Test := true,
-    mappings in (Test, packageBin) := {
-      val previous = (mappings in (Test, packageBin)).value
+    Test / scroogePublishThrift := true,
+    Test / scroogeLanguages := Seq("java", "scala"),
+    unmanagedResources / excludeFilter := "BUILD",
+    Test / publishArtifact := true,
+    (Test / packageBin / mappings) := {
+      val previous = (Test / packageBin / mappings).value
       previous.filter(mappingContainsAnyPath(_, thriftTestJarSources))
     },
-    mappings in (Test, packageDoc) := {
-      val previous = (mappings in (Test, packageDoc)).value
+    (Test / packageDoc / mappings) := {
+      val previous = (Test / packageDoc / mappings).value
       previous.filter(mappingContainsAnyPath(_, thriftTestJarSources))
     },
-    mappings in (Test, packageSrc) := {
-      val previous = (mappings in (Test, packageSrc)).value
+    (Test / packageSrc / mappings) := {
+      val previous = (Test / packageSrc / mappings).value
       previous.filter(mappingContainsAnyPath(_, thriftTestJarSources))
     }
   ).dependsOn(
@@ -1094,7 +1096,7 @@ lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-h
   .settings(
     name := "inject-thrift-client-http-mapper",
     moduleName := "inject-thrift-client-http-mapper",
-    excludeFilter in Test in unmanagedResources := "BUILD",
+    Test / unmanagedResources / excludeFilter := "BUILD",
     libraryDependencies ++= Seq(
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
@@ -1130,7 +1132,6 @@ def kafkaDependencies(kafkaVersion: String): Seq[ModuleID] = {
     "org.apache.kafka" %% "kafka" % kafkaVersion % "test" classifier "test",
     "org.apache.kafka" % "kafka-clients" % kafkaVersion % "test->test",
     "org.apache.kafka" % "kafka-clients" % kafkaVersion % "test" classifier "test",
-    "org.apache.kafka" % "kafka-streams" % kafkaVersion % "compile->compile;test->test",
     "org.apache.kafka" % "kafka-streams" % kafkaVersion % "test" classifier "test",
     "org.apache.kafka" % "kafka-streams-test-utils" % kafkaVersion % "compile->compile;test->test",
     "org.apache.kafka" % "kafka-streams-test-utils" % kafkaVersion % "test" classifier "test"
@@ -1140,12 +1141,11 @@ def kafkaDependencies(kafkaVersion: String): Seq[ModuleID] = {
 def kafkaStreamsDependencies(kafkaVersion: String): Seq[ModuleID] = {
   Seq(
     "org.apache.kafka" %% "kafka-streams-scala" % kafkaVersion % "compile->compile;test->test",
-    "org.apache.kafka" % "kafka-streams" % kafkaVersion % "compile->compile;test->test",
     "org.apache.kafka" % "kafka-streams" % kafkaVersion % "test" classifier "test"
   )
 }
 
-// select the library and different set of source files with different scala version
+// select the library and different set of source (files with different scala version
 def crossVersionKafka(
   scalaVersion: Option[(Long, Long)],
   kafkaWithscala212: String,
@@ -1176,22 +1176,22 @@ lazy val kafka = (project in file("kafka"))
       val scalaV = CrossVersion.partialVersion(scalaVersion.value)
       kafkaDependencies(crossVersionKafka(scalaV, versions.kafka24, versions.kafka25))
     },
-    excludeDependencies in Test ++= kafkaStreamsExclusionRules,
+    Test / excludeDependencies ++= kafkaStreamsExclusionRules,
     excludeDependencies ++= kafkaStreamsExclusionRules,
-    scroogeThriftIncludeFolders in Test := Seq(file("src/test/thrift")),
-    scroogeLanguages in Test := Seq("scala"),
-    excludeFilter in unmanagedResources := "BUILD",
-    publishArtifact in Test := true,
-    mappings in (Test, packageBin) := {
-      val previous = (mappings in (Test, packageBin)).value
+    Test / scroogeThriftIncludeFolders := Seq(file("src/test/thrift")),
+    Test / scroogeLanguages := Seq("scala"),
+    unmanagedResources / excludeFilter := "BUILD",
+    Test / publishArtifact := true,
+    (Test / packageBin / mappings) := {
+      val previous = (Test / packageBin / mappings).value
       previous.filter(mappingContainsAnyPath(_, kafkaTestJarSources))
     },
-    mappings in (Test, packageDoc) := {
-      val previous = (mappings in (Test, packageDoc)).value
+    (Test / packageDoc / mappings) := {
+      val previous = (Test / packageDoc / mappings).value
       previous.filter(mappingContainsAnyPath(_, kafkaTestJarSources))
     },
-    mappings in (Test, packageSrc) := {
-      val previous = (mappings in (Test, packageSrc)).value
+    (Test / packageSrc / mappings) := {
+      val previous = (Test / packageSrc / mappings).value
       previous.filter(mappingContainsAnyPath(_, kafkaTestJarSources))
     }
   ).dependsOn(
@@ -1213,9 +1213,9 @@ lazy val kafkaStreamsQueryableThriftClient =
         "com.twitter" %% "finagle-serversets" % versions.twLibVersion,
         "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
       ),
-      excludeDependencies in Test ++= kafkaStreamsExclusionRules,
+      Test / excludeDependencies ++= kafkaStreamsExclusionRules,
       excludeDependencies ++= kafkaStreamsExclusionRules,
-      excludeFilter in unmanagedResources := "BUILD"
+      unmanagedResources / excludeFilter := "BUILD"
     ).dependsOn(
       injectCore % "test->test;compile->compile",
       injectSlf4j % "test->test;compile->compile",
@@ -1231,7 +1231,7 @@ lazy val kafkaStreamsStaticPartitioning =
       name := "finatra-kafka-streams-static-partitioning",
       moduleName := "finatra-kafka-streams-static-partitioning",
       ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
-      unmanagedSources / includeFilter in Compile := {
+      Compile / unmanagedSources / includeFilter := {
         val scalaV = CrossVersion.partialVersion(scalaVersion.value)
         scalaV match {
           case _ => "*.scala"
@@ -1241,9 +1241,9 @@ lazy val kafkaStreamsStaticPartitioning =
         val sourceDir = (Compile / sourceDirectory).value
         sourceDir / "scala-kafka2.5"
       },
-      excludeDependencies in Test ++= kafkaStreamsExclusionRules,
+      Test / excludeDependencies ++= kafkaStreamsExclusionRules,
       excludeDependencies ++= kafkaStreamsExclusionRules,
-      excludeFilter in unmanagedResources := "BUILD",
+      unmanagedResources / excludeFilter := "BUILD",
       libraryDependencies ++= Seq(
         "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
       )
@@ -1263,9 +1263,9 @@ lazy val kafkaStreamsPrerestore = (project in file("kafka-streams/kafka-streams-
     name := "finatra-kafka-streams-prerestore",
     moduleName := "finatra-kafka-streams-prerestore",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
-    excludeDependencies in Test ++= kafkaStreamsExclusionRules,
+    Test / excludeDependencies ++= kafkaStreamsExclusionRules,
     excludeDependencies ++= kafkaStreamsExclusionRules,
-    excludeFilter in unmanagedResources := "BUILD",
+    unmanagedResources / excludeFilter := "BUILD",
     libraryDependencies ++= Seq(
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
@@ -1281,12 +1281,12 @@ lazy val kafkaStreamsQueryableThrift =
       name := "finatra-kafka-streams-queryable-thrift",
       moduleName := "finatra-kafka-streams-queryable-thrift",
       ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
-      excludeDependencies in Test ++= kafkaStreamsExclusionRules,
+      Test / excludeDependencies ++= kafkaStreamsExclusionRules,
       excludeDependencies ++= kafkaStreamsExclusionRules,
-      scroogeThriftIncludeFolders in Compile := Seq(file("src/test/thrift")),
-      scroogeLanguages in Compile := Seq("java", "scala"),
-      scroogeLanguages in Test := Seq("java", "scala"),
-      excludeFilter in unmanagedResources := "BUILD",
+      Compile / scroogeThriftIncludeFolders := Seq(file("src/test/thrift")),
+      Compile / scroogeLanguages := Seq("java", "scala"),
+      Test / scroogeLanguages := Seq("java", "scala"),
+      unmanagedResources / excludeFilter := "BUILD",
       libraryDependencies ++= Seq(
         "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
       )
@@ -1301,13 +1301,13 @@ lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))
     name := "finatra-kafka-streams",
     moduleName := "finatra-kafka-streams",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
-    unmanagedSourceDirectories in Compile += {
-      val sourceDir = (sourceDirectory in Compile).value
+    Compile / unmanagedSourceDirectories += {
+      val sourceDir = (Compile / sourceDirectory).value
       val scalaV = CrossVersion.partialVersion(scalaVersion.value)
       sourceDir / "scala-kafka2.5"
     },
-    unmanagedSourceDirectories in Test += {
-      val testDir = (sourceDirectory in Test).value
+    Test / unmanagedSourceDirectories += {
+      val testDir = (Test / sourceDirectory).value
       val scalaV = CrossVersion.partialVersion(scalaVersion.value)
       testDir / crossVersionKafka(scalaV, "scala-kafka2.4", "scala-kafka2.5")
     },
@@ -1316,17 +1316,17 @@ lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))
       "it.unimi.dsi" % "fastutil" % versions.fastutil,
       "jakarta.ws.rs" % "jakarta.ws.rs-api" % "2.1.3",
       "org.agrona" % "agrona" % versions.agrona,
-      "org.rocksdb" % "rocksdbjni" % versions.rocksdbjni % "provided;compile->compile;test->test",
+      "org.rocksdb" % "rocksdbjni" % versions.rocksdbjni % "provided;compile->compile;test->test" exclude("org.mockito", "mockito-all"),
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
     libraryDependencies ++= {
       val scalaV = CrossVersion.partialVersion(scalaVersion.value)
       kafkaStreamsDependencies(crossVersionKafka(scalaV, versions.kafka24, versions.kafka25))
     },
-    excludeDependencies in Test ++= kafkaStreamsExclusionRules,
+    Test / excludeDependencies ++= kafkaStreamsExclusionRules,
     excludeDependencies ++= kafkaStreamsExclusionRules,
-    excludeFilter in unmanagedResources := "BUILD",
-    publishArtifact in Test := true
+    unmanagedResources / excludeFilter := "BUILD",
+    Test / publishArtifact := true
   ).dependsOn(
     injectCore % "test->test;compile->compile",
     injectSlf4j % "test->test;compile->compile",
@@ -1341,8 +1341,8 @@ lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))
 lazy val site = (project in file("doc"))
   .enablePlugins(SphinxPlugin)
   .settings(baseSettings ++ buildSettings ++ Seq(
-    scalacOptions in doc ++= Seq("-doc-title", "Finatra", "-doc-version", version.value),
-    includeFilter in Sphinx := ("*.html" | "*.png" | "*.svg" | "*.js" | "*.css" | "*.gif" | "*.txt")
+    doc / scalacOptions ++= Seq("-doc-title", "Finatra", "-doc-version", version.value),
+    Sphinx / includeFilter := ("*.html" | "*.png" | "*.svg" | "*.js" | "*.css" | "*.gif" | "*.txt")
   ))
 
 // START EXAMPLES
@@ -1355,7 +1355,7 @@ lazy val benchmark = (project in file("examples/benchmark"))
   .settings(
     name := "benchmark-server",
     moduleName := "benchmark-server",
-    mainClass in Compile := Some("com.twitter.finatra.http.benchmark.FinatraBenchmarkServerMain"),
+    Compile / mainClass := Some("com.twitter.finatra.http.benchmark.FinatraBenchmarkServerMain"),
     libraryDependencies ++= Seq(
       "org.slf4j" % "slf4j-nop" % versions.slf4j
     )
@@ -1482,7 +1482,7 @@ lazy val thriftIdl = (project in file("examples/thrift/idl"))
     name := "thrift-server-idl",
     moduleName := "thrift-example-idl",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
-    scroogeThriftIncludeFolders in Compile := Seq(file("examples/thrift/idl/src/main/thrift"))
+    Compile / scroogeThriftIncludeFolders := Seq(file("examples/thrift/idl/src/main/thrift"))
   ).dependsOn(
     thrift
   )
@@ -1573,7 +1573,7 @@ lazy val exampleWebDashboard = (project in file("examples/advanced/web-dashboard
   .settings(
     name := "web-dashboard",
     moduleName := "web-dashboard",
-    unmanagedResourceDirectories in Compile += baseDirectory.value / "src" / "main" / "webapp",
+    Compile / unmanagedResourceDirectories += baseDirectory.value / "src" / "main" / "webapp",
     libraryDependencies ++= Seq(
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
