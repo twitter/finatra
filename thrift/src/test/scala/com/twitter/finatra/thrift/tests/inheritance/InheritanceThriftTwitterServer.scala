@@ -9,7 +9,6 @@ import com.twitter.scrooge.{HeaderMap, Request, Response}
 import com.twitter.serviceA.thriftscala.ServiceA.Echo
 import com.twitter.serviceB.thriftscala.ServiceB
 import com.twitter.serviceB.thriftscala.ServiceB.Ping
-import com.twitter.util.logging.Logger
 import com.twitter.util.{Await, Future}
 
 case class InheritanceService(
@@ -37,8 +36,6 @@ class InheritanceThriftTwitterServer(clientRequestHeaderKey: String)
     with Ports {
   private[this] val thriftPortFlag = flag("thrift.port", ":9999", "External Thrift server port")
   private[this] var thriftServer: ListeningServer = NullServer
-
-  private[this] val logger = Logger(getClass.getName)
 
   private def logRequestHeaders(
     headerMap: HeaderMap,

@@ -15,7 +15,6 @@ import com.twitter.finatra.thrift.tests.ReqRepServicePerEndpointTest._
 import com.twitter.inject.server.{PortUtils, Ports}
 import com.twitter.io.Buf
 import com.twitter.scrooge.{HeaderMap, Request, Response}
-import com.twitter.util.logging.Logger
 import com.twitter.util.{Await, Future}
 
 class DoEverythingThriftTwitterServer(clientRequestHeaderKey: String)
@@ -23,8 +22,6 @@ class DoEverythingThriftTwitterServer(clientRequestHeaderKey: String)
     with Ports {
   private[this] val thriftPortFlag = flag("thrift.port", ":9999", "External Thrift server port")
   private[this] var thriftServer: ListeningServer = NullServer
-
-  private[this] val logger = Logger(getClass.getName)
 
   private def logRequestHeaders(
     headerMap: HeaderMap,

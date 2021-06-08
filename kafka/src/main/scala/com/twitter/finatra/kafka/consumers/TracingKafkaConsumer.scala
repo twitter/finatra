@@ -23,10 +23,7 @@ object TracingKafkaConsumer {
    * @return an instance of [[TracingKafkaConsumer]].
    */
   @deprecated(
-    """There is no way to propagate the TraceId back to the caller without changing the API, so we
-      |recommend the users interested in tracing manually wrap the results of the `poll` method with
-      |TracingKafkaConsumer.trace(records) { ... } and use the callback to do further processing
-      |which can be traced.""".stripMargin,
+    "There is no way to propagate the TraceId back to the caller without changing the API, so we recommend the users interested in tracing manually wrap the results of the `poll` method with TracingKafkaConsumer.trace(records) { ... } and use the callback to do further processing which can be traced.",
     "2021-05-06"
   )
   def apply[K, V](
@@ -54,10 +51,7 @@ object TracingKafkaConsumer {
  * @tparam V type of value.
  */
 @deprecated(
-  """There is no way to propagate the TraceId back to the caller without changing the API we
-    |recommend the users interested in tracing manually wrap the `poll` method with
-    |TracingKafkaConsumer.trace(records) { ... } and use the callback to do further processing which
-    |can be traced.""".stripMargin,
+  "There is no way to propagate the TraceId back to the caller without changing the API we recommend the users interested in tracing manually wrap the `poll` method with TracingKafkaConsumer.trace(records) { ... } and use the callback to do further processing which can be traced.",
   "2021-05-06"
 )
 class TracingKafkaConsumer[K, V](

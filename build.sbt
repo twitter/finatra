@@ -10,8 +10,8 @@ val releaseVersion = "21.6.0-SNAPSHOT"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
-  scalaVersion := "2.12.12",
-  crossScalaVersions := Seq("2.12.12", "2.13.1"),
+  scalaVersion := "2.13.6",
+  crossScalaVersions := Seq("2.12.12", "2.13.6"),
   scalaModuleInfo := scalaModuleInfo.value.map(_.withOverrideScalaVersion(true)),
   Test / fork := true, // We have to fork to get the JavaOptions
   Test / javaOptions ++= travisTestJavaOptions,
