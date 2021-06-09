@@ -7,6 +7,12 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+
+* inject-utils: Remove deprecated `c.t.inject.utils.AnnotationUtils`. Users should instead prefer
+  `c.t.util.reflect.Annotations` from util/util-reflect. ``PHAB_ID=D684662``
+
 21.5.0
 ------
 
