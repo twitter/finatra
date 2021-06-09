@@ -152,12 +152,7 @@ lazy val baseSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   scalaCompilerOptions,
-  Compile / compile / javacOptions ++= Seq(
-    "-source",
-    "1.8",
-    "-target",
-    "1.8",
-    "-Xlint:unchecked"),
+  Compile / compile / javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint:unchecked"),
   doc / javacOptions ++= Seq("-source", "1.8"),
   javaOptions ++= Seq(
     "-Djava.net.preferIPv4Stack=true",
@@ -252,6 +247,7 @@ lazy val baseServerSettings = baseSettings ++ buildSettings ++ publishSettings +
 
 lazy val exampleServerSettings = baseServerSettings ++ Seq(
   run / fork := true,
+  coverageEnabled := false,
   Test / javaOptions ++= Seq(
     // we are unable to guarantee that Logback will not get picked up b/c of coursier caching
     // so we set the Logback System properties in addition to the slf4j-simple and the
@@ -644,7 +640,7 @@ lazy val injectThrift = (project in file("inject/inject-thrift"))
   .settings(
     name := "inject-thrift",
     moduleName := "inject-thrift",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*;.*ThriftCommonLogFormatter.*;.*ThriftFilter.*",
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % versions.libThrift exclude ("commons-logging", "commons-logging"),
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
@@ -784,6 +780,7 @@ lazy val validation = project
   .settings(
     name := "finatra-validation",
     moduleName := "finatra-validation",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*ValidationResult.*;.*InvalidCaseClassException.*",
     libraryDependencies ++= Seq(
       "joda-time" % "joda-time" % versions.jodaTime,
       "com.twitter" %% "util-core" % versions.twLibVersion,
@@ -1316,7 +1313,7 @@ lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))
       "it.unimi.dsi" % "fastutil" % versions.fastutil,
       "jakarta.ws.rs" % "jakarta.ws.rs-api" % "2.1.3",
       "org.agrona" % "agrona" % versions.agrona,
-      "org.rocksdb" % "rocksdbjni" % versions.rocksdbjni % "provided;compile->compile;test->test" exclude("org.mockito", "mockito-all"),
+      "org.rocksdb" % "rocksdbjni" % versions.rocksdbjni % "provided;compile->compile;test->test" exclude ("org.mockito", "mockito-all"),
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
     libraryDependencies ++= {
