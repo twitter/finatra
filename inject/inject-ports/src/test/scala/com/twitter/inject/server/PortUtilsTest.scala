@@ -8,41 +8,40 @@ import java.net.InetSocketAddress
 
 class PortUtilsTest extends Test {
 
+  private[this] val server: ListeningServer = new ListeningServer {
+    override def boundAddress = new InetSocketAddress(9999)
+    override protected def closeServer(deadline: Time): Future[Unit] = Future.Done
+    override def result(timeout: Duration)(implicit permit: CanAwait) = ???
+    override def isReady(implicit permit: CanAwait) = ???
+    override def ready(timeout: Duration)(implicit permit: CanAwait) = ???
+  }
+
+  override protected def afterAll(): Unit = {
+    server.close()
+    super.afterAll()
+  }
+
+  test("PortUtils#ephemeralLoopback") {
+    PortUtils.ephemeralLoopback.isEmpty should be(false)
+  }
+
   test("PortUtils#getPort for ListeningServer") {
-    val server = new ListeningServer {
+    PortUtils.getPort(server) should be(9999)
+  }
 
-      /**
-       * The address to which this server is bound.
-       */
-      override def boundAddress = new InetSocketAddress(9999)
+  test("PortUtils#getSocketAddress for ListeningServer") {
+    PortUtils.getSocketAddress(server) should equal(new InetSocketAddress(9999))
+  }
 
-      override protected def closeServer(deadline: Time): Future[Unit] = Future.Done
+  test("PortUtils#getPort for SocketAddress") {
+    PortUtils.getPort(new InetSocketAddress(9999)) should be(9999)
+  }
 
-      /**
-       * Support for `Await.result`. The use of the implicit permit is an
-       * access control mechanism: only `Await.result` may call this
-       * method.
-       */
-      override def result(timeout: Duration)(implicit permit: CanAwait) = ???
+  test("PortUtils#loopbackAddressForPort") {
+    PortUtils.loopbackAddressForPort(9999) should be(s"${PortUtils.loopbackAddress}:9999")
+  }
 
-      /**
-       * Is this Awaitable ready? In other words: would calling
-       * [[com.twitter.util.Awaitable.ready Awaitable.ready]] block?
-       */
-      override def isReady(implicit permit: CanAwait) = ???
-
-      /**
-       * Support for `Await.ready`. The use of the implicit permit is an
-       * access control mechanism: only `Await.ready` may call this
-       * method.
-       */
-      override def ready(timeout: Duration)(implicit permit: CanAwait) = ???
-    }
-
-    try {
-      PortUtils.getPort(server) should be(9999)
-    } finally {
-      server.close()
-    }
+  test("PortUtils#parseAddr for ListeningServer") {
+    PortUtils.parseAddr(":9999") should equal(new InetSocketAddress(9999))
   }
 }

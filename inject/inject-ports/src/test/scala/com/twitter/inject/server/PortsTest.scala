@@ -4,24 +4,27 @@ import com.twitter.inject.Test
 
 class PortsTest extends Test {
 
-  lazy val server: Ports =
+  private[this] val server: Ports =
     new Ports {
-      override def httpExternalPort = Some(9999)
-      override def httpsExternalPort = Some(4443)
-      override def thriftPort = Some(9991)
+      override def httpExternalPort: Some[Int] = Some(9999)
+      override def httpsExternalPort: Some[Int] = Some(4443)
+      override def thriftPort: Some[Int] = Some(9991)
     }
 
   override protected def afterAll(): Unit = {
-    try {
-      super.afterAll()
-    } finally {
-      server.close()
-    }
+    server.close()
+    super.afterAll()
   }
 
-  test("Ports#resolve") {
+  test("Ports#resolve httpExternalPort") {
     server.httpExternalPort shouldBe Some(9999)
+  }
+
+  test("Ports#resolve httpsExternalPort") {
     server.httpsExternalPort shouldBe Some(4443)
+  }
+
+  test("Ports#resolve thriftPort") {
     server.thriftPort shouldBe Some(9991)
   }
 }
