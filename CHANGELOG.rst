@@ -10,6 +10,10 @@ Unreleased
 Changed
 ~~~~~~~
 
+* inject-utils: Remove deprecated `c.t.inject.utils.StringUtils`. Users should prefer to use
+  the corresponding methods in `com.twitter.conversions.StringOps` from util/util-core, instead.
+  ``PHAB_ID=D684659``
+
 * inject-utils: Remove deprecated `c.t.inject.utils.AnnotationUtils`. Users should instead prefer
   `c.t.util.reflect.Annotations` from util/util-reflect. ``PHAB_ID=D684662``
 

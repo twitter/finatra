@@ -415,7 +415,8 @@ lazy val injectStack = (project in file("inject/inject-stack"))
     moduleName := "inject-stack",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
-    )
+    ),
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*StackTransformer.*"
   )
 
 lazy val injectLogback = (project in file("inject/inject-logback"))
