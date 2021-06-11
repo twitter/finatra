@@ -2,11 +2,10 @@ package com.twitter.finatra.jackson.streaming
 
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.JsonNode
-import com.twitter.finatra.jackson.ScalaObjectMapper
-import com.twitter.finatra.json.JsonDiff
 import com.twitter.inject.Test
-import com.twitter.io.Buf
 import com.twitter.inject.conversions.buf._
+import com.twitter.io.Buf
+import com.twitter.util.jackson.{JsonDiff, ScalaObjectMapper}
 import org.scalacheck.{Gen, Shrink}
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
@@ -143,7 +142,7 @@ class AsyncJsonParserTest extends Test with ScalaCheckDrivenPropertyChecks {
     val mapper = ScalaObjectMapper()
     val nodes = result.map(mapper.parse[JsonNode])
     nodes.size should be(1)
-    JsonDiff.jsonDiff(nodes.head, jsonObj)
+    JsonDiff.assertDiff(jsonObj, nodes.head)
   }
 
   test("decode json split up over multiple chunks") {
@@ -234,7 +233,7 @@ class AsyncJsonParserTest extends Test with ScalaCheckDrivenPropertyChecks {
       val bufs: Seq[Buf] = parser.feedAndParse(buf)
       bufs.map(mapper.parse[JsonNode])
     }
-    JsonDiff.jsonDiff(nodes, jsonObj)
+    JsonDiff.assertDiff(jsonObj, nodes)
   }
 
   private def assertParsing(
@@ -265,6 +264,6 @@ class AsyncJsonParserTest extends Test with ScalaCheckDrivenPropertyChecks {
     val result: Seq[Buf] = parser.feedAndParse(Buf.Utf8("[" + jsonObj + "]"))
     val nodes: Seq[JsonNode] = result.map(mapper.parse[JsonNode])
     nodes.size should be(size)
-    if (size > 0) JsonDiff.jsonDiff(nodes.head, jsonObj)
+    if (size > 0) JsonDiff.assertDiff(jsonObj, nodes.head)
   }
 }

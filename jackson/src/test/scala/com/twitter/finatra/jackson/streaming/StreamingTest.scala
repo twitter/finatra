@@ -2,10 +2,10 @@ package com.twitter.finatra.jackson.streaming
 
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Method, Request}
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.{CaseClassWithSeqBooleans, FooClass}
 import com.twitter.inject.Test
 import com.twitter.io.{Buf, Reader}
+import com.twitter.util.jackson.ScalaObjectMapper
 import com.twitter.util.{Await, Future}
 import scala.collection.mutable.ArrayBuffer
 

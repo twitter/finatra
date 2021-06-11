@@ -1,8 +1,8 @@
 package com.twitter.finatra.jackson.streaming
 
 import com.twitter.concurrent.AsyncStream
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.io.{Buf, Reader}
+import com.twitter.util.jackson.ScalaObjectMapper
 import javax.inject.{Inject, Singleton}
 
 @Singleton

@@ -5,12 +5,12 @@ import com.twitter.finagle.http.{Fields, MediaType, Message, Request, Response}
 import com.twitter.finatra.http.annotations.{Header, QueryParam}
 import com.twitter.finatra.http.marshalling.modules.MessageBodyManagerModule
 import com.twitter.finatra.http.{Prod, TestMessageBodyWriterAnn}
-import com.twitter.finatra.jackson.ScalaObjectMapper
-import com.twitter.finatra.jackson.caseclass.exceptions.InjectableValuesException
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.{Injector, Test}
+import com.twitter.util.jackson.ScalaObjectMapper
+import com.twitter.util.jackson.caseclass.exceptions.InjectableValuesException
 import com.twitter.util.mock.Mockito
 import javax.inject.Inject
 
@@ -69,7 +69,11 @@ class MessageBodyManagerTest extends Test with Mockito {
 
   private val message: Message = mock[Message]
   private val injector: Injector =
-    TestInjector(FileResolverModule, ScalaObjectMapperModule, MessageBodyManagerModule).create
+    TestInjector(
+      FileResolverModule,
+      ScalaObjectMapperModule,
+      MessageBodyManagerModule
+    ).create()
 
   private val defaultMessageBodyReader: DefaultMessageBodyReader =
     injector.instance[DefaultMessageBodyReader]

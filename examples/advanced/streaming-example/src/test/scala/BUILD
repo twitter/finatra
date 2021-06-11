@@ -13,6 +13,5 @@ junit_tests(
         "finatra/http-server/src/test/scala/com/twitter/finatra/http",
         "finatra/inject/inject-server/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-server/src/test/scala/com/twitter/inject/server",
-        "finatra/jackson/src/main/scala",
     ],
 )

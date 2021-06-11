@@ -3,10 +3,10 @@ package com.twitter.finatra.http.tests.routing
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.routing.{HttpRouter, HttpWarmup, RoutesByType, Services}
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.inject.Test
-import com.twitter.util.{Future, Throw}
+import com.twitter.util.jackson.ScalaObjectMapper
 import com.twitter.util.mock.Mockito
+import com.twitter.util.{Future, Throw}
 import java.util.concurrent.atomic.AtomicInteger
 
 class HttpWarmupTest extends Test with Mockito {

@@ -19,8 +19,8 @@ scala_library(
         "finatra/inject/inject-modules/src/main/scala/com/twitter/inject/modules",
         "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
-        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
         "util/util-core:scala",
+        "util/util-jackson/src/main/scala/com/twitter/util/jackson",
         "util/util-slf4j-api/src/main/scala",
     ],
     exports = [
@@ -28,5 +28,7 @@ scala_library(
         "3rdparty/jvm/net/codingwell:scala-guice",
         "finatra/http-core/src/main/scala/com/twitter/finatra/http/request",
         "finatra/inject/inject-modules/src/main/scala/com/twitter/inject/modules",
+        "util/util-core:scala",
+        "util/util-jackson/src/main/scala/com/twitter/util/jackson",
     ],
 )

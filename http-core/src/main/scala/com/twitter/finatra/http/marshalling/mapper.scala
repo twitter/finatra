@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.marshalling
 
 import com.twitter.finagle.http.Message
-import com.twitter.finatra.jackson.ScalaObjectMapper
+import com.twitter.util.jackson.ScalaObjectMapper
 
 object mapper {
 

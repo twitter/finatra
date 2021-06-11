@@ -9,8 +9,8 @@ import com.twitter.finatra.http.marshalling.{
   MessageBodyReader,
   WriterResponse
 }
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.utils.FileResolver
+import com.twitter.util.jackson.ScalaObjectMapper
 
 /** A helper to create a [[com.twitter.finatra.http.response.ResponseBuilder]] with default behavior */
 object DefaultResponseBuilder {

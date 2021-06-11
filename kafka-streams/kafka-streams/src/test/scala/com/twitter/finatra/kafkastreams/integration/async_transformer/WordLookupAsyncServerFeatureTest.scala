@@ -1,11 +1,11 @@
 package com.twitter.finatra.kafkastreams.integration.async_transformer
 
 import com.twitter.conversions.DurationOps._
-import com.twitter.finatra.json.JsonDiff
 import com.twitter.finatra.kafka.serde.ScalaSerdes
 import com.twitter.finatra.kafkastreams.test.KafkaStreamsFeatureTest
 import com.twitter.inject.server.EmbeddedTwitterServer
 import com.twitter.util.Try
+import com.twitter.util.jackson.JsonDiff
 import java.lang.{Long => JLong}
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.header.Header
@@ -140,7 +140,7 @@ class WordLookupAsyncServerFeatureTestBase extends KafkaStreamsFeatureTest {
 
     val outputKeyValues: Map[String, JLong] =
       outputRecords.map(record => (record.key(), record.value())).toMap
-    JsonDiff.jsonDiff(outputKeyValues, expectedKeyValueMap)
+    JsonDiff.assertDiff(expectedKeyValueMap, outputKeyValues)
 
     expectedHeaders.forall { expectedHeader =>
       outputRecords.forall { record =>

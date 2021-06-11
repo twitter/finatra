@@ -1,12 +1,12 @@
 package com.twitter.finatra.http.modules
 
 import com.google.inject.{Module, Provides}
+import com.twitter.finatra.http.marshalling.modules.MessageBodyManagerModule
 import com.twitter.finatra.http.marshalling.{
   DefaultMessageBodyReader,
   DefaultMessageBodyWriter,
   MessageBodyManager
 }
-import com.twitter.finatra.http.marshalling.modules.MessageBodyManagerModule
 import com.twitter.inject.{Injector, TwitterModule}
 import javax.inject.Singleton
 
@@ -17,8 +17,7 @@ object MessageBodyModule extends MessageBodyModule {
 
 /**
  * A [[TwitterModule]] that provides default implementations for [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]],
- * and [[com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter]] and assigns a default binding for
- * [[com.twitter.finatra.jackson.caseclass.InjectableTypes]].
+ * and [[com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter]].
  *
  * Extend this module to override the defaults of the bound [[com.twitter.finatra.http.marshalling.MessageBodyManager]].
  *
@@ -40,8 +39,8 @@ object MessageBodyModule extends MessageBodyModule {
 class MessageBodyModule extends TwitterModule {
 
   /**
-   * The [[com.twitter.finatra.http.marshalling.modules.MessageBodyManagerModule]] provides the default reader
-   * and writer implementations along with a default binding for [[com.twitter.finatra.jackson.caseclass.InjectableTypes]].
+   * The [[com.twitter.finatra.http.marshalling.modules.MessageBodyManagerModule]] provides the
+   * default reader and writer implementations.
    */
   override val frameworkModules: Seq[Module] = Seq(MessageBodyManagerModule)
 

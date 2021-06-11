@@ -13,12 +13,12 @@ import com.twitter.concurrent.AsyncStream;
 import com.twitter.finagle.http.Method;
 import com.twitter.finagle.http.Request;
 import com.twitter.finagle.http.Version;
-import com.twitter.finatra.jackson.ScalaObjectMapper;
 import com.twitter.finatra.jackson.streaming.JsonStreamParser;
 import com.twitter.io.Buf;
 import com.twitter.io.Bufs;
 import com.twitter.io.Reader;
 import com.twitter.util.Await;
+import com.twitter.util.jackson.ScalaObjectMapper;
 
 public class StreamingRequestJavaTest extends Assert {
 

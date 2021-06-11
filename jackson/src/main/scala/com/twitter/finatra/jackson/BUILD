@@ -15,11 +15,12 @@ scala_library(
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/jakarta/validation:jakarta.validation-api",
         "3rdparty/jvm/net/codingwell:scala-guice",
-        "finatra/jackson/src/main/scala/com/fasterxml/jackson/databind",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions",
-        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/serde",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/modules",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/streaming",
         "finatra/validation/src/main/scala/com/twitter/finatra/validation",
+        "util/util-jackson/src/main/scala/com/twitter/util/jackson",
         "util/util-validator/src/main/scala/com/twitter/util/validation",
     ],
     exports = [
@@ -29,6 +30,8 @@ scala_library(
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/jakarta/validation:jakarta.validation-api",
         "3rdparty/jvm/net/codingwell:scala-guice",
+        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/modules",
         "finatra/validation/src/main/scala/com/twitter/finatra/validation",
+        "util/util-jackson/src/main/scala/com/twitter/util/jackson",
     ],
 )

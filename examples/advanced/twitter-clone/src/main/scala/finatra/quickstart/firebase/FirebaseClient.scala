@@ -2,8 +2,8 @@ package finatra.quickstart.firebase
 
 import com.twitter.finatra.http.response.ResponseUtils
 import com.twitter.finatra.httpclient.{HttpClient, RequestBuilder}
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.inject.Logging
+import com.twitter.util.jackson.ScalaObjectMapper
 import com.twitter.util.{Future, Return, Throw}
 import javax.inject.{Inject, Singleton}
 

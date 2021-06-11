@@ -3,8 +3,8 @@ package com.twitter.finatra.http.marshalling
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.inject.Injector
 import com.twitter.finagle.http.{MediaType, Message}
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.http.annotations.JsonIgnoreBody
+import com.twitter.util.jackson.ScalaObjectMapper
 
 private object DefaultMessageBodyReaderImpl {
   private val EmptyObjectNode = new ObjectNode(null)

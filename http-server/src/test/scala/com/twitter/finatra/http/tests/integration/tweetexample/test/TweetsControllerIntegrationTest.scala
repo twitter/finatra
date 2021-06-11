@@ -380,7 +380,7 @@ class TweetsControllerIntegrationTest extends FeatureTest {
   }
 
   test("get hello in parallel") {
-    pending // disabling until pool shutdown added
+    pending
     await {
       Future.collect {
         for (_ <- 1 to 500) yield {

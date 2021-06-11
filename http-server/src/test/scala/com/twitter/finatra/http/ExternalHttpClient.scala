@@ -1,8 +1,8 @@
 package com.twitter.finatra.http
 
 import com.twitter.conversions.DurationOps._
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports, info}
+import com.twitter.util.jackson.ScalaObjectMapper
 import com.twitter.util.{Await, Closable, Promise}
 import net.codingwell.scalaguice.typeLiteral
 import scala.collection.JavaConverters._

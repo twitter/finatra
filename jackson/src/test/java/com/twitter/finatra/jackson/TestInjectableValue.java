@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.twitter.finatra.json.annotations.InjectableValue;
+import com.twitter.util.jackson.annotation.InjectableValue;
 
 /**
  * FOR TESTING ONLY

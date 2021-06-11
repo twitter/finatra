@@ -28,6 +28,7 @@ java_library(
         "finatra/inject/inject-server/src/main/scala",
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",
+        "util/util-jackson/src/main/scala/com/twitter/util/jackson",
     ],
 )
 

@@ -2,7 +2,7 @@ package com.twitter.finatra.http.tests.integration.darktraffic.main
 
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
-import com.twitter.finatra.jackson.ScalaObjectMapper
+import com.twitter.util.jackson.ScalaObjectMapper
 import javax.inject.Inject
 
 case class Foo(name: String)

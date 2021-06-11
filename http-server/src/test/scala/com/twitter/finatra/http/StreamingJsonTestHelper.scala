@@ -2,16 +2,16 @@ package com.twitter.finatra.http
 
 import com.fasterxml.jackson.databind.ObjectWriter
 import com.twitter.finagle.http.Request
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.inject.utils.FutureUtils
 import com.twitter.io.Buf
+import com.twitter.util.jackson.ScalaObjectMapper
 import com.twitter.util.{Duration, Future}
 
 /**
  * Helper class to "stream" JSON to a [[com.twitter.finagle.http.Request]]. Uses the given mapper
  * or the passed optional com.fasterxml.jackson.databind.ObjectWriter for writing JSON values.
  *
- * @param mapper - default [[com.twitter.finatra.jackson.ScalaObjectMapper]] to use for writing values.
+ * @param mapper - default [[com.twitter.util.jackson.ScalaObjectMapper]] to use for writing values.
  * @param writer - optional com.fasterxml.jackson.databind.ObjectWriter to use instead of the given mapper.
  */
 class StreamingJsonTestHelper(mapper: ScalaObjectMapper, writer: Option[ObjectWriter] = None) {

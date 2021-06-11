@@ -20,9 +20,8 @@ scala_library(
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
-        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
-        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/streaming",
         "util/util-core:util-core-util",
         "util/util-core/src/main/scala/com/twitter/concurrent",
+        "util/util-jackson/src/main/scala/com/twitter/util/jackson",
     ],
 )

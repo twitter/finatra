@@ -34,7 +34,7 @@ import com.twitter.finagle.http.Message
  * }}}
  *
  * The framework default [[com.twitter.finatra.http.marshalling.MessageBodyReader]] will attempt to
- * convert the incoming request body using the server's configured [[com.twitter.finatra.jackson.ScalaObjectMapper]]
+ * convert the incoming request body using the server's configured [[com.twitter.util.jackson.ScalaObjectMapper]]
  * and is the basis for the framework's [[https://twitter.github.io/finatra/user-guide/json/routing.html#requests JSON Integration with Routing]].
  *
  * The [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]] trait differs from the

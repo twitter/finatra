@@ -10,6 +10,35 @@ Unreleased
 Changed
 ~~~~~~~
 
+* finatra (BREAKING API CHANGE): Update to use the new util/util-jackson `ScalaObjectMapper` for
+  case class object mapping. We've removed the custom Finatra `c.t.finatra.jackson.ScalaObjectMapper`
+  and instead now use the `c.t.util.jackson.ScalaObjectMapper`. Since the `c.t.util.jackson.ScalaObjectMapper`
+  does not support `Joda-Time <https://www.joda.org/joda-time/>`__, backwards compatibility is
+  maintained through usage of the Finatra `ScalaObjectMapperModule` for obtaining a configured
+  `ScalaObjectMapper` which will be created with Joda-Time support, though support for Joda-Time in
+  Finatra is deprecated and users should expect for Joda-Time support to be removed in an upcoming release.
+  Users should prefer to use the JDK 8 `java.time` classes or `java.util.Date`.
+
+  The finatra/inject `c.t.inject.domain.WrappedValue` has been removed and users should update to the
+  util/util-core `c.t.util.WrappedValue` instead.
+
+  The finatra/jackson JsonDiff utility is also removed. Users should switch to the improved version
+  in util/util-jackson: `c.t.util.jackson.JsonDiff`.
+
+  With the move to the util/util-jackson `ScalaObjectMapper` we're also able to clean up some awkward
+  directory structures in Finatra which were necessary because of dependencies. Specifically, the
+  `finatra/json-annotations` library no longer exists, as `@InjectableValue` is now an annotation in
+  `util/util-jackson-annotations`, and the remaining binding annotations `@CamelCaseMapper` and `@SnakeCaseMapper`
+  have been moved into `finatra/jackson`.
+
+  Using the util/util-jackson `ScalaObjectMapper` also brings `Java 8 date/time <https://www.oracle.com/technical-resources/articles/java/jf14-date-time.html>`__
+  (JSR310) support via inclusion of the Jackson `JavaTimeModule <https://github.com/FasterXML/jackson-modules-java8/tree/master/datetime>`__
+  by default.
+
+  Lastly, we've also added the `YamlScalaObjectMapperModule` which can be used in place of the
+  `ScalaObjectMapperModule` in order to provide a `YAMLFactory` configured `ScalaObjectMapper`.
+  ``PHAB_ID=D664955``
+
 * inject-utils: Remove deprecated `c.t.inject.utils.StringUtils`. Users should prefer to use
   the corresponding methods in `com.twitter.conversions.StringOps` from util/util-core, instead.
   ``PHAB_ID=D684659``
@@ -30,7 +59,7 @@ Fixed
   into a `null` field instance value, they could define a custom deserializer to do so and annotate
   the case class field with `@JsonDeserialize(using = classOf[CustomNullableDeserializer])`.
 
-  Additionally, we fix a bug in how String case class fields are handled when the incoming JSON is
+  Additionally, we've fix a bug in how String case class fields are handled when the incoming JSON is
   not a String-type. The current code incorrectly returns an empty string when the field value is
   parsed into Jackson ContainerNode or ObjectNode types and an incorrect `toString` representation
   for a PojoNode type. We now correctly represent the field value as a string in these cases to

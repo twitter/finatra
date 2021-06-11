@@ -1,11 +1,11 @@
 package com.twitter.finatra.kafka.test
 
-import com.twitter.finatra.json.JsonDiff
+import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.kafka.interceptors.PublishTimeProducerInterceptor
 import com.twitter.finatra.kafka.test.utils.{PollUtils, ThreadUtils}
 import com.twitter.inject.Logging
-import com.twitter.conversions.DurationOps._
-import com.twitter.util.{Time, Duration, TimeoutException}
+import com.twitter.util.jackson.JsonDiff
+import com.twitter.util.{Duration, Time, TimeoutException}
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.{Collections, Properties}
 import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecord, KafkaConsumer}
@@ -13,10 +13,10 @@ import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig, Produce
 import org.apache.kafka.common.header.Header
 import org.apache.kafka.common.serialization.{ByteArrayDeserializer, ByteArraySerializer, Serde}
 import org.apache.kafka.streams.integration.utils.EmbeddedKafkaCluster
+import org.scalatest.matchers.should.Matchers
 import org.slf4j.event.Level
 import scala.collection.JavaConverters._
 import scala.util.control.NonFatal
-import org.scalatest.matchers.should.Matchers
 
 /**
  * Used to read/write from Kafka topics created on local brokers during testing.
@@ -297,7 +297,7 @@ case class KafkaTopic[K, V](
   def consumeExpectedMap(expected: Map[K, V], timeout: Duration = defaultConsumeTimeout): Unit = {
     val receivedMap = consumeMessages(expected.size, timeout).toMap
     if (receivedMap != expected) {
-      JsonDiff.jsonDiff(receivedMap, expected)
+      JsonDiff.assertDiff(expected, receivedMap)
     }
   }
 

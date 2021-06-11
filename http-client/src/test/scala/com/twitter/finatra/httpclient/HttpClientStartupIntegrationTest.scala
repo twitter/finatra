@@ -4,11 +4,11 @@ import com.google.inject.Provides
 import com.twitter.finagle.Http
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.httpclient.modules.HttpClientModuleTrait
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.{Injector, Test}
+import com.twitter.util.jackson.ScalaObjectMapper
 
 class HttpClientStartupIntegrationTest extends Test {
 

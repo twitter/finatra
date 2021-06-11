@@ -36,23 +36,18 @@ You could create and use the following case classes:
 
 .. code:: scala
 
+    import jakarta.validation.constraints.{NotEmpty, Past}
+    import java.util.Date
+
     case class GroupRequest(
       @NotEmpty name: String,
       description: Option[String],
       tweetIds: Set[Long],
       dates: Dates) {
 
-      @MethodValidation
-      def validateName = {
-        ValidationResult.validate(
-          name.startsWith("grp-"),
-          "name must start with 'grp-'")
-      }
-    }
-
     case class Dates(
-      @PastTime start: DateTime,
-      @PastTime end: DateTime)
+      @Past start: Date,
+      @Past end: Date)
 
 
 This case class could then used as the input to a Controller route callback:

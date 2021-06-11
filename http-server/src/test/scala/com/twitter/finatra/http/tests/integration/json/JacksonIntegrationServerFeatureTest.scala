@@ -8,9 +8,9 @@ import com.twitter.finagle.http.Status.{BadRequest, Ok}
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 import com.twitter.inject.server.FeatureTest
+import com.twitter.util.jackson.ScalaObjectMapper
 import scala.collection.JavaConverters._
 
 class JacksonIntegrationServerFeatureTest extends FeatureTest {

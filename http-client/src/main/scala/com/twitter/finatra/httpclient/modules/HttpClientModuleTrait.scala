@@ -5,10 +5,10 @@ import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.httpclient.HttpClient
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.inject.Injector
 import com.twitter.inject.modules.StackClientModuleTrait
 import com.twitter.util.Try
+import com.twitter.util.jackson.ScalaObjectMapper
 
 /**
  * Extending this trait allows for configuring an

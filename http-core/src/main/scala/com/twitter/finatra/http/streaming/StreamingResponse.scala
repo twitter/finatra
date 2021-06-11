@@ -1,9 +1,9 @@
 package com.twitter.finatra.http.streaming
 
 import com.twitter.finagle.http.{Response, Status, Version}
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.Future
+import com.twitter.util.jackson.ScalaObjectMapper
 import java.util.concurrent.atomic.AtomicBoolean
 import scala.language.higherKinds
 

@@ -1,10 +1,10 @@
 package com.twitter.finatra.http.marshalling
 
 import com.twitter.finagle.http.MediaType
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.utils.{AutoClosable, FileResolver}
 import com.twitter.inject.annotations.Flag
 import com.twitter.io.{Buf, StreamIO}
+import com.twitter.util.jackson.ScalaObjectMapper
 import java.io.{BufferedInputStream, File, FileInputStream, InputStream}
 import scala.runtime.BoxedUnit
 

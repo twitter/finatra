@@ -1,6 +1,5 @@
 package com.twitter.finatra.kafkastreams.transformer.stores
 
-import com.twitter.finatra.json.JsonDiff
 import com.twitter.finatra.kafkastreams.test.KafkaTestUtil
 import com.twitter.finatra.kafkastreams.transformer.domain.{Expire, Time, TimerMetadata}
 import com.twitter.finatra.kafkastreams.transformer.stores.internal.{
@@ -10,14 +9,15 @@ import com.twitter.finatra.kafkastreams.transformer.stores.internal.{
 import com.twitter.finatra.kafkastreams.transformer.watermarks.Watermark
 import com.twitter.finatra.streams.transformer.internal.domain.TimerSerde
 import com.twitter.inject.Test
+import com.twitter.util.jackson.JsonDiff
 import org.apache.kafka.common.metrics.Metrics
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.utils.LogContext
 import org.apache.kafka.streams.processor.internals.MockStreamsMetrics
+import org.apache.kafka.streams.state.internals.{RocksDBStoreFactory, ThreadCache}
 import org.apache.kafka.test.{InternalMockProcessorContext, TestUtils}
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ArrayBuffer
-import org.apache.kafka.streams.state.internals.{RocksDBStoreFactory, ThreadCache}
 
 class PersistentTimerValueStoreTest extends Test {
 
@@ -165,7 +165,7 @@ class PersistentTimerValueStoreTest extends Test {
 
   private def assertAndClearOnTimerCallbacks(expectedTimerCalls: OnTimerCall*): Unit = {
     if (onTimerCalls != expectedTimerCalls) {
-      JsonDiff.jsonDiff(onTimerCalls, expectedTimerCalls)
+      JsonDiff.assertDiff(expectedTimerCalls, onTimerCalls)
     }
     onTimerCalls.clear()
   }

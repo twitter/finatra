@@ -27,10 +27,10 @@ import com.twitter.finatra.http.tests.integration.doeverything.main.services.{
   MultiService
 }
 import com.twitter.finatra.httpclient.{HttpClient, RequestBuilder}
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.json.annotations.CamelCaseMapper
 import com.twitter.inject.annotations.Flag
 import com.twitter.util.Future
+import com.twitter.util.jackson.ScalaObjectMapper
 import jakarta.validation.ValidationException
 import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets

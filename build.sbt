@@ -102,7 +102,6 @@ lazy val versions = new {
   val kafka25 = "2.5.0"
   val libThrift = "0.10.0"
   val logback = "1.2.3"
-  val mockitoScala = "1.14.8"
   val mustache = "0.8.18"
   val nscalaTime = "2.22.0"
   val rocksdbjni = "5.14.2"
@@ -291,7 +290,6 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   injectThriftClientHttpMapper,
   injectUtils,
   jackson,
-  jsonAnnotations,
   kafka,
   kafkaStreams,
   kafkaStreamsPrerestore,
@@ -817,10 +815,6 @@ lazy val validation = project
     utils % "test->test;compile->compile"
   )
 
-lazy val jacksonTestJarSources =
-  Seq(
-    "com/twitter/finatra/json/JsonDiff"
-  )
 lazy val jackson = project
   .settings(projectSettings)
   .settings(
@@ -828,53 +822,28 @@ lazy val jackson = project
     moduleName := "finatra-jackson",
     ScoverageKeys.coverageExcludedPackages := ".*DurationMillisSerializer.*;.*ByteBufferUtils.*",
     libraryDependencies ++= Seq(
+      "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
+      "com.fasterxml.jackson.module" % "jackson-module-guice" % versions.jackson,
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson,
       "com.google.inject" % "guice" % versions.guice,
+      "javax.inject" % "javax.inject" % "1",
       "org.json4s" %% "json4s-core" % versions.json4s,
       "com.twitter" %% "finagle-http" % versions.twLibVersion % "test",
       "com.twitter" %% "util-core" % versions.twLibVersion,
+      "com.twitter" %% "util-jackson" % versions.twLibVersion,
       "com.twitter" %% "util-reflect" % versions.twLibVersion,
       "com.twitter" %% "util-validator" % versions.twLibVersion,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
-    ),
-    // special-case to only scaladoc what's necessary as some of the tests cannot generate scaladocs
-    Test / doc / sources := {
-      val previous: Seq[File] = (Test / doc / sources).value
-      previous.filter(file => jacksonTestJarSources.foldLeft(false)(_ || file.getPath.contains(_)))
-    },
-    Test / publishArtifact := true,
-    (Test / packageBin / mappings) := {
-      val previous = (Test / packageBin / mappings).value
-      previous.filter(mappingContainsAnyPath(_, jacksonTestJarSources))
-    },
-    (Test / packageDoc / mappings) := {
-      val previous = (Test / packageDoc / mappings).value
-      previous.filter(mappingContainsAnyPath(_, jacksonTestJarSources))
-    },
-    (Test / packageSrc / mappings) := {
-      val previous = (Test / packageSrc / mappings).value
-      previous.filter(mappingContainsAnyPath(_, jacksonTestJarSources))
-    }
+    )
   ).dependsOn(
     injectApp % "test->test",
     injectCore,
     injectSlf4j,
     injectUtils,
-    jsonAnnotations,
     validation % "test->test;compile->compile",
     utils
-  )
-
-lazy val jsonAnnotations = (project in file("json-annotations"))
-  .settings(projectSettings)
-  .settings(
-    name := "finatra-json-annotations",
-    moduleName := "finatra-json-annotations",
-    libraryDependencies ++= Seq(
-      "com.google.inject" % "guice" % versions.guice
-    )
   )
 
 lazy val mustache = project
@@ -902,8 +871,12 @@ lazy val httpCore = (project in file("http-core"))
     name := "finatra-http-core",
     moduleName := "finatra-http-core",
     libraryDependencies ++= Seq(
+      "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
+      "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "com.twitter" %% "util-reflect" % versions.twLibVersion,
+      "com.twitter" %% "util-jackson-annotations" % versions.twLibVersion,
+      "com.twitter" %% "util-jackson" % versions.twLibVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "javax.servlet" % "servlet-api" % versions.servletApi % "provided;compile->compile;test->test"
@@ -937,6 +910,7 @@ lazy val httpServer = (project in file("http-server"))
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % versions.libThrift intransitive (),
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
+      "com.twitter" %% "util-core" % versions.twLibVersion % Test,
       "com.twitter" %% "util-reflect" % versions.twLibVersion,
       "javax.servlet" % "servlet-api" % versions.servletApi % "provided;compile->compile;test->test",
       "com.novocode" % "junit-interface" % "0.11" % Test,
@@ -978,9 +952,10 @@ lazy val httpAnnotations = (project in file("http-annotations"))
   .settings(projectSettings)
   .settings(
     name := "finatra-http-annotations",
-    moduleName := "finatra-http-annotations"
-  ).dependsOn(
-    jsonAnnotations
+    moduleName := "finatra-http-annotations",
+    libraryDependencies ++= Seq(
+      "com.twitter" %% "util-jackson-annotations" % versions.twLibVersion
+    )
   )
 
 lazy val httpMustache = (project in file("http-mustache"))
@@ -1311,6 +1286,7 @@ lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))
     },
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-jvm" % versions.twLibVersion,
+      "com.twitter" %% "util-jackson" % versions.twLibVersion % Test,
       "it.unimi.dsi" % "fastutil" % versions.fastutil,
       "jakarta.ws.rs" % "jakarta.ws.rs-api" % "2.1.3",
       "org.agrona" % "agrona" % versions.agrona,
@@ -1445,6 +1421,7 @@ lazy val javaHttpServer = (project in file("examples/http/java"))
     moduleName := "java-http-server",
     libraryDependencies ++= Seq(
       "com.novocode" % "junit-interface" % "0.11" % Test,
+      "com.twitter" %% "util-jackson" % versions.twLibVersion,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
@@ -1552,6 +1529,8 @@ lazy val twitterClone = (project in file("examples/advanced/twitter-clone"))
     moduleName := "twitter-clone",
     ScoverageKeys.coverageExcludedPackages := "<empty>;finatra\\.quickstart\\..*",
     libraryDependencies ++= Seq(
+      "com.twitter" %% "util-core" % versions.twLibVersion,
+      "com.twitter" %% "util-jackson" % versions.twLibVersion,
       "com.twitter" %% "util-mock" % versions.twLibVersion % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )

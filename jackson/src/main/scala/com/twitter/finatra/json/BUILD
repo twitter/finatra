@@ -8,13 +8,11 @@ scala_library(
     ),
     strict_deps = True,
     dependencies = [
-        "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
-        "3rdparty/jvm/com/google/inject:guice",
+        "3rdparty/jvm/javax/inject:javax.inject",
         "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
-        "finatra/jackson/src/main/scala/com/fasterxml/jackson/databind",
-        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
+        "util/util-jackson/src/main/scala/com/twitter/util/jackson",
     ],
     exports = [
-        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
+        "util/util-jackson/src/main/scala/com/twitter/util/jackson",
     ],
 )

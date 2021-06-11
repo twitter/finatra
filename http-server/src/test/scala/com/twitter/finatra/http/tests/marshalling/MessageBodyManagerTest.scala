@@ -7,12 +7,12 @@ import com.twitter.finatra.http.marshalling._
 import com.twitter.finatra.http.modules.MessageBodyModule
 import com.twitter.finatra.http.tests.integration.json.CaseClassWithBoolean
 import com.twitter.finatra.http.{Prod, TestMessageBodyWriterAnn}
-import com.twitter.finatra.jackson.ScalaObjectMapper
-import com.twitter.finatra.jackson.caseclass.exceptions.InjectableValuesException
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.{Injector, Test}
+import com.twitter.util.jackson.ScalaObjectMapper
+import com.twitter.util.jackson.caseclass.exceptions.InjectableValuesException
 import com.twitter.util.mock.Mockito
 import javax.inject.Inject
 

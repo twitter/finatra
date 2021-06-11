@@ -22,7 +22,7 @@ package com.twitter.finatra.http.marshalling
  * }}}
  *
  * The framework default will attempt to convert the outgoing type `T` to a JSON response using the
- * server's configured [[com.twitter.finatra.jackson.ScalaObjectMapper]].
+ * server's configured [[com.twitter.util.jackson.ScalaObjectMapper]].
  *
  * The [[com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter]] trait differs from the
  * [[com.twitter.finatra.http.marshalling.MessageBodyWriter]] trait in that the

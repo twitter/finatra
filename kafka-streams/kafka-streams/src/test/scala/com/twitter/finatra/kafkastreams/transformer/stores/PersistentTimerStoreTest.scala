@@ -1,15 +1,15 @@
 package com.twitter.finatra.kafkastreams.transformer.stores
 
-import com.twitter.finatra.json.JsonDiff
+import com.twitter.finatra.kafkastreams.test.KafkaTestUtil
 import com.twitter.finatra.kafkastreams.transformer.domain.{Expire, Time, TimerMetadata}
 import com.twitter.finatra.kafkastreams.transformer.stores.internal.{
   FinatraKeyValueStoreImpl,
   Timer
 }
-import com.twitter.finatra.kafkastreams.test.KafkaTestUtil
 import com.twitter.finatra.kafkastreams.transformer.watermarks.Watermark
 import com.twitter.finatra.streams.transformer.internal.domain.TimerSerde
 import com.twitter.inject.Test
+import com.twitter.util.jackson.JsonDiff
 import org.apache.kafka.common.metrics.Metrics
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.utils.LogContext
@@ -27,7 +27,7 @@ class PersistentTimerStoreTest extends Test {
     TestUtils.tempDirectory,
     Serdes.String,
     Serdes.String,
-    KafkaTestUtil.createNoopRecord,
+    KafkaTestUtil.createNoopRecord(),
     new ThreadCache(new LogContext("testCache"), 0, new MockStreamsMetrics(new Metrics()))
   )
 
@@ -57,7 +57,7 @@ class PersistentTimerStoreTest extends Test {
 
   override def afterEach(): Unit = {
     assertEmptyOnTimerCalls()
-    assert(keyValueStore.all.asScala.isEmpty)
+    assert(keyValueStore.all().asScala.isEmpty)
     keyValueStore.close()
   }
 
@@ -160,7 +160,7 @@ class PersistentTimerStoreTest extends Test {
 
   private def assertAndClearOnTimerCallbacks(expectedTimerCalls: OnTimerCall*): Unit = {
     if (onTimerCalls != expectedTimerCalls) {
-      JsonDiff.jsonDiff(onTimerCalls, expectedTimerCalls)
+      JsonDiff.assertDiff(expectedTimerCalls, onTimerCalls)
     }
     onTimerCalls.clear()
   }

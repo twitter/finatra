@@ -15,11 +15,12 @@ scala_library(
         "finatra/http-core/src/main/scala/com/twitter/finatra/http/exceptions",
         "finatra/http-core/src/main/scala/com/twitter/finatra/http/response",
         "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
-        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions",
+        "util/util-jackson/src/main/scala/com/twitter/util/jackson/caseclass/exceptions",
     ],
     exports = [
         "3rdparty/jvm/jakarta/validation:jakarta.validation-api",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions",
+        "util/util-jackson/src/main/scala/com/twitter/util/jackson/caseclass/exceptions",
     ],
 )

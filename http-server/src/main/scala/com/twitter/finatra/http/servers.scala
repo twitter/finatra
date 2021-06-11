@@ -512,27 +512,25 @@ trait HttpServer extends HttpServerTrait {
   /**
    * Default [[com.twitter.inject.TwitterModule]] for providing implementations,
    * [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]],
-   * [[com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter]] and a default
-   * binding for [[com.twitter.finatra.jackson.caseclass.InjectableTypes]].
+   * [[com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter]].
    *
    * @return a [[com.twitter.inject.TwitterModule]] which provides implementations for
    *         [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]],
-   *         [[com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter]], and
-   *         [[com.twitter.finatra.jackson.caseclass.InjectableTypes]].
+   *         [[com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter]].
    */
   protected def messageBodyModule: Module = MessageBodyModule
 
   /**
-   * Default [[com.twitter.inject.TwitterModule]] for providing a [[com.twitter.finatra.jackson.ScalaObjectMapper]].
+   * Default [[com.twitter.inject.TwitterModule]] for providing a [[com.twitter.util.jackson.ScalaObjectMapper]].
    *
-   * @return a [[com.twitter.inject.TwitterModule]] which provides a [[com.twitter.finatra.jackson.ScalaObjectMapper]] implementation.
+   * @return a [[com.twitter.inject.TwitterModule]] which provides a [[com.twitter.util.jackson.ScalaObjectMapper]] implementation.
    */
   protected def jacksonModule: Module = ScalaObjectMapperModule
 
   /**
-   * Default [[com.twitter.inject.TwitterModule]] for providing a [[com.twitter.finatra.validation.Validator]].
+   * Default [[com.twitter.inject.TwitterModule]] for providing a [[com.twitter.util.validation.ScalaValidator]].
    *
-   * @return a [[com.twitter.inject.TwitterModule]] which provides a [[com.twitter.finatra.validation.Validator]] implementation.
+   * @return a [[com.twitter.inject.TwitterModule]] which provides a [[com.twitter.util.validation.ScalaValidator]] implementation.
    *
    * @note This can be overriden to provide a different Validator. The new Validator will replace
    *       the default Validator in [[jacksonModule]], and be used to apply the validation logic in

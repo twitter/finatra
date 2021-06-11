@@ -29,6 +29,7 @@ scala_library(
         "3rdparty/jvm/joda-time",
         "3rdparty/jvm/junit",
         "3rdparty/jvm/org/scalatest",
+        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "util/util-core:scala",
     ],
 )

@@ -6,11 +6,11 @@ import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finatra.httpclient.modules.HttpClientModuleTrait
 import com.twitter.finatra.httpclient.test.InMemoryHttpService
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
-import com.twitter.inject.{Injector, IntegrationTest}
 import com.twitter.inject.app.TestInjector
+import com.twitter.inject.{Injector, IntegrationTest}
 import com.twitter.util.Await
+import com.twitter.util.jackson.ScalaObjectMapper
 import javax.inject.Singleton
 
 class HttpClientIntegrationTest extends IntegrationTest {

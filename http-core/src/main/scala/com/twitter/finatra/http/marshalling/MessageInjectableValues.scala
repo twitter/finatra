@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.marshalling
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.fasterxml.jackson.core.{JsonParser, JsonToken, ObjectCodec}
+import com.fasterxml.jackson.core.{JsonParser, JsonToken}
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember
@@ -17,24 +17,25 @@ import com.fasterxml.jackson.databind.{
 import com.google.inject.Injector
 import com.twitter.finagle.http.{Message, Request, Response}
 import com.twitter.finatra.http.annotations.{FormParam, Header, QueryParam, RouteParam}
-import com.twitter.finatra.jackson.ScalaObjectMapper
-import com.twitter.finatra.jackson.caseclass.exceptions.{
-  CaseClassFieldMappingException,
-  InjectableValuesException
-}
-import com.twitter.finatra.jackson.caseclass.{
-  DefaultInjectableValues,
+import com.twitter.finatra.jackson.caseclass.exceptions.InjectableValuesException
+import com.twitter.finatra.jackson.caseclass.{Annotations, GuiceInjectableValues}
+import com.twitter.inject.Logging
+import com.twitter.util.jackson.ScalaObjectMapper
+import com.twitter.util.jackson.annotation.InjectableValue
+import com.twitter.util.jackson.caseclass.exceptions.CaseClassFieldMappingException
+import com.twitter.util.jackson.caseclass.{
   Types,
   isNotAssignableFrom,
   newBeanProperty,
   resolveSubType
 }
-import com.twitter.finatra.json.annotations.InjectableValue
-import com.twitter.util.reflect.Annotations
+import com.twitter.util.reflect.{Annotations => ReflectAnnotations}
 import java.lang.annotation.Annotation
 import scala.collection.JavaConverters._
 
 private object MessageInjectableValues {
+  val MessageInjectableTypes: Seq[Class[_]] = Seq(classOf[Request], classOf[Response])
+
   val SeqWithSingleEmptyString: Seq[String] = Seq("")
 
   val requestParamsAnnotations: Seq[Class[_ <: Annotation]] =
@@ -57,7 +58,8 @@ private[http] class MessageInjectableValues(
   injector: Injector,
   objectMapper: ScalaObjectMapper,
   message: Message)
-    extends DefaultInjectableValues(injector) {
+    extends GuiceInjectableValues(injector)
+    with Logging {
   import MessageInjectableValues._
 
   /**
@@ -65,23 +67,23 @@ private[http] class MessageInjectableValues(
    *
    * @note this class uses nulls extensively as it is an integration with the Jackson
    *       java library.
-   *
    * @param valueId Key for looking up the value
-   * @param context DeserializationContext
-   * @param forProperty BeanProperty
+   * @param ctxt DeserializationContext
+   * @param forProperty CaseClassBeanProperty
    * @param beanInstance Bean instance
+   *
    * @return the injected value
    */
-  override final def findInjectableValue(
-    valueId: Object,
-    context: DeserializationContext,
+  override def findInjectableValue(
+    valueId: Any,
+    ctxt: DeserializationContext,
     forProperty: BeanProperty,
-    beanInstance: Object
-  ): Object = message match {
+    beanInstance: Any
+  ): AnyRef = message match {
     case request: Request if injector != null =>
       handle(
         valueId,
-        context,
+        ctxt,
         forProperty,
         beanInstance,
         fieldNameForAnnotation(forProperty),
@@ -90,7 +92,7 @@ private[http] class MessageInjectableValues(
     case response: Response if injector != null =>
       handle(
         valueId,
-        context,
+        ctxt,
         forProperty,
         beanInstance,
         fieldNameForAnnotation(forProperty),
@@ -102,17 +104,17 @@ private[http] class MessageInjectableValues(
 
   /** Handle [[Request]] types */
   private[this] def handle(
-    valueId: Object,
+    valueId: Any,
     context: DeserializationContext,
     forProperty: BeanProperty,
-    beanInstance: Object,
+    beanInstance: Any,
     fieldName: String,
     request: Request
-  ): Object = {
+  ): AnyRef = {
     try {
       if (isRequest(forProperty)) {
         request
-      } else if (hasAnnotation(forProperty, requestParamsAnnotations)) {
+      } else if (Annotations.hasAnnotation(forProperty, requestParamsAnnotations)) {
         if (forProperty.getType.isCollectionLikeType) {
           request.params.getAll(fieldName) match {
             case propertyValue: Seq[String]
@@ -120,19 +122,19 @@ private[http] class MessageInjectableValues(
               val separatedValues = handleCommaSeparatedLists(forProperty, fieldName, propertyValue)
               val value = handleEmptySeq(forProperty, separatedValues)
               val modifiedParamsValue = handleExtendedBooleans(forProperty, value)
-              convert(valueId, context, forProperty, modifiedParamsValue)
+              convert(context, forProperty, modifiedParamsValue)
             case _ => null
           }
         } else {
           request.params.get(fieldName) match {
             case Some(value) =>
               val modifiedParamsValue = handleExtendedBooleans(forProperty, value)
-              convert(valueId, context, forProperty, modifiedParamsValue)
+              convert(context, forProperty, modifiedParamsValue)
             case _ => null
           }
         }
       } else if (forProperty.getContextAnnotation(classOf[Header]) != null) {
-        getHeader(valueId, context, forProperty, fieldName, request)
+        getHeader(context, forProperty, fieldName, request)
       } else {
         // handle if the field is annotated with an injection annotation
         super.findInjectableValue(valueId, context, forProperty, beanInstance)
@@ -150,25 +152,25 @@ private[http] class MessageInjectableValues(
 
   /** Handle [[Response]] types */
   private[this] def handle(
-    valueId: Object,
+    valueId: Any,
     context: DeserializationContext,
     forProperty: BeanProperty,
-    beanInstance: Object,
+    beanInstance: Any,
     fieldName: String,
     response: Response
-  ): Object = {
+  ): AnyRef = {
     try {
       if (isResponse(forProperty)) {
         response
       } else if (forProperty.getContextAnnotation(classOf[Header]) != null) {
-        getHeader(valueId, context, forProperty, fieldName, response)
-      } else if (hasAnnotation(forProperty, requestParamsAnnotations)) {
+        getHeader(context, forProperty, fieldName, response)
+      } else if (Annotations.hasAnnotation(forProperty, requestParamsAnnotations)) {
         // request annotations are not supported for parsing a response
         val message =
           s"Unable to inject field '$fieldName'. ${classOf[Request].getSimpleName}-specific " +
             s"annotations: [${requestParamsAnnotations.map(a => s"@${a.getSimpleName}").mkString(", ")}] " +
             s"are not supported with a ${classOf[Response].getName}."
-        throw new InjectableValuesException(message)
+        throw InjectableValuesException(message)
       } else {
         // handle if the field is annotated with an injection annotation
         super.findInjectableValue(valueId, context, forProperty, beanInstance)
@@ -186,21 +188,21 @@ private[http] class MessageInjectableValues(
 
   /** Retrieve a Header value */
   private[this] def getHeader(
-    valueId: Object,
     context: DeserializationContext,
     forProperty: BeanProperty,
     name: String,
     message: Message
   ): Object = {
     message.headerMap.get(name) match {
-      case Some(p) => convert(valueId, context, forProperty, p)
-      case None => null
+      case Some(p) =>
+        convert(context, forProperty, p)
+      case None =>
+        null
     }
   }
 
   /** Try to convert */
   private[this] def convert(
-    valueId: Object,
     context: DeserializationContext,
     forProperty: BeanProperty,
     propertyValue: Any
@@ -209,45 +211,38 @@ private[http] class MessageInjectableValues(
       if (propertyValue == "") {
         None
       } else {
-        Option(
-          convert(
-            valueId,
-            context,
-            forProperty,
-            forProperty.getType.containedType(0),
-            propertyValue))
+        Option(convert(context, forProperty, forProperty.getType.containedType(0), propertyValue))
       }
     } else if (forProperty.getType.hasRawClass(classOf[Boolean]) && propertyValue == "") {
       // for backwards compatibility: injected booleans with no value should
       // return null and not attempt conversion
       null
     } else {
-      convert(valueId, context, forProperty, forProperty.getType, propertyValue)
+      convert(context, forProperty, forProperty.getType, propertyValue)
     }
   }
 
   /** Convert based on a given [[JavaType]] */
   private[this] def convert(
-    valueId: Object,
     context: DeserializationContext,
     forProperty: BeanProperty,
     javaType: JavaType,
     propertyValue: Any
   ): Object = {
-    val withAnnotations = newBeanProperty(
-      valueId,
-      context,
-      javaType = javaType,
-      optionalJavaType = None,
-      annotatedParameter = null,
-      annotations = getAllAnnotations(context, forProperty.getMember, javaType),
-      name = forProperty.getName,
-      index = 0 // only one value
-    )
+    val withAnnotations: BeanProperty =
+      newBeanProperty(
+        context,
+        javaType = javaType,
+        optionalJavaType = None,
+        annotatedParameter = null,
+        annotations = getAllAnnotations(context, forProperty.getMember, javaType),
+        name = forProperty.getName,
+        index = 0 // only one value
+      ).property
     convertWithContext(context, withAnnotations, withAnnotations.getType, propertyValue)
   }
 
-  /** Try to convert with context */
+  /** Try to convert with ctxt */
   private[this] def convertWithContext(
     context: DeserializationContext,
     forProperty: BeanProperty,
@@ -294,18 +289,11 @@ private[http] class MessageInjectableValues(
           readPropertyValue(
             context,
             treeTraversingParser,
-            objectMapper.underlying,
             forProperty,
             propertyValue,
             Some(annotation.contentAs))
         case _ =>
-          readPropertyValue(
-            context,
-            treeTraversingParser,
-            objectMapper.underlying,
-            forProperty,
-            propertyValue,
-            None)
+          readPropertyValue(context, treeTraversingParser, forProperty, propertyValue, None)
       }
     } finally {
       treeTraversingParser.close()
@@ -316,7 +304,6 @@ private[http] class MessageInjectableValues(
   private[this] def readPropertyValue(
     context: DeserializationContext,
     jsonParser: JsonParser,
-    fieldCodec: ObjectCodec,
     forProperty: BeanProperty,
     propertyValue: Any,
     subTypeClazz: Option[Class[_]]
@@ -338,7 +325,7 @@ private[http] class MessageInjectableValues(
           // for polymorphic types we cannot contextualize
           context.readValue(jsonParser, resolvedType)
         case _ =>
-          // this will properly resolve Jackson Annotations on the BeanProperty handling contextualization
+          // this will properly resolve Jackson Annotations on the CaseClassBeanProperty handling contextualization
           context.readPropertyValue(jsonParser, forProperty, resolvedType)
       }
     }
@@ -372,7 +359,7 @@ private[http] class MessageInjectableValues(
   private[this] def fieldNameForAnnotation(forProperty: BeanProperty): String = {
     findAnnotation(forProperty, annotations) match {
       case Some(annotation) =>
-        Annotations.getValueIfAnnotatedWith[InjectableValue](annotation) match {
+        ReflectAnnotations.getValueIfAnnotatedWith[InjectableValue](annotation) match {
           case Some(value) if value != null && value.nonEmpty => value
           case _ => forProperty.getName
         }
@@ -430,10 +417,10 @@ private[http] class MessageInjectableValues(
     case _ => value
   }
 
-  // Note that the InjectableValue annotation information for the field is carried in
+  // Note that the @InjectableValue annotation information for the field is carried in
   // the beanProperty.getContextAnnotation field, not the beanProperty.getAnnotation
   // field, because the underlying AnnotatedMember does not carry non-Jackson annotations
-  // thus we pass all annotation information as context annotations.
+  // thus we pass all annotation information as ctxt annotations.
   // See: com.fasterxml.jackson.databind.introspect.AnnotationMap
   private[this] def findAnnotation(
     beanProperty: BeanProperty,
@@ -442,11 +429,6 @@ private[http] class MessageInjectableValues(
     annotations
       .find(beanProperty.getContextAnnotation(_) != null)
       .map(beanProperty.getContextAnnotation(_))
-
-  private[this] lazy val hasAnnotation: (BeanProperty, Seq[Class[_ <: Annotation]]) => Boolean = {
-    (beanProperty, annotations) =>
-      annotations.exists(beanProperty.getContextAnnotation(_) != null)
-  }
 
   private[this] lazy val isSeqOfBooleans: JavaType => Boolean = { forType =>
     forType.hasRawClass(classOf[Seq[_]]) && isBoolean(forType.containedType(0).getRawClass)

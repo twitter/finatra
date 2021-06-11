@@ -1,9 +1,9 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main
 
 import com.google.inject.{Module, Provides}
-import com.twitter.finagle.Filter
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.finagle.{Filter, Http}
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.jsonpatch.{JsonPatchExceptionMapper, JsonPatchMessageBodyReader}
 import com.twitter.finatra.http.routing.HttpRouter
@@ -25,8 +25,8 @@ import com.twitter.finatra.http.tests.integration.doeverything.main.modules.{
 import com.twitter.finatra.http.{Controller, HttpServer}
 import com.twitter.finatra.httpclient.HttpClient
 import com.twitter.finatra.httpclient.modules.HttpClientModuleTrait
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.inject.Injector
+import com.twitter.util.jackson.ScalaObjectMapper
 import javax.inject.Singleton
 
 object DoEverythingServerMain extends DoEverythingServer
@@ -56,6 +56,23 @@ class DoEverythingServer extends HttpServer {
     new DoEverythingModule,
     httpClientModuleTrait
   )
+
+  /**
+   * This method allows for further configuration of the http server for parameters not exposed by
+   * this trait or for overriding defaults provided herein, e.g.,
+   *
+   * override def configureHttpServer(server: Http.Server): Http.Server = {
+   * server
+   * .withMaxInitialLineSize(2048)
+   * }
+   *
+   * @param server - the [[com.twitter.finagle.Http.Server]] to configure.
+   *
+   * @return a configured Http.Server.
+   */
+  override protected def configureHttpServer(server: Http.Server): Http.Server = {
+    server
+  }
 
   override def configureHttp(router: HttpRouter): Unit = {
     router

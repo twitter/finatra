@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import scala.collection.immutable.Stream;
 
 import scala.collection.JavaConverters;
+import scala.collection.immutable.Stream;
 import scala.reflect.Manifest;
 import scala.reflect.ManifestFactory;
 import scala.runtime.BoxedUnit;
@@ -21,7 +21,6 @@ import com.twitter.finagle.http.Response;
 import com.twitter.finagle.stats.StatsReceiver;
 import com.twitter.finatra.http.marshalling.MessageBodyManager;
 import com.twitter.finatra.http.response.ResponseBuilder;
-import com.twitter.finatra.jackson.ScalaObjectMapper;
 import com.twitter.finatra.utils.FileResolver;
 import com.twitter.io.Buf;
 import com.twitter.io.BufReader;
@@ -32,6 +31,7 @@ import com.twitter.util.Await;
 import com.twitter.util.Duration;
 import com.twitter.util.Function;
 import com.twitter.util.Future;
+import com.twitter.util.jackson.ScalaObjectMapper;
 
 public class StreamingResponseJavaTest extends Assert {
 

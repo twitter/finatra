@@ -3,10 +3,10 @@ package com.twitter.finatra.http.streaming
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Method, Request, Version}
 import com.twitter.finatra.http.streaming.StreamingRequestTest.BarClass
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.streaming.JsonStreamParser
 import com.twitter.inject.Test
 import com.twitter.io.{Buf, Reader}
+import com.twitter.util.jackson.ScalaObjectMapper
 
 private object StreamingRequestTest {
   case class BarClass(v1: Int, v2: String)

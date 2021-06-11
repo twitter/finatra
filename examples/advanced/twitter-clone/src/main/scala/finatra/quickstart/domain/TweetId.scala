@@ -1,5 +1,5 @@
 package finatra.quickstart.domain
 
-import com.twitter.inject.domain.WrappedValue
+import com.twitter.util.WrappedValue
 
 case class TweetId(id: String) extends WrappedValue[String]

@@ -5,10 +5,10 @@ import com.twitter.finagle.http.{Fields, Request, Response, Status, Version}
 import com.twitter.finatra.http.marshalling.MessageBodyManager
 import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.finatra.http.streaming.{FromReader, StreamingRequest, StreamingResponse}
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.streaming.JsonStreamParser
 import com.twitter.inject.TypeUtils
 import com.twitter.io.{Buf, Reader}
+import com.twitter.util.jackson.ScalaObjectMapper
 import com.twitter.util.{Future, FuturePool, Promise}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext => ScalaExecutionContext, Future => ScalaFuture}

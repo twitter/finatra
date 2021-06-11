@@ -1,7 +1,7 @@
 package com.twitter.finatra.json
 
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.inject.Logging
+import com.twitter.util.jackson.ScalaObjectMapper
 import javax.inject.Inject
 
 object JsonLogging {

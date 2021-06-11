@@ -2,8 +2,8 @@ package com.twitter.finatra.http.tests.integration.json
 
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
-import com.twitter.finatra.jackson.ScalaObjectMapper
-import com.twitter.finatra.jackson.caseclass.exceptions.CaseClassMappingException
+import com.twitter.util.jackson.ScalaObjectMapper
+import com.twitter.util.jackson.caseclass.exceptions.CaseClassMappingException
 import com.twitter.util.validation.ScalaValidator
 import jakarta.validation.ValidationException
 import javax.inject.Inject

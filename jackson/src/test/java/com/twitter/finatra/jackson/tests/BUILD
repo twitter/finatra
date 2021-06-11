@@ -13,5 +13,6 @@ junit_tests(
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/modules",
+        "util/util-jackson/src/main/scala/com/twitter/util/jackson",
     ],
 )

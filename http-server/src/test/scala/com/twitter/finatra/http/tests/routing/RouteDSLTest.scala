@@ -85,7 +85,7 @@ class RouteDSLTest extends Test {
     response1.headerMap shouldEqual response2.headerMap
   }
 
-  test("PrefixedDSL should update the context prefix") {
+  test("PrefixedDSL should update the ctxt prefix") {
     val routeDSL = new PrefixedDSL("/v1")
 
     routeDSL.context.prefix shouldEqual "/v1"

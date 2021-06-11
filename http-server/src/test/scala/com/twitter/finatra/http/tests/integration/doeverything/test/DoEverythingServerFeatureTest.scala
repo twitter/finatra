@@ -13,9 +13,9 @@ import com.twitter.finatra.http.tests.integration.doeverything.main.domain.Somet
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.DoEverythingService
 import com.twitter.finatra.http.{EmbeddedHttpServer, RouteHint}
 import com.twitter.finatra.httpclient.{HttpClient, RequestBuilder}
-import com.twitter.finatra.json.JsonDiff._
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.{Buf, StreamIO}
+import com.twitter.util.jackson.JsonDiff
 import com.twitter.util.mock.Mockito
 import com.twitter.util.{Future, Time}
 import com.twitter.{logging => ctl}
@@ -233,7 +233,9 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
 
   test("json response to /example") {
     val response = server.httpGet("/example/routing/json/1", andExpect = Ok)
-    jsonDiff(response.contentString, """{"id":"1","name":"bob","magic":"1","module_magic":"2"}""")
+    JsonDiff.assertDiff(
+      expected = """{"id":"1","name":"bob","magic":"1","module_magic":"2"}""",
+      actual = response.contentString)
   }
 
   test("GET /stringMap") {

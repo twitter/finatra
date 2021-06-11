@@ -19,11 +19,11 @@ scala_library(
         "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",
         "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
-        "finatra/jackson/src/main/scala/com/twitter/finatra/jackson",
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",
         "util/util-core:util-core-util",
         "util/util-core/src/main/scala/com/twitter/concurrent",
         "util/util-core/src/main/scala/com/twitter/io",
+        "util/util-jackson/src/main/scala/com/twitter/util/jackson",
         "util/util-stats/src/main/scala/com/twitter/finagle/stats",
     ],
     exports = [

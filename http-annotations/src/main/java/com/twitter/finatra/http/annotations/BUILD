@@ -8,9 +8,9 @@ java_library(
     ),
     strict_deps = True,
     dependencies = [
-        "finatra/json-annotations/src/main/java/com/twitter/finatra/json/annotations",
+        "util/util-jackson-annotations/src/main/java/com/twitter/util/jackson/annotation",
     ],
     exports = [
-        "finatra/json-annotations/src/main/java/com/twitter/finatra/json/annotations",
+        "util/util-jackson-annotations/src/main/java/com/twitter/util/jackson/annotation",
     ],
 )

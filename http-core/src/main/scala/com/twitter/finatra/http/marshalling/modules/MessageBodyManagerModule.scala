@@ -1,20 +1,18 @@
 package com.twitter.finatra.http.marshalling.modules
 
 import com.google.inject.{Module, Provides}
-import com.twitter.inject.{Injector, TwitterModule}
-import com.twitter.inject.annotations.Flag
 import com.twitter.finatra.http.marshalling.{
   DefaultMessageBodyReader,
   DefaultMessageBodyReaderImpl,
   DefaultMessageBodyWriter,
   DefaultMessageBodyWriterImpl,
-  MessageBodyFlags,
-  MessageInjectableTypes
+  MessageBodyFlags
 }
-import com.twitter.finatra.jackson.ScalaObjectMapper
-import com.twitter.finatra.jackson.caseclass.InjectableTypes
 import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.finatra.utils.FileResolver
+import com.twitter.inject.annotations.Flag
+import com.twitter.inject.{Injector, TwitterModule}
+import com.twitter.util.jackson.ScalaObjectMapper
 import javax.inject.Singleton
 
 /**
@@ -26,11 +24,6 @@ object MessageBodyManagerModule extends TwitterModule {
   def get(): this.type = this
 
   override val modules: Seq[Module] = Seq(FileResolverModule, MessageBodyFlagsModule)
-
-  override def configure(): Unit = {
-    // override the default binding of `InjectableTypes` to the more specific `RequestInjectableTypes`
-    bindOption[InjectableTypes].setBinding.toInstance(MessageInjectableTypes)
-  }
 
   @Provides
   @Singleton

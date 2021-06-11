@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main.domain
 
-import com.twitter.inject.domain.WrappedValue
+import com.twitter.util.WrappedValue
 
 case class RequestWithSeqWrappedString(value: Seq[WrappedString])
 

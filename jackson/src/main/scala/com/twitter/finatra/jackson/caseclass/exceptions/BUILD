@@ -9,10 +9,10 @@ scala_library(
     strict_deps = True,
     dependencies = [
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
+        "3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-guice",
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/jakarta/validation:jakarta.validation-api",
-        "finatra/json-annotations/src/main/java/com/twitter/finatra/json/annotations",
-        "finatra/validation/src/main/scala/com/twitter/finatra/validation",
-        "util/util-validator/src/main/scala/com/twitter/util/validation",
+        "util/util-jackson-annotations/src/main/java/com/twitter/util/jackson/annotation",
+        "util/util-jackson/src/main/scala/com/twitter/util/jackson/caseclass/exceptions",
     ],
 )

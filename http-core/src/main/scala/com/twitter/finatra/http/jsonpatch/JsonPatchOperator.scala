@@ -3,15 +3,15 @@ package com.twitter.finatra.http.jsonpatch
 import com.fasterxml.jackson.core.JsonPointer
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.{ArrayNode, ObjectNode}
-import com.twitter.finatra.jackson.ScalaObjectMapper
-import scala.annotation.tailrec
+import com.twitter.util.jackson.ScalaObjectMapper
 import javax.inject.{Inject, Singleton}
+import scala.annotation.tailrec
 
 /**
  * A utility class for operating on a case class by converting it to a JsonNode.
  * Note: users can always implement their own JsonPatchOperator on demand
  *
- * @param mapper default [[com.twitter.finatra.jackson.ScalaObjectMapper]] to use for writing values.
+ * @param mapper default [[com.twitter.util.jackson.ScalaObjectMapper]] to use for writing values.
  */
 @Singleton
 class JsonPatchOperator @Inject() (mapper: ScalaObjectMapper) {

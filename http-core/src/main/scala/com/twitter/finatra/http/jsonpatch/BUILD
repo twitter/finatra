@@ -16,13 +16,13 @@ scala_library(
         "finatra/http-core/src/main/scala/com/twitter/finatra/http/exceptions",
         "finatra/http-core/src/main/scala/com/twitter/finatra/http/marshalling",
         "finatra/http-core/src/main/scala/com/twitter/finatra/http/response",
-        "finatra/jackson/src/main/scala",
+        "util/util-jackson/src/main/scala/com/twitter/util/jackson",
     ],
     exports = [
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-core",
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
         "finatra/http-core/src/main/java/com/twitter/finatra/http/jsonpatch",
         "finatra/http-core/src/main/scala/com/twitter/finatra/http/response",
-        "finatra/jackson/src/main/scala",
+        "util/util-jackson/src/main/scala/com/twitter/util/jackson",
     ],
 )

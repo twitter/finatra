@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.twitter.finatra.json.annotations.InjectableValue;
+import com.twitter.util.jackson.annotation.InjectableValue;
 
 /**
  * Marker {@link java.lang.annotation.Annotation} for denoting a Jackson "injectable value" which
@@ -13,7 +13,7 @@ import com.twitter.finatra.json.annotations.InjectableValue;
  * access to the Finatra "named parameter" of the path of an HTTP route callback defined in a
  * Controller.
  *
- * @see com.twitter.finatra.json.annotations.InjectableValue
+ * @see com.twitter.util.jackson.annotation.InjectableValue
  * @see <a href="https://twitter.github.io/finatra/user-guide/json/index.html#injectablevalues">Finatra User's Guide - JSON Injectable Values</a>
  * @see <a href="https://twitter.github.io/finatra/user-guide/http/controllers.html#named-parameters">Finatra User's Guide - Controller Named Parameters</a>
  * @see <a href="https://twitter.github.io/finatra/user-guide/http/requests.html#field-annotations">Finatra User's Guide - HTTP Request Field Annotations</a>

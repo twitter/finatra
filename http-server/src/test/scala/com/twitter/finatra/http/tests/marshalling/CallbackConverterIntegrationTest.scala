@@ -6,7 +6,6 @@ import com.twitter.finatra.http.internal.routing.{CallbackConverter, CallbackCon
 import com.twitter.finatra.http.modules.MessageBodyModule
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.http.streaming.{StreamingRequest, StreamingResponse}
-import com.twitter.finatra.jackson.ScalaObjectMapper
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.inject.app.TestInjector
@@ -15,6 +14,7 @@ import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.{Injector, IntegrationTest}
 import com.twitter.io.{Buf, BufReader, Reader}
 import com.twitter.util.Future
+import com.twitter.util.jackson.ScalaObjectMapper
 import com.twitter.util.mock.Mockito
 import scala.concurrent.{Future => ScalaFuture}
 

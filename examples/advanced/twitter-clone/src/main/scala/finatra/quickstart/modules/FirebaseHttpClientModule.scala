@@ -1,15 +1,15 @@
 package finatra.quickstart.modules
 
 import com.google.inject.{Provides, Singleton}
-import com.twitter.finatra.httpclient.HttpClient
-import com.twitter.finatra.httpclient.modules.HttpClientModuleTrait
-import com.twitter.finatra.http.response.ResponseUtils._
 import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.Http
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finatra.jackson.ScalaObjectMapper
+import com.twitter.finatra.http.response.ResponseUtils._
+import com.twitter.finatra.httpclient.HttpClient
+import com.twitter.finatra.httpclient.modules.HttpClientModuleTrait
 import com.twitter.inject.Injector
 import com.twitter.inject.utils.RetryPolicyUtils._
+import com.twitter.util.jackson.ScalaObjectMapper
 
 object FirebaseHttpClientModule extends HttpClientModuleTrait {
 
