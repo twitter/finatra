@@ -20,7 +20,7 @@ trait FinatraDslToCluster extends FlushingAwareServer {
     /**
      * Publishes events to a kafka topic on the specified cluster rather than the primary cluster.
      * This call is needed because KafkaStreams does not natively provide the ability
-     * to publish to a cluster different from the cluster from whith it is consuming.
+     * to publish to a cluster different from the cluster from which it is consuming.
      * Can only be used in at_least_once processing guarantee. Will not work with exactly_once.
      *
      * @param cluster               Cluster to which events are published (wily path or host:port)

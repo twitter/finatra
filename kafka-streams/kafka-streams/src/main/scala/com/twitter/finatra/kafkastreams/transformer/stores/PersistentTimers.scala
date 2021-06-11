@@ -70,7 +70,7 @@ trait PersistentTimers extends OnWatermark with OnInit {
    * a time, key, and value, a timer is stored in the store which triggered as the specified
    * time. The specified `onTimer` function is then called with the key and value.
    *
-   * @param timerStoreName The name of the timerstore, created seperately
+   * @param timerStoreName The name of the timerstore, created separately
    * @param onTimer A function that is called when the timer is triggered
    * @param punctuationType Must be STREAM_TIME, WALL_CLOCK_TIME is not supported
    * @param maxTimerFiresPerWatermark Maximum number of timers can can fire per watermark event

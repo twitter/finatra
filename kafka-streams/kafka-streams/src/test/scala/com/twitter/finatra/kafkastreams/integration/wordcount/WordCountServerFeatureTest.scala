@@ -100,7 +100,7 @@ class WordCountServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
       "kafka/consumer/wordcount_prod_CountsStore_changelog/time_since_record_published_ms"
     ) should be(None)
     serverAfterRestartStats.stats.get(
-      "kafka/consumer/wordcoun_prod_CountsStore_changelog/time_since_record_timestamp_ms"
+      "kafka/consumer/wordcount_prod_CountsStore_changelog/time_since_record_timestamp_ms"
     ) should be(None)
     serverAfterRestart.close()
     Await.result(serverAfterRestart.mainResult)

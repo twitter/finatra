@@ -76,8 +76,8 @@ trait KafkaProducerConfigMethods[Self] extends KafkaConfigMethods[Self] with Log
   def clientId(clientId: String): This =
     withConfig(ProducerConfig.CLIENT_ID_CONFIG, clientId)
 
-  def compressionType(compresionType: CompressionType): This =
-    withConfig(ProducerConfig.COMPRESSION_TYPE_CONFIG, compresionType.name)
+  def compressionType(compressionType: CompressionType): This =
+    withConfig(ProducerConfig.COMPRESSION_TYPE_CONFIG, compressionType.name)
 
   def connectionsMaxIdle(duration: Duration): This =
     withConfig(ProducerConfig.CONNECTIONS_MAX_IDLE_MS_CONFIG, duration)

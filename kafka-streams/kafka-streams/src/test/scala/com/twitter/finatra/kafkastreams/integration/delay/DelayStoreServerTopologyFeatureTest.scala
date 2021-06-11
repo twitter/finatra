@@ -79,7 +79,7 @@ class DelayStoreServerTopologyFeatureTest extends TopologyFeatureTest {
 
   }
 
-  test("Two published deuplicate events outside delay window gets published twice") {
+  test("Two published deduplicate events outside delay window gets published twice") {
     incomingTopic.pipeInput(3L, 3L)
     outgoingTopic.readAllOutput() shouldBe empty
 

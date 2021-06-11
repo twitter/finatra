@@ -87,9 +87,9 @@ trait FinatraDslWindowedAggregations
      * @param stateStore the name of the StateStore used to maintain the counts.
      * @param windowSize splits the stream of data into buckets of data of windowSize,
      *                   based on the timestamp of each message.
-     * @param allowedLateness allow messages that are upto this amount late to be added to the
+     * @param allowedLateness allow messages that are up to this amount late to be added to the
      *                        store, otherwise they are emitted as restatements.
-     * @param queryableAfterClose allow state to be queried upto this amount after the window is closed.
+     * @param queryableAfterClose allow state to be queried up to this amount after the window is closed.
      * @param keySerde Serde for the keys in the StateStore.
      * @param aggregateSerde Serde for the aggregation type
      * @param initializer Initializer function that computes an initial intermediate aggregation result
@@ -191,9 +191,9 @@ trait FinatraDslWindowedAggregations
      * @param stateStore the name of the StateStore used to maintain the counts.
      * @param windowSize splits the stream of data into buckets of data of windowSize,
      *                   based on the timestamp of each message.
-     * @param allowedLateness allow messages that are upto this amount late to be added to the
+     * @param allowedLateness allow messages that are up to this amount late to be added to the
      *                        store, otherwise they are emitted as restatements.
-     * @param queryableAfterClose allow state to be queried upto this amount after the window is closed.
+     * @param queryableAfterClose allow state to be queried up to this amount after the window is closed.
      * @param keySerde Serde for the keys in the StateStore.
      * @param emitOnClose Emit messages for each entry in the window when the window close. Emitted
      *                    entries will have a WindowResultType set to WindowClosed.
@@ -261,9 +261,9 @@ trait FinatraDslWindowedAggregations
      * @param stateStore the name of the StateStore used to maintain the counts.
      * @param windowSize splits the stream of data into buckets of data of windowSize,
      *                   based on the timestamp of each message.
-     * @param allowedLateness allow messages that are upto this amount late to be added to the
+     * @param allowedLateness allow messages that are up to this amount late to be added to the
      *                        store, otherwise they are emitted as restatements.
-     * @param queryableAfterClose allow state to be queried upto this amount after the window is closed.
+     * @param queryableAfterClose allow state to be queried up to this amount after the window is closed.
      * @param keySerde Serde for the keys in the StateStore.
      * @param emitOnClose Emit messages for each entry in the window when the window close. Emitted
      *                    entries will have a WindowResultType set to WindowClosed.

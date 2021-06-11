@@ -29,8 +29,8 @@ abstract class FinatraTransformerChangeLogConfigFeatureTest
   val sinkTopicName = "sink"
   val stateStoreName = "test-state-store"
   val timerStoreName = "test-timer-store"
-  val stateStoreChanglogTopicName = s"$appId-$stateStoreName-changelog"
-  val timerStoreChanglogTopicName = s"$appId-$timerStoreName-changelog"
+  val stateStoreChangelogTopicName = s"$appId-$stateStoreName-changelog"
+  val timerStoreChangelogTopicName = s"$appId-$timerStoreName-changelog"
   val startTime = new DateTime("1970-01-01T00:00:00.000Z")
   val expirationTimeMills: Long = 1.minutes.inMillis
 
@@ -95,15 +95,15 @@ abstract class FinatraTransformerChangeLogConfigFeatureTest
     Serdes.String
   )
 
-  val stateStoreChanglogTopic: TopologyTesterTopic[String, String] = topologyTester.topic(
-    stateStoreChanglogTopicName,
+  val stateStoreChangelogTopic: TopologyTesterTopic[String, String] = topologyTester.topic(
+    stateStoreChangelogTopicName,
     Serdes.String,
     Serdes.String
   )
 
-  val timerStoreChanglogTopic: TopologyTesterTopic[Timer[String], Array[Byte]] =
+  val timerStoreChangelogTopic: TopologyTesterTopic[Timer[String], Array[Byte]] =
     topologyTester.topic(
-      timerStoreChanglogTopicName,
+      timerStoreChangelogTopicName,
       TimerSerde(Serdes.String),
       Serdes.ByteArray()
     )
@@ -151,12 +151,12 @@ class WithLoggingEnabled extends FinatraTransformerChangeLogConfigFeatureTest {
       timestamp = startTime.getMillis)
 
     val sinkTopicOutput = sinkTopic.readAllOutput()
-    val stateStoreChanglogTopicOutput = stateStoreChanglogTopic.readAllOutput()
-    val timerStoreChanglogTopicOutput = timerStoreChanglogTopic.readAllOutput()
+    val stateStoreChangelogTopicOutput = stateStoreChangelogTopic.readAllOutput()
+    val timerStoreChangelogTopicOutput = timerStoreChangelogTopic.readAllOutput()
 
     sinkTopicOutput.length should be(1)
-    stateStoreChanglogTopicOutput.length should be(1)
-    timerStoreChanglogTopicOutput.length should be(1)
+    stateStoreChangelogTopicOutput.length should be(1)
+    timerStoreChangelogTopicOutput.length should be(1)
 
     stateStoreTestProbe().get(testKey) should be(testValue)
     val timerStoreEntities = timerStoreTestProbe().all().toSeqWithAutoClose
@@ -193,12 +193,12 @@ class WithLoggingDisabled extends FinatraTransformerChangeLogConfigFeatureTest {
       timestamp = startTime.getMillis)
 
     val sinkTopicOutput = sinkTopic.readAllOutput()
-    val stateStoreChanglogTopicOutput = stateStoreChanglogTopic.readAllOutput()
-    val timerStoreChanglogTopicOutput = timerStoreChanglogTopic.readAllOutput()
+    val stateStoreChangelogTopicOutput = stateStoreChangelogTopic.readAllOutput()
+    val timerStoreChangelogTopicOutput = timerStoreChangelogTopic.readAllOutput()
 
     sinkTopicOutput.length should be(1)
-    stateStoreChanglogTopicOutput.length should be(0)
-    timerStoreChanglogTopicOutput.length should be(0)
+    stateStoreChangelogTopicOutput.length should be(0)
+    timerStoreChangelogTopicOutput.length should be(0)
 
     stateStoreTestProbe().get(testKey) should be(testValue)
     val timerStoreEntities = timerStoreTestProbe().all().toSeqWithAutoClose

@@ -92,7 +92,7 @@ trait FinatraDslSampling
      * @param sampleName       the name of the sample
      * @param sampleKeySerde   the serde for the SampleKey
      * @param sampleValueSerde the serde for the SampleValue
-     * @tparam SampleValue the type of the SampleVaule
+     * @tparam SampleValue the type of the SampleValue
      *
      * @return a stream of SampleKey and SampleValue
      */
