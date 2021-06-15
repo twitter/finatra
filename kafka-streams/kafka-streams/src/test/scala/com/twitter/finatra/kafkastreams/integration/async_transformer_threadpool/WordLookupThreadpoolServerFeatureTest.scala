@@ -30,30 +30,32 @@ class WordLookupThreadpoolServerFeatureTestBase extends KafkaStreamsFeatureTest 
 
   private val wordsWithCountsTopic = kafkaTopic(Serdes.String, Serdes.Long, "WordToWordLength")
 
-  // This test was added to address the race condition where some of the callbacks in
-  // AsyncFlushing.addFuture only complete after onFlush completes when the AsyncTransformer is
-  // used with a threadpool.
-  test("all onFutureSuccess calls complete before onFlush completes") {
+  if (!sys.props.contains("SKIP_FLAKY_TRAVIS")) {
+    // This test was added to address the race condition where some of the callbacks in
+    // AsyncFlushing.addFuture only complete after onFlush completes when the AsyncTransformer is
+    // used with a threadpool.
+    test("all onFutureSuccess calls complete before onFlush completes") {
 
-    val word = "hello"
+      val word = "hello"
 
-    val words = List.fill(numberOfWords)(word)
-    val wordsToLengths = words.map(word => (word, word.length))
+      val words = List.fill(numberOfWords)(word)
+      val wordsToLengths = words.map(word => (word, word.length))
 
-    server.start()
+      server.start()
 
-    textLinesTopic.publish(1L -> words.mkString(" "))
-    wordsWithCountsTopic.consumeMessages(
-      numMessages = numberOfWords,
-      90.seconds) should contain theSameElementsAs wordsToLengths
-    assertOutputTopicEmpty()
+      textLinesTopic.publish(1L -> words.mkString(" "))
+      wordsWithCountsTopic.consumeMessages(
+        numMessages = numberOfWords,
+        90.seconds) should contain theSameElementsAs wordsToLengths
+      assertOutputTopicEmpty()
 
-    server.close()
+      server.close()
 
-    await(server.mainResult)
-    // Make sure assertion in onFlush did not throw an exception
-    server.injectableServer
-      .asInstanceOf[KafkaStreamsTwitterServer].uncaughtException shouldBe null
+      await(server.mainResult)
+      // Make sure assertion in onFlush did not throw an exception
+      server.injectableServer
+        .asInstanceOf[KafkaStreamsTwitterServer].uncaughtException shouldBe null
+    }
   }
 
   private def assertOutputTopicEmpty(): Unit = {
