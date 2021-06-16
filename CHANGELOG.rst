@@ -10,6 +10,8 @@ Unreleased
 Changed
 ~~~~~~~
 
+* thrift: Add `service_class` to Finatra library thrift registry entry. ``PHAB_ID=D687117``
+
 * finatra (BREAKING API CHANGE): Update to use the new util/util-jackson `ScalaObjectMapper` for
   case class object mapping. We've removed the custom Finatra `c.t.finatra.jackson.ScalaObjectMapper`
   and instead now use the `c.t.util.jackson.ScalaObjectMapper`. Since the `c.t.util.jackson.ScalaObjectMapper`

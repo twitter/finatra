@@ -10,7 +10,6 @@ import com.twitter.finatra.thrift.modules.{ExceptionManagerModule, ThriftRespons
 import com.twitter.finatra.thrift.response.ThriftResponseClassifier
 import com.twitter.finatra.thrift.routing.{JavaThriftRouter, ThriftRouter}
 import com.twitter.inject.annotations.Lifecycle
-import com.twitter.inject.internal.LibraryRegistry
 import com.twitter.inject.modules.StackTransformerModule
 import com.twitter.inject.server.{AbstractTwitterServer, PortUtils, TwitterServer}
 import com.twitter.util.{Await, Duration}
@@ -317,8 +316,14 @@ abstract class AbstractThriftServer extends AbstractTwitterServer with ThriftSer
     server: ThriftMux.Server
   ): ListeningServer = {
     val router = injector.instance[JavaThriftRouter]
-    val service = registerService(configureService(router.createService(server.serverParam)))
-    server.serve(addr, service)
+    router.getServiceClazzStackParam match {
+      case Some(serviceClazz) =>
+        server
+          .withServiceClass(serviceClazz)
+          .serve(addr, configureService(router.createService(server.serverParam)))
+      case _ =>
+        server.serve(addr, configureService(router.createService(server.serverParam)))
+    }
   }
 
   /** Users are expected to use [[configureThrift(router: JavaThriftRouter)]] */
@@ -363,24 +368,5 @@ abstract class AbstractThriftServer extends AbstractTwitterServer with ThriftSer
    */
   override private[thrift] final def configureRouter(): Unit = {
     configureThrift(injector.instance[JavaThriftRouter])
-  }
-
-  /* Private */
-
-  /**
-   * The service may be filtered and thus we want to fully capture in the registry the
-   * resultant service.
-   *
-   * @note we register the service given here because it may not have been configured
-   *       by a router (which registers methods and applied filters).
-   */
-  private[this] final def registerService[Req, Rep](
-    service: Service[Req, Rep]
-  ): Service[Req, Rep] = {
-    injector
-      .instance[LibraryRegistry]
-      .withSection("thrift")
-      .put("service", service.toString)
-    service
   }
 }

@@ -309,6 +309,7 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
     val thrift = finatra("thrift").asInstanceOf[Map[String, Any]]
     thrift.contains("filters") should be(true)
     thrift.contains("methods") should be(true)
+    thrift.contains("service_class") should be(true)
 
     val methods = thrift("methods").asInstanceOf[Map[String, Any]]
     methods.size should be > 0

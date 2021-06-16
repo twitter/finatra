@@ -27,11 +27,19 @@ private[routing] abstract class BaseThriftRouter[Router <: BaseThriftRouter[Rout
   exceptionManager: ExceptionManager)
     extends Logging { this: Router =>
 
-  def isConfigured: Boolean = configurationComplete
-
   // There is no guarantee that this is always accessed from the same thread
   @volatile
   private[this] var configurationComplete: Boolean = false
+
+  // There is no guarantee that this is always accessed from the same thread
+  @volatile
+  protected[this] var serviceClazzStackParam: Option[Class[_]] = None
+
+  /** Returns true is this router is configured */
+  def isConfigured: Boolean = configurationComplete
+
+  /** Returns the currently set `ServiceClassStackParam` value. */
+  def getServiceClazzStackParam: Option[Class[_]] = serviceClazzStackParam
 
   /**
    * Add exception mapper used for the corresponding exceptions.
@@ -109,14 +117,27 @@ private[routing] abstract class BaseThriftRouter[Router <: BaseThriftRouter[Rout
   }
 
   protected[this] def registerGlobalFilter(
-    thriftFilter: Object,
-    registry: LibraryRegistry
+    registry: LibraryRegistry,
+    thriftFilter: Object
   ): Unit = {
     if (thriftFilter ne Filter.TypeAgnostic.Identity) {
       registry
         .withSection("thrift")
         .put("filters", thriftFilter.toString)
     }
+  }
+
+  protected[this] def registerService(
+    registry: LibraryRegistry,
+    serviceName: String
+  ): Unit = {
+    val name =
+      if (serviceName.endsWith("$")) {
+        serviceName.substring(0, serviceName.length - 1)
+      } else serviceName
+    registry
+      .withSection("thrift")
+      .put("service_class", name)
   }
 }
 
@@ -248,11 +269,19 @@ class ThriftRouter @Inject() (
         .instance[LibraryRegistry]
         .withSection("thrift", "methods")
 
-      registerGlobalFilter(filterStack, reg)
+      registerGlobalFilter(reg, filterStack)
 
-      underlying = controller.config match {
-        case c: Controller.ControllerConfig => addController(controller, c)
-        case c: Controller.LegacyConfig => addLegacyController(controller, c)
+      this.underlying = controller.config match {
+        case c: Controller.ControllerConfig =>
+          val controllerClazz = c.gen.getClass
+          this.serviceClazzStackParam = Some(controllerClazz)
+          registerService(reg, controllerClazz.getName)
+          addController(controller, c)
+        case c: Controller.LegacyConfig =>
+          val controllerClazz = controller.getClass.getInterfaces.head
+          this.serviceClazzStackParam = Some(controllerClazz)
+          registerService(reg, controllerClazz.getName)
+          addLegacyController(controller, c)
       }
     }
   }
@@ -478,7 +507,9 @@ class JavaThriftRouter @Inject() (injector: Injector, exceptionManager: Exceptio
               declaredMethods.map(method => s"$serviceName.${method.getName}").mkString("\n")
           )
 
-          registerGlobalFilter(filters, libraryRegistry)
+          registerGlobalFilter(libraryRegistry, filters)
+          serviceClazzStackParam = Some(serviceClazz)
+          registerService(libraryRegistry, serviceClazz.getName)
           registerMethods(serviceName, controllerClazz, declaredMethods.toSeq)
 
           serviceInstance
