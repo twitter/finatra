@@ -31,8 +31,6 @@ class MultiServerFeatureTest extends Test with HttpTest with ThriftTest {
 
     add1HttpServer.inMemoryStats.counters.assert("clnt/adder-thrift/Adder/add1/requests", 4)
     add1HttpServer.inMemoryStats.counters.assert("clnt/adder-thrift/Adder/add1/success", 2)
-    // invocations --> incremented every time we call/invoke the method.
-    add1HttpServer.inMemoryStats.counters.assert("clnt/adder-thrift/Adder/add1/invocations", 2)
     add1HttpServer.inMemoryStats.counters.assert("clnt/adder-thrift/Adder/add1/failures", 2)
     add1HttpServer.inMemoryStats.counters.assert(
       "clnt/adder-thrift/Adder/add1/failures/org.apache.thrift.TApplicationException",
@@ -49,9 +47,6 @@ class MultiServerFeatureTest extends Test with HttpTest with ThriftTest {
     // client stats
     add1HttpServer.inMemoryStats.counters.assert("clnt/adder-thrift/Adder/add1String/requests", 6)
     add1HttpServer.inMemoryStats.counters.assert("clnt/adder-thrift/Adder/add1String/success", 1)
-    // invocations --> incremented every time we call/invoke the method.
-    add1HttpServer.inMemoryStats.counters
-      .assert("clnt/adder-thrift/Adder/add1String/invocations", 2)
     add1HttpServer.inMemoryStats.counters.assert("clnt/adder-thrift/Adder/add1String/failures", 5)
     add1HttpServer.inMemoryStats.counters.assert(
       "clnt/adder-thrift/Adder/add1String/failures/org.apache.thrift.TApplicationException",
@@ -93,11 +88,6 @@ class MultiServerFeatureTest extends Test with HttpTest with ThriftTest {
     )
     add1HttpServer.inMemoryStats.counters
       .get("clnt/adder-thrift/Adder/add1AlwaysError/success") should be(None)
-    // invocations --> incremented every time we call/invoke the method.
-    add1HttpServer.inMemoryStats.counters.assert(
-      "clnt/adder-thrift/Adder/add1AlwaysError/invocations",
-      numHttpRequests
-    )
     add1HttpServer.inMemoryStats.counters.assert(
       "clnt/adder-thrift/Adder/add1AlwaysError/failures",
       expectedFailedThriftRequests
@@ -146,14 +136,11 @@ class MultiServerFeatureTest extends Test with HttpTest with ThriftTest {
     ) // our requests should total at most the expected but may be less.
     add1HttpServer.inMemoryStats.counters
       .get("clnt/adder-thrift/Adder/add1Slowly/success") should be(None)
-    // invocations --> incremented every time we call/invoke the method.
-    add1HttpServer.inMemoryStats.counters
-      .assert("clnt/adder-thrift/Adder/add1Slowly/invocations", numHttpRequests)
     add1HttpServer.inMemoryStats.counters.assert("clnt/adder-thrift/Adder/add1Slowly/failures")(
       _ <= expectedFailedThriftRequests
     ) // our failures should total at most the expected but may be less.
     add1HttpServer.inMemoryStats.counters.assert(
-      "clnt/adder-thrift/Adder/add1Slowly/failures/com.twitter.util.TimeoutException"
+      "clnt/adder-thrift/add1Slowly/logical/failures/com.twitter.finagle.IndividualRequestTimeoutException"
     )(
       _ <= expectedFailedThriftRequests
     ) // our failures should total at most the expected but may be less.
@@ -164,7 +151,7 @@ class MultiServerFeatureTest extends Test with HttpTest with ThriftTest {
       _ <= expectedFailedThriftRequests
     ) // our requests should total at most the expected but may be less.
     add1HttpServer.inMemoryStats.counters
-      .assert("clnt/adder-thrift/failures/com.twitter.util.TimeoutException")(
+      .assert("clnt/adder-thrift/failures/com.twitter.finagle.IndividualRequestTimeoutException")(
         _ <= expectedFailedThriftRequests
       ) // our requests should total at most the expected but may be less.
 

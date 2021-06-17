@@ -10,14 +10,14 @@ import com.twitter.util.mock.Mockito
 
 class Add1ServerFeatureTest extends FeatureTest with Mockito {
 
-  val adderFuture = mock[Adder[Future]]
+  val adderMpe = mock[Adder.MethodPerEndpoint]
 
   override val server =
     new EmbeddedHttpServer(new Add1Server)
-      .bind[Adder[Future]].toInstance(adderFuture)
+      .bind[Adder.MethodPerEndpoint].toInstance(adderMpe)
 
   test("add1") {
-    adderFuture.add1(5) returns Future(6)
+    adderMpe.add1(5) returns Future(6)
 
     server.httpGet("/add1?num=5", andExpect = Status.Ok, withBody = "6")
   }

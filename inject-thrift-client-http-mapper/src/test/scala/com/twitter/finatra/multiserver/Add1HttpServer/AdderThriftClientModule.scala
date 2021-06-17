@@ -4,71 +4,58 @@ import com.twitter.adder.thriftscala.Adder
 import com.twitter.adder.thriftscala.Adder._
 import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.Filter
-import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
-import com.twitter.inject.thrift.modules.FilteredThriftClientModule
-import com.twitter.util.Future
+import com.twitter.inject.Injector
+import com.twitter.inject.exceptions.PossiblyRetryable
+import com.twitter.inject.thrift.ThriftMethodBuilderFactory
+import com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule
 
 object AdderThriftClientModule
-    extends FilteredThriftClientModule[Adder[Future], Adder.ServiceIface] {
+    extends ThriftMethodBuilderClientModule[Adder.ServicePerEndpoint, Adder.MethodPerEndpoint] {
 
   override val label = "adder-thrift"
   override val dest = "flag!adder-thrift-server"
 
-  override def filterServiceIface(
-    serviceIface: ServiceIface,
-    filter: ThriftClientFilterBuilder
-  ): ServiceIface = {
+  override def configureServicePerEndpoint(
+    injector: Injector,
+    builder: ThriftMethodBuilderFactory[Adder.ServicePerEndpoint],
+    servicePerEndpoint: Adder.ServicePerEndpoint
+  ): Adder.ServicePerEndpoint = {
 
-    serviceIface.copy(
-      add1 = filter
-        .method(Add1)
-        .withExceptionFilter(
-          Filter.identity[Add1.Args, Add1.SuccessType]
-        ) // Example of replacing the default exception filter
-        .withTimeout(3.minutes)
-        .withExponentialRetry(
-          shouldRetryResponse = PossiblyRetryableExceptions,
-          start = 50.millis,
-          multiplier = 2,
-          retries = 3
-        )
-        .withRequestTimeout(1.minute)
-        .andThen(serviceIface.add1),
-      add1String = filter
-        .method(Add1String)
-        .withTimeout(3.minutes)
-        .withExponentialRetry(
-          shouldRetryResponse = PossiblyRetryableExceptions,
-          start = 50.millis,
-          multiplier = 2,
-          retries = 3
-        )
-        .withRequestTimeout(1.minute)
-        .andThen(serviceIface.add1String),
-      add1Slowly = filter
-        .method(Add1Slowly)
-        .withTimeout(3.minutes)
-        .withExponentialRetry(
-          shouldRetryResponse = PossiblyRetryableExceptions,
-          start = 50.millis,
-          multiplier = 2,
-          retries = 3
-        )
-        .withRequestTimeout(
-          1.millis
-        ) // We purposely set a very small timeout so that we can test handling IndividualRequestTimeoutException
-        .andThen(serviceIface.add1Slowly),
-      add1AlwaysError = filter
-        .method(Add1AlwaysError)
-        .withTimeout(3.minutes)
-        .withExponentialRetry(
-          shouldRetryResponse = PossiblyRetryableExceptions,
-          start = 50.millis,
-          multiplier = 2,
-          retries = 3
-        )
-        .withRequestTimeout(1.minute)
-        .andThen(serviceIface.add1AlwaysError)
-    )
+    servicePerEndpoint
+      .withAdd1(
+        builder
+          .method(Add1)
+          .withExceptionFilter(Filter.identity[Add1.Args, Add1.SuccessType])
+          .withTimeoutTotal(3.minutes)
+          .withTimeoutPerRequest(1.minute)
+          .withRetryForClassifier(PossiblyRetryable.ResponseClassifier)
+          .withMaxRetries(3)
+          .service)
+      .withAdd1String(
+        builder
+          .method(Add1String)
+          .withTimeoutTotal(3.minutes)
+          .withTimeoutPerRequest(1.minute)
+          .withRetryForClassifier(PossiblyRetryable.ResponseClassifier)
+          .withMaxRetries(3)
+          .service
+      ).withAdd1Slowly(
+        builder
+          .method(Add1Slowly)
+          .withTimeoutTotal(3.minutes)
+          // We purposely set a very small timeout so that we can test handling IndividualRequestTimeoutException
+          .withTimeoutPerRequest(1.millis)
+          .withRetryForClassifier(PossiblyRetryable.ResponseClassifier)
+          .withMaxRetries(3)
+          .service
+      ).withAdd1AlwaysError(
+        builder
+          .method(Add1AlwaysError)
+          .withTimeoutTotal(3.minutes)
+          .withTimeoutPerRequest(1.minute)
+          .withRetryForClassifier(PossiblyRetryable.ResponseClassifier)
+          .withMaxRetries(3)
+          .service
+      )
   }
 }

@@ -10,6 +10,11 @@ Unreleased
 Changed
 ~~~~~~~
 
+* inject-thrift-client (BREAKING API CHANGE): Removed the deprecated
+  `c.t.inject.thrift.modules.FilteredThriftClientModule`. Please use its successor
+  `c.t.inject.thrift.modules.ThriftMethodBuilderClientModule` for per-method configuration of a
+  Thrift client. ``PHAB_ID=D687663``
+
 * thrift: Add `service_class` to Finatra library thrift registry entry. ``PHAB_ID=D687117``
 
 * finatra (BREAKING API CHANGE): Update to use the new util/util-jackson `ScalaObjectMapper` for
