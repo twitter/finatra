@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Binding Annotations &#8212; Finatra 21.5.0 documentation</title>
+    <title>Binding Annotations &#8212; Finatra 21.6.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -72,20 +72,27 @@ We recommend that you put the annotation in its own <cite>.java</cite> file.</p>
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import com.google.inject.BindingAnnotation;
+import javax.inject.Qualifier;
 
 import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+@Qualifier
+@Target({ FIELD, PARAMETER, METHOD })
+@Retention(RUNTIME)
+public @interface FooClient {}
+
+// Older code may still use Guice `com.google.inject.BindingAnnotation` in place of the standard
+// `@Qualifier` annotation. New code should use `@Qualifier` instead.
 @BindingAnnotation
-@Target(PARAMETER)
+@Target({ FIELD, PARAMETER, METHOD })
 @Retention(RUNTIME)
 public @interface FooClient {}
 </pre></div>
 </div>
-<p>For more information on the meta-annotations see the Google Guice
-<a class="reference external" href="https://github.com/google/guice/wiki/BindingAnnotations">documentation on Binding
-Annotations</a>.</p>
+<p>For more information on these meta-annotations see the Google Guice <a class="reference external" href="https://github.com/google/guice/wiki/BindingAnnotations">documentation on Binding Annotations</a>.</p>
 </div>
 <div class="section" id="create-a-binding-with-the-annotation">
 <h2>Create a Binding with the Annotation<a class="headerlink" href="#create-a-binding-with-the-annotation" title="Permalink to this headline">¶</a></h2>

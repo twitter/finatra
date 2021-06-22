@@ -29,7 +29,7 @@ Validation Errors
 -----------------
 
 By default, validation errors are returned **alphabetically sorted** by validation error message (for
-determinism when testing). See the `CaseClassMappingException <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions/CaseClassMappingException.scala>`__.
+determinism when testing). See the `CaseClassMappingException <https://github.com/twitter/util/blob/develop/util-jackson/src/main/scala/com/twitter/util/jackson/caseclass/exceptions/CaseClassMappingException.scala>`__.
 
 Eg.,
 
@@ -51,15 +51,7 @@ You may wish to execute validation for case classes in certain scenarios, but by
 others. For example, you may want to validate a `POST` request on the write path and store the JSON
 results somewhere, but bypass validating that same JSON for a `GET` request on the read path.
 
-You can create a `ScalaObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala>`__
-that will bypass validation like this:
-
-.. code:: scala
-
-    ScalaObjectMapper.builder.withNoValidation.objectMapper
-
-If you desire to bypass validation **in all scenarios throughout your service**, you can disable validation
-when defining a new `ScalaObjectMapperModule <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala>`__
+In your custom `ScalaObjectMapperModule <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala>`__
 
 .. code:: scala
    :emphasize-lines: 4

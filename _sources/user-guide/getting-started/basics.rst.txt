@@ -64,6 +64,11 @@ Dependency Injection Best Practices
 
 To aid in making code more testable here are a few best practices to consider when working with Dependency Injection. These are generally good to follow regardless of the dependency injection framework being used and some are described in detail in the Google `Guice documentation <https://github.com/google/guice/wiki>`__.
 
+Prefer JSR-330's annotations
+----------------------------
+
+As of Guice 3.0, Guice implements a complete JSR-330 injector. `JSR-330 <http://javax-inject.github.io/javax-inject/>`__ standardizes annotations like `@Inject` and the `Provider` interfaces for Java platforms. Users should prefer the `javax.inject` annotations over the `com.google.inject` equivalents. For more details, see the Guice `documentation on this subject <https://github.com/google/guice/wiki/JSR330>`__.
+
 Use Constructor Injection
 -------------------------
 

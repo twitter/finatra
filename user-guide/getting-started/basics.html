@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Dependency Injection &#8212; Finatra 21.5.0 documentation</title>
+    <title>Dependency Injection &#8212; Finatra 21.6.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -110,6 +110,10 @@ can provide ways for users to replace the instance of <cite>T</cite> returned in
 <div class="section" id="dependency-injection-best-practices">
 <h1>Dependency Injection Best Practices<a class="headerlink" href="#dependency-injection-best-practices" title="Permalink to this headline">¶</a></h1>
 <p>To aid in making code more testable here are a few best practices to consider when working with Dependency Injection. These are generally good to follow regardless of the dependency injection framework being used and some are described in detail in the Google <a class="reference external" href="https://github.com/google/guice/wiki">Guice documentation</a>.</p>
+<div class="section" id="prefer-jsr-330-s-annotations">
+<h2>Prefer JSR-330’s annotations<a class="headerlink" href="#prefer-jsr-330-s-annotations" title="Permalink to this headline">¶</a></h2>
+<p>As of Guice 3.0, Guice implements a complete JSR-330 injector. <a class="reference external" href="http://javax-inject.github.io/javax-inject/">JSR-330</a> standardizes annotations like <cite>&#64;Inject</cite> and the <cite>Provider</cite> interfaces for Java platforms. Users should prefer the <cite>javax.inject</cite> annotations over the <cite>com.google.inject</cite> equivalents. For more details, see the Guice <a class="reference external" href="https://github.com/google/guice/wiki/JSR330">documentation on this subject</a>.</p>
+</div>
 <div class="section" id="use-constructor-injection">
 <h2>Use Constructor Injection<a class="headerlink" href="#use-constructor-injection" title="Permalink to this headline">¶</a></h2>
 <p>Finatra highly recommends using constructor injection to create immutable objects. Immutability allows objects to be simple, shareable and composable. For example:</p>
@@ -438,6 +442,7 @@ consistently use the Java methods for binding and lookup, e.g., <cite>&#64;Provi
 </li>
 <li><a class="reference internal" href="#dependency-injection-and-testing">Dependency Injection and Testing</a></li>
 <li><a class="reference internal" href="#dependency-injection-best-practices">Dependency Injection Best Practices</a><ul>
+<li><a class="reference internal" href="#prefer-jsr-330-s-annotations">Prefer JSR-330’s annotations</a></li>
 <li><a class="reference internal" href="#use-constructor-injection">Use Constructor Injection</a><ul>
 <li><a class="reference internal" href="#assistedinject">AssistedInject</a></li>
 <li><a class="reference internal" href="#field-injection-not-recommended">Field Injection (not recommended)</a></li>

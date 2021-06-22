@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>JSON Integration with HTTP Routing &#8212; Finatra 21.5.0 documentation</title>
+    <title>JSON Integration with HTTP Routing &#8212; Finatra 21.6.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -84,23 +84,18 @@ and return a <cite>400 BadRequest</cite> with a list of all accumulated errors i
 </pre></div>
 </div>
 <p>You could create and use the following case classes:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class GroupRequest(
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import jakarta.validation.constraints.{NotEmpty, Past}
+import java.util.Date
+
+case class GroupRequest(
   @NotEmpty name: String,
   description: Option[String],
   tweetIds: Set[Long],
   dates: Dates) {
 
-  @MethodValidation
-  def validateName = {
-    ValidationResult.validate(
-      name.startsWith(&quot;grp-&quot;),
-      &quot;name must start with &#39;grp-&#39;&quot;)
-  }
-}
-
 case class Dates(
-  @PastTime start: DateTime,
-  @PastTime end: DateTime)
+  @Past start: Date,
+  @Past end: Date)
 </pre></div>
 </div>
 <p>This case class could then used as the input to a Controller route callback:</p>

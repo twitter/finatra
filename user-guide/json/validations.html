@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>JSON Validation Framework &#8212; Finatra 21.5.0 documentation</title>
+    <title>JSON Validation Framework &#8212; Finatra 21.6.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -83,7 +83,7 @@ case class instance.</p>
 <div class="section" id="validation-errors">
 <h2>Validation Errors<a class="headerlink" href="#validation-errors" title="Permalink to this headline">¶</a></h2>
 <p>By default, validation errors are returned <strong>alphabetically sorted</strong> by validation error message (for
-determinism when testing). See the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions/CaseClassMappingException.scala">CaseClassMappingException</a>.</p>
+determinism when testing). See the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-jackson/src/main/scala/com/twitter/util/jackson/caseclass/exceptions/CaseClassMappingException.scala">CaseClassMappingException</a>.</p>
 <p>Eg.,</p>
 <div class="code json highlight-text notranslate"><div class="highlight"><pre><span></span>{
   &quot;errors&quot; : [
@@ -101,13 +101,7 @@ determinism when testing). See the <a class="reference external" href="https://g
 <p>You may wish to execute validation for case classes in certain scenarios, but bypass validation in
 others. For example, you may want to validate a <cite>POST</cite> request on the write path and store the JSON
 results somewhere, but bypass validating that same JSON for a <cite>GET</cite> request on the read path.</p>
-<p>You can create a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/ScalaObjectMapper.scala">ScalaObjectMapper</a>
-that will bypass validation like this:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>ScalaObjectMapper.builder.withNoValidation.objectMapper
-</pre></div>
-</div>
-<p>If you desire to bypass validation <strong>in all scenarios throughout your service</strong>, you can disable validation
-when defining a new <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala">ScalaObjectMapperModule</a></p>
+<p>In your custom <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala">ScalaObjectMapperModule</a></p>
 <p>See the <a class="reference external" href="../getting-started/modules.html#module-configuration-in-servers">Modules Configuration in Servers</a>
 or the HTTP Server <a class="reference external" href="../http/server.html#framework-modules">Framework Modules</a> for more information
 on how to make use of any custom <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala"><cite>ScalaObjectMapperModule</cite></a>.</p>
