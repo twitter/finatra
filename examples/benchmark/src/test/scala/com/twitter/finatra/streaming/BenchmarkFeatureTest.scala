@@ -57,11 +57,12 @@ class BenchmarkFeatureTest extends Test {
     contentLength: Int,
     response: Response
   ): Unit = {
-    response.headerMap.size should equal(4)
-    response.headerMap.contains("Date")
+    response.headerMap.size should equal(5)
+    response.headerMap.contains("Date") should equal(true)
     response.headerMap("Server") should equal(server)
     response.headerMap("Content-Type") should equal(contentType)
     response.headerMap("Content-Length") should equal(contentLength.toString)
+    response.headerMap.contains("x-http2-stream-id") should equal(true)
   }
 
   override protected def afterAll(): Unit = {
