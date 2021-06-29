@@ -44,7 +44,7 @@ abstract class Controller private (val config: Controller.Config) extends Loggin
     this(new Controller.ControllerConfig(gen))
     assert(
       !self.isInstanceOf[ToThriftService],
-      "Controllers should no longer extend ToThriftSerivce")
+      "Controllers should no longer extend ToThriftService")
   }
 
   /**
@@ -126,7 +126,7 @@ abstract class Controller private (val config: Controller.Config) extends Loggin
 
   /**
    * Have the controller handle a thrift method with optionally applied filters and an
-   * implementation. All thrift methods that a ThriftSerivce handles must be registered using
+   * implementation. All thrift methods that a ThriftService handles must be registered using
    * this method to properly construct a Controller.
    *
    * @note The provided implementation will be invoked for each request.

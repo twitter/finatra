@@ -23,7 +23,7 @@ import scala.util.control.NoStackTrace
 
 @Singleton
 @deprecated(
-  "These tests exist to ensure legacy functionaly still operates. Do not use them for guidance",
+  "These tests exist to ensure legacy functionality still operates. Do not use them for guidance",
   "2018-12-20")
 class LegacyDoEverythingThriftController @Inject() (@Flag("magicNum") magicNumValue: String)
     extends Controller
