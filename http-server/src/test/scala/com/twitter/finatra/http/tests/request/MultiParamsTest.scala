@@ -179,7 +179,7 @@ class MultiParamsTest extends Test with Mockito {
   test("invalid upload data") {
     val requestAsBytes = resourceAsBytes("/multipart/request-POST-android.bytes")
     val finagleRequest = HttpCodec.decodeBytesToRequest(requestAsBytes)
-    finagleRequest.setContentType("text/html; bounfoodary=foo; charset=UTF-8\"")
+    finagleRequest.setContentType("text/html; boundary=foo; charset=UTF-8\"")
 
     assertMultiParamsEmpty(finagleRequest)
   }

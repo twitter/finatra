@@ -6,7 +6,7 @@ import com.twitter.finatra.http.tests.integration.doeverything.main.controllers.
 import com.twitter.finatra.http.{EmbeddedHttpServer, HttpServer}
 import com.twitter.inject.Test
 
-class MaxRequestFowardingDepthTest extends Test {
+class MaxRequestForwardingDepthTest extends Test {
 
   test("Default of 5 with infinite loop error on 6th call") {
     val server = new EmbeddedHttpServer(
