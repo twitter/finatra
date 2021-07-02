@@ -1,7 +1,7 @@
 package com.twitter.inject.conversions
 
 import com.twitter.conversions.MapOps
-import com.twitter.inject.conversions.tuple._
+import com.twitter.conversions.TupleOps._
 import java.util.concurrent.ConcurrentHashMap
 import scala.collection.compat.immutable.ArraySeq
 import scala.collection.{SortedMap, immutable}
