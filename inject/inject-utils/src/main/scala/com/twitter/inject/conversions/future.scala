@@ -1,7 +1,7 @@
 package com.twitter.inject.conversions
 
 import com.twitter.inject.conversions.option._
-import com.twitter.inject.conversions.seq._
+import com.twitter.conversions.SeqOps._
 import com.twitter.util._
 import com.twitter.util.logging.Logger
 import scala.util.control.NonFatal
