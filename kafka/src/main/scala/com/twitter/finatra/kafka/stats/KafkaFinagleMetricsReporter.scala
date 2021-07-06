@@ -1,7 +1,7 @@
 package com.twitter.finatra.kafka.stats
 
+import com.twitter.conversions.StringOps._
 import com.twitter.finagle.stats.{Gauge, LoadedStatsReceiver, StatsReceiver}
-import com.twitter.inject.conversions.string._
 import com.twitter.inject.{Injector, Logging}
 import java.util
 import java.util.regex.Pattern

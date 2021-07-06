@@ -1,9 +1,9 @@
 package com.twitter.finatra.http.request
 
+import com.twitter.conversions.StringOps._
 import com.twitter.finagle.http.{Fields, Request}
 import com.twitter.finatra.http.exceptions.{BadRequestException, NotAcceptableException}
 import com.twitter.finatra.http.fileupload.{FinagleRequestFileUpload, MultipartItem}
-import com.twitter.inject.conversions.string._
 import java.net.URI
 
 object RequestUtils {

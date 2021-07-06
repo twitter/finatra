@@ -4,6 +4,7 @@ import com.google.inject.Module
 import com.twitter.app.Flag
 import com.twitter.conversions.DurationOps._
 import com.twitter.conversions.StorageUnitOps._
+import com.twitter.conversions.StringOps._
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.service.NilService
 import com.twitter.finagle.stats.StatsReceiver
@@ -21,7 +22,6 @@ import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.finatra.validation.ValidatorModule
 import com.twitter.inject.annotations.Lifecycle
-import com.twitter.inject.conversions.string._
 import com.twitter.inject.server.{AbstractTwitterServer, PortUtils, TwitterServer}
 import com.twitter.util.{Await, Duration, StorageUnit}
 import java.net.InetSocketAddress

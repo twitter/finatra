@@ -10,13 +10,17 @@ Unreleased
 Breaking API Change
 ~~~~~~~~~~~~~~~~~~~
 
+* inject-utils: Removed deprecated `c.t.inject.conversions.string`, use 
+  `c.t.conversions.StringOps` in the util/util-core project instead.
+  ``PHAB_ID=D692729``
+
+* inject-utils: Removed deprecated `c.t.inject.conversions.tuple`, use
+ `c.t.conversions.TupleOps` in the util/util-core project instead.
+  ``PHAB_ID=D692429``
+
 * inject-utils: Removed deprecated `c.t.inject.conversions.seq`, use 
   `c.t.conversions.SeqOps` in the util/util-core project instead. 
   ``PHAB_ID=D692775``
-
-* inject-utils: Removed deprecated `c.t.inject.conversions.tuple`. use
- `c.t.conversions.TupleOps` in the util/util-core project instead.
-  ``PHAB_ID=D692429``
 
 Changed
 ~~~~~~~
