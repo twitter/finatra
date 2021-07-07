@@ -6,6 +6,7 @@ scala_library(
         repo = artifactory,
     ),
     strict_deps = True,
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/org/scalatest",
         "util/util-core/src/main/scala/com/twitter/io",

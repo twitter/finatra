@@ -1,6 +1,7 @@
 create_thrift_libraries(
     base_name = "doeverything-thrift",
     sources = ["*.thrift"],
+    tags = ["bazel-compatible"],
     generate_languages = [
         "java",
         "scala",

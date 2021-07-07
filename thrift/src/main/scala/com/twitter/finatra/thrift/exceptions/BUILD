@@ -7,6 +7,7 @@ scala_library(
         repo = artifactory,
     ),
     strict_deps = True,
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/net/codingwell:scala-guice",
         "finatra/inject/inject-core/src/main/scala",

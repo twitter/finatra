@@ -26,6 +26,7 @@ scala_library(
         repo = artifactory,
     ),
     strict_deps = True,
+    tags = ["bazel-compatible"],
     dependencies = [
         scoped(
             ":logging-bridges",

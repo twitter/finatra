@@ -11,6 +11,7 @@ scala_library(
         repo = artifactory,
     ),
     strict_deps = "True",
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "finagle/finagle-base-http/src/main",
@@ -59,6 +60,7 @@ scala_library(
         repo = artifactory,
     ),
     strict_deps = "True",
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/javax/inject:javax.inject",
         "finagle/finagle-core/src/main",

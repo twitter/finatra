@@ -7,6 +7,7 @@ scala_library(
         repo = artifactory,
     ),
     strict_deps = "True",
+    tags = ["bazel-compatible"],
     dependencies = [
         "finagle/finagle-core/src/main",
         "finatra/inject/inject-core/src/main/scala",

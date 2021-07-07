@@ -8,6 +8,7 @@ scala_library(
         repo = artifactory,
     ),
     strict_deps = "True",
+    tags = ["bazel-compatible"],
     dependencies = [
         "finagle/finagle-base-http/src/main",
     ],
@@ -28,6 +29,7 @@ scala_library(
         repo = artifactory,
     ),
     strict_deps = "True",
+    tags = ["bazel-compatible"],
     dependencies = [
         ":exception-mapper",
         "3rdparty/jvm/javax/inject:javax.inject",

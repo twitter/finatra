@@ -1,6 +1,7 @@
 java_library(
     sources = ["**/*.java"],
     compiler_option_sets = ["fatal_warnings"],
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "finagle/finagle-base-http/src/main",
@@ -36,6 +37,7 @@ jvm_binary(
     name = "bin",
     basename = "java-http-server",
     main = "com.twitter.finatra.example.HelloWorldServerMain",
+    tags = ["bazel-compatible"],
     dependencies = [
         ":example",
         "finatra/examples/http-server/java/src/main/resources",

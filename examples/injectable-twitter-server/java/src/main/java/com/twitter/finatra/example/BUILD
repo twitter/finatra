@@ -1,6 +1,7 @@
 java_library(
     sources = ["**/*.java"],
     compiler_option_sets = ["fatal_warnings"],
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/net/codingwell:scala-guice",
@@ -18,6 +19,7 @@ jvm_binary(
     name = "bin",
     basename = "injectable-twitter-server-java",
     main = "com.twitter.finatra.example.ExampleTwitterServerMain",
+    tags = ["bazel-compatible"],
     dependencies = [
         ":example",
         "finatra/examples/injectable-twitter-server/java/src/main/resources",

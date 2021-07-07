@@ -9,6 +9,7 @@ scala_library(
         name = "inject-thrift-client",
         repo = artifactory,
     ),
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/github/nscala_time",
         "3rdparty/jvm/com/google/inject:guice",

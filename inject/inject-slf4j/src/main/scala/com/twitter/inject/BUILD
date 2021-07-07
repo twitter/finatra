@@ -6,6 +6,7 @@ scala_library(
         name = "inject-slf4j",
         repo = artifactory,
     ),
+    tags = ["bazel-compatible"],
     dependencies = [
         "util/util-core:scala",
         "util/util-slf4j-api/src/main/scala",

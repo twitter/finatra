@@ -7,6 +7,7 @@ java_library(
         repo = artifactory,
     ),
     strict_deps = True,
+    tags = ["bazel-compatible"],
     dependencies = [
         "finatra/http-annotations/src/main/java/com/twitter/finatra/http/annotations",
     ],

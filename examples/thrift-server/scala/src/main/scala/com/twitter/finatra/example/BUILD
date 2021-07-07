@@ -1,6 +1,7 @@
 scala_library(
     sources = ["**/*.scala"],
     compiler_option_sets = ["fatal_warnings"],
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/javax/inject:javax.inject",
@@ -31,6 +32,7 @@ jvm_binary(
     name = "bin",
     basename = "thrift-example-server",
     main = "com.twitter.finatra.example.CalculatorServerMain",
+    tags = ["bazel-compatible"],
     dependencies = [
         ":example",
         "finatra/examples/thrift-server/scala/src/main/resources",

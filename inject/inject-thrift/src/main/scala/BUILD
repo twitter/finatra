@@ -6,6 +6,7 @@ scala_library(
         name = "inject-thrift",
         repo = artifactory,
     ),
+    tags = ["bazel-compatible"],
     dependencies = [
         "finagle/finagle-core/src/main",
         "finagle/finagle-mux/src/main/scala",

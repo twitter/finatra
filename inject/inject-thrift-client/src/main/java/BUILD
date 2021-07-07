@@ -6,6 +6,7 @@ java_library(
         name = "inject-thrift-client-java",
         repo = artifactory,
     ),
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
     ],
@@ -16,4 +17,5 @@ java_library(
 files(
     name = "pants-workaround",
     sources = ["**/*.java"],
+    tags = ["bazel-compatible"],
 )

@@ -1,7 +1,10 @@
 junit_tests(
     sources = ["**/*.scala"],
     compiler_option_sets = ["fatal_warnings"],
-    tags = ["known-jdk11-failure:VM-4209"],
+    tags = [
+        "bazel-compatible",
+        "known-jdk11-failure:VM-4209",
+    ],
     dependencies = [
         "3rdparty/jvm/ch/qos/logback:logback-classic",
         "3rdparty/jvm/ch/qos/logback:logback-core",

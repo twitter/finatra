@@ -1,6 +1,7 @@
 scala_library(
     sources = ["**/*.scala"],
     compiler_option_sets = ["fatal_warnings"],
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/org/slf4j:slf4j-api",
@@ -38,6 +39,7 @@ jvm_binary(
     name = "bin",
     basename = "scala-http-server",
     main = "com.twitter.finatra.example.HelloWorldServerMain",
+    tags = ["bazel-compatible"],
     dependencies = [
         ":example",
         "finatra/examples/http-server/scala/src/main/resources",

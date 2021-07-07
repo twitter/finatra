@@ -1,6 +1,7 @@
 junit_tests(
     sources = ["com/twitter/inject/tests/**/*.scala"],
     compiler_option_sets = ["fatal_warnings"],
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/joda-time",
         "3rdparty/jvm/org/scalatest",

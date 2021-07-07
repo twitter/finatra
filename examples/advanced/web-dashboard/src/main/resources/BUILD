@@ -3,4 +3,5 @@ resources(
         "*.xml",
         "templates/*.mustache",
     ],
+    tags = ["bazel-compatible"],
 )

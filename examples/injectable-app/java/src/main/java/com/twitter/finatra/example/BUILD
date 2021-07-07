@@ -1,6 +1,7 @@
 java_library(
     sources = ["**/*.java"],
     compiler_option_sets = ["fatal_warnings"],
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/net/codingwell:scala-guice",
@@ -18,6 +19,7 @@ jvm_binary(
     name = "bin",
     basename = "injectable-app-java",
     main = "com.twitter.finatra.example.HelloWorldAppMain",
+    tags = ["bazel-compatible"],
     dependencies = [
         ":example",
         "3rdparty/jvm/ch/qos/logback:logback-classic",

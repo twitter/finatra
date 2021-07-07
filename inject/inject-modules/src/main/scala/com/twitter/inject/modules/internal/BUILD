@@ -7,6 +7,7 @@ scala_library(
         repo = artifactory,
     ),
     strict_deps = True,
+    tags = ["bazel-compatible"],
     dependencies = [
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject/internal",

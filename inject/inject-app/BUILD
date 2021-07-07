@@ -1,5 +1,6 @@
 target(
     tags = [
+        "bazel-compatible",
         # users should use finer-grain targets directly
         "deprecated",
     ],
@@ -13,6 +14,7 @@ target(
 target(
     name = "test-deps",
     tags = [
+        "bazel-compatible",
         # users should use finatra/inject/inject-app/src/test/scala/com/twitter/inject/app directly
         "deprecated",
     ],

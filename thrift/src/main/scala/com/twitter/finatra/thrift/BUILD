@@ -12,6 +12,7 @@ scala_library(
         repo = artifactory,
     ),
     strict_deps = True,
+    tags = ["bazel-compatible"],
     dependencies = [
         "finagle/finagle-thriftmux/src/main/scala",
         "finatra/inject/inject-app/src/main/scala",
@@ -59,6 +60,7 @@ scala_library(
         repo = artifactory,
     ),
     strict_deps = True,
+    tags = ["bazel-compatible"],
     dependencies = [
         "finagle/finagle-thrift/src/main/scala",
         "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",

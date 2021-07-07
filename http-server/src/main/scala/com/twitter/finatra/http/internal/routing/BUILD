@@ -7,6 +7,7 @@ scala_library(
         repo = artifactory,
     ),
     strict_deps = "True",
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/io/netty:netty4-codec-http",
         "finagle/finagle-base-http/src/main",

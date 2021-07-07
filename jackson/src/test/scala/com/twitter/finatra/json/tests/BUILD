@@ -1,5 +1,6 @@
 junit_tests(
     sources = ["*.scala"],
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-annotations",
         "3rdparty/jvm/org/scalatest",

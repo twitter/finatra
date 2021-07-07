@@ -1,4 +1,5 @@
 junit_tests(
+    tags = ["bazel-compatible"],
     dependencies = [
         "finagle/finagle-core/src/main",
         "finagle/finagle-http/src/main/scala",

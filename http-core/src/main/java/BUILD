@@ -7,6 +7,7 @@ java_library(
         repo = artifactory,
     ),
     tags = [
+        "bazel-compatible",
         # users should depend on specific finer-grained targets instead of this monolithic target
         "deprecated",
     ],

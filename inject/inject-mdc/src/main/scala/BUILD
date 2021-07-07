@@ -6,6 +6,7 @@ scala_library(
         name = "inject-mdc",
         repo = artifactory,
     ),
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "finagle/finagle-core/src/main",

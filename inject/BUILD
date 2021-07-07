@@ -1,5 +1,6 @@
 test_suite(
     name = "tests",
+    tags = ["bazel-compatible"],
     dependencies = [
         "finatra/inject/inject-app/src/test/scala/com/twitter/inject/app/tests",
         "finatra/inject/inject-core/src/test/scala/com/twitter/inject/tests",

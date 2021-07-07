@@ -7,6 +7,7 @@ scala_library(
         repo = artifactory,
     ),
     strict_deps = True,
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/github/spullara/mustache/java",
         "3rdparty/jvm/com/google/inject:guice",
