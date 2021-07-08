@@ -24,7 +24,7 @@ Breaking API Change
 
 Changed
 ~~~~~~~
-* finatra: Update Scalatest to version 1.15.4 ``PHAB_ID=D691691``
+* finatra: Update ScalaCheck to version 1.15.4 ``PHAB_ID=D691691``
 
 21.6.0
 ------
