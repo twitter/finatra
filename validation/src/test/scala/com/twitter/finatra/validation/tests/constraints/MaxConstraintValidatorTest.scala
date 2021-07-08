@@ -214,7 +214,7 @@ class MaxConstraintValidatorTest
       violations.head.getInvalidValue shouldBe value
       val payload = violations.head.getDynamicPayload(classOf[ErrorCode.ValueTooLarge])
       payload.isDefined shouldBe true
-      payload.get shouldBe errorCode(value)
+      payload.get shouldBe errorCode(value.toLong)
     }
   }
 
