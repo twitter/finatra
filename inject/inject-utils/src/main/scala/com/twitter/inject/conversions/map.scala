@@ -1,41 +1,11 @@
 package com.twitter.inject.conversions
 
-import com.twitter.conversions.MapOps
 import com.twitter.conversions.TupleOps._
 import java.util.concurrent.ConcurrentHashMap
 import scala.collection.compat.immutable.ArraySeq
 import scala.collection.{SortedMap, immutable}
 
 object map {
-
-  @deprecated("Use com.twitter.conversions.MapOps instead", "2020-11-16")
-  implicit class RichMap[K, V](val self: Map[K, V]) extends AnyVal {
-    @deprecated("Use com.twitter.conversions.MapOps#mapKeys instead", "2020-11-16")
-    def mapKeys[T](func: K => T): Map[T, V] = MapOps.mapKeys(self, func)
-
-    @deprecated("Use com.twitter.conversions.MapOps#invert instead", "2020-11-16")
-    def invert: Map[V, Seq[K]] = MapOps.invert(self)
-
-    @deprecated("Use com.twitter.conversions.MapOps#invertSingleValue instead", "2020-11-16")
-    def invertSingleValue: Map[V, K] = MapOps.invertSingleValue(self)
-
-    @deprecated("Use com.twitter.conversions.MapOps#filterValues instead", "2020-11-16")
-    def filterValues(func: V => Boolean): Map[K, V] =
-      MapOps.filterValues(self, func)
-
-    @deprecated("Use com.twitter.conversions.MapOps#filterNotValues instead", "2020-11-16")
-    def filterNotValues(func: V => Boolean): Map[K, V] =
-      MapOps.filterNotValues(self, func)
-
-    @deprecated("Use com.twitter.conversions.MapOps#filterNotKeys instead", "2020-11-16")
-    def filterNotKeys(func: K => Boolean): Map[K, V] =
-      MapOps.filterNotKeys(self, func)
-
-    @deprecated("Use com.twitter.conversions.MapOps#toSortedMap instead", "2020-11-16")
-    def toSortedMap(implicit ordering: Ordering[K]): SortedMap[K, V] =
-      MapOps.toSortedMap(self)
-
-  }
 
   implicit class RichJavaMap[K, V](val self: java.util.Map[K, V]) extends AnyVal {
     import scala.collection.JavaConverters._

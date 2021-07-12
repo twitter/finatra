@@ -18,9 +18,14 @@ Breaking API Change
  `c.t.conversions.TupleOps` in the util/util-core project instead.
   ``PHAB_ID=D692429``
 
-* inject-utils: Removed deprecated `c.t.inject.conversions.seq`, use 
-  `c.t.conversions.SeqOps` in the util/util-core project instead. 
+* inject-utils: Removed deprecated `c.t.inject.conversions.seq`, use
+  `c.t.conversions.SeqOps` in the util/util-core project instead.
   ``PHAB_ID=D692775``
+  
+* inject-utils: Removed implicit class RichMap from  `c.t.inject.conversions.map`, use
+  `c.t.conversions.MapOps` in the util/util-core project instead. ``PHAB_ID=D699010``
+
+
 
 Changed
 ~~~~~~~
