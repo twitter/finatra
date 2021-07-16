@@ -139,15 +139,8 @@ trait TestMixin
    * @see [[com.twitter.inject.TestMixin.defaultAwaitTimeout]]
    */
   protected def assertFailedFuture[T <: Throwable: Manifest](result: Future[_]): T = {
-    try {
+    intercept[T] {
       await(result)
-      fail("Expected exception " + manifest[T].runtimeClass + " never thrown")
-    } catch {
-      case e: Throwable =>
-        if (manifest[T].runtimeClass.isAssignableFrom(e.getClass))
-          e.asInstanceOf[T]
-        else
-          fail("Expected exception " + manifest[T].runtimeClass + " but caught " + e)
     }
   }
 

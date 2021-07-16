@@ -7,6 +7,13 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Fixed
+~~~~~
+
+* inject-core: Fixed a bug where `c.t.inject.TestMixin#assertFailedFuture` would incorrectly pass
+  for non-failed `c.t.util.Future` in some cases where the tested failure is a supertype of
+  `org.scalatest.exceptions.TestFailedException`. ``PHAB_ID=D705002``
+
 Breaking API Change
 ~~~~~~~~~~~~~~~~~~~
 
@@ -21,11 +28,9 @@ Breaking API Change
 * inject-utils: Removed deprecated `c.t.inject.conversions.seq`, use
   `c.t.conversions.SeqOps` in the util/util-core project instead.
   ``PHAB_ID=D692775``
-  
+
 * inject-utils: Removed implicit class RichMap from  `c.t.inject.conversions.map`, use
   `c.t.conversions.MapOps` in the util/util-core project instead. ``PHAB_ID=D699010``
-
-
 
 Changed
 ~~~~~~~
