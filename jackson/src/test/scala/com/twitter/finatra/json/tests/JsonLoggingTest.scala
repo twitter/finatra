@@ -16,7 +16,7 @@ object JsonLoggingTest {
 class JsonLoggingTest extends Test with JsonLogging {
   import JsonLoggingTest._
 
-  // Set SLFJ Simple Logger log level to Info
+  // Set SLF4J Simple Logger log level to Info
   System.setProperty("org.slf4j.simpleLogger.log.com.twitter.finatra.json.tests", "info")
 
   test("log params should be evaluated for log levels >= the configured info level") {
