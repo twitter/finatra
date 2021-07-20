@@ -9,7 +9,7 @@ import java.net.{InetAddress, InetSocketAddress, SocketAddress}
  */
 object PortUtils {
 
-  /** Returns a `host:port` String which is the loopback address and the emphemeral port :0 */
+  /** Returns a `host:port` String which is the loopback address and the ephemeral port :0 */
   def ephemeralLoopback: String = {
     loopbackAddressForPort(0)
   }
