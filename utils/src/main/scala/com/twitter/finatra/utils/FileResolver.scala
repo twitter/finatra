@@ -75,7 +75,7 @@ class FileResolver(localDocRoot: String, docRoot: String) extends Logging {
     extMap.getContentType(dottedFileExtension(file))
 
   def getFileExtension(filename: String): String = {
-    val lastSeparator = getLastSeperatorIndex(filename)
+    val lastSeparator = getLastSeparatorIndex(filename)
     val extensionPos = filename.lastIndexOf(EXTENSION_SEPARATOR)
     if (lastSeparator >= extensionPos) "" else filename.substring(extensionPos)
   }
@@ -86,7 +86,7 @@ class FileResolver(localDocRoot: String, docRoot: String) extends Logging {
   private[this] final val WINDOWS_SEPARATOR = '\\'
   private[this] final val EXTENSION_SEPARATOR = '.'
 
-  private[this] def getLastSeperatorIndex(filename: String): Int = {
+  private[this] def getLastSeparatorIndex(filename: String): Int = {
     val lastUnixPos = filename.lastIndexOf(UNIX_SEPARATOR)
     val lastWindowPos = filename.lastIndexOf(WINDOWS_SEPARATOR)
     if (lastUnixPos > lastWindowPos) lastUnixPos else lastWindowPos
