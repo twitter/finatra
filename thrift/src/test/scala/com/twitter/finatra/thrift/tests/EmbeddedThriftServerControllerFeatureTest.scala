@@ -1,6 +1,5 @@
 package com.twitter.finatra.thrift.tests
 
-import com.twitter.conversions.DurationOps._
 import com.twitter.converter.thriftscala.Converter
 import com.twitter.converter.thriftscala.Converter.Uppercase
 import com.twitter.finagle.{Filter, Service}
@@ -11,7 +10,7 @@ import com.twitter.finatra.thrift.tests.EmbeddedThriftServerControllerFeatureTes
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.Buf
 import com.twitter.scrooge
-import com.twitter.util.{Await, Future}
+import com.twitter.util.Future
 
 object EmbeddedThriftServerControllerFeatureTest {
 
@@ -58,19 +57,6 @@ class EmbeddedThriftServerControllerFeatureTest extends FeatureTest {
   /* Req/Rep Service-Per-Endpoint type: https://twitter.github.io/scrooge/Finagle.html#id3 */
   val reqRepServicePerEndpoint123: Converter.ReqRepServicePerEndpoint =
     server.servicePerEndpoint[Converter.ReqRepServicePerEndpoint](clientId = "client123")
-
-  override protected def afterAll(): Unit = {
-    Await.all(
-      Seq(
-        client123.asClosable.close(),
-        methodPerEndpointClient123.asClosable.close(),
-        servicePerEndpoint123.asClosable.close(),
-        reqRepServicePerEndpoint123.asClosable.close()
-      ),
-      2.seconds
-    )
-    super.afterAll()
-  }
 
   test("success") {
     await(client123.uppercase("Hi")) should equal("HI")

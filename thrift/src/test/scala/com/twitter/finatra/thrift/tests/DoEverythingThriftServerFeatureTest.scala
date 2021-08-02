@@ -47,21 +47,6 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
   val reqRepServicePerEndpoint123: DoEverything.ReqRepServicePerEndpoint =
     server.servicePerEndpoint[DoEverything.ReqRepServicePerEndpoint](clientId = "client123")
 
-  override protected def afterAll(): Unit = {
-    Await.all(
-      Seq(
-        client123.asClosable.close(),
-        methodPerEndpointClient123.asClosable.close(),
-        servicePerEndpoint123.asClosable.close(),
-        anotherMethodPerEndpointClient123.asClosable.close(),
-        yetAnotherMethodPerEndpointClient123.asClosable.close(),
-        reqRepServicePerEndpoint123.asClosable.close()
-      ),
-      2.seconds
-    )
-    super.afterAll()
-  }
-
   test("success") {
     await(client123.uppercase("Hi")) should equal("HI")
     await(methodPerEndpointClient123.uppercase("Hi")) should equal("HI")

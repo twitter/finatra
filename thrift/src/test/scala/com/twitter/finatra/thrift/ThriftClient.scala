@@ -10,7 +10,8 @@ import com.twitter.finagle.thrift.service.{
   ThriftServiceBuilder
 }
 import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports, info}
-import com.twitter.util.{Await, Duration, Promise}
+import com.twitter.scrooge.AsClosableMethodName
+import com.twitter.util.{Await, Closable, Duration, Future, Promise}
 import scala.reflect.ClassTag
 
 trait ThriftClient { self: EmbeddedTwitterServer =>
@@ -116,7 +117,7 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
    */
   def thriftClient[ThriftService: ClassTag](
     clientId: String = null
-  ): ThriftService = {
+  ): ThriftService = ensureClosedOnExit {
     thriftMuxClient(clientId)
       .build[ThriftService](externalThriftHostAndPort)
   }
@@ -146,7 +147,7 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
     clientId: String = null
   )(
     implicit builder: ServicePerEndpointBuilder[ServicePerEndpoint]
-  ): ServicePerEndpoint = {
+  ): ServicePerEndpoint = ensureClosedOnExit {
     val label = if (clientId != null) clientId else ""
     thriftMuxClient(clientId)
       .servicePerEndpoint[ServicePerEndpoint](externalThriftHostAndPort, label)
@@ -178,7 +179,7 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
     servicePerEndpoint: ServicePerEndpoint
   )(
     implicit builder: MethodPerEndpointBuilder[ServicePerEndpoint, MethodPerEndpoint]
-  ): MethodPerEndpoint = {
+  ): MethodPerEndpoint = ensureClosedOnExit {
     ThriftMux.Client
       .methodPerEndpoint[ServicePerEndpoint, MethodPerEndpoint](servicePerEndpoint)
   }
@@ -216,7 +217,51 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
     servicePerEndpoint: ServicePerEndpoint
   )(
     implicit builder: ThriftServiceBuilder[ServicePerEndpoint, ThriftService]
-  ): ThriftService = {
+  ): ThriftService = ensureClosedOnExit {
     ThriftMux.Client.thriftService[ServicePerEndpoint, ThriftService](servicePerEndpoint)
+  }
+
+  private[this] def ensureClosedOnExit[T](f: => T): T = {
+    val clnt = f
+    closeOnExit(asClosableThriftService(clnt))
+    clnt
+  }
+
+  // copied from our ThriftClientModuleTrait because we can't depend on it here without
+  // creating a circular dependency
+  private[this] def asClosableThriftService(thriftService: Any): Closable = {
+    val close = thriftService match {
+      case closable: Closable =>
+        closable
+      case _ =>
+        val asClosableMethodOpt =
+          thriftService.getClass.getMethods
+            .find(_.getName == AsClosableMethodName)
+        asClosableMethodOpt match {
+          case Some(method) =>
+            try {
+              method.invoke(thriftService).asInstanceOf[Closable]
+            } catch {
+              case _: java.lang.ClassCastException =>
+                System.err.println(
+                  s"Unable to cast result of ${AsClosableMethodName} invocation to a " +
+                    s"${Closable.getClass.getName.dropRight(1)} type."
+                )
+                Closable.nop
+            }
+          case _ =>
+            System.err.println(
+              s"${AsClosableMethodName} not found for instance: ${thriftService.getClass.getName}"
+            )
+            Closable.nop
+        }
+    }
+    Closable.all(
+      Closable.make { _ =>
+        info(s"Closing Embedded ThriftClient '$thriftService''", disableLogging)
+        Future.Done
+      },
+      close
+    )
   }
 }

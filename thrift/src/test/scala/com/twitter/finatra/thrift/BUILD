@@ -19,6 +19,7 @@ scala_library(
         "finatra/inject/inject-ports/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-server/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-server/src/test/scala/com/twitter/inject/server",
+        "scrooge/scrooge-core/src/main/scala",
         "twitter-server/server/src/main/scala",
         "util/util-stats/src/main/scala",
     ],
