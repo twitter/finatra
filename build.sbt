@@ -1413,7 +1413,7 @@ lazy val scalaInjectableTwitterServer =
 
 // http server
 
-lazy val javaHttpServer = (project in file("examples/http/java"))
+lazy val javaHttpServer = (project in file("examples/http-server/java"))
   .settings(exampleServerSettings)
   .settings(noPublishSettings)
   .settings(
@@ -1432,7 +1432,7 @@ lazy val javaHttpServer = (project in file("examples/http/java"))
     injectLogback
   )
 
-lazy val scalaHttpServer = (project in file("examples/http/scala"))
+lazy val scalaHttpServer = (project in file("examples/http-server/scala"))
   .settings(exampleServerSettings)
   .settings(noPublishSettings)
   .settings(
@@ -1450,7 +1450,7 @@ lazy val scalaHttpServer = (project in file("examples/http/scala"))
 
 // thrift server
 
-lazy val thriftIdl = (project in file("examples/thrift/idl"))
+lazy val thriftIdl = (project in file("examples/thrift-server/idl"))
   .settings(baseServerSettings)
   .settings(noPublishSettings)
   .settings(
@@ -1462,7 +1462,7 @@ lazy val thriftIdl = (project in file("examples/thrift/idl"))
     thrift
   )
 
-lazy val javaThriftServer = (project in file("examples/thrift/java"))
+lazy val javaThriftServer = (project in file("examples/thrift-server/java"))
   .settings(exampleServerSettings)
   .settings(noPublishSettings)
   .settings(
@@ -1482,7 +1482,7 @@ lazy val javaThriftServer = (project in file("examples/thrift/java"))
     injectLogback
   )
 
-lazy val scalaThriftServer = (project in file("examples/thrift/scala"))
+lazy val scalaThriftServer = (project in file("examples/thrift-server/scala"))
   .settings(exampleServerSettings)
   .settings(noPublishSettings)
   .settings(
