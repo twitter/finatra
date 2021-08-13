@@ -7,17 +7,8 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
-21.8.0
-------
-
-Changed
-~~~~~~~
-
-* thrift: Update the test `c.t.finatra.thrift.ThriftClient` to close client and clean-up resources
-  during the `EmbeddedTwitterServer` close. ``PHAB_ID=D707963``
-
-21.7.0
-------
+21.8.0 (No 21.7.0 Release)
+--------------------------
 
 Fixed
 ~~~~~
@@ -46,6 +37,9 @@ Breaking API Change
 
 Changed
 ~~~~~~~
+
+* thrift: Update the test `c.t.finatra.thrift.ThriftClient` to close client and clean-up resources
+  during the `EmbeddedTwitterServer` close. ``PHAB_ID=D707963``
 
 * finatra: Update ScalaCheck to version 1.15.4 ``PHAB_ID=D691691``
 
