@@ -46,12 +46,6 @@ scala_library(
         "util/util-logging/src/main/scala",
         "util/util-slf4j-api/src/main/scala",
     ],
-    excludes = [
-        exclude(
-            org = "org.slf4j",
-            name = "slf4j-jdk14",
-        ),
-    ],
     exports = [
         "finatra/inject/inject-dtab/src/main/scala/com/twitter/inject/app",
     ],

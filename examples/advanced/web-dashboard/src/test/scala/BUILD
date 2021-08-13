@@ -17,10 +17,4 @@ junit_tests(
         "finatra/inject/inject-server/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-server/src/test/scala/com/twitter/inject/server",
     ],
-    excludes = [
-        exclude(
-            org = "org.slf4j",
-            name = "slf4j-jdk14",
-        ),
-    ],
 )
