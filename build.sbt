@@ -1457,7 +1457,7 @@ lazy val thriftIdl = (project in file("examples/thrift-server/idl"))
     name := "thrift-server-idl",
     moduleName := "thrift-example-idl",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
-    Compile / scroogeThriftIncludeFolders := Seq(file("examples/thrift/idl/src/main/thrift"))
+    Compile / scroogeThriftIncludeFolders := Seq(file("examples/thrift-server/idl/src/main/thrift"))
   ).dependsOn(
     thrift
   )
