@@ -12,6 +12,8 @@ Runtime Behavior Changes
 
 * finatra: Bump version of Jackson to 2.11.4. ``PHAB_ID=D727879``
 
+* finatra: Bump version of logback to 1.2.5. ``PHAB_ID=D729767``
+
 21.8.0 (No 21.7.0 Release)
 --------------------------
 
