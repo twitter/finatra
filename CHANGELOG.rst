@@ -14,6 +14,8 @@ Runtime Behavior Changes
 
 * finatra: Bump version of logback to 1.2.5. ``PHAB_ID=D729767``
 
+* finatra: Bump version of Joda-Time to 2.10.10. ``PHAB_ID=D729742``
+
 21.8.0 (No 21.7.0 Release)
 --------------------------
 
