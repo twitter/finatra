@@ -12,9 +12,11 @@ Runtime Behavior Changes
 
 * finatra: Bump version of Jackson to 2.11.4. ``PHAB_ID=D727879``
 
+* finatra: Bump version of Joda-Time to 2.10.10. ``PHAB_ID=D729742``
+
 * finatra: Bump version of logback to 1.2.5. ``PHAB_ID=D729767``
 
-* finatra: Bump version of Joda-Time to 2.10.10. ``PHAB_ID=D729742``
+* finatra: Bump version of json4s to 3.6.11. ``PHAB_ID=D729764``
 
 21.8.0 (No 21.7.0 Release)
 --------------------------
