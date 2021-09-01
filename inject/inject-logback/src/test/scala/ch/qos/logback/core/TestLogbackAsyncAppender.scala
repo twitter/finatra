@@ -16,10 +16,12 @@ class TestLogbackAsyncAppender(
     extends LogbackAsyncAppenderBase(statsReceiver) {
 
   override def start(): Unit = {
-    super.start()
     if (stopAsyncWorkerThread) {
-      worker.interrupt()
-      worker.stop()
+      // We override the worker thread from the base class to the one that does nothing.
+      worker = new Worker() {
+        override def run(): Unit = ()
+      }
     }
+    super.start()
   }
 }
