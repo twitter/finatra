@@ -10,6 +10,8 @@ Unreleased
 Runtime Behavior Changes
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
+* finatra: Bump version of Logback to 1.2.6. ``PHAB_ID=D742405``
+
 * finatra: Bump version of Jackson to 2.11.4. ``PHAB_ID=D727879``
 
 * finatra: Bump version of Joda-Time to 2.10.10. ``PHAB_ID=D729742``
