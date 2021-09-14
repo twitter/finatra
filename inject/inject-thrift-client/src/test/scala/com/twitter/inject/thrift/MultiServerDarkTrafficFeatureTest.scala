@@ -6,7 +6,6 @@ import com.twitter.inject.Test
 import com.twitter.inject.server.PortUtils
 import com.twitter.inject.thrift.integration.DarkTrafficThriftServer
 import com.twitter.test.thriftscala.EchoService
-import com.twitter.util.Future
 
 class MultiServerDarkTrafficFeatureTest extends Test with ThriftTest {
 
@@ -21,8 +20,8 @@ class MultiServerDarkTrafficFeatureTest extends Test with ThriftTest {
     disableTestLogging = true
   )
 
-  private[this] lazy val client123: EchoService[Future] =
-    liveEchoThriftServer.thriftClient[EchoService[Future]](clientId = "client123")
+  private[this] lazy val client123: EchoService.MethodPerEndpoint =
+    liveEchoThriftServer.thriftClient[EchoService.MethodPerEndpoint](clientId = "client123")
 
   // See DoEverythingThriftServerDarkTrafficFilterModule#enableSampling
 

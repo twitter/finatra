@@ -100,8 +100,8 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
    * or the method-per-endpoint type, e.g.,
    *
    * {{{
-   *   val client: MyService[Future] =
-   *    server.thriftClient[MyService[Future]](clientId = "client123")
+   *   val client: MyService.MethodPerEndpoint =
+   *    server.thriftClient[MyService.MethodPerEndpoint](clientId = "client123")
    *
    *   ... or ...
    *
@@ -187,9 +187,9 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
   /**
    * Builds a Thrift client to the EmbeddedTwitterServer in the higher-kinded form of a
    * method-per-endpoint which wraps a given `ServicePerEndpoint`. Converts the `ServicePerEndpoint`
-   * to a higher-kinded method-per-endpoint interface, e.g., `MyService[Future]`.
+   * to a higher-kinded method-per-endpoint interface, e.g., `MyService.MethodPerEndpoint`.
    *
-   * Note: While `MyService.MethodPerEndpoint` and `MyService[Future]` are semantically equivalent,
+   * Note: While `MyService.MethodPerEndpoint` and `MyService.MethodPerEndpoint` are semantically equivalent,
    * there are differences when it comes to some testing features that have trouble dealing with
    * higher-kinded types (like mocking).
    *
@@ -199,8 +199,8 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
    * {{{
    *  val servicePerEndpoint = MyService.ServicePerEndpoint =
    *    server.servicePerEndpoint[MyService.ServicePerEndpoint](clientId = "client123")
-   *  val client: MyService[Future] =
-   *    server.thriftClient[MyService.ServicePerEndpoint, MyService[Future]](servicePerEndpoint)
+   *  val client: MyService.MethodPerEndpoint =
+   *    server.thriftClient[MyService.ServicePerEndpoint, MyService.MethodPerEndpoint](servicePerEndpoint)
    * }}}
    *
    * This is useful if you want to be able to filter calls to the Thrift service but only want to

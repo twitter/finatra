@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Singleton
 
 @Singleton
-class MyEchoService extends EchoService[Future] with Logging {
+class MyEchoService extends EchoService.MethodPerEndpoint with Logging {
   private val timesToEcho = new AtomicInteger(1)
 
   /* Public */

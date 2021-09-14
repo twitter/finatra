@@ -46,8 +46,8 @@ class EmbeddedThriftServerControllerFeatureTest extends FeatureTest {
     new EmbeddedThriftServer(new ConverterControllerServer, disableTestLogging = true)
 
   /* Higher-kinded interface type */
-  val client123: Converter[Future] =
-    server.thriftClient[Converter[Future]](clientId = "client123")
+  val client123: Converter.MethodPerEndpoint =
+    server.thriftClient[Converter.MethodPerEndpoint](clientId = "client123")
   /* Method-Per-Endpoint type: https://twitter.github.io/scrooge/Finagle.html#id1 */
   val methodPerEndpointClient123: Converter.MethodPerEndpoint =
     server.thriftClient[Converter.MethodPerEndpoint](clientId = "client123")

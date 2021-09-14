@@ -15,13 +15,13 @@ import com.twitter.inject.thrift.integration.basic.{
 }
 import com.twitter.inject.thrift.integration.{TestHttpServer, TestThriftServer}
 import com.twitter.test.thriftscala.EchoService
-import com.twitter.util.Future
 import javax.inject.{Inject, Singleton}
 
 object DoEverythingThriftClientModuleFeatureTest {
-  @Singleton class EchoServiceFuture @Inject() (val service: EchoService[Future])
+  @Singleton class EchoServiceFuture @Inject() (val service: EchoService.MethodPerEndpoint)
 
-  class EchoHttpController1 @Inject() (echoThriftService: EchoService[Future]) extends Controller {
+  class EchoHttpController1 @Inject() (echoThriftService: EchoService.MethodPerEndpoint)
+      extends Controller {
     get("/echo") { request: Request =>
       val msg = request.params("msg")
       echoThriftService.echo(msg)
@@ -33,7 +33,7 @@ object DoEverythingThriftClientModuleFeatureTest {
   }
 
   /* Testing deprecated code for coverage */
-  class EchoHttpController2 @Inject() (echoThriftService: EchoService.FutureIface)
+  class EchoHttpController2 @Inject() (echoThriftService: EchoService.MethodPerEndpoint)
       extends Controller {
     get("/echo") { request: Request =>
       val msg = request.params("msg")
@@ -101,8 +101,8 @@ class DoEverythingThriftClientModuleFeatureTest extends FeatureTest with HttpTes
     super.afterAll()
   }
 
-  // test EchoService[Future]
-  test("EchoService[Future] is available from the injector") {
+  // test EchoService.MethodPerEndpoint
+  test("EchoService.MethodPerEndpoint is available from the injector") {
     httpServer1.injector.instance[EchoServiceFuture].service should not be null
   }
   test("EchoHttpServer1#echo 3 times") {
@@ -123,10 +123,6 @@ class DoEverythingThriftClientModuleFeatureTest extends FeatureTest with HttpTes
     httpServer1.httpGet(path = "/echo?msg=Bob", andExpect = Ok, withBody = "BobBobBob")
   }
 
-  // test EchoService.FutureIface
-  test("EchoService.FutureIface is available from the injector") {
-    httpServer2.injector.instance[EchoService.FutureIface] should not be null
-  }
   test("EchoHttpServer2#echo 3 times") {
     httpServer2.httpPost(
       path = "/config?timesToEcho=2",
@@ -145,10 +141,6 @@ class DoEverythingThriftClientModuleFeatureTest extends FeatureTest with HttpTes
     httpServer2.httpGet(path = "/echo?msg=Bob", andExpect = Ok, withBody = "BobBobBob")
   }
 
-  // test EchoService.MethodPerEndpoint
-  test("EchoService.MethodPerEndpoint is available from the injector") {
-    httpServer3.injector.instance[EchoService.MethodPerEndpoint] should not be null
-  }
   test("EchoHttpServer3#echo 3 times") {
     httpServer3.httpPost(
       path = "/config?timesToEcho=2",
@@ -169,7 +161,7 @@ class DoEverythingThriftClientModuleFeatureTest extends FeatureTest with HttpTes
 
   test("ThriftClient#asClosable") {
     val thriftClient = server
-      .thriftClient[EchoService[Future]](clientIdString)
+      .thriftClient[EchoService.MethodPerEndpoint](clientIdString)
 
     await(thriftClient.setTimesToEcho(2))
     await(thriftClient.setTimesToEcho(3))

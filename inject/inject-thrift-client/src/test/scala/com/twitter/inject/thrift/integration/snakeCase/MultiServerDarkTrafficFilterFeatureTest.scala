@@ -11,7 +11,6 @@ import com.twitter.snakeCase.thriftscala.{
   NotificationEvent,
   SnakeCaseService
 }
-import com.twitter.util.Future
 import scala.util.Random
 
 class MultiServerDarkTrafficFilterFeatureTest extends Test with ThriftTest {
@@ -28,8 +27,9 @@ class MultiServerDarkTrafficFilterFeatureTest extends Test with ThriftTest {
     disableTestLogging = true
   )
 
-  private[this] lazy val client123: SnakeCaseService[Future] =
-    liveSnakeCaseThriftServer.thriftClient[SnakeCaseService[Future]](clientId = "client123")
+  private[this] lazy val client123: SnakeCaseService.MethodPerEndpoint =
+    liveSnakeCaseThriftServer
+      .thriftClient[SnakeCaseService.MethodPerEndpoint](clientId = "client123")
 
   override protected def beforeEach(): Unit = {
     darkSnakeCaseThriftServer.statsReceiver.asInstanceOf[InMemoryStatsReceiver].clear()

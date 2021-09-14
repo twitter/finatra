@@ -6,7 +6,7 @@ import com.twitter.finatra.http.{EmbeddedHttpServer, RouteHint}
 import com.twitter.finatra.multiserver.CombinedServer.{AdminAdd1Request, DoEverythingCombinedServer}
 import com.twitter.finatra.thrift.ThriftClient
 import com.twitter.inject.server.FeatureTest
-import com.twitter.util.{Await, Future}
+import com.twitter.util.Await
 
 class DoEverythingCombinedServerFeatureTest extends FeatureTest {
 
@@ -16,7 +16,8 @@ class DoEverythingCombinedServerFeatureTest extends FeatureTest {
     flags = Map("https.port" -> ":0") // for testing `EmbeddedHttpServer.logStartup` method
   ) with ThriftClient
 
-  lazy val client: Adder[Future] = server.thriftClient[Adder[Future]](clientId = "client123")
+  lazy val client: Adder.MethodPerEndpoint =
+    server.thriftClient[Adder.MethodPerEndpoint](clientId = "client123")
 
   test("bind thrift external port") {
     server.thriftExternalPort should not be 0

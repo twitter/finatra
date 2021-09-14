@@ -24,7 +24,7 @@ import scala.reflect.ClassTag
  *       can be bound by including the [[ThriftClientIdModule]] in your server configuration.
  *
  * @tparam ThriftService A Scrooge-generated `MethodPerEndpoint` or the higher-kinded type of the
- *                       Scrooge-generated service, e.g., `MyService[Future]`.
+ *                       Scrooge-generated service, e.g., `MyService.MethodPerEndpoint`.
  * @see [[com.twitter.finagle.thrift.ThriftRichClient.build(dest: String, label: String)]]
  * @see [[https://twitter.github.io/finagle/guide/Clients.html Finagle Clients]]
  * @see [[https://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux What is ThriftMux?]]

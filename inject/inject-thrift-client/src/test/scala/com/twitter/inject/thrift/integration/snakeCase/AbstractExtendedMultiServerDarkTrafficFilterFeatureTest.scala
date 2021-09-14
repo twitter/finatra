@@ -10,7 +10,6 @@ import com.twitter.snakeCase.thriftscala.{
   ExtendedSnakeCaseService,
   NotificationEvent
 }
-import com.twitter.util.Future
 import scala.util.Random
 
 abstract class AbstractExtendedMultiServerDarkTrafficFilterFeatureTest(
@@ -20,9 +19,9 @@ abstract class AbstractExtendedMultiServerDarkTrafficFilterFeatureTest(
     extends Test
     with ThriftTest {
 
-  private[this] lazy val client123: ExtendedSnakeCaseService[Future] =
+  private[this] lazy val client123: ExtendedSnakeCaseService.MethodPerEndpoint =
     liveExtendedSnakeCaseThriftServer
-      .thriftClient[ExtendedSnakeCaseService[Future]](clientId = clientId)
+      .thriftClient[ExtendedSnakeCaseService.MethodPerEndpoint](clientId = clientId)
 
   override protected def beforeEach(): Unit = {
     darkExtendedSnakeCaseThriftServer.statsReceiver.asInstanceOf[InMemoryStatsReceiver].clear()
