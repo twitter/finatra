@@ -5,7 +5,10 @@
 # we add these here.
 target(
     name = "logging-bridges",
-    tags = ["logging_impl_check_whitelisted_target"],
+    tags = [
+        "bazel-compatible",
+        "logging_impl_check_whitelisted_target",
+    ],
     dependencies = [
         # -------- BEGIN: slf4j-api logging bridges -------------------------------
         # Add the slf4j-api logging bridges to ensure that any dependents
