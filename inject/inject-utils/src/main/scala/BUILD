@@ -9,6 +9,7 @@ scala_library(
     tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/github/nscala_time",
+        "3rdparty/jvm/javax/xml/bind:jaxb-api",
         "3rdparty/jvm/joda-time",
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "finagle/finagle-core/src/main",
