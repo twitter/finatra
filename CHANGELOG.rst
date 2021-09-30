@@ -7,6 +7,12 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Breaking API Change
+~~~~~~~~~~~~~~~~~~~
+
+* finatra-thrift: Removed c.t.finatra.thrift.ThriftClient#thriftClient, use
+  #methodPerEndpoint. ``PHAB_ID=D747744``
+
 Runtime Behavior Changes
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

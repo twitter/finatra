@@ -4,17 +4,23 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.ScalaObjectMapper
 import com.twitter.conversions.DurationOps._
-import com.twitter.doeverything.thriftscala.{Answer, DoEverything, Question}
+import com.twitter.doeverything.thriftscala.Answer
+import com.twitter.doeverything.thriftscala.DoEverything
+import com.twitter.doeverything.thriftscala.Question
 import com.twitter.finagle.http.Status
-import com.twitter.finagle.tracing.{Flags, Trace, TraceId}
-import com.twitter.finagle.{Filter, Service}
+import com.twitter.finagle.tracing.Flags
+import com.twitter.finagle.tracing.Trace
+import com.twitter.finagle.tracing.TraceId
+import com.twitter.finagle.Filter
+import com.twitter.finagle.Service
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.finatra.thrift.tests.doeverything.DoEverythingThriftServer
 import com.twitter.finatra.thrift.tests.doeverything.controllers.DoEverythingThriftController
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.Buf
 import com.twitter.scrooge
-import com.twitter.util.{Await, Future}
+import com.twitter.util.Await
+import com.twitter.util.Future
 import org.apache.thrift.TApplicationException
 
 class DoEverythingThriftServerFeatureTest extends FeatureTest {
@@ -24,20 +30,13 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
     flags = Map("magicNum" -> "57")
   )
 
-  /* Higher-kinded interface type */
-  val client123: DoEverything[Future] =
-    server.thriftClient[DoEverything[Future]](clientId = "client123")
   /* Method-Per-Endpoint type: https://twitter.github.io/scrooge/Finagle.html#id1 */
-  val methodPerEndpointClient123: DoEverything.MethodPerEndpoint =
+  val client123: DoEverything.MethodPerEndpoint =
     server.thriftClient[DoEverything.MethodPerEndpoint](clientId = "client123")
   /* Service-Per-Endpoint type: https://twitter.github.io/scrooge/Finagle.html#id2 */
   val servicePerEndpoint123: DoEverything.ServicePerEndpoint =
     server.servicePerEndpoint[DoEverything.ServicePerEndpoint](clientId = "client123")
-  /* Higher-kinded interface type wrapping a Service-per-endpoint: https://twitter.github.io/scrooge/Finagle.html#id1 */
-  val anotherMethodPerEndpointClient123: DoEverything[Future] =
-    server.thriftClient[DoEverything.ServicePerEndpoint, DoEverything[Future]](
-      servicePerEndpoint123
-    )
+
   /* Another Method-Per-Endpoint type wrapping a Service-per-endpoint: https://twitter.github.io/scrooge/Finagle.html#id1 */
   val yetAnotherMethodPerEndpointClient123: DoEverything.MethodPerEndpoint =
     server.methodPerEndpoint[DoEverything.ServicePerEndpoint, DoEverything.MethodPerEndpoint](
@@ -49,8 +48,6 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
 
   test("success") {
     await(client123.uppercase("Hi")) should equal("HI")
-    await(methodPerEndpointClient123.uppercase("Hi")) should equal("HI")
-    await(anotherMethodPerEndpointClient123.uppercase("Hi")) should equal("HI")
     await(yetAnotherMethodPerEndpointClient123.uppercase("Hi")) should equal("HI")
 
     val filter = new Filter[
