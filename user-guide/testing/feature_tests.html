@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Feature Tests &#8212; Finatra 21.8.0 documentation</title>
+    <title>Feature Tests &#8212; Finatra 21.9.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -391,8 +391,8 @@ class ExampleThriftServerFeatureTest extends FeatureTest {
       &quot;dtab.add&quot; -&gt; &quot;/$/inet=&gt;/$/nil;/zk=&gt;/$/nil&quot;)
   )
 
-  lazy val client: ExampleThrift[Future] =
-    server.thriftClient[ExampleThrift[Future]](clientId = &quot;client123&quot;)
+  lazy val client: ExampleThrift.MethodPerEndpoint =
+    server.thriftClient[ExampleThrift.MethodPerEndpoint](clientId = &quot;client123&quot;)
 
   test(&quot;ExampleThriftServer#return data accordingly&quot;) {
     await(client.doExample(&quot;input&quot;)) should equal(&quot;output&quot;)
@@ -509,8 +509,8 @@ class ExampleCombinedServerFeatureTest extends FeatureTest {
         &quot;dtab.add&quot; -&gt; &quot;/$/inet=&gt;/$/nil;/zk=&gt;/$/nil&quot;)
     ) with ThriftClient
 
-  lazy val client: ExampleThrift[Future] =
-    server.thriftClient[ExampleThrift[Future]](clientId = &quot;client123&quot;)
+  lazy val client: ExampleThrift.MethodPerEndpoint =
+    server.thriftClient[ExampleThrift.MethodPerEndpoint](clientId = &quot;client123&quot;)
 
   &quot;ExampleCombinedServer#perform feature&quot;) {
       server.httpGet(
