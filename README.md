@@ -115,7 +115,7 @@ breaks and changes in runtime behavior.
 
 The [develop branch](https://github.com/twitter/finatra/tree/develop) in Github tracks the latest code which is updated every week. If you want to contribute a patch or fix, please use this branch as the basis of your [Pull Request](https://help.github.com/articles/creating-a-pull-request/).
 
-For more information on providing contributions, please see our [CONTRIBUTING.md](/CONTRIBUTING.md) documentation.
+We feel that a welcoming community is important and we ask that you follow Twitter's [Open Source Code of Conduct](https://github.com/twitter/.github/blob/main/code-of-conduct.md) in all interactions with the community. For more information on providing contributions, please see our [CONTRIBUTING.md](/CONTRIBUTING.md) documentation.
 
 ## Presentations
 
