@@ -1,20 +1,27 @@
 package com.twitter.finatra.http.routing
 
+import com.google.inject.Key
+import com.google.inject.TypeLiteral
 import com.twitter.finagle.Filter
-import com.twitter.finatra.http.exceptions.{
-  AbstractExceptionMapper,
-  ExceptionManager,
-  ExceptionMapper,
-  ExceptionMapperCollection
-}
-import com.twitter.finatra.http.internal.routing.{CallbackConverterImpl, Route, RoutingService}
-import com.twitter.finatra.http.marshalling.{MessageBodyComponent, MessageBodyManager}
-import com.twitter.finatra.http.{AbstractController, Controller, HttpFilter}
+import com.twitter.finatra.http.exceptions.AbstractExceptionMapper
+import com.twitter.finatra.http.exceptions.ExceptionManager
+import com.twitter.finatra.http.exceptions.ExceptionMapper
+import com.twitter.finatra.http.exceptions.ExceptionMapperCollection
+import com.twitter.finatra.http.internal.routing.CallbackConverterImpl
+import com.twitter.finatra.http.internal.routing.Route
+import com.twitter.finatra.http.internal.routing.RoutingService
+import com.twitter.finatra.http.marshalling.MessageBodyComponent
+import com.twitter.finatra.http.marshalling.MessageBodyManager
+import com.twitter.finatra.http.AbstractController
+import com.twitter.finatra.http.Controller
+import com.twitter.finatra.http.HttpFilter
 import com.twitter.inject.TypeUtils
 import com.twitter.inject.internal.LibraryRegistry
-import com.twitter.inject.{Injector, Logging}
+import com.twitter.inject.Injector
+import com.twitter.inject.Logging
 import java.lang.annotation.{Annotation => JavaAnnotation}
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
+import javax.inject.Singleton
 import scala.collection.mutable.ArrayBuffer
 
 object HttpRouter {
@@ -107,38 +114,44 @@ class HttpRouter @Inject() (
   }
 
   /** Add global filter used for all requests annotated with Annotation Type */
-  def filter[FilterType <: HttpFilter: Manifest, Ann <: JavaAnnotation: Manifest]: HttpRouter = {
+  def filter[FilterType <: HttpFilter: Manifest, Ann <: JavaAnnotation: Manifest]: HttpRouter =
     filter(injector.instance[FilterType, Ann])
-  }
 
   /** Add global filter used for all requests, by default applied AFTER route matching */
-  def filter(clazz: Class[_ <: HttpFilter]): HttpRouter = {
+  def filter(clazz: Class[_ <: HttpFilter]): HttpRouter =
     filter(injector.instance(clazz))
-  }
 
   /** Add global filter used for all requests, optionally BEFORE route matching */
-  def filter(clazz: Class[_ <: HttpFilter], beforeRouting: Boolean): HttpRouter = {
-    if (beforeRouting) {
-      filter(injector.instance(clazz), beforeRouting = true)
-    } else {
-      filter(injector.instance(clazz))
-    }
-  }
+  def filter(clazz: Class[_ <: HttpFilter], beforeRouting: Boolean): HttpRouter =
+    filter(injector.instance(clazz), beforeRouting)
 
   /** Add global filter used for all requests, by default applied AFTER route matching */
-  def filter[FilterType <: HttpFilter: Manifest]: HttpRouter = {
-    filter(injector.instance[FilterType])
-  }
+  def filter(typeLiteral: TypeLiteral[_ <: HttpFilter]): HttpRouter =
+    filter(injector.instance(Key.get(typeLiteral)))
+
+  /** Add global filter used for all requests, by default applied AFTER route matching */
+  def filter(typeLiteral: TypeLiteral[_ <: HttpFilter], annotation: JavaAnnotation): HttpRouter =
+    filter(injector.instance(Key.get(typeLiteral, annotation)))
 
   /** Add global filter used for all requests, optionally BEFORE route matching */
-  def filter[FilterType <: HttpFilter: Manifest](beforeRouting: Boolean): HttpRouter = {
-    if (beforeRouting) {
-      filter(injector.instance[FilterType], beforeRouting = true)
-      this
-    } else {
-      filter(injector.instance[FilterType])
-    }
-  }
+  def filter(typeLiteral: TypeLiteral[_ <: HttpFilter], beforeRouting: Boolean): HttpRouter =
+    filter(injector.instance(Key.get(typeLiteral)), beforeRouting)
+
+  /** Add global filter used for all requests, optionally BEFORE route matching */
+  def filter(
+    typeLiteral: TypeLiteral[_ <: HttpFilter],
+    annotation: JavaAnnotation,
+    beforeRouting: Boolean
+  ): HttpRouter =
+    filter(injector.instance(Key.get(typeLiteral, annotation)), beforeRouting)
+
+  /** Add global filter used for all requests, by default applied AFTER route matching */
+  def filter[FilterType <: HttpFilter: Manifest]: HttpRouter =
+    filter(injector.instance[FilterType])
+
+  /** Add global filter used for all requests, optionally BEFORE route matching */
+  def filter[FilterType <: HttpFilter: Manifest](beforeRouting: Boolean): HttpRouter =
+    filter(injector.instance[FilterType], beforeRouting)
 
   /** Add global filter used for all requests, by default applied AFTER route matching */
   def filter(filter: HttpFilter): HttpRouter = {

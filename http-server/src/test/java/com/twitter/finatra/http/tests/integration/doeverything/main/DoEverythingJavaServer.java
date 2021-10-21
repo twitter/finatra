@@ -3,10 +3,21 @@ package com.twitter.finatra.http.tests.integration.doeverything.main;
 import java.util.Collection;
 import java.util.Collections;
 
-import com.google.inject.Module;
+import scala.reflect.ManifestFactory;
 
+import com.google.inject.Module;
+import com.google.inject.TypeLiteral;
+
+import com.twitter.finagle.http.Request;
+import com.twitter.finagle.http.Response;
 import com.twitter.finatra.http.AbstractHttpServer;
-import com.twitter.finatra.http.filters.CommonFilters;
+import com.twitter.finatra.http.filters.AccessLoggingFilter;
+import com.twitter.finatra.http.filters.ExceptionMappingFilter;
+import com.twitter.finatra.http.filters.HttpNackFilter;
+import com.twitter.finatra.http.filters.HttpResponseFilter;
+import com.twitter.finatra.http.filters.LoggingMDCFilter;
+import com.twitter.finatra.http.filters.StatsFilter;
+import com.twitter.finatra.http.filters.TraceIdMDCFilter;
 import com.twitter.finatra.http.routing.HttpRouter;
 
 public class DoEverythingJavaServer extends AbstractHttpServer {
@@ -24,7 +35,13 @@ public class DoEverythingJavaServer extends AbstractHttpServer {
   @Override
   public void configureHttp(HttpRouter router) {
     router
-        .filter(CommonFilters.class)
+        .filter(new TypeLiteral<LoggingMDCFilter<Request, Response>>(){})
+        .filter(ManifestFactory.classType(TraceIdMDCFilter.class))
+        .filter(new TypeLiteral<StatsFilter<Request>>() {})
+        .filter(new TypeLiteral<AccessLoggingFilter<Request>>() {})
+        .filter(new TypeLiteral<HttpResponseFilter<Request>>() {})
+        .filter(new TypeLiteral<ExceptionMappingFilter<Request>>() {})
+        .filter(new TypeLiteral<HttpNackFilter<Request>>() {})
         .filter(new AppendToHeaderJavaFilter("test", "1"))
         .add(DoEverythingJavaController.class)
         .add(new DoEverythingJavaNonInjectedController())
