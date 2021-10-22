@@ -42,6 +42,7 @@ scala_library(
         name = "finatra-httpclient-tests",
         repo = artifactory,
     ),
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "finagle/finagle-core/src/main",
