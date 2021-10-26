@@ -1,7 +1,8 @@
 package com.twitter.inject.tests
 
 import com.twitter.finagle.stats.InMemoryStatsReceiver
-import com.twitter.inject.{InMemoryStatsReceiverUtility, Test}
+import com.twitter.inject.InMemoryStatsReceiverUtility
+import com.twitter.inject.Test
 import com.twitter.conversions.DurationOps._
 import com.twitter.util.FuturePool
 import org.scalatest.exceptions.TestFailedDueToTimeoutException
@@ -68,32 +69,35 @@ class InMemoryStatsReceiverUtilityTest extends Test {
     var gaugeValue: Float = 0.0f
     val gauge = inMemoryStatsReceiver.addGauge("gauge") { gaugeValue }
 
+    val counterWait = FuturePool.unboundedPool { sr.counters.waitFor("counter", 1L, timeout) }
     // Change metrics every 20 millis
-    val increaseCounter = FuturePool.unboundedPool {
+    FuturePool.unboundedPool {
       for (_ <- 0 to 2) {
         Thread.sleep(20)
         // counter values: 0L, 1L, 2L, 3L
         counter.incr()
       }
     }
-    sr.counters.waitFor("counter", 1L, timeout)
+    await(counterWait)
 
-    val addToHistogram = FuturePool.unboundedPool {
+    val statsWait = FuturePool.unboundedPool { sr.stats.waitFor("stat", Seq(0.0f, 1.0f), timeout) }
+    FuturePool.unboundedPool {
       for (s <- 0 to 2) {
         Thread.sleep(20)
         // histogram values: Seq(0.0f, 1.0f, 2.0f)
         stat.add(s)
       }
     }
-    sr.stats.waitFor("stat", Seq(0.0f, 1.0f), timeout)
+    await(statsWait)
 
-    val increaseGauge = FuturePool.unboundedPool {
+    val gaugeWait = FuturePool.unboundedPool { sr.gauges.waitFor("gauge", 1.0f, timeout) }
+    FuturePool.unboundedPool {
       for (g <- 0 to 2) {
         Thread.sleep(20)
         // gauge values: 0.0f, 1.0f, 2.0f
         gaugeValue = g
       }
     }
-    sr.gauges.waitFor("gauge", 1.0f, timeout)
+    await(gaugeWait)
   }
 }

@@ -1,7 +1,8 @@
 package com.twitter.inject.server.tests
 
 import com.twitter.finagle.http.Status
-import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest}
+import com.twitter.inject.server.EmbeddedTwitterServer
+import com.twitter.inject.server.FeatureTest
 
 /** Test a non-inject TwitterServer using a Custom StatsReceiver implementation with the [[FeatureTest]] trait */
 class FeatureTestNonInjectionCustomStatsReceiverTest extends FeatureTest {
@@ -24,6 +25,7 @@ class FeatureTestNonInjectionCustomStatsReceiverTest extends FeatureTest {
    */
   override def beforeAll(): Unit = {
     server.start()
+    super.beforeAll()
   }
 
   test("TestServer#starts up") {
