@@ -7,6 +7,9 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+21.10.0
+-------
+
 * http-server: Add versions of `HttpRouter#filter` which accept a Guice `TypeLiteral` to
   aid Java users in being able to apply generically typed Filters obtained from the object graph.
   ``PHAB_ID=D768777``
