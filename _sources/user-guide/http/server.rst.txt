@@ -65,7 +65,7 @@ A more complete example includes adding Modules, a Controller, and Filters. In S
 
     import com.google.inject.Module
     import com.twitter.finatra.http.HttpServer
-    import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter, TraceIdMDCFilter}
+    import com.twitter.finatra.http.filters.{LoggingMDCFilter, TraceIdMDCFilter}
     import com.twitter.finatra.http.routing.HttpRouter
 
     object ExampleServerMain extends ExampleServer
@@ -79,7 +79,7 @@ A more complete example includes adding Modules, a Controller, and Filters. In S
         router
           .filter[LoggingMDCFilter[Request, Response]]
           .filter[TraceIdMDCFilter[Request, Response]]
-          .filter[CommonFilters]
+          .filter[ExampleFilter]
           .add[ExampleController]
       }
     }
@@ -89,15 +89,16 @@ in Java:
 .. code:: java
 
     import com.google.inject.Module;
+    import com.google.inject.TypeLiteral;
     import com.twitter.app.Flaggable;
     import com.twitter.finatra.http.AbstractHttpServer;
-    import com.twitter.finatra.http.filters.CommonFilters;
     import com.twitter.finatra.http.routing.HttpRouter;
-    import com.twitter.finatra.http.filters.CommonFilters; 
-    import com.twitter.finatra.http.filters.LoggingMDCFilter; 
+    import com.twitter.finatra.http.filters.LoggingMDCFilter;
+    import com.twitter.finatra.http.filters.StatsFilter;
     import com.twitter.finatra.http.filters.TraceIdMDCFilter;
     import java.util.Collection;
     import java.util.Collections;
+    import scala.reflect.ManifestFactory;
 
     public class ExampleServer extends AbstractHttpServer {
 
@@ -118,12 +119,34 @@ in Java:
       @Override
       public void configureHttp(HttpRouter httpRouter) {
           httpRouter
-              .filter(LoggingMDCFilter<Request, Response>.class)
-              .filter(TraceIdMDCFilter<Request, Response>.class)
-              .filter(CommonFilters.class)
+              .filter(new TypeLiteral<LoggingMDCFilter<Request, Response>>(){})
+              .filter(ManifestFactory.classType(TraceIdMDCFilter.class))
+              .filter(new TypeLiteral<StatsFilter<Request>>() {})
+              .filter(ExampleFilter.class)
               .add(ExampleController.class);
       }
     }
+
+Adding filters in Java can happen in multiple ways which is somewhat dependent on your tolerance to
+type erasure if you need to apply Filters that have `parameterized types <https://github.com/google/guice/wiki/FrequentlyAskedQuestions#how-to-inject-class-with-generic-type>`__.
+
+Above, we show how you can choose to use the `.filter(typeLiteral: TypeLiteral[T])` method from the
+`HttpRouter` which will obtain the Filter instance described by the `TypeLiteral[T] <https://github.com/google/guice/wiki/BuiltInBindings#typeliterals>`__
+and append it to the filter chain. There is a version which also accepts a `binding annotation <../getting-started/binding_annotations.html>`__
+which is useful if you need to construct a Filter that is not only parameterized but also discriminated
+by a `binding annotation <../getting-started/binding_annotations.html>`__. **This is the recommended
+way to configure generically typed Filters.**
+
+Or you can choose to use the `scala.reflect.ManifestFactory <https://www.scala-lang.org/api/2.12.4/scala/reflect/ManifestFactory$.html>`__
+to pass the Manifest type for a Filter class. Note in the usage above, the `TraceIdMDCFilter <https://twitter.github.io/finatra/scaladocs/com/twitter/finatra/http/filters/TraceIdMDCFilter.html>`__
+has two type params, `[Req,Rep]`. They are not specified when building the Manifest which amounts
+to the types being erased. In this case, this is OK since we are a.) appending the instance
+to a chain which will adapt the types appropriately and b.) we don't expect to obtain the Filter
+instance from the injector anywhere else in the code (which would need to be asked for as just
+`TraceIdMDCFilter` and not `TraceIdMDCFilter[Request, Response]`).
+
+Finally, you can always pass the class of the Filter to append. The instance will be obtained from
+the injector and appended to the filter chain.
 
 .. tip::
 
