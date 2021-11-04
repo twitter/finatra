@@ -4,10 +4,13 @@ import com.twitter.finagle.Address.Inet
 import com.twitter.finagle._
 import com.twitter.finagle.context.Contexts
 import com.twitter.finagle.partitioning.zk.ZkMetadata
-import com.twitter.finagle.stats.{Counter, StatsReceiver}
-import com.twitter.finatra.streams.queryable.thrift.domain.{RequestedShardIds, ServiceShardId}
+import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.finatra.streams.queryable.thrift.domain.RequestedShardIds
+import com.twitter.finatra.streams.queryable.thrift.domain.ServiceShardId
 import com.twitter.inject.Logging
-import com.twitter.util.{Activity, Future, Time}
+import com.twitter.util.Activity
+import com.twitter.util.Future
+import com.twitter.util.Time
 import scala.collection.mutable
 
 //TODO: DRY with com.twitter.finagle.loadbalancer.Balancers
@@ -78,8 +81,6 @@ private final class ShardIdAwareRoundRobinBalancer[Req, Rep](
     with Balancer[Req, Rep]
     with Updating[Req, Rep]
     with Logging {
-
-  protected[this] val maxEffortExhausted: Counter = statsReceiver.counter("max_effort_exhausted")
 
   override def additionalMetadata: Map[String, Any] = Map.empty
 
