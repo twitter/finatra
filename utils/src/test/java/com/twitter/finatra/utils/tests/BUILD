@@ -1,5 +1,6 @@
 junit_tests(
     sources = ["**/*.java"],
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/github/nscala_time",
         "3rdparty/jvm/joda-time",

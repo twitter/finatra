@@ -1,5 +1,6 @@
 junit_tests(
     sources = ["**/*.scala"],
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/javax/inject:javax.inject",
         "3rdparty/jvm/org/scalatestplus:junit",

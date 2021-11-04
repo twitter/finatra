@@ -10,6 +10,7 @@ junit_tests(
     ],
     compiler_option_sets = ["fatal_warnings"],
     strict_deps = True,
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala",
         "3rdparty/jvm/com/google/inject:guice",

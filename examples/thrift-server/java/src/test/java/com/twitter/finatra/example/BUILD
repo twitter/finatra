@@ -1,6 +1,7 @@
 junit_tests(
     sources = ["**/*.java"],
     compiler_option_sets = [],
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/junit",

@@ -1,5 +1,6 @@
 junit_tests(
     sources = ["com/twitter/finatra/httpclient/*.scala"],
+    tags = ["bazel-compatible"],
     dependencies = [
         ":test-deps",
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind",
