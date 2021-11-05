@@ -51,10 +51,6 @@ jobs:
           if [ -f ~/.sbt ]; then
             find ~/.sbt         -name "*.lock"               -delete
           fi
-      - name: clean up before building
-        run: |
-          rm -fr scrooge-generator-tests/target/
-        working-directory: ~/.dodo/clones/scrooge
       - name: build dependencies
         uses: twitter/dodo-build@v3
         with:
@@ -63,7 +59,7 @@ jobs:
           no-test: true
           publish-m2: true
           verbose: true
-          clean: true
+          clean-files: true
       - name: test
         run: ${{ format('./sbt ++{0} clean coverage test coverageReport', matrix.scala) }}
       - name: coverage
