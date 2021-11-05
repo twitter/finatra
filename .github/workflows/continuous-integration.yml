@@ -51,6 +51,10 @@ jobs:
           if [ -f ~/.sbt ]; then
             find ~/.sbt         -name "*.lock"               -delete
           fi
+      - name: clean up before building
+        run: |
+          ls -al ~/.dodo/clones/scrooge/scrooge-generator-tests/target/scala-2.13/src_managed
+          ./sbt ++clean
       - name: build dependencies
         uses: twitter/dodo-build@v3
         with:
