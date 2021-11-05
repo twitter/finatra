@@ -53,8 +53,7 @@ jobs:
           fi
       - name: clean up before building
         run: |
-          ls -al scrooge-generator-tests/target/scala-2.13/
-          ./sbt -verbose +clean
+          rm -fr scrooge-generator-tests/target/
         working-directory: ~/.dodo/clones/scrooge
       - name: build dependencies
         uses: twitter/dodo-build@v3
