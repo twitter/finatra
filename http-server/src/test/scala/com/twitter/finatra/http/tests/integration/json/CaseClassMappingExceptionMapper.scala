@@ -1,8 +1,10 @@
 package com.twitter.finatra.http.tests.integration.json
 
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
 import com.twitter.finatra.http.exceptions.ExceptionMapper
-import com.twitter.finatra.http.response.{ErrorsResponse, ResponseBuilder}
+import com.twitter.finatra.http.response.ErrorsResponse
+import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.inject.Logging
 import com.twitter.util.jackson.caseclass.exceptions.CaseClassMappingException
 import javax.inject.Inject
@@ -19,7 +21,8 @@ class CaseClassMappingExceptionMapper @Inject() (
   private def toError(exception: CaseClassMappingException): Seq[String] = {
     for (error <- exception.errors) yield {
       val initialMessage = error.getMessage()
-      if (initialMessage.contains("Cannot deserialize instance of")) {
+      if (initialMessage.contains("Cannot deserialize value of") ||
+        initialMessage.contains("Cannot deserialize instance of")) {
         warn(initialMessage)
         s"${error.path.names.head}: Unable to parse"
       } else {

@@ -1,32 +1,34 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main.controllers
 
-import com.twitter.finagle.http.{Method, Request, Status}
-import com.twitter.finagle.{ChannelClosedException, ChannelWriteException, Failure}
+import com.twitter.finagle.http.Method
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Status
+import com.twitter.finagle.ChannelClosedException
+import com.twitter.finagle.ChannelWriteException
+import com.twitter.finagle.Failure
 import com.twitter.finatra.http.Controller
-import com.twitter.finatra.http.annotations.{QueryParam, RouteParam}
+import com.twitter.finatra.http.annotations.QueryParam
+import com.twitter.finatra.http.annotations.RouteParam
 import com.twitter.finatra.http.exceptions._
-import com.twitter.finatra.http.jsonpatch.{JsonPatch, JsonPatchOperator, JsonPatchUtility}
+import com.twitter.finatra.http.jsonpatch.JsonPatch
+import com.twitter.finatra.http.jsonpatch.JsonPatchOperator
+import com.twitter.finatra.http.jsonpatch.JsonPatchUtility
 import com.twitter.finatra.http.marshalling.mapper._
 import com.twitter.finatra.http.request.RequestUtils
 import com.twitter.finatra.http.response._
 import com.twitter.finatra.http.routing.HttpForward
-import com.twitter.finatra.http.tests.integration.doeverything.main.domain.{
-  TestCaseClassWithLocalDate,
-  _
-}
+import com.twitter.finatra.http.tests.integration.doeverything.main.domain.TestCaseClassWithLocalDate
+import com.twitter.finatra.http.tests.integration.doeverything.main.domain._
 import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions._
-import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{
-  AppendToHeaderFilter,
-  ForbiddenFilter,
-  IdentityFilter
-}
+import com.twitter.finatra.http.tests.integration.doeverything.main.filters.AppendToHeaderFilter
+import com.twitter.finatra.http.tests.integration.doeverything.main.filters.ForbiddenFilter
+import com.twitter.finatra.http.tests.integration.doeverything.main.filters.IdentityFilter
 import com.twitter.finatra.http.tests.integration.doeverything.main.jsonpatch._
-import com.twitter.finatra.http.tests.integration.doeverything.main.services.{
-  ComplexServiceFactory,
-  DoEverythingService,
-  MultiService
-}
-import com.twitter.finatra.httpclient.{HttpClient, RequestBuilder}
+import com.twitter.finatra.http.tests.integration.doeverything.main.services.ComplexServiceFactory
+import com.twitter.finatra.http.tests.integration.doeverything.main.services.DoEverythingService
+import com.twitter.finatra.http.tests.integration.doeverything.main.services.MultiService
+import com.twitter.finatra.httpclient.HttpClient
+import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.finatra.json.annotations.CamelCaseMapper
 import com.twitter.inject.annotations.Flag
 import com.twitter.util.Future
@@ -671,8 +673,10 @@ class DoEverythingController @Inject() (
     throw InternalServerErrorException.plainText("foo1")
   }
 
-  get("/UnserializableClassField") { r: RequestWithInjectedMapper =>
-    r
+  get("/UnserializableClassField") { r: Request =>
+    val record = new UnserializableRecord(null)
+    record.recurse = record
+    record
   }
 
   get("/RequestWithQueryParamSeqString") { r: RequestWithQueryParamSeqString =>

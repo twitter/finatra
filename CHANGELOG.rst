@@ -7,6 +7,15 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+
+* finatra: Bump version of Jackson to 2.13.0 ``PHAB_ID=D744627``
+
+* http-server (BREAKING API CHANGE): Will now serialize many self-referential Jackson types as "{}"
+  instead of returning a serialization error.  See https://github.com/FasterXML/jackson-databind/commit/765e2fe1b7f6cdbc6855b32b39ba876fdff9fbcc
+  for more details. ``PHAB_ID=D744627``
+
 21.10.0
 -------
 
@@ -17,14 +26,11 @@ Unreleased
 21.9.0
 ------
 
-Breaking API Change
-~~~~~~~~~~~~~~~~~~~
+Changed
+~~~~~~~
 
-* finatra-thrift: Removed c.t.finatra.thrift.ThriftClient#thriftClient, use
+* finatra-thrift (BREAKING API CHANGE): Removed c.t.finatra.thrift.ThriftClient#thriftClient, use
   #methodPerEndpoint. ``PHAB_ID=D747744``
-
-Runtime Behavior Changes
-~~~~~~~~~~~~~~~~~~~~~~~~
 
 * finatra: Bump version of Logback to 1.2.6. ``PHAB_ID=D742405``
 
@@ -46,26 +52,23 @@ Fixed
   for non-failed `c.t.util.Future` in some cases where the tested failure is a supertype of
   `org.scalatest.exceptions.TestFailedException`. ``PHAB_ID=D705002``
 
-Breaking API Change
-~~~~~~~~~~~~~~~~~~~
+Changed
+~~~~~~~
 
-* inject-utils: Removed deprecated `c.t.inject.conversions.string`, use 
+* inject-utils (BREAKING API CHANGE): Removed deprecated `c.t.inject.conversions.string`, use 
   `c.t.conversions.StringOps` in the util/util-core project instead.
   ``PHAB_ID=D692729``
 
-* inject-utils: Removed deprecated `c.t.inject.conversions.tuple`, use
+* inject-utils (BREAKING API CHANGE): Removed deprecated `c.t.inject.conversions.tuple`, use
  `c.t.conversions.TupleOps` in the util/util-core project instead.
   ``PHAB_ID=D692429``
 
-* inject-utils: Removed deprecated `c.t.inject.conversions.seq`, use
+* inject-utils (BREAKING API CHANGE): Removed deprecated `c.t.inject.conversions.seq`, use
   `c.t.conversions.SeqOps` in the util/util-core project instead.
   ``PHAB_ID=D692775``
 
-* inject-utils: Removed implicit class RichMap from  `c.t.inject.conversions.map`, use
+* inject-utils (BREAKING API CHANGE): Removed implicit class RichMap from  `c.t.inject.conversions.map`, use
   `c.t.conversions.MapOps` in the util/util-core project instead. ``PHAB_ID=D699010``
-
-Changed
-~~~~~~~
 
 * thrift: Update the test `c.t.finatra.thrift.ThriftClient` to close client and clean-up resources
   during the `EmbeddedTwitterServer` close. ``PHAB_ID=D707963``
@@ -203,19 +206,16 @@ Added
   `com.twitter.inject.thrift.ThriftMethodBuilder` for customizing `configureServicePerEndpoint`.
   ``PHAB_ID=D619565``
 
-Breaking API Changes
-~~~~~~~~~~~~~~~~~~~~
+Changed
+~~~~~~~
 
-* finatra: Deprecate `c.t.inject.utils.AnnotationUtils`, users should instead use
+* finatra (BREAKING API CHANGE): Deprecate `c.t.inject.utils.AnnotationUtils`, users should instead use
   `c.t.util.reflect.Annotations` from `com.twitter:util-reflect`. Deprecate
   `c.t.finatra.utils.ClassUtils`, users should instead use either
   `c.t.util.reflect.Classes#simpleName`, `c.t.util.reflect.Types#isCaseClass` or
   `c.t.util.reflect.Types#notCaseClass` from `com.twitter:util-reflect`. ``PHAB_ID=D638655``
 
-* finatra: Builds are now only supported for Scala 2.12+ ``PHAB_ID=D631091``
-
-Changed
-~~~~~~~
+* finatra (BREAKING API CHANGE): Builds are now only supported for Scala 2.12+ ``PHAB_ID=D631091``
 
 * finatra: Revert to scala version 2.12.12 due to https://github.com/scoverage/sbt-scoverage/issues/319
   ``PHAB_ID=D635917``

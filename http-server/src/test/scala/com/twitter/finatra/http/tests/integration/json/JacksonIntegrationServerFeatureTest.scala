@@ -4,10 +4,13 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.google.inject.Module
 import com.twitter.finagle.http.Response
-import com.twitter.finagle.http.Status.{BadRequest, Ok}
+import com.twitter.finagle.http.Status.BadRequest
+import com.twitter.finagle.http.Status.Ok
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
+import com.twitter.finatra.http.Controller
+import com.twitter.finatra.http.EmbeddedHttpServer
+import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.jackson.ScalaObjectMapper

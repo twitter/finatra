@@ -4,6 +4,4 @@ import com.twitter.finatra.http.annotations.QueryParam
 import com.twitter.util.jackson.ScalaObjectMapper
 import javax.inject.Inject
 
-case class RequestWithInjectedMapper(
-  @Inject mapper: ScalaObjectMapper,
-  @QueryParam foo: Option[String])
+class UnserializableRecord(var recurse: UnserializableRecord)
