@@ -59,6 +59,7 @@ jobs:
           no-test: true
           publish-m2: true
           verbose: true
+          clean-files: true
       - name: test
         run: ${{ format('./sbt ++{0} clean coverage test coverageReport', matrix.scala) }}
       - name: coverage
