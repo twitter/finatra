@@ -673,10 +673,8 @@ class DoEverythingController @Inject() (
     throw InternalServerErrorException.plainText("foo1")
   }
 
-  get("/UnserializableClassField") { r: Request =>
-    val record = new UnserializableRecord(null)
-    record.recurse = record
-    record
+  get("/UnserializableClassField") { r: RequestWithInjectedMapper =>
+    r
   }
 
   get("/RequestWithQueryParamSeqString") { r: RequestWithQueryParamSeqString =>
