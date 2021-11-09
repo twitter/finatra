@@ -7,6 +7,25 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
+* inject-core: Introduce a `runAfterAll` hook in `c.t.inject.IntegrationTestMixin` to allow for
+  running logic to clean-up test resources in the `org.scalatest.BeforeAndAfterAll#afterAll` without
+  needing to 1) override `org.scalatest.BeforeAndAfterAll#afterAll`, 2) ensure `super` is called for
+  other resources clean-up, and 3) ensure all resources get cleaned up, regardless of non-fatal
+  exceptions thrown as part of the clean-up logic and otherwise fail the TestSuite run.
+  ``PHAB_ID=D707939``
+
+Changed
+~~~~~~~
+
+* finatra: Bump version of Jackson to 2.13.0 ``PHAB_ID=D744627``
+
+* http-server (BREAKING API CHANGE): Will now serialize many self-referential Jackson types as "{}"
+  instead of returning a serialization error.  See https://github.com/FasterXML/jackson-databind/commit/765e2fe1b7f6cdbc6855b32b39ba876fdff9fbcc
+  for more details. ``PHAB_ID=D744627``
+
 21.10.0
 -------
 
@@ -49,7 +68,7 @@ Fixed
 Breaking API Change
 ~~~~~~~~~~~~~~~~~~~
 
-* inject-utils: Removed deprecated `c.t.inject.conversions.string`, use 
+* inject-utils: Removed deprecated `c.t.inject.conversions.string`, use
   `c.t.conversions.StringOps` in the util/util-core project instead.
   ``PHAB_ID=D692729``
 

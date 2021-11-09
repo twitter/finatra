@@ -1,8 +1,9 @@
 package com.twitter.inject.server
 
-import com.twitter.inject.{Injector, IntegrationTestMixin}
-import org.scalatest.{Suite, SuiteMixin}
-import scala.util.control.NonFatal
+import com.twitter.inject.Injector
+import com.twitter.inject.IntegrationTestMixin
+import org.scalatest.Suite
+import org.scalatest.SuiteMixin
 
 /**
  * Testing trait which extends the [[com.twitter.inject.IntegrationTestMixin]] to provide
@@ -23,6 +24,14 @@ trait FeatureTestMixin extends SuiteMixin with IntegrationTestMixin { this: Suit
 
   override protected def injector: Injector = server.injector
 
+  runAfterAll {
+    try {
+      server.close()
+    } finally {
+      server.assertCleanShutdown()
+    }
+  }
+
   def printStats: Boolean = false
 
   override protected def afterEach(): Unit = {
@@ -40,17 +49,4 @@ trait FeatureTestMixin extends SuiteMixin with IntegrationTestMixin { this: Suit
     }
   }
 
-  override protected def afterAll(): Unit = {
-    try {
-      super.afterAll()
-    } finally {
-      server.close()
-      try {
-        server.assertCleanShutdown()
-      } catch {
-        case NonFatal(e) =>
-          e.printStackTrace(System.err)
-      }
-    }
-  }
 }
