@@ -2,11 +2,11 @@
 
 owners:
   - banderson
-  - ccoco
   - ibennett
   - jyan
   - mnakamura
   - yufang
 watchers:
   - csl-team:ldap
+  - ccoco
   - scosenza
