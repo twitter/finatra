@@ -4,7 +4,9 @@ import com.twitter.finagle.http.Method
 import com.twitter.finatra.http.exceptions.UnsupportedMethodException
 import com.twitter.finatra.http.request.AnyMethod
 import scala.annotation.tailrec
-import scala.collection.mutable.{ArrayBuffer, AnyRefMap => AMap, LinkedHashMap => LMap}
+import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable.{AnyRefMap => AMap}
+import scala.collection.mutable.{LinkedHashMap => LMap}
 
 private[http] case class RouteAndParameter(route: Route, routeParams: Map[String, String])
 private[http] case class MatchedNonConstantRoute(
@@ -96,7 +98,19 @@ private[http] class Trie(routes: Seq[Route]) {
         val child = childIterator.next()
         if (result.routeAndParamOpt.isEmpty) {
           if (child.constantSegment) {
-            if (child.segment.equals(currentSegment)) {
+            // we make sure to compare the segment match ignoring the `/`,
+            // this is because for paths with optional trailing slash (`/?`),
+            // we store the last segment with `/`, and this should match the
+            // case where the incoming path is without a `/`.
+            if (child.segment.endsWith("/") && child.segment.regionMatches(
+                true,
+                0,
+                currentSegment,
+                0,
+                currentSegment.length)) {
+              result = findNonConstantRoute(child, method, path, nextIndex + 1)
+              methodNotAllowed = methodNotAllowed || result.methodNotAllowed
+            } else if (child.segment.equals(currentSegment)) {
               result = findNonConstantRoute(child, method, path, nextIndex + 1)
               methodNotAllowed = methodNotAllowed || result.methodNotAllowed
             }
@@ -120,9 +134,12 @@ private[http] class Trie(routes: Seq[Route]) {
       node.routes.update(route.method.name, route)
       node.pattern += PathPattern(path)
     } else {
-      val segment =
-        if (nextIndex == -1) path.substring(startIndex, path.length)
+      val segment = {
+        // when we reached the last character, note we store `/` as part of the segment
+        // so we could treat a path with and without trailing slash as 2 different paths
+        if (nextIndex == -1 || nextIndex == path.length - 1) path.substring(startIndex, path.length)
         else path.substring(startIndex, nextIndex)
+      }
       if (segment == ":*") {
         // update the current node
         node.routes.update(route.method.name, route)

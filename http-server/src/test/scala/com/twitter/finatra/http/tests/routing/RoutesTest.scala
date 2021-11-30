@@ -1,9 +1,12 @@
 package com.twitter.finatra.http.tests.routing
 
 import com.twitter.finagle.Filter
-import com.twitter.finagle.http.{Method, Request, Response}
+import com.twitter.finagle.http.Method
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
 import com.twitter.finatra.http.contexts.RouteInfo
-import com.twitter.finatra.http.internal.routing.{Route, Routes}
+import com.twitter.finatra.http.internal.routing.Route
+import com.twitter.finatra.http.internal.routing.Routes
 import com.twitter.inject.Test
 import com.twitter.util.Future
 import org.scalatest.OptionValues
@@ -47,6 +50,31 @@ class RoutesTest extends Test with OptionValues {
     routes.handle(Request("/groups/"), bypassFilters = true) should be('defined)
 
     routes.handle(Request("/groups"), bypassFilters = true) should be('defined)
+
+    routes.handle(Request("/foo"), bypassFilters = true) should be('empty)
+  }
+
+  test("constant route with same segment but different trailing slashes variant") {
+    val routes = Routes.createRoutes(
+      Seq(
+        createRoute(Method.Get, "/user/123"),
+        createRoute(Method.Get, "/user/123/")
+      ))
+
+    routes.handle(Request("/user/123"), bypassFilters = true) should be('defined)
+
+    routes.handle(Request("/user/123/"), bypassFilters = true) should be('defined)
+
+    routes.handle(Request("/foo"), bypassFilters = true) should be('empty)
+  }
+
+  test(
+    "constant route with same segment but different trailing slashes variant are treated as different routes") {
+    val routes = Routes.createRoutes(Seq(createRoute(Method.Get, "/user/123")))
+
+    routes.handle(Request("/user/123"), bypassFilters = true) should be('defined)
+
+    routes.handle(Request("/user/123/"), bypassFilters = true) should be('empty)
 
     routes.handle(Request("/foo"), bypassFilters = true) should be('empty)
   }

@@ -20,6 +20,14 @@ Added
   exceptions thrown as part of the clean-up logic and otherwise fail the TestSuite run.
   ``PHAB_ID=D707939``
 
+Runtime Behavior Changes
+~~~~~~~~~~~~~~~~~~~~~~~~
+* http-server: Treat non-constant routes with or without trailing slash as 2 different routes.
+  For example, "/user/:id" and "/user/:id/" are treated as different routes in Finatra. You can still
+  use the optional trailing slash `/?` which will indicate Finatra to ignore the trailing slash while
+  routing. We don't recommend to mix both use cases when defining your routes. For example: passing
+  in both `/user/:id` and `/user/:id/?` at the same time. ``PHAB_ID=D787560``
+
 Changed
 ~~~~~~~
 
