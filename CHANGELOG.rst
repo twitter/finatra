@@ -31,8 +31,6 @@ Runtime Behavior Changes
 Changed
 ~~~~~~~
 
-* finatra: Bump version of Jackson to 2.13.0 ``PHAB_ID=D744627``
-
 * http-server (BREAKING API CHANGE): Will now serialize many self-referential Jackson types as "{}"
   instead of returning a serialization error.  See https://github.com/FasterXML/jackson-databind/commit/765e2fe1b7f6cdbc6855b32b39ba876fdff9fbcc
   for more details. ``PHAB_ID=D744627``
