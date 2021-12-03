@@ -6,7 +6,10 @@ scala_library(
         name = "inject-utils",
         repo = artifactory,
     ),
-    tags = ["bazel-compatible"],
+    tags = [
+        "bazel-compatible",
+        "known-jdk11-failure:CSL-11503",
+    ],
     dependencies = [
         "3rdparty/jvm/com/github/nscala_time",
         "3rdparty/jvm/javax/xml/bind:jaxb-api",
