@@ -5,14 +5,22 @@ import com.twitter.app.Flag
 import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.service.NilService
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finagle.{ListeningServer, NullServer, Service, ThriftMux}
-import com.twitter.finatra.thrift.modules.{ExceptionManagerModule, ThriftResponseClassifierModule}
+import com.twitter.finagle.ListeningServer
+import com.twitter.finagle.NullServer
+import com.twitter.finagle.Service
+import com.twitter.finagle.ThriftMux
+import com.twitter.finatra.thrift.modules.ExceptionManagerModule
+import com.twitter.finatra.thrift.modules.ThriftResponseClassifierModule
 import com.twitter.finatra.thrift.response.ThriftResponseClassifier
-import com.twitter.finatra.thrift.routing.{JavaThriftRouter, ThriftRouter}
+import com.twitter.finatra.thrift.routing.JavaThriftRouter
+import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.modules.StackTransformerModule
-import com.twitter.inject.server.{AbstractTwitterServer, PortUtils, TwitterServer}
-import com.twitter.util.{Await, Duration}
+import com.twitter.inject.server.AbstractTwitterServer
+import com.twitter.inject.server.PortUtils
+import com.twitter.inject.server.TwitterServer
+import com.twitter.util.Await
+import com.twitter.util.Duration
 import java.net.InetSocketAddress
 
 private object ThriftServerTrait {
@@ -316,13 +324,16 @@ abstract class AbstractThriftServer extends AbstractTwitterServer with ThriftSer
     server: ThriftMux.Server
   ): ListeningServer = {
     val router = injector.instance[JavaThriftRouter]
+    // Configure the service first so that serviceClazzStackParam is defined
+    // by the time it is checked (for Java servers configured via JavaThriftRouter)
+    val service = configureService(router.createService(server.serverParam))
     router.getServiceClazzStackParam match {
       case Some(serviceClazz) =>
         server
           .withServiceClass(serviceClazz)
-          .serve(addr, configureService(router.createService(server.serverParam)))
+          .serve(addr, service)
       case _ =>
-        server.serve(addr, configureService(router.createService(server.serverParam)))
+        server.serve(addr, service)
     }
   }
 
