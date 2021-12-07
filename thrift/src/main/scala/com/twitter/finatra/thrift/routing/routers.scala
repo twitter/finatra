@@ -2,25 +2,30 @@ package com.twitter.finatra.thrift.routing
 
 import com.twitter.finagle
 import com.twitter.finagle.service.NilService
-import com.twitter.finagle.thrift.{
-  AbstractThriftService,
-  RichServerParam,
-  ThriftService,
-  ToThriftService
-}
+import com.twitter.finagle.thrift.AbstractThriftService
+import com.twitter.finagle.thrift.RichServerParam
+import com.twitter.finagle.thrift.ThriftService
+import com.twitter.finagle.thrift.ToThriftService
 import com.twitter.finagle._
 import com.twitter.finatra.thrift.Controller
 import com.twitter.finatra.thrift.ScroogeServiceImpl
-import com.twitter.finatra.thrift.exceptions.{ExceptionManager, ExceptionMapper}
-import com.twitter.finatra.thrift.internal.routing.{NullThriftService, Registrar}
+import com.twitter.finatra.thrift.exceptions.ExceptionManager
+import com.twitter.finatra.thrift.exceptions.ExceptionMapper
+import com.twitter.finatra.thrift.internal.routing.NullThriftService
+import com.twitter.finatra.thrift.internal.routing.Registrar
 import com.twitter.inject.annotations.Flag
 import com.twitter.inject.TypeUtils
 import com.twitter.inject.internal.LibraryRegistry
-import com.twitter.inject.{Injector, Logging, StackTransformer}
-import com.twitter.scrooge.{Request, Response, ThriftMethod}
+import com.twitter.inject.Injector
+import com.twitter.inject.Logging
+import com.twitter.inject.StackTransformer
+import com.twitter.scrooge.Request
+import com.twitter.scrooge.Response
+import com.twitter.scrooge.ThriftMethod
 import java.lang.annotation.{Annotation => JavaAnnotation}
 import java.lang.reflect.{Method => JMethod}
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
+import javax.inject.Singleton
 
 private[routing] abstract class BaseThriftRouter[Router <: BaseThriftRouter[Router]](
   injector: Injector,
@@ -508,7 +513,7 @@ class JavaThriftRouter @Inject() (injector: Injector, exceptionManager: Exceptio
           )
 
           registerGlobalFilter(libraryRegistry, filters)
-          serviceClazzStackParam = Some(serviceClazz)
+          serviceClazzStackParam = Some(serviceIfaceClazz)
           registerService(libraryRegistry, serviceClazz.getName)
           registerMethods(serviceName, controllerClazz, declaredMethods.toSeq)
 
