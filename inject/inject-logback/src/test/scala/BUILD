@@ -4,6 +4,7 @@ junit_tests(
     tags = [
         "bazel-compatible",
         "known-jdk11-failure:VM-4209",
+        "known-to-fail-jira:CSL-11518",
     ],
     dependencies = [
         "3rdparty/jvm/ch/qos/logback:logback-classic",
