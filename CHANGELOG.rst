@@ -7,6 +7,12 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+
+* inject-core: Move `runAfterAll` hook from `c.t.inject.IntegrationTestMixin` to
+  `c.t.inject.TestMixin` ``PHAB_ID=D784576``
+
 21.11.0
 -------
 

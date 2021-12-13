@@ -1,12 +1,21 @@
 package com.twitter.inject
 
-import com.twitter.util.{Await, Awaitable, Duration, ExecutorServiceFuturePool, Future}
+import com.twitter.util.Await
+import com.twitter.util.Awaitable
+import com.twitter.util.Duration
+import com.twitter.util.ExecutorServiceFuturePool
+import com.twitter.util.Future
 import java.nio.charset.{StandardCharsets => JChar}
 import java.util.TimeZone
 import com.twitter.io.StreamIO
+import java.util.concurrent.ConcurrentLinkedQueue
 import org.joda.time.DateTimeZone
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Suite, SuiteMixin}
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.BeforeAndAfterEach
+import org.scalatest.Suite
+import org.scalatest.SuiteMixin
 import org.scalatest.matchers.should.Matchers
+import scala.util.control.NonFatal
 
 /**
  * Testing trait which provides the following stackable modification traits:
@@ -32,20 +41,50 @@ trait TestMixin
 
   setUtcTimeZone()
 
+  // while the test execution (beforeAll, afterAll, beforeEach, afterEach, test, etc)
+  // is serial, we have no guarantees of where they will register afterAll functions, so
+  // we attempt to provide thread safety.
+  @volatile private[this] var afterAllStarted: Boolean = false
+  private[this] val afterAllFns: ConcurrentLinkedQueue[() => Unit] =
+    new ConcurrentLinkedQueue[() => Unit]()
+
   /* Overrides */
 
-  override protected def afterAll(): Unit = {
-    super.afterAll()
+  /**
+   * When overriding, ensure that `super.afterAll()` is called.
+   */
+  override protected def afterAll(): Unit =
     try {
-      pool.executor.shutdown()
-    } catch {
-      case t: Throwable =>
-        println(s"Unable to shutdown ${"Test " + getClass.getSimpleName} future pool executor. $t")
-        t.printStackTrace()
+      super.afterAll()
+    } finally {
+      afterAllStarted = true
+      // we drain the queue and call the exits, regardless of exceptions
+      while (!afterAllFns.isEmpty) {
+        executeFn(afterAllFns.poll())
+      }
+
+      try {
+        pool.executor.shutdown()
+      } catch {
+        case t: Throwable =>
+          println(
+            s"Unable to shutdown ${"Test " + getClass.getSimpleName} future pool executor. $t")
+          t.printStackTrace()
+      }
     }
-  }
 
   /* Protected */
+
+  /**
+   * Logic that needs to be executed during the [[afterAll()]] block of tests. This method
+   * allows for resources, such as clients or servers, to be cleaned up after test execution
+   * without the need for multiple overrides to `afterAll` and calling `super`.
+   *
+   * @param f The logic to execute in the [[afterAll()]]
+   */
+  protected final def runAfterAll(f: => Unit): Unit =
+    if (afterAllStarted) executeFn(() => f) // execute inline if we've started `afterAll`
+    else afterAllFns.add(() => f) // otherwise we add it to the queue
 
   /**
    * An unbounded [[ExecutorServiceFuturePool]] available for use in testing.
@@ -158,4 +197,13 @@ trait TestMixin
   protected def bytes(str: String): Array[Byte] = {
     str.getBytes(JChar.UTF_8)
   }
+
+  // we always try/catch because we don't want non-fatal errors to fail tests in our `afterAll`
+  private[this] def executeFn(f: () => Unit): Unit =
+    try {
+      f()
+    } catch {
+      case NonFatal(e) =>
+        e.printStackTrace(System.err)
+    }
 }
