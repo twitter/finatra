@@ -7,6 +7,7 @@ Getting Started
 ---------------
 
 - :doc:`getting-started/basics`
+- :doc:`getting-started/dependency_injection`
 - :doc:`getting-started/framework`
 - :doc:`getting-started/twitter_server`
 - :doc:`getting-started/lifecycle`

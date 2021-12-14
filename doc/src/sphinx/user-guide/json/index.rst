@@ -380,7 +380,7 @@ The default is very similar to the `jackson-module-guice <https://github.com/Fas
 
 .. note::
 
-    Jackson “InjectableValues” is not related to `Dependency Injection <../getting-started/basics.html#dependency-injection>`_
+    Jackson “InjectableValues” is not related to `Dependency Injection <../getting-started/dependency_injection.html#dependency-injection>`_
     or Google `Guice <https://github.com/google/guice>`_. It is meant to convey the filling in of a
     value in a deserialized object from somewhere other than the incoming JSON. In Jackson parlance,
     this is “injection” of a value.

@@ -705,8 +705,8 @@ Best Practices
    an object makes use of the Module less verbose.
 -  Remember to add ``@Singleton`` to your ``@Provides`` method if you require only **one** instance
    per JVM process.
--  Avoid `cyclic dependencies <basics.html#avoid-cyclic-dependencies>`_.
--  Avoid `conditional logic <basics.html#avoid-conditional-logic-in-modules>`_ in a `TwitterModule`.
+-  Avoid `cyclic dependencies <dependency_injection.html#avoid-cyclic-dependencies>`_.
+-  Avoid `conditional logic <dependency_injection.html#avoid-conditional-logic-in-modules>`_ in a `TwitterModule`.
 -  Make use of the `TwitterModule` `lifecycle  <#module-lifecycle>`_.
 -  Make use of the `TestInjector <../testing/integration_tests.html#id2>`_ for integration testing
    with `TwitterModules` as this will correctly handle the lifecycle and Flag parsing of

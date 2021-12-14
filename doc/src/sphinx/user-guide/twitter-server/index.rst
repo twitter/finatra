@@ -56,7 +56,7 @@ injectable `TwitterServer`. Finatra provides |c.t.inject.server.TwitterServer|_ 
 version of the `TwitterServer <https://twitter.github.io/twitter-server/>`__
 |c.t.server.TwitterServer|_ trait.
 
-Specifically, this allows for the use of `dependency injection <../getting-started/basics.html#dependency-injection>`__
+Specifically, this allows for the use of `dependency injection <../getting-started/dependency_injection.html#dependency-injection>`__
 in a |TwitterServer|_ with support for `Modules <../getting-started/modules.html>`__ allowing for
 `powerful feature testing <../testing/index.html#types-of-tests>`__ of the server.
 
