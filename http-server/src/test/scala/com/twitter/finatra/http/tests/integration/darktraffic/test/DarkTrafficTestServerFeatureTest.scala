@@ -4,7 +4,8 @@ import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.tests.integration.darktraffic.main.DarkTrafficTestServer
 import com.twitter.util.mock.Mockito
-import com.twitter.inject.server.{FeatureTest, PortUtils}
+import com.twitter.inject.server.FeatureTest
+import com.twitter.inject.server.PortUtils
 import org.scalatest.concurrent.Eventually._
 
 class DarkTrafficTestServerFeatureTest extends FeatureTest with Mockito {
@@ -99,6 +100,8 @@ class DarkTrafficTestServerFeatureTest extends FeatureTest with Mockito {
   override def beforeEach(): Unit = {
     liveServer.clearStats()
     server.clearStats()
+    server.assertHealthy()
+    super.beforeEach()
   }
 
   override def afterAll(): Unit = {
