@@ -18,7 +18,7 @@ provides an injectable version of the |c.t.app.App|_ trait: |c.t.inject.app.App|
 
 Extending the |c.t.inject.app.App|_ trait creates an injectable |c.t.app.App|_.
 
-This allows for the use of `dependency injection <../getting-started/basics.html#dependency-injection>`__
+This allows for the use of `dependency injection <../getting-started/dependency_injection.html#dependency-injection>`__
 in a |c.t.app.App|_ with support for `modules <../getting-started/modules.html>`__ which allows for
 `powerful feature testing <../testing/index.html#types-of-tests>`__ of the application.
 

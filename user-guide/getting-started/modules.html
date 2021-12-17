@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Modules &#8212; Finatra 21.11.0 documentation</title>
+    <title>Modules &#8212; Finatra 21.12.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -685,8 +685,8 @@ and any <a class="reference external" href="./flags.html">Flags</a> defined with
 an object makes use of the Module less verbose.</li>
 <li>Remember to add <code class="docutils literal notranslate"><span class="pre">&#64;Singleton</span></code> to your <code class="docutils literal notranslate"><span class="pre">&#64;Provides</span></code> method if you require only <strong>one</strong> instance
 per JVM process.</li>
-<li>Avoid <a class="reference external" href="basics.html#avoid-cyclic-dependencies">cyclic dependencies</a>.</li>
-<li>Avoid <a class="reference external" href="basics.html#avoid-conditional-logic-in-modules">conditional logic</a> in a <cite>TwitterModule</cite>.</li>
+<li>Avoid <a class="reference external" href="dependency_injection.html#avoid-cyclic-dependencies">cyclic dependencies</a>.</li>
+<li>Avoid <a class="reference external" href="dependency_injection.html#avoid-conditional-logic-in-modules">conditional logic</a> in a <cite>TwitterModule</cite>.</li>
 <li>Make use of the <cite>TwitterModule</cite> <a class="reference external" href="#module-lifecycle">lifecycle</a>.</li>
 <li>Make use of the <a class="reference external" href="../testing/integration_tests.html#id2">TestInjector</a> for integration testing
 with <cite>TwitterModules</cite> as this will correctly handle the lifecycle and Flag parsing of
