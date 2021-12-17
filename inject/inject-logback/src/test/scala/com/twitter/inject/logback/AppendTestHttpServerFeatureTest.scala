@@ -2,17 +2,25 @@ package com.twitter.inject.logback
 
 import ch.qos.logback.classic.layout.TTLLLayout
 import ch.qos.logback.classic.spi.ILoggingEvent
-import ch.qos.logback.classic.{BasicConfigurator, Level, LoggerContext}
+import ch.qos.logback.classic.BasicConfigurator
+import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.core.encoder.LayoutWrappingEncoder
-import ch.qos.logback.core.{ConsoleAppender, LogbackAsyncAppenderBase, TestLogbackAsyncAppender}
+import ch.qos.logback.core.ConsoleAppender
+import ch.qos.logback.core.LogbackAsyncAppenderBase
+import ch.qos.logback.core.TestLogbackAsyncAppender
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.ScalaObjectMapper
-import com.twitter.finagle.http.{Request, Status}
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Status
 import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
-import com.twitter.inject.{Logging, Test}
+import com.twitter.finatra.http.Controller
+import com.twitter.finatra.http.EmbeddedHttpServer
+import com.twitter.finatra.http.HttpServer
+import com.twitter.inject.Logging
+import com.twitter.inject.Test
 import java.util.concurrent.LinkedBlockingQueue
 import org.slf4j.LoggerFactory
 import scala.collection.JavaConverters._
@@ -105,6 +113,7 @@ class AppendTestHttpServerFeatureTest extends Test {
     }
   }
 
+  // AsyncAppender drops TRACE/DEBUG/INFO if the queue is 80% full
   test("Assert dropped TRACE, DEBUG, and INFO events are tracked by the InMemoryStatsReceiver") {
     val server = new EmbeddedHttpServer(
       twitterServer = new AppendTestHttpServer,
@@ -132,15 +141,21 @@ class AppendTestHttpServerFeatureTest extends Test {
 
         server.inMemoryStats.counters
           .assert(s"logback/appender/$appenderStatName/events/discarded/debug", 5)
+        server.inMemoryStats.counters
+          .assert(s"logback/appender/$appenderStatName/events/discarded/trace", 5)
 
-        val infoCount = server.inMemoryStats.counters
-          .toSortedMap(s"logback/appender/$appenderStatName/events/discarded/info")
+        // The server sometimes logs extra messages non-deterministically. We check >= 5 to ensure
+        // entries are appropriately being discarded. DEBUG/TRACE entries are dropped determistically
+        // so we are sure the dropped entries correlate with the log entries emitted by the http server.
+        // If this changes, the test should be restructured to ensure the dropped messages correlate
+        // more appropriately.
 
         // this is sometimes 5 and sometimes 6 because startup sometimes logs a message that
         // gets discarded in this test. however, it's non-deterministic.
-        assert(infoCount == 5 || infoCount == 6)
-        server.inMemoryStats.counters
-          .assert(s"logback/appender/$appenderStatName/events/discarded/trace", 5)
+        val infoCount = server.inMemoryStats.counters
+          .toSortedMap(s"logback/appender/$appenderStatName/events/discarded/info")
+        assert(infoCount >= 5)
+
         server.inMemoryStats.counters
           .get(s"logback/appender/$appenderStatName/events/discarded/warn") should be(None)
         server.inMemoryStats.counters
@@ -151,6 +166,8 @@ class AppendTestHttpServerFeatureTest extends Test {
     }
   }
 
+  // When setting `neverBlock`, AsyncAppender drops messages regardless of their state to not
+  // block the application. In this state, we expect ERROR/WARN to also get dropped.
   test("Assert ERROR AND WARN events are discarded when neverBlock is true") {
     val server = new EmbeddedHttpServer(
       twitterServer = new AppendTestHttpServer,
@@ -184,32 +201,33 @@ class AppendTestHttpServerFeatureTest extends Test {
         server.httpGet("/log_events")
 
         server.inMemoryStats.counters
+          .assert(s"logback/appender/$appenderStatName/events/discarded/debug", 5)
+        server.inMemoryStats.counters
           .assert(s"logback/appender/$appenderStatName/events/discarded/trace", 5)
 
-        val errorCount = server.inMemoryStats.counters
-          .toSortedMap(s"logback/appender/$appenderStatName/events/discarded/error")
+        // The server sometimes logs extra messages non-deterministically. We check >= 5 to ensure
+        // entries are appropriately being discarded. DEBUG/TRACE entries are dropped determistically
+        // so we are sure that the dropped entries correlate with the log entries emitted by the http server.
+        // If this changes, the test should be restructured to ensure the dropped messages correlate
+        // more appropriately.
+
         // this is sometimes 5 and sometimes 6 because startup sometimes logs a message that
         // gets discarded in this test. however, it's non-deterministic.
-        assert(errorCount == 5 || errorCount == 6)
-
-        val warnCount =
-          server.inMemoryStats.counters
-            .toSortedMap(s"logback/appender/$appenderStatName/events/discarded/warn")
-        // this is sometimes 5 and sometimes 6 because startup sometimes logs a message that
-        // gets discarded in this test. however, it's non-deterministic.
-        assert(warnCount == 5 || warnCount == 6)
-
-        val debugCount = server.inMemoryStats.counters
-          .toSortedMap(s"logback/appender/$appenderStatName/events/discarded/debug")
-        // this is sometimes 5 and sometimes 6 because startup sometimes logs a message that
-        // gets discarded in this test. however, it's non-deterministic.
-        assert(debugCount == 5 || debugCount == 6)
-
         val infoCount = server.inMemoryStats.counters
           .toSortedMap(s"logback/appender/$appenderStatName/events/discarded/info")
+        assert(infoCount >= 5)
+
         // this is sometimes 5 and sometimes 6 because startup sometimes logs a message that
         // gets discarded in this test. however, it's non-deterministic.
-        assert(infoCount == 5 || infoCount == 6)
+        val warnCount = server.inMemoryStats.counters
+          .toSortedMap(s"logback/appender/$appenderStatName/events/discarded/warn")
+        assert(warnCount >= 5)
+
+        // this is sometimes 5 and sometimes 6 because startup sometimes logs a message that
+        // gets discarded in this test. however, it's non-deterministic.
+        val errorCount = server.inMemoryStats.counters
+          .toSortedMap(s"logback/appender/$appenderStatName/events/discarded/error")
+        assert(errorCount >= 5)
 
         // no events make it to the unit test console appender
         consoleAppenderQueue.size() should equal(0)
