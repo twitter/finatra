@@ -19,7 +19,7 @@ Finatra is a lightweight framework for building fast, testable, scala applicatio
 ## Getting involved
 
 * Website: [https://twitter.github.io/finatra/](https://twitter.github.io/finatra/)
-* Latest news: [Blog](https://twitter.github.io/finatra/blog/archives/)
+* Latest news: [Blog](https://finagle.github.io/blog/)
 * Github Source: [https://github.com/twitter/finatra/](https://github.com/twitter/finatra/)
 * Gitter: [https://gitter.im/twitter/finatra](https://gitter.im/twitter/finatra)
 * Mailing List: [finatra-users@googlegroups.com](https://groups.google.com/forum/#!forum/finatra-users)
