@@ -71,6 +71,7 @@ object EmbeddedMysqlServer {
   )
 
   case class Config private (
+    baseClient: Mysql.Client = Mysql.client,
     version: MySqlVersion = v5_7_28, // TODO - replace with public default before SBT build support
     path: Path = Paths.get(System.getProperty("java.io.tmpdir")),
     databaseName: String = "a_database",
@@ -78,6 +79,7 @@ object EmbeddedMysqlServer {
     setupQueries: Seq[String] = Seq.empty,
     closeGracePeriod: Duration = 1.second,
     closeAwaitPeriod: Duration = 2.seconds) {
+    def withBaseClient(baseClient: Mysql.Client): Config = copy(baseClient = baseClient)
     def withVersion(version: MySqlVersion): Config = copy(version = version)
     def withPath(path: Path): Config = copy(path = path)
     def withDatabaseName(databaseName: String): Config = copy(databaseName = databaseName)
@@ -96,7 +98,8 @@ object EmbeddedMysqlServer {
       users = users,
       setupQueries = setupQueries,
       closeGracePeriod = closeGracePeriod,
-      closeAwaitPeriod = closeAwaitPeriod
+      closeAwaitPeriod = closeAwaitPeriod,
+      baseClient
     )
   }
 
@@ -145,7 +148,8 @@ final class EmbeddedMysqlServer private (
   users: Seq[User],
   setupQueries: Seq[String],
   closeGracePeriod: Duration,
-  closeAwaitPeriod: Duration)
+  closeAwaitPeriod: Duration,
+  baseClient: Mysql.Client)
     extends Logging
     with Matchers {
 
@@ -235,7 +239,7 @@ final class EmbeddedMysqlServer private (
   def mysqlClient(user: User): MysqlClient = {
     start()
     debug(s"Creating client for '$user' on EmbeddedMysqlServer '$databaseName'")
-    val underlying = Mysql.client
+    val underlying = baseClient
       .withStatsReceiver(NullStatsReceiver)
       .withDatabase(databaseName)
       .withCredentials(user.name, user.password.orNull)

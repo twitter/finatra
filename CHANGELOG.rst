@@ -7,6 +7,12 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+* mysql-client: Add base client configuration in EmbeddedMysqlServer to enable for more robust
+  testing setup. This would allow users to add configurations like `charset`.
+  Added a overridable function `createRichClient` to MysqlClientModuleTrait to allow
+  creating the mysql client in other ways like `newRichClient(Finagle.Name, String)`
+  ``PHAB_ID=D805245``
+
 21.12.0
 -------
 

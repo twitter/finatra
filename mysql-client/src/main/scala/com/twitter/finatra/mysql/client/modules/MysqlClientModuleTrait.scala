@@ -1,8 +1,10 @@
 package com.twitter.finatra.mysql.client.modules
 
 import com.twitter.finagle.Mysql
+import com.twitter.finagle.mysql.Client
 import com.twitter.finagle.mysql.Request
 import com.twitter.finagle.mysql.Result
+import com.twitter.finagle.mysql.Transactions
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.mysql.client.Config
 import com.twitter.finatra.mysql.client.MysqlClient
@@ -106,12 +108,28 @@ trait MysqlClientModuleTrait extends StackClientModuleTrait[Request, Result, Mys
     statsReceiver: StatsReceiver,
     config: Config
   ): MysqlClient = {
-    val baseClient = newClient(injector, statsReceiver, config).newRichClient(dest, label)
+    val baseClient = createRichClient(injector, newClient(injector, statsReceiver, config))
     val clnt = MysqlClient(baseClient)
     onExit {
       Await.result(clnt.close(defaultClosableGracePeriod), defaultClosableAwaitPeriod)
     }
     clnt
+  }
+
+  /**
+   * This method should be overriden by implementors if the rich client must be created in a
+   * different manner.
+   *
+   * @param injector the [[com.twitter.inject.Injector]] which can be used to help create the rich
+   *                 client
+   * @param client the configured client
+   * @return the rich client
+   */
+  protected def createRichClient(
+    injector: Injector,
+    client: Mysql.Client
+  ): Client with Transactions = {
+    client.newRichClient(dest, label)
   }
 
   private[this] def newClient(
