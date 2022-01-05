@@ -15,7 +15,10 @@ jvm_binary(
     name = "bin",
     basename = "injectable-app-scala",
     main = "com.twitter.finatra.example.SampleAppMain",
-    tags = ["bazel-compatible"],
+    tags = [
+        "bazel-compatible",
+        "known-to-fail-jira:CSL-11559",
+    ],
     dependencies = [
         ":example",
         "3rdparty/jvm/ch/qos/logback:logback-classic",
