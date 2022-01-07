@@ -5,25 +5,32 @@ import com.twitter.app.Flag
 import com.twitter.conversions.DurationOps._
 import com.twitter.conversions.StorageUnitOps._
 import com.twitter.conversions.StringOps._
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
 import com.twitter.finagle.service.NilService
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finagle.{Http, ListeningServer, NullServer, Service}
+import com.twitter.finagle.Http
+import com.twitter.finagle.ListeningServer
+import com.twitter.finagle.NullServer
+import com.twitter.finagle.Service
 import com.twitter.finatra.http.marshalling.modules.MessageBodyFlagsModule
-import com.twitter.finatra.http.modules.{
-  AccessLogModule,
-  ExceptionManagerModule,
-  HttpResponseClassifierModule,
-  MessageBodyModule
-}
+import com.twitter.finatra.http.modules.AccessLogModule
+import com.twitter.finatra.http.modules.ExceptionManagerModule
+import com.twitter.finatra.http.modules.HttpResponseClassifierModule
+import com.twitter.finatra.http.modules.MessageBodyModule
 import com.twitter.finatra.http.response.HttpResponseClassifier
-import com.twitter.finatra.http.routing.{AdminHttpRouter, HttpRouter}
+import com.twitter.finatra.http.routing.AdminHttpRouter
+import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
 import com.twitter.finatra.modules.FileResolverModule
 import com.twitter.finatra.validation.ValidatorModule
 import com.twitter.inject.annotations.Lifecycle
-import com.twitter.inject.server.{AbstractTwitterServer, PortUtils, TwitterServer}
-import com.twitter.util.{Await, Duration, StorageUnit}
+import com.twitter.inject.server.AbstractTwitterServer
+import com.twitter.inject.server.PortUtils
+import com.twitter.inject.server.TwitterServer
+import com.twitter.util.Await
+import com.twitter.util.Duration
+import com.twitter.util.StorageUnit
 import java.net.InetSocketAddress
 
 private object HttpServerTrait {
@@ -338,7 +345,7 @@ trait HttpServerTrait extends TwitterServer {
           info(s"https server announced to $addr")
           httpsServer.announce(addr)
       }
-      info(s"https server started on port: $address")
+      info(s"https server started on port ${PortUtils.getPort(httpsServer.boundAddress)}")
     }
   }
 
