@@ -17,7 +17,6 @@ jvm_binary(
     main = "com.twitter.finatra.example.SampleAppMain",
     tags = [
         "bazel-compatible",
-        "known-to-fail-jira:CSL-11559",
     ],
     dependencies = [
         ":example",
