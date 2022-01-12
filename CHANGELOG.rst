@@ -7,6 +7,9 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+22.1.0
+------
+
 Added
 ~~~~~
 * http-server: (BREAKING API CHANGE) Allow for customization of the building of the HTTP and HTTPS
