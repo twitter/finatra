@@ -306,7 +306,7 @@ trait HttpServerTrait extends TwitterServer {
 
     // START HTTP
     for (address <- parsePort(httpPortFlag)) {
-      httpServer = build(
+      httpServer = buildHttpListeningServer(
         address,
         frameworkConfigureHttpServer(
           configureHttpServer(defaultHttpServer(httpServerNameFlag()))
@@ -328,7 +328,7 @@ trait HttpServerTrait extends TwitterServer {
 
     // START HTTPS
     for (address <- parsePort(httpsPortFlag)) {
-      httpsServer = build(
+      httpsServer = buildHttpsListeningServer(
         address,
         frameworkConfigureHttpsServer(
           configureHttpsServer(defaultHttpServer(httpsServerNameFlag()))
@@ -427,11 +427,27 @@ trait HttpServerTrait extends TwitterServer {
    *
    * @param addr the [[InetSocketAddress]] address to bind the resultant [[ListeningServer]].
    * @param server the configured [[Http.Server]] stack.
-   * @return a constructed [[ListeningServer]].
+   * @return a constructed HTTP [[ListeningServer]].
    */
-  protected[http] def build(addr: InetSocketAddress, server: Http.Server): ListeningServer = {
+  protected def buildHttpListeningServer(
+    addr: InetSocketAddress,
+    server: Http.Server
+  ): ListeningServer =
     server.serve(addr, this.httpService)
-  }
+
+  /**
+   * Construct a [[com.twitter.finagle.ListeningServer]] from the given [[InetSocketAddress]] addr
+   * and configured [[Http.Server]] stack.
+   *
+   * @param addr the [[InetSocketAddress]] address to bind the resultant [[ListeningServer]].
+   * @param server the configured [[Http.Server]] stack.
+   * @return a constructed HTTPS [[ListeningServer]].
+   */
+  protected def buildHttpsListeningServer(
+    addr: InetSocketAddress,
+    server: Http.Server
+  ): ListeningServer =
+    server.serve(addr, this.httpService)
 
   /* Private */
 
@@ -476,8 +492,17 @@ trait HttpServer extends HttpServerTrait {
    */
   protected final def httpService: Service[Request, Response] = NilService
 
-  /** Serve the `Service[Request, Response]` from the configured [[HttpRouter]]. */
-  override protected[http] final def build(
+  /** Serve the `Service[-Request, +Response]` from the configured [[HttpRouter]]. */
+  override protected def buildHttpListeningServer(
+    addr: InetSocketAddress,
+    server: Http.Server
+  ): ListeningServer = {
+    val router = injector.instance[HttpRouter]
+    server.serve(addr, router.services.externalService)
+  }
+
+  /** Serve the `Service[-Request, +Response]` from the configured [[HttpRouter]]. */
+  override protected def buildHttpsListeningServer(
     addr: InetSocketAddress,
     server: Http.Server
   ): ListeningServer = {

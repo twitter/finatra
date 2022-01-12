@@ -7,10 +7,22 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+* http-server: (BREAKING API CHANGE) Allow for customization of the building of the HTTP and HTTPS
+  `ListeningServer` constructs. This allows users to specify any additional configuration over the
+  Finagle `Service[-R, +R]` that is constructed by the `HttpRouter`. The
+  `c.t.finatra.http.HttpServerTrait#build` method has been replaced by two more specific versions:
+  `#buildHttpListeningServer` and `#buildHttpsListeningServer` which are used in `postWarmup` to
+  create the appropriate `ListeningServer` given it has a defined port value.
+
+  We also update the `EmbeddedHttpServer` and `EmbeddedHttpClient` to allow for being able to run both
+  the HTTP and HTTPS listening servers in tests. This is done by setting the `httpsPortFlag` to the
+  value of `https.port` which will enable the binding of the HTTPS listening server to the ephemeral
+  port in tests. ``PHAB_ID=D809633``
+
 * mysql-client: Add base client configuration in EmbeddedMysqlServer to enable for more robust
   testing setup. This would allow users to add configurations like `charset`.
   Added a overridable function `createRichClient` to MysqlClientModuleTrait to allow
-  creating the mysql client in other ways like `newRichClient(Finagle.Name, String)`
+  creating the mysql client in other ways like `newRichClient(Finagle.Name, String)`.
   ``PHAB_ID=D805245``
 
 21.12.0
@@ -20,7 +32,7 @@ Changed
 ~~~~~~~
 
 * inject-core: Move `runAfterAll` hook from `c.t.inject.IntegrationTestMixin` to
-  `c.t.inject.TestMixin` ``PHAB_ID=D784576``
+  `c.t.inject.TestMixin`. ``PHAB_ID=D784576``
 
 21.11.0
 -------

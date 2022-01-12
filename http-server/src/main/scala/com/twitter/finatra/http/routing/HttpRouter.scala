@@ -3,6 +3,9 @@ package com.twitter.finatra.http.routing
 import com.google.inject.Key
 import com.google.inject.TypeLiteral
 import com.twitter.finagle.Filter
+import com.twitter.finagle.Service
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
 import com.twitter.finatra.http.exceptions.AbstractExceptionMapper
 import com.twitter.finatra.http.exceptions.ExceptionManager
 import com.twitter.finatra.http.exceptions.ExceptionMapper
@@ -66,6 +69,16 @@ class HttpRouter @Inject() (
   }
 
   /* Public */
+
+  /**
+   * The resultant external (e.g., non-admin routes only) Finagle `Service[-Request, +Response]`
+   * created from all added controllers and filters.
+   * @return a configured `Service[-Request, +Response]`
+   * @note it is '''important''' to only call this method once '''all router configuration''' has
+   *       been applied, otherwise the returned `Service[-Request, +Response]` instance will
+   *       be incomplete and any subsequent configuration will not be applied due to memoization.
+   */
+  def externalService: Service[Request, Response] = services.externalService
 
   /**
    * Allows maximum forwarding depth for a given [[com.twitter.finagle.http.Request]]
@@ -678,7 +691,7 @@ class HttpRouter @Inject() (
   }
 
   private[finatra] def partitionRoutesByType: RoutesByType = {
-    info("Adding routes\n" + routes.map(_.summary).mkString("\n"))
+    if (routes.nonEmpty) info("Adding routes\n" + routes.map(_.summary).mkString("\n"))
     val (adminRoutes, externalRoutes) = routes.partition { route =>
       route.path.startsWith(FinatraAdminPrefix) || route.admin
     }

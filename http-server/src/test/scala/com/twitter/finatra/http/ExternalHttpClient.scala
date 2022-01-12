@@ -1,9 +1,14 @@
 package com.twitter.finatra.http
 
 import com.twitter.conversions.DurationOps._
-import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports, info}
+import com.twitter.inject.server.EmbeddedTwitterServer
+import com.twitter.inject.server.PortUtils
+import com.twitter.inject.server.Ports
+import com.twitter.inject.server.info
 import com.twitter.util.jackson.ScalaObjectMapper
-import com.twitter.util.{Await, Closable, Promise}
+import com.twitter.util.Await
+import com.twitter.util.Closable
+import com.twitter.util.Promise
 import net.codingwell.scalaguice.typeLiteral
 import scala.collection.JavaConverters._
 
@@ -17,11 +22,19 @@ private[twitter] trait ExternalHttpClient { self: EmbeddedTwitterServer =>
   def twitterServer: Ports
 
   /**
-   * The expected flag that sets the external port for serving the underlying Thrift service.
+   * The expected flag that sets the external port for serving the underlying Http service.
    * @return a String representing the Http port flag.
    * @see [[com.twitter.app.Flag]]
    */
   def httpPortFlag: String = "http.port"
+
+  /**
+   * The expected flag that sets the external port for serving the underlying Http service.
+   * The default "" means "unset". To enable the default Finatra HTTPS port, set the value to `https.port`.
+   * @return a String representing the Https port flag.
+   * @see [[com.twitter.app.Flag]]
+   */
+  def httpsPortFlag: String = ""
 
   /** Provide an override to the underlying server's mapper */
   def mapperOverride: Option[ScalaObjectMapper]
@@ -48,7 +61,9 @@ private[twitter] trait ExternalHttpClient { self: EmbeddedTwitterServer =>
    * @see [[PortUtils.ephemeralLoopback]].
    */
   override protected[twitter] def combineArgs(): Array[String] = {
-    s"-$httpPortFlag=${PortUtils.ephemeralLoopback}" +: self.combineArgs
+    configurePortFlag(Option(httpPortFlag)) ++
+      configurePortFlag(Option(httpsPortFlag)) ++
+      self.combineArgs
   }
 
   /* Public */
@@ -156,5 +171,11 @@ private[twitter] trait ExternalHttpClient { self: EmbeddedTwitterServer =>
         client.close(deadline)
       }
     } else Closable.nop
+  }
+
+  private[this] def configurePortFlag(flagOpt: Option[String]): Array[String] = flagOpt match {
+    case Some(flg) if flg.nonEmpty =>
+      Array(s"-$flg=${PortUtils.ephemeralLoopback}")
+    case _ => Array.empty[String]
   }
 }

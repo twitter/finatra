@@ -3,14 +3,20 @@ package com.twitter.finatra.http
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.inject.Stage
 import com.twitter.app.GlobalFlag
-import com.twitter.finagle.http.{MediaType, Method, Status, _}
+import com.twitter.finagle.http.MediaType
+import com.twitter.finagle.http.Method
+import com.twitter.finagle.http.Status
+import com.twitter.finagle.http._
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.JsonAwareEmbeddedHttpClient.jsonParseWithNormalizer
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.inject.conversions.map._
-import com.twitter.inject.server.{EmbeddedHttpClient, EmbeddedTwitterServer, Ports}
+import com.twitter.inject.server.EmbeddedHttpClient
+import com.twitter.inject.server.EmbeddedTwitterServer
+import com.twitter.inject.server.Ports
 import com.twitter.util.jackson.ScalaObjectMapper
-import com.twitter.util.{Duration, Memoize}
+import com.twitter.util.Duration
+import com.twitter.util.Memoize
 import java.lang.annotation.Annotation
 import scala.collection.JavaConverters._
 
@@ -31,9 +37,10 @@ import scala.collection.JavaConverters._
  *                                          integration tests that connect to external services).
  * @param defaultRequestHeaders             Headers to always send to the embedded server.
  * @param defaultHttpSecure                 Default all requests to the server to be HTTPS.
- * @param mapperOverride                    [[import com.twitter.util.jackson.ScalaObjectMapper]] to use instead of the mapper configuered by
+ * @param mapperOverride                    [[com.twitter.util.jackson.ScalaObjectMapper]] to use instead of the mapper configuered by
  *                                          the embedded server.
  * @param httpPortFlag                      Name of the flag that defines the external http port for the server.
+ * @param httpsPortFlag                     Name of the flag that defines the external https port for the server.
  * @param streamResponse                    Toggle to not unwrap response content body to allow caller to stream response.
  * @param verbose                           Enable verbose logging during test runs.
  * @param disableTestLogging                Disable all logging emitted from the test infrastructure.
@@ -66,6 +73,7 @@ class EmbeddedHttpServer(
   defaultHttpSecure: Boolean = false,
   override val mapperOverride: Option[ScalaObjectMapper] = None,
   override val httpPortFlag: String = "http.port",
+  override val httpsPortFlag: String = "", // by default set the https.port flag to empty (disabled)
   override val streamResponse: Boolean = false,
   verbose: Boolean = false,
   disableTestLogging: Boolean = false,
@@ -168,7 +176,7 @@ class EmbeddedHttpServer(
    * response#contentString into an instance of type [[ResponseType]].
    *
    * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
-   * @see [[import com.twitter.util.jackson.ScalaObjectMapper]]#parse[T: Manifest](string: String)
+   * @see [[com.twitter.util.jackson.ScalaObjectMapper#parse[T: Manifest](string: String)]]
    * @param path - URI of the request
    * @param accept - add request Accept header with the given [[com.twitter.finagle.http.MediaType]]
    * @param headers - additional headers that should be passed with the request
@@ -294,7 +302,7 @@ class EmbeddedHttpServer(
    * response#contentString into an instance of type [[ResponseType]].
    *
    * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
-   * @see [[import com.twitter.util.jackson.ScalaObjectMapper]]#parse[T: Manifest](string: String)
+   * @see [[com.twitter.util.jackson.ScalaObjectMapper#parse[T: Manifest](string: String)]]
    * @param path - URI of the request
    * @param postBody - body of the POST request
    * @param suppress - suppress http client logging
@@ -422,7 +430,7 @@ class EmbeddedHttpServer(
    * response#contentString into an instance of type [[ResponseType]].
    *
    * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
-   * @see [[import com.twitter.util.jackson.ScalaObjectMapper]]#parse[T: Manifest](string: String)
+   * @see [[com.twitter.util.jackson.ScalaObjectMapper#parse[T: Manifest](string: String)]]
    * @param path - URI of the request
    * @param putBody - the body of the PUT request
    * @param suppress - suppress http client logging
@@ -552,7 +560,7 @@ class EmbeddedHttpServer(
    * response#contentString into an instance of type [[ResponseType]].
    *
    * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
-   * @see [[import com.twitter.util.jackson.ScalaObjectMapper]]#parse[T: Manifest](string: String)
+   * @see [[com.twitter.util.jackson.ScalaObjectMapper#parse[T: Manifest](string: String)]]
    * @param path - URI of the request
    * @param deleteBody - the body of the DELETE request
    * @param suppress - suppress http client logging
@@ -731,7 +739,7 @@ class EmbeddedHttpServer(
    * response#contentString into an instance of type [[ResponseType]].
    *
    * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
-   * @see [[import com.twitter.util.jackson.ScalaObjectMapper]]#parse[T: Manifest](string: String)
+   * @see [[com.twitter.util.jackson.ScalaObjectMapper#parse[T: Manifest](string: String)]]
    * @param path - URI of the request
    * @param patchBody - the body of the PATCH request
    * @param suppress - suppress http client logging
@@ -991,7 +999,7 @@ class EmbeddedHttpServer(
    * Sends the given [[com.twitter.finagle.http.Request]] to the embedded server
    * serializing the normalized response#contentString into an instance of type [[ResponseType]]
    *
-   * @see [[import com.twitter.util.jackson.ScalaObjectMapper]]#parse[T: Manifest](string: String)
+   * @see [[com.twitter.util.jackson.ScalaObjectMapper#parse[T: Manifest](string: String)]]
    * @param request - built [[com.twitter.finagle.http.Request]] to send to the embedded server
    * @param suppress - suppress http client logging
    * @param andExpect - expected [[com.twitter.finagle.http.Status]] value
