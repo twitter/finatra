@@ -7,6 +7,8 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
 * http-server: (BREAKING API CHANGE) Allow for customization of the building of the HTTP and HTTPS
   `ListeningServer` constructs. This allows users to specify any additional configuration over the
   Finagle `Service[-R, +R]` that is constructed by the `HttpRouter`. The
@@ -24,6 +26,11 @@ Unreleased
   Added a overridable function `createRichClient` to MysqlClientModuleTrait to allow
   creating the mysql client in other ways like `newRichClient(Finagle.Name, String)`.
   ``PHAB_ID=D805245``
+
+Changed
+~~~~~~~
+
+* finatra: Bump version of Jackson to 2.13.1 ``PHAB_ID=D808049``
 
 21.12.0
 -------
@@ -72,14 +79,11 @@ Changed
 21.9.0
 ------
 
-Breaking API Change
-~~~~~~~~~~~~~~~~~~~
+Changed
+~~~~~~~
 
-* finatra-thrift: Removed c.t.finatra.thrift.ThriftClient#thriftClient, use
+* finatra-thrift (BREAKING API CHANGE): Removed c.t.finatra.thrift.ThriftClient#thriftClient, use
   #methodPerEndpoint. ``PHAB_ID=D747744``
-
-Runtime Behavior Changes
-~~~~~~~~~~~~~~~~~~~~~~~~
 
 * finatra: Bump version of Logback to 1.2.6. ``PHAB_ID=D742405``
 
@@ -101,8 +105,8 @@ Fixed
   for non-failed `c.t.util.Future` in some cases where the tested failure is a supertype of
   `org.scalatest.exceptions.TestFailedException`. ``PHAB_ID=D705002``
 
-Breaking API Change
-~~~~~~~~~~~~~~~~~~~
+Changed
+~~~~~~~
 
 * inject-utils: Removed deprecated `c.t.inject.conversions.string`, use
   `c.t.conversions.StringOps` in the util/util-core project instead.
@@ -118,9 +122,6 @@ Breaking API Change
 
 * inject-utils: Removed implicit class RichMap from  `c.t.inject.conversions.map`, use
   `c.t.conversions.MapOps` in the util/util-core project instead. ``PHAB_ID=D699010``
-
-Changed
-~~~~~~~
 
 * thrift: Update the test `c.t.finatra.thrift.ThriftClient` to close client and clean-up resources
   during the `EmbeddedTwitterServer` close. ``PHAB_ID=D707963``
@@ -258,19 +259,16 @@ Added
   `com.twitter.inject.thrift.ThriftMethodBuilder` for customizing `configureServicePerEndpoint`.
   ``PHAB_ID=D619565``
 
-Breaking API Changes
-~~~~~~~~~~~~~~~~~~~~
+Changed
+~~~~~~~
 
-* finatra: Deprecate `c.t.inject.utils.AnnotationUtils`, users should instead use
+* finatra (BREAKING API CHANGE): Deprecate `c.t.inject.utils.AnnotationUtils`, users should instead use
   `c.t.util.reflect.Annotations` from `com.twitter:util-reflect`. Deprecate
   `c.t.finatra.utils.ClassUtils`, users should instead use either
   `c.t.util.reflect.Classes#simpleName`, `c.t.util.reflect.Types#isCaseClass` or
   `c.t.util.reflect.Types#notCaseClass` from `com.twitter:util-reflect`. ``PHAB_ID=D638655``
 
-* finatra: Builds are now only supported for Scala 2.12+ ``PHAB_ID=D631091``
-
-Changed
-~~~~~~~
+* finatra (BREAKING API CHANGE): Builds are now only supported for Scala 2.12+ ``PHAB_ID=D631091``
 
 * finatra: Revert to scala version 2.12.12 due to https://github.com/scoverage/sbt-scoverage/issues/319
   ``PHAB_ID=D635917``

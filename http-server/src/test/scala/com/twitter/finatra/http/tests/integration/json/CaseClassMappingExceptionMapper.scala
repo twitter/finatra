@@ -21,7 +21,8 @@ class CaseClassMappingExceptionMapper @Inject() (
   private def toError(exception: CaseClassMappingException): Seq[String] = {
     for (error <- exception.errors) yield {
       val initialMessage = error.getMessage()
-      if (initialMessage.contains("Cannot deserialize instance of")) {
+      if (initialMessage.contains("Cannot deserialize value of") ||
+        initialMessage.contains("Cannot deserialize instance of")) {
         warn(initialMessage)
         s"${error.path.names.head}: Unable to parse"
       } else {
