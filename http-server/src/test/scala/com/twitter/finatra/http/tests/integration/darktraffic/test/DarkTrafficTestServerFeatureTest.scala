@@ -7,6 +7,8 @@ import com.twitter.util.mock.Mockito
 import com.twitter.inject.server.FeatureTest
 import com.twitter.inject.server.PortUtils
 import org.scalatest.concurrent.Eventually._
+import org.scalatest.time.Milliseconds
+import org.scalatest.time.Span
 
 class DarkTrafficTestServerFeatureTest extends FeatureTest with Mockito {
 
@@ -37,8 +39,12 @@ class DarkTrafficTestServerFeatureTest extends FeatureTest with Mockito {
     liveServer.inMemoryStats.counters.get("dark_traffic_filter/skipped") should be(None)
 
     server.assertHealthy()
-    // "dark" service stats
-    eventually {
+
+    // We have a custom timeout here for the eventually because 150 milliseconds was not enough
+    // for the request to consistently make it through to the underlying service. We chose 500
+    // millis here because it was three times the value of the original timeout.
+    eventually(timeout(Span(500, Milliseconds))) {
+      // "dark" service stats
       server.inMemoryStats.counters.assert("route/plaintext/GET/status/200", 1)
     }
   }
