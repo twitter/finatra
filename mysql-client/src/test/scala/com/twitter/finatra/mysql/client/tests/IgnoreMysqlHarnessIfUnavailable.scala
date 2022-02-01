@@ -9,7 +9,7 @@ import org.scalatest.Tag
 trait IgnoreMysqlHarnessIfUnavailable extends Test {
 
   private[this] lazy val isHarnessDefined: Boolean =
-    EmbeddedMysqlServer.newBuilder().newServer().testHarnessExists()
+    EmbeddedMysqlServer.newBuilder().withLazyStart.newServer().testHarnessExists()
 
   abstract override protected def test(
     testName: String,

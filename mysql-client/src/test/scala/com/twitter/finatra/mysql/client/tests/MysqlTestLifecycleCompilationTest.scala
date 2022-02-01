@@ -9,7 +9,8 @@ class MysqlTestLifecycleCompilationTest
     with MysqlTestLifecycle
     with IgnoreMysqlHarnessIfUnavailable {
 
-  protected final val embeddedMysqlServer = EmbeddedMysqlServer()
+  protected final val embeddedMysqlServer =
+    EmbeddedMysqlServer.newBuilder().withLazyStart.newServer()
 
   lazy val mysqlClient = embeddedMysqlServer.mysqlClient
 

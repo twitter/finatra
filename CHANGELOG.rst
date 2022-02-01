@@ -6,6 +6,8 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 
 Unreleased
 ----------
+* mysql-client: EmbeddedMysqlServer now eagerly starts by default. Added the ability to preserve
+  the old behavior by configuuuring the server with `.withLazyStart` ``PHAB_ID=D823799``
 
 22.1.0
 ------
