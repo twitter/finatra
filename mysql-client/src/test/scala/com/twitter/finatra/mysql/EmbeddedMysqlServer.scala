@@ -78,8 +78,7 @@ object EmbeddedMysqlServer {
     users: Seq[User] = Seq.empty,
     setupQueries: Seq[String] = Seq.empty,
     closeGracePeriod: Duration = 1.second,
-    closeAwaitPeriod: Duration = 2.seconds,
-    eagerStart: Boolean = true) {
+    closeAwaitPeriod: Duration = 2.seconds) {
     def withBaseClient(baseClient: Mysql.Client): Config = copy(baseClient = baseClient)
     def withVersion(version: MySqlVersion): Config = copy(version = version)
     def withPath(path: Path): Config = copy(path = path)
@@ -90,27 +89,18 @@ object EmbeddedMysqlServer {
       copy(closeGracePeriod = closeGracePeriod)
     def withCloseAwaitPeriod(closeAwaitPeriod: Duration): Config =
       copy(closeAwaitPeriod = closeAwaitPeriod)
-    def withLazyStart: Config =
-      copy(eagerStart = false)
 
     /** Generate the new [[EmbeddedMysqlServer]] from the configured properties */
-    def newServer(): EmbeddedMysqlServer = {
-      val server = new EmbeddedMysqlServer(
-        version = version,
-        path = path,
-        databaseName = databaseName,
-        users = users,
-        setupQueries = setupQueries,
-        closeGracePeriod = closeGracePeriod,
-        closeAwaitPeriod = closeAwaitPeriod,
-        baseClient
-      )
-      if (eagerStart) {
-        server.start()
-        server.assertStarted()
-      }
-      server
-    }
+    def newServer(): EmbeddedMysqlServer = new EmbeddedMysqlServer(
+      version = version,
+      path = path,
+      databaseName = databaseName,
+      users = users,
+      setupQueries = setupQueries,
+      closeGracePeriod = closeGracePeriod,
+      closeAwaitPeriod = closeAwaitPeriod,
+      baseClient
+    )
   }
 
   /**

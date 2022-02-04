@@ -9,7 +9,7 @@ import java.nio.file.Paths
 class EmbeddedMysqlServerIntegrationTest extends Test with IgnoreMysqlHarnessIfUnavailable {
 
   test("EmbeddedMysqlServer#can start", MysqlHarnessTag) {
-    val server = EmbeddedMysqlServer.newBuilder().withLazyStart.newServer()
+    val server = EmbeddedMysqlServer()
     try {
       server.start()
       server.assertStarted()
@@ -19,18 +19,8 @@ class EmbeddedMysqlServerIntegrationTest extends Test with IgnoreMysqlHarnessIfU
     }
   }
 
-  test("EmbeddedMysqlServer#can start eagerly", MysqlHarnessTag) {
-    val server = EmbeddedMysqlServer.newBuilder().newServer()
-    try {
-      server.assertStarted()
-      server.close()
-    } finally {
-      server.close()
-    }
-  }
-
   test("EmbeddedMysqlServer#can retrieve a client", MysqlHarnessTag) {
-    val server = EmbeddedMysqlServer.newBuilder().withLazyStart.newServer()
+    val server = EmbeddedMysqlServer()
     try {
       val clnt = server.mysqlClient
       server.assertStarted()
@@ -42,7 +32,7 @@ class EmbeddedMysqlServerIntegrationTest extends Test with IgnoreMysqlHarnessIfU
   }
 
   test("EmbeddedMysqlServer#retrieving a client always creates a new instance", MysqlHarnessTag) {
-    val server = EmbeddedMysqlServer.newBuilder().withLazyStart.newServer()
+    val server = EmbeddedMysqlServer()
     try {
       val clnt = server.mysqlClient
       server.assertStarted()
@@ -66,9 +56,8 @@ class EmbeddedMysqlServerIntegrationTest extends Test with IgnoreMysqlHarnessIfU
     val user2 = User("user2", Some("pass2"), User.Permission.Select)
     val user3 = User("user3", Some("pass3"), User.Permission.Select)
     val server = EmbeddedMysqlServer.newBuilder
+      .withDatabaseName("invalidCredentialsDb")
       .withUsers(Seq(user1, user2, user3))
-      .withDatabaseName("dbWithMoreUsers")
-      .withLazyStart
       .newServer()
 
     try {
@@ -87,10 +76,7 @@ class EmbeddedMysqlServerIntegrationTest extends Test with IgnoreMysqlHarnessIfU
 
   test("EmbeddedMysqlServer#fails to start with bad config") {
     val server =
-      EmbeddedMysqlServer.newBuilder
-        .withPath(Paths.get("/tmp/mysql/not_extracted"))
-        .withLazyStart
-        .newServer()
+      EmbeddedMysqlServer.newBuilder.withPath(Paths.get("/tmp/mysql/not_extracted")).newServer()
     try {
       intercept[Exception] {
         server.start()
@@ -102,7 +88,7 @@ class EmbeddedMysqlServerIntegrationTest extends Test with IgnoreMysqlHarnessIfU
   }
 
   test("EmbeddedMysqlServer#cannot start a closed server", MysqlHarnessTag) {
-    val server = EmbeddedMysqlServer.newBuilder().withLazyStart.newServer()
+    val server = EmbeddedMysqlServer()
     try {
       server.start()
       server.assertStarted()

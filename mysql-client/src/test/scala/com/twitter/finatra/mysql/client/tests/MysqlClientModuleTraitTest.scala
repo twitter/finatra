@@ -99,7 +99,7 @@ class MysqlClientModuleTraitTest extends Test with Mockito with IgnoreMysqlHarne
   }
 
   test("MysqlClientModuleTrait#can bind over MysqlClient", MysqlHarnessTag) {
-    val embeddedMysql = EmbeddedMysqlServer.newBuilder().withLazyStart.newServer()
+    val embeddedMysql = EmbeddedMysqlServer()
     val mysqlClient = embeddedMysql.mysqlClient
     val server = new EmbeddedTwitterServer(
       new TwitterServer {
