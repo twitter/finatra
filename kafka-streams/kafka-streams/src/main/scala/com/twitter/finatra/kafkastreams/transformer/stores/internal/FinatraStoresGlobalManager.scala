@@ -2,14 +2,12 @@ package com.twitter.finatra.kafkastreams.transformer.stores.internal
 
 import com.twitter.finatra.kafkastreams.transformer.aggregation.TimeWindowed
 import com.twitter.finatra.kafkastreams.transformer.domain.CompositeKey
-import com.twitter.finatra.kafkastreams.transformer.stores.{
-  FinatraKeyValueStore,
-  FinatraReadOnlyKeyValueStore,
-  NonLocalQueryKeyException
-}
+import com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore
+import com.twitter.finatra.kafkastreams.transformer.stores.FinatraReadOnlyKeyValueStore
+import com.twitter.finatra.kafkastreams.transformer.stores.NonLocalQueryKeyException
 import com.twitter.finatra.streams.queryable.thrift.domain.ServiceShardId
 import com.twitter.finatra.streams.queryable.thrift.partitioning.KafkaPartitioner
-import com.twitter.inject.Logging
+import com.twitter.util.logging.Logging
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import org.apache.kafka.common.serialization.Serializer

@@ -2,16 +2,26 @@ package com.twitter.finatra.kafka.test
 
 import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.kafka.interceptors.PublishTimeProducerInterceptor
-import com.twitter.finatra.kafka.test.utils.{PollUtils, ThreadUtils}
-import com.twitter.inject.Logging
+import com.twitter.finatra.kafka.test.utils.PollUtils
+import com.twitter.finatra.kafka.test.utils.ThreadUtils
 import com.twitter.util.jackson.JsonDiff
-import com.twitter.util.{Duration, Time, TimeoutException}
+import com.twitter.util.Duration
+import com.twitter.util.Time
+import com.twitter.util.TimeoutException
+import com.twitter.util.logging.Logging
 import java.util.concurrent.LinkedBlockingQueue
-import java.util.{Collections, Properties}
-import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecord, KafkaConsumer}
-import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig, ProducerRecord}
+import java.util.Collections
+import java.util.Properties
+import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.consumer.ConsumerRecord
+import org.apache.kafka.clients.consumer.KafkaConsumer
+import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.producer.ProducerConfig
+import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.header.Header
-import org.apache.kafka.common.serialization.{ByteArrayDeserializer, ByteArraySerializer, Serde}
+import org.apache.kafka.common.serialization.ByteArrayDeserializer
+import org.apache.kafka.common.serialization.ByteArraySerializer
+import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.streams.integration.utils.EmbeddedKafkaCluster
 import org.scalatest.matchers.should.Matchers
 import org.slf4j.event.Level

@@ -1,8 +1,10 @@
 package com.twitter.inject.server
 
 import com.twitter.finagle.util.DefaultTimer
-import com.twitter.inject.Logging
-import com.twitter.util.{Await, Awaitable, Duration}
+import com.twitter.util.Await
+import com.twitter.util.Awaitable
+import com.twitter.util.Duration
+import com.twitter.util.logging.Logging
 import java.util.concurrent.CountDownLatch
 
 private[server] object Awaiter extends Logging {

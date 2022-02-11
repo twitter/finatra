@@ -1,7 +1,7 @@
 package com.twitter.finatra.kafkastreams.transformer.watermarks
 
 import com.twitter.finatra.kafkastreams.transformer.domain.Time
-import com.twitter.inject.Logging
+import com.twitter.util.logging.Logging
 
 class DefaultWatermarkAssignor[K, V] extends WatermarkAssignor[K, V] with Logging {
 

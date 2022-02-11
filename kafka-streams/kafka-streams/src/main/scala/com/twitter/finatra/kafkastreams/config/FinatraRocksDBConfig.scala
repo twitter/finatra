@@ -3,8 +3,9 @@ package com.twitter.finatra.kafkastreams.config
 import com.twitter.conversions.StorageUnitOps._
 import com.twitter.finagle.stats.{LoadedStatsReceiver, StatsReceiver}
 import com.twitter.finatra.kafkastreams.internal.stats.RocksDBStatsCallback
-import com.twitter.inject.{Injector, Logging}
+import com.twitter.inject.Injector
 import com.twitter.jvm.numProcs
+import com.twitter.util.logging.Logging
 import com.twitter.util.StorageUnit
 import java.util
 import org.apache.kafka.streams.state.RocksDBConfigSetter

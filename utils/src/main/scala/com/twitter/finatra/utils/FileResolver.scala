@@ -1,9 +1,13 @@
 package com.twitter.finatra.utils
 
-import com.twitter.inject.Logging
 import com.twitter.inject.conversions.boolean._
-import java.io.{BufferedInputStream, File, FileInputStream, InputStream}
-import java.nio.file.{Files, Paths}
+import com.twitter.util.logging.Logger
+import java.io.BufferedInputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.InputStream
+import java.nio.file.Files
+import java.nio.file.Paths
 import javax.activation.MimetypesFileTypeMap
 
 object FileResolver {
@@ -15,6 +19,8 @@ object FileResolver {
   /** Creates a new [[FileResolver]] with the given document root. */
   def newResolver(root: String): FileResolver =
     new FileResolver(localDocRoot = "", docRoot = root)
+
+  private val logger: Logger = Logger(FileResolver.getClass)
 }
 
 /**
@@ -31,7 +37,8 @@ object FileResolver {
  * @param localDocRoot - File serving directory for local development only.
  * @param docRoot - File serving directory/namespace for classpath resources.
  */
-class FileResolver(localDocRoot: String, docRoot: String) extends Logging {
+class FileResolver(localDocRoot: String, docRoot: String) {
+  import FileResolver._
 
   // assertions -- cannot have both doc roots set
   if (localDocRoot.nonEmpty && docRoot.nonEmpty) {
@@ -42,7 +49,7 @@ class FileResolver(localDocRoot: String, docRoot: String) extends Logging {
 
   private val extMap = new MimetypesFileTypeMap()
   private val localFileMode = localDocRoot.nonEmpty.onTrue {
-    info("Local file mode enabled")
+    logger.info("Local file mode enabled")
   }
   private val actualDocRoot = if (docRoot.startsWith("/")) docRoot else "/" + docRoot
 

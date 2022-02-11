@@ -1,9 +1,9 @@
 package com.twitter.inject.thrift.integration.basic
 
 import com.twitter.finagle.thrift.ClientId
-import com.twitter.inject.Logging
 import com.twitter.test.thriftscala.EchoService
 import com.twitter.util.Future
+import com.twitter.util.logging.Logging
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Singleton
 

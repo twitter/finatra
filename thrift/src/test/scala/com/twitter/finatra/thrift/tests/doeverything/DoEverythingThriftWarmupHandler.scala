@@ -1,11 +1,13 @@
 package com.twitter.finatra.thrift.tests.doeverything
 
-import com.twitter.doeverything.thriftscala.DoEverything.{Echo, Uppercase}
+import com.twitter.doeverything.thriftscala.DoEverything.Echo
+import com.twitter.doeverything.thriftscala.DoEverything.Uppercase
 import com.twitter.finagle.thrift.ClientId
 import com.twitter.finatra.thrift.routing.ThriftWarmup
-import com.twitter.inject.Logging
 import com.twitter.inject.utils.Handler
-import javax.inject.{Inject, Singleton}
+import com.twitter.util.logging.Logging
+import javax.inject.Inject
+import javax.inject.Singleton
 import scala.reflect.ClassTag
 
 @Singleton

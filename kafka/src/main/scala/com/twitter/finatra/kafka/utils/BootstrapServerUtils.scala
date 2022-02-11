@@ -1,10 +1,18 @@
 package com.twitter.finatra.kafka.utils
 
-import com.twitter.finagle.Addr.{Bound, Failed, Neg, Pending}
+import com.twitter.finagle.Addr.Bound
+import com.twitter.finagle.Addr.Failed
+import com.twitter.finagle.Addr.Neg
+import com.twitter.finagle.Addr.Pending
 import com.twitter.finagle.Address.Inet
-import com.twitter.finagle.{Addr, Address, Namer}
-import com.twitter.inject.Logging
-import com.twitter.util.{Await, Duration, Promise, Witness}
+import com.twitter.finagle.Addr
+import com.twitter.finagle.Address
+import com.twitter.finagle.Namer
+import com.twitter.util.Await
+import com.twitter.util.Duration
+import com.twitter.util.Promise
+import com.twitter.util.Witness
+import com.twitter.util.logging.Logging
 import java.net.InetSocketAddress
 
 object BootstrapServerUtils extends Logging {

@@ -3,16 +3,20 @@ package com.twitter.finatra.kafkastreams.transformer.stores.internal
 import com.twitter.finatra.kafkastreams.internal.utils.ReflectionUtils
 import com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore
 import com.twitter.finatra.kafkastreams.utils.RocksKeyValueIterator
-import com.twitter.inject.Logging
+import com.twitter.util.logging.Logging
 import java.util
 import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.common.utils.Bytes
 import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.errors.InvalidStateStoreException
 import org.apache.kafka.streams.processor.internals.ProcessorStateManager
-import org.apache.kafka.streams.processor.{ProcessorContext, StateStore, TaskId}
+import org.apache.kafka.streams.processor.ProcessorContext
+import org.apache.kafka.streams.processor.StateStore
+import org.apache.kafka.streams.processor.TaskId
 import org.apache.kafka.streams.state.internals.RocksDBStore
-import org.apache.kafka.streams.state.{KeyValueIterator, KeyValueStore, StateSerdes}
+import org.apache.kafka.streams.state.KeyValueIterator
+import org.apache.kafka.streams.state.KeyValueStore
+import org.apache.kafka.streams.state.StateSerdes
 import org.rocksdb.RocksDB
 
 class FinatraKeyValueStoreImpl[K, V](

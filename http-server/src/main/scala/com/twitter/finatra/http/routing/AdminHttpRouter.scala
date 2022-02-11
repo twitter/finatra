@@ -1,12 +1,16 @@
 package com.twitter.finatra.http.routing
 
-import com.twitter.finagle.http.{HttpMuxer, Method}
+import com.twitter.finagle.http.HttpMuxer
+import com.twitter.finagle.http.Method
 import com.twitter.finatra.http.internal.routing.Route
 import com.twitter.finatra.http.request.AnyMethod
-import com.twitter.inject.Logging
 import com.twitter.server.AdminHttpServer
 import com.twitter.server.filters.AdminThreadPoolFilter
-import com.twitter.util.lint.{Category, GlobalRules, Issue, Rule}
+import com.twitter.util.lint.Category
+import com.twitter.util.lint.GlobalRules
+import com.twitter.util.lint.Issue
+import com.twitter.util.lint.Rule
+import com.twitter.util.logging.Logging
 
 private[http] object AdminHttpRouter extends Logging {
 

@@ -7,9 +7,9 @@ import com.twitter.finagle.partitioning.zk.ZkMetadata
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.streams.queryable.thrift.domain.RequestedShardIds
 import com.twitter.finatra.streams.queryable.thrift.domain.ServiceShardId
-import com.twitter.inject.Logging
 import com.twitter.util.Activity
 import com.twitter.util.Future
+import com.twitter.util.logging.Logging
 import com.twitter.util.Time
 import scala.collection.mutable
 

@@ -1,10 +1,11 @@
 package com.twitter.finatra.http.conversions
 
 import com.twitter.finagle.http.Status
-import com.twitter.finatra.http.exceptions.{HttpException, NotFoundException}
-import com.twitter.inject.Logging
+import com.twitter.finatra.http.exceptions.HttpException
+import com.twitter.finatra.http.exceptions.NotFoundException
 import com.twitter.inject.conversions.future.RichFutureOption
 import com.twitter.util.Future
+import com.twitter.util.logging.Logging
 
 object futureHttp {
 

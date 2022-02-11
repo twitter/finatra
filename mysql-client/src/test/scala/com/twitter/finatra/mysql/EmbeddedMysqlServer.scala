@@ -13,7 +13,7 @@ import com.twitter.finagle.mysql.harness.config.MySqlVersion
 import com.twitter.finagle.mysql.harness.config.User
 import com.twitter.finagle.stats.NullStatsReceiver
 import com.twitter.finatra.mysql.client.MysqlClient
-import com.twitter.inject.Logging
+import com.twitter.util.logging.Logging
 import com.twitter.util.Await
 import com.twitter.util.Duration
 import com.twitter.util.Future

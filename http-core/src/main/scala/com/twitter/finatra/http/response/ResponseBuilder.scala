@@ -4,10 +4,10 @@ import com.twitter.finagle
 import com.twitter.finagle.http._
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http
-import com.twitter.finatra.http.marshalling.{MessageBodyFlags, MessageBodyManager}
+import com.twitter.finatra.http.marshalling.MessageBodyFlags
+import com.twitter.finatra.http.marshalling.MessageBodyManager
 import com.twitter.finatra.http.streaming.ToReader
 import com.twitter.finatra.utils.FileResolver
-import com.twitter.inject.Logging
 import com.twitter.inject.annotations.Flag
 import com.twitter.util.jackson.ScalaObjectMapper
 import java.util.concurrent.ConcurrentHashMap
@@ -30,8 +30,7 @@ class ResponseBuilder @Inject() (
   fileResolver: FileResolver,
   messageBodyManager: MessageBodyManager,
   statsReceiver: StatsReceiver,
-  @Flag(MessageBodyFlags.ResponseCharsetEnabled) includeContentTypeCharset: Boolean)
-    extends Logging {
+  @Flag(MessageBodyFlags.ResponseCharsetEnabled) includeContentTypeCharset: Boolean) {
   import ResponseBuilder._
 
   // optimized

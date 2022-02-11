@@ -1,11 +1,15 @@
 package finatra.quickstart.firebase
 
 import com.twitter.finatra.http.response.ResponseUtils
-import com.twitter.finatra.httpclient.{HttpClient, RequestBuilder}
-import com.twitter.inject.Logging
+import com.twitter.finatra.httpclient.HttpClient
+import com.twitter.finatra.httpclient.RequestBuilder
+import com.twitter.util.logging.Logging
 import com.twitter.util.jackson.ScalaObjectMapper
-import com.twitter.util.{Future, Return, Throw}
-import javax.inject.{Inject, Singleton}
+import com.twitter.util.Future
+import com.twitter.util.Return
+import com.twitter.util.Throw
+import javax.inject.Inject
+import javax.inject.Singleton
 
 case class FirebaseError(error: String)
 

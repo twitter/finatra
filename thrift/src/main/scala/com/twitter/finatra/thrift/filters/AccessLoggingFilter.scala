@@ -1,10 +1,18 @@
 package com.twitter.finatra.thrift.filters
 
+import com.twitter.finagle.Filter
+import com.twitter.finagle.Service
 import com.twitter.finagle.filter.LogFormatter
-import com.twitter.finagle.{Filter, Service}
-import com.twitter.inject.Logging
-import com.twitter.util.{Future, Return, Stopwatch, Throw}
+import com.twitter.util.Future
+import com.twitter.util.Return
+import com.twitter.util.Stopwatch
+import com.twitter.util.Throw
+import com.twitter.util.logging.Logger
 import javax.inject.Singleton
+
+private object AccessLoggingFilter {
+  val logger: Logger = Logger(AccessLoggingFilter.getClass)
+}
 
 /**
  * Provides a standard "Access Log" -- a list of all requests through this Filter. The Filter uses an
@@ -24,7 +32,8 @@ import javax.inject.Singleton
  * @see [[com.twitter.finagle.filter.LogFormatter]]
  */
 @Singleton
-class AccessLoggingFilter extends Filter.TypeAgnostic with Logging {
+class AccessLoggingFilter extends Filter.TypeAgnostic {
+  import AccessLoggingFilter._
 
   private[this] val formatter: LogFormatter[Any, Any] = new ThriftCommonLogFormatter
 
@@ -33,9 +42,9 @@ class AccessLoggingFilter extends Filter.TypeAgnostic with Logging {
       val elapsed = Stopwatch.start()
       service(request).respond {
         case Return(response) =>
-          info(formatter.format(request, response, elapsed()))
+          logger.info(formatter.format(request, response, elapsed()))
         case Throw(e) =>
-          warn(formatter.formatException(request, e, elapsed()))
+          logger.warn(formatter.formatException(request, e, elapsed()))
       }
     }
   }

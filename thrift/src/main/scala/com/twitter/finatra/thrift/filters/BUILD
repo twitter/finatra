@@ -12,8 +12,11 @@ scala_library(
         "3rdparty/jvm/javax/inject:javax.inject",
         "finagle/finagle-thrift/src/main/scala",
         "finatra/inject/inject-mdc/src/main/scala",
-        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/exceptions",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/response",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
+    ],
+    exports = [
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
 )

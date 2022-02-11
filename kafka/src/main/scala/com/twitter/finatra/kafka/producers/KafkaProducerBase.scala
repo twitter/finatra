@@ -1,11 +1,15 @@
 package com.twitter.finatra.kafka.producers
 
-import com.twitter.inject.Logging
-import com.twitter.util.{Closable, Future, Time}
+import com.twitter.util.Closable
+import com.twitter.util.Future
+import com.twitter.util.Time
+import com.twitter.util.logging.Logging
 import java.util
 import org.apache.kafka.clients.consumer.OffsetAndMetadata
-import org.apache.kafka.clients.producer.{ProducerRecord, RecordMetadata}
-import org.apache.kafka.common.{PartitionInfo, TopicPartition}
+import org.apache.kafka.clients.producer.ProducerRecord
+import org.apache.kafka.clients.producer.RecordMetadata
+import org.apache.kafka.common.PartitionInfo
+import org.apache.kafka.common.TopicPartition
 
 /**
  * An interface for publishing events in key/value pairs to Kafka and

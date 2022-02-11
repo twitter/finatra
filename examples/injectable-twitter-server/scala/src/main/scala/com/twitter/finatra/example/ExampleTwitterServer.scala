@@ -1,12 +1,11 @@
 package com.twitter.finatra.example
 
 import com.google.inject.Module
-import com.twitter.inject.Logging
 import com.twitter.inject.server.TwitterServer
 
 object ExampleTwitterServerMain extends ExampleTwitterServer
 
-class ExampleTwitterServer extends TwitterServer with Logging {
+class ExampleTwitterServer extends TwitterServer {
   flag[Int]("subscriber.max.read", 5, "Subscriber Max read")
 
   override val modules: Seq[Module] = Seq(QueueModule)

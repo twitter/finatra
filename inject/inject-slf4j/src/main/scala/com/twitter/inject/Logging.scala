@@ -1,6 +1,9 @@
 package com.twitter.inject
 
-import com.twitter.util.{Future, Return, Stopwatch, Throw}
+import com.twitter.util.Future
+import com.twitter.util.Return
+import com.twitter.util.Stopwatch
+import com.twitter.util.Throw
 import scala.util.control.NonFatal
 
 /**
@@ -28,6 +31,7 @@ import scala.util.control.NonFatal
  *  }
  * }}}
  */
+@deprecated("Use c.t.util.logging.Logging directly", "2022-01-27")
 trait Logging extends com.twitter.util.logging.Logging {
 
   /**
@@ -37,6 +41,7 @@ trait Logging extends com.twitter.util.logging.Logging {
    * @param func The function returning a future whose result will be placed in msg.
    * @return Result of func
    */
+  @deprecated("No replacement", "2022-01-27")
   protected def debugFutureResult[T](msg: String)(func: => Future[T]): Future[T] = {
     func.respond {
       case Return(result) =>
@@ -46,6 +51,7 @@ trait Logging extends com.twitter.util.logging.Logging {
     }
   }
 
+  @deprecated("No replacement", "2022-01-27")
   protected def time[T](formatStr: String)(func: => T): T = {
     val elapsed = Stopwatch.start()
     try {

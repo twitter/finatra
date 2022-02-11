@@ -35,7 +35,6 @@ junit_tests(
         "finatra/inject/inject-app/src/test/scala/com/twitter/inject/app",
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
-        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/modules",

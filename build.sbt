@@ -378,6 +378,7 @@ lazy val injectCore = (project in file("inject/inject-core"))
       "com.google.inject.extensions" % "guice-assistedinject" % versions.guice,
       "com.google.inject.extensions" % "guice-multibindings" % versions.guice,
       "com.twitter" %% "util-app" % versions.twLibVersion,
+      "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
       "javax.inject" % "javax.inject" % "1",
       "joda-time" % "joda-time" % versions.jodaTime,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
@@ -402,8 +403,6 @@ lazy val injectCore = (project in file("inject/inject-core"))
       val previous = (Test / packageSrc / mappings).value
       previous.filter(mappingContainsAnyPath(_, injectCoreTestJarSources))
     }
-  ).dependsOn(
-    injectSlf4j
   )
 
 lazy val injectStack = (project in file("inject/inject-stack"))
@@ -565,6 +564,7 @@ lazy val injectServer = (project in file("inject/inject-server"))
     moduleName := "inject-server",
     ScoverageKeys.coverageExcludedPackages := "<empty>",
     libraryDependencies ++= Seq(
+      "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
       "com.twitter" %% "twitter-server" % versions.twLibVersion,
       "org.slf4j" % "slf4j-api" % versions.slf4j,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
@@ -586,7 +586,6 @@ lazy val injectServer = (project in file("inject/inject-server"))
     injectApp % "test->test;compile->compile",
     injectModules % "test->test;compile->compile",
     injectPorts % "test->test;compile->compile",
-    injectSlf4j,
     injectUtils
   )
 
@@ -603,7 +602,6 @@ lazy val injectMdc = (project in file("inject/inject-mdc"))
       "org.slf4j" % "slf4j-api" % versions.slf4j
     )
   ).dependsOn(
-    injectSlf4j,
     injectCore % "test->test"
   )
 
@@ -618,6 +616,8 @@ lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
       "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
       "org.slf4j" % "slf4j-api" % versions.slf4j
     )
+  ).dependsOn(
+    injectCore % "test->test"
   )
 
 lazy val injectRequestScope = (project in file("inject/inject-request-scope"))
@@ -810,7 +810,6 @@ lazy val validation = project
     }
   ).dependsOn(
     injectCore % "test->test;compile->compile",
-    injectSlf4j,
     injectUtils,
     utils % "test->test;compile->compile"
   )
@@ -834,13 +833,13 @@ lazy val jackson = project
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "com.twitter" %% "util-jackson" % versions.twLibVersion,
       "com.twitter" %% "util-reflect" % versions.twLibVersion,
+      "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
       "com.twitter" %% "util-validator" % versions.twLibVersion,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
     injectApp % "test->test",
     injectCore,
-    injectSlf4j,
     injectUtils,
     validation % "test->test;compile->compile",
     utils
@@ -912,6 +911,7 @@ lazy val httpServer = (project in file("http-server"))
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "com.twitter" %% "util-core" % versions.twLibVersion % Test,
       "com.twitter" %% "util-reflect" % versions.twLibVersion,
+      "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
       "javax.servlet" % "servlet-api" % versions.servletApi % "provided;compile->compile;test->test",
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal",
@@ -941,7 +941,6 @@ lazy val httpServer = (project in file("http-server"))
     injectRequestScope % Test,
     injectPorts % "test->test",
     injectMdc,
-    injectSlf4j,
     injectServer % "test->test;compile->compile",
     jackson % "test->test;compile->compile",
     utils % "test->test;compile->compile",
@@ -1034,6 +1033,7 @@ lazy val thrift = project
       "com.twitter" %% "finagle-thriftmux" % versions.twLibVersion,
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "com.twitter" %% "util-reflect" % versions.twLibVersion,
+      "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
       "javax.inject" % "javax.inject" % "1",
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "org.yaml" % "snakeyaml" % versions.snakeyaml,
@@ -1059,7 +1059,6 @@ lazy val thrift = project
     injectPorts % "test->test",
     injectServer % "test->test;compile->compile",
     injectMdc,
-    injectSlf4j,
     injectStack,
     injectThrift
   )
@@ -1077,7 +1076,6 @@ lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-h
     httpServer % "test->test;compile->compile",
     injectCore,
     injectServer % "test->test",
-    injectSlf4j % "test->test",
     injectThriftClient % "test->test;compile->compile",
     thrift % "test->test;test->compile"
   )
@@ -1142,6 +1140,7 @@ lazy val kafka = (project in file("kafka"))
       "com.twitter" %% "finagle-thrift" % versions.twLibVersion,
       "com.twitter" %% "scrooge-serializer" % versions.twLibVersion,
       "com.twitter" %% "util-codec" % versions.twLibVersion,
+      "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
       "org.slf4j" % "slf4j-api" % versions.slf4j % "compile->compile;test->test",
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
@@ -1169,7 +1168,6 @@ lazy val kafka = (project in file("kafka"))
     }
   ).dependsOn(
     injectCore % "test->test;compile->compile",
-    injectSlf4j % "test->test;compile->compile",
     injectUtils % "test->test;compile->compile",
     jackson % "test->test",
     utils % "test->test;compile->compile"
@@ -1183,6 +1181,7 @@ lazy val kafkaStreamsQueryableThriftClient =
       moduleName := "finatra-kafka-streams-queryable-thrift-client",
       ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
       libraryDependencies ++= Seq(
+        "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
         "com.twitter" %% "finagle-serversets" % versions.twLibVersion,
         "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
       ),
@@ -1191,7 +1190,6 @@ lazy val kafkaStreamsQueryableThriftClient =
       unmanagedResources / excludeFilter := "BUILD"
     ).dependsOn(
       injectCore % "test->test;compile->compile",
-      injectSlf4j % "test->test;compile->compile",
       injectUtils % "test->test;compile->compile",
       thrift % "test->test;compile->compile",
       utils % "test->test;compile->compile"
@@ -1222,7 +1220,6 @@ lazy val kafkaStreamsStaticPartitioning =
       )
     ).dependsOn(
       injectCore % "test->test;compile->compile",
-      injectSlf4j % "test->test;compile->compile",
       injectUtils % "test->test;compile->compile",
       kafkaStreams % "test->test;compile->compile",
       kafkaStreamsQueryableThriftClient % "test->test;compile->compile",
@@ -1287,6 +1284,7 @@ lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-jvm" % versions.twLibVersion,
       "com.twitter" %% "util-jackson" % versions.twLibVersion % Test,
+      "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
       "it.unimi.dsi" % "fastutil" % versions.fastutil,
       "jakarta.ws.rs" % "jakarta.ws.rs-api" % "2.1.3",
       "org.agrona" % "agrona" % versions.agrona,
@@ -1303,7 +1301,6 @@ lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))
     Test / publishArtifact := true
   ).dependsOn(
     injectCore % "test->test;compile->compile",
-    injectSlf4j % "test->test;compile->compile",
     injectUtils % "test->test;compile->compile",
     jackson % "test->test;compile->compile",
     kafka % "test->test;compile->compile",
@@ -1348,13 +1345,13 @@ lazy val javaInjectableApp = (project in file("examples/injectable-app/java"))
     moduleName := "java-app",
     libraryDependencies ++= Seq(
       "com.novocode" % "junit-interface" % "0.11" % Test,
-      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
+      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal",
+      "com.twitter" %% "util-slf4j-api" % versions.twLibVersion
     )
   ).dependsOn(
     injectApp % "test->test;compile->compile",
     injectLogback,
-    injectModules,
-    injectSlf4j
+    injectModules
   )
 
 lazy val scalaInjectableApp = (project in file("examples/injectable-app/scala"))
@@ -1364,13 +1361,13 @@ lazy val scalaInjectableApp = (project in file("examples/injectable-app/scala"))
     name := "scala-app",
     moduleName := "scala-app",
     libraryDependencies ++= Seq(
-      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
+      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal",
+      "com.twitter" %% "util-slf4j-api" % versions.twLibVersion
     )
   ).dependsOn(
     injectApp % "test->test;compile->compile",
     injectLogback,
-    injectModules,
-    injectSlf4j
+    injectModules
   )
 
 // injectable-twitter-server
@@ -1384,13 +1381,13 @@ lazy val javaInjectableTwitterServer = (project in file("examples/injectable-twi
     libraryDependencies ++= Seq(
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal",
-      "com.twitter" %% "util-core" % versions.twLibVersion
+      "com.twitter" %% "util-core" % versions.twLibVersion,
+      "com.twitter" %% "util-slf4j-api" % versions.twLibVersion
     )
   ).dependsOn(
     injectServer % "test->test;compile->compile",
     injectCore % "test->test",
     injectApp % "test->test",
-    injectSlf4j,
     utils
   )
 
@@ -1403,11 +1400,11 @@ lazy val scalaInjectableTwitterServer =
       moduleName := "scala-twitter-server",
       libraryDependencies ++= Seq(
         "com.twitter" %% "util-mock" % versions.twLibVersion % Test,
-        "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
+        "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal",
+        "com.twitter" %% "util-slf4j-api" % versions.twLibVersion
       )
     ).dependsOn(
       injectServer % "test->test;compile->compile",
-      injectSlf4j,
       utils
     )
 
@@ -1428,7 +1425,6 @@ lazy val javaHttpServer = (project in file("examples/http-server/java"))
     httpServer % "test->test;compile->compile",
     httpClient,
     injectCore % "test->test",
-    injectSlf4j,
     injectLogback
   )
 
@@ -1444,7 +1440,6 @@ lazy val scalaHttpServer = (project in file("examples/http-server/scala"))
   ).dependsOn(
     httpServer % "test->test;compile->compile",
     injectCore % "test->test",
-    injectSlf4j,
     injectLogback
   )
 
@@ -1471,7 +1466,8 @@ lazy val javaThriftServer = (project in file("examples/thrift-server/java"))
     moduleName := "java-thrift-server",
     libraryDependencies ++= Seq(
       "com.novocode" % "junit-interface" % "0.11" % Test,
-      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
+      "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal",
+      "com.twitter" %% "util-slf4j-api" % versions.twLibVersion
     )
   ).dependsOn(
     thriftIdl,
@@ -1479,7 +1475,6 @@ lazy val javaThriftServer = (project in file("examples/thrift-server/java"))
     injectApp % "test->test",
     injectCore % "test->test",
     injectServer % "test->test",
-    injectSlf4j,
     injectLogback
   )
 
@@ -1499,7 +1494,6 @@ lazy val scalaThriftServer = (project in file("examples/thrift-server/scala"))
     injectApp % "test->test",
     injectCore % "test->test",
     injectServer % "test->test",
-    injectSlf4j,
     injectLogback
   )
 
@@ -1518,7 +1512,6 @@ lazy val streamingExample = (project in file("examples/advanced/streaming-exampl
   ).dependsOn(
     httpServer % "test->test;compile->compile",
     injectCore % "test->test",
-    injectSlf4j,
     injectLogback
   )
 
@@ -1533,6 +1526,7 @@ lazy val twitterClone = (project in file("examples/advanced/twitter-clone"))
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "com.twitter" %% "util-jackson" % versions.twLibVersion,
       "com.twitter" %% "util-mock" % versions.twLibVersion % Test,
+      "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(
@@ -1540,7 +1534,6 @@ lazy val twitterClone = (project in file("examples/advanced/twitter-clone"))
     httpClient,
     injectCore % "test->test",
     injectDtab,
-    injectSlf4j,
     injectLogback,
     validation
   )
@@ -1560,7 +1553,6 @@ lazy val exampleWebDashboard = (project in file("examples/advanced/web-dashboard
     httpMustache,
     httpClient,
     injectCore % "test->test",
-    injectSlf4j,
     injectLogback,
     mustache
   )

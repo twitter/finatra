@@ -18,6 +18,7 @@ scala_library(
         "finatra/mysql-client/src/main/scala/com/twitter/finatra/mysql/client",
         "util/util-jvm/src/main/scala",
         "util/util-mock/src/main/scala/com/twitter/util/mock",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
         "util/util-stats/src/main/scala/com/twitter/finagle/stats",
     ],
 )

@@ -1,15 +1,22 @@
 package com.twitter.finatra.thrift.routing
 
-import com.twitter.inject.Logging
 import com.twitter.inject.thrift.utils.ThriftMethodUtils._
-import com.twitter.scrooge.{Request, Response, ThriftMethod}
-import com.twitter.util.{Await, Try}
+import com.twitter.scrooge.Request
+import com.twitter.scrooge.Response
+import com.twitter.scrooge.ThriftMethod
+import com.twitter.util.Await
+import com.twitter.util.Stopwatch
+import com.twitter.util.Try
+import com.twitter.util.logging.Logger
 import javax.inject.Inject
+import scala.util.control.NonFatal
 
 private object ThriftWarmup {
 
   /**  Function curried as the default arg for the responseCallback: M#SuccessType => Unit parameter. */
   val unitFunction: AnyRef => Unit = _ => ()
+
+  val logger: Logger = Logger(ThriftWarmup.getClass)
 }
 
 /**
@@ -24,8 +31,7 @@ private object ThriftWarmup {
  * @see [[com.twitter.finatra.thrift.routing.ThriftRouter]]
  */
 class ThriftWarmup @Inject() (
-  router: ThriftRouter)
-    extends Logging {
+  router: ThriftRouter) {
   import ThriftWarmup._
 
   /* Public */
@@ -94,4 +100,17 @@ class ThriftWarmup @Inject() (
 
   @deprecated("This is now a no-op.", "2018-03-20")
   def close(): Unit = {}
+
+  private[this] def time[T](formatStr: String)(func: => T): T = {
+    val elapsed = Stopwatch.start()
+    try {
+      val result = func
+      logger.info(formatStr.format(elapsed().inMillis, result))
+      result
+    } catch {
+      case NonFatal(e) =>
+        logger.error(formatStr.format(elapsed().inMillis, e))
+        throw e
+    }
+  }
 }

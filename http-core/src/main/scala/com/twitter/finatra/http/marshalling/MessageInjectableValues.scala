@@ -1,39 +1,44 @@
 package com.twitter.finatra.http.marshalling
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.fasterxml.jackson.core.{JsonParser, JsonToken}
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.core.JsonToken
+import com.fasterxml.jackson.databind.BeanProperty
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JavaType
+import com.fasterxml.jackson.databind.JsonDeserializer
+import com.fasterxml.jackson.databind.JsonMappingException
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember
 import com.fasterxml.jackson.databind.node.TreeTraversingParser
-import com.fasterxml.jackson.databind.{
-  BeanProperty,
-  DeserializationContext,
-  JavaType,
-  JsonDeserializer,
-  JsonMappingException,
-  JsonNode
-}
 import com.google.inject.Injector
-import com.twitter.finagle.http.{Message, Request, Response}
-import com.twitter.finatra.http.annotations.{FormParam, Header, QueryParam, RouteParam}
+import com.twitter.finagle.http.Message
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
+import com.twitter.finatra.http.annotations.FormParam
+import com.twitter.finatra.http.annotations.Header
+import com.twitter.finatra.http.annotations.QueryParam
+import com.twitter.finatra.http.annotations.RouteParam
+import com.twitter.finatra.jackson.caseclass.Annotations
+import com.twitter.finatra.jackson.caseclass.GuiceInjectableValues
 import com.twitter.finatra.jackson.caseclass.exceptions.InjectableValuesException
-import com.twitter.finatra.jackson.caseclass.{Annotations, GuiceInjectableValues}
-import com.twitter.inject.Logging
 import com.twitter.util.jackson.ScalaObjectMapper
 import com.twitter.util.jackson.annotation.InjectableValue
+import com.twitter.util.jackson.caseclass.Types
 import com.twitter.util.jackson.caseclass.exceptions.CaseClassFieldMappingException
-import com.twitter.util.jackson.caseclass.{
-  Types,
-  isNotAssignableFrom,
-  newBeanProperty,
-  resolveSubType
-}
+import com.twitter.util.jackson.caseclass.isNotAssignableFrom
+import com.twitter.util.jackson.caseclass.newBeanProperty
+import com.twitter.util.jackson.caseclass.resolveSubType
+import com.twitter.util.logging.Logger
 import com.twitter.util.reflect.{Annotations => ReflectAnnotations}
 import java.lang.annotation.Annotation
 import scala.collection.JavaConverters._
 
 private object MessageInjectableValues {
+  val logger: Logger = Logger(MessageInjectableValues.getClass)
+
   val MessageInjectableTypes: Seq[Class[_]] = Seq(classOf[Request], classOf[Response])
 
   val SeqWithSingleEmptyString: Seq[String] = Seq("")
@@ -58,8 +63,7 @@ private[http] class MessageInjectableValues(
   injector: Injector,
   objectMapper: ScalaObjectMapper,
   message: Message)
-    extends GuiceInjectableValues(injector)
-    with Logging {
+    extends GuiceInjectableValues(injector) {
   import MessageInjectableValues._
 
   /**
@@ -143,7 +147,7 @@ private[http] class MessageInjectableValues(
       // Only translate `InvalidDefinitionException` to InjectableValuesException,
       // all others escape to be handled elsewhere.
       case ex: InvalidDefinitionException =>
-        debug(ex.getMessage, ex)
+        logger.debug(ex.getMessage, ex)
         throw InjectableValuesException(
           forProperty.getMember.getDeclaringClass,
           forProperty.getName)
@@ -179,7 +183,7 @@ private[http] class MessageInjectableValues(
       // Only translate `InvalidDefinitionException` to InjectableValuesException,
       // all others escape to be handled elsewhere.
       case ex: InvalidDefinitionException =>
-        debug(ex.getMessage, ex)
+        logger.debug(ex.getMessage, ex)
         throw InjectableValuesException(
           forProperty.getMember.getDeclaringClass,
           forProperty.getName)

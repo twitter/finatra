@@ -2,14 +2,16 @@ package com.twitter.finatra.http.internal.routing
 
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.Method._
-import com.twitter.finagle.http.{Fields, Method, Request, Response, Status}
-import com.twitter.finatra.http.exceptions.{
-  RouteParamExtractionException,
-  UnsupportedMethodException
-}
+import com.twitter.finagle.http.Fields
+import com.twitter.finagle.http.Method
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
+import com.twitter.finagle.http.Status
+import com.twitter.finatra.http.exceptions.RouteParamExtractionException
+import com.twitter.finatra.http.exceptions.UnsupportedMethodException
 import com.twitter.finatra.http.response.SimpleResponse
-import com.twitter.inject.Logging
 import com.twitter.util.Future
+import com.twitter.util.logging.Logger
 
 private object RoutingService {
   val AllowedMethods: Seq[Method] =
@@ -17,11 +19,11 @@ private object RoutingService {
 
   val AllowedMethodsStr: String =
     AllowedMethods.map(_.name.toUpperCase).mkString(", ")
+
+  val logger: Logger = Logger(RoutingService.getClass)
 }
 
-private[http] class RoutingService(routes: Seq[Route])
-    extends Service[Request, Response]
-    with Logging {
+private[http] class RoutingService(routes: Seq[Route]) extends Service[Request, Response] {
 
   import RoutingService._
 
@@ -56,7 +58,7 @@ private[http] class RoutingService(routes: Seq[Route])
   }
 
   private[this] def notFound(request: Request): Future[Response] = {
-    debug(request + " not found in registered routes: " + routesStr)
+    logger.debug(request + " not found in registered routes: " + routesStr)
     Future.value(SimpleResponse(Status.NotFound))
   }
 

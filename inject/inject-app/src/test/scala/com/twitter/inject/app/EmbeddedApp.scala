@@ -1,10 +1,11 @@
 package com.twitter.inject.app
 
-import collection.JavaConverters._
 import com.google.inject.Module
-import com.twitter.inject.{Injector, Logging}
+import com.twitter.inject.Injector
+import com.twitter.util.logging.Logging
 import java.lang.annotation.Annotation
 import scala.annotation.varargs
+import scala.collection.JavaConverters._
 
 /**
  * EmbeddedApp allow's a [[com.twitter.inject.app.App]] to be integration and

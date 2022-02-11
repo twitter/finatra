@@ -1,11 +1,12 @@
 package com.twitter.inject.thrift.integration.serviceperendpoint
 
 import com.twitter.finagle.Service
-import com.twitter.inject.Logging
 import com.twitter.inject.thrift.integration.AbstractThriftService
 import com.twitter.test.thriftscala.EchoService
-import com.twitter.test.thriftscala.EchoService.{Echo, SetTimesToEcho}
+import com.twitter.test.thriftscala.EchoService.Echo
+import com.twitter.test.thriftscala.EchoService.SetTimesToEcho
 import com.twitter.util.Future
+import com.twitter.util.logging.Logging
 import java.util.concurrent.atomic.AtomicInteger
 
 class EchoThriftService(

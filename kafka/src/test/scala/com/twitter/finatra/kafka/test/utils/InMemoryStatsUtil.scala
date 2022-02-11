@@ -1,9 +1,11 @@
 package com.twitter.finatra.kafka.test.utils
 
 import com.twitter.conversions.DurationOps._
-import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
+import com.twitter.finagle.stats.InMemoryStatsReceiver
+import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.inject.InMemoryStatsReceiverUtility
-import com.twitter.inject.{Injector, Logging}
+import com.twitter.inject.Injector
+import com.twitter.util.logging.Logging
 import org.scalatest.matchers.should.Matchers
 
 @deprecated("Use com.twitter.inject.InMemoryStatsReceiverUtility", "2019-05-17")

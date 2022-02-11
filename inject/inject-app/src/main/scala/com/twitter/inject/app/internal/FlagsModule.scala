@@ -1,10 +1,12 @@
 package com.twitter.inject.app.internal
 
+import com.google.inject.AbstractModule
+import com.google.inject.Key
 import com.google.inject.util.Types
-import com.google.inject.{AbstractModule, Key}
-import com.twitter.app.{Flag, Flaggable}
+import com.twitter.app.Flag
+import com.twitter.app.Flaggable
 import com.twitter.inject.annotations.Flags
-import com.twitter.inject.Logging
+import com.twitter.util.logging.Logging
 import java.lang.reflect.Type
 import java.util.Optional
 import javax.inject.Provider

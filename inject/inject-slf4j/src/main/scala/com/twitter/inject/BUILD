@@ -6,13 +6,17 @@ scala_library(
         name = "inject-slf4j",
         repo = artifactory,
     ),
-    tags = ["bazel-compatible"],
+    tags = [
+        "bazel-compatible",
+        # users should prefer to depend on util/util-slf4j-api/src/main/scala/com/twitter/util/logging
+        "deprecated",
+    ],
     dependencies = [
         "util/util-core:scala",
-        "util/util-slf4j-api/src/main/scala",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
     exports = [
         "util/util-core:scala",
-        "util/util-slf4j-api/src/main/scala",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
 )

@@ -1,10 +1,11 @@
 package com.twitter.inject.thrift.integration.reqrepserviceperendpoint
 
-import com.twitter.finagle.{Filter, Service}
+import com.twitter.finagle.Filter
+import com.twitter.finagle.Service
 import com.twitter.greeter.thriftscala.Greeter.Hi
-import com.twitter.inject.Logging
 import com.twitter.scrooge
 import com.twitter.util.Future
+import com.twitter.util.logging.Logging
 
 class HiHeadersFilter(
   requestHeaderKey: String)

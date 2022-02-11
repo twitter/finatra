@@ -5,8 +5,8 @@ scala_library(
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "finatra/inject/inject-server/src/main/scala/com/twitter/inject/server",
-        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
 )
 

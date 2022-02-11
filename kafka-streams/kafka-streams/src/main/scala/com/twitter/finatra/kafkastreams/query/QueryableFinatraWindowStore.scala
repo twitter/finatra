@@ -1,21 +1,17 @@
 package com.twitter.finatra.kafkastreams.query
 
 import com.twitter.conversions.DurationOps._
-import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer.{
-  DateTimeMillis,
-  WindowStartTime
-}
+import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer.DateTimeMillis
+import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer.WindowStartTime
 import com.twitter.finatra.kafkastreams.transformer.aggregation.TimeWindowed
 import com.twitter.finatra.kafkastreams.transformer.domain.Time
 import com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraStoresGlobalManager
 import com.twitter.finatra.kafkastreams.utils.time._
 import com.twitter.finatra.streams.queryable.thrift.domain.ServiceShardId
-import com.twitter.finatra.streams.queryable.thrift.partitioning.{
-  KafkaPartitioner,
-  StaticServiceShardPartitioner
-}
-import com.twitter.inject.Logging
+import com.twitter.finatra.streams.queryable.thrift.partitioning.KafkaPartitioner
+import com.twitter.finatra.streams.queryable.thrift.partitioning.StaticServiceShardPartitioner
 import com.twitter.util.Duration
+import com.twitter.util.logging.Logging
 import java.io.File
 import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.streams.errors.InvalidStateStoreException

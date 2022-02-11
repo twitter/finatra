@@ -2,7 +2,7 @@ package com.twitter.inject.logging
 
 import com.twitter.concurrent.Once
 import com.twitter.finagle.context.Contexts
-import com.twitter.inject.Logging
+import com.twitter.util.logging.Logging
 import java.util.{HashMap => JHashMap}
 import org.slf4j.FinagleMDCInitializer
 

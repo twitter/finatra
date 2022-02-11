@@ -1,9 +1,10 @@
 package com.twitter.inject.thrift.integration.inheritance
 
-import com.twitter.finagle.{Filter, Service}
-import com.twitter.inject.Logging
+import com.twitter.finagle.Filter
+import com.twitter.finagle.Service
 import com.twitter.serviceA.thriftscala.ServiceA
 import com.twitter.util.Future
+import com.twitter.util.logging.Logging
 
 class EchoFilter
     extends Filter[

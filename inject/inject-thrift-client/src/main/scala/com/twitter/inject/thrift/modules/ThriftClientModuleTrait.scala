@@ -1,12 +1,14 @@
 package com.twitter.inject.thrift.modules
 
-import com.twitter.finagle.thrift.{ClientId, ThriftClientRequest}
 import com.twitter.finagle.ThriftMux
 import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.finagle.thrift.ClientId
+import com.twitter.finagle.thrift.ThriftClientRequest
+import com.twitter.inject.Injector
 import com.twitter.inject.modules.StackClientModuleTrait
-import com.twitter.inject.{Injector, Logging}
 import com.twitter.scrooge.AsClosableMethodName
 import com.twitter.util.Closable
+import com.twitter.util.logging.Logging
 
 private[twitter] trait ThriftClientModuleTrait
     extends StackClientModuleTrait[ThriftClientRequest, Array[Byte], ThriftMux.Client]

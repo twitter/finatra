@@ -1,9 +1,13 @@
 package com.twitter.finatra.kafkastreams.internal.stats
 
-import com.twitter.finagle.stats.{Gauge, StatsReceiver}
-import com.twitter.inject.Logging
+import com.twitter.finagle.stats.Gauge
+import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.util.logging.Logging
 import java.util.concurrent.atomic.AtomicLong
-import org.rocksdb.{HistogramData, HistogramType, StatisticsCollectorCallback, TickerType}
+import org.rocksdb.HistogramData
+import org.rocksdb.HistogramType
+import org.rocksdb.StatisticsCollectorCallback
+import org.rocksdb.TickerType
 import scala.collection.mutable.{Map => MutableMap}
 
 /**

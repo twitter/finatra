@@ -46,7 +46,6 @@ junit_tests(
         "finatra/inject/inject-modules/src/main/scala/com/twitter/inject/modules",
         "finatra/inject/inject-server/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-server/src/test/scala/com/twitter/inject/server",
-        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-thrift-client/src/main/scala",
         "finatra/inject/inject-thrift-client/src/test/thrift:greeter-thrift-scala",
         "finatra/inject/inject-thrift/src/main/scala",
@@ -66,6 +65,6 @@ junit_tests(
         "util/util-lint/src/main/scala",
         "util/util-logging/src/main/scala",
         "util/util-mock/src/main/scala/com/twitter/util/mock",
-        "util/util-slf4j-api/src/main/scala",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
 )

@@ -3,15 +3,14 @@ package com.twitter.finatra.kafkastreams.dsl
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.kafka.serde.ScalaSerdes
 import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
-import com.twitter.finatra.kafkastreams.config.{DefaultTopicConfig, FinatraTransformerFlags}
-import com.twitter.finatra.kafkastreams.internal.utils.sampling.{
-  IndexedSampleKeySerde,
-  ReservoirSamplingTransformer
-}
+import com.twitter.finatra.kafkastreams.config.DefaultTopicConfig
+import com.twitter.finatra.kafkastreams.config.FinatraTransformerFlags
+import com.twitter.finatra.kafkastreams.internal.utils.sampling.IndexedSampleKeySerde
+import com.twitter.finatra.kafkastreams.internal.utils.sampling.ReservoirSamplingTransformer
 import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer
 import com.twitter.finatra.kafkastreams.transformer.utils.SamplingUtils
-import com.twitter.inject.Logging
 import com.twitter.util.Duration
+import com.twitter.util.logging.Logging
 import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.scala.kstream.{KStream => KStreamS}

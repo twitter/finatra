@@ -18,7 +18,7 @@ java_library(
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/routing",
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",
-        "util/util-slf4j-api/src/main/scala",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
 )
 

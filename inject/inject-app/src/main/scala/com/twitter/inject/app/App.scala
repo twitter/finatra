@@ -1,17 +1,20 @@
 package com.twitter.inject.app
 
-import com.google.inject.{Module, Stage}
-import com.twitter.app.lifecycle.Event.{
-  AfterPostWarmup,
-  BeforePostWarmup,
-  PostInjectorStartup,
-  PostWarmup,
-  Warmup
-}
-import com.twitter.app.{Flag, Flaggable}
+import com.google.inject.Module
+import com.google.inject.Stage
+import com.twitter.app.Flag
+import com.twitter.app.Flaggable
+import com.twitter.app.lifecycle.Event.AfterPostWarmup
+import com.twitter.app.lifecycle.Event.BeforePostWarmup
+import com.twitter.app.lifecycle.Event.PostInjectorStartup
+import com.twitter.app.lifecycle.Event.PostWarmup
+import com.twitter.app.lifecycle.Event.Warmup
+import com.twitter.inject.Injector
+import com.twitter.inject.InjectorModule
 import com.twitter.inject.annotations.Lifecycle
-import com.twitter.inject.app.internal.{InstalledModules, Modules}
-import com.twitter.inject.{Injector, InjectorModule, Logging}
+import com.twitter.inject.app.internal.InstalledModules
+import com.twitter.inject.app.internal.Modules
+import com.twitter.util.logging.Logging
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ArrayBuffer
 

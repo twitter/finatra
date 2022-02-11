@@ -10,10 +10,11 @@ scala_library(
     tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/javax/inject:javax.inject",
-        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "util/util-jackson/src/main/scala/com/twitter/util/jackson",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
     exports = [
         "util/util-jackson/src/main/scala/com/twitter/util/jackson",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
 )

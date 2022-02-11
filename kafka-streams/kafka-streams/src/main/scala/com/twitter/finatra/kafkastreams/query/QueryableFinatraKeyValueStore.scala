@@ -2,11 +2,9 @@ package com.twitter.finatra.kafkastreams.query
 
 import com.twitter.finatra.kafkastreams.transformer.stores.internal.FinatraStoresGlobalManager
 import com.twitter.finatra.streams.queryable.thrift.domain.ServiceShardId
-import com.twitter.finatra.streams.queryable.thrift.partitioning.{
-  KafkaPartitioner,
-  StaticServiceShardPartitioner
-}
-import com.twitter.inject.Logging
+import com.twitter.finatra.streams.queryable.thrift.partitioning.KafkaPartitioner
+import com.twitter.finatra.streams.queryable.thrift.partitioning.StaticServiceShardPartitioner
+import com.twitter.util.logging.Logging
 import java.io.File
 import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.streams.errors.InvalidStateStoreException

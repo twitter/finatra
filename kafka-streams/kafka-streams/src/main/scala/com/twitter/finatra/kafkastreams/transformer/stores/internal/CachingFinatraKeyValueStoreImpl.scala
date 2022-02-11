@@ -1,14 +1,17 @@
 package com.twitter.finatra.kafkastreams.transformer.stores.internal
 
-import com.twitter.finagle.stats.{Gauge, StatsReceiver}
+import com.twitter.finagle.stats.Gauge
+import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.kafkastreams.transformer.stores.FinatraKeyValueStore
-import com.twitter.inject.Logging
+import com.twitter.util.logging.Logging
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import java.util
 import java.util.function.BiConsumer
 import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.processor.internals.InternalProcessorContext
-import org.apache.kafka.streams.processor.{ProcessorContext, StateStore, TaskId}
+import org.apache.kafka.streams.processor.ProcessorContext
+import org.apache.kafka.streams.processor.StateStore
+import org.apache.kafka.streams.processor.TaskId
 import org.apache.kafka.streams.state.KeyValueIterator
 
 /**

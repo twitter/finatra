@@ -1,10 +1,11 @@
 package com.twitter.inject.thrift.integration.filters
 
-import com.twitter.finagle.{Filter, Service}
-import com.twitter.inject.Logging
+import com.twitter.finagle.Filter
+import com.twitter.finagle.Service
 import com.twitter.scrooge
-import com.twitter.util.Future
 import com.twitter.test.thriftscala.EchoService.SetTimesToEcho
+import com.twitter.util.Future
+import com.twitter.util.logging.Logging
 
 class SetTimesEchoTypeAgnosticFilter extends Filter.TypeAgnostic with Logging {
 

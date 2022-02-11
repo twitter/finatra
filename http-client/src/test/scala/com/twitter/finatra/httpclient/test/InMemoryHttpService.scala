@@ -1,10 +1,12 @@
 package com.twitter.finatra.httpclient.test
 
 import com.twitter.finagle.Service
+import com.twitter.finagle.http.Method
 import com.twitter.finagle.http.Method._
-import com.twitter.finagle.http.{Method, Request, Response}
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
+import com.twitter.inject.Injector
 import com.twitter.inject.app.Banner
-import com.twitter.inject.{Injector, Logging}
 import com.twitter.util.Future
 import java.lang.annotation.Annotation
 import scala.collection._
@@ -16,7 +18,7 @@ object InMemoryHttpService {
   }
 }
 
-class InMemoryHttpService extends Service[Request, Response] with Logging {
+class InMemoryHttpService extends Service[Request, Response] {
 
   private[this] val responseMap =
     mutable.Map[RequestKey, ArrayBuffer[ResponseWithExpectedBody]]().withDefaultValue(ArrayBuffer())

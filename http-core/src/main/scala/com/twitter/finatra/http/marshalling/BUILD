@@ -28,11 +28,13 @@ scala_library(
         "util/util-jackson/src/main/scala/com/twitter/util/jackson/caseclass",
         "util/util-jackson/src/main/scala/com/twitter/util/jackson/caseclass/exceptions",
         "util/util-reflect/src/main/scala/com/twitter/util/reflect",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
     exports = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/javax/inject:javax.inject",
         "finagle/finagle-base-http/src/main",
         "finatra/inject/inject-core/src/main/scala",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
 )

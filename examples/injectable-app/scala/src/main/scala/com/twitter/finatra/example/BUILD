@@ -8,6 +8,7 @@ scala_library(
         "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app",
         "finatra/inject/inject-modules/src/main/scala/com/twitter/inject/modules",
         "util/util-app/src/main/scala",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
 )
 

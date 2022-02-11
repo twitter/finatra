@@ -1,11 +1,17 @@
 package com.twitter.inject.server.tests
 
 import com.twitter.conversions.DurationOps._
-import com.twitter.finagle.{Http, ListeningServer, Service}
-import com.twitter.finagle.http.{Request, Response, Status}
+import com.twitter.finagle.Http
+import com.twitter.finagle.ListeningServer
+import com.twitter.finagle.Service
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
+import com.twitter.finagle.http.Status
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.inject.Logging
-import com.twitter.util.{Await, Duration, Future}
+import com.twitter.util.Await
+import com.twitter.util.Duration
+import com.twitter.util.Future
+import com.twitter.util.logging.Logging
 
 class NonInjectionTestServer(
   statsReceiver: Option[StatsReceiver])

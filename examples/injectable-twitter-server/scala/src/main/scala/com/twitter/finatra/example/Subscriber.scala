@@ -1,11 +1,13 @@
 package com.twitter.finatra.example
 
 import com.twitter.conversions.DurationOps._
-import com.twitter.inject.Logging
 import com.twitter.inject.annotations.Flag
 import com.twitter.util._
-import java.util.concurrent.atomic.{AtomicInteger, AtomicReference}
-import javax.inject.{Inject, Singleton}
+import com.twitter.util.logging.Logging
+import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicReference
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class Subscriber @Inject() (

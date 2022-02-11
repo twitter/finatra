@@ -25,7 +25,6 @@ scala_library(
         "finatra/validation/src/main/java/com/twitter/finatra/validation:pants-workaround",
         "util/util-core:scala",
         "util/util-reflect/src/main/scala/com/twitter/util/reflect",
-        "util/util-slf4j-api/src/main/scala",
         "util/util-validator/src/main/scala/com/twitter/util/validation",
         "util/util-validator/src/main/scala/com/twitter/util/validation/constraintvalidation",
     ],

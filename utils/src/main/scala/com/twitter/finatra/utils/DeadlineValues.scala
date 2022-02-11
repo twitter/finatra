@@ -1,8 +1,9 @@
 package com.twitter.finatra.utils
 
-import com.twitter.finagle.context.{Contexts, Deadline}
-import com.twitter.inject.Logging
+import com.twitter.finagle.context.Contexts
+import com.twitter.finagle.context.Deadline
 import com.twitter.util.Time
+import com.twitter.util.logging.Logging
 
 object DeadlineValues extends Logging {
 

@@ -19,7 +19,6 @@ junit_tests(
             scope = "runtime",
         ),
         "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
-        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/validation/src/main/java/com/twitter/finatra/validation",
         "finatra/validation/src/main/scala/com/twitter/finatra/validation",

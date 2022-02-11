@@ -1,14 +1,20 @@
 package com.twitter.finatra.jackson.caseclass
 
 import com.fasterxml.jackson.annotation.JacksonInject
-import com.fasterxml.jackson.databind.{BeanProperty, DeserializationContext, InjectableValues}
-import com.google.inject.{ConfigurationException, Injector, Key}
+import com.fasterxml.jackson.databind.BeanProperty
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.InjectableValues
+import com.google.inject.ConfigurationException
+import com.google.inject.Injector
+import com.google.inject.Key
 import com.twitter.finatra.jackson.caseclass.exceptions.InjectableValuesException
-import com.twitter.inject.Logging
+import com.twitter.util.logging.Logger
 import java.lang.annotation.Annotation
 
 private[finatra] object GuiceInjectableValues {
   type HasAnnotationType = (BeanProperty, Seq[Class[_ <: Annotation]])
+
+  private val logger: Logger = Logger(GuiceInjectableValues.getClass)
 
   /**
    * We support the same annotations as the jackson-module-guice `com.fasterxml.jackson.module.guice.DefaultAnnotationIntrospector`:
@@ -30,9 +36,7 @@ private[finatra] object GuiceInjectableValues {
  *
  * @see [[https://github.com/FasterXML/jackson-module-guice/blob/master/src/main/java/com/fasterxml/jackson/module/guice/GuiceInjectableValues.java]]
  */
-private[finatra] class GuiceInjectableValues(injector: Injector)
-    extends InjectableValues
-    with Logging {
+private[finatra] class GuiceInjectableValues(injector: Injector) extends InjectableValues {
   import GuiceInjectableValues._
 
   override def findInjectableValue(
@@ -46,7 +50,7 @@ private[finatra] class GuiceInjectableValues(injector: Injector)
         this.injector.getInstance(key).asInstanceOf[Object]
       } catch {
         case ex: ConfigurationException =>
-          debug(ex.getMessage, ex)
+          logger.debug(ex.getMessage, ex)
           throw InjectableValuesException(
             forProperty.getMember.getDeclaringClass,
             forProperty.getName,

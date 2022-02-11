@@ -1,8 +1,8 @@
 package com.twitter.finatra.kafka.test.utils
 
-import com.twitter.inject.Logging
 import com.twitter.conversions.DurationOps._
 import com.twitter.util.Duration
+import com.twitter.util.logging.Logging
 
 object PollUtils extends Logging {
   def poll[T](

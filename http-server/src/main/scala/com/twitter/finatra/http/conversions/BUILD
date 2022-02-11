@@ -11,11 +11,12 @@ scala_library(
     dependencies = [
         "finagle/finagle-base-http/src/main",
         "finatra/http-core/src/main/scala/com/twitter/finatra/http/exceptions",
-        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
         "util/util-core:util-core-util",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
     exports = [
         "util/util-core:util-core-util",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
 )

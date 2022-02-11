@@ -3,8 +3,8 @@ package com.twitter.finatra.http.tests.integration.doeverything.main
 import com.twitter.finatra.http.response.ResponseUtils._
 import com.twitter.finatra.http.routing.HttpWarmup
 import com.twitter.finatra.httpclient.RequestBuilder._
-import com.twitter.inject.Logging
 import com.twitter.inject.utils.Handler
+import com.twitter.util.logging.Logging
 import javax.inject.Inject
 import scala.util.control.NonFatal
 

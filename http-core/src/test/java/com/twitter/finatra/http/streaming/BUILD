@@ -21,7 +21,6 @@ junit_tests(
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-server/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-server/src/test/scala/com/twitter/inject/server",
-        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/streaming",
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",

@@ -1,11 +1,15 @@
 package com.twitter.finatra.kafka.stats
 
 import com.twitter.conversions.StringOps._
-import com.twitter.finagle.stats.{Gauge, LoadedStatsReceiver, StatsReceiver}
-import com.twitter.inject.{Injector, Logging}
+import com.twitter.finagle.stats.Gauge
+import com.twitter.finagle.stats.LoadedStatsReceiver
+import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.inject.Injector
+import com.twitter.util.logging.Logging
 import java.util
 import java.util.regex.Pattern
-import org.apache.kafka.common.metrics.{KafkaMetric, MetricsReporter}
+import org.apache.kafka.common.metrics.KafkaMetric
+import org.apache.kafka.common.metrics.MetricsReporter
 import scala.collection.JavaConverters._
 import scala.collection.mutable
 

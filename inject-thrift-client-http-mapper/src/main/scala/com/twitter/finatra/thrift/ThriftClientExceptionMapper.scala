@@ -1,19 +1,21 @@
 package com.twitter.finatra.thrift
 
-import com.twitter.finagle.http.{Request, Response, Status}
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
+import com.twitter.finagle.http.Status
 import com.twitter.finatra.http.exceptions.ExceptionMapper
 import com.twitter.finatra.http.response.ResponseBuilder
-import com.twitter.inject.Logging
 import com.twitter.inject.utils.ExceptionUtils._
-import com.twitter.inject.thrift.{ThriftClientException, ThriftClientExceptionSource}
-import javax.inject.{Inject, Singleton}
+import com.twitter.inject.thrift.ThriftClientException
+import com.twitter.inject.thrift.ThriftClientExceptionSource
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class ThriftClientExceptionMapper @Inject() (
   response: ResponseBuilder,
   source: ThriftClientExceptionSource)
-    extends ExceptionMapper[ThriftClientException]
-    with Logging {
+    extends ExceptionMapper[ThriftClientException] {
 
   override def toResponse(
     request: Request,

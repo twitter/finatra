@@ -1,14 +1,18 @@
 package com.twitter.finatra.http.internal.exceptions
 
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
 import com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper._
 import com.twitter.finatra.http.response.ResponseBuilder
-import com.twitter.inject.Logging
 import com.twitter.inject.utils.ExceptionUtils._
-import javax.inject.{Inject, Singleton}
+import com.twitter.util.logging.Logger
+import javax.inject.Inject
+import javax.inject.Singleton
 
 private[exceptions] object ThrowableExceptionMapper {
   val DefaultExceptionSource = "Internal"
+
+  val logger: Logger = Logger(ThrowableExceptionMapper.getClass)
 
   def unhandledExceptionResponse(
     request: Request,
@@ -49,8 +53,7 @@ private[exceptions] object ThrowableExceptionMapper {
  */
 @Singleton
 private[http] class ThrowableExceptionMapper @Inject() (response: ResponseBuilder)
-    extends AbstractFrameworkExceptionMapper[Throwable](response)
-    with Logging {
+    extends AbstractFrameworkExceptionMapper[Throwable](response) {
 
   override protected def handle(
     request: Request,
@@ -58,7 +61,7 @@ private[http] class ThrowableExceptionMapper @Inject() (response: ResponseBuilde
     throwable: Throwable
   ): Response = {
 
-    error("Unhandled Exception", throwable)
+    logger.error("Unhandled Exception", throwable)
     unhandledExceptionResponse(request, response, throwable)
   }
 }

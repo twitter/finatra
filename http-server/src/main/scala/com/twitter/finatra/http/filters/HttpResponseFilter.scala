@@ -1,14 +1,28 @@
 package com.twitter.finatra.http.filters
 
 import com.twitter.conversions.DurationOps._
-import com.twitter.finagle.http.{Fields, HeaderMap, MediaType, Message, Request, Response}
-import com.twitter.finagle.{Service, SimpleFilter}
+import com.twitter.finagle.http.Fields
+import com.twitter.finagle.http.HeaderMap
+import com.twitter.finagle.http.MediaType
+import com.twitter.finagle.http.Message
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
+import com.twitter.finagle.Service
+import com.twitter.finagle.SimpleFilter
 import com.twitter.finatra.http.request.RequestUtils
-import com.twitter.inject.Logging
-import com.twitter.util.{Future, Return, ScheduledThreadPoolTimer, Throw, Try}
+import com.twitter.util.Future
+import com.twitter.util.Return
+import com.twitter.util.ScheduledThreadPoolTimer
+import com.twitter.util.Throw
+import com.twitter.util.Try
+import com.twitter.util.logging.Logger
 import java.net.URI
 import javax.inject.Singleton
 import scala.util.control.NonFatal
+
+private object HttpResponseFilter {
+  val logger: Logger = Logger(HttpResponseFilter.getClass)
+}
 
 /**
  * HttpResponseFilter does the following:
@@ -35,8 +49,8 @@ import scala.util.control.NonFatal
  */
 @Singleton
 class HttpResponseFilter[R <: Request](fullyQualifyLocationHeader: Boolean)
-    extends SimpleFilter[R, Response]
-    with Logging {
+    extends SimpleFilter[R, Response] {
+  import HttpResponseFilter._
 
   def this() = {
     // https://tools.ietf.org/html/rfc7231#section-7.1.2 relaxes the requirement for complete
@@ -77,7 +91,7 @@ class HttpResponseFilter[R <: Request](fullyQualifyLocationHeader: Boolean)
       headerMap.set(Fields.Location, value)
     } catch {
       case NonFatal(e) =>
-        warn(
+        logger.warn(
           s"Unable to set Response Header '${Fields.Location}' value: '$value' - ${e.getMessage}")
     }
   }
@@ -109,7 +123,7 @@ class HttpResponseFilter[R <: Request](fullyQualifyLocationHeader: Boolean)
     for (existingLocation <- response.location) {
       Try(new URI(existingLocation)) match {
         case Throw(e) =>
-          warn(
+          logger.warn(
             s"Response Header '${Fields.Location}' value: '$existingLocation' is not a valid URI. ${e.getMessage}"
           )
         case Return(uri) if isRelativeLocation(uri) =>

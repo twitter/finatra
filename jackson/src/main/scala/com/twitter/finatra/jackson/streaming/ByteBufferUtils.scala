@@ -1,8 +1,8 @@
 package com.twitter.finatra.jackson.streaming
 
-import com.twitter.inject.Logging
 import com.twitter.inject.conversions.buf._
 import com.twitter.io.Buf
+import com.twitter.util.logging.Logging
 import java.nio.ByteBuffer
 
 private[finatra] object ByteBufferUtils extends Logging {

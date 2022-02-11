@@ -1,14 +1,18 @@
 package com.twitter.finatra.kafka.consumers
 
 import com.twitter.conversions.DurationOps._
-import com.twitter.finatra.kafka.config.{KafkaConfigMethods, ToKafkaProperties}
-import com.twitter.finatra.kafka.domain.{IsolationLevel, KafkaGroupId}
+import com.twitter.finatra.kafka.config.KafkaConfigMethods
+import com.twitter.finatra.kafka.config.ToKafkaProperties
+import com.twitter.finatra.kafka.domain.IsolationLevel
+import com.twitter.finatra.kafka.domain.KafkaGroupId
 import com.twitter.finatra.kafka.interceptors.MonitoringConsumerInterceptor
 import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter
 import com.twitter.finatra.kafka.utils.BootstrapServerUtils
-import com.twitter.inject.Logging
-import com.twitter.util.{Duration, StorageUnit}
-import org.apache.kafka.clients.consumer.{ConsumerConfig, OffsetResetStrategy}
+import com.twitter.util.Duration
+import com.twitter.util.StorageUnit
+import com.twitter.util.logging.Logging
+import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.consumer.OffsetResetStrategy
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.metrics.Sensor.RecordingLevel
 

@@ -1,10 +1,11 @@
 package com.twitter.finatra.http.routing
 
 import com.twitter.finagle.Service
-import com.twitter.finagle.http.{Request, Response}
-import com.twitter.inject.Logging
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
 import com.twitter.util.Await
 import com.twitter.util.jackson.ScalaObjectMapper
+import com.twitter.util.logging.Logger
 import javax.inject.Inject
 
 private object HttpWarmup {
@@ -12,6 +13,8 @@ private object HttpWarmup {
 
   /**  Function curried as the default arg for the responseCallback: Response => Unit parameter. */
   val unitFunction: Response => Unit = _ => ()
+
+  val logger: Logger = Logger(HttpWarmup.getClass)
 }
 
 /**
@@ -24,7 +27,7 @@ private object HttpWarmup {
  *
  * @see [[HttpRouter]]
  */
-class HttpWarmup @Inject() (router: HttpRouter, mapper: ScalaObjectMapper) extends Logging {
+class HttpWarmup @Inject() (router: HttpRouter, mapper: ScalaObjectMapper) {
   import HttpWarmup._
 
   /* Public */
@@ -72,7 +75,7 @@ class HttpWarmup @Inject() (router: HttpRouter, mapper: ScalaObjectMapper) exten
           router.services.externalService
         }
 
-      infoResult("%s") {
+      logger.infoResult("%s") {
         val response = Await.result(service(createdRequest))
         responseCallback(response)
         s"Warmup $createdRequest completed with ${response.status}"

@@ -1,14 +1,22 @@
 package com.twitter.finatra.thrift.filters
 
-import com.twitter.finagle.{Filter, Service}
-import com.twitter.finagle.service.{ReqRep, ResponseClass, ResponseClassifier}
+import com.twitter.finagle.Filter
+import com.twitter.finagle.Service
+import com.twitter.finagle.service.ReqRep
+import com.twitter.finagle.service.ResponseClass
+import com.twitter.finagle.service.ResponseClassifier
+import com.twitter.finagle.stats.Counter
+import com.twitter.finagle.stats.Stat
 import com.twitter.finagle.stats.Stat.timeFuture
-import com.twitter.finagle.stats.{Counter, Stat, StatsReceiver}
+import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.thrift.MethodMetadata
 import com.twitter.finatra.thrift.response.ThriftResponseClassifier
-import com.twitter.inject.Logging
-import com.twitter.util.{Future, Memoize, Throw, Try}
-import javax.inject.{Inject, Singleton}
+import com.twitter.util.Future
+import com.twitter.util.Memoize
+import com.twitter.util.Throw
+import com.twitter.util.Try
+import javax.inject.Inject
+import javax.inject.Singleton
 
 private object StatsFilter {
 
@@ -97,9 +105,7 @@ private object StatsFilter {
 class StatsFilter @Inject() (
   statsReceiver: StatsReceiver,
   responseClassifier: ThriftResponseClassifier)
-    extends Filter.TypeAgnostic
-    with Logging {
-
+    extends Filter.TypeAgnostic {
   import StatsFilter._
 
   /* Public */

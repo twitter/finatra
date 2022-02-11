@@ -1,9 +1,10 @@
 package com.twitter.finatra.kafka.consumers
 
-import com.twitter.finatra.kafka.domain.{KafkaTopic, SeekStrategy}
+import com.twitter.finatra.kafka.domain.KafkaTopic
+import com.twitter.finatra.kafka.domain.SeekStrategy
 import com.twitter.finatra.utils.FuturePools
-import com.twitter.inject.Logging
 import com.twitter.util._
+import com.twitter.util.logging.Logging
 import java.util
 import java.util.concurrent.atomic.AtomicBoolean
 import org.apache.kafka.clients.consumer._

@@ -22,7 +22,6 @@ scala_library(
         "finatra/inject/inject-modules/src/main/scala/com/twitter/inject/modules/internal",
         "finatra/inject/inject-ports/src/main/scala/com/twitter/inject/server",
         "finatra/inject/inject-server/src/main/scala/com/twitter/server/internal",
-        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",
@@ -30,13 +29,13 @@ scala_library(
         "util/util-lint/src/main/scala",
         # for DeprecatedLoggingFlags trait
         "util/util-logging/src/main/scala",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
         "util/util-stats/src/main/scala",
     ],
     exports = [
         "3rdparty/jvm/net/codingwell:scala-guice",
         "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app",
         "finatra/inject/inject-ports/src/main/scala/com/twitter/inject/server",
-        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",

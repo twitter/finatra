@@ -8,7 +8,7 @@
 package com.twitter.finatra.http.request
 
 import com.twitter.finatra.http.request.MediaRange.MediaRangeParser
-import com.twitter.inject.Logging
+import com.twitter.util.logging.Logging
 import scala.collection.BitSet
 import scala.util.parsing.combinator.Parsers
 import scala.util.parsing.input.CharSequenceReader
@@ -149,7 +149,7 @@ object MediaRange extends Logging {
       (mediaType | ('*' ~> parameters.map(ps => MediaType("*", "*", ps.flatten)))) ^^ { mediaType =>
         val (params, rest) = mediaType.parameters.span(_._1 != "q")
         val (qValueStr, acceptParams) = rest match {
-          case q :: ps => (q._2, ps)
+          case q +: ps => (q._2, ps)
           case _ => (None, Nil)
         }
         val qValue = qValueStr.flatMap { q =>

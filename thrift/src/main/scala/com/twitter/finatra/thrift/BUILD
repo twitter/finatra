@@ -20,7 +20,6 @@ scala_library(
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject/internal",
         "finatra/inject/inject-modules/src/main/scala/com/twitter/inject/modules",
         "finatra/inject/inject-server/src/main/scala",
-        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-thrift/src/main/scala",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/exceptions",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/filters",
@@ -35,7 +34,6 @@ scala_library(
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-modules/src/main/scala/com/twitter/inject/modules",
         "finatra/inject/inject-server/src/main/scala",
-        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-thrift/src/main/scala",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/exceptions",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/filters",
@@ -63,11 +61,12 @@ scala_library(
     tags = ["bazel-compatible"],
     dependencies = [
         "finagle/finagle-thrift/src/main/scala",
-        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/internal",
         "scrooge/scrooge-core/src/main/scala",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
     exports = [
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/internal",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
 )

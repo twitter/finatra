@@ -15,9 +15,9 @@ scala_library(
         "finagle/finagle-base-http/src/main",
         "finatra/http-core/src/main/scala/com/twitter/finatra/http/exceptions",
         "finatra/http-core/src/main/scala/com/twitter/finatra/http/response",
-        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/exceptions",
         "util/util-jackson/src/main/scala/com/twitter/util/jackson/caseclass/exceptions",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
     exports = [
         "3rdparty/jvm/jakarta/validation:jakarta.validation-api",

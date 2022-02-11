@@ -1,25 +1,24 @@
 package com.twitter.inject.logback
 
-import ch.qos.logback.classic.layout.TTLLLayout
-import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.classic.BasicConfigurator
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.LoggerContext
-import ch.qos.logback.core.encoder.LayoutWrappingEncoder
+import ch.qos.logback.classic.layout.TTLLLayout
+import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.ConsoleAppender
 import ch.qos.logback.core.LogbackAsyncAppenderBase
 import ch.qos.logback.core.TestLogbackAsyncAppender
+import ch.qos.logback.core.encoder.LayoutWrappingEncoder
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.ScalaObjectMapper
 import com.twitter.finagle.http.Request
 import com.twitter.finagle.http.Status
 import com.twitter.finagle.stats.InMemoryStatsReceiver
-import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.HttpServer
-import com.twitter.inject.Logging
+import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.inject.Test
 import java.util.concurrent.LinkedBlockingQueue
 import org.slf4j.LoggerFactory
@@ -44,7 +43,7 @@ private object AppendTestHttpServerFeatureTest {
     }
   }
 
-  class AppendTestHttpServer extends HttpServer with Logging {
+  class AppendTestHttpServer extends HttpServer {
     override protected def configureHttp(router: HttpRouter): Unit = {
       router.add(new Controller {
         get("/log_events") { _: Request =>

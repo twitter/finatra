@@ -1,12 +1,14 @@
 package com.twitter.inject.thrift.filters
 
 import com.twitter.conversions.StringOps._
+import com.twitter.finagle.Filter
+import com.twitter.finagle.Service
 import com.twitter.finagle.filter.AbstractDarkTrafficFilter
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finagle.thrift.{MethodMetadata, ThriftClientRequest}
-import com.twitter.finagle.{Filter, Service}
-import com.twitter.inject.Logging
+import com.twitter.finagle.thrift.MethodMetadata
+import com.twitter.finagle.thrift.ThriftClientRequest
 import com.twitter.util.Future
+import com.twitter.util.logging.Logging
 import scala.reflect.ClassTag
 
 sealed abstract class BaseDarkTrafficFilter(

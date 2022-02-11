@@ -6,6 +6,9 @@ import com.twitter.finagle.Filter
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.Request
 import com.twitter.finagle.http.Response
+import com.twitter.finatra.http.AbstractController
+import com.twitter.finatra.http.Controller
+import com.twitter.finatra.http.HttpFilter
 import com.twitter.finatra.http.exceptions.AbstractExceptionMapper
 import com.twitter.finatra.http.exceptions.ExceptionManager
 import com.twitter.finatra.http.exceptions.ExceptionMapper
@@ -15,13 +18,10 @@ import com.twitter.finatra.http.internal.routing.Route
 import com.twitter.finatra.http.internal.routing.RoutingService
 import com.twitter.finatra.http.marshalling.MessageBodyComponent
 import com.twitter.finatra.http.marshalling.MessageBodyManager
-import com.twitter.finatra.http.AbstractController
-import com.twitter.finatra.http.Controller
-import com.twitter.finatra.http.HttpFilter
+import com.twitter.inject.Injector
 import com.twitter.inject.TypeUtils
 import com.twitter.inject.internal.LibraryRegistry
-import com.twitter.inject.Injector
-import com.twitter.inject.Logging
+import com.twitter.util.logging.Logger
 import java.lang.annotation.{Annotation => JavaAnnotation}
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -29,6 +29,8 @@ import scala.collection.mutable.ArrayBuffer
 
 object HttpRouter {
   val FinatraAdminPrefix = "/admin/finatra/"
+
+  private val logger: Logger = Logger(HttpRouter.getClass)
 }
 
 /**
@@ -47,8 +49,7 @@ class HttpRouter @Inject() (
   injector: Injector,
   callbackConverter: CallbackConverterImpl,
   messageBodyManager: MessageBodyManager,
-  exceptionManager: ExceptionManager)
-    extends Logging {
+  exceptionManager: ExceptionManager) {
   import HttpRouter._
 
   /* Mutable State */
@@ -691,7 +692,7 @@ class HttpRouter @Inject() (
   }
 
   private[finatra] def partitionRoutesByType: RoutesByType = {
-    if (routes.nonEmpty) info("Adding routes\n" + routes.map(_.summary).mkString("\n"))
+    if (routes.nonEmpty) logger.info("Adding routes\n" + routes.map(_.summary).mkString("\n"))
     val (adminRoutes, externalRoutes) = routes.partition { route =>
       route.path.startsWith(FinatraAdminPrefix) || route.admin
     }
@@ -709,7 +710,7 @@ class HttpRouter @Inject() (
         // non-constant routes MUST start with /admin/finatra/
         if (!route.path.startsWith(HttpRouter.FinatraAdminPrefix)) {
           val msg = message.format(route.path)
-          error(msg)
+          logger.error(msg)
           throw new java.lang.AssertionError(msg)
         }
       }

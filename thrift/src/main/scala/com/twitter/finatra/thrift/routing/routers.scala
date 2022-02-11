@@ -1,27 +1,27 @@
 package com.twitter.finatra.thrift.routing
 
 import com.twitter.finagle
+import com.twitter.finagle._
 import com.twitter.finagle.service.NilService
 import com.twitter.finagle.thrift.AbstractThriftService
 import com.twitter.finagle.thrift.RichServerParam
 import com.twitter.finagle.thrift.ThriftService
 import com.twitter.finagle.thrift.ToThriftService
-import com.twitter.finagle._
 import com.twitter.finatra.thrift.Controller
 import com.twitter.finatra.thrift.ScroogeServiceImpl
 import com.twitter.finatra.thrift.exceptions.ExceptionManager
 import com.twitter.finatra.thrift.exceptions.ExceptionMapper
 import com.twitter.finatra.thrift.internal.routing.NullThriftService
 import com.twitter.finatra.thrift.internal.routing.Registrar
-import com.twitter.inject.annotations.Flag
-import com.twitter.inject.TypeUtils
-import com.twitter.inject.internal.LibraryRegistry
 import com.twitter.inject.Injector
-import com.twitter.inject.Logging
 import com.twitter.inject.StackTransformer
+import com.twitter.inject.TypeUtils
+import com.twitter.inject.annotations.Flag
+import com.twitter.inject.internal.LibraryRegistry
 import com.twitter.scrooge.Request
 import com.twitter.scrooge.Response
 import com.twitter.scrooge.ThriftMethod
+import com.twitter.util.logging.Logger
 import java.lang.annotation.{Annotation => JavaAnnotation}
 import java.lang.reflect.{Method => JMethod}
 import javax.inject.Inject
@@ -29,8 +29,7 @@ import javax.inject.Singleton
 
 private[routing] abstract class BaseThriftRouter[Router <: BaseThriftRouter[Router]](
   injector: Injector,
-  exceptionManager: ExceptionManager)
-    extends Logging { this: Router =>
+  exceptionManager: ExceptionManager) { this: Router =>
 
   // There is no guarantee that this is always accessed from the same thread
   @volatile
@@ -149,6 +148,8 @@ private[routing] abstract class BaseThriftRouter[Router <: BaseThriftRouter[Rout
 private object ThriftRouter {
   val url: String =
     "https://twitter.github.io/finatra/user-guide/thrift/controllers.html#handle-thriftmethod-dsl"
+
+  val logger: Logger = Logger(ThriftRouter.getClass)
 }
 
 /**
@@ -164,6 +165,7 @@ class ThriftRouter @Inject() (
   stackTransformer: StackTransformer,
   @Flag("thrift.name") serverName: String)
     extends BaseThriftRouter[ThriftRouter](injector, exceptionManager) {
+  import ThriftRouter._
 
   private[this] var underlying: ThriftService = NullThriftService
 
@@ -321,7 +323,7 @@ class ThriftRouter @Inject() (
       }
     }.toMap
 
-    info(
+    logger.info(
       "Adding methods\n" + routes.keys
         .map(method => s"${controller.getClass.getSimpleName}.${method.name}")
         .mkString("\n")
@@ -335,7 +337,7 @@ class ThriftRouter @Inject() (
     conf: Controller.LegacyConfig
   ): ThriftService = {
     if (conf.methods.isEmpty) {
-      error(
+      logger.error(
         s"${controller.getClass.getName} contains no visible methods. " +
           s"For more details see: ${ThriftRouter.url}"
       )
@@ -352,7 +354,7 @@ class ThriftRouter @Inject() (
         method -> reqRepService.asInstanceOf[ScroogeServiceImpl]
       }.toMap
 
-      info(
+      logger.info(
         "Adding methods\n" + conf.methods
           .map(method => s"${controller.getClass.getSimpleName}.${method.name}")
           .mkString("\n")
@@ -360,6 +362,10 @@ class ThriftRouter @Inject() (
     }
     controller.asInstanceOf[ToThriftService].toThriftService
   }
+}
+
+private object JavaThriftRouter {
+  val logger: Logger = Logger(JavaThriftRouter.getClass)
 }
 
 /**
@@ -377,6 +383,7 @@ class ThriftRouter @Inject() (
 @Singleton
 class JavaThriftRouter @Inject() (injector: Injector, exceptionManager: ExceptionManager)
     extends BaseThriftRouter[JavaThriftRouter](injector, exceptionManager) {
+  import JavaThriftRouter._
 
   private class ServiceCreator {
     def apply(param: RichServerParam): Service[Array[Byte], Array[Byte]] = NilService
@@ -507,7 +514,7 @@ class JavaThriftRouter @Inject() (injector: Injector, exceptionManager: Exceptio
               .asInstanceOf[Service[Array[Byte], Array[Byte]]]
 
           val declaredMethods: Array[JMethod] = controllerClazz.getDeclaredMethods
-          info(
+          logger.info(
             "Adding methods\n" +
               declaredMethods.map(method => s"$serviceName.${method.getName}").mkString("\n")
           )

@@ -18,11 +18,10 @@ scala_library(
         "finatra/http-core/src/main/scala/com/twitter/finatra/http/request",
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-modules/src/main/scala/com/twitter/inject/modules",
-        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
         "util/util-core:scala",
         "util/util-jackson/src/main/scala/com/twitter/util/jackson",
-        "util/util-slf4j-api/src/main/scala",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
     exports = [
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",

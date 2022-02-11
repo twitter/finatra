@@ -5,6 +5,7 @@ import com.twitter.util.Awaitable
 import com.twitter.util.Duration
 import com.twitter.util.ExecutorServiceFuturePool
 import com.twitter.util.Future
+import com.twitter.util.{logging => utl}
 import java.nio.charset.{StandardCharsets => JChar}
 import java.util.TimeZone
 import com.twitter.io.StreamIO
@@ -22,7 +23,7 @@ import scala.util.control.NonFatal
  *  - [[org.scalatest.BeforeAndAfterAll]]
  *  - [[org.scalatest.BeforeAndAfterEach]]
  *  - [[org.scalatest.matchers.should.Matchers]]
- *  - [[com.twitter.inject.Logging]]
+ *  - [[com.twitter.util.logging.Logging]]
  *
  * This trait is expected to be mixed with a class that extends a core Suite trait,
  * e.g., [[org.scalatest.funsuite.AnyFunSuite]].
@@ -35,7 +36,7 @@ trait TestMixin
     with BeforeAndAfterAll
     with BeforeAndAfterEach
     with Matchers
-    with Logging { this: Suite =>
+    with utl.Logging { this: Suite =>
 
   /* Constructor */
 

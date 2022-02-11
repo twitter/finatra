@@ -1,7 +1,9 @@
 package com.twitter.inject.app.internal
 
 import com.google.inject.Module
-import com.twitter.inject.{Injector, Logging, TwitterModuleLifecycle}
+import com.twitter.inject.Injector
+import com.twitter.inject.TwitterModuleLifecycle
+import com.twitter.util.logging.Logging
 import scala.PartialFunction.condOpt
 
 /**

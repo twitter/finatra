@@ -16,7 +16,6 @@ scala_library(
         "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject/internal",
-        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-stack/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-thrift/src/main/scala",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift:controller",
@@ -24,6 +23,7 @@ scala_library(
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/internal",
         "finatra/thrift/src/main/scala/com/twitter/finatra/thrift/internal/routing",
         "scrooge/scrooge-core/src/main/scala",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
     exports = [
         "finatra/inject/inject-stack/src/main/scala/com/twitter/inject",

@@ -7,16 +7,20 @@ import com.twitter.app.Flag
 import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.NullServer
 import com.twitter.finagle.client.ClientRegistry
-import com.twitter.inject.Logging
 import com.twitter.inject.annotations.Lifecycle
-import com.twitter.inject.app.{AbstractApp, App}
+import com.twitter.inject.app.AbstractApp
+import com.twitter.inject.app.App
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.modules.internal.LibraryModule
 import com.twitter.inject.utils.Handler
 import com.twitter.server.Lifecycle.Warmup
 import com.twitter.server.internal.FinagleBuildRevision
-import com.twitter.util.lint.{Category, GlobalRules, Issue, Rule}
-import com.twitter.util.{Await, Awaitable}
+import com.twitter.util.lint.Category
+import com.twitter.util.lint.GlobalRules
+import com.twitter.util.lint.Issue
+import com.twitter.util.lint.Rule
+import com.twitter.util.Await
+import com.twitter.util.Awaitable
 import java.util.concurrent.ConcurrentLinkedQueue
 import scala.collection.JavaConverters._
 
@@ -82,8 +86,7 @@ trait TwitterServer
     with com.twitter.server.TwitterServer
     with DeprecatedLogging
     with Ports
-    with Warmup
-    with Logging {
+    with Warmup {
 
   addFrameworkModules(
     statsReceiverModule,

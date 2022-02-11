@@ -1,13 +1,12 @@
 package com.twitter.finatra.http.internal.routing
 
 import com.twitter.finatra.http.exceptions.RouteParamExtractionException
-import com.twitter.inject.Logging
 import io.netty.handler.codec.http.QueryStringDecoder
 import java.util.regex.Matcher
 import scala.collection.immutable
 import scala.util.matching.Regex
 
-private[http] object PathPattern extends Logging {
+private[http] object PathPattern {
 
   /* Matches and captures route param names */
   private val NamedRouteParamRegex = """:\w+""".r

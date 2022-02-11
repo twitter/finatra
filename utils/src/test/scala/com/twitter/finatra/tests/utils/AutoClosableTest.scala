@@ -1,7 +1,8 @@
 package com.twitter.finatra.tests.utils
 
 import com.twitter.finatra.utils.AutoClosable
-import com.twitter.inject.{Logging, Test}
+import com.twitter.inject.Test
+import com.twitter.util.logging.Logger
 
 class AutoClosableTest extends Test {
 
@@ -17,7 +18,13 @@ class AutoClosableTest extends Test {
 
 }
 
-class AutoClosableObject extends AutoCloseable with Logging {
+private object AutoClosableObject {
+  val logger: Logger = Logger(AutoClosableObject.getClass)
+}
+
+class AutoClosableObject extends AutoCloseable {
+  import AutoClosableObject._
+
   private var closed = false
 
   def isClosed: Boolean = {
@@ -25,7 +32,7 @@ class AutoClosableObject extends AutoCloseable with Logging {
   }
 
   def doSomething(): Unit = {
-    info("Performing auto-closable function.")
+    logger.info("Performing auto-closable function.")
   }
 
   override def close(): Unit = {

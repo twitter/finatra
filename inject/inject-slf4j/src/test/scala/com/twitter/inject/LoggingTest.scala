@@ -1,6 +1,5 @@
-package com.twitter.inject.tests
+package com.twitter.inject
 
-import com.twitter.inject.{Logging, Test}
 import com.twitter.util.Future
 
 /**

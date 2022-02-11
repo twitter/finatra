@@ -1,11 +1,11 @@
 package com.twitter.inject.thrift.integration.inheritance
 
 import com.twitter.finagle.Service
-import com.twitter.inject.Logging
 import com.twitter.inject.thrift.integration.AbstractThriftService
-import com.twitter.util.Future
 import com.twitter.serviceA.thriftscala.ServiceA
 import com.twitter.serviceB.thriftscala.ServiceB
+import com.twitter.util.Future
+import com.twitter.util.logging.Logging
 
 class ServiceBThriftService(
   clientId: String)

@@ -3,27 +3,31 @@ package com.twitter.finatra.kafkastreams.test
 import com.github.nscala_time.time.DurationBuilder
 import com.google.inject.Module
 import com.twitter.conversions.DurationOps._
-import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
+import com.twitter.finagle.stats.InMemoryStatsReceiver
+import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.kafka.modules.KafkaBootstrapModule
 import com.twitter.finatra.kafka.test.utils.InMemoryStatsUtil
 import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
 import com.twitter.finatra.kafkastreams.config.FinatraTransformerFlags
-import com.twitter.finatra.kafkastreams.query.{
-  QueryableFinatraCompositeWindowStore,
-  QueryableFinatraKeyValueStore,
-  QueryableFinatraWindowStore
-}
+import com.twitter.finatra.kafkastreams.query.QueryableFinatraCompositeWindowStore
+import com.twitter.finatra.kafkastreams.query.QueryableFinatraKeyValueStore
+import com.twitter.finatra.kafkastreams.query.QueryableFinatraWindowStore
 import com.twitter.finatra.kafkastreams.transformer.aggregation.TimeWindowed
 import com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer
 import com.twitter.finatra.kafkastreams.utils.time._
-import com.twitter.inject.{AppAccessor, Injector, Logging, TwitterModule}
+import com.twitter.inject.AppAccessor
+import com.twitter.inject.Injector
+import com.twitter.inject.TwitterModule
 import com.twitter.util.Duration
+import com.twitter.util.logging.Logging
 import java.io.File
 import java.util.Properties
 import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.streams.state.KeyValueStore
-import org.apache.kafka.streams.{Topology, TopologyTestDriver}
-import org.joda.time.{DateTime, DateTimeUtils}
+import org.apache.kafka.streams.Topology
+import org.apache.kafka.streams.TopologyTestDriver
+import org.joda.time.DateTime
+import org.joda.time.DateTimeUtils
 
 object FinatraTopologyTester {
 

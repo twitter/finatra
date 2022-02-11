@@ -1,9 +1,9 @@
 package com.twitter.inject.utils
 
 import com.twitter.finagle.service.RetryPolicy
-import com.twitter.inject.Logging
 import com.twitter.inject.utils.FutureUtils._
 import com.twitter.util._
+import com.twitter.util.logging.Logging
 
 object RetryUtils extends Logging {
 

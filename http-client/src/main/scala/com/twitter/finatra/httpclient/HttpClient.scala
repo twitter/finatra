@@ -2,13 +2,17 @@ package com.twitter.finatra.httpclient
 
 import com.fasterxml.jackson.databind.ObjectReader
 import com.twitter.finagle.Service
-import com.twitter.finagle.http.{Message, Request, Response, Status}
+import com.twitter.finagle.http.Message
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
+import com.twitter.finagle.http.Status
 import com.twitter.finagle.service.RetryPolicy
-import com.twitter.inject.Logging
 import com.twitter.inject.conversions.future._
 import com.twitter.inject.utils.RetryUtils
-import com.twitter.util.{Future, Try}
+import com.twitter.util.Future
+import com.twitter.util.Try
 import com.twitter.util.jackson.ScalaObjectMapper
+import com.twitter.util.logging.Logging
 
 /**
  * A simple HTTP client.

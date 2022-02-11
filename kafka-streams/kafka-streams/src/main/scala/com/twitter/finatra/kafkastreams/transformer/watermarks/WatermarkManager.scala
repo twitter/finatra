@@ -2,7 +2,7 @@ package com.twitter.finatra.kafkastreams.transformer.watermarks
 
 import com.twitter.finatra.kafkastreams.transformer.domain.Time
 import com.twitter.finatra.kafkastreams.transformer.lifecycle.OnWatermark
-import com.twitter.inject.Logging
+import com.twitter.util.logging.Logging
 import org.apache.kafka.streams.processor.TaskId
 
 /**

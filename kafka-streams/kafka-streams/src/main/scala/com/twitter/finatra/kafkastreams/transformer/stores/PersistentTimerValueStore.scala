@@ -2,13 +2,14 @@ package com.twitter.finatra.kafkastreams.transformer.stores
 
 import com.google.common.annotations.Beta
 import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer.TimerTime
-import com.twitter.finatra.kafkastreams.transformer.domain.{Time, TimerMetadata}
+import com.twitter.finatra.kafkastreams.transformer.domain.Time
+import com.twitter.finatra.kafkastreams.transformer.domain.TimerMetadata
 import com.twitter.finatra.kafkastreams.transformer.lifecycle.OnWatermark
 import com.twitter.finatra.kafkastreams.transformer.stores.internal.Timer
 import com.twitter.finatra.kafkastreams.transformer.watermarks.Watermark
 import com.twitter.finatra.kafkastreams.utils.time._
 import com.twitter.finatra.streams.transformer.internal.domain.TimerSerde
-import com.twitter.inject.Logging
+import com.twitter.util.logging.Logging
 import org.apache.kafka.streams.state.KeyValueIterator
 
 @Beta

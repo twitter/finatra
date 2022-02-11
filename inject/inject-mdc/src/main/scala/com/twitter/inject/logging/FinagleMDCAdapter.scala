@@ -1,7 +1,9 @@
 package com.twitter.inject.logging
 
 import com.twitter.finagle.context.Contexts
-import java.util.{Collections, HashMap => JHashMap, Map => JMap}
+import java.util.Collections
+import java.util.{HashMap => JHashMap}
+import java.util.{Map => JMap}
 import org.slf4j.spi.MDCAdapter
 
 /**

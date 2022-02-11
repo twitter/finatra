@@ -1,6 +1,6 @@
 package com.twitter.finatra.kafkastreams.test
 
-import com.twitter.inject.Logging
+import com.twitter.util.logging.Logging
 import java.io.File
 import java.nio.file.Files
 import scala.util.control.NonFatal

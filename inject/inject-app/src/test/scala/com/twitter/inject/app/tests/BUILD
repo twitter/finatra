@@ -27,9 +27,9 @@ junit_tests(
         "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
         "finatra/inject/inject-modules/src/main/scala/com/twitter/inject/modules",
         "finatra/inject/inject-modules/src/test/scala/com/twitter/inject/modules",
-        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "util/util-app/src/main/scala",
         "util/util-core:scala",
         "util/util-mock/src/main/scala/com/twitter/util/mock",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
 )

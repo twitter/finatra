@@ -3,13 +3,15 @@ package com.twitter.finatra.kafka.test
 import com.twitter.conversions.DurationOps._
 import com.twitter.conversions.StorageUnitOps._
 import com.twitter.finatra.kafka.modules.KafkaBootstrapModule
-import com.twitter.inject.{Logging, Test}
+import com.twitter.inject.Test
 import com.twitter.util.Duration
+import com.twitter.util.logging.Logging
 import java.util.Properties
 import kafka.server.KafkaConfig
 import org.apache.kafka.common.serialization._
 import org.apache.kafka.common.utils.Bytes
-import org.apache.kafka.streams.integration.utils.{EmbeddedKafkaCluster, KafkaEmbedded}
+import org.apache.kafka.streams.integration.utils.EmbeddedKafkaCluster
+import org.apache.kafka.streams.integration.utils.KafkaEmbedded
 import scala.collection.mutable.ArrayBuffer
 
 trait EmbeddedKafka extends Test with Logging {

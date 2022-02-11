@@ -7,6 +7,11 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+* inject-slf4j: Deprecate `c.t.inject.logging.Logging` trait and methods. Users are encouraged
+  to use the `c.t.util.logging.Logging` trait directly. There are no replacements for
+  `c.t.inject.logging.Logging#debugFutureResult` and `c.t.inject.logging.Logging#time`.
+  ``PHAB_ID=D821722``
+
 22.1.0
 ------
 

@@ -5,8 +5,8 @@ import com.twitter.finagle.http.Response
 import com.twitter.finatra.http.exceptions.ExceptionMapper
 import com.twitter.finatra.http.response.ErrorsResponse
 import com.twitter.finatra.http.response.ResponseBuilder
-import com.twitter.inject.Logging
 import com.twitter.util.jackson.caseclass.exceptions.CaseClassMappingException
+import com.twitter.util.logging.Logging
 import javax.inject.Inject
 
 class CaseClassMappingExceptionMapper @Inject() (

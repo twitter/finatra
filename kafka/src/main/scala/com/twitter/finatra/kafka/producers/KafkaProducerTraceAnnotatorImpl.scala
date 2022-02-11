@@ -1,9 +1,13 @@
 package com.twitter.finatra.kafka.producers
 
-import com.twitter.finagle.tracing.{Annotation, TraceServiceName, Tracing}
-import com.twitter.finagle.{Dtab, Init}
-import com.twitter.inject.Logging
-import org.apache.kafka.clients.producer.{ProducerConfig, ProducerRecord}
+import com.twitter.finagle.tracing.Annotation
+import com.twitter.finagle.tracing.TraceServiceName
+import com.twitter.finagle.tracing.Tracing
+import com.twitter.finagle.Dtab
+import com.twitter.finagle.Init
+import com.twitter.util.logging.Logging
+import org.apache.kafka.clients.producer.ProducerConfig
+import org.apache.kafka.clients.producer.ProducerRecord
 
 object KafkaProducerTraceAnnotatorImpl {
 

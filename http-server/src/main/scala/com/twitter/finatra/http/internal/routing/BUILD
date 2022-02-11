@@ -19,10 +19,10 @@ scala_library(
         "finatra/http-core/src/main/scala/com/twitter/finatra/http/response",
         "finatra/http-core/src/main/scala/com/twitter/finatra/http/streaming",
         "finatra/inject/inject-core/src/main/scala",
-        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
         "util/util-core:util-core-util",
         "util/util-core/src/main/scala/com/twitter/concurrent",
         "util/util-jackson/src/main/scala/com/twitter/util/jackson",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
 )

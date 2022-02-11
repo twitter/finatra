@@ -5,14 +5,16 @@ import com.twitter.finagle.http._
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.exceptions.HttpResponseException
-import com.twitter.finatra.http.marshalling.{MessageBodyManager, WriterResponse}
+import com.twitter.finatra.http.marshalling.MessageBodyManager
+import com.twitter.finatra.http.marshalling.WriterResponse
 import com.twitter.finatra.utils.FileResolver
-import com.twitter.inject.Logging
 import com.twitter.inject.exceptions.DetailedNonRetryableSourcedException
 import com.twitter.io.Buf
 import com.twitter.util.Future
 import com.twitter.util.jackson.ScalaObjectMapper
-import java.io.{File, InputStream}
+import com.twitter.util.logging.Logging
+import java.io.File
+import java.io.InputStream
 
 /**
  * A wrapper around a [[com.twitter.finagle.http.Response]] which is itself a type of

@@ -8,28 +8,25 @@ import com.twitter.finatra.kafka.serde.ScalaSerdes
 import com.twitter.finatra.kafkastreams.config.FinatraTransformerFlags
 import com.twitter.finatra.kafkastreams.flushing.FlushingAwareServer
 import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer
-import com.twitter.finatra.kafkastreams.transformer.aggregation.{
-  AggregatorTransformer,
-  FixedTimeWindowedSerde,
-  TimeWindowed,
-  WindowedValue
-}
+import com.twitter.finatra.kafkastreams.transformer.aggregation.AggregatorTransformer
+import com.twitter.finatra.kafkastreams.transformer.aggregation.FixedTimeWindowedSerde
+import com.twitter.finatra.kafkastreams.transformer.aggregation.TimeWindowed
+import com.twitter.finatra.kafkastreams.transformer.aggregation.WindowedValue
 import com.twitter.finatra.kafkastreams.transformer.domain.Time
 import com.twitter.finatra.kafkastreams.utils.ScalaStreamsImplicits
-import com.twitter.inject.Logging
 import com.twitter.util.Duration
-import org.apache.kafka.common.config.TopicConfig.{
-  CLEANUP_POLICY_COMPACT,
-  CLEANUP_POLICY_CONFIG,
-  CLEANUP_POLICY_DELETE,
-  DELETE_RETENTION_MS_CONFIG,
-  RETENTION_MS_CONFIG,
-  SEGMENT_BYTES_CONFIG
-}
+import com.twitter.util.logging.Logging
+import org.apache.kafka.common.config.TopicConfig.CLEANUP_POLICY_COMPACT
+import org.apache.kafka.common.config.TopicConfig.CLEANUP_POLICY_CONFIG
+import org.apache.kafka.common.config.TopicConfig.CLEANUP_POLICY_DELETE
+import org.apache.kafka.common.config.TopicConfig.DELETE_RETENTION_MS_CONFIG
+import org.apache.kafka.common.config.TopicConfig.RETENTION_MS_CONFIG
+import org.apache.kafka.common.config.TopicConfig.SEGMENT_BYTES_CONFIG
 import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.streams.scala.kstream.{KStream => KStreamS}
 import org.apache.kafka.streams.state.internals.FinatraStores
-import org.apache.kafka.streams.{KafkaStreams, StreamsBuilder}
+import org.apache.kafka.streams.KafkaStreams
+import org.apache.kafka.streams.StreamsBuilder
 import scala.collection.JavaConverters._
 import scala.reflect.ClassTag
 

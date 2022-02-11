@@ -4,10 +4,13 @@ import com.twitter.finagle.context.Contexts
 import com.twitter.finagle.filter.PayloadSizeFilter.ClientReqTraceKey
 import com.twitter.finagle.tracing._
 import com.twitter.finagle.util.LoadService
-import com.twitter.inject.Logging
+import com.twitter.util.logging.Logging
 import java.util.Properties
 import java.util.concurrent.Future
-import org.apache.kafka.clients.producer.{Callback, KafkaProducer, ProducerRecord, RecordMetadata}
+import org.apache.kafka.clients.producer.Callback
+import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.producer.ProducerRecord
+import org.apache.kafka.clients.producer.RecordMetadata
 import org.apache.kafka.common.serialization.Serializer
 import scala.collection.JavaConverters._
 

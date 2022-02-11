@@ -1,13 +1,15 @@
 package com.twitter.finatra.kafka.producers
 
 import com.twitter.conversions.DurationOps._
-import com.twitter.finatra.kafka.config.{KafkaConfigMethods, ToKafkaProperties}
+import com.twitter.finatra.kafka.config.KafkaConfigMethods
+import com.twitter.finatra.kafka.config.ToKafkaProperties
 import com.twitter.finatra.kafka.domain.AckMode
 import com.twitter.finatra.kafka.interceptors.PublishTimeProducerInterceptor
 import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter
 import com.twitter.finatra.kafka.utils.BootstrapServerUtils
-import com.twitter.inject.Logging
-import com.twitter.util.{Duration, StorageUnit}
+import com.twitter.util.Duration
+import com.twitter.util.StorageUnit
+import com.twitter.util.logging.Logging
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.metrics.Sensor.RecordingLevel
 import org.apache.kafka.common.record.CompressionType

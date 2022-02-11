@@ -1,17 +1,22 @@
 package com.twitter.finatra.http.internal.exceptions
 
 import com.twitter.finagle.Failure
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
 import com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper._
 import com.twitter.finatra.http.response.ResponseBuilder
-import com.twitter.inject.Logging
+import com.twitter.util.logging.Logger
 import com.twitter.{logging => ctl}
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
+import javax.inject.Singleton
+
+private object FailureExceptionMapper {
+  val logger: Logger = Logger(FailureExceptionMapper.getClass)
+}
 
 @Singleton
 private[http] class FailureExceptionMapper @Inject() (response: ResponseBuilder)
-    extends AbstractFrameworkExceptionMapper[Failure](response)
-    with Logging {
+    extends AbstractFrameworkExceptionMapper[Failure](response) {
 
   private val MaxDepth = 5
 
@@ -47,15 +52,15 @@ private[http] class FailureExceptionMapper @Inject() (response: ResponseBuilder)
     val message = "Unhandled Failure"
     failure.logLevel match {
       case ctl.Level.ALL | ctl.Level.TRACE =>
-        trace(message, failure)
+        logger.trace(message, failure)
       case ctl.Level.INFO =>
-        info(message, failure)
+        logger.info(message, failure)
       case ctl.Level.WARNING =>
-        warn(message, failure)
+        logger.warn(message, failure)
       case ctl.Level.ERROR | ctl.Level.CRITICAL | ctl.Level.FATAL =>
-        error(message, failure)
+        logger.error(message, failure)
       case ctl.Level.DEBUG =>
-        debug(message, failure)
+        logger.debug(message, failure)
       case _ =>
       // do nothing
     }

@@ -1,10 +1,13 @@
 package com.twitter.inject.thrift.integration.serviceperendpoint
 
 import com.twitter.finagle.Service
-import com.twitter.greeter.thriftscala.{ByeOperation, ByeResponse, Greeter, InvalidOperation}
-import com.twitter.inject.Logging
+import com.twitter.greeter.thriftscala.ByeOperation
+import com.twitter.greeter.thriftscala.ByeResponse
+import com.twitter.greeter.thriftscala.Greeter
+import com.twitter.greeter.thriftscala.InvalidOperation
 import com.twitter.inject.thrift.integration.AbstractThriftService
 import com.twitter.util.Future
+import com.twitter.util.logging.Logging
 import java.util.concurrent.atomic.AtomicInteger
 
 class GreeterThriftService(

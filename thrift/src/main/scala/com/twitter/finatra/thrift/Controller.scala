@@ -1,11 +1,15 @@
 package com.twitter.finatra.thrift
 
-import com.twitter.finagle.thrift.{GeneratedThriftService, ToThriftService}
-import com.twitter.finagle.{Filter, Service}
+import com.twitter.finagle.Filter
+import com.twitter.finagle.Service
+import com.twitter.finagle.thrift.GeneratedThriftService
+import com.twitter.finagle.thrift.ToThriftService
 import com.twitter.finatra.thrift.internal.ThriftMethodService
-import com.twitter.inject.Logging
-import com.twitter.scrooge.{Request, Response, ThriftMethod}
+import com.twitter.scrooge.Request
+import com.twitter.scrooge.Response
+import com.twitter.scrooge.ThriftMethod
 import com.twitter.util.Future
+import com.twitter.util.logging.Logging
 import scala.collection.mutable.ListBuffer
 
 private[thrift] object Controller {

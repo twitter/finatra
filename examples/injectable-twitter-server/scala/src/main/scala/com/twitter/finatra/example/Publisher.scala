@@ -1,10 +1,11 @@
 package com.twitter.finatra.example
 
 import com.twitter.conversions.DurationOps._
-import com.twitter.inject.Logging
 import com.twitter.util._
+import com.twitter.util.logging.Logging
 import java.util.concurrent.atomic.AtomicReference
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
+import javax.inject.Singleton
 
 private object Publisher {
   val StringsToPub: Set[String] =

@@ -1,17 +1,20 @@
 package com.twitter.inject.requestscope
 
-import com.google.inject.{Key, OutOfScopeException, Provider, Scope, Scopes}
+import com.google.inject.Key
+import com.google.inject.OutOfScopeException
+import com.google.inject.Provider
+import com.google.inject.Scope
+import com.google.inject.Scopes
 import com.twitter.finagle.context.Contexts
-import com.twitter.inject.Logging
 import com.twitter.inject.requestscope.FinagleRequestScope._
 import java.util.{HashMap => JHashMap}
 import net.codingwell.scalaguice.typeLiteral
 
-object FinagleRequestScope {
+private object FinagleRequestScope {
 
   /** LocalContext Key */
-  private val localKey = new Contexts.local.Key[JHashMap[Key[_], AnyRef]]()
-  private val scopeName = "FinagleRequestScope"
+  val localKey = new Contexts.local.Key[JHashMap[Key[_], AnyRef]]()
+  val scopeName = "FinagleRequestScope"
 }
 
 /**
@@ -27,7 +30,7 @@ object FinagleRequestScope {
  * @see [[https://twitter.github.io/finatra/user-guide/http/filters.html HttpServer Request Scoping]]
  * @see [[https://twitter.github.io/finatra/user-guide/thrift/filters.html#request-scope ThriftServer Request Scoping]]
  */
-class FinagleRequestScope extends Scope with Logging {
+class FinagleRequestScope extends Scope {
 
   /* Public */
 

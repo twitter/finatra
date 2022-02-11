@@ -1,18 +1,30 @@
 package com.twitter.finatra.http.filters
 
-import com.twitter.finagle.http.{Request, Response, Status, Method => HttpMethod}
-import com.twitter.finagle.service.{ReqRep, ResponseClass, ResponseClassifier}
-import com.twitter.finagle.stats.{Counter, Stat, StatsReceiver}
-import com.twitter.finagle.{Service, SimpleFilter}
+import com.twitter.finagle.Service
+import com.twitter.finagle.SimpleFilter
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
+import com.twitter.finagle.http.Status
+import com.twitter.finagle.http.{Method => HttpMethod}
+import com.twitter.finagle.service.ReqRep
+import com.twitter.finagle.service.ResponseClass
+import com.twitter.finagle.service.ResponseClassifier
+import com.twitter.finagle.stats.Counter
+import com.twitter.finagle.stats.Stat
+import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.contexts.RouteInfo
-import com.twitter.finatra.http.response.{HttpResponseClassifier, SimpleResponse}
-import com.twitter.inject.Logging
+import com.twitter.finatra.http.response.HttpResponseClassifier
+import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.util._
-import javax.inject.{Inject, Singleton}
+import com.twitter.util.logging.Logger
+import javax.inject.Inject
+import javax.inject.Singleton
 
 private object StatsFilter {
   val url =
     "https://twitter.github.io/finatra/user-guide/http/exceptions.html#exceptionmappingfilter"
+
+  val logger: Logger = Logger(StatsFilter.getClass)
 
   /** INTENDED FOR INTERNAL USE ONLY */
   object Stats {
@@ -138,8 +150,7 @@ private object StatsFilter {
 @Singleton
 class StatsFilter[
   R <: Request] @Inject() (statsReceiver: StatsReceiver, responseClassifier: HttpResponseClassifier)
-    extends SimpleFilter[R, Response]
-    with Logging {
+    extends SimpleFilter[R, Response] {
 
   import StatsFilter._
 
@@ -219,7 +230,7 @@ class StatsFilter[
     val response = tryResponse match {
       case Return(v) => v
       case Throw(e) =>
-        warn(
+        logger.warn(
           s"Uncaught exception: ${e.getClass.getName}. " +
             s"Please ensure ${classOf[ExceptionMappingFilter[_]].getName} is installed. " +
             s"For more details see: $url"

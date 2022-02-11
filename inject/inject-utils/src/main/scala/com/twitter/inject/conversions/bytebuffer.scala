@@ -1,8 +1,8 @@
 package com.twitter.inject.conversions
 
-import com.twitter.inject.Logging
 import com.twitter.inject.conversions.buf._
 import com.twitter.io.Buf
+import com.twitter.util.logging.Logging
 import java.nio.ByteBuffer
 
 object bytebuffer extends Logging {

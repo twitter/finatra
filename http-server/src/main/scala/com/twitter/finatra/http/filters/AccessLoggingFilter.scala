@@ -1,11 +1,21 @@
 package com.twitter.finatra.http.filters
 
+import com.twitter.finagle.Service
+import com.twitter.finagle.SimpleFilter
 import com.twitter.finagle.filter.LogFormatter
-import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finagle.{Service, SimpleFilter}
-import com.twitter.inject.Logging
-import com.twitter.util.{Future, Return, Stopwatch, Throw}
-import javax.inject.{Inject, Singleton}
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
+import com.twitter.util.Future
+import com.twitter.util.Return
+import com.twitter.util.Stopwatch
+import com.twitter.util.Throw
+import com.twitter.util.logging.Logger
+import javax.inject.Inject
+import javax.inject.Singleton
+
+private object AccessLoggingFilter {
+  val logger: Logger = Logger(AccessLoggingFilter.getClass)
+}
 
 /**
  * Provides a standard "Access Log" -- a list of all requests through this Filter. Typically, this
@@ -35,18 +45,18 @@ import javax.inject.{Inject, Singleton}
  */
 @Singleton
 class AccessLoggingFilter[R <: Request] @Inject() (formatter: LogFormatter[R, Response])
-    extends SimpleFilter[R, Response]
-    with Logging {
+    extends SimpleFilter[R, Response] {
+  import AccessLoggingFilter._
 
   override def apply(request: R, service: Service[R, Response]): Future[Response] = {
     val elapsed = Stopwatch.start()
     service(request).respond {
       case Return(response) =>
-        info(formatter.format(request, response, elapsed()))
+        logger.info(formatter.format(request, response, elapsed()))
       case Throw(e) =>
         // should never get here since this filter is meant to be after (above)
         // the `ExceptionMappingFilter` which translates exceptions to responses.
-        warn(formatter.formatException(request, e, elapsed()))
+        logger.warn(formatter.formatException(request, e, elapsed()))
     }
   }
 }

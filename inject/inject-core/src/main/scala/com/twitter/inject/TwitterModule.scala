@@ -1,12 +1,18 @@
 package com.twitter.inject
 
 import com.google.inject.assistedinject.FactoryModuleBuilder
-import com.google.inject.matcher.{Matcher, Matchers}
+import com.google.inject.matcher.Matcher
+import com.google.inject.matcher.Matchers
 import com.google.inject.spi.TypeConverter
-import com.google.inject.{Module, _}
+import com.google.inject.Module
+import com.google.inject._
 import com.twitter.app.Flaggable
+import com.twitter.util.{logging => utl}
 import java.lang.annotation.Annotation
-import net.codingwell.scalaguice.{ScalaModule, ScalaMultibinder, ScalaOptionBinder, typeLiteral}
+import net.codingwell.scalaguice.ScalaModule
+import net.codingwell.scalaguice.ScalaMultibinder
+import net.codingwell.scalaguice.ScalaOptionBinder
+import net.codingwell.scalaguice.typeLiteral
 
 /**
  * =Overview=
@@ -194,7 +200,7 @@ abstract class TwitterModule
     extends AbstractModule
     with TwitterBaseModule
     with ScalaModule
-    with Logging {
+    with utl.Logging {
 
   /**
    * Uses the given [[https://google.github.io/guice/api-docs/4.1/javadoc/com/google/inject/Module.html com.google.inject.Module]]

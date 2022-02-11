@@ -12,6 +12,7 @@ java_library(
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",
         "twitter-server/server/src/main/scala",
         "util/util-core/src/main/java/com/twitter/util",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
 )
 

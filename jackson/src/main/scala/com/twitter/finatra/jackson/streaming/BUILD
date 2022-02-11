@@ -11,10 +11,13 @@ scala_library(
     dependencies = [
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-core",
         "3rdparty/jvm/javax/inject:javax.inject",
-        "finatra/inject/inject-slf4j/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
         "util/util-core/src/main/scala/com/twitter/concurrent",
         "util/util-core/src/main/scala/com/twitter/io",
         "util/util-jackson/src/main/scala/com/twitter/util/jackson",
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
+    ],
+    exports = [
+        "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
 )

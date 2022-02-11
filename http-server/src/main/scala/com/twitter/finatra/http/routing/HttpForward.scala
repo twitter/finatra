@@ -1,11 +1,12 @@
 package com.twitter.finatra.http.routing
 
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
 import com.twitter.finatra.http.exceptions.MaxForwardsExceededException
 import com.twitter.finatra.http.request.ForwardedRequest
-import com.twitter.inject.Logging
 import com.twitter.util.Future
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
+import javax.inject.Singleton
 
 object HttpForward {
   private[finatra] val DepthField: Request.Schema.Field[Option[Int]] =
@@ -13,7 +14,7 @@ object HttpForward {
 }
 
 @Singleton
-class HttpForward @Inject() (router: HttpRouter) extends Logging {
+class HttpForward @Inject() (router: HttpRouter) {
   import HttpForward._
 
   /**
