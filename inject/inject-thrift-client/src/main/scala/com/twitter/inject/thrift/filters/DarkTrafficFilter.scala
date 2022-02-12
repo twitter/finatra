@@ -31,10 +31,10 @@ sealed abstract class BaseDarkTrafficFilter(
     def apply(request: T, service: Service[T, U]): Future[U] = {
       if (forwardAfterService) {
         service(request).ensure {
-          sendDarkRequest(request)(enableSampling, invokeDarkService)
+          sendDarkRequest(request)(enableSampling(request), invokeDarkService)
         }
       } else {
-        serviceConcurrently(service, request)(enableSampling, invokeDarkService)
+        serviceConcurrently(service, request)(enableSampling(request), invokeDarkService)
       }
     }
   }
