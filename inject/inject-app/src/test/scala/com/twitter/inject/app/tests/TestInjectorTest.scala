@@ -1,16 +1,27 @@
 package com.twitter.inject.app.tests
 
 import com.google.inject.name.Names
-import com.google.inject.{Provides, Scopes, Stage}
+import com.google.inject.Provides
+import com.google.inject.Scopes
+import com.google.inject.Stage
 import com.twitter.app.GlobalFlag
 import com.twitter.finagle.Service
-import com.twitter.inject.annotations.{Annotations, Down, Flag, Flags, Up}
+import com.twitter.inject.annotations.Annotations
+import com.twitter.inject.annotations.Down
+import com.twitter.inject.annotations.Flag
+import com.twitter.inject.annotations.Flags
+import com.twitter.inject.annotations.Up
 import com.twitter.inject.app.TestInjector
-import com.twitter.inject.modules.{InMemoryStatsReceiverModule, LoggerModule, StatsReceiverModule}
-import com.twitter.inject.{Injector, Test, TwitterModule}
+import com.twitter.inject.modules.InMemoryStatsReceiverModule
+import com.twitter.inject.modules.StackTransformerModule
+import com.twitter.inject.modules.StatsReceiverModule
+import com.twitter.inject.Injector
+import com.twitter.inject.Test
+import com.twitter.inject.TwitterModule
 import com.twitter.util.Future
 import com.twitter.util.mock.Mockito
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
+import javax.inject.Singleton
 import scala.language.higherKinds
 
 object testBooleanGlobalFlag
@@ -217,23 +228,26 @@ class TestInjectorTest extends Test with Mockito {
     val flags: Map[String, String] = Map("foo" -> "bar", "baz" -> "bus")
 
     TestInjector()
-    TestInjector(LoggerModule, StatsReceiverModule)
-    TestInjector(Seq(LoggerModule, StatsReceiverModule))
-    TestInjector(modules = Seq(LoggerModule, StatsReceiverModule))
-    TestInjector(Seq(LoggerModule, StatsReceiverModule), flags)
-    TestInjector(modules = Seq(LoggerModule, StatsReceiverModule), flags = flags)
-    TestInjector(Seq(LoggerModule, StatsReceiverModule), flags, Seq(InMemoryStatsReceiverModule))
+    TestInjector(StackTransformerModule, StatsReceiverModule)
+    TestInjector(Seq(StackTransformerModule, StatsReceiverModule))
+    TestInjector(modules = Seq(StackTransformerModule, StatsReceiverModule))
+    TestInjector(Seq(StackTransformerModule, StatsReceiverModule), flags)
+    TestInjector(modules = Seq(StackTransformerModule, StatsReceiverModule), flags = flags)
     TestInjector(
-      modules = Seq(LoggerModule, StatsReceiverModule),
+      Seq(StackTransformerModule, StatsReceiverModule),
+      flags,
+      Seq(InMemoryStatsReceiverModule))
+    TestInjector(
+      modules = Seq(StackTransformerModule, StatsReceiverModule),
       flags = flags,
       overrideModules = Seq(InMemoryStatsReceiverModule))
     TestInjector(
-      Seq(LoggerModule, StatsReceiverModule),
+      Seq(StackTransformerModule, StatsReceiverModule),
       flags,
       Seq(InMemoryStatsReceiverModule),
       Stage.PRODUCTION)
     TestInjector(
-      modules = Seq(LoggerModule, StatsReceiverModule),
+      modules = Seq(StackTransformerModule, StatsReceiverModule),
       flags = flags,
       overrideModules = Seq(InMemoryStatsReceiverModule),
       stage = Stage.PRODUCTION)

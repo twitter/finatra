@@ -5,9 +5,11 @@ import java.util.Collections;
 
 import com.google.inject.Module;
 
-import com.twitter.inject.modules.LoggerModule$;
+import com.twitter.inject.modules.StatsReceiverModule;
 
 public class SampleJavaApp extends AbstractApp {
+  public SampleJavaApp() {
+  }
 
   private String sampleServiceResponse = "";
 
@@ -17,8 +19,7 @@ public class SampleJavaApp extends AbstractApp {
 
   @Override
   public Collection<Module> javaModules() {
-    return Collections.singletonList(
-        LoggerModule$.MODULE$);
+    return Collections.singletonList(StatsReceiverModule.get());
   }
 
   @Override

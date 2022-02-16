@@ -1,6 +1,5 @@
 package com.twitter.finatra.example;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -10,12 +9,11 @@ import com.google.inject.Module;
 import com.twitter.app.Flaggable;
 import com.twitter.inject.annotations.Flags;
 import com.twitter.inject.app.AbstractApp;
-import com.twitter.inject.modules.LoggerModule;
 import com.twitter.inject.modules.StatsReceiverModule;
 import com.twitter.util.logging.Logger;
 
 public class HelloWorldApp extends AbstractApp {
-  private static final Logger LOG = Logger.getLogger("HelloWorldApp");
+  private static final Logger LOG = Logger.getLogger(HelloWorldApp.class);
 
   private final List<Integer> queue;
 
@@ -32,10 +30,7 @@ public class HelloWorldApp extends AbstractApp {
 
   @Override
   public Collection<Module> javaModules() {
-    return Collections.unmodifiableList(
-        Arrays.asList(
-          LoggerModule.get(),
-          StatsReceiverModule.get()));
+    return Collections.singletonList(StatsReceiverModule.get());
   }
 
   @Override

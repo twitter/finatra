@@ -7,6 +7,19 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+* inject-modules: Deprecate `c.t.inject.modules.LoggerModule`. Update `c.t.inject.app.App` to
+  mix in the `util/util-slf4j-jul-bridge` `Slf4jBridge` trait. The `LoggerModule` does
+  not provide a solution inline with the best practices for bridging JUL to the SLF4J-API
+  and users are encouraged to instead mix in the `c.t.util.logging.Slf4jBridge` into the
+  main class of their application if necessary. The updates to `c.t.inject.app.App` will now
+  properly bridge JUL to the SLF4J-API early in the constructor of the application catching any
+  log messages emitted to JUL before where the bridging would have been attempted when using
+  the `LoggerModule`.
+
+  Note that `Slf4jBridge` trait is already mixed into the `c.t.server.TwitterServer` trait and
+  thus no further action is necessary forbridging JUL to the SLF4J-API in extensions of
+  `c.t.server.TwitterServer`. ``PHAB_ID=D827584``
+
 * inject-slf4j: Deprecate `c.t.inject.logging.Logging` trait and methods. Users are encouraged
   to use the `c.t.util.logging.Logging` trait directly. There are no replacements for
   `c.t.inject.logging.Logging#debugFutureResult` and `c.t.inject.logging.Logging#time`.

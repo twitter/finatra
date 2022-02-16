@@ -20,14 +20,21 @@ are free to choose their actual logging implementation.
     and `finatra/inject/inject-server <https://github.com/twitter/finatra/tree/develop/inject/inject-server>`__
     transitively provide SLF4J bridges for the following logging providers:
 
-    -  `Log4J 1.x <https://en.wikipedia.org/wiki/Log4j>`__
-    -  `commons-logging <https://commons.apache.org/proper/commons-logging/>`__
-    -  `java.util.logging <https://docs.oracle.com/javase/7/docs/api/index.html?java/util/logging/package-summary.html>`__:
-       there is a performance cost for intercepting JUL log messages, so `c.t.server.TwitterServer`
-       will install the `SLF4JBridgeHandler <https://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html>`__
-       which mitigates most of the performance penalty.
+-  `Log4J 1.x <https://en.wikipedia.org/wiki/Log4j>`__
+-  `commons-logging <https://commons.apache.org/proper/commons-logging/>`__
+-  `java.util.logging <https://docs.oracle.com/javase/7/docs/api/index.html?java/util/logging/package-summary.html>`__
 
-    For more information on the SLF4J bridges see the SLF4J `Bridging legacy APIs <https://www.slf4j.org/legacy.html>`__ documentation.
+.. tip::
+
+   Note, `TwitterServer <https://github.com/twitter/twitter-server/blob/b4be9ff71f273a007f880df6ea433f238c2d1f18/server/src/main/scala/com/twitter/server/TwitterServer.scala#L40>`__
+   and Finatra's `inject-app <../app/index.html>`__ both mix in the the `c.t.util.logging.Slf4jBridge <https://github.com/twitter/util/blob/develop/util-slf4j-jul-bridge/src/main/scala/com/twitter/util/logging/Slf4jBridge.scala>`__
+   trait to attempt installation of the `SLF4JBridgeHandler <https://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html>`__.
+
+   If you are not using one of these and want to bridge JUL to the SLF4J-API, you can mix in the
+   `c.t.util.logging.Slf4jBridge <https://github.com/twitter/util/blob/develop/util-slf4j-jul-bridge/src/main/scala/com/twitter/util/logging/Slf4jBridge.scala>`__
+   trait to your main application class.
+
+   For more information on the SLF4J bridges see the SLF4J `Bridging legacy APIs <https://www.slf4j.org/legacy.html>`__ documentation.
 
 Since `SLF4J <https://www.slf4j.org/manual.html>`__ is an interface, it requires an actual logging
 implementation. However, you should ensure that you **do not** end-up with *multiple* logging

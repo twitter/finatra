@@ -15,6 +15,7 @@ import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.app.internal.InstalledModules
 import com.twitter.inject.app.internal.Modules
 import com.twitter.util.logging.Logging
+import com.twitter.util.logging.Slf4jBridge
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ArrayBuffer
 
@@ -97,7 +98,7 @@ abstract class AbstractApp extends App {
  * Typically, you will only need to interact with the following methods:
  *   run -- callback executed after the injector is created and all @Lifecycle methods have completed.
  */
-trait App extends com.twitter.app.App with Logging {
+trait App extends com.twitter.app.App with Slf4jBridge with Logging {
 
   /**
    * All modules composed within this application (including modules referenced only from

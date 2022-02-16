@@ -42,6 +42,7 @@ scala_library(
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "util/util-app/src/main/scala",
         "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
+        "util/util-slf4j-jul-bridge/src/main/scala/com/twitter/util/logging",
     ],
     exports = [
         "3rdparty/jvm/com/google/inject:guice",
@@ -50,5 +51,6 @@ scala_library(
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "util/util-app/src/main/scala",
         "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
+        "util/util-slf4j-jul-bridge/src/main/scala/com/twitter/util/logging",
     ],
 )

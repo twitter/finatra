@@ -17,7 +17,7 @@ import com.twitter.inject.Injector;
 import com.twitter.inject.annotations.Down;
 import com.twitter.inject.annotations.Flags;
 import com.twitter.inject.modules.InMemoryStatsReceiverModule;
-import com.twitter.inject.modules.LoggerModule;
+import com.twitter.inject.modules.StackTransformerModule;
 import com.twitter.inject.modules.StatsReceiverModule;
 
 public class TestInjectorJavaTest extends Assert {
@@ -30,19 +30,19 @@ public class TestInjectorJavaTest extends Assert {
 
     TestInjector.Builder testInjector = TestInjector$.MODULE$.apply();
     testInjector = TestInjector.apply();
-    testInjector = TestInjector.apply(LoggerModule.get(), StatsReceiverModule.get());
+    testInjector = TestInjector.apply(StackTransformerModule.get(), StatsReceiverModule.get());
     testInjector = TestInjector.apply(
-            /* modules = */ Arrays.asList(LoggerModule.get(), StatsReceiverModule.get()));
+            /* modules = */ Arrays.asList(StackTransformerModule.get(), StatsReceiverModule.get()));
     testInjector = TestInjector.apply(
-            /* modules = */ Arrays.asList(LoggerModule.get(), StatsReceiverModule.get()),
+            /* modules = */ Arrays.asList(StackTransformerModule.get(), StatsReceiverModule.get()),
             /* flags = */ flags);
     testInjector = TestInjector.apply(
-            /* modules = */ Arrays.asList(LoggerModule.get(), StatsReceiverModule.get()),
+            /* modules = */ Arrays.asList(StackTransformerModule.get(), StatsReceiverModule.get()),
             /* flags = */ flags,
             /* overrideModules = */ Collections.singletonList(InMemoryStatsReceiverModule.get())
     );
     testInjector = TestInjector.apply(
-            /* modules = */ Arrays.asList(LoggerModule.get(), StatsReceiverModule.get()),
+            /* modules = */ Arrays.asList(StackTransformerModule.get(), StatsReceiverModule.get()),
             /* flags = */ flags,
             /* overrideModules = */ Collections.singletonList(InMemoryStatsReceiverModule.get()),
             /* stage */ Stage.PRODUCTION
@@ -81,7 +81,7 @@ public class TestInjectorJavaTest extends Assert {
     BigDecimal payment = new BigDecimal(12.34, MathContext.DECIMAL32);
 
     TestInjector.Builder testInjector = TestInjector.apply(
-        LoggerModule.get(),
+        StackTransformerModule.get(),
         StatsReceiverModule.get());
 
     Injector injector = testInjector
@@ -110,7 +110,7 @@ public class TestInjectorJavaTest extends Assert {
     BigDecimal payment = new BigDecimal(12.34, MathContext.DECIMAL32);
 
     TestInjector.Builder testInjector = TestInjector.apply(
-        Arrays.asList(LoggerModule.get(), StatsReceiverModule.get()));
+        Arrays.asList(StackTransformerModule.get(), StatsReceiverModule.get()));
 
     Injector injector = testInjector
         .bindClass(String.class, "Hello, world")

@@ -3,23 +3,21 @@ package com.twitter.finatra.example
 import com.google.inject.Module
 import com.twitter.inject.annotations.Flags
 import com.twitter.inject.app.App
-import com.twitter.inject.modules.{LoggerModule, StatsReceiverModule}
+import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.util.logging.Logger
+import com.twitter.util.logging.Slf4jBridge
 import scala.collection.mutable.ArrayBuffer
 
 object SampleAppMain extends SampleApp
 
-class SampleApp extends App {
+class SampleApp extends App with Slf4jBridge {
   private[this] val log: Logger = Logger("SampleApp")
 
   private[this] val queue: ArrayBuffer[Int] = new ArrayBuffer[Int]()
 
   flag[String]("username", "Username to use.", "-username=Bob")
 
-  override val modules: Seq[Module] = Seq(
-    LoggerModule,
-    StatsReceiverModule
-  )
+  override val modules: Seq[Module] = Seq(StatsReceiverModule)
 
   override protected def run(): Unit = {
     queue += 3

@@ -14,7 +14,18 @@ Getting Started
 
 To create an injectable |c.t.app.App|_, first depend on the `inject-app` library. Then use the
 `inject framework <../getting-started/framework.html#inject>`__ to create an injectable App. Finatra
-provides an injectable version of the |c.t.app.App|_ trait: |c.t.inject.app.App|_.
+provides an injectable version of the |c.t.app.App|_ trait: |c.t.inject.app.App|_. We
+also recommend using `Logback <https://logback.qos.ch/>`__ as your `SLF4J <https://www.slf4j.org/manual.html>`__
+implementation.
+
+E.g., with sbt:
+
+.. parsed-literal::
+
+    "com.twitter" %% "inject-app" % "\ |release|\ ",
+    "ch.qos.logback" % "logback-classic" % versions.logback,
+
+For more information on logging with Finatra see: `Introduction to Logging With Finatra <../logging/index.html#introduction-to-logging-with-finatra>`__.
 
 Extending the |c.t.inject.app.App|_ trait creates an injectable |c.t.app.App|_.
 
@@ -36,6 +47,9 @@ Given a `module <../getting-started/modules.html>`__ definition:
     @Singleton
     @Provides
     def providesFooService: FooService = ???
+
+    /**  Java-friendly way to access this module as a singleton instance */
+    def get(): this.type = this
   }
 
 You could define an |c.t.inject.app.App|_:
@@ -43,17 +57,14 @@ You could define an |c.t.inject.app.App|_:
 .. code:: scala
 
   import com.google.inject.Module
-  import com.twitter.inject.Logging
   import com.twitter.inject.app.App
-  import com.twitter.inject.modules.LoggingModule
 
   object MyAppMain extends MyApp
 
-  class MyApp extends App with Logging  {
+  class MyApp
+    extends App {
 
-    override val modules: Seq[Module] = Seq(
-      LoggingModule,
-      MyModule1)
+    override val modules: Seq[Module] = Seq(MyModule1)
 
     override protected def run(): Unit = {
       // Core app logic goes here.
@@ -61,12 +72,6 @@ You could define an |c.t.inject.app.App|_:
       ???
     }
   }
-
-.. tip::
-
-  We include the `c.t.inject.modules.LoggingModule <https://github.com/twitter/finatra/blob/develop/inject/inject-modules/src/main/scala/com/twitter/inject/modules/LoggerModule.scala>`__ to attempt installation of the 
-  `SLF4JBridgeHandler <https://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html>`__ here as an example of
-  how to `bridge legacy APIs <https://www.slf4j.org/legacy.html>`__.
 
 Java Example
 ------------
@@ -79,15 +84,12 @@ Java Example
   import com.google.inject.Module;
 
   import com.twitter.inject.app.AbstractApp;
-  import com.twitter.inject.modules.LoggerModule$;
 
   public class MyApp extends AbstractApp {
 
       @Override
       public Collection<Module> javaModules() {
-          return Collections.<Module>singletonList(
-                  LoggerModule$.MODULE$,
-                  MyModule1$.MODULE$);
+          return Collections.<Module>singletonList(MyModule1.get());
       }
 
       @Override
@@ -157,14 +159,12 @@ For example, to exit the application upon receiving an `INT` signal:
 
   import com.google.inject.Module
   import com.twitter.inject.app.App
-  import com.twitter.inject.Logging
 
   object MyAppMain extends MyApp
 
-  class MyApp extends App with Logging  {
+  class MyApp extends App  {
 
-    override val modules: Seq[Module] = Seq(
-      MyModule1)
+    override val modules: Seq[Module] = Seq(MyModule1)
 
     HandleSignal("INT") { signal =>
       exitOnError(s"Process is being terminated with signal $signal.")
@@ -282,28 +282,25 @@ Assuming you have an App:
 
     import com.google.inject.Module
     import com.twitter.finagle.stats.StatsReceiver
-    import com.twitter.inject.Logging
     import com.twitter.inject.app.App
-    import com.twitter.inject.modules.LoggingModule
     import com.twitter.inject.modules.StatsReceiverModule
 
     object MyAppMain extends MyApp
 
-    class MyApp extends App with Logging  {
+    class MyApp extends App {
 
-    override val modules: Seq[Module] = Seq(
-      StatsReceiverModule
-      LoggingModule,
-      MyModule1)
+      override val modules: Seq[Module] = Seq(
+        StatsReceiverModule
+        MyModule1)
 
-    override protected def run(): Unit = {
-      // Core app logic goes here.
-      val statsReceiver = injector.instance[StatsReceiver]
-      statsReceiver.counter("my_counter").incr()
-      val fooService = injector.instance[FooService]
-      ???
+      override protected def run(): Unit = {
+        // Core app logic goes here.
+        val statsReceiver = injector.instance[StatsReceiver]
+        statsReceiver.counter("my_counter").incr()
+        val fooService = injector.instance[FooService]
+        ???
+      }
     }
-  }
 
 You could then test emitted metrics like so:
 

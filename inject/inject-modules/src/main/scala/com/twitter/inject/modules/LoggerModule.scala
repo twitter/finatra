@@ -1,6 +1,7 @@
 package com.twitter.inject.modules
 
-import com.twitter.inject.{Injector, TwitterModule}
+import com.twitter.inject.Injector
+import com.twitter.inject.TwitterModule
 import com.twitter.util
 
 /**
@@ -9,6 +10,9 @@ import com.twitter.util
  *
  * @see [[com.twitter.util.logging.Slf4jBridgeUtility]]
  */
+@deprecated(
+  "No replacement. Users should use the Slf4jBridgeUtility in the constructor of their application.",
+  "2022-02-04")
 object LoggerModule extends TwitterModule {
 
   override def singletonStartup(injector: Injector): Unit = {

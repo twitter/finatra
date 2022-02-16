@@ -490,6 +490,7 @@ lazy val injectApp = (project in file("inject/inject-app"))
       "com.twitter" %% "finagle-core" % versions.twLibVersion % Test,
       "com.twitter" %% "util-mock" % versions.twLibVersion % Test,
       "com.twitter" %% "util-core" % versions.twLibVersion,
+      "com.twitter" %% "util-slf4j-jul-bridge" % versions.twLibVersion,
       "org.slf4j" % "slf4j-api" % versions.slf4j,
       // -------- BEGIN: slf4j-api logging bridges -------------------------------
       // Add the slf4j-api logging bridges to ensure that any dependents
