@@ -25,7 +25,6 @@ import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.inject.InMemoryStatsReceiverUtility
 import com.twitter.util.Duration.fromMilliseconds
-import com.twitter.util.Await
 import com.twitter.util.Duration
 import com.twitter.util.Time
 import java.util.concurrent.TimeUnit
@@ -58,45 +57,6 @@ class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
 
   private def getNativeTestProducer(statsReceiver: StatsReceiver) = {
     getTestProducerBuilder(statsReceiver).buildClient()
-  }
-
-  test("success then failure publish") {
-    val injector = TestInjector(InMemoryStatsReceiverModule).create
-    KafkaFinagleMetricsReporter.init(injector)
-
-    val producer = getTestProducerBuilder(injector.instance[StatsReceiver])
-      .requestTimeout(fromMilliseconds(500))
-      .deliveryTimeout(fromMilliseconds(1000))
-      .build()
-
-    try {
-      Await.result(producer.send("test-topic", "Foo", "Bar", System.currentTimeMillis))
-
-      val statsUtils = InMemoryStatsReceiverUtility(injector)
-
-      statsUtils.gauges.assert("kafka/test_producer/record_send_total", 1.0f)
-      val onSendLag = statsUtils.stats("kafka/test_producer/record_timestamp_on_send_lag")
-      assert(onSendLag.size == 1)
-      assert(onSendLag.head >= 0)
-
-      val onSuccessLag = statsUtils.stats("kafka/test_producer/record_timestamp_on_success_lag")
-      assert(onSuccessLag.size == 1)
-      assert(onSuccessLag.head >= onSendLag.head)
-
-      /* Stop the brokers so that the next publish attempt results in publish error */
-      closeEmbeddedKafka()
-
-      intercept[org.apache.kafka.common.errors.TimeoutException] {
-        Await.result(producer.send("test-topic", "Hello", "World", System.currentTimeMillis))
-      }
-
-      statsUtils.gauges.assert("kafka/test_producer/record_error_total", 1.0f)
-      val onFailureLag = statsUtils.stats("kafka/test_producer/record_timestamp_on_failure_lag")
-      assert(onFailureLag.size == 1)
-      assert(onFailureLag.head >= 0)
-    } finally {
-      producer.close()
-    }
   }
 
   test("close with Time.Bottom deadline should not throw exception") {
@@ -328,5 +288,46 @@ class FinagleKafkaProducerIntegrationTest extends EmbeddedKafka {
     traceIdHeader shouldBe None
 
     verify(nullTracer, times(0)).record(any[Record])
+  }
+
+  // NOTE: this test shuts down the embedded kafka cluster so we need to make sure
+  //       it's run last or else it clobbers other tests.
+  test("success then failure publish") {
+    val injector = TestInjector(InMemoryStatsReceiverModule).create
+    KafkaFinagleMetricsReporter.init(injector)
+
+    val producer = getTestProducerBuilder(injector.instance[StatsReceiver])
+      .requestTimeout(fromMilliseconds(500))
+      .deliveryTimeout(fromMilliseconds(1000))
+      .build()
+
+    try {
+      await(producer.send("test-topic", "Foo", "Bar", System.currentTimeMillis))
+
+      val statsUtils = InMemoryStatsReceiverUtility(injector)
+
+      statsUtils.gauges.assert("kafka/test_producer/record_send_total", 1.0f)
+      val onSendLag = statsUtils.stats("kafka/test_producer/record_timestamp_on_send_lag")
+      assert(onSendLag.size == 1)
+      assert(onSendLag.head >= 0)
+
+      val onSuccessLag = statsUtils.stats("kafka/test_producer/record_timestamp_on_success_lag")
+      assert(onSuccessLag.size == 1)
+      assert(onSuccessLag.head >= onSendLag.head)
+
+      /* Stop the brokers so that the next publish attempt results in publish error */
+      closeEmbeddedKafka()
+
+      intercept[org.apache.kafka.common.errors.TimeoutException] {
+        await(producer.send("test-topic", "Hello", "World", System.currentTimeMillis))
+      }
+
+      statsUtils.gauges.assert("kafka/test_producer/record_error_total", 1.0f)
+      val onFailureLag = statsUtils.stats("kafka/test_producer/record_timestamp_on_failure_lag")
+      assert(onFailureLag.size == 1)
+      assert(onFailureLag.head >= 0)
+    } finally {
+      producer.close()
+    }
   }
 }
