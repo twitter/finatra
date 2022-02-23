@@ -46,7 +46,7 @@ private[inject] trait TwitterModuleLifecycle extends utl.Logging {
    *          upon graceful shutdown.
    *
    * {{{
-   *   closeOnExit {
+   *   onExit {
    *     val closable = ...
    *     Await.result(
    *       closable.close(after: Duration), timeout: Duration)
@@ -67,7 +67,7 @@ private[inject] trait TwitterModuleLifecycle extends utl.Logging {
         } catch {
           case NonFatal(e) =>
             warn(e.getMessage)
-            debug(s"An error occurred in ${getClass.getSimpleName}#closeOnExit", e)
+            debug(s"An error occurred in ${getClass.getSimpleName}#onExit", e)
         }
       }
     }

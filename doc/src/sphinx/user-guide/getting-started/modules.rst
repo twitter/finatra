@@ -395,7 +395,7 @@ E.g,
     avoid binding unscoped resources without ways to shutdown or close them.
 
 There is also the option to inline the logic for closing your resource using the
-`TwitterModuleLifecycle#closeOnExit(f: => Unit)` function.
+`TwitterModuleLifecycle#onExit(f: => Unit)` function.
 
 For example, assume we have a class, `SomeClient` with a `close()` method that returns a `Future[Unit]`:
 
@@ -441,7 +441,7 @@ by doing the following:
             .withAnotherParam(b = true)
             .withSomeOtherConfiguration(137)
 
-        closeOnExit {
+        onExit {
            Await.result(client.close(), 2.seconds)
         }
 
@@ -488,7 +488,7 @@ or in Java:
             .withAnotherParam(true)
             .withSomeOtherConfiguration(137)
 
-        closeOnExit(() -> Await.result(client.close(), Duration.fromSeconds(2)));;
+        onExit(() -> Await.result(client.close(), Duration.fromSeconds(2)));;
 
         return client;
       }
@@ -497,11 +497,11 @@ or in Java:
 This allows for not needing to implement the `singletonShutdown` method which would require that you
 obtain an instance of the singleton resource from the Injector to then call the `close()` function.
 
-Any logic passed to the `closeOnExit` function is added to the application's list of `onExit`
+Any logic passed to the `onExit` function is added to the application's list of `onExit`
 functions to be run in the order registered upon graceful shutdown of the application.
 
 For an example, see the `c.t.inject.thrift.modules.ThriftMethodBuilderClientModule <https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftMethodBuilderClientModule.scala>`_
-where we use `closeOnExit` to ensure that any bound ThriftClient will be closed when the application
+where we use `onExit` to ensure that any bound ThriftClient will be closed when the application
 gracefully exits.
 
 See the `Application and Server Lifecycle <lifecycle.html>`__ section for more information on the
