@@ -42,8 +42,8 @@ class FeatureTestNonInjectionCustomStatsReceiverTest extends FeatureTest {
     }
 
     assert(
-      testStatsReceiver.gauges.nonEmpty
-    ) /* we add a build revision gauge in startup of the server */
+      testStatsReceiver == server.statsReceiver
+    )
   }
 
   test("TestServer#feature test") {

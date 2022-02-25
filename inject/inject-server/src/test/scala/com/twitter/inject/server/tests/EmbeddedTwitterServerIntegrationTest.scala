@@ -1,14 +1,21 @@
 package com.twitter.inject.server.tests
 
 import com.google.inject.name.Names
-import com.google.inject.{Module, Provides, Stage}
+import com.google.inject.Module
+import com.google.inject.Provides
+import com.google.inject.Stage
 import com.twitter.finagle.http.Status
-import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
+import com.twitter.finagle.stats.InMemoryStatsReceiver
+import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.inject.app.StartupTimeoutException
 import com.twitter.inject.server.EmbeddedTwitterServer.ReducibleFn
-import com.twitter.inject.server.{EmbeddedTwitterServer, TwitterServer}
-import com.twitter.inject.{Test, TwitterModule}
-import com.twitter.util.{Await, Future, TimeoutException}
+import com.twitter.inject.server.EmbeddedTwitterServer
+import com.twitter.inject.server.TwitterServer
+import com.twitter.inject.Test
+import com.twitter.inject.TwitterModule
+import com.twitter.util.Await
+import com.twitter.util.Future
+import com.twitter.util.TimeoutException
 import javax.inject.Singleton
 import org.scalatest.exceptions.TestFailedException
 import scala.collection.immutable.ListMap
@@ -209,8 +216,8 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
     }
 
     assert(
-      testStatsReceiver.gauges.nonEmpty
-    ) /* we add a build revision gauge in startup of the server */
+      embeddedServer.statsReceiver == testStatsReceiver
+    )
   }
 
   test("server#in memory stats receiver with non-injectable server") {
@@ -235,8 +242,8 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
     }
 
     assert(
-      inMemoryStatsReceiver.gauges.nonEmpty
-    ) /* we add a build revision gauge in startup of the server */
+      inMemoryStatsReceiver == embeddedServer.inMemoryStatsReceiver
+    )
   }
 
   test("server#fail if server is a singleton") {
