@@ -7,6 +7,9 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+22.2.0
+------
+
 * inject-modules: Deprecate `c.t.inject.modules.LoggerModule`. Update `c.t.inject.app.App` to
   mix in the `util/util-slf4j-jul-bridge` `Slf4jBridge` trait. The `LoggerModule` does
   not provide a solution inline with the best practices for bridging JUL to the SLF4J-API
