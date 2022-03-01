@@ -233,7 +233,7 @@ final class EmbeddedMysqlServer private (
     }
 
   /** The base [[MysqlClient]] to the underlying EmbeddedMysql instance, which uses the Root User */
-  def mysqlClient: MysqlClient = mysqlClient(User.Root)
+  lazy val mysqlClient: MysqlClient = mysqlClient(User.Root)
 
   /** The base [[MysqlClient]] to the underlying EmbeddedMysql instance */
   def mysqlClient(user: User): MysqlClient = {
