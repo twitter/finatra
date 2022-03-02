@@ -3,6 +3,7 @@ package com.twitter.finagle.loadbalancer
 import com.twitter.finagle.Address.Inet
 import com.twitter.finagle._
 import com.twitter.finagle.context.Contexts
+import com.twitter.finagle.loadbalancer.LoadBalancerFactory.PanicMod
 import com.twitter.finagle.partitioning.zk.ZkMetadata
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.streams.queryable.thrift.domain.RequestedShardIds
@@ -22,8 +23,7 @@ object ShardIdAwareRoundRobinBalancer {
       params: Stack.Params
     ): ServiceFactory[Req, Rep] = {
       val sr = params[param.Stats].statsReceiver
-      //Note: We set maxEffort to 1 since our pick has it's own retry logic to try to find an open shard //TODO: Verify this
-      val balancer = new ShardIdAwareRoundRobinBalancer(endpoints, sr, exc, maxEffort = 1)
+      val balancer = new ShardIdAwareRoundRobinBalancer(endpoints, sr, exc)
       newScopedBal(params[param.Label].label, sr, "round_robin", balancer)
     }
 
@@ -76,7 +76,7 @@ private final class ShardIdAwareRoundRobinBalancer[Req, Rep](
   protected val endpoints: Activity[IndexedSeq[EndpointFactory[Req, Rep]]],
   protected val statsReceiver: StatsReceiver,
   protected val emptyException: NoBrokersAvailableException,
-  protected val maxEffort: Int = 5)
+  private[loadbalancer] val panicMode: PanicMode = PanicMode.MajorityUnhealthy)
     extends ServiceFactory[Req, Rep]
     with Balancer[Req, Rep]
     with Updating[Req, Rep]
