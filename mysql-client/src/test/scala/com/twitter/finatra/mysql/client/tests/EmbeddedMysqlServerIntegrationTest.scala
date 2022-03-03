@@ -31,29 +31,40 @@ class EmbeddedMysqlServerIntegrationTest extends Test with IgnoreMysqlHarnessIfU
     }
   }
 
-  /*
-  This test works locally or tryout 100
-  SCOOT_IGNORE=true ./scoot/config/scripts/tryout.sh --bazel finatra/mysql-client/src/test/scala/com/twitter/finatra/mysql/client/tests:tests 100
-  but it keeps failing on full build. See https://phabricator.twitter.biz/D842973
-
   test("EmbeddedMysqlServer#retrieving a client always creates a new instance", MysqlHarnessTag) {
-    val server = EmbeddedMysqlServer()
+    val user1 = User("user1", Some("pass1"), User.Permission.Select)
+    val server = EmbeddedMysqlServer.newBuilder
+      .withDatabaseName("databaseWithUser")
+      .withUsers(Seq(user1))
+      .newServer()
+    val clnt = server.mysqlClient(user1)
+    val clntB = server.mysqlClient(user1)
+    val clntC = server.mysqlClient(user1)
     try {
-      val clnt = server.mysqlClient
       server.assertStarted()
-      val clntB = server.mysqlClient
-      val clntC = server.mysqlClient
       assert((clnt eq clntB) == false)
       assert((clnt eq clntC) == false)
+    } finally {
       server.close()
       assert(clnt.isClosed)
       assert(clntB.isClosed)
       assert(clntC.isClosed)
-    } finally {
-      server.close()
     }
   }
-   */
+
+  test("EmbeddedMysqlServer#only creates a single root client", MysqlHarnessTag) {
+    val server = EmbeddedMysqlServer()
+    val clnt = server.mysqlClient
+    val clntB = server.mysqlClient
+    try {
+      server.assertStarted()
+      assert((clnt eq clntB) == true)
+    } finally {
+      server.close()
+      assert(clnt.isClosed)
+      assert(clntB.isClosed)
+    }
+  }
 
   test(
     "EmbeddedMysqlServer#retrieving client for invalid user credentials is allowed",
