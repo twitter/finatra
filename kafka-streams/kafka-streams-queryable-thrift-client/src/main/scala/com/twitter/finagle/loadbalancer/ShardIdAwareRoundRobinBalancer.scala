@@ -3,7 +3,7 @@ package com.twitter.finagle.loadbalancer
 import com.twitter.finagle.Address.Inet
 import com.twitter.finagle._
 import com.twitter.finagle.context.Contexts
-import com.twitter.finagle.loadbalancer.LoadBalancerFactory.PanicMod
+import com.twitter.finagle.loadbalancer.LoadBalancerFactory.PanicMode
 import com.twitter.finagle.partitioning.zk.ZkMetadata
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.streams.queryable.thrift.domain.RequestedShardIds
