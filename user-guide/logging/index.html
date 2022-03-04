@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to Logging With Finatra &#8212; Finatra 22.1.0 documentation</title>
+    <title>Introduction to Logging With Finatra &#8212; Finatra 22.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -68,43 +68,43 @@ are free to choose their actual logging implementation.</p>
 <p class="first admonition-title">From the SLF4J documentation</p>
 <p class="last">“The Simple Logging Facade for Java serves as a simple facade or
 abstraction for various logging frameworks, such as
-java.util.logging, Logback and log4j. SLF4J allows the end-user to
+java.util.logging, Logback and Log4j. SLF4J allows the end-user to
 plug in the desired logging framework at deployment time.”</p>
 </div>
-<p><a class="reference external" href="https://github.com/twitter/finatra/tree/develop/inject/inject-app">finatra/inject/inject-app</a>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Logback is the recommended SLF4J-API implementation. As such, <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/inject/inject-app">finatra/inject/inject-app</a>
 and <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/inject/inject-server">finatra/inject/inject-server</a>
 transitively provide SLF4J bridges for the following logging providers:</p>
+</div>
 <ul class="simple">
-<li><a class="reference external" href="https://en.wikipedia.org/wiki/Log4j">Log4j</a></li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Log4j">Log4J 1.x</a></li>
 <li><a class="reference external" href="https://commons.apache.org/proper/commons-logging/">commons-logging</a></li>
-<li><a class="reference external" href="https://docs.oracle.com/javase/7/docs/api/index.html?java/util/logging/package-summary.html">java.util.logging</a>:
-there is a performance penalty for intercepting jul log messages, so <cite>c.t.inject.server.TwitterServer</cite>
-will install the <a class="reference external" href="https://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html">SLF4JBridgeHandler</a>
-which mitigates most of the performance penalty.</li>
+<li><a class="reference external" href="https://docs.oracle.com/javase/7/docs/api/index.html?java/util/logging/package-summary.html">java.util.logging</a></li>
 </ul>
 <div class="admonition tip">
 <p class="first admonition-title">Tip</p>
-<p class="last">Note, if you are not using <cite>c.t.inject.server.TwitterServer</cite> or a subclass, e.g., you are
-building a command line application directly with <cite>c.t.inject.app.App</cite>, you can include the
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-modules/src/main/scala/com/twitter/inject/modules/LoggerModule.scala">LoggingModule</a>
-to attempt installation of the <a class="reference external" href="https://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html">SLF4JBridgeHandler</a>.</p>
+<p>Note, <a class="reference external" href="https://github.com/twitter/twitter-server/blob/b4be9ff71f273a007f880df6ea433f238c2d1f18/server/src/main/scala/com/twitter/server/TwitterServer.scala#L40">TwitterServer</a>
+and Finatra’s <a class="reference external" href="../app/index.html">inject-app</a> both mix in the the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-jul-bridge/src/main/scala/com/twitter/util/logging/Slf4jBridge.scala">c.t.util.logging.Slf4jBridge</a>
+trait to attempt installation of the <a class="reference external" href="https://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html">SLF4JBridgeHandler</a>.</p>
+<p>If you are not using one of these and want to bridge JUL to the SLF4J-API, you can mix in the
+<a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-jul-bridge/src/main/scala/com/twitter/util/logging/Slf4jBridge.scala">c.t.util.logging.Slf4jBridge</a>
+trait to your main application class.</p>
+<p class="last">For more information on the SLF4J bridges see the SLF4J <a class="reference external" href="https://www.slf4j.org/legacy.html">Bridging legacy APIs</a> documentation.</p>
 </div>
-<p>For more information on the SLF4J bridges see the SLF4J
-<a class="reference external" href="https://www.slf4j.org/legacy.html">Bridging legacy APIs</a> documentation.</p>
 <p>Since <a class="reference external" href="https://www.slf4j.org/manual.html">SLF4J</a> is an interface, it requires an actual logging
 implementation. However, you should ensure that you <strong>do not</strong> end-up with <em>multiple</em> logging
 implementations on your classpath, e.g., you should not have multiple SLF4J bindings (<cite>slf4j-nop</cite>,
 <cite>slf4j-log4j12</cite>, <cite>slf4j-jdk14</cite>, etc.) nor the <cite>java.util.logging</cite> implementation, etc. on your
 classpath as these are all competing implementations and since classpath order is non-deterministic
 this will lead to unexpected logging behavior.</p>
-<p>While there are several scala-wrappers for SLF4J, Finatra uses and exposes some additional features
-on top of the <a class="reference external" href="https://twitter.github.io/util/">TwitterUtil</a>
+<p>While there are several scala-wrappers for SLF4J, Finatra uses the <a class="reference external" href="https://twitter.github.io/util/">TwitterUtil</a>
 <a class="reference external" href="https://github.com/twitter/util/tree/develop/util-slf4j-api">util-slf4j-api</a> project.</p>
-<p>The main logging utility is the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-slf4j/src/main/scala/com/twitter/inject/Logging.scala">c.t.inject.Logging</a>
-trait which can be mixed into any object or class:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.Logging
+<p>The main logging utility is either the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-api/src/main/scala/com/twitter/util/logging/Logging.scala">c.t.util.logging.Logging</a>
+trait which can be mixed into any object (or class):</p>
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.util.logging.Logging
 
-class MyClass extends Logging {
+object MyObject extends Logging {
   def foo() = {
     info(&quot;Calculating...&quot;)
     &quot;bar&quot;
@@ -112,17 +112,26 @@ class MyClass extends Logging {
 }
 </pre></div>
 </div>
-<p>This trait is a wrapper with some added utility over the
-<a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-api/src/main/scala/com/twitter/util/logging/Logging.scala">c.t.util.logging.Logging</a>.</p>
-<div class="admonition important">
-<p class="first admonition-title">Important</p>
-<p class="last">Scala users should prefer using the logging methods of the
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-slf4j/src/main/scala/com/twitter/inject/Logging.scala">c.t.inject.Logging</a>
-trait as opposed to directly accessing the underlying Logger instance in the Logging as these
-methods use “call-by-name” parameters.</p>
+<p>or the or the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-api/src/main/scala/com/twitter/util/logging/Logger.scala">c.t.util.logging.Logger</a>
+class which provides a standard Logger interface:</p>
+<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.util.logging.Logger
+
+private object MyCompanionObject {
+  val logger: Logger = Logger(this.getClass)
+}
+
+class MyClass {
+  import MyCompanionObject._
+
+  def foo() = {
+    logger.info(&quot;Calculating...&quot;)
+    &quot;bar&quot;
+  }
+}
+</pre></div>
 </div>
-<p>For more information see the <cite>c.t.inject.Logging</cite> <a class="reference external" href="https://twitter.github.io/finatra/scaladocs/index.html#com.twitter.inject.Logging">scaladocs</a>
-or the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-api/README.md">util-slf4j-api README</a>.</p>
+<p>For more information see the util-slf4j-api <a class="reference external" href="https://twitter.github.io/util/docs/com/twitter/util/logging/index.html">scaladocs</a>
+or <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-api/README.md">README</a>.</p>
 </div>
 
 

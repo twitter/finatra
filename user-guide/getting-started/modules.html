@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Modules &#8212; Finatra 22.1.0 documentation</title>
+    <title>Modules &#8212; Finatra 22.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -408,7 +408,7 @@ object MyModule extends TwitterModule {
 avoid binding unscoped resources without ways to shutdown or close them.</p>
 </div>
 <p>There is also the option to inline the logic for closing your resource using the
-<cite>TwitterModuleLifecycle#closeOnExit(f: =&gt; Unit)</cite> function.</p>
+<cite>TwitterModuleLifecycle#onExit(f: =&gt; Unit)</cite> function.</p>
 <p>For example, assume we have a class, <cite>SomeClient</cite> with a <cite>close()</cite> method that returns a <cite>Future[Unit]</cite>:</p>
 <div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class SomeClient(
   configurationParam1: Int,
@@ -448,7 +448,7 @@ object MyModule extends TwitterModule {
         .withAnotherParam(b = true)
         .withSomeOtherConfiguration(137)
 
-    closeOnExit {
+    onExit {
        Await.result(client.close(), 2.seconds)
     }
 
@@ -493,7 +493,7 @@ public final class MyModule extends TwitterModule {
         .withAnotherParam(true)
         .withSomeOtherConfiguration(137)
 
-    closeOnExit(() -&gt; Await.result(client.close(), Duration.fromSeconds(2)));;
+    onExit(() -&gt; Await.result(client.close(), Duration.fromSeconds(2)));;
 
     return client;
   }
@@ -502,10 +502,10 @@ public final class MyModule extends TwitterModule {
 </div>
 <p>This allows for not needing to implement the <cite>singletonShutdown</cite> method which would require that you
 obtain an instance of the singleton resource from the Injector to then call the <cite>close()</cite> function.</p>
-<p>Any logic passed to the <cite>closeOnExit</cite> function is added to the application’s list of <cite>onExit</cite>
+<p>Any logic passed to the <cite>onExit</cite> function is added to the application’s list of <cite>onExit</cite>
 functions to be run in the order registered upon graceful shutdown of the application.</p>
 <p>For an example, see the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftMethodBuilderClientModule.scala">c.t.inject.thrift.modules.ThriftMethodBuilderClientModule</a>
-where we use <cite>closeOnExit</cite> to ensure that any bound ThriftClient will be closed when the application
+where we use <cite>onExit</cite> to ensure that any bound ThriftClient will be closed when the application
 gracefully exits.</p>
 <p>See the <a class="reference external" href="lifecycle.html">Application and Server Lifecycle</a> section for more information on the
 application and server lifecycle.</p>

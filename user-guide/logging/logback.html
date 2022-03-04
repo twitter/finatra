@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Logback &#8212; Finatra 22.1.0 documentation</title>
+    <title>Logback &#8212; Finatra 22.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -65,7 +65,7 @@
 implementation).</p>
 <div class="admonition-from-the-logback-documentation admonition">
 <p class="first admonition-title">From the Logback documentation</p>
-<p>Logback is intended as a successor to the popular log4j project, picking up where log4j leaves off.</p>
+<p>Logback is intended as a successor to the popular Log4J project, picking up where Log4J leaves off.</p>
 <p class="last">Logback’s architecture is sufficiently generic so as to apply under different circumstances. At
 present time, logback is divided into three modules, logback-core, logback-classic and
 logback-access.</p>
@@ -135,11 +135,14 @@ the <cite>jul-to-slf4j</cite> bridge cannot replace classes in the <cite>java.ut
 redirection statically as it does for the other bridge implementations. Instead, it has to register
 a handler on the root logger and listen for logging statements like any other handler. It will then
 redirect those logging statements appropriately. This redirection is accomplished via SLF4J’s
-<cite>SLF4JBridgeHandler</cite> [<a class="reference external" href="https://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html">documentation</a>].
-<a class="reference external" href="https://github.com/twitter/finatra/tree/develop/inject/inject-modules">finatra/inject-modules</a>
-provides a module for initializing this bridge handler via the
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-modules/src/main/scala/com/twitter/inject/modules/LoggerModule.scala">LoggerModule</a>.
-This module is added by the framework to Http and Thrift servers by default.</p>
+<cite>SLF4JBridgeHandler</cite> [<a class="reference external" href="https://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html">documentation</a>].</p>
+<p>The <a class="reference external" href="https://github.com/twitter/util/tree/develop/util-slf4j-jul-bridge">util/util-slf4j-jul-bridge</a>
+library provides a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-jul-bridge/src/main/scala/com/twitter/util/logging/Slf4jBridgeUtility.scala">utility</a>
+(and a mixin which applies the utility in the class constructor) which will attempt installation of
+the <cite>SLF4JBridgeHandler</cite> if it does not detect classes from <cite>slf4j-jdk14</cite> on the classpath.</p>
+<p>This utility is already mixed into <a class="reference external" href="https://github.com/twitter/twitter-server/blob/b4be9ff71f273a007f880df6ea433f238c2d1f18/server/src/main/scala/com/twitter/server/TwitterServer.scala#L40">c.t.server.TwitterServer</a>
+and Finatra’s <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala">c.t.inject.app.App</a>
+and thus JUL bridging to the SLF4J-API will be attempted automatically for extensions of those traits/classes.</p>
 </div>
 </div>
 

@@ -65,14 +65,12 @@ Advanced Example
 
 .. code:: scala
 
-    import com.twitter.inject.Logging
     import com.twitter.inject.server.TwitterServer
 
     object MyTwitterServerMain extends MyTwitterServer
 
     class MyTwitterServer
-      extends TwitterServer
-      with Logging {
+      extends TwitterServer {
 
       override val modules = Seq(
         MyModule1)
