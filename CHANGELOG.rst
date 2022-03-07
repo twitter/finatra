@@ -7,6 +7,14 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+
+* inject-thrift-client: Deprecate `c.t.inject.thrift.AndThenService`, `c.t.inject.thrift.modules.AndThenServiceModule`, 
+  and `c.t.inject.thrift.internal.DefaultAndThenServiceImpl`. These were plumbing for unreleased
+  experimental record/replay functionality and currently do nothing with no plan for implementation.
+  ``PHAB_ID=D845841``
+
 22.2.0
 ------
 

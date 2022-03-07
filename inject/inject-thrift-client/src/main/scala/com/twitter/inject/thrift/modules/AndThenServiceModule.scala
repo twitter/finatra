@@ -4,9 +4,10 @@ import com.twitter.inject.TwitterModule
 import com.twitter.inject.thrift.AndThenService
 import com.twitter.inject.thrift.internal.DefaultAndThenServiceImpl
 
+@deprecated("No replacement.", "2022-03-03")
 object AndThenServiceModule extends TwitterModule {
 
-  override def configure: Unit = {
+  override def configure(): Unit = {
     bind[AndThenService].to[DefaultAndThenServiceImpl]
   }
 
