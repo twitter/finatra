@@ -10,6 +10,8 @@ Unreleased
 Changed
 ~~~~~~~
 
+* finatra: Bump version of Jackson to 2.13.2 ``PHAB_ID=D848592``
+
 * inject-thrift-client: Deprecate `c.t.inject.thrift.AndThenService`, `c.t.inject.thrift.modules.AndThenServiceModule`, 
   and `c.t.inject.thrift.internal.DefaultAndThenServiceImpl`. These were plumbing for unreleased
   experimental record/replay functionality and currently do nothing with no plan for implementation.
