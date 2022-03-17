@@ -448,7 +448,6 @@ lazy val injectModules = (project in file("inject/inject-modules"))
     moduleName := "inject-modules",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
-      "com.twitter" %% "util-slf4j-jul-bridge" % versions.twLibVersion,
       "com.twitter" %% "util-stats" % versions.twLibVersion,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),

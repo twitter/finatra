@@ -10,6 +10,8 @@ Unreleased
 Changed
 ~~~~~~~
 
+* inject-modules: Remove deprecated `c.t.inject.modules.LoggerModule`. ``PHAB_ID=D853325``
+
 * finatra: Bump version of Jackson to 2.13.2 ``PHAB_ID=D848592``
 
 * inject-thrift-client: Deprecate `c.t.inject.thrift.AndThenService`, `c.t.inject.thrift.modules.AndThenServiceModule`, 
@@ -29,8 +31,8 @@ Changed
   log messages emitted to JUL before where the bridging would have been attempted when using
   the `LoggerModule`.
 
-  Note that `Slf4jBridge` trait is already mixed into the `c.t.server.TwitterServer` trait and
-  thus no further action is necessary forbridging JUL to the SLF4J-API in extensions of
+  Note that the `Slf4jBridge` trait is already mixed into the `c.t.server.TwitterServer` trait and
+  thus no further action is necessary for bridging JUL to the SLF4J-API in extensions of
   `c.t.server.TwitterServer`. ``PHAB_ID=D827584``
 
 * inject-slf4j: Deprecate `c.t.inject.logging.Logging` trait and methods. Users are encouraged
@@ -43,6 +45,7 @@ Changed
 
 Added
 ~~~~~
+
 * http-server: (BREAKING API CHANGE) Allow for customization of the building of the HTTP and HTTPS
   `ListeningServer` constructs. This allows users to specify any additional configuration over the
   Finagle `Service[-R, +R]` that is constructed by the `HttpRouter`. The
