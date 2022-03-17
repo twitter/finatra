@@ -17,7 +17,7 @@ You can customize and provide a |ScalaValidator|_ via a `TwitterModule`. The eas
 to extend the `c.t.finatra.validation.ValidatorModule <https://github.com/twitter/finatra/blob/develop/validation/src/main/scala/com/twitter/finatra/validation/ValidatorModule.scala>`_
 and implement the `ValidatorModule#configureValidator` method:
 
-.. code:: scala
+.. code-block:: scala
    :emphasize-lines: 7
 
     import com.twitter.finatra.validation.ValidatorModule
@@ -42,7 +42,7 @@ Then include this module in your server's list of modules. In a Finatra HTTP ser
 is provided as a `framework module <../http/server.html#framework-modules>`__, thus you can use your new module as the implementation of
 the `validatorModule` function in your `HttpServer definition <../http/server.html#framework-modules>`__:
 
-.. code:: scala
+.. code-block:: scala
    :emphasize-lines: 7
 
     import com.twitter.finatra.http.HttpServer

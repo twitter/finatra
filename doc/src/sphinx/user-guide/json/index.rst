@@ -57,7 +57,7 @@ To **serialize** a case class into a JSON string, use
 
 For example:
 
-.. code:: scala
+.. code-block:: scala
    :emphasize-lines: 16, 21
 
     Welcome to Scala 2.12.13 (JDK 64-Bit Server VM, Java 1.8.0_242).
@@ -100,7 +100,7 @@ To **deserialize** a JSON string into a case class, use
 
 For example, assuming the same `Bar` and `Foo` case classes defined above:
 
-.. code:: scala
+.. code-block:: scala
    :emphasize-lines: 16
 
     Welcome to Scala 2.12.13 (JDK 64-Bit Server VM, Java 1.8.0_242).
@@ -320,7 +320,7 @@ Then add via a Jackson `SimpleModule` or a |jackson-module-scala|_ `JacksonModul
 
 Lastly, add the custom serializer or deserializer to your customized Finatra |ScalaObjectMapperModule|_:
 
-.. code:: scala
+.. code-block:: scala
    :emphasize-lines: 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 
     import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule

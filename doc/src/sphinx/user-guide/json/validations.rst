@@ -53,7 +53,7 @@ results somewhere, but bypass validating that same JSON for a `GET` request on t
 
 In your custom `ScalaObjectMapperModule <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala>`__
 
-.. code:: scala
+.. code-block:: scala
    :emphasize-lines: 4
 
     import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
