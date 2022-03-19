@@ -12,6 +12,8 @@ import com.twitter.app.lifecycle.Event.Warmup
 import com.twitter.inject.Injector
 import com.twitter.inject.InjectorModule
 import com.twitter.inject.annotations.Lifecycle
+import com.twitter.inject.app.console.ConsoleWriter
+import com.twitter.inject.app.internal.ConsoleWriterModule
 import com.twitter.inject.app.internal.InstalledModules
 import com.twitter.inject.app.internal.Modules
 import com.twitter.util.logging.Logging
@@ -119,7 +121,8 @@ trait App extends com.twitter.app.App with Slf4jBridge with Logging {
 
   /* Mutable State */
 
-  private val frameworkModules: ArrayBuffer[Module] = ArrayBuffer(InjectorModule)
+  private val frameworkModules: ArrayBuffer[Module] =
+    ArrayBuffer(InjectorModule, ConsoleWriterModule)
   private val frameworkOverrideModules: ArrayBuffer[Module] = ArrayBuffer()
 
   private[inject] var stage: Stage = Stage.PRODUCTION
@@ -163,8 +166,11 @@ trait App extends com.twitter.app.App with Slf4jBridge with Logging {
 
     info(s"$name started.")
 
-    /* Execute callback for further configuration or to start long-running background processes */
-    startApplication()
+    val consoleWriter = injector.instance[ConsoleWriter]
+    consoleWriter.let { // use our installed output streams for this application
+      /* Execute callback for further configuration or to start long-running background processes */
+      startApplication()
+    }
   }
 
   /* Public */

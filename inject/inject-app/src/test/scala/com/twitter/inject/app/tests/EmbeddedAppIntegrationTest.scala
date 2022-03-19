@@ -5,6 +5,8 @@ import com.twitter.inject.Test
 import com.twitter.inject.TwitterModule
 import com.twitter.inject.app.App
 import com.twitter.inject.app.EmbeddedApp
+import com.twitter.inject.app.TestConsoleWriter
+import com.twitter.inject.app.console.ConsoleWriter
 import com.twitter.util.logging.Logging
 import com.twitter.util.mock.Mockito
 import javax.inject.Inject
@@ -101,6 +103,46 @@ class EmbeddedAppIntegrationTest extends Test with Mockito {
       val app = new EmbeddedApp(new FailfastOnFlagsNotParsedApp(true))
       app.main()
     }
+  }
+
+  test("access console output of an app using the ConsoleWriter directly") {
+    val console = new TestConsoleWriter()
+    val app = new EmbeddedApp(new App {
+      override def run(): Unit = {
+        val console = injector.instance[ConsoleWriter]
+        console.out.println("Hello, World!")
+        console.err.println("Oh, No!")
+      }
+    }).bind[ConsoleWriter].toInstance(console)
+
+    assert(console.inspectOut() == "") // main hasn't been run yet, we don't have any output
+    assert(console.inspectErr() == "") // main hasn't been run yet, we don't have any output
+    app.main()
+    assert(console.inspectOut() == "Hello, World!\n")
+    assert(console.inspectErr() == "Oh, No!\n")
+  }
+
+  test("access console output of an app using the ConsoleWriter via implicit scope") {
+    val console = new TestConsoleWriter()
+
+    val app = new EmbeddedApp(new App {
+      override def run(): Unit = {
+        print("Hello, World:")
+        Console.err.println("Oof!") // will be captured
+        Console.out.println(" Part 2!") // will be captured
+        System.out.println("ABC") // will NOT be captured
+        System.err.println("XYZ") // will NOT be captured
+        info("INFO log") // will NOT be captured
+        error("ERROR log") // will NOT be captured
+      }
+    }).bind[ConsoleWriter].toInstance(console)
+
+    app.main()
+
+    println("Test that we've escaped scope!") // should not get captured, not part of our App
+
+    assert(console.inspectOut() == "Hello, World: Part 2!\n")
+    assert(console.inspectErr() == "Oof!\n")
   }
 }
 

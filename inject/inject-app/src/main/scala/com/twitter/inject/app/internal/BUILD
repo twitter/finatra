@@ -13,6 +13,7 @@ scala_library(
         "3rdparty/jvm/javax/inject:javax.inject",
         "3rdparty/jvm/joda-time",
         "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",
+        "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app/console",
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
         "util/util-core:util-core-util",
@@ -20,6 +21,7 @@ scala_library(
     ],
     exports = [
         "finatra/inject/inject-app/src/main/java/com/twitter/inject/annotations",
+        "finatra/inject/inject-app/src/main/scala/com/twitter/inject/app/console",
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],

@@ -7,6 +7,13 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
+* inject-app: Introduce test-friendly `c.t.inject.app.console.ConsoleWriter` and
+  `c.t.inject.app.TestConsoleWriter`, which can be used to inspect the output of a command-line
+  style `c.t.inject.app.App`. ``PHAB_ID=D856159``
+
 Changed
 ~~~~~~~
 
