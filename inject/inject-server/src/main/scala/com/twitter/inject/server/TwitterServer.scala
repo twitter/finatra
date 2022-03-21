@@ -361,7 +361,9 @@ trait TwitterServer
 @deprecated("For backwards compatibility of defined flags", "2017-10-06")
 private[server] trait DeprecatedLogging extends com.twitter.logging.Logging { self: App =>
   @deprecated("For backwards compatibility only.", "2017-10-06")
-  override lazy val log: com.twitter.logging.Logger = com.twitter.logging.Logger(name)
+  override lazy val log: com.twitter.logging.Logger =
+    throw new UnsupportedOperationException(
+      "Finatra uses the SLF4J-API for logging. This is a JUL logger provided as a backward-compatible shim for legacy reasons and access is thus unsupported for Finatra servers. Please refer to the logging documentation for information on how to log with the Finatra framework: https://twitter.github.io/finatra/user-guide/logging/index.html")
 
   // lint if any com.twitter.logging.Logging flags are set
   premain {

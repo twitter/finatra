@@ -7,6 +7,17 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Runtime Behavior Changes
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* inject-server: Throw an `UnsupportedOperationException` when access to the `c.t.inject.server.DeprecatedLogging#log`
+  instance is attempted. This is a JUL Logger instance which was provided only as a backward-compatible
+  shim for Finatra services when the `c.t.server.TwitterServer` framework was moved to the `SLF4J-API`.
+  The instance was marked `@deprecated` in hopes of alerting users to not use it. We have now updated
+  it to throw an exception when accessed. Please refer to the Finatra documentation for more information
+  on using the SLF4J-API for logging with the Finatra framework: https://twitter.github.io/finatra/user-guide/logging/index.html.
+  ``PHAB_ID=D854365``
+
 Added
 ~~~~~
 
@@ -100,6 +111,7 @@ Added
 
 Runtime Behavior Changes
 ~~~~~~~~~~~~~~~~~~~~~~~~
+
 * http-server: Treat non-constant routes with or without trailing slash as 2 different routes.
   For example, "/user/:id" and "/user/:id/" are treated as different routes in Finatra. You can still
   use the optional trailing slash `/?` which will indicate Finatra to ignore the trailing slash while
