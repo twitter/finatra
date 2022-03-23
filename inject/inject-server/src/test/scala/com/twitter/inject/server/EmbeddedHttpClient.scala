@@ -1,12 +1,20 @@
 package com.twitter.inject.server
 
 import com.twitter.conversions.DurationOps._
-import com.twitter.finagle.{Http, Service}
-import com.twitter.finagle.http.{Request, Response, Status}
+import com.twitter.finagle.Http
+import com.twitter.finagle.Service
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
+import com.twitter.finagle.http.Status
 import com.twitter.finagle.http.codec.HttpCodec
-import com.twitter.finagle.stats.InMemoryStatsReceiver
+import com.twitter.finagle.stats.NullStatsReceiver
 import com.twitter.inject.server.PortUtils.loopbackAddressForPort
-import com.twitter.util.{Await, Closable, Duration, Future, Stopwatch, Time}
+import com.twitter.util.Await
+import com.twitter.util.Closable
+import com.twitter.util.Duration
+import com.twitter.util.Future
+import com.twitter.util.Stopwatch
+import com.twitter.util.Time
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import org.scalatest.matchers.should.Matchers
 
@@ -69,7 +77,7 @@ private[twitter] class EmbeddedHttpClient private[twitter] (
   private[this] var client =
     Http.client.withSessionQualifier.noFailFast.withSessionQualifier.noFailureAccrual.withSession
       .acquisitionTimeout(_sessionAcquisitionTimeout)
-      .withStatsReceiver(new InMemoryStatsReceiver)
+      .withStatsReceiver(NullStatsReceiver)
       .withStreaming(_streamResponses)
       .withLabel(label)
   if (tls) {
