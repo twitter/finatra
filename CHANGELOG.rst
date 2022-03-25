@@ -10,6 +10,19 @@ Unreleased
 Runtime Behavior Changes
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
+* inject-app: Remove the SLF4J-API logging bridges as dependencies. These were originally
+  added as the framework was expressly opionated that users should use Logback as an SLF4J-API
+  implementation, however specifying the bridges on the Finatra inject/inject-app library
+  causes many issues with code that must use a different SLF4J-API logging implementation
+  but still uses the Finatra framework. Users should note that if they do not include these
+  bridges in some other manner that they may lose logging if they have any libraries which
+  log with one of the formerly bridged implementations. Also note that servers using a
+  `TwitterServer` logging implementation to support `dynamically changing log levels <https://twitter.github.io/twitter-server/Features.html#dynamically-change-log-levels>`__ will get the proper bridges as dependencies.
+  ``PHAB_ID=D854393``
+
+Runtime Behavior Changes
+~~~~~~~~~~~~~~~~~~~~~~~~
+
 * inject-server: Throw an `UnsupportedOperationException` when access to the `c.t.inject.server.DeprecatedLogging#log`
   instance is attempted. This is a JUL Logger instance which was provided only as a backward-compatible
   shim for Finatra services when the `c.t.server.TwitterServer` framework was moved to the `SLF4J-API`.
