@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>JSON Validation Framework &#8212; Finatra 22.2.0 documentation</title>
+    <title>JSON Validation Framework &#8212; Finatra 22.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -85,7 +85,7 @@ case class instance.</p>
 <p>By default, validation errors are returned <strong>alphabetically sorted</strong> by validation error message (for
 determinism when testing). See the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-jackson/src/main/scala/com/twitter/util/jackson/caseclass/exceptions/CaseClassMappingException.scala">CaseClassMappingException</a>.</p>
 <p>Eg.,</p>
-<div class="code json highlight-text notranslate"><div class="highlight"><pre><span></span>{
+<div class="code json highlight-scala notranslate"><div class="highlight"><pre><span></span>{
   &quot;errors&quot; : [
     &quot;location.lat: [9999.0] is not between -85 and 85&quot;,
     &quot;location.long: field is required&quot;,
@@ -102,6 +102,13 @@ determinism when testing). See the <a class="reference external" href="https://g
 others. For example, you may want to validate a <cite>POST</cite> request on the write path and store the JSON
 results somewhere, but bypass validating that same JSON for a <cite>GET</cite> request on the read path.</p>
 <p>In your custom <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala">ScalaObjectMapperModule</a></p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span> <span class="k">import</span> <span class="nn">com.twitter.finatra.jackson.modules.ScalaObjectMapperModule</span>
+
+ <span class="k">object</span> <span class="nc">NoValidationJacksonModule</span> <span class="k">extends</span> <span class="nc">ScalaObjectMapperModule</span> <span class="o">{</span>
+<span class="hll">   <span class="k">override</span> <span class="k">val</span> <span class="n">validation</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">false</span>
+</span> <span class="o">}</span>
+</pre></div>
+</div>
 <p>See the <a class="reference external" href="../getting-started/modules.html#module-configuration-in-servers">Modules Configuration in Servers</a>
 or the HTTP Server <a class="reference external" href="../http/server.html#framework-modules">Framework Modules</a> for more information
 on how to make use of any custom <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala"><cite>ScalaObjectMapperModule</cite></a>.</p>
@@ -167,7 +174,7 @@ on how to make use of any custom <a class="reference external" href="https://git
   
 
   <div class="footer">
-    &copy; Copyright 2013-2022 Twitter, Inc.
+    &copy; Copyright 2022 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Working with Mocks &#8212; Finatra 22.2.0 documentation</title>
+    <title>Working with Mocks &#8212; Finatra 22.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -91,27 +91,27 @@ control over the lifecycle of a mock within a given test rather than binding a m
 <a class="reference external" href="bind_dsl.html">#bind[T]</a> DSL allows for the test to retain control of the mock in order to
 expect or if necessary, reset, behavior.</p>
 <p>To use, first add a dependency on <cite>util/util-mock</cite> and then mix in the <cite>c.t.util.mock.Mockito</cite> trait to your test. E.g.,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.inject.server.FeatureTest
-import com.twitter.util.mock.Mockito
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.http.EmbeddedHttpServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.server.FeatureTest</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.mock.Mockito</span>
 
-class ExampleFeatureTest
-  extends FeatureTest
-  with Mockito {
+<span class="k">class</span> <span class="nc">ExampleFeatureTest</span>
+  <span class="k">extends</span> <span class="nc">FeatureTest</span>
+  <span class="k">with</span> <span class="nc">Mockito</span> <span class="o">{</span>
 
-  private val mockDownstreamServiceClient = mock[DownstreamServiceClient]
-  private val mockIdService = mock[IdService]
+  <span class="k">private</span> <span class="k">val</span> <span class="n">mockDownstreamServiceClient</span> <span class="k">=</span> <span class="n">mock</span><span class="o">[</span><span class="kt">DownstreamServiceClient</span><span class="o">]</span>
+  <span class="k">private</span> <span class="k">val</span> <span class="n">mockIdService</span> <span class="k">=</span> <span class="n">mock</span><span class="o">[</span><span class="kt">IdService</span><span class="o">]</span>
 
-  override val server =
-    new EmbeddedHttpServer(new ExampleServer)
-    .bind[DownstreamServiceClient].toInstance(mockDownstreamServiceClient)
-    .bind[IdService].toInstance(mockIdService)
+  <span class="k">override</span> <span class="k">val</span> <span class="n">server</span> <span class="k">=</span>
+    <span class="k">new</span> <span class="nc">EmbeddedHttpServer</span><span class="o">(</span><span class="k">new</span> <span class="nc">ExampleServer</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">bind</span><span class="o">[</span><span class="kt">DownstreamServiceClient</span><span class="o">].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">mockDownstreamServiceClient</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">bind</span><span class="o">[</span><span class="kt">IdService</span><span class="o">].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">mockIdService</span><span class="o">)</span>
 
-  test(&quot;service test&quot;) {
-    /* Mock GET Request performed by DownstreamServiceClient */
-    mockDownstreamServiceClient.get(&quot;/tweets/123.json&quot;)(manifest[FooResponse]) returns Future(None)
-    ...
-  }
+  <span class="n">test</span><span class="o">(</span><span class="s">&quot;service test&quot;</span><span class="o">)</span> <span class="o">{</span>
+    <span class="cm">/* Mock GET Request performed by DownstreamServiceClient */</span>
+    <span class="n">mockDownstreamServiceClient</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="s">&quot;/tweets/123.json&quot;</span><span class="o">)(</span><span class="n">manifest</span><span class="o">[</span><span class="kt">FooResponse</span><span class="o">])</span> <span class="n">returns</span> <span class="nc">Future</span><span class="o">(</span><span class="nc">None</span><span class="o">)</span>
+    <span class="o">...</span>
+  <span class="o">}</span>
 </pre></div>
 </div>
 <p>You can then bind the mocked instance to the object graph of the server or application under test
@@ -119,30 +119,30 @@ using the <a class="reference external" href="bind_dsl.html">#bind[T]</a> DSL an
 necessary.</p>
 <p>This is preferable over creating a <a class="reference external" href="../getting-started/modules.html">Module</a> then binding the
 mock to the object graph in the module, e.g.,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.TwitterModule
-import com.twitter.util.mock.Mockito
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.inject.TwitterModule</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.mock.Mockito</span>
 
-// NOT RECOMMENDED
-object MyTestModule extends TwitterModule with Mockito {
-  override def configure(): Unit = {
-    val mockFoo = mock[Foo]
-    mockFoo.doSomething returns &quot;Hello, world!&quot;
+<span class="c1">// NOT RECOMMENDED</span>
+<span class="k">object</span> <span class="nc">MyTestModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="k">with</span> <span class="nc">Mockito</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configure</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="n">mockFoo</span> <span class="k">=</span> <span class="n">mock</span><span class="o">[</span><span class="kt">Foo</span><span class="o">]</span>
+    <span class="n">mockFoo</span><span class="o">.</span><span class="n">doSomething</span> <span class="n">returns</span> <span class="s">&quot;Hello, world!&quot;</span>
 
-    bind[Foo].toInstance(mockFoo)
-  }
-}
+    <span class="n">bind</span><span class="o">[</span><span class="kt">Foo</span><span class="o">].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">mockFoo</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>In the above example, the user of the module has no access to the mock object to be able to expect
 behavior of the mock (this is in essence a <a class="reference external" href="https://martinfowler.com/articles/mocksArentStubs.html#TheDifferenceBetweenMocksAndStubs">stub</a> and you may very well find this useful).</p>
 <p>You could change the code to instead expose passing of the mock object into the module,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.TwitterModule
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.inject.TwitterModule</span>
 
-class MyTestModule(foo: Foo) extends TwitterModule {
-  override def configure(): Unit = {
-    bind[Foo].toInstance(foo)
-  }
-}
+<span class="k">class</span> <span class="nc">MyTestModule</span><span class="o">(</span><span class="n">foo</span><span class="k">:</span> <span class="kt">Foo</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configure</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">bind</span><span class="o">[</span><span class="kt">Foo</span><span class="o">].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">foo</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>This would then allow a test to create the mock and retain control to be able to expect behavior.
@@ -175,32 +175,32 @@ and using stat assertions.</p>
 if using Scala or similar functionality with an <cite>&#64;After</cite> annotated method in JUnit if using Java.
 The Finatra framework mixes in the ScalaTest <a class="reference external" href="http://doc.scalatest.org/3.1.2/org/scalatest/BeforeAndAfterEach.html">BeforeAndAfterEach</a>
 trait, thus the ScalaTest <cite>afterEach()</cite> function is available to override. E.g.,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.inject.server.FeatureTest
-import com.twitter.util.mock.Mockito
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.http.EmbeddedHttpServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.server.FeatureTest</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.mock.Mockito</span>
 
-class ExampleFeatureTest
-  extends FeatureTest
-  with Mockito {
+<span class="k">class</span> <span class="nc">ExampleFeatureTest</span>
+  <span class="k">extends</span> <span class="nc">FeatureTest</span>
+  <span class="k">with</span> <span class="nc">Mockito</span> <span class="o">{</span>
 
-  private val mockDownstreamServiceClient = mock[DownstreamServiceClient]
-  private val mockIdService = mock[IdService]
+  <span class="k">private</span> <span class="k">val</span> <span class="n">mockDownstreamServiceClient</span> <span class="k">=</span> <span class="n">mock</span><span class="o">[</span><span class="kt">DownstreamServiceClient</span><span class="o">]</span>
+  <span class="k">private</span> <span class="k">val</span> <span class="n">mockIdService</span> <span class="k">=</span> <span class="n">mock</span><span class="o">[</span><span class="kt">IdService</span><span class="o">]</span>
 
-  override val server =
-    new EmbeddedHttpServer(new ExampleServer)
-    .bind[DownstreamServiceClient].toInstance(mockDownstreamServiceClient)
-    .bind[IdService].toInstance(mockIdService)
+  <span class="k">override</span> <span class="k">val</span> <span class="n">server</span> <span class="k">=</span>
+    <span class="k">new</span> <span class="nc">EmbeddedHttpServer</span><span class="o">(</span><span class="k">new</span> <span class="nc">ExampleServer</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">bind</span><span class="o">[</span><span class="kt">DownstreamServiceClient</span><span class="o">].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">mockDownstreamServiceClient</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">bind</span><span class="o">[</span><span class="kt">IdService</span><span class="o">].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">mockIdService</span><span class="o">)</span>
 
-  override afterEach(): Unit = {
-    // c.t.util.mock.Mockito provides a `reset(mocks*)` function
-    reset(mockDownstreamServiceClient, mockIdService)
-  }
+  <span class="k">override</span> <span class="n">afterEach</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="c1">// c.t.util.mock.Mockito provides a `reset(mocks*)` function</span>
+    <span class="n">reset</span><span class="o">(</span><span class="n">mockDownstreamServiceClient</span><span class="o">,</span> <span class="n">mockIdService</span><span class="o">)</span>
+  <span class="o">}</span>
 
-  test(&quot;service test&quot;) {
-    /* Mock GET Request performed by DownstreamServiceClient */
-    mockDownstreamServiceClient.get(&quot;/tweets/123.json&quot;)(manifest[FooResponse]) returns Future(None)
-    ...
-  }
+  <span class="n">test</span><span class="o">(</span><span class="s">&quot;service test&quot;</span><span class="o">)</span> <span class="o">{</span>
+    <span class="cm">/* Mock GET Request performed by DownstreamServiceClient */</span>
+    <span class="n">mockDownstreamServiceClient</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="s">&quot;/tweets/123.json&quot;</span><span class="o">)(</span><span class="n">manifest</span><span class="o">[</span><span class="kt">FooResponse</span><span class="o">])</span> <span class="n">returns</span> <span class="nc">Future</span><span class="o">(</span><span class="nc">None</span><span class="o">)</span>
+    <span class="o">...</span>
+  <span class="o">}</span>
 </pre></div>
 </div>
 <p>This will <a class="reference external" href="https://javadoc.io/static/org.mockito/mockito-core/3.3.3/org/mockito/Mockito.html#resetting_mocks">reset</a>
@@ -312,7 +312,7 @@ to do so. Note that as documented, you should use the <cite>org.mockito.scalates
   
 
   <div class="footer">
-    &copy; Copyright 2013-2022 Twitter, Inc.
+    &copy; Copyright 2022 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

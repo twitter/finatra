@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>HTTP Server Warmup &#8212; Finatra 22.2.0 documentation</title>
+    <title>HTTP Server Warmup &#8212; Finatra 22.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -72,34 +72,34 @@ TwitterServer <a class="reference external" href="https://twitter.github.io/twit
 <p>See <a class="reference external" href="../getting-started/lifecycle.html">here</a> for more information on the lifecycle of a Finatra
 server.</p>
 <p>To perform warmup, simply override this callback method and implement your logic. E.g.,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import DoEverythingModule
-import ExampleController
-import ExampleFilter
-import ExampleWarmupHandler
-import MalformedURLExceptionMapper
-import com.twitter.finatra.http.HttpServer
-import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter, TraceIdMDCFilter}
-import com.twitter.finatra.http.routing.HttpRouter
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">DoEverythingModule</span>
+<span class="k">import</span> <span class="nn">ExampleController</span>
+<span class="k">import</span> <span class="nn">ExampleFilter</span>
+<span class="k">import</span> <span class="nn">ExampleWarmupHandler</span>
+<span class="k">import</span> <span class="nn">MalformedURLExceptionMapper</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.HttpServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.filters.</span><span class="o">{</span><span class="nc">CommonFilters</span><span class="o">,</span> <span class="nc">LoggingMDCFilter</span><span class="o">,</span> <span class="nc">TraceIdMDCFilter</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpRouter</span>
 
-object ExampleServerMain extends ExampleServer
+<span class="k">object</span> <span class="nc">ExampleServerMain</span> <span class="k">extends</span> <span class="nc">ExampleServer</span>
 
-class ExampleServer extends HttpServer {
+<span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
 
-  override val modules = Seq(
-    DoEverythingModule)
+  <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+    <span class="nc">DoEverythingModule</span><span class="o">)</span>
 
-  override def configureHttp(router: HttpRouter): Unit = {
-    router
-      .filter[LoggingMDCFilter[Request, Response]]
-      .filter[TraceIdMDCFilter[Request, Response]]
-      .filter[CommonFilters]
-      .add[ExampleFilter, ExampleController]
-      .exceptionMapper[MalformedURLExceptionMapper]
-  }
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">router</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">LoggingMDCFilter</span><span class="o">[</span><span class="kt">Request</span>, <span class="kt">Response</span><span class="o">]]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">TraceIdMDCFilter</span><span class="o">[</span><span class="kt">Request</span>, <span class="kt">Response</span><span class="o">]]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">CommonFilters</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">ExampleFilter</span>, <span class="kt">ExampleController</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">exceptionMapper</span><span class="o">[</span><span class="kt">MalformedURLExceptionMapper</span><span class="o">]</span>
+  <span class="o">}</span>
 
-  override protected def warmup(): Unit = {
-    // YOUR WARMUP LOGIC HERE &lt;----------------------------------------------
-  }
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="n">warmup</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="c1">// YOUR WARMUP LOGIC HERE &lt;----------------------------------------------</span>
+  <span class="o">}</span>
 </pre></div>
 </div>
 </div>
@@ -116,32 +116,32 @@ which simply instantiates a given <a class="reference external" href="https://gi
 via the injector and invokes its <cite>#handle()</cite> function.</p>
 <p>Combining the above, if we wanted to run an initial call through our HTTP service we could create the
 following handler:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.routing.HttpWarmup
-import com.twitter.finatra.httpclient.RequestBuilder._
-import com.twitter.inject.utils.Handler
-import scala.util.control.NonFatal
-import javax.inject.Inject
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpWarmup</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.httpclient.RequestBuilder._</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.utils.Handler</span>
+<span class="k">import</span> <span class="nn">scala.util.control.NonFatal</span>
+<span class="k">import</span> <span class="nn">javax.inject.Inject</span>
 
-class ExampleWarmupHandler @Inject()(
-  warmup: HttpWarmup)
-  extends Handler {
+<span class="k">class</span> <span class="nc">ExampleWarmupHandler</span> <span class="nd">@Inject</span><span class="o">()(</span>
+  <span class="n">warmup</span><span class="k">:</span> <span class="kt">HttpWarmup</span><span class="o">)</span>
+  <span class="k">extends</span> <span class="nc">Handler</span> <span class="o">{</span>
 
-  override def handle(): Unit = {
-    try {
-      warmup.send(get(&quot;/ping&quot;))()
-    } catch {
-      case NonFatal(e) =&gt;
-        // Here we don&#39;t want a warmup failure to prevent server start-up --
-        // this is important if your service will call downstream services
-        // during warmup that could be temporarily down or unavailable.
-        // We don&#39;t want that unavailability to cause our server to fail
-        // warm-up and thus prevent the server from starting. So we simply
-        // log the error message here.
-        error(e.getMessage, e)
-    }
-    info(&quot;Warm-up done.&quot;)
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">handle</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="n">warmup</span><span class="o">.</span><span class="n">send</span><span class="o">(</span><span class="n">get</span><span class="o">(</span><span class="s">&quot;/ping&quot;</span><span class="o">))()</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">{</span>
+      <span class="k">case</span> <span class="nc">NonFatal</span><span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="k">=&gt;</span>
+        <span class="c1">// Here we don&#39;t want a warmup failure to prevent server start-up --</span>
+        <span class="c1">// this is important if your service will call downstream services</span>
+        <span class="c1">// during warmup that could be temporarily down or unavailable.</span>
+        <span class="c1">// We don&#39;t want that unavailability to cause our server to fail</span>
+        <span class="c1">// warm-up and thus prevent the server from starting. So we simply</span>
+        <span class="c1">// log the error message here.</span>
+        <span class="n">error</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">getMessage</span><span class="o">,</span> <span class="n">e</span><span class="o">)</span>
+    <span class="o">}</span>
+    <span class="n">info</span><span class="o">(</span><span class="s">&quot;Warm-up done.&quot;</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>The handler above simply tries to hit the <cite>/ping</cite> endpoint of the server.</p>
@@ -153,35 +153,35 @@ starting and thus, you most likely <strong>do not</strong> want an exception fro
 of the handler.</p>
 </div>
 <p>You would then run this handler in the <cite>warmup()</cite> lifecycle callback. E.g.,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import DoEverythingModule
-import ExampleController
-import ExampleFilter
-import ExampleWarmupHandler
-import MalformedURLExceptionMapper
-import com.twitter.finatra.http.HttpServer
-import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter, TraceIdMDCFilter}
-import com.twitter.finatra.http.routing.HttpRouter
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">DoEverythingModule</span>
+<span class="k">import</span> <span class="nn">ExampleController</span>
+<span class="k">import</span> <span class="nn">ExampleFilter</span>
+<span class="k">import</span> <span class="nn">ExampleWarmupHandler</span>
+<span class="k">import</span> <span class="nn">MalformedURLExceptionMapper</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.HttpServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.filters.</span><span class="o">{</span><span class="nc">CommonFilters</span><span class="o">,</span> <span class="nc">LoggingMDCFilter</span><span class="o">,</span> <span class="nc">TraceIdMDCFilter</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpRouter</span>
 
-object ExampleServerMain extends ExampleServer
+<span class="k">object</span> <span class="nc">ExampleServerMain</span> <span class="k">extends</span> <span class="nc">ExampleServer</span>
 
-class ExampleServer extends HttpServer {
+<span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
 
-  override val modules = Seq(
-    DoEverythingModule)
+  <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+    <span class="nc">DoEverythingModule</span><span class="o">)</span>
 
-  override def configureHttp(router: HttpRouter): Unit = {
-    router
-      .filter[LoggingMDCFilter[Request, Response]]
-      .filter[TraceIdMDCFilter[Request, Response]]
-      .filter[CommonFilters]
-      .add[ExampleFilter, ExampleController]
-      .exceptionMapper[MalformedURLExceptionMapper]
-  }
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">router</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">LoggingMDCFilter</span><span class="o">[</span><span class="kt">Request</span>, <span class="kt">Response</span><span class="o">]]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">TraceIdMDCFilter</span><span class="o">[</span><span class="kt">Request</span>, <span class="kt">Response</span><span class="o">]]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">CommonFilters</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">ExampleFilter</span>, <span class="kt">ExampleController</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">exceptionMapper</span><span class="o">[</span><span class="kt">MalformedURLExceptionMapper</span><span class="o">]</span>
+  <span class="o">}</span>
 
-  override protected def warmup(): Unit = {
-    handle[ExampleWarmupHandler]() &lt;----------------------------------------------
-  }
-}
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="n">warmup</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">handle</span><span class="o">[</span><span class="kt">ExampleWarmupHandler</span><span class="o">]()</span> <span class="o">&lt;----------------------------------------------</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 </div>
@@ -252,7 +252,7 @@ class ExampleServer extends HttpServer {
   
 
   <div class="footer">
-    &copy; Copyright 2013-2022 Twitter, Inc.
+    &copy; Copyright 2022 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

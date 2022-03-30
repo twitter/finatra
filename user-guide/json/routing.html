@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>JSON Integration with HTTP Routing &#8212; Finatra 22.2.0 documentation</title>
+    <title>JSON Integration with HTTP Routing &#8212; Finatra 22.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -72,7 +72,7 @@ using the server’s configured <a class="reference external" href="https://gith
 <p>Similar to declaratively parsing a <cite>GET</cite> request (described above), Finatra will perform validations
 and return a <cite>400 BadRequest</cite> with a list of all accumulated errors in JSON format.</p>
 <p>Suppose you wanted to handle a <cite>POST</cite> of the following JSON (representing a group of tweet ids):</p>
-<div class="code json highlight-text notranslate"><div class="highlight"><pre><span></span>{
+<div class="code json highlight-scala notranslate"><div class="highlight"><pre><span></span>{
   &quot;name&quot;: &quot;EarlyTweets&quot;,
   &quot;description&quot;: &quot;Some of the earliest tweets on Twitter.&quot;,
   &quot;tweetIds&quot;: [20, 22, 24],
@@ -84,24 +84,24 @@ and return a <cite>400 BadRequest</cite> with a list of all accumulated errors i
 </pre></div>
 </div>
 <p>You could create and use the following case classes:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import jakarta.validation.constraints.{NotEmpty, Past}
-import java.util.Date
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">jakarta.validation.constraints.</span><span class="o">{</span><span class="nc">NotEmpty</span><span class="o">,</span> <span class="nc">Past</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">java.util.Date</span>
 
-case class GroupRequest(
-  @NotEmpty name: String,
-  description: Option[String],
-  tweetIds: Set[Long],
-  dates: Dates) {
+<span class="k">case</span> <span class="k">class</span> <span class="nc">GroupRequest</span><span class="o">(</span>
+  <span class="nd">@NotEmpty</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
+  <span class="n">description</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">],</span>
+  <span class="n">tweetIds</span><span class="k">:</span> <span class="kt">Set</span><span class="o">[</span><span class="kt">Long</span><span class="o">],</span>
+  <span class="n">dates</span><span class="k">:</span> <span class="kt">Dates</span><span class="o">)</span> <span class="o">{</span>
 
-case class Dates(
-  @Past start: Date,
-  @Past end: Date)
+<span class="k">case</span> <span class="k">class</span> <span class="nc">Dates</span><span class="o">(</span>
+  <span class="nd">@Past</span> <span class="n">start</span><span class="k">:</span> <span class="kt">Date</span><span class="o">,</span>
+  <span class="nd">@Past</span> <span class="n">end</span><span class="k">:</span> <span class="kt">Date</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>This case class could then used as the input to a Controller route callback:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>post(&quot;/tweets&quot;) { request: GroupRequest =&gt;
-  ...
-}
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">post</span><span class="o">(</span><span class="s">&quot;/tweets&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">GroupRequest</span> <span class="o">=&gt;</span>
+  <span class="o">...</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 </div>
@@ -171,7 +171,7 @@ callback. The default behavior will be to render this <cite>case class</cite> as
   
 
   <div class="footer">
-    &copy; Copyright 2013-2022 Twitter, Inc.
+    &copy; Copyright 2022 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Defining Thrift Controllers &#8212; Finatra 22.2.0 documentation</title>
+    <title>Defining Thrift Controllers &#8212; Finatra 22.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -66,81 +66,81 @@
 <h2>Implementing methods with <cite>handle(ThriftMethod)</cite><a class="headerlink" href="#implementing-methods-with-handle-thriftmethod" title="Permalink to this headline">¶</a></h2>
 <p>The Finatra <cite>c.t.finatra.thrift.Controller</cite> provides a DSL with which you can implement your thrift service methods via the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/Controller.scala#L124">handle(ThriftMethod)</a> function. Using this DSL, you can apply <cite>TypeAgnostic</cite> <cite>Filters</cite> to handling of methods as well as provide an implementation in the form of a function from <cite>ThriftMethod.Args =&gt; Future[ThriftMethod.SuccessType]</cite>, <cite>Request[ThriftMethod.Args] =&gt; Future[Response[ThriftMethod.SuccessType]]</cite> or <cite>Service[Request[ThriftMethod.Args], Response[ThriftMethod.Args]]</cite>.</p>
 <p>For example, given the following thrift IDL: <cite>example_service.thrift</cite></p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>namespace java com.twitter.example.thriftjava
-#@namespace scala com.twitter.example.thriftscala
-namespace rb ExampleService
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">namespace</span> <span class="n">java</span> <span class="n">com</span><span class="o">.</span><span class="n">twitter</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">thriftjava</span>
+<span class="o">#</span><span class="nd">@namespace</span> <span class="n">scala</span> <span class="n">com</span><span class="o">.</span><span class="n">twitter</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">thriftscala</span>
+<span class="n">namespace</span> <span class="n">rb</span> <span class="nc">ExampleService</span>
 
-exception UnknownClientIdError {
-  1: string message
-}
+<span class="n">exception</span> <span class="nc">UnknownClientIdError</span> <span class="o">{</span>
+  <span class="mi">1</span><span class="k">:</span> <span class="kt">string</span> <span class="kt">message</span>
+<span class="o">}</span>
 
-exception NoClientIdError {
-  1: string message
-}
+<span class="n">exception</span> <span class="nc">NoClientIdError</span> <span class="o">{</span>
+  <span class="mi">1</span><span class="k">:</span> <span class="kt">string</span> <span class="kt">message</span>
+<span class="o">}</span>
 
-enum ClientErrorCause {
-  /** Improperly-formatted request can&#39;t be fulfilled. */
-  BAD_REQUEST     = 0,
+<span class="n">enum</span> <span class="nc">ClientErrorCause</span> <span class="o">{</span>
+  <span class="cm">/** Improperly-formatted request can&#39;t be fulfilled. */</span>
+  <span class="nc">BAD_REQUEST</span>     <span class="k">=</span> <span class="mi">0</span><span class="o">,</span>
 
-  /** Required request authorization failed. */
-  UNAUTHORIZED    = 1,
+  <span class="cm">/** Required request authorization failed. */</span>
+  <span class="nc">UNAUTHORIZED</span>    <span class="k">=</span> <span class="mi">1</span><span class="o">,</span>
 
-  /** Server timed out while fulfilling the request. */
-  REQUEST_TIMEOUT = 2,
+  <span class="cm">/** Server timed out while fulfilling the request. */</span>
+  <span class="nc">REQUEST_TIMEOUT</span> <span class="k">=</span> <span class="mi">2</span><span class="o">,</span>
 
-  /** Initiating client has exceeded its maximum rate. */
-  RATE_LIMITED    = 3
-}
+  <span class="cm">/** Initiating client has exceeded its maximum rate. */</span>
+  <span class="nc">RATE_LIMITED</span>    <span class="k">=</span> <span class="mi">3</span>
+<span class="o">}</span>
 
-exception ClientError {
-  1: ClientErrorCause errorCause
-  2: string message
-}
+<span class="n">exception</span> <span class="nc">ClientError</span> <span class="o">{</span>
+  <span class="mi">1</span><span class="k">:</span> <span class="kt">ClientErrorCause</span> <span class="kt">errorCause</span>
+  <span class="mi">2</span><span class="k">:</span> <span class="kt">string</span> <span class="kt">message</span>
+<span class="o">}</span>
 
-enum ServerErrorCause {
-  /** Generic server error. */
-  INTERNAL_SERVER_ERROR = 0,
+<span class="n">enum</span> <span class="nc">ServerErrorCause</span> <span class="o">{</span>
+  <span class="cm">/** Generic server error. */</span>
+  <span class="nc">INTERNAL_SERVER_ERROR</span> <span class="k">=</span> <span class="mi">0</span><span class="o">,</span>
 
-  /** Server lacks the ability to fulfill the request. */
-  NOT_IMPLEMENTED       = 1,
+  <span class="cm">/** Server lacks the ability to fulfill the request. */</span>
+  <span class="nc">NOT_IMPLEMENTED</span>       <span class="k">=</span> <span class="mi">1</span><span class="o">,</span>
 
-  /** Request cannot be fulfilled due to error from dependent service. */
-  DEPENDENCY_ERROR      = 2,
+  <span class="cm">/** Request cannot be fulfilled due to error from dependent service. */</span>
+  <span class="nc">DEPENDENCY_ERROR</span>      <span class="k">=</span> <span class="mi">2</span><span class="o">,</span>
 
-  /** Server is currently unavailable. */
-  SERVICE_UNAVAILABLE   = 3
-}
+  <span class="cm">/** Server is currently unavailable. */</span>
+  <span class="nc">SERVICE_UNAVAILABLE</span>   <span class="k">=</span> <span class="mi">3</span>
+<span class="o">}</span>
 
-exception ServerError {
-  1: ServerErrorCause errorCause
-  2: string message
-}
+<span class="n">exception</span> <span class="nc">ServerError</span> <span class="o">{</span>
+  <span class="mi">1</span><span class="k">:</span> <span class="kt">ServerErrorCause</span> <span class="kt">errorCause</span>
+  <span class="mi">2</span><span class="k">:</span> <span class="kt">string</span> <span class="kt">message</span>
+<span class="o">}</span>
 
-service ExampleService {
-  i32 add1(
-    1: i32 num
-  ) throws (
-    1: ServerError serverError,
-    2: UnknownClientIdError unknownClientIdError
-    3: NoClientIdError kClientError
-  )
-}
+<span class="n">service</span> <span class="nc">ExampleService</span> <span class="o">{</span>
+  <span class="n">i32</span> <span class="n">add1</span><span class="o">(</span>
+    <span class="mi">1</span><span class="k">:</span> <span class="kt">i32</span> <span class="kt">num</span>
+  <span class="o">)</span> <span class="n">throws</span> <span class="o">(</span>
+    <span class="mi">1</span><span class="k">:</span> <span class="kt">ServerError</span> <span class="kt">serverError</span><span class="o">,</span>
+    <span class="mi">2</span><span class="k">:</span> <span class="kt">UnknownClientIdError</span> <span class="kt">unknownClientIdError</span>
+    <span class="mi">3</span><span class="k">:</span> <span class="kt">NoClientIdError</span> <span class="kt">kClientError</span>
+  <span class="o">)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>We can implement the following Thrift Controller:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.example.thriftscala.ExampleService
-import com.twitter.finatra.thrift.Controller
-import com.twitter.util.Future
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.example.thriftscala.ExampleService</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.Controller</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.Future</span>
 
-class ExampleThriftController
-  extends Controller(ExampleService) {
+<span class="k">class</span> <span class="nc">ExampleThriftController</span>
+  <span class="k">extends</span> <span class="nc">Controller</span><span class="o">(</span><span class="nc">ExampleService</span><span class="o">)</span> <span class="o">{</span>
 
-  val addFilter: Filter.TypeAgnostic = { ... }
+  <span class="k">val</span> <span class="n">addFilter</span><span class="k">:</span> <span class="kt">Filter.TypeAgnostic</span> <span class="o">=</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
 
-  handle(Add1).filtered(addFilter) { args: Add1.Args =&gt;
-    Future(args.num + 1)
-  }
-}
+  <span class="n">handle</span><span class="o">(</span><span class="nc">Add1</span><span class="o">).</span><span class="n">filtered</span><span class="o">(</span><span class="n">addFilter</span><span class="o">)</span> <span class="o">{</span> <span class="n">args</span><span class="k">:</span> <span class="kt">Add1.Args</span> <span class="o">=&gt;</span>
+    <span class="nc">Future</span><span class="o">(</span><span class="n">args</span><span class="o">.</span><span class="n">num</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>The <cite>handle(ThriftMethod)</cite> function may seem magical but it serves an important purpose. By implementing your service method via this function, it allows the framework to apply the configured global filter chain defined in your <a class="reference external" href="../build-new-thrift-server#server-definition">server definition</a> to your method implementation (passed as the callback to <cite>handle(ThriftMethod)</cite>).</p>
@@ -151,21 +151,21 @@ class ExampleThriftController
 <div class="section" id="scrooge-request-and-response-wrappers">
 <h2>Scrooge <cite>Request</cite> and <cite>Response</cite> Wrappers<a class="headerlink" href="#scrooge-request-and-response-wrappers" title="Permalink to this headline">¶</a></h2>
 <p>By providing an implementation that is aware of the Scrooge-generated <cite>Request</cite> and <cite>Response</cite> wrappers, header data is available. Using the earlier <cite>ExampleThrift</cite>, we can construct a Controller that examines header information like this:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.example.thriftscala.ExampleService
-import com.twitter.finatra.thrift.Controller
-import com.twitter.util.Future
-import com.twitter.scrooge.{Request, Response}
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.example.thriftscala.ExampleService</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.Controller</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.Future</span>
+<span class="k">import</span> <span class="nn">com.twitter.scrooge.</span><span class="o">{</span><span class="nc">Request</span><span class="o">,</span> <span class="nc">Response</span><span class="o">}</span>
 
-class ExampleThriftController extends Controller(ExampleService) {
+<span class="k">class</span> <span class="nc">ExampleThriftController</span> <span class="k">extends</span> <span class="nc">Controller</span><span class="o">(</span><span class="nc">ExampleService</span><span class="o">)</span> <span class="o">{</span>
 
-  handle(Add1).withFn { request: Request[Add1.Args] =&gt;
-    val num = request.args.num
-    val headers = request.headers
+  <span class="n">handle</span><span class="o">(</span><span class="nc">Add1</span><span class="o">).</span><span class="n">withFn</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span><span class="o">[</span><span class="kt">Add1.Args</span><span class="o">]</span> <span class="k">=&gt;</span>
+    <span class="k">val</span> <span class="n">num</span> <span class="k">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">num</span>
+    <span class="k">val</span> <span class="n">headers</span> <span class="k">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span>
 
-    log(s&quot;Add1 called with $num and headers: $headers&quot;)
-    Future(Response(num + 1))
-  }
-}
+    <span class="n">log</span><span class="o">(</span><span class="s">s&quot;Add1 called with </span><span class="si">$num</span><span class="s"> and headers: </span><span class="si">$headers</span><span class="s">&quot;</span><span class="o">)</span>
+    <span class="nc">Future</span><span class="o">(</span><span class="nc">Response</span><span class="o">(</span><span class="n">num</span> <span class="o">+</span> <span class="mi">1</span><span class="o">))</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 </div>
@@ -173,13 +173,13 @@ class ExampleThriftController extends Controller(ExampleService) {
 <h2>Add the Controller to the Server<a class="headerlink" href="#add-the-controller-to-the-server" title="Permalink to this headline">¶</a></h2>
 <p>As previously shown, the server can then be defined with this Thrift
 Controller:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class ExampleServer extends ThriftServer {
-  ...
-  override def configureThrift(router: ThriftRouter): Unit = {
-    router
-      .add[ExampleThriftController]
-  }
-}
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">ThriftServer</span> <span class="o">{</span>
+  <span class="o">...</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureThrift</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">ThriftRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">router</span>
+      <span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">ExampleThriftController</span><span class="o">]</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Please note that Finatra only currently supports adding a <strong>single</strong> Thrift Controller to the <cite>ThriftRouter</cite>. The expectation is that you are implementing a single Thrift <em>service</em> and thus a single <cite>ThriftService</cite>.</p>
@@ -189,18 +189,18 @@ Controller:</p>
 <p>Don’t worry. You don’t have to.</p>
 <p>The only requirement is a single class which implements the service’s defined thrift methods. Nothing specifies that <em>this</em> class needs to contain all of your service implementation or logic.</p>
 <p>If you want to modularize or componentize to have a better separation of concerns in your code, your <cite>Controller</cite> implementation can be easily written to inject other services or handlers such that complicated logic can be handled in other classes as is generally good practice. E.g.,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class ExampleThriftController @Inject() (
-  add1Service: Add1Service,
-  add2Service: Add2Service,
-) extends Controller(ExampleService) {
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ExampleThriftController</span> <span class="nd">@Inject</span><span class="o">()</span> <span class="o">(</span>
+  <span class="n">add1Service</span><span class="k">:</span> <span class="kt">Add1Service</span><span class="o">,</span>
+  <span class="n">add2Service</span><span class="k">:</span> <span class="kt">Add2Service</span><span class="o">,</span>
+<span class="o">)</span> <span class="k">extends</span> <span class="nc">Controller</span><span class="o">(</span><span class="nc">ExampleService</span><span class="o">)</span> <span class="o">{</span>
 
-  // add1Service must be of a unique type for injection but also extends:
-  // Service[Request[Add1.Args], Response[Add1.SuccessType]]
-  // which is what the withService method is looking for.
-  handle(Add1).withService(add1Service)
+  <span class="c1">// add1Service must be of a unique type for injection but also extends:</span>
+  <span class="c1">// Service[Request[Add1.Args], Response[Add1.SuccessType]]</span>
+  <span class="c1">// which is what the withService method is looking for.</span>
+  <span class="n">handle</span><span class="o">(</span><span class="nc">Add1</span><span class="o">).</span><span class="n">withService</span><span class="o">(</span><span class="n">add1Service</span><span class="o">)</span>
 
-  handle(Add2).withService(add2Service)
-}
+  <span class="n">handle</span><span class="o">(</span><span class="nc">Add2</span><span class="o">).</span><span class="n">withService</span><span class="o">(</span><span class="n">add2Service</span><span class="o">)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>In the above example the <cite>Controller</cite> implementation forwards handling of the various methods to the injected services directly.</p>
@@ -209,25 +209,25 @@ Controller:</p>
 <div class="section" id="per-method-stats">
 <h2>Per-Method Stats<a class="headerlink" href="#per-method-stats" title="Permalink to this headline">¶</a></h2>
 <p>Per-method stats recording is provided by Finatra in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/StatsFilter.scala">c.t.finatra.thrift.filters.StatsFilter</a>.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.example.thriftscala.ExampleService
-import com.twitter.finatra.thrift.Controller
-import com.twitter.util.Future
-import com.twitter.scrooge.{Request, Response}
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.example.thriftscala.ExampleService</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.Controller</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.Future</span>
+<span class="k">import</span> <span class="nn">com.twitter.scrooge.</span><span class="o">{</span><span class="nc">Request</span><span class="o">,</span> <span class="nc">Response</span><span class="o">}</span>
 
-class ExampleThriftController extends Controller(ExampleService) {
+<span class="k">class</span> <span class="nc">ExampleThriftController</span> <span class="k">extends</span> <span class="nc">Controller</span><span class="o">(</span><span class="nc">ExampleService</span><span class="o">)</span> <span class="o">{</span>
 
-  handle(Add1).withFn { request: Request[Add1.Args] =&gt;
-    val num = request.args.num
-    val headers = request.headers
+  <span class="n">handle</span><span class="o">(</span><span class="nc">Add1</span><span class="o">).</span><span class="n">withFn</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span><span class="o">[</span><span class="kt">Add1.Args</span><span class="o">]</span> <span class="k">=&gt;</span>
+    <span class="k">val</span> <span class="n">num</span> <span class="k">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">num</span>
+    <span class="k">val</span> <span class="n">headers</span> <span class="k">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span>
 
-    log(s&quot;Add1 called with $num and headers: $headers&quot;)
-    Future(Response(num + 1))
-  }
-}
+    <span class="n">log</span><span class="o">(</span><span class="s">s&quot;Add1 called with </span><span class="si">$num</span><span class="s"> and headers: </span><span class="si">$headers</span><span class="s">&quot;</span><span class="o">)</span>
+    <span class="nc">Future</span><span class="o">(</span><span class="nc">Response</span><span class="o">(</span><span class="n">num</span> <span class="o">+</span> <span class="mi">1</span><span class="o">))</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>yields the following stats:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>per_method_stats/add1/failures 0
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span>per_method_stats/add1/failures 0
 per_method_stats/add1/success 1
 per_method_stats/add1/latency_ms 8.666667 [5.0, 3.0, 2.0]
 </pre></div>
@@ -240,18 +240,18 @@ per_method_stats/add1/latency_ms 8.666667 [5.0, 3.0, 2.0]
 <p>It is important that when constructing the overrides for the <cite>BaseServiceIface</cite>, they must be implemented as a <cite>val</cite> instead of a <cite>def</cite>. If they’re <cite>defs</cite>, the service/filters will be re-created for each incoming request, incurring very serious overhead.</p>
 <p>Legacy style Controllers cannot use per-method filtering or have access to headers via Scrooge’s <cite>Request</cite> and <cite>Response</cite> types.</p>
 <p>A properly configured legacy-style Controller looks like this:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.example.thriftscala.ExampleService
-import com.twitter.finatra.thrift.Controller
-import com.twitter.util.Future
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.example.thriftscala.ExampleService</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.Controller</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.Future</span>
 
-class ExampleThriftController
-  extends Controller with ExampleService.BaseServiceIface {
+<span class="k">class</span> <span class="nc">ExampleThriftController</span>
+  <span class="k">extends</span> <span class="nc">Controller</span> <span class="k">with</span> <span class="nc">ExampleService</span><span class="o">.</span><span class="nc">BaseServiceIface</span> <span class="o">{</span>
 
-  // Note that this is a val instead of a def
-  override val add1 = handle(Add1) { args: Add1.Args =&gt;
-    Future(args.num + 1)
-  }
-}
+  <span class="c1">// Note that this is a val instead of a def</span>
+  <span class="k">override</span> <span class="k">val</span> <span class="n">add1</span> <span class="k">=</span> <span class="n">handle</span><span class="o">(</span><span class="nc">Add1</span><span class="o">)</span> <span class="o">{</span> <span class="n">args</span><span class="k">:</span> <span class="kt">Add1.Args</span> <span class="o">=&gt;</span>
+    <span class="nc">Future</span><span class="o">(</span><span class="n">args</span><span class="o">.</span><span class="n">num</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 </div>
@@ -324,7 +324,7 @@ class ExampleThriftController
   
 
   <div class="footer">
-    &copy; Copyright 2013-2022 Twitter, Inc.
+    &copy; Copyright 2022 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

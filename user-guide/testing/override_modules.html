@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Override Modules &#8212; Finatra 22.2.0 documentation</title>
+    <title>Override Modules &#8212; Finatra 22.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -73,52 +73,52 @@ calls to an external service through a real client we want to instead use a mock
 Or load an in-memory implementation to which we can keep a reference in order to make assertions on
 its internal state. In these cases we can compose a server with a collection of override modules that
 selectively replace bound instances.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>override val server = new EmbeddedHttpServer(
-  twitterServer = new ExampleServer {
-    override def overrideModules = Seq(OverrideSomeBehaviorModule)
-  },
-  ...
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">override</span> <span class="k">val</span> <span class="n">server</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EmbeddedHttpServer</span><span class="o">(</span>
+  <span class="n">twitterServer</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ExampleServer</span> <span class="o">{</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">overrideModules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="nc">OverrideSomeBehaviorModule</span><span class="o">)</span>
+  <span class="o">},</span>
+  <span class="o">...</span>
 </pre></div>
 </div>
 <p>For instance if you have a controller which takes in a type of <cite>ServiceA</cite>:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class MyController(serviceA: ServiceA) extends Controller {
-  get(&quot;/:id&quot;) { request: Request =&gt;
-    serviceA.lookupInformation(request.params(&quot;id&quot;))
-  }
-}
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyController</span><span class="o">(</span><span class="n">serviceA</span><span class="k">:</span> <span class="kt">ServiceA</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
+  <span class="n">get</span><span class="o">(</span><span class="s">&quot;/:id&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+    <span class="n">serviceA</span><span class="o">.</span><span class="n">lookupInformation</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="n">params</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">))</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>With a <a class="reference external" href="../getting-started/modules.html">Module</a> that provides the implementation of <cite>ServiceA</cite>
 to the injector:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>object MyServiceAModule extends TwitterModule {
-  val key = flag(&quot;key&quot;, &quot;defaultkey&quot;, &quot;The key to use.&quot;)
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">object</span> <span class="nc">MyServiceAModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">key</span> <span class="k">=</span> <span class="n">flag</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;defaultkey&quot;</span><span class="o">,</span> <span class="s">&quot;The key to use.&quot;</span><span class="o">)</span>
 
-  @Singleton
-  @Provides
-  def providesServiceA: ServiceA = {
-    new ServiceA(key())
-  }
-}
+  <span class="nd">@Singleton</span>
+  <span class="nd">@Provides</span>
+  <span class="k">def</span> <span class="n">providesServiceA</span><span class="k">:</span> <span class="kt">ServiceA</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">new</span> <span class="nc">ServiceA</span><span class="o">(</span><span class="n">key</span><span class="o">())</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>In order to test, you may want to use a mock or stub version of <cite>ServiceA</cite> in your controller instead
 of the real version. You could do this by writing a re-usable module for testing and compose it into
 the server when testing by including it as an override module.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>object StubServiceAModule extends TwitterModule {
-  @Singleton
-  @Provides
-  def providesServiceA: ServiceA = {
-    new StubServiceA(&quot;fake&quot;)
-  }
-}
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">object</span> <span class="nc">StubServiceAModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
+  <span class="nd">@Singleton</span>
+  <span class="nd">@Provides</span>
+  <span class="k">def</span> <span class="n">providesServiceA</span><span class="k">:</span> <span class="kt">ServiceA</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">new</span> <span class="nc">StubServiceA</span><span class="o">(</span><span class="s">&quot;fake&quot;</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>And in your test, add this stub module as a override module:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>override val server = new EmbeddedHttpServer(
-  twitterServer = new MyGreatServer {
-    override def overrideModules = Seq(StubServiceAModule)
-  },
-  ...
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">override</span> <span class="k">val</span> <span class="n">server</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EmbeddedHttpServer</span><span class="o">(</span>
+  <span class="n">twitterServer</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">MyGreatServer</span> <span class="o">{</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">overrideModules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="nc">StubServiceAModule</span><span class="o">)</span>
+  <span class="o">},</span>
+  <span class="o">...</span>
 </pre></div>
 </div>
 <p>An “override module” does what it sounds like. It overrides any bound instance in the object graph
@@ -206,7 +206,7 @@ functionality in a test.</p>
   
 
   <div class="footer">
-    &copy; Copyright 2013-2022 Twitter, Inc.
+    &copy; Copyright 2022 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

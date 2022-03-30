@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Validation Framework Integration &#8212; Finatra 22.2.0 documentation</title>
+    <title>Validation Framework Integration &#8212; Finatra 22.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -71,9 +71,45 @@ please see the <a class="reference external" href="http://twitter.github.io/util
 <p>You can customize and provide a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-validator/src/main/scala/com/twitter/util/validation/ScalaValidator.scala"><cite>ScalaValidator</cite></a> via a <cite>TwitterModule</cite>. The easiest way to do so is
 to extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/validation/src/main/scala/com/twitter/finatra/validation/ValidatorModule.scala">c.t.finatra.validation.ValidatorModule</a>
 and implement the <cite>ValidatorModule#configureValidator</cite> method:</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span> <span class="k">import</span> <span class="nn">com.twitter.finatra.validation.ValidatorModule</span>
+ <span class="k">import</span> <span class="nn">com.twitter.inject.Injector</span>
+ <span class="k">import</span> <span class="nn">com.twitter.util.validation.ScalaValidator</span>
+ <span class="k">import</span> <span class="nn">com.twitter.util.validation.cfg.ConstraintMapping</span>
+
+ <span class="k">object</span> <span class="nc">CustomizedValidatorModule</span> <span class="k">extends</span> <span class="nc">ValidatorModule</span> <span class="o">{</span>
+<span class="hll">   <span class="k">override</span> <span class="k">def</span> <span class="n">configureValidator</span><span class="o">(</span><span class="n">injector</span><span class="k">:</span> <span class="kt">Injector</span><span class="o">,</span> <span class="n">builder</span><span class="k">:</span> <span class="kt">ScalaValidator.Builder</span><span class="o">)</span><span class="k">:</span> <span class="kt">ScalaValidator.Builder</span> <span class="o">=</span> <span class="o">{</span>
+</span>     <span class="k">val</span> <span class="n">newConstraintMapping</span> <span class="k">=</span> <span class="nc">ConstraintMapping</span><span class="o">(</span>
+        <span class="n">annotationType</span> <span class="k">=</span> <span class="n">classOf</span><span class="o">[</span><span class="kt">FooConstraintAnnotation</span><span class="o">],</span>
+        <span class="n">constraintValidator</span> <span class="k">=</span> <span class="n">classOf</span><span class="o">[</span><span class="kt">FooConstraintValidator</span><span class="o">]</span>
+      <span class="o">)</span>
+
+     <span class="n">builder</span>
+       <span class="o">.</span><span class="n">withDescriptorCacheSize</span><span class="o">(</span><span class="mi">512</span><span class="o">)</span>
+       <span class="o">.</span><span class="n">withConstraintMapping</span><span class="o">(</span><span class="n">newConstraintMapping</span><span class="o">)</span>
+   <span class="o">}</span>
+ <span class="o">}</span>
+</pre></div>
+</div>
 <p>Then include this module in your server’s list of modules. In a Finatra HTTP server, a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-validator/src/main/scala/com/twitter/util/validation/ScalaValidator.scala"><cite>ScalaValidator</cite></a>
 is provided as a <a class="reference external" href="../http/server.html#framework-modules">framework module</a>, thus you can use your new module as the implementation of
 the <cite>validatorModule</cite> function in your <a class="reference external" href="../http/server.html#framework-modules">HttpServer definition</a>:</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span> <span class="k">import</span> <span class="nn">com.twitter.finatra.http.HttpServer</span>
+ <span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpRouter</span>
+ <span class="k">import</span> <span class="nn">com.twitter.inject.TwitterModule</span>
+
+ <span class="nc">ServerWithCustomizedValidator</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
+   <span class="k">override</span> <span class="k">val</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">&quot;validation-server&quot;</span>
+<span class="hll">   <span class="k">override</span> <span class="k">def</span> <span class="n">validatorModule</span><span class="k">:</span> <span class="kt">TwitterModule</span> <span class="o">=</span> <span class="nc">CustomizedValidatorModule</span>
+</span>
+   <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+     <span class="n">router</span>
+       <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">MyFilter</span><span class="o">]</span>
+       <span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">MyController</span><span class="o">]</span>
+       <span class="o">...</span>
+   <span class="o">}</span>
+ <span class="o">}</span>
+</pre></div>
+</div>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
 <p>By overriding the default <cite>validatorModule</cite> in an <a class="reference external" href="../http/server.html#framework-modules">HttpServer</a>,
@@ -101,20 +137,20 @@ on case class validation during JSON deserialization, please refer to <a class="
 allow for validation of JSON request bodies when modeled as a <a class="reference external" href="../http/requests.html#custom-case-class-request-object">custom request case class</a>.</p>
 <p>For example, if you have the following HTTP <a class="reference external" href="../http/requests.html#custom-case-class-request-object">custom request case class</a>
 defined:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import jakarta.validation.constraints.{Max, NotEmpty}
-import com.twitter.util.validation.constraints.Pattern
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">jakarta.validation.constraints.</span><span class="o">{</span><span class="nc">Max</span><span class="o">,</span> <span class="nc">NotEmpty</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.validation.constraints.Pattern</span>
 
-case class ValidateUserRequest(
-  @NotEmpty @Pattern(regexp = &quot;[a-z]+&quot;) userName: String,
-  @Max(value = 9999) id: Long,
-  title: String
-)
+<span class="k">case</span> <span class="k">class</span> <span class="nc">ValidateUserRequest</span><span class="o">(</span>
+  <span class="nd">@NotEmpty</span> <span class="nd">@Pattern</span><span class="o">(</span><span class="n">regexp</span> <span class="k">=</span> <span class="s">&quot;[a-z]+&quot;</span><span class="o">)</span> <span class="n">userName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
+  <span class="nd">@Max</span><span class="o">(</span><span class="n">value</span> <span class="k">=</span> <span class="mi">9999</span><span class="o">)</span> <span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span>
+  <span class="n">title</span><span class="k">:</span> <span class="kt">String</span>
+<span class="o">)</span>
 </pre></div>
 </div>
 <p>And in your HTTP controller, you define a <cite>POST</cite> endpoint:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>post(&quot;/validate_user&quot;) { _: ValidateUserRequest =&gt;
-  ...
-}
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">post</span><span class="o">(</span><span class="s">&quot;/validate_user&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="k">_:</span> <span class="kt">ValidateUserRequest</span> <span class="o">=&gt;</span>
+  <span class="o">...</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>When a <cite>POST</cite> request with a content-type of <cite>application/json</cite> is sent to the <cite>/validate_user/</cite>
@@ -143,7 +179,7 @@ documentation <a class="reference external" href="http://twitter.github.io/util/
 case class field should be able to be done eagerly and without side-effects.</p>
 </li>
 <li><p class="first">Case classes with generic type params should be considered <strong>not supported</strong> for validation. E.g.,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class GenericCaseClass[T](@NotEmpty @Valid data: T)
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span> <span class="k">class</span> <span class="nc">GenericCaseClass</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="nd">@NotEmpty</span> <span class="nd">@Valid</span> <span class="n">data</span><span class="k">:</span> <span class="kt">T</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>This may appear to work for some category of data but in practice the way the <a class="reference external" href="http://twitter.github.io/util/guide/util-validator/index.html">util-validator</a>
@@ -226,7 +262,7 @@ of contents when annotated with <cite>&#64;Valid</cite>. Annotated unsupported t
   
 
   <div class="footer">
-    &copy; Copyright 2013-2022 Twitter, Inc.
+    &copy; Copyright 2022 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

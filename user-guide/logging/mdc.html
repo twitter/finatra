@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Mapped Diagnostic Context (MDC) Support &#8212; Finatra 22.2.0 documentation</title>
+    <title>Mapped Diagnostic Context (MDC) Support &#8212; Finatra 22.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -81,20 +81,20 @@ provided by Finatra. This is done by calling <cite>c.t.inject.logging.MDCInitial
 the beginning of the closure and then discard after the closure. When used in a Filter in the request
 path this means that MDC logging can be scoped per-request.</p>
 <p>For example:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.{Service, Filter}
-import com.twitter.inject.logging.MDCInitializer
-import com.twitter.util.Future
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.</span><span class="o">{</span><span class="nc">Service</span><span class="o">,</span> <span class="nc">Filter</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.logging.MDCInitializer</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.Future</span>
 
-class MDCInitializationFilter extends Filter[Request, Response, Request, Response] {
-  /* Initialize MDC adapter which overrides the standard one */
-  MDCInitializer.init()
+<span class="k">class</span> <span class="nc">MDCInitializationFilter</span> <span class="k">extends</span> <span class="nc">Filter</span><span class="o">[</span><span class="kt">Request</span>, <span class="kt">Response</span>, <span class="kt">Request</span>, <span class="kt">Response</span><span class="o">]</span> <span class="o">{</span>
+  <span class="cm">/* Initialize MDC adapter which overrides the standard one */</span>
+  <span class="nc">MDCInitializer</span><span class="o">.</span><span class="n">init</span><span class="o">()</span>
 
-  override def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
-    MDCInitializer.let {
-      service(request)
-    }
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">request</span><span class="k">:</span> <span class="kt">Request</span><span class="o">,</span> <span class="n">service</span><span class="k">:</span> <span class="kt">Service</span><span class="o">[</span><span class="kt">Request</span>, <span class="kt">Response</span><span class="o">])</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Response</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="nc">MDCInitializer</span><span class="o">.</span><span class="n">let</span> <span class="o">{</span>
+      <span class="n">service</span><span class="o">(</span><span class="n">request</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>The <cite>Service[Request, Response]</cite> executed by the Filter can then get and set MDC values which can be
@@ -123,22 +123,22 @@ added by including the http <a class="reference external" href="https://github.c
 (there is also a thrift <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/TraceIdMDCFilter.scala">TraceIdMDCLoggingFilter</a>).</p>
 <p>In a server definition, the <cite>LoggingMDCFilter</cite> must be listed before the <cite>TraceIdMDCLoggingFilter</cite>,
 e.g.,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finatra.http.HttpServer
-import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter, TraceIdMDCFilter}
-import com.twitter.finatra.http.routing.HttpRouter
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.http.</span><span class="o">{</span><span class="nc">Request</span><span class="o">,</span> <span class="nc">Response</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.HttpServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.filters.</span><span class="o">{</span><span class="nc">CommonFilters</span><span class="o">,</span> <span class="nc">LoggingMDCFilter</span><span class="o">,</span> <span class="nc">TraceIdMDCFilter</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpRouter</span>
 
-object HelloWorldServerMain extends HelloWorldServer
+<span class="k">object</span> <span class="nc">HelloWorldServerMain</span> <span class="k">extends</span> <span class="nc">HelloWorldServer</span>
 
-class HelloWorldServer extends HttpServer {
+<span class="k">class</span> <span class="nc">HelloWorldServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
 
-  override def configureHttp(router: HttpRouter) {
-    router
-      .filter[LoggingMDCFilter[Request, Response]]
-      .filter[TraceIdMDCFilter[Request, Response]]
-      .add[HelloWorldController]
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">router</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">LoggingMDCFilter</span><span class="o">[</span><span class="kt">Request</span>, <span class="kt">Response</span><span class="o">]]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">TraceIdMDCFilter</span><span class="o">[</span><span class="kt">Request</span>, <span class="kt">Response</span><span class="o">]]</span>
+      <span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">HelloWorldController</span><span class="o">]</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 </div>
@@ -200,7 +200,7 @@ class HelloWorldServer extends HttpServer {
   
 
   <div class="footer">
-    &copy; Copyright 2013-2022 Twitter, Inc.
+    &copy; Copyright 2022 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

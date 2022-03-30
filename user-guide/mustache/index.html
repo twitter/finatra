@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Mustache Support &#8212; Finatra 22.2.0 documentation</title>
+    <title>Mustache Support &#8212; Finatra 22.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -69,11 +69,11 @@ library.</p>
 <p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache">finatra/mustache</a>
 library provides a mechanism to generate a String from a rendered <a class="reference external" href="https://mustache.github.io/">Mustache</a>
 template via the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/marshalling/MustacheService.scala"><cite>c.t.finatra.mustache.marshalling.MustacheService</cite></a>.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.mustache.marshalling.MustacheService
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.mustache.marshalling.MustacheService</span>
 
-val mustacheService: MustacheService = injector.instance[MustacheService]
-val result =
-  mustacheService.createString(&quot;index.mustache&quot;, HtmlIndex(&quot;Bob&quot;, 45, Seq(&quot;Alice&quot;)))
+<span class="k">val</span> <span class="n">mustacheService</span><span class="k">:</span> <span class="kt">MustacheService</span> <span class="o">=</span> <span class="n">injector</span><span class="o">.</span><span class="n">instance</span><span class="o">[</span><span class="kt">MustacheService</span><span class="o">]</span>
+<span class="k">val</span> <span class="n">result</span> <span class="k">=</span>
+  <span class="n">mustacheService</span><span class="o">.</span><span class="n">createString</span><span class="o">(</span><span class="s">&quot;index.mustache&quot;</span><span class="o">,</span> <span class="nc">HtmlIndex</span><span class="o">(</span><span class="s">&quot;Bob&quot;</span><span class="o">,</span> <span class="mi">45</span><span class="o">,</span> <span class="nc">Seq</span><span class="o">(</span><span class="s">&quot;Alice&quot;</span><span class="o">)))</span>
 </pre></div>
 </div>
 <p>The most common way to obtain the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/marshalling/MustacheService.scala"><cite>c.t.finatra.mustache.marshalling.MustacheService</cite></a> is from the injector.</p>
@@ -83,15 +83,15 @@ val result =
 <p>To do so, you will need to include the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/modules/MustacheFactoryModule.scala"><cite>c.t.finatra.mustache.modules.MustacheFactoryModule</cite></a> in the list of
 modules passed to create the injector. This module provides a correctly configured
 <cite>MustacheFactory</cite> which the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/mustache/src/main/scala/com/twitter/finatra/mustache/marshalling/MustacheService.scala"><cite>c.t.finatra.mustache.marshalling.MustacheService</cite></a> uses. E.g.,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.google.inject.Module
-import com.twitter.finatra.mustache.modules.MustacheFactoryModule
-import com.twitter.inject.server.TwitterServer
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.google.inject.Module</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.mustache.modules.MustacheFactoryModule</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.server.TwitterServer</span>
 
-class MyServer extends TwitterServer {
-    override val modules: Seq[Module] = Seq(MustacheFactoryModule)
+<span class="k">class</span> <span class="nc">MyServer</span> <span class="k">extends</span> <span class="nc">TwitterServer</span> <span class="o">{</span>
+    <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Module</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="nc">MustacheFactoryModule</span><span class="o">)</span>
 
-    ???
-}
+    <span class="o">???</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p><a class="reference external" href="https://mustache.github.io/">Mustache</a> templates are resolved by Finatra’s
@@ -111,13 +111,13 @@ the <a class="reference external" href="https://github.com/twitter/finatra/blob/
 <ul>
 <li><p class="first">in “local file mode” (e.g., when the <cite>-local.doc.root</cite> flag is set to a <strong>non-empty</strong> value) the framework will
 try to load a template first from the absolute path under <cite>mustache.templates.dir</cite>, e.g.,</p>
-<div class="code bash highlight-text notranslate"><div class="highlight"><pre><span></span>/${mustache.templates.dir}/template.mustache
+<div class="code bash highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">$</span><span class="o">{</span><span class="n">mustache</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">dir</span><span class="o">}/</span><span class="n">template</span><span class="o">.</span><span class="n">mustache</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">if the template is not found, it will then be loaded from a location of <cite>mustache.templates.dir</cite> relative to
 the specified <cite>-local.doc.root</cite>, value e.g.,</p>
-<div class="code bash highlight-text notranslate"><div class="highlight"><pre><span></span>/${local.doc.root}/${mustache.templates.dir}/template.mustache
+<div class="code bash highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">$</span><span class="o">{</span><span class="n">local</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">root</span><span class="o">}/</span><span class="n">$</span><span class="o">{</span><span class="n">mustache</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">dir</span><span class="o">}/</span><span class="n">template</span><span class="o">.</span><span class="n">mustache</span>
 </pre></div>
 </div>
 </li>
@@ -191,7 +191,7 @@ section.</p>
   
 
   <div class="footer">
-    &copy; Copyright 2013-2022 Twitter, Inc.
+    &copy; Copyright 2022 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

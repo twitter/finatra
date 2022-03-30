@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Defining HTTP Controllers &#8212; Finatra 22.2.0 documentation</title>
+    <title>Defining HTTP Controllers &#8212; Finatra 22.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -62,48 +62,48 @@
   <div class="section" id="defining-http-controllers">
 <span id="http-controllers"></span><h1>Defining HTTP Controllers<a class="headerlink" href="#defining-http-controllers" title="Permalink to this headline">¶</a></h1>
 <p>We now want to add the following controller to the <a class="reference external" href="server.html">server definition</a>:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import ExampleService
-import com.twitter.finagle.http.Request
-import com.twitter.finatra.http.Controller
-import javax.inject.Inject
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">ExampleService</span>
+<span class="k">import</span> <span class="nn">com.twitter.finagle.http.Request</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.Controller</span>
+<span class="k">import</span> <span class="nn">javax.inject.Inject</span>
 
-class ExampleController @Inject()(
-  exampleService: ExampleService
-) extends Controller {
+<span class="k">class</span> <span class="nc">ExampleController</span> <span class="nd">@Inject</span><span class="o">()(</span>
+  <span class="n">exampleService</span><span class="k">:</span> <span class="kt">ExampleService</span>
+<span class="o">)</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
 
-  get(&quot;/ping&quot;) { request: Request =&gt;
-    &quot;pong&quot;
-  }
+  <span class="n">get</span><span class="o">(</span><span class="s">&quot;/ping&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+    <span class="s">&quot;pong&quot;</span>
+  <span class="o">}</span>
 
-  get(&quot;/name&quot;) { request: Request =&gt;
-    response.ok.body(&quot;Bob&quot;)
-  }
+  <span class="n">get</span><span class="o">(</span><span class="s">&quot;/name&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="o">.</span><span class="n">body</span><span class="o">(</span><span class="s">&quot;Bob&quot;</span><span class="o">)</span>
+  <span class="o">}</span>
 
-  post(&quot;/foo&quot;) { request: Request =&gt;
-    exampleService.do(request)
-    &quot;bar&quot;
-  }
-}
+  <span class="n">post</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+    <span class="n">exampleService</span><span class="o">.</span><span class="k">do</span><span class="o">(</span><span class="n">request</span><span class="o">)</span>
+    <span class="s">&quot;bar&quot;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>The server can now be defined with the controller as follows:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import DoEverythingModule
-import ExampleController
-import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.http.{Controller, HttpServer}
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">DoEverythingModule</span>
+<span class="k">import</span> <span class="nn">ExampleController</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpRouter</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.</span><span class="o">{</span><span class="nc">Controller</span><span class="o">,</span> <span class="nc">HttpServer</span><span class="o">}</span>
 
-object ExampleServerMain extends ExampleServer
+<span class="k">object</span> <span class="nc">ExampleServerMain</span> <span class="k">extends</span> <span class="nc">ExampleServer</span>
 
-class ExampleServer extends HttpServer {
+<span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
 
-  override val modules = Seq(
-    DoEverythingModule)
+  <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+    <span class="nc">DoEverythingModule</span><span class="o">)</span>
 
-  override def configureHttp(router: HttpRouter): Unit = {
-    router.
-      add[ExampleController]
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">router</span><span class="o">.</span>
+      <span class="n">add</span><span class="o">[</span><span class="kt">ExampleController</span><span class="o">]</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Here we are adding <em>by type</em> allowing the framework to handle class instantiation.</p>
@@ -156,53 +156,53 @@ group routes related to a single resource into one controller.</p>
 <h3>Per-Route Stats<a class="headerlink" href="#per-route-stats" title="Permalink to this headline">¶</a></h3>
 <p>The per-route stats recording provided by Finatra in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala">c.t.finatra.http.filters.StatsFilter</a>
 works best when the above convention is followed.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
-import com.twitter.finatra.http.Controller
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.http.Request</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.Controller</span>
 
-class GroupsController extends Controller {
-  get(&quot;/groups/:id&quot;) { request: Request =&gt;
-    ???
-  }
+<span class="k">class</span> <span class="nc">GroupsController</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
+  <span class="n">get</span><span class="o">(</span><span class="s">&quot;/groups/:id&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+    <span class="o">???</span>
+  <span class="o">}</span>
 
-  post(&quot;/groups&quot;) { request: Request =&gt;
-    ???
-  }
+  <span class="n">post</span><span class="o">(</span><span class="s">&quot;/groups&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+    <span class="o">???</span>
+  <span class="o">}</span>
 
-  delete(&quot;/groups/:id&quot;) { request: Request =&gt;
-    ???
-  }
-}
+  <span class="n">delete</span><span class="o">(</span><span class="s">&quot;/groups/:id&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+    <span class="o">???</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>yields the following stats:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>route/groups_id/GET/...
-route/groups/POST/...
-route/groups_id/DELETE/...
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">route</span><span class="o">/</span><span class="n">groups_id</span><span class="o">/</span><span class="nc">GET</span><span class="o">/...</span>
+<span class="n">route</span><span class="o">/</span><span class="n">groups</span><span class="o">/</span><span class="nc">POST</span><span class="o">/...</span>
+<span class="n">route</span><span class="o">/</span><span class="n">groups_id</span><span class="o">/</span><span class="nc">DELETE</span><span class="o">/...</span>
 </pre></div>
 </div>
 <p>Alternatively, each route can be assigned a name which will then be used to create stat names.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
-import com.twitter.finatra.http.Controller
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.http.Request</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.Controller</span>
 
-class GroupsController extends Controller {
-  get(&quot;/groups/:id&quot;, name = &quot;group_by_id&quot;) { request: Request =&gt;
-    ???
-  }
+<span class="k">class</span> <span class="nc">GroupsController</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
+  <span class="n">get</span><span class="o">(</span><span class="s">&quot;/groups/:id&quot;</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">&quot;group_by_id&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+    <span class="o">???</span>
+  <span class="o">}</span>
 
-  post(&quot;/groups&quot;, name = &quot;create_group&quot;) { request: Request =&gt;
-    ???
-  }
+  <span class="n">post</span><span class="o">(</span><span class="s">&quot;/groups&quot;</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">&quot;create_group&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+    <span class="o">???</span>
+  <span class="o">}</span>
 
-  delete(&quot;/groups/:id&quot;, name = &quot;delete_group&quot;) { request: Request =&gt;
-    ???
-  }
-}
+  <span class="n">delete</span><span class="o">(</span><span class="s">&quot;/groups/:id&quot;</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">&quot;delete_group&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+    <span class="o">???</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>yields:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>route/group_by_id/GET/...
-route/create_group/POST/...
-route/delete_group/DELETE/...
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">route</span><span class="o">/</span><span class="n">group_by_id</span><span class="o">/</span><span class="nc">GET</span><span class="o">/...</span>
+<span class="n">route</span><span class="o">/</span><span class="n">create_group</span><span class="o">/</span><span class="nc">POST</span><span class="o">/...</span>
+<span class="n">route</span><span class="o">/</span><span class="n">delete_group</span><span class="o">/</span><span class="nc">DELETE</span><span class="o">/...</span>
 </pre></div>
 </div>
 </div>
@@ -212,11 +212,11 @@ route/delete_group/DELETE/...
 <div class="section" id="named-parameters">
 <h3>Named Parameters<a class="headerlink" href="#named-parameters" title="Permalink to this headline">¶</a></h3>
 <p>Route patterns may include named parameters. E.g., a defined variable in the route path:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.http.Request</span>
 
-get(&quot;/users/:id&quot;) { request: Request =&gt;
-  &quot;You looked up &quot; + request.params(&quot;id&quot;)
-}
+<span class="n">get</span><span class="o">(</span><span class="s">&quot;/users/:id&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="s">&quot;You looked up &quot;</span> <span class="o">+</span> <span class="n">request</span><span class="o">.</span><span class="n">params</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>In the above example, <cite>:id</cite> is considered a “named parameter” of the route and will capture the
@@ -224,12 +224,12 @@ value in its position in the incoming request URI.</p>
 <p>As shown, the incoming value from the request can be obtained from the request parameters map, e.g.
 <cite>request.params(“id”)</cite>.</p>
 <p>For example, both of the following requests will match the above defined route:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>GET /users/1234
-GET /users/5678
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="nc">GET</span> <span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="mi">1234</span>
+<span class="nc">GET</span> <span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="mi">5678</span>
 </pre></div>
 </div>
 <p>Which would produce responses like the following:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>===========================================================================
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span>===========================================================================
 HTTP GET /users/1234
 [Header]    Host -&gt; 127.0.0.1:57866
 ===========================================================================
@@ -272,19 +272,19 @@ will handle the request.</p>
 <p>Routes can also contain the wildcard pattern as a <a class="reference external" href="#named-parameters">named parameter</a>, <cite>:*</cite>. The
 wildcard can only appear once at the end of a pattern and it will capture <em>all text in its place</em>.</p>
 <p>For example,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.http.Request</span>
 
-get(&quot;/files/:*&quot;) { request: Request =&gt;
-  request.params(&quot;*&quot;)
-}
+<span class="n">get</span><span class="o">(</span><span class="s">&quot;/files/:*&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="n">request</span><span class="o">.</span><span class="n">params</span><span class="o">(</span><span class="s">&quot;*&quot;</span><span class="o">)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Given a request:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>GET  /files/abc/123/foo.txt
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="nc">GET</span>  <span class="o">/</span><span class="n">files</span><span class="o">/</span><span class="n">abc</span><span class="o">/</span><span class="mi">123</span><span class="o">/</span><span class="n">foo</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
 <p>would produce a response:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>===========================================================================
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span>===========================================================================
 HTTP GET /files/abc/123/foo.txt
 [Header]    Host -&gt; 127.0.0.1:58540
 ===========================================================================
@@ -309,33 +309,33 @@ abc/123/foo.txt
 instance, if you have a group of routes within a controller that should all have a common prefix
 you can define them by making use of the <cite>c.t.finatra.http.RouteDSL#prefix</cite> function available in
 any subclass of <cite>c.t.finatra.http.Controller</cite>, e.g.,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
-import com.twitter.finatra.http.Controller
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.http.Request</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.Controller</span>
 
-class MyController extends Controller {
+<span class="k">class</span> <span class="nc">MyController</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
 
-  // regular route
-  get(&quot;/foo&quot;) { request: Request =&gt;
-    &quot;Hello, world!&quot;
-  }
+  <span class="c1">// regular route</span>
+  <span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+    <span class="s">&quot;Hello, world!&quot;</span>
+  <span class="o">}</span>
 
-  // set of prefixed routes
-  prefix(&quot;/2&quot;) {
-    get(&quot;/foo&quot;) { request: Request =&gt;
-      &quot;Hello, world!&quot;
-    }
+  <span class="c1">// set of prefixed routes</span>
+  <span class="n">prefix</span><span class="o">(</span><span class="s">&quot;/2&quot;</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+      <span class="s">&quot;Hello, world!&quot;</span>
+    <span class="o">}</span>
 
-    post(&quot;/bar&quot;) { request: Request =&gt;
-      response.ok
-    }
-  }
-}
+    <span class="n">post</span><span class="o">(</span><span class="s">&quot;/bar&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+      <span class="n">response</span><span class="o">.</span><span class="n">ok</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>This definition would produce the following routes:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>GET     /foo
-GET     /2/foo
-POST    /2/bar
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="nc">GET</span>     <span class="o">/</span><span class="n">foo</span>
+<span class="nc">GET</span>     <span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">foo</span>
+<span class="nc">POST</span>    <span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">bar</span>
 </pre></div>
 </div>
 <p>The input to the <cite>c.t.finatra.http.RouteDSL#prefix</cite> function is a String and how you determine the
@@ -345,27 +345,27 @@ or a <a class="reference external" href="../getting-started/binding_annotations.
 String type in the object graph which would allow you provide it in any manner appropriate for your
 use case.</p>
 <p>For example,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
-import com.twitter.finatra.http.Controller
-import com.twitter.inject.annotations
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.http.Request</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.Controller</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.annotations</span>
 
-class MyController @Inject()(
-  @Flag(&quot;api.version.prefix&quot;) apiVersionPrefix: String, // value from a &quot;api.version.prefix&quot; flag
-  @VersionPrefix otherVersionPrefix otherApiVersionPrefix: String // value from a String bound with annotation: @VersionPrefix
-) extends Controller {
-  ...
+<span class="k">class</span> <span class="nc">MyController</span> <span class="nd">@Inject</span><span class="o">()(</span>
+  <span class="nd">@Flag</span><span class="o">(</span><span class="s">&quot;api.version.prefix&quot;</span><span class="o">)</span> <span class="n">apiVersionPrefix</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="c1">// value from a &quot;api.version.prefix&quot; flag</span>
+  <span class="nd">@VersionPrefix</span> <span class="n">otherVersionPrefix</span> <span class="n">otherApiVersionPrefix</span><span class="k">:</span> <span class="kt">String</span> <span class="c1">// value from a String bound with annotation: @VersionPrefix</span>
+<span class="o">)</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
+  <span class="o">...</span>
 
-  prefix(apiVersionPrefix) {
-    get(&quot;/foo&quot;) { request: Request =&gt;
-      ???
-    }
-  }
+  <span class="n">prefix</span><span class="o">(</span><span class="n">apiVersionPrefix</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+      <span class="o">???</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
 
-  prefix(otherVersionPrefix) {
-    get(&quot;/bar&quot;) { request: Request =&gt;
-      ???
-    }
-  }
+  <span class="n">prefix</span><span class="o">(</span><span class="n">otherVersionPrefix</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">get</span><span class="o">(</span><span class="s">&quot;/bar&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+      <span class="o">???</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
 </pre></div>
 </div>
 <div class="admonition important">
@@ -386,11 +386,11 @@ the same or different values.</li>
 <h2>Trailing Slashes<a class="headerlink" href="#trailing-slashes" title="Permalink to this headline">¶</a></h2>
 <p>If you want to ignore trailing slashes on routes such that <cite>/groups/1</cite> and <cite>groups/1/</cite> are treated
 to be equivalent, append <cite>/?</cite> to your route URI, e.g.,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.http.Request</span>
 
-get(&quot;/groups/:id/?&quot;) { request: Request =&gt;
-  response.ok(&quot;response body here&quot;)
-}
+<span class="n">get</span><span class="o">(</span><span class="s">&quot;/groups/:id/?&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="o">(</span><span class="s">&quot;response body here&quot;</span><span class="o">)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Otherwise, the route as specified is an <strong>exact match</strong>. E.g., if you define <cite>/groups/1</cite> we will
@@ -416,25 +416,25 @@ admin interface by setting <cite>admin = true</cite> when defining the route.</p
 <p class="first admonition-title">Important</p>
 <p class="last">Any admin route that does not start with <cite>/admin/finatra/</cite> <strong>MUST</strong> be a <cite>constant route</cite>, e.g., it does not define any <a class="reference external" href="#named-parameters">named parameters</a>.</p>
 </div>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.http.Request</span>
 
-get(&quot;/admin/finatra/users/&quot;) { request: Request =&gt;
-  userDatabase.getAllUsers(
-    request.params(&quot;cursor&quot;))
-}
+<span class="n">get</span><span class="o">(</span><span class="s">&quot;/admin/finatra/users/&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="n">userDatabase</span><span class="o">.</span><span class="n">getAllUsers</span><span class="o">(</span>
+    <span class="n">request</span><span class="o">.</span><span class="n">params</span><span class="o">(</span><span class="s">&quot;cursor&quot;</span><span class="o">))</span>
+<span class="o">}</span>
 
-get(&quot;/admin/display/&quot;, admin = true) { request: Request =&gt;
-  response.ok(&quot;response body here&quot;)
-}
+<span class="n">get</span><span class="o">(</span><span class="s">&quot;/admin/display/&quot;</span><span class="o">,</span> <span class="n">admin</span> <span class="k">=</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="o">(</span><span class="s">&quot;response body here&quot;</span><span class="o">)</span>
+<span class="o">}</span>
 
-post(&quot;/special/route/&quot;, admin = true) { request: Request =&gt;
-  ???
-}
+<span class="n">post</span><span class="o">(</span><span class="s">&quot;/special/route/&quot;</span><span class="o">,</span> <span class="n">admin</span> <span class="k">=</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="o">???</span>
+<span class="o">}</span>
 
-// cannot be added to admin index as it uses a named parameter (:id) in the route path
-get(&quot;/admin/client/:id&quot;, admin = true) { request: Request =&gt;
-  response.ok(&quot;response body here&quot;)
-}
+<span class="c1">// cannot be added to admin index as it uses a named parameter (:id) in the route path</span>
+<span class="n">get</span><span class="o">(</span><span class="s">&quot;/admin/client/:id&quot;</span><span class="o">,</span> <span class="n">admin</span> <span class="k">=</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="o">(</span><span class="s">&quot;response body here&quot;</span><span class="o">)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 </div>
@@ -453,16 +453,16 @@ get(&quot;/admin/client/:id&quot;, admin = true) { request: Request =&gt;
 <p>When defining the route in a Controller, in addition to setting <cite>admin = true</cite> you must also provide
 a <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Route.scala">RouteIndex</a>,
 e.g.,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.http.Request</span>
 
-get(&quot;/admin/client_id.json&quot;,
-  admin = true,
-  index = Some(
-    RouteIndex(
-      alias = &quot;Thrift Client Id&quot;,
-      group = &quot;Process Info&quot;))) { request: Request =&gt;
-  Map(&quot;client_id&quot; -&gt; &quot;clientId.1234&quot;))
-}
+<span class="n">get</span><span class="o">(</span><span class="s">&quot;/admin/client_id.json&quot;</span><span class="o">,</span>
+  <span class="n">admin</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span>
+  <span class="n">index</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span>
+    <span class="nc">RouteIndex</span><span class="o">(</span>
+      <span class="n">alias</span> <span class="k">=</span> <span class="s">&quot;Thrift Client Id&quot;</span><span class="o">,</span>
+      <span class="n">group</span> <span class="k">=</span> <span class="s">&quot;Process Info&quot;</span><span class="o">)))</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="nc">Map</span><span class="o">(</span><span class="s">&quot;client_id&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;clientId.1234&quot;</span><span class="o">))</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>The route will appear in the left-rail of the <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a>
@@ -562,7 +562,7 @@ these routes cannot be included in the <a class="reference external" href="https
   
 
   <div class="footer">
-    &copy; Copyright 2013-2022 Twitter, Inc.
+    &copy; Copyright 2022 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

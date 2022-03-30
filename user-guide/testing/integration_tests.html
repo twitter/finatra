@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Integration Tests &#8212; Finatra 22.2.0 documentation</title>
+    <title>Integration Tests &#8212; Finatra 22.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -93,21 +93,21 @@ created from <cite>TwitterModules</cite> will skip both the lifecycle functions 
 <cite>injector</cite> val with your constructed instance of a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">c.t.inject.Injector</a>
 created from the <cite>c.t.inject.app.TestInjector</cite>.</p>
 <p>You’ll then be able to access instances of necessary classes to execute tests.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.IntegrationTest
-import com.twitter.inject.app.TestInjector
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.inject.IntegrationTest</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.app.TestInjector</span>
 
-class ExampleIntegrationTest extends IntegrationTest {
-  override val injector: TestInjector =
-    TestInjector(
-      flags = Map(&quot;foo.flag&quot; -&gt; &quot;meaningfulValue&quot;),
-      modules = Seq(ExampleModule)
-    ).create()
+<span class="k">class</span> <span class="nc">ExampleIntegrationTest</span> <span class="k">extends</span> <span class="nc">IntegrationTest</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">val</span> <span class="n">injector</span><span class="k">:</span> <span class="kt">TestInjector</span> <span class="o">=</span>
+    <span class="nc">TestInjector</span><span class="o">(</span>
+      <span class="n">flags</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">&quot;foo.flag&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;meaningfulValue&quot;</span><span class="o">),</span>
+      <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="nc">ExampleModule</span><span class="o">)</span>
+    <span class="o">).</span><span class="n">create</span><span class="o">()</span>
 
-  test(&quot;MyTest#perform feature&quot;) {
-    val exampleThingy = injector.instance[ExampleThingy]
-    ...
-  }
-}
+  <span class="n">test</span><span class="o">(</span><span class="s">&quot;MyTest#perform feature&quot;</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="n">exampleThingy</span> <span class="k">=</span> <span class="n">injector</span><span class="o">.</span><span class="n">instance</span><span class="o">[</span><span class="kt">ExampleThingy</span><span class="o">]</span>
+    <span class="o">...</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <div class="admonition caution">
@@ -120,30 +120,30 @@ only want to start <strong>one instance of your injector per test file</strong> 
 and <cite>close()</cite> methods. Note that the <cite>TestInjector</cite> doesn’t take ownership of modules’ lifecycle
 and, instead, leaves this exercise to the users. Put this way, you’re responsible for calling
 <cite>start()</cite> and <cite>close()</cite> in your test if you want to execute the lifecycle hooks in modules.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.IntegrationTest
-import com.twitter.inject.app.TestInjector
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.inject.IntegrationTest</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.app.TestInjector</span>
 
-class ExampleLifecycleTest extends IntegrationTest {
-  override val injector: TestInjector = TestInjector(
-    flags = Map(&quot;foo.flag&quot; -&gt; &quot;meaningfulValue&quot;),
-    modules = Seq(ExampleModule)
-  ).create()
+<span class="k">class</span> <span class="nc">ExampleLifecycleTest</span> <span class="k">extends</span> <span class="nc">IntegrationTest</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">val</span> <span class="n">injector</span><span class="k">:</span> <span class="kt">TestInjector</span> <span class="o">=</span> <span class="nc">TestInjector</span><span class="o">(</span>
+    <span class="n">flags</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">&quot;foo.flag&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;meaningfulValue&quot;</span><span class="o">),</span>
+    <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="nc">ExampleModule</span><span class="o">)</span>
+  <span class="o">).</span><span class="n">create</span><span class="o">()</span>
 
-  override def beforeAll(): Unit = {
-    // NOTE: This may throw an exception if any of your startup callbacks throw.
-    injector.start()
-  }
+  <span class="k">override</span> <span class="k">def</span> <span class="n">beforeAll</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="c1">// NOTE: This may throw an exception if any of your startup callbacks throw.</span>
+    <span class="n">injector</span><span class="o">.</span><span class="n">start</span><span class="o">()</span>
+  <span class="o">}</span>
 
-  override def afterAll(): Unit = {
-    // NOTE: This may throw an exception if any of your shutdown callbacks throw.
-    injector.close()
-  }
+  <span class="k">override</span> <span class="k">def</span> <span class="n">afterAll</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="c1">// NOTE: This may throw an exception if any of your shutdown callbacks throw.</span>
+    <span class="n">injector</span><span class="o">.</span><span class="n">close</span><span class="o">()</span>
+  <span class="o">}</span>
 
-  test(&quot;MyTest#perform feature&quot;) {
-    val exampleThingy = injector.instance[ExampleThingy]
-    ...
-  }
-}
+  <span class="n">test</span><span class="o">(</span><span class="s">&quot;MyTest#perform feature&quot;</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="n">exampleThingy</span> <span class="k">=</span> <span class="n">injector</span><span class="o">.</span><span class="n">instance</span><span class="o">[</span><span class="kt">ExampleThingy</span><span class="o">]</span>
+    <span class="o">...</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -268,7 +268,7 @@ test.</p>
   
 
   <div class="footer">
-    &copy; Copyright 2013-2022 Twitter, Inc.
+    &copy; Copyright 2022 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

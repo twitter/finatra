@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Examples &#8212; Finatra 22.2.0 documentation</title>
+    <title>Examples &#8212; Finatra 22.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -65,42 +65,42 @@
 <div class="section" id="word-count-server">
 <h2>Word Count Server<a class="headerlink" href="#word-count-server" title="Permalink to this headline">¶</a></h2>
 <p>We can build a lightweight server which counts the unique words from an input topic, storing the results in RocksDB.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class WordCountRocksDbServer extends KafkaStreamsTwitterServer {
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">WordCountRocksDbServer</span> <span class="k">extends</span> <span class="nc">KafkaStreamsTwitterServer</span> <span class="o">{</span>
 
-  override val name = &quot;wordcount&quot;
-  private val countStoreName = &quot;CountsStore&quot;
+  <span class="k">override</span> <span class="k">val</span> <span class="n">name</span> <span class="k">=</span> <span class="s">&quot;wordcount&quot;</span>
+  <span class="k">private</span> <span class="k">val</span> <span class="n">countStoreName</span> <span class="k">=</span> <span class="s">&quot;CountsStore&quot;</span>
 
-  override protected def configureKafkaStreams(builder: StreamsBuilder): Unit = {
-    builder.asScala
-      .stream[Bytes, String](&quot;TextLinesTopic&quot;)(Consumed.`with`(Serdes.Bytes, Serdes.String))
-      .flatMapValues(_.split(&#39; &#39;))
-      .groupBy((_, word) =&gt; word)(Serialized.`with`(Serdes.String, Serdes.String))
-      .count()(Materialized.as(countStoreName))
-      .toStream
-      .to(&quot;WordsWithCountsTopic&quot;)(Produced.`with`(Serdes.String, ScalaSerdes.Long))
-  }
-}
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="n">configureKafkaStreams</span><span class="o">(</span><span class="n">builder</span><span class="k">:</span> <span class="kt">StreamsBuilder</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">builder</span><span class="o">.</span><span class="n">asScala</span>
+      <span class="o">.</span><span class="n">stream</span><span class="o">[</span><span class="kt">Bytes</span>, <span class="kt">String</span><span class="o">](</span><span class="s">&quot;TextLinesTopic&quot;</span><span class="o">)(</span><span class="nc">Consumed</span><span class="o">.</span><span class="n">`with`</span><span class="o">(</span><span class="nc">Serdes</span><span class="o">.</span><span class="nc">Bytes</span><span class="o">,</span> <span class="nc">Serdes</span><span class="o">.</span><span class="nc">String</span><span class="o">))</span>
+      <span class="o">.</span><span class="n">flatMapValues</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">split</span><span class="o">(</span><span class="sc">&#39; &#39;</span><span class="o">))</span>
+      <span class="o">.</span><span class="n">groupBy</span><span class="o">((</span><span class="k">_</span><span class="o">,</span> <span class="n">word</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">word</span><span class="o">)(</span><span class="nc">Serialized</span><span class="o">.</span><span class="n">`with`</span><span class="o">(</span><span class="nc">Serdes</span><span class="o">.</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Serdes</span><span class="o">.</span><span class="nc">String</span><span class="o">))</span>
+      <span class="o">.</span><span class="n">count</span><span class="o">()(</span><span class="nc">Materialized</span><span class="o">.</span><span class="n">as</span><span class="o">(</span><span class="n">countStoreName</span><span class="o">))</span>
+      <span class="o">.</span><span class="n">toStream</span>
+      <span class="o">.</span><span class="n">to</span><span class="o">(</span><span class="s">&quot;WordsWithCountsTopic&quot;</span><span class="o">)(</span><span class="nc">Produced</span><span class="o">.</span><span class="n">`with`</span><span class="o">(</span><span class="nc">Serdes</span><span class="o">.</span><span class="nc">String</span><span class="o">,</span> <span class="nc">ScalaSerdes</span><span class="o">.</span><span class="nc">Long</span><span class="o">))</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <div class="section" id="queryable-state">
 <h3>Queryable State<a class="headerlink" href="#queryable-state" title="Permalink to this headline">¶</a></h3>
 <p>We can then expose a Thrift endpoint enabling clients to directly query the state via <a class="reference external" href="https://kafka.apache.org/21/documentation/streams/developer-guide/interactive-queries.html">interactive queries</a>.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class WordCountRocksDbServer extends KafkaStreamsTwitterServer with QueryableState {
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">WordCountRocksDbServer</span> <span class="k">extends</span> <span class="nc">KafkaStreamsTwitterServer</span> <span class="k">with</span> <span class="nc">QueryableState</span> <span class="o">{</span>
 
-  ...
+  <span class="o">...</span>
 
-  final override def configureThrift(router: ThriftRouter): Unit = {
-    router
-      .add(
-        new WordCountQueryService(
-          queryableFinatraKeyValueStore[String, Long](
-            storeName = countStoreName,
-            primaryKeySerde = Serdes.String
-          )
-        )
-      )
-  }
-}
+  <span class="k">final</span> <span class="k">override</span> <span class="k">def</span> <span class="n">configureThrift</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">ThriftRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">router</span>
+      <span class="o">.</span><span class="n">add</span><span class="o">(</span>
+        <span class="k">new</span> <span class="nc">WordCountQueryService</span><span class="o">(</span>
+          <span class="n">queryableFinatraKeyValueStore</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Long</span><span class="o">](</span>
+            <span class="n">storeName</span> <span class="k">=</span> <span class="n">countStoreName</span><span class="o">,</span>
+            <span class="n">primaryKeySerde</span> <span class="k">=</span> <span class="nc">Serdes</span><span class="o">.</span><span class="nc">String</span>
+          <span class="o">)</span>
+        <span class="o">)</span>
+      <span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>In this example, <code class="docutils literal notranslate"><span class="pre">WordCountQueryService</span></code> is an underlying Thrift service.</p>
@@ -168,7 +168,7 @@
   
 
   <div class="footer">
-    &copy; Copyright 2013-2022 Twitter, Inc.
+    &copy; Copyright 2022 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

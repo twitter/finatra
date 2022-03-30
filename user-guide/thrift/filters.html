@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Filtering Thrift Requests &#8212; Finatra 22.2.0 documentation</title>
+    <title>Filtering Thrift Requests &#8212; Finatra 22.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -107,34 +107,34 @@
 <p>The <cite>ThriftRouter</cite> allows you to build a global Filter chain which will trigger on the request path
 when executing an RPC call to methods implemented by the added <a class="reference external" href="controllers.html">Thrift Controller</a>.</p>
 <p>Filters must be a subclass of the <a class="reference external" href="https://github.com/twitter/finagle/blob/ee9cb4ec2c17b810354b36ff97816fc97efb6394/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala#L295">c.t.finagle.Filter.TypeAgnostic</a> which is a</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>c.t.finagle.Filter[T, Rep, T, Rep]
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">finagle</span><span class="o">.</span><span class="nc">Filter</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">Rep</span>, <span class="kt">T</span>, <span class="kt">Rep</span><span class="o">]</span>
 </pre></div>
 </div>
 <p>that is polymorphic in <cite>T</cite>.</p>
 <p>If you want to apply a Filter or Filters to <strong>all</strong> methods of your Thrift Controller, call the
 <cite>ThriftRouter#filter</cite> method, to register a <cite>Filter.TypeAgnostic</cite>:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import DoEverythingModule
-import com.twitter.finatra.thrift.ThriftServer
-import com.twitter.finatra.thrift.routing.ThriftRouter
-import com.twitter.finatra.thrift.filters._
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">DoEverythingModule</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.ThriftServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.routing.ThriftRouter</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.filters._</span>
 
-object ExampleServerMain extends ExampleServer
+<span class="k">object</span> <span class="nc">ExampleServerMain</span> <span class="k">extends</span> <span class="nc">ExampleServer</span>
 
-class ExampleServer extends ThriftServer {
+<span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">ThriftServer</span> <span class="o">{</span>
 
-  override val modules = Seq(
-    DoEverythingModule)
+  <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+    <span class="nc">DoEverythingModule</span><span class="o">)</span>
 
-  override def configureThrift(router: ThriftRouter): Unit = {
-    router
-      .filter[LoggingMDCFilter]
-      .filter[TraceIdMDCFilter]
-      .filter[ThriftMDCFilter]
-      .filter[AccessLoggingFilter]
-      .filter[StatsFilter]
-      .add[ExampleThriftController]
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureThrift</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">ThriftRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">router</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">LoggingMDCFilter</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">TraceIdMDCFilter</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">ThriftMDCFilter</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">AccessLoggingFilter</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">StatsFilter</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">ExampleThriftController</span><span class="o">]</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Note, like <a class="reference external" href="../http/filters.html">HTTP</a>, Filters are applied <strong>in the order</strong> they are defined on
@@ -148,36 +148,36 @@ section on <a class="reference external" href="https://twitter.github.io/finagle
 <h4><cite>TypeAgnostic</cite> Filters<a class="headerlink" href="#typeagnostic-filters" title="Permalink to this headline">¶</a></h4>
 <p>You can filter by a <a class="reference external" href="https://github.com/twitter/finagle/blob/ee9cb4ec2c17b810354b36ff97816fc97efb6394/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala#L295">TypeAgnostic Filter</a>
 per-method implemented in a Controller, by calling the <cite>handle(ThriftMethod)#filtered</cite> Function e.g.:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.{Filter, Service, SimpleFilter}
-import com.twitter.util.Future
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.</span><span class="o">{</span><span class="nc">Filter</span><span class="o">,</span> <span class="nc">Service</span><span class="o">,</span> <span class="nc">SimpleFilter</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.Future</span>
 
-val countEchoFilter = new Filter.TypeAgnostic {
-  private[this] val echos = stats.counter(&quot;echo_calls&quot;)
-  def toFilter[Req, Rep]: Filter[Req, Rep, Req, Rep] = new SimpleFilter[Req, Rep]{
-    def apply(request: Req, service: Service[Req, Rep]): Future[Rep] = {
-      echos.incr()
-      service(request)
-    }
-  }
-}
+<span class="k">val</span> <span class="n">countEchoFilter</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Filter</span><span class="o">.</span><span class="nc">TypeAgnostic</span> <span class="o">{</span>
+  <span class="k">private</span><span class="o">[</span><span class="kt">this</span><span class="o">]</span> <span class="k">val</span> <span class="n">echos</span> <span class="k">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">counter</span><span class="o">(</span><span class="s">&quot;echo_calls&quot;</span><span class="o">)</span>
+  <span class="k">def</span> <span class="n">toFilter</span><span class="o">[</span><span class="kt">Req</span>, <span class="kt">Rep</span><span class="o">]</span><span class="k">:</span> <span class="kt">Filter</span><span class="o">[</span><span class="kt">Req</span>, <span class="kt">Rep</span>, <span class="kt">Req</span>, <span class="kt">Rep</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">SimpleFilter</span><span class="o">[</span><span class="kt">Req</span>, <span class="kt">Rep</span><span class="o">]{</span>
+    <span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">request</span><span class="k">:</span> <span class="kt">Req</span><span class="o">,</span> <span class="n">service</span><span class="k">:</span> <span class="kt">Service</span><span class="o">[</span><span class="kt">Req</span>, <span class="kt">Rep</span><span class="o">])</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Rep</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+      <span class="n">echos</span><span class="o">.</span><span class="n">incr</span><span class="o">()</span>
+      <span class="n">service</span><span class="o">(</span><span class="n">request</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 
-...
+<span class="o">...</span>
 
-import com.foo.bar.thriftscala.EchoService.Echo
-import com.twitter.finatra.thrift.Controller
-import com.twitter.util.Future
-import scala.util.control.NoStackTrace
+<span class="k">import</span> <span class="nn">com.foo.bar.thriftscala.EchoService.Echo</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.Controller</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.Future</span>
+<span class="k">import</span> <span class="nn">scala.util.control.NoStackTrace</span>
 
-class ExampleController extends Controller {
+<span class="k">class</span> <span class="nc">ExampleController</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
 
-  handle(Echo).filtered(countEchoFilter) { args: Echo.Args =&gt;
-    if (args.msg == &quot;clientError&quot;) {
-      Future.exception(new Exception(&quot;client error&quot;) with NoStackTrace)
-    } else {
-      Future.value(args.msg)
-    }
-  }
-}
+  <span class="n">handle</span><span class="o">(</span><span class="nc">Echo</span><span class="o">).</span><span class="n">filtered</span><span class="o">(</span><span class="n">countEchoFilter</span><span class="o">)</span> <span class="o">{</span> <span class="n">args</span><span class="k">:</span> <span class="kt">Echo.Args</span> <span class="o">=&gt;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">args</span><span class="o">.</span><span class="n">msg</span> <span class="o">==</span> <span class="s">&quot;clientError&quot;</span><span class="o">)</span> <span class="o">{</span>
+      <span class="nc">Future</span><span class="o">.</span><span class="n">exception</span><span class="o">(</span><span class="k">new</span> <span class="nc">Exception</span><span class="o">(</span><span class="s">&quot;client error&quot;</span><span class="o">)</span> <span class="k">with</span> <span class="nc">NoStackTrace</span><span class="o">)</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+      <span class="nc">Future</span><span class="o">.</span><span class="n">value</span><span class="o">(</span><span class="n">args</span><span class="o">.</span><span class="n">msg</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Note that you can chain <cite>handle(ThriftMethod)#filtered</cite> calls arbitrarily deep.</p>
@@ -186,37 +186,37 @@ class ExampleController extends Controller {
 <h4>Typed Filters<a class="headerlink" href="#typed-filters" title="Permalink to this headline">¶</a></h4>
 <p>If you’d like to specify a typed Filter, use the <cite>handle(ThriftMethod)#withService</cite> Function and apply
 your typed <cite>Filter[-ReqIn, +RepOut, +ReqOut, -RepIn]</cite> to your <cite>Service[-ReqOut, +RepIn]</cite> implementation.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.foo.bar.thriftscala.EchoService.Echo
-import com.twitter.finagle.{Filter, Service, SimpleFilter}
-import com.twitter.inject.Logging
-import com.twitter.util.Future
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.foo.bar.thriftscala.EchoService.Echo</span>
+<span class="k">import</span> <span class="nn">com.twitter.finagle.</span><span class="o">{</span><span class="nc">Filter</span><span class="o">,</span> <span class="nc">Service</span><span class="o">,</span> <span class="nc">SimpleFilter</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.Logging</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.Future</span>
 
-val echoLoggingFilter = new Filter[Echo.Args, String, Echo.Args, String] with Logging {
-  def apply(request: Echo.Args, service: Service[Echo.Args, String]): Future[String] = {
-    info(s&quot;Received request message: ${request.msg}&quot;)
-    service(request)
-  }
-}
+<span class="k">val</span> <span class="n">echoLoggingFilter</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Filter</span><span class="o">[</span><span class="kt">Echo.Args</span>, <span class="kt">String</span>, <span class="kt">Echo.Args</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">with</span> <span class="nc">Logging</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">request</span><span class="k">:</span> <span class="kt">Echo.Args</span><span class="o">,</span> <span class="n">service</span><span class="k">:</span> <span class="kt">Service</span><span class="o">[</span><span class="kt">Echo.Args</span>, <span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="n">info</span><span class="o">(</span><span class="s">s&quot;Received request message: </span><span class="si">${</span><span class="n">request</span><span class="o">.</span><span class="n">msg</span><span class="si">}</span><span class="s">&quot;</span><span class="o">)</span>
+    <span class="n">service</span><span class="o">(</span><span class="n">request</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 
-...
+<span class="o">...</span>
 
-import com.foo.bar.thriftscala.EchoService.Echo
-import com.twitter.finatra.thrift.Controller
-import com.twitter.util.Future
-import scala.util.control.NoStackTrace
+<span class="k">import</span> <span class="nn">com.foo.bar.thriftscala.EchoService.Echo</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.Controller</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.Future</span>
+<span class="k">import</span> <span class="nn">scala.util.control.NoStackTrace</span>
 
-class ExampleController extends Controller {
+<span class="k">class</span> <span class="nc">ExampleController</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
 
-  val svc: Service[Echo.Args, String] = Service.mk { args: Echo.Args =&gt;
-    if (args.msg == &quot;clientError&quot;) {
-      Future.exception(new Exception(&quot;client error&quot;) with NoStackTrace)
-    } else {
-      Future.value(args.msg)
-    }
-  }
+  <span class="k">val</span> <span class="n">svc</span><span class="k">:</span> <span class="kt">Service</span><span class="o">[</span><span class="kt">Echo.Args</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Service</span><span class="o">.</span><span class="n">mk</span> <span class="o">{</span> <span class="n">args</span><span class="k">:</span> <span class="kt">Echo.Args</span> <span class="o">=&gt;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">args</span><span class="o">.</span><span class="n">msg</span> <span class="o">==</span> <span class="s">&quot;clientError&quot;</span><span class="o">)</span> <span class="o">{</span>
+      <span class="nc">Future</span><span class="o">.</span><span class="n">exception</span><span class="o">(</span><span class="k">new</span> <span class="nc">Exception</span><span class="o">(</span><span class="s">&quot;client error&quot;</span><span class="o">)</span> <span class="k">with</span> <span class="nc">NoStackTrace</span><span class="o">)</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+      <span class="nc">Future</span><span class="o">.</span><span class="n">value</span><span class="o">(</span><span class="n">args</span><span class="o">.</span><span class="n">msg</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
 
-  handle(Echo).withService(echoLoggingFilter.andThen(svc))
-}
+  <span class="n">handle</span><span class="o">(</span><span class="nc">Echo</span><span class="o">).</span><span class="n">withService</span><span class="o">(</span><span class="n">echoLoggingFilter</span><span class="o">.</span><span class="n">andThen</span><span class="o">(</span><span class="n">svc</span><span class="o">))</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>For more information on the <cite>handle(ThriftMethod)</cite> DSL of the Controller, see the documentation on <a class="reference external" href="controllers.html#implementing-methods-with-handle-thriftmethod">Thrift
@@ -247,15 +247,15 @@ not work within the context of a Twitter <a class="reference external" href="htt
 <p>Then define a module which mixes in the <cite>c.t.inject.requestscope.RequestScopeBinding</cite> trait.
 This trait defines <cite>#bindRequestScope[T]</cite> which will bind the given type to an “unseeded”
 <cite>Provider[T]</cite> of the type <em>in</em> the custom “FinagleRequestScope”. E.g.,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.TwitterModule
-import com.twitter.inject.requestscope.RequestScopeBinding
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.inject.TwitterModule</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.requestscope.RequestScopeBinding</span>
 
-object UserModule extends TwitterModule with RequestScopeBinding {
+<span class="k">object</span> <span class="nc">UserModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="k">with</span> <span class="nc">RequestScopeBinding</span> <span class="o">{</span>
 
-  override def configure(): Unit = {
-    bindRequestScope[User]
-  }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configure</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">bindRequestScope</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <div class="admonition important">
@@ -268,75 +268,75 @@ and calling <cite>#seed[T](instance)</cite>. For request scoping, you would gene
 executed on the request path.</p>
 <p>For example, to define a <a class="reference external" href="https://github.com/twitter/finagle/blob/ee9cb4ec2c17b810354b36ff97816fc97efb6394/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala#L295">TypeAgnostic Filter</a>
 which seeds a <cite>User</cite> into the “FinagleRequestScope”:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.{Filter, Service}
-import com.twitter.inject.requestscope.FinagleRequestScope
-import com.twitter.util.Future
-import javax.inject.{Inject, Singleton}
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.</span><span class="o">{</span><span class="nc">Filter</span><span class="o">,</span> <span class="nc">Service</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.requestscope.FinagleRequestScope</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.Future</span>
+<span class="k">import</span> <span class="nn">javax.inject.</span><span class="o">{</span><span class="nc">Inject</span><span class="o">,</span> <span class="nc">Singleton</span><span class="o">}</span>
 
-@Singleton
-class UserFilter @Inject()(
-  finagleRequestScope: FinagleRequestScope
-) extends Filter.TypeAgnostic {
+<span class="nd">@Singleton</span>
+<span class="k">class</span> <span class="nc">UserFilter</span> <span class="nd">@Inject</span><span class="o">()(</span>
+  <span class="n">finagleRequestScope</span><span class="k">:</span> <span class="kt">FinagleRequestScope</span>
+<span class="o">)</span> <span class="k">extends</span> <span class="nc">Filter</span><span class="o">.</span><span class="nc">TypeAgnostic</span> <span class="o">{</span>
 
-  def toFilter[Req, Rep]: Filter[Req, Rep, Req, Rep] =
-    new Filter[Req, Rep, Req, Rep] {
-      def apply[Req, Rep](request: Req, service: Service[Req, Rep]): Future[Rep] = {
-        val userId = parseUserId(request) // User-defined method to parse a &quot;user id&quot; from the request
-        val user = User(userId)
-        finagleRequestScope.seed[User](user)
-        service(request)
-      }
-    }
-}
+  <span class="k">def</span> <span class="n">toFilter</span><span class="o">[</span><span class="kt">Req</span>, <span class="kt">Rep</span><span class="o">]</span><span class="k">:</span> <span class="kt">Filter</span><span class="o">[</span><span class="kt">Req</span>, <span class="kt">Rep</span>, <span class="kt">Req</span>, <span class="kt">Rep</span><span class="o">]</span> <span class="k">=</span>
+    <span class="k">new</span> <span class="nc">Filter</span><span class="o">[</span><span class="kt">Req</span>, <span class="kt">Rep</span>, <span class="kt">Req</span>, <span class="kt">Rep</span><span class="o">]</span> <span class="o">{</span>
+      <span class="k">def</span> <span class="n">apply</span><span class="o">[</span><span class="kt">Req</span>, <span class="kt">Rep</span><span class="o">](</span><span class="n">request</span><span class="k">:</span> <span class="kt">Req</span><span class="o">,</span> <span class="n">service</span><span class="k">:</span> <span class="kt">Service</span><span class="o">[</span><span class="kt">Req</span>, <span class="kt">Rep</span><span class="o">])</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Rep</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+        <span class="k">val</span> <span class="n">userId</span> <span class="k">=</span> <span class="n">parseUserId</span><span class="o">(</span><span class="n">request</span><span class="o">)</span> <span class="c1">// User-defined method to parse a &quot;user id&quot; from the request</span>
+        <span class="k">val</span> <span class="n">user</span> <span class="k">=</span> <span class="nc">User</span><span class="o">(</span><span class="n">userId</span><span class="o">)</span>
+        <span class="n">finagleRequestScope</span><span class="o">.</span><span class="n">seed</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span><span class="n">user</span><span class="o">)</span>
+        <span class="n">service</span><span class="o">(</span><span class="n">request</span><span class="o">)</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Next, add the <a class="reference external" href="https://github.com/twitter/finatra/tree/master/inject/inject-request-scope/src/main/scala/com/twitter/inject/requestscope/FinagleRequestScopeFilter.scala">FinagleRequestScopeFilter.TypeAgnostic</a>
 to your server _above_ the defined <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala">Filter</a> which seeds the provided instance.</p>
 <p>E.g., for the <cite>UserFilter</cite> defined above (shown with commonly recommended Filters in the recommended
 order):</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.google.inject.Module
-import com.twitter.finatra.thrift.exceptions.FinatraThriftExceptionMapper
-import com.twitter.finatra.thrift.ThriftServer
-import com.twitter.finatra.thrift.routing.ThriftRouter
-import com.twitter.finatra.thrift.filters._
-import com.twitter.finatra.thrift.modules.ClientIdAcceptlistModule
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.google.inject.Module</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.exceptions.FinatraThriftExceptionMapper</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.ThriftServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.routing.ThriftRouter</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.filters._</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.modules.ClientIdAcceptlistModule</span>
 
-class Server extends ThriftServer {
-  override def modules: Seq[Module] = Seq(ClientIdAcceptlistModule)
+<span class="k">class</span> <span class="nc">Server</span> <span class="k">extends</span> <span class="nc">ThriftServer</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">modules</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Module</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="nc">ClientIdAcceptlistModule</span><span class="o">)</span>
 
-  override def configureThrift(router: ThriftRouter): Unit = {
-    router
-      .filter[LoggingMDCFilter]
-      .filter[TraceIdMDCFilter]
-      .filter[ThriftMDCFilter]
-      .filter[AccessLoggingFilter]
-      .filter[StatsFilter]
-      .filter[ExceptionMappingFilter]
-      .filter[ClientIdAcceptlistFilter]
-      .filter[FinagleRequestScopeFilter.TypeAgnostic]
-      .filter[UserFilter]
-      .exceptionMapper[FinatraThriftExceptionMapper]
-      .add[MyController]
-    }
-}
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureThrift</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">ThriftRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">router</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">LoggingMDCFilter</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">TraceIdMDCFilter</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">ThriftMDCFilter</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">AccessLoggingFilter</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">StatsFilter</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">ExceptionMappingFilter</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">ClientIdAcceptlistFilter</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">FinagleRequestScopeFilter.TypeAgnostic</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">UserFilter</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">exceptionMapper</span><span class="o">[</span><span class="kt">FinatraThriftExceptionMapper</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">MyController</span><span class="o">]</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Lastly, wherever you need to access the Request scoped <cite>User</cite> inject a <cite>User</cite> or a <cite>Provider[User]</cite>
 type.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.Service
-import com.twitter.finatra.thrift.Controller
-import javax.inject.{Inject, Provider, Singleton}
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.Service</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.Controller</span>
+<span class="k">import</span> <span class="nn">javax.inject.</span><span class="o">{</span><span class="nc">Inject</span><span class="o">,</span> <span class="nc">Provider</span><span class="o">,</span> <span class="nc">Singleton</span><span class="o">}</span>
 
-@Singleton
-class MyController @Inject()(
-  dao: GroupsDAO,
-  user: Provider[User])
-  extends Controller with MyService.BaseServiceIface {
+<span class="nd">@Singleton</span>
+<span class="k">class</span> <span class="nc">MyController</span> <span class="nd">@Inject</span><span class="o">()(</span>
+  <span class="n">dao</span><span class="k">:</span> <span class="kt">GroupsDAO</span><span class="o">,</span>
+  <span class="n">user</span><span class="k">:</span> <span class="kt">Provider</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span>
+  <span class="k">extends</span> <span class="nc">Controller</span> <span class="k">with</span> <span class="nc">MyService</span><span class="o">.</span><span class="nc">BaseServiceIface</span> <span class="o">{</span>
 
-  val getUser: Service[GetUser.Args, GetUser.SuccessType] = handle(GetUser) { args: GetUser.Args =&gt;
-    &quot;The incoming user has id &quot; + user.get.id
-  }
-}
+  <span class="k">val</span> <span class="n">getUser</span><span class="k">:</span> <span class="kt">Service</span><span class="o">[</span><span class="kt">GetUser.Args</span>, <span class="kt">GetUser.SuccessType</span><span class="o">]</span> <span class="k">=</span> <span class="n">handle</span><span class="o">(</span><span class="nc">GetUser</span><span class="o">)</span> <span class="o">{</span> <span class="n">args</span><span class="k">:</span> <span class="kt">GetUser.Args</span> <span class="o">=&gt;</span>
+    <span class="s">&quot;The incoming user has id &quot;</span> <span class="o">+</span> <span class="n">user</span><span class="o">.</span><span class="n">get</span><span class="o">.</span><span class="n">id</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -420,7 +420,7 @@ class MyController @Inject()(
   
 
   <div class="footer">
-    &copy; Copyright 2013-2022 Twitter, Inc.
+    &copy; Copyright 2022 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

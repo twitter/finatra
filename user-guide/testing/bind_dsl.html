@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Explicit Binding with #bind[T] &#8212; Finatra 22.2.0 documentation</title>
+    <title>Explicit Binding with #bind[T] &#8212; Finatra 22.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -74,58 +74,58 @@ for testing to compose into our server as an override module. Instead we can use
 function on the embedded server.</p>
 <p>This is especially useful if you want to replace a bound instance with a mock under control of the
 test.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
-import com.twitter.inject.server.FeatureTest
-import com.twitter.util.mock.Mockito
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.http.</span><span class="o">{</span><span class="nc">EmbeddedHttpServer</span><span class="o">,</span> <span class="nc">HttpTest</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.server.FeatureTest</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.mock.Mockito</span>
 
-class ExampleFeatureTest
-  extends FeatureTest
-  with Mockito
-  with HttpTest {
+<span class="k">class</span> <span class="nc">ExampleFeatureTest</span>
+  <span class="k">extends</span> <span class="nc">FeatureTest</span>
+  <span class="k">with</span> <span class="nc">Mockito</span>
+  <span class="k">with</span> <span class="nc">HttpTest</span> <span class="o">{</span>
 
-  private val mockDownstreamServiceClient = mock[DownstreamServiceClient]
-  private val mockIdService = mock[IdService]
+  <span class="k">private</span> <span class="k">val</span> <span class="n">mockDownstreamServiceClient</span> <span class="k">=</span> <span class="n">mock</span><span class="o">[</span><span class="kt">DownstreamServiceClient</span><span class="o">]</span>
+  <span class="k">private</span> <span class="k">val</span> <span class="n">mockIdService</span> <span class="k">=</span> <span class="n">mock</span><span class="o">[</span><span class="kt">IdService</span><span class="o">]</span>
 
-  override val server =
-    new EmbeddedHttpServer(new ExampleServer)
-    .bind[DownstreamServiceClient].toInstance(mockDownstreamServiceClient)
-    .bind[IdService].toInstance(mockIdService)
+  <span class="k">override</span> <span class="k">val</span> <span class="n">server</span> <span class="k">=</span>
+    <span class="k">new</span> <span class="nc">EmbeddedHttpServer</span><span class="o">(</span><span class="k">new</span> <span class="nc">ExampleServer</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">bind</span><span class="o">[</span><span class="kt">DownstreamServiceClient</span><span class="o">].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">mockDownstreamServiceClient</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">bind</span><span class="o">[</span><span class="kt">IdService</span><span class="o">].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">mockIdService</span><span class="o">)</span>
 
-  test(&quot;service test&quot;) {
-    /* Mock GET Request performed by DownstreamServiceClient */
-    mockDownstreamServiceClient.get(&quot;/tweets/123.json&quot;)(manifest[FooResponse]) returns Future(None)
-    ...
-  }
+  <span class="n">test</span><span class="o">(</span><span class="s">&quot;service test&quot;</span><span class="o">)</span> <span class="o">{</span>
+    <span class="cm">/* Mock GET Request performed by DownstreamServiceClient */</span>
+    <span class="n">mockDownstreamServiceClient</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="s">&quot;/tweets/123.json&quot;</span><span class="o">)(</span><span class="n">manifest</span><span class="o">[</span><span class="kt">FooResponse</span><span class="o">])</span> <span class="n">returns</span> <span class="nc">Future</span><span class="o">(</span><span class="nc">None</span><span class="o">)</span>
+    <span class="o">...</span>
+  <span class="o">}</span>
 </pre></div>
 </div>
 <p>For a complete example, see the
 <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/examples/advanced/twitter-clone/src/test/scala/finatra/quickstart/TwitterCloneFeatureTest.scala">TwitterCloneFeatureTest</a>.</p>
 <p>Note this is also available for <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala">EmbeddedApp</a>
 as well:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.stats.InMemoryStatsReceiver
-import com.twitter.inject.Test
-import com.twitter.inject.app.EmbeddedApp
-import com.twitter.util.mock.Mockito
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.stats.InMemoryStatsReceiver</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.Test</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.app.EmbeddedApp</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.mock.Mockito</span>
 
-class MyAppTest extends Test with Mockito {
-  private val inMemoryStatsReceiver: InMemoryStatsReceiver = new InMemoryStatsReceiver
-  private val mockIdService = mock[IdService]
+<span class="k">class</span> <span class="nc">MyAppTest</span> <span class="k">extends</span> <span class="nc">Test</span> <span class="k">with</span> <span class="nc">Mockito</span> <span class="o">{</span>
+  <span class="k">private</span> <span class="k">val</span> <span class="n">inMemoryStatsReceiver</span><span class="k">:</span> <span class="kt">InMemoryStatsReceiver</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">InMemoryStatsReceiver</span>
+  <span class="k">private</span> <span class="k">val</span> <span class="n">mockIdService</span> <span class="k">=</span> <span class="n">mock</span><span class="o">[</span><span class="kt">IdService</span><span class="o">]</span>
 
-  // build an EmbeddedApp
-  def app(): EmbeddedApp = app(new MyApp)
-  def app(underlying: MyApp): EmbeddedApp =
-    new EmbeddedApp(underlying)
-      .bind[IdService].toInstance(mockIdService)
-      .bind[StatsReceiver].toInstance(inMemoryStatsReceiver)
+  <span class="c1">// build an EmbeddedApp</span>
+  <span class="k">def</span> <span class="n">app</span><span class="o">()</span><span class="k">:</span> <span class="kt">EmbeddedApp</span> <span class="o">=</span> <span class="n">app</span><span class="o">(</span><span class="k">new</span> <span class="nc">MyApp</span><span class="o">)</span>
+  <span class="k">def</span> <span class="n">app</span><span class="o">(</span><span class="n">underlying</span><span class="k">:</span> <span class="kt">MyApp</span><span class="o">)</span><span class="k">:</span> <span class="kt">EmbeddedApp</span> <span class="o">=</span>
+    <span class="k">new</span> <span class="nc">EmbeddedApp</span><span class="o">(</span><span class="n">underlying</span><span class="o">)</span>
+      <span class="o">.</span><span class="n">bind</span><span class="o">[</span><span class="kt">IdService</span><span class="o">].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">mockIdService</span><span class="o">)</span>
+      <span class="o">.</span><span class="n">bind</span><span class="o">[</span><span class="kt">StatsReceiver</span><span class="o">].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">inMemoryStatsReceiver</span><span class="o">)</span>
 
-  test(&quot;assert count&quot;) {
-    val undertest = app()
-    undertest.main(&quot;username&quot; -&gt; &quot;jack&quot;)
+  <span class="n">test</span><span class="o">(</span><span class="s">&quot;assert count&quot;</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="n">undertest</span> <span class="k">=</span> <span class="n">app</span><span class="o">()</span>
+    <span class="n">undertest</span><span class="o">.</span><span class="n">main</span><span class="o">(</span><span class="s">&quot;username&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;jack&quot;</span><span class="o">)</span>
 
-    val statsReceiver = undertest.injector.instance[StatsReceiver].asInstanceOf[InMemoryStatsReceiver]
-    statsReceiver.counter(&quot;my_counter&quot;)() shouldEqual 1
-  }
-}
+    <span class="k">val</span> <span class="n">statsReceiver</span> <span class="k">=</span> <span class="n">undertest</span><span class="o">.</span><span class="n">injector</span><span class="o">.</span><span class="n">instance</span><span class="o">[</span><span class="kt">StatsReceiver</span><span class="o">].</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">InMemoryStatsReceiver</span><span class="o">]</span>
+    <span class="n">statsReceiver</span><span class="o">.</span><span class="n">counter</span><span class="o">(</span><span class="s">&quot;my_counter&quot;</span><span class="o">)()</span> <span class="n">shouldEqual</span> <span class="mi">1</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 </div>
@@ -136,24 +136,24 @@ class MyAppTest extends Test with Mockito {
 <cite>bind[T]</cite> function to let you replace bound instances in the constructed object graph with another
 instance, like a mock or stub.</p>
 <p>E.g.,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.inject.IntegrationTest
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.inject.IntegrationTest</span>
 
-class ExampleIntegrationTest extends IntegrationTest {
-  val mockIdService = mock[IdService]
+<span class="k">class</span> <span class="nc">ExampleIntegrationTest</span> <span class="k">extends</span> <span class="nc">IntegrationTest</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">mockIdService</span> <span class="k">=</span> <span class="n">mock</span><span class="o">[</span><span class="kt">IdService</span><span class="o">]</span>
 
-  override val injector =
-    TestInjector(
-      flags =
-        Map(&quot;foo.flag&quot; -&gt; &quot;meaningfulValue&quot;),
-      modules =
-        Seq(ExampleModule, IdServiceModule))
-      .bind[IdService].toInstance(mockIdService)
-      .create
+  <span class="k">override</span> <span class="k">val</span> <span class="n">injector</span> <span class="k">=</span>
+    <span class="nc">TestInjector</span><span class="o">(</span>
+      <span class="n">flags</span> <span class="k">=</span>
+        <span class="nc">Map</span><span class="o">(</span><span class="s">&quot;foo.flag&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;meaningfulValue&quot;</span><span class="o">),</span>
+      <span class="n">modules</span> <span class="k">=</span>
+        <span class="nc">Seq</span><span class="o">(</span><span class="nc">ExampleModule</span><span class="o">,</span> <span class="nc">IdServiceModule</span><span class="o">))</span>
+      <span class="o">.</span><span class="n">bind</span><span class="o">[</span><span class="kt">IdService</span><span class="o">].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">mockIdService</span><span class="o">)</span>
+      <span class="o">.</span><span class="n">create</span>
 
-  test(&quot;MyTest#perform feature&quot;) {
-    ...
-  }
-}
+  <span class="n">test</span><span class="o">(</span><span class="s">&quot;MyTest#perform feature&quot;</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">...</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>In this example, the bound <cite>IdService</cite> would be replaced with the <cite>mockIdService</cite>. For a more complete
@@ -163,91 +163,91 @@ example, see the <a class="reference external" href="https://github.com/twitter/
 <h2><a class="reference external" href="https://github.com/twitter/finatra/tree/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/BindDSL.scala"><cite>#bind[T]</cite></a> DSL<a class="headerlink" href="#bind-t-dsl" title="Permalink to this headline">¶</a></h2>
 <p>The primary DSL can be expressed as such (and is similar to the Guice <a class="reference external" href="https://github.com/google/guice/wiki/LinkedBindings">Linked</a>
 and <a class="reference external" href="https://github.com/google/guice/wiki/InstanceBindings">Instance</a> bindings):</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>bind[T].to[U &lt;: T]
-bind[T].to[Class[U &lt;: T]]
-bind[T].toInstance(T)
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">to</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]</span>
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">to</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]]</span>
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">T</span><span class="o">)</span>
 
-bind[T].annotatedWith[Ann].to[U &lt;: T]
-bind[T].annotatedWith[Ann].to[Class[U &lt;: T]]
-bind[T].annotatedWith[Ann].toInstance(T)
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">annotatedWith</span><span class="o">[</span><span class="kt">Ann</span><span class="o">].</span><span class="n">to</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]</span>
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">annotatedWith</span><span class="o">[</span><span class="kt">Ann</span><span class="o">].</span><span class="n">to</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]]</span>
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">annotatedWith</span><span class="o">[</span><span class="kt">Ann</span><span class="o">].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">T</span><span class="o">)</span>
 
-bind[T].annotatedWith[Class[Ann]].to[U &lt;: T]
-bind[T].annotatedWith[Class[Ann]].to[Class[U &lt;: T]]
-bind[T].annotatedWith[Class[Ann]].toInstance(T)
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">annotatedWith</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">Ann</span><span class="o">]].</span><span class="n">to</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]</span>
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">annotatedWith</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">Ann</span><span class="o">]].</span><span class="n">to</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]]</span>
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">annotatedWith</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">Ann</span><span class="o">]].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">T</span><span class="o">)</span>
 
-bind[T].annotatedWith(Annotation).to[U &lt;: T]
-bind[T].annotatedWith(Annotation).to[Class[U &lt;: T]]
-bind[T].annotatedWith(Annotation).toInstance(T)
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">annotatedWith</span><span class="o">(</span><span class="nc">Annotation</span><span class="o">).</span><span class="n">to</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]</span>
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">annotatedWith</span><span class="o">(</span><span class="nc">Annotation</span><span class="o">).</span><span class="n">to</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]]</span>
+<span class="n">bind</span><span class="o">[</span><span class="kt">T</span><span class="o">].</span><span class="n">annotatedWith</span><span class="o">(</span><span class="nc">Annotation</span><span class="o">).</span><span class="n">toInstance</span><span class="o">(</span><span class="n">T</span><span class="o">)</span>
 
-bindClass(Class[T]).to[T]
-bindClass(Class[T]).to[Class[U &lt;: T]]
-bindClass(Class[T]).toInstance(T)
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">]).</span><span class="n">to</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">]).</span><span class="n">to</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]]</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">]).</span><span class="n">toInstance</span><span class="o">(</span><span class="n">T</span><span class="o">)</span>
 
-bindClass(Class[T]).annotatedWith[Class[Ann]].to[T]
-bindClass(Class[T]).annotatedWith[Class[Ann]].[Class[U &lt;: T]]
-bindClass(Class[T]).annotatedWith[Class[Ann]].toInstance(T)
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">]).</span><span class="n">annotatedWith</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">Ann</span><span class="o">]].</span><span class="n">to</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">]).</span><span class="n">annotatedWith</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">Ann</span><span class="o">]].[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]]</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">]).</span><span class="n">annotatedWith</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">Ann</span><span class="o">]].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">T</span><span class="o">)</span>
 
-bindClass(Class[T]).annotatedWith(Annotation).to[T]
-bindClass(Class[T]).annotatedWith(Annotation).[Class[U &lt;: T]]
-bindClass(Class[T]).annotatedWith(Annotation).toInstance(T)
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">]).</span><span class="n">annotatedWith</span><span class="o">(</span><span class="nc">Annotation</span><span class="o">).</span><span class="n">to</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">]).</span><span class="n">annotatedWith</span><span class="o">(</span><span class="nc">Annotation</span><span class="o">).[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">]]</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">]).</span><span class="n">annotatedWith</span><span class="o">(</span><span class="nc">Annotation</span><span class="o">).</span><span class="n">toInstance</span><span class="o">(</span><span class="n">T</span><span class="o">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="usage-from-java">
 <h2>Usage from Java<a class="headerlink" href="#usage-from-java" title="Permalink to this headline">¶</a></h2>
 <p>The <cite>#bind[T]</cite> DSL also provides several Java-friendly methods for binding:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>bindClass(Class[T], T)
-bindClass(Class[T], Annotation, T)
-bindClass(Class[T], Class[Annotation], T)
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">],</span> <span class="n">T</span><span class="o">)</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">],</span> <span class="nc">Annotation</span><span class="o">,</span> <span class="n">T</span><span class="o">)</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">],</span> <span class="nc">Class</span><span class="o">[</span><span class="kt">Annotation</span><span class="o">],</span> <span class="n">T</span><span class="o">)</span>
 
-bindClass(Class[T], Class[U &lt;: T])
-bindClass(Class[T], Annotation, Class[U &lt;: T])
-bindClass(Class[T], Class[Annotation], Class[U &lt;: T])
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">],</span> <span class="nc">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">])</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">],</span> <span class="nc">Annotation</span><span class="o">,</span> <span class="nc">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">])</span>
+<span class="n">bindClass</span><span class="o">(</span><span class="nc">Class</span><span class="o">[</span><span class="kt">T</span><span class="o">],</span> <span class="nc">Class</span><span class="o">[</span><span class="kt">Annotation</span><span class="o">],</span> <span class="nc">Class</span><span class="o">[</span><span class="kt">U</span> <span class="k">&lt;:</span> <span class="kt">T</span><span class="o">])</span>
 </pre></div>
 </div>
 <p>Example:</p>
-<div class="code java highlight-text notranslate"><div class="highlight"><pre><span></span>import java.util.Collections;
+<div class="code java highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">java.util.Collections</span><span class="o">;</span>
 
-import com.google.inject.Stage;
+<span class="k">import</span> <span class="nn">com.google.inject.Stage</span><span class="o">;</span>
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+<span class="k">import</span> <span class="nn">org.junit.AfterClass</span><span class="o">;</span>
+<span class="k">import</span> <span class="nn">org.junit.Assert</span><span class="o">;</span>
+<span class="k">import</span> <span class="nn">org.junit.BeforeClass</span><span class="o">;</span>
+<span class="k">import</span> <span class="nn">org.junit.Test</span><span class="o">;</span>
 
-import com.twitter.finagle.http.Request;
-import com.twitter.finagle.http.Response;
-import com.twitter.finagle.http.Status;
-import com.twitter.finatra.http.EmbeddedHttpServer;
-import com.twitter.finatra.httpclient.RequestBuilder;
-import com.twitter.inject.annotations.Flags;
+<span class="k">import</span> <span class="nn">com.twitter.finagle.http.Request</span><span class="o">;</span>
+<span class="k">import</span> <span class="nn">com.twitter.finagle.http.Response</span><span class="o">;</span>
+<span class="k">import</span> <span class="nn">com.twitter.finagle.http.Status</span><span class="o">;</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.EmbeddedHttpServer</span><span class="o">;</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.httpclient.RequestBuilder</span><span class="o">;</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.annotations.Flags</span><span class="o">;</span>
 
-public class HelloWorldServerFeatureTest extends Assert {
+<span class="n">public</span> <span class="k">class</span> <span class="nc">HelloWorldServerFeatureTest</span> <span class="k">extends</span> <span class="nc">Assert</span> <span class="o">{</span>
 
-    private static final EmbeddedHttpServer SERVER = setup();
+    <span class="k">private</span> <span class="n">static</span> <span class="k">final</span> <span class="nc">EmbeddedHttpServer</span> <span class="nc">SERVER</span> <span class="k">=</span> <span class="n">setup</span><span class="o">();</span>
 
-    private static EmbeddedHttpServer setup() {
-        EmbeddedHttpServer server = new EmbeddedHttpServer(
-            new HelloWorldServer(),
-            Collections.emptyMap(),
-            Stage.DEVELOPMENT);
+    <span class="k">private</span> <span class="n">static</span> <span class="nc">EmbeddedHttpServer</span> <span class="n">setup</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">EmbeddedHttpServer</span> <span class="n">server</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EmbeddedHttpServer</span><span class="o">(</span>
+            <span class="k">new</span> <span class="nc">HelloWorldServer</span><span class="o">(),</span>
+            <span class="nc">Collections</span><span class="o">.</span><span class="n">emptyMap</span><span class="o">(),</span>
+            <span class="nc">Stage</span><span class="o">.</span><span class="nc">DEVELOPMENT</span><span class="o">);</span>
 
-        server.bindClass(Integer.class, Flags.named(&quot;magic.number&quot;), 42);
-        server.bindClass(Integer.class, Flags.named(&quot;module.magic.number&quot;), 9999);
-        return server;
-    }
+        <span class="n">server</span><span class="o">.</span><span class="n">bindClass</span><span class="o">(</span><span class="nc">Integer</span><span class="o">.</span><span class="n">class</span><span class="o">,</span> <span class="nc">Flags</span><span class="o">.</span><span class="n">named</span><span class="o">(</span><span class="s">&quot;magic.number&quot;</span><span class="o">),</span> <span class="mi">42</span><span class="o">);</span>
+        <span class="n">server</span><span class="o">.</span><span class="n">bindClass</span><span class="o">(</span><span class="nc">Integer</span><span class="o">.</span><span class="n">class</span><span class="o">,</span> <span class="nc">Flags</span><span class="o">.</span><span class="n">named</span><span class="o">(</span><span class="s">&quot;module.magic.number&quot;</span><span class="o">),</span> <span class="mi">9999</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">server</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    ...
+    <span class="o">...</span>
 
-    /** test magicNum endpoint */
-    @Test
-    public void testMagicNumEndpoint() {
-        Request request = RequestBuilder.get(&quot;/magicNum&quot;);
-        Response response = SERVER.httpRequest(request);
-        assertEquals(Status.Ok(), response.status());
-        assertEquals(&quot;42&quot;, response.contentString());
-    }
-}
+    <span class="cm">/** test magicNum endpoint */</span>
+    <span class="nd">@Test</span>
+    <span class="n">public</span> <span class="n">void</span> <span class="n">testMagicNumEndpoint</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">Request</span> <span class="n">request</span> <span class="k">=</span> <span class="nc">RequestBuilder</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="s">&quot;/magicNum&quot;</span><span class="o">);</span>
+        <span class="nc">Response</span> <span class="n">response</span> <span class="k">=</span> <span class="nc">SERVER</span><span class="o">.</span><span class="n">httpRequest</span><span class="o">(</span><span class="n">request</span><span class="o">);</span>
+        <span class="n">assertEquals</span><span class="o">(</span><span class="nc">Status</span><span class="o">.</span><span class="nc">Ok</span><span class="o">(),</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span><span class="o">());</span>
+        <span class="n">assertEquals</span><span class="o">(</span><span class="s">&quot;42&quot;</span><span class="o">,</span> <span class="n">response</span><span class="o">.</span><span class="n">contentString</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>See the <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/examples/http-server/java/src/main/java">java-http-server</a>
@@ -265,74 +265,74 @@ graph under test.</p>
 annotation with the <a class="reference external" href="https://github.com/google/guice/wiki/BoundFields">BoundFieldModule</a>) on a
 test member field then using the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">c.t.inject.Injector</a>
 of the server, application or <a class="reference external" href="./integration_tests.html#id2"><cite>TestInjector</cite></a> under test to do <cite>injector.underlying.injectMembers(this)</cite>.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class MyIntegrationTest extends IntegrationTest {
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyIntegrationTest</span> <span class="k">extends</span> <span class="nc">IntegrationTest</span> <span class="o">{</span>
 
-  // THIS IS NOT RECOMMENDED
-  @Bind(to = classOf[StubBarImp]) private val bar: Bar
-  // Foo depends on Bar.
-  @Inject private val foo: Foo
-  @Bind private val mockDatasource: Datasource = mock[DatasourceImplementation]
+  <span class="c1">// THIS IS NOT RECOMMENDED</span>
+  <span class="nd">@Bind</span><span class="o">(</span><span class="n">to</span> <span class="k">=</span> <span class="n">classOf</span><span class="o">[</span><span class="kt">StubBarImp</span><span class="o">])</span> <span class="k">private</span> <span class="k">val</span> <span class="n">bar</span><span class="k">:</span> <span class="kt">Bar</span>
+  <span class="c1">// Foo depends on Bar.</span>
+  <span class="nd">@Inject</span> <span class="k">private</span> <span class="k">val</span> <span class="n">foo</span><span class="k">:</span> <span class="kt">Foo</span>
+  <span class="nd">@Bind</span> <span class="k">private</span> <span class="k">val</span> <span class="n">mockDatasource</span><span class="k">:</span> <span class="kt">Datasource</span> <span class="o">=</span> <span class="n">mock</span><span class="o">[</span><span class="kt">DatasourceImplementation</span><span class="o">]</span>
 
-  override val injector =
-    TestInjector(
-      modules = Seq(new OurGreatModule(), BoundFieldModule.of(this)),
-    ).create()
+  <span class="k">override</span> <span class="k">val</span> <span class="n">injector</span> <span class="k">=</span>
+    <span class="nc">TestInjector</span><span class="o">(</span>
+      <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="k">new</span> <span class="nc">OurGreatModule</span><span class="o">(),</span> <span class="nc">BoundFieldModule</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="k">this</span><span class="o">)),</span>
+    <span class="o">).</span><span class="n">create</span><span class="o">()</span>
 
-    injector.injectMembers(this)
+    <span class="n">injector</span><span class="o">.</span><span class="n">injectMembers</span><span class="o">(</span><span class="k">this</span><span class="o">)</span>
 
-    test(&quot;test something&quot;) {
-      ...
-    }
-}
+    <span class="n">test</span><span class="o">(</span><span class="s">&quot;test something&quot;</span><span class="o">)</span> <span class="o">{</span>
+      <span class="o">...</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Or you could choose to do the test class member injection in a <cite>beforeAll</cite>:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class MyIntegrationTest extends IntegrationTest {
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyIntegrationTest</span> <span class="k">extends</span> <span class="nc">IntegrationTest</span> <span class="o">{</span>
 
-  // THIS IS NOT RECOMMENDED
-  @Bind(to = classOf[StubBarImp]) private val bar: Bar
-  // Foo depends on Bar.
-  @Inject private val foo: Foo
-  @Bind private val mockDatasource = mock[DatasourceImplementation]
+  <span class="c1">// THIS IS NOT RECOMMENDED</span>
+  <span class="nd">@Bind</span><span class="o">(</span><span class="n">to</span> <span class="k">=</span> <span class="n">classOf</span><span class="o">[</span><span class="kt">StubBarImp</span><span class="o">])</span> <span class="k">private</span> <span class="k">val</span> <span class="n">bar</span><span class="k">:</span> <span class="kt">Bar</span>
+  <span class="c1">// Foo depends on Bar.</span>
+  <span class="nd">@Inject</span> <span class="k">private</span> <span class="k">val</span> <span class="n">foo</span><span class="k">:</span> <span class="kt">Foo</span>
+  <span class="nd">@Bind</span> <span class="k">private</span> <span class="k">val</span> <span class="n">mockDatasource</span> <span class="k">=</span> <span class="n">mock</span><span class="o">[</span><span class="kt">DatasourceImplementation</span><span class="o">]</span>
 
-  override val injector =
-    TestInjector(
-      modules = Seq(new OurGreatModule(), BoundFieldModule.of(this)),
-    ).create()
+  <span class="k">override</span> <span class="k">val</span> <span class="n">injector</span> <span class="k">=</span>
+    <span class="nc">TestInjector</span><span class="o">(</span>
+      <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="k">new</span> <span class="nc">OurGreatModule</span><span class="o">(),</span> <span class="nc">BoundFieldModule</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="k">this</span><span class="o">)),</span>
+    <span class="o">).</span><span class="n">create</span><span class="o">()</span>
 
-  override protected def beforeAll(): Unit = {
-    super.beforeAll()
-    injector.injectMembers(this)
-  }
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="n">beforeAll</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">super</span><span class="o">.</span><span class="n">beforeAll</span><span class="o">()</span>
+    <span class="n">injector</span><span class="o">.</span><span class="n">injectMembers</span><span class="o">(</span><span class="k">this</span><span class="o">)</span>
+  <span class="o">}</span>
 
-    test(&quot;test something&quot;) {
-      ...
-    }
-}
+    <span class="n">test</span><span class="o">(</span><span class="s">&quot;test something&quot;</span><span class="o">)</span> <span class="o">{</span>
+      <span class="o">...</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Or with a <a class="reference external" href="./feature_tests.html">FeatureTest</a>:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class MyFeatureTest extends FeatureTest {
-  // THIS IS NOT RECOMMENDED
-  @Inject val fakeFilesystem: Filesystem
-  @Inject val mockSubsystem: Subsystem
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyFeatureTest</span> <span class="k">extends</span> <span class="nc">FeatureTest</span> <span class="o">{</span>
+  <span class="c1">// THIS IS NOT RECOMMENDED</span>
+  <span class="nd">@Inject</span> <span class="k">val</span> <span class="n">fakeFilesystem</span><span class="k">:</span> <span class="kt">Filesystem</span>
+  <span class="nd">@Inject</span> <span class="k">val</span> <span class="n">mockSubsystem</span><span class="k">:</span> <span class="kt">Subsystem</span>
 
-  override val server = new EmbeddedHttpServer(
-    twitterServer = new OurHttpTwitterServerUnderTest {
-      val modules: Seq[Module] = defaultModules ++ Seq(TestModuleWithTheSystemBindings)
-    }
-  )
+  <span class="k">override</span> <span class="k">val</span> <span class="n">server</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EmbeddedHttpServer</span><span class="o">(</span>
+    <span class="n">twitterServer</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">OurHttpTwitterServerUnderTest</span> <span class="o">{</span>
+      <span class="k">val</span> <span class="n">modules</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Module</span><span class="o">]</span> <span class="k">=</span> <span class="n">defaultModules</span> <span class="o">++</span> <span class="nc">Seq</span><span class="o">(</span><span class="nc">TestModuleWithTheSystemBindings</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">)</span>
 
-  override protected def beforeAll(): Unit = {
-    super.beforeAll()
-    server.injector.underlying.injectMembers(this)
-  }
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="n">beforeAll</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">super</span><span class="o">.</span><span class="n">beforeAll</span><span class="o">()</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">injector</span><span class="o">.</span><span class="n">underlying</span><span class="o">.</span><span class="n">injectMembers</span><span class="o">(</span><span class="k">this</span><span class="o">)</span>
+  <span class="o">}</span>
 
-  test(&quot;test something&quot;) {
-    ...
-  }
+  <span class="n">test</span><span class="o">(</span><span class="s">&quot;test something&quot;</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">...</span>
+  <span class="o">}</span>
 
-}
+<span class="o">}</span>
 </pre></div>
 </div>
 <div class="section" id="why">
@@ -376,56 +376,56 @@ instances from the appropriate object graph over using the indirection of inject
 this way, all object graphs are established at instantiation of the test member making it easier to
 reason about the test lifecycle.</p>
 <p>For example:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class MyIntegrationTest extends IntegrationTest {
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyIntegrationTest</span> <span class="k">extends</span> <span class="nc">IntegrationTest</span> <span class="o">{</span>
 
-  private val mockDatasource = mock[DatasourceImplementation]
+  <span class="k">private</span> <span class="k">val</span> <span class="n">mockDatasource</span> <span class="k">=</span> <span class="n">mock</span><span class="o">[</span><span class="kt">DatasourceImplementation</span><span class="o">]</span>
 
-  // create an object graph for obtaining test fixtures. `OurIntegrationTestModule`
-  // provides bindings for `Foo` and `Bar`
-  private[this] val testFixturesInjector =
-    TestInjector(
-      modules = Seq(new OurIntegrationTestModule())
-    )
-    .bind[Datasource].toInstance(mockDatasource)
-    .create()
+  <span class="c1">// create an object graph for obtaining test fixtures. `OurIntegrationTestModule`</span>
+  <span class="c1">// provides bindings for `Foo` and `Bar`</span>
+  <span class="k">private</span><span class="o">[</span><span class="kt">this</span><span class="o">]</span> <span class="k">val</span> <span class="n">testFixturesInjector</span> <span class="k">=</span>
+    <span class="nc">TestInjector</span><span class="o">(</span>
+      <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="k">new</span> <span class="nc">OurIntegrationTestModule</span><span class="o">())</span>
+    <span class="o">)</span>
+    <span class="o">.</span><span class="n">bind</span><span class="o">[</span><span class="kt">Datasource</span><span class="o">].</span><span class="n">toInstance</span><span class="o">(</span><span class="n">mockDatasource</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">create</span><span class="o">()</span>
 
-  private val foo: Foo = testFixturesInjector.instance[Foo]
-  private val bar: Bar = testFixturesInjector.instance[Bar]
+  <span class="k">private</span> <span class="k">val</span> <span class="n">foo</span><span class="k">:</span> <span class="kt">Foo</span> <span class="o">=</span> <span class="n">testFixturesInjector</span><span class="o">.</span><span class="n">instance</span><span class="o">[</span><span class="kt">Foo</span><span class="o">]</span>
+  <span class="k">private</span> <span class="k">val</span> <span class="n">bar</span><span class="k">:</span> <span class="kt">Bar</span> <span class="o">=</span> <span class="n">testFixturesInjector</span><span class="o">.</span><span class="n">instance</span><span class="o">[</span><span class="kt">Bar</span><span class="o">]</span>
 
-  // the object graph under test
-  override val injector =
-    TestInjector(
-      modules = Seq(new OurGreatModule())
-    ).create()
+  <span class="c1">// the object graph under test</span>
+  <span class="k">override</span> <span class="k">val</span> <span class="n">injector</span> <span class="k">=</span>
+    <span class="nc">TestInjector</span><span class="o">(</span>
+      <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="k">new</span> <span class="nc">OurGreatModule</span><span class="o">())</span>
+    <span class="o">).</span><span class="n">create</span><span class="o">()</span>
 
-  test(&quot;test something&quot;) {
-    ...
-  }
-}
+  <span class="n">test</span><span class="o">(</span><span class="s">&quot;test something&quot;</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">...</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Or with a <a class="reference external" href="./feature_tests.html">FeatureTest</a>:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>class MyFeatureTest extends FeatureTest {
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyFeatureTest</span> <span class="k">extends</span> <span class="nc">FeatureTest</span> <span class="o">{</span>
 
-  // create an object graph for obtaining test fixtures, `OurIntegrationTestModule`
-  // provides bindings for `Filesystem` and `Subsystem`
-  private[this] val testFixturesInjector =
-    TestInjector(
-      modules = Seq(new OurIntegrationTestModule())
-    ).create()
+  <span class="c1">// create an object graph for obtaining test fixtures, `OurIntegrationTestModule`</span>
+  <span class="c1">// provides bindings for `Filesystem` and `Subsystem`</span>
+  <span class="k">private</span><span class="o">[</span><span class="kt">this</span><span class="o">]</span> <span class="k">val</span> <span class="n">testFixturesInjector</span> <span class="k">=</span>
+    <span class="nc">TestInjector</span><span class="o">(</span>
+      <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="k">new</span> <span class="nc">OurIntegrationTestModule</span><span class="o">())</span>
+    <span class="o">).</span><span class="n">create</span><span class="o">()</span>
 
-  private val fakeFilesystem: Filesystem = testFixturesInjector.instance[Filesystem]
-  private val mockSubsystem: Subsystem = testFixturesInjector.instance[Subsystem]
+  <span class="k">private</span> <span class="k">val</span> <span class="n">fakeFilesystem</span><span class="k">:</span> <span class="kt">Filesystem</span> <span class="o">=</span> <span class="n">testFixturesInjector</span><span class="o">.</span><span class="n">instance</span><span class="o">[</span><span class="kt">Filesystem</span><span class="o">]</span>
+  <span class="k">private</span> <span class="k">val</span> <span class="n">mockSubsystem</span><span class="k">:</span> <span class="kt">Subsystem</span> <span class="o">=</span> <span class="n">testFixturesInjector</span><span class="o">.</span><span class="n">instance</span><span class="o">[</span><span class="kt">Subsystem</span><span class="o">]</span>
 
-  // the object graph under test is encapsulated in the embedded server
-  override val server = new EmbeddedHttpServer(
-    twitterServer = new OurHttpTwitterServerUnderTest
-  )
+  <span class="c1">// the object graph under test is encapsulated in the embedded server</span>
+  <span class="k">override</span> <span class="k">val</span> <span class="n">server</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EmbeddedHttpServer</span><span class="o">(</span>
+    <span class="n">twitterServer</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">OurHttpTwitterServerUnderTest</span>
+  <span class="o">)</span>
 
-  test(&quot;test something&quot;) {
-    ...
-  }
-}
+  <span class="n">test</span><span class="o">(</span><span class="s">&quot;test something&quot;</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">...</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>This is the same tactic taken in testing <a class="reference external" href="./feature_tests.html#testing-multiple-applications-or-servers">multiple servers or applications</a>
@@ -529,7 +529,7 @@ obtained from the appropriate object graph for use in testing.</p>
   
 
   <div class="footer">
-    &copy; Copyright 2013-2022 Twitter, Inc.
+    &copy; Copyright 2022 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

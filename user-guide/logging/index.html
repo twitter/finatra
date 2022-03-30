@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to Logging With Finatra &#8212; Finatra 22.2.0 documentation</title>
+    <title>Introduction to Logging With Finatra &#8212; Finatra 22.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -73,65 +73,196 @@ plug in the desired logging framework at deployment time.”</p>
 </div>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
-<p class="last">Logback is the recommended SLF4J-API implementation. As such, <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/inject/inject-app">finatra/inject/inject-app</a>
+<p>Logback is the recommended SLF4J-API implementation. As such, <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/inject/inject-app">finatra/inject/inject-app</a>
 and <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/inject/inject-server">finatra/inject/inject-server</a>
 transitively provide SLF4J bridges for the following logging providers:</p>
-</div>
-<ul class="simple">
+<ul class="last simple">
 <li><a class="reference external" href="https://en.wikipedia.org/wiki/Log4j">Log4J 1.x</a></li>
 <li><a class="reference external" href="https://commons.apache.org/proper/commons-logging/">commons-logging</a></li>
-<li><a class="reference external" href="https://docs.oracle.com/javase/7/docs/api/index.html?java/util/logging/package-summary.html">java.util.logging</a></li>
+<li><a class="reference external" href="https://docs.oracle.com/javase/7/docs/api/index.html?java/util/logging/package-summary.html">java.util.logging</a> (JUL)</li>
 </ul>
-<div class="admonition tip">
-<p class="first admonition-title">Tip</p>
-<p>Note, <a class="reference external" href="https://github.com/twitter/twitter-server/blob/b4be9ff71f273a007f880df6ea433f238c2d1f18/server/src/main/scala/com/twitter/server/TwitterServer.scala#L40">TwitterServer</a>
+</div>
+<div class="section" id="bridging-logging-implementations">
+<h2>Bridging Logging Implementations<a class="headerlink" href="#bridging-logging-implementations" title="Permalink to this headline">¶</a></h2>
+<p>For background see the SLF4J <a class="reference external" href="https://www.slf4j.org/legacy.html">Bridging legacy APIs</a> documentation.</p>
+<p><a class="reference external" href="https://github.com/twitter/twitter-server/blob/b4be9ff71f273a007f880df6ea433f238c2d1f18/server/src/main/scala/com/twitter/server/TwitterServer.scala#L40">TwitterServer</a>
 and Finatra’s <a class="reference external" href="../app/index.html">inject-app</a> both mix in the the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-jul-bridge/src/main/scala/com/twitter/util/logging/Slf4jBridge.scala">c.t.util.logging.Slf4jBridge</a>
 trait to attempt installation of the <a class="reference external" href="https://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html">SLF4JBridgeHandler</a>.</p>
-<p>If you are not using one of these and want to bridge JUL to the SLF4J-API, you can mix in the
-<a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-jul-bridge/src/main/scala/com/twitter/util/logging/Slf4jBridge.scala">c.t.util.logging.Slf4jBridge</a>
+<p>If you are not using one of these and want to bridge <a class="reference external" href="https://docs.oracle.com/javase/7/docs/api/index.html?java/util/logging/package-summary.html">JUL</a>
+to the SLF4J-API, you can mix in the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-jul-bridge/src/main/scala/com/twitter/util/logging/Slf4jBridge.scala">c.t.util.logging.Slf4jBridge</a>
 trait to your main application class.</p>
-<p class="last">For more information on the SLF4J bridges see the SLF4J <a class="reference external" href="https://www.slf4j.org/legacy.html">Bridging legacy APIs</a> documentation.</p>
-</div>
 <p>Since <a class="reference external" href="https://www.slf4j.org/manual.html">SLF4J</a> is an interface, it requires an actual logging
 implementation. However, you should ensure that you <strong>do not</strong> end-up with <em>multiple</em> logging
 implementations on your classpath, e.g., you should not have multiple SLF4J bindings (<cite>slf4j-nop</cite>,
 <cite>slf4j-log4j12</cite>, <cite>slf4j-jdk14</cite>, etc.) nor the <cite>java.util.logging</cite> implementation, etc. on your
-classpath as these are all competing implementations and since classpath order is non-deterministic
+classpath as these are all competing implementations and since classpath order is non-deterministic,
 this will lead to unexpected logging behavior.</p>
+</div>
+<div class="section" id="util-util-slf4j-api">
+<h2><cite>util/util-slf4j-api</cite><a class="headerlink" href="#util-util-slf4j-api" title="Permalink to this headline">¶</a></h2>
 <p>While there are several scala-wrappers for SLF4J, Finatra uses the <a class="reference external" href="https://twitter.github.io/util/">TwitterUtil</a>
 <a class="reference external" href="https://github.com/twitter/util/tree/develop/util-slf4j-api">util-slf4j-api</a> project.</p>
-<p>The main logging utility is either the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-api/src/main/scala/com/twitter/util/logging/Logging.scala">c.t.util.logging.Logging</a>
-trait which can be mixed into any object (or class):</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.util.logging.Logging
+<p>There are two main utilities in the library: the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-api/src/main/scala/com/twitter/util/logging/Logging.scala">c.t.util.logging.Logging</a>
+trait and the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-api/src/main/scala/com/twitter/util/logging/Logger.scala">c.t.util.logging.Logger</a>
+class which provides a standard “Logger” interface that wraps the SLF4J <a class="reference external" href="https://www.javadoc.io/static/org.slf4j/slf4j-api/1.7.25/index.html?org/slf4j/Logger.html">org.slf4j.Logger</a>
+but with API ergonomics for Scala users and other optimizations.</p>
+<div class="section" id="c-t-util-logging-logging">
+<h3><cite>c.t.util.logging.Logging</cite><a class="headerlink" href="#c-t-util-logging-logging" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-api/src/main/scala/com/twitter/util/logging/Logging.scala">c.t.util.logging.Logging</a>
+trait can be mixed into any object or class:</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span> <span class="k">import</span> <span class="nn">com.twitter.util.logging.Logging</span>
 
-object MyObject extends Logging {
-  def foo() = {
-    info(&quot;Calculating...&quot;)
-    &quot;bar&quot;
-  }
-}
+<span class="hll"> <span class="k">object</span> <span class="nc">MyObject</span> <span class="k">extends</span> <span class="nc">Logging</span> <span class="o">{</span>
+</span>   <span class="k">def</span> <span class="n">foo</span><span class="o">()</span> <span class="k">=</span> <span class="o">{</span>
+<span class="hll">     <span class="n">info</span><span class="o">(</span><span class="s">&quot;Calculating...&quot;</span><span class="o">)</span>
+</span>     <span class="s">&quot;bar&quot;</span>
+   <span class="o">}</span>
+ <span class="o">}</span>
 </pre></div>
 </div>
-<p>or the or the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-api/src/main/scala/com/twitter/util/logging/Logger.scala">c.t.util.logging.Logger</a>
-class which provides a standard Logger interface:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.util.logging.Logger
+<p>When mixing in this trait, a new <cite>c.t.util.logging.Logger</cite> <a class="reference external" href="https://github.com/twitter/util/blob/20a66daa41117e473b9d1cba2b2a459efca000af/util-slf4j-api/src/main/scala/com/twitter/util/logging/Logging.scala#L59">is instantiated</a>
+for the current class. The trait exposes logging methods which can be called as though they exist
+within the current class, e.g., <cite>trace</cite>, <cite>debug</cite>, <cite>info</cite>, <cite>warn</cite>, or <cite>error</cite>.</p>
+<p>See the <cite>c.t.util.logging.Logging</cite> trait <a class="reference external" href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html">scaladocs</a>
+for details.</p>
+<p>As an example, in the code above, by mixing in the <cite>Logging</cite> trait the <cite>MyObject</cite> now has a logger named
+for the <cite>MyObject.getClass</cite> class. E.g.,</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span>Welcome to Scala 2.12.15 (JDK 64-Bit Server VM, Java 1.8.0_275).
+Type in expressions for evaluation. Or try :help.
 
-private object MyCompanionObject {
-  val logger: Logger = Logger(this.getClass)
-}
+scala&gt; import com.twitter.util.logging.Logging
+import com.twitter.util.logging.Logging
 
-class MyClass {
-  import MyCompanionObject._
+scala&gt; import com.twitter.util.logging.Logger
+import com.twitter.util.logging.Logger
 
-  def foo() = {
-    logger.info(&quot;Calculating...&quot;)
-    &quot;bar&quot;
-  }
-}
+scala&gt; object MyObject extends Logging {
+     |
+     |   def myLogger: Logger = this.logger
+     |
+     |   def myLoggerName: String = this.loggerName
+     |
+     |   def foo() = {
+     |     info(&quot;Calculating...&quot;)
+     |     &quot;bar&quot;
+     |   }
+     | }
+defined object MyObject
+
+scala&gt; MyObject.myLoggerName
+res0: String = MyObject
+
+scala&gt; val logger = MyObject.myLogger
+logger: com.twitter.util.logging.Logger = com.twitter.util.logging.Logger@65da4a5d
+
+scala&gt; logger.name
+res1: String = MyObject
+
+scala&gt; logger.isInfoEnabled
+res2: Boolean = true
+
+scala&gt; MyObject.foo
+<span class="hll">12:41:20.171 [main] INFO $line5.$read$$iw$$iw$MyObject - Calculating...
+</span>res3: String = bar
+
+scala&gt; class MyClass extends Logging {
+     |
+     |   def myLogger: Logger = this.logger
+     |
+     |   def myLoggerName: String = this.loggerName
+     |
+     |   def bar() = {
+     |     info(&quot;Calculating...&quot;)
+     |     &quot;foo&quot;
+     |   }
+     |
+     | }
+defined class MyClass
+
+scala&gt; val c = new MyClass
+c: MyClass = MyClass@eaa901a
+
+scala&gt; c.myLoggerName
+res4: String = MyClass
+
+scala&gt; val logger = c.myLogger
+logger: com.twitter.util.logging.Logger = com.twitter.util.logging.Logger@4a03c4bc
+
+scala&gt; c.bar
+<span class="hll">12:43:19.130 [main] INFO $line15.$read$$iw$$iw$MyClass - Calculating...
+</span>res5: String = foo
+
+scala&gt;
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-api/src/main/scala/com/twitter/util/logging/Logger.scala">c.t.util.logging.Logger</a>
+will <a class="reference external" href="https://github.com/twitter/util/blob/20a66daa41117e473b9d1cba2b2a459efca000af/util-slf4j-api/src/main/scala/com/twitter/util/logging/Logger.scala#L70">remove the trailing</a>
+<cite>$</cite> from <a class="reference external" href="https://docs.scala-lang.org/tour/singleton-objects.html">Scala object</a> class names.</p>
+</div>
+</div>
+<div class="section" id="c-t-util-logging-logger">
+<h3><cite>c.t.util.logging.Logger</cite><a class="headerlink" href="#c-t-util-logging-logger" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-api/src/main/scala/com/twitter/util/logging/Logger.scala">c.t.util.logging.Logger</a>
+class provides a standard “Logger” interface wrapping the SLF4J <a class="reference external" href="https://www.javadoc.io/static/org.slf4j/slf4j-api/1.7.25/index.html?org/slf4j/Logger.html">org.slf4j.Logger</a>:</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span> <span class="k">import</span> <span class="nn">com.twitter.util.logging.Logger</span>
+
+ <span class="k">private</span> <span class="k">object</span> <span class="nc">MyCompanion</span> <span class="o">{</span>
+<span class="hll">   <span class="k">val</span> <span class="n">logger</span><span class="k">:</span> <span class="kt">Logger</span> <span class="o">=</span> <span class="nc">Logger</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="n">getClass</span><span class="o">)</span>
+</span> <span class="o">}</span>
+
+ <span class="k">class</span> <span class="nc">MyCompanion</span> <span class="o">{</span>
+   <span class="k">import</span> <span class="nn">MyCompanion._</span>
+
+   <span class="k">def</span> <span class="n">foo</span><span class="o">()</span> <span class="k">=</span> <span class="o">{</span>
+<span class="hll">     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="o">(</span><span class="s">&quot;Calculating...&quot;</span><span class="o">)</span>
+</span>     <span class="s">&quot;bar&quot;</span>
+   <span class="o">}</span>
+ <span class="o">}</span>
+</pre></div>
+</div>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span> Welcome to Scala 2.12.15 (JDK 64-Bit Server VM, Java 1.8.0_275).
+ Type in expressions for evaluation. Or try :help.
+
+ scala&gt; import com.twitter.util.logging.Logger
+ import com.twitter.util.logging.Logger
+
+ scala&gt; :paste
+ // Entering paste mode (ctrl-D to finish)
+
+ private object MyCompanion {
+   val logger: Logger = Logger(this.getClass)
+ }
+
+ class MyCompanion {
+   import MyCompanion._
+
+   def foo() = {
+     logger.info(&quot;Calculating...&quot;)
+     &quot;bar&quot;
+   }
+ }
+
+ // Exiting paste mode, now interpreting.
+
+ defined object MyCompanion
+ defined class MyCompanion
+
+ scala&gt; val c = new MyCompanion
+ c: MyCompanion = MyCompanion@63cf578f
+
+ scala&gt; c.foo
+<span class="hll"> 12:52:43.809 [main] INFO $line4.$read$$iw$$iw$MyCompanion - Calculating...
+</span> res0: String = bar
+
+ scala&gt;
 </pre></div>
 </div>
 <p>For more information see the util-slf4j-api <a class="reference external" href="https://twitter.github.io/util/docs/com/twitter/util/logging/index.html">scaladocs</a>
 or <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-api/README.md">README</a>.</p>
+</div>
+</div>
 </div>
 
 
@@ -152,7 +283,20 @@ or <a class="reference external" href="https://github.com/twitter/util/blob/deve
   <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
-</ul><h3>Related Topics</h3>
+</ul>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction to Logging With Finatra</a><ul>
+<li><a class="reference internal" href="#bridging-logging-implementations">Bridging Logging Implementations</a></li>
+<li><a class="reference internal" href="#util-util-slf4j-api"><cite>util/util-slf4j-api</cite></a><ul>
+<li><a class="reference internal" href="#c-t-util-logging-logging"><cite>c.t.util.logging.Logging</cite></a></li>
+<li><a class="reference internal" href="#c-t-util-logging-logger"><cite>c.t.util.logging.Logger</cite></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
   <li><a href="../index.html">User’s Guide</a><ul>
@@ -183,7 +327,7 @@ or <a class="reference external" href="https://github.com/twitter/util/blob/deve
   
 
   <div class="footer">
-    &copy; Copyright 2013-2022 Twitter, Inc.
+    &copy; Copyright 2022 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

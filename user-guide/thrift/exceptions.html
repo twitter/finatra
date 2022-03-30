@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Thrift Exception Mapping &#8212; Finatra 22.2.0 documentation</title>
+    <title>Thrift Exception Mapping &#8212; Finatra 22.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -78,99 +78,99 @@ another action). You are encouraged to do what makes sense for your use case or 
 <cite>ThriftServer</cite> which provides a root-level <em>no-op</em> mapping for exceptions. You can register
 additional mappers or override the default altogether.</p>
 <p>Given the following Thrift IDL:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>namespace java com.twitter.example.thriftjava
-#@namespace scala com.twitter.example.thriftscala
-namespace rb ExampleService
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">namespace</span> <span class="n">java</span> <span class="n">com</span><span class="o">.</span><span class="n">twitter</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">thriftjava</span>
+<span class="o">#</span><span class="nd">@namespace</span> <span class="n">scala</span> <span class="n">com</span><span class="o">.</span><span class="n">twitter</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">thriftscala</span>
+<span class="n">namespace</span> <span class="n">rb</span> <span class="nc">ExampleService</span>
 
-exception UnknownClientIdError {
-  1: string message
-}
+<span class="n">exception</span> <span class="nc">UnknownClientIdError</span> <span class="o">{</span>
+  <span class="mi">1</span><span class="k">:</span> <span class="kt">string</span> <span class="kt">message</span>
+<span class="o">}</span>
 
-exception NoClientIdError {
-  1: string message
-}
+<span class="n">exception</span> <span class="nc">NoClientIdError</span> <span class="o">{</span>
+  <span class="mi">1</span><span class="k">:</span> <span class="kt">string</span> <span class="kt">message</span>
+<span class="o">}</span>
 
-enum ClientErrorCause {
-  /** Improperly-formatted request can&#39;t be fulfilled. */
-  BAD_REQUEST     = 0,
+<span class="n">enum</span> <span class="nc">ClientErrorCause</span> <span class="o">{</span>
+  <span class="cm">/** Improperly-formatted request can&#39;t be fulfilled. */</span>
+  <span class="nc">BAD_REQUEST</span>     <span class="k">=</span> <span class="mi">0</span><span class="o">,</span>
 
-  /** Required request authorization failed. */
-  UNAUTHORIZED    = 1,
+  <span class="cm">/** Required request authorization failed. */</span>
+  <span class="nc">UNAUTHORIZED</span>    <span class="k">=</span> <span class="mi">1</span><span class="o">,</span>
 
-  /** Server timed out while fulfilling the request. */
-  REQUEST_TIMEOUT = 2,
+  <span class="cm">/** Server timed out while fulfilling the request. */</span>
+  <span class="nc">REQUEST_TIMEOUT</span> <span class="k">=</span> <span class="mi">2</span><span class="o">,</span>
 
-  /** Initiating client has exceeded its maximum rate. */
-  RATE_LIMITED    = 3
-}
+  <span class="cm">/** Initiating client has exceeded its maximum rate. */</span>
+  <span class="nc">RATE_LIMITED</span>    <span class="k">=</span> <span class="mi">3</span>
+<span class="o">}</span>
 
-exception ClientError {
-  1: ClientErrorCause errorCause
-  2: string message
-}
+<span class="n">exception</span> <span class="nc">ClientError</span> <span class="o">{</span>
+  <span class="mi">1</span><span class="k">:</span> <span class="kt">ClientErrorCause</span> <span class="kt">errorCause</span>
+  <span class="mi">2</span><span class="k">:</span> <span class="kt">string</span> <span class="kt">message</span>
+<span class="o">}</span>
 
-enum ServerErrorCause {
-  /** Generic server error. */
-  INTERNAL_SERVER_ERROR = 0,
+<span class="n">enum</span> <span class="nc">ServerErrorCause</span> <span class="o">{</span>
+  <span class="cm">/** Generic server error. */</span>
+  <span class="nc">INTERNAL_SERVER_ERROR</span> <span class="k">=</span> <span class="mi">0</span><span class="o">,</span>
 
-  /** Server lacks the ability to fulfill the request. */
-  NOT_IMPLEMENTED       = 1,
+  <span class="cm">/** Server lacks the ability to fulfill the request. */</span>
+  <span class="nc">NOT_IMPLEMENTED</span>       <span class="k">=</span> <span class="mi">1</span><span class="o">,</span>
 
-  /** Request cannot be fulfilled due to error from dependent service. */
-  DEPENDENCY_ERROR      = 2,
+  <span class="cm">/** Request cannot be fulfilled due to error from dependent service. */</span>
+  <span class="nc">DEPENDENCY_ERROR</span>      <span class="k">=</span> <span class="mi">2</span><span class="o">,</span>
 
-  /** Server is currently unavailable. */
-  SERVICE_UNAVAILABLE   = 3
-}
+  <span class="cm">/** Server is currently unavailable. */</span>
+  <span class="nc">SERVICE_UNAVAILABLE</span>   <span class="k">=</span> <span class="mi">3</span>
+<span class="o">}</span>
 
-exception ServerError {
-  1: ServerErrorCause errorCause
-  2: string message
-}
+<span class="n">exception</span> <span class="nc">ServerError</span> <span class="o">{</span>
+  <span class="mi">1</span><span class="k">:</span> <span class="kt">ServerErrorCause</span> <span class="kt">errorCause</span>
+  <span class="mi">2</span><span class="k">:</span> <span class="kt">string</span> <span class="kt">message</span>
+<span class="o">}</span>
 
-service ExampleService {
-  i32 add1(
-    1: i32 num
-  ) throws (
-    1: ServerError serverError,
-    2: UnknownClientIdError unknownClientIdError
-    3: NoClientIdError kClientError
-  )
-}
+<span class="n">service</span> <span class="nc">ExampleService</span> <span class="o">{</span>
+  <span class="n">i32</span> <span class="n">add1</span><span class="o">(</span>
+    <span class="mi">1</span><span class="k">:</span> <span class="kt">i32</span> <span class="kt">num</span>
+  <span class="o">)</span> <span class="n">throws</span> <span class="o">(</span>
+    <span class="mi">1</span><span class="k">:</span> <span class="kt">ServerError</span> <span class="kt">serverError</span><span class="o">,</span>
+    <span class="mi">2</span><span class="k">:</span> <span class="kt">UnknownClientIdError</span> <span class="kt">unknownClientIdError</span>
+    <span class="mi">3</span><span class="k">:</span> <span class="kt">NoClientIdError</span> <span class="kt">kClientError</span>
+  <span class="o">)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>If you wanted to map a <cite>java.lang.ClassCastException</cite> to an exception specified in the Thrift
 IDL, you could create the following <cite>ExceptionMapper</cite>:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.example.thriftscala.{ClientError, ClientErrorCause}
-import com.twitter.finatra.thrift.exceptions.ExceptionMapper
-import com.twitter.util.Future
-import java.lang.ClassCastException
-import javax.inject.Singleton
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.example.thriftscala.</span><span class="o">{</span><span class="nc">ClientError</span><span class="o">,</span> <span class="nc">ClientErrorCause</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.exceptions.ExceptionMapper</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.Future</span>
+<span class="k">import</span> <span class="nn">java.lang.ClassCastException</span>
+<span class="k">import</span> <span class="nn">javax.inject.Singleton</span>
 
-@Singleton
-class ClassCastExceptionMapper
-  extends ExceptionMapper[ClassCastException, ClientError] {
+<span class="nd">@Singleton</span>
+<span class="k">class</span> <span class="nc">ClassCastExceptionMapper</span>
+  <span class="k">extends</span> <span class="nc">ExceptionMapper</span><span class="o">[</span><span class="kt">ClassCastException</span>, <span class="kt">ClientError</span><span class="o">]</span> <span class="o">{</span>
 
-  def handleException(throwable: ClassCastException): Future[ClientError] = {
-    Future.exception(ClientError(ClientErrorCause.BadRequest, throwable.getMessage))
-  }
-}
+  <span class="k">def</span> <span class="n">handleException</span><span class="o">(</span><span class="n">throwable</span><span class="k">:</span> <span class="kt">ClassCastException</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">ClientError</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="nc">Future</span><span class="o">.</span><span class="n">exception</span><span class="o">(</span><span class="nc">ClientError</span><span class="o">(</span><span class="nc">ClientErrorCause</span><span class="o">.</span><span class="nc">BadRequest</span><span class="o">,</span> <span class="n">throwable</span><span class="o">.</span><span class="n">getMessage</span><span class="o">))</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Then register this exception mapper in your server.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.ThriftServer
-import com.twitter.finatra.thrift.filters.ExceptionMappingFilter
-import com.twitter.finatra.thrift.routing.ThriftRouter
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.ThriftServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.filters.ExceptionMappingFilter</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.routing.ThriftRouter</span>
 
-class MyThriftServer extends ThriftServer {
+<span class="k">class</span> <span class="nc">MyThriftServer</span> <span class="k">extends</span> <span class="nc">ThriftServer</span> <span class="o">{</span>
 
-  override def configureThrift(router: ThriftRouter): Unit = {
-    router
-      .filter[ExceptionMappingFilter]
-      .exceptionMapper[ClassCastExceptionMapper]
+  <span class="k">override</span> <span class="k">def</span> <span class="n">configureThrift</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">ThriftRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">router</span>
+      <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">ExceptionMappingFilter</span><span class="o">]</span>
+      <span class="o">.</span><span class="n">exceptionMapper</span><span class="o">[</span><span class="kt">ClassCastExceptionMapper</span><span class="o">]</span>
 
-    ???
-  }
+    <span class="o">???</span>
+  <span class="o">}</span>
 </pre></div>
 </div>
 <p>You can see here we register the exception mapper <em>by type</em> allowing the framework to instantiate
@@ -236,55 +236,55 @@ previous mapper will be overwritten.</p>
 <h2>Register an Exception Mapper<a class="headerlink" href="#register-an-exception-mapper" title="Permalink to this headline">¶</a></h2>
 <p>There are several ways to add a mapper.</p>
 <p>Either directly through the <cite>ThriftRouter</cite>:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>override def configureThrift(router: ThriftRouter): Unit = {
-  router
-    .filter[ExceptionMappingFilter]
-    .exceptionMapper[MyThrowableExceptionMapper]
-    .exceptionMapper[OtherExceptionMapper]
-}
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">override</span> <span class="k">def</span> <span class="n">configureThrift</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">ThriftRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="n">router</span>
+    <span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">ExceptionMappingFilter</span><span class="o">]</span>
+    <span class="o">.</span><span class="n">exceptionMapper</span><span class="o">[</span><span class="kt">MyThrowableExceptionMapper</span><span class="o">]</span>
+    <span class="o">.</span><span class="n">exceptionMapper</span><span class="o">[</span><span class="kt">OtherExceptionMapper</span><span class="o">]</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>With the <cite>JavaThriftRouter</cite>:</p>
-<div class="code java highlight-text notranslate"><div class="highlight"><pre><span></span>@Override
-public void configureThrift(router: JavaThriftRouter) {
-   router
-     .filter(ExceptionMappingFilter.class)
-     .exceptionMapper(MyThrowableExceptionMapper.class)
-     .exceptionMapper(OtherExceptionMapper.class);
- }
+<div class="code java highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="nd">@Override</span>
+<span class="n">public</span> <span class="n">void</span> <span class="n">configureThrift</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">JavaThriftRouter</span><span class="o">)</span> <span class="o">{</span>
+   <span class="n">router</span>
+     <span class="o">.</span><span class="n">filter</span><span class="o">(</span><span class="nc">ExceptionMappingFilter</span><span class="o">.</span><span class="n">class</span><span class="o">)</span>
+     <span class="o">.</span><span class="n">exceptionMapper</span><span class="o">(</span><span class="nc">MyThrowableExceptionMapper</span><span class="o">.</span><span class="n">class</span><span class="o">)</span>
+     <span class="o">.</span><span class="n">exceptionMapper</span><span class="o">(</span><span class="nc">OtherExceptionMapper</span><span class="o">.</span><span class="n">class</span><span class="o">);</span>
+ <span class="o">}</span>
 </pre></div>
 </div>
 <p>Or in a module which is then added to the Server, e.g.,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>object MyExceptionMapperModule extends TwitterModule {
-  override def singletonStartup(injector: Injector): Unit = {
-    val manager = injector.instance[ExceptionManager]
-    manager.add[MyThrowableExceptionMapper]
-    manager.add[OtherExceptionMapper]
-  }
-}
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">object</span> <span class="nc">MyExceptionMapperModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">singletonStartup</span><span class="o">(</span><span class="n">injector</span><span class="k">:</span> <span class="kt">Injector</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="n">manager</span> <span class="k">=</span> <span class="n">injector</span><span class="o">.</span><span class="n">instance</span><span class="o">[</span><span class="kt">ExceptionManager</span><span class="o">]</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">MyThrowableExceptionMapper</span><span class="o">]</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">OtherExceptionMapper</span><span class="o">]</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 
-...
+<span class="o">...</span>
 
-override val modules = Seq(
-  MyExceptionMapperModule)
+<span class="k">override</span> <span class="k">val</span> <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+  <span class="nc">MyExceptionMapperModule</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>in Java:</p>
-<div class="code java highlight-text notranslate"><div class="highlight"><pre><span></span>public class MyExceptionMapperModule extends TwitterModule {
-  @Override
-  public void singletonStartup(Injector injector) {
-    ExceptionManager manager = injector.instance(ExceptionManager.class);
-    manager.add(MyThrowableExceptionMapper.class);
-    manager.add(OtherExceptionMapper.class);
-  }
-}
+<div class="code java highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="k">class</span> <span class="nc">MyExceptionMapperModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
+  <span class="nd">@Override</span>
+  <span class="n">public</span> <span class="n">void</span> <span class="n">singletonStartup</span><span class="o">(</span><span class="nc">Injector</span> <span class="n">injector</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">ExceptionManager</span> <span class="n">manager</span> <span class="k">=</span> <span class="n">injector</span><span class="o">.</span><span class="n">instance</span><span class="o">(</span><span class="nc">ExceptionManager</span><span class="o">.</span><span class="n">class</span><span class="o">);</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">add</span><span class="o">(</span><span class="nc">MyThrowableExceptionMapper</span><span class="o">.</span><span class="n">class</span><span class="o">);</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">add</span><span class="o">(</span><span class="nc">OtherExceptionMapper</span><span class="o">.</span><span class="n">class</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 
-...
+<span class="o">...</span>
 
-@Override
-public Collection&lt;Module&gt; javaModules() {
-  return Collections.singletonList(new MyExceptionMapperModule());
-}
+<span class="nd">@Override</span>
+<span class="n">public</span> <span class="nc">Collection</span><span class="o">&lt;</span><span class="nc">Module</span><span class="o">&gt;</span> <span class="n">javaModules</span><span class="o">()</span> <span class="o">{</span>
+  <span class="k">return</span> <span class="nc">Collections</span><span class="o">.</span><span class="n">singletonList</span><span class="o">(</span><span class="k">new</span> <span class="nc">MyExceptionMapperModule</span><span class="o">());</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 </div>
@@ -352,7 +352,7 @@ public Collection&lt;Module&gt; javaModules() {
   
 
   <div class="footer">
-    &copy; Copyright 2013-2022 Twitter, Inc.
+    &copy; Copyright 2022 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

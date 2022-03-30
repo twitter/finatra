@@ -177,6 +177,74 @@ For example, to exit the application upon receiving an `INT` signal:
     }
   }
 
+An Example of Handling Console Output
+-------------------------------------
+
+There may be cases where your application needs to output information to the console, such as when you are
+writing a command-line utility that prints its result when a computation has finished. There are some gotchas
+to making console output testable, so Finatra has exposed a `ConsoleWriter <https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/console/ConsoleWriter.scala>`__
+that can be used by both Java and Scala applications. The `ConsoleWriter` avoids modifying global JVM state, as modifying
+`System.setOut()` and/or `System.setErr()` may result in flaky tests.
+
+.. note::
+
+  Finatra exposes Logging integrations, which are a separate concern from the `ConsoleWriter`. The output
+  of a Logger may not be appropriate for a command-line utility. The testing/binding of a `Logger`
+  is currently beyond the scope of the `ConsoleWriter`. Additionally, `Logger` configuration is
+  extremely flexible and there are no guarantees of messages reaching the console.
+
+  For more information on logging with Finatra see: `Introduction to Logging With Finatra <../logging/index.html#introduction-to-logging-with-finatra>`__.
+
+If your implementation is in Scala, the `ConsoleWriter` acts
+as a drop in replacement that allows for capturing any `scala.Console` output (i.e. via `println()`) within the
+`c.t.inject.app.App#run()` method via the `TestConsoleWriter <#testconsolewriter>`__ without explicit use of the `ConsoleWriter`.
+
+For example,
+
+.. code:: scala
+
+    import com.twitter.inject.app.App
+    import com.twitter.inject.console.ConsoleWriter
+
+    class MyApp extends App {
+
+      override def run(): Unit = {
+        val console = injector.instance[ConsoleWriter]
+        console.out.println("Hello, World!")
+        console.err.println("Oops!")
+        // println("Hello, World!") will be forwarded to `console`
+        // Console.out.println("Hello, World!") will be forwarded to `console`
+        // System.out.println("Hello, World!") will NOT be forwarded to `console`
+      }
+    }
+
+If your implementation is in Java, the `System.out` and `System.err` calls will not be forwarded
+to the `ConsoleWriter` automatically, due to their previously mentioned coupling to global JVM state.
+For Java users, it would be preferred to have expected console output of the `c.t.inject.app.App#run()`
+method use the `ConsoleWriter` directly.
+
+For example:
+
+.. code:: java
+
+    import com.twitter.inject.app.AbstractApp;
+    import com.twitter.inject.console.ConsoleWriter;
+
+    public class MyApp extends AbstractApp {
+
+        @Override
+        public void run() {
+            // Core app logic goes here.
+            ConsoleWriter console =
+              injector().instance(ConsoleWriter.class);
+            console.out().println("Hello, World!");
+            console.err().println("Oops!");
+            // System.out.println("Hello, World!") will NOT be forwarded to `console`
+        }
+    }
+
+See `TestConsoleWriter <#testconsolewriter>`__ for testing and verifying `ConsoleWriter` output.
+
 Testing
 -------
 
@@ -260,6 +328,102 @@ and in Java:
     you may want to ensure that a new instance of your application under test is created per test run, like written above.
 
 There may be cases where you want to assert some metrics are written by your application for the purpose of testing functionality, even though your application may not export them for collection.
+
+TestConsoleWriter
+-----------------
+
+Finatra provides a `ConsoleWriterModule <https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/internal/ConsoleWriterModule.scala>`__ which will bind the `ConsoleWriter <https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/console/ConsoleWriter.scala>`__ to the object graph.
+The `ConsoleWriter` can be bound for testing with the `TestConsoleWriter <https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/TestConsoleWriter.scala>`__ in order to inspect the console output of a command-line style `App`.
+
+Assuming you have an App:
+
+.. code:: scala
+
+    import com.twitter.inject.app.App
+    import com.twitter.inject.app.console.ConsoleWriter
+
+    object MyAppMain extends MyApp
+
+    class MyApp extends App {
+
+      override protected def run(): Unit = {
+        // Core app logic goes here.
+        val console = injector.instance[ConsoleWriter]
+        console.out.println("Hello, World!")
+
+        // output to the Scala `Console` will also be captured, the following would be equivalent:
+        // Console.out.println("Hello, World!")
+        // println("Hello, World!")
+      }
+    }
+
+and in Java:
+
+.. code:: java
+
+    import com.twitter.inject.app.AbstractApp;
+    import com.twitter.inject.console.ConsoleWriter;
+
+    public class MyApp extends AbstractApp {
+
+        @Override
+        public void run() {
+            // Core app logic goes here.
+            ConsoleWriter console =
+              injector().instance(ConsoleWriter.class);
+            console.out().println("Hello, World!");
+            // System.out.println("Hello, World!"); will NOT be captured for testing
+        }
+    }
+
+You could then test emitted console output like so:
+
+.. code:: scala
+
+    import com.twitter.inject.Test
+    import com.twitter.inject.app.EmbeddedApp
+    import com.twitter.inject.app.TestConsoleWriter
+    import com.twitter.inject.app.console.ConsoleWriter
+
+    class MyAppTest extends Test {
+      val console = new TestConsoleWriter()
+      // build an EmbeddedApp
+      def app(): EmbeddedApp = app(new MyApp).bind[ConsoleWriter].toInstance(console)
+
+      override def beforeEach(): Unit = {
+        console.reset()
+        super.beforeEach()
+      }
+
+      test("assert count") {
+        val undertest = app()
+        undertest.main()
+
+        assert(console.inspectOut() == "Hello, World!\n")
+      }
+    }
+
+and in Java:
+
+.. code:: java
+
+    import com.twitter.inject.app.EmbeddedApp;
+    import com.twitter.inject.app.TestConsoleWriter;
+    import com.twitter.inject.app.console.ConsoleWriter;
+
+    import junit.Assert;
+    import junit.Test;
+
+    public class MyAppTest extends Assert {
+
+      @Test
+      public void testOutput() throws Exception {
+        TestConsoleWriter console = new TestConsoleWriter();
+        EmbeddedApp app = new EmbeddedApp(myApp).bindClass(ConsoleWriter.class, console);
+        app.main();
+        assertEquals(console.inspectOut(), "Hello, World!\n");
+      }
+    }
 
 InMemoryStatsReceiver
 ---------------------

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Jackson Integration &#8212; Finatra 22.2.0 documentation</title>
+    <title>Jackson Integration &#8212; Finatra 22.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -95,20 +95,74 @@ structures [<a class="reference external" href="https://www.json.org/json-en.htm
 <p>Here we outline some simple usage patterns. More examples can be found in the TwitterUtil
 <a class="reference external" href="http://twitter.github.io/util/guide/util-jackson/index.html">User Guide</a>.</p>
 <p>Let’s assume we have these two case classes:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class Bar(d: String)
-case class Foo(a: String, b: Int, c: Bar)
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span> <span class="k">class</span> <span class="nc">Bar</span><span class="o">(</span><span class="n">d</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
+<span class="k">case</span> <span class="k">class</span> <span class="nc">Foo</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">b</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">c</span><span class="k">:</span> <span class="kt">Bar</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>To <strong>serialize</strong> a case class into a JSON string, use</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>ScalaObjectMapper#writeValueAsString(any: Any): String
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="nc">ScalaObjectMapper</span><span class="k">#</span><span class="n">writeValueAsString</span><span class="o">(</span><span class="n">any</span><span class="k">:</span> <span class="kt">Any</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span>
 </pre></div>
 </div>
 <p>For example:</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span> Welcome to Scala 2.12.13 (JDK 64-Bit Server VM, Java 1.8.0_242).
+ Type in expressions for evaluation. Or try :help.
+
+ scala&gt; import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
+ import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
+
+ scala&gt; import com.twitter.util.jackson.ScalaObjectMapper
+ import com.twitter.util.jackson.ScalaObjectMapper
+
+ scala&gt; val mapper: ScalaObjectMapper = (new ScalaObjectMapperModule).objectMapper
+ mapper: com.twitter.util.jackson.ScalaObjectMapper = com.twitter.util.jackson.ScalaObjectMapper@5690c2a8
+
+ scala&gt; val foo = Foo(&quot;Hello, World&quot;, 42, Bar(&quot;Goodbye, World&quot;))
+ foo: Foo = Foo(Hello, World,42,Bar(Goodbye, World))
+
+<span class="hll"> scala&gt; mapper.writeValueAsString(foo)
+</span> res0: String = {&quot;a&quot;:&quot;Hello, World&quot;,&quot;b&quot;:42,&quot;c&quot;:{&quot;d&quot;:&quot;Goodbye, World&quot;}}
+
+ scala&gt; // or use the configured &quot;pretty print mapper&quot;
+
+<span class="hll"> scala&gt; mapper.writePrettyString(foo)
+</span> res1: String =
+ {
+   &quot;a&quot; : &quot;Hello, World&quot;,
+   &quot;b&quot; : 42,
+   &quot;c&quot; : {
+     &quot;d&quot; : &quot;Goodbye, World&quot;
+   }
+ }
+
+ scala&gt;
+</pre></div>
+</div>
 <p>To <strong>deserialize</strong> a JSON string into a case class, use</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>ScalaObjectMapper#parse[T](s: String): T
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="nc">ScalaObjectMapper</span><span class="k">#</span><span class="n">parse</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">T</span>
 </pre></div>
 </div>
 <p>For example, assuming the same <cite>Bar</cite> and <cite>Foo</cite> case classes defined above:</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span> Welcome to Scala 2.12.13 (JDK 64-Bit Server VM, Java 1.8.0_242).
+ Type in expressions for evaluation. Or try :help.
+
+ scala&gt; import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
+ import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
+
+ scala&gt; import com.twitter.util.jackson.ScalaObjectMapper
+ import com.twitter.util.jackson.ScalaObjectMapper
+
+ scala&gt; val mapper: ScalaObjectMapper = (new ScalaObjectMapperModule).objectMapper
+ mapper: com.twitter.util.jackson.ScalaObjectMapper = com.twitter.util.jackson.ScalaObjectMapper@2c1523cd
+
+ scala&gt; val s = &quot;&quot;&quot;{&quot;a&quot;: &quot;Hello, World&quot;, &quot;b&quot;: 42, &quot;c&quot;: {&quot;d&quot;: &quot;Goodbye, World&quot;}}&quot;&quot;&quot;
+ s: String = {&quot;a&quot;: &quot;Hello, World&quot;, &quot;b&quot;: 42, &quot;c&quot;: {&quot;d&quot;: &quot;Goodbye, World&quot;}}
+
+<span class="hll"> scala&gt; val foo = mapper.parse[Foo](s)
+</span> foo: Foo = Foo(Hello, World,42,Bar(Goodbye, World))
+
+ scala&gt;
+</pre></div>
+</div>
 <p>You can find many examples of using the <cite>ScalaObjectMapperModule</cite> in the various framework tests:</p>
 <ul class="simple">
 <li>Scala examples [<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModuleTest.scala">1</a>, <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/jackson/ScalaObjectMapperTest.scala">2</a>].</li>
@@ -146,37 +200,37 @@ mapper across your application.</p>
 <cite>ScalaObjectMapper#Builder</cite> for configuring the bound mappers.</p>
 <p>For example, to create a <a class="reference external" href="../getting-started/modules.html">c.t.inject.TwitterModule</a>  which sets
 the <cite>PropertyNamingStrategy</cite> different than the default:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.fasterxml.jackson.databind.PropertyNamingStrategy
-import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.fasterxml.jackson.databind.PropertyNamingStrategy</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.jackson.modules.ScalaObjectMapperModule</span>
 
-object MyCustomObjectMapperModule extends ScalaObjectMapperModule {
+<span class="k">object</span> <span class="nc">MyCustomObjectMapperModule</span> <span class="k">extends</span> <span class="nc">ScalaObjectMapperModule</span> <span class="o">{</span>
 
-    override val propertyNamingStrategy: PropertyNamingStrategy =
-      new PropertyNamingStrategy.KebabCaseStrategy
-}
+    <span class="k">override</span> <span class="k">val</span> <span class="n">propertyNamingStrategy</span><span class="k">:</span> <span class="kt">PropertyNamingStrategy</span> <span class="o">=</span>
+      <span class="k">new</span> <span class="nc">PropertyNamingStrategy</span><span class="o">.</span><span class="nc">KebabCaseStrategy</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Or to set additional modules or configuration:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.fasterxml.jackson.databind.{
-  DeserializationFeature,
-  Module,
-  ObjectMapper,
-  PropertyNamingStrategy
-}
-import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.fasterxml.jackson.databind.</span><span class="o">{</span>
+  <span class="nc">DeserializationFeature</span><span class="o">,</span>
+  <span class="nc">Module</span><span class="o">,</span>
+  <span class="nc">ObjectMapper</span><span class="o">,</span>
+  <span class="nc">PropertyNamingStrategy</span>
+<span class="o">}</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.jackson.modules.ScalaObjectMapperModule</span>
 
-object MyCustomObjectMapperModule extends ScalaObjectMapperModule {
+<span class="k">object</span> <span class="nc">MyCustomObjectMapperModule</span> <span class="k">extends</span> <span class="nc">ScalaObjectMapperModule</span> <span class="o">{</span>
 
-    override val propertyNamingStrategy: PropertyNamingStrategy =
-      new PropertyNamingStrategy.KebabCaseStrategy
+    <span class="k">override</span> <span class="k">val</span> <span class="n">propertyNamingStrategy</span><span class="k">:</span> <span class="kt">PropertyNamingStrategy</span> <span class="o">=</span>
+      <span class="k">new</span> <span class="nc">PropertyNamingStrategy</span><span class="o">.</span><span class="nc">KebabCaseStrategy</span>
 
-    override val additionalJacksonModules: Seq[Module] =
-      Seq(MySimpleJacksonModule)
+    <span class="k">override</span> <span class="k">val</span> <span class="n">additionalJacksonModules</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Module</span><span class="o">]</span> <span class="k">=</span>
+      <span class="nc">Seq</span><span class="o">(</span><span class="nc">MySimpleJacksonModule</span><span class="o">)</span>
 
-    override def additionalMapperConfiguration(mapper: ObjectMapper): Unit = {
-      mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true)
-    }
-}
+    <span class="k">override</span> <span class="k">def</span> <span class="n">additionalMapperConfiguration</span><span class="o">(</span><span class="n">mapper</span><span class="k">:</span> <span class="kt">ObjectMapper</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+      <span class="n">mapper</span><span class="o">.</span><span class="n">configure</span><span class="o">(</span><span class="nc">DeserializationFeature</span><span class="o">.</span><span class="nc">FAIL_ON_UNKNOWN_PROPERTIES</span><span class="o">,</span> <span class="kc">true</span><span class="o">)</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>See the <a class="reference external" href="../getting-started/modules.html#module-configuration-in-servers">Modules Configuration in Servers</a>
@@ -228,57 +282,57 @@ and can thus be used in place). See example below.</p>
 </li>
 </ul>
 <p>For example: first create the serializer or deserializer (a deserializer example is shown below)</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.fasterxml.jackson.databind.JsonDeserializer
-import com.fasterxml.jackson.databind.deser.Deserializers
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.fasterxml.jackson.databind.JsonDeserializer</span>
+<span class="k">import</span> <span class="nn">com.fasterxml.jackson.databind.deser.Deserializers</span>
 
-// custom deserializer
-class FooDeserializer extends JsonDeserializer[Foo] {
-  override def deserialize(...)
-}
+<span class="c1">// custom deserializer</span>
+<span class="k">class</span> <span class="nc">FooDeserializer</span> <span class="k">extends</span> <span class="nc">JsonDeserializer</span><span class="o">[</span><span class="kt">Foo</span><span class="o">]</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">deserialize</span><span class="o">(...)</span>
+<span class="o">}</span>
 
-// custom parameterized deserializer
-class MapIntIntDeserializer extends JsonDeserializer[Map[Int, Int]] {
-  override def deserialize(...)
-}
+<span class="c1">// custom parameterized deserializer</span>
+<span class="k">class</span> <span class="nc">MapIntIntDeserializer</span> <span class="k">extends</span> <span class="nc">JsonDeserializer</span><span class="o">[</span><span class="kt">Map</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">Int</span><span class="o">]]</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">deserialize</span><span class="o">(...)</span>
+<span class="o">}</span>
 
-// custom parameterized deserializer resolver
-class MapIntIntDeserializerResolver extends Deserializers.Base {
-  override def findBeanDeserializer(
-    javaType: JavaType,
-    config: DeserializationConfig,
-    beanDesc: BeanDescription
-  ): MapIntIntDeserializer = {
-    if (javaType.isMapLikeType &amp;&amp; javaType.hasGenericTypes &amp;&amp; hasIntTypes(javaType)) {
-      new MapIntIntDeserializer
-    } else null
-  }
+<span class="c1">// custom parameterized deserializer resolver</span>
+<span class="k">class</span> <span class="nc">MapIntIntDeserializerResolver</span> <span class="k">extends</span> <span class="nc">Deserializers</span><span class="o">.</span><span class="nc">Base</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">findBeanDeserializer</span><span class="o">(</span>
+    <span class="n">javaType</span><span class="k">:</span> <span class="kt">JavaType</span><span class="o">,</span>
+    <span class="n">config</span><span class="k">:</span> <span class="kt">DeserializationConfig</span><span class="o">,</span>
+    <span class="n">beanDesc</span><span class="k">:</span> <span class="kt">BeanDescription</span>
+  <span class="o">)</span><span class="k">:</span> <span class="kt">MapIntIntDeserializer</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">javaType</span><span class="o">.</span><span class="n">isMapLikeType</span> <span class="o">&amp;&amp;</span> <span class="n">javaType</span><span class="o">.</span><span class="n">hasGenericTypes</span> <span class="o">&amp;&amp;</span> <span class="n">hasIntTypes</span><span class="o">(</span><span class="n">javaType</span><span class="o">))</span> <span class="o">{</span>
+      <span class="k">new</span> <span class="nc">MapIntIntDeserializer</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="kc">null</span>
+  <span class="o">}</span>
 
-  private[this] def hasIntTypes(javaType: JavaType): Boolean = {
-    val k = javaType.containedType(0)
-    val v = javaType.containedType(1)
-    k.isPrimitive &amp;&amp; k.getRawClass == classOf[Integer] &amp;&amp;
-      v.isPrimitive &amp;&amp; v.getRawClass == classOf[Integer]
-  }
-}
+  <span class="k">private</span><span class="o">[</span><span class="kt">this</span><span class="o">]</span> <span class="k">def</span> <span class="n">hasIntTypes</span><span class="o">(</span><span class="n">javaType</span><span class="k">:</span> <span class="kt">JavaType</span><span class="o">)</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="n">k</span> <span class="k">=</span> <span class="n">javaType</span><span class="o">.</span><span class="n">containedType</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+    <span class="k">val</span> <span class="n">v</span> <span class="k">=</span> <span class="n">javaType</span><span class="o">.</span><span class="n">containedType</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
+    <span class="n">k</span><span class="o">.</span><span class="n">isPrimitive</span> <span class="o">&amp;&amp;</span> <span class="n">k</span><span class="o">.</span><span class="n">getRawClass</span> <span class="o">==</span> <span class="n">classOf</span><span class="o">[</span><span class="kt">Integer</span><span class="o">]</span> <span class="o">&amp;&amp;</span>
+      <span class="n">v</span><span class="o">.</span><span class="n">isPrimitive</span> <span class="o">&amp;&amp;</span> <span class="n">v</span><span class="o">.</span><span class="n">getRawClass</span> <span class="o">==</span> <span class="n">classOf</span><span class="o">[</span><span class="kt">Integer</span><span class="o">]</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Then add via a Jackson <cite>SimpleModule</cite> or a <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala"><cite>jackson-module-scala</cite></a> <cite>JacksonModule</cite>:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.fasterxml.jackson.databind.module.SimpleModule
-import com.fasterxml.jackson.module.scala.JacksonModule
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.fasterxml.jackson.databind.module.SimpleModule</span>
+<span class="k">import</span> <span class="nn">com.fasterxml.jackson.module.scala.JacksonModule</span>
 
-// Jackson SimpleModule for custom deserializer
-class FooDeserializerModule extends SimpleModule {
-  addDeserializer(FooDeserializer)
-}
+<span class="c1">// Jackson SimpleModule for custom deserializer</span>
+<span class="k">class</span> <span class="nc">FooDeserializerModule</span> <span class="k">extends</span> <span class="nc">SimpleModule</span> <span class="o">{</span>
+  <span class="n">addDeserializer</span><span class="o">(</span><span class="nc">FooDeserializer</span><span class="o">)</span>
+<span class="o">}</span>
 
-// Jackson Module Scala JacksonModule for custom deserializer
-class MapIntIntDeserializerModule extends JacksonModule {
-  override def getModuleName: String = this.getClass.getName
+<span class="c1">// Jackson Module Scala JacksonModule for custom deserializer</span>
+<span class="k">class</span> <span class="nc">MapIntIntDeserializerModule</span> <span class="k">extends</span> <span class="nc">JacksonModule</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">getModuleName</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="n">getClass</span><span class="o">.</span><span class="n">getName</span>
 
-  this += {
-    _.addDeserializers(new MapIntIntDeserializerResolver)
-  }
-}
+  <span class="k">this</span> <span class="o">+=</span> <span class="o">{</span>
+    <span class="k">_</span><span class="o">.</span><span class="n">addDeserializers</span><span class="o">(</span><span class="k">new</span> <span class="nc">MapIntIntDeserializerResolver</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -291,6 +345,22 @@ in concept to Google <a class="reference external" href="https://github.com/goog
 <cite>ObjectMapper</cite> instead of an <cite>Injector</cite>.</p>
 </div>
 <p>Lastly, add the custom serializer or deserializer to your customized Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala"><cite>ScalaObjectMapperModule</cite></a>:</p>
+<div class="highlight-scala notranslate"><div class="highlight"><pre><span></span> <span class="k">import</span> <span class="nn">com.twitter.finatra.jackson.modules.ScalaObjectMapperModule</span>
+
+ <span class="k">object</span> <span class="nc">MyCustomObjectMapperModule</span> <span class="k">extends</span> <span class="nc">ScalaObjectMapperModule</span> <span class="o">{</span>
+<span class="hll">   <span class="k">override</span> <span class="k">val</span> <span class="n">additionalJacksonModules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+</span><span class="hll">     <span class="c1">// added via a new anonymous SimpleModule</span>
+</span><span class="hll">     <span class="k">new</span> <span class="nc">SimpleModule</span> <span class="o">{</span>
+</span><span class="hll">       <span class="n">addSerializer</span><span class="o">(</span><span class="nc">LocalDateParser</span><span class="o">)</span>
+</span><span class="hll">     <span class="o">},</span>
+</span><span class="hll">     <span class="c1">// added via a re-usable SimpleModule</span>
+</span><span class="hll">     <span class="k">new</span> <span class="nc">FooDeserializerModule</span><span class="o">,</span>
+</span><span class="hll">     <span class="c1">// added via a re-usable JacksonModule</span>
+</span><span class="hll">     <span class="k">new</span> <span class="nc">MapIntIntDeserializerModule</span>
+</span><span class="hll">   <span class="o">)</span>
+</span> <span class="o">}</span>
+</pre></div>
+</div>
 <p>For more information see the Jackson documentation for
 <a class="reference external" href="https://github.com/FasterXML/jackson-docs/wiki/JacksonHowToCustomSerializers">Custom Serializers</a>.</p>
 <p>You would then use this module in your server. See the <a class="reference external" href="../getting-started/modules.html#module-configuration-in-servers">Modules Configuration in Servers</a>
@@ -336,9 +406,9 @@ this is “injection” of a value.</p>
 allows users to denote fields in the case class to fill with values that come from a configured Google <a class="reference external" href="https://github.com/google/guice">Guice</a>
 <a class="reference external" href="https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/Injector.html">Injector</a>
 such that you can do this:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import javax.inject.Inject
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">javax.inject.Inject</span>
 
-case class Foo(name: String, description: String, @Inject bar: Bar)
+<span class="k">case</span> <span class="k">class</span> <span class="nc">Foo</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">description</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="nd">@Inject</span> <span class="n">bar</span><span class="k">:</span> <span class="kt">Bar</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>That is, annotate the field to inject with either:</p>
@@ -356,25 +426,25 @@ with a key difference being that the Finatra version ensures we do not attempt l
 the Guice Injector <strong>unless there is a non-null Guice Injector configured and the field is specifically annotated</strong>
 with one of the supporting annotations.</p>
 <p>Using the <cite>Foo</cite> case class above, you could then parse incoming JSON with the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-jackson/src/main/scala/com/twitter/util/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a>:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
-import com.twitter.util.jackson.ScalaObjectMapper
-import com.twitter.inject.Injector
-import com.twitter.inject.app.TestInjector
-import javax.inject.Inject
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.jackson.modules.ScalaObjectMapperModule</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.jackson.ScalaObjectMapper</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.Injector</span>
+<span class="k">import</span> <span class="nn">com.twitter.inject.app.TestInjector</span>
+<span class="k">import</span> <span class="nn">javax.inject.Inject</span>
 
-case class Foo(name: String, description: String, @Inject bar: Bar)
+<span class="k">case</span> <span class="k">class</span> <span class="nc">Foo</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">description</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="nd">@Inject</span> <span class="n">bar</span><span class="k">:</span> <span class="kt">Bar</span><span class="o">)</span>
 
-val json: String =
-  &quot;&quot;&quot;
-    |{
-    |  “name”: “FooItem”,
-    |  “description”: “This is the description for FooItem”
-    |}
-  &quot;&quot;&quot;.stripMargin
+<span class="k">val</span> <span class="n">json</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span>
+  <span class="s">&quot;&quot;&quot;</span>
+<span class="s">    |{</span>
+<span class="s">    |  “name”: “FooItem”,</span>
+<span class="s">    |  “description”: “This is the description for FooItem”</span>
+<span class="s">    |}</span>
+<span class="s">  &quot;&quot;&quot;</span><span class="o">.</span><span class="n">stripMargin</span>
 
-val injector: Injector = TestInjector(???).create
-val mapper: ScalaObjectMapper = (new ScalaObjectMapper).objectMapper(injector.underlying)
-val foo = mapper.parse[Foo](json)
+<span class="k">val</span> <span class="n">injector</span><span class="k">:</span> <span class="kt">Injector</span> <span class="o">=</span> <span class="nc">TestInjector</span><span class="o">(???).</span><span class="n">create</span>
+<span class="k">val</span> <span class="n">mapper</span><span class="k">:</span> <span class="kt">ScalaObjectMapper</span> <span class="o">=</span> <span class="o">(</span><span class="k">new</span> <span class="nc">ScalaObjectMapper</span><span class="o">).</span><span class="n">objectMapper</span><span class="o">(</span><span class="n">injector</span><span class="o">.</span><span class="n">underlying</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">foo</span> <span class="k">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">Foo</span><span class="o">](</span><span class="n">json</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>When deserializing the JSON string into an instance of <cite>Foo</cite>, the mapper will attempt to locate an
@@ -410,20 +480,20 @@ sources to add annotations.</p>
 <p>The TwitterUtil <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-jackson/src/main/scala/com/twitter/util/jackson/ScalaObjectMapper.scala"><cite>ScalaObjectMapper</cite></a> supports Jackson <a class="reference external" href="https://github.com/FasterXML/jackson-docs/wiki/JacksonMixInAnnotations">Mix-in Annotations</a>
 for specifying field annotations during deserialization with the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-jackson/src/main/scala/com/twitter/util/jackson/caseclass/CaseClassDeserializer.scala">case class deserializer</a>.</p>
 <p>For example, to deserialize JSON into the following classes that are not yours to annotate:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class Point(x: Int, y: Int) {
-  def area: Int = x * y
-}
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span> <span class="k">class</span> <span class="nc">Point</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">y</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">area</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
+<span class="o">}</span>
 
-case class Points(points: Seq[Point])
+<span class="k">case</span> <span class="k">class</span> <span class="nc">Points</span><span class="o">(</span><span class="n">points</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Point</span><span class="o">])</span>
 </pre></div>
 </div>
 <p>However, you want to enforce field constraints with <a class="reference external" href="./validations.html">validations</a>
 during deserialization. You can define a <cite>Mix-in</cite>,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>trait PointMixIn {
-  @Min(0) @Max(100) def x: Int
-  @Min(0) @Max(100) def y: Int
-  @JsonIgnore def area: Int
-}
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">trait</span> <span class="nc">PointMixIn</span> <span class="o">{</span>
+  <span class="nd">@Min</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span> <span class="nd">@Max</span><span class="o">(</span><span class="mi">100</span><span class="o">)</span> <span class="k">def</span> <span class="n">x</span><span class="k">:</span> <span class="kt">Int</span>
+  <span class="nd">@Min</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span> <span class="nd">@Max</span><span class="o">(</span><span class="mi">100</span><span class="o">)</span> <span class="k">def</span> <span class="n">y</span><span class="k">:</span> <span class="kt">Int</span>
+  <span class="nd">@JsonIgnore</span> <span class="k">def</span> <span class="n">area</span><span class="k">:</span> <span class="kt">Int</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Then register this <cite>Mix-in</cite> for the <cite>Point</cite> class type. There are several ways to do this. Generally,
@@ -437,23 +507,23 @@ ensure usage of a consistently configured mapper across your application.</p>
 <li>In your custom <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala"><cite>ScalaObjectMapperModule</cite></a> extension, add the Jackson <a class="reference external" href="https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/Module.java">Module</a>.</li>
 </ul>
 <p>For example, create a new Jackson <cite>SimpleModule</cite>:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.fasterxml.jackson.databind.module.SimpleModule
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.fasterxml.jackson.databind.module.SimpleModule</span>
 
-object PointMixInModule extends SimpleModule {
-    setMixInAnnotation(classOf[Point], classOf[PointMixIn]);
-}
+<span class="k">object</span> <span class="nc">PointMixInModule</span> <span class="k">extends</span> <span class="nc">SimpleModule</span> <span class="o">{</span>
+    <span class="n">setMixInAnnotation</span><span class="o">(</span><span class="n">classOf</span><span class="o">[</span><span class="kt">Point</span><span class="o">],</span> <span class="n">classOf</span><span class="o">[</span><span class="kt">PointMixIn</span><span class="o">]);</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Then add the <cite>SimpleModule</cite> to the list of additional Jackson modules in your custom <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala"><cite>ScalaObjectMapperModule</cite></a>:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.jackson.modules.ScalaObjectMapperModule
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.jackson.modules.ScalaObjectMapperModule</span>
 
-object MyCustomObjectMapperModule extends ScalaObjectMapperModule {
-  override val additionalJacksonModules = Seq(PointMixInModule)
-}
+<span class="k">object</span> <span class="nc">MyCustomObjectMapperModule</span> <span class="k">extends</span> <span class="nc">ScalaObjectMapperModule</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">val</span> <span class="n">additionalJacksonModules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="nc">PointMixInModule</span><span class="o">)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Deserializing this JSON would then error with failed validations:</p>
-<div class="code json highlight-text notranslate"><div class="highlight"><pre><span></span>{
+<div class="code json highlight-scala notranslate"><div class="highlight"><pre><span></span>{
   &quot;points&quot;: [
     {&quot;x&quot;: -1, &quot;y&quot;: 120},
     {&quot;x&quot;: 4, &quot;y&quot;: 99}
@@ -539,7 +609,7 @@ the maximum of 100.</p>
   
 
   <div class="footer">
-    &copy; Copyright 2013-2022 Twitter, Inc.
+    &copy; Copyright 2022 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

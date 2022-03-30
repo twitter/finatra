@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>HTTP Requests &#8212; Finatra 22.2.0 documentation</title>
+    <title>HTTP Requests &#8212; Finatra 22.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -84,17 +84,17 @@ can be configured to handle common name substitutions (e.g. <cite>snake_case</ci
 <cite>snake_case</cite> is used (defaults are set by the <cite>ScalaObjectMapper</cite> provided by the <a class="reference external" href="https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/jackson/modules/ScalaObjectMapperModule.scala">ScalaObjectMapperModule</a>).</p>
 <p>For example, if we have a <cite>POST</cite> endpoint which expects a JSON body with a <cite>Long</cite> <cite>“id”</cite> and a
 <cite>String</cite> <cite>“name”</cite>, we could define the following case class and Controller route:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class HiRequest(id: Long, name: String)
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span> <span class="k">class</span> <span class="nc">HiRequest</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
 
-...
+<span class="o">...</span>
 
-post(&quot;/hi&quot;) { hiRequest: HiRequest =&gt;
-  &quot;Hello &quot; + hiRequest.name + &quot; with id &quot; + hiRequest.id
-}
+<span class="n">post</span><span class="o">(</span><span class="s">&quot;/hi&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">hiRequest</span><span class="k">:</span> <span class="kt">HiRequest</span> <span class="o">=&gt;</span>
+  <span class="s">&quot;Hello &quot;</span> <span class="o">+</span> <span class="n">hiRequest</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&quot; with id &quot;</span> <span class="o">+</span> <span class="n">hiRequest</span><span class="o">.</span><span class="n">id</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>For the request: <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/hi</span></code></p>
-<div class="code json highlight-text notranslate"><div class="highlight"><pre><span></span>{
+<div class="code json highlight-scala notranslate"><div class="highlight"><pre><span></span>{
   &quot;id&quot;: 1,
   &quot;name&quot;: &quot;Bob&quot;
 }
@@ -136,14 +136,14 @@ the <cite>c.t.finagle.http.Request</cite>. Supported annotations:</p>
 <div class="section" id="routeparam">
 <h4><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-annotations/src/main/java/com/twitter/finatra/http/annotations/RouteParam.java">&#64;RouteParam</a><a class="headerlink" href="#routeparam" title="Permalink to this headline">¶</a></h4>
 <p>Denotes a field to be parsed from a named parameter in a given route, e.g.,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class FromRouteRequest(
-  @RouteParam(&quot;entity&quot;) resource: String,
-  @RouteParam id: String)
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span> <span class="k">class</span> <span class="nc">FromRouteRequest</span><span class="o">(</span>
+  <span class="nd">@RouteParam</span><span class="o">(</span><span class="s">&quot;entity&quot;</span><span class="o">)</span> <span class="n">resource</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
+  <span class="nd">@RouteParam</span> <span class="n">id</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
 
 
-get(&quot;/foo/:entity/:id&quot;) { request: FromRouteRequest =&gt;
-  s&quot;The resource is ${request.resource} and the id = ${request.id}&quot;
-}
+<span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo/:entity/:id&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">FromRouteRequest</span> <span class="o">=&gt;</span>
+  <span class="s">s&quot;The resource is </span><span class="si">${</span><span class="n">request</span><span class="o">.</span><span class="n">resource</span><span class="si">}</span><span class="s"> and the id = </span><span class="si">${</span><span class="n">request</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s">&quot;</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Given a request: <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/foo/users/1234</span></code></p>
@@ -176,14 +176,14 @@ and <cite>verbose</cite>, e.g.,</p>
 <p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/users?max=10&amp;start_date=2014-05-30TZ&amp;verbose=true</span></code></p>
 <p>This can be modeled with the following custom “request” case class which also applies
 <a class="reference external" href="../json/validations.html">validations</a>:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class UsersRequest(
-  @Max(100) @QueryParam max: Int,
-  @PastDate @QueryParam startDate: Option[DateTime],
-  @QueryParam verbose: Boolean = false)
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span> <span class="k">class</span> <span class="nc">UsersRequest</span><span class="o">(</span>
+  <span class="nd">@Max</span><span class="o">(</span><span class="mi">100</span><span class="o">)</span> <span class="nd">@QueryParam</span> <span class="n">max</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span>
+  <span class="nd">@PastDate</span> <span class="nd">@QueryParam</span> <span class="n">startDate</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">DateTime</span><span class="o">],</span>
+  <span class="nd">@QueryParam</span> <span class="n">verbose</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">false</span><span class="o">)</span>
 
-get(&quot;/users&quot;) { request: UsersRequest =&gt;
-  ???
-}
+<span class="n">get</span><span class="o">(</span><span class="s">&quot;/users&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">UsersRequest</span> <span class="o">=&gt;</span>
+  <span class="o">???</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>The <cite>max</cite> value will be parsed into an <cite>Int</cite> and <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/validation/validators/MaxValidator.scala#L49">validated to be less than or equal to
@@ -192,9 +192,9 @@ The <cite>startDate</cite> will be parsed into an <cite>Option[DateTime]</cite> 
 from the query string) and if present will be validated to be a date in the past. Lastly, the
 <cite>verbose</cite> parameter will be parsed into a <cite>Boolean</cite> type.</p>
 <p>You can also set the parameter name as a value in the <code class="docutils literal notranslate"><span class="pre">&#64;QueryParam</span></code> annotation, e.g.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class QueryParamRequest(
-  @QueryParam foo: String,
-  @QueryParam(&quot;skip&quot;) isSkipped: Boolean)
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span> <span class="k">class</span> <span class="nc">QueryParamRequest</span><span class="o">(</span>
+  <span class="nd">@QueryParam</span> <span class="n">foo</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
+  <span class="nd">@QueryParam</span><span class="o">(</span><span class="s">&quot;skip&quot;</span><span class="o">)</span> <span class="n">isSkipped</span><span class="k">:</span> <span class="kt">Boolean</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>Using this case class in a route callback for a request:</p>
@@ -203,8 +203,8 @@ from the query string) and if present will be validated to be a date in the past
 as a Boolean into the <cite>QueryParamRequest#isSkipped</cite> field.</p>
 <p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala">example</a>.</p>
 <p>You can parse comma-separated lists in your query parameters by setting <cite>commaSeparatedList</cite> to <cite>true</cite> in the QueryParam annotation, e.g.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class ManyUsersRequest(
-  @QueryParam(commaSeparatedList=true) ids: Seq[Long])
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span> <span class="k">class</span> <span class="nc">ManyUsersRequest</span><span class="o">(</span>
+  <span class="nd">@QueryParam</span><span class="o">(</span><span class="n">commaSeparatedList</span><span class="k">=</span><span class="kc">true</span><span class="o">)</span> <span class="n">ids</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Long</span><span class="o">])</span>
 </pre></div>
 </div>
 <p>Using this class in a route callback for a request:</p>
@@ -235,11 +235,11 @@ as a Boolean into the <cite>QueryParamRequest#isSkipped</cite> field.</p>
 <p>Read a header value specified by the case class field name or by the <code class="docutils literal notranslate"><span class="pre">&#64;Header</span></code> annotation value.
 You can use a Scala <a class="reference external" href="https://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html">“back-quote” literal</a>
 for the field name when special characters are involved.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>@Header `user-agent`: String
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="nd">@Header</span> <span class="n">`user-agent`</span><span class="k">:</span> <span class="kt">String</span>
 </pre></div>
 </div>
 <p>or specify the header name as a parameter to the <code class="docutils literal notranslate"><span class="pre">&#64;Header</span></code> annotation, e.g.,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>@Header(&quot;user-agent&quot;) agent: String
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="nd">@Header</span><span class="o">(</span><span class="s">&quot;user-agent&quot;</span><span class="o">)</span> <span class="n">agent</span><span class="k">:</span> <span class="kt">String</span>
 </pre></div>
 </div>
 <p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/CreateUserRequest.scala">example</a>.</p>
@@ -250,10 +250,10 @@ request. As such, you should ensure that <code class="docutils literal notransla
 names. Otherwise, an <code class="docutils literal notranslate"><span class="pre">&#64;QueryParam</span></code> could end up parsing an <code class="docutils literal notranslate"><span class="pre">&#64;RouteParam</span></code> or <code class="docutils literal notranslate"><span class="pre">&#64;FormParam</span></code>
 field.</p>
 <p>Also note that headers are accessed <strong>case-insensitively</strong>. Thus, the annotated fields:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>@Header(&quot;Accept-Charset&quot;) acceptCharset: String
-@Header(&quot;accept-charset&quot;) acceptCharset: String
-@Header(&quot;aCcEpT-cHaRsEt&quot;) acceptCharset: String
-@Header `accept-charset`: String
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="nd">@Header</span><span class="o">(</span><span class="s">&quot;Accept-Charset&quot;</span><span class="o">)</span> <span class="n">acceptCharset</span><span class="k">:</span> <span class="kt">String</span>
+<span class="nd">@Header</span><span class="o">(</span><span class="s">&quot;accept-charset&quot;</span><span class="o">)</span> <span class="n">acceptCharset</span><span class="k">:</span> <span class="kt">String</span>
+<span class="nd">@Header</span><span class="o">(</span><span class="s">&quot;aCcEpT-cHaRsEt&quot;</span><span class="o">)</span> <span class="n">acceptCharset</span><span class="k">:</span> <span class="kt">String</span>
+<span class="nd">@Header</span> <span class="n">`accept-charset`</span><span class="k">:</span> <span class="kt">String</span>
 </pre></div>
 </div>
 <p class="last">would all retrieve <strong>the same value</strong> from the request headers map.</p>
@@ -264,21 +264,21 @@ field.</p>
 <h4>&#64;Inject<a class="headerlink" href="#inject" title="Permalink to this headline">¶</a></h4>
 <p>Can be used to inject any <a class="reference external" href="https://github.com/google/guice">Guice</a> managed class into your case
 class.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>case class InjectedFieldCaseClass(
-  @Inject defaultOptString: Option[String],
-  @Inject foo Foo)
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">case</span> <span class="k">class</span> <span class="nc">InjectedFieldCaseClass</span><span class="o">(</span>
+  <span class="nd">@Inject</span> <span class="n">defaultOptString</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">],</span>
+  <span class="nd">@Inject</span> <span class="n">foo</span> <span class="nc">Foo</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>Note, however, it is not necessary to inject the underlying Finagle <cite>http</cite> Request into your
 case class. To access the underlying Finagle HTTP Request in your custom case class, simply
 include a field of type <cite>c.t.finagle.http.Request</cite> and the framework will properly inject the
 incoming request into your custom case class, for example:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.http.Request</span>
 
-case class CaseClassWithRequestField(
- @Header(&quot;user-agent&quot;) agent: String,
- @QueryParam verbose: Boolean = false,
- request: Request)
+<span class="k">case</span> <span class="k">class</span> <span class="nc">CaseClassWithRequestField</span><span class="o">(</span>
+ <span class="nd">@Header</span><span class="o">(</span><span class="s">&quot;user-agent&quot;</span><span class="o">)</span> <span class="n">agent</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
+ <span class="nd">@QueryParam</span> <span class="n">verbose</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">false</span><span class="o">,</span>
+ <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http-server/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithInjections.scala">example</a>.</p>
@@ -341,26 +341,26 @@ forwarding will re-use the same request as opposed to issuing a redirect which w
 to issue a new request.</p>
 <p>To forward, you need to include a <cite>c.t.finatra.http.request.HttpForward</cite> instance in your controller,
 e.g.,</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
-import com.twitter.finatra.http.Controller
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finagle.http.Request</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.Controller</span>
 
-class MyController @Inject()(
-  forward: HttpForward)
-  extends Controller {
+<span class="k">class</span> <span class="nc">MyController</span> <span class="nd">@Inject</span><span class="o">()(</span>
+  <span class="n">forward</span><span class="k">:</span> <span class="kt">HttpForward</span><span class="o">)</span>
+  <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
 </pre></div>
 </div>
 <p>Then, to use in your route:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>get(&quot;/foo&quot;) { request: Request =&gt;
-  forward(request, &quot;/bar&quot;)
-}
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="n">forward</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="s">&quot;/bar&quot;</span><span class="o">)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Forwarded requests will bypass the server defined filter chain (as the requests have already passed
 through the filter chain) but will still pass through controller defined filters.</p>
 <p>For example, if a route is defined:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>filter[MyAwesomeFilter].get(&quot;/bar&quot;) { request: Request =&gt;
-  &quot;Hello, world.&quot;
-}
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">filter</span><span class="o">[</span><span class="kt">MyAwesomeFilter</span><span class="o">].</span><span class="n">get</span><span class="o">(</span><span class="s">&quot;/bar&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="s">&quot;Hello, world.&quot;</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>When another controller forwards to this route, <cite>MyAwesomeFilter</cite> will be executed on the forwarded
@@ -371,11 +371,11 @@ request.</p>
 <cite>HttpRouter#withMaxRequestForwardingDepth</cite>. This helps prevent a given request from being
 forwarded in an infinite loop.</p>
 <p>In the example below, the server has been setup to allow a request to forward a maximum of 10 times.</p>
-<div class="code scala last highlight-text notranslate"><div class="highlight"><pre><span></span>override def configureHttp(router: HttpRouter) {
-  router
-    .withMaxRequestForwardingDepth(10)
-    .add[MyController]
-}
+<div class="code scala last highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">router</span>
+    <span class="o">.</span><span class="n">withMaxRequestForwardingDepth</span><span class="o">(</span><span class="mi">10</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">MyController</span><span class="o">]</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 </div>
@@ -384,27 +384,27 @@ forwarded in an infinite loop.</p>
 <h2>Multipart Requests<a class="headerlink" href="#multipart-requests" title="Permalink to this headline">¶</a></h2>
 <p>Finatra has support for multi-part requests. Here’s an example of a multi-part <cite>POST</cite> controller
 route definition that simply returns all of the keys in the multi-part request:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>post(&quot;/multipartParamsEcho&quot;) { request: Request =&gt;
-  RequestUtils.multiParams(request).keys
-}
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">post</span><span class="o">(</span><span class="s">&quot;/multipartParamsEcho&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+  <span class="nc">RequestUtils</span><span class="o">.</span><span class="n">multiParams</span><span class="o">(</span><span class="n">request</span><span class="o">).</span><span class="n">keys</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>An example of testing this endpoint:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>def deserializeRequest(name: String) = {
-  val requestBytes = IOUtils.toByteArray(getClass.getResourceAsStream(name))
-  HttpCodec.decodeBytesToRequest(requestBytes)
-}
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="n">deserializeRequest</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">requestBytes</span> <span class="k">=</span> <span class="nc">IOUtils</span><span class="o">.</span><span class="n">toByteArray</span><span class="o">(</span><span class="n">getClass</span><span class="o">.</span><span class="n">getResourceAsStream</span><span class="o">(</span><span class="n">name</span><span class="o">))</span>
+  <span class="nc">HttpCodec</span><span class="o">.</span><span class="n">decodeBytesToRequest</span><span class="o">(</span><span class="n">requestBytes</span><span class="o">)</span>
+<span class="o">}</span>
 
-&quot;post multipart&quot; in {
-  val request = deserializeRequest(&quot;/multipart/request-POST-android.bytes&quot;)
-  request.uri = &quot;/multipartParamsEcho&quot;
+<span class="s">&quot;post multipart&quot;</span> <span class="n">in</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">request</span> <span class="k">=</span> <span class="n">deserializeRequest</span><span class="o">(</span><span class="s">&quot;/multipart/request-POST-android.bytes&quot;</span><span class="o">)</span>
+  <span class="n">request</span><span class="o">.</span><span class="n">uri</span> <span class="k">=</span> <span class="s">&quot;/multipartParamsEcho&quot;</span>
 
-  server.httpRequest(
-    request = request,
-    suppress = true,
-    andExpect = Ok,
-    withJsonBody = &quot;&quot;&quot;[&quot;banner&quot;]&quot;&quot;&quot;)
-}
+  <span class="n">server</span><span class="o">.</span><span class="n">httpRequest</span><span class="o">(</span>
+    <span class="n">request</span> <span class="k">=</span> <span class="n">request</span><span class="o">,</span>
+    <span class="n">suppress</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span>
+    <span class="n">andExpect</span> <span class="k">=</span> <span class="nc">Ok</span><span class="o">,</span>
+    <span class="n">withJsonBody</span> <span class="k">=</span> <span class="s">&quot;&quot;&quot;[&quot;banner&quot;]&quot;&quot;&quot;</span><span class="o">)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 </div>
@@ -416,60 +416,60 @@ the <cite>JsonPatchExceptionMapper</cite> in the server. The <cite>JsonPatchMess
 Patch requests as type <cite>c.t.finatra.http.jsonpatch.JsonPatch</cite>, and <cite>JsonPatchExceptionMapper</cite> can
 convert JsonPatchExceptions to HTTP responses.</p>
 <p>See <a class="reference external" href="exceptions.html">Add an ExceptionMapper</a> for more information on exception mappers.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.HttpServer
-import com.twitter.finatra.http.routing.HttpRouter
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.http.HttpServer</span>
+<span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpRouter</span>
 
-class ExampleServer extends HttpServer {
+<span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
 
- override def configureHttp(router: HttpRouter): Unit = {
-   router
-     .register[JsonPatchMessageBodyReader]
-     .exceptionMapper[JsonPatchExceptionMapper]
-     .add[ExampleController]
- }
-}
+ <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+   <span class="n">router</span>
+     <span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">JsonPatchMessageBodyReader</span><span class="o">]</span>
+     <span class="o">.</span><span class="n">exceptionMapper</span><span class="o">[</span><span class="kt">JsonPatchExceptionMapper</span><span class="o">]</span>
+     <span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">ExampleController</span><span class="o">]</span>
+ <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Next, you should include a <cite>c.t.finatra.http.jsonpatch.JsonPatchOperator</cite> instance in your controller,
 which provides <cite>JsonPatchOperator#toJsonNode</cite> conversions and support for all JSON Patch operations.</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.Controller
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="k">import</span> <span class="nn">com.twitter.finatra.http.Controller</span>
 
-class MyController @Inject()(
-  jsonPatchOperator: JsonPatchOperator
-) extends Controller {
-  ???
-}
+<span class="k">class</span> <span class="nc">MyController</span> <span class="nd">@Inject</span><span class="o">()(</span>
+  <span class="n">jsonPatchOperator</span><span class="k">:</span> <span class="kt">JsonPatchOperator</span>
+<span class="o">)</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
+  <span class="o">???</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>After the target data has been converted to a JsonNode, just call <cite>JsonPatchUtility.operate</cite> to apply
 JSON Patch operations to the target.</p>
 <p>For example:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>patch(&quot;/jsonPatch&quot;) { jsonPatch: JsonPatch =&gt;
-  val testCase = ExampleCaseClass(&quot;world&quot;)
-  val originalJson = jsonPatchOperator.toJsonNode[ExampleCaseClass](testCase)
-  JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
-}
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="n">patch</span><span class="o">(</span><span class="s">&quot;/jsonPatch&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">jsonPatch</span><span class="k">:</span> <span class="kt">JsonPatch</span> <span class="o">=&gt;</span>
+  <span class="k">val</span> <span class="n">testCase</span> <span class="k">=</span> <span class="nc">ExampleCaseClass</span><span class="o">(</span><span class="s">&quot;world&quot;</span><span class="o">)</span>
+  <span class="k">val</span> <span class="n">originalJson</span> <span class="k">=</span> <span class="n">jsonPatchOperator</span><span class="o">.</span><span class="n">toJsonNode</span><span class="o">[</span><span class="kt">ExampleCaseClass</span><span class="o">](</span><span class="n">testCase</span><span class="o">)</span>
+  <span class="nc">JsonPatchUtility</span><span class="o">.</span><span class="n">operate</span><span class="o">(</span><span class="n">jsonPatch</span><span class="o">.</span><span class="n">patches</span><span class="o">,</span> <span class="n">jsonPatchOperator</span><span class="o">,</span> <span class="n">originalJson</span><span class="o">)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>An example of testing this endpoint:</p>
-<div class="code scala highlight-text notranslate"><div class="highlight"><pre><span></span>&quot;JsonPatch&quot; in {
-  val request = RequestBuilder.patch(&quot;/jsonPatch&quot;)
-    .body(
-      &quot;&quot;&quot;[
-        |{&quot;op&quot;:&quot;add&quot;,&quot;path&quot;:&quot;/fruit&quot;,&quot;value&quot;:&quot;orange&quot;},
-        |{&quot;op&quot;:&quot;remove&quot;,&quot;path&quot;:&quot;/hello&quot;},
-        |{&quot;op&quot;:&quot;copy&quot;,&quot;from&quot;:&quot;/fruit&quot;,&quot;path&quot;:&quot;/veggie&quot;},
-        |{&quot;op&quot;:&quot;replace&quot;,&quot;path&quot;:&quot;/veggie&quot;,&quot;value&quot;:&quot;bean&quot;},
-        |{&quot;op&quot;:&quot;move&quot;,&quot;from&quot;:&quot;/fruit&quot;,&quot;path&quot;:&quot;/food&quot;},
-        |{&quot;op&quot;:&quot;test&quot;,&quot;path&quot;:&quot;/food&quot;,&quot;value&quot;:&quot;orange&quot;}
-        |]&quot;&quot;&quot;.stripMargin,
-      contentType = Message.ContentTypeJsonPatch)
+<div class="code scala highlight-scala notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;JsonPatch&quot;</span> <span class="n">in</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">request</span> <span class="k">=</span> <span class="nc">RequestBuilder</span><span class="o">.</span><span class="n">patch</span><span class="o">(</span><span class="s">&quot;/jsonPatch&quot;</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">body</span><span class="o">(</span>
+      <span class="s">&quot;&quot;&quot;[</span>
+<span class="s">        |{&quot;op&quot;:&quot;add&quot;,&quot;path&quot;:&quot;/fruit&quot;,&quot;value&quot;:&quot;orange&quot;},</span>
+<span class="s">        |{&quot;op&quot;:&quot;remove&quot;,&quot;path&quot;:&quot;/hello&quot;},</span>
+<span class="s">        |{&quot;op&quot;:&quot;copy&quot;,&quot;from&quot;:&quot;/fruit&quot;,&quot;path&quot;:&quot;/veggie&quot;},</span>
+<span class="s">        |{&quot;op&quot;:&quot;replace&quot;,&quot;path&quot;:&quot;/veggie&quot;,&quot;value&quot;:&quot;bean&quot;},</span>
+<span class="s">        |{&quot;op&quot;:&quot;move&quot;,&quot;from&quot;:&quot;/fruit&quot;,&quot;path&quot;:&quot;/food&quot;},</span>
+<span class="s">        |{&quot;op&quot;:&quot;test&quot;,&quot;path&quot;:&quot;/food&quot;,&quot;value&quot;:&quot;orange&quot;}</span>
+<span class="s">        |]&quot;&quot;&quot;</span><span class="o">.</span><span class="n">stripMargin</span><span class="o">,</span>
+      <span class="n">contentType</span> <span class="k">=</span> <span class="nc">Message</span><span class="o">.</span><span class="nc">ContentTypeJsonPatch</span><span class="o">)</span>
 
-  server.httpRequestJson[JsonNode](
-    request = request,
-    andExpect = Ok,
-    withJsonBody = &quot;&quot;&quot;{&quot;food&quot;:&quot;orange&quot;,&quot;veggie&quot;:&quot;bean&quot;}&quot;&quot;&quot;)
-}
+  <span class="n">server</span><span class="o">.</span><span class="n">httpRequestJson</span><span class="o">[</span><span class="kt">JsonNode</span><span class="o">](</span>
+    <span class="n">request</span> <span class="k">=</span> <span class="n">request</span><span class="o">,</span>
+    <span class="n">andExpect</span> <span class="k">=</span> <span class="nc">Ok</span><span class="o">,</span>
+    <span class="n">withJsonBody</span> <span class="k">=</span> <span class="s">&quot;&quot;&quot;{&quot;food&quot;:&quot;orange&quot;,&quot;veggie&quot;:&quot;bean&quot;}&quot;&quot;&quot;</span><span class="o">)</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>For more information and examples, see:</p>
@@ -557,7 +557,7 @@ JSON Patch operations to the target.</p>
   
 
   <div class="footer">
-    &copy; Copyright 2013-2022 Twitter, Inc.
+    &copy; Copyright 2022 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>
