@@ -7,7 +7,7 @@ scala_library(
         name = "finatra-http-exception-mapper",
         repo = artifactory,
     ),
-    strict_deps = "True",
+    strict_deps = True,
     tags = ["bazel-compatible"],
     dependencies = [
         "finagle/finagle-base-http/src/main",
@@ -28,7 +28,7 @@ scala_library(
         name = "finatra-http-exceptions",
         repo = artifactory,
     ),
-    strict_deps = "True",
+    strict_deps = True,
     tags = ["bazel-compatible"],
     dependencies = [
         ":exception-mapper",

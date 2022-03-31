@@ -6,7 +6,7 @@ scala_library(
         name = "finatra-http-jsonpatch",
         repo = artifactory,
     ),
-    strict_deps = "True",
+    strict_deps = True,
     tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-core",

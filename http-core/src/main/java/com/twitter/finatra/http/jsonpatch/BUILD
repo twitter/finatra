@@ -6,6 +6,6 @@ java_library(
         name = "finatra-http-java-jsonpatch",
         repo = artifactory,
     ),
-    strict_deps = "True",
+    strict_deps = True,
     tags = ["bazel-compatible"],
 )

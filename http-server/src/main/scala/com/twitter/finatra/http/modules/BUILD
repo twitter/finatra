@@ -6,7 +6,7 @@ scala_library(
         name = "finatra-http-modules",
         repo = artifactory,
     ),
-    strict_deps = "True",
+    strict_deps = True,
     tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",

@@ -6,7 +6,7 @@ scala_library(
         name = "finatra-http-fileupload",
         repo = artifactory,
     ),
-    strict_deps = "True",
+    strict_deps = True,
     tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/commons-fileupload",

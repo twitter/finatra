@@ -6,7 +6,7 @@ scala_library(
         name = "inject-server-internal",
         repo = artifactory,
     ),
-    strict_deps = "True",
+    strict_deps = True,
     tags = ["bazel-compatible"],
     dependencies = [
         "finagle/finagle-core/src/main",

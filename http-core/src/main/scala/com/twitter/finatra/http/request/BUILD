@@ -5,7 +5,7 @@ scala_library(
         name = "finatra-http-core-request",
         repo = artifactory,
     ),
-    strict_deps = "True",
+    strict_deps = True,
     tags = ["bazel-compatible"],
     dependencies = [
         "finagle/finagle-base-http/src/main",

@@ -6,7 +6,7 @@ scala_library(
         name = "finatra-http-internal-routing",
         repo = artifactory,
     ),
-    strict_deps = "True",
+    strict_deps = True,
     tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/io/netty:netty4-codec-http",

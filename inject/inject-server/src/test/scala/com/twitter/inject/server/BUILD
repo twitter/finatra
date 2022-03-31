@@ -6,7 +6,7 @@ scala_library(
         name = "inject-server-tests",
         repo = artifactory,
     ),
-    strict_deps = "True",
+    strict_deps = True,
     tags = ["bazel-compatible"],
     dependencies = [
         "//:scala-reflect",
