@@ -10,6 +10,7 @@ Getting Started
 - :doc:`getting-started/dependency_injection`
 - :doc:`getting-started/framework`
 - :doc:`getting-started/twitter_server`
+- :doc:`getting-started/comparison`
 - :doc:`getting-started/lifecycle`
 - :doc:`getting-started/modules`
 - :doc:`getting-started/binding_annotations`

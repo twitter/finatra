@@ -34,6 +34,11 @@ method or in the application or server callbacks.
    `super.lifecycleMethod()` in your override to ensure that framework lifecycle events happen
    accordingly.
 
+Choosing between TwitterServer and App
+--------------------------------------
+See the `TwitterServer v. App comparison chart <./comparison.html>`__ to decide
+between an App or TwitterServer.
+
 See the `Creating an injectable App <../app/index.html>`__ and
 `Creating an injectable TwitterServer <../twitter-server/index.html>`__ sections for more information.
 
