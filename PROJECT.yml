@@ -11,3 +11,7 @@ watchers:
   - csl-team:ldap
   - ccoco
   - scosenza
+
+fileOwners:
+  CHANGELOG.rst:
+    - csl-team:ldap
