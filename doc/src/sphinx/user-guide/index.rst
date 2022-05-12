@@ -35,6 +35,7 @@ Injectable TwitterServer
 ------------------------
 
 - :doc:`twitter-server/index`
+- :doc:`twitter-server/update`
 
 StatsReceiver
 -------------

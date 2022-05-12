@@ -171,7 +171,14 @@ under test.
       }
     }
 
-For an "injectable" TwitterServer, |c.t.inject.server.TwitterServer|_ the test would look exactly the same.
+|c.t.inject.server.TwitterServer|_
+----------------------------------
+
+For an "injectable" TwitterServer, |c.t.inject.server.TwitterServer|_ the test would look exactly the same as above
+for `c.t.server.TwitterServer <#c-t-server-twitterserver>`__ but you'll be able to take advantage of the `Injector <../getting-started/dependency_injection.html>`__
+for overriding bound implementations to help create powerful tests. 
+
+See the next sections on :ref:`mocks`, :ref:`override_modules`, and :ref:`bind_dsl` for details.
 
 Testing With `Global Flags`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

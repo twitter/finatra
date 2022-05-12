@@ -255,7 +255,7 @@ and considerations during `shutdown <../getting-started/lifecycle.html#shutdown>
 .. |ThriftServer| replace:: ``ThriftServer``
 .. _ThriftServer: ../thrift/server.html
 
-.. |FuturePools| replace:: ``FuturePools``
+.. |FuturePools| replace:: ``c.t.finatra.utils.FuturePools``
 .. _FuturePools: https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/utils/FuturePools.scala
 
 .. |finatra-http| replace:: `finatra-http`
