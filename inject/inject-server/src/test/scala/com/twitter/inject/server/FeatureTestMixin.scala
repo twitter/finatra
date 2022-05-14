@@ -33,6 +33,7 @@ trait FeatureTestMixin extends SuiteMixin with IntegrationTestMixin { this: Suit
   }
 
   def printStats: Boolean = false
+  def printTraces: Boolean = false
 
   override protected def afterEach(): Unit = {
     super.afterEach()
@@ -46,6 +47,18 @@ trait FeatureTestMixin extends SuiteMixin with IntegrationTestMixin { this: Suit
     } catch {
       case _: IllegalStateException => /* DO NOTHING */
       // we don't have access to a StatsReceiver to perform these functions for the user
+    }
+
+    try {
+      if (server.usesInMemoryTracer) {
+        if (printTraces) {
+          server.printTraces()
+        }
+        server.clearTraces()
+      }
+    } catch {
+      case _: IllegalStateException => /* DO NOTHING */
+      // we don't have access to a Tracer to perform these functions for the user
     }
   }
 

@@ -7,7 +7,11 @@ import com.google.inject.Stage
 import com.twitter.finagle.http.Status
 import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.finagle.tracing.NullTracer
+import com.twitter.finagle.tracing.Trace
+import com.twitter.finagle.tracing.Tracer
 import com.twitter.inject.app.StartupTimeoutException
+import com.twitter.inject.app.TestConsoleWriter
 import com.twitter.inject.server.EmbeddedTwitterServer.ReducibleFn
 import com.twitter.inject.server.EmbeddedTwitterServer
 import com.twitter.inject.server.TwitterServer
@@ -15,9 +19,12 @@ import com.twitter.inject.Test
 import com.twitter.inject.TwitterModule
 import com.twitter.util.Await
 import com.twitter.util.Future
+import com.twitter.util.Promise
 import com.twitter.util.TimeoutException
+
 import javax.inject.Singleton
 import org.scalatest.exceptions.TestFailedException
+
 import scala.collection.immutable.ListMap
 import scala.util.Random
 
@@ -439,6 +446,117 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
       awaitablesContainAdmin should equal(false) // verify that we never started the adminHttpServer
     } finally {
       server.close()
+    }
+  }
+
+  test("server#supports validating traces") {
+    val promise = new Promise[Unit]
+    // NOTE: this is NOT a realistic example, as tracing is tightly integrated with a Finagle Client or Server
+    // implementation. Tracing is attached to a request/response lifecycle, which we are not illustrating here.
+    // We are only verifying that the InMemoryTracer is correctly wired up to the EmbeddedServer and scoping the
+    // Tracer in a manner that is consistent with a Finagle Client or Server TraceInitializerFilter so that we can
+    // verify the utility of the Trace tool. There should be other tests with the protocol specific embedded servers
+    // that are more realistic.
+    val embeddedServer = new EmbeddedTwitterServer(
+      twitterServer = new TwitterServer {
+        override def start(): Unit = {
+          Trace.letTracer(injector.instance[Tracer]) {
+            val trace = Trace()
+            if (trace.isActivelyTracing) {
+              trace.record("Hello, World!")
+              trace.recordBinary("Hello", "World!")
+            }
+            promise.setDone()
+            super.start()
+          }
+        }
+      }
+    )
+    try {
+      embeddedServer.start()
+      await(promise) // need to wait until the trace has been annotated
+      embeddedServer.usesInMemoryTracer should equal(true)
+      embeddedServer.inMemoryTracer.binaryAnnotations.get("World").isDefined should equal(false)
+      embeddedServer.inMemoryTracer.binaryAnnotations("Hello")
+      intercept[IllegalArgumentException] {
+        embeddedServer.inMemoryTracer.binaryAnnotations("World")
+      }
+      intercept[IllegalArgumentException] {
+        embeddedServer.inMemoryTracer.binaryAnnotations("World", "Hello")
+      }
+      embeddedServer.inMemoryTracer.messages("Hello, World!")
+      embeddedServer.inMemoryTracer.messages.get("World, Hello?").isDefined should equal(false)
+      intercept[IllegalArgumentException] {
+        embeddedServer.inMemoryTracer.messages("World")
+      }
+      embeddedServer.inMemoryTracer.binaryAnnotations("Hello", "World!")
+      embeddedServer.inMemoryTracer.binaryAnnotations.get("World", "Hello?").isDefined should equal(
+        false)
+      embeddedServer.inMemoryTracer.messages.get("Goodbye, All").isDefined should equal(false)
+      embeddedServer.inMemoryTracer.rpcs.get("rpc").isDefined should equal(false)
+      intercept[IllegalArgumentException] {
+        embeddedServer.inMemoryTracer.rpcs("rpc")
+      }
+      embeddedServer.inMemoryTracer.serviceNames.get("name").isDefined should equal(false)
+      intercept[IllegalArgumentException] {
+        embeddedServer.inMemoryTracer.serviceNames("name")
+      }
+
+      // look up a trace that isn't present and verify that we print the trace information
+      val console = new TestConsoleWriter()
+      console.let {
+        val exception = intercept[IllegalArgumentException] {
+          embeddedServer.inMemoryTracer.serviceNames("http")
+        }
+        exception.getMessage.contains(
+          "ServiceName Annotation with name 'http' does not exist") should equal(true)
+      }
+      val out = console.inspectOut()
+      out.contains("BinaryAnnotation(Hello,World!)") should equal(true)
+      out.contains("Message(Hello, World!)") should equal(true)
+
+    } finally {
+      embeddedServer.close()
+    }
+  }
+
+  test("server#supports overriding the InMemoryTracer") {
+    val promise = new Promise[Unit]
+    // NOTE: this is NOT a realistic example, as tracing is tightly integrated with a Finagle Client or Server
+    // implementation. Tracing is attached to a request/response lifecycle, which we are not illustrating here.
+    // We are only verifying that the InMemoryTracer is correctly wired up to the EmbeddedServer and scoping the
+    // Tracer in a manner that is consistent with a Finagle Client or Server TraceInitializerFilter so that we can
+    // verify the utility of the Trace tool. There should be other tests with the protocol specific embedded servers
+    // that are more realistic.
+    val embeddedServer = new EmbeddedTwitterServer(
+      twitterServer = new TwitterServer {
+        override def start(): Unit = {
+          Trace.letTracer(injector.instance[Tracer]) {
+            val trace = Trace()
+            if (trace.isActivelyTracing) {
+              trace.record("Hello, World!")
+              trace.recordBinary("Hello", "World!")
+            }
+            promise.setDone()
+            super.start()
+          }
+        }
+      },
+      tracerOverride = Some(NullTracer)
+    )
+    try {
+      embeddedServer.start()
+      await(promise) // need to wait until the trace has been annotated
+      embeddedServer.usesInMemoryTracer should equal(false)
+      intercept[IllegalStateException] {
+        embeddedServer.inMemoryTracer.binaryAnnotations.get("World").isDefined should equal(false)
+        embeddedServer.inMemoryTracer.binaryAnnotations("Hello")
+        embeddedServer.inMemoryTracer.messages("Hello, World!")
+        embeddedServer.inMemoryTracer.binaryAnnotations("Hello", "World!")
+        embeddedServer.inMemoryTracer.messages.get("Goodbye, All").isDefined should equal(false)
+      }
+    } finally {
+      embeddedServer.close()
     }
   }
 

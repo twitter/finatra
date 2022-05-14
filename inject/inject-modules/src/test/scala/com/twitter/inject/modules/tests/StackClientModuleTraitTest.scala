@@ -1,16 +1,37 @@
 package com.twitter.inject.modules.tests
 
-import com.google.inject.{Guice, Provides}
+import com.google.inject.Guice
+import com.google.inject.Provides
 import com.twitter.conversions.DurationOps._
-import com.twitter.finagle.{ClientConnection, Service, ServiceFactory, Stack, Stackable}
-import com.twitter.finagle.client.{EndpointerModule, EndpointerStackClient, StackClient}
+import com.twitter.finagle.ClientConnection
+import com.twitter.finagle.Service
+import com.twitter.finagle.ServiceFactory
+import com.twitter.finagle.Stack
+import com.twitter.finagle.Stackable
+import com.twitter.finagle.client.EndpointerModule
+import com.twitter.finagle.client.EndpointerStackClient
+import com.twitter.finagle.client.StackClient
 import com.twitter.finagle.factory.TimeoutFactory
-import com.twitter.finagle.param.{Label, Monitor, Stats}
-import com.twitter.finagle.service.{Retries, RetryBudget, TimeoutFilter}
+import com.twitter.finagle.param.Label
+import com.twitter.finagle.param.Monitor
+import com.twitter.finagle.param.Stats
+import com.twitter.finagle.service.Retries
+import com.twitter.finagle.service.RetryBudget
+import com.twitter.finagle.service.TimeoutFilter
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.inject.{Injector, InjectorModule, Test, TwitterModule}
-import com.twitter.inject.modules.{StackClientModuleTrait, StatsReceiverModule}
-import com.twitter.util.{Closable, Duration, Future, NullMonitor, Time}
+import com.twitter.inject.Injector
+import com.twitter.inject.InjectorModule
+import com.twitter.inject.Test
+import com.twitter.inject.TwitterModule
+import com.twitter.inject.modules.StackClientModuleTrait
+import com.twitter.inject.modules.StatsReceiverModule
+import com.twitter.inject.modules.TracerModule
+import com.twitter.util.Closable
+import com.twitter.util.Duration
+import com.twitter.util.Future
+import com.twitter.util.NullMonitor
+import com.twitter.util.Time
+
 import java.net.SocketAddress
 import javax.inject.Singleton
 
@@ -18,7 +39,8 @@ class StackClientModuleTraitTest extends Test {
   import StackClientModuleTraitTest._
 
   test("can create a module for a new stack client") {
-    val injector = Guice.createInjector(TestModule, InjectorModule, StatsReceiverModule)
+    val injector =
+      Guice.createInjector(TestModule, InjectorModule, StatsReceiverModule, TracerModule)
     injector.getInstance(Test.Client.getClass) should not be null
   }
 
@@ -27,7 +49,8 @@ class StackClientModuleTraitTest extends Test {
   // initialClientConfig -> configureClient -> frameworkConfigureClient
 
   test("verify client initial configuration") {
-    val injector = Guice.createInjector(DefaultTestModule, InjectorModule, StatsReceiverModule)
+    val injector =
+      Guice.createInjector(DefaultTestModule, InjectorModule, StatsReceiverModule, TracerModule)
     val clnt = injector.getInstance(classOf[Test.Client])
     assert(clnt.params[TimeoutFilter.Param].timeout == Duration.Top)
     assert(clnt.params[TimeoutFactory.Param].timeout == Duration.Top)
@@ -38,7 +61,8 @@ class StackClientModuleTraitTest extends Test {
   }
 
   test("verify client initial configuration with parameter override") {
-    val injector = Guice.createInjector(TestModule, InjectorModule, StatsReceiverModule)
+    val injector =
+      Guice.createInjector(TestModule, InjectorModule, StatsReceiverModule, TracerModule)
     val clnt = injector.getInstance(classOf[Test.Client])
     assert(clnt.params[TimeoutFilter.Param].timeout == 200.milliseconds)
     assert(clnt.params[TimeoutFactory.Param].timeout == 1.second)
@@ -50,7 +74,8 @@ class StackClientModuleTraitTest extends Test {
   }
 
   test("verify client custom configuration override") {
-    val injector = Guice.createInjector(CustomizedTestModule, InjectorModule, StatsReceiverModule)
+    val injector =
+      Guice.createInjector(CustomizedTestModule, InjectorModule, StatsReceiverModule, TracerModule)
     val clnt = injector.getInstance(classOf[Test.Client])
     assert(clnt.params[TimeoutFilter.Param].timeout == 100.milliseconds)
     assert(clnt.params[TimeoutFactory.Param].timeout == 1.second)
@@ -62,7 +87,8 @@ class StackClientModuleTraitTest extends Test {
   }
 
   test("verify framework client configuration override") {
-    val injector = Guice.createInjector(FrameworkTestModule, InjectorModule, StatsReceiverModule)
+    val injector =
+      Guice.createInjector(FrameworkTestModule, InjectorModule, StatsReceiverModule, TracerModule)
     val clnt = injector.getInstance(classOf[Test.Client])
     assert(clnt.params[TimeoutFilter.Param].timeout == 50.milliseconds)
     assert(clnt.params[TimeoutFactory.Param].timeout == 1.second)

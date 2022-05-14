@@ -1,13 +1,23 @@
 package com.twitter.inject.modules
 
+import com.google.inject.Module
 import com.twitter.conversions.DurationOps._
-import com.twitter.finagle.{Service, Stack}
+import com.twitter.finagle.Service
+import com.twitter.finagle.Stack
 import com.twitter.finagle.client.StackBasedClient
-import com.twitter.finagle.param.{ClientParams, CommonParams, WithClientSession}
+import com.twitter.finagle.param.ClientParams
+import com.twitter.finagle.param.CommonParams
+import com.twitter.finagle.param.WithClientSession
 import com.twitter.finagle.service.RetryBudget
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.inject.{Injector, TwitterModule}
-import com.twitter.util.{Await, Closable, Duration, Monitor, NullMonitor}
+import com.twitter.finagle.tracing.Tracer
+import com.twitter.inject.Injector
+import com.twitter.inject.TwitterModule
+import com.twitter.util.Await
+import com.twitter.util.Closable
+import com.twitter.util.Duration
+import com.twitter.util.Monitor
+import com.twitter.util.NullMonitor
 
 /**
  * A module for configuring a Finagle [[StackBasedClient]]. Binding is explicitly not handled by this
@@ -70,6 +80,9 @@ trait StackClientModuleTrait[
     ClientType
   ] with ClientParams[ClientType] with WithClientSession[ClientType]]
     extends TwitterModule {
+
+  override protected[inject] def frameworkModules: Seq[Module] =
+    super.frameworkModules ++ Seq(TracerModule)
 
   /**
    * Finagle client label.
@@ -173,13 +186,18 @@ trait StackClientModuleTrait[
     client: ClientType,
     statsReceiver: StatsReceiver
   ): ClientType = {
-    client.withSession
+    val clnt = client.withSession
       .acquisitionTimeout(sessionAcquisitionTimeout)
       .withRequestTimeout(requestTimeout)
       .withStatsReceiver(statsReceiver)
       .withMonitor(monitor)
       .withLabel(label)
       .withRetryBudget(retryBudget)
+
+    injector.instance[Option[Tracer]] match {
+      case Some(tracer) => clnt.withTracer(tracer)
+      case _ => clnt
+    }
   }
 
   /**

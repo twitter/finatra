@@ -3,10 +3,14 @@ package com.twitter.finatra.thrift
 import com.google.inject.Stage
 import com.twitter.app.GlobalFlag
 import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.finagle.tracing.Tracer
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.server.PortUtils._
-import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
+import com.twitter.inject.server.EmbeddedTwitterServer
+import com.twitter.inject.server.PortUtils
+import com.twitter.inject.server.Ports
 import com.twitter.util.Duration
+
 import java.lang.annotation.Annotation
 import scala.collection.JavaConverters._
 
@@ -43,6 +47,12 @@ import scala.collection.JavaConverters._
  *                              a custom [[StatsReceiver]] implementation instead and can provide an instance
  *                              to use here. For non-injectable servers this can be a shared reference
  *                              used in the server under test.
+ * @param tracerOverride An optional [[Tracer]] implementation that should be bound to the underlying server when
+ *                       testing an injectable server. By default, an injectable server under test will have an
+ *                       [[com.twitter.inject.InMemoryTracer]] implementation bound for the purpose of testing.
+ *                       In some cases, users may want to test using a custom [[Tracer]] implementation instead and can
+ *                       provide an instance to use here. For non-injectable servers, this can be a shared reference
+ *                       used in the server under test.
  */
 class EmbeddedThriftServer(
   override val twitterServer: Ports,
@@ -58,7 +68,8 @@ class EmbeddedThriftServer(
   failOnLintViolation: Boolean = false,
   closeGracePeriod: Option[Duration] = None,
   globalFlags: => Map[GlobalFlag[_], String] = Map(),
-  statsReceiverOverride: Option[StatsReceiver] = None)
+  statsReceiverOverride: Option[StatsReceiver] = None,
+  tracerOverride: Option[Tracer] = None)
     extends EmbeddedTwitterServer(
       twitterServer,
       flags + (thriftPortFlag -> ephemeralLoopback),
@@ -72,7 +83,8 @@ class EmbeddedThriftServer(
       failOnLintViolation = failOnLintViolation,
       closeGracePeriod = closeGracePeriod,
       globalFlags = globalFlags,
-      statsReceiverOverride = statsReceiverOverride
+      statsReceiverOverride = statsReceiverOverride,
+      tracerOverride = tracerOverride
     )
     with ThriftClient {
 

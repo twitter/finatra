@@ -138,8 +138,27 @@ along with helper methods for asserting `counter <https://github.com/twitter/fin
 and `gauge <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L343>`__
 values, such that you can expect behavior against the underlying server's recorded stats in tests.
 
-`Feature Tests <#feature_tests>`__ also `print all recorded stats <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTestMixin.scala#L50>`__
-to stdout after each test by default.
+`Feature Tests <#feature_tests>`__ also `print all recorded stats <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTestMixin.scala#L42>`__
+to stdout after each test, if the `printStats` property is set to `true` (it is disabled by default to minimize test execution times).
+
+See: `c.t.finatra.multiserver.test.MultiServerFeatureTest <https://github.com/twitter/finatra/blob/develop/inject-thrift-client-http-mapper/src/test/scala/com/twitter/finatra/multiserver/test/MultiServerFeatureTest.scala>`__
+for an example usage.
+
+InMemoryTracer
+---------------------
+
+The |EmbeddedTwitterServer|_ (and thus its subclasses: |EmbeddedHttpServer|_ and |EmbeddedThriftServer|_)
+binds an instance of the `com.twitter.finagle.stats.InMemoryTracer <https://github.com/twitter/util/blob/develop/util-stats/src/main/scala/com/twitter/finagle/stats/InMemoryTracer.scala>`__
+to the underlying server's object graph (if the underlying server supports injection). This will
+override any other bound implementation of a `c.t.finagle.tracing.Tracer <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/tracing/Tracer.scala>`__
+in the server's object graph.
+
+The |EmbeddedTwitterServer|_ exposes the bound `Tracer <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/tracing/Tracer.scala>`__
+along with helper methods for verifying the presence of Trace `Record <https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/tracing/Record.scala>`__
+values, such that you can inspect behavior against the underlying server's recorded trace annotations in tests.
+
+`Feature Tests <#feature_tests>`__ also `print all recorded traces <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTestMixin.scala#L54>`__
+to stdout after each test, if the `printTraces` property is set to `true` (it is disabled by default to minimize test execution times).
 
 See: `c.t.finatra.multiserver.test.MultiServerFeatureTest <https://github.com/twitter/finatra/blob/develop/inject-thrift-client-http-mapper/src/test/scala/com/twitter/finatra/multiserver/test/MultiServerFeatureTest.scala>`__
 for an example usage.

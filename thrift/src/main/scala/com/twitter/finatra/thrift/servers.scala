@@ -9,6 +9,7 @@ import com.twitter.finagle.ListeningServer
 import com.twitter.finagle.NullServer
 import com.twitter.finagle.Service
 import com.twitter.finagle.ThriftMux
+import com.twitter.finagle.tracing.Tracer
 import com.twitter.finatra.thrift.modules.ExceptionManagerModule
 import com.twitter.finatra.thrift.modules.ThriftResponseClassifierModule
 import com.twitter.finatra.thrift.response.ThriftResponseClassifier
@@ -21,6 +22,7 @@ import com.twitter.inject.server.PortUtils
 import com.twitter.inject.server.TwitterServer
 import com.twitter.util.Await
 import com.twitter.util.Duration
+
 import java.net.InetSocketAddress
 
 private object ThriftServerTrait {
@@ -178,14 +180,26 @@ trait ThriftServerTrait extends TwitterServer {
   override protected def postWarmup(): Unit = {
     super.postWarmup()
 
+    val baseSrv = ThriftMux.server
+      .withLabel(thriftServerNameFlag())
+      .withStatsReceiver(injector.instance[StatsReceiver].scope("srv"))
+      .withResponseClassifier(injector.instance[ThriftResponseClassifier])
+
+    // The inject.TwitterServer installs the TracerModule, which uses a bindOption for configuring a Tracer. This
+    // approach differs from the pattern used with StatsReceiver & StatsReceiverModule in order to work
+    // backwards compatibly with implementations that already bind their own customer Tracer.
+    // If a Tracer is bound to the object graph we configure it here, otherwise the default Tracer
+    // configuration is used. This is our primary integration point for verifying traces via test.
+    val srv = injector.instance[Option[Tracer]] match {
+      case Some(tracer) => baseSrv.withTracer(tracer)
+      case _ => baseSrv
+    }
+
     thriftServer = build(
       thriftPortFlag(),
       frameworkConfigureServer(
         configureThriftServer(
-          ThriftMux.server
-            .withLabel(thriftServerNameFlag())
-            .withStatsReceiver(injector.instance[StatsReceiver].scope("srv"))
-            .withResponseClassifier(injector.instance[ThriftResponseClassifier])
+          srv
         )
       )
     )

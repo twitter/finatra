@@ -11,6 +11,7 @@ import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.app.AbstractApp
 import com.twitter.inject.app.App
 import com.twitter.inject.modules.StatsReceiverModule
+import com.twitter.inject.modules.TracerModule
 import com.twitter.inject.modules.internal.LibraryModule
 import com.twitter.inject.utils.Handler
 import com.twitter.server.Lifecycle.Warmup
@@ -21,6 +22,7 @@ import com.twitter.util.lint.Issue
 import com.twitter.util.lint.Rule
 import com.twitter.util.Await
 import com.twitter.util.Awaitable
+
 import java.util.concurrent.ConcurrentLinkedQueue
 import scala.collection.JavaConverters._
 
@@ -90,6 +92,7 @@ trait TwitterServer
 
   addFrameworkModules(
     statsReceiverModule,
+    TracerModule,
     new LibraryModule(libraryName)
   )
 

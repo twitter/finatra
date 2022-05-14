@@ -2,24 +2,36 @@ package com.twitter.finatra.http.tests.integration.doeverything.test
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.inject.name.Names
-import com.google.inject.{Key, TypeLiteral}
+import com.google.inject.Key
+import com.google.inject.TypeLiteral
 import com.twitter.finagle.http.Method._
 import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http.codec.HttpCodec
-import com.twitter.finagle.http.{MediaType, _}
-import com.twitter.finagle.{Failure, FailureFlags}
+import com.twitter.finagle.http.MediaType
+import com.twitter.finagle.http._
+import com.twitter.finagle.Failure
+import com.twitter.finagle.FailureFlags
 import com.twitter.finatra.http.tests.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.SomethingStreamedResponse
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.DoEverythingService
-import com.twitter.finatra.http.{EmbeddedHttpServer, RouteHint}
-import com.twitter.finatra.httpclient.{HttpClient, RequestBuilder}
+import com.twitter.finatra.http.EmbeddedHttpServer
+import com.twitter.finatra.http.RouteHint
+import com.twitter.finatra.httpclient.HttpClient
+import com.twitter.finatra.httpclient.RequestBuilder
+import com.twitter.inject.app.TestConsoleWriter
+import com.twitter.inject.app.console.ConsoleWriter
 import com.twitter.inject.server.FeatureTest
-import com.twitter.io.{Buf, StreamIO}
+import com.twitter.io.Buf
+import com.twitter.io.StreamIO
 import com.twitter.util.jackson.JsonDiff
 import com.twitter.util.mock.Mockito
-import com.twitter.util.{Future, Time}
+import com.twitter.util.Future
+import com.twitter.util.Time
 import com.twitter.{logging => ctl}
-import java.net.{ConnectException, InetSocketAddress, SocketAddress}
+
+import java.net.ConnectException
+import java.net.InetSocketAddress
+import java.net.SocketAddress
 import org.scalatest.exceptions.TestFailedException
 
 object DoEverythingServerFeatureTest {
@@ -2372,6 +2384,40 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     }
 
     com.twitter.finagle.stats.logOnShutdown() should equal(false) // verify default value unchanged
+  }
+
+  test("DoEverythingServer#supports trace verification") {
+    val srvr = new EmbeddedHttpServer(
+      twitterServer = new DoEverythingServer(),
+      flags = Map("something.flag" -> "foobar"),
+      disableTestLogging = true
+    )
+
+    try {
+      srvr.httpGet("/plaintext", withBody = "Hello, World!")
+      srvr.inMemoryTracer.binaryAnnotations("srv/finagle.label")
+      srvr.inMemoryTracer.binaryAnnotations("srv/finagle.version")
+      srvr.inMemoryTracer.binaryAnnotations("http.uri", "/plaintext")
+      srvr.inMemoryTracer.binaryAnnotations("http.method", "GET")
+      srvr.inMemoryTracer.binaryAnnotations("http.status_code", 200)
+      srvr.inMemoryTracer.serviceNames("http")
+
+      // look up a trace that isn't present and verify that we print the trace information
+      val console = new TestConsoleWriter()
+      console.let {
+        val exception = intercept[IllegalArgumentException] {
+          srvr.inMemoryTracer.serviceNames("thriftmux")
+        }
+        exception.getMessage.contains(
+          "ServiceName Annotation with name 'thriftmux' does not exist") should equal(true)
+      }
+      val out = console.inspectOut()
+      out.contains("BinaryAnnotation(http.uri,/plaintext)") should equal(true)
+      out.contains("ServiceName(http)") should equal(true)
+
+    } finally {
+      srvr.close()
+    }
   }
 
   test("POST /ctu-time") {

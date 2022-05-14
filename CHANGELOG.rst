@@ -7,6 +7,11 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
+finatra: Introduce InMemoryTracer for inspecting Trace information via tests. ``PHAB_ID=D878616``
+
 22.4.0
 ------
 

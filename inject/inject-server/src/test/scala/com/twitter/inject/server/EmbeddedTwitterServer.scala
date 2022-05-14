@@ -2,26 +2,36 @@ package com.twitter.inject.server
 
 import com.google.inject.Stage
 import com.twitter.app.GlobalFlag
-import com.twitter.app.lifecycle.Event.{Close, PreMain}
-import com.twitter.app.lifecycle.{Event, Observer}
+import com.twitter.app.lifecycle.Event.Close
+import com.twitter.app.lifecycle.Event.PreMain
+import com.twitter.app.lifecycle.Event
+import com.twitter.app.lifecycle.Observer
 import com.twitter.conversions.DurationOps._
-import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
+import com.twitter.finagle.stats.InMemoryStatsReceiver
+import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.finagle.tracing.Tracer
 import com.twitter.finagle.util.DefaultTimer
-import com.twitter.inject.app.{BindDSL, StartupTimeoutException}
+import com.twitter.inject.app.BindDSL
+import com.twitter.inject.app.StartupTimeoutException
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
+import com.twitter.inject.modules.InMemoryTracerModule
 import com.twitter.inject.server.PortUtils.getPort
-import com.twitter.inject.{Injector, InMemoryStatsReceiverUtility, PoolUtils, TwitterModule}
-import com.twitter.util.lint.{GlobalRules, Rule}
-import com.twitter.util.{
-  Await,
-  Closable,
-  Duration,
-  ExecutorServiceFuturePool,
-  Future,
-  Promise,
-  TimeoutException
-}
+import com.twitter.inject.InMemoryStatsReceiverUtility
+import com.twitter.inject.InMemoryTracer
+import com.twitter.inject.Injector
+import com.twitter.inject.PoolUtils
+import com.twitter.inject.TwitterModule
+import com.twitter.util.lint.GlobalRules
+import com.twitter.util.lint.Rule
+import com.twitter.util.Await
+import com.twitter.util.Closable
+import com.twitter.util.Duration
+import com.twitter.util.ExecutorServiceFuturePool
+import com.twitter.util.Future
+import com.twitter.util.Promise
+import com.twitter.util.TimeoutException
+
 import java.lang.annotation.Annotation
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -225,6 +235,12 @@ object EmbeddedTwitterServer {
  *                              a custom [[StatsReceiver]] implementation instead and can provide an instance
  *                              to use here. For non-injectable servers this can be a shared reference
  *                              used in the server under test.
+ * @param tracerOverride An optional [[Tracer]] implementation that should be bound to the underlying server when
+ *                       testing an injectable server. By default, an injectable server under test will have an
+ *                       [[InMemoryTracer]] implementation bound for the purpose of testing. In some cases, users
+ *                       may want to test using a custom [[Tracer]] implementation instead and can provide an instance
+ *                       to use here. For non-injectable servers, this can be a shared reference used in the server
+ *                       under test.
  */
 class EmbeddedTwitterServer(
   twitterServer: com.twitter.server.TwitterServer,
@@ -241,7 +257,8 @@ class EmbeddedTwitterServer(
   failOnLintViolation: Boolean = false,
   closeGracePeriod: Option[Duration] = None,
   globalFlags: => Map[GlobalFlag[_], String] = Map(),
-  statsReceiverOverride: Option[StatsReceiver] = None)
+  statsReceiverOverride: Option[StatsReceiver] = None,
+  tracerOverride: Option[Tracer] = None)
     extends AdminHttpClient(twitterServer, verbose)
     with BindDSL
     with Matchers {
@@ -288,6 +305,16 @@ class EmbeddedTwitterServer(
         })
       case _ =>
         injectableServer.addFrameworkOverrideModules(InMemoryStatsReceiverModule)
+    }
+    tracerOverride match {
+      case Some(tracer) =>
+        injectableServer.addFrameworkOverrideModules(new TwitterModule {
+          override def configure(): Unit = {
+            bind[Tracer].toInstance(tracer)
+          }
+        })
+      case _ =>
+        injectableServer.addFrameworkOverrideModules(InMemoryTracerModule)
     }
   }
 
@@ -360,6 +387,21 @@ class EmbeddedTwitterServer(
 
   lazy val usesInMemoryStatsReceiver: Boolean =
     statsReceiver.isInstanceOf[InMemoryStatsReceiver]
+
+  lazy val tracer: Tracer =
+    if (isInjectable) injector.instance[Tracer]
+    else
+      tracerOverride.getOrElse(throw new IllegalStateException(
+        "Accessing the underlying Tracer is only supported with an injectable server or when an override is provided."))
+
+  lazy val usesInMemoryTracer: Boolean = tracer.isInstanceOf[InMemoryTracer]
+
+  lazy val inMemoryTracer: InMemoryTracer = tracer match {
+    case t: InMemoryTracer => t
+    case _ =>
+      throw new IllegalStateException(
+        "The configured Tracer implementation is not of type InMemoryTracer.")
+  }
 
   /**
    * Returns the bound [[InMemoryStatsReceiver]] when applicable. If access to this member is
@@ -676,6 +718,35 @@ class EmbeddedTwitterServer(
   def assertGauge(name: String, expected: Float): Unit = {
     getGauge(name) should equal(expected)
   }
+
+  /**
+   * Prints traces from the bound [[InMemoryTracer]] when applicable. If access to this method
+   * is attempted when a non [[InMemoryTracer]] is provided as a [[tracerOverride]]
+   * this will throw an [[IllegalStateException]] as it is not expected that users call this
+   * when providing a custom [[Tracer]] implementation via the [[tracerOverride]].
+   * Instead, users should prefer to print traces from their custom [[Tracer]] implementation
+   * by other means.
+   *
+   * @throws IllegalStateException when a non [[InMemoryTracer]] is provided as a
+   *        [[tracerOverride]].
+   */
+  def printTraces(): Unit = {
+    infoBanner(name + " Traces", disableLogging)
+    if (!disableLogging) inMemoryTracer.print()
+  }
+
+  /**
+   * Clears all traces of the bound [[InMemoryTracer]] when applicable. If access to this
+   * method is attempted when a non [[InMemoryTracer]] is provided as a [[tracerOverride]]
+   * this will throw an [[IllegalStateException]] as it is not expected that users call this
+   * when providing a custom [[Tracer]] implementation via the [[tracerOverride]].
+   * Instead, users should prefer to clear traces from their custom [[Tracer]] implementation
+   * by other means.
+   *
+   * @throws IllegalStateException when a non [[InMemoryTracer]] is provided as a
+   *         [[tracerOverride]].
+   */
+  def clearTraces(): Unit = inMemoryTracer.clear()
 
   /* Protected */
 

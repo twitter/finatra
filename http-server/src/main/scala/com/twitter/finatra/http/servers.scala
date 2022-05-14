@@ -13,6 +13,7 @@ import com.twitter.finagle.Http
 import com.twitter.finagle.ListeningServer
 import com.twitter.finagle.NullServer
 import com.twitter.finagle.Service
+import com.twitter.finagle.tracing.Tracer
 import com.twitter.finatra.http.marshalling.modules.MessageBodyFlagsModule
 import com.twitter.finatra.http.modules.AccessLogModule
 import com.twitter.finatra.http.modules.ExceptionManagerModule
@@ -31,6 +32,7 @@ import com.twitter.inject.server.TwitterServer
 import com.twitter.util.Await
 import com.twitter.util.Duration
 import com.twitter.util.StorageUnit
+
 import java.net.InetSocketAddress
 
 private object HttpServerTrait {
@@ -292,12 +294,22 @@ trait HttpServerTrait extends TwitterServer {
   /* Lifecycle */
 
   private[this] def defaultHttpServer(name: String): Http.Server = {
-    Http.server
+    val baseSrv = Http.server
       .withMaxRequestSize(maxRequestSizeFlag())
       .withStreaming(streamRequest)
       .withLabel(name)
       .withStatsReceiver(injector.instance[StatsReceiver])
       .withResponseClassifier(injector.instance[HttpResponseClassifier])
+
+    // The inject.TwitterServer installs the TracerModule, which uses a bindOption for configuring a Tracer. This
+    // approach differs from the pattern used with StatsReceiver & StatsReceiverModule in order to work
+    // backwards compatibly with implementations that already bind their own customer Tracer.
+    // If a Tracer is bound to the object graph we configure it here, otherwise the default Tracer
+    // configuration is used. This is our primary integration point for verifying traces via test.
+    injector.instance[Option[Tracer]] match {
+      case Some(tracer) => baseSrv.withTracer(tracer)
+      case _ => baseSrv
+    }
   }
 
   @Lifecycle

@@ -16,6 +16,7 @@ import com.twitter.finagle.Service
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.finatra.thrift.tests.doeverything.DoEverythingThriftServer
 import com.twitter.finatra.thrift.tests.doeverything.controllers.DoEverythingThriftController
+import com.twitter.inject.app.TestConsoleWriter
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.Buf
 import com.twitter.scrooge
@@ -336,12 +337,56 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
     server.inMemoryStats.counters.assert("echo_calls", 2)
   }
 
-  private def await[T](f: Future[T]): T = {
-    Await.result(f, 2.seconds)
+  test("trace annotation verification") {
+    await(client123.echo("a"))
+    server.inMemoryTracer.binaryAnnotations("srv/finagle.version")
+    server.inMemoryTracer.binaryAnnotations("srv/finagle.label", "thrift")
+    server.inMemoryTracer.binaryAnnotations(
+      "srv/thrift_endpoint",
+      "com.twitter.doeverything.thriftscala.DoEverything#echo()")
+    server.inMemoryTracer.serviceNames("thrift")
+    server.inMemoryTracer.rpcs("echo")
+
+    server.inMemoryTracer.clear()
+
+    await(client123.echo2("a"))
+    server.inMemoryTracer.binaryAnnotations("srv/finagle.version")
+    server.inMemoryTracer.binaryAnnotations("srv/finagle.label", "thrift")
+    server.inMemoryTracer.binaryAnnotations(
+      "srv/thrift_endpoint",
+      "com.twitter.doeverything.thriftscala.DoEverything#echo2()")
+    server.inMemoryTracer.serviceNames("thrift")
+    server.inMemoryTracer.rpcs("echo2")
+
+    server.inMemoryTracer.clear()
+
+    await(client123.uppercase("a"))
+    server.inMemoryTracer.binaryAnnotations("srv/finagle.version")
+    server.inMemoryTracer.binaryAnnotations("srv/finagle.label", "thrift")
+    server.inMemoryTracer.binaryAnnotations(
+      "srv/thrift_endpoint",
+      "com.twitter.doeverything.thriftscala.DoEverything#uppercase()")
+    server.inMemoryTracer.serviceNames("thrift")
+    server.inMemoryTracer.rpcs("uppercase")
+
+    // look up a trace that isn't present and verify that we print the trace information
+    val console = new TestConsoleWriter()
+    console.let {
+      val exception = intercept[IllegalArgumentException] {
+        server.inMemoryTracer.serviceNames("http")
+      }
+      exception.getMessage.contains(
+        "ServiceName Annotation with name 'http' does not exist") should equal(true)
+    }
+    val out = console.inspectOut()
+    out.contains(
+      "BinaryAnnotation(srv/thrift_endpoint,com.twitter.doeverything.thriftscala.DoEverything#uppercase())") should equal(
+      true)
+    out.contains("ServiceName(thrift)") should equal(true)
   }
 
-  override protected def beforeEach(): Unit = {
-    server.inMemoryStatsReceiver.clear()
+  private def await[T](f: Future[T]): T = {
+    Await.result(f, 2.seconds)
   }
 
 }

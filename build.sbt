@@ -361,6 +361,7 @@ lazy val injectCoreTestJarSources =
   Seq(
     "com/twitter/inject/InMemoryStats",
     "com/twitter/inject/InMemoryStatsReceiverUtility",
+    "com/twitter/inject/InMemoryTracer",
     "com/twitter/inject/IntegrationTest",
     "com/twitter/inject/IntegrationTestMixin",
     "com/twitter/inject/PoolUtils",
@@ -388,6 +389,7 @@ lazy val injectCore = (project in file("inject/inject-core"))
       "com.google.inject" % "guice" % versions.guice % Test,
       "com.google.inject.extensions" % "guice-testlib" % versions.guice % Test,
       "com.twitter" %% "finagle-stats" % versions.twLibVersion % Test,
+      "com.twitter" %% "util-jackson" % versions.twLibVersion % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
     Test / publishArtifact := true,
@@ -440,7 +442,7 @@ lazy val injectLogback = (project in file("inject/inject-logback"))
   )
 
 lazy val injectModulesTestJarSources =
-  Seq("com/twitter/inject/modules/InMemoryStatsReceiverModule")
+  Seq("com/twitter/inject/modules/InMemoryStatsReceiverModule", "com/twitter/inject/modules/InMemoryTracerModule")
 lazy val injectModules = (project in file("inject/inject-modules"))
   .settings(projectSettings)
   .settings(

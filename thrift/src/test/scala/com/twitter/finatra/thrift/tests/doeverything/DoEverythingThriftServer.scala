@@ -1,7 +1,6 @@
 package com.twitter.finatra.thrift.tests.doeverything
 
 import com.twitter.finagle.{Filter, ThriftMux}
-import com.twitter.finagle.tracing.NullTracer
 import com.twitter.finatra.thrift.filters._
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.tests.doeverything.controllers.DoEverythingThriftController
@@ -23,7 +22,6 @@ class DoEverythingThriftServer extends ThriftServer {
   override protected def configureThriftServer(server: ThriftMux.Server): ThriftMux.Server = {
     server
       .withMonitor(NullMonitor)
-      .withTracer(NullTracer)
       .withPerEndpointStats
   }
 

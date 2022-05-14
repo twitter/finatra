@@ -1,12 +1,15 @@
 package com.twitter.finatra.multiserver.test
 
 import com.twitter.finagle.http.Status
-import com.twitter.finagle.stats.InMemoryStatsReceiver
-import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
+import com.twitter.finagle.tracing.Annotation
+import com.twitter.finagle.tracing.Record
+import com.twitter.finatra.http.EmbeddedHttpServer
+import com.twitter.finatra.http.HttpTest
 import com.twitter.finatra.multiserver.Add1HttpServer.Add1Server
 import com.twitter.finatra.multiserver.AdderThriftServer.AdderThriftServer
 import com.twitter.finatra.multiserver.Add2HttpServer.Add2Server
-import com.twitter.finatra.thrift.{EmbeddedThriftServer, ThriftTest}
+import com.twitter.finatra.thrift.EmbeddedThriftServer
+import com.twitter.finatra.thrift.ThriftTest
 import com.twitter.inject.Test
 
 class MultiServerFeatureTest extends Test with HttpTest with ThriftTest {
@@ -37,10 +40,26 @@ class MultiServerFeatureTest extends Test with HttpTest with ThriftTest {
       2
     )
     add1HttpServer.inMemoryStats.counters.assert("route/add1/GET/status/200", 2)
+
+    add1HttpServer.inMemoryTracer.serviceNames("http")
+    add1HttpServer.inMemoryTracer.binaryAnnotations("srv/finagle.label", "http")
+    add1HttpServer.inMemoryTracer.binaryAnnotations("http.method", "GET")
+    add1HttpServer.inMemoryTracer.binaryAnnotations("http.uri", "/add1")
+    add1HttpServer.inMemoryTracer.serviceNames("adder-thrift")
+    add1HttpServer.inMemoryTracer.messages("Retried Request")
+    add1HttpServer.inMemoryTracer.binaryAnnotations("clnt/finagle.protocol", "thriftmux")
+    add1HttpServer.inMemoryTracer.groupBy(_.traceId).size shouldBe 6
+    add1HttpServer.inMemoryTracer.count {
+      case Record(_, _, Annotation.Message("Retried Request"), _) => true
+      case _ => false
+    } shouldBe 2
   }
 
   test("add1") {
     add1HttpServer.httpGet("/add1String?num=10", andExpect = Status.ServiceUnavailable)
+
+    add1HttpServer.inMemoryTracer.binaryAnnotations("http.status_code", 503)
+    add1HttpServer.inMemoryTracer.clear()
 
     add1HttpServer.httpGet("/add1String?num=10", andExpect = Status.Ok, withBody = "11")
 
@@ -66,6 +85,15 @@ class MultiServerFeatureTest extends Test with HttpTest with ThriftTest {
     // service failure stats
     add1HttpServer.inMemoryStats.counters.assert("service/failure", 1)
     add1HttpServer.inMemoryStats.counters.assert("service/failure/adder-thrift", 1)
+
+    add1HttpServer.inMemoryTracer.serviceNames("http")
+    add1HttpServer.inMemoryTracer.binaryAnnotations("srv/finagle.label", "http")
+    add1HttpServer.inMemoryTracer.binaryAnnotations("http.method", "GET")
+    add1HttpServer.inMemoryTracer.binaryAnnotations("http.uri", "/add1String")
+    add1HttpServer.inMemoryTracer.serviceNames("adder-thrift")
+    add1HttpServer.inMemoryTracer.messages("Retried Request")
+    add1HttpServer.inMemoryTracer.binaryAnnotations("clnt/finagle.protocol", "thriftmux")
+    add1HttpServer.inMemoryTracer.binaryAnnotations("http.status_code", 200)
   }
 
   test("add1 always error") {
@@ -115,6 +143,15 @@ class MultiServerFeatureTest extends Test with HttpTest with ThriftTest {
       "service/failure/adder-thrift/Adder/add1AlwaysError/org.apache.thrift.TApplicationException",
       numHttpRequests
     )
+
+    add1HttpServer.inMemoryTracer.serviceNames("http")
+    add1HttpServer.inMemoryTracer.binaryAnnotations("srv/finagle.label", "http")
+    add1HttpServer.inMemoryTracer.binaryAnnotations("http.method", "GET")
+    add1HttpServer.inMemoryTracer.binaryAnnotations("http.uri", "/errorAdd1")
+    add1HttpServer.inMemoryTracer.serviceNames("adder-thrift")
+    add1HttpServer.inMemoryTracer.messages("Retried Request")
+    add1HttpServer.inMemoryTracer.binaryAnnotations("clnt/finagle.protocol", "thriftmux")
+    add1HttpServer.inMemoryTracer.binaryAnnotations("http.status_code", 503)
   }
 
   test("slow add resulting in request timeouts") {
@@ -193,10 +230,20 @@ class MultiServerFeatureTest extends Test with HttpTest with ThriftTest {
       "service/failure/adder-thrift/Adder/add1Slowly/com.twitter.finagle.IndividualRequestTimeoutException",
       1
     )
+
+    add1HttpServer.inMemoryTracer.serviceNames("http")
+    add1HttpServer.inMemoryTracer.binaryAnnotations("srv/finagle.label", "http")
+    add1HttpServer.inMemoryTracer.binaryAnnotations("http.method", "GET")
+    add1HttpServer.inMemoryTracer.binaryAnnotations("http.uri", "/slowAdd1")
+    add1HttpServer.inMemoryTracer.serviceNames("adder-thrift")
+    add1HttpServer.inMemoryTracer.messages("Retried Request")
+    add1HttpServer.inMemoryTracer.binaryAnnotations("clnt/finagle.protocol", "thriftmux")
+    add1HttpServer.inMemoryTracer.binaryAnnotations("http.status_code", 503)
   }
 
   override protected def afterEach(): Unit = {
-    add1HttpServer.statsReceiver.asInstanceOf[InMemoryStatsReceiver].clear()
+    add1HttpServer.clearStats()
+    add1HttpServer.clearTraces()
   }
 
   override def afterAll(): Unit = {
