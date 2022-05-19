@@ -1,7 +1,10 @@
 package com.twitter.finatra.http.tests.integration.messagebody.main.domain
 
-import com.twitter.finagle.http.{MediaType, Message}
-import com.twitter.finatra.http.marshalling.{MessageBodyWriter, WriterResponse}
+import com.twitter.finagle.http.MediaType
+import com.twitter.finagle.http.Message
+import com.twitter.finagle.http.Request
+import com.twitter.finatra.http.marshalling.MessageBodyWriter
+import com.twitter.finatra.http.marshalling.WriterResponse
 import com.twitter.util.jackson.ScalaObjectMapper
 import javax.inject.Inject
 
@@ -23,7 +26,11 @@ class GreetingMessageBodyWriter @Inject() (mapper: ScalaObjectMapper)
   }
 
   private def acceptsJson(message: Message): Boolean = {
-    message.acceptMediaTypes.contains("application/json")
+    message match {
+      case req: Request =>
+        req.acceptMediaTypes.contains("application/json")
+      case _ => false
+    }
   }
 
   private def getLanguage(message: Message): String = {
