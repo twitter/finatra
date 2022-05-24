@@ -179,7 +179,7 @@ Example:
     import com.twitter.finagle.http.Response;
     import com.twitter.finagle.http.Status;
     import com.twitter.finatra.http.EmbeddedHttpServer;
-    import com.twitter.finatra.httpclient.RequestBuilder;
+    import com.twitter.finatra.http.request.RequestBuilder;
     import com.twitter.inject.annotations.Flags;
 
     public class HelloWorldServerFeatureTest extends Assert {

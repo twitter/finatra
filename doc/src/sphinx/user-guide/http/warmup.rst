@@ -70,8 +70,8 @@ following handler:
 
 .. code:: scala
 
+    import com.twitter.finatra.http.request.RequestBuilder._
     import com.twitter.finatra.http.routing.HttpWarmup
-    import com.twitter.finatra.httpclient.RequestBuilder._
     import com.twitter.inject.utils.Handler
     import scala.util.control.NonFatal
     import javax.inject.Inject

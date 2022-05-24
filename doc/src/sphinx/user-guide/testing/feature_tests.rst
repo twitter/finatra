@@ -233,7 +233,7 @@ a client:
 
     import com.twitter.finagle.Http
     import com.twitter.finagle.http.{Request, Status}
-    import com.twitter.finatra.httpclient.RequestBuilder
+    import com.twitter.finatra.http.request.RequestBuilder
     import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest}
     import java.net.InetAddress
     import scala.collection.immutable.ListMap
@@ -326,7 +326,7 @@ to help easily construct a `c.t.finagle.http.Request`.
 
     import com.twitter.finagle.http.Status
     import com.twitter.finatra.http.EmbeddedHttpServer
-    import com.twitter.finatra.httpclient.RequestBuilder
+    import com.twitter.finatra.http.request.RequestBuilder
     import com.twitter.inject.server.FeatureTest
     import scala.collection.immutable.ListMap
 
