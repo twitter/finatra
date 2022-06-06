@@ -12,6 +12,11 @@ Added
 
 finatra: Introduce InMemoryTracer for inspecting Trace information via tests. ``PHAB_ID=D878616``
 
+Runtime Behavior Changes
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+finatra: Update Jackson library to version 2.13.3 ``PHAB_ID=D906005``
+
 22.4.0
 ------
 
