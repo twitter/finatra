@@ -6,6 +6,14 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 
 Unreleased
 ----------
+Changed
+~~~~~~~
+
+* finatra: Removed ``kafka`` and ``kafka-streams`` modules from finatra core library. ``PHAB_ID=D878136``
+
+* Note: We published a stand-alone `finatra-kafka client <https://github.com/finagle/finatra-kafka>`_ with deprecation announcement to serve as exit pathway for current users
+
+* Announcement: `finagle blog <https://finagle.github.io/blog/2022/06/01/announce-migrations/>`_
 
 Added
 ~~~~~

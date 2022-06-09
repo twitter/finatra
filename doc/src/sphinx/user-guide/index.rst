@@ -93,13 +93,6 @@ Clients
 
 - :doc:`thrift/clients`
 
-Kafka Streams
--------------
-
-- :doc:`kafka-streams/index`
-- :doc:`kafka-streams/examples`
-- :doc:`kafka-streams/testing`
-
 Testing
 -------
 
