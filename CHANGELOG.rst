@@ -6,19 +6,37 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 
 Unreleased
 ----------
+
+Runtime Behavior Changes
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* inject-server: Remove deprecated `c.t.inject.server.DeprecatedLogging` trait. This trait was
+  introduced as a placeholder shim to ensure that JUL util-logging Flags were still defined within
+  a Finatra server such that servers did not fail upon startup if Flag values were being set.
+  The default behavior during Flag parsing is to error if a Flag value is passed for a Flag not
+  defined within the application.  
+
+  We have removed the shim and the trait (and thus the Flag definitions), as it is not expected 
+  that users use util-logging JUL Flags for logging configuration with Finatra servers since Finatra 
+  uses the SLF4J-API. Logging configuration should be done on the choosen SLF4J-API logging 
+  implementation. If your server fails to start after this change, please ensure you are not passing 
+  values for the JUL util-logging Flags. ``PHAB_ID=D850852``
+
 Changed
 ~~~~~~~
 
-* finatra: Removed ``kafka`` and ``kafka-streams`` modules from finatra core library. ``PHAB_ID=D878136``
-
-* Note: We published a stand-alone `finatra-kafka client <https://github.com/finagle/finatra-kafka>`_ with deprecation announcement to serve as exit pathway for current users
-
-* Announcement: `finagle blog <https://finagle.github.io/blog/2022/06/01/announce-migrations/>`_
+* finatra: Removed ``kafka`` and ``kafka-streams`` modules from finatra core library. 
+  
+  Note: We published a stand-alone `finatra-kafka client <https://github.com/finagle/finatra-kafka>`_ 
+  with deprecation announcement to serve as exit pathway for current users.
+  
+  Announcement: `finagle blog <https://finagle.github.io/blog/2022/06/01/announce-migrations/>`_ 
+  ``PHAB_ID=D878136``
 
 Added
 ~~~~~
 
-finatra: Introduce InMemoryTracer for inspecting Trace information via tests. ``PHAB_ID=D878616``
+* finatra: Introduce InMemoryTracer for inspecting Trace information via tests. ``PHAB_ID=D878616``
 
 Runtime Behavior Changes
 ~~~~~~~~~~~~~~~~~~~~~~~~
