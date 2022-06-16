@@ -116,7 +116,7 @@ object InMemoryTracer {
             name = records.collectFirst {
               case Record(_, _, Annotation.Rpc(name), _) => name
             },
-            timestamp = records.lastOption.map(_.timestamp.inMillis),
+            timestamp = records.lastOption.map(_.timestamp.inMicroseconds),
             duration = duration,
             localEndpoint = records.collectFirst {
               case Record(_, _, Annotation.LocalAddr(ia), _) =>
@@ -125,6 +125,14 @@ object InMemoryTracer {
                   ipv4 = Some(ia.getHostString),
                   ipv6 = None,
                   port = Some(ia.getPort))
+              case Record(_, _, Annotation.ServiceName(svc), _) =>
+                // this is a secondary case for Local Tracing
+                EndpointNode(
+                  serviceName = Some(svc),
+                  ipv4 = None,
+                  ipv6 = None,
+                  port = None
+                )
             },
             remoteEndpoint = records.collectFirst {
               case Record(_, _, Annotation.ClientAddr(ia), _) =>
@@ -136,11 +144,11 @@ object InMemoryTracer {
             },
             annotations = records.collect {
               case Record(_, timestamp, Annotation.WireRecv, _) =>
-                AnnotationNode(timestamp.inMillis, "wr")
+                AnnotationNode(timestamp.inMicroseconds, "wr")
               case Record(_, timestamp, Annotation.WireSend, _) =>
-                AnnotationNode(timestamp.inMillis, "ws")
+                AnnotationNode(timestamp.inMicroseconds, "ws")
               case Record(_, timestamp, Annotation.Message(msg), _) =>
-                AnnotationNode(timestamp.inMillis, msg)
+                AnnotationNode(timestamp.inMicroseconds, msg)
             },
             tags = records.collect {
               case Record(_, _, Annotation.BinaryAnnotation(k, v), _) => (k -> v.toString)
