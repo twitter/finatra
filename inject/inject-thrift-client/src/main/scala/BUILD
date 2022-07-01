@@ -4,6 +4,7 @@ scala_library(
     java_sources = [
         "finatra/inject/inject-thrift-client/src/main/java",
     ],
+    platform = "java8",
     provides = scala_artifact(
         org = "com.twitter",
         name = "inject-thrift-client",

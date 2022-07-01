@@ -6,6 +6,7 @@ scala_library(
         "servers.scala",
     ],
     compiler_option_sets = ["fatal_warnings"],
+    platform = "java8",
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-thrift-server",
@@ -52,6 +53,7 @@ scala_library(
         "package.scala",
     ],
     compiler_option_sets = ["fatal_warnings"],
+    platform = "java8",
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-thrift-controller",

@@ -1,6 +1,7 @@
 java_library(
     sources = ["**/*.java"],
     compiler_option_sets = [],
+    platform = "java8",
     provides = artifact(
         org = "com.twitter.finatra",
         name = "finatra-utils-java-annotations",

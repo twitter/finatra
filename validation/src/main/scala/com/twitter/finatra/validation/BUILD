@@ -6,6 +6,7 @@ scala_library(
     java_sources = [
         "finatra/validation/src/main/java/com/twitter/finatra/validation",
     ],
+    platform = "java8",
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-validation-core",
