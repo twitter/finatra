@@ -385,7 +385,7 @@ The default is very similar to the `jackson-module-guice <https://github.com/Fas
     value in a deserialized object from somewhere other than the incoming JSON. In Jackson parlance,
     this is “injection” of a value.
 
-The Finatra `c.t.finatra.jackson.caseclass.GuiceInjectableValues <https://github.com/twitter/util/blob/develop/util-jackson/src/main/scala/com/twitter/util/jackson/caseclass/GuiceInjectableValues.scala>`_
+The Finatra `c.t.finatra.jackson.caseclass.GuiceInjectableValues <https://github.com/twitter/finatra/blob/release/jackson/src/main/scala/com/twitter/finatra/jackson/caseclass/GuiceInjectableValues.scala>`_
 allows users to denote fields in the case class to fill with values that come from a configured Google `Guice <https://github.com/google/guice>`_
 `Injector <https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/Injector.html>`_
 such that you can do this:
