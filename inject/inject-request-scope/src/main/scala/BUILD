@@ -4,6 +4,7 @@ scala_library(
     java_sources = [
         "finatra/inject/inject-request-scope/src/main/java",
     ],
+    platform = "java8",
     provides = scala_artifact(
         org = "com.twitter",
         name = "inject-request-scope",

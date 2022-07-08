@@ -1,6 +1,7 @@
 java_library(
     sources = [],
     compiler_option_sets = [],
+    platform = "java8",
     provides = artifact(
         org = "com.twitter",
         name = "finatra-http-java",
