@@ -8,6 +8,7 @@ import com.twitter.finagle.Service
 import com.twitter.finagle.ServiceFactory
 import com.twitter.finagle.Stack
 import com.twitter.finagle.Stackable
+import com.twitter.finagle.Status
 import com.twitter.finagle.client.EndpointerModule
 import com.twitter.finagle.client.EndpointerStackClient
 import com.twitter.finagle.client.StackClient
@@ -31,7 +32,6 @@ import com.twitter.util.Duration
 import com.twitter.util.Future
 import com.twitter.util.NullMonitor
 import com.twitter.util.Time
-
 import java.net.SocketAddress
 import javax.inject.Singleton
 
@@ -122,6 +122,7 @@ object StackClientModuleTraitTest {
               def apply(conn: ClientConnection): Future[Service[Request, Response]] =
                 Future.value(Service.mk[Request, Response](_ => Future.value(Response())))
               def close(deadline: Time): Future[Unit] = Future.Done
+              def status: Status = Status.Open
             }
           }
         )
