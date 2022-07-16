@@ -1,16 +1,11 @@
 package com.twitter.inject.tests.exceptions
 
-import com.twitter.finagle.mux.ClientDiscardedRequestException
-import com.twitter.finagle.{
-  CancelledConnectionException,
-  CancelledRequestException,
-  Failure,
-  FailureFlags
-}
+import com.twitter.finagle.CancelledRequestException
 import com.twitter.inject.Test
 import com.twitter.inject.exceptions.PossiblyRetryable
 import com.twitter.scrooge.ThriftException
-import com.twitter.util.{Return, Throw}
+import com.twitter.util.Return
+import com.twitter.util.Throw
 
 class PossiblyRetryableTest extends Test {
 
@@ -18,18 +13,6 @@ class PossiblyRetryableTest extends Test {
   object NonRetryableException
       extends ThriftException
       with com.twitter.inject.exceptions.NonRetryableException
-
-  test("test isCancellation") {
-    assertIsCancellation(new CancelledRequestException)
-    assertIsCancellation(new CancelledConnectionException(new Exception("cause")))
-    assertIsCancellation(new ClientDiscardedRequestException("cause"))
-    assertIsCancellation(Failure("int", FailureFlags.Interrupted))
-    assertIsCancellation(Failure.rejected("", new CancelledRequestException))
-  }
-
-  test("test isNonRetryable") {
-    assertIsNonRetryable(Failure("int", FailureFlags.Ignorable))
-  }
 
   test("test apply") {
     PossiblyRetryable(PossiblyRetryableException) should be(true)
@@ -70,13 +53,5 @@ class PossiblyRetryableTest extends Test {
       Throw(new Exception("FORCED EXCEPTION"))) should be(
       true
     )
-  }
-
-  private def assertIsCancellation(e: Throwable): Unit = {
-    PossiblyRetryable.isCancellation(e) should be(true)
-  }
-
-  private def assertIsNonRetryable(e: Throwable): Unit = {
-    PossiblyRetryable.isNonRetryable(e) should be(true)
   }
 }

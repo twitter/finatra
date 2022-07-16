@@ -12,6 +12,7 @@ junit_tests(
             scope = "runtime",
         ),
         "finagle/finagle-core/src/main",
+        "finagle/finagle-mux/src/main/scala",
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-core/src/test/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",

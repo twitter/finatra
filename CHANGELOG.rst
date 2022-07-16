@@ -7,6 +7,14 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+
+* inject-utils|inject-thrift: Move package private methods `PossiblyRetryable#isCancellation` and
+  `PossibleRetryable#isNonRetryable` in inject-thrift to inject-utils `ExceptionUtils` as publicly
+  usable methods. These methods are generally useful when processing interrupts on Futures.
+  ``PHAB_ID=D935287``
+
 Runtime Behavior Changes
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

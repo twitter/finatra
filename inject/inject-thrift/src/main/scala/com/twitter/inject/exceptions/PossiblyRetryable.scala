@@ -1,15 +1,12 @@
 package com.twitter.inject.exceptions
 
-import com.twitter.finagle.mux.ClientDiscardedRequestException
-import com.twitter.finagle.{
-  CancelledConnectionException,
-  CancelledRequestException,
-  Failure,
-  FailureFlags,
-  service => ctfs
-}
-import com.twitter.finagle.service.{ReqRep, ResponseClass}
-import com.twitter.util.{Return, Throw, Try}
+import com.twitter.finagle.{service => ctfs}
+import com.twitter.finagle.service.ReqRep
+import com.twitter.finagle.service.ResponseClass
+import com.twitter.inject.utils.ExceptionUtils
+import com.twitter.util.Return
+import com.twitter.util.Throw
+import com.twitter.util.Try
 import scala.util.control.NonFatal
 
 /**
@@ -65,24 +62,6 @@ object PossiblyRetryable {
    * @return true if the [[Throwable]] represents an Exception or Failure which is possibly
    *         retryable, false otherwise.
    */
-  def possiblyRetryable(t: Throwable): Boolean = {
-    !isCancellation(t) && !isNonRetryable(t) && NonFatal(t)
-  }
-
-  private[inject] def isCancellation(t: Throwable): Boolean = t match {
-    case _: CancelledRequestException => true
-    case _: CancelledConnectionException => true
-    case _: ClientDiscardedRequestException => true
-    case f: FailureFlags[_] if f.isFlagged(FailureFlags.Ignorable) => true
-    case f: FailureFlags[_] if f.isFlagged(FailureFlags.Interrupted) => true
-    case f: Failure if f.cause.isDefined => isCancellation(f.cause.get)
-    case _ => false
-  }
-
-  private[inject] def isNonRetryable(t: Throwable): Boolean = t match {
-    case _: NonRetryableException => true
-    case f: FailureFlags[_] if f.isFlagged(FailureFlags.Ignorable) => true
-    case f: Failure if f.cause.isDefined => isNonRetryable(f.cause.get)
-    case _ => false
-  }
+  def possiblyRetryable(t: Throwable): Boolean =
+    !ExceptionUtils.isCancellation(t) && !ExceptionUtils.isNonRetryable(t) && NonFatal(t)
 }

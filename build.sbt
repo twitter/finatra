@@ -625,7 +625,7 @@ lazy val injectThrift = (project in file("inject/inject-thrift"))
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % versions.libThrift exclude ("commons-logging", "commons-logging"),
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
-      "com.twitter" %% "finagle-mux" % versions.twLibVersion,
+      "com.twitter" %% "finagle-mux" % versions.twLibVersion % Test,
       "com.twitter" %% "scrooge-core" % versions.twLibVersion,
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "com.twitter" %% "util-mock" % versions.twLibVersion % Test,
@@ -669,6 +669,7 @@ lazy val injectUtils = (project in file("inject/inject-utils"))
     moduleName := "inject-utils",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
+      "com.twitter" %% "finagle-mux" % versions.twLibVersion,
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "javax.xml.bind" % "jaxb-api" % versions.javaxBind,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
