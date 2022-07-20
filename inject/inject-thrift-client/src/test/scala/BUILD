@@ -1,6 +1,7 @@
 junit_tests(
     sources = ["com/twitter/inject/thrift/**/*.scala"],
     compiler_option_sets = ["fatal_warnings"],
+    platform = "java8",
     tags = ["bazel-compatible"],
     dependencies = [
         "//:scala-reflect",

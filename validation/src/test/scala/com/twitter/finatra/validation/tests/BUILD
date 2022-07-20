@@ -4,6 +4,7 @@ junit_tests(
         "*.scala",
         "constraints/*.scala",
     ],
+    platform = "java8",
     strict_deps = True,
     tags = ["bazel-compatible"],
     dependencies = [

@@ -1,4 +1,5 @@
 junit_tests(
+    platform = "java8",
     tags = ["bazel-compatible"],
     dependencies = [
         "finagle/finagle-core/src/main",

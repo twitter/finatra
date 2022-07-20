@@ -1,6 +1,7 @@
 scala_library(
     sources = ["**/*.scala"],
     compiler_option_sets = ["fatal_warnings"],
+    platform = "java8",
     tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
@@ -38,6 +39,7 @@ jvm_binary(
     name = "bin",
     basename = "scala-http-server",
     main = "com.twitter.finatra.example.HelloWorldServerMain",
+    platform = "java8",
     tags = ["bazel-compatible"],
     dependencies = [
         ":example",

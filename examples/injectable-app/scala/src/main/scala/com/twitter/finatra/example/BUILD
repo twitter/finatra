@@ -1,6 +1,7 @@
 scala_library(
     sources = ["**/*.scala"],
     compiler_option_sets = ["fatal_warnings"],
+    platform = "java8",
     tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/javax/inject:javax.inject",
@@ -17,6 +18,7 @@ jvm_binary(
     name = "bin",
     basename = "injectable-app-scala",
     main = "com.twitter.finatra.example.SampleAppMain",
+    platform = "java8",
     tags = [
         "bazel-compatible",
     ],

@@ -1,6 +1,7 @@
 scala_library(
     sources = ["**/*.scala"],
     compiler_option_sets = ["fatal_warnings"],
+    platform = "java8",
     tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
@@ -14,6 +15,7 @@ jvm_binary(
     name = "bin",
     basename = "injectable-twitter-server-java",
     main = "com.twitter.finatra.example.ExampleTwitterServerMain",
+    platform = "java8",
     tags = ["bazel-compatible"],
     dependencies = [
         ":example",

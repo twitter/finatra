@@ -1,5 +1,6 @@
 junit_tests(
     sources = ["**/*.scala"],
+    platform = "java8",
     tags = ["bazel-compatible"],
     dependencies = [
         "//:scalac",

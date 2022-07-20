@@ -1,6 +1,7 @@
 java_library(
     sources = ["**/*.java"],
     compiler_option_sets = ["fatal_warnings"],
+    platform = "java8",
     tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
@@ -19,6 +20,7 @@ jvm_binary(
     name = "bin",
     basename = "injectable-app-java",
     main = "com.twitter.finatra.example.HelloWorldAppMain",
+    platform = "java8",
     tags = ["bazel-compatible"],
     dependencies = [
         ":example",

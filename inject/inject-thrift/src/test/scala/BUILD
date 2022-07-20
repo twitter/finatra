@@ -4,6 +4,7 @@ junit_tests(
         "com/twitter/inject/tests/thrift/utils/*.scala",
     ],
     compiler_option_sets = ["fatal_warnings"],
+    platform = "java8",
     tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/org/scalatest",

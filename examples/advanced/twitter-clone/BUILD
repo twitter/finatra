@@ -17,6 +17,7 @@ jvm_binary(
     name = "bin",
     basename = "finatra-twitter-clone",
     main = "finatra.quickstart.TwitterCloneServerMain",
+    platform = "java8",
     tags = ["bazel-compatible"],
     dependencies = [
         ":twitter-clone",

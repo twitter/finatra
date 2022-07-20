@@ -3,6 +3,7 @@ junit_tests(
         "**/*.java",
         "**/*.scala",
     ],
+    platform = "java8",
     tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/fasterxml/jackson/core:jackson-annotations",

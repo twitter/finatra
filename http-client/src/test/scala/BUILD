@@ -1,5 +1,6 @@
 junit_tests(
     sources = ["com/twitter/finatra/httpclient/*.scala"],
+    platform = "java8",
     tags = ["bazel-compatible"],
     dependencies = [
         ":test-deps",
@@ -38,6 +39,7 @@ scala_library(
     name = "test-deps",
     sources = ["com/twitter/finatra/httpclient/test/*.scala"],
     compiler_option_sets = ["fatal_warnings"],
+    platform = "java8",
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-httpclient-tests",

@@ -10,6 +10,7 @@ jvm_binary(
     name = "bin",
     basename = "streaming-example",
     main = "com.twitter.streaming.StreamingServerMain",
+    platform = "java8",
     tags = ["bazel-compatible"],
     dependencies = [
         "finatra/examples/advanced/streaming-example/src/main/scala",

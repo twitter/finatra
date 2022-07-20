@@ -1,6 +1,7 @@
 create_thrift_libraries(
     base_name = "doeverything-thrift",
     sources = ["*.thrift"],
+    platform = "java8",
     tags = ["bazel-compatible"],
     generate_languages = [
         "java",

@@ -1,6 +1,7 @@
 java_library(
     sources = ["**/*.java"],
     compiler_option_sets = ["fatal_warnings"],
+    platform = "java8",
     tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
@@ -26,6 +27,7 @@ jvm_binary(
     name = "bin",
     basename = "java-thrift-server",
     main = "com.twitter.finatra.example.CalculatorServerMain",
+    platform = "java8",
     tags = ["bazel-compatible"],
     dependencies = [
         ":example",
