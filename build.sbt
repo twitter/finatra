@@ -106,7 +106,6 @@ lazy val versions = new {
   val scalaTestPlusScalaCheck = "3.1.2.0"
   val servletApi = "2.5"
   val slf4j = "1.7.30"
-  val snakeyaml = "1.24"
   val javaxBind = "2.3.0"
   val javaxActivation = "1.1.1"
 }
@@ -1019,7 +1018,6 @@ lazy val thrift = project
       "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
       "javax.inject" % "javax.inject" % "1",
       "com.novocode" % "junit-interface" % "0.11" % Test,
-      "org.yaml" % "snakeyaml" % versions.snakeyaml,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
     Test / scroogePublishThrift := true,
