@@ -1,5 +1,4 @@
 import scala.language.reflectiveCalls
-import scoverage.ScoverageKeys
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 Global / excludeLintKeys += scalacOptions
@@ -194,17 +193,6 @@ lazy val publishSettings = Seq(
         <url>https://www.twitter.com/</url>
       </developer>
     </developers>,
-  pomPostProcess := { node: scala.xml.Node =>
-    val rule: scala.xml.transform.RewriteRule = new scala.xml.transform.RewriteRule {
-      override def transform(n: scala.xml.Node): scala.xml.NodeSeq =
-        n.nameToString(new StringBuilder()).toString() match {
-          case "dependency" if (n \ "groupId").text.trim == "org.scoverage" => Nil
-          case _ => n
-        }
-    }
-
-    new scala.xml.transform.RuleTransformer(rule).transform(node).head
-  },
   Compile / resourceGenerators += Def.task {
     val dir = (Compile / resourceManaged).value
     val file = dir / "com" / "twitter" / name.value / "build.properties"
@@ -238,7 +226,6 @@ lazy val baseServerSettings = baseSettings ++ buildSettings ++ publishSettings +
 
 lazy val exampleServerSettings = baseServerSettings ++ Seq(
   run / fork := true,
-  coverageEnabled := false,
   Test / javaOptions ++= Seq(
     // we are unable to guarantee that Logback will not get picked up b/c of coursier caching
     // so we set the Logback System properties in addition to the slf4j-simple and the
@@ -401,7 +388,6 @@ lazy val injectStack = (project in file("inject/inject-stack"))
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
     ),
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*StackTransformer.*"
   )
 
 lazy val injectLogback = (project in file("inject/inject-logback"))
@@ -481,7 +467,6 @@ lazy val injectApp = (project in file("inject/inject-app"))
       "org.slf4j" % "slf4j-api" % versions.slf4j,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*TypeConverter.*",
     Test / publishArtifact := true,
     (Test / packageBin / mappings) := {
       val previous = (Test / packageBin / mappings).value
@@ -518,7 +503,6 @@ lazy val injectPorts = (project in file("inject/inject-ports"))
   .settings(
     name := "inject-ports",
     moduleName := "inject-ports",
-    ScoverageKeys.coverageExcludedPackages := "<empty>",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
       "com.twitter" %% "twitter-server" % versions.twLibVersion,
@@ -543,7 +527,6 @@ lazy val injectServer = (project in file("inject/inject-server"))
   .settings(
     name := "inject-server",
     moduleName := "inject-server",
-    ScoverageKeys.coverageExcludedPackages := "<empty>",
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
       "com.twitter" %% "twitter-server" % versions.twLibVersion,
@@ -575,7 +558,6 @@ lazy val injectMdc = (project in file("inject/inject-mdc"))
   .settings(
     name := "inject-mdc",
     moduleName := "inject-mdc",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
       "com.twitter" %% "util-core" % versions.twLibVersion,
@@ -591,7 +573,6 @@ lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
   .settings(
     name := "inject-slf4j",
     moduleName := "inject-slf4j",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;",
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
@@ -620,7 +601,6 @@ lazy val injectThrift = (project in file("inject/inject-thrift"))
   .settings(
     name := "inject-thrift",
     moduleName := "inject-thrift",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*;.*ThriftCommonLogFormatter.*;.*ThriftFilter.*",
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % versions.libThrift exclude ("commons-logging", "commons-logging"),
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
@@ -640,7 +620,6 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
   .settings(
     name := "inject-thrift-client",
     moduleName := "inject-thrift-client",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*;.*LatencyFilter.*",
     Test / scroogeLanguages := Seq("java", "scala"),
     Test / scroogePublishThrift := true,
     libraryDependencies ++= Seq(
@@ -721,7 +700,6 @@ lazy val utils = project
   .settings(
     name := "finatra-utils",
     moduleName := "finatra-utils",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*DeadlineValues.*;.*RichBuf.*;.*RichByteBuf.*",
     libraryDependencies ++= Seq(
       "com.google.inject" % "guice" % versions.guice,
       "joda-time" % "joda-time" % versions.jodaTime,
@@ -761,7 +739,6 @@ lazy val validation = project
   .settings(
     name := "finatra-validation",
     moduleName := "finatra-validation",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*ValidationResult.*;.*InvalidCaseClassException.*",
     libraryDependencies ++= Seq(
       "joda-time" % "joda-time" % versions.jodaTime,
       "com.twitter" %% "util-core" % versions.twLibVersion,
@@ -801,7 +778,6 @@ lazy val jackson = project
   .settings(
     name := "finatra-jackson",
     moduleName := "finatra-jackson",
-    ScoverageKeys.coverageExcludedPackages := ".*DurationMillisSerializer.*;.*ByteBufferUtils.*",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
@@ -832,7 +808,6 @@ lazy val mustache = project
   .settings(
     name := "finatra-mustache",
     moduleName := "finatra-mustache",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*",
     libraryDependencies ++= Seq(
       "javax.inject" % "javax.inject" % "1",
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache exclude ("com.google.guava", "guava"),
@@ -887,7 +862,6 @@ lazy val httpServer = (project in file("http-server"))
   .settings(
     name := "finatra-http-server",
     moduleName := "finatra-http-server",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*ThriftExceptionMapper.*;.*HttpResponseExceptionMapper.*;.*HttpResponseException.*",
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % versions.libThrift intransitive (),
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
@@ -1007,7 +981,6 @@ lazy val thrift = project
   .settings(
     name := "finatra-thrift",
     moduleName := "finatra-thrift",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
       "com.twitter" %% "finagle-exp" % versions.twLibVersion,
@@ -1205,7 +1178,6 @@ lazy val thriftIdl = (project in file("examples/thrift-server/idl"))
     name := "thrift-server-idl",
     moduleName := "thrift-example-idl",
     Compile / scroogeLanguages := Seq("java", "scala"),
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
     Compile / scroogeThriftIncludeFolders := Seq(file("examples/thrift-server/idl/src/main/thrift"))
   ).dependsOn(
     thrift
@@ -1237,7 +1209,6 @@ lazy val scalaThriftServer = (project in file("examples/thrift-server/scala"))
   .settings(
     name := "scala-thrift-server",
     moduleName := "scala-thrift-server",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*ExceptionTranslationFilter.*",
     libraryDependencies ++= Seq(
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
@@ -1274,7 +1245,6 @@ lazy val twitterClone = (project in file("examples/advanced/twitter-clone"))
   .settings(
     name := "twitter-clone",
     moduleName := "twitter-clone",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;finatra\\.quickstart\\..*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "com.twitter" %% "util-jackson" % versions.twLibVersion,
