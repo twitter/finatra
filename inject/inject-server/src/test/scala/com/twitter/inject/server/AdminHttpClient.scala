@@ -60,7 +60,7 @@ private[twitter] abstract class AdminHttpClient private[twitter] (
   }
 
   def healthResponse(expectedHealthy: Boolean = true): Try[Response] = {
-    val expectedBody = if (expectedHealthy) "OK\n" else ""
+    val expectedBody = if (expectedHealthy) "OK\n" else "warming up\n"
 
     Try {
       httpGetAdmin("/health", andExpect = Status.Ok, withBody = expectedBody, suppress = !verbose)
