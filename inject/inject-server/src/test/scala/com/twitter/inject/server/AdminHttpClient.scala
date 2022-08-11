@@ -1,8 +1,13 @@
 package com.twitter.inject.server
 
-import com.twitter.finagle.http.{Fields, Method, Request, Response, Status}
+import com.twitter.finagle.http.Fields
+import com.twitter.finagle.http.Method
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
+import com.twitter.finagle.http.Status
 import com.twitter.server.AdminHttpServer
-import com.twitter.util.{Closable, Try}
+import com.twitter.util.Closable
+import com.twitter.util.Try
 import java.net.URI
 
 /** Internal utility which represents an http client to the AdminHttpInterface of the [[EmbeddedTwitterServer]] */
