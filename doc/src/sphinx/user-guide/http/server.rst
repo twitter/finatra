@@ -59,6 +59,10 @@ Or in Java, extend the `c.t.finatra.http.AbstractHttpServer <https://github.com/
       }
     }
 
+.. tip::
+
+  See the server `naming conventions <#naming-convention>`__ which is especially important for Java users.
+
 A more complete example includes adding Modules, a Controller, and Filters. In Scala:
 
 .. code:: scala
@@ -127,6 +131,11 @@ in Java:
       }
     }
 
+
+.. tip::
+
+  Take a look at the server `naming conventions <#naming-convention>`__ which is especially important for Java users.
+
 Adding filters in Java can happen in multiple ways which is somewhat dependent on your tolerance to
 type erasure if you need to apply Filters that have `parameterized types <https://github.com/google/guice/wiki/FrequentlyAskedQuestions#how-to-inject-class-with-generic-type>`__.
 
@@ -159,7 +168,7 @@ Additionally, a server can define `modules <../getting-started/modules.html>`__ 
 Naming Convention
 -----------------
 
-The Finatra convention is to create a Scala `object <https://twitter.github.io/scala_school/basics2.html#object>`__ 
+The Finatra convention for defining a server is to create a Scala `object <https://twitter.github.io/scala_school/basics2.html#object>`__ 
 with a name ending in "Main" that extends your server class. The server *class* can be used in 
 testing as this allows your server to be instantiated multiple times in tests without worrying about 
 static state persisting across test runs in the same JVM.
@@ -175,8 +184,7 @@ for running the server in all other cases.
 Java Naming Convention
 ~~~~~~~~~~~~~~~~~~~~~~
 
-In Java you would create a separate "main" class which defines a static `main()` method and accepts args
-for flag parsing:
+Similarly, in Java the best practice is to create a separate "main" class which defines a Java `main() <https://docs.oracle.com/javase/tutorial/getStarted/application/index.html#MAIN>`__ method that accepts the Java `command-line arguments <https://docs.oracle.com/javase/tutorial/essential/environment/cmdLineArgs.html#:~:text=A%20Java%20application%20can%20accept,when%20the%20application%20is%20launched.&text=When%20an%20application%20is%20launched,an%20array%20of%20String%20s.>`__ for flag parsing:
 
 .. code:: java
 
@@ -189,7 +197,7 @@ for flag parsing:
         }
     }
 
-This would be the class used as the `application entry point <https://docs.oracle.com/javase/tutorial/deployment/jar/appman.html>`__
+The `ExampleServerMain` would be the class used as the `application entry point <https://docs.oracle.com/javase/tutorial/deployment/jar/appman.html>`__
 for running the server.
 
 Creating an HTTPS Server
