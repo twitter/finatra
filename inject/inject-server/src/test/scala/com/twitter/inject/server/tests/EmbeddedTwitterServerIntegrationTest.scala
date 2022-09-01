@@ -21,10 +21,8 @@ import com.twitter.util.Await
 import com.twitter.util.Future
 import com.twitter.util.Promise
 import com.twitter.util.TimeoutException
-
 import javax.inject.Singleton
 import org.scalatest.exceptions.TestFailedException
-
 import scala.collection.immutable.ListMap
 import scala.util.Random
 
@@ -310,7 +308,7 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
       val e = intercept[Exception] {
         server.assertHealthy()
       }
-      e.getMessage.contains("Error parsing flag \"foo.bar\": flag undefined") should be(true)
+      e.getMessage.contains("Error parsing flag \"foo.bar\"") should be(true)
     } finally {
       server.close()
     }
@@ -332,7 +330,7 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
         server.injector
       }
 
-      e.getMessage.contains("Error parsing flag \"foo.bar\": flag undefined") should be(true)
+      e.getMessage.contains("Error parsing flag \"foo.bar\"") should be(true)
       e.getMessage equals e2.getMessage
     } finally {
       server.close()
