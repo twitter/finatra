@@ -258,7 +258,7 @@ final class EmbeddedMysqlServer private (
    */
   def truncateAllTables(
     preserveTables: Seq[String] = Seq.empty,
-    timeout: Duration = 1.second
+    timeout: Duration = 30.seconds
   ): Unit = {
     val tables: Seq[String] = extractTables()
       .filterNot(preserveTables.contains)
@@ -284,7 +284,7 @@ final class EmbeddedMysqlServer private (
        |AND TABLE_ROWS > 0
       """.stripMargin
 
-  private[this] def extractTables(timeout: Duration = 1.second): Seq[String] = {
+  private[this] def extractTables(timeout: Duration = 30.seconds): Seq[String] = {
     val result = Await.result(mysqlClient.query(selectTablesWithNonZeroRowsQuery), timeout)
     result match {
       case ResultSet(_, rows) =>

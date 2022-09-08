@@ -53,9 +53,9 @@ trait MysqlTestLifecycle extends TestMixin { self: TestSuite =>
     embeddedMysqlServer.close()
   }
 
-  override protected def afterEach(): Unit = {
+  override protected def beforeEach(): Unit = {
     if (truncateTablesBetweenTests) embeddedMysqlServer.truncateAllTables(preserveTables)
-    super.afterEach()
+    super.beforeEach()
   }
 
 }
