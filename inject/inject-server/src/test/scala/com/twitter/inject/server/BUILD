@@ -31,7 +31,6 @@ scala_library(
         "twitter-server/server/src/main/scala",
         "util/util-app/src/main/scala",
         "util/util-core:scala",
-        "util/util-logging/src/main/scala",
         "util/util-slf4j-api/src/main/scala",
         "util/util-stats/src/main/scala",
     ],

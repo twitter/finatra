@@ -29,7 +29,6 @@ scala_library(
         "util/util-core:util-core-util",
         "util/util-lint/src/main/scala",
         # for DeprecatedLoggingFlags trait
-        "util/util-logging/src/main/scala",
         "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
         "util/util-stats/src/main/scala",
     ],

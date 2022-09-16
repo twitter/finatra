@@ -73,7 +73,6 @@ junit_tests(
         "util/util-core:util-core-util",
         "util/util-jackson/src/main/scala/com/twitter/util/jackson/caseclass/exceptions",
         "util/util-lint/src/main/scala",
-        "util/util-logging/src/main/scala",
         "util/util-mock/src/main/scala/com/twitter/util/mock",
         "util/util-security-test-certs/src/main/resources",
         "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",

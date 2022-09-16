@@ -22,7 +22,6 @@ scala_library(
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "util/util-core:scala",
         "util/util-jackson/src/main/scala/com/twitter/util/jackson",
-        "util/util-logging/src/main/scala",
         "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
         "util/util-stats/src/main/scala",
     ],

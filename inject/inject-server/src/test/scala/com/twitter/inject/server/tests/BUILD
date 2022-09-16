@@ -30,7 +30,6 @@ junit_tests(
         "util/util-app/src/main/scala",
         "util/util-core:scala",
         "util/util-lint/src/main/scala",
-        "util/util-logging/src/main/scala",
         "util/util-registry/src/main/scala",
         "util/util-slf4j-api/src/main/scala/com/twitter/util/logging",
     ],
