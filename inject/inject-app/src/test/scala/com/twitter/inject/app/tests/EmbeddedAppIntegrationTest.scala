@@ -1,6 +1,8 @@
 package com.twitter.inject.app.tests
 
 import com.google.inject.Module
+import com.google.inject.Provides
+import com.google.inject.Stage
 import com.twitter.inject.Test
 import com.twitter.inject.TwitterModule
 import com.twitter.inject.app.App
@@ -10,6 +12,7 @@ import com.twitter.inject.app.console.ConsoleWriter
 import com.twitter.util.logging.Logging
 import com.twitter.util.mock.Mockito
 import javax.inject.Inject
+import javax.inject.Singleton
 
 class EmbeddedAppIntegrationTest extends Test with Mockito {
 
@@ -144,6 +147,15 @@ class EmbeddedAppIntegrationTest extends Test with Mockito {
     assert(console.inspectOut() == "Hello, World: Part 2!\n")
     assert(console.inspectErr() == "Oof!\n")
   }
+
+  test("app#injector error") {
+    val sampleApp = new SampleApp
+    val app = new EmbeddedApp(sampleApp, stage = Stage.PRODUCTION)
+
+    intercept[Exception] {
+      app.main()
+    }.getCause.getMessage should be("Yikes")
+  }
 }
 
 object SampleAppMain extends SampleApp
@@ -162,7 +174,13 @@ class SampleApp extends App {
 
   override val name = "sample-app"
 
-  override val modules: Seq[Module] = Seq.empty[Module]
+  override val modules: Seq[Module] = Seq(new TwitterModule() {
+    @Provides
+    @Singleton
+    def providesFoo: Integer = {
+      throw new Exception("Yikes")
+    }
+  })
 
   override protected def run(): Unit = {
     sampleServiceResponse = injector.instance[SampleManager].start()

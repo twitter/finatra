@@ -7,6 +7,12 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+
+* inject-app: (BREAKING CHANGE) ``EmbeddedApp`` now sets com.google.inject.Stage to ``DEVELOPMENT``
+  ``PHAB_ID=D983261``
+
 22.7.0
 ------
 
