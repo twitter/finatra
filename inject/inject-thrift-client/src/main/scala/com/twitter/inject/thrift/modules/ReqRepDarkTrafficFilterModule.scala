@@ -1,8 +1,10 @@
 package com.twitter.inject.thrift.modules
 
-import com.twitter.finagle.{Filter, ThriftMux}
+import com.twitter.finagle.Filter
+import com.twitter.finagle.ThriftMux
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finagle.thrift.service.{Filterable, ReqRepServicePerEndpointBuilder}
+import com.twitter.finagle.thrift.service.Filterable
+import com.twitter.finagle.thrift.service.ReqRepServicePerEndpointBuilder
 import com.twitter.inject.Injector
 import com.twitter.inject.thrift.filters.DarkTrafficFilter
 import scala.reflect.ClassTag
@@ -11,9 +13,7 @@ import scala.reflect.ClassTag
  * A [[com.twitter.inject.TwitterModule]] which configures and binds a [[DarkTrafficFilter]] to the object graph.
  *
  * @note This [[DarkTrafficFilter]] module is to be used with `Controllers` which are constructed by
- *       extending `Controller(GeneratedThriftService)`. For Controllers that are constructed using
- *       the deprecated method of extending `Controller with GeneratedThriftService.BaseServiceIface`,
- *       Use the [[DarkTrafficFilterModule]] above.
+ *       extending `Controller(GeneratedThriftService)`.
  * @note This is only applicable in Scala as it uses generated Scala classes and expects to configure
  *       the [[DarkTrafficFilter]] over a [[com.twitter.finagle.Service]] that is generated from
  *       Finagle via generated Scala code. Users of generated Java code should use the
