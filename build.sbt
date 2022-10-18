@@ -876,7 +876,7 @@ lazy val httpServer = (project in file("http-server"))
     Test / unmanagedResourceDirectories += baseDirectory(
       _ / "src" / "test" / "webapp"
     ).value,
-    Test / unmanagedResources / excludeFilter := "BUILD",
+    Test / unmanagedResources / excludeFilter := "BUILD.bazel",
     Test / publishArtifact := true,
     (Test / packageBin / mappings) := {
       val previous = (Test / packageBin / mappings).value
