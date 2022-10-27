@@ -177,10 +177,10 @@ lazy val publishSettings = Seq(
   homepage := Some(url("https://github.com/twitter/finatra")),
   autoAPIMappings := true,
   apiURL := Some(url("https://twitter.github.io/finatra/scaladocs/")),
-  Compile / managedSources / excludeFilter := HiddenFileFilter || "BUILD",
-  Compile / unmanagedSources / excludeFilter := HiddenFileFilter || "BUILD",
-  Compile / managedResources / excludeFilter := HiddenFileFilter || "BUILD",
-  Compile / unmanagedResources / excludeFilter := HiddenFileFilter || "BUILD",
+  Compile / managedSources / excludeFilter := HiddenFileFilter || "BUILD.bazel",
+  Compile / unmanagedSources / excludeFilter := HiddenFileFilter || "BUILD.bazel",
+  Compile / managedResources / excludeFilter := HiddenFileFilter || "BUILD.bazel",
+  Compile / unmanagedResources / excludeFilter := HiddenFileFilter || "BUILD.bazel",
   pomExtra :=
     <scm>
       <url>git://github.com/twitter/finatra.git</url>
@@ -217,7 +217,7 @@ lazy val baseServerSettings = baseSettings ++ buildSettings ++ publishSettings +
   publishLocal := {},
   publish := {},
   assembly / assemblyMergeStrategy := {
-    case "BUILD" => MergeStrategy.discard
+    case "BUILD.bazel" => MergeStrategy.discard
     case "META-INF/io.netty.versions.properties" => MergeStrategy.last
     case PathList(ps @ _*) if ps.last endsWith ".class" => MergeStrategy.first
     case other => MergeStrategy.defaultMergeStrategy(other)
@@ -837,7 +837,7 @@ lazy val httpCore = (project in file("http-core"))
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "javax.servlet" % "servlet-api" % versions.servletApi % "provided;compile->compile;test->test"
     ),
-    Test / unmanagedResources / excludeFilter := "BUILD",
+    Test / unmanagedResources / excludeFilter := "BUILD.bazel",
     Test / publishArtifact := true
   ).dependsOn(
     httpAnnotations,
@@ -995,7 +995,7 @@ lazy val thrift = project
     ),
     Test / scroogePublishThrift := true,
     Test / scroogeLanguages := Seq("java", "scala"),
-    unmanagedResources / excludeFilter := "BUILD",
+    unmanagedResources / excludeFilter := "BUILD.bazel",
     Test / publishArtifact := true,
     (Test / packageBin / mappings) := {
       val previous = (Test / packageBin / mappings).value
@@ -1022,7 +1022,7 @@ lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-h
   .settings(
     name := "inject-thrift-client-http-mapper",
     moduleName := "inject-thrift-client-http-mapper",
-    Test / unmanagedResources / excludeFilter := "BUILD",
+    Test / unmanagedResources / excludeFilter := "BUILD.bazel",
     libraryDependencies ++= Seq(
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
