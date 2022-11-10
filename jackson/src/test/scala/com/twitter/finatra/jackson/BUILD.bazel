@@ -42,8 +42,6 @@ junit_tests(
         "finatra/jackson/src/main/scala/com/twitter/finatra/jackson/streaming",
         "finatra/jackson/src/main/scala/com/twitter/finatra/json",
         "finatra/jackson/src/test/java/com/twitter/finatra/jackson",
-        "finatra/validation/src/main/java/com/twitter/finatra/validation",
-        "finatra/validation/src/main/scala/com/twitter/finatra/validation",
         "finatra/validation/src/test/scala/com/twitter/finatra/validation",
         "util/util-core:scala",
         "util/util-jackson/src/main/scala/com/twitter/util/jackson",
