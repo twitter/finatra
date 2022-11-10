@@ -13,7 +13,10 @@ scala_library(
         repo = artifactory,
     ),
     strict_deps = True,
-    tags = ["bazel-compatible"],
+    tags = [
+        "bazel-compatible",
+        "visibility://codestructure/packages/validation:legal-scala",
+    ],
     dependencies = [
         "3rdparty/jvm/com/fasterxml/jackson/datatype:jackson-datatype-joda",
         "3rdparty/jvm/jakarta/validation:jakarta.validation-api",

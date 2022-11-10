@@ -6,7 +6,10 @@ java_library(
     compiler_option_sets = ["fatal_warnings"],
     platform = "java8",
     strict_deps = True,
-    tags = ["bazel-compatible"],
+    tags = [
+        "bazel-compatible",
+        "visibility://codestructure/packages/validation:legal-java",
+    ],
     dependencies = [
         "3rdparty/jvm/jakarta/validation:jakarta.validation-api",
         "finatra/validation/src/main/scala/com/twitter/finatra/validation",
