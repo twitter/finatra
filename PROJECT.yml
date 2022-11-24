@@ -1,17 +1,8 @@
 # See go/project-docs. Generated using ./bazel run src/python/twitter/phabricator:owners_to_project -- --dirs=a/owned/path,b/owned/path
 
 owners:
-  - banderson
-  - ibennett
-  - jyan
-  - mnakamura
-  - vkostyukov
-  - yufang
-watchers:
   - csl-team:ldap
-  - ccoco
-  - scosenza
-
-fileOwners:
-  CHANGELOG.rst:
-    - csl-team:ldap
+  - jillianc
+  - mbezoyan
+  - mdickinson
+  - nvong
