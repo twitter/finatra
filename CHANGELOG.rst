@@ -13,6 +13,11 @@ Changed
 * inject-app: (BREAKING CHANGE) ``EmbeddedApp`` now sets com.google.inject.Stage to ``DEVELOPMENT``
   ``PHAB_ID=D983261``
 
+Runtime Behavior Changes
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* util: Bump version of logback to 1.2.11. ``PHAB_ID=D1026765``
+
 22.7.0
 ------
 
