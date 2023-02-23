@@ -7,6 +7,12 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+
+Runtime Behavior Changes
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* finatra: Bump version of Jackson to 2.14.2. ``PHAB_ID=D1049772``
+
 22.12.0
 -------
 
