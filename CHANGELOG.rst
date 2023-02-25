@@ -13,6 +13,8 @@ Runtime Behavior Changes
 
 * finatra: Bump version of Jackson to 2.14.2. ``PHAB_ID=D1049772``
 
+* finatra: Bump version of nscala-time to 2.32.0. ``PHAB_ID=D1050087``
+
 22.12.0
 -------
 
