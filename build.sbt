@@ -88,9 +88,9 @@ lazy val versions = new {
   // All Twitter library releases are date versioned as YY.MM.patch
   val twLibVersion = releaseVersion
   val commonsFileupload = "1.4"
-  val guice = "4.2.3"
+  val guice = "5.1.0"
   val jackson = "2.14.2"
-  val jodaConvert = "1.5"
+  val jodaConvert = "2.2.3"
   val jodaTime = "2.12.1"
   val json4s = "4.0.3"
   val junit = "4.12"
@@ -99,7 +99,7 @@ lazy val versions = new {
   val mustache = "0.8.18"
   val nscalaTime = "2.32.0"
   val scalaCheck = "1.15.4"
-  val scalaGuice = "4.2.11"
+  val scalaGuice = "5.1.0"
   val scalaTest = "3.1.2"
   val scalaTestPlusJunit = "3.1.2.0"
   val scalaTestPlusScalaCheck = "3.1.2.0"
@@ -350,7 +350,6 @@ lazy val injectCore = (project in file("inject/inject-core"))
     libraryDependencies ++= Seq(
       "com.google.inject" % "guice" % versions.guice,
       "com.google.inject.extensions" % "guice-assistedinject" % versions.guice,
-      "com.google.inject.extensions" % "guice-multibindings" % versions.guice,
       "com.twitter" %% "util-app" % versions.twLibVersion,
       "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
       "javax.inject" % "javax.inject" % "1",
@@ -414,7 +413,9 @@ lazy val injectLogback = (project in file("inject/inject-logback"))
   )
 
 lazy val injectModulesTestJarSources =
-  Seq("com/twitter/inject/modules/InMemoryStatsReceiverModule", "com/twitter/inject/modules/InMemoryTracerModule")
+  Seq(
+    "com/twitter/inject/modules/InMemoryStatsReceiverModule",
+    "com/twitter/inject/modules/InMemoryTracerModule")
 lazy val injectModules = (project in file("inject/inject-modules"))
   .settings(projectSettings)
   .settings(
@@ -1033,7 +1034,6 @@ lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-h
     injectThriftClient % "test->test;compile->compile",
     thrift % "test->test;test->compile"
   )
-
 
 lazy val site = (project in file("doc"))
   .enablePlugins(SphinxPlugin)
