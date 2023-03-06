@@ -135,7 +135,7 @@ TwitterUtil `ScalaObjectMapper`
 -------------------------------
 
 The TwitterUtil |ScalaObjectMapper|_ is a thin wrapper around a configured |jackson-module-scala|_
-`com.fasterxml.jackson.module.scala.ScalaObjectMapper <https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/scala-2.+/com/fasterxml/jackson/module/scala/ScalaObjectMapper.scala>`_.
+`com.fasterxml.jackson.module.scala.ScalaObjectMapper <https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/scala-2.%2B/tools/jackson/module/scala/ScalaObjectMapper.scala>`_.
 In Finatra, the recommended way to construct a |ScalaObjectMapper|_ is via the Finatra |ScalaObjectMapperModule|_.
 
 c.t.f.jackson.modules.ScalaObjectMapperModule
@@ -229,27 +229,27 @@ Adding a Custom Serializer or Deserializer
 To register a custom serializer or deserializer, configure any custom serializer or deserializer
 via the methods provided by the |ScalaObjectMapperModule|_.
 
-- Create a new Jackson `com.fasterxml.jackson.databind.Module <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/Module.java>`_ implementation.
+- Create a new Jackson `com.fasterxml.jackson.databind.JacksonModule <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/tools/jackson/databind/JacksonModule.java>`_ implementation.
 
   .. tip::
 
-    To implement a new Jackson `Module <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/Module.java>`_ for adding a basic custom serializer or deserializer, you can
-    use the `com.fasterxml.jackson.databind.module.SimpleModule <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/module/SimpleModule.java>`_.
+    To implement a new Jackson `Module <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/tools/jackson/databind/JacksonModule.java>`_ for adding a basic custom serializer or deserializer, you can
+    use the `com.fasterxml.jackson.databind.module.SimpleModule <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/tools/jackson/databind/module/SimpleModule.java>`_.
 
     Note, that if you want to register a `JsonSerializer` or `JsonDeserializer` over a parameterized
     type, such as a `Collection[T]` or `Map[T, U]`, that you should instead implement
-    `com.fasterxml.jackson.databind.deser.Deserializers <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/deser/Deserializers.java>`_
-    or `com.fasterxml.jackson.databind.ser.Serializers <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/ser/Serializers.java>`_
+    `com.fasterxml.jackson.databind.deser.Deserializers <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/tools/jackson/databind/deser/Deserializers.java>`_
+    or `com.fasterxml.jackson.databind.ser.Serializers <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/tools/jackson/databind/ser/Serializers.java>`_
     which provide callbacks to match the full signatures of the class to deserialize into via a
     Jackson `JavaType`.
 
     Also note that with this usage it is generally recommended to add your `Serializers` or
-    `Deserializers` implementation via a |jackson-module-scala|_ `JacksonModule <https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/scala/com/fasterxml/jackson/module/scala/JacksonModule.scala>`_.
-    (which is an extension of `com.fasterxml.jackson.databind.Module <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/Module.java>`_
+    `Deserializers` implementation via a |jackson-module-scala|_ `JacksonModule <https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/scala/tools/jackson/module/scala/JacksonModule.scala>`_.
+    (which is an extension of `com.fasterxml.jackson.databind.JacksonModule <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/tools/jackson/databind/JacksonModule.java>`_
     and can thus be used in place). See example below.
 
 - Add your serializer or deserializer using the `SimpleModule#addSerializer` or `SimpleModule#addDeserializer` methods in your module.
-- In your custom |ScalaObjectMapperModule|_ extension, add the Jackson `Module <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/Module.java>`_ implementation to list of additional Jackson modules by overriding and implementing the `ScalaObjectMapperModule#additionalJacksonModules`.
+- In your custom |ScalaObjectMapperModule|_ extension, add the `JacksonModule <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/tools/jackson/databind/JacksonModule.java>`_ implementation to list of additional Jackson modules by overriding and implementing the `ScalaObjectMapperModule#additionalJacksonModules`.
 
 For example: first create the serializer or deserializer (a deserializer example is shown below)
 
@@ -355,7 +355,7 @@ features:
 -  Throws a `JsonMappingException` when required fields are missing from the parsed JSON.
 -  Uses specified `case class` default values when fields are missing in the incoming JSON.
 -  Properly deserializes a `Seq[Long]` (see: https://github.com/FasterXML/jackson-module-scala/issues/62).
--  Supports `"wrapped values" <https://docs.scala-lang.org/overviews/core/value-classes.html>`__ using `c.t.util.jackson.WrappedValue <https://github.com/twitter/util/blob/develop/util-jackson/src/main/scala/com/twitter/util/jackson/WrappedValue.scala>`_.
+-  Supports `"wrapped values" <https://docs.scala-lang.org/overviews/core/value-classes.html>`__ using `c.t.util.jackson.WrappedValue <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/WrappedValue.scala>`_.
 -  Support for field and method level validations via integration with the `util-validator <https://twitter.github.io/util/guide/util-validator/index.html>`__ Bean Validation 2.0 style validations during JSON deserialization.
 -  Accumulates all JSON deserialization errors (instead of failing fast) in a returned sub-class of `JsonMappingException` (see: `CaseClassMappingException <https://github.com/twitter/util/blob/develop/util-jackson/src/main/scala/com/twitter/util/jackson/caseclass/exceptions/CaseClassMappingException.scala>`_).
 
@@ -372,11 +372,11 @@ Jackson InjectableValues Support
 --------------------------------
 
 By default, the Finatra provides a |ScalaObjectMapper|_ via the |ScalaObjectMapperModule|_ configured
-to resolve Jackson `InjectableValues <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/InjectableValues.java>`_
+to resolve Jackson `InjectableValues <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/tools/jackson/databind/InjectableValues.java>`_
 via a given Google `Guice <https://github.com/google/guice>`_ `Injector <https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/Injector.html>`_.
 
 The default is very similar to the `jackson-module-guice <https://github.com/FasterXML/jackson-modules-base/tree/master/guice>`_ --
-`GuiceInjectableValues <https://github.com/FasterXML/jackson-modules-base/blob/master/guice/src/main/java/com/fasterxml/jackson/module/guice/GuiceInjectableValues.java>`_.
+`GuiceInjectableValues <https://github.com/FasterXML/jackson-modules-base/blob/master/guice/src/main/java/tools/jackson/module/guice/GuiceInjectableValues.java>`_.
 
 .. note::
 
@@ -407,7 +407,7 @@ the mapper was configured. In this case, the framework would attempt to obtain a
 from the object graph.
 
 As mentioned, this is essentially the same functionality found in the `jackson-module-guice <https://github.com/FasterXML/jackson-modules-base/tree/master/guice>`__
-`GuiceInjectableValues <https://github.com/FasterXML/jackson-modules-base/blob/master/guice/src/main/java/com/fasterxml/jackson/module/guice/GuiceInjectableValues.java>`__
+`GuiceInjectableValues <https://github.com/FasterXML/jackson-modules-base/blob/master/guice/src/main/java/tools/jackson/module/guice/GuiceInjectableValues.java>`__
 with a key difference being that the Finatra version ensures we do not attempt lookup of a field from
 the Guice Injector **unless there is a non-null Guice Injector configured and the field is specifically annotated**
 with one of the supporting annotations.
@@ -503,9 +503,9 @@ ensure usage of a consistently configured mapper across your application.
 Implement via a Custom |ScalaObjectMapperModule|_
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- First, create a new Jackson `com.fasterxml.jackson.databind.Module <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/Module.java>`__ implementation. You can use the `com.fasterxml.jackson.databind.module.SimpleModule <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/module/SimpleModule.java>`_.
+- First, create a new Jackson `com.fasterxml.jackson.databind.JacksonModule <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/tools/jackson/databind/JacksonModule.java>`__ implementation. You can use the `com.fasterxml.jackson.databind.module.SimpleModule <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/tools/jackson/databind/module/SimpleModule.java>`_.
 - Add your `MixIn` using the `SimpleModule#setMixInAnnotation` method in your module.
-- In your custom |ScalaObjectMapperModule|_ extension, add the Jackson `Module <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/Module.java>`__.
+- In your custom |ScalaObjectMapperModule|_ extension, add the `JacksonModule <https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/tools/jackson/databind/JacksonModule.java>`__.
 
 For example, create a new Jackson `SimpleModule`:
 
