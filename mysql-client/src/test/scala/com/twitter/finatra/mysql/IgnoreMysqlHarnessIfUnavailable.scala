@@ -1,6 +1,5 @@
-package com.twitter.finatra.mysql.client.tests
+package com.twitter.finatra.mysql
 
-import com.twitter.finatra.mysql.EmbeddedMysqlServer
 import com.twitter.inject.Test
 import org.scalactic.source.Position
 import org.scalatest.Tag

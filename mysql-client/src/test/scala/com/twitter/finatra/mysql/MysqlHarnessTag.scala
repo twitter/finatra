@@ -1,4 +1,4 @@
-package com.twitter.finatra.mysql.client.tests
+package com.twitter.finatra.mysql
 
 import org.scalatest.Tag
 

@@ -1,6 +1,8 @@
 package com.twitter.finatra.mysql.client.tests
 
 import com.twitter.finatra.mysql.EmbeddedMysqlServer
+import com.twitter.finatra.mysql.IgnoreMysqlHarnessIfUnavailable
+import com.twitter.finatra.mysql.MysqlHarnessTag
 import com.twitter.finatra.mysql.MysqlTestLifecycle
 import com.twitter.inject.Test
 

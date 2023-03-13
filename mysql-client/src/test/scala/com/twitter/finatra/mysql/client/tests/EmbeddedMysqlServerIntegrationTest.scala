@@ -3,6 +3,8 @@ package com.twitter.finatra.mysql.client.tests
 import com.twitter.finagle.mysql.ServerError
 import com.twitter.finagle.mysql.harness.config.User
 import com.twitter.finatra.mysql.EmbeddedMysqlServer
+import com.twitter.finatra.mysql.IgnoreMysqlHarnessIfUnavailable
+import com.twitter.finatra.mysql.MysqlHarnessTag
 import com.twitter.inject.Test
 import java.nio.file.Paths
 

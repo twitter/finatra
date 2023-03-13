@@ -6,6 +6,8 @@ import com.google.inject.Singleton
 import com.twitter.finagle.mysql.Result
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.mysql.EmbeddedMysqlServer
+import com.twitter.finatra.mysql.IgnoreMysqlHarnessIfUnavailable
+import com.twitter.finatra.mysql.MysqlHarnessTag
 import com.twitter.finatra.mysql.client.Config
 import com.twitter.finatra.mysql.client.Credentials
 import com.twitter.finatra.mysql.client.MysqlClient
