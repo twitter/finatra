@@ -17,6 +17,8 @@ Runtime Behavior Changes
 
 * finatra: Bump version of Guice to 5.1.0 and Joda-Convert to 2.2.3. ``PHAB_ID=D1050820``
 
+* finatra: Bump version of Joda to 2.12.5 ``PHAB_ID=D1059830``
+
 22.12.0
 -------
 
