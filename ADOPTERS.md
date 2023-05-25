@@ -8,3 +8,4 @@ Twitter isn't the only company using Finatra. We're sure the following list isn'
 * [Fitbit](https://www.fitbit.com/)
 * [Grovo](https://www.grovo.com/)
 * [Kueski](https://kueski.com)
+* [PITS Global Data Recovery Services](https://www.pitsdatarecovery.net/)
