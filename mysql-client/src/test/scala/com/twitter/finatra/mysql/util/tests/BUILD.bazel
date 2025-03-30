@@ -3,7 +3,10 @@ junit_tests(
     compiler_option_sets = ["fatal_warnings"],
     runtime_platform = "java11",
     strict_deps = True,
-    tags = ["bazel-compatible"],
+    tags = [
+        "bazel-compatible",
+        "known-to-fail-jira:CSL-12423",
+    ],
     dependencies = [
         "finagle/finagle-core/src/main",
         "finagle/finagle-mysql/src/main/scala",
