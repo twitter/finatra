@@ -3,10 +3,7 @@ junit_tests(
     compiler_option_sets = ["fatal_warnings"],
     platform = "java8",
     strict_deps = True,
-    tags = [
-        "bazel-compatible",
-        "known-to-fail-jira:CSL-12422",
-    ],
+    tags = ["bazel-compatible"],
     dependencies = [
         "3rdparty/jvm/com/github/ben-manes/caffeine",
         "3rdparty/jvm/org/slf4j:slf4j-simple",
