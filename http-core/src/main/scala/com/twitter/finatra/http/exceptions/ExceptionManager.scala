@@ -1,11 +1,13 @@
 package com.twitter.finatra.http.exceptions
 
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.inject.Injector
 import com.twitter.inject.TypeUtils.singleTypeParam
 import com.twitter.inject.exceptions.DetailedNonRetryableSourcedException
+import com.twitter.util.Throwables
 import com.twitter.util.reflect.Classes
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
@@ -105,16 +107,20 @@ class ExceptionManager(injector: Injector, statsReceiver: StatsReceiver) {
         RouteInfo.sanitize(request.path)
     }
 
+    val methodName = request.method.toString
+    val statusCode = response.status.code.toString
+
     statsReceiver
-      .counter(
-        "route",
-        path,
-        request.method.toString,
-        "status",
-        response.status.code.toString,
-        "mapped",
-        exceptionDetails(throwable)
-      )
+      .hierarchicalScope("route").hierarchicalScope(path).hierarchicalScope(methodName)
+      .hierarchicalScope("status").hierarchicalScope(statusCode)
+      .hierarchicalScope("mapped").hierarchicalScope(exceptionDetails(throwable))
+      .dimensionalScope("srv").dimensionalScope("finatra")
+      .dimensionalScope("http").dimensionalScope("errors")
+      .label("route", routeInfo.fold("unknown")(_.path))
+      .label("method", methodName)
+      .label("status", statusCode)
+      .label("exception", Throwables.RootCause.nested(throwable).getClass.getName)
+      .counter()
       .incr()
   }
 

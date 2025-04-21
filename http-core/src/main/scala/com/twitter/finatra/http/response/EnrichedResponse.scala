@@ -2,6 +2,7 @@ package com.twitter.finatra.http.response
 
 import com.twitter.finagle
 import com.twitter.finagle.http._
+import com.twitter.finagle.stats.MetricBuilder
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.exceptions.HttpResponseException
@@ -712,12 +713,16 @@ private final case class EnrichedResponseImpl(
       val serviceFailureNamespace = Seq("service", "failure")
       val serviceFailureScoped = statsReceiver.scope(serviceFailureNamespace: _*)
 
-      statsReceiver.counter(serviceFailureNamespace: _*).incr()
+      // All of these metrics are already exported by [[ExceptionManager]], so we skip them in the
+      // dimensional export.
+      val builder = MetricBuilder.forCounter.withHierarchicalOnly
 
-      serviceFailureScoped.counter(source).incr() // service/failure/AuthService
+      statsReceiver.counter(builder.withName(serviceFailureNamespace: _*)).incr()
+
+      serviceFailureScoped.counter(builder.withName(source)).incr() // service/failure/AuthService
       serviceFailureScoped
         .scope(source)
-        .counter(detailStrings: _*)
+        .counter(builder.withName(detailStrings: _*))
         .incr() // service/failure/AuthService/3040/Bad_signature
       RouteInfo(request) match {
         case Some(info) =>
@@ -725,7 +730,7 @@ private final case class EnrichedResponseImpl(
           statsReceiver
             .scope("route", info.sanitizedPath, request.method.toString(), "failure")
             .scope(source)
-            .counter(detailStrings: _*)
+            .counter(builder.withName(detailStrings: _*))
             .incr()
         case _ =>
         // No stored RouteInfo. Note: the com.twitter.finatra.http.exceptions.ExceptionManager

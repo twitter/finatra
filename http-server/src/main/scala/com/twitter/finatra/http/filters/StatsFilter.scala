@@ -10,6 +10,7 @@ import com.twitter.finagle.service.ReqRep
 import com.twitter.finagle.service.ResponseClass
 import com.twitter.finagle.service.ResponseClassifier
 import com.twitter.finagle.stats.Counter
+import com.twitter.finagle.stats.MetricBuilder
 import com.twitter.finagle.stats.Stat
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.contexts.RouteInfo
@@ -32,11 +33,25 @@ private object StatsFilter {
       val statusClass = s"${statusCode / 100}XX"
       Stats(
         requestCount = if (perEndpoint) Some(statsReceiver.counter("requests")) else None,
-        statusCodeCount = statsReceiver.scope("status").counter(statusCode.toString),
-        statusClassCount = statsReceiver.scope("status").counter(statusClass),
-        requestTime = if (perEndpoint) Some(statsReceiver.stat("time")) else None,
-        statusCodeTime = statsReceiver.scope("time").stat(statusCode.toString),
-        statusClassTime = statsReceiver.scope("time").stat(statusClass),
+        statusCodeCount = statsReceiver
+          .hierarchicalScope("status").hierarchicalScope(statusCode.toString)
+          .dimensionalScope("response").label("status", statusCode.toString)
+          .counter(),
+        statusClassCount = statsReceiver
+          .scope("status")
+          .counter(MetricBuilder.forCounter.withHierarchicalOnly.withName(statusClass)),
+        requestTime =
+          if (perEndpoint)
+            Some(statsReceiver.stat(MetricBuilder.forStat.withHierarchicalOnly.withName("time")))
+          else None,
+        statusCodeTime = statsReceiver
+          .scope("time")
+          .hierarchicalScope(statusCode.toString)
+          .label("status", statusCode.toString)
+          .stat(),
+        statusClassTime = statsReceiver
+          .scope("time")
+          .stat(MetricBuilder.forStat.withHierarchicalOnly.withName(statusClass)),
         successCount = if (perEndpoint) Some(statsReceiver.counter("success")) else None,
         failuresCount = if (perEndpoint) Some(statsReceiver.counter("failures")) else None,
         ignoredCount = if (perEndpoint) Some(statsReceiver.counter("ignored")) else None
@@ -153,6 +168,8 @@ class StatsFilter[
     extends SimpleFilter[R, Response] {
 
   import StatsFilter._
+  private[this] val dimensionalStats = statsReceiver
+    .dimensionalScope("srv").dimensionalScope("finatra").dimensionalScope("http")
 
   private[this] val perRouteStats = Memoize[(RouteInfo, HttpMethod, Int), Stats] {
     case (routeInfo, method, statusCode) =>
@@ -162,13 +179,15 @@ class StatsFilter[
         else
           routeInfo.sanitizedPath
 
-      val scopedStatsReceiver =
-        statsReceiver.scope("route").scope(nameOrPath).scope(method.toString.toUpperCase)
+      val methodName = method.toString.toUpperCase
+      val scopedStatsReceiver = dimensionalStats
+        .hierarchicalScope("route").hierarchicalScope(nameOrPath).hierarchicalScope(methodName)
+        .label("route", routeInfo.path).label("method", methodName)
       Stats.mk(scopedStatsReceiver, statusCode, perEndpoint = true)
   }
 
   private[this] val globalStats = Memoize[Int, Stats] { statusCode =>
-    Stats.mk(statsReceiver, statusCode, perEndpoint = false)
+    Stats.mk(dimensionalStats.dimensionalScope("global"), statusCode, perEndpoint = false)
   }
 
   /* Public */
