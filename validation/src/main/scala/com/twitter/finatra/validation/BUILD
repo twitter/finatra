@@ -22,7 +22,6 @@ scala_library(
         "3rdparty/jvm/jakarta/validation:jakarta.validation-api",
         "3rdparty/jvm/joda-time",
         "3rdparty/jvm/org/hibernate/validator:hibernate-validator",
-        "3rdparty/jvm/org/json4s:json4s-core",
         "finatra/inject/inject-core/src/main/scala/com/twitter/inject",
         "finatra/inject/inject-utils/src/main/scala",
         "finatra/utils/src/main/scala/com/twitter/finatra/utils",

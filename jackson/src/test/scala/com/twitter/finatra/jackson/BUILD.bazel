@@ -21,7 +21,6 @@ junit_tests(
         "3rdparty/jvm/junit",
         "3rdparty/jvm/net/codingwell:scala-guice",
         "3rdparty/jvm/org/apache/thrift:libthrift",
-        "3rdparty/jvm/org/json4s:json4s-core",
         "3rdparty/jvm/org/scalacheck",
         "3rdparty/jvm/org/scalatest",
         "3rdparty/jvm/org/scalatestplus:junit",

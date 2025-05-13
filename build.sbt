@@ -92,7 +92,6 @@ lazy val versions = new {
   val jackson = "2.14.3"
   val jodaConvert = "2.2.3"
   val jodaTime = "2.12.5"
-  val json4s = "4.0.3"
   val junit = "4.12"
   val libThrift = "0.10.0"
   val logback = "1.2.11"
@@ -745,7 +744,6 @@ lazy val validation = project
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "com.twitter" %% "util-reflect" % versions.twLibVersion,
       "com.twitter" %% "util-validator" % versions.twLibVersion,
-      "org.json4s" %% "json4s-core" % versions.json4s,
       "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
@@ -787,7 +785,6 @@ lazy val jackson = project
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson,
       "com.google.inject" % "guice" % versions.guice,
       "javax.inject" % "javax.inject" % "1",
-      "org.json4s" %% "json4s-core" % versions.json4s,
       "com.twitter" %% "finagle-http" % versions.twLibVersion % "test",
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "com.twitter" %% "util-jackson" % versions.twLibVersion,
