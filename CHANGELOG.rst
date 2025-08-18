@@ -29,6 +29,8 @@ Runtime Behavior Changes
 
 * finatra: Bump version of Jackson to 2.14.3. ``PHAB_ID=D1069160``
 
+* finatra: Bump version of Joda to 2.14.0. ``PHAB_ID=D1249922``
+
 22.12.0
 -------
 
