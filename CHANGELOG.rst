@@ -2037,7 +2037,7 @@ Changed
 
 * finatra-thrift: Fixes and improvements for better Java support. ExceptionMappingFilter now
   works properly with generated Java controllers, added an exception mapper for the exceptions
-  defined in `finatra_thrift_exceptions.thrift` which works on the geneated Java code for these
+  defined in `finatra_thrift_exceptions.thrift` which works on the generated Java code for these
   exceptions. Better Java API separation to make usage less error prone and confusing.
   ``PHAB_ID=D237483``
 
