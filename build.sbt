@@ -128,7 +128,7 @@ lazy val scalaCompilerOptions = scalacOptions ++= Seq(
 
 lazy val testDependenciesSettings = Seq(
   libraryDependencies ++= Seq(
-    "junit" % "junit" % versions.junit, // used by Java tests & org.junit.runner.RunWith annotation on c.t.inject.Test
+    "junit" % "junit" % versions.junit % Test, // used by Java tests & org.junit.runner.RunWith annotation on c.t.inject.Test
     "org.scalacheck" %% "scalacheck" % versions.scalaCheck % Test,
     "org.scalatest" %% "scalatest" % versions.scalaTest % Test,
     "org.scalatestplus" %% "junit-4-12" % versions.scalaTestPlusJunit % Test,
