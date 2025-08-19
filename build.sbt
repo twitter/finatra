@@ -87,7 +87,7 @@ lazy val versions = new {
 
   // All Twitter library releases are date versioned as YY.MM.patch
   val twLibVersion = releaseVersion
-  val commonsFileupload = "1.4"
+  val commonsFileupload = "1.5"
   val guice = "5.1.0"
   val jackson = "2.14.3"
   val jodaConvert = "2.2.3"
