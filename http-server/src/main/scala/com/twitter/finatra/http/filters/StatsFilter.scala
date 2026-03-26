@@ -34,8 +34,9 @@ private object StatsFilter {
       Stats(
         requestCount = if (perEndpoint) Some(statsReceiver.counter("requests")) else None,
         statusCodeCount = statsReceiver
-          .scope("status")
-          .counter(statusCode.toString),
+          .hierarchicalScope("status").hierarchicalScope(statusCode.toString)
+          .dimensionalScope("response").label("status", statusCode.toString)
+          .counter(),
         statusClassCount = statsReceiver
           .scope("status")
           .counter(MetricBuilder.forCounter.withHierarchicalOnly.withName(statusClass)),
@@ -45,7 +46,9 @@ private object StatsFilter {
           else None,
         statusCodeTime = statsReceiver
           .scope("time")
-          .stat(statusCode.toString),
+          .hierarchicalScope(statusCode.toString)
+          .label("status", statusCode.toString)
+          .stat(),
         statusClassTime = statsReceiver
           .scope("time")
           .stat(MetricBuilder.forStat.withHierarchicalOnly.withName(statusClass)),
@@ -165,6 +168,8 @@ class StatsFilter[
     extends SimpleFilter[R, Response] {
 
   import StatsFilter._
+  private[this] val dimensionalStats = statsReceiver
+    .dimensionalScope("srv").dimensionalScope("finatra").dimensionalScope("http")
 
   private[this] val perRouteStats = Memoize[(RouteInfo, HttpMethod, Int), Stats] {
     case (routeInfo, method, statusCode) =>
@@ -175,13 +180,14 @@ class StatsFilter[
           routeInfo.sanitizedPath
 
       val methodName = method.toString.toUpperCase
-      val scopedStatsReceiver = statsReceiver
-        .scope("route", nameOrPath, methodName)
+      val scopedStatsReceiver = dimensionalStats
+        .hierarchicalScope("route").hierarchicalScope(nameOrPath).hierarchicalScope(methodName)
+        .label("route", routeInfo.path).label("method", methodName)
       Stats.mk(scopedStatsReceiver, statusCode, perEndpoint = true)
   }
 
   private[this] val globalStats = Memoize[Int, Stats] { statusCode =>
-    Stats.mk(statsReceiver, statusCode, perEndpoint = false)
+    Stats.mk(dimensionalStats.dimensionalScope("global"), statusCode, perEndpoint = false)
   }
 
   /* Public */
