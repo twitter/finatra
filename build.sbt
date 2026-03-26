@@ -5,12 +5,11 @@ Global / excludeLintKeys += scalacOptions
 Global / concurrentRestrictions += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "24.8.0-SNAPSHOT"
+val releaseVersion = "24.2.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
-  scalaVersion := "2.13.6",
-  crossScalaVersions := Seq("2.12.12", "2.13.6"),
+  scalaVersion := "2.13.18",
   scalaModuleInfo := scalaModuleInfo.value.map(_.withOverrideScalaVersion(true)),
   Test / fork := true, // We have to fork to get the JavaOptions
   Test / javaOptions ++= travisTestJavaOptions,
@@ -22,37 +21,9 @@ lazy val noPublishSettings = Seq(
 )
 
 def gcJavaOptions: Seq[String] = {
-  val javaVersion = System.getProperty("java.version")
-  if (javaVersion.startsWith("1.8")) {
-    jdk8GcJavaOptions
-  } else {
-    jdk11GcJavaOptions
-  }
-}
-
-def jdk8GcJavaOptions: Seq[String] = {
   Seq(
-    "-XX:+UseParNewGC",
-    "-XX:+UseConcMarkSweepGC",
-    "-XX:+CMSParallelRemarkEnabled",
-    "-XX:+CMSClassUnloadingEnabled",
+    "-XX:+UseG1GC",
     "-XX:ReservedCodeCacheSize=128m",
-    "-XX:SurvivorRatio=128",
-    "-XX:MaxTenuringThreshold=0",
-    "-Xss8M",
-    "-Xms512M",
-    "-Xmx2G"
-  )
-}
-
-def jdk11GcJavaOptions: Seq[String] = {
-  Seq(
-    "-XX:+UseConcMarkSweepGC",
-    "-XX:+CMSParallelRemarkEnabled",
-    "-XX:+CMSClassUnloadingEnabled",
-    "-XX:ReservedCodeCacheSize=128m",
-    "-XX:SurvivorRatio=128",
-    "-XX:MaxTenuringThreshold=0",
     "-Xss8M",
     "-Xms512M",
     "-Xmx2G"
@@ -137,16 +108,12 @@ lazy val testDependenciesSettings = Seq(
 )
 
 lazy val baseSettings = Seq(
-  resolvers ++= Seq(
-    Resolver.sonatypeRepo("releases"),
-    Resolver.sonatypeRepo("snapshots")
-  ),
+  resolvers ++= Resolver.sonatypeOssRepos("releases") ++ Resolver.sonatypeOssRepos("snapshots"),
   scalaCompilerOptions,
-  Compile / compile / javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint:unchecked"),
-  doc / javacOptions ++= Seq("-source", "1.8"),
+  Compile / compile / javacOptions ++= Seq("-source", "21", "-target", "21", "-Xlint:unchecked"),
+  doc / javacOptions ++= Seq("-source", "21"),
   javaOptions ++= Seq(
     "-Djava.net.preferIPv4Stack=true",
-    "-XX:+AggressiveOpts",
     "-server"
   ),
   javaOptions ++= gcJavaOptions,
