@@ -34,8 +34,8 @@ private object StatsFilter {
       Stats(
         requestCount = if (perEndpoint) Some(statsReceiver.counter("requests")) else None,
         statusCodeCount = statsReceiver
-          .hierarchicalScope("status").hierarchicalScope(statusCode.toString)
-          .dimensionalScope("response").label("status", statusCode.toString)
+          .scope("status", statusCode.toString)
+          .scope("response")
           .counter(),
         statusClassCount = statsReceiver
           .scope("status")
@@ -45,9 +45,7 @@ private object StatsFilter {
             Some(statsReceiver.stat(MetricBuilder.forStat.withHierarchicalOnly.withName("time")))
           else None,
         statusCodeTime = statsReceiver
-          .scope("time")
-          .hierarchicalScope(statusCode.toString)
-          .label("status", statusCode.toString)
+          .scope("time", statusCode.toString)
           .stat(),
         statusClassTime = statsReceiver
           .scope("time")
@@ -169,7 +167,7 @@ class StatsFilter[
 
   import StatsFilter._
   private[this] val dimensionalStats = statsReceiver
-    .dimensionalScope("srv").dimensionalScope("finatra").dimensionalScope("http")
+    .scope("srv", "finatra", "http")
 
   private[this] val perRouteStats = Memoize[(RouteInfo, HttpMethod, Int), Stats] {
     case (routeInfo, method, statusCode) =>
@@ -181,13 +179,12 @@ class StatsFilter[
 
       val methodName = method.toString.toUpperCase
       val scopedStatsReceiver = dimensionalStats
-        .hierarchicalScope("route").hierarchicalScope(nameOrPath).hierarchicalScope(methodName)
-        .label("route", routeInfo.path).label("method", methodName)
+        .scope("route", nameOrPath, methodName)
       Stats.mk(scopedStatsReceiver, statusCode, perEndpoint = true)
   }
 
   private[this] val globalStats = Memoize[Int, Stats] { statusCode =>
-    Stats.mk(dimensionalStats.dimensionalScope("global"), statusCode, perEndpoint = false)
+    Stats.mk(dimensionalStats.scope("global"), statusCode, perEndpoint = false)
   }
 
   /* Public */

@@ -111,16 +111,12 @@ class ExceptionManager(injector: Injector, statsReceiver: StatsReceiver) {
     val statusCode = response.status.code.toString
 
     statsReceiver
-      .hierarchicalScope("route").hierarchicalScope(path).hierarchicalScope(methodName)
-      .hierarchicalScope("status").hierarchicalScope(statusCode)
-      .hierarchicalScope("mapped").hierarchicalScope(exceptionDetails(throwable))
-      .dimensionalScope("srv").dimensionalScope("finatra")
-      .dimensionalScope("http").dimensionalScope("errors")
-      .label("route", routeInfo.fold("unknown")(_.path))
-      .label("method", methodName)
-      .label("status", statusCode)
-      .label("exception", Throwables.RootCause.nested(throwable).getClass.getName)
-      .counter()
+      .scope("route", path, methodName)
+      .scope("status", statusCode)
+      .scope("mapped", exceptionDetails(throwable))
+      .scope("srv", "finatra")
+      .scope("http", "errors")
+      .counter("exceptions")
       .incr()
   }
 
