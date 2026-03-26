@@ -111,12 +111,8 @@ class ExceptionManager(injector: Injector, statsReceiver: StatsReceiver) {
     val statusCode = response.status.code.toString
 
     statsReceiver
-      .scope("route", path, methodName)
-      .scope("status", statusCode)
-      .scope("mapped", exceptionDetails(throwable))
-      .scope("srv", "finatra")
-      .scope("http", "errors")
-      .counter("exceptions")
+      .scope("route", path, methodName, "status", statusCode, "mapped", exceptionDetails(throwable))
+      .counter()
       .incr()
   }
 

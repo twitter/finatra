@@ -5,7 +5,7 @@ Global / excludeLintKeys += scalacOptions
 Global / concurrentRestrictions += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "24.2.0"
+val releaseVersion = "24.8.0-SNAPSHOT"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -13,6 +13,9 @@ lazy val buildSettings = Seq(
   scalaModuleInfo := scalaModuleInfo.value.map(_.withOverrideScalaVersion(true)),
   Test / fork := true, // We have to fork to get the JavaOptions
   Test / javaOptions ++= travisTestJavaOptions,
+  Test / javaOptions ++= Seq(
+    "--add-opens=java.base/java.lang=ALL-UNNAMED"
+  ),
   libraryDependencies += scalaCollectionCompat
 )
 

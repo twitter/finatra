@@ -151,8 +151,10 @@ class FlagsModuleTest extends Test {
       defaultDuration.toString)
     injector.instance[String](AnnotationFlags.named("storage.unit")) should equal(
       defaultStorageUnit.toString())
-    injector.instance[String](AnnotationFlags.named("some.address")) should equal(
-      defaultInetSocketAddress.toString)
+    // Java 21 changed the format from "localhost[/<unresolved>]:0" to "localhost:0"
+    val addressStr = injector.instance[String](AnnotationFlags.named("some.address"))
+    assert(addressStr == "localhost:0" || addressStr == "localhost[/<unresolved>]:0",
+      s"Expected localhost:0 or localhost[/<unresolved>]:0 but got: $addressStr")
   }
 
   test("inject flags as (typed) options") {

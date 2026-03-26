@@ -34,9 +34,8 @@ private object StatsFilter {
       Stats(
         requestCount = if (perEndpoint) Some(statsReceiver.counter("requests")) else None,
         statusCodeCount = statsReceiver
-          .scope("status", statusCode.toString)
-          .scope("response")
-          .counter(),
+          .scope("status")
+          .counter(statusCode.toString),
         statusClassCount = statsReceiver
           .scope("status")
           .counter(MetricBuilder.forCounter.withHierarchicalOnly.withName(statusClass)),
@@ -45,8 +44,8 @@ private object StatsFilter {
             Some(statsReceiver.stat(MetricBuilder.forStat.withHierarchicalOnly.withName("time")))
           else None,
         statusCodeTime = statsReceiver
-          .scope("time", statusCode.toString)
-          .stat(),
+          .scope("time")
+          .stat(statusCode.toString),
         statusClassTime = statsReceiver
           .scope("time")
           .stat(MetricBuilder.forStat.withHierarchicalOnly.withName(statusClass)),
@@ -166,8 +165,6 @@ class StatsFilter[
     extends SimpleFilter[R, Response] {
 
   import StatsFilter._
-  private[this] val dimensionalStats = statsReceiver
-    .scope("srv", "finatra", "http")
 
   private[this] val perRouteStats = Memoize[(RouteInfo, HttpMethod, Int), Stats] {
     case (routeInfo, method, statusCode) =>
@@ -178,13 +175,13 @@ class StatsFilter[
           routeInfo.sanitizedPath
 
       val methodName = method.toString.toUpperCase
-      val scopedStatsReceiver = dimensionalStats
+      val scopedStatsReceiver = statsReceiver
         .scope("route", nameOrPath, methodName)
       Stats.mk(scopedStatsReceiver, statusCode, perEndpoint = true)
   }
 
   private[this] val globalStats = Memoize[Int, Stats] { statusCode =>
-    Stats.mk(dimensionalStats.scope("global"), statusCode, perEndpoint = false)
+    Stats.mk(statsReceiver, statusCode, perEndpoint = false)
   }
 
   /* Public */

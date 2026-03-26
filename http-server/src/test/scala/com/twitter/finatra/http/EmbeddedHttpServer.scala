@@ -14,7 +14,9 @@ import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.server.EmbeddedHttpClient
 import com.twitter.inject.server.EmbeddedTwitterServer
+import com.twitter.inject.server.PortUtils
 import com.twitter.inject.server.Ports
+import com.twitter.inject.server.info
 import com.twitter.util.jackson.ScalaObjectMapper
 import com.twitter.util.Duration
 import com.twitter.util.Memoize
@@ -93,7 +95,9 @@ class EmbeddedHttpServer(
   tracerOverride: Option[Tracer] = None)
     extends EmbeddedTwitterServer(
       twitterServer = twitterServer,
-      flags = flags,
+      flags = flags ++
+        (if (httpPortFlag.nonEmpty) Map(httpPortFlag -> PortUtils.ephemeralLoopback) else Map.empty) ++
+        (if (httpsPortFlag.nonEmpty) Map(httpsPortFlag -> PortUtils.ephemeralLoopback) else Map.empty),
       args = args,
       waitForWarmup = waitForWarmup,
       stage = stage,
@@ -110,6 +114,18 @@ class EmbeddedHttpServer(
       tracerOverride = tracerOverride
     )
     with ExternalHttpClient {
+
+  /* Overrides */
+
+  override protected[twitter] def logStartup(): Unit = {
+    super.logStartup()
+    if (twitterServer.httpExternalPort.isDefined) {
+      info(s"ExternalHttp   -> http://$externalHttpHostAndPort", disableLogging)
+    }
+    if (twitterServer.httpsExternalPort.isDefined) {
+      info(s"ExternalHttps  -> https://$externalHttpsHostAndPort", disableLogging)
+    }
+  }
 
   /* Additional Constructors */
 

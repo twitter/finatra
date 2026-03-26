@@ -42,30 +42,6 @@ private[twitter] trait ExternalHttpClient { self: EmbeddedTwitterServer =>
   /** Provide an override to the external HTTPS client */
   private[twitter] def httpsClientOverride: Option[JsonAwareEmbeddedHttpClient] = None
 
-  /* Overrides */
-
-  /** Logs the external http and/or https host and port of the underlying EmbeddedHttpServer */
-  override protected[twitter] def logStartup(): Unit = {
-    self.logStartup()
-    if (twitterServer.httpExternalPort.isDefined) {
-      info(s"ExternalHttp   -> http://$externalHttpHostAndPort", disableLogging)
-    }
-    if (twitterServer.httpsExternalPort.isDefined) {
-      info(s"ExternalHttps  -> https://$externalHttpsHostAndPort", disableLogging)
-    }
-  }
-
-  /**
-   * Adds the [[httpPortFlag]] with a value pointing to the ephemeral loopback address to
-   * the list of flags to be passed to the underlying server.
-   * @see [[PortUtils.ephemeralLoopback]].
-   */
-  override protected[twitter] def combineArgs(): Array[String] = {
-    configurePortFlag(Option(httpPortFlag)) ++
-      configurePortFlag(Option(httpsPortFlag)) ++
-      self.combineArgs
-  }
-
   /* Public */
 
   /** A `host:post` String of the loopback and external "http" port for the underlying embedded HttpServer */
@@ -171,11 +147,5 @@ private[twitter] trait ExternalHttpClient { self: EmbeddedTwitterServer =>
         client.close(deadline)
       }
     } else Closable.nop
-  }
-
-  private[this] def configurePortFlag(flagOpt: Option[String]): Array[String] = flagOpt match {
-    case Some(flg) if flg.nonEmpty =>
-      Array(s"-$flg=${PortUtils.ephemeralLoopback}")
-    case _ => Array.empty[String]
   }
 }

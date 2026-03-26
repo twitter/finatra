@@ -9,6 +9,7 @@ import com.twitter.inject.server.PortUtils._
 import com.twitter.inject.server.EmbeddedTwitterServer
 import com.twitter.inject.server.PortUtils
 import com.twitter.inject.server.Ports
+import com.twitter.inject.server.info
 import com.twitter.util.Duration
 
 import java.lang.annotation.Annotation
@@ -87,6 +88,13 @@ class EmbeddedThriftServer(
       tracerOverride = tracerOverride
     )
     with ThriftClient {
+
+  /* Overrides */
+
+  override protected[twitter] def logStartup(): Unit = {
+    super.logStartup()
+    info(s"ExternalThrift -> thrift://$externalThriftHostAndPort\n", disableLogging)
+  }
 
   /* Additional Constructors */
 
