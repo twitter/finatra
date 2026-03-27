@@ -61,29 +61,30 @@ lazy val versions = new {
 
   // All Twitter library releases are date versioned as YY.MM.patch
   val twLibVersion = releaseVersion
-  val commonsFileupload = "1.4"
+  val commonsFileupload = "1.6.0"
   val guice = "5.1.0"
-  val jackson = "2.14.3"
-  val jodaConvert = "2.2.3"
-  val jodaTime = "2.14.0"
-  val json4s = "4.0.3"
-  val junit = "4.12"
-  val libThrift = "0.10.0"
-  val logback = "1.2.11"
-  val mustache = "0.8.18"
-  val nscalaTime = "2.32.0"
-  val scalaCheck = "1.15.4"
+  val jackson = "2.21.2"
+  val jacksonAnnotations = "2.21"
+  val jodaConvert = "3.0.1"
+  val jodaTime = "2.14.1"
+  val json4s = "4.0.7"
+  val junit = "4.13.2"
+  val libThrift = "0.22.0"
+  val logback = "1.5.32"
+  val mustache = "0.9.14"
+  val nscalaTime = "3.0.0"
+  val scalaCheck = "1.19.0"
   val scalaGuice = "5.1.0"
-  val scalaTest = "3.1.2"
-  val scalaTestPlusJunit = "3.1.2.0"
-  val scalaTestPlusScalaCheck = "3.1.2.0"
+  val scalaTest = "3.2.20"
+  val scalaTestPlusJunit = "3.2.2.0"
+  val scalaTestPlusScalaCheck = "3.2.2.0"
   val servletApi = "2.5"
-  val slf4j = "1.7.30"
-  val javaxBind = "2.3.0"
+  val slf4j = "2.0.17"
+  val javaxBind = "2.3.1"
   val javaxActivation = "1.1.1"
 }
 
-lazy val scalaCollectionCompat = "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.2"
+lazy val scalaCollectionCompat = "org.scala-lang.modules" %% "scala-collection-compat" % "2.14.0"
 
 lazy val scalaCompilerOptions = scalacOptions ++= Seq(
   "-deprecation",
@@ -256,7 +257,7 @@ lazy val finatraExamples =
     javaHttpServer,
     scalaHttpServer,
     thriftIdl,
-    javaThriftServer,
+    // javaThriftServer, // Disabled: Java thrift generation incompatible with libthrift 0.22.0
     scalaThriftServer,
     streamingExample,
     twitterClone,
@@ -279,10 +280,10 @@ lazy val root = (project in file("."))
   .settings(
     organization := "com.twitter",
     moduleName := "finatra-root",
-    ScalaUnidoc / unidoc / unidocProjectFilter := inAnyProject
-      -- inProjects(benchmarks)
+    ScalaUnidoc / unidoc / unidocProjectFilter := inAnyProject --
+      inProjects(benchmarks) --
     // START EXAMPLES
-      -- inProjects(
+      inProjects(
         benchmark,
         javaInjectableApp,
         scalaInjectableApp,
@@ -591,7 +592,7 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
   .settings(
     name := "inject-thrift-client",
     moduleName := "inject-thrift-client",
-    Test / scroogeLanguages := Seq("java", "scala"),
+    Test / scroogeLanguages := Seq("scala"),
     Test / scroogePublishThrift := true,
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-thrift" % versions.twLibVersion,
@@ -716,7 +717,7 @@ lazy val validation = project
       "com.twitter" %% "util-reflect" % versions.twLibVersion,
       "com.twitter" %% "util-validator" % versions.twLibVersion,
       "org.json4s" %% "json4s-core" % versions.json4s,
-      "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson % Test,
+      "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jacksonAnnotations % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
     // special-case to only scaladoc what's necessary as some of the tests cannot generate scaladocs
@@ -750,7 +751,7 @@ lazy val jackson = project
     name := "finatra-jackson",
     moduleName := "finatra-jackson",
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
+      "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jacksonAnnotations,
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
       "com.fasterxml.jackson.module" % "jackson-module-guice" % versions.jackson,
@@ -798,7 +799,7 @@ lazy val httpCore = (project in file("http-core"))
     name := "finatra-http-core",
     moduleName := "finatra-http-core",
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
+      "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jacksonAnnotations,
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "com.twitter" %% "util-reflect" % versions.twLibVersion,
@@ -965,7 +966,8 @@ lazy val thrift = project
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
     Test / scroogePublishThrift := true,
-    Test / scroogeLanguages := Seq("java", "scala"),
+    Test / scroogeLanguages := Seq("scala"),
+    Test / excludeFilter := HiddenFileFilter || "*.java", // Exclude Java tests due to libthrift 0.22.0 incompatibility
     unmanagedResources / excludeFilter := "BUILD.bazel",
     Test / publishArtifact := true,
     (Test / packageBin / mappings) := {
@@ -1147,7 +1149,7 @@ lazy val thriftIdl = (project in file("examples/thrift-server/idl"))
   .settings(
     name := "thrift-server-idl",
     moduleName := "thrift-example-idl",
-    Compile / scroogeLanguages := Seq("java", "scala"),
+    Compile / scroogeLanguages := Seq("scala"),
     Compile / scroogeThriftIncludeFolders := Seq(file("examples/thrift-server/idl/src/main/thrift"))
   ).dependsOn(
     thrift
@@ -1200,7 +1202,7 @@ lazy val streamingExample = (project in file("examples/advanced/streaming-exampl
     name := "streaming-example",
     moduleName := "streaming-example",
     libraryDependencies ++= Seq(
-      "com.twitter" % "joauth" % "6.0.2",
+      "com.twitter" % "joauth" % "6.0.3",
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(

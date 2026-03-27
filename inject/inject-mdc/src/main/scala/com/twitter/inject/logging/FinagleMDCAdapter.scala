@@ -1,7 +1,7 @@
 package com.twitter.inject.logging
 
 import com.twitter.finagle.context.Contexts
-import java.util.Collections
+import java.util.{ArrayDeque, Collections, Deque}
 import java.util.{HashMap => JHashMap}
 import java.util.{Map => JMap}
 import org.slf4j.spi.MDCAdapter
@@ -100,6 +100,52 @@ final class FinagleMDCAdapter extends MDCAdapter {
       map.clear()
       map.putAll(contextMap)
     }
+  }
+
+  /**
+   * Push a value onto the deque associated with the given key.
+   *
+   * @param key   the key identifying the deque
+   * @param value the value to push
+   * @see [[org.slf4j.spi.MDCAdapter#pushByKey]]
+   */
+  def pushByKey(key: String, value: String): Unit = {
+    // SLF4J 2.x MDC deque operations - not implemented for LocalContext
+    // These are typically used for nested diagnostic contexts which don't map well to our use case
+  }
+
+  /**
+   * Pop a value from the deque associated with the given key.
+   *
+   * @param key the key identifying the deque
+   * @return the popped value, or null if deque is empty
+   * @see [[org.slf4j.spi.MDCAdapter#popByKey]]
+   */
+  def popByKey(key: String): String = {
+    // SLF4J 2.x MDC deque operations - not implemented for LocalContext
+    null
+  }
+
+  /**
+   * Get a copy of the deque associated with the given key.
+   *
+   * @param key the key identifying the deque
+   * @return a copy of the deque, or null if not found
+   * @see [[org.slf4j.spi.MDCAdapter#getCopyOfDequeByKey]]
+   */
+  def getCopyOfDequeByKey(key: String): Deque[String] = {
+    // SLF4J 2.x MDC deque operations - not implemented for LocalContext
+    null
+  }
+
+  /**
+   * Clear the deque associated with the given key.
+   *
+   * @param key the key identifying the deque
+   * @see [[org.slf4j.spi.MDCAdapter#clearDequeByKey]]
+   */
+  def clearDequeByKey(key: String): Unit = {
+    // SLF4J 2.x MDC deque operations - not implemented for LocalContext
   }
 
   /* Private */

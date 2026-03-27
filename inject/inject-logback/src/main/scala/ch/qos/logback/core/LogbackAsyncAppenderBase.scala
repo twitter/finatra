@@ -123,7 +123,7 @@ abstract class LogbackAsyncAppenderBase(
 
   /* Private */
 
-  private[this] def isQueueBelowDiscardingThreshold: Boolean =
+  override def isQueueBelowDiscardingThreshold(): Boolean =
     this.blockingQueue.remainingCapacity < this.getDiscardingThreshold
 
   private[this] def put(eventObject: ILoggingEvent): Unit = {

@@ -64,7 +64,7 @@ private[mustache] class ScalaObjectHandler extends ReflectionObjectHandler {
     iteration: Iteration,
     writer: Writer,
     value: AnyRef,
-    scopes: Array[AnyRef]
+    scopes: java.util.List[Object]
   ) = {
     value match {
       case TraversableAnyRef(t) => {
@@ -84,7 +84,7 @@ private[mustache] class ScalaObjectHandler extends ReflectionObjectHandler {
     iteration: Iteration,
     writer: Writer,
     value: AnyRef,
-    scopes: Array[AnyRef]
+    scopes: java.util.List[Object]
   ) = {
     value match {
       case TraversableAnyRef(t) => {
