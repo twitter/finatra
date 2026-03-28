@@ -6,7 +6,7 @@ import com.twitter.greeter.thriftscala.Greeter.Hello
 import com.twitter.scrooge
 import com.twitter.util.Future
 import com.twitter.util.logging.Logging
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 class HelloHeadersFilter(

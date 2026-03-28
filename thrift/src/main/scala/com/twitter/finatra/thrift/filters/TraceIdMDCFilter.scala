@@ -4,7 +4,7 @@ import com.twitter.finagle.{Filter, Service}
 import com.twitter.finagle.tracing.Trace
 import com.twitter.inject.logging.MDCKeys
 import com.twitter.util.Future
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 import org.slf4j.MDC
 
 /**

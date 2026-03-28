@@ -9,7 +9,7 @@ import com.twitter.inject.annotations.Flags
 import com.twitter.util.logging.Logging
 import java.lang.reflect.Type
 import java.util.Optional
-import javax.inject.Provider
+import jakarta.inject.Provider
 
 /**
  * Note this is purposely *not* an instance of a [[com.twitter.inject.TwitterModule]]

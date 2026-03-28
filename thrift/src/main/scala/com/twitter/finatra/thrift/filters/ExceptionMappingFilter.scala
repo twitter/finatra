@@ -3,7 +3,7 @@ package com.twitter.finatra.thrift.filters
 import com.twitter.finagle.{Filter, Service}
 import com.twitter.finatra.thrift.exceptions.ExceptionManager
 import com.twitter.util.Future
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 /**
  * A [[ThriftFilter]] which handles exceptions by rescuing the exception and passing

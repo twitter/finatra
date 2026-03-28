@@ -3,7 +3,7 @@ package com.twitter.finatra.jackson.streaming
 import com.twitter.concurrent.AsyncStream
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.jackson.ScalaObjectMapper
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 @Singleton
 private[finatra] class JsonStreamParser @Inject() (mapper: ScalaObjectMapper) {

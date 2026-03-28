@@ -5,7 +5,7 @@ import com.twitter.finagle.Service
 import com.twitter.greeter.thriftscala.Greeter.Bye
 import com.twitter.util.Future
 import com.twitter.util.logging.Logging
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 class ByeFilter extends Filter[Bye.Args, Bye.SuccessType, Bye.Args, Bye.SuccessType] with Logging {

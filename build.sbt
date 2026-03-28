@@ -62,7 +62,7 @@ lazy val versions = new {
   // All Twitter library releases are date versioned as YY.MM.patch
   val twLibVersion = releaseVersion
   val commonsFileupload = "1.6.0"
-  val guice = "5.1.0"
+  val guice = "7.0.0"
   val jackson = "2.21.2"
   val jacksonAnnotations = "2.21"
   val jodaConvert = "3.0.1"
@@ -74,7 +74,7 @@ lazy val versions = new {
   val mustache = "0.9.14"
   val nscalaTime = "3.0.0"
   val scalaCheck = "1.19.0"
-  val scalaGuice = "5.1.0"
+  val scalaGuice = "7.0.0"
   val scalaTest = "3.2.20"
   val scalaTestPlusJunit = "3.2.2.0"
   val scalaTestPlusScalaCheck = "3.2.2.0"
@@ -323,7 +323,7 @@ lazy val injectCore = (project in file("inject/inject-core"))
       "com.google.inject.extensions" % "guice-assistedinject" % versions.guice,
       "com.twitter" %% "util-app" % versions.twLibVersion,
       "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
-      "javax.inject" % "javax.inject" % "1",
+      "jakarta.inject" % "jakarta.inject-api" % "2.0.1",
       "joda-time" % "joda-time" % versions.jodaTime,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "net.codingwell" %% "scala-guice" % versions.scalaGuice,
@@ -757,7 +757,7 @@ lazy val jackson = project
       "com.fasterxml.jackson.module" % "jackson-module-guice" % versions.jackson,
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson,
       "com.google.inject" % "guice" % versions.guice,
-      "javax.inject" % "javax.inject" % "1",
+      "jakarta.inject" % "jakarta.inject-api" % "2.0.1",
       "org.json4s" %% "json4s-core" % versions.json4s,
       "com.twitter" %% "finagle-http" % versions.twLibVersion % "test",
       "com.twitter" %% "util-core" % versions.twLibVersion,
@@ -781,7 +781,7 @@ lazy val mustache = project
     name := "finatra-mustache",
     moduleName := "finatra-mustache",
     libraryDependencies ++= Seq(
-      "javax.inject" % "javax.inject" % "1",
+      "jakarta.inject" % "jakarta.inject-api" % "2.0.1",
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache exclude ("com.google.guava", "guava"),
       "com.google.inject" % "guice" % versions.guice,
       "com.twitter" %% "util-core" % versions.twLibVersion,
@@ -891,7 +891,7 @@ lazy val httpMustache = (project in file("http-mustache"))
     name := "finatra-http-mustache",
     moduleName := "finatra-http-mustache",
     libraryDependencies ++= Seq(
-      "javax.inject" % "javax.inject" % "1",
+      "jakarta.inject" % "jakarta.inject-api" % "2.0.1",
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache exclude ("com.google.guava", "guava"),
       "com.google.inject" % "guice" % versions.guice,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
@@ -961,7 +961,7 @@ lazy val thrift = project
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "com.twitter" %% "util-reflect" % versions.twLibVersion,
       "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
-      "javax.inject" % "javax.inject" % "1",
+      "jakarta.inject" % "jakarta.inject-api" % "2.0.1",
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),

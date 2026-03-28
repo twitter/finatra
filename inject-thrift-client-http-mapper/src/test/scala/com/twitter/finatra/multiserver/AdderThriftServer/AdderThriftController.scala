@@ -6,7 +6,7 @@ import com.twitter.finagle.CancelledRequestException
 import com.twitter.finatra.thrift.Controller
 import com.twitter.util.Future
 import java.util.concurrent.atomic.AtomicInteger
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 class AdderThriftController extends Controller with Adder.BaseServiceIface {

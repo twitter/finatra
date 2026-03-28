@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import scala.runtime.AbstractFunction0;
 import scala.runtime.BoxedUnit;

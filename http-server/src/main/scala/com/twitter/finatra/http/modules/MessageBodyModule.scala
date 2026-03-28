@@ -8,7 +8,7 @@ import com.twitter.finatra.http.marshalling.{
   MessageBodyManager
 }
 import com.twitter.inject.{Injector, TwitterModule}
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 object MessageBodyModule extends MessageBodyModule {
   // java-friendly access to singleton

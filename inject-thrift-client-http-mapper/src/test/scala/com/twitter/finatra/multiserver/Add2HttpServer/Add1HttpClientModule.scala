@@ -6,7 +6,7 @@ import com.twitter.finatra.httpclient.HttpClient
 import com.twitter.finatra.httpclient.modules.HttpClientModuleTrait
 import com.twitter.inject.Injector
 import com.twitter.util.jackson.ScalaObjectMapper
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 object Add1HttpClientModule extends HttpClientModuleTrait {
   val dest = "flag!add1-http-server"

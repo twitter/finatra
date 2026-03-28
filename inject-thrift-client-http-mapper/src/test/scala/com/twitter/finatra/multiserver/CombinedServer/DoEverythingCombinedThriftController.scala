@@ -4,7 +4,7 @@ import com.twitter.adder.thriftscala.Adder
 import com.twitter.adder.thriftscala.Adder.{Add1AlwaysError, Add1Slowly, Add1, Add1String}
 import com.twitter.finatra.thrift.Controller
 import com.twitter.util.Future
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 @Singleton
 class DoEverythingCombinedThriftController @Inject() (adder: AdderService)

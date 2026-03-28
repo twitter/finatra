@@ -7,7 +7,7 @@ import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra.http.filters.HttpNackFilter._
 import com.twitter.finatra.http.exceptions.HttpNackException
 import com.twitter.util.Future
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 private object HttpNackFilter {
   val RetryableHttpNackException: Future[Response] =

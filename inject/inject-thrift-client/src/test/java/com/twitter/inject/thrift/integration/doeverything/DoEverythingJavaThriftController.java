@@ -1,6 +1,6 @@
 package com.twitter.inject.thrift.integration.doeverything;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.twitter.test.thriftjava.EchoService;
 import com.twitter.util.Future;

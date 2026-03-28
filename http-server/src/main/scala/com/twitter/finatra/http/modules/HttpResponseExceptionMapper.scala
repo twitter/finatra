@@ -5,8 +5,8 @@ import com.twitter.finagle.http.Response
 import com.twitter.finatra.http.exceptions.ExceptionMapper
 import com.twitter.finatra.http.exceptions.HttpResponseException
 import com.twitter.finatra.http.response.ResponseBuilder
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
 @Singleton
 class HttpResponseExceptionMapper @Inject() (response: ResponseBuilder)

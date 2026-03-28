@@ -19,7 +19,7 @@ import com.twitter.inject.utils.RetryPolicyUtils.constantRetry
 import com.twitter.inject.utils.RetryUtils.retryFuture
 import com.twitter.util.{Future, Return}
 import java.util.concurrent.ConcurrentLinkedQueue
-import javax.inject.{Inject, Provider}
+import jakarta.inject.{Inject, Provider}
 import scala.collection.JavaConverters._
 
 class RequestScopeFeatureTest extends FeatureTest {

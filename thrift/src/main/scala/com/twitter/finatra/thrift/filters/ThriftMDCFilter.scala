@@ -4,7 +4,7 @@ import com.twitter.finagle.{Filter, Service}
 import com.twitter.finagle.thrift.MethodMetadata
 import com.twitter.finagle.thrift.ClientId
 import com.twitter.util.Future
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 import org.slf4j.MDC
 
 /**

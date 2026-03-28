@@ -1,6 +1,6 @@
 package com.twitter.finatra.example
 
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 class HelloService {

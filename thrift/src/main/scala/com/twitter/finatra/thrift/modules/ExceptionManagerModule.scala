@@ -5,7 +5,7 @@ import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.thrift.exceptions.ExceptionManager
 import com.twitter.finatra.thrift.internal.exceptions.ThrowableExceptionMapper
 import com.twitter.inject.{Injector, TwitterModule}
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 private[thrift] object ExceptionManagerModule extends TwitterModule {
 

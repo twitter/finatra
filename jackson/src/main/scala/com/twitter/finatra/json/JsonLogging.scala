@@ -2,7 +2,7 @@ package com.twitter.finatra.json
 
 import com.twitter.util.jackson.ScalaObjectMapper
 import com.twitter.util.logging.Logging
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 object JsonLogging {
   private lazy val DefaultMapper = ScalaObjectMapper()

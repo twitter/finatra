@@ -16,7 +16,7 @@ import com.twitter.inject.TwitterModule
 import com.twitter.util.jackson.{JacksonScalaObjectMapperType, ScalaObjectMapper}
 import com.twitter.util.validation.ScalaValidator
 import javax.annotation.Nullable
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 object ScalaObjectMapperModule extends ScalaObjectMapperModule {
   // java-friendly access to singleton

@@ -8,7 +8,7 @@ import com.twitter.util.Await
 import com.twitter.util.Stopwatch
 import com.twitter.util.Try
 import com.twitter.util.logging.Logger
-import javax.inject.Inject
+import jakarta.inject.Inject
 import scala.util.control.NonFatal
 
 private object ThriftWarmup {

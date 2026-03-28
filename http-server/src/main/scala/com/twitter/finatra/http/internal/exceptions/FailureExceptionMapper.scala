@@ -7,8 +7,8 @@ import com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper._
 import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.util.logging.Logger
 import com.twitter.{logging => ctl}
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
 private object FailureExceptionMapper {
   val logger: Logger = Logger(FailureExceptionMapper.getClass)

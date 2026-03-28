@@ -7,7 +7,7 @@ import com.twitter.finatra.http.response.ErrorsResponse
 import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.util.jackson.caseclass.exceptions.CaseClassMappingException
 import com.twitter.util.logging.Logging
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 class CaseClassMappingExceptionMapper @Inject() (
   response: ResponseBuilder)

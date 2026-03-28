@@ -11,8 +11,8 @@ import com.twitter.inject.app.TestConsoleWriter
 import com.twitter.inject.app.console.ConsoleWriter
 import com.twitter.util.logging.Logging
 import com.twitter.util.mock.Mockito
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
 class EmbeddedAppIntegrationTest extends Test with Mockito {
 

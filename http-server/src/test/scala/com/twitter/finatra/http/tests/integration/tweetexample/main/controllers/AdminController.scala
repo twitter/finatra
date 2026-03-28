@@ -3,7 +3,7 @@ package com.twitter.finatra.http.tests.integration.tweetexample.main.controllers
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.{Controller, Prod, Staging}
 import com.twitter.finatra.http.tests.integration.tweetexample.main.services.admin.UserService
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 class AdminController @Inject() (@Prod prodUsers: UserService, @Staging stagingUsers: UserService)
     extends Controller {

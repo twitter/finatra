@@ -12,7 +12,7 @@ import com.twitter.inject.annotations.Flag
 import com.twitter.util.jackson.ScalaObjectMapper
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.{Function => JFunction}
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 object ResponseBuilder {
   private val MediaTypesWithCharsetSupport: Map[String, String] =

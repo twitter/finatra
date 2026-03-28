@@ -7,7 +7,7 @@ import com.twitter.app.Flag
 import com.twitter.conversions.DurationOps._
 import com.twitter.inject.tests.Prod
 import com.twitter.inject.{Injector, TwitterModule}
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 import java.util.Properties
 import org.scalatest.Assertions
 import scala.util.control.NonFatal

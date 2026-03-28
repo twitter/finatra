@@ -1,6 +1,6 @@
 package com.twitter.finatra.multiserver.CombinedServer
 
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 class AdderService {

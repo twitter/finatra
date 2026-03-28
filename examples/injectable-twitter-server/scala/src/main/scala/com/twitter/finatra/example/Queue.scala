@@ -1,7 +1,7 @@
 package com.twitter.finatra.example
 
 import java.util.concurrent.ConcurrentLinkedQueue
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 import scala.collection.JavaConverters._
 
 /**

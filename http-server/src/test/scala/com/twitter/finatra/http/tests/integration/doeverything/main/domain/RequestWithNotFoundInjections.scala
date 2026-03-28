@@ -1,5 +1,5 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main.domain
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 case class RequestWithNotFoundInjections(@Inject fooClass: FooClass)

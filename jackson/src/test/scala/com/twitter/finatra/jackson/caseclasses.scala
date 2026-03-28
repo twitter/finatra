@@ -1,7 +1,7 @@
 package com.twitter.finatra.jackson
 
 import com.fasterxml.jackson.annotation._
-import javax.inject.Inject
+import jakarta.inject.Inject
 import org.joda.time.DateTime
 
 sealed trait ZeroOrOne

@@ -11,7 +11,7 @@ import com.twitter.finagle.{ThriftMux, thriftmux}
 import com.twitter.inject.thrift.ThriftMethodBuilderFactory
 import com.twitter.inject.{Injector, TwitterModule}
 import com.twitter.util.Await
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 /**
  * A [[TwitterModule]] which allows for configuration of a `ThriftMux` client. The client interface

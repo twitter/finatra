@@ -4,7 +4,7 @@ import com.twitter.finagle.filter.LogFormatter
 import com.twitter.finagle.http.filter.CommonLogFormatter
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.inject.TwitterModule
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 /**
  * A [[com.twitter.inject.TwitterModule]] which provides a

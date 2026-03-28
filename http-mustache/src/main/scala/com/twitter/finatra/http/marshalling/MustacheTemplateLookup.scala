@@ -3,7 +3,7 @@ package com.twitter.finatra.http.marshalling
 import com.twitter.finatra.http.annotations.Mustache
 import com.twitter.inject.conversions.map._
 import java.util.concurrent.ConcurrentHashMap
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 private[finatra] class MustacheTemplateLookup {

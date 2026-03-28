@@ -10,7 +10,7 @@ import com.twitter.inject.TypeUtils
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.jackson.ScalaObjectMapper
 import com.twitter.util.{Future, FuturePool, Promise}
-import javax.inject.Inject
+import jakarta.inject.Inject
 import scala.concurrent.{ExecutionContext => ScalaExecutionContext, Future => ScalaFuture}
 import scala.reflect.runtime.universe._
 import scala.util.{Failure, Success}

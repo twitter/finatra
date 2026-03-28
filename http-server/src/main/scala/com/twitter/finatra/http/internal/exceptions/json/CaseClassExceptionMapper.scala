@@ -4,7 +4,7 @@ import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.exceptions.ExceptionMapper
 import com.twitter.finatra.http.response.{ErrorsResponse, ResponseBuilder}
 import com.twitter.util.jackson.caseclass.exceptions.CaseClassMappingException
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 @Singleton
 private[http] class CaseClassExceptionMapper @Inject() (response: ResponseBuilder)

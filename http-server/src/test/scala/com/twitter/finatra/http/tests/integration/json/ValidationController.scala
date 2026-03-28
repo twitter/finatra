@@ -6,7 +6,7 @@ import com.twitter.util.jackson.ScalaObjectMapper
 import com.twitter.util.jackson.caseclass.exceptions.CaseClassMappingException
 import com.twitter.util.validation.ScalaValidator
 import jakarta.validation.ValidationException
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 class ValidationController @Inject() (
   validator: ScalaValidator,

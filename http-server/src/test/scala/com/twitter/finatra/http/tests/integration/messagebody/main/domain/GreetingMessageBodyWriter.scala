@@ -6,7 +6,7 @@ import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.marshalling.MessageBodyWriter
 import com.twitter.finatra.http.marshalling.WriterResponse
 import com.twitter.util.jackson.ScalaObjectMapper
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 class GreetingMessageBodyWriter @Inject() (mapper: ScalaObjectMapper)
     extends MessageBodyWriter[GreetingRequest] {

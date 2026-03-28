@@ -5,7 +5,7 @@ import com.twitter.test.thriftscala.EchoService
 import com.twitter.util.Future
 import com.twitter.util.logging.Logging
 import java.util.concurrent.atomic.AtomicInteger
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 class MyEchoService extends EchoService.MethodPerEndpoint with Logging {

@@ -4,7 +4,7 @@ import com.twitter.doeverything.thriftscala.{Answer, DoEverythingException}
 import com.twitter.finatra.thrift.exceptions.ExceptionMapper
 import com.twitter.scrooge.Response
 import com.twitter.util.Future
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 class ReqRepBarExceptionMapper extends ExceptionMapper[BarException, Response[String]] {

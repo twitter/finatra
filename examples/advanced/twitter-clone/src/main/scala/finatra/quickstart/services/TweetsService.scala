@@ -5,7 +5,7 @@ import com.twitter.util.Future
 import finatra.quickstart.domain.http.{TweetPostRequest, TweetResponse}
 import finatra.quickstart.domain.{Tweet, TweetId}
 import finatra.quickstart.firebase.FirebaseClient
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 @Singleton
 class TweetsService @Inject() (idService: IdService, firebase: FirebaseClient) {

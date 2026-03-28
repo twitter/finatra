@@ -8,7 +8,7 @@ import com.twitter.util.Return
 import com.twitter.util.Stopwatch
 import com.twitter.util.Throw
 import com.twitter.util.logging.Logger
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 private object AccessLoggingFilter {
   val logger: Logger = Logger(AccessLoggingFilter.getClass)

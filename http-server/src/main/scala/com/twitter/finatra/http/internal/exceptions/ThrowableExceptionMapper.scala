@@ -6,8 +6,8 @@ import com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper._
 import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.inject.utils.ExceptionUtils._
 import com.twitter.util.logging.Logger
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
 private[exceptions] object ThrowableExceptionMapper {
   val DefaultExceptionSource = "Internal"

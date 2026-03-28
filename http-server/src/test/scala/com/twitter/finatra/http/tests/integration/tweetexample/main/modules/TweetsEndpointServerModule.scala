@@ -5,7 +5,7 @@ import com.twitter.finatra.http.tests.integration.tweetexample.main.services.{
   TweetsRepository
 }
 import com.twitter.inject.TwitterModule
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 object TweetsEndpointServerModule extends TwitterModule {
 

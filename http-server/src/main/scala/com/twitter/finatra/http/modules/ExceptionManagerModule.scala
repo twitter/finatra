@@ -9,7 +9,7 @@ import com.twitter.finatra.http.internal.exceptions.json.{
   JsonParseExceptionMapper
 }
 import com.twitter.inject.{Injector, TwitterModule}
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 private[http] object ExceptionManagerModule extends TwitterModule {
 

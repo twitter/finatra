@@ -11,7 +11,7 @@ import java.io.File
 import java.net.InetSocketAddress
 import java.time.LocalTime
 import java.util.{Arrays, Optional}
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 class FlagsModuleTest extends Test {
   private[this] val flag =

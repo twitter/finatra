@@ -5,7 +5,7 @@ import com.twitter.finatra.http.Controller
 import com.twitter.greeter.thriftscala.Greeter
 import com.twitter.greeter.thriftscala.Greeter.{Bye, Hello, Hi}
 import com.twitter.scrooge
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 class ReqRepServicePerEndpointHttpController @Inject() (
   greeter: Greeter.ReqRepServicePerEndpoint)

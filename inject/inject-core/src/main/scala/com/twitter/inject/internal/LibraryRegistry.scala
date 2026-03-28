@@ -1,7 +1,7 @@
 package com.twitter.inject.internal
 
 import com.twitter.util.registry.{GlobalRegistry, Registry}
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * Utility for adding entries to the [[com.twitter.util.registry.Library]] for

@@ -2,7 +2,7 @@ package com.twitter.finatra.http.filters
 
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.filters.MergedFilter
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 /**
  * A typical collection of Filters for HTTP services. Ordering of Filters is important.

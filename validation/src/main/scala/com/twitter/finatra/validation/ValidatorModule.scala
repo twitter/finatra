@@ -3,7 +3,7 @@ package com.twitter.finatra.validation
 import com.google.inject.Provides
 import com.twitter.inject.{Injector, TwitterModule}
 import com.twitter.util.validation.ScalaValidator
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 object ValidatorModule extends ValidatorModule {
   // java-friendly access to singleton

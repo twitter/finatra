@@ -23,8 +23,8 @@ import com.twitter.inject.TypeUtils
 import com.twitter.inject.internal.LibraryRegistry
 import com.twitter.util.logging.Logger
 import java.lang.annotation.{Annotation => JavaAnnotation}
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import scala.collection.mutable.ArrayBuffer
 
 object HttpRouter {

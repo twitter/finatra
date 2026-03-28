@@ -1,6 +1,6 @@
 package com.twitter.finatra.example.controllers;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.twitter.finagle.http.Request;
 import com.twitter.finatra.example.exceptions.HelloWorldException;

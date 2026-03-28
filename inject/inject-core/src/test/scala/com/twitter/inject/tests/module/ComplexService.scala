@@ -1,7 +1,7 @@
 package com.twitter.inject.tests.module
 
 import com.google.inject.assistedinject.Assisted
-import javax.inject.{Inject, Named}
+import jakarta.inject.{Inject, Named}
 
 class ComplexService @Inject() (
   exampleService: DoEverythingService,

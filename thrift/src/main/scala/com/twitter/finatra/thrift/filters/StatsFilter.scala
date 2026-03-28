@@ -15,8 +15,8 @@ import com.twitter.util.Future
 import com.twitter.util.Memoize
 import com.twitter.util.Throw
 import com.twitter.util.Try
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
 private object StatsFilter {
 

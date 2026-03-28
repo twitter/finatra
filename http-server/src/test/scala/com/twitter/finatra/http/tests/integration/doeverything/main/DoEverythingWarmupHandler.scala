@@ -5,7 +5,7 @@ import com.twitter.finatra.http.routing.HttpWarmup
 import com.twitter.finatra.httpclient.RequestBuilder._
 import com.twitter.inject.utils.Handler
 import com.twitter.util.logging.Logging
-import javax.inject.Inject
+import jakarta.inject.Inject
 import scala.util.control.NonFatal
 
 class DoEverythingWarmupHandler @Inject() (warmup: HttpWarmup) extends Handler with Logging {

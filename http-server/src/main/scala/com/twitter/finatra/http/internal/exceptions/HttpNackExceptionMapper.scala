@@ -4,7 +4,7 @@ import com.twitter.finagle.http.filter.HttpNackFilter
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finatra.http.exceptions.HttpNackException
 import com.twitter.finatra.http.response.ResponseBuilder
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 /**
  * Default [[com.twitter.finatra.http.exceptions.ExceptionMapper]] responsible for converting

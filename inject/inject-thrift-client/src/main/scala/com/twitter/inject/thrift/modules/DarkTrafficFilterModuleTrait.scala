@@ -7,7 +7,7 @@ import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.thrift.ClientId
 import com.twitter.finatra.annotations.DarkTrafficFilterType
 import com.twitter.inject.Injector
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 private[modules] trait DarkTrafficFilterModuleTrait extends ThriftClientModuleTrait {
 

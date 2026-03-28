@@ -3,7 +3,7 @@ package com.twitter.finatra.http.tests.integration.doeverything.main.exceptions
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.exceptions.ExceptionMapper
 import com.twitter.finatra.http.response.ResponseBuilder
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 class BarExceptionMapper @Inject() (response: ResponseBuilder)
     extends ExceptionMapper[BarException] {

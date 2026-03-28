@@ -3,7 +3,7 @@ package finatra.quickstart.services
 import com.twitter.util.Future
 import finatra.quickstart.domain.TweetId
 import java.util.UUID
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 class IdService {
