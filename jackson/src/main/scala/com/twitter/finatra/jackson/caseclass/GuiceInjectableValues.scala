@@ -18,13 +18,13 @@ private[finatra] object GuiceInjectableValues {
 
   /**
    * We support the same annotations as the jackson-module-guice `com.fasterxml.jackson.module.guice.DefaultAnnotationIntrospector`:
-   * [[JacksonInject]], [[javax.inject.Inject]], and [[com.google.inject.Inject]].
+   * [[JacksonInject]], [[jakarta.inject.Inject]], and [[com.google.inject.Inject]].
    *
    * @see [[https://github.com/FasterXML/jackson-modules-base/blob/master/guice/src/main/java/com/fasterxml/jackson/module/guice/GuiceAnnotationIntrospector.java]]
    * */
   val InjectionAnnotations: Set[Class[_ <: Annotation]] = Set(
     classOf[JacksonInject],
-    classOf[javax.inject.Inject],
+    classOf[jakarta.inject.Inject],
     classOf[com.google.inject.Inject]
   )
 }

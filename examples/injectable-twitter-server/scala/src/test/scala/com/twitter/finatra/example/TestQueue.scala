@@ -1,7 +1,7 @@
 package com.twitter.finatra.example
 
 import java.util.concurrent.atomic.AtomicInteger
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 class TestQueue extends Queue(Integer.MAX_VALUE) {

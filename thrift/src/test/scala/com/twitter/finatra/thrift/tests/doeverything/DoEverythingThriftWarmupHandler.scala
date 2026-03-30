@@ -6,8 +6,8 @@ import com.twitter.finagle.thrift.ClientId
 import com.twitter.finatra.thrift.routing.ThriftWarmup
 import com.twitter.inject.utils.Handler
 import com.twitter.util.logging.Logging
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import scala.reflect.ClassTag
 
 @Singleton

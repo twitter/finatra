@@ -14,7 +14,7 @@ import com.twitter.inject.{Injector, Test}
 import com.twitter.util.jackson.ScalaObjectMapper
 import com.twitter.util.jackson.caseclass.exceptions.InjectableValuesException
 import com.twitter.util.mock.Mockito
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 private object MessageBodyManagerTest {
   trait Car {

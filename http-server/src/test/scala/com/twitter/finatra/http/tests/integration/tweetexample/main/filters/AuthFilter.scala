@@ -4,7 +4,7 @@ import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.util.Future
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 class AuthFilter @Inject() (responseBuilder: ResponseBuilder)
     extends SimpleFilter[Request, Response] {

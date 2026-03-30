@@ -1,6 +1,6 @@
 package com.twitter.finatra.example.services;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.twitter.finagle.http.Method;
 import com.twitter.finagle.http.Request;

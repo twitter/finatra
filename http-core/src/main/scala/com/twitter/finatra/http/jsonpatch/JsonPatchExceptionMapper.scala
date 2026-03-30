@@ -3,7 +3,7 @@ package com.twitter.finatra.http.jsonpatch
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.exceptions.ExceptionMapper
 import com.twitter.finatra.http.response.{ErrorsResponse, ResponseBuilder}
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 @Singleton
 class JsonPatchExceptionMapper @Inject() (response: ResponseBuilder)

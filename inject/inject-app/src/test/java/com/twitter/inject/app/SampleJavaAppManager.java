@@ -1,6 +1,6 @@
 package com.twitter.inject.app;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.twitter.util.logging.Logger;
 

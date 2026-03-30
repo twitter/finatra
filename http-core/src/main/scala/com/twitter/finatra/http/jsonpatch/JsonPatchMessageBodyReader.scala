@@ -4,7 +4,7 @@ import com.twitter.finagle.http.Message
 import com.twitter.finatra.http.marshalling.MessageBodyReader
 import com.twitter.finatra.http.marshalling.mapper._
 import com.twitter.util.jackson.ScalaObjectMapper
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * Transform an HTTP Message to [[com.twitter.finatra.http.jsonpatch JsonPatch]]

@@ -15,7 +15,7 @@ import com.twitter.inject.tests.module.classes._
 import com.twitter.inject.tests.module.{ClassToConvert, ComplexServiceFactory, TestTwitterModule}
 import com.twitter.inject.{Injector, Test, TwitterModule}
 import java.lang.annotation.Annotation
-import javax.inject.{Inject, Named, Provider, Singleton}
+import jakarta.inject.{Inject, Named, Provider, Singleton}
 import net.codingwell.scalaguice.ScalaModule
 import scala.collection.immutable
 import scala.util.Random
@@ -217,7 +217,7 @@ class TwitterModuleTest extends Test {
     Injector(Guice.createInjector(module)).instance(Key.get(classOf[X], classOf[Named]))
   }
 
-  test("allow use provider form javax.inject.Provider") {
+  test("allow use provider form jakarta.inject.Provider") {
     val module = new TwitterModule {
       override def configure(): Unit = {
         bind[Foo].toProvider[FooProviderWithJavax]
@@ -504,12 +504,12 @@ class TwitterModuleTest extends Test {
     // Check Option
     injector.instance[Option[T]] should contain(expected)
     injector.instance[Option[Provider[T]]].get.get() should equal(expected)
-    injector.instance[Option[javax.inject.Provider[T]]].get.get() should equal(expected)
+    injector.instance[Option[jakarta.inject.Provider[T]]].get.get() should equal(expected)
 
     // Check Option
     injector.instance[Option[T]].get should equal(expected)
     injector.instance[Option[Provider[T]]].get.get() should equal(expected)
-    injector.instance[Option[javax.inject.Provider[T]]].get.get() should equal(expected)
+    injector.instance[Option[jakarta.inject.Provider[T]]].get.get() should equal(expected)
   }
 
   private def validateWithAnn[T: Manifest, Ann <: Annotation: Manifest](
@@ -521,12 +521,12 @@ class TwitterModuleTest extends Test {
     // Check Option
     injector.instance[Option[T], Ann] should contain(expected)
     injector.instance[Option[Provider[T]], Ann].get.get() should equal(expected)
-    injector.instance[Option[javax.inject.Provider[T]], Ann].get.get() should equal(expected)
+    injector.instance[Option[jakarta.inject.Provider[T]], Ann].get.get() should equal(expected)
 
     // Check Option
     injector.instance[Option[T], Ann].get should equal(expected)
     injector.instance[Option[Provider[T]], Ann].get.get() should equal(expected)
-    injector.instance[Option[javax.inject.Provider[T]], Ann].get.get() should equal(expected)
+    injector.instance[Option[jakarta.inject.Provider[T]], Ann].get.get() should equal(expected)
   }
 
   private def validateWithAnnotation[T: Manifest](
@@ -539,12 +539,12 @@ class TwitterModuleTest extends Test {
     // Check Option
     injector.instance[Option[T]](annotation) should contain(expected)
     injector.instance[Option[Provider[T]]](annotation).get.get() should equal(expected)
-    injector.instance[Option[javax.inject.Provider[T]]](annotation).get.get() should equal(expected)
+    injector.instance[Option[jakarta.inject.Provider[T]]](annotation).get.get() should equal(expected)
 
     // Check Option
     injector.instance[Option[T]](annotation).get should equal(expected)
     injector.instance[Option[Provider[T]]](annotation).get.get() should equal(expected)
-    injector.instance[Option[javax.inject.Provider[T]]](annotation).get.get() should equal(expected)
+    injector.instance[Option[jakarta.inject.Provider[T]]](annotation).get.get() should equal(expected)
   }
 
   private def validateAbsent[T: Manifest](module: Module, expected: T = "A"): Unit = {
@@ -553,11 +553,11 @@ class TwitterModuleTest extends Test {
     // Check Option
     injector.instance[Option[T]] should be(None)
     injector.instance[Option[Provider[T]]] should be(None)
-    injector.instance[Option[javax.inject.Provider[T]]] should be(None)
+    injector.instance[Option[jakarta.inject.Provider[T]]] should be(None)
 
     // Check Option
     injector.instance[Option[T]].isDefined should be(false)
     injector.instance[Option[Provider[T]]].isDefined should be(false)
-    injector.instance[Option[javax.inject.Provider[T]]].isDefined should be(false)
+    injector.instance[Option[jakarta.inject.Provider[T]]].isDefined should be(false)
   }
 }

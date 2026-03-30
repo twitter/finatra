@@ -1,6 +1,6 @@
 package com.twitter.finatra.thrift.tests.doeverything;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.twitter.doeverything.thriftjava.Answer;
 import com.twitter.doeverything.thriftjava.DoEverything;

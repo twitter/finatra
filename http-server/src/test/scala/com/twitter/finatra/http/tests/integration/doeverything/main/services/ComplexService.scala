@@ -2,7 +2,7 @@ package com.twitter.finatra.http.tests.integration.doeverything.main.services
 
 import com.google.inject.assistedinject.Assisted
 import com.twitter.inject.annotations.Flag
-import javax.inject.{Inject, Named}
+import jakarta.inject.{Inject, Named}
 import com.twitter.util.Duration
 
 class ComplexService @Inject() (

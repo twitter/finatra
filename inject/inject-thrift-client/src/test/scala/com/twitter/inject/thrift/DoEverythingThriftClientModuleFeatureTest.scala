@@ -15,7 +15,7 @@ import com.twitter.inject.thrift.integration.basic.{
 }
 import com.twitter.inject.thrift.integration.{TestHttpServer, TestThriftServer}
 import com.twitter.test.thriftscala.EchoService
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 object DoEverythingThriftClientModuleFeatureTest {
   @Singleton class EchoServiceFuture @Inject() (val service: EchoService.MethodPerEndpoint)

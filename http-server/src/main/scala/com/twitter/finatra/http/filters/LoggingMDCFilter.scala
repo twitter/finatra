@@ -3,7 +3,7 @@ package com.twitter.finatra.http.filters
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.inject.logging.MDCInitializer
 import com.twitter.util.Future
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 class LoggingMDCFilter[Req, Rep] extends SimpleFilter[Req, Rep] {

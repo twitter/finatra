@@ -6,7 +6,7 @@ import com.twitter.greeter.thriftscala.Greeter
 import com.twitter.greeter.thriftscala.Greeter.{Bye, Hello, Hi}
 import com.twitter.test.thriftscala.EchoService
 import com.twitter.test.thriftscala.EchoService.{Echo, SetTimesToEcho}
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 class ServicePerEndpointHttpController @Inject() (
   greeter: Greeter.ServicePerEndpoint,

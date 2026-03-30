@@ -3,7 +3,7 @@ package com.twitter.finatra.http.tests.integration.multiserver.add2server
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.httpclient.{HttpClient, RequestBuilder}
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 class Add2Controller @Inject() (add1Client: HttpClient) extends Controller {
 

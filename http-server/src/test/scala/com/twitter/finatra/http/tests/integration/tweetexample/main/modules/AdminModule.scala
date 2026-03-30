@@ -7,7 +7,7 @@ import com.twitter.finatra.http.tests.integration.tweetexample.main.services.adm
 }
 import com.twitter.finatra.http.{Prod, Staging}
 import com.twitter.inject.{TwitterModule, TwitterPrivateModule}
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 object AdminModule extends TwitterModule {
 

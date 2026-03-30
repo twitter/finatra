@@ -4,7 +4,7 @@ import com.twitter.finatra.thrift.Controller
 import com.twitter.scrooge.Response
 import com.twitter.snakeCase.thriftscala.{ExtendedSnakeCaseService, SnakeCaseService}
 import com.twitter.util.Future
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 class ExtendedSnakeCaseController extends Controller(ExtendedSnakeCaseService) {

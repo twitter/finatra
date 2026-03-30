@@ -6,8 +6,8 @@ import com.twitter.util._
 import com.twitter.util.logging.Logging
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
 @Singleton
 class Subscriber @Inject() (

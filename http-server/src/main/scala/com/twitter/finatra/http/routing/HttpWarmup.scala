@@ -6,7 +6,7 @@ import com.twitter.finagle.http.Response
 import com.twitter.util.Await
 import com.twitter.util.jackson.ScalaObjectMapper
 import com.twitter.util.logging.Logger
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 private object HttpWarmup {
   val userAgent = "http-warmup-client"

@@ -3,7 +3,7 @@ package com.twitter.finatra.thrift.filters
 import com.twitter.finagle.{Filter, Service}
 import com.twitter.inject.logging.MDCInitializer
 import com.twitter.util.Future
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 class LoggingMDCFilter extends Filter.TypeAgnostic {

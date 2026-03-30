@@ -1,7 +1,7 @@
 package com.twitter.inject.tests.module
 
 import com.google.inject.{Provider, TypeLiteral}
-import javax.inject.{Inject, Named}
+import jakarta.inject.{Inject, Named}
 
 object classes {
   object Outer {
@@ -47,7 +47,7 @@ object classes {
     def foo(): String
   }
 
-  class FooProviderWithJavax extends javax.inject.Provider[Foo] {
+  class FooProviderWithJavax extends jakarta.inject.Provider[Foo] {
     def get(): Foo = new Foo {
       def foo() = "foo"
     }
@@ -64,7 +64,7 @@ object classes {
   case class SealedTraitContainer[T <: SealedTrait](inner: T)
 
   class SealedTraitContainerFinalSealedTraitProvider
-      extends javax.inject.Provider[SealedTraitContainer[FinalSealedTrait.type]] {
+      extends jakarta.inject.Provider[SealedTraitContainer[FinalSealedTrait.type]] {
     def get(): SealedTraitContainer[FinalSealedTrait.type] = SealedTraitContainer(FinalSealedTrait)
   }
 }

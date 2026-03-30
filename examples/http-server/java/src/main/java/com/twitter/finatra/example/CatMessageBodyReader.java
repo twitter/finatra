@@ -1,6 +1,6 @@
 package com.twitter.finatra.example;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import scala.reflect.ManifestFactory;
 

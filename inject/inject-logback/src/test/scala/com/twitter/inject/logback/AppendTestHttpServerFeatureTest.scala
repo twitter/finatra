@@ -5,6 +5,7 @@ import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.classic.layout.TTLLLayout
 import ch.qos.logback.classic.spi.ILoggingEvent
+import ch.qos.logback.classic.spi.Configurator
 import ch.qos.logback.core.ConsoleAppender
 import ch.qos.logback.core.LogbackAsyncAppenderBase
 import ch.qos.logback.core.TestLogbackAsyncAppender
@@ -30,7 +31,7 @@ private object AppendTestHttpServerFeatureTest {
     asyncAppender: LogbackAsyncAppenderBase)
       extends BasicConfigurator {
 
-    override def configure(lc: LoggerContext): Unit = {
+    override def configure(lc: LoggerContext): Configurator.ExecutionStatus = {
       setContext(lc)
       this.addInfo("Setting up test configuration.")
 
@@ -40,6 +41,8 @@ private object AppendTestHttpServerFeatureTest {
       val rootLogger = lc.getLogger("ROOT")
       rootLogger.setLevel(Level.ALL)
       rootLogger.addAppender(asyncAppender)
+
+      Configurator.ExecutionStatus.DO_NOT_INVOKE_NEXT_IF_ANY
     }
   }
 

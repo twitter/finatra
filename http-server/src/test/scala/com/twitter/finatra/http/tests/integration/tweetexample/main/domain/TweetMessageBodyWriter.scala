@@ -3,7 +3,7 @@ package com.twitter.finatra.http.tests.integration.tweetexample.main.domain
 import com.twitter.finagle.http.MediaType
 import com.twitter.finatra.http.marshalling.{MessageBodyWriter, WriterResponse}
 import com.twitter.util.jackson.ScalaObjectMapper
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 class TweetMessageBodyWriter @Inject() (mapper: ScalaObjectMapper)
     extends MessageBodyWriter[Tweet] {

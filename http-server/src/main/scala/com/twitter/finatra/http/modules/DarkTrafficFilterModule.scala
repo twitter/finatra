@@ -13,7 +13,7 @@ import com.twitter.finatra.annotations.{
 }
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.inject.{Injector, TwitterModule}
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 /* exposed for testing */
 private[finatra] object DarkTrafficFilterModule {

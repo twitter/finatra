@@ -4,7 +4,7 @@ import com.twitter.finagle.{Filter, Service}
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.{Injector, IntegrationTest, TwitterModule}
 import com.twitter.util.Future
-import javax.inject.{Inject, Provider}
+import jakarta.inject.{Inject, Provider}
 
 class FinagleRequestScopeFilterIntegrationTest extends IntegrationTest {
 

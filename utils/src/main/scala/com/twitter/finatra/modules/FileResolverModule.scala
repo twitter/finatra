@@ -4,7 +4,7 @@ import com.google.inject.Provides
 import com.twitter.finatra.utils.FileResolver
 import com.twitter.inject.TwitterModule
 import com.twitter.inject.annotations.Flag
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 object FileResolverFlags {
 

@@ -76,7 +76,7 @@ private[jackson] class DefaultAnnotationIntrospector
     )
 
     if (injectionAnnotations.nonEmpty) {
-      // has one of `javax.inject.Inject`, `com.google.inject.Inject` or `com.fasterxml.jackson.annotation.JacksonInject`
+      // has one of `jakarta.inject.Inject`, `com.google.inject.Inject` or `com.fasterxml.jackson.annotation.JacksonInject`
       // should not also have any JacksonAnnotation
       val jacksonAnnotations =
         annotations.filter(a =>

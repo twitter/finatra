@@ -13,7 +13,7 @@ import com.twitter.finatra.utils.FileResolver
 import com.twitter.inject.annotations.Flag
 import com.twitter.inject.{Injector, TwitterModule}
 import com.twitter.util.jackson.ScalaObjectMapper
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 /**
  * A [[TwitterModule]] that provides default implementations for [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]],

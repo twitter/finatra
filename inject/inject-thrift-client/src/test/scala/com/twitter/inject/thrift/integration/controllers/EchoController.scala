@@ -5,7 +5,7 @@ import com.twitter.finatra.thrift.Controller
 import com.twitter.scrooge.Response
 import com.twitter.test.thriftscala.EchoService
 import com.twitter.util.Future
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 @Singleton
 class EchoController @Inject() (stats: StatsReceiver) extends Controller(EchoService) {

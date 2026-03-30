@@ -1,6 +1,7 @@
 package org.slf4j
 
 import com.twitter.inject.logging.FinagleMDCAdapter
+import java.lang.reflect.Field
 
 /**
  * Sets up the [[com.twitter.inject.logging.FinagleMDCAdapter]] as the [[org.slf4j.spi.MDCAdapter]]
@@ -22,6 +23,20 @@ object FinagleMDCInitializer {
    */
   def init(): Unit = {
     MDC.getMDCAdapter // Make sure default MDC static initializer has run
-    MDC.mdcAdapter = new FinagleMDCAdapter // Swap in the Finagle adapter
+
+    // SLF4J 2.x made MDC_ADAPTER private, use reflection to swap in the Finagle adapter
+    try {
+      val mdcClass = classOf[MDC]
+      val field = mdcClass.getDeclaredField("MDC_ADAPTER")
+      field.setAccessible(true)
+
+      // Set the Finagle MDC adapter
+      field.set(null, new FinagleMDCAdapter)
+    } catch {
+      case e: Exception =>
+        throw new RuntimeException(
+          "Failed to initialize FinagleMDCAdapter. " +
+          "This may be due to JVM security restrictions or SLF4J API changes.", e)
+    }
   }
 }

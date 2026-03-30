@@ -9,7 +9,7 @@ import com.twitter.finatra.http.tests.integration.tweetexample.main.services.Twe
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.Future
 import java.nio.charset.StandardCharsets
-import javax.inject.Inject
+import jakarta.inject.Inject
 import scala.collection.mutable
 
 class TweetsController @Inject() (

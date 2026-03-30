@@ -6,7 +6,7 @@ import com.twitter.finatra.http.marshalling.response._
 import com.twitter.finatra.http.tests.server.domain.{FormPostRequest, TestCaseClassWithHtml}
 import com.twitter.finatra.http.tests.server.views.{HTMLView, JSONView, NoAnnotation, TestUserView}
 import com.twitter.finatra.mustache.marshalling.MustacheService
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 class TestController @Inject() (mustacheService: MustacheService) extends Controller {
 

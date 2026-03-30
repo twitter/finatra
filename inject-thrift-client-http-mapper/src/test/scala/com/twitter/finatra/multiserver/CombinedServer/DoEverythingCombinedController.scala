@@ -2,7 +2,7 @@ package com.twitter.finatra.multiserver.CombinedServer
 
 import com.twitter.finagle.http.{RouteIndex, Request}
 import com.twitter.finatra.http.Controller
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 @Singleton
 class DoEverythingCombinedController @Inject() (adder: AdderService) extends Controller {

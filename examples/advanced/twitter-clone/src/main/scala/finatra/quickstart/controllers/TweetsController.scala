@@ -3,7 +3,7 @@ package finatra.quickstart.controllers
 import com.twitter.finatra.http.Controller
 import finatra.quickstart.domain.http.{TweetGetRequest, TweetPostRequest, TweetResponse}
 import finatra.quickstart.services.TweetsService
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 @Singleton
 class TweetsController @Inject() (tweetsService: TweetsService) extends Controller {

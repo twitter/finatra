@@ -17,7 +17,7 @@ import com.twitter.util.Throw
 import com.twitter.util.Try
 import com.twitter.util.logging.Logger
 import java.net.URI
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 import scala.util.control.NonFatal
 
 private object HttpResponseFilter {

@@ -3,7 +3,7 @@ package finatra.quickstart.warmup
 import com.twitter.finatra.http.routing.HttpWarmup
 import com.twitter.finatra.httpclient.RequestBuilder.{get, post}
 import com.twitter.inject.utils.Handler
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 @Singleton
 class TwitterCloneWarmupHandler @Inject() (httpWarmup: HttpWarmup) extends Handler {

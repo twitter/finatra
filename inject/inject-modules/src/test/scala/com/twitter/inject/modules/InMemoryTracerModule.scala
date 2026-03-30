@@ -4,7 +4,7 @@ import com.twitter.finagle.tracing.Tracer
 import com.twitter.inject.InMemoryTracer
 import com.twitter.inject.TwitterModule
 
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 object InMemoryTracerModule extends TwitterModule {
   override def configure(): Unit = {

@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.marshalling
 
 import com.twitter.finatra.mustache.marshalling.MustacheService
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 @Singleton
 class MustacheMessageBodyWriter @Inject() (

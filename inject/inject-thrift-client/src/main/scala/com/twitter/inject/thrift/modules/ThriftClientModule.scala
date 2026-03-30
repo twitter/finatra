@@ -6,7 +6,7 @@ import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.thrift.ClientId
 import com.twitter.inject.{Injector, TwitterModule}
 import com.twitter.util.Await
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 import scala.reflect.ClassTag
 
 /**

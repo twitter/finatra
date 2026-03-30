@@ -8,8 +8,8 @@ import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.inject.utils.ExceptionUtils._
 import com.twitter.inject.thrift.ThriftClientException
 import com.twitter.inject.thrift.ThriftClientExceptionSource
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
 @Singleton
 class ThriftClientExceptionMapper @Inject() (

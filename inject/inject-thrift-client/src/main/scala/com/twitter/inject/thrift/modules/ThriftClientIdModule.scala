@@ -3,7 +3,7 @@ package com.twitter.inject.thrift.modules
 import com.google.inject.Provides
 import com.twitter.finagle.thrift.ClientId
 import com.twitter.inject.TwitterModule
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 object ThriftClientIdModule extends ThriftClientIdModule
 

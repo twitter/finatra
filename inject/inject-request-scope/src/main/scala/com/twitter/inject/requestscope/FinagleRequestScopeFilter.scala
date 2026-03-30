@@ -2,7 +2,7 @@ package com.twitter.inject.requestscope
 
 import com.twitter.finagle.{Filter, Service}
 import com.twitter.util.Future
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 object FinagleRequestScopeFilter {
 

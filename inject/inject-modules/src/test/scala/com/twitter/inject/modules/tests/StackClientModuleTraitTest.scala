@@ -33,7 +33,7 @@ import com.twitter.util.Future
 import com.twitter.util.NullMonitor
 import com.twitter.util.Time
 import java.net.SocketAddress
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 class StackClientModuleTraitTest extends Test {
   import StackClientModuleTraitTest._

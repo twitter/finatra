@@ -7,6 +7,50 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+24.9.0-SNAPSHOT
+---------------
+
+Runtime Behavior Changes
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* **BREAKING**: Upgraded Apache Thrift from 0.20.0 to 0.22.0. The ``TMemoryInputTransport``
+  constructor now throws checked ``TTransportException``. Scrooge-generated Java code updated
+  to handle this change.
+
+* finatra: All Twitter OSS projects upgraded to 24.9.0-SNAPSHOT to avoid conflicts with
+  internal Twitter repository artifacts.
+
+* finatra: Bump version of Jackson to 2.21.2 (from 2.17.2). Security updates and CVE fixes.
+
+* finatra: Bump version of Guice to 7.0.0 (from 6.0.0).
+
+* finatra: Bump version of slf4j to 2.0.17 (from 2.0.16).
+
+* finatra: Bump version of logback to 1.5.32 (from 1.5.14).
+
+* finatra: Bump version of log4j2 to 2.25.3 (from 2.25.2).
+
+* finatra: Bump version of Joda-Time to 2.14.1 (from 2.13.0).
+
+* finatra: Bump version of scala-parser-combinators to 2.4.0 (from 2.1.1).
+
+* scrooge: Updated Apache Java code generation templates to wrap ``TMemoryInputTransport``
+  instantiations in try-catch blocks to handle checked ``TTransportException``.
+
+* thrift: Disabled Java thrift server example tests due to generated code compatibility
+  during transition period.
+
+Changed
+~~~~~~~
+
+* inject-core, inject-thrift-client, finatra-thrift: All Thrift-related modules now require
+  Apache Thrift 0.22.0 or later.
+
+* scrooge-generator: Java code generation now produces code compatible with Apache Thrift
+  0.22.0's checked exception requirements.
+
+See ``UPGRADE-24.9.0.md`` for detailed upgrade instructions and migration guide.
+
 24.5.0
 ------
 

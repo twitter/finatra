@@ -1,6 +1,6 @@
 package com.twitter.finatra.thrift.tests.doeverything;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.twitter.doeverything.thriftjava.Answer;
 import com.twitter.doeverything.thriftjava.DoEverythingException;

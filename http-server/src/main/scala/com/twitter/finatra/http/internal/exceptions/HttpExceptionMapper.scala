@@ -4,7 +4,7 @@ import com.twitter.finagle.http.MediaType
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.exceptions.HttpException
 import com.twitter.finatra.http.response.{ErrorsResponse, ResponseBuilder}
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 @Singleton
 class HttpExceptionMapper @Inject() (response: ResponseBuilder)

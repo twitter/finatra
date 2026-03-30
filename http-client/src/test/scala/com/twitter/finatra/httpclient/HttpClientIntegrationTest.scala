@@ -11,7 +11,7 @@ import com.twitter.inject.app.TestInjector
 import com.twitter.inject.{Injector, IntegrationTest}
 import com.twitter.util.Await
 import com.twitter.util.jackson.ScalaObjectMapper
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 class HttpClientIntegrationTest extends IntegrationTest {
 

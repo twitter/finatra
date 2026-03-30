@@ -1,9 +1,10 @@
 package com.twitter.inject
 
-import com.twitter.util.{Duration, Future, Return, Throw}
+import com.twitter.util.{Await, Duration, Future, Return, Throw}
 import org.scalatest.concurrent.PatienceConfiguration.{Interval, Timeout}
 import org.scalatest.concurrent.ScalaFutures.{FutureConcept, PatienceConfig}
 import org.scalatest.time.{Millis, Seconds, Span}
+import org.scalactic.source.Position
 import scala.language.implicitConversions
 
 /**
@@ -29,6 +30,13 @@ trait WhenReadyMixin {
       // must return false.
       def isExpired: Boolean = false
       def isCanceled: Boolean = false
+
+      def futureValueImpl(pos: Position)(implicit config: PatienceConfig): T = {
+        val timeout = com.twitter.util.Duration.fromNanoseconds(
+          config.timeout.totalNanos
+        )
+        Await.result(twitterFuture, timeout)
+      }
     }
 
   final implicit def twitterDurationToScalaTestTimeout(duration: Duration): Timeout = {

@@ -21,7 +21,7 @@ import com.twitter.util.Await
 import com.twitter.util.Future
 import com.twitter.util.Promise
 import com.twitter.util.TimeoutException
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 import org.scalatest.exceptions.TestFailedException
 import scala.collection.immutable.ListMap
 import scala.util.Random

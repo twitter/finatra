@@ -2,9 +2,9 @@
 
 set -eo pipefail
 
-sbtver="1.7.1"
+sbtver="1.10.8"
 sbtjar="sbt-launch-$sbtver.jar"
-sbtsha128="468efdd45baf58dbb575f9b4369c5234f8cd54ba"
+sbtsha128="a54cbe4f61eb84382ca96a1e4f9231a5ac7168b7"
 
 sbtrepo="https://repo1.maven.org/maven2/org/scala-sbt/sbt-launch"
 

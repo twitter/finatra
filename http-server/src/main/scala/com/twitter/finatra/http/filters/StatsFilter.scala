@@ -18,8 +18,8 @@ import com.twitter.finatra.http.response.HttpResponseClassifier
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.util._
 import com.twitter.util.logging.Logger
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
 private object StatsFilter {
   val url =

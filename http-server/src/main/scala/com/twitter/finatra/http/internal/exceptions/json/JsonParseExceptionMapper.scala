@@ -7,8 +7,8 @@ import com.twitter.finatra.http.exceptions.ExceptionMapper
 import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.util.logging.Logger
 import com.twitter.util.jackson.caseclass.exceptions._
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
 private object JsonParseExceptionMapper {
   val logger: Logger = Logger(JsonParseExceptionMapper.getClass)

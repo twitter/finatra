@@ -24,7 +24,7 @@ import com.twitter.finatra.thrift.tests.doeverything.exceptions.{BarException, F
 import com.twitter.inject.annotations.Flag
 import com.twitter.inject.logging.FinagleMDCAdapter
 import com.twitter.util.Future
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import org.slf4j.MDC
 import scala.collection.JavaConverters._
 import scala.util.control.NoStackTrace

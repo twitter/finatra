@@ -1,6 +1,6 @@
 package com.twitter.finatra.example;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.twitter.calculator.thriftjava.Calculator;
 import com.twitter.util.Future;

@@ -3,7 +3,7 @@ package com.twitter.finatra.multiserver.Add1HttpServer
 import com.twitter.adder.thriftscala.Adder
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 class Add1Controller @Inject() (adder: Adder.MethodPerEndpoint) extends Controller {
 

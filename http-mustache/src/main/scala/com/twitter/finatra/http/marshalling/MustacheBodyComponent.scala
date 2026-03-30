@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.marshalling
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 case class MustacheBodyComponent @Inject() (
   data: Any,

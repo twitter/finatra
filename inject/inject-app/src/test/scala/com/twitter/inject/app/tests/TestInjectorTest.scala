@@ -20,8 +20,8 @@ import com.twitter.inject.Test
 import com.twitter.inject.TwitterModule
 import com.twitter.util.Future
 import com.twitter.util.mock.Mockito
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import scala.language.higherKinds
 
 object testBooleanGlobalFlag

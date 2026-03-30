@@ -3,7 +3,7 @@ package com.twitter.finatra.http.tests.integration.doeverything.main;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.twitter.finagle.http.Request;
 import com.twitter.finagle.http.Response;

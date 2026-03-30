@@ -5,7 +5,7 @@ import com.twitter.inject.{Injector, TypeUtils}
 import com.twitter.util.Future
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 import net.codingwell.scalaguice.typeLiteral
 import scala.annotation.tailrec
 import scala.collection.JavaConverters._

@@ -6,7 +6,7 @@ import com.twitter.inject.TwitterModule
 import com.twitter.inject.annotations.Flag
 import com.twitter.util.security
 import java.io.File
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 object CredentialsFlags {
 

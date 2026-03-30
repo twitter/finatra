@@ -8,8 +8,8 @@ import com.twitter.util.jackson.ScalaObjectMapper
 import com.twitter.util.Future
 import com.twitter.util.Return
 import com.twitter.util.Throw
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
 case class FirebaseError(error: String)
 

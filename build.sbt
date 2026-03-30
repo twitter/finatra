@@ -5,15 +5,17 @@ Global / excludeLintKeys += scalacOptions
 Global / concurrentRestrictions += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "24.8.0-SNAPSHOT"
+val releaseVersion = "24.9.0-SNAPSHOT"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
-  scalaVersion := "2.13.6",
-  crossScalaVersions := Seq("2.12.12", "2.13.6"),
+  scalaVersion := "2.13.18",
   scalaModuleInfo := scalaModuleInfo.value.map(_.withOverrideScalaVersion(true)),
   Test / fork := true, // We have to fork to get the JavaOptions
   Test / javaOptions ++= travisTestJavaOptions,
+  Test / javaOptions ++= Seq(
+    "--add-opens=java.base/java.lang=ALL-UNNAMED"
+  ),
   libraryDependencies += scalaCollectionCompat
 )
 
@@ -22,37 +24,9 @@ lazy val noPublishSettings = Seq(
 )
 
 def gcJavaOptions: Seq[String] = {
-  val javaVersion = System.getProperty("java.version")
-  if (javaVersion.startsWith("1.8")) {
-    jdk8GcJavaOptions
-  } else {
-    jdk11GcJavaOptions
-  }
-}
-
-def jdk8GcJavaOptions: Seq[String] = {
   Seq(
-    "-XX:+UseParNewGC",
-    "-XX:+UseConcMarkSweepGC",
-    "-XX:+CMSParallelRemarkEnabled",
-    "-XX:+CMSClassUnloadingEnabled",
+    "-XX:+UseG1GC",
     "-XX:ReservedCodeCacheSize=128m",
-    "-XX:SurvivorRatio=128",
-    "-XX:MaxTenuringThreshold=0",
-    "-Xss8M",
-    "-Xms512M",
-    "-Xmx2G"
-  )
-}
-
-def jdk11GcJavaOptions: Seq[String] = {
-  Seq(
-    "-XX:+UseConcMarkSweepGC",
-    "-XX:+CMSParallelRemarkEnabled",
-    "-XX:+CMSClassUnloadingEnabled",
-    "-XX:ReservedCodeCacheSize=128m",
-    "-XX:SurvivorRatio=128",
-    "-XX:MaxTenuringThreshold=0",
     "-Xss8M",
     "-Xms512M",
     "-Xmx2G"
@@ -87,29 +61,30 @@ lazy val versions = new {
 
   // All Twitter library releases are date versioned as YY.MM.patch
   val twLibVersion = releaseVersion
-  val commonsFileupload = "1.4"
-  val guice = "5.1.0"
-  val jackson = "2.14.3"
-  val jodaConvert = "2.2.3"
-  val jodaTime = "2.14.0"
-  val json4s = "4.0.3"
-  val junit = "4.12"
-  val libThrift = "0.10.0"
-  val logback = "1.2.11"
-  val mustache = "0.8.18"
-  val nscalaTime = "2.32.0"
-  val scalaCheck = "1.15.4"
-  val scalaGuice = "5.1.0"
-  val scalaTest = "3.1.2"
-  val scalaTestPlusJunit = "3.1.2.0"
-  val scalaTestPlusScalaCheck = "3.1.2.0"
+  val commonsFileupload = "1.6.0"
+  val guice = "7.0.0"
+  val jackson = "2.21.2"
+  val jacksonAnnotations = "2.21"
+  val jodaConvert = "3.0.1"
+  val jodaTime = "2.14.1"
+  val json4s = "4.0.7"
+  val junit = "4.13.2"
+  val libThrift = "0.22.0"
+  val logback = "1.5.32"
+  val mustache = "0.9.14"
+  val nscalaTime = "3.0.0"
+  val scalaCheck = "1.19.0"
+  val scalaGuice = "7.0.0"
+  val scalaTest = "3.2.20"
+  val scalaTestPlusJunit = "3.2.2.0"
+  val scalaTestPlusScalaCheck = "3.2.2.0"
   val servletApi = "2.5"
-  val slf4j = "1.7.30"
-  val javaxBind = "2.3.0"
+  val slf4j = "2.0.17"
+  val javaxBind = "2.3.1"
   val javaxActivation = "1.1.1"
 }
 
-lazy val scalaCollectionCompat = "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.2"
+lazy val scalaCollectionCompat = "org.scala-lang.modules" %% "scala-collection-compat" % "2.14.0"
 
 lazy val scalaCompilerOptions = scalacOptions ++= Seq(
   "-deprecation",
@@ -137,16 +112,12 @@ lazy val testDependenciesSettings = Seq(
 )
 
 lazy val baseSettings = Seq(
-  resolvers ++= Seq(
-    Resolver.sonatypeRepo("releases"),
-    Resolver.sonatypeRepo("snapshots")
-  ),
+  resolvers ++= Resolver.sonatypeOssRepos("releases") ++ Resolver.sonatypeOssRepos("snapshots"),
   scalaCompilerOptions,
-  Compile / compile / javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint:unchecked"),
-  doc / javacOptions ++= Seq("-source", "1.8"),
+  Compile / compile / javacOptions ++= Seq("-source", "21", "-target", "21", "-Xlint:unchecked"),
+  doc / javacOptions ++= Seq("-source", "21"),
   javaOptions ++= Seq(
     "-Djava.net.preferIPv4Stack=true",
-    "-XX:+AggressiveOpts",
     "-server"
   ),
   javaOptions ++= gcJavaOptions,
@@ -286,7 +257,7 @@ lazy val finatraExamples =
     javaHttpServer,
     scalaHttpServer,
     thriftIdl,
-    javaThriftServer,
+    // javaThriftServer, // Disabled: Java thrift generation incompatible with libthrift 0.22.0
     scalaThriftServer,
     streamingExample,
     twitterClone,
@@ -309,10 +280,10 @@ lazy val root = (project in file("."))
   .settings(
     organization := "com.twitter",
     moduleName := "finatra-root",
-    ScalaUnidoc / unidoc / unidocProjectFilter := inAnyProject
-      -- inProjects(benchmarks)
+    ScalaUnidoc / unidoc / unidocProjectFilter := inAnyProject --
+      inProjects(benchmarks) --
     // START EXAMPLES
-      -- inProjects(
+      inProjects(
         benchmark,
         javaInjectableApp,
         scalaInjectableApp,
@@ -352,7 +323,7 @@ lazy val injectCore = (project in file("inject/inject-core"))
       "com.google.inject.extensions" % "guice-assistedinject" % versions.guice,
       "com.twitter" %% "util-app" % versions.twLibVersion,
       "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
-      "javax.inject" % "javax.inject" % "1",
+      "jakarta.inject" % "jakarta.inject-api" % "2.0.1",
       "joda-time" % "joda-time" % versions.jodaTime,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "net.codingwell" %% "scala-guice" % versions.scalaGuice,
@@ -621,7 +592,7 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
   .settings(
     name := "inject-thrift-client",
     moduleName := "inject-thrift-client",
-    Test / scroogeLanguages := Seq("java", "scala"),
+    Test / scroogeLanguages := Seq("scala"),
     Test / scroogePublishThrift := true,
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-thrift" % versions.twLibVersion,
@@ -746,7 +717,7 @@ lazy val validation = project
       "com.twitter" %% "util-reflect" % versions.twLibVersion,
       "com.twitter" %% "util-validator" % versions.twLibVersion,
       "org.json4s" %% "json4s-core" % versions.json4s,
-      "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson % Test,
+      "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jacksonAnnotations % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
     // special-case to only scaladoc what's necessary as some of the tests cannot generate scaladocs
@@ -780,13 +751,13 @@ lazy val jackson = project
     name := "finatra-jackson",
     moduleName := "finatra-jackson",
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
+      "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jacksonAnnotations,
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
       "com.fasterxml.jackson.module" % "jackson-module-guice" % versions.jackson,
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson,
       "com.google.inject" % "guice" % versions.guice,
-      "javax.inject" % "javax.inject" % "1",
+      "jakarta.inject" % "jakarta.inject-api" % "2.0.1",
       "org.json4s" %% "json4s-core" % versions.json4s,
       "com.twitter" %% "finagle-http" % versions.twLibVersion % "test",
       "com.twitter" %% "util-core" % versions.twLibVersion,
@@ -810,7 +781,7 @@ lazy val mustache = project
     name := "finatra-mustache",
     moduleName := "finatra-mustache",
     libraryDependencies ++= Seq(
-      "javax.inject" % "javax.inject" % "1",
+      "jakarta.inject" % "jakarta.inject-api" % "2.0.1",
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache exclude ("com.google.guava", "guava"),
       "com.google.inject" % "guice" % versions.guice,
       "com.twitter" %% "util-core" % versions.twLibVersion,
@@ -828,7 +799,7 @@ lazy val httpCore = (project in file("http-core"))
     name := "finatra-http-core",
     moduleName := "finatra-http-core",
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
+      "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jacksonAnnotations,
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "com.twitter" %% "util-reflect" % versions.twLibVersion,
@@ -920,7 +891,7 @@ lazy val httpMustache = (project in file("http-mustache"))
     name := "finatra-http-mustache",
     moduleName := "finatra-http-mustache",
     libraryDependencies ++= Seq(
-      "javax.inject" % "javax.inject" % "1",
+      "jakarta.inject" % "jakarta.inject-api" % "2.0.1",
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache exclude ("com.google.guava", "guava"),
       "com.google.inject" % "guice" % versions.guice,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
@@ -990,12 +961,13 @@ lazy val thrift = project
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "com.twitter" %% "util-reflect" % versions.twLibVersion,
       "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
-      "javax.inject" % "javax.inject" % "1",
+      "jakarta.inject" % "jakarta.inject-api" % "2.0.1",
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     ),
     Test / scroogePublishThrift := true,
-    Test / scroogeLanguages := Seq("java", "scala"),
+    Test / scroogeLanguages := Seq("scala"),
+    Test / excludeFilter := HiddenFileFilter || "*.java", // Exclude Java tests due to libthrift 0.22.0 incompatibility
     unmanagedResources / excludeFilter := "BUILD.bazel",
     Test / publishArtifact := true,
     (Test / packageBin / mappings) := {
@@ -1177,7 +1149,7 @@ lazy val thriftIdl = (project in file("examples/thrift-server/idl"))
   .settings(
     name := "thrift-server-idl",
     moduleName := "thrift-example-idl",
-    Compile / scroogeLanguages := Seq("java", "scala"),
+    Compile / scroogeLanguages := Seq("scala"),
     Compile / scroogeThriftIncludeFolders := Seq(file("examples/thrift-server/idl/src/main/thrift"))
   ).dependsOn(
     thrift
@@ -1230,7 +1202,7 @@ lazy val streamingExample = (project in file("examples/advanced/streaming-exampl
     name := "streaming-example",
     moduleName := "streaming-example",
     libraryDependencies ++= Seq(
-      "com.twitter" % "joauth" % "6.0.2",
+      "com.twitter" % "joauth" % "6.0.3",
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test-internal"
     )
   ).dependsOn(

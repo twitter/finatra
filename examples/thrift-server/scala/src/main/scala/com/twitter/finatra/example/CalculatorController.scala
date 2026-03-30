@@ -4,7 +4,7 @@ import com.twitter.calculator.thriftscala.Calculator
 import com.twitter.calculator.thriftscala.Calculator._
 import com.twitter.finatra.thrift.Controller
 import com.twitter.util.Future
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 class CalculatorController extends Controller(Calculator) {

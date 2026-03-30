@@ -1,6 +1,6 @@
 package com.twitter.inject.tests.module
 
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 class DoEverythingService {

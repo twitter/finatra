@@ -3,7 +3,7 @@ package com.twitter.finatra.http.tests.integration.mdc.main
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 import com.twitter.inject.logging.FinagleMDCAdapter
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import org.slf4j.MDC
 import scala.collection.JavaConverters._
 

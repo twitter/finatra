@@ -24,8 +24,8 @@ import com.twitter.scrooge.ThriftMethod
 import com.twitter.util.logging.Logger
 import java.lang.annotation.{Annotation => JavaAnnotation}
 import java.lang.reflect.{Method => JMethod}
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
 private[routing] abstract class BaseThriftRouter[Router <: BaseThriftRouter[Router]](
   injector: Injector,

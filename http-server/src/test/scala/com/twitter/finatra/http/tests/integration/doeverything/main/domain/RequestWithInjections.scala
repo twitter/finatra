@@ -2,7 +2,7 @@ package com.twitter.finatra.http.tests.integration.doeverything.main.domain
 
 import com.twitter.finatra.http.Prod
 import com.twitter.finatra.http.annotations.QueryParam
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 case class RequestWithInjections(
   @QueryParam id: UserId,

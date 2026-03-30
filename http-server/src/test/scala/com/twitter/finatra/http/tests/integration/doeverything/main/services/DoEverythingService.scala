@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main.services
 
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 class DoEverythingService {

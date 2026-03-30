@@ -5,8 +5,8 @@ import com.twitter.finagle.http.Response
 import com.twitter.finatra.http.exceptions.MaxForwardsExceededException
 import com.twitter.finatra.http.request.ForwardedRequest
 import com.twitter.util.Future
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
 object HttpForward {
   private[finatra] val DepthField: Request.Schema.Field[Option[Int]] =

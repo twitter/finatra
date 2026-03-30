@@ -1,6 +1,6 @@
 package com.twitter.inject.app.tests
 
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 class StateMap {

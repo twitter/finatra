@@ -4,7 +4,7 @@ import com.github.mustachejava.MustacheFactory
 import com.twitter.io.Buf
 import java.io.{ByteArrayOutputStream, OutputStreamWriter, StringWriter}
 import java.nio.charset.StandardCharsets
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 /**
  * A service for rendering mustache templates. Note: it is expected to be rare
