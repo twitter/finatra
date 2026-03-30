@@ -5,7 +5,7 @@ Global / excludeLintKeys += scalacOptions
 Global / concurrentRestrictions += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "24.8.0-SNAPSHOT"
+val releaseVersion = "24.9.0-SNAPSHOT"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
